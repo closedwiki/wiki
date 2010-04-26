@@ -109,8 +109,8 @@ The following themes are provided:
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 1.1 (2010-04-25) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-04-25: | Renamed BUTTON, TOGGLE, CLEAR, TABPANE, ENDTABPANE, TAB, ENDTAB variables to JQBUTTON, JQTOGGLE, JQCLEAR, JQTABPANE, JQENDTABPANE, JQTAB, JQENDTAB, respectively. Old variables names available if configure setting is set: =$TWiki::cfg{JQueryPlugin}{Legacy2008} = 1;= |
-|  2010-04-22: | Doc improvements, no code changes |
+|  2010-04-25: | TWikibug:Item6436 - renamed too generic variable names BUTTON, TOGGLE, CLEAR, TABPANE, ENDTABPANE, TAB, ENDTAB to JQBUTTON, JQTOGGLE, JQCLEAR, JQTABPANE, JQENDTABPANE, JQTAB, JQENDTAB, respectively. Old variables names available if configure setting is set: =$TWiki::cfg{JQueryPlugin}{Legacy2008} = 1;= -- TWiki:Main/PeterThoeny |
+|  2010-04-22: | TWikibug:Item6433 - doc improvements, no code changes |
 |  15 Jul 2008: | updated to ui-1.5.2; added async treeview; added async options to tabpane |
 |  03 Jul 2008: | updated to ui-1.5.1 |
 |  05 Jun 2008: | updated to jquery-1.2.6 and ui-1.5-RC1 |
