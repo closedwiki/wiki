@@ -1,17 +1,23 @@
-<a href="http://wikiring.com"><img src="%ATTACHURL%/logo.gif" style="float:right" /></a>
+%META:TOPICINFO{author="TWikiContributor" date="1272247235" format="1.1" version="$Rev$"}%
 ---+ Subscribe Plugin
-
 <!--
-   * Set SHORTDESCRIPTION = This is a companion plugin to the MailerContrib. It allows you to trivially add a "Subscribe me" link to topics to get subscribed to changes.
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/SubscribePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/SubscribePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+
+   * Set SHORTDESCRIPTION = Companion plugin to the MailerContrib, adding a "Subscribe me" link to topics to easily subscribe to topic changes
 -->
 %SHORTDESCRIPTION%
 
-Example (only works if plugin is installed, and you are logged in (not %MAINWEB%.TWikiGuest)): %SUBSCRIBE%
+Example (only works if plugin is installed, and you are logged in (not %USERSWEB%.TWikiGuest)): %SUBSCRIBE%
 
 ---++ Usage
+
 %INCLUDE{"VarSUBSCRIBE" section="subscribe_attributes"}%
 
 ---++ Access Controls
+
 The guest user is not allowed to subscribe for notification.
 
 You don't need =VIEW= access to the WebNotify topic in order to subscribe to changes in a web, but you must have =CHANGE= access. If you want users to be able to subscribe or unsubscribe, but you don't want them to be able to modify their subscription or otherwise edit the WebNotify topic, you can restrict =VIEW= access to WebNotify. This will make it uneditable from the browser (but will not block =save= urls, so is not fully secure).
@@ -19,18 +25,17 @@ You don't need =VIEW= access to the WebNotify topic in order to subscribe to cha
 %X% Note that permissions on individual topics are *not* checked when subscription mails are sent out, so be very careful about who you allow to subscribe.
 
 ---++ Plugin Installation Instructions
+
 %$INSTALL_INSTRUCTIONS%
 
 ---++ Plugin Info
 
-Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
-
-|  Plugin Author: | TWiki:Main.CrawfordCurrie |
-|  Copyright: | &copy; 2008, Crawford Currie http://c-dot.co.uk |
+|  Plugin Author: | TWiki:Main/CrawfordCurrie |
+|  Copyright: | &copy; 2008 Crawford Currie http://c-dot.co.uk; <br /> &copy; 2008-2010 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
-|  Dependencies: | %$DEPENDENCIES% |
 |  Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-04-25 | TWikibug:Item6433 - doc improvements |
 |  15 Oct 2008 | TWikibug:Item4115: enable subscriptions with (child), \
                     TWikibug:Item5950: fix cross web SUBSCRIPTION indication (requires updated MailerContrib) \
                     can now get feedback to %<nop>SUBSCRIBE{topic="*"}% \
@@ -46,11 +51,9 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  13506 | TWikibug:Item3731 - Update dependency to latest version of MailerContrib |
 |  13081 | TWikibug:Item3731 - Added SubscribePlugin, and cleaned up and updated APIs in MailerContrib |
 |  24 Apr 2007 | First version |
+|  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
-
-%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
-%META:FILEATTACHMENT{name="logo.gif" attr="h" comment="" version="1"}%
+__Related Topics:__ VarSUBSCRIBE, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences

@@ -6,11 +6,9 @@ require TWiki::Func;
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC $uid $WEB $TOPIC);
 
-$VERSION = '$Rev: 13787 (18 May 2007) $';
-
-$RELEASE = 'Dakar';
-
-$SHORTDESCRIPTION = 'Subscribe to web notification';
+$VERSION = '$Rev: 13787$';
+$RELEASE = '2010-04-25';
+$SHORTDESCRIPTION = 'Companion plugin to the MailerContrib, adding a "Subscribe me" link to topics to easily subscribe to topic changes';
 
 $NO_PREFS_IN_TOPIC = 1;
 
