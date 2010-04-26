@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272001526" format="1.1" version="$Rev$"}%
----+!! <nop>%TOPIC%
+%META:TOPICINFO{author="TWikiContributor" date="1272259587" format="1.1" version="$Rev$"}%
+---+!! JQuery Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
    at http://twiki.org/cgi-bin/view/Plugins/JQueryPlugin or provide feedback
@@ -13,13 +13,10 @@
 %TOC%
 
 ---++ Description
-This plugin contains the latest version of the [[http://jquery.com][jQuery]]
-<nop>JavaScript library. 
+This plugin contains the latest version of the [[http://jquery.com/][jQuery]] <nop>JavaScript library. 
 
 <blockquote>
-"jQuery is a fast, concise, <nop>JavaScript Library that simplifies how you traverse
-HTML documents, handle events, perform animations, and add Ajax interactions to
-your web pages."
+"jQuery is a fast, concise, <nop>JavaScript Library that simplifies how you traverse HTML documents, handle events, perform animations, and add Ajax interactions to your web pages."
 </blockquote>
 
 See the Sandbox.JQueryPluginExamples page for a demo of a couple of widgets used by TWiki.
@@ -54,7 +51,7 @@ See the Sandbox.JQueryPluginExamples page for a demo of a couple of widgets used
    1 ui.sortable
    1 ui.tabs
 
----++ Documentation
+---++ JQuery Library Documentation
    * [[http://docs.jquery.com/How_jQuery_Works][Getting the feet wet]]
    * [[http://docs.jquery.com/Tutorials][Tutorials]]
    * [[http://docs.jquery.com/Main_Page][Reference API]]
@@ -63,10 +60,10 @@ See the Sandbox.JQueryPluginExamples page for a demo of a couple of widgets used
 
 ---++ Syntax Rules
 
-=%<nop>JQSCRIPT{"jquery.js"}%= : include the specified script. Keep in mind that the =jquery.js= script must be loaded before plug-ins scripts.<br />
-=%<nop>JQTHEME{"mythemename"}%= : include the specified theme. Better load the desired theme before any script.<br />
-=%<nop>JQIMAGESURLPATH{"myimage.png"}%= : Expand to the specified image path.<br />
-=%<nop>JQIMAGESURLPATH%/myimage.png= : Same result as the above.<br />
+   * =%<nop>JQSCRIPT{"jquery.js"}%= - include the specified script. Keep in mind that the =jquery.js= script must be loaded before plug-ins scripts.
+   * =%<nop>JQTHEME{"mythemename"}%= - include the specified theme. Better load the desired theme before any script.
+   * =%<nop>JQIMAGESURLPATH{"myimage.png"}%= - expand to the specified image path.
+   * =%<nop>JQIMAGESURLPATH%/myimage.png= - Same result as the above.
 
 ---++ Themes
 
@@ -83,34 +80,36 @@ The following themes are provided:
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
-     | data/Sandbox/JQueryPluginExamples.txt | Example topic |
-     | data/Sandbox/PluginTestJQueryPlugin.txt | Test topic |
-     | data/TWiki/JQueryPlugin.txt | Plugin documentation topic |
-     | lib/CPAN/lib/CSS/Minifier.pm | Perl module |
-     | lib/CPAN/lib/JavaScript/Minifier.pm | Perl module |
-     | lib/TWiki/Plugins/JQueryPlugin/Core.pm | Perl module |
-     | lib/TWiki/Plugins/JQueryPlugin.pm | Perl module |
-     | pub/TWiki/JQueryPlugin/Makefile | Makefile |
-     | pub/TWiki/JQueryPlugin/jquery-all.css | Main stylesheet file |
-     | pub/TWiki/JQueryPlugin/jquery-all.js | Main Javascript file |
-     | pub/TWiki/JQueryPlugin/jquery-all.js.gz | Main Javascript file, compressed |
-     | pub/TWiki/JQueryPlugin/*.js | Javascript files |
-     | pub/TWiki/JQueryPlugin/*.gif | Image files |
-     | pub/TWiki/JQueryPlugin/*.png | Image files |
-     | pub/TWiki/JQueryPlugin/i18n/*.js | Style sheets for internationalization |
-     | pub/TWiki/JQueryPlugin/images/*.gif | Image library |
-     | pub/TWiki/JQueryPlugin/themes/* | Themes |
-     | tools/minifycss | Utility |
-     | tools/minifyjs | Utility |
+     | =data/Sandbox/JQueryPluginExamples.txt= | Example topic |
+     | =data/Sandbox/PluginTestJQueryPlugin.txt= | Test topic |
+     | =data/TWiki/JQueryPlugin.txt= | Plugin documentation topic |
+     | =lib/CPAN/lib/CSS/Minifier.pm= | Perl module |
+     | =lib/CPAN/lib/JavaScript/Minifier.pm= | Perl module |
+     | =lib/TWiki/Plugins/JQueryPlugin/Core.pm= | Perl module |
+     | =lib/TWiki/Plugins/JQueryPlugin.pm= | Perl module |
+     | =pub/TWiki/JQueryPlugin/Makefile= | Makefile |
+     | =pub/TWiki/JQueryPlugin/jquery-all.css= | Main stylesheet file |
+     | =pub/TWiki/JQueryPlugin/jquery-all.js= | Main Javascript file |
+     | =pub/TWiki/JQueryPlugin/jquery-all.js.gz= | Main Javascript file, compressed |
+     | =pub/TWiki/JQueryPlugin/*.js= | Javascript files |
+     | =pub/TWiki/JQueryPlugin/*.gif= | Image files |
+     | =pub/TWiki/JQueryPlugin/*.png= | Image files |
+     | =pub/TWiki/JQueryPlugin/i18n/*.js= | Style sheets for internationalization |
+     | =pub/TWiki/JQueryPlugin/images/*.gif= | Image library |
+     | =pub/TWiki/JQueryPlugin/themes/*= | Themes |
+     | =tools/minifycss= | Utility |
+     | =tools/minifyjs= | Utility |
    * TWiki 4 and up: Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
    * Test [[Sandbox.JQueryPluginExamples]] for functionality.
 
 ---++ Plugin Info
-|  Plugin Author(s): | TWiki:Main/MichaelDaum |
-|  Copyright: | 2007-2008 Michael Daum http://michaeldaumconsulting.com |
-|  License: | GPL |
-|  Plugin Version: | 2010-04-22 v1.0 |
+
+|  Plugin Author: | TWiki:Main/MichaelDaum |
+|  Copyright: | &copy; 2007-2008 Michael Daum http://michaeldaumconsulting.com <br /> &copy; 2008-2010 TWiki:TWiki/TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 1.1 (2010-04-25) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-04-25: | Renamed BUTTON, TOGGLE, CLEAR, TABPANE, ENDTABPANE, TAB, ENDTAB variables to JQBUTTON, JQTOGGLE, JQCLEAR, JQTABPANE, JQENDTABPANE, JQTAB, JQENDTAB, respectively. Old variables names available if configure setting is set: =$TWiki::cfg{JQueryPlugin}{Legacy2008} = 1;= |
 |  2010-04-22: | Doc improvements, no code changes |
 |  15 Jul 2008: | updated to ui-1.5.2; added async treeview; added async options to tabpane |
 |  03 Jul 2008: | updated to ui-1.5.1 |
@@ -129,3 +128,4 @@ The following themes are provided:
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/JQueryPluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/JQueryPluginAppraisal |
 
+__Related topics:__ Sandbox.PluginTestJQueryPlugin, Sandbox.JQueryPluginExamples, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory

@@ -1,9 +1,9 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (c) 2007-2008 Michael Daum, http://michaeldaumconsulting.com
-# 
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
+# Copyright (c) 2007-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 # NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
@@ -28,13 +28,13 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.0'; 
+$RELEASE = '1.1 (2010-04-15)';
 $SHORTDESCRIPTION = 'jQuery <nop>JavaScript library for TWiki';
 $NO_PREFS_IN_TOPIC = 1;
 
 $header = <<'HERE';
-<link rel="stylesheet" href="%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/jquery-all.css" type="text/css" media="all" />
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/jquery-all.js"></script>
+<link rel="stylesheet" href="%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin/jquery-all.css" type="text/css" media="all" />
+<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin/jquery-all.js"></script>
 HERE
 
 
@@ -44,16 +44,27 @@ sub initPlugin {
 
   $doneInit = 0;
   $doneHeader = 0;
-  TWiki::Func::registerTagHandler('BUTTON', \&handleButton );
-  TWiki::Func::registerTagHandler('TOGGLE', \&handleToggle );
-  TWiki::Func::registerTagHandler('CLEAR', \&handleClear );
-  TWiki::Func::registerTagHandler('TABPANE', \&handleTabPane );
-  TWiki::Func::registerTagHandler('ENDTABPANE', \&handleEndTabPane );
-  TWiki::Func::registerTagHandler('TAB', \&handleTab );
-  TWiki::Func::registerTagHandler('ENDTAB', \&handleEndTab );
+
+  TWiki::Func::registerTagHandler('JQBUTTON', \&handleButton );
+  TWiki::Func::registerTagHandler('JQTOGGLE', \&handleToggle );
+  TWiki::Func::registerTagHandler('JQCLEAR', \&handleClear );
+  TWiki::Func::registerTagHandler('JQTABPANE', \&handleTabPane );
+  TWiki::Func::registerTagHandler('JQENDTABPANE', \&handleEndTabPane );
+  TWiki::Func::registerTagHandler('JQTAB', \&handleTab );
+  TWiki::Func::registerTagHandler('JQENDTAB', \&handleEndTab );
   TWiki::Func::registerTagHandler('JQSCRIPT', \&handleJQueryScript );
   TWiki::Func::registerTagHandler('JQTHEME', \&handleJQueryTheme );
   TWiki::Func::registerTagHandler('JQIMAGESURLPATH', \&handleJQueryImagesUrlPath );
+
+  if( $TWiki::cfg{JQueryPlugin}{Legacy2008} ) {
+    TWiki::Func::registerTagHandler('BUTTON', \&handleButton );
+    TWiki::Func::registerTagHandler('TOGGLE', \&handleToggle );
+    TWiki::Func::registerTagHandler('CLEAR', \&handleClear );
+    TWiki::Func::registerTagHandler('TABPANE', \&handleTabPane );
+    TWiki::Func::registerTagHandler('ENDTABPANE', \&handleEndTabPane );
+    TWiki::Func::registerTagHandler('TAB', \&handleTab );
+    TWiki::Func::registerTagHandler('ENDTAB', \&handleEndTab );
+  }
 
   return 1;
 }
@@ -119,7 +130,7 @@ sub handleJQueryScript	{
   my $scriptFileName = $params->{_DEFAULT};
   return '' unless $scriptFileName;
   $scriptFileName .= '.js' unless $scriptFileName =~ /\.js$/;
-  return "<script type=\"text/javascript\" src=\"%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/$scriptFileName\"></script>";
+  return "<script type=\"text/javascript\" src=\"%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin/$scriptFileName\"></script>";
 }
 
 ###############################################################################
@@ -129,15 +140,15 @@ sub handleJQueryTheme {
   my $themeName = $params->{_DEFAULT};
   return '' unless $themeName;
 
-  return "<style type='text/css'>\@import url(\"%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/themes/$themeName/$themeName.all.css\");</style>";
+  return "<style type='text/css'>\@import url(\"%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin/themes/$themeName/$themeName.all.css\");</style>";
 }
 
 ###############################################################################
 sub handleJQueryImagesUrlPath {
   my ($session, $params, $theTopic, $theWeb) = @_;   
   my $image = $params->{_DEFAULT};
-  return "%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/images/$image" if defined $image;
-  return "%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/images";
+  return "%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin/images/$image" if defined $image;
+  return "%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin/images";
 }
 
 1;
