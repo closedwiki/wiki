@@ -538,6 +538,7 @@ lib/TWiki/I18N.pm 0444
 lib/TWiki/I18N/Extract.pm 0444
 lib/TWiki/I18N/Fallback.pm 0444
 lib/TWiki/If/Node.pm 0444
+lib/TWiki/If/OP_isempty.pm 0444
 lib/TWiki/If/OP_isweb.pm 0444
 lib/TWiki/If/OP_istopic.pm 0444
 lib/TWiki/If/OP_dollar.pm 0444
