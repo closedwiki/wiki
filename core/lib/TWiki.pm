@@ -4259,6 +4259,8 @@ sub ALLVARIABLES {
 sub META {
     my ( $this, $params, $topic, $web ) = @_;
 
+    # FIXME: This is a total hack and a bug: $web and $topic is current topic, but $meta
+    # is base topic! This breaks if parent is rendered in an included topic in different web.
     my $meta  = $this->inContext( 'can_render_meta' );
 
     return '' unless $meta;
