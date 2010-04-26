@@ -43,7 +43,7 @@ You don't need =VIEW= access to the WebNotify topic in order to subscribe to cha
 |  25 May 2008 | TWikibug:Item5488: merged TWiki:Main.DavidPatterson's patch to fix deep subscription |
 |  25 Jan 2008 | TWikibug:Item4812: added TWiki:Main.BobGoldstein's noexpand patch for groups |
 |  9 Sep 2007 | TWikibug:Item4175 added MAKETEXT in case the string is available |
-|  13966 | TWikiBug:Item4155 Fixed for 4.0.x and 4.1.x |
+|  13966 | TWikibug:Item4155 Fixed for 4.0.x and 4.1.x |
 |  13787 | TWikibug:Item4010 - fix web subscription, and =format= parameters. - TWiki:Main.SvenDowideit |
 |  13525 | TWikibug:Item3731 - Update documentation topic. |
 |  13512 | TWikibug:Item3731 - final pre-release tweaks, result of testing on 4.1.2 |
