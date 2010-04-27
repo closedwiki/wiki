@@ -2,6 +2,9 @@
 #
 # Copyright (C) 2002-2003 Will Norris. All Rights Reserved. (wbniv@saneasylumstudios.com)
 # Copyright (C) 2005-2008 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2002-2010 TWiki Contributor. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,9 +28,9 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '3.72';
+$RELEASE = '3.73';
 $NO_PREFS_IN_TOPIC = 1;
-$SHORTDESCRIPTION = 'Displays image gallery with auto-generated thumbnails from attachments';
+$SHORTDESCRIPTION = 'Show image gallery with auto-generated thumbnails from attachments';
 
 # =========================
 sub initPlugin {
@@ -53,7 +56,7 @@ sub commonTagsHandler {
     # add css definitions, deliberately NOT using addToHEAD()
     my $link = 
       '<link rel="stylesheet" '.
-      'href="%PUBURL%/%TWIKIWEB%/ImageGalleryPlugin/style.css" '.
+      'href="%PUBURL%/%SYSTEMWEB%/ImageGalleryPlugin/style.css" '.
       'type="text/css" media="all" />';
 
     if ($_[0] =~ s/<head>(.*?[\r\n]+)/<head>$1$link\n/o) {
