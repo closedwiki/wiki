@@ -1,14 +1,19 @@
-%META:TOPICINFO{author="SvenDowideit" date="1157251037" format="1.1" version="1.3"}%
----+ Timeline TWiki Plugin
+%META:TOPICINFO{author="TWikiContributor" date="1272348558" format="1.1" version="$Rev$"}%
+---+!! Timeline TWiki Plugin
 <img src="%ATTACHURLPATH%/timeline.jpg" alt="timeline.jpg" style="float:right;" />
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/TimelinePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TimelinePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+[[http://simile.mit.edu/timeline/][Timeline]] is a DHTML-based AJAXy widget for visualizing time-based events. It can be used to show a <nop>WebChanges timeline with the query below.
 
-[[http://simile.mit.edu/timeline/][Timeline]] is a DHTML-based AJAXy widget for visualizing time-based events.
-
-I use it to show a <nop>WebChanges timeline  with the query below.
-
+%TOC%
 
 ---++ Syntax Rules
-the %<nop>TIMELINE% variable has the following parmeters:
+
+The %<nop>TIMELINE% variable handles the following parameters:
    * DEFAULT - the url of the datasource
    * urltype - XML or JSON (defaults to JSON)
    * interval - (DAY, MONTH, YEAR, DECADE)
@@ -19,8 +24,7 @@ the %<nop>TIMELINE% variable has the following parmeters:
 
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TIMELINEPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TIMELINEPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Show a scrolling Timeline from a TWiki SEARCH
@@ -29,8 +33,11 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
       * Set DEBUG = 0
       
 ---++ Example (shows when Plugin is installed and running successfully)
+
 Note that the JSON based output is much more reliable cross browsers, so only use xml is you really need to.
----+++ static file
+
+---+++ Static file
+
 The first example shows a timeline based on a pre-existing JSON file (%PUBURL%/%SYSTEMWEB%/TimelinePlugin/cubism.js)
 
 %TIMELINE{
@@ -50,8 +57,8 @@ urltype="JSON"
 </verbatim>
 
 ---+++ TWiki =SEARCH= based timeline
-This example uses the %SYSTEMWEB%.TimeLineSearchJSON topic to show the last 10 modified topics in all webs.
 
+This example uses the %SYSTEMWEB%.TimeLineSearchJSON topic to show the last 10 modified topics in all webs.
 
 %TIMELINE{
 urltype="JSON"
@@ -61,7 +68,8 @@ height="450px"
 width="700px"
 date="%DISPLAYTIME{"$day $month $year"}%"
 }%
- The example is made up of the the %<nop>TIMELINE% variable that is converted into the client side javascript, and a TWiki %<nop>SEARCH% statement that formats the results into the XML data format that the javascript requires.
+
+The example is made up of the the %<nop>TIMELINE% variable that is converted into the client side javascript, and a TWiki %<nop>SEARCH% statement that formats the results into the XML data format that the javascript requires.
  
 <verbatim>
 %TIMELINE{
@@ -100,14 +108,15 @@ format="<event start='$date' title='$topic' link='%SCRIPTURL{"view"}%/$web/$topi
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.SvenDowideit - <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> http://WikiRing.com |
-|  Copyright: | TWiki Plugin &copy; 2006-2008, TWiki:Main.SvenDowideit |
-|             | The SIMILE Timeline software is sponsored by The Andrew W. Mellon Foundation  and is maintained by the SIMILE project, in particular: David François Huynh, dfhuynh at csail.mit.edu |
+|  Plugin Author: | TWiki:Main.SvenDowideit - http://WikiRing.com |
+|  Copyright: | TWiki Plugin &copy; 2006-2008, TWiki:Main/SvenDowideit; <br /> &copy; 2006-2010 TWiki:TWiki/TWikiContributor |
+|             | The SIMILE Timeline software is sponsored by The Andrew W. Mellon Foundation  and is maintained by the SIMILE project, in particular: David Francois Huynh, dfhuynh at csail.mit.edu |
 |  Plugin License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  SIMILE Timeline  License: | [[http://simile.mit.edu/license.html][BSD license]] |
+|  SIMILE Timeline License: | [[http://simile.mit.edu/license.html][BSD license]] |
 |  Plugin Version: | %$VERSION% - %$DATE% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  19 March 2008   | updated to Revision 9234: http://simile.mit.edu/repository/timeline/trunk/src/webapp/api and http://simile.mit.edu/repository/ajax/trunk/src/webapp/api/ , updated Plugin to add features.|
+|  2010-04-26: | TWikibug:Item6433 - doc improvements |
+|  19 March 2008: | updated to Revision 9234: http://simile.mit.edu/repository/timeline/trunk/src/webapp/api and http://simile.mit.edu/repository/ajax/trunk/src/webapp/api/ , updated Plugin to add features.|
 |  22 July 2006: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
@@ -118,7 +127,6 @@ format="<event start='$date' title='$topic' link='%SCRIPTURL{"view"}%/$web/$topi
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ TimeLineSearch, TimeLineSearchJSON, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
-%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="" autoattached="1" comment="" date="1153741461" path="wikiringlogo20x20.png" size="1343" user="Main.TWikiGuest" version="1"}%
-%META:FILEATTACHMENT{name="timeline.jpg" attr="" autoattached="1" comment="" date="1153721646" path="timeline.jpg" size="11824" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="timeline.jpg" attr="" comment="" date="1153721646" path="timeline.jpg" size="11824" user="TWikiContributor" version=""}%
