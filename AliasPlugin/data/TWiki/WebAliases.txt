@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1161636940" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1272346792" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="AliasPlugin"}%
----+!! %TOPIC%
+---+!! <nop>%TOPIC%
 
 <!-- Put your global aliases into this list. -->
 
@@ -8,3 +8,5 @@
 
 <!-- summary -->
 %ALIASES%
+
+__Related topic:__ AliasPlugin
