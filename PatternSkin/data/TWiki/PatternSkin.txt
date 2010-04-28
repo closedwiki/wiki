@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1160971176" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1272497563" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 <!--
    * Set SHORTDESCRIPTION = <nop>PatternSkin provides a CSS based default look and feel for TWiki - flexible and <nop>W3C-compliant. Its layout and color scheme are designed to provide a nice, clean and productive editing environment
@@ -78,13 +78,16 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 
 ---++ Skin Info
 
+|  Skin Author: | TWiki:Main/ArthurClemens |
+|  Copyright: | &copy; 2004-2008 TWiki:Main/ArthurClemens; <br /> &copy; 2004-2010 TWiki:TWiki/TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Description: | TWiki's default skin; CSS based, flexible and <nop>W3C-compliant |
 |  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.jpg" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this skin]] |
 |  Base Name: | pattern |
-|  Skin Author: | TWiki:Main/ArthurClemens |
-|  Skin Version: | 03 Aug 2008 (v3.0.1) | 
+|  Skin Version: | 2010-04-28 | 
 |  History: | <!-- specify latest version first -->&nbsp; |
+|  2010-04-28: | TWikibug:Item6416 - fix for only two pages printing in FF 3.6 -- TWiki:Main/PeterThoeny |
 |  03 Aug 2008: | v.3.0.1 - TWiki 4.2.1 (Edinburgh) RELEASE VERSION |
 |  13 Jul 2007: | v.3.0.0 - TWiki 4.2.0 (Edinburgh) RELEASE VERSION |
 |  15 Jan 2006: | v.2.0.6 - TWiki 4.1.0 (Edinburgh) RELEASE VERSION |

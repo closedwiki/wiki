@@ -20,6 +20,9 @@
 	#patternMain {
 		padding-bottom:1em;
 		width:100%;
+		float:none;
+		display:inline;
+		overflow:visible;
 	}
 	
 	/* no left bar */
