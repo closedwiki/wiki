@@ -4259,15 +4259,18 @@ sub ALLVARIABLES {
 sub META {
     my ( $this, $params, $topic, $web ) = @_;
 
-    # FIXME: This is a total hack and a bug: $web and $topic is current topic, but $meta
-    # is base topic! This breaks if parent is rendered in an included topic in different web.
+
+    # TWikibug:Item6438: %META uses current web.topic scope, but base topic's meta data.
+    # ==> Quirky spec for compatibility with pre 5.0 releases where base topic is used
+    # by default instead of current topic because meta data is pulled from base topic.
+    $web   = $this->{SESSION_TAGS}{BASEWEB}   || $web;
+    $topic = $this->{SESSION_TAGS}{BASETOPIC} || $topic;
     my $meta  = $this->inContext( 'can_render_meta' );
 
     return '' unless $meta;
+
     my $result = '';
-
     my $option = $params->{_DEFAULT} || '';
-
     if( $option eq 'form' ) {
         # META:FORM and META:FIELD
         $result = $meta->renderFormForDisplay( $this->templates );
