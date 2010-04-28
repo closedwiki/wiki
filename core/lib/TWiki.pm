@@ -4267,6 +4267,18 @@ sub META {
     $topic = $this->{SESSION_TAGS}{BASETOPIC} || $topic;
     my $meta  = $this->inContext( 'can_render_meta' );
 
+    my $paramTopic = $params->{topic}; 
+    if( $paramTopic ) {
+        ( $web, $topic ) = $this->normalizeWebTopicName( $web, $paramTopic );
+        try {
+            my $dummyText;
+            ( $meta, $dummyText ) = $this->{store}->readTopic(
+                  $this->{session}->{user}, $web, $topic );
+        } catch TWiki::AccessControlException with {
+            # Ignore access exceptions
+            return '';
+        };
+    }
     return '' unless $meta;
 
     my $result = '';
