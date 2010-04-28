@@ -1,6 +1,9 @@
 # MediaWikiTablePlugin Core
 #
 # Copyright (C) 2006 Michael Daum http://wikiring.com
+# Copyright (C) 2006-2010 TWiki Contributor. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License

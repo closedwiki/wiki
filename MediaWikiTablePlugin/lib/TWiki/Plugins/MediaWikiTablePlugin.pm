@@ -1,6 +1,9 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2006 Michael Daum http://wikiring.com
+# Copyright (C) 2006-2010 TWiki Contributor. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,7 +24,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v1.01';
+$RELEASE = 'v1.1';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Format tables the <nop>MediaWiki way';
 
@@ -40,7 +43,7 @@ sub commonTagsHandler {
   return if $doneHeader;
   my $link = 
     '<link rel="stylesheet" '.
-    'href="%PUBURL%/%TWIKIWEB%/MediaWikiTablePlugin/style.css" '.
+    'href="%PUBURL%/%SYSTEMWEB%/MediaWikiTablePlugin/style.css" '.
     'type="text/css" media="all" />';
   if ($_[0] =~ s/<head>(.*?[\r\n]+)/<head>$1$link\n/o) {
     $doneHeader = 1;
