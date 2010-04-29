@@ -1,17 +1,22 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272497563" format="1.1" version="$Rev$"}%
-%STARTINCLUDE%
-<!--
-   * Set SHORTDESCRIPTION = <nop>PatternSkin provides a CSS based default look and feel for TWiki - flexible and <nop>W3C-compliant. Its layout and color scheme are designed to provide a nice, clean and productive editing environment
--->
+%META:TOPICINFO{author="TWikiContributor" date="1272518108" format="1.1" version="$Rev$"}%
 ---+!! Pattern skin
-
-%SHORTDESCRIPTION%. For use in corporate or perhaps in personal websites it should be fairly easy to tune the looks or even create a !PatternSkin-based new skin.
-
+<!--
+   Contributions to this skin are appreciated. Please update the skin page at
+   http://twiki.org/cgi-bin/view/Plugins/PatternSkin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/PatternSkinDev.
+   If you are a TWiki contributor please update the skin in the SVN repository.
+-->
+<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding:0 20px 0 20px">
 %TOC{title="Page contents"}%
+</div>
+%SHORTDESCRIPTION%. For use in corporate or perhaps in personal websites it should be fairly easy to tune the looks or even create a !PatternSkin-based new skin.
+<!--
+   * Set SHORTDESCRIPTION = CSS based skin with clean and productive editing environment
+-->
 
 ---++ Screenshot
 
-<a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.jpg" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a>
+<a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.png" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a>
 <!--
 %SEARCH{ "%TOPIC%" scope="topic" nosearch="on" nototal="on" format="$pattern(.*\| *Screenshot\:[^\|]*\|([^\|]*).*)" }%
 <div class="twikiGrayText">Click to view full screenshot</div>-->
@@ -19,14 +24,17 @@
 ---++ Creating your own look
 
 ---+++ Template customization
+
 %SYSTEMWEB%.PatternSkinCustomization - how to configure page elements
-%TOC{"%SYSTEMWEB%.PatternSkinCustomization"}%
+%TOC{"%SYSTEMWEB%.PatternSkinCustomization" title=" "}%
 
 ---+++ Style sheet customization
+
 %SYSTEMWEB%.PatternSkinCssCookbook - how to customize the visual style
-%TOC{"%SYSTEMWEB%.PatternSkinCssCookbook"}%
+%TOC{"%SYSTEMWEB%.PatternSkinCssCookbook" title=" "}%
 
 ---+++ Changing graphics
+
 The original Photoshop files of the skin graphics (mainly background images) are attached to PatternSkinGraphics.
 
 ---++ Supported browsers
@@ -74,7 +82,7 @@ If TWIKILAYOUTURL or TWIKISTYLEURL don't give a value or point to non-existing f
 
 If this still does not work, contact the administrator who installs skins.
 
-For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Report bugs in the [[TWiki:Support/WebHome][Support web]].
+For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Report bugs at TWikibug:PatternSkin.
 
 ---++ Skin Info
 
@@ -82,7 +90,7 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 |  Copyright: | &copy; 2004-2008 TWiki:Main/ArthurClemens; <br /> &copy; 2004-2010 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Description: | TWiki's default skin; CSS based, flexible and <nop>W3C-compliant |
-|  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.jpg" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
+|  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.png" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this skin]] |
 |  Base Name: | pattern |
 |  Skin Version: | 2010-04-28 | 
@@ -97,9 +105,9 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 |  31 Jan 2006: | v.2.0.0 - TWiki 4.0.0 (Dakar) RELEASE VERSION |
 |  28 Aug 2004: | v.1.0.9 - TWiki 3.0 (Cairo) RELEASE VERSION |
 |  08 Aug 2004: | Initial version (v1.0.0) |
-|  Dependencies: | TWiki:Plugins/TwistyContrib (automatically supported by Dakar) |
+|  Dependencies: | TWiki:Plugins/TwistyContrib (included in TWiki distribution) |
 |  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev | %STOPINCLUDE%
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Download: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 
 ---++ Related topics
@@ -128,8 +136,3 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 Other skins:
    * %SYSTEMWEB%.TWikiSkins
    * %SYSTEMWEB%.TWikiSkinBrowser
-
----++ Feedback
-
-Leave remarks, suggestions and other feedback in TWiki:Plugins.PatternSkinDev.
-
