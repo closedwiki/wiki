@@ -1,6 +1,9 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2006-2008 Michael Daum http://wikiring.de
+# Copyright (C) 2006-2010 TWiki Contributor. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
 # Based on the NatSkinPlugin
 #
@@ -30,7 +33,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v1.02';
+$RELEASE = 'v1.1';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Render content conditionally';
 
