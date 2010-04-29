@@ -1,6 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272139928" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1272520664" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
-
+<!--
+   Contributions to this skin are appreciated. Please update the skin page at
+   http://twiki.org/cgi-bin/view/Plugins/TopMenuSkin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TopMenuSkinDev.
+   If you are a TWiki contributor please update the skin in the SVN repository.
+-->
 The !TopMenuSkin adds pulldown menus to the PatternSkin.
 <div style="float: right; text-align: center; padding: 10px; background-color: #f0f0f8">
 This skin is%BR% sponsored by:%BR%
