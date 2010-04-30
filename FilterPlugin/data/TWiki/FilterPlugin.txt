@@ -1,38 +1,33 @@
-%META:TOPICINFO{author="TWikiContributor" date="1203093319" format="1.1" version="$Rev$"}%
-<!--
-
-   PLEASE DO NOT EDIT THIS TOPIC
-
-   It is automatically generated from the subversion repository, and any changes
-   you make will simply be overwritten the next time a release is generated.
-
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
--->
+%META:TOPICINFO{author="TWikiContributor" date="1272609327" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/FilterPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/FilterPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+%SHORTDESCRIPTION%
+<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
 %TOC%
-<table style="float:right">
-<tr>
-  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
-  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none">
-      Powered by <br /> <nop>WikiRing Consultants </a>
-  </td>
-</tr>
-</table>
+</div>
+
 ---++ Description
-This plugin allows to substitute and extract information from content by
-using regular expressions. There are three different types of new functions:
+
+This plugin allows to substitute and extract information from content by using regular expressions. There are three different types of new functions:
    1 FORMATLIST: maniplulate a list of items; it is highly configurable to 
      define what constitutes a list and how to extract items from it
    1 SUBST, STARTSUBST/STOPSUBST: substiture a pattern in a chunk of text
    1 EXTRACT, STARTEXTRACT/STOPEXTRACT: extract a pattern from a text
-While the START-STOP versions of SUBST and EXTRACT work on inline text,
-the normal versions process a source topic before including it into the current one.
+
+While the START-STOP versions of SUBST and EXTRACT work on inline text, the normal versions process a source topic before including it into the current one.
 
 ---++ Syntax Rules
+
 ---+++ SUBST
+
 *Syntax*: =%<nop>SUBST{topic="..." ...}%= 
 
-insert a topic by processing its content.
+Insert a topic by processing its content.
 
    * =topic="..."=: name of the topic text to be processed 
    * =text="..."=: text to be processed (has got higher precedence than 'topic')
@@ -40,15 +35,14 @@ insert a topic by processing its content.
    * =format="..."=: format expression or pattern substitute 
    * =header="..."=: header string prepended to output
    * =footer="..."=: footer string appended to output
-   * =limit="&lt;n>"= maximum number of occurences to extract or substitute counted from the 
-     start of the text (defaults to =100000= aka all hits) 
+   * =limit="&lt;n>"= maximum number of occurences to extract or substitute counted from the start of the text (defaults to =100000= aka all hits) 
    * =skip="&lt;n>"= skip the first n occurences
    * =exclude="..."=: skip occurences that match this regular expression
    * sort="on,off,alpha,num" order of the formatted items (default "off")
-   * =expand="on,off"=: toggle expansion of TWiki markup before filtering
-     (defaults to =on=) 
+   * =expand="on,off"=: toggle expansion of TWiki markup before filtering (defaults to =on=) 
 
 ---+++ STARTSUBST, STOPSUBST
+
 *Syntax*:
 <verbatim>
 %STARTSUBST{...}% 
@@ -56,14 +50,16 @@ insert a topic by processing its content.
 %STOPSUBST%
 </verbatim>
 
-substitute text given inline. see [[#SUBST][SUBST]].
+Substitute text given inline. see [[#SUBST][SUBST]].
 
 ---+++ EXTRACT
+
 *Syntax*: =%<nop>EXTRACT{topic="..."  ...}%= 
 
-extract text from a topic. see [[#SUBST][SUBST]].
+Extract text from a topic. see [[#SUBST][SUBST]].
 
 ---+++ STARTEXTRACT, STOPEXTRACT
+
 *Syntax*:
 <verbatim>
 %STARTEXTRACT{...}% 
@@ -71,16 +67,14 @@ extract text from a topic. see [[#SUBST][SUBST]].
 %STOPEXTRACT%
 </verbatim>
 
-extract content given inline. see [[#SUBST][SUBST]].
+Extract content given inline. see [[#SUBST][SUBST]].
 
 
 ---+++ FORMATLIST
+
 *Syntax*: =%<nop>FORMATLIST{"&lt;list>" ...}%=
 
-formats a list of items. The &lt;list> argument is separated into items by using
-a split expression; each item is matched agains a pattern and then formatted
-using a format string while being separated by a separator string; the result is
-prepended with a header and appended with a footer in case the list is not empty.
+Formats a list of items. The &lt;list> argument is separated into items by using a split expression; each item is matched against a pattern and then formatted using a format string while being separated by a separator string; the result is prefixed with a header and appended with a footer in case the list is not empty.
    * &lt;list>: the list 
    * split="...": the split expression (default ",")
    * pattern="...": pattern applied to each item (default "\s(.*)\s")
@@ -94,21 +88,16 @@ prepended with a header and appended with a footer in case the list is not empty
    * reverse="on,off": reverse the sortion of the list
    * unique="on,off": remove dupplicates from the list
    * exclude="...": remove list items that match this regular expression
-The pattern string shall group matching substrings in the list item to which you can refer to by 
-using $1, $2, ... in the format string. Any format string (=format=, =header=, =footer=) may
-contain variables =$percnt$=, =$nop=, =$dollar= and =$n=. The variable
-=$index= referse to the position number within the list being formatted; using =$count= in the
-footer or header argument refers to the total number of list elements.
+
+The pattern string shall group matching substrings in the list item to which you can refer to by using $1, $2, ... in the format string. Any format string (=format=, =header=, =footer=) may contain variables =$percnt$=, =$nop=, =$dollar= and =$n=. The variable =$index= referse to the position number within the list being formatted; using =$count= in the footer or header argument refers to the total number of list elements.
 
 ---+++ MAKEINDEX
+
 *Syntax*: =%<nop>MAKEINDEX{"&lt;list>" ...}%=
 
-formats a list into a multi-column index like in <nop>MediaWiki's category topcis.
-MAKEINDEX insert capitals as headlines to groups of sorted items. It will try to balance all
-columns equally, and keep track of breaks to prevent "schusterkinder", that is avoid 
-isolated headlines at the bottom of a column.
+Formats a list into a multi-column index like in <nop>MediaWiki's category topcis. MAKEINDEX insert capitals as headlines to groups of sorted items. It will try to balance all columns equally, and keep track of breaks to prevent "schusterkinder", that is avoid isolated headlines at the bottom of a column.
 
-parameters:
+Parameters:
    * &lt;list>: the list of items
    * split="...": the split expression to separate the &lt;list> into items (default ",")
    * pattern="...": pattern applied to each item (default "(.*)")
@@ -121,18 +110,18 @@ parameters:
    * header="...": format string to prepend to the result
    * footer="..." format string to be appended to the result
 
-Like in FORMATLIST the =format= parameter can make use of $1, $2, ... variables
-to match the groupings defined in the =pattern= argument (like in =pattern="(.*);(.*);(.*)"=) .
-The first matched grouping $1 will be used as the $item to sort the list.
+Like in FORMATLIST the =format= parameter can make use of $1, $2, ... variables to match the groupings defined in the =pattern= argument (like in =pattern="(.*);(.*);(.*)"=) . The first matched grouping $1 will be used as the $item to sort the list.
 
 ---++ Examples
 
 ---+++ Secure Html
+
 %STARTSUBST{pattern="<(a href=\"javascript:.*?)>(.*?)</a>" format="&lt;$1&gt;$2&lt;/a&gt;"}%
 <a href="javascript:window.alert('Pop me up');">Pop me up</a>
 %STOPSUBST%
 
 ---+++ Format Comments
+
 | *Date* | *Author* | *Headline* |
 %EXTRACT{topic="%TOPIC%" expand="off" pattern=".div class=\"text\">.*?[\r\n]+(.*?)[\r\n]+(?:.*?[\r\n]+)+?-- (.*?) on (.*?)[\r\n]+" format="| $3 | $2 | $1 ... |$n"}%
 
@@ -150,6 +139,7 @@ This is a second comment.
 </div></div>
 
 ---+++ Extract table data
+
 | *Pos* | *Description* | *Hours* | 
 |  1 | onsite troubleshooting |  3 | 
 |  2 | normalizing data to new format |  10 |
@@ -164,7 +154,8 @@ This is a second comment.
 }%
 
 ---+++ MAKEINDEX example
-compare with [[http://en.wikipedia.org/wiki/Category:Philosophy_articles_needing_attention][Philosophy articles needing attention]]
+
+Compare with [[http://en.wikipedia.org/wiki/Category:Philosophy_articles_needing_attention][Philosophy articles needing attention]]
 
 %MAKEINDEX{
   "Absolute (philosophy), Accident (philosophy), Actualism, Talk:Adam Weishaupt, Alphabet of human thought, Alterity, Analytic philosophy, Analytic-synthetic distinction, Apologism, Bundle theory, Categories (Stoic), Causal chain, Causality, Coherentism, Conscience, Context principle, Contextualism, Cosmology, De dicto and de re, Dialectical monism, Difference (philosophy), Direct reference theory, Discourse ethics, Dualism, Emergentism, Essence, Ethical naturalism, Exemplification, Existentialism, Fatalism, French materialism, Futilitarianism, Hermeneutics, Hypokeimenon, Identity and change, Idolon tribus, Immanent evaluation, Indeterminacy (Philosophy), Individual, Inherence, Kennisbank Filosofie Nederland, Lazy Reason, Mike Lesser, Libertarianism (metaphysics), Logicism, Mad pain and Martian pain, Materialism, Meaning of life, Metakosmia, Metaphysical naturalism, Milesian school, Mind, Monism, Moral imperative, Multiplicity (philosophy), Mystical philosophy of antiquity, Nature (philosophy), Neomodernism, New England Transcendentalists, Nominalism, Non-archimedean time, Non-rigid designator, Object (philosophy), Ontic, Ontological reductionism, Phenomenology, Philosophical realism, Philosophical skepticism, Philosophy, Pluralism (philosophy), Post-structuralism, Postmodern philosophy, Preferentialism Present (time), Problem of universals, Process philosophy, Rational Animal, Rationalist movement, Relativism, Self (philosophy), Solipsism, Species (metaphysics), Specters of Marx, Substance theory, Talk:The Art of Being Right, Truth-value link, Universal (metaphysics), Utilitarianism, Value judgment, World riddle" 
@@ -173,22 +164,24 @@ compare with [[http://en.wikipedia.org/wiki/Category:Philosophy_articles_needing
 }%
 
 ---++ Plugin Installation Instructions
-   * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
+
+   * Download the ZIP file from twiki.org (see below)
    * Unzip it in your twiki installation directory. Content: 
      | *File:* | *Description:* |
 %$MANIFEST%
    * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
+
 <!-- provided for compatibility only
    * Set SHORTDESCRIPTION = Substitute and extract information from content by using regular expressions
 -->
-
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2005-2008, Michael Daum http://michaeldaumconsulting.com |
+|  Copyright: | &copy; 2005-2008, Michael Daum http://michaeldaumconsulting.com <br /> &copy; 2005-2010, TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.51 |
+|  Plugin Version: | v1.6 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-04-29: | TWikibug:Item6433 - doc improvements |
 |  03 Jul 2008: | sorting a list _before_, not _after_, formatting it in FORMATLIST |
 |  08 May 2008: | added 'text' parameter to SUBST and EXTRACT; \
                   fixed SUBST as it was pretty useless before |
@@ -213,11 +206,9 @@ compare with [[http://en.wikipedia.org/wiki/Category:Philosophy_articles_needing
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
-|  Plugin Home: | TWiki:Plugins/%TOPIC% |
-|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
-|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 03 Jul 2008
-
-%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attr="h" autoattached="1" comment="" date="1189788323" path="wikiringlogo40x40.png" size="2571" user="TWikiContributor" version="1"}%
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
