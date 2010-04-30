@@ -1,7 +1,21 @@
+# Contrib for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) Motorola 2003 - All rights reserved
-# Copyright (C) Crawford Currie 2004
+# Copyright (C) 2004 Crawford Currie
+# Copyright (C) 2004-2010 TWiki Contributor. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
 use strict;
 
 =begin text
