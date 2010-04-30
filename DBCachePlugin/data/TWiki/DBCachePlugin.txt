@@ -1,82 +1,38 @@
-%META:TOPICINFO{author="TWikiContributor" date="1209486030" format="1.1" reprev="1.1" version="$Rev$"}%
-<!--
-
-   PLEASE DO NOT EDIT THIS TOPIC
-
-   It is automatically generated from the subversion repository, and any changes
-   you make will simply be overwritten the next time a release is generated.
-
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author(s).
--->
+%META:TOPICINFO{author="TWikiContributor" date="1272597338" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
-
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/DBCachePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/DBCachePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+%SHORTDESCRIPTION%
+<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
 %TOC%
-<table style="float:right">
-<tr>
-  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
-  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none">
-      Powered by <br /> <nop>WikiRing Consultants </a>
-  </td>
-</tr>
-</table>
+</div>
 
 ---++ Description
-This is a lightweighted frontend to the DBCacheContrib. The provided
-tags DBQUERY and DBCALL can be used as a replacement for SEARCH and INCLUDE
-that use the database store instead of searching and extracting on the raw
-topic files. 
 
-*DBQUERY* is provided to ease the use of
-<nop>TWikiApplications based on the DBCacheContrib combining its flexible query
-language with unrestricted formatting and an extend mechanism to extract topic
-properties. 
+This is a lightweighted frontend to the DBCacheContrib. The provided tags DBQUERY and DBCALL can be used as a replacement for SEARCH and INCLUDE that use the database store instead of searching and extracting on the raw topic files. 
 
-*DBCALL* is named "call" and not "include" as its main purpose is to ease 
-<nop>TWikiApplications where <nop>TopicFunctions are treated as stored procedures.
-It fetches pre-compiled topics or sections of it. "Glue" chars
-(see TWiki:Plugins:GluePlugin) are applied in advance so that the actual rendering time
-is minimized. DBCALL does therefore not allow to call "external" pages as INCLUDE allows.
-DBCALL's "warn" parameter can only be set to "on" and "off" and does not allow 
-alternative content in case of a warning. The "pattern" feature used to extract a fragment from
-an INCLUDEd text using regular expression  has been dropped.
-That aside, DBCALLs can be called recursively as INCLUDEs can,
-parametrized using key-value arguments and
-obeys to %<nop>STARTINCLUDE%, %<nop>STOPINCLUDE%, %<nop>STARTSECTION{"..."}% 
-and %<nop>ENDSECTION{"..."}%.
+*DBQUERY* is provided to ease the use of <nop>TWikiApplications based on the DBCacheContrib combining its flexible query language with unrestricted formatting and an extend mechanism to extract topic
+properties.
 
-Using the <nop>DBCacheContrib topic sections are stored into the topic object of the database.
-The section between %<nop>STARTINCLUDE% ... %<nop>STOPINCLUDE% is called 
-=_sectiondefault= whereas all sections between %<nop>STARTSECTION{"&lt;name>"}% .... 
-%<nop>ENDSECTION{"&lt;name>"}% are called =_section&lt;name>= and are stored accordingly.
+*DBCALL* is named "call" and not "include" as its main purpose is to ease <nop>TWikiApplications where <nop>TopicFunctions are treated as stored procedures. It fetches pre-compiled topics or sections of it. "Glue" chars (see TWiki:Plugins:GluePlugin) are applied in advance so that the actual rendering time is minimized. DBCALL does therefore not allow to call "external" pages as INCLUDE allows. DBCALL's "warn" parameter can only be set to "on" and "off" and does not allow alternative content in case of a warning. The "pattern" feature used to extract a fragment from an INCLUDEd text using regular expression  has been dropped. That aside, DBCALLs can be called recursively as INCLUDEs can, parametrized using key-value arguments and obeys to %<nop>STARTINCLUDE%, %<nop>STOPINCLUDE%, %<nop>STARTSECTION{"..."}% and %<nop>ENDSECTION{"..."}%.
 
+Using the <nop>DBCacheContrib topic sections are stored into the topic object of the database. The section between %<nop>STARTINCLUDE% ... %<nop>STOPINCLUDE% is called =_sectiondefault= whereas all sections between %<nop>STARTSECTION{"&lt;name>"}% .... %<nop>ENDSECTION{"&lt;name>"}% are called =_section&lt;name>= and are stored accordingly.
 
-In addition, DBCALL implements so called *TopicMethods*. A method call is of the
-form =%<nop>DBCALL{"SomeTopic->RenderMethod" ...}%= and will infer the actual
-=...RenderMethod= to be called on the base of the _TopicType_ of =SomeTopic=. !TopicTypes
-are a concept introduced by the TWiki:Plugins/TWikiWorkbenchAddOn. It basically refers
-to a convention to tag the type(s) of a topic in a formfield "TopicType". The lookup
-mechanism for !TopicMethods proceeds as normal if the DBCALl is not of the form
-="SomeTopic->RenderMethod"=. For example, if =SomeTopic= is of type =Video, <nop>MediaType, <nop>ClassifiedTopic=
-the lookup mechanism will try to find the methods =VideoRenderMethod=, =MediaTypeRenderMethod=
-and =ClassifiedTopicRenderMethod= in the given order and use the one found first. The web
-these types are defined in is infered on the base of the !TWikiForm definitions of each of 
-these types. If none of these type-specific methods is found the method call will fallback
-to a normal non-specific function call. The !TopicMethod itself is called with an implicit
-parameter =OBJECT= that refers to =SomeTopic=, that is the object this method has been called for.
+In addition, DBCALL implements so called *TopicMethods*. A method call is of the form =%<nop>DBCALL{"SomeTopic->RenderMethod" ...}%= and will infer the actual =...RenderMethod= to be called on the base of the _TopicType_ of =SomeTopic=. !TopicTypes are a concept introduced by the TWiki:Plugins/TWikiWorkbenchAddOn. It basically refers to a convention to tag the type(s) of a topic in a formfield "TopicType". The lookup mechanism for !TopicMethods proceeds as normal if the DBCALl is not of the form ="SomeTopic->RenderMethod"=. For example, if =SomeTopic= is of type =Video, <nop>MediaType, <nop>ClassifiedTopic= the lookup mechanism will try to find the methods =VideoRenderMethod=, =MediaTypeRenderMethod= and =ClassifiedTopicRenderMethod= in the given order and use the one found first. The web these types are defined in is infered on the base of the !TWikiForm definitions of each of these types. If none of these type-specific methods is found the method call will fallback to a normal non-specific function call. The !TopicMethod itself is called with an implicit parameter =OBJECT= that refers to =SomeTopic=, that is the object this method has been called for.
 
-*ATTACHMENTS* lists the attachments of a given topic giving you a high degree of control about
-what and how to display attachments. 
+*ATTACHMENTS* lists the attachments of a given topic giving you a high degree of control about what and how to display attachments.
 
-*DBRECURSE* itterates over topics in a web following a certain topic-to-topic relation, like
-the partent-child relation among topics. You can define arbitrary relations using filters.
-
+*DBRECURSE* itterates over topics in a web following a certain topic-to-topic relation, like the partent-child relation among topics. You can define arbitrary relations using filters.
 
 ---++ Syntax
+
 ---+++ ATTACHMENTS
-List all attachments of a given topic. Without any parameters it displays a
-table of attachments similar to the one generated by the TWiki templates at the bottom
-of a topic. There are a couple of parameters that take regular expressions to
-limit the number of attachments to be listed.
+
+List all attachments of a given topic. Without any parameters it displays a table of attachments similar to the one generated by the TWiki templates at the bottom of a topic. There are a couple of parameters that take regular expressions to limit the number of attachments to be listed.
 
 *Syntax:*
 | *%<nop>ATTACHMENTS%, %<nop>ATTACHMENTS{"&lt;topic>" ...}* ||
@@ -137,6 +93,7 @@ The format, header and footer may contain the standard escape sequences:
    * $percnt: % sign
 
 ---+++ DBCALL
+
 Fetch topic content or a section of it from the database store.
 
 *Syntax:*
@@ -153,6 +110,7 @@ Fetch topic content or a section of it from the database store.
 		     aka do-not-touch-mode) |
 
 ---+++ DBDUMP
+
 Display the database record of a topic (usefull for debugging).
 
 *Syntax:*
@@ -161,9 +119,8 @@ Display the database record of a topic (usefull for debugging).
 | =web="..."= | name of the web to look for the given topic; \
   note that you can use the dot-notation in specifying the <nop>web.topic also |
 
-
-
 ---+++ DBQUERY
+
 DBQUERY can be used in either of two modes (a) as a pure search
 tool or (b) as a tool to extract properties of (a set of) known topics.
 
@@ -202,12 +159,8 @@ Following variables are expanded in format strings:
    * $index: the current row index in the search
    * $web: the web where the hits where found
    * $formfield(&lt;formfield-name>): the value of the given formfield
-   * $formatTime(&lt;formfield-accessor> [,&lt;format>]): format the datefield pointed
-     to by the &lt;formfield-accessor> using the given &lt;format>; the format can be
-     in any form supported by =TWiki::Func::formatTime()= 
-     (see [[%TWIKIWEB%.TWikiVariables#DISPLAYTIME_format_formatted_dis][TWikiVariables]] documentation).
-   * $expand(&lt;formfield-accessor>): return the formfield pointed to by the 
-      &lt;formfield-accessor>
+   * $formatTime(&lt;formfield-accessor> [,&lt;format>]): format the datefield pointed to by the &lt;formfield-accessor> using the given &lt;format>; the format can be in any form supported by =TWiki::Func::formatTime()= (see [[%SYSTEMWEB%.VarGMTIME2][GMTIME]] documentation).
+   * $expand(&lt;formfield-accessor>): return the formfield pointed to by the &lt;formfield-accessor&gt;
    * $rss(...): encode entities so that the text can be included in an rss feed
    * $encode(...): encode entities so that the text can be included in HTML input form elements
    * $flatten(...): remove any special markup producing a flattened text representation
@@ -215,22 +168,17 @@ Following variables are expanded in format strings:
 
 *Formfield accessors:*
 
-In its most basic form =$expand(Ref)= is identical to =$formfield(Ref)=. In addition
-=$expand()= can be used to refer to topic properties of related topics that can be reached from the current one using the '@' symbol. For example, if a topic A uses a form that contains a field named "Ref" and specifies a reference to 
-another topic B (by using its name) you can access the "Headline" in B from A using =$expand(@Ref.Headline)=.
+In its most basic form =$expand(Ref)= is identical to =$formfield(Ref)=. In addition =$expand()= can be used to refer to topic properties of related topics that can be reached from the current one using the '@' symbol. For example, if a topic A uses a form that contains a field named "Ref" and specifies a reference to another topic B (by using its name) you can access the "Headline" in B from A using =$expand(@Ref.Headline)=.
 
-A formfield accessor can be a composed one using 'or' and 'and'. Example: =$expand(Name or Author)=
-will expand to the value of the formfield "Name" if it exists and is non-empty and to the value 
-of the formfield "Author" otherwise. More valid examples:
+A formfield accessor can be a composed one using 'or' and 'and'. Example: =$expand(Name or Author)= will expand to the value of the formfield "Name" if it exists and is non-empty and to the value of the formfield "Author" otherwise. More valid examples:
    * =$expand(@Ref.Headline)=: headline of the refered topic
    * =$expand(Nr and '.')=: append a dot to the formfield value "Nr" if it exists
    * =$expand(Name or Author)=: expand to "Name" or "Author"
 
-A formfield accessor can be computed using <nop>TWikiMarkup. If the string starts with '%',
-it is expanded and its result is taken as the real formfield accessor. This is useful when the 
-name of the formfield must be computed by different means.
+A formfield accessor can be computed using <nop>TWikiMarkup. If the string starts with '%', it is expanded and its result is taken as the real formfield accessor. This is useful when the name of the formfield must be computed by different means.
 
 ---+++ DBRECURSE
+
 Traverse topic-to-topic relations, like the intrinsic parent-child relation
 
 *Syntax:*
@@ -264,8 +212,7 @@ The =...format=, =...header= and =...footer= format strings may contain the foll
    * $topic: the current topic in the search
    * $index: the topic index number in one recursion step, that is an enumeration in each recursion step
    * $number: the "paragraph" number in the recursion, e.g. =1.2.1.5= depicts the path alternative in the recursion tree
-   * $count: number of found topics; this is the total number of found topics in the =header= and =footer= and the
-             number of topics _found so far_ during recursion
+   * $count: number of found topics; this is the total number of found topics in the =header= and =footer= and the number of topics _found so far_ during recursion
    * $indent: 3 spaces per depth
    * $indent(&lt;string>): uses =&lt;string>= for indenting the result in each depth
    * $formfield(...): see #DBQUERY
@@ -284,6 +231,7 @@ Example:
 
 
 ---+++ DBSTATS
+
 Compute and format a statistics on the database.
 
 *Syntax:*
@@ -305,14 +253,9 @@ Compute and format a statistics on the database.
 | =limit="..."= | maximum number of keys to be formated in the output |
 | =hidenull="..."= | flag to indicate that an empty hit set should not be displayed |
 
-The DBSTATS searches for all topics in given web and reads the given form fields.
-It then uses the =pattern= to extract any key in the data and counts their occurrence.
-The result is rendered using the =format= parameter for each token found, separating them
-by =sep=, prepend the =header= and append the =footer=. Results can be sorted alphabetically
-or by createdate.
+The DBSTATS searches for all topics in given web and reads the given form fields. It then uses the =pattern= to extract any key in the data and counts their occurrence. The result is rendered using the =format= parameter for each token found, separating them by =sep=, prepend the =header= and append the =footer=. Results can be sorted alphabetically or by createdate.
 
-Format strings (=header=, =format=, =footer=) can use the following variables to insert
-the computed statistics:
+Format strings (=header=, =format=, =footer=) can use the following variables to insert the computed statistics:
    * $key, $key1: the found key, this must match the first group in the pattern argument
    * $key2, $key3, $key4,$key5: second, third, etc grouping in the =pattern= argument
    * $count: the number of occurences of the key
@@ -324,9 +267,7 @@ the computed statistics:
    * $web: the web we search in
    * $topics: the list of all topics where the keys where found
 
-For example if you want to extract all month/years from a database's =Date= field
-that has the format =dd mon yyyy= and then format a link to an archive using
-the month and the year as separate url parameters then use something like this:
+For example if you want to extract all month/years from a database's =Date= field that has the format =dd mon yyyy= and then format a link to an archive using the month and the year as separate url parameters then use something like this:
 <verbatim>
 %DBSTATS{"<db query>"
    field="Date"
@@ -336,11 +277,10 @@ the month and the year as separate url parameters then use something like this:
 }%
 </verbatim>
 
-Note, that the above pattern will crop away the day. Groups can be nested counting
-them from left to right, outside to inside:  the first group matches the
-compete pattern, the second the month the third the year.
+Note, that the above pattern will crop away the day. Groups can be nested counting them from left to right, outside to inside:  the first group matches the compete pattern, the second the month the third the year.
 
 ---+++ TOPICTITLE
+
 derive the title of a topic from a couple of properties:
 
 *Syntax:*
@@ -353,37 +293,20 @@ derive the title of a topic from a couple of properties:
 
 ---++ Perl API
 
-The <nop>DBCachePlugin supports overloading the contained default database cache by inheriting
-from =DBCachePlugin::WebDB= being itself a =DBCacheContrib=. The only purpose of the 
-=DBCachePlugin::WebDB= is to extract the <nop>TopicFunctions contained in a topic as described
-above. You can easily extend this functionality by deriving a <nop>WebDB specific to your
-own <nop>TWikiApplication. For example, the TWiki:Plugins.BlogPlugin defines a <no>WebDB of
-its own where it caches the createdate of a topic being either specified in a formfield  or
-given in the timestamp of the first revision of a topic.
+The <nop>DBCachePlugin supports overloading the contained default database cache by inheriting from =DBCachePlugin::WebDB= being itself a =DBCacheContrib=. The only purpose of the =DBCachePlugin::WebDB= is to extract the <nop>TopicFunctions contained in a topic as described above. You can easily extend this functionality by deriving a <nop>WebDB specific to your own <nop>TWikiApplication. For example, the TWiki:Plugins.BlogPlugin defines a <no>WebDB of its own where it caches the createdate of a topic being either specified in a formfield or given in the timestamp of the first revision of a topic.
 
----+++ DBCachePlugin 
+---+++ DBCachePlugin
+
 ---++++ getDB()
-Returns a database object used for further queries.  This function must be
-called ahead of any actual database access. If your <nop>TWikiApplication is
-using a derived <nop>WebDB then use the =WEBDB= variable in your WebPreferences
-to point to its implementation (example: =Set WEBDB =
-TWiki::Plugins::BlogPlugin::WebDB=). If =WEBDB= is not defined the default
-implementation =TWiki::Plugins::DBCachePlugin::WebDB= is used.  Note, that this
-way only one application-specific database cache can be loaded _per web_.  This
-is rather a design decision; otherwise each DBQUERY and DBCALL tag would have to
-declare which database it operated on. So currently the rule of thumb is: one
-web one <nop>TWikiApplication making use of this plugin.
 
-returns a database object. See the TWiki:Plugins::DBCacheContrib documentation
-for its interfaces.
+Returns a database object used for further queries.  This function must be called ahead of any actual database access. If your <nop>TWikiApplication is using a derived <nop>WebDB then use the =WEBDB= variable in your WebPreferences to point to its implementation (example: =Set WEBDB = TWiki::Plugins::BlogPlugin::WebDB=). If =WEBDB= is not defined the default implementation =TWiki::Plugins::DBCachePlugin::WebDB= is used.  Note, that this way only one application-specific database cache can be loaded _per web_.  This is rather a design decision; otherwise each DBQUERY and DBCALL tag would have to declare which database it operated on. So currently the rule of thumb is: one web one <nop>TWikiApplication making use of this plugin.
 
 ---+++ DBCachePlugin::WebDB 
-This implements the database object that is used to access the topic records in
-a web. Note, that for each web there is exactly one <nop>WebDB database object.
-A database object is fetched (and initialized if needed) by the
-DBCachePlugin::getDB() function. 
+
+This implements the database object that is used to access the topic records in a web. Note, that for each web there is exactly one <nop>WebDB database object. A database object is fetched (and initialized if needed) by the DBCachePlugin::getDB() function. 
 
 ---++++ dbQuery()
+
 The DBQUERY functionality can be access from within perl using the plugins =dbQuery()= method.
 
 | *(@$topicNames, %$topicObjs, $errorMsg) = $db-&gt;dbQuery([$search, @$topics, $order, $reverse, $include, $exclude])* ||
@@ -397,10 +320,10 @@ The DBQUERY functionality can be access from within perl using the plugins =dbQu
 | =include= | pattern that topic names must match to be considered a hit |
 | =exclude= | pattern that topic names must _not_ match to be considered a hit |
 
-returns a list pointer of all found topics names, a hash pointer to an array of all found
-topic objects (keys are the name of the topics) and a possibly defined error message.
+returns a list pointer of all found topics names, a hash pointer to an array of all found topic objects (keys are the name of the topics) and a possibly defined error message.
 
 ---++++ getFormField()
+
 Access the formfield value of an arbitrary topic.
 
 | *$value = $db-&gt;getFormField($topic, $formfield)* ||
@@ -412,38 +335,34 @@ returns the value of the named formfield
 <!-- %RED%TODO: document the rest of the methods %ENDCOLOR% -->
 
 ---++ Plugin Settings
-<!-- provided for compatibility only
-   * Set SHORTDESCRIPTION = Lightweighted frontend to the DBCacheContrib
--->
 
-Each web can specify an alternative implementation inheriting from DBCachePlugin::WebDB.
-To specify it you have to set the =WEBDB= variable in the WebPreferences. If not the
-following is the default paramenter (omitting the #)
+<!-- provided for compatibility only
+   * Set SHORTDESCRIPTION = Lightweighted frontend to the DBCacheContrib to query cached TWiki content
+-->
+Each web can specify an alternative implementation inheriting from DBCachePlugin::WebDB. To specify it you have to set the =WEBDB= variable in the WebPreferences. If not the following is the default paramenter (omitting the #)
    * #Set WEBDB = TWiki::Plugins::DBCachePlugin::WebDB
    
 ---+++ {DBCache}{alwaysUpdateCache} (DBCacheContrib setting)
-If  $TWiki::cfg{DBCache}{alwaysUpdateCache}  is set to FALSE (defaults to TRUE for compatibility)
-then DBCacheContrib will avoid calling _updateCache unless requested with =getDB($web, 1)=. _updateCache_ accesses every topic file in the web, so its an unnecessary performance hit.
-DBCachePlugin will then only request full _updateCache from the afterSaveHandler and from the new REST [[%SCRIPTURL{rest}%/DBCachePlugin/UpdateCache?topic=Web.WebHome][updateCache]] 
-handler (change 'Web' to set which web to update).
-You can also call the update from the command line - from the twiki/bin dir -
+
+If  $TWiki::cfg{DBCache}{alwaysUpdateCache}  is set to FALSE (defaults to TRUE for compatibility) then DBCacheContrib will avoid calling _updateCache unless requested with =getDB($web, 1)=. _updateCache_ accesses every topic file in the web, so its an unnecessary performance hit. DBCachePlugin will then only request full _updateCache from the afterSaveHandler and from the new REST [[%SCRIPTURL{rest}%/DBCachePlugin/UpdateCache?topic=Web.WebHome][updateCache]] handler (change 'Web' to set which web to update). You can also call the update from the command line - from the twiki/bin dir -
 <verbatim>./rest DBCachePlugin.UpdateCache topic=Web.WebHome</verbatim>
 
 ---++ Plugin Installation Instructions
 
    * Download the ZIP file
-   * Download and install all additionally required plugins listed in the
-     [[#Plugin_Info][dependencies information]] below
+   * Download and install all additionally required plugins listed in the [[#Plugin_Info][dependencies information]] below
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
    | *File:* | *Description:* |
 %$MANIFEST%
 
 ---++ Plugin Info
-|  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2005-2008, Michael Daum http://michaeldaumconsulting.com |
+
+|  Plugin Author: | TWiki:Main/MichaelDaum |
+|  Copyright: | &copy; 2005-2008, Michael Daum http://michaeldaumconsulting.comi; <br /> &copy; 2005-2010, TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.01 |
+|  Plugin Version: | v2.1 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-04-29: | TWikibug:Item6433 - doc improvements |
 |  03 Jul 2008: | fixed calculation of a topic title; \
                   disabled =renderWikiWordHandler= for TWikis before 4.2, \
                   so not replacing the <nop>WikiName with its  <nop>TopicTitle  |
@@ -510,13 +429,11 @@ You can also call the update from the command line - from the twiki/bin dir -
 |  24 Nov 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | TWiki:Plugins/DBCacheContrib (Version TWiki-4, Rev &gt;= 13562)|
+|  Other Dependencies: | TWiki:Plugins/DBCacheContrib (Version TWiki-4, Rev &gt;= 13562) |
 |  Perl Version: | 5.8 |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
-|  Plugin Home: | TWiki:Plugins/%TOPIC% |
-|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
-|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 03 Jul 2008
-
-%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attr="h" autoattached="1" comment="" date="1207666446" path="wikiringlogo40x40.png" size="2571" user="TWikiContributor" version="1"}%
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences

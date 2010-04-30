@@ -1,6 +1,9 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2005-2007 Michael Daum http://wikiring.de
+# Copyright (C) 2005-2010 TWiki Contributor. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,9 +30,9 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '2.01';
+$RELEASE = '2.1';
 $NO_PREFS_IN_TOPIC = 1;
-$SHORTDESCRIPTION = 'Lightweighted frontend to the DBCacheContrib';
+$SHORTDESCRIPTION = 'Lightweighted frontend to the DBCacheContrib to query cached TWiki content';
 
 ###############################################################################
 # plugin initializer
