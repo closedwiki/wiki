@@ -1,40 +1,21 @@
-%META:TOPICINFO{author="TWikiContributor" date="1195829708" format="1.1" reprev="1.2" version="$Rev$"}%
-<!--
-
-   PLEASE DO NOT EDIT THIS TOPIC
-
-   It is automatically generated from the subversion repository, and any changes
-   you make will simply be overwritten the next time a release is generated.
-
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
--->
+%META:TOPICINFO{author="TWikiContributor" date="1272610865" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
-%TOC%
----++ Description
-<table style="float:right">
-<tr>
-  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
-  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none">
-      Powered by <br /> <nop>WikiRing Consultants </a>
-  </td>
-</tr>
-</table>
-This plugin will help you to write _readable_ markup (<nop>TWikiMarkup, HMTL, ...)
-within TWiki by allowing tags and arguments to be formatted on multiple lines.
-This is done by removing whitespaces surrounding tilde characters at the
-beginning of a line and recombine consecutive lines again.  Basically, there
-are two ways of glueing and recombining lines by either removing all whitespaces
-between two lines using =%*~~= or 
-by removing all whitespaces and separateing lines with a
-single space using =%~~~=.  
-There's a helper character sequence =%~~= that prevents the TWiki engine to
-interprete tags before the GluePlugin could reformat the text.
-In addition there's a glue sequence =#~~= to insert comments within a <nop>TWikiMarkup
-expression.
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/GluePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/GluePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+%SHORTDESCRIPTION%
 
-While these glue sequences might feel strange at the beginning they help you
-to format and recognize your markup and make it more readable. That way you
-will be able to format a <nop>TWikiApplications that looked like this
+<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
+%TOC%
+</div>
+---++ Description
+
+This plugin will help you to write _readable_ markup (<nop>TWikiMarkup, HMTL, ...) within TWiki by allowing tags and arguments to be formatted on multiple lines. This is done by removing whitespaces surrounding tilde characters at the beginning of a line and recombine consecutive lines again.  Basically, there are two ways of glueing and recombining lines by either removing all whitespaces between two lines using =%*~~= or by removing all whitespaces and separateing lines with a single space using =%~~~=. There's a helper character sequence =%~~= that prevents the TWiki engine to interprete tags before the GluePlugin could reformat the text. In addition there's a glue sequence =#~~= to insert comments within a <nop>TWikiMarkup expression.
+
+While these glue sequences might feel strange at the beginning they help you to format and recognize your markup and make it more readable. That way you will be able to format a <nop>TWikiApplications that looked like this
 
 <verbatim>
 %SEARCH{"..." type="query" header="<table width="100%" border="5px"><thead><tr><th>Name</th><th>Description</th><th>Date</th></tr></thead>" format="<tr><th>$formfield(Name)</th><th>$summary</th><th>$createdate</th></tr>" footer="</table>"}%
@@ -90,18 +71,15 @@ somewhat like this
 #~~ #################################
 </verbatim>
 
-
 ---++ Syntax
+
 | *Line prefix* | *Action* |
 | =~~~&lt;space>= | combine lines by removing all, insert one whitespaces |
 | =*~~&lt;space>= | recombine lines by removing any whitespaces between them |
 | =%~~&lt;space>= | escape tag interpretation |
 | =#~~&lt;space>= | comment line, all chars on the same line are removed |
 
-The &lt;space> is a literal whitespace blank. The =~~~&lt;space>= and 
-=*~~&lt;space>= sequences are recognized only at the beginning of a line, whereas
-the =%~~&lt;space>= escape sequence might appear everywhere. The basic
-anatomy of writing a TWiki tag using the GluePlugin is exemplified by
+The &lt;space> is a literal whitespace blank. The =~~~&lt;space>= and =*~~&lt;space>= sequences are recognized only at the beginning of a line, whereas the =%~~&lt;space>= escape sequence might appear everywhere. The basic anatomy of writing a TWiki tag using the GluePlugin is exemplified by
 <verbatim>
 %~~ TAG{
 ~~~ key="
@@ -116,6 +94,7 @@ which will be recombined to
 </verbatim>
 
 ---++ Examples
+
 <table class="twikiTable">
 <tr><th> You type: </th></tr>
 <tr><td>
@@ -227,7 +206,7 @@ Oranges
 
 ---++ Plugin Installation Instructions
 
-   * [[%ATTACHURL%/%TOPIC%.zip][Download]] the ZIP file
+   * Download the ZIP file from twiki.org (see below)
    * Unzip it in your twiki installation directory. Content: 
      | *File:* | *Description:* |
 %$MANIFEST%
@@ -241,15 +220,16 @@ Oranges
 
 
 ---++ Plugin Info
-<!-- provided for compatibility only
-   * Set SHORTDESCRIPTION = Enable <nop>TWikiML to span multiple lines
--->
 
+<!-- provided for compatibility only
+   * Set SHORTDESCRIPTION = Enable TML (TWiki Markup Language) to span multiple lines
+-->
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2005-2007, Michael Daum http://michaeldaumconsulting.com |
+|  Copyright: | &copy; 2005-2007, Michael Daum http://michaeldaumconsulting.com <br /> &copy; 2004-2010, TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.00 |
+|  Plugin Version: | v2.1 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-04-30: | TWikibug:Item6433 - doc improvements |
 |  23 Nov 2007: | added way to add comments in the middle of a <nop>TWikiMarkup expression |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
 |  28 Jul 2006: | fixed MANIFEST;\
@@ -266,12 +246,9 @@ Oranges
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
-|  Plugin Home: | TWiki:Plugins/%TOPIC% |
-|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
-|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-
--- TWiki:Main.MichaelDaum - 23 Nov 2007
-
-%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attr="h" autoattached="0" comment="" date="1190996093" path="wikiringlogo40x40.png" size="2571" user="TWikiContributor" version="1"}%
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
