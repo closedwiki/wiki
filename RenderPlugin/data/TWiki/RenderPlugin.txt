@@ -1,22 +1,21 @@
-%META:TOPICINFO{author="micha" date="1215778439" format="1.1" reprev="1.2" version="1.2"}%
----+!! %TOPIC%
+%META:TOPICINFO{author="TWikiContributor" date="1272703205" format="1.1" version="$Rev$"}%
+---+!! <nop>%TOPIC%
 <!--
-One line description, required for extensions repository catalog.
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/OrphansPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/OrphansPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+
    * Set SHORTDESCRIPTION = Render <nop>TWikiApplications asynchronously
 -->
 %SHORTDESCRIPTION%
 
+<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
 %TOC%
+</div>
 
 ---++ Description
-<table style="float:right">
-<tr>
-  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png" title="Make your Wiki ring!" alt="WikiRing"></td>
-  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none">
-      Powered by <br /> <nop>WikiRing Consultants </a>
-  </td>
-</tr>
-</table>
+
 This plugin implements three simple REST handlers to get content from TWiki.
 For example, these can be used to easily replace a server-side INCLUDE with a
 functinal equivalent using an ajax call to one of these REST handlers. 
@@ -43,6 +42,7 @@ appropriate ajax request. This basically is the client side equivalent of
 a parametrized =INCLUDE= as it is used on server side <nop>TWikiApplications (see examples below).
 
 ---++ Syntax
+
 The available REST handlers are:
 
 | *Handler* | *Parameters* | *Description* |
@@ -56,6 +56,7 @@ The available REST handlers are:
   <nop>TWikiMarkup |
 
 ---++ Usage
+
 The REST handlers are called like this:
 <verbatim>
 %SCRIPTURLPATH{"rest"}/RenderPlugin/render?text=%ENCODE{"This is _very_ cool."}%
@@ -80,6 +81,7 @@ $(function() {
 ---++ Examples
 
 ---+++ Fetching a message 
+
 <verbatim>
 %STARTSECTION{"message"}%
 *Hello World!* :)
@@ -111,6 +113,7 @@ function clearTheMessage() {
 </script>
 
 ---+++ Previewing TML
+
 <div class="twikiPageForm">
 <form>
 <textarea id="mytext" name="text" rows="5" columns="80" style="width:100%"></textarea>
@@ -143,14 +146,15 @@ Okay, your turn to create an example calling SEARCH.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2006-2008, Michael Daum http://michaeldaumconsulting.com |
+|  Copyright: | &copy; 2006-2008, Michael Daum http://michaeldaumconsulting.com; <br /> &copy; 2008-2010, TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 0.1 |
+|  Plugin Version: | 0.2 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-05-01: | TWikibug:Item6433 - doc improvements |
 |  11 Jul 2008: | initial version |
 |  Dependencies: | %$DEPENDENCIES% |
-|  Plugin Home: | TWiki:Plugins/%TOPIC% |
-|  Feedback: | TWiki:lugins/%TOPIC%Dev |
-|  Appraisal: | TWiki:lugins/%TOPIC%Appraisal |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
