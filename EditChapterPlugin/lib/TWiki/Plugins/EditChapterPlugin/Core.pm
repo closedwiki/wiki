@@ -1,6 +1,9 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2008 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2008-2010 TWiki Contributor. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -36,7 +39,7 @@ sub new {
     TWiki::Func::getPreferencesValue("EDITCHAPTERPLUGIN_MAXDEPTH") || 6;
   my $editImg = 
     TWiki::Func::getPreferencesValue("EDITCHAPTERPLUGIN_EDITIMG") || 
-    '<img src="%PUBURLPATH%/%TWIKIWEB%/EditChapterPlugin/ueb.png" height="16" width="16" border="0" />';
+    '<img src="%PUBURLPATH%/%SYSTEMWEB%/EditChapterPlugin/ueb.png" height="16" width="16" border="0" />';
   my $editLabelFormat = 
     TWiki::Func::getPreferencesValue("EDITCHAPTERPLUGIN_EDITLABELFORMAT") || 
     '<span class="ecpHeading">$anchor $heading <a class="ecpEdit" href="$url" title="Edit this chapter">$img</a></span>';
