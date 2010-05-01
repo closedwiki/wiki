@@ -1,5 +1,9 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
+# Copyright (C) 2008-2010 TWiki Contributor. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -58,31 +62,15 @@ require TWiki::Contrib::DojoToolkitContrib;
 
 require JSON;
 
-# $VERSION is referred to by TWiki, and is the only global variable that
-# *must* exist in this package.
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC );
 
-# This should always be $Rev: 64 (19 Mar 2008) $ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev: 64 (19 Mar 2008) $';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'TWiki-4.2';
+$RELEASE = '1.1';
 
 # Short description of this plugin
 # One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
 $SHORTDESCRIPTION = 'Full implementation of REST';
 
-# You must set $NO_PREFS_IN_TOPIC to 0 if you want your plugin to use preferences
-# stored in the plugin topic. This default is required for compatibility with
-# older plugins, but imposes a significant performance penalty, and
-# is not recommended. Instead, use $TWiki::cfg entries set in LocalSite.cfg, or
-# if you want the users to be able to change settings, then use standard TWiki
-# preferences that can be defined in your Main.TWikiPreferences and overridden
-# at the web and topic level.
 $NO_PREFS_IN_TOPIC = 1;
 
 # Name of this Plugin, only used in this module
@@ -173,7 +161,7 @@ Addressing scheme is...
 http://twiki/cgi-bin/rest/RestPlugin/rest/Web.Topic:FormName.FieldName
 
 eg:
-        #if $pathInfo == '' %MAINWEB%.WebHome
+        #if $pathInfo == '' %USERSWEB%.WebHome
         #if $pathInfo == 'Web' Web.WebHome
         #if $pathInfo == 'Web.Topic' Web.Topic
         #if $pathInfo == 'Web.Topic:FORM' the topic's form
