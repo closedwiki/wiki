@@ -1,5 +1,8 @@
+%META:TOPICINFO{author="TWikiContributor" date="1272694107" format="1.1" version="$Rev$"}%
+---+ !EditRowPlugin Examples
+
 ---
-*WikiRing %PUBURL%/%TWIKIWEB%/EditRowPlugin/wikiringlogo20x20.png Projects*
+
 %EDITTABLE{ format="| row, -1 | text, 20, init | select, 1, not started, starting, ongoing, completed | radio, 3,:-),:-I,:-( | date, 20 |" changerows="on" quietsave="on"}%
 | *Nr* | *Project* | *State* | *Progress* | *Timestamp* |
 | 1 | Sliced yoghourt | completed | :-) | 26 Jun 2002 |
@@ -32,3 +35,5 @@
 | Gender: | M %EDITCELL{select, 1, , F, M}% |
 | DOB: | 18 October 2007 %EDITCELL{date, 10}% |
 | City: | New York |
+
+__Related Topic:__ EditRowPlugin

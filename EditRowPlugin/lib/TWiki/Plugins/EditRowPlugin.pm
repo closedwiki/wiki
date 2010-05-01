@@ -1,4 +1,28 @@
-# See bottom of file for copyright
+# Author: Crawford Currie http://c-dot.co.uk
+#
+# Copyright (C) 2007 WindRiver Inc.
+# Copyright (C) 2008-2010 TWiki Contributor. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
+# NOTE: Please extend that file, not this notice.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# Do not remove this copyright notice.
+#
+# This plugin supports editing of a table row-by-row.
+#
+# It uses a fairly generic table object, and employs a REST handler
+# for saving.
+
 package TWiki::Plugins::EditRowPlugin;
 
 use strict;
@@ -341,28 +365,3 @@ sub save {
 }
 
 1;
-__END__
-
-Author: Crawford Currie http://c-dot.co.uk
-
-Copyright (C) 2007 WindRiver Inc. and TWiki Contributors.
-All Rights Reserved. TWiki Contributors are listed in the
-AUTHORS file in the root of this distribution.
-NOTE: Please extend that file, not this notice.
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version. For
-more details read LICENSE in the root of this distribution.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-Do not remove this copyright notice.
-
-This plugin supports editing of a table row-by-row.
-
-It uses a fairly generic table object, and employs a REST handler
-for saving.

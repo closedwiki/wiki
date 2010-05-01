@@ -1,9 +1,13 @@
+%META:TOPICINFO{author="TWikiContributor" date="1272693056" format="1.1" version="$Rev$"}%
 ---+!! !EditRowPlugin
 <!--
-One line description, required for extensions repository catalog.
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/EditRowPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/EditRowPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+
    * Set SHORTDESCRIPTION = Replacement for some of !EditTablePlugin, some of !EditTablerowPlugin and some of !TablePlugin.
 -->
-
 %SHORTDESCRIPTION%
 
 <img src="%ATTACHURLPATH%/screenshot.gif" alt="screenshot.gif" style="float:right" />
@@ -64,11 +68,11 @@ Parameters:
       * =date, &lt;size&gt;, &lt;initial value&gt;, &lt;DHTML date format&gt;= Date. Initial value and date format are both optional.
    * ==changerows== - Rows can be added and removed if ="on"=. Rows can be
      added but not removed if ="add"=. Defaults to the value of the
-     [[%TWIKIWEB%.TWikiVariables][preference]] =CHANGEROWS=, or =off= if it isn't set.
+     [[%SYSTEMWEB%.TWikiVariables][preference]] =CHANGEROWS=, or =off= if it isn't set.
    * ==disable== - By default, the plugin shows both full table and individual row editing controls. You can choose to disable one or both of these modes using the =disable= parameter, by setting it to =row= or =full= (or =row,full= to disable all editing and just leave sorting). If full table editing is disabled, but =changerows= is =on=, then the <img src="%ATTACHURLPATH%/edittable.gif" /> (edit table) button will be replaced with a <img src="%ATTACHURLPATH%/addrow.gif" /> (add row) button. Defaults to the value of the
-     [[%TWIKIWEB%.TWikiVariables][preference]] =EDITROWPLUGIN_DISABLE=, or =none= if it isn't set.
+     [[%SYSTEMWEB%.TWikiVariables][preference]] =EDITROWPLUGIN_DISABLE=, or =none= if it isn't set.
    * ==quietsave== - Quiet Save button is shown if ="on"=. Defaults to the
-     value of the [[%TWIKIWEB%.TWikiVariables][preference]] =QUIETSAVE=, or =off= if it
+     value of the [[%SYSTEMWEB%.TWikiVariables][preference]] =QUIETSAVE=, or =off= if it
      isn't set.
    * ==include== -
      Name of another topic defining the EDITTABLE parameters. The first
@@ -166,7 +170,7 @@ then="enabled in this TWiki. Click on the buttons to try it out."}%
 <img src="%ATTACHURLPATH%/example5.gif" alt='Example 4'/>
 
 ---++ Preferences
-The plugin interprets a couple of [[%TWIKIWEB%.TWikiVariables][preferences]], in common with the !EditTablePlugin.
+The plugin interprets a couple of [[%SYSTEMWEB%.TWikiVariables][preferences]], in common with the !EditTablePlugin.
 | =QUIETSAVE= | Gives a default value for the =quietsave= parameter. Default is =off=. |
 | =CHANGEROWS= | Gives a default value for the =changerows= parameter. Default is =off=. |
 Also, the plugin can be selectively disabled using
@@ -215,13 +219,13 @@ The handler accepts the following parameters:
 The value of each individual cell is stored in a parameter called =erp_&lt;table>_&lt;row>_&lt;column>=
 
 ---++ Plugin Info
-Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
 
-|  Plugin Author(s): | Crawford Currie http://c-dot.co.uk |
+|  Plugin Author: | Crawford Currie http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
-|  Copyright: | &copy; 2007 Wind<nop>River Inc. |
+|  Copyright: | &copy; 2007 Wind<nop>River Inc. <br /> &copy; 2007-2010, TWiki:TWiki/TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-04-30: | TWikibug:Item6433 - doc improvements; changing TWIKIWEB to SYSTEMWEB |
 |  15 May 2008: | TWikibug:Item5621: helptopics were getting munged because of use of BR to replace newlines. This was to prevent accidental table concatenation, but breaks other things worse so I removed it. TWikibug:Item5624: handle comments with embedded tables. TWikibug:Item5625: don't count generated tables in the table count. TWikibug:Item5594: typo was causing strange behaviour with row management tools. TWikibug:Item5595: fixed problem with included tables. TWikibug:Item5596: changed default behaviour for empty cells to ignore pre-existing spaces if there is no other content. TWikibug:Item5616: row moving was failing on 4.1.2 due to bad URL construction. |
 |  8 Mar 2008 | TWikibug:Item5386: fixed problem with editing of tables embedded from an included topic TWikibug:Item5043: added Jeff Crawford's patch to fix multiline textareas |
 |  4 Jan 2008 | TWikibug:Item5320: fixed destructive save when add row is pressed outside edit mode |
@@ -251,10 +255,9 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/EditRowPluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/EditRowPluginAppraisal |
 
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+__Related Topics:__ EditRowPluginExamples, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
 %META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" version="1"}%
-%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
 %META:FILEATTACHMENT{name="edittable.gif" attr="h" comment="" version="1"}%
 %META:FILEATTACHMENT{name="quiet.gif" attr="h" comment="" version="1"}%
 %META:FILEATTACHMENT{name="addrow.gif" attr="h" comment="" version="1"}%

@@ -1,5 +1,6 @@
 # Release manifest for EditRowPlugin
 data/TWiki/EditRowPlugin.txt 0644 Documentation
+data/TWiki/EditRowPluginExamples.txt 0644 Examples
 lib/TWiki/Plugins/EditRowPlugin.pm 0644 Perl module
 lib/TWiki/Plugins/EditRowPlugin/Table.pm 0644 Perl module
 lib/TWiki/Plugins/EditRowPlugin/TableRow.pm 0644 Perl module
@@ -15,4 +16,3 @@ pub/TWiki/EditRowPlugin/TableSort.js 0444 Javascript table sorting code
 pub/TWiki/EditRowPlugin/TableSort_src.js 0444 Javascript table sorting code
 pub/TWiki/EditRowPlugin/twiki.js 0444 Javascript table sorting code
 pub/TWiki/EditRowPlugin/twiki_src.js 0444 Javascript table sorting code
-pub/TWiki/EditRowPlugin/wikiringlogo20x20.png 0660
