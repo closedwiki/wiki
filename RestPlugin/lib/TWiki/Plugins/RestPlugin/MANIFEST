@@ -1,0 +1,11 @@
+data/TWiki/RestPlugin.txt 0644 Documentation
+data/Sandbox/BugItem1.txt 0644
+data/Sandbox/BugItemTemplate.txt 0644
+lib/TWiki/Plugins/RestPlugin.pm 0644 Perl module
+templates/formtables.dojo.tmpl 0644
+templates/restpluginscript.tmpl 0644
+pub/TWiki/RestPlugin/restplugin-viewform.png 0644
+pub/TWiki/RestPlugin/Edit-chalk-10g.png 0644
+pub/TWiki/RestPlugin/formfield_example.png 0644
+pub/TWiki/RestPlugin/Image:Edit-chalk-10bo.png 0644
+pub/TWiki/RestPlugin/Wiki-text-icon.png 0644
