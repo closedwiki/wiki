@@ -1,5 +1,4 @@
 data/TWiki/DojoToolkitContrib.txt  Plugin doc page
-pub/TWiki/DojoToolkitContrib/wikiringlogo20x20.png
 lib/TWiki/Contrib/DojoToolkitContrib.pm  Plugin Perl module 
 templates/javascript.dojo.tmpl
 pub/TWiki/DojoToolkitContrib/dojo/date/locale.js
