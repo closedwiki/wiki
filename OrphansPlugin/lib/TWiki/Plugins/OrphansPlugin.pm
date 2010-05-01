@@ -1,6 +1,9 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004 Wind River
+# Copyright (C) 2004-2010 TWiki Contributor. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 # Plugin written by http://TWiki.org/cgi-bin/view/Main/CrawfordCurrie
 #
 # This program is free software; you can redistribute it and/or
@@ -21,7 +24,7 @@ package TWiki::Plugins::OrphansPlugin;
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 
 $VERSION = '$Rev$';
-$RELEASE = '4.2.0';
+$RELEASE = '4.3';
 $SHORTDESCRIPTION = 'Locate and manage orphaned topics';
 
 sub initPlugin {

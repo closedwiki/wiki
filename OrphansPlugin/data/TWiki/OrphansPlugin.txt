@@ -1,10 +1,20 @@
+%META:TOPICINFO{author="TWikiContributor" date="1272696338" format="1.1" version="$Rev$"}%
 ---+ Orphans Plugin
-<!--#
-Please do _not_ attempt to edit this topic; it is auto-generated from
-Subversion. Please add comments/questions/remarks to the Dev topic instead. 
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/OrphansPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/OrphansPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+
+   * Set SHORTDESCRIPTION = Locate orphaned topics in TWiki webs
 -->
-<a href="http://wikiring.com"><img src="%ATTACHURL%/logo.png" style="float:right" /></a>
 %SHORTDESCRIPTION%
+
+<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
+%TOC%
+</div>
+
+---++ Introduction
 
 This Plugin assists in the management of topics within a TWiki web by locating orphaned topics (topics that have no parent, or their parent has been deleted).
 
@@ -25,9 +35,9 @@ Orphaned topics are displayed in a table, optionally with a reference count. Exa
 | <span class="link">delete</span> | <span class="link">MichaelDawson</span> | 23 | <span class="link">TheOthers</span>, <span class="link">TheIrritating</span> |
 | <span class="link">delete</span> | <span class="link">JamesSawyer</span> | 42 | <span class="link">TheHidden</span>, <span class="link">TheOthers</span>, <span class="link">TheFaithful</span> |
 
-
 ---++ Tools
-The plugin is used from a page in the %TWIKIWEB% web, %TWIKIWEB%.ManageOrphanedPages. Normally you should be able to get away with just this topic, though you can use the plugin from any topic in any web if you want to.
+
+The plugin is used from a page in the %SYSTEMWEB% web, %SYSTEMWEB%.ManageOrphanedPages. Normally you should be able to get away with just this topic, though you can use the plugin from any topic in any web if you want to.
 
 ---++ Syntax Rules
 
@@ -45,39 +55,33 @@ Example:
 When the topic is viewed the Plugin will generate a table of topics in the selected web, with reference counts if you requested them, and an _action link_ that allows you to delete the topic directly (prompts you to move it to the Trash web).
 
 *Notes*
-	1 Before you can delete a topic, a final check for any topics that reference it is performed. If you searched in all webs, then the check also searches in all webs, but if you searched in the current web only, then only the current web is searched for confirmation. If you want to be _absolutely_ sure that no useful references exist, always select allwebs.
-	1 References from the WebStatistics topic are not counted.
-
-<!--
----++ Settings
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Locate orphaned topics in TWiki webs
--->
+  1 Before you can delete a topic, a final check for any topics that reference it is performed. If you searched in all webs, then the check also searches in all webs, but if you searched in the current web only, then only the current web is searched for confirmation. If you want to be _absolutely_ sure that no useful references exist, always select allwebs.
+   1 References from the WebStatistics topic are not counted.
 
 ---++ Plugin Installation Instructions
 
 %$INSTALL_INSTRUCTIONS%
-	* Test if the plugin is correctly installed by visiting the %TWIKIWEB%.ManageOrphanedPages topic, select a web and see if the table is expanded correctly.
+   * Test if the plugin is correctly installed by visiting the %SYSTEMWEB%.ManageOrphanedPages topic, select a web and see if the table is expanded correctly.
 
 ---++ Plugin Info
-Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
 
 Many thanks to the following sponsors for supporting this work:
-   * [[http://windriver.com][Wind River]]
+   * [[http://windriver.com/][Wind River]]
 
 |  Plugin Author: | TWiki:Main.CrawfordCurrie |
+|  Copyright: | &copy; 2004, Wind River; <br /> &copy; 2004-2010, TWiki:TWiki/TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-04-30: | TWikibug:Item6433 - doc improvements; changing TWIKIWEB to SYSTEMWEB |
 |  7 Sep 2007 | Bugs:Item4571 corrected noautolink handling, and hopefully improved UTF-8 handling as well |
 |  11498 | Ported to TWiki-4 |
 |  25 Mar 2004: | Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.008 and up |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, ManageOrphanedPages 95% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 99%, ManageOrphanedPages 95% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
-%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
-%META:FILEATTACHMENT{name="logo.png" attr="h" comment="" version="1"}%
+__Related Topics:__ %SYSTEMWEB%.ManageOrphanedPages, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences

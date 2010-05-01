@@ -1,6 +1,9 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004 Wind River
+# Copyright (C) 2004-2010 TWiki Contributor. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
 # Plugin written for Wind River Systems by CrawfordCurrie
 # http://c-dot.co.uk - http://wikiring.com

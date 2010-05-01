@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="TWikiContributor" date="1272696469" format="1.1" version="$Rev$"}%
 ---+ Find orphaned Topics
 
 This page lets you search for topics in a web that are not referenced by any other topic. You can also search to find out how many references there are to all the topics in a web.
@@ -14,4 +15,4 @@ Select the web using the form below, and choose whether to show all references t
 %FINDORPHANS{web="%URLPARAM{"qTheWeb"}%" allrefs="%URLPARAM{"qAllRefs"}%" allwebs="%URLPARAM{"qAllWebs"}%" }%
 
 ---
-%T% For full information on the plugin that supports this page, see %TWIKIWEB%.OrphansPlugin
+%T% For full information on the plugin that supports this page, see %SYSTEMWEB%.OrphansPlugin
