@@ -1,20 +1,16 @@
-%META:TOPICINFO{author="TWikiContributor" date="1184958640" format="1.1" reprev="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1272695238" format="1.1" version="$Rev$"}%
 ---+!! !MediaWikiToTWikiAddOn
 <!--
-One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = <nop>MediaWiki 2 TWiki Conversion Tool
+   Contributions to this add-on are appreciated. Please update the add-on page at
+   http://twiki.org/cgi-bin/view/Plugins/MediaWikiToTWikiAddOn or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/MediaWikiToTWikiAddOnDev.
+   If you are a TWiki contributor please update the add-on in the SVN repository.
+
+   * Set SHORTDESCRIPTION = <nop>MediaWiki to TWiki conversion tool
 -->
 %SHORTDESCRIPTION%
 
 %TOC%
-<table style="float:right">
-<tr>
-  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
-  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none">
-      Powered by <br /> <nop>WikiRing Consultants </a>
-  </td>
-</tr>
-</table>
 
 This is a commandline tool to import <nop>MediaWiki pages and images
 to TWiki. It processes a <nop>MediaWiki XML dump to extract the pages
@@ -113,17 +109,17 @@ should test the conversion result by using the -debug, -dry and -max.
 Sponsored by <a href="http://www.schenck-rotec.net"><img src="%ATTACHURLPATH%/schenck_logo.gif" border="0" title="Schenck-RoTec"/></a>
 
 |  <nop>AddOn Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2006-2007, Michael Daum http://wikiring.de |
+|  Copyright: | &copy; 2006-2007, Michael Daum http://wikiring.de <br /> &copy; 2006-2010, TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  <nop>AddOn Version: | v1.0 |
+|  <nop>AddOn Version: | v1.1 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-04-30: | TWikibug:Item6433 - doc improvements |
 |  20 Jul 2007 | initial release |
 |  Dependencies: | %$DEPENDENCIES% |
 |  <nop>AddOn Home: | http://twiki.org/cgi-bin/view/Plugins/MediaWikiToTWikiAddOn |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/MediaWikiToTWikiAddOnDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/MediaWikiToTWikiAddOnAppraisal |
 
-
+__Related Topics:__ %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory
 
 %META:FILEATTACHMENT{name="schenck_logo.gif" attachment="schenck_logo.gif" attr="h" comment="" date="1184958431" path="schenck_logo.gif" size="882" stream="schenck_logo.gif" tmpFilename="/var/tmp/CGItemp4701" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%

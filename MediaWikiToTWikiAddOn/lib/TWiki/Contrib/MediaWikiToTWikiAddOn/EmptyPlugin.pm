@@ -1,6 +1,9 @@
 # Plugin for mediawiki2twiki
 #
 # Copyright (C) 2007 Michael Daum http://wikiring.de
+# Copyright (C) 2007-2010 TWiki Contributor. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
 # Copy/Rename this file to YourOwnPlugin.pm and rename the package line below
 
