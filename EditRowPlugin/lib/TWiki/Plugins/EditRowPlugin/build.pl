@@ -1,4 +1,3 @@
-
 #!/usr/bin/perl -w
 BEGIN {
     unshift @INC, split( /:/, $ENV{TWIKI_LIBS} );
