@@ -118,5 +118,4 @@ Many thanks to the following sponsors for supporting this work:
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
-%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attr="h" autoattached="0" comment="" date="1198066989" path="wikiringlogo40x40.png" size="2571" version=""}%
 %META:FILEATTACHMENT{name="uweb-g.gif" attr="h" autoattached="0" comment="" date="1198066989" path="uweb-g.gif" size="2571" version=""}%
