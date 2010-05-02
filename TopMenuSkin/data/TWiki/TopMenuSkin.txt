@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272520664" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1272773856" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -100,8 +100,6 @@ __NOTE:__ The pulldown menus only work if the TWiki:Plugins/JQueryPlugin is inst
 This section defines the CSS and !JavaScript. ([[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][View Raw]] to see the source.)
 
 %STARTINCLUDE%<!--<pre>-->
-<link rel="stylesheet" href="%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin/jquery-all.css" type="text/css" media="all" />
-<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin/jquery-all.js"></script>
 <script type="text/javascript">
 var twtimeout = 600;
 var twclosetimer = null;
@@ -196,13 +194,13 @@ document.onclick = twTopMenuClose;
 </style>
 <!--</pre>-->%STOPINCLUDE%
 
-
 ---++ Installation
 
 *Note:* You do not need to install anything on the browser to use this skin. The following instructions are for the administrator who installs the skin on the server where TWiki is running.
 
    * Download the ZIP file from the Skin homepage (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory
+   * Install TWiki:Plugins/JQueryPlugin and enable it using configure (if not done already)
    * To turn on the skin, write in !Main.TWikiPreferences: %BR%
      =* Set SKIN = topmenu, pattern=
    * [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Test if installed]]
@@ -223,16 +221,16 @@ The !TopMenuSkin disables the sidebar and activates a different top bar in =twik
 
    * Set SHORTDESCRIPTION = Skin with pulldown menus in top bar
 
-<!-- Note on Screenshot: Please attach a 600x130 pixel screenshot and a full screen shot to the Skin topic, then update the href and img src to reflect the names -->
 |  Skin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2010, TWiki:Main/PeterThoeny, [[http://twiki.net][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Description: | Top-menu skin |
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Click for full screen image" width="600" height="130" /></a> |
-|  Preview: | [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
+|  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2010-04-26 (v1.2) |
+|  Skin Version: | 2010-05-01 (v1.2) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-05-01: | TWikibug:Item6437 - removed loading of jQuery Javascript library to avoid double load issue; require !JQueryPlugin installed and enabled |
 |  2010-04-26: | TWikibug:Item6435 - doc improvements |
 |  2010-04-21: | TWikibug:Item6431 - fix hardcoded reference to !JQueryPlugin CSS and JS; doc improvements |
 |  2010-04-19: | TWikibug:Item6413 - initial release (v1.0) |
