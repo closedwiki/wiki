@@ -1239,6 +1239,8 @@ $TWiki::cfg{Plugins}{TWikiNetSkinPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{TwistyPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{TinyMCEPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled} = 1;
+$TWiki::cfg{Plugins}{JQueryPlugin}{Enabled} = 1;
+$TWiki::cfg{Plugins}{JSCalendarPlugin}{Enabled} = 1;
 # **STRING 80**
 # Plugins evaluation order. If set to a comma-separated list of plugin names,
 # will change the execution order of plugins so the listed subset of plugins
