@@ -1,7 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1165257591" format="1.1" version="$Rev$"}%
----+ %TOPIC%
+%META:TOPICINFO{author="TWikiContributor" date="1272784582" format="1.1" version="$Rev$"}%
+---+!! <nop>%TOPIC%
 
 ---++ Description
+
 Extract user information from an Ldap directory. Note, you have to install the
 TWiki:Plugins/LdapNgPlugin to make this work. Depending on your directory layout
 and the used schema you have to adjust the filter below.
@@ -10,6 +11,7 @@ and the used schema you have to adjust the filter below.
    * KEY: key used to fetc the user record, e.g. the login name
 
 ---++ Implementation
+
 <verbatim>
 %STARTINCLUDE%
 %~~ LDAP{"(&(objectClass=posixAccount)(uid=%KEY%))" 

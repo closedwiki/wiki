@@ -1,6 +1,9 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2006-2008 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2006-2010 TWiki Contributor. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,11 +25,8 @@ use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC $done);
 
 use constant DEBUG => 0; # toggle me
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-$RELEASE = 'v1.05';
+$RELEASE = 'v1.1';
 $SHORTDESCRIPTION = 'Create a user topic if it does not exist yet';
 $NO_PREFS_IN_TOPIC = 1;
 
@@ -112,6 +112,7 @@ sub createUserTopic {
   $newUserTemplate =~ s/\%TWIKIWEB\%/$twikiWeb/g;
   $newUserTemplate =~ s/\%SYSTEMWEB\%/$twikiWeb/g;
   $newUserTemplate =~ s/\%MAINWEB\%/$mainWeb/g;
+  $newUserTemplate =~ s/\%USERSWEB\%/$mainWeb/g;
 
   # in Main
   ($tmplWeb, $tmplTopic) =
