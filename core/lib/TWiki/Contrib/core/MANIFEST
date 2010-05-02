@@ -195,7 +195,7 @@ data/TWiki/TextFormattingRules.txt 0644
 data/TWiki/TimBernersLee.txt 0644
 data/TWiki/TimeSpecifications.txt 0644
 data/TWiki/UserDocumentationCategory.txt 0644
-data/TWiki/UserToolsCategory.txt 0644
+#data/TWiki/UserToolsCategory.txt 0644
 data/TWiki/UsingHTML.txt 0644
 data/TWiki/VarACTIVATEDPLUGINS.txt 0644
 data/TWiki/VarALLVARIABLES.txt 0644
@@ -510,11 +510,11 @@ lib/TWiki/Configure/UIs/FINDEXTENSIONS.pm 0444
 lib/TWiki/Configure/UIs/LANGUAGES.pm 0444
 lib/TWiki/Configure/UIs/PLUGINS.pm 0444
 lib/TWiki/Configure/UIs/PasswordProtected.pm 0444
-lib/TWiki/Configure/UIs/PrompPASS.pm 0444
+lib/TWiki/Configure/UIs/PromptPASS.pm 0444
 lib/TWiki/Configure/UIs/Root.pm 0444
 lib/TWiki/Configure/UIs/Section.pm 0444
 lib/TWiki/Configure/UIs/SetNewPass.pm 0444
-lib/TWiki/Configure/UIs/SETPass.pm 0444
+lib/TWiki/Configure/UIs/SETPASS.pm 0444
 lib/TWiki/Configure/UIs/TAGS.pm 0444
 lib/TWiki/Configure/UIs/UPDATE.pm 0444
 lib/TWiki/Configure/UIs/Value.pm 0444
@@ -1148,7 +1148,6 @@ tools/extender.pl 0444
 tools/geturl.pl 0555
 tools/rewriteshbang.pl 0555
 tools/tick_twiki.pl 0555
-tools/upgrade_emails.pl 0555
 twiki_httpd_conf.txt 0444
 working/tmp/README 0444
 working/registration_approvals/README 0444
