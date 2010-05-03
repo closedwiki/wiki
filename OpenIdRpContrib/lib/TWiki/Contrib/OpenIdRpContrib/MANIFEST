@@ -2,6 +2,7 @@ data/TWiki/OpenIdRpContrib.txt 0644
 data/TWiki/OpenIdRpContribFAQ.txt 0644
 data/TWiki/OpenIDAdminConsole.txt 0644
 data/TWiki/OpenIDUserConsole.txt 0644
+lib/TWiki/Contrib/OpenIdRpContrib.pm 0444
 lib/TWiki/Contrib/OpenIdRpContrib/DBLockPerAccess.pm 0444
 lib/TWiki/LoginManager/OpenID.pm 0444
 lib/TWiki/Users/OpenIDMapping.pm 0444
