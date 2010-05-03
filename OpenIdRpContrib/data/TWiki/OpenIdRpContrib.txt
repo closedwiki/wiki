@@ -1,0 +1,161 @@
+%META:TOPICINFO{author="TWikiContributor" date="1272872315" format="1.1" version="$Rev$"}%
+---+!! !OpenID Relying Party (RP) Contrib Package
+
+<img src="%ATTACHURLPATH%/openid-logo-200x61.png" alt="OpenID logo" width='200' height='61' align="right" />
+The !OpenID Relying Party (RP) Contrib extension adds [[http://www.openid.net][OpenID]] authentication to TWiki sites.  This can be used to allow users to log in to a TWiki site using an account at an !OpenID provider (such as Google), and therefore not need a separate username/password for the TWiki site.
+
+This contrib package is an !OpenID Relying Party (RP), also known as a !OpenID consumer, because the user account information is not kept on the TWiki site, but rather accessed from an !OpenID provider (OP) site.  When a user requests to log in to a TWiki site via !OpenID, the protocol defines interactions between the TWiki site acting as an RP and the user's authenticating site acting as an OP.
+
+!OpenID providers can range in scope from a single individual's home server to large ISPs and social networking sites.  In fact, millions of users already have !OpenID just by having accounts at !LiveJournal (where !OpenID was invented), AOL, Blogger, Flickr, Google, !MySpace, Wordpress and many others.  Some dedicated identity-provider sites use !OpenID, such as !ClaimID, !MyOpenID, Vidoop and Verisign.  A larger list is available at the [[http://www.openid.net][OpenID Foundation]] - but it's already too big for anyone to know all the OP or RP sites any more. With the !OpenID RP Contrib, any TWiki site can be an RP and allow logins from users of some, most or all OPs, depending how you want to configure your TWiki site.
+
+!OpenIdRpContrib supports !OpenID 1.1 and 2.0.  This supersedes the experimental OpenIDUserContrib from 2008, which only had basic support for !OpenID 1.1.
+
+*See the [[OpenIdRpContribFAQ][Frequently Asked Questions for OpenIdRpContrib]].*
+
+%TOC%
+
+<!--
+---++ Summary of Contents
+   * TBD
+   * 
+-->
+
+---++ Configuration
+All the configuration parameters for !OpenIdRpContrib are defined in the TWiki.pm or <nop>LocalSite.cfg files.
+
+__Required configuration:__
+   * $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::OpenID';
+   * $TWiki::cfg{UserMappingManager} = 'TWiki::Users::OpenIDMapping';
+
+| *Parameter* | *Description* | *Default* |
+| $TWiki::cfg{OpenIdRpContrib}{Debug} | flag: enable debug mode | 0 (false) |
+| $TWiki::cfg{OpenIdRpContrib}{OpenIDProviders}  | Perl array of name/URL for !OpenID providers - see Codev.OpenIDProviderList | none (required) |
+| $TWiki::cfg{OpenIdRpContrib}{AutoRegisterUser} | Automatically redirect new users to registration page | 0 (false) |
+| $TWiki::cfg{OpenIdRpContrib}{AutoCreateUser} | Automatically create new users | 0 (false) |
+| $TWiki::cfg{OpenIdRpContrib}{TWikiRegistrationWeb} | Web to use for registration page - see <nop>AutoRegisterUser above | $TWiki::cfg{SystemWebName} |
+| $TWiki::cfg{OpenIdRpContrib}{TWikiRegistrationTopic} | Topic to use for registration page - see <nop>AutoRegisterUser above | <nop>TWikiRegistration |
+| $TWiki::cfg{OpenIdRpContrib}{OPHostWhitelist} | comma-delimited !OpenID Provider host whitelist | (no whitelist) |
+| $TWiki::cfg{OpenIdRpContrib}{OPHostBlacklist} | comma-delimited !OpenID Provider host blacklist, ignored if whitelist defined | (no blacklist) |
+| $TWiki::cfg{OpenIdRpContrib}{EmailDomWhitelist} | comma-delimited user e-mail domain whitelist | (no whitelist) |
+| $TWiki::cfg{OpenIdRpContrib}{EmailDomBlacklist} | comma-delimited user e-mail domain blacklist, ignored if whitelist defined | (no blacklist) |
+| $TWiki::cfg{OpenIdRpContrib}{ua_class} | Perl class to use for HTTP user agent | LWP::UserAgent |
+| $TWiki::cfg{OpenIdRpContrib}{required_root} | required root for !OpenID return URLs | $TWiki::cfg{DefaultUrlHost} |
+| $TWiki::cfg{OpenIdRpContrib}{req_fields1} | !OpenID 1.1 required SREG fields | fullname,email |
+| $TWiki::cfg{OpenIdRpContrib}{opt_fields1} | !OpenID 1.1 optional SREG fields | nickname,country,timezone |
+| $TWiki::cfg{OpenIdRpContrib}{policy_url} | !OpenID 1.1 optional SREG policy URL | (disabled) |
+| $TWiki::cfg{OpenIdRpContrib}{req_fields2} | !OpenID 2.0 required AX fields | firstname,lastname,email |
+| $TWiki::cfg{OpenIdRpContrib}{opt_fields2} | !OpenID 2.0 optional AX fields | nickname,country,timezone |
+| $TWiki::cfg{OpenIdRpContrib}{UserMenuThresh1} | threshold for admin console user menu to split to 2 levels | 25 |
+| $TWiki::cfg{OpenIdRpContrib}{UserMenuThresh2} | threshold for admin console user menu to split to 3 levels | 500 |
+| $TWiki::cfg{OpenIdRpContrib}{ForbiddenAccounts} | accounts not allowed to be accessed by !OpenID | <nop>TWikiContributor, <nop>TWikiGuest, <nop>TWikiRegistrationAgent, <nop>UnknownUser |
+
+See also:
+   * $TWiki::cfg{<nop>PermittedRedirectHostUrls} - affects hosts which can be used as OPs
+
+---+++ Example Localsite.cfg settings
+<verbatim>
+$TWiki::cfg{OpenIdRpContrib}{Debug} = 1;
+$TWiki::cfg{OpenIdRpContrib}{OpenIDProviders} = [ # OpenID Provider names and endpoint URLs for creating login buttons
+    "AOL",      "https://openid.aol.com/",
+    "Google",   "https://www.google.com/accounts/o8/id",
+    "Hyves", "http://www.hyves.nl/",
+    "MyID.net", "http://myid.net/",
+    "MyOpenID", "http://myopenid.com/",
+    "MySpace",  "http://api.myspace.com/openid",
+    "NTT !MyDocomo", "https://i.mydocomo.com/",
+    "Verisign", "https://pip.verisignlabs.com/",
+];
+$TWiki::cfg{OpenIdRpContrib}{AutoRegisterUser} = 1; # redirect new users who do not have a user page to registration page
+# $TWiki::cfg{OpenIdRpContrib}{TWikiRegistrationWeb} = $TWiki::cfg{SystemWebName}; # web to redirect new users for registration when arriving by OpenID
+# $TWiki::cfg{OpenIdRpContrib}{TWikiRegistrationTopic} = "TWikiRegistration"; # page to redirect new users for registration when arriving by OpenID
+$TWiki::cfg{OpenIdRpContrib}{AutoCreateUser} = 0; # automatically create user page
+# $TWiki::cfg{OpenIdRpContrib}{OPHostWhitelist} = ''; # if set, limits OP hosts
+# $TWiki::cfg{OpenIdRpContrib}{OPHostBlacklist} = '.*\.jkg.in'; # ignored if WL defined
+# $TWiki::cfg{OpenIdRpContrib}{EmailDomWhitelist} = ''; # if set, limits e-mail domains
+# $TWiki::cfg{OpenIdRpContrib}{EmailDomBlacklist} = 'mailinator.com'; # ignored if WL defined
+# $TWiki::cfg{OpenIdRpContrib}{NoUserAddId} = 0; # inhibit code that allows users to add more OpenID identities to their accounts
+# $TWiki::cfg{OpenIdRpContrib}{NoUserDelId} = 0; # inhibit code that allows users to delete OpenID identities from their accounts
+# $TWiki::cfg{OpenIdRpContrib}{ua_class} = "LWP::UserAgent"; # user agent Perl class
+# $TWiki::cfg{OpenIdRpContrib}{required_root} = "http://your.server.dom/"; # root of your server
+# $TWiki::cfg{OpenIdRpContrib}{nonce_pattern} = "GJvxv_%s"; # nonce pattern to make security exchange less predictable - OK to change but keep the %s in it
+# $TWiki::cfg{OpenIdRpContrib}{req_fields1} = 'fullname,email'; # Required fields for OpenID 1.1
+# $TWiki::cfg{OpenIdRpContrib}{opt_fields1} = 'nickname,country,timezone'; # Optional fields for OpenID 1.1
+# $TWiki::cfg{OpenIdRpContrib}{req_fields2} = 'firstname,lastname,email'; # Required fields for OpenID 2.x
+# $TWiki::cfg{OpenIdRpContrib}{opt_fields2} = 'nickname,country,timezone'; # Optional fields for OpenID 2.x
+# $TWiki::cfg{OpenIdRpContrib}{policy_url1} = "http://example.dom/privacypolicy.html"; # default policy URL for OpenID 1.1 SREG systems which require it
+$TWiki::cfg{OpenIdRpContrib}{UserMenuThresh1} = 25; # threshold in total OpenID users for admin console to begin showing 1 level of menu
+$TWiki::cfg{OpenIdRpContrib}{UserMenuThresh2} = 500; # threshold in total OpenID users for admin console to begin showing 2 levels of menus
+</verbatim>
+
+---+++ Additional Reading
+
+   * [[OpenIdRpContribFAQ][Frequently Asked Questions for OpenIdRpContrib]]
+   * [[Codev.OpenIDProviderList]] - list of !OpenID provider endpoints
+   * [[http://openid.net/][OpenID Foundation]]
+      * [[http://openid.net/specs/openid-authentication-2_0.html][OpenID Authentication 2.0 specification]]
+      * [[http://openid.net/specs/openid-attribute-exchange-1_0.html][OpenID Attribute Exchange (AX) 1.0]] for !OpenID 2.0
+      * [[http://openid.net/specs/openid-authentication-1_1.html][OpenID Authentication 1.1 specification]]
+      * [[http://openid.net/specs/openid-simple-registration-extension-1_0.html][OpenID Simple Registration (SREG) Extension 1.0]] for !OpenID 1.1
+   * [[http://en.wikipedia.org/wiki/OpenID][OpenID article at Wikipedia]]
+   * [[http://www.intertwingly.net/blog/2007/01/03/OpenID-for-non-SuperUsers][OpenID for non-SuperUsers]], tutorial by Sam Ruby
+   * [[http://openidexplained.com/][OpenID explained]], tutorial by Omer Bar-or and Benjamin Thomas
+   * [[http://search.cpan.org/~mart/Net-OpenID-Consumer-1.03/lib/Net/OpenID/Consumer.pm][Net::OpenID::Consumer]] on [[http://www.cpan.org/][CPAN]], written by Brad Fitzpatrick (original author of !OpenID itself), Tatsuhiko Miyagawa and Martin Atkins
+
+---++ Screen shots
+
+---+++ Login screen
+<a href="%ATTACHURLPATH%/twiki-openid-10-screenshot.png"><img src="%ATTACHURLPATH%/twiki-openid-10-screenshot.png" alt="twiki-openid-10-screenshot.png" width='543' height='182' /></a>
+
+---+++ User console
+<a href="%ATTACHURLPATH%/twiki-openid-9-screenshot.png"><img src="%ATTACHURLPATH%/twiki-openid-9-screenshot.png" alt="twiki-openid-9-screenshot.png" width='543' height='343' /></a>
+
+---+++ Admin console
+<a href="%ATTACHURLPATH%/twiki-openid-11-screenshot.png"><img src="%ATTACHURLPATH%/twiki-openid-11-screenshot.png" alt="twiki-openid-11-screenshot.png" width='543' height='265' /></a>
+
+
+---++ Settings
+
+Settings are stored as preferences variables. To reference a setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g. ==%<nop>JSCALENDARCONTRIB_STUB%==
+
+   * One line description:
+      * Set SHORTDESCRIPTION = Allow TWiki to authenticate !OpenID users as a Relying Party (RP) or consumer site
+
+There are no other settings on the TWiki topic.  All the configuration is done through TWiki.spec and Localsite.cfg.  Modifications should only be made to Localsite.cfg.
+
+---++ Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this contrib package. The following instructions are for the administrator who installs the package on the server where TWiki is running.
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Contrib topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Contrib topic repository |
+     | ==lib/TWiki/Users/OpenIDMapping.pm== | Perl user mapping module |
+     | ==lib/TWiki/LoginManager/OpenID.pm== | Perl login manager module |
+<!-- replace table body above, keeping the header, with %$MANIFEST% when using with Build module to automatically extract MANIFEST -->
+   * Test if the installation was successful:
+      * _enter samples here_
+
+---++ Contrib Info
+
+|  Author: | TWiki:Main/IanKluft |
+|  Copyright: | &copy; 2010, TWiki Inc, All Rights Reserved |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Dependencies: | Net::OpenID::Consumer perl-IO-Socket-SSL DB_File::Lock Tie::Hash Cache::FileCache LWP::UserAgent <!-- use %$DEPENDENCIES% with the Build Module to automatically extract dependencies --> |
+|  Version: | 0.01 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-01-26: | Initial version |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+
+-- TWiki:Main/IanKluft - 2010-01-26
+<!-- replace 2010-01-26 with %$DATE% for Build module, to get build date -->
+
+%META:FILEATTACHMENT{name="openid-logo-200x61.png" attachment="openid-logo-200x61.png" attr="h" comment="" date="1272872242" size="5532" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="twiki-openid-9-screenshot.png" attachment="twiki-openid-9-screenshot.png" attr="h" comment="" date="1272872284" size="101905" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="twiki-openid-10-screenshot.png" attachment="twiki-openid-10-screenshot.png" attr="h" comment="" date="1272872300" size="31813" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="twiki-openid-11-screenshot.png" attachment="twiki-openid-11-screenshot.png" attr="h" comment="" date="1272872315" size="52303" user="TWikiContributor" version="1"}%

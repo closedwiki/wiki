@@ -1,0 +1,68 @@
+%META:TOPICINFO{author="TWikiContributor" date="1272872656" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="OpenIdRpContrib"}%
+---+!! Frequently Asked Questions for OpenIdRpContrib
+
+%TOC%
+
+---++ Generic !OpenID topics
+
+---+++ What is !OpenID?
+
+!OpenID is a single sign-on system intended to minimize the number of times users have to remember login/password combinations. Users log in to an !OpenID provider site and use that account to log into other sites.
+
+---+++ Is TWiki an !OpenID Provider (OP) or Relying Party (RP)?
+
+Using this contrib, a TWiki site can be a Relying Party (RP).  This should help understand the reason for the name of OpenIdRpContrib.  It means that you can log into a TWiki/!OpenIdRpContrib site using an account from an !OpenID Provider. So TWiki does not provide !OpenID accounts. It still supports local login/password accounts.  But this gives the user an option not to have to remember another login/password combination to use a TWiki site.
+
+---+++ Is !OpenID secure?
+
+Like anything else on the Internet, it's as secure as the parties involved: you, your !OpenID Provider(OP) and any relying party (RP) site you log in to (TWiki in this case).  You should only use an OP whom you trust.  !OpenID only provides identity - it does not vouch for anyone's trustworthiness.  It simply states that you control a URL which serves as your identity.  It is no better than the login/password system for preventing spammers from posting on a wiki.  However, similar methods like blacklists/whitelists and pattern recognition also work in tandem with !OpenID to mitigate spam.
+
+---++ User topics
+
+---+++ How do I get an !OpenID account?
+
+You probably already have one.  Large sites like AOL, Google, Yahoo and many others have made their user accounts into !OpenID accounts. There are also authentication sites specializing in !OpenID such as !MyOpenID and YIID.  See [[http://openid.net/get-an-openid/]["Get an OpenID"]] at the !OpenID Foundation. In Japan, NTT Docomo hosts !OpenID for its cable TV Internet customers, which is half the population of the country.
+
+You can also host your own OP for yourself and others.  See Sam Ruby's tutorial on [[http://www.intertwingly.net/blog/2007/01/03/OpenID-for-non-SuperUsers]["OpenID for non-SuperUsers"]].  There is a simple one-user OP script in PHP called [[http://siege.org/projects/phpMyID/][phpMyID]].  Or you can use [[http://search.cpan.org/~mart/Net-OpenID-Server-1.02/lib/Net/OpenID/Server.pm][Net::OpenID::Server]] from !CPAN to write your own.
+
+---+++ How do I log in to a TWiki site using !OpenID?
+
+Select the login link as usual.  Or when entering an area that requires authentication, which could be the entire system depending how it's configured, TWiki will display the login page. On TWiki sites with OpenIdRpContrib installed, it will display an expanded login page with both !OpenID and normal password logins side-by-side.
+   * If you have an !OpenID account on one of the !OpenID Providers (OP) listed, then you can simply click on the button for your provider.
+   * If your OP is not listed, you may enter your !OpenID identity string (which is a URL) into the login.  You will have to obtain this identity string from your OP.  Leave the password field empty to tell TWiki that you're using !OpenID.
+   * Alternatively, if you have logged in with !OpenID to the same TWiki site before, just enter your !WikiName in the login field and leave the password field blank.  TWiki will initiate the login via your OP using your !OpenID identity.  If you have more than one !OpenID identity attached to your account, TWiki will use the first one for this method.
+
+If the TWiki site is configured to allow automatic creation of new accounts via !OpenID, the admins may configure the system to direct new users to the TWiki registration form first, or to just create the account based on the !OpenID data.
+
+---+++ Should I log into my !OpenID Provider (OP) before logging in to TWiki?
+
+Technically, it doesn't matter.  If you aren't logged in at your OP when you log into TWiki, the OP will prompt you to log in at that time.
+
+However, as a matter of best practice and prudent Internet security precautions, you _should_ log into your OP first.  If a malicious site somewhere on the Internet sets up a false login page which looks like your OP's and you try to log in via !OpenID on their site, you would not fall for that trick if you always login first at your provider.  You would notice that the OP appears to be asking you to log in again when it shouldn't.  So it's a good habit to get into.
+
+---+++ How do I add an !OpenID identity to an existing !non-OpenID account?
+
+Go to the TWiki.OpenIDUserConsole page on the TWiki site where you have an account.  The area to add an ID is at the bottom of the user console box. There are buttons for known OPs which you may use if your OP is listed.  Otherwise you may enter your identity string in the text entry box and click on the "Claim ID" button.  If the login succeeds, your !OpenID identity will be attached to your existing TWiki account.
+
+---++ Administrator topics
+
+---+++ How do I add an !OpenID identity to a user's account?
+
+As the administrator, you may pre-approve an identity string for an account using the TWiki.OpenIDAdminConsole.  However, since you can't log into the user's account, TWiki only stores the pre-approval until the user uses it to log in.
+
+You must use caution when adding an !OpenID identity to an account.  Treat it as seriously as setting an account's password.  This gives access to that account to anyone who controls that !OpenID identity.  So be sure you *really* know who is asking.  There have been many cases where malicious parties have contacted support to reset an account and obtained access via [[http://en.wikipedia.org/wiki/Social_engineering_%28security%29][social engineering]] to trick the admins to give them access.  This is no different with !OpenID.  When in doubt, make the user log in to add their own identity.
+
+---+++ Can I rearrange the OP login buttons?
+
+Only the order can be changed, not the layout.  The login buttons are displayed according to the HTML style sheet and arranged by the user's web browser.  It is possible to override the style sheet through TWiki's normal skinning/theming templates for some control over the display.
+
+---+++ How do I add a login button for another OP?
+
+Use <nop>$TWiki::cfg{OpenIdRpContrib}{OpenIDProviders} in !LocalSite.cfg.  This is set with a Perl array containing pairs of strings, the OP's login button text and the OP's "endpoint URL".  The endpoint URL can be tricky to find in some cases, sometimes not available at all for some OPs.  That's why we made a community-maintained list at Codev.OpenIDProviderList.
+
+Please add to that list as you find any other OP's endpoint URL. Any URL where standardized !OpenID discovery methods can find the endpoint will do.  Start by trying the provider's top home page URL or their !OpenID usage documentation.  Search the web for your provider's name and "endpoint URL".  Or ask the community here on TWiki.org. Also let us know which ones you find - someone else will undoutbedly want to know.
+
+You do not need to provide an icon for the OP's login button.  TWiki will use the Favicon from the provider's web site.
+
+-- Main.IanKluft - 2010-03-26
