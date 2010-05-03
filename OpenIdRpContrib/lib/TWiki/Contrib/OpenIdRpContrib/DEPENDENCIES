@@ -1,0 +1,6 @@
+Net::OpenID::Consumer,>=0.1,cpan,Required. Available from the CPAN: archive.
+perl-IO-Socket-SSL,>=0.1,perl
+DB_File::Lock,>=0.1,cpan,Required. Available from the CPAN:DB_File::Lock archive.
+Tie::Hash,>=0.1,cpan,Required. Available from the CPAN:Tie::Hash archive.
+Cache::FileCache,>=0.1,cpan,Required. Available from the CPAN:Cache::FileCache archive.
+LWP::UserAgent,>=0.1,cpan,Required. Available from the CPAN:LWP::UserAgent archive.
