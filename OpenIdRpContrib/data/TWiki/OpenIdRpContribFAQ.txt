@@ -59,10 +59,12 @@ Only the order can be changed, not the layout.  The login buttons are displayed 
 
 ---+++ How do I add a login button for another OP?
 
-Use <nop>$TWiki::cfg{OpenIdRpContrib}{OpenIDProviders} in !LocalSite.cfg.  This is set with a Perl array containing pairs of strings, the OP's login button text and the OP's "endpoint URL".  The endpoint URL can be tricky to find in some cases, sometimes not available at all for some OPs.  That's why we made a community-maintained list at Codev.OpenIDProviderList.
+Use <nop>$TWiki::cfg{OpenIdRpContrib}{OpenIDProviders} in !LocalSite.cfg.  This is set with a Perl array containing pairs of strings, the OP's login button text and the OP's "endpoint URL".  The endpoint URL can be tricky to find in some cases, sometimes not available at all for some OPs.  That's why we made a community-maintained list at TWiki:Codev/OpenIDProviderList.
 
 Please add to that list as you find any other OP's endpoint URL. Any URL where standardized !OpenID discovery methods can find the endpoint will do.  Start by trying the provider's top home page URL or their !OpenID usage documentation.  Search the web for your provider's name and "endpoint URL".  Or ask the community here on TWiki.org. Also let us know which ones you find - someone else will undoutbedly want to know.
 
 You do not need to provide an icon for the OP's login button.  TWiki will use the Favicon from the provider's web site.
 
--- Main.IanKluft - 2010-03-26
+-- __Contributor:__ TWiki:Main/IanKluft - 2010-05-03
+
+__Related Topics:__ OpenIdRpContrib, OpenIDAdminConsole, OpenIDUserConsole

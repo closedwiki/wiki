@@ -1,6 +1,9 @@
-%META:TOPICINFO{author="IanKluft" date="1268097209" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1268097209" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="OpenIdRpContrib"}%
 ---+ !OpenID Admin Console
 
 logged in via !OpenID: %IF{ "context logged_in_openid" then="yes" else="no" }% 
 
 %OPENIDCONSOLE{admin="1"}%
+
+__Related Topics:__ OpenIdRpContrib, OpenIdRpContribFAQ, OpenIDUserConsole
