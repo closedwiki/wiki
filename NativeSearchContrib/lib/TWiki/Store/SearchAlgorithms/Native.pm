@@ -1,7 +1,9 @@
+# TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2007 TWiki Contributors. All Rights Reserved.
-# TWiki Contributors are listed in the AUTHORS file in the root
-# of this distribution. NOTE: Please extend that file, not this notice.
+# Copyright (C) 2007 WikiRing.
+# Copyright (C) 2007-2010 TWiki Contributor. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
