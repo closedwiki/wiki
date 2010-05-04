@@ -1,6 +1,6 @@
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2007 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 1999-2010 Peter Thoeny, peter@thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -19,6 +19,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # As per the GPL, removal of this notice is prohibited.
+# The multiple File Upload support added in April 2010.
+# The feature was sponsored by Twiki, Inc (sales@twiki.net)
+#
 
 =pod
 
@@ -54,39 +57,40 @@ Generates a prompt page for adding an attachment.
 sub attach {
     my $session = shift;
 
-    my $query = $session->{request};
+    my $query   = $session->{request};
     my $webName = $session->{webName};
-    my $topic = $session->{topicName};
+    my $topic   = $session->{topicName};
 
-    my $fileName = $query->param( 'filename' ) || '';
+    my $fileName = $query->param('filename') || '';
     my $skin = $session->getSkin();
 
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'attach' );
 
-    my $tmpl = '';
-    my $text = '';
-    my $meta = '';
-    my $atext = '';
-    my $fileUser = '';
+    my $tmpl          = '';
+    my $text          = '';
+    my $meta          = '';
+    my $atext         = '';
+    my $fileUser      = '';
     my $isHideChecked = '';
-    my $users = $session->{users};
+    my $users         = $session->{users};
 
     TWiki::UI::checkMirror( $session, $webName, $topic );
 
-    TWiki::UI::checkAccess( $session, $webName, $topic,
-                            'CHANGE', $session->{user} );
+    TWiki::UI::checkAccess( $session, $webName, $topic, 'CHANGE',
+        $session->{user} );
     TWiki::UI::checkTopicExists( $session, $webName, $topic,
-                                 'upload files to' );
+        'upload files to' );
 
     ( $meta, $text ) =
       $session->{store}->readTopic( $session->{user}, $webName, $topic, undef );
     my $args = $meta->get( 'FILEATTACHMENT', $fileName );
     $args = {
-             name => $fileName,
-             attr => '',
-             path => '',
-             comment => ''
-            } unless( $args );
+        name    => $fileName,
+        attr    => '',
+        path    => '',
+        comment => ''
+      }
+      unless ($args);
 
     if ( $args->{attr} =~ /h/o ) {
         $isHideChecked = 'checked';
@@ -95,20 +99,23 @@ sub attach {
     # SMELL: why log attach before post is called?
     # FIXME: Move down, log only if successful (or with error msg?)
     # Attach is a read function, only has potential for a change
-    if( $TWiki::cfg{Log}{attach} ) {
+    if ( $TWiki::cfg{Log}{attach} ) {
+
         # write log entry
-        $session->writeLog( 'attach', $webName.'.'.$topic, $fileName );
+        $session->writeLog( 'attach', $webName . '.' . $topic, $fileName );
     }
 
     my $fileWikiUser = '';
-    if( $fileName ) {
+    if ($fileName) {
         $tmpl = $session->templates->readTemplate( 'attachagain', $skin );
         my $u = $args->{user};
         $fileWikiUser = $users->webDotWikiName($u) if $u;
-    } else {
+    }
+    else {
         $tmpl = $session->templates->readTemplate( 'attachnew', $skin );
     }
-    if ( $fileName ) {
+    if ($fileName) {
+
         # must come after templates have been read
         $atext .= $session->attach->formatVersions( $webName, $topic, %$args );
     }
@@ -123,7 +130,7 @@ sub attach {
     $args->{comment} = TWiki::entityEncode( $args->{comment} );
     $tmpl =~ s/%FILECOMMENT%/$args->{comment}/g;
 
-    $session->writeCompletePage( $tmpl );
+    $session->writeCompletePage($tmpl);
 }
 
 =pod
@@ -137,6 +144,9 @@ CGI parameters, passed in $query:
 
 | =hidefile= | if defined, will not show file in attachment table |
 | =filepath= | |
+| =filepath1= | |
+| =filepath2= | | upto
+| =filepath9= | | upto
 | =filename= | |
 | =filecomment= | comment to associate with file in attachment table |
 | =createlink= | if defined, will create a link to file at end of topic |
@@ -148,45 +158,37 @@ a crude RPC (it will redirect to the 'view' script unless the
 'noredirect' parameter is specified, in which case it will print a message to
 STDOUT, starting with 'OK' on success and 'ERROR' on failure.
 
+Your form should be defined similar to following: 
+<form  enctype="multipart/form-data" action="%SCRIPTURLPATH{upload}%/%WEB%/%TOPIC% method="post">
+<input  type="file" name="filepath" value="" size="70" />
+<input  type="file" name="filepath1" value="" size="70" />
+<input  type="file" name="filepath2" value="" size="70" />
+<input type="file" name="filepath3" value="" size="70" />
+....
+<input type="submit" value='Upload file' /> 
+</form>
+
 =cut
 
 sub upload {
     my $session = shift;
 
-    my $query = $session->{request};
+    my $query   = $session->{request};
     my $webName = $session->{webName};
-    my $topic = $session->{topicName};
-    my $user = $session->{user};
+    my $topic   = $session->{topicName};
+    my $user    = $session->{user};
 
-    my $hideFile = $query->param( 'hidefile' ) || '';
-    my $fileComment = $query->param( 'filecomment' ) || '';
-    my $createLink = $query->param( 'createlink' ) || '';
-    my $doPropsOnly = $query->param( 'changeproperties' );
-    my $filePath = $query->param( 'filepath' ) || '';
-    my $fileName = $query->param( 'filename' ) || '';
-    if ( $filePath && ! $fileName ) {
-        $filePath =~ m|([^/\\]*$)|;
-        $fileName = $1;
-    }
+    if ( $query->request_method() !~ /^POST$/i ) {
 
-    $fileComment =~ s/\s+/ /go;
-    $fileComment =~ s/^\s*//o;
-    $fileComment =~ s/\s*$//o;
-    $fileName =~ s/\s*$//o;
-    $filePath =~ s/\s*$//o;
-
-    if( $query->request_method() !~ /^POST$/i ) {
         # upload script can only be called via POST method
         throw TWiki::OopsException(
             'attention',
-            def => 'post_method_only',
-            web => $webName,
-            topic => $topic,
-            params => [ 'upload' ]);
+            def    => 'post_method_only',
+            web    => $webName,
+            topic  => $topic,
+            params => ['upload']
+        );
     }
-
-
-
 
     #$action in this block/subroutine is used only for verification
     #of crypttoken
@@ -195,7 +197,6 @@ sub upload {
     map { $secureActions{ lc($_) } = 1; }
       split( /[\s,]+/, $TWiki::cfg{CryptToken}{SecureActions} );
 
-
     #If Crypt Token is requred for save action, one should not be able
     #go beyond following step without valid crypttokens.
 
@@ -203,107 +204,212 @@ sub upload {
         && $secureActions{ lc($cryptaction) } )
     {
 
-    TWiki::UI::verifyCryptToken( $session, $query->param('crypttoken') );
+        TWiki::UI::verifyCryptToken( $session, $query->param('crypttoken') );
     }
-
 
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'attach files to' );
-    TWiki::UI::checkTopicExists( $session, $webName, $topic, 'attach files to' );
+    TWiki::UI::checkTopicExists( $session, $webName, $topic,
+        'attach files to' );
     TWiki::UI::checkMirror( $session, $webName, $topic );
-    TWiki::UI::checkAccess( $session, $webName, $topic,
-                            'CHANGE', $user );
+    TWiki::UI::checkAccess( $session, $webName, $topic, 'CHANGE', $user );
 
-    my $origName = $fileName;
-    my $stream;
-    my ( $fileSize, $fileDate, $tmpFilePath ) = '';
+    my $hideFile    = $query->param('hidefile')    || '';
+    my $fileComment = $query->param('filecomment') || '';
+    my $createLink  = $query->param('createlink')  || '';
+    my $doPropsOnly = $query->param('changeproperties');
 
-    unless( $doPropsOnly ) {
-        my $fh = $query->param( 'filepath' );
+    $fileComment =~ s/\s+/ /go;
+    $fileComment =~ s/^\s*//o;
+    $fileComment =~ s/\s*$//o;
 
-        try {
-            $tmpFilePath = $query->tmpFileName( $fh );
-        } catch Error::Simple with {
-            # Item5130, Item5133 - Illegal file name, bad path,
-            # something like that
-            throw TWiki::OopsException(
-                'attention',
-                def => 'zero_size_upload',
-                web => $webName,
-                topic => $topic,
-                params => [ ($filePath || '""') ] );
-        };
+    my @fileNames   = ();
+    my @upload_objs = ();
 
-        $stream = $query->upload( 'filepath' );
-        ( $fileName, $origName ) =
-          TWiki::Sandbox::sanitizeAttachmentName( $fileName );
-
-        # check if upload has non zero size
-        if( $stream ) {
-            my @stats = stat $stream;
-            $fileSize = $stats[7];
-            $fileDate = $stats[9];
+    #FixMe - in future - the maximum number of files should come from
+    #TWiki Variable
+    for ( 0 .. 9 ) {
+        if ( $_ == 0 ) {
+            if ( defined $query->{uploads}{ $query->param('filepath') } ) {
+                push @upload_objs,
+                  $query->{uploads}{ $query->param('filepath') };
+                push @fileNames, $query->param('filepath');
+            }
         }
-        unless( $fileSize && $fileName ) {
-            throw TWiki::OopsException(
-                'attention',
-                def => 'zero_size_upload',
-                web => $webName,
-                topic => $topic,
-                params => [ ($filePath || '""') ] );
+        else {
+            if ( defined $query->{uploads}{ $query->param( 'filepath' . $_ ) } )
+            {
+                push @upload_objs,
+                  $query->{uploads}{ $query->param( 'filepath' . $_ ) };
+                push @fileNames, $query->param( 'filepath' . $_ );
+            }
         }
 
-        my $maxSize = $session->{prefs}->getPreferencesValue(
-            'ATTACHFILESIZELIMIT' );
+    }
+
+    my @origNames = ();    # If filenames are changed after uploading to
+                           # topic, those should be shown to the user
+                           # when upload is complete
+
+    my @fileSizes   = ();
+    my @fileDates   = ();
+    my @tmpFilePath = ();
+
+    unless ($doPropsOnly) {
+        my $i = 0;
+        my $j = 0;
+
+     #my $stream = $query->param( 'filepath' ); in scalar context
+     #$stream is both a file name *and* a file handle
+     #my @streams = $query->param( 'filepath' ); in list context
+     #each element is  is both a file name *and* a file handle (see the CGI doc)
+        foreach my $fh (@upload_objs) {
+
+            if ( defined $fh ) {
+
+                try {
+
+                    # SMELL: use of undocumented CGI::tmpFileName
+                    #$tmpFilePath[$j] = $query->tmpFileName($fh);
+                    $tmpFilePath[$j] = $fh->tmpFileName();
+                }
+                catch Error::Simple with {
+
+                    # Item5130, Item5133 - Illegal file name, bad path,
+                    # something like that
+                    throw TWiki::OopsException(
+                        'attention',
+                        def    => 'zero_size_upload',
+                        web    => $webName,
+                        topic  => $topic,
+                        params => [ ( $fileNames[$j] || '""' ) ]
+                    );
+                };
+                $j++;
+            }
+        }
+
+#play with filenames, remember original names, need to inform users about changes
+        $j = 0;
+        foreach my $f (@fileNames) {
+
+            ( $fileNames[$j], $origNames[$j] ) =
+              TWiki::Sandbox::sanitizeAttachmentName( $fileNames[$j] );
+            $j++;
+        }
+
+        my $maxSize =
+          $session->{prefs}->getPreferencesValue('ATTACHFILESIZELIMIT');
         $maxSize = 0 unless ( $maxSize =~ /([0-9]+)/o );
 
-        if( $maxSize && $fileSize > $maxSize * 1024 ) {
+        # check if upload has non zero size
+
+        $j = 0;
+
+        my @stream_fhs = ();
+        foreach my $f (@upload_objs) {
+            if ( defined $f ) {
+                push @stream_fhs, $f->handle();
+            }
+        }
+
+        foreach my $stream (@stream_fhs) {
+
+            if ($stream) {
+                my @stats = stat $stream;
+                $fileSizes[$j] = $stats[7];    ## Local Variables
+                $fileDates[$j] = $stats[9];    ## Local Variables
+
+                unless ( $fileSizes[$j] && $fileNames[$j] ) {
+                    throw TWiki::OopsException(
+                        'attention',
+                        def    => 'zero_size_upload',
+                        web    => $webName,
+                        topic  => $topic,
+                        params => [ ( $fileNames[$j] || '""' ) ]
+                    );
+                }
+
+                if ( $maxSize && $fileSizes[$j] > $maxSize * 1024 ) {
+                    throw TWiki::OopsException(
+                        'attention',
+                        def    => 'oversized_upload',
+                        web    => $webName,
+                        topic  => $topic,
+                        params => [ $fileNames[$j], $maxSize ]
+                    );
+                }
+
+            }
+            $j++;
+        }
+
+        $i = 0;
+        foreach my $stream (@stream_fhs) {
+
+            try {
+                $session->{store}->saveAttachment(
+                    $webName, $topic,
+                    $fileNames[$i],
+                    $user,
+                    {
+                        dontlog     => !$TWiki::cfg{Log}{upload},
+                        comment     => $fileComment,
+                        hide        => $hideFile,
+                        createlink  => $createLink,
+                        stream      => $stream,
+                        filepath    => $fileNames[$i],
+                        filesize    => $fileSizes[$i],
+                        filedate    => $fileDates[$i],
+                        tmpFilename => $tmpFilePath[$i],
+                    }
+                );
+            }
+            catch Error::Simple with {
+                throw TWiki::OopsException(
+                    'attention',
+                    def    => 'save_error',
+                    web    => $webName,
+                    topic  => $topic,
+                    params => [ shift->{-text} ]
+                );
+            };
+            close($stream) if $stream;
+            $i++;
+        }
+
+        $j = 0;
+        my @names_changed = ();
+
+        foreach my $file (@fileNames) {
+            if ( $file ne $origNames[$j] ) {
+                push @names_changed, $origNames[$j], $file;
+            }
+            $j++;
+        }
+
+        if ( !@names_changed ) {
+            $session->redirect(
+                $session->getScriptUrl( 1, 'view', $webName, $topic ),
+                undef, 1 );
+
+        }
+        else {
             throw TWiki::OopsException(
                 'attention',
-                def => 'oversized_upload',
-                web => $webName,
-                topic => $topic,
-                params => [ $fileName, $maxSize ] );
+                def    => 'upload_name_changed',
+                web    => $webName,
+                topic  => $topic,
+                params => [@names_changed]
+            );
         }
-    }
-    try {
-        $session->{store}->saveAttachment(
-            $webName, $topic, $fileName, $user,
-            {
-                dontlog => !$TWiki::cfg{Log}{upload},
-                comment => $fileComment,
-                hide => $hideFile,
-                createlink => $createLink,
-                stream => $stream,
-                filepath => $filePath,
-                filesize => $fileSize,
-                filedate => $fileDate,
-                tmpFilename => $tmpFilePath,
-            } );
-    } catch Error::Simple with {
-        throw TWiki::OopsException( 'attention',
-                                    def => 'save_error',
-                                    web => $webName,
-                                    topic => $topic,
-                                    params => [ shift->{-text} ] );
-    };
-    close( $stream ) if $stream;
 
-    if( $fileName eq $origName ) {
-        $session->redirect(
-            $session->getScriptUrl( 1, 'view', $webName, $topic ), undef, 1 );
-    } else {
-        throw TWiki::OopsException( 'attention',
-                                    def => 'upload_name_changed',
-                                    web => $webName,
-                                    topic => $topic,
-                                    params => [ $origName, $fileName ] );
     }
 
-    # generate a message useful for those calling this script from the command line
-    my $message = ( $doPropsOnly ) ?
-      'properties changed' : "$fileName uploaded";
+ # generate a message useful for those calling this script from the command line
+    my $message =
+      ($doPropsOnly) ? 'properties changed' : "$fileNames[0] uploaded";
 
-    print 'OK ',$message,"\n" if $session->inContext('command_line');
+    print 'OK ', $message, "\n" if $session->inContext('command_line');
 }
 
 1;
