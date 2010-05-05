@@ -345,25 +345,20 @@ __%MAKETEXT{"Note:"}%__
 %TMPL:END%
 %TMPL:DEF{"upload_name_changed"}%
 
----+++ %MAKETEXT{"File/s has been uploaded with different name"}%
+---+++ %MAKETEXT{"Files have been uploaded with different name"}%
 %MAKETEXT{"The files have been uploaded and attached properly to the [_1] topic." args="<nop>%TOPIC%"}%
-%MAKETEXT{"However,  A few filenames have been changed. Please make a note of it."}%
+%MAKETEXT{"Some files have been renamed on upload:"}%
 
-%IF{ "$'URLPARAM{param1}'=''" then="" else="|<b>from:</b> $percntURLPARAM{\"param1\" encode=\"quote\"}$percnt | |" }%  %IF{ "$'URLPARAM{param2}'=''" then="" else="<b>to:</b> $percntURLPARAM{\"param2\" encode=\"quote\"}$percnt |" }%
-%IF{ "$'URLPARAM{param3}'=''" then="" else="|<b>from:</b> $percntURLPARAM{\"param3\" encode=\"quote\"}$percnt | |" }%  %IF{ "$'URLPARAM{param4}'=''" then="" else="<b>to:</b> $percntURLPARAM{\"param4\" encode=\"quote\"}$percnt |" }%
-%IF{ "$'URLPARAM{param5}'=''" then="" else="|<b>from:</b> $percntURLPARAM{\"param5\" encode=\"quote\"}$percnt | |" }%  %IF{ "$'URLPARAM{param6}'=''" then="" else="<b>to:</b> $percntURLPARAM{\"param6\" encode=\"quote\"}$percnt |" }%
-%IF{ "$'URLPARAM{param7}'=''" then="" else="|<b>from:</b> $percntURLPARAM{\"param7\" encode=\"quote\"}$percnt | |" }%  %IF{ "$'URLPARAM{param8}'=''" then="" else="<b>to:</b> $percntURLPARAM{\"param8\" encode=\"quote\"}$percnt |" }%
-%IF{ "$'URLPARAM{param9}'=''" then="" else="|<b>from:</b> $percntURLPARAM{\"param9\" encode=\"quote\"}$percnt | |" }%  %IF{ "$'URLPARAM{param10}'=''" then="" else="<b>to:</b> $percntURLPARAM{\"param10\" encode=\"quote\"}$percnt |" }%
-%IF{ "$'URLPARAM{param11}'=''" then="" else="|<b>from:</b> $percntURLPARAM{\"param11\" encode=\"quote\"}$percnt | |" }%  %IF{ "$'URLPARAM{param12}'=''" then="" else="<b>to:</b> $percntURLPARAM{\"param12\" encode=\"quote\"}$percnt |" }%
-%IF{ "$'URLPARAM{param13}'=''" then="" else="|<b>from:</b> $percntURLPARAM{\"param13\" encode=\"quote\"}$percnt | |" }%  %IF{ "$'URLPARAM{param14}'=''" then="" else="<b>to:</b> $percntURLPARAM{\"param14\" encode=\"quote\"}$percnt |" }%
-%IF{ "$'URLPARAM{param15}'=''" then="" else="|<b>from:</b> $percntURLPARAM{\"param15\" encode=\"quote\"}$percnt | |" }%  %IF{ "$'URLPARAM{param16}'=''" then="" else="<b>to:</b> $percntURLPARAM{\"param16\" encode=\"quote\"}$percnt |" }%
-%IF{ "$'URLPARAM{param17}'=''" then="" else="|<b>from:</b> $percntURLPARAM{\"param17\" encode=\"quote\"}$percnt | |" }%  %IF{ "$'URLPARAM{param18}'=''" then="" else="<b>to:</b>$percntURLPARAM{\"param18\" encode=\"quote\"}$percnt |" }%
-%IF{ "$'URLPARAM{param19}'=''" then="" else="|<b>from:</b> $percntURLPARAM{\"param19\" encode=\"quote\"}$percnt| |" }%  %IF{ "$'URLPARAM{param20}'=''" then="" else="<b>to:</b> $percntURLPARAM{\"param20\" encode=\"quote\"}$percnt |" }%
-
-
-
-
-
+%IF{ "$'URLPARAM{param1}'=''" then="" else="| $percntURLPARAM{\"param1\" encode=\"quote\"}$percnt | =&gt; | $percntURLPARAM{\"param2\" encode=\"quote\"}$percnt |" }%
+%IF{ "$'URLPARAM{param3}'=''" then="" else="| $percntURLPARAM{\"param3\" encode=\"quote\"}$percnt | =&gt; | $percntURLPARAM{\"param4\" encode=\"quote\"}$percnt |" }%
+%IF{ "$'URLPARAM{param5}'=''" then="" else="| $percntURLPARAM{\"param5\" encode=\"quote\"}$percnt | =&gt; | $percntURLPARAM{\"param6\" encode=\"quote\"}$percnt |" }%
+%IF{ "$'URLPARAM{param7}'=''" then="" else="| $percntURLPARAM{\"param7\" encode=\"quote\"}$percnt | =&gt; | $percntURLPARAM{\"param8\" encode=\"quote\"}$percnt |" }%
+%IF{ "$'URLPARAM{param9}'=''" then="" else="| $percntURLPARAM{\"param9\" encode=\"quote\"}$percnt | =&gt; | $percntURLPARAM{\"param10\" encode=\"quote\"}$percnt |" }%
+%IF{ "$'URLPARAM{param11}'=''" then="" else="| $percntURLPARAM{\"param11\" encode=\"quote\"}$percnt | =&gt; | $percntURLPARAM{\"param12\" encode=\"quote\"}$percnt |" }%
+%IF{ "$'URLPARAM{param13}'=''" then="" else="| $percntURLPARAM{\"param13\" encode=\"quote\"}$percnt | =&gt; | $percntURLPARAM{\"param14\" encode=\"quote\"}$percnt |" }%
+%IF{ "$'URLPARAM{param15}'=''" then="" else="| $percntURLPARAM{\"param15\" encode=\"quote\"}$percnt | =&gt; | $percntURLPARAM{\"param16\" encode=\"quote\"}$percnt |" }%
+%IF{ "$'URLPARAM{param17}'=''" then="" else="| $percntURLPARAM{\"param17\" encode=\"quote\"}$percnt | =&gt; | $percntURLPARAM{\"param18\" encode=\"quote\"}$percnt |" }%
+%IF{ "$'URLPARAM{param19}'=''" then="" else="| $percntURLPARAM{\"param19\" encode=\"quote\"}$percnt | =&gt; | $percntURLPARAM{\"param20\" encode=\"quote\"}$percnt |" }%
 
 __%MAKETEXT{"Note:"}%__
 %MAKETEXT{"In some cases, TWiki changes the name of the uploaded file to make it safe and accessible across all platforms:"}%
