@@ -150,6 +150,3 @@ All plugin configuration is done through =configure=.
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/SafeWikiPluginAppraisal |
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
-
-%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
-%META:FILEATTACHMENT{name="safewiki.png" attr="h" comment="" version="1"}%
