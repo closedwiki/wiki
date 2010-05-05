@@ -1,7 +1,5 @@
 %{ This is a default template }%%TMPL:INCLUDE{"twiki"}%
 
-
-
 %TMPL:DEF{"notes"}%   * <a class="twikiPopUp" target='FileAttachment' href="%SCRIPTURL{view}%/%SYSTEMWEB%/FileAttachment" rel='nofollow'>FileAttachment</a> %MAKETEXT{"has more information about attaching files." args=""}%%TMPL:END%
 
 %TMPL:DEF{"existingattachments"}%%META{"attachments" all="on" title="<h2>%MAKETEXT{"Attachments of [_1]" args="<nop>%TOPIC%"}%</h2>"}%%TMPL:END%
@@ -17,6 +15,7 @@
    %MAKETEXT{"Attach new file"}%
   </td><td>
    <input type="hidden" name="filename" value="%FILENAME%" /> 
+   <input type="file" name="filepath" value="%FILEPATH%" size="50" />
    <input type="file" name="filepath" value="%FILEPATH%" size="50" />
   </td>
  </tr>%TMPL:END%
