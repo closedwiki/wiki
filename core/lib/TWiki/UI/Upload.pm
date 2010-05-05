@@ -222,29 +222,12 @@ sub upload {
     $fileComment =~ s/^\s*//o;
     $fileComment =~ s/\s*$//o;
 
-    my @fileNames   = ();
-    my @upload_objs = ();
+    # Future - the number of files should be defined in TWiki varaibles
+    # Now we are supporting to upload upto ten files
 
-    #FixMe - in future - the maximum number of files should come from
-    #TWiki Variable
-    for ( 0 .. 9 ) {
-        if ( $_ == 0 ) {
-            if ( defined $query->{uploads}{ $query->param('filepath') } ) {
-                push @upload_objs,
-                  $query->{uploads}{ $query->param('filepath') };
-                push @fileNames, $query->param('filepath');
-            }
-        }
-        else {
-            if ( defined $query->{uploads}{ $query->param( 'filepath' . $_ ) } )
-            {
-                push @upload_objs,
-                  $query->{uploads}{ $query->param( 'filepath' . $_ ) };
-                push @fileNames, $query->param( 'filepath' . $_ );
-            }
-        }
-
-    }
+    my @fileNames = grep { defined $query->{uploads}{$_} }
+       map { $query->param("filepath$_") } ('', 1 .. 9);
+    my @upload_objs = @{$query->{uploads}}{@fileNames}; 
 
     my @origNames = ();    # If filenames are changed after uploading to
                            # topic, those should be shown to the user
