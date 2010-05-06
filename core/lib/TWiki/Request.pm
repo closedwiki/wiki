@@ -638,10 +638,17 @@ sub load {
 Called with file name parameter returns an open filehandle
 to uploaded file.
 
+   * If called  without parameters returns a list filenames, app trying to upload
+    
 =cut
 
 sub upload {
-    my ( $this, $name ) = @_;
+    my  $this = shift;
+   
+    if (@_ == 0 ) {
+             return keys %{$this->uploads};
+    }
+    my $name  = shift; # Assuming the number of arguments are more .. 
     my $upload = $this->{uploads}{$this->param($name)};
     return defined $upload ? $upload->handle : undef;
 }
