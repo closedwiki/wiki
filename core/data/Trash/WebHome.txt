@@ -1,5 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1240780661" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273185215" format="1.1" version="$Rev$"}%
+%INCLUDE{%SYSTEMWEB%.WebChangesRightBox}%
 ---+ Trash Web
+
 %MAKETEXT{"This is the Trash. Here you can undelete topics; deleted attachments are in TrashAttachment." args="<b><nop>%WEB%</b>"}%
 
 %RED%
@@ -7,17 +9,15 @@
 %ENDCOLOR%
 %MAKETEXT{"By default, viewing the Trash web is restricted to [_1]. If you would like to allow all users to view the Trash web, remove the =ALLOWWEBVIEW= restriction in WebPreferences." args="%USERSWEB%.TWikiAdminGroup"}%
 
----++ %MAKETEXT{"Recently Deleted Topics"}%
-%SEARCH{ ".*" web="%INCLUDINGWEB%" type="regex" excludetopic="WebHome, WebStatistics, TrashAttachment" nototal="on" nosearch="on" order="modified" limit="20" reverse="on" }%
-[[WebChanges][%MAKETEXT{"more..."}%]]
-
 ---++ <nop>%WEB% Web Utilities
-<form action='%SCRIPTURLPATH{"search"}%/%WEB%/'>
-   * <input type="text" name="search" size="22" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" /> - [[WebSearchAdvanced][advanced search]]
-   * WebTopicList - all topics in alphabetical order
-   * WebChanges - recent topic changes in this web
-   * WebNotify - subscribe to an e-mail alert sent when topics change
-   * WebRss, WebAtom - RSS and ATOM news feeds of topic changes
-   * WebStatistics - listing popular topics and top contributors
-   * WebPreferences - preferences of this web
-</form>
+
+   * [[TrashAttachment]] - topic holding trashed attachments
+   * [[WebSearch]] - simple search
+   * [[WebSearchAdvanced]] - %MAKETEXT{"advanced search"}%
+   * [[WebTopicList]] - all topics in alphabetical order
+   * [[WebChanges]] - recent topic changes in this web
+   * [[WebNotify]] - subscribe to an e-mail alert sent when topics change
+   * [[WebRss]], [[WebAtom]] - RSS and ATOM news feeds of topic changes
+   * [[WebStatistics]] - listing popular topics and top contributors
+   * [[WebTopMenu]] - top menu definition
+   * [[WebPreferences]] - preferences of this web

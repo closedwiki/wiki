@@ -1,4 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273185215" format="1.1" version="$Rev$"}%
+%INCLUDE{%SYSTEMWEB%.WebChangesRightBox}%
 ---+ !TestCases Web
 
 If you are here, you want to test this version of TWiki. This web is held in the TWiki Subversion repository, so:

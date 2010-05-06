@@ -1,19 +1,21 @@
-%META:TOPICINFO{author="TWikiContributor" date="1112002813" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273185196" format="1.1" version="$Rev$"}%
+%INCLUDE{%SYSTEMWEB%.WebChangesRightBox}%
 ---+!! %MAKETEXT{"Welcome to the [_1] web" args="<nop>%WEB%"}%
 
----++ %MAKETEXT{"Available Information"}%
-   * ...
-   * ...
-   * ...
- 
----++ <nop>%WEB% Web Utilities
-<form action='%SCRIPTURLPATH{"search"}%/%WEB%/'>
-   * <input type="text" name="search" size="22" />&nbsp;<input type="submit" class="twikiSubmit" value="%MAKETEXT{"Search"}%" /> - [[WebSearchAdvanced][%MAKETEXT{"advanced search"}%]]
-   * WebTopicList - all topics in alphabetical order
-   * WebChanges - recent topic changes in this web
-   * WebNotify - subscribe to an e-mail alert sent when topics change
-   * WebRss, WebAtom - RSS and ATOM news feeds of topic changes
-   * WebStatistics - listing popular topics and top contributors
-   * WebPreferences - preferences of this web
-</form>
+Replace this text with a short description on how this web is used.
 
+   * Add links to useful topics in this web
+   * ...
+   * ...
+
+---++ <nop>%WEB% Web Utilities
+
+   * [[WebSearch]] - simple search
+   * [[WebSearchAdvanced]] - %MAKETEXT{"advanced search"}%
+   * [[WebTopicList]] - all topics in alphabetical order
+   * [[WebChanges]] - recent topic changes in this web
+   * [[WebNotify]] - subscribe to an e-mail alert sent when topics change
+   * [[WebRss]], [[WebAtom]] - RSS and ATOM news feeds of topic changes
+   * [[WebStatistics]] - listing popular topics and top contributors
+   * [[WebTopMenu]] - top menu definition
+   * [[WebPreferences]] - preferences of this web
