@@ -38,15 +38,8 @@ use vars qw(
         $defaultTrendWidth $defaultTrendHeight
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '2010-04-08';
+$RELEASE = '2010-05-05';
 
 $pluginInitialized = 0;
 $perlGDModuleFound = 0;
@@ -179,13 +172,29 @@ sub _parse_parameters
 # code to determine what parameters remain and were not requested.
 sub _get_parameter
 {
-    my ( $var_name, $default, $parameters ) = @_;
+    my ( $var_name, $type, $default, $parameters ) = @_;
     my $value = delete $$parameters{$var_name};         # Delete since already parsed.
-    if( defined $value && $value ne "" ) {
-        return $value;
-    } else {
-        return $default;
+    unless( defined $value && $value ne "" ) {
+        $value = $default;
     }
+    my $filter = '';
+    if( $type eq 'word' ) {
+        $filter = '[^a-zA-Z0-9_\-]';
+    } elsif( $type eq 'float' ) {
+        $filter = '[^\-\+0-9e]';
+    } elsif( $type eq 'pos' ) {
+        $filter = '[^0-9]';
+    } elsif( $type eq 'scale' ) {
+        $filter = '[^0-9\., ]';
+    } elsif( $type eq 'colors' ) {
+        $filter = '[^\#a-zA-Z0-9\, ]';
+    }
+    if( $filter && $value ) {
+       $value =~ s/<[^>]+//go;
+       $value =~ s/$filter//g;
+       return TWiki::Sandbox::untaintUnchecked( $value );
+    }
+    return $value;
 }
 
 # Generate the file name in which the graphic file will be placed.  Also
@@ -314,7 +323,7 @@ sub _make_gauge
     # If the GD module was found, then create an error image.
     if( $perlGDModuleFound ) {
         my %parameters = _parse_parameters( $args );
-        my ( $type ) = _get_parameter( "type", $defaultType, \%parameters );
+        my ( $type ) = _get_parameter( 'type', 'word', $defaultType, \%parameters );
         return _make_tambar_gauge( $topic, $web, \%parameters ) if( $type eq "tambar" );
         return _make_trend_gauge( $topic, $web, \%parameters ) if( $type eq "trend" );
         return _make_error( "Unknown gauge type '$type'" );
@@ -333,11 +342,11 @@ sub _make_tambar_gauge
     my ( $color_fg, $color_bg, $value_color_dark, $value_color_light );
 
     # Get the gauge colors (use defaults if not specified).
-    my $tambar_colors = _get_parameter( "colors", $defaultColors, $parameters );
+    my $tambar_colors = _get_parameter( 'colors', 'colors', $defaultColors, $parameters );
     my @tambar_colors = split(/[\s,]+/, $tambar_colors);
 
     # Get the tambar gauge scale values (use defaults of not specified).
-    my $tambar_scale = _get_parameter( "scale", $defaultTambarScale, $parameters);
+    my $tambar_scale = _get_parameter( 'scale', 'scale', $defaultTambarScale, $parameters);
     my @tambar_scale = split(/[\s,]+/, $tambar_scale);
     # Get the left and right side values.  Needed to scale to the image
     # size.
@@ -359,8 +368,8 @@ sub _make_tambar_gauge
     }
 
     # Get the tambar gauge width and height (different from scale used)
-    my $tambar_width = _get_parameter( "width", $defaultTambarWidth, $parameters);
-    my $tambar_height = _get_parameter( "height", $defaultTambarHeight, $parameters);
+    my $tambar_width  = _get_parameter( 'width', 'pos', $defaultTambarWidth, $parameters);
+    my $tambar_height = _get_parameter( 'height', 'pos', $defaultTambarHeight, $parameters);
 
     # Compute the height of the scale portion of the gauge.  A minimum
     # value of 2, but is in general an 8th the size of the gauge value
@@ -369,20 +378,19 @@ sub _make_tambar_gauge
 
     # See if the parameter 'name' is available.  This is a required
     # parameter.  If it is missing, then generate an error message.
-    my $name = _get_parameter( "name", undef, $parameters);
-    return _make_error("parameter *name* must be specified") if( ! defined $name );
+    my $name = _get_parameter( 'name', 'word', undef, $parameters);
+    return _make_error("parameter *name* must be specified") unless( $name );
 
     # Generate the name of the graphic file that will be referenced
     my ( $dir, $filename ) = _make_filename("tambar", $name, $topic, $web);
 
     # Get the gauge value.
-    my $value = _get_parameter( "value", undef, $parameters );
+    my $value = _get_parameter( 'value', 'float', undef, $parameters );
 
-    # Get the gauge IMG 'alt' text.  If there is no value, then use 'value' as the default;
-    my $alt = _get_parameter( "alt", $value, $parameters ) || "";
+    # Get the gauge IMG 'alt' text.  If there is no value, then use 'value' as the default
+    my $alt = _get_parameter( 'alt', '', $value, $parameters ) || "";
 
     # clean up numerical value
-    $value =~ s/<[^>]+//g if( $value );
     if( ( defined $value ) && ( $value =~ /^.*?([\+\-]?[0-9\.]+).*$/ ) ) {
         $value = $1;
     } else {
@@ -514,18 +522,17 @@ sub _make_trend_gauge
     my ( $color_fg, $color_bg, $value_color_dark, $value_color_light );
 
     # Get the trend gauge width and height (different from scale used)
-    my $trend_width = _get_parameter( "width", $defaultTrendWidth, $parameters);
-    my $trend_height = _get_parameter( "height", $defaultTrendHeight, $parameters);
+    my $trend_width  = _get_parameter( 'width', 'pos', $defaultTrendWidth, $parameters);
+    my $trend_height = _get_parameter( 'height', 'pos', $defaultTrendHeight, $parameters);
 
     # Get the trend value.  If there is no value, then create an error graphic noting the error
     my $filename;
-    my $value = _get_parameter( "value", undef, $parameters );
+    my $value = _get_parameter( 'value', 'float', undef, $parameters );
 
     # Get the gauge IMG 'alt' text.  If there is no value, then use 'value' as the default
-    my $alt = _get_parameter( "alt", $value, $parameters ) || "";
+    my $alt = _get_parameter( 'alt', '', $value, $parameters ) || "";
 
     # clean up numerical value
-    $value =~ s/<[^>]+//g if( $value );
     if( ( defined $value ) && ( $value =~ /^.*?([\+\-]?[0-9\.]+).*$/ ) ) {
         $value = $1;
 

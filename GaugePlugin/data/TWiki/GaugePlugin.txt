@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1270702978" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273127252" format="1.1" version="$Rev$"}%
 ---+ Gauge Plugin
 
 This plugin can be used to build dashboards that contain graphical images of gauges like %ATTACHURL%/tambar1.gif (target measure gauge) and %ATTACHURL%/trendup.gif (trend icons).
@@ -94,10 +94,11 @@ __Note:__ You do not need to install anything on your browser to use this plugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny, TWiki:Main/TaitCyrus |
-|  Copyright: | &copy; 2002-2010, Peter Thoeny |
+|  Copyright: | &copy; 2002-2010, TWiki:Main/PeterThoeny; <br /> &copy; 2008-2010, TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-04-08 |
+|  Plugin Version: | 2010-05-05 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-05-05: | TWikibug:Item6419 - Validate and untaint input values -- TWiki:Main/PeterThoeny |
 |  2010-04-08: | TWikibug:Item6420 - Added VarGAUGE variable documentation page; other doc improvements -- TWiki:Main/PeterThoeny |
 |  01 May 2003: | Added time stamp to image to prevent browser from caching images; ignore non-numerical chars in value parameter; fixed warnings (V1.002) |
 |  08 Sep 2002: | Added missing binmode (for Windows); pass parameters also to error image (V1.001) |
@@ -110,8 +111,6 @@ __Note:__ You do not need to install anything on your browser to use this plugin
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
 __Related Topics:__ VarGAUGE, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
-
--- TWiki:Main/TaitCyrus, TWiki:Main/PeterThoeny - 2010-04-08
 
 %META:FILEATTACHMENT{name="tambar1.gif" attr="h" comment="Target Measure Bar, 60x16 example" date="1021945424" path="tambar1.gif" size="932" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="trendup.gif" attr="h" comment="Trend Up Icon 16x16" date="1021945466" path="trendup.gif" size="877" user="TWikiContributor" version="1.1"}%
