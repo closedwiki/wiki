@@ -10,6 +10,7 @@ To learn more about TWiki, visit the [[%SYSTEMWEB%.WebHome][TWiki web]]. Please 
 
 ---++ <nop>%WEB% Web Utilities
 
+   * [[%SYSTEMWEB%.SiteMap][SiteMap]] - site map listing all <nop>%WIKITOOLNAME% webs
    * [[%SYSTEMWEB%.WelcomeGuest][WelcomeGuest]] - for first time visitors
    * [[%SYSTEMWEB%.TWikiRegistration][Registration]] - become a <nop>%WIKITOOLNAME% user
    * [[%WIKIUSERSTOPIC%]] - list of users of this <nop>%WIKITOOLNAME% site
