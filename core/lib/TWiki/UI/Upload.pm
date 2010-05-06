@@ -222,12 +222,13 @@ sub upload {
     $fileComment =~ s/^\s*//o;
     $fileComment =~ s/\s*$//o;
 
-    # Future - the number of files should be defined in TWiki varaibles
-    # Now we are supporting to upload upto ten files
+    # below - @fileNames is array of files being uploaded 
+    # below - @upload_objs are array of TWiki::Request::Upload objects 
 
     my @fileNames = grep { defined $query->{uploads}{$_} }
        map { $query->param("filepath$_") } ('', 1 .. 9);
     my @upload_objs = @{$query->{uploads}}{@fileNames}; 
+    
 
     my @origNames = ();    # If filenames are changed after uploading to
                            # topic, those should be shown to the user
@@ -241,24 +242,17 @@ sub upload {
         my $i = 0;
         my $j = 0;
 
-     #my $stream = $query->param( 'filepath' ); in scalar context
-     #$stream is both a file name *and* a file handle
-     #my @streams = $query->param( 'filepath' ); in list context
-     #each element is  is both a file name *and* a file handle (see the CGI doc)
-        foreach my $fh (@upload_objs) {
+        # Following loop just makes sure we have at least some non-empty file 
+        # available to upload  to topic
 
+        foreach my $fh (@upload_objs) {
             if ( defined $fh ) {
 
                 try {
-
-                    # SMELL: use of undocumented CGI::tmpFileName
-                    #$tmpFilePath[$j] = $query->tmpFileName($fh);
                     $tmpFilePath[$j] = $fh->tmpFileName();
                 }
                 catch Error::Simple with {
 
-                    # Item5130, Item5133 - Illegal file name, bad path,
-                    # something like that
                     throw TWiki::OopsException(
                         'attention',
                         def    => 'zero_size_upload',
@@ -271,7 +265,8 @@ sub upload {
             }
         }
 
-#play with filenames, remember original names, need to inform users about changes
+        # Creating Array of original names for files, need to inform users about filename changes
+        
         $j = 0;
         foreach my $f (@fileNames) {
 
@@ -284,16 +279,9 @@ sub upload {
           $session->{prefs}->getPreferencesValue('ATTACHFILESIZELIMIT');
         $maxSize = 0 unless ( $maxSize =~ /([0-9]+)/o );
 
-        # check if upload has non zero size
 
         $j = 0;
-
-        my @stream_fhs = ();
-        foreach my $f (@upload_objs) {
-            if ( defined $f ) {
-                push @stream_fhs, $f->handle();
-            }
-        }
+        my @stream_fhs = grep { defined $_ } map {$_->handle()} @upload_objs;
 
         foreach my $stream (@stream_fhs) {
 
