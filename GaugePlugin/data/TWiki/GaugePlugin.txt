@@ -1,5 +1,18 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273127252" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273167157" format="1.1" version="$Rev$"}%
 ---+ Gauge Plugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/GaugePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/GaugePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+%SHORTDESCRIPTION%
+
+<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC%
+</div>
+
+---++ Introduction
 
 This plugin can be used to build dashboards that contain graphical images of gauges like %ATTACHURL%/tambar1.gif (target measure gauge) and %ATTACHURL%/trendup.gif (trend icons).
 
@@ -96,8 +109,9 @@ __Note:__ You do not need to install anything on your browser to use this plugin
 |  Plugin Author: | TWiki:Main/PeterThoeny, TWiki:Main/TaitCyrus |
 |  Copyright: | &copy; 2002-2010, TWiki:Main/PeterThoeny; <br /> &copy; 2008-2010, TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-05-05 |
+|  Plugin Version: | 2010-05-06 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-05-06: | TWikibug:Item6433 - Doc fixes -- TWiki:Main/PeterThoeny |
 |  2010-05-05: | TWikibug:Item6419 - Validate and untaint input values -- TWiki:Main/PeterThoeny |
 |  2010-04-08: | TWikibug:Item6420 - Added VarGAUGE variable documentation page; other doc improvements -- TWiki:Main/PeterThoeny |
 |  01 May 2003: | Added time stamp to image to prevent browser from caching images; ignore non-numerical chars in value parameter; fixed warnings (V1.002) |
