@@ -1,5 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_333" date="1228139403" format="1.1" version="1.2"}%
-%META:TOPICPARENT{name="WebHome"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273167157" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WEB% Web Preferences
 
 The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in [[%SYSTEMWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, eg: %USERSWEB%.%WIKINAME% in the [[%USERSWEB%.%HOMETOPIC%][%USERSWEB%]] web).
@@ -13,8 +12,7 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
    * Web settings:
       * Set WEBTOPICLIST = [[%WIKIUSERSTOPIC%][Users]] %SEP% [[TWikiGroups][Groups]] %SEP% [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
       * Set WEBBGCOLOR = #FFEFA6
-      * Set SITEMAPWHAT = Welcome to <nop>%WIKITOOLNAME%... [[%WEB%.%WIKIUSERSTOPIC%][Users]], [[%WEB%.TWikiGroups][Groups]]
-      * Set SITEMAPUSETO = ...see who is registered on this TWiki
+      * Set SITEMAPWHAT = <nop>%WIKITOOLNAME% home where [[%USERSWEB%.%WIKIUSERSTOPIC%][users]] and [[%USERSWEB%.TWikiGroups][groups]] are located
       * Set SITEMAPLIST = on
 
    * Default template for *new topics* for this web:

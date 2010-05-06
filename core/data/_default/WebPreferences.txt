@@ -1,5 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1172730733" format="1.0" version="$Rev$"}%
-%META:TOPICPARENT{name="WebHome"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273167157" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WEB% Web Preferences
 
 The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in [[%SYSTEMWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, eg: [[%USERSWEB%.%WIKINAME%][%WIKINAME%]] in the [[%USERSWEB%.%HOMETOPIC%][%USERSWEB%]] web).
@@ -30,7 +29,6 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
       __Note:__ Unlike other variables, the setting of SITEMAPLIST is *not* inherited from parent webs. It has to be set in *every* web that is to be listed in the [[%SYSTEMWEB%.SiteMap][SiteMap]] %BR%
       * Set SITEMAPLIST = on
       * Set SITEMAPWHAT = 
-      * Set SITEMAPUSETO = 
       * __Note:__ Above settings are automatically configured when you create a web
 
    * Exclude web from a =web="all"= search: (Set to =on= for hidden webs).
@@ -65,4 +63,4 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
 
 %INCLUDE{%SYSTEMWEB%.WebPreferencesHelp}%
 
-%META:FILEATTACHMENT{name="favicon.ico" attachment="favicon.ico" attr="" comment="placeholder favicon" date="1100974473" path="favicon.ico" size="318" tmpFilename="/var/tmp/CGItemp25580" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="favicon.ico" attachment="favicon.ico" attr="" comment="placeholder favicon" date="1100974473" path="favicon.ico" size="318" user="TWikiContributor" version="1.1"}%

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273167157" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WEB% Web Preferences
 
 The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in [[%SYSTEMWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, eg: %USERSWEB%.%WIKINAME% in the [[%USERSWEB%.%HOMETOPIC%][%USERSWEB%]] web).
@@ -14,8 +14,7 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
       * Set WEBBGCOLOR = #FFD8AA
       * Set WEBHEADERART = %PUBURLPATH%/%SYSTEMWEB%/%WEBPREFSTOPIC%/Dakar.gif
       * Set SITEMAPLIST = on
-      * Set SITEMAPWHAT = [[%WEB%.WelcomeGuest][Welcome]], [[%WEB%.TWikiRegistration][Registration]], and other %WEB%.StartingPoints; TWiki history &amp; Wiki style; All the docs...
-      * Set SITEMAPUSETO = ...discover TWiki details, and how to start your own site.
+      * Set SITEMAPWHAT = TWiki documentation, [[%SYSTEMWEB%.WelcomeGuest][welcome]], [[%SYSTEMWEB%.TWikiRegistration][registration]] and other [[%SYSTEMWEB%.StartingPoints][starting points]]
       * Hide Table of Contents if the topic is included
          * Set TOC_HIDE_IF_INCLUDED = on
       * Set default Table of Contents title
@@ -46,4 +45,4 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
 
 %INCLUDE{%SYSTEMWEB%.WebPreferencesHelp}%
 
-%META:FILEATTACHMENT{name="favicon.ico" attachment="favicon.ico" attr="" comment="" date="1100974473" path="favicon.ico" size="318" tmpFilename="/var/tmp/CGItemp25580" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="favicon.ico" attachment="favicon.ico" attr="" comment="" date="1100974473" path="favicon.ico" size="318" user="TWikiContributor" version="1.1"}%

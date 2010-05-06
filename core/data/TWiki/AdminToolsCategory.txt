@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.1" version="$Rev $"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273167157" format="1.1" version="$Rev $"}%
 ---+ Admin tools
 Manage whole <b>TWiki</b> site from one screen.
 
@@ -7,15 +7,14 @@ Manage whole <b>TWiki</b> site from one screen.
    * %ICON{persons}% Manage [[%USERSWEB%.%WIKIUSERSTOPIC%][Users]]: [[TWikiRegistration][Register]], %SYSTEMWEB%.NewUserTemplate, %SYSTEMWEB%.UserForm, ResetPassword, ChangePassword
    * %ICON{indexlist}% Manage Content: [[ManagingTopics][Topics]], [[ManagingWebs][Webs]], YouAreHere
    * %ICON{folder}% Webs:
-  <table width="100%" border="0" cellspacing="2" bgcolor="#000000" cellpadding="3">
+  <table width="100%" border="0" cellspacing="2" bgcolor="#dddddd" cellpadding="3">
   <tr bgcolor="#99CCCC">
     <th>Web</th>
     <th>Tools</th>
-    <th>Use to...</th>
   </tr>
-    %SEARCH{ "^%WEBPREFSTOPIC%$" web="all" scope="topic" type="regex" nototal="on" nosearch="on" format=" <tr bgcolor=\"$pattern(.*?\* Set WEBBGCOLOR\s*=\s*([^\s]*).*)\">$n <td> <b>[[$web.%HOMETOPIC%][$web]]</b></td>$n <td> [[$web.%HOMETOPIC%][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/home.gif\" alt=\"Home of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebSearch][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/searchtopic.gif\" alt=\"Search <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebChanges][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/recentchanges.gif\" alt=\"Recent changes in the <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%NOTIFYTOPIC%][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/notify.gif\" alt=\"Get notified of changes to the <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%WEBPREFSTOPIC%][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/wrench.gif\" alt=\"Preferences of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%STATISTICSTOPIC%][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/statistics.gif\" alt=\"Statistics of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebTopicList][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/indexlist.gif\" alt=\"Bullet list of all topics\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebIndex][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/index.gif\" alt=\"Index of all topics\" width=\"16\" height=\"16\" border=\"0\">]]</td><td>$pattern(.*?\* Set SITEMAPUSETO\s*=([^\n\r]*).*)</td></tr>" }%
+    %SEARCH{ "^%WEBPREFSTOPIC%$" web="all" scope="topic" type="regex" nototal="on" nosearch="on" format=" <tr bgcolor=\"$pattern(.*?\* Set WEBBGCOLOR\s*=\s*([^\s]*).*)\">$n <td> <b>[[$web.%HOMETOPIC%][$web]]</b>: $pattern(.*?\* Set SITEMAPWHAT\s*=([^\n\r]*).*)</td>$n <td> [[$web.%HOMETOPIC%][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/home.gif\" alt=\"Home\" title=\"Home of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebSearch][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/searchtopic.gif\" alt=\"Search\" title=\"Search <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebChanges][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/recentchanges.gif\" alt=\"Changes\" title=\"Recent changes in the <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%NOTIFYTOPIC%][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/notify.gif\" alt=\"Notification\" title=\"Get notified of changes to the <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%WEBPREFSTOPIC%][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/wrench.gif\" alt=\"Preferences\" title=\"Preferences of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebTopMenu][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/sitetree.gif\" alt=\"Top menu\" title=\"Top menu of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%STATISTICSTOPIC%][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/statistics.gif\" alt=\"Statistics\" title=\"Statistics of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebTopicList][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/indexlist.gif\" alt=\"All topics\" title=\"Bullet list of all topics\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebIndex][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/index.gif\" alt=\"Topic details\" title=\"Index of all topics\" width=\"16\" height=\"16\" border=\"0\">]]</td></tr>" }%
   <tr bgcolor="#ffffff">
-    <td colspan="3">This table is updated automatically based on <nop>WebPreferences settings of the individual webs.</td>
+    <td colspan="2">This table is updated automatically based on <nop>WebPreferences settings of the individual webs.</td>
   </tr>
   </table>
   <table border="0" cellspacing="2" cellpadding="3">

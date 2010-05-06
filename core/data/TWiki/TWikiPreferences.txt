@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1271304562" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273167157" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -33,8 +33,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
    * List this web in the %SYSTEMWEB%.SiteMap:
       * If yes, set SITEMAPLIST to =on=, do not set NOSEARCHALL, and add the "what" and "use to..." description for the site map. Make sure to list only links that include the name of the web, e.g. <nop>%WEB%.Topic links.
       * Set SITEMAPLIST = on
-      * Set SITEMAPWHAT = Describe what this web does.
-      * Set SITEMAPUSETO = ...to do something.
+      * Set SITEMAPWHAT = Describe what this web does
 
    * Copyright notice:
       * Set WEBCOPYRIGHT = <span class="twikiRight"> <a href="http://twiki.org/"><img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiLogos/T-badge-88x31.gif" alt="This site is powered by the TWiki collaboration platform" width="88" height="31" title="This site is powered by the TWiki collaboration platform" border="0" /></a></span>%MAKETEXT{"Copyright &&copy; by the contributing authors. All material on this collaboration platform is the property of the contributing authors." args="1999-%GMTIME{$year}%"}% <br /> %MAKETEXT{"Ideas, requests, problems regarding [_1]? <a href='[_2]'>Send feedback</a>" args="<nop>%WIKITOOLNAME%,mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%%20Feedback%20on%20%BASEWEB%.%BASETOPIC%"}% %IF{"$ WEB= $ SYSTEMWEB" then="<br /> __Note:__ Please contribute updates to this topic on TWiki.org at TWiki:TWiki.%BASETOPIC%"}%
