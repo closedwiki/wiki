@@ -297,7 +297,7 @@ sub getDescription {
         $this->{description} = $prefs->getPreferencesValue( $pref ) || '';
     }
     if( $this->{disabled} ) {
-        return ' '.$this->{installWeb}.'.'.$this->{name}.': (disabled)';
+        return ' !'.$this->{name}.': (disabled)';
     }
 
     my $release = $this->getRelease();
