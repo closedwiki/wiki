@@ -6,7 +6,12 @@
 </div>%STOPINCLUDE%
 ---+ Web Changes Box on the Right Side
 
-This box is included in the %HOMETOPIC% of every TWiki web.
+This box is included in the <nop>%HOMETOPIC% of every web, except for the TWiki documentation web.
+
+To update existing webs, add the following at the very top of <nop>%HOMETOPIC%:
+<verbatim>
+%INCLUDE{%SYSTEMWEB%.WebChangesRightBox}%
+</verbatim>
 
 <br clear="all">
 -- __Contributors:__ Main.PeterThoeny - 2010-05-06
