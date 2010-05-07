@@ -1,47 +1,28 @@
 %TMPL:INCLUDE{"attach"}%
 %TMPL:DEF{"logo"}%%TMPL:END%
-
-
 %TMPL:DEF{"bodyclassname"}%patternNoViewPage patternAttachPage%TMPL:END%
-
-
 %TMPL:DEF{"titleaction"}%%MAKETEXT{"(attach)"}% %TMPL:END%
-
-
 %TMPL:DEF{"pagetitle"}%%MAKETEXT{"Attach image or document on [_1]" args="[[%TOPIC%]]"}%%TMPL:END%
-
-
 %TMPL:DEF{"toolbar"}%<div class="patternTop">%TWISTYBUTTON{id="attachhelp" mode="div" remember="on" link="%MAKETEXT{"Attachments help"}%" showimgleft="%ICONURLPATH{toggleopen}%"
 hideimgleft="%ICONURLPATH{toggleclose}%"}%</div><!--//patternTop-->%TMPL:END%
-
-
 %TMPL:DEF{"pagehelp"}%%TWISTYTOGGLE{id="attachhelp" mode="div" remember="on" noscript="hide"}%<div class="twikiHelp">
 %TMPL:P{"notes"}%
 %TMPL:P{"extranotes"}%</div>%ENDTWISTYTOGGLE%%TMPL:END%
-
 %TMPL:DEF{"pagehelp_nojavascript"}%<br />%TWISTYTOGGLE{id="pagehelp_nojavascript" mode="div" start="hide"}%<div class="twikiHelp">
 %TMPL:P{"notes"}%
 %TMPL:P{"extranotes"}%</div>%ENDTWISTYTOGGLE%%TMPL:END%
 
-
-%TMPL:DEF{"formstart"}%<div class="patternAttachForm"><form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH{"upload"}%/%WEB%/%TOPIC%" method="post">%TMPL:END%
-
+%TMPL:DEF{"formstart"}%<div class="patternAttachForm"><form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH{"upload"}%/%WEB%/%TOPIC%" method="post" />%TMPL:END%
 %TMPL:DEF{"formend"}%</form></div><!-- /patternAttachForm-->%TMPL:END%
-
-
 %TMPL:DEF{"attachformstart"}%<div class="twikiFormSteps">%TMPL:END%
-
 %TMPL:DEF{"attachformend"}%</div><!-- /twikiFormSteps-->%TMPL:END%
-
 %TMPL:DEF{"newfile"}%<div class="twikiFormStep">
 ---+++ %MAKETEXT{"Attach new file"}%
 
 %TMPL:P{"previous"}%%IF{"$ATTACHFILESIZELIMIT > 0" then="%MAKETEXT{"Upload up to [_1] KB." args="%ATTACHFILESIZELIMIT%"}%"}%
-
-<input type="hidden" name="filename" value="%FILENAME%" /> 
-<input class="twikiInputField" type="file" name="filepath" value="%FILEPATH%" size="70" />
-</div><!-- /twikiFormStep-->%TMPL:END%
-
+%MAKETEXT{"Attach up to 10 files at a time."}%  <!-- Now multiple file upload possible-->
+<div id="mUpload"> <input type="file" id="element_input" class="upload" name="filepath" value="%FILEPATH%"  size="70" /><br />
+</div> <input type="hidden" name="filename" value="%FILENAME%" /> <div id="attachlist" name="attachlist"> </div> </div> <!-- /twikiFormStep-->%TMPL:END%
 %TMPL:DEF{"comment"}%<div class="twikiFormStep">
 ---+++ %MAKETEXT{"Comment"}%
 <p>
@@ -58,9 +39,12 @@ hideimgleft="%ICONURLPATH{toggleclose}%"}%</div><!--//patternTop-->%TMPL:END%
 <input type="checkbox" class="twikiCheckbox" id="hidefile" name="hidefile" %HIDEFILE% /><label for="hidefile">%MAKETEXT{"Do not show attachment in table"}%</label> <span class="twikiGrayText">%MAKETEXT{"Attachments will not be shown in topic view page."}%</span>
 </div><!-- /twikiFormStep-->%TMPL:P{"changepropertiesaction"}%%TMPL:END%
 
+%TMPL:DEF{"multiple-file-javascript"}%
+<script type="text/javascript"> $(document).ready(function(){	var fileMax = 10; $('#attachlist').after('<div id="files_list"></div>'); $("input.upload").change(function(){ doIt(this, fileMax); }); });	function doIt(obj, fm) { if($('input.upload').size() > fm) {alert('Max files is '+fm); obj.value='';return true;} var fileNo = $('input.upload').size(); $(obj).hide(); $(obj).parent().prepend('<input type="file" class="upload" name="filepath'+fileNo+'" value ="%FILEPATH%" size="70" />').find("input").change(function() {doIt(this, fm)}); var v = obj.value; if(v != '') { $("div#files_list").append('<div>'+'<input type="image" src="%ICONURL{remove}%" width="12" height="12" border="0"  alt="Remove file" title="Remove file" value="" style="margin:-2px 0px 0px 0px; border:none; padding:0px; width:12px; height:12px; background-color:transparent;" />  '+v+'</div>') .find("input").click(function(){ $(this).parent().remove(); $(obj).remove(); return true; }); } }; </script> %TMPL:END%
 
 %TMPL:DEF{"content"}%%TMPL:P{"toolbar"}%
 %TMPL:P{"pagehelp"}%
+%TMPL:P{"multiple-file-javascript"}%
 %TMPL:P{"formstart"}%
 %TMPL:P{"attachform"}%
 %TMPL:P{"topicaction"}%%TMPL:P{"formend"}%
