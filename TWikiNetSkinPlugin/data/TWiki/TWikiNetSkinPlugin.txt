@@ -1,6 +1,14 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 13805 $"}%
----+ TWikiNetSkin Plugin
-
+%META:TOPICINFO{author="TWikiContributor" date="1273211493" format="1.1" version="$Rev$"}%
+---+!! !TWikiNetSkin Plugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/TWikiNetSkinPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TWikiNetSkinPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC%
+</div>
 Helps TWikiNetSkin to render tables and h2 headers. This plugin is only enabled if the skin is set to =twikinet=.
 
 ---++ Syntax Rules
@@ -9,42 +17,40 @@ Helps TWikiNetSkin to render tables and h2 headers. This plugin is only enabled 
 
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TWIKINETSKINPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TWIKINETSKINPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Helps TWikiNetSkin to render tables and h2 headers
 
    * Debug plugin: ( TWiki sets =$debug= in your plugin. See output in =data/debug.txt=.)
       * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
+
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your root ($TWIKI_ROOT) directory. Content:
    | *File:* | *Description:* |
    | ==data/TWiki/%TOPIC%.txt== |  |
    | ==lib/TWiki/Plugins/%TOPIC%.pm== |  |
 
-   * Optionally, if it exists, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
-   * Alternatively, manually make sure the dependencies listed in the table below are resolved.
-   None
    * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
    * Set the skin to =twikinet= (together with =pattern=): %BR%
    =* Set SKIN = twikinet,pattern=
 
-
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
+|  Copyright: | &copy; 2007-2010 [[http://www.twiki.net/][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  30 Jul 2007: | Initial version |
+|  2010-05-06: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
+|  2007-07-30: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  Dependencies: | %$DEPENDENCIES |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 99%, %TOPIC% 99% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ TWikiNetSkin, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences

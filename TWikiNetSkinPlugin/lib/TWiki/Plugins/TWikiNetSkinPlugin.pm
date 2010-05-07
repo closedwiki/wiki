@@ -1,9 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (c) 2007, 2008 by Arthur Clemens
-# All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
+# Copyright (c) 2007-2010 TWiki Inc. All Rights Reserved.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,18 +20,9 @@ use strict;
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
+$RELEASE = '1.1';
 
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.0';
-
-# Short description of this plugin
-# One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 $SHORTDESCRIPTION = 'Helps formatting TWikiNetSkin design. Enable by setting the skin to "twikinet"';
 
 # Name of this Plugin, only used in this module
