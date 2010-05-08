@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273167157" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273290249" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -284,25 +284,25 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * <span style='background : #808080;'>%WHITE% *Set WHITE = looks like this (with gray background)* %ENDCOLOR%</span>
       * The following color settings are enclosed in verbatim tags to avoid incorrect nesting of XHTML tags:
 <verbatim>
-      * Set YELLOW = <font color="#ffff00">
-      * Set ORANGE = <font color="#ff6600">
-      * Set RED = <font color="#ff0000">
-      * Set PINK = <font color="#ff00ff">
-      * Set PURPLE = <font color="#800080">
-      * Set TEAL = <font color="#008080">
-      * Set NAVY = <font color="#000080">
-      * Set BLUE = <font color="#0000ff">
-      * Set AQUA = <font color="#00ffff">
-      * Set LIME = <font color="#00ff00">
-      * Set GREEN = <font color="#008000">
-      * Set OLIVE = <font color="#808000">
-      * Set MAROON = <font color="#800000">
-      * Set BROWN = <font color="#996633">
-      * Set BLACK = <font color="#000000">
-      * Set GRAY = <font color="#808080">
-      * Set SILVER = <font color="#c0c0c0">
-      * Set WHITE = <font color="#ffffff">
-      * Set ENDCOLOR = </font>
+      * Set YELLOW = <span style="color: #ffff00">
+      * Set ORANGE = <span style="color: #ff6600">
+      * Set RED = <span style="color: #ff0000">
+      * Set PINK = <span style="color: #ff00ff">
+      * Set PURPLE = <span style="color: #800080">
+      * Set TEAL = <span style="color: #008080">
+      * Set NAVY = <span style="color: #000080">
+      * Set BLUE = <span style="color: #0000ff">
+      * Set AQUA = <span style="color: #00ffff">
+      * Set LIME = <span style="color: #00ff00">
+      * Set GREEN = <span style="color: #008000">
+      * Set OLIVE = <span style="color: #808000">
+      * Set MAROON = <span style="color: #800000">
+      * Set BROWN = <span style="color: #996633">
+      * Set BLACK = <span style="color: #000000">
+      * Set GRAY = <span style="color: #808080">
+      * Set SILVER = <span style="color: #c0c0c0">
+      * Set WHITE = <span style="color: #ffffff">
+      * Set ENDCOLOR = </span>
 </verbatim>
 
 ---++ Miscellaneous Settings
@@ -313,11 +313,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
    * Format of a NewWikiWord link:
    * Note that =$text= is the topic link text, =$topic= is the name of the new topic, and =$web= is the name of the web for the new topic. Values for the 3 are taken from the link syntax =[<nop>[$web.$topic][$text]]=. For normal plain !WikiWord links =$text= and =$topic= are the same. The value of =$web= is the current web unless the link is in the format =$web.$topic=.
       * default setting:
-
          * Set NEWLINKFORMAT = <span class="twikiNewLink"><a href="%SCRIPTURLPATH{"edit"}%/$web/$topic?topicparent=%WEB%.%TOPIC%;nowysiwyg=%IF{ "$ EDITMETHOD='wysiwyg'" then="0" else="1"  }%" rel="nofollow" title="%MAKETEXT{"$text (this topic does not yet exist; you can create it)"}%">$text</a></span>
-
-
-         * #Set NEWLINKFORMAT = <span class="twikiNewLink">$text<a href="%SCRIPTURLPATH{"edit"}%/$web/$topic?topicparent=%WEB%.%TOPIC%" rel="nofollow" title="%MAKETEXT{"Create this topic"}%">?</a></span> 
       * alternative setting:
          * #Set NEWLINKFORMAT = <a class="twikiNewLink" href="%SCRIPTURLPATH{"edit"}%/$web/$topic?topicparent=%WEB%.%TOPIC%" rel="nofollow" title="%MAKETEXT{"Create this topic"}%">$text</a>
 
