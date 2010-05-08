@@ -372,6 +372,7 @@ passed to the tag (usually empty) e.g. for
 <pre class='slobadob'>
 XYZ
 </pre>
+</verbatim>
 the map will contain:
 <pre>
 $removed->{'pre1'}{text}:   XYZ
