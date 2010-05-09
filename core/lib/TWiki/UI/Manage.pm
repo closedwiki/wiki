@@ -902,9 +902,11 @@ sub _newTopicScreen {
 
     if( !$attachment && $newWeb eq $TWiki::cfg{TrashWebName} ) {
         # Trashing a topic; look for a non-conflicting name
-        $newTopic = $oldWeb.$newTopic;
+        my $base = $oldWeb;
+        $base =~ s/[\/\.]//go; #remove separator between sub-webs
+        $newTopic = $base.$newTopic;
         my $n = 1;
-        my $base = $newTopic;
+        $base = $newTopic;
         while( $session->{store}->topicExists( $newWeb, $newTopic)) {
             $newTopic = $base.$n;
             $n++;
