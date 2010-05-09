@@ -45,7 +45,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/AndreaSterbini, TWiki:Main/PeterThoeny, TWiki:Main/CrawfordCurrie |
-|  Copyright: | &copy; 2001-2008, TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2001-2010, TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
