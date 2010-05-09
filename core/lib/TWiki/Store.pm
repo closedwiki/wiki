@@ -1049,6 +1049,8 @@ sub saveAttachment {
             $attrs->{comment} = $opts->{comment} if (defined($opts->{comment}));
         }
         $attrs->{attr} = ( $opts->{hide} ) ? 'h' : '';
+        delete $attrs->{stream} if( $attrs->{stream} ) ;
+        delete $attrs->{tmpFilename} if( $attrs->{tmpFilename} );
         $meta->putKeyed( 'FILEATTACHMENT', $attrs );
 
         if( $opts->{createlink} ) {
