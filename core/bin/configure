@@ -424,6 +424,7 @@ print <<'HERE';
     <div id="patternFloatWrap">
      <div id="patternMain">
       <div id="patternMainContents">
+<table><tr><td width="180">
 HERE
 
 # use this script recursively to serve the icon image
@@ -437,6 +438,9 @@ print CGI::img(
         height => '40'
     }
 );
+print "\n</td><td>&nbsp;</td><td>\n";
+print CGI::h1( 'TWiki Configuration');
+print "</td></tr></table>\n";
 
 my $stub = new TWiki::Configure::Item();
 
@@ -536,7 +540,7 @@ sub _actionNext {
 
     #TODO - if authorisation fails - redirect to authentication form
     if ( !$confirm ) {
-        print CGI::h2('Please confirm the following Changes');
+        print CGI::h2('Please Confirm the Following Changes');
         print CGI::div( $modified
               . ' configuration item'
               . ( $modified == 1 ? ' was' : 's were' )
@@ -566,6 +570,7 @@ sub _actionNext {
 # Action invoked for prompting the Password on the main screen
 sub _actionPromptPassword {
 
+    print CGI::h2( 'TWiki Administrator Login');
     print $sanityStatement ;    ## printing this in any case..
 
     my $root = new TWiki::Configure::Root();
@@ -670,8 +675,8 @@ HERE
 
 # Invoked by "find more extensions" button in the Extensions section
 sub _actionFindMoreExtensions {
+    print CGI::h2('Find TWiki Extensions');
     my $root = new TWiki::Configure::Root();
-    print CGI::h1('Find TWiki Extensions');
     print '<div class="patternContent"><div class="patternTopic">';
 
     my $ui = _checkLoadUI( 'EXTENSIONS', $root );
@@ -683,6 +688,7 @@ sub _actionFindMoreExtensions {
 
 # Invoked when an extension is to be installed
 sub _actionInstallExtension {
+    print CGI::h2('Install TWiki Extension');
     my $root = new TWiki::Configure::Root();
     my $ui;
     if ( !TWiki::Configure::UI::authorised() ) {
@@ -713,7 +719,7 @@ sub _actionConfigure {
     $TWiki::Configure::UI::toterrors   = 0;
     $TWiki::Configure::UI::totwarnings = 0;
 
-    print CGI::h1('Configuration');
+    print CGI::h2('Modify Configuration Settings');
     print $sanityStatement;
 
     # The first three sections go without a root
