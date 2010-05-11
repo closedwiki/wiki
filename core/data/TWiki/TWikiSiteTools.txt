@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273618173" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273619749" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Site Tools
 
@@ -118,6 +118,7 @@ TWiki generates monthly log files which are used by the statistics script
      | search | =search= | search string |
      | upload | =upload= | filename |
      | view | =view= | when viewing non-existing topic: =(not exist)= %BR% when viewing previous topic revision: =r3= |
+     | viewfile | =viewfile= | Attachment name and revision: =File.txt, r3= |
 
 #ConfigureEmail
 ---++ E-mail
