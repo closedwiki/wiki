@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273619749" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273621160" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Site Tools
 
@@ -106,6 +106,7 @@ TWiki generates monthly log files which are used by the statistics script
      | attach | =attach= | when viewing attach screen of previous uploaded attachment: =filename= |
      | changes | =changes= |  |
      | edit | =edit= | when editing non-existing topic: =(not exist)= |
+     | login, logon,%BR% attach, edit,%BR% register, rest,%BR% view, vewfile | =sudologin=, %BR% =sudologout= | Login name of administrator user who is logging in or out |
      | manage | =changepasswd= | Login name of user who's password is changed |
      | rdiff | =rdiff= | higher and lower revision numbers: =4 3= |
      | register | =regstart= | !WikiUserName, e-Mail address, LoginName: =user attempts to register= |
