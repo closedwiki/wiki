@@ -361,7 +361,7 @@ sub loadSession {
        
         if ($sudoUser) {
         	_trace($this, "User is logging out to $sudoUser");
-        	$twiki->writeLog( 'sudo logout', '', 'from '.($authUser ||''), $sudoUser );
+        	$twiki->writeLog( 'sudologout', '', 'from '.($authUser ||''), $sudoUser );
         	$this->{_cgisession}->clear( 'SUDOFROMAUTHUSER' );
         	$authUser = $sudoUser;
         } else {
@@ -513,7 +513,7 @@ sub userLoggedIn {
         #TODO: right now anyone that makes a template login url can log in multiple times - should i forbid it
         if( $TWiki::cfg{UseClientSessions} ) {
 	        if (defined($twiki->{remoteUser}) && $twiki->inContext('sudo_login')) {
-        		$twiki->writeLog( 'sudo login', '', 'from '.($twiki->{remoteUser}||''), $authUser );
+        		$twiki->writeLog( 'sudologin', '', 'from '.($twiki->{remoteUser}||''), $authUser );
           	    $this->{_cgisession}->param( 'SUDOFROMAUTHUSER', $twiki->{remoteUser} );
         	}   
         	#TODO: these are bare login's, so if and when there are multiple usermappings, this would need to include cUID..     
