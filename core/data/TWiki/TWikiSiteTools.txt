@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1177803014" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273618173" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Site Tools
 
@@ -111,6 +111,7 @@ TWiki generates monthly log files which are used by the statistics script
      | register | =register= | E-mail address: =user successfully registers= |
      | register | =bulkregister= | !WikiUserName of new, e-mail address, admin ID |
      | rename | =rename= | when moving topic: =moved to !Newweb.NewTopic= |
+     | rename | =renameweb= | when renaming a web: =moved to !Newweb= |
      | rename | =move= | when moving attachment: =Attachment filename moved to !Newweb.NewTopic= |
      | save | =save= | when replacing existing revision: =repRev 3= %BR% when user checks the minor changes box: =dontNotify= %BR% when user changes attributes to an exising attachment: =filename.ext= |
      | save | =cmd= | special admin parameter used when saving |
