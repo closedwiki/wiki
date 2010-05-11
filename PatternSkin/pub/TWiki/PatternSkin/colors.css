@@ -495,33 +495,16 @@ a:hover .twikiAccessKey {
 .patternTopicAction .twikiSeparator {
    color:#e2e2e2;
 }
-.patternTopic a:visited {
- text-decoration:none;
-  border-color:#58438b; border-style:none none dotted none; border-width:1px;
-  color:#58438b;
+.patternActionButtons a:link,
+.patternActionButtons a:visited {
+   color:#4571D0;
 }
-
-.patternTopic a:active {
-  text-decoration:none;
-  border-color:#4571d0; border-style:none none dotted none; border-width:1px;
-  color:#4571d0;
+.patternActionButtons a:hover {
+   color:#fff;
 }
-.patternTopic a:hover {
-  text-decoration:none;
-  border-color:#4571d0; border-style:none none solid none; border-width:1px;
-  color:#4571d0;
-  background-color:#d5e2ff;
-}
-.patternTopic a:visited:hover {
-  text-decoration:none;
-  border-color:#58438b; border-style:none none solid none; border-width:1px;
-  color:#58438b;
-  background-color:#e6dbff;
-}
-
 .patternTopicAction .twikiAccessKey {
-   color:#be000a;
-   border-color:#be000a;
+   color:#4571D0;
+   border-color:#4571D0;
 }
 .patternTopicAction a:hover .twikiAccessKey {
    color:#fff;

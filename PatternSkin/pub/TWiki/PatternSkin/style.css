@@ -835,7 +835,6 @@ html>body #patternLeftBarContents li { /* Mozilla */
 .patternActionButtons a:visited {
 	padding:1px 1px 2px 1px;
 }
-
 .patternTopicAction .patternActionButtons a:link,
 .patternTopicAction .patternActionButtons a:visited {
 	text-decoration:none;
@@ -844,13 +843,6 @@ html>body #patternLeftBarContents li { /* Mozilla */
 .patternTopicAction .patternActionButtons span strike {
 	text-decoration:none;
 }
-.patternActionButtons a:hover {
-  text-decoration:none;
-  border-color:#4571d0; border-style:none none solid none; border-width:1px;
-  color:#4571d0;
-  background-color:#d5e2ff;
-}
-
 .patternTopicAction .patternSaveOptions {
 	margin-top:.5em;
 }
