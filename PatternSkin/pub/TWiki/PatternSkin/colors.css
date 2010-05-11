@@ -97,7 +97,7 @@ h3, h4, h5, h6 {
 :link:hover,
 :visited:hover {
    color:#fff;
-   background-color:#ce000f;
+   background-color:#8296C2;
    background-image:none;
 }
 :link:hover img,
@@ -429,7 +429,7 @@ a:hover .twikiAccessKey {
    background-color:transparent;
 }
 .twikiImage a:hover img {
-   border-color:#ce000f;
+   border-color:#c1d2f7;
 }
 
 /*   -----------------------------------------------------------
