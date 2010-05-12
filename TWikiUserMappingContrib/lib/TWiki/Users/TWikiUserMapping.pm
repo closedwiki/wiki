@@ -473,7 +473,7 @@ sub userExists {
     ASSERT($cUID) if DEBUG;
 
     # Do this to avoid a password manager lookup
-    return 1 if $cUID eq $this->{session}->{user};
+    return 1 if (defined $this->{session}->{user} && $cUID eq $this->{session}->{user});
 
     my $loginName = $this->getLoginName( $cUID );
     return 0 unless defined($loginName);
