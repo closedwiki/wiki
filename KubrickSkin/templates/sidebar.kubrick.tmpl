@@ -1,0 +1,33 @@
+%TMPL:DEF{"sidebar"}% %{need to define the login form}%
+%TMPL:DEF{"breadcrumb:CurrentWeb"}%<img src="%ICONURLPATH{web-bg-small}%" border="0" alt="" width="13" height="13" style="background-color:%WEBBGCOLOR%" />&nbsp;<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%HOMETOPIC%">%MAKETEXT{"[_1] Web" args="<nop>%WEB%"}%</a>%TMPL:END%
+%TMPL:DEF{"Kubrickwebleftbar"}%%TMPL:P{"webleftbarindicator"}%
+%INCLUDE{"%WEB%.KubrickWebLeftBar"}%%TMPL:END%
+
+
+
+<div id="sidebar">
+ <ul>
+ <li>
+ <p>
+%TMPL:P{"breadcrumb:CurrentWeb"}%
+</p>
+
+%TMPL:P{"Kubrickwebleftbar"}%
+
+<li><h2>About</h2>
+<p></p>
+E-mail: <a href="mailto:#">Sopan Shewale</a>
+<p>A little something about you, the author. Nothing lengthy, just an overview.</p>
+</li>
+
+<li><h2>Recently</h2>
+<ul><li><a href="">titles</a></li></ul>
+</li>
+<li><h2>Categories</h2>
+<ul>
+<li><a href="#">ddd</a></li>
+</ul>
+</li>
+</ul>
+</div>
+%TMPL:END%%TMPL:P{"sidebar"}%

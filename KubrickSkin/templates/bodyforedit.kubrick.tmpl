@@ -1,0 +1,35 @@
+
+%TMPL:INCLUDE{"navigation"}%
+%TMPL:INCLUDE{"actionbutton"}%
+
+%TMPL:INCLUDE{"edit.pattern"}%
+%TMPL:DEF{"body"}%
+%TMPL:INCLUDE{"actionbutton"}%
+<style type="text/css" media="all">
+@import url('%PUBURLPATH%/%SYSTEMWEB%/KubrickSkin/kubrick.css');
+@import url('%PUBURLPATH%/%SYSTEMWEB%/KubrickSkin/kubrickbg.jpg');
+@import url('%PUBURLPATH%/%SYSTEMWEB%/KubrickSkin/kubrickbgcolor.jpg');
+@import url('%PUBURLPATH%/%SYSTEMWEB%/KubrickSkin/kubrickbgwide.jpg');
+</style>
+
+<div id="content" class="widecolumn">
+
+<div class="alignleft"><a href="#"></a></div>
+<div class="alignright"><a href="#"></a></div>
+%TMPL:DEF{"edit_topic_link"}%<span class="patternButton"><a href='%TMPL:P{"edit_topic_link:url"}%' rel='nofollow' %TMPL:P{"edit_topic_link:label"}%</a></span>%TMPL:END%
+%TMPL:DEF{"attach_link"}%<span class='patternButton'><a href='%TMPL:P{"attach_link:url"}%' rel='nofollow' %TMPL:P{"attach_link:label"}%</a></span>%TMPL:END%
+
+<div class="post">
+<div class="entrytext">
+<div class="NewClass">
+
+
+</div>
+
+<p>
+</p>
+</form>
+</div>
+</div>
+</div>
+%TMPL:END%%TMPL:P{"body"}%

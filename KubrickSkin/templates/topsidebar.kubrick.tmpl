@@ -1,0 +1,40 @@
+%TMPL:INCLUDE{"topsidebar"}%
+
+<div id="topsidebar">
+%TMPL:INCLUDE{"twiki.classic"}%
+%TMPL:DEF{"topbarcontents:jump"}%
+<form name="jumpForm" action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%"><input id="jumpFormField" type="text" class="twikiInputField" name="topic" value="" size="16" /><input type="submit" class="twikinetJumpButton" name="submit" value="" /></form>%TMPL:END%
+
+%TMPL:DEF{"topbarcontents:search"}%
+<form name="quickSearchForm" action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/WebSearch"><input type="text" class="twikiInputField" id="quickSearchBox" name="search" value="%URLPARAM{"search"}%" size="18" /><input type="hidden" name="scope" value="all" /><input type="hidden" name="web" value="%BASEWEB%" /><input type="submit" size="5" class="twikinetSearchButton" name="submit" value="" /></form>%TMPL:END%
+
+
+
+%TMPL:DEF{"webaction"}% TWiki User Authentication %TMPL:END%
+%TMPL:DEF{"titleaction"}%(login) %TMPL:END%
+%TMPL:DEF{"LOG_IN_BANNER"}%Please enter your username and password%TMPL:END%
+%TMPL:DEF{"LOGGED_IN_BANNER"}% %MAINWEB%.%WIKINAME% is currently logged in%TMPL:END%
+%TMPL:DEF{"NEW_USER_NOTE"}%Enter a new username and password to change identity%TMPL:END%
+%TMPL:DEF{"UNRECOGNISED_USER"}%Unrecognised user and/or password.%TMPL:END%
+%TMPL:DEF{"rememberbox"}%</td></tr><tr><td colspan='2'><input id='remember' name='remember' type='checkbox' value='1' />&nbsp;<label for='remember'>%MAKETEXT{"Remember me"}%</label>%TMPL:END%
+%TMPL:DEF{"login_actions"}%%IF{"context authenticated" then='%MAKETEXT{"Hello [_1]!" args="[[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]"}%%BR%%LOGOUT%' else='%LOGIN% %MAKETEXT{"or"}% [[%TWIKIWEB%.TWikiRegistration][%MAKETEXT{"Register"}%]]'}%%TMPL:END%
+%TMPL:DEF{"breadcrumb:title"}%<span class="patternHomePathTitle">%MAKETEXT{"You are here:"}% </span> %TMPL:END%
+
+
+%TMPL:P{"login_actions"}%<br/>
+
+
+
+%MAKETEXT{"Jump"}%
+
+
+
+%TMPL:P{"topbarcontents:jump"}%
+
+
+%MAKETEXT{"Search"}%
+
+%TMPL:P{"topbarcontents:search"}%
+%TMPL:END%
+</div>
+%TMPL:P{"topsidebar"}%

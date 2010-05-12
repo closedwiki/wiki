@@ -1,0 +1,25 @@
+%{ to include a header }%
+%TMPL:INCLUDE{"topnavigation"}%
+%TMPL:DEF{"header"}%
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>KubrickSkin</title>
+<style type="text/css" media="all">
+@import url('%PUBURLPATH%/%SYSTEMWEB%/KubrickSkin/kubrick.css');
+</style>
+
+</head>
+<body><!-- // Begin Header -->
+<div id="page">
+<div id="header">
+<div id="headerimg">
+<h1><a href="#" title="TWiki">My TWiki Site</a></h1>
+<div class="description">The Collaboration Wiki</div>
+<div id="headerbottom">%TMPL:P{"topnavigationbar"}%</div>  
+</div>
+</div>
+<hr /> <!-- End Header -->
+%TMPL:END%
+%TMPL:P{"header"}%

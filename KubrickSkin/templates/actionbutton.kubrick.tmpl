@@ -1,0 +1,8 @@
+%TMPL:DEF{"attach_link"}%<span><a href='%SCRIPTURLPATH{"attach"}%/%WEB%/%TOPIC%' rel='nofollow' %MAKETEXT{"title='Attach an image or document to this topic' accesskey='a'>&Attach"}%</a></span>%TMPL:END%
+
+%TMPL:DEF{"edit_topic_link"}%<span><a href='%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%%TMPL:P{"url_param_editaction"}%%IF{"context TinyMCEPluginEnabled" then=";nowysiwyg=%IF{ "$ EDITMETHOD='wysiwyg'" then="0" else="1" }%"}%' rel='nofollow' %MAKETEXT{"title='Edit this topic text' accesskey='e'>&Edit"}%</a></span>%TMPL:END%
+
+
+
+
+%TMPL:DEF{"view_topic_link"}%<span><a href='%SCRIPTURL{"view"}%/%WEB%/%TOPIC%' rel='nofollow' %MAKETEXT{"title='View topic' accesskey='v'>&View topic"}%</a></span>%TMPL:END%
