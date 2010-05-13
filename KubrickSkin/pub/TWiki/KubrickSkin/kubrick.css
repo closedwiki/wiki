@@ -1,0 +1,966 @@
+/*   
+	Kubrick v1.2.5  for  WordPress 1.2
+	 http://binarybonsai.com/kubrick/
+
+	This theme was designed and built by Michael Heilemann,
+	whose blog you will find at http://binarybonsai.com/
+
+	The CSS, XHTML and design is released under GPL:
+	http://www.opensource.org/licenses/gpl-license.php
+	
+
+	*** REGARDING IMAGES ***
+	All CSS that involves the use of images, can be found in the 'index.php' file.
+	This is to ease installation inside subdirectories of a server.
+
+	Have fun, and don't be afraid to contact me if you have questions.
+*/
+
+/* Begin Typography & Colors */
+body {
+	font-size: 62.5%; /* Resets 1em to 10px */
+	font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	background-color: #d5d6d7;
+	color: #333;
+	text-align: center;
+	}
+
+#page {
+	background-color: white;
+	border: 0px solid #959596;
+	text-align: left;
+	}
+
+#header {
+	background-color: #73a0c5;
+	}
+
+#content {
+width: 450px;
+height: auto;
+float: left;
+padding: 20px;
+margin: 0px;
+
+
+
+	font-size: 1.2em
+	}
+
+.widecolumn .entry p {
+	font-size: 1.05em;
+	}
+
+.narrowcolumn .entry, .widecolumn .entry {
+line-height: 1.4em;
+}	
+
+.widecolumn {
+	line-height: 1.6em;
+	}
+	
+.narrowcolumn .postmetadata {
+	text-align: center;
+	}
+
+.graybox {
+	background-color: #f8f8f8;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	}
+
+#footer {
+	background-color: #eee;
+	}
+#footercontent {
+		
+ padding:10px;
+        margin: 0 auto;
+        
+     
+
+
+		}	
+
+small {
+	font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 0.9em;
+	line-height: 1.5em;
+	}
+
+h1, h2, h3 {
+	font-family: 'Trebuchet MS', 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	font-weight: bold;
+	}
+
+h1 {
+	font-size: 4em;
+	text-align: center;
+	}
+
+.description {
+	font-size: 1.3em;
+	text-align: center;
+	}
+
+h2 {
+	font-size: 1.6em;
+	}
+
+h2.pagetitle {
+	font-size: 1.6em;
+	}
+
+#sidebar h2 {
+	font-family: 'Lucida Grande', Verdana, Sans-Serif;
+	font-size: 1.2em;
+	}
+
+h3 {
+	font-size: 1.3em;
+	}
+
+h1, h1 a, h1 a:hover, h1 a:visited, .description {
+	text-decoration: none;
+
+color:white;
+
+	}
+
+h2, h2 a, h2 a:visited, h3, h3 a, h3 a:visited {
+	color: #333;
+}
+
+h2, h2 a, h2 a:hover, h2 a:visited, h3, h3 a, h3 a:hover, h3 a:visited, #sidebar h2, #wp-calendar caption, cite {
+	text-decoration: none;
+	}
+
+.entry p a:visited {
+	color: #b85b5a;
+	}
+
+.commentlist li, #commentform input, #commentform textarea {
+	font: 0.9em 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	}
+	
+.commentlist li {
+	font-weight: bold;
+	}
+
+.commentlist cite, .commentlist cite a {
+	font-weight: bold;
+	font-style: normal;
+	font-size: 1.1em;
+	}
+
+.commentlist p {
+	font-weight: normal;
+	line-height: 1.5em;
+	text-transform: none;
+	}
+
+#commentform p {
+	font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	}
+
+.commentmetadata {
+	font-weight: normal;
+	}
+
+#sidebar {
+	font: 1em 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	}
+
+small, #sidebar ul ul li, #sidebar ul ol li, .nocomments, .postmetadata, blockquote, strike {
+	color: #777;
+	}
+	
+code {
+	font: 1.1em 'Courier New', Courier, Fixed;
+	}
+
+acronym, abbr, span.caps
+{
+	font-size: 0.9em;
+	letter-spacing: .07em;
+	}
+
+a, h2 a:hover, h3 a:hover {
+	color: #06c;
+	text-decoration: none;
+
+
+}
+
+a:hover {
+	color: #147;
+	text-decoration: underline;
+	}
+	
+#wp-calendar #prev a {
+	font-size: 9pt;
+	}
+
+#wp-calendar a {
+	text-decoration: none;
+	}
+
+#wp-calendar caption {
+	font: bold 1.3em 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	text-align: center;
+	}
+
+#wp-calendar th {
+	font-style: normal;
+	text-transform: capitalize;
+	}
+/* End Typography & Colors */
+
+
+
+/* Begin Structure */
+body {
+	margin: 0;
+	padding: 0; 
+	}
+
+#page {
+	background-color: white;
+	margin: 2px auto;
+	padding: 0;
+	width: 760px;
+
+	}
+	
+#header {
+	padding: 0;
+	margin: 0 auto;
+	height: 200px;
+	width: 100%;
+	background-color: #73a0c5;
+	}
+#headerbottom {
+	padding:0;
+	margin:0 auto;
+	margin-top:35px;
+	}
+#headerimg {
+	margin: 0;
+	height: 200px;
+	width: 100%;
+	}
+
+#headerimg h1 { color:white; }
+
+#sidebar {
+	margin-top:10px;
+	margin-bottom:10px;
+	margin-right:10px;
+	margin-left:500px;
+float:right;
+}
+.narrowcolumn {
+	float: right;
+	padding: 0 0 20px 45px;
+	margin: 0px 0 0;
+	width: 450px;
+	}
+
+.widecolumn {
+        padding: 10px 10px 10px 0;
+        margin: 10px 10px 10px 50px;
+        width: 420px;
+        }
+
+
+	
+.post {
+	margin: 0 0 40px;
+	text-align: justify;
+	}
+
+.widecolumn .post {
+	margin: 0;
+	}
+
+.narrowcolumn .postmetadata {
+	padding-top: 5px;
+	}
+
+.widecolumn .postmetadata {
+	margin: 30px 0;
+	}
+	
+#footer {
+	padding: 0;
+	margin: 0 auto;
+	width: 745px;
+	clear: both;
+broder:0px;
+	}
+
+#footer p {
+	margin: 0;
+	padding: 20px 0;
+	text-align: center;
+	}
+/* End Structure */
+
+
+
+/*	Begin Headers */
+h1 {
+	padding-top: 70px;
+	margin: 0;
+	}
+
+
+
+
+.description {
+	text-align: center;
+	}
+
+h2 {
+	margin: 30px 0 0;
+	}
+
+h2.pagetitle {
+	margin-top: 30px;
+	text-align: center;
+}
+
+#sidebar h2 {
+	margin: 5px 0 0;
+	padding: 0;
+	}
+
+h3 {
+	padding: 0;
+	margin: 30px 0 0;
+	}
+
+h3.comments {
+	padding: 0;
+	margin: 40px auto 20px ;
+	}
+/* End Headers */
+
+
+
+/* Begin Images */
+p img {
+	padding: 0;
+	max-width: 100%;
+	}
+
+/*	Using 'class="alignright"' on an image will (who would've
+	thought?!) align the image to the right. And using 'class="centered',
+	will of course center the image. This is much better than using
+	align="center", being much more futureproof (and valid) */
+	
+img.centered {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	}
+	
+img.alignright {
+	padding: 4px;
+	margin: 0 0 2px 7px;
+	display: inline;
+	}
+
+img.alignleft {
+	padding: 4px;
+	margin: 0 7px 2px 0;
+	display: inline;
+	}
+
+.alignright {
+	float: right;
+	}
+	
+.alignleft {
+	float: left
+	}
+/* End Images */
+
+
+
+/* Begin Lists
+
+	Special stylized non-IE bullets
+	Do not work in Internet Explorer, which merely default to normal bullets. */
+
+html>body .entry ul {
+	margin-left: 0px;
+	padding: 0 0 0 30px;
+	list-style: none;
+	padding-left: 10px;
+	text-indent: -10px;
+	} 
+
+html>body .entry li {
+	margin: 7px 0 8px 10px;
+	}
+
+.entry ul li:before, #sidebar ul ul li:before {
+	content: "\00BB \0020";
+	}
+
+.entry ol {
+	padding: 0 0 0 35px;
+	margin: 0;
+	}
+
+.entry ol li {
+	margin: 0;
+	padding: 0;
+	}
+
+.postmetadata ul, .postmetadata li {
+	display: inline;
+	list-style-type: none;
+	list-style-image: none;
+	}
+	
+#sidebar ul, #sidebar ul ol {
+	margin: 0;
+	padding: 0;
+	}
+
+#sidebar ul li {
+	list-style-type: none;
+	list-style-image: none;
+	margin-bottom: 15px;
+	}
+
+#sidebar ul p, #sidebar ul select {
+	margin: 5px 0 8px;
+	}
+
+#sidebar ul ul, #sidebar ul ol {
+	margin: 5px 0 0 10px;
+	}
+
+#sidebar ul ul ul, #sidebar ul ol {
+	margin: 0 0 0 10px;
+	}
+
+ol li, #sidebar ul ol li {
+	list-style: decimal outside;
+	}
+
+#sidebar ul ul li, #sidebar ul ol li {
+	margin: 3px 0 0;
+	padding: 0;
+	}
+/* End Entry Lists */
+
+
+
+/* Begin Form Elements */
+#searchform {
+	margin: 10px auto;
+	padding: 5px 3px; 
+	text-align: center;
+	}
+
+#sidebar #searchform #s {
+	width: 130px;
+	padding: 2px;
+	}
+
+#sidebar #searchsubmit {
+	padding: 1px;
+	}
+
+.entry form { /* This is mainly for password protected posts, makes them look better. */
+	text-align:center;
+	}
+
+select {
+	width: 130px;
+	}
+
+#commentform input {
+	width: 170px;
+	padding: 2px;
+	margin: 5px 5px 1px 0;
+	}
+
+#commentform textarea {
+	width: 100%;
+	padding: 2px;
+	}
+
+#commentform #submit {
+	margin: 0;
+	float: right;
+	}
+/* End Form Elements */
+
+
+
+/* Begin Comments*/
+.graybox {
+	margin: 0;
+	padding: 10px;
+	}
+
+.commentlist {
+	padding: 0;
+	text-align: justify;
+	}
+
+.commentlist li {
+	margin: 15px 0 3px;
+	padding: 5px 10px 3px;
+	list-style: none;
+	}
+
+.commentlist p {
+	margin: 10px 5px 10px 0;
+	}
+
+#commentform p {
+	margin: 5px 0;
+	}
+
+.nocomments {
+	ext-align: center;
+	margin: 0;
+	padding: 0;
+	}
+
+.commentmetadata {
+	margin: 0;
+	display: block;
+	}
+/* End Comments */
+
+
+
+/* Begin Sidebar */
+#sidebar
+{
+	padding: 10px 10px 10px 10px;
+	
+	width: 195px;
+maigin-top:10px;	
+margin-right:20px;
+margin-bottom:20px;
+margin-left:31px;
+}
+
+#sidebar form {
+	margin: 0;
+	}
+
+    /*Externally added */
+     
+    #sidebar {
+width: 220px;
+height:100%;
+float:right;
+padding: 0px 10px 10px 5px;
+margin:10px 10px 10px 10px;
+}
+
+
+
+/* End Sidebar */
+
+
+
+/* Begin Calendar */
+#wp-calendar {
+	empty-cells: show;
+	margin: 10px auto 0;
+	width: 155px;
+	}
+
+#wp-calendar #next a {
+	padding-right: 10px;
+	text-align: right;
+	}
+
+#wp-calendar #prev a {
+	padding-left: 10px;
+	text-align: left;
+	}
+
+#wp-calendar a {
+	display: block;
+	}
+
+#wp-calendar caption {
+	text-align: center;
+	width: 100%;
+	}
+
+#wp-calendar td {
+	padding: 3px 0;
+	text-align: center;
+	}
+
+#wp-calendar td.pad:hover { /* Doesn't work in IE */
+	background-color: #fff; }
+/* End Calendar */
+
+
+
+/* Begin Various Tags & Classes */
+acronym, abbr, span.caps {
+	cursor: help;
+	}
+
+acronym, abbr {
+	border-bottom: 1px dashed #999;
+	}
+
+blockquote {
+	margin: 15px 30px 0 10px;
+	padding-left: 20px;
+	border-left: 5px solid #ddd;
+	}
+
+blockquote cite {
+	margin: 5px 0 0;
+	display: block;
+	}
+
+.center {
+	text-align: center;
+	}
+
+hr {
+	display: none;
+	}
+
+a img {
+	border: none;
+	}
+
+.navigation {
+	display: block;
+	text-align: center;
+	margin-top: 10px;
+	margin-bottom: 60px;
+	}
+/* End Various Tags & Classes*/
+
+
+
+
+ /*
+ EXTERNALY ADDED FOR NAVIGATION BAR  */
+#navigation
+{
+        float: right;
+        width: 28.%;
+        background:#56A5EC;
+}
+
+#navigation ul
+{
+        margin: 0px;
+        padding:0px;
+}
+
+#navigation ul li
+{
+        list-style-type: none;
+        display: inline;
+}
+
+#navigation li a
+{
+        display: block;
+        float:left;
+        padding: 5px 10px;
+        color: #fff;
+        text-decoration: none;
+        border-right: 1px solid #fff;
+}
+
+#navigation li a:hover { background:#383; }
+
+
+#newnavigation
+{
+        float: left;
+        width: 100%;
+        background:#56A5EC;
+}
+
+#newnavigation ul
+{
+        margin: 0px;
+        padding:0px;
+}
+
+#newnavigation ul li
+{
+        list-style-type: none;
+        display: inline;
+}
+
+#newnavigation li a
+{
+        display: block;
+        float:left;
+        color: #fff;
+        text-decoration: none;
+        border-right: 1px solid #fff;
+}
+
+
+/* EXTERNALY ADDED FOR MENUBAR   */
+
+/*Credits: Dynamic Drive CSS Library */
+/*URL: http://www.dynamicdrive.com/style/ */
+
+#tabs {
+	float:left;
+	width:100%;
+	font-size:93%;
+	line-height:normal;
+	border-bottom:1px solid #666;
+	margin-bottom:1em; /*margin between menu and rest of page*/
+	overflow:hidden;
+	}
+
+#tabs ul {
+	margin:0;
+	padding:5px 10px 0 0px;
+	list-style:none;
+	
+	}
+
+#tabs li {
+	display:inline;
+	margin:0;
+	padding:0;
+	}
+
+#tabs a {
+	float:left;
+	background:url("media/left.png") no-repeat left top;
+	margin:0;
+	padding:0 0 0 6px;
+	text-decoration:none;
+	}
+
+#tabs a span {
+	float:left;
+	display:block;
+	background:url("media/right.png") no-repeat right top;
+	padding:6px 15px 4px 6px;
+	margin-right:2px;
+	color:#2554C7;
+	}
+
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+#tabs a span {float:none;}
+
+/* End IE5-Mac hack */
+#tabs a:hover span {
+	}
+
+#tabs a:hover {
+	background-position:0% -42px;
+	}
+
+#tabs a:hover span {
+	background-position:100% -42px;
+	}
+
+.NewClass  
+	{
+font-size:85%;
+text-color:red;
+padding-top:0px;}
+
+.NewClass h1{
+	font-size:1.6em;	
+	color:black;
+text-align:left;	
+color:#333333;
+padding-top:15px;
+}
+
+
+
+.navigation {
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+        margin-bottom: 60px;
+        }
+/* End Various Tags & Classes*/
+
+
+
+
+ /*
+ EXTERNALY ADDED FOR NAVIGATION BAR  */
+#topnavigation
+{
+        float: center;
+        width: 80%;
+        background:#56A5EC;
+}
+
+#topnavigation ul
+{
+        margin: 0px;
+        padding:0px;
+	margin-left:230px;
+
+}
+
+#topnavigation ul li
+{
+        list-style-type: none;
+        display: inline;
+}
+
+#topnavigation li a
+{
+        display: block;
+        float:left;
+        padding: 5px 10px;
+        color: #fff;
+        text-decoration: none;
+        border-right: 0px solid #fff;
+}
+
+#topnavigation li a:hover { background:white; 
+				color:black;
+				}   /* previous color green and code was 383*/
+
+
+
+
+
+/* FOR LOGIN */
+#topsidebar{
+
+margin:10px;
+
+width:230px;
+padding-bottom:0px;
+padding-left:10px;
+padding-top:10px;
+padding-right:0px;
+float:right;
+
+	}
+
+
+#patternBottomBar {
+        border-width:1px 0 0 0;
+        border-style:solid;
+}
+#patternBottomBarContents {}
+#patternWebBottomBar {
+        font-size:94%; /*S2*/
+        line-height:125%;
+        text-align:left;
+
+
+
+}
+
+
+.NwClass
+{
+padding:10px;
+margin:auto;
+margin-top:40px;
+
+
+}
+
+.NwClass h1
+	{
+	color:black;
+	font-size:1.5em;
+	padding-bottom:10px;
+	text-align:left;
+	margin-left:10px
+height:10px;
+padding-top:0px;
+}
+
+
+.subNwClass
+	{
+	
+padding:20px;
+margin:auto;
+
+	}
+
+
+
+#sidelinks
+	{
+margin:0px
+paddind:0px;
+
+text-align:right;
+
+
+
+	}
+
+#sidelinkcontainer {
+margin:0px;
+padding:0px;
+padding-right:30px;
+text-align:right;
+
+
+}
+
+/* BEGIN IMAGE CSS
+/*      To accomodate differing install paths of WordPress, images are referred only here,
+        and not in the wp-layout.css file. If you prefer to use only CSS for colors and what
+then go right ahead and delete the following lines, and the image files. */
+
+body{ background: url("/twiki/pub/TWiki/KubrickSkin/kubrickbgcolor.jpg"); }
+#page{ background: url("/twiki/pub/TWiki/KubrickSkin/kubrickbg.jpg") repeat-y top; border: none; }
+#page{ background: url("/twiki/pub/TWiki/KubrickSkin/kubrickbgwide.jpg") repeat-y top; border: none; }
+#header{ background: url("/twiki/pub/TWiki/KubrickSkin/kubrickheader.jpg") no-repeat bottom center; }
+#footer{ background: url("/twiki/pub/TWiki/KubrickSkin/kubrickfooter.jpg") no-repeat bottom; border: none;}
+/*Because the template is slightly different, size-wise, with images, this needs to be set here
+If you don't want to use the template's images, you can also delete the following two lines. */
+#header{ margin: 0 !important; margin: 0 0 0 1px; padding: 1px; height: 198px; width: 758px; }
+#headerimg{ margin: 7px 9px 0; height: 192px; width: 740px; }
+
+#logo{"twiki/pub/TWiki/KubrickSkin/TWikilogos/T-logo-80x15.png}
+#logo{margin-left:10px, margin-top:50px,padding:10px;}
+                /* END IMAGE CSS */
+
+                /*      To ease the insertion of a personal header image, I have done it in such a way,
+                        that you simply drop in an image called 'personalheader.jpg' into your /images/
+                        directory. Dimensions should be at least 760px x 200px. Anything above that will
+                        get cropped off of the image. */
+#headerimg{ background: url('/twiki/pub/TWiki/KubrickSkin/personalheader.jpg') no-repeat top;}
+
+
+#navigation {
+padding-left:20px;
+margin:10px;
+
+}
+
+
+
+
+/*
+	It won't be a stylish marriage, I can't afford a carriage.
+	But you'll look sweet upon the seat of a bicycle built for two." */
