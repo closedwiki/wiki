@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273627321" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273715477" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. Doc graphics are defined at %CALC{$SET(icontopics, $LISTIF($NOT($EXACT($item,)), $LISTMAP($IF($EXISTS($item), [[$item]], ), %ICONTOPIC%)))$GET(icontopics)}%.
@@ -60,6 +60,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{map}% | =%<nop>ICON{map}%= | Map | gif | 16x16 |  |
 | %ICON{mechanics}% | =%<nop>ICON{mechanics}%= | Mechanics | gif | 16x16 |  |
 | %ICON{megaphone}% | =%<nop>ICON{megaphone}%= | Megaphone | gif | 16x16 |  |
+| %ICON{meeting}% | =%<nop>ICON{meeting}%= | Meeting | gif | 16x16 |  |
 | %ICON{mobile}% | =%<nop>ICON{mobile}%= | Mobile | gif | 16x16 |  |
 | %ICON{more}% | =%<nop>ICON{more}%= | Read more | gif | 16x16 |  |
 | %ICON{more-small}% | =%<nop>ICON{more-small}%= | Read more | gif | 13x13 |  |
@@ -638,6 +639,7 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="map.gif" attr="h" comment="" date="1181928995" path="map.gif" size="932" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="mdb.gif" attr="h" comment="" date="1169565034" path="mdb.gif" size="385" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="mechanics.gif" attr="h" comment="" date="1260335693" path="mechanics.gif" size="970" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="meeting.gif" attr="h" comment="" date="1196729838" path="meeting.gif" size="958" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="megaphone.gif" attr="h" comment="" date="1196729838" path="megaphone.gif" size="995" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="minus.gif" attr="h" comment="" date="1169565034" path="minus.gif" size="83" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="mobile.gif" attr="h" comment="" date="1193349525" path="mobile.gif" size="333" user="TWikiContributor" version=""}%
