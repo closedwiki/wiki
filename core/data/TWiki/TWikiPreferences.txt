@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273290249" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273793760" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -264,25 +264,25 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
      | You get: | %RED% red text %ENDCOLOR% and %GREEN% green text %ENDCOLOR% |
       * __Note:__ =%&lt;color&gt;%= text must end with =%<nop>ENDCOLOR%=. If you want to switch from one color to another one you first need to end the active color with =%<nop>ENDCOLOR%=, e.g. write =%<nop>RED% some text %<nop>ENDCOLOR% %<nop>GREEN% more text %<nop>ENDCOLOR%=.
         <!-- Two sets of colors follow: Color test and color setting -->
-      * %YELLOW% *Set YELLOW = looks like this* %ENDCOLOR%
-      * %ORANGE% *Set ORANGE = looks like this* %ENDCOLOR%
-      * %RED% *Set RED = looks like this* %ENDCOLOR%
-      * %PINK% *Set PINK = looks like this* %ENDCOLOR%
-      * %PURPLE% *Set PURPLE = looks like this* %ENDCOLOR%
-      * %TEAL% *Set TEAL = looks like this* %ENDCOLOR%
-      * %NAVY% *Set NAVY = looks like this* %ENDCOLOR%
-      * %BLUE% *Set BLUE = looks like this* %ENDCOLOR%
-      * %AQUA% *Set AQUA = looks like this* %ENDCOLOR%
-      * %LIME% *Set LIME = looks like this* %ENDCOLOR%
-      * %GREEN% *Set GREEN = looks like this* %ENDCOLOR%
-      * %OLIVE% *Set OLIVE = looks like this* %ENDCOLOR%
-      * %MAROON% *Set MAROON = looks like this* %ENDCOLOR%
-      * %BROWN% *Set BROWN = looks like this* %ENDCOLOR%
-      * %BLACK% *Set BLACK = looks like this* %ENDCOLOR%
-      * %GRAY% *Set GRAY = looks like this* %ENDCOLOR%
-      * %SILVER% *Set SILVER = looks like this* %ENDCOLOR%
-      * <span style='background : #808080;'>%WHITE% *Set WHITE = looks like this (with gray background)* %ENDCOLOR%</span>
-      * The following color settings are enclosed in verbatim tags to avoid incorrect nesting of XHTML tags:
+      * %YELLOW% *%<nop>YELLOW% looks like this* %ENDCOLOR%
+      * %ORANGE% *%<nop>ORANGE% looks like this* %ENDCOLOR%
+      * %RED% *%<nop>RED% looks like this* %ENDCOLOR%
+      * %PINK% *%<nop>PINK% looks like this* %ENDCOLOR%
+      * %PURPLE% *%<nop>PURPLE% looks like this* %ENDCOLOR%
+      * %TEAL% *%<nop>TEAL% looks like this* %ENDCOLOR%
+      * %NAVY% *%<nop>NAVY% looks like this* %ENDCOLOR%
+      * %BLUE% *%<nop>BLUE% looks like this* %ENDCOLOR%
+      * %AQUA% *%<nop>AQUA% looks like this* %ENDCOLOR%
+      * %LIME% *%<nop>LIME% looks like this* %ENDCOLOR%
+      * %GREEN% *%<nop>GREEN% looks like this* %ENDCOLOR%
+      * %OLIVE% *%<nop>OLIVE% looks like this* %ENDCOLOR%
+      * %MAROON% *%<nop>MAROON% looks like this* %ENDCOLOR%
+      * %BROWN% *%<nop>BROWN% looks like this* %ENDCOLOR%
+      * %BLACK% *%<nop>BLACK% looks like this* %ENDCOLOR%
+      * %GRAY% *%<nop>GRAY% looks like this* %ENDCOLOR%
+      * %SILVER% *%<nop>SILVER% looks like this* %ENDCOLOR%
+      * <span style='background : #808080;'>%WHITE% *%<nop>WHITE% looks like this (with gray background)* %ENDCOLOR%</span>
+      * The following settings define the colors: (they are enclosed in verbatim tags to avoid incorrect nesting of XHTML tags)
 <verbatim>
       * Set YELLOW = <span style="color: #ffff00">
       * Set ORANGE = <span style="color: #ff6600">
