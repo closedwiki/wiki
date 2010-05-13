@@ -216,7 +216,7 @@ sub authorised {
         # No password passed in, and TWiki::cfg doesn't contain a password
         print CGI::div({class=>'error'}, <<'HERE');
 WARNING: You have not defined a password. You must define a password before
-you can save.
+you can enter the configuration screen.
 HERE
         return 0;
     }
