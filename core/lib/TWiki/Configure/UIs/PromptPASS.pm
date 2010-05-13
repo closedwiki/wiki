@@ -85,21 +85,22 @@ sub ui {
             CGI::strong('Notes on Security') );
         $output .= <<HERE;
 <ul>
- <li>
-  If you don't set a password, or the password is cracked, then
-  <code>configure</code> could be used to do <strong>very</strong> nasty
-  things to your server.
+ <li> <b>Forgotten your password?</b> To reset the password, log in to the
+  server and delete the <code>&#36;TWiki::cfg{Password} = '...';</code> line
+  from <code>lib/LocalSite.cfg</code>
  </li>
  <li>
-  If you are running TWiki on a public website, you are
-  <strong>strongly</strong> advised to totally disable saving from
-  <code>configure</code> by making <code>lib/LocalSite.cfg</code> readonly once
-  you are happy with your configuration.
+  If the configure password is cracked, then <code>configure</code> could be
+  used to do <strong>very</strong> nasty things to your server.
+ </li>
+ <li>
+  If you are running TWiki on a public website, you are advised to totally disable
+  saving from <code>configure</code> by making <code>lib/LocalSite.cfg</code>
+  readonly once you are happy with your configuration.
  </li>
 </ul>
 </div><!--expanation-->
 HERE
-
     }
 
     return $output . CGI::end_form();
