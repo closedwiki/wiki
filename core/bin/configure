@@ -636,12 +636,12 @@ HERE
 
             if ( !TWiki::Configure::UI::authorised() ) {
                 $ui = _checkLoadUI( 'SetNewPass', $root );
-                return 1 unless $ui;
+                return 0 unless $ui;
                 print $ui->ui( 1, 'Configure' );
             }
             else {
                 $ui = _checkLoadUI( 'AUTH', $root );
-                return 1 unless $ui;
+                return 0 unless $ui;
                 print $ui->ui( 1, 'Configure' );
 
             }
@@ -649,10 +649,10 @@ HERE
         }
         else {
             $ui = _checkLoadUI( 'SetNewPass', $root );
-            return 1 unless $ui;
+            return 0 unless $ui;
             print $ui->ui( 1, 'Configure' );
         }
-        return 1;
+        return 0;
 
     }
 
@@ -662,7 +662,7 @@ HERE
         ## TODO...Add meaningful line
 
         $ui = _checkLoadUI( 'PromptPASS', $root );
-        return 1 unless $ui;
+        return 0 unless $ui;
         print $ui->ui( 1, 'Configure' );
     }
     else {
@@ -670,7 +670,7 @@ HERE
         ## Password is verified and is correct...
 
     }
-    return 1;
+    return 0;
 }
 
 # Invoked by "find more extensions" button in the Extensions section
@@ -711,9 +711,9 @@ sub _actionConfigure {
 
     if ( !TWiki::Configure::UI::authorised() ) {
         my $ui = _checkLoadUI( 'PromptPASS', $root );
-        return 1 unless $ui;
+        return 0 unless $ui;
         print $ui->ui( 1, 'Configure' );
-        return 1;
+        return 0;
     }    #Here i am authenticate
 
     $TWiki::Configure::UI::toterrors   = 0;
