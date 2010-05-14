@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273794801" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273799005" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -261,7 +261,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
    * Colored text: (see more StandardColors)
      | You type: | =%<nop>RED% red text %<nop>ENDCOLOR% and %<nop>GREEN% green text %<nop>ENDCOLOR%= |
      | You get: | %RED% red text %ENDCOLOR% and %GREEN% green text %ENDCOLOR% |
-      * __Note:__ =%&lt;color&gt;%= text must end with =%<nop>ENDCOLOR%=. If you want to switch from one color to another one you first need to end the active color with =%<nop>ENDCOLOR%=, e.g. write =%<nop>RED% some text %<nop>ENDCOLOR% %<nop>GREEN% more text %<nop>ENDCOLOR%=.
+      * __Note:__ =%&lt;color&gt;%= text must end with =%<nop>ENDCOLOR%=. If you want to switch from one color to another one you first need to end the active color with =%<nop>ENDCOLOR%=, such as =%<nop>RED% some text %<nop>ENDCOLOR% %<nop>GREEN% more text %<nop>ENDCOLOR%=.
         <!-- Two sets of colors follow: Color test and color setting -->
       * %YELLOW% *%<nop>YELLOW% looks like this* %ENDCOLOR%
       * %ORANGE% *%<nop>ORANGE% looks like this* %ENDCOLOR%
@@ -302,6 +302,52 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * Set SILVER = <span style="color: #c0c0c0">
       * Set WHITE = <span style="color: #ffffff">
       * Set ENDCOLOR = </span>
+</verbatim>
+
+   * Colored background: (see more StandardColors)
+     | You type: | =%<nop>REDBG% red background %<nop>ENDBG% | %<nop>GREENBG% green background %<nop>ENDBG%= |
+     | You get: | %REDBG% red background %ENDBG% | %GREENBG% green background %ENDBG% |
+      * __Note:__ These background colors are block level elements, e.g. take up a whole row of text by default. Useful to set background colors in cells of TWiki tables.
+        <!-- Two sets of colors follow: Color test and color setting -->
+      * %YELLOWBG% *%<nop>YELLOWBG% looks like this* %ENDBG%
+      * %ORANGEBG% *%<nop>ORANGEBG% looks like this* %ENDBG%
+      * %REDBG% *%<nop>REDBG% looks like this* %ENDBG%
+      * %PINKBG% *%<nop>PINKBG% looks like this* %ENDBG%
+      * %PURPLEBG% *%<nop>PURPLEBG% looks like this* %ENDBG%
+      * %TEALBG% *%<nop>TEALBG% looks like this* %ENDBG%
+      * %NAVYBG% *%<nop>NAVYBG% looks like this* %ENDBG%
+      * %BLUEBG% *%<nop>BLUEBG% looks like this* %ENDBG%
+      * %AQUABG% *%<nop>AQUABG% looks like this* %ENDBG%
+      * %LIMEBG% *%<nop>LIMEBG% looks like this* %ENDBG%
+      * %GREENBG% *%<nop>GREENBG% looks like this* %ENDBG%
+      * %OLIVEBG% *%<nop>OLIVEBG% looks like this* %ENDBG%
+      * %MAROONBG% *%<nop>MAROONBG% looks like this* %ENDBG%
+      * %BROWNBG% *%<nop>BROWNBG% looks like this* %ENDBG%
+      * <span style="color:#ffffff">%BLACKBG% *%<nop>BLACKBG% looks like this* %ENDBG%</span>
+      * %GRAYBG% *%<nop>GRAYBG% looks like this* %ENDBG%
+      * %SILVERBG% *%<nop>SILVERBG% looks like this* %ENDBG%
+      * %WHITEBG% *%<nop>WHITEBG% looks like this* %ENDBG%
+      * The following settings define the background colors: (they are enclosed in verbatim tags to avoid incorrect nesting of XHTML tags)
+<verbatim>
+      * Set YELLOWBG = <div style="background-color: #ffff80; padding:0 3px 0 3px">
+      * Set ORANGEBG = <div style="background-color: #ffbb80; padding:0 3px 0 3px">
+      * Set REDBG = <div style="background-color: #ff8080; padding:0 3px 0 3px">
+      * Set PINKBG = <div style="background-color: #ff80ff; padding:0 3px 0 3px">
+      * Set PURPLEBG = <div style="background-color: #dd99dd; padding:0 3px 0 3px">
+      * Set TEALBG = <div style="background-color: #80c0c0; padding:0 3px 0 3px">
+      * Set NAVYBG = <div style="background-color: #8080c0; padding:0 3px 0 3px">
+      * Set BLUEBG = <div style="background-color: #8080ff; padding:0 3px 0 3px">
+      * Set AQUABG = <div style="background-color: #80ffff; padding:0 3px 0 3px">
+      * Set LIMEBG = <div style="background-color: #80ff80; padding:0 3px 0 3px">
+      * Set GREENBG = <div style="background-color: #99cc99; padding:0 3px 0 3px">
+      * Set OLIVEBG = <div style="background-color: #c0c080; padding:0 3px 0 3px">
+      * Set MAROONBG = <div style="background-color: #c08080; padding:0 3px 0 3px">
+      * Set BROWNBG = <div style="background-color: #bb9988; padding:0 3px 0 3px">
+      * Set BLACKBG = <div style="background-color: #000000; padding:0 3px 0 3px">
+      * Set GRAYBG = <div style="background-color: #a0a0a0; padding:0 3px 0 3px">
+      * Set SILVERBG = <div style="background-color: #c0c0c0; padding:0 3px 0 3px">
+      * Set WHITEBG = <div style="background-color: #ffffff; padding:0 3px 0 3px">
+      * Set ENDBG = </div>
 </verbatim>
 
 ---++ Miscellaneous Settings
