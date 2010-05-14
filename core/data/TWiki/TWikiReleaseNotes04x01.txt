@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1173426057" format="1.1" version="$Rev$"}%
----+!! TWiki Release 4.1.2 (Edinburgh), %$DATE%
+---+!! TWiki Release 4.1.2 (Edinburgh), 2007-03-03
 
-_Note: This is the release note for the previous major release version 4.1.X. This note and the TWikiReleaseNotes04x00 are included with 4.2.X because they contain valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes04x02 for the 4.2.X release notes_
+__Note:__ _This is the release note for the previous major release version 4.1.X. This note and the TWikiReleaseNotes04x00 are included with 4.2.X because they contain valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes04x02 for the 4.2.X release notes_
 
 %TOC%
 
@@ -509,7 +509,7 @@ None
 
 ---++ TWiki 4.1.2 Patch Release Details
 
-The 4.1.2 release was built from SVN http://svn.twiki.org/svn/twiki/Patch04x01 revision %$VERSION% (%$DATE%).
+The 4.1.2 release was built from SVN http://svn.twiki.org/svn/twiki/Patch04x01 revision 13046 (2007-03-03).
 
 TWiki 4.1.1 Fixes
 <noautolink>
