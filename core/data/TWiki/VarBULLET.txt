@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1176595670" format="1.1" version="$Rev$"}%
-%META:TOPICPARENT{name="TWikiPreferences"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273807283" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
 #VarBULLET
 
 ---+++ BULLET -- bullet character
