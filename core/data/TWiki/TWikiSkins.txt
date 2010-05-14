@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1168736701" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273873869" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Skins
 
@@ -124,7 +124,7 @@ You can use [[TWikiTemplates#TemplateVariables][template variables]], TWikiVaria
 | =%<nop>SCRIPTSUFFIX%= | The script suffix, ex: =.pl=, =.cgi= |
 | =%<nop>WEB%= | The name of the current web. |
 | =%<nop>TOPIC%= | The name of the current topic. |
-| =%<nop>WEBTOPICLIST%= | Common links of current web, defined in the WebPreferences. It includes a [[#GoBox][Go box]] |
+| =%<nop>WEBTOPICLIST%= | Common links of current web, defined in the WebPreferences. It includes a [[#JumpBox][Jump box]] |
 | =%<nop>TEXT%= | The topic text, e.g. the content that can be edited |
 | =%<nop>META{"form"}%= | [[TWikiForms][TWikiForm]], if any |
 | =%<nop>META{"attachments"}%= | FileAttachment table |
@@ -136,13 +136,14 @@ You can use [[TWikiTemplates#TemplateVariables][template variables]], TWikiVaria
 | =%<nop>BROADCASTMESSAGE%= | Broadcast message at the beginning of your view template, can be used to alert users of scheduled downtimes; can be set in %LOCALSITEPREFS% |
 
 #GoBox
----++ The "Go" Box and Navigation Box
+#JumpBox
+---++ The Jump Box and Navigation Box
 
-The default skins include a [[GoBox]["Go" box]], also called "Jump" box, to jump to a topic.
+The default skins include a [[JumpBox][Jump Box]], to jump to a topic.
 
 The box also understands URLs, e.g. you can type =http://www.google.com/= to jump to an external web site. The feature is handy if you build a skin that has a select box of frequently used links, like Intranet home, employee database, sales database and such. A little <nop>JavaScript gets into action on the =onchange= method of the select tag to fill the selected URL into the "Go" box field, then submits the form.
 
-Here is an example form that has a select box and the "Go" box for illustration purposes. You need to have <nop>JavaScript enabled for this to work:
+Here is an example form that has a select box and the Jump Box for illustration purposes. You need to have <nop>JavaScript enabled for this to work:
 
 <form name="sample" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
 <table border="0" cellpadding="5" bgcolor="#DDDDDD"><tr><td colspan="2">

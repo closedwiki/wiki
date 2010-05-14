@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273873941" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+!! TWiki Topics
 %TOC%
@@ -93,7 +93,7 @@ A primary purpose of TWiki is to make it incredibly easy for you to add and edit
       * %H% *One little links rule: each topic, and its WikiWord link, belong to one unique web only.* To link _between_ webs, you must first enter the topic's web name. <br />
          __Example:__ This is %TOPIC%, in the ==TWiki== web, so that's all you need to type on any topic in this web. But to link to <nop>%TOPIC% from a topic in the ==%USERSWEB%== web, you have to type ==%SYSTEMWEB%.<nop>%TOPIC%== - ==Webname.<nop>TopicName==. It's easy.
 
-Another way to add a topic is to type a new topic name in the Go box or an unknown topic URL.  You can type in either a WikiName to create the topic in the current web or <nop>Web.TopicName to create a topic in a different web than the current page.  Topics created with the Go box or URLs do not have parent meta-data defined.
+Another way to add a topic is to type a new topic name in the JumpBox or an unknown topic URL.  You can type in either a WikiName to create the topic in the current web or <nop>Web.TopicName to create a topic in a different web than the current page.  Topics created with the Jump Box or URLs do not have parent meta-data defined.
 
 
 #OtherFeatures

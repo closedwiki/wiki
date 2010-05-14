@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1241028994" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273873971" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
@@ -545,7 +545,7 @@ __Major New Features__
    * *25 Nov 2002* - TWiki:Main.PeterThoeny
       * Include previous topic revision with =%<nop>INCLUDE{ "OtherTopic" rev="1.2" }%=
    * *15 Nov 2002* - TWiki:Main.PeterThoeny
-      * The Go box understands also URLs, useful for special TWikiSkins handling
+      * The Jump box understands also URLs, useful for special TWikiSkins handling
    * *08 Nov 2002* - TWiki:Main.ColasNahaboo, TWiki:Main.RichardDonkin
       * In %NOTIFYTOPIC%, if only the WikiName is specified, the e-mail is taken from the user's home page; if the WikiName is a group name, a notification is sent to all members of the group
    * *30 Oct 2002* - TWiki:Main.PeterThoeny

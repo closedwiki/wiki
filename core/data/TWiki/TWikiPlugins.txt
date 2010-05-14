@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1208648630" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273873714" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Plugins
 
@@ -190,7 +190,7 @@ The plugin documentation topic contains usage instructions and version details. 
       * select all in the Edit box &amp; copy 
       * Cancel the edit
       * go back to your site to the %SYSTEMWEB% web
-      * In the GoBox enter your plugin name, for example =MyFirstPlugin=, press enter and create the new topic
+      * In the JumpBox enter your plugin name, for example =MyFirstPlugin=, press enter and create the new topic
       * paste &amp; save new plugin topic on your site
    1. *Customize* your plugin topic.
       * Important: In case you plan to publish your plugin on TWiki.org, use Interwiki names for author names and links to TWiki.org topics, such as TWiki:Main/%WIKINAME%. This is important because links should work properly in a plugin topic installed on any TWiki, not just on TWiki.org.
@@ -400,4 +400,3 @@ If the currently-running TWiki version is 1.1 _or later_, then the _handler will
 __Related Topics:__ DeveloperDocumentationCategory, AdminDocumentationCategory, TWiki:TWiki.TWikiPluginsSupplement
 
 -- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.AndreaSterbini, TWiki:Main.MikeMannix, TWiki:Main.CrawfordCurrie, TWiki:Main.ArthurClemens, TWiki:Main.WillNorris
-
