@@ -109,7 +109,6 @@ data/TWiki/FileAttribute.txt 0644
 data/TWiki/ForceNewRevision.txt 0644
 data/TWiki/FormattedSearch.txt 0644
 data/TWiki/GnuGeneralPublicLicense.txt 0644
-data/TWiki/GoBox.txt 0644
 data/TWiki/GoodStyle.txt 0644
 data/TWiki/HiddenAttachment.txt 0644
 data/TWiki/HierarchicalNavigation.txt 0644
@@ -118,6 +117,7 @@ data/TWiki/IfStatements.txt 0644
 data/TWiki/IncludeTopicsAndWebPages.txt 0644
 data/TWiki/InstalledPlugins.txt 0644
 data/TWiki/InstantEnhancements.txt 0644
+data/TWiki/JumpBox.txt 0644
 data/TWiki/LanguageSelector.txt 0644
 data/TWiki/MainFeatures.txt 0644
 data/TWiki/ManagingTopics.txt 0644
