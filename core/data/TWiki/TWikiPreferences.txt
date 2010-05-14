@@ -156,9 +156,6 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
    * 'Mail this topic' link text
       * Set MAILTHISTOPICTEXT = Send a link to this page
 
-   * URL for current topic
-      * Set TOPICURL = %SCRIPTURL{"view"}%/%WEB%/%BASETOPIC%
-
 ---+++ HTTP-<nop>EQUIV Settings
 
    * %T% *NOTE:* Changing cache behaviour with these settings should not be necessary and may cause cache-related problems (e.g. TWiki:Codev.BackFromPreviewLosesText or TWiki:Codev.RefreshEditPage). These settings do not affect proxy caches.
@@ -224,23 +221,26 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
 #RenderingShortcuts
 ---++ Rendering Shortcuts Settings
 
+   * Line break and bullet with different levels of indentation:
+      * Set BB = <br />&#8226;
+      * Set BB2 = <br />&nbsp;&nbsp;&#8226;
+      * Set BB3 = <br />&nbsp;&nbsp;&nbsp;&nbsp;&#8226;
+      * Set BB4 = <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8226;
+
    * Line break: Note that the setting has an intentional trailing space
       * Set BR = <br /> 
 
    * Bullet sign:
       * Set BULLET = &#8226;
 
-   * Vertical bar / pipe symbol:
-      * Set VBAR = &#124;
-
    * Vertical caret symbol:
       * Set CARET = &#94;
 
-   * Line break and bullet with different levels of indentation:
-      * Set BB = <br />&#8226;
-      * Set BB2 = <br />&nbsp;&nbsp;&#8226;
-      * Set BB3 = <br />&nbsp;&nbsp;&nbsp;&nbsp;&#8226;
-      * Set BB4 = <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8226;
+   * URL of current topic
+      * Set TOPICURL = %SCRIPTURL{"view"}%/%WEB%/%BASETOPIC%
+
+   * Vertical bar / pipe symbol:
+      * Set VBAR = &#124;
 
    * __Hint:__ Above shortcuts are useful in TWiki tables where you cannot use newlines
 
