@@ -1,5 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1241048971" format="1.1" version="$Rev$"}%
----+!! TWiki Release 4.3.1 (Georgetown), 2009-04-29
+%META:TOPICINFO{author="TWikiContributor" date="1273881423" format="1.1" version="$Rev$"}%
+---+!! TWiki Release 4.3.2 (Georgetown), 2009-09-02
+
+__Note:__ _This is the release note for the previous major release version 4.3.X. This note, TWikiReleaseNotes04x00, TWikiReleaseNotes04x01 and TWikiReleaseNotes04x02 are included with 5.0.X because they contain valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes05x00 for the 5.0.X release notes._
 
 %TOC%
 
@@ -9,11 +11,13 @@ TWiki-4.3.0 released on 2009-03-30 introduces security enhancements, usability e
 
 TWiki-4.3.1 released on 2009-04-29 introduces security enhancements. This release also introduces use of ISO date format by default.
 
-It is highly recommended to upgrade to TWiki-4.3.1. Users will find this release much more stable and secure in daily use.
+TWiki-4.3.2 released on 2009-09-02 introduces security enhancements.
+
+It is highly recommended to upgrade to TWiki-4.3.2. Users will find this release much more stable and secure in daily use.
 
 ---++ Pre-installed Extensions
 
-TWiki-4.3.1 ships with:
+TWiki-4.3.2 ships with:
 
    * *Plugins:* !CommentPlugin, !EditTablePlugin, !EmptyPlugin, !HeadlinesPlugin, !InterwikiPlugin, !PreferencesPlugin, !RenderListPlugin, !SlideShowPlugin, !SmiliesPlugin, !SpreadSheetPlugin, !TablePlugin, !TinyMCEPlugin, !TWikiNetSkinPlugin, !TwistyPlugin, !WysiwygPlugin
    * *Contribs:* !BehaviourContrib, !JSCalendarContrib, !MailerContrib, !TipsContrib, !TWikiUserMappingContrib, !TwistyContrib
@@ -166,6 +170,29 @@ TWiki-4.3.1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRele
 | [[%BUGS%/Item6240][Item6240]] | unhelpful error message when sysCommand fails |
 | [[%BUGS%/Item6243][Item6243]] | URLPARAM "empty or missing" |
 | [[%BUGS%/Item6251][Item6251]] | CSRF vulnerability CVE-2009-1339: Possible to gain TWiki admin privileges with a specially crafted image tag |
+</noautolink>
+
+---++  TWiki 4.3.2 Patch Release - Details
+
+TWiki-4.3.2 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x03 revision 18148 (2009-09-02)
+
+---+++ Highlights
+
+   * Security:
+      * TWiki:Codev/SecurityAuditTokenBasedCsrfFix: Crypt Token Based Fix for CSRF Vulnerability
+   * Usability:
+      * Upgrade TinyMCEPlugin with latest tinyMCE WYSIWYG editor
+
+---+++ Enhancements
+
+<noautolink>
+TODO
+</noautolink>
+
+---+++ Fixes
+
+<noautolink>
+TODO
 </noautolink>
 
 <!-- Note: Do not use TWikibug: interwiki links because interwiki rule might not be defined
