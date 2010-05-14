@@ -1,25 +1,29 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273185215" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273879046" format="1.1" version="$Rev$"}%
+<sticky>
 <div style="float:right;width:255px;padding:1em;text-align:center;">
 <a href="http://twiki.org"><img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiLogos/T-logo-235x67-t.gif" style="margin:.3em 0;" width="235" height="67" alt="Collaborate with TWiki -- visit TWiki.org" title="Collaborate with TWiki -- visit TWiki.org" border="0" /></a>
 <br />The official TWiki<sup>&reg;</sup> site is <a href="http://twiki.org"><span class="twikiLinkLabel">twiki.org</span></a>
 </div>
----+!! Welcome to the TWiki Documentation Web
+</sticky>
+---+!! Welcome to the TWiki<sup>&reg;</sup> Documentation Web
 
 _The place to learn about TWiki features and perform TWiki system maintenance._
 
 This site is running TWiki version *%WIKIVERSION%*, Plugin API version *%PLUGINVERSION{}%*
 
-TWiki is a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
+TWiki is a flexible, powerful, secure, yet simple web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
 
 ---++ TWiki Documentation and Configuration
+<sticky>
 <div style="float:right;width:255px;padding:1em;">%INCLUDE{ "TWikiTipsOfTheDayInclude" warn="off" }%</div>
+</sticky>
    * [[WelcomeGuest][Welcome Guest]] - look here first
    * [[TWikiTutorial][Tutorial]] - 20 minutes TWiki tutorial
    * [[TWikiUsersGuide][User's Guide]] - documentation for TWiki users
    * [[TWikiFAQ][Frequently Asked Questions]] - about TWiki
    * [[TWikiReferenceManual][Reference Manual]] - documentation for system administrators
    * [[AdminToolsCategory][Admin Tools]] - manage the TWiki site
-   * [[TWikiReleaseNotes04x03][TWiki-4.3 Release Notes]] - describes what's new in this release
+   * [[TWikiReleaseNotes05x00][TWiki-5.0 Release Notes]] - describes what's new in this release
 
 ---++ <nop>%WEB% Web Utilities
 
@@ -35,7 +39,7 @@ TWiki is a flexible, powerful, secure, yet simple web-based collaboration platfo
 
 ---++ Disclaimer
 
-   * TWiki<sup>&reg;</sup> is a registered trademarks of TWiki founder [[http://twiki.org/cgi-bin/view/Main/PeterThoeny][Peter Thoeny]], [[http://www.twiki.net/][TWIKI.NET]]. The [[TWikiLogos][TWiki logo]] and the "Collaborate with TWiki" tagline are trademarks of Peter Thoeny.
+   * TWiki<sup>&reg;</sup> is a registered trademarks of TWiki founder [[http://twiki.org/cgi-bin/view/Main/PeterThoeny][Peter Thoeny]], [[http://www.twiki.net/][Twiki, Inc.]]. The [[TWikiLogos][TWiki logo]] and the "Collaborate with TWiki" tagline are trademarks of Peter Thoeny.
    * Twiki (with a lower case "w") is a robot character from the _Buck Rogers&trade; in the 25th Century_ TV series. TWiki (with an upper case "W") is not affiliated with the Dille Family Trust, the registered trademark owner of the _Buck Rogers_ name.
    * TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]].
    * Get the latest TWiki release from [[http://TWiki.org/][TWiki.org]].
