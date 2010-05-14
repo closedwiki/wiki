@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1273873369" format="1.1" version="$Rev$"}%
 ---+ Jump Box
 
-__The box at the top or sidebar of each page is a hidden gem for quick navigation in a large TWiki.__
+_The Jump Box at the top or sidebar of each page is a hidden gem for quick navigation in a large TWiki._
 
 1. *Quick Jump:* Enter a topic name to quickly jump to the topic, for example:
 
