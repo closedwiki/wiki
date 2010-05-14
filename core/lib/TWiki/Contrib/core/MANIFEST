@@ -220,6 +220,7 @@ data/TWiki/VarDISPLAYTIME.txt 0644
 data/TWiki/VarDISPLAYTIME2.txt 0644
 data/TWiki/VarEDITACTION.txt 0644
 data/TWiki/VarENCODE.txt 0644
+data/TWiki/VarENDBG.txt 0644
 data/TWiki/VarENDCOLOR.txt 0644
 data/TWiki/VarENDSECTION.txt 0644
 data/TWiki/VarENV.txt 0644
@@ -272,6 +273,7 @@ data/TWiki/VarQ.txt 0644
 data/TWiki/VarQUERYPARAMS.txt 0644
 data/TWiki/VarQUERYSTRING.txt 0644
 data/TWiki/VarRED.txt 0644
+data/TWiki/VarREDBG.txt 0644
 data/TWiki/VarREMOTEADDR.txt 0644
 data/TWiki/VarREMOTEPORT.txt 0644
 data/TWiki/VarREMOTEUSER.txt 0644
