@@ -734,22 +734,25 @@ tests if the $redirect is an external URL, returning false if AllowRedirectUrl i
 
 sub isRedirectSafe {
     my $redirect = shift;
-    
+    return 1 if ($TWiki::cfg{AllowRedirectUrl}); 
+     
     #TODO: this should really use URI
-    if ((!$TWiki::cfg{AllowRedirectUrl}) && ( $redirect =~ m!^([^:]*://[^/]*)/*(.*)?$! )) {
+    if ( $redirect =~ m!^([^:]*://[^/]*)/*(.*)?$! ) {
         my $host = $1;
         #remove trailing /'s to match
         $TWiki::cfg{DefaultUrlHost} =~ m!^([^:]*://[^/]*)/*(.*)?$!;
         my $expected = $1;
-        
+        return 1 if (uc($host) eq uc($expected));
+ 
         if (defined($TWiki::cfg{PermittedRedirectHostUrls} ) && $TWiki::cfg{PermittedRedirectHostUrls}  ne '') {
             my @permitted =
                 map { s!^([^:]*://[^/]*)/*(.*)?$!$1!; $1 }
                         split(/,\s*/, $TWiki::cfg{PermittedRedirectHostUrls});
             return 1 if ( grep ( { uc($host) eq uc($_) } @permitted));
         }
-        return (uc($host) eq uc($expected));
+        return 0;
     }
+
     return 1;
 }
 
