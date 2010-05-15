@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273873971" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273967746" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
@@ -616,7 +616,7 @@ __Major New Features__
    * *01 Jun 2001* - TWiki:Main.KlausWriessnegger, TWiki:Main.AndreaSterbini
       * Forms to change/reset/install passwords, see ChangePassword &amp; ResetPassword
    * *01 May 2001* - TWiki:Main.AndreaSterbini
-      * The %MAINWEB%.TWikiAdminGroup (or other group) can be enabled as a [[TWikiAccessControl#SuperAdminGroup][SuperAdminGroup]]. Members have browser edit access to _all_ locked topics. 
+      * The %USERSWEB%.TWikiAdminGroup (or other group) can be enabled as a [[TWikiAccessControl#SuperAdminGroup][SuperAdminGroup]]. Members have browser edit access to _all_ locked topics. 
    * *01 May 2001* - TWiki:Main.JohnTalintyre
       * Meta information format, see TWikiMetaData
    * *01 May 2001* - TWiki:Main.JohnTalintyre
@@ -675,7 +675,7 @@ __Major New Features__
    * *26 Sep 2000* - TWiki:Main.AlWilliams, TWiki:Main.PeterThoeny
       * Fixed TWiki:Codev/UppercaseAttachments bug and added =png= image support. 
    * *26 Sep 2000* - TWiki:Main.HaroldGottschalk, TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny
-      * Allow nesting of variables, i.e. =%<nop>INCLUDE{"%<nop>TWIKIWEB%.TWikiWebsTable"}%=. More in TWiki:Codev/BetterTWikiTagTemplateProcessing. 
+      * Allow nesting of variables, i.e. =%<nop>INCLUDE{"%<nop>SYSTEMWEB%.TWikiWebsTable"}%=. More in TWiki:Codev/BetterTWikiTagTemplateProcessing. 
    * *20 Sep 2000* - TWiki:Main.ManpreetSingh
       * New -q switch in =mailnotify= to suppress all normal output. 
    * *19 Sep 2000* - TWiki:Main.PeterThoeny
