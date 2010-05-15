@@ -1,11 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273956256" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiGroups"}%
 ---+!! <nop>%URLPARAM{"topic"}%
 
    * Member list (comma-separated list):
-      * Set GROUP = %WIKIUSERNAME%
+      * Set GROUP = %WIKINAME%
    * Persons/group who can change the list:
       * Set ALLOWTOPICCHANGE = %URLPARAM{"topic"}%
 
-__%MAKETEXT{"Related topics:"}%__ [[%WIKIUSERSTOPIC%]], [[TWikiGroups]], [[%TWIKIWEB%.TWikiAccessControl][TWikiAccessControl]]
-
+__%MAKETEXT{"Related topics:"}%__ [[%WIKIUSERSTOPIC%]], [[TWikiGroups]], [[%SYSTEMWEB%.TWikiAccessControl][TWikiAccessControl]]

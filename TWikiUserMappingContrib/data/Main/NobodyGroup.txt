@@ -1,4 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273956256" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiGroups"}%
 ---+ Nobody Group
 
    * Member list:
@@ -6,6 +7,6 @@
    * Persons/group who can change the list:
       * Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
-Used to prevent dangerous actions e.g. renaming [[%TWIKIWEB%.TWikiPreferences][TWikiPreferences]] - put !NobodyGroup as the only group allowed to rename a topic and it can't be renamed.
+Used to prevent dangerous actions e.g. renaming [[%SYSTEMWEB%.TWikiPreferences][TWikiPreferences]] - put !NobodyGroup as the only group allowed to rename a topic and it can't be renamed.
 
-__Related topics:__ [[%WIKIUSERSTOPIC%]], [[TWikiGroups]], [[%TWIKIWEB%.TWikiAccessControl][TWikiAccessControl]]
+__Related topics:__ [[%WIKIUSERSTOPIC%]], [[TWikiGroups]], [[%SYSTEMWEB%.TWikiAccessControl][TWikiAccessControl]]
