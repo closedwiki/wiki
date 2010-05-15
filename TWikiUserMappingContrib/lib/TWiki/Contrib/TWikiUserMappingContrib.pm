@@ -18,6 +18,6 @@ use strict;
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 
 $VERSION = '$Rev$';
-$RELEASE = '';
-$SHORTDESCRIPTION = '';
+$RELEASE = '4.4';
+$SHORTDESCRIPTION = 'Traditional TWiki topic based user management and user mapping';
 

@@ -1,23 +1,29 @@
+%META:TOPICINFO{author="TWikiContributor" date="1273963073" format="1.1" version="$Rev$"}%
 ---+!! !TWikiUserMappingContrib
 <!--
-One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = Traditional <nop>TWikiTopic  based mapping and user management
+   Contributions to this contrib are appreciated. Please update the contrib page at
+   http://twiki.org/cgi-bin/view/Plugins/TWikiUserMappingContrib or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TWikiUserMappingContribDev.
+   If you are a TWiki contributor please update the contrib in the SVN repository.
+
+One line description, required for extensions repository catalog:
+   * Set SHORTDESCRIPTION = Traditional TWiki topic based user management and user mapping
 -->
 %SHORTDESCRIPTION%
-
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC%
+</div>
 
-The _User Mapping Manager_ interface provides services for mapping between a 'user identity' as used when talking to an external authentication provider,
-an internal TWiki canonical user ID, and the displayed name used to identify the user in TWiki. 
-This is the default <nop>TWikiUserMapping in which user information is stored in TWiki topics - one per user, and then any mapping needed is done using the
-<nop>TWikiUsers topic in the %MAINWEB%.
+---++ Introduction
 
-see [[http://twiki.org/cgi-bin/view/Codev/SimplifiedUserMappingCodeInterface][SimplifiedUserMappingCodeInterface]] on TWiki.org for a more detailed discussion
-of the concepts.
+The _User Mapping Manager_ interface provides services for mapping between a 'user identity' as used when talking to an external authentication provider, an internal TWiki canonical user ID, and the displayed name used to identify the user in TWiki. This is the default <nop>TWikiUserMapping in which user information is stored in TWiki topics - one per user, and then any mapping needed is done using the <nop>TWikiUsers topic in the %USERSWEB%.
+
+See TWiki:Codev/SimplifiedUserMappingCodeInterface on TWiki.org for a more detailed discussion of the concepts.
 
 It includes the topics that are used when registering and managing users and groups via TWiki, in TWikiTopics.
 
-it includes:
+It includes:
+
    * Registration and user management topics
       * TWiki.TWikiRegistration
       * TWiki.ResetPassword
@@ -47,10 +53,11 @@ it includes:
       * TWiki.TWikiUserSetting
       * Main.TWikiGroupTemplate        
 
-If you are developing a non-TWiki based User mapper, you might like to consider removeing or replacing the files installed by this Contrib.
+If you are developing a non-TWiki based User mapper, you might like to consider removing or replacing the files installed by this Contrib.
 
 ---++ Settings
-The TWikiUserMappingContrib specific settings have not yet been moved out of the standard TWiki.spec. This will be done in a future release.
+
+The !TWikiUserMappingContrib specific settings have not yet been moved out of the standard TWiki.spec. This will be done in a future release.
 
 ---++ Installation Instructions
 
@@ -59,10 +66,11 @@ It's a part of the default distribution of the TWiki Core.
 ---++ Contrib Info
 
 |  Contrib Authors: | Sven Dowideit, SvenDowideit@WikiRing.com and TWiki Contributors. |
-|  Copyright &copy;: | 2007 Sven Dowideit; 2007-2010 TWiki Contributors |
+|  Copyright: | &copy; 2007 Sven Dowideit;%BR% &copy; 2007-2010 TWiki:TWiki/TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Contrib Version: | 4.3 |
+|  Contrib Version: | 4.4 (2010-05-15) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-05-15: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  4.3 | TWikibug:Item6417 - fix issue so that LDAP users can login if 'TWiki::Users::TWikiUserMapping' is used |
 |  4.2.1 | 03 Aug 2008 - Distributed with TWiki 4.2.1 |
 |  4.2.0 | 22 Jan 2008 - Distributed with TWiki 4.2.0 |
@@ -70,4 +78,3 @@ It's a part of the default distribution of the TWiki Core.
 |  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/TWikiUserMappingContrib |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/TWikiUserMappingContribDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/TWikiUserMappingContribAppraisal |
-

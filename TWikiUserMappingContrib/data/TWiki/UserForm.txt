@@ -1,15 +1,15 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273956409" format="1.1" version="$Rev$"}%
 ---+ User Form
 
 __Note:__ This is a maintenance topic, used by the TWiki administrator.
 
 This form defines the form of the home pages of registered TWiki users listed
-in %MAINWEB%.%WIKIUSERSTOPIC%. *Do not edit this topic* - if you want to customise the
+in %USERSWEB%.%WIKIUSERSTOPIC%. *Do not edit this topic* - if you want to customise the
 user form, then:
-   1 Take a copy of this topic and save it to %MAINWEB%.<nop>UserForm
-   1 Customise %MAINWEB%.<nop>UserForm
-   1 Take a copy of NewUserTemplate and save it to %MAINWEB%.<nop>NewUserTemplate
-   1 Modify %MAINWEB%.<nop>NewUserTemplate and change the form to select your new user form.
+   1 Take a copy of this topic and save it to %USERSWEB%.<nop>UserForm
+   1 Customise %USERSWEB%.<nop>UserForm
+   1 Take a copy of NewUserTemplate and save it to %USERSWEB%.<nop>NewUserTemplate
+   1 Modify %USERSWEB%.<nop>NewUserTemplate and change the form to select your new user form.
 
 |*Name*  |*Type*  |*Size*  |*Values*  |*Tooltip message*  |*Attributes*  |
 | <nop>FirstName | text | 40 | | | |
@@ -28,7 +28,6 @@ user form, then:
 | <nop>HomePage | text | 40 | | | |
 | Comment | textarea | 50x6 | | | |
 
-__%X% Note:__ Please keep the %TWIKIWEB%.TWikiRegistration form and this form definition in sync. When you update this form you need to edit/save the %TWIKIWEB%.NewUserTemplate topic. This ensures that the fields are in the right order.
+__%X% Note:__ Please keep the %SYSTEMWEB%.TWikiRegistration form and this form definition in sync. When you update this form you need to edit/save the %SYSTEMWEB%.NewUserTemplate topic. This ensures that the fields are in the right order.
 
-__Related topics:__ %MAINWEB%.%WIKIUSERSTOPIC%, %MAINWEB%.UserViewTemplate, %TWIKIWEB%.NewUserTemplate, %MAINWEB%.UserHomepageHeader, %TWIKIWEB%.TWikiForms, %TWIKIWEB%.TWikiRegistration
-
+__Related topics:__ %USERSWEB%.%WIKIUSERSTOPIC%, %SYSTEMWEB%.UserViewTemplate, %SYSTEMWEB%.NewUserTemplate, %USERSWEB%.UserHomepageHeader, %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.TWikiRegistration

@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiAdminGroup" date="1178574333" format="1.1" reprev="1.2" version="1.2"}%
----+ List of <nop>%WIKITOOLNAME% users
+%META:TOPICINFO{author="TWikiContributor" date="1178574333" format="1.1" version="$Rev$"}%
+---+ List of <nop>%WIKITOOLNAME% Users
 
-Below is a list of users with accounts. If you want to edit topics or see protected areas of the site then you can get added to the list by registering: fill out the form in %TWIKIWEB%.TWikiRegistration. 
+Below is a list of users with accounts. If you want to edit topics or see protected areas of the site then you can get added to the list by registering: fill out the form in %SYSTEMWEB%.TWikiRegistration. 
 
-If you forget your password, %TWIKIWEB%.ResetPassword will get a new one sent to you.
+If you forget your password, %SYSTEMWEB%.ResetPassword will get a new one sent to you.
 
 %INCLUDE{"UserListHeader"}%
 
@@ -31,11 +31,11 @@ If you forget your password, %TWIKIWEB%.ResetPassword will get a new one sent to
    * R - <a name="R">- - - -</a>
    * S - <a name="S">- - - -</a>
    * T - <a name="T">- - - -</a>
-   * TWikiContributor - 1 Jan 2005
-   * TWikiGuest - guest - 10 Feb 1999
-   * TWikiRegistrationAgent - 1 Jan 2005
+   * TWikiContributor - 2005-01-01
+   * TWikiGuest - guest - 1999-02-10
+   * TWikiRegistrationAgent - 2005-01-01
    * U - <a name="U">- - - -</a>
-   * UnknownUser - 1 Jan 2005
+   * UnknownUser - 2005-01-01
    * V - <a name="V">- - - -</a>
    * W - <a name="W">- - - -</a>
    * X - <a name="X">- - - -</a>

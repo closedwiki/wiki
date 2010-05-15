@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1240003685" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273964680" version="$Rev$"}%
 ---++ My Links
 
 %STARTSECTION{ type="expandvariables" }%
@@ -9,7 +9,6 @@
    * [[Sandbox.%TOPIC%Sandbox][%TOPIC%Sandbox]] - just for me
    * 
    * 
-
 
 ---++ My Personal Preferences
 
@@ -30,7 +29,6 @@
 %SPLIT%
    * %KEY%: %VALUE%%SPLIT%
 %ENDSECTION{ type="expandvariables" }%
-
 %STARTSECTION{type="templateonly"}%
 ----
 Notes to TWiki Administrator:
@@ -58,7 +56,7 @@ Text for multilingual wiki community, copy from here to %<nop>ENDSECTION{type="t
 ---++ %MAKETEXT{"My Links"}%
 
    * %MAKETEXT{"[_1] - view a short introductory presentation on TWiki for beginners" args="[[%SYSTEMWEB%.ATasteOfTWiki][ATasteOfTWiki]]"}%
-   * %MAKETEXT{"[_1] - starting points on TWiki" args="[[%TWIKIWEB%.WelcomeGuest][WelcomeGuest]]"}%
+   * %MAKETEXT{"[_1] - starting points on TWiki" args="[[%SYSTEMWEB%.WelcomeGuest][WelcomeGuest]]"}%
    * %MAKETEXT{"[_1] - complete TWiki documentation, Quick Start to Reference" args="[[%SYSTEMWEB%.TWikiUsersGuide][TWikiUsersGuide]]"}%
    * %MAKETEXT{"[_1] - try out TWiki on your own" args="[[Sandbox.%HOMETOPIC%][%HOMETOPIC%]]"}%
    * %MAKETEXT{"[_1] - just for me" args="[[Sandbox.%TOPIC%Sandbox][%TOPIC%Sandbox]]"}%
@@ -81,8 +79,7 @@ Text for multilingual wiki community, copy from here to %<nop>ENDSECTION{type="t
    * %MAKETEXT{"[_1] lists all TWiki user tools" args="[[%SYSTEMWEB%.UserToolsCategory][UserToolsCategory]]"}%
 
 %ENDSECTION{type="templateonly"}%
-
-%META:FORM{name="%25TWIKIWEB%25.UserForm"}%
+%META:FORM{name="%25SYSTEMWEB%25.UserForm"}%
 %META:FIELD{name="FirstName" attributes="" title="<nop>FirstName" value=""}%
 %META:FIELD{name="LastName" attributes="" title="<nop>LastName" value=""}%
 %META:FIELD{name="OrganisationName" attributes="" title="<nop>OrganisationName" value=""}%
