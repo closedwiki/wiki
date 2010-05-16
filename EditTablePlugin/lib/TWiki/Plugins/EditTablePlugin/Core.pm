@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2008 Arthur Clemens, arthur@visiblearea.com
-# Copyright (C) 2002-2009 Peter Thoeny, peter@thoeny.org and
+# Copyright (C) 2002-2010 Peter Thoeny, peter@thoeny.org and
 # TWiki Contributors.
 #
 # This program is free software; you can redistribute it and/or
@@ -95,12 +95,12 @@ sub protectVariables {
 
                 # only do the one table that is being edited
                 my $inRe = '
-                %				# start of variable
-                (				# group at index 1
-                .*?				# variable name
-                \{*.*?\}*		# variable contents inside braces, if any
-                )				#
-                %				# end of variable';
+                %          # start of variable
+                (          # group at index 1
+                .*?        # variable name
+                \{*.*?\}*  # variable contents inside braces, if any
+                )          #
+                %          # end of variable';
                 $tableText =~ s/$inRe/%$STUB_VARIABLE$1%/gox;
                 $tableText =~ s/%$STUB_VARIABLE\BR%/&#10;/go
                   ;    # replace escaped %BR% with newline
@@ -942,8 +942,8 @@ sub viewEditCell {
         $img = '';
         if ( $value =~ s/(.+),\s*(.+)/$1/o ) {
             $img = $2;
-            $img =~ s|%ATTACHURL%|%PUBURL%/%TWIKIWEB%/EditTablePlugin|o;
-            $img =~ s|%WEB%|%TWIKIWEB%|o;
+            $img =~ s|%ATTACHURL%|%PUBURL%/%SYSTEMWEB%/EditTablePlugin|o;
+            $img =~ s|%WEB%|%SYSTEMWEB%|o;
         }
     }
     if ($img) {

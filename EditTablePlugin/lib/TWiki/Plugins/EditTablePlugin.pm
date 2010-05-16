@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2008 Arthur Clemens, arthur@visiblearea.com
-# Copyright (C) 2002-2009 Peter Thoeny, peter@thoeny.org and TWiki
+# Copyright (C) 2002-2010 Peter Thoeny, peter@thoeny.org and TWiki
 # Contributors.
 #
 # This program is free software; you can redistribute it and/or
@@ -28,21 +28,14 @@ use vars qw(
   %editMode %saveMode $ASSET_URL
 );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '4.9.1';
+$RELEASE = '5.0';
 
 $encodeStart = '--EditTableEncodeStart--';
 $encodeEnd   = '--EditTableEncodeEnd--';
 %editMode    = ( 'NONE', 0, 'EDIT', 1 );
 %saveMode    = ( 'NONE', 0, 'SAVE', 1, 'SAVEQUIET', 2 );
-$ASSET_URL   = '%PUBURL%/%TWIKIWEB%/EditTablePlugin';
+$ASSET_URL   = '%PUBURL%/%SYSTEMWEB%/EditTablePlugin';
 
 sub initPlugin {
     ( $topic, $web, $user ) = @_;
@@ -143,7 +136,7 @@ sub addViewModeHeadersToHead {
 
     my $header = <<'EOF';
 <style type="text/css" media="all">
-@import url("%PUBURL%/%TWIKIWEB%/EditTablePlugin/edittable.css");
+@import url("%PUBURL%/%SYSTEMWEB%/EditTablePlugin/edittable.css");
 </style>
 EOF
     TWiki::Func::addToHEAD( 'EDITTABLEPLUGIN', $header );
@@ -175,9 +168,9 @@ sub addEditModeHeadersToHead {
       . $ASSET_URL . '" />';
     $header .= <<'EOF';
 <style type="text/css" media="all">
-@import url("%PUBURL%/%TWIKIWEB%/EditTablePlugin/edittable.css");
+@import url("%PUBURL%/%SYSTEMWEB%/EditTablePlugin/edittable.css");
 </style>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/EditTablePlugin/edittable.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/EditTablePlugin/edittable.js"></script>
 EOF
 
     TWiki::Func::addToHEAD( 'EDITTABLEPLUGIN', $header );

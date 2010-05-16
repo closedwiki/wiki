@@ -306,24 +306,24 @@ EXPECTED
 <nop>
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="cols" border="1">
-	<tbody>
-		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <span class="et_rowlabel">0<input type="hidden" name="etcell1x1" value="0" /></span> </td>
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> <input class="twikiInputField editTableInput" type="text" name="etcell1x2" size="10" value="test1" /> </td>
-		</tr>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
-			<td bgcolor="#f2f3f6" valign="top" class="twikiTableCol0 twikiFirstCol"> <span class="et_rowlabel">1<input type="hidden" name="etcell2x1" value="1" /></span> </td>
-			<td bgcolor="#f2f3f6" valign="top" class="twikiTableCol1 twikiLastCol"> <input class="twikiInputField editTableInput" type="text" name="etcell2x2" size="10" value="test2" /> </td>
-		</tr>
-		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <span class="et_rowlabel">2<input type="hidden" name="etcell3x1" value="2" /></span> </td>
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> <input class="twikiInputField editTableInput" type="text" name="etcell3x2" size="10" value="test3" /> </td>
-		</tr>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
-			<td bgcolor="#f2f3f6" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <span class="et_rowlabel">3<input type="hidden" name="etcell4x1" value="3" /></span> </td>
-			<td bgcolor="#f2f3f6" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <input class="twikiInputField editTableInput" type="text" name="etcell4x2" size="10" value="init" /> </td>
-		</tr>
-	</tbody></table>
+   <tbody>
+      <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+         <td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <span class="et_rowlabel">0<input type="hidden" name="etcell1x1" value="0" /></span> </td>
+         <td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> <input class="twikiInputField editTableInput" type="text" name="etcell1x2" size="10" value="test1" /> </td>
+      </tr>
+      <tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+         <td bgcolor="#f2f3f6" valign="top" class="twikiTableCol0 twikiFirstCol"> <span class="et_rowlabel">1<input type="hidden" name="etcell2x1" value="1" /></span> </td>
+         <td bgcolor="#f2f3f6" valign="top" class="twikiTableCol1 twikiLastCol"> <input class="twikiInputField editTableInput" type="text" name="etcell2x2" size="10" value="test2" /> </td>
+      </tr>
+      <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+         <td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <span class="et_rowlabel">2<input type="hidden" name="etcell3x1" value="2" /></span> </td>
+         <td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> <input class="twikiInputField editTableInput" type="text" name="etcell3x2" size="10" value="test3" /> </td>
+      </tr>
+      <tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+         <td bgcolor="#f2f3f6" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <span class="et_rowlabel">3<input type="hidden" name="etcell4x1" value="3" /></span> </td>
+         <td bgcolor="#f2f3f6" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <input class="twikiInputField editTableInput" type="text" name="etcell4x2" size="10" value="init" /> </td>
+      </tr>
+   </tbody></table>
 <input type="hidden" name="etrows" value="4" />
 <input type="hidden" name="etaddedrows" value="1" />
 <input type="submit" name="etsave" id="etsave" value="Save table" class="twikiSubmit" />
@@ -353,7 +353,7 @@ EXPECTED
         $input );
 
     $twiki = new TWiki( undef, $query );
-	my $response = new Unit::Response;
+    my $response = new Unit::Response;
     $TWiki::Plugins::SESSION = $twiki;
 
     my ( $saveResult, $ecode ) = $this->capture(
@@ -420,14 +420,14 @@ INPUT
 <input type="hidden" name="ettablenr" value="1" />
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="cols" border="1">
-	<tbody>
-		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <select class="twikiSelect" name="etcell1x1" size="1"> <option>a</option> <option>b</option> <option selected="selected">c</option> <option>d</option></select> </td>
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLast"> <select class="twikiSelect" name="etcell1x2" size="1"> <option>a</option> <option>b</option> <option selected="selected">c</option> <option>d</option></select> </td>
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol2 twikiLast"> <select class="twikiSelect" name="etcell1x3" size="1 "> <option>a </option> <option>b</option> <option selected="selected">c</option> <option>d</option></select> </td>
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol3 twikiLastCol twikiLast"> <select class="twikiSelect" name="etcell1x4" size="1 "> <option>a </option> <option>b </option> <option selected="selected">c </option> <option>d</option></select> </td>
-		</tr>
-	</tbody>
+   <tbody>
+      <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+         <td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <select class="twikiSelect" name="etcell1x1" size="1"> <option>a</option> <option>b</option> <option selected="selected">c</option> <option>d</option></select> </td>
+         <td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLast"> <select class="twikiSelect" name="etcell1x2" size="1"> <option>a</option> <option>b</option> <option selected="selected">c</option> <option>d</option></select> </td>
+         <td bgcolor="#ffffff" valign="top" class="twikiTableCol2 twikiLast"> <select class="twikiSelect" name="etcell1x3" size="1 "> <option>a </option> <option>b</option> <option selected="selected">c</option> <option>d</option></select> </td>
+         <td bgcolor="#ffffff" valign="top" class="twikiTableCol3 twikiLastCol twikiLast"> <select class="twikiSelect" name="etcell1x4" size="1 "> <option>a </option> <option>b </option> <option selected="selected">c </option> <option>d</option></select> </td>
+      </tr>
+   </tbody>
 </table>
 <input type="hidden" name="etrows" value="1" />
 <input type="submit" name="etsave" id="etsave" value="Save table" class="twikiSubmit" />
@@ -485,12 +485,12 @@ INPUT
 <input type="hidden" name="ettablenr" value="1" />
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="cols" border="1">
-	<tbody>
-		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <table class="editTableInnerTable"><tr><td valign="top"> <input type="radio" name="etcell1x1" value=":skull:" /> <img src="$pubUrlTWikiWeb/SmiliesPlugin/skull.gif" alt="dead!" title="dead!" border="0" /> <br /> <input type="radio" name="etcell1x1" value=":cool:" /> <img src="$pubUrlTWikiWeb/SmiliesPlugin/cool.gif" alt="cool!" title="cool!" border="0" /> </td></tr></table> </td>
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <table class="editTableInnerTable"><tr><td valign="top"> <input type="checkbox" name="etcell1x2x2" value=":skull:" checked="checked" /> <img src="$pubUrlTWikiWeb/SmiliesPlugin/skull.gif" alt="dead!" title="dead!" border="0" /> <br /> <input type="checkbox" name="etcell1x2x3" value=":cool:" checked="checked" /> <img src="$pubUrlTWikiWeb/SmiliesPlugin/cool.gif" alt="cool!" title="cool!" border="0" /> </td></tr></table><input type="hidden" name="etcell1x2" value="Chkbx: etcell1x2x2 etcell1x2x3" /> </td>
-		</tr>
-	</tbody>
+   <tbody>
+      <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+         <td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <table class="editTableInnerTable"><tr><td valign="top"> <input type="radio" name="etcell1x1" value=":skull:" /> <img src="$pubUrlTWikiWeb/SmiliesPlugin/skull.gif" alt="dead!" title="dead!" border="0" /> <br /> <input type="radio" name="etcell1x1" value=":cool:" /> <img src="$pubUrlTWikiWeb/SmiliesPlugin/cool.gif" alt="cool!" title="cool!" border="0" /> </td></tr></table> </td>
+         <td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <table class="editTableInnerTable"><tr><td valign="top"> <input type="checkbox" name="etcell1x2x2" value=":skull:" checked="checked" /> <img src="$pubUrlTWikiWeb/SmiliesPlugin/skull.gif" alt="dead!" title="dead!" border="0" /> <br /> <input type="checkbox" name="etcell1x2x3" value=":cool:" checked="checked" /> <img src="$pubUrlTWikiWeb/SmiliesPlugin/cool.gif" alt="cool!" title="cool!" border="0" /> </td></tr></table><input type="hidden" name="etcell1x2" value="Chkbx: etcell1x2x2 etcell1x2x3" /> </td>
+      </tr>
+   </tbody>
 </table>
 <input type="hidden" name="etrows" value="1" />
 <input type="submit" name="etsave" id="etsave" value="Save table" class="twikiSubmit" />
@@ -541,12 +541,12 @@ INPUT
 <input type="hidden" name="etedit" value="on" />
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="cols" border="1">
-	<tbody>
-		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/choice-yes.gif" alt="DONE" title="DONE" width="16" height="16" border="0" /> </td>
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <a href="$viewUrl" class="twikiCurrentTopicLink twikiLink">$topicName</a> </td>
-		</tr>
-	</tbody>
+   <tbody>
+      <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+         <td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/choice-yes.gif" alt="DONE" title="DONE" width="16" height="16" border="0" /> </td>
+         <td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <a href="$viewUrl" class="twikiCurrentTopicLink twikiLink">$topicName</a> </td>
+      </tr>
+   </tbody>
 </table>
 <input type="hidden" name="etrows" value="1" />
 <input class="editTableEditImageButton" type="image" src="$pubUrlTWikiWeb/EditTablePlugin/edittable.gif" alt="Edit this table" /></form>
@@ -554,7 +554,7 @@ INPUT
 END
 
     $expected =~ s/%PUBURLPATH%/$TWiki::cfg{PubUrlPath}/e;
-    $expected =~ s/%TWIKIWEB%/TWiki/g;
+    $expected =~ s/%SYSTEMWEB%/TWiki/g;
 
     $this->do_testHtmlOutput( $expected, $result, 1 );
 }
@@ -595,12 +595,12 @@ INPUT
 <input type="hidden" name="ettablenr" value="1" />
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="cols" border="1">
-	<tbody>
-		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <input class="twikiInputField editTableInput" type="text" name="etcell1x1" size="30" value="%Y%" /> </td>
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <input class="twikiInputField editTableInput" type="text" name="etcell1x2" size="30" value="%TOPIC%" /> </td>
-		</tr>
-	</tbody>	
+   <tbody>
+      <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+         <td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <input class="twikiInputField editTableInput" type="text" name="etcell1x1" size="30" value="%Y%" /> </td>
+         <td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <input class="twikiInputField editTableInput" type="text" name="etcell1x2" size="30" value="%TOPIC%" /> </td>
+      </tr>
+   </tbody>
 </table>
 <input type="hidden" name="etrows" value="1" />
 <input type="submit" name="etsave" id="etsave" value="Save table" class="twikiSubmit" />
@@ -657,7 +657,7 @@ INPUT
         $input );
 
     $twiki = new TWiki( undef, $query );
-	my $response = new Unit::Response;
+    my $response = new Unit::Response;
     $TWiki::Plugins::SESSION = $twiki;
 
     my ( $saveResult, $ecode ) = $this->capture(
@@ -724,7 +724,7 @@ INPUT
         $input );
 
     $twiki = new TWiki( undef, $query );
-	my $response = new Unit::Response;
+    my $response = new Unit::Response;
     $TWiki::Plugins::SESSION = $twiki;
 
     my ( $saveResult, $ecode ) = $this->capture(
@@ -790,7 +790,7 @@ INPUT
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
     $twiki = new TWiki( undef, $query );
-	my $response = new Unit::Response;
+    my $response = new Unit::Response;
     $TWiki::Plugins::SESSION = $twiki;
     my ( $saveResult, $ecode ) = $this->capture(
         sub {
@@ -849,7 +849,7 @@ INPUT
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
     $twiki = new TWiki( undef, $query );
-	my $response = new Unit::Response;
+    my $response = new Unit::Response;
     $TWiki::Plugins::SESSION = $twiki;
     my ( $saveResult, $ecode ) = $this->capture(
         sub {
@@ -910,7 +910,7 @@ INPUT
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
     $twiki = new TWiki( undef, $query );
-	my $response = new Unit::Response;
+    my $response = new Unit::Response;
     $TWiki::Plugins::SESSION = $twiki;
     my ( $saveResult, $ecode ) = $this->capture(
         sub {
@@ -960,11 +960,11 @@ INPUT
 <input type="hidden" name="etedit" value="on" />
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="cols" border="1">
-	<tbody>
-		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLastCol twikiLast"> blablabla <br /> there's still a bug <br /> lurking around <br /> <em>italic</em> <br /> <strong>bold</strong> </td>
-		</tr>
-	</tbody></table>
+   <tbody>
+      <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+         <td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLastCol twikiLast"> blablabla <br /> there's still a bug <br /> lurking around <br /> <em>italic</em> <br /> <strong>bold</strong> </td>
+      </tr>
+   </tbody></table>
 <input type="hidden" name="etrows" value="1" />
 <input class="editTableEditImageButton" type="image" src="$pubUrlTWikiWeb/EditTablePlugin/edittable.gif" alt="Edit this table" /> </form>
 </div><!-- /editTable -->
@@ -1004,7 +1004,7 @@ INPUT
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
     $twiki = new TWiki( undef, $query );
-	my $response = new Unit::Response;
+    my $response = new Unit::Response;
     $TWiki::Plugins::SESSION = $twiki;
     my ( $saveResult, $ecode ) = $this->capture(
         sub {
@@ -1058,7 +1058,7 @@ INPUT
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
     $twiki = new TWiki( undef, $query );
-	my $response = new Unit::Response;
+    my $response = new Unit::Response;
     $TWiki::Plugins::SESSION = $twiki;
     my ( $saveResult, $ecode ) = $this->capture(
         sub {
@@ -1130,7 +1130,7 @@ sub test_buttonRowAtTop_edit {
 SOMETHING %EDITTABLE{buttonrow="top"}%
 INPUT
 
-	$query->path_info("/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
 
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
@@ -1198,7 +1198,7 @@ INPUT
         $input );
 
     $twiki = new TWiki( undef, $query );
-	my $response = new Unit::Response;
+    my $response = new Unit::Response;
     $TWiki::Plugins::SESSION = $twiki;
 
     my ( $saveResult, $ecode ) = $this->capture(
