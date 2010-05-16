@@ -1,7 +1,7 @@
 package TWiki::Contrib::BehaviourContrib;
 use vars qw( $VERSION );
 $VERSION = '$Rev$';
-$RELEASE = '1.3.1';
+$RELEASE = '1.4';
 
 =begin twiki
 
@@ -22,7 +22,7 @@ sub commonTagsHandler {
 =cut
 
 sub addHEAD {
-    my $base = '%PUBURLPATH%/%TWIKIWEB%/BehaviourContrib';
+    my $base = '%PUBURLPATH%/%SYSTEMWEB%/BehaviourContrib';
     my $USE_SRC =
       TWiki::Func::getPreferencesValue('BEHAVIOURCONTRIB_DEBUG') ?
           '_src' : '';
