@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1273990422" format="1.1" version="$Rev$"}%
----+ The Smilies Plugin <nop>:-)
+---+!! The Smilies Plugin <nop>:-)
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page
    at http://twiki.org/cgi-bin/view/Plugins/SmiliesPlugin or provide feedback
