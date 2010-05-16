@@ -63,7 +63,7 @@ Skins can customize the color of the twisty placeholder by modifiying the =.twis
 
 ---++ Twisty made easy
 
-Manual written by [[TWiki:Main/HaraldJoerg][Harald Joerg]]. Examples require SpreadsheetPlugin to work (installed by default).
+Manual written by [[TWiki:Main/HaraldJoerg][Harald Joerg]]. Examples require SpreadSheetPlugin to work (installed by default).
 
 <blockquote>
 Some of my TWiki users are impressed by the optical effect of what can be done with TwistyPlugin - and they keep asking me: "How do I do that? I don't understand the documentation, and I don't understand the raw text of your topics!"
