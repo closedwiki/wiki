@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1240009352" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273992617" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Templates
 
@@ -204,9 +204,9 @@ Example:
 If you have the following content in a template topic:
 <verbatim>
 %STARTSECTION{ type="expandvariables" }%
-   * %TWIKIWEB%.ATasteOfTWiki - view a short introductory presentation on TWiki for beginners
-   * %TWIKIWEB%.WelcomeGuest - starting points on TWiki
-   * %TWIKIWEB%.TWikiUsersGuide - complete TWiki documentation
+   * %SYSTEMWEB%.ATasteOfTWiki - view a short introductory presentation on TWiki for beginners
+   * %SYSTEMWEB%.WelcomeGuest - starting points on TWiki
+   * %SYSTEMWEB%.TWikiUsersGuide - complete TWiki documentation
    * Sandbox.%HOMETOPIC% - try out TWiki on your own
    * Sandbox.%TOPIC%Sandbox - just for me
 %ENDSECTION{ type="expandvariables" }%
@@ -215,9 +215,9 @@ If you have the following content in a template topic:
 you will get this raw text in new topics based on that template topic:
 
 <pre>
-   * %TWIKIWEB%.ATasteOfTWiki - view a short introductory presentation on TWiki for beginners
-   * %TWIKIWEB%.WelcomeGuest - starting points on TWiki
-   * %TWIKIWEB%.TWikiUsersGuide - complete TWiki documentation
+   * %SYSTEMWEB%.ATasteOfTWiki - view a short introductory presentation on TWiki for beginners
+   * %SYSTEMWEB%.WelcomeGuest - starting points on TWiki
+   * %SYSTEMWEB%.TWikiUsersGuide - complete TWiki documentation
    * Sandbox.%HOMETOPIC% - try out TWiki on your own
    * Sandbox.JimmyNeutronSandbox - just for me
 </pre>
