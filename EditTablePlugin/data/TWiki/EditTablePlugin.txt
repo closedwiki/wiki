@@ -24,7 +24,7 @@ Multiple tables per topic are editable, but only one at a time can be edited.
 ---++ Per Table Settings
 
 Add a =%<nop>EDITTABLE{...}%= variable just before an existing table to make it editable, or add the variable anywhere in a topic to start a new table.
-%INCLUDE{"%SYSTEMWEB%.VarEDITTABLE" section="edittable_attributes"}%
+%INCLUDE{"VarEDITTABLE" section="edittable_attributes"}%
 
 ---+++ Using TWiki Variables in the Format Parameter
 
@@ -265,7 +265,7 @@ __Note:__ The Plugin uses base settings like date format, language and style fro
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__  %SYSTEMWEB%.VarEDITTABLE, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
+__Related Topics:__  VarEDITTABLE, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 %META:FILEATTACHMENT{name="EditTablePluginCalendarExample.gif" attr="h" comment="" date="1071283396" path="EditTablePluginCalendarExample.gif" size="7823" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="ScreenshotEditCell1.gif" attr="h" comment="Screenshot" date="1077050633" path="ScreenshotEditCell1.gif" size="2017" user="TWikiContributor" version="1"}%
