@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1173426057" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273969316" format="1.1" version="$Rev$"}%
 ---+!! TWiki Release 4.0 (Dakar)
 
-_Note: This is the release note for the previous major release version 4.0.X. It is included with 4.1.X because it contains valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes04x01 for the 4.1.X release notes_
+__Note:__ This is the release note for the previous major release version 4.0.X. It is included with 4.1.X because it contains valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes04x01 for the 4.1.X release notes.
 
 'Dakar' is the first major release of the TWiki Enterprise Collaboration Platform in over a year. The focus of this release has been on refactoring the code in the interests of *security*, *efficiency* and *maintainability*, though a range of powerful new features are also included. The refactoring work has included tightening up the specification of certain key TWiki behaviours, which has resulted in some specification changes. The impact on end users has been minimised as far as possible.
 
@@ -241,8 +241,8 @@ of hierarchical webs, preferences are now evaluated in the following order:
    1 Parent Web(s) (if appropriate. All parent webs are evaluated in bottom-up order)
    1 Session
    1 User
-   1 Local Site (as set in {LocalSitePreferences}, typically =%<nop>MAINWEB%.TWikiPreferences))
-   1 Default (as set in {SitePrefsTopic}, typically =%<nop>TWIKIWEB%.TWikiPreferences))
+   1 Local Site (as set in {LocalSitePreferences}, typically =%<nop>USERSWEB%.TWikiPreferences))
+   1 Default (as set in {SitePrefsTopic}, typically =%<nop>SYSTEMWEB%.TWikiPreferences))
 This is a change from previous versions, where the User preferences were evaluated between the topic and the web.
 
 Note that a user can still dictate preference values that can't be overridden by the topic or the web
@@ -256,7 +256,7 @@ TWiki:Plugins.PreferencesPlugin has been included to allow more convenient editi
 
 The following standard preferences have been removed: [[%SCRIPTURLPATH{"search"}%?scope=text&web=all&order=topic&search=%25MAILTHISTOPIC%25&casesensitive=on&limit=all][MAILTHISTOPIC]], [[%SCRIPTURLPATH{"search"}%?scope=text&web=all&order=topic&search=%25MAILTHISTOPICTEXT%25&casesensitive=on&limit=all][MAILTHISTOPICTEXT]], [[%SCRIPTURLPATH{"search"}%?scope=text&web=all&order=topic&search=%25TOPICURL%25&casesensitive=on&limit=all][TOPICURL]], [[%SCRIPTURLPATH{"search"}%?scope=text&web=all&order=topic&search=%25READTOPICPREFS%25&casesensitive=on&limit=all][READTOPICPREFS]], [[%SCRIPTURLPATH{"search"}%?scope=text&web=all&order=topic&search=%25TOPICOVERRIDESUSER%25&casesensitive=on&limit=all][TOPICOVERRIDESUSER]]  (click on the name to search for occurrences on this site). If they are in use on your site, you can restore them to their Cairo settings by simply cutting and pasting the old definitions.
 
----++++ {LocalSitePreferences} (was <nop>%MAINWEB%.TWikiPreferences)
+---++++ {LocalSitePreferences} (was <nop>%USERSWEB%.TWikiPreferences)
 
 Customized site preferences can now be saved in the {LocalSitePreferences} topic which will override settings in {SitePrefsTopicName}. This simplifies upgrades as you can overwrite the {SitePrefsTopicName} topic and gain any new or updated preference settings without losing your local customizations.
 
@@ -268,7 +268,7 @@ Out of the box, TWiki is configured to easily customise the =favicon.ico= for ea
       * <nop>Set FAVICON = %PUBURLPATH%/%WEB%/WebPreferences/favicon.ico
 
 To provide a single, site-wide =favicon.ico=, hardcode a specific web, for example:
-      * <nop>Set FAVICON = %PUBURLPATH%/%TWIKIWEB%/WebPreferences/favicon.ico
+      * <nop>Set FAVICON = %PUBURLPATH%/%SYSTEMWEB%/WebPreferences/favicon.ico
 
 ---++++ =FORCENEWREVISIONCHECKBOX=
 
@@ -276,7 +276,7 @@ Normally, if you make another edit within a one hour period (was =$editLockTime=
 
 The "Force New Revision" checkbox is a way to force it to create a separate revision each time you save.
 
-The [[%TWIKIWEB%.TWikiPreferences]] variable =FORCENEWREVISIONCHECKBOX= controls whether this is checked by default or not.
+The [[%SYSTEMWEB%.TWikiPreferences]] variable =FORCENEWREVISIONCHECKBOX= controls whether this is checked by default or not.
 
 On a related note, you can force __every__ save to be a new revision number by editing =lib/TWiki.cfg= and setting =={ReplaceIfEditedAgainWithin}== to 0.
 
@@ -290,7 +290,7 @@ To change the logo's filename, set the =WEBLOGONAME= variable.  You'll especiall
       * <nop>Set WEBLOGONAME = !MyLogo.jpg
 
 If you don't want to have custom logos on a per-web basic, but instead want to use a single, site-wide logo, hardcode a specific web in the =WEBLOGOURL= variable.  For example:
-      * <nop>Set WEBLOGOURL = %<nop>PUBURLPATH%/%MAINWEB%/WebPreferences/logo.png
+      * <nop>Set WEBLOGOURL = %<nop>PUBURLPATH%/%USERSWEB%/WebPreferences/logo.png
 
 ---++++ =WIKILOGOIMG=, =WIKILOGOURL=, =WIKILOGOALT=
 
@@ -300,8 +300,8 @@ These variables are now more closely associated with =WIKITOOLNAME=.  If you cha
 
 The =FINALPREFERENCES= setting prevents particular preference settings from being over-ridden at a lower level. The hierarchy of how =FINALPREFERENCES= settings are applied has been clarified/formalized as reflected in the following chart:
 | *Level* | *Set By* | *Local site examples* |
-| default site | !%TWIKIWEB%.TWikiPreferences or !%WIKIPREFSTOPIC%  | %TWIKIWEB%.%WIKIPREFSTOPIC% |
-| local site | !%MAINWEB%.TWikiPreferences or !%LOCALSITEPREFS%  | %LOCALSITEPREFS% |
+| default site | !%SYSTEMWEB%.TWikiPreferences or !%WIKIPREFSTOPIC%  | %SYSTEMWEB%.%WIKIPREFSTOPIC% |
+| local site | !%USERSWEB%.TWikiPreferences or !%LOCALSITEPREFS%  | %LOCALSITEPREFS% |
 | web | !WebPreferences  | %WEB%.%WEBPREFSTOPIC% |
 | user | In one's user topic  | %WIKIUSERNAME% |
 | topic | "Edit topic preferences settings" under "More topic actions"  | %WEB%.%TOPIC% |
@@ -375,7 +375,7 @@ Standard TWiki incorporates some simple measures to protect e-mail addresses and
 ---+++ New User Registration
 
 The new user registration process has been extensively reworked to improve usability and security of the registration process.
-   1 !FirstName and !LastName are recorded separately and tabulated. See %MAINWEB%.UserListByLocation
+   1 !FirstName and !LastName are recorded separately and tabulated. See %USERSWEB%.UserListByLocation
    1 Sends a e-mail that the user has to respond to; registration data is staged until this is done
    1 Populates a form in the user topic, if there is one in the !NewUserTemplate. If there is no form, then bullets are used, as in pre-Dakar TWiki.
    1 Sends different e-mails to the WIKIWEBMASTER and the USER, with the users containing the password unless {HidePasswdInRegistration} is set.
@@ -476,7 +476,7 @@ See TWikiSkins for more information.
 ---+++ Supporting web names that are !WikiWords
 Although web names have been [[TWiki:Codev.WebNameAsWikiName][permitted to be WikiWords]] since the TWiki:Codev.CairoRelease, the base templates have been [[TWiki:Codev.DefaultTemplatesSupportWebNameAsWikiWord][fixed]] for Dakar.
 
-Skins should be upgraded if they have standalone =%<nop>WEB%= variables; only standalone =%<nop>WEB%= text that potentially could be turned into a link (because of a WikiWord) needs to be escaped. Same for =%<nop>MAINWEB%= and =%<nop>TWIKIWEB%=.
+Skins should be upgraded if they have standalone =%<nop>WEB%= variables; only standalone =%<nop>WEB%= text that potentially could be turned into a link (because of a WikiWord) needs to be escaped. Same for =%<nop>USERSWEB%= and =%<nop>SYSTEMWEB%=.
 
 Examples:
 
@@ -547,7 +547,7 @@ The following fixes have been addressed in this release:
 | [[%BUGS%/Item1574][Item1574]] | Net.pm: Tidying up e-mail split |
 | [[%BUGS%/Item1574][Item1574]] | Net.pm: Split only on , not on spaces when sending e-mail |
 | [[%BUGS%/Item1572][Item1572]] | made  optional - thus removing the horrible slowdown it causes from the main loop |
-| [[%BUGS%/Item663][Item663]] | Fix %<nop>MAINWEB%.TWikiPreferences to %<nop>LOCALSITEPREFS%; remove %<nop>TWIKIWEB% prefix where not needed |
+| [[%BUGS%/Item663][Item663]] | Fix %<nop>USERSWEB%.TWikiPreferences to %<nop>LOCALSITEPREFS%; remove %<nop>SYSTEMWEB% prefix where not needed |
 | [[%BUGS%/Item663][Item663]] | TWiki.org doc merge: GNU patch requirement |
 | [[%BUGS%/Item240][Item240]] | layout of more screen; added line "Current parent" with 2 searches inside IF - must be a more efficient way but how? |
 | [[%BUGS%/Item240][Item240]] | just to be sure: replacing MAKETEXT text with English, to be translated later. |
