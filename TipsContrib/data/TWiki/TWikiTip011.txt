@@ -1,15 +1,16 @@
-%META:TOPICINFO{author="TWikiContributor" date="1107569826" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273972960" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiTipsOfTheDay"}%
 ---+ Server side include
 
 To include the contents of a web page or TWiki topic, use =%<nop>INCLUDE{"page"}%=.
 
 Examples:
-	* =%<nop>INCLUDE{"http://www.google.com/"}%=
-	* =%<nop>INCLUDE{"%TWIKIWEB%.WebHome"}%=
-	* =%<nop>INCLUDE{"WebHome"}%=
+   * =%<nop>INCLUDE{"http://www.google.com/"}%=
+   * =%<nop>INCLUDE{"%SYSTEMWEB%.WebHome"}%=
+   * =%<nop>INCLUDE{"WebHome"}%=
+
+Learn more at VarINCLUDE and IncludeTopicsAndWebPages.
 
 [[TWikiTipsOfTheDay][See More Tips...]]
 
--- TWiki:Main.PaulineCheung - 29 Jan 2005
-
+-- __Contributors:__ TWiki:Main/PaulineCheung, TWiki:Main/PeterThoeny - 2010-05-15

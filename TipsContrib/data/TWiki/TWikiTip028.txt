@@ -1,14 +1,13 @@
-%META:TOPICINFO{author="TWikiContributor" date="1107726758" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273973210" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiTipsOfTheDay"}%
 ---+ Keyword search
 
-Interactive [[WebSearch][search]] is a keyword search by default. For example, to search for all topics that contain "SOAP", "WSDL", a literal "web service", but not "shampoo", enter this:
+[[WebSearch][Interactive search]] is a keyword search by default. For example, to search for all topics that contain "SOAP", "WSDL", a literal "web service", but not "shampoo", enter this:
 
 =soap +wsdl "web service" -shampoo=
 
 More [[SearchHelp][search help]]
 
-[[%TWIKIWEB%.TWikiTipsOfTheDay][See More Tips...]]
+[[TWikiTipsOfTheDay][See More Tips...]]
 
--- TWiki:Main.PeterThoeny - 06 Feb 2005
-
+-- __Contributor:__ TWiki:Main/PeterThoeny - 2010-05-15
