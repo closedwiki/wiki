@@ -1,19 +1,19 @@
-%META:TOPICINFO{author="TWikiContributor" date="1235842556" format="1.1" version="$Rev$"}%
----++ <nop>Inter-Wiki Link Rules (or Links to other Sites)
+%META:TOPICINFO{author="TWikiContributor" date="1273986057" format="1.1" version="$Rev$"}%
+---+ <nop>Inter-Wiki Link Rules (or Links to other Sites)
 
 This topic lists all aliases needed to map Inter-Site links to external wikis/sites.
 
 Whenever you write ==ExternalSite:Page== it will be linked automatically to the page on the external site. The link points to the URL corresponding to the ==ExternalSite== alias below, concatenated to the ==Page== you choose. Example: Type ==Wiki<nop>:RecentChanges== to get <a href="http://c2.com/cgi/wiki?RecentChanges">Wiki:RecentChanges</a>, the <nop>RecentChanges page at the original Wiki site.
 
----+++ How to define Inter-Site links
+---++ How to define Inter-Site links
 
    * Inter-Site links are defined in the tables below.
    * Each entry must be of format: <br /> ==| External site alias | URL | Tooltip help text |==.
    * The Alias must start with an upper case letter and may contain alphanumeric letters.
    * The URL and Tooltip Text may contain optional ==$page== variables; the variable gets expanded to the page name.
-   * __Note:__ The Tooltip Text must not contain any HTML tags (including ==&lt;nop&gt;== escape code), no internal %TWIKIWEB%.WikiWord links, and no external links. Hint: Escape =='WikiWords'== and =='$page'==.
+   * __Note:__ The Tooltip Text must not contain any HTML tags (including ==&lt;nop&gt;== escape code), no internal %SYSTEMWEB%.WikiWord links, and no external links. Hint: Escape =='WikiWords'== and =='$page'==.
 
----+++ General Inter-Site Links
+---++ General Inter-Site Links
 
 <noautolink>
 
@@ -29,7 +29,7 @@ Whenever you write ==ExternalSite:Page== it will be linked automatically to the 
 
 </noautolink>
 
----+++ Inter-Wiki Links
+---++ Inter-Wiki Links
 
 <noautolink>
 

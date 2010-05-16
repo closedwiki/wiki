@@ -50,15 +50,8 @@ use vars qw(
             %interSiteTable
     );
 
-# This should always be $Rev: 14913 (17 Sep 2007) $ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev: 14913 (17 Sep 2007) $';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '28 Feb 2009';
+$VERSION = '$Rev$';
+$RELEASE = '2010-05-15';
 
 BEGIN {
     # 'Use locale' for internationalisation of Perl sorting and searching - 
