@@ -43,7 +43,7 @@ our $buildpldir;
 our $libpath;
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2010-04-25';
+our $RELEASE = '2010-05-15';
 
 our $SHORTDESCRIPTION =
   'Automate build process for Plugins, Add-ons and Contrib modules';
