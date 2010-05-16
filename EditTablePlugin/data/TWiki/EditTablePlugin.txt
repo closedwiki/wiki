@@ -26,7 +26,7 @@ Multiple tables per topic are editable, but only one at a time can be edited.
 Add a =%<nop>EDITTABLE{...}%= variable just before an existing table to make it editable, or add the variable anywhere in a topic to start a new table.
 %INCLUDE{"VarEDITTABLE" section="edittable_attributes"}%
 
----+++ Using TWiki Variables in the Format Parameter
+---+++ Using TWiki Variables!! in the Format Parameter
 
 By default, variables in =&lt;initial value&gt;= (of text input field) and =&lt;label text&gt;= (of fixed label) get expanded when a new row is added. This can be used for example to add a timestamp to a label. You can escape characters with format tokens if you do not want that.
 
