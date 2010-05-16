@@ -30,12 +30,8 @@ use vars qw(
     );
 
 # Plugin version
-$VERSION = '2010-02-27 (18359)';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'any TWiki';
+$VERSION = '$Rev$';
+$RELEASE = '2010-05-15';
 
 $doInit = 0;
 

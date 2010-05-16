@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1267326314" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273987580" format="1.1" version="$Rev$"}%
+---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
    http://twiki.org/cgi-bin/view/Plugins/SpreadSheetPlugin or provide feedback at
    http://twiki.org/cgi-bin/view/Plugins/SpreadSheetPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
----+!! TWiki Spreadsheet Plugin
 
 This plugin adds spreadsheet capabilities to TWiki topics. Formulae like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this plugin provides general formula evaluation capability, not just classic spreadsheet functions.
 
@@ -25,7 +25,9 @@ __Interactive example:__
 
 <form name="interactive" action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="get">
 <noautolink>
-Formula: <code>%<nop>CALC{"</code><input type="text" name="formula" size="40" value="%URLPARAM{ "formula" default="$PROPERSPACE(%WIKINAME%)" encode="entity" }%" class="twikiInputField" /><code>"}%</code> &nbsp; <input type="submit" value="Go" class="twikiSubmit" /><br />
+Formula:
+<code>%<nop>CALC{"</code><input type="text" name="formula" size="40" value="%URLPARAM{ "formula" default="$PROPERSPACE(%WIKINAME%)" encode="entity" }%" class="twikiInputField" /><code>"}%</code>
+<input type="submit" value="Evaluate" class="twikiSubmit" /><br />
 Result: &nbsp; &nbsp; %CALC{%URLPARAM{ "formula" default="$PROPERSPACE(%WIKINAME%)" }%}%
 </noautolink>
 </form>
@@ -768,7 +770,8 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-02-27 (18359) |
+|  Plugin Version: | %$VERSION% (2010-05-15) |
+|  2010-05-15: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  2010-02-27: | Doc improvements |
 |  2009-11-22: | Enhanced $NOP(): Added $quot replacement for quote character, changed $per replacement with $percnt, contributed by TWiki:Main/HorstEsser |
@@ -778,7 +781,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  24 Mar 2009: | Fixed bug in $REPLACE() if to-be-replaced string is "0"; fixed bug in $SUBSTITUTE() if replace string is empty; improved docs |
 |  13 Oct 2007: | Added $FORMATTIMEDIFF() |
 |  09 Sep 2007: | Enhanced documentation for $EVAL() and $INT() |
-|  02 Jun 2007: | Added %TWIKIWEB%.VarCALC to have =%<nop>CALC{}%= listed in %TWIKIWEB%.TWikiVariables |
+|  02 Jun 2007: | Added %SYSTEMWEB%.VarCALC to have =%<nop>CALC{}%= listed in %SYSTEMWEB%.TWikiVariables |
 |  14 Apr 2007: | Fixing bug in $EXISTS() that required full =web.topic= instead of just =topic= |
 |  11 Mar 2007: | Fixing bug in $VALUE() and $INT(), introduced by version 09 Mar 2007 |
 |  09 Mar 2007: | Added $EXP(), $LN(), $LOG(), $PI(), $SQRT(); fixed $ROUND() bug, contributed by TWiki:Main/SergejZnamenskij |
@@ -824,6 +827,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.VarCALC
-
--- TWiki:Main/PeterThoeny - 2010-02-27
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.VarCALC, %SYSTEMWEB%.VarIF
