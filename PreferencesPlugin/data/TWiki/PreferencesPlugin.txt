@@ -1,9 +1,19 @@
-%META:TOPICINFO{author="TWikiContributor" date="1240032470" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273980162" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
-
-Allows editing of preferences using fields predefined in a %SYSTEMWEB%.TWikiForms. However, the edit fields are inlined in the text, similar to how tables are edited in TWiki:Plugins/EditTablePlugin.
-
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page
+   at http://twiki.org/cgi-bin/view/Plugins/PreferencesPlugin or provide feedback
+   at http://twiki.org/cgi-bin/view/Plugins/PreferencesPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC%
+</div>
+%SHORTDESCRIPTION%
+
+---++ Introduction
+
+Allows editing of preferences using fields predefined in a %SYSTEMWEB%.TWikiForms. However, the edit fields are inlined in the text, similar to how tables are edited in EditTablePlugin.
 
 Insert the =%<nop>EDITPREFERENCES%= variable (see below) anywhere in your topic. It will be replaced by a button that allows editing each preference in its predefined input format (or a text box, when no format is defined for this preference).
 
@@ -22,10 +32,12 @@ In edit mode, the edit button is replaced by Save and Cancel buttons, with their
    * =%<nop>EDITPREFERENCES{ "%<nop>SYSTEMWEB%.TWikiPreferencesForm" }%= 
 
 ---++ Plugin Settings
+
    * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Allows editing of preferences using fields predefined in a form
 
 ---++ Plugin Installation Instructions
+
 %$INSTALL_INSTRUCTIONS%
    * If the installation was successful, an edit button should appear below:
 %EDITPREFERENCES%
@@ -33,8 +45,11 @@ In edit mode, the edit button is replaced by Save and Cancel buttons, with their
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
+|  Copyright: | &copy; 2005TWiki:Main.ThomasWeigert, %BR% &copy; 2005-2010 TWiki:TWiki/TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-05-15: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  17 Apr 2009: | Peter Thoeny: Save of preferences can only be done with http POST method, not GET |
 |  05 Nov 2007: | Kenneth Lavrsen fixed problem when settings are hidden in html comments. These settings are now ignored. |
 |  23 Jun 2007: | Crawford Currie added testcases, recoded to work without a form definition, fixed for TWiki 4.2 |
@@ -47,10 +62,9 @@ In edit mode, the edit button is replaced by Save and Cancel buttons, with their
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiForms
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferencesForm, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.TWikiPlugins
