@@ -26,7 +26,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev: 16234 $';
-$RELEASE = '2.0';
+$RELEASE = '2.1';
 $pluginName = 'RenderListPlugin';  # Name of this Plugin
 
 # =========================
@@ -178,8 +178,8 @@ sub renderIconList
     $theParams =~ s/%PUBURL%/$pubUrl/go;
     $theParams =~ s/%ATTACHURL%/$attachUrl/go;
     $theParams =~ s/%WEB%/$installWeb/go;
-    $theParams =~ s/%MAINWEB%/TWiki::Func::getMainWebname()/geo;
-    $theParams =~ s/%TWIKIWEB%/TWiki::Func::getTwikiWebname()/geo;
+    $theParams =~ s/%(MAIN|USERS)WEB%/TWiki::Func::getMainWebname()/geo;
+    $theParams =~ s/%(TWIKI|SYSTEM)WEB%/TWiki::Func::getTwikiWebname()/geo;
     my ( $showLead, $width, $height, $iconSp, $iconT, $iconI, $iconL, $iconImg )
        = split( /, */, $theParams );
     $width   = 16 unless( $width );
