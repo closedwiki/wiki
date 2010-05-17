@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2002-2010 Peter Thoeny, peter@thoeny.org
 # Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
-# Copyright (C) 2005 TWiki Contributors
+# Copyright (C) 2005-2010 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ use strict;
 use vars qw($VERSION $RELEASE $isInitialized $doneHeader);
 
 $VERSION = '$Rev$';
-$RELEASE = '2.5';
+$RELEASE = '2.6';
 
 # =========================
 sub initPlugin {

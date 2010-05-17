@@ -1,12 +1,15 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272178101" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274067528" format="1.1" version="$Rev$"}%
 ---+!! Headlines Plugin
 <!--
-   Contributions to this plugin are appreciated. Please update the plugin page
-   at http://twiki.org/cgi-bin/view/Plugins/HeadlinesPlugin or provide feedback
-   at http://twiki.org/cgi-bin/view/Plugins/HeadlinesPluginDev.
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/HeadlinesPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/HeadlinesPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC%
+</div>
+%SHORTDESCRIPTION%
 
 ---++ Description
 
@@ -182,8 +185,9 @@ The default HEADER and FORMAT settings use the following styles. See the [[%ATTA
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.MichaelDaum |
 |  Copyright: | &copy; 2002-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]; 2005-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.5 - 2010-04-25 |
+|  Plugin Version: | v2.6 - 2010-05-16 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-05-16: | TWikibug:Item6433 - more doc improvements |
 |  2010-04-25: | TWikibug:Item6433 - doc fix: Changing TWIKIWEB to SYSTEMWEB |
 |  2010-02-27: | TWikibug:Item6313 - fixed bug in ATOM feed with =&lt;link ...&gt;&lt;/link&gt;= instead of =&lt;link ... /&gt;= -- Peter Thoeny |
 |  2009-09-30: | fixed bug in lastBuildDate of feeds affecting touch parameter functionality -- Peter Thoeny |
@@ -208,8 +212,8 @@ The default HEADER and FORMAT settings use the following styles. See the [[%ATTA
 |  11 Jun 2002: | Initial version (V1.000) |
 |  Perl Version: | 5.8 |
 |  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 100%, %SYSTEMWEB%.FormattedSearch 99.5%, %TOPIC% 94% |
-|  Plugin Home: | TWiki:Plugins/%TOPIC% |
-|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
-|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.PeterThoeny - 2010-04-25
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
