@@ -1,20 +1,24 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272002871" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274071894" format="1.1" version="$Rev$"}%
 ---+!! Mailer Contrib
 <!--
-   Contributions to this TWiki extension are appreciated. Please update the page
-   at http://twiki.org/cgi-bin/view/Plugins/MailerContrib or provide feedback
-   at http://twiki.org/cgi-bin/view/Plugins/MailerContribDev.
-   If you are a TWiki contributor please update the plugin in the SVN repository.
+   Contributions to this TWiki extension are appreciated. Please update the page at
+   http://twiki.org/cgi-bin/view/Plugins/MailerContrib or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/MailerContribDev.
+   If you are a TWiki contributor please update the extension in the SVN repository.
 -->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC%
+</div>
+%SHORTDESCRIPTION%
+
+---++ Introduction
+
 The Mailer Contrib allows users to "subscribe" to regularly scheduled e-mails containing either:
+
    * A report on changes to all topics that have changed within a particular TWiki web.
    * A report on changes to a specific topic or set of topics the user can define flexibly.
    * The entire content of a specific topic or set of topics. This is referred to as "news mode."
    * The companion plugin (TWiki:Plugins.SubscribePlugin) lets you trivially add a "Subscribe to changes" button to topics
-
-<div class="twikiBroadcastMessage">WARNING: TWiki-4 only. If you want to use this extension with an earlier version of TWiki, please use [[http://twiki.org/cgi-bin/attach/Plugins/%TOPIC%?filename=%TOPIC%.zip&revInfo=1][revision 17 of the zip]].</div>
-
-%TOC%
 
 ---++ tools/mailnotify
 
@@ -98,15 +102,18 @@ Note that when using the "news mode" =!= or =?= specifiers the entire topic text
 In addition, the %<nop>STARTPUBLISH% and %<nop>STOPPUBLISH% markers used by TWiki:Plugins.PublishContrib to delimit the text to be published are respected in news mode.
 
 ---++ TWiki/Contrib/MailerContrib code library
+
 The second part of the module is a code library that provides the services for other applications to modify the subscription topics through a clean, well documented API. This allows (for example) plugin developers to add (for example) a "Register me for this newsletter" button to their pages. Developers should refer to the POD documentation for the !WebNotify class as their starting point.
 
 ---++ Installation Instructions
+
 %$INSTALL_INSTRUCTIONS%
    * To make sure the installation was successful, run the =mailnotify= script from the command line, with no parameters. In this case it will print out what it would have done to =STDOUT=.
 *Additional settings*
    * You can change the regular expression that matches email addresses in <nop>%NOTIFYTOPIC% using the ={MailerContrib}{EmailFilterIn} setting in =configure=. This allows you to limit the domains to which emails can be sent, or even block email addresses altogether.
 
 ---+++ Setting up your cron job(s)
+
 You need to set up a =cron= (or equivalent) job to run the =tools/mailnotify= perl script.
 
 The script is used as follows: <code>perl -I _bin_ mailnotify [-q] [-news] [ <i>web1 web2 ... webN</i> ]</code>
@@ -128,14 +135,17 @@ will generate change notifications for all webs, except the =Sandbox= web.
 </verbatim>
 will generate newsletters from *all* webs every week on midnight Saturday.
 
-%X% Note: Multiple instances of mailnotify script are not allowed to be executed simutaneously. If you need to run the script multiple times with different options, make sure the cron jobs are scheduled so a previous run has finished before the next starts. You can also write a small script that runs mailnotify in sequence as described in TWiki:Support.DuplicateNotificationsFromMailerCon.
+%X% Note: Multiple instances of mailnotify script are not allowed to be executed simultaneously. If you need to run the script multiple times with different options, make sure the cron jobs are scheduled so a previous run has finished before the next starts. You can also write a small script that runs mailnotify in sequence as described in TWiki:Support.DuplicateNotificationsFromMailerCon.
 
 <!--
    * Set STUB = TWiki::Contrib::Mailer
    * Set SHORTDESCRIPTION = Send e-mail notification of changes to topics in TWiki webs
 -->
+
 ---++ Developer Notes
+
 The changes mails sent to subscribers are based on a TWiki template called =mailnotify=. This template must contain the following definitions. 
+
 | =HTML:before= | Section of a HTML mail before the changes |
 | =HTML:middle= | Repeated in a HTML mail for each change |
 | =HTML:after= | Section of a HTML mail after the changes |
@@ -143,6 +153,7 @@ The changes mails sent to subscribers are based on a TWiki template called =mail
 | =PLAIN:middle= | Repeated in a plain text mail for each changes |
 | =PLAIN:after= | Section of a plain text mail after the changes |
 | =MailNotifyBody= | All the above are embedded in this. %<nop>HTML_TEXT% expands to the HTML obtained by expanding the =HTML:*= templates, and %<nop>PLAIN_TEXT% from the =PLAIN:*= templates. |
+
 The default template sends multipart mails containing both HTML and plaintext versions. You can easily provide a custom version of this template using a local skin.
 
 Newsletters are sent after formatting using the standard =view= template, using whatever skin is selected in the topic being mailed.
@@ -154,11 +165,12 @@ Many thanks to the following sponsors for supporting this work:
    * [[http://wikigardens.com][WikiGardens]]
 
 |  Author: | TWiki:Main/CrawfordCurrie (http://c-dot.co.uk) |
-|  Copyright &copy;: | 2004, Wind River Systems; 2008, http://WikiRing.com |
-|  License: | GPL |
+|  Copyright: | &copy; 2004, Wind River Systems;%BR% &copy; 2008, http://WikiRing.com%BR% &copy; 2004-2010 TWiki:TWiki/TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2010-04-25 | TWikibug:Item6433 - doc fixes, no code changes |
+|  2010-05-16: | TWikibug:Item6433 - more doc fixes |
+|  2010-04-25: | TWikibug:Item6433 - doc fixes, no code changes |
 |  15 Oct 2008 | TWikibug:Item: generalised code to enable TWiki:Codev.SubscribePlugin to delegate parsing to %TOPIC% - TWiki:Main.SvenDowideit |
 |  14 Oct 2008 | TWikibug:Item6066: fixed issue for user mappings where cuid != login  - TWiki:Main.SvenDowideit |
 |  27 Aug 2008 | TWikibug:Item5949: fixed problem with unsubscribe that should result in an empty subscription |
@@ -206,7 +218,8 @@ Many thanks to the following sponsors for supporting this work:
 |  1 Oct 2004 | 1.002 Peter<nop>Thoeny provided additional documentation |
 |  27 Sep 2004 | 1.001 runnable as CGI script, minor bugfixes, removed dependency on DB<nop>CacheContrib |
 |  8 Sep 2004 | 1.000 Initial version |
-|  Home: | TWiki:Plugins/%TOPIC% |
-|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences
