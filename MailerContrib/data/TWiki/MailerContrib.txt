@@ -90,7 +90,7 @@ A user may be listed many times in the <nop>%NOTIFYTOPIC% topic. Where a user ha
 
 If a _group_ is listed for notification, the group will be recursively expanded to the e-mail addresses of all members.
 
-__%X% Warning: Because an email address is not linked to a user name, there is no way for TWiki to check access controls for subscribers identified by email addresses. A subscriber identified by an email address alone will only be sent change notifications if the topic they are subscribed to is readable by guest users. You can limit what email addresses can be used in %<nop>NOTIFYTOPIC%, or even block use of emails altogther, using the ={MailerContrib}{EmailFilterIn} setting in =configure=.
+__%X% Warning:__ Because an email address is not linked to a user name, there is no way for TWiki to check access controls for subscribers identified by email addresses. A subscriber identified by an email address alone will only be sent change notifications if the topic they are subscribed to is readable by guest users. You can limit what email addresses can be used in %<nop>NOTIFYTOPIC%, or even block use of emails altogther, using the ={MailerContrib}{EmailFilterIn} setting in =configure=.
 
 __%T% Tip:__ List names in alphabetical order to make it easier to find the names.
 %STOPINCLUDE%
