@@ -1,9 +1,15 @@
-%META:TOPICINFO{author="TWikiContributor" date="1217665619" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274073099" format="1.1" version="$Rev$"}%
 ---+!! Slide Show Plugin
-
-This plugin converts a topic with headings into a slideshow.
-
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/SlideShowPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/SlideShowPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC%
+</div>
+%SHORTDESCRIPTION%
 
 ---++ Introduction
 
@@ -148,10 +154,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Copyright: | &copy; 2006-2007, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] |
+|  Copyright: | &copy; 2002-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]%BR% &copy; 2002-2010 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 02 Aug 2008 |
+|  Plugin Version: | 2010-05-16 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-05-16: | TWikibug:Item6433 - doc improvements |
 |  02 Aug 2008: | Fixed corruption of preview |
 |  29 Sep 2007: | Added %SYSTEMWEB%.VarSLIDESHOWSTART and %SYSTEMWEB%.VarSLIDESHOWEND to have them listed in %SYSTEMWEB%.TWikiVariables |
 |  12 Feb 2007: | fixed construction of view urls (TWiki:Main/MichaelDaum) |
@@ -173,11 +180,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
-%META:FILEATTACHMENT{name="next.gif" attr="h" comment="Next button" date="1037510613" path="C:\Data\next.gif" size="993" user="TWikiContributor" version="1.2"}%
-%META:FILEATTACHMENT{name="prev.gif" attr="h" comment="Prev button" date="1037510599" path="C:\Data\prev.gif" size="993" user="TWikiContributor" version="1.2"}%
-%META:FILEATTACHMENT{name="clearpixel.gif" attr="h" comment="Clear pixel for spacing" date="1037523452" path="C:\Data\clearpixel.gif" size="807" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="startpres.gif" attr="h" comment="Start Presentation button" date="1037759933" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\startpres.gif" size="2065" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="endpres.gif" attr="h" comment="End Presentation button" date="1037759950" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\endpres.gif" size="2066" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="logo.gif" attr="h" comment="Logo for slide template" date="1037760048" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\logo.gif" size="2877" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="first.gif" attr="h" comment="First slide button" date="1037951064" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\first.gif" size="1010" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="last.gif" attr="h" comment="Last slide button" date="1037951080" path="C:\Data\MyTWiki\Plugins\SlideShowPlugin\pub\TWiki\SlideShowPlugin\last.gif" size="1014" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="next.gif" attr="h" comment="Next button" date="1037510613" path="next.gif" size="993" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="prev.gif" attr="h" comment="Prev button" date="1037510599" path="prev.gif" size="993" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="clearpixel.gif" attr="h" comment="Clear pixel for spacing" date="1037523452" path="clearpixel.gif" size="807" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="startpres.gif" attr="h" comment="Start Presentation button" date="1037759933" path="startpres.gif" size="2065" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="endpres.gif" attr="h" comment="End Presentation button" date="1037759950" path="endpres.gif" size="2066" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="logo.gif" attr="h" comment="Logo for slide template" date="1037760048" path="logo.gif" size="2877" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="first.gif" attr="h" comment="First slide button" date="1037951064" path="first.gif" size="1010" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="last.gif" attr="h" comment="Last slide button" date="1037951080" path="last.gif" size="1014" user="TWikiContributor" version="1"}%
