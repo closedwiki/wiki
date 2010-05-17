@@ -73,7 +73,9 @@ my %w = (
 
 =begin twiki
 
----+++ TWiki::Contrib::JSCalendarContrib::renderDateForEdit($name, $value, $format [, \%cssClass]) -> $html
+---+++ renderDateForEdit
+
+TWiki::Contrib::JSCalendarContrib::renderDateForEdit($name, $value, $format [, \%cssClass]) -> $html
 
 This is the simplest way to use calendars from a plugin.
    * =$name= is the name of the CGI parameter for the calendar
@@ -128,7 +130,9 @@ sub renderDateForEdit {
 
 =begin twiki
 
----+++ TWiki::Contrib::JSCalendarContrib::addHEAD($setup)
+---+++ addHEAD
+
+TWiki::Contrib::JSCalendarContrib::addHEAD($setup)
 
 This function will automatically add the headers for the calendar to the page
 being rendered. It's intended for use when you want more control over the
