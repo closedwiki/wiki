@@ -1,6 +1,6 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2009 Peter Thoeny and TWiki Contributors. All
+# Copyright (C) 2004-2010 Peter Thoeny and TWiki Contributors. All
 # Rights Reserved. TWiki Contributors are listed in the AUTHORS
 # file in the root of the TWiki distribution. NOTE: Please extend
 # that file, not this notice.
@@ -37,7 +37,7 @@ require TWiki::Func;    # The plugins API
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 
 $VERSION = '$Rev$';
-$RELEASE = '03 Aug 2008';
+$RELEASE = '2010-05-16';
 $SHORTDESCRIPTION = "[[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]], packaged for use by plugins, skins and add-ons";
 
 # Max width of different mishoo format components

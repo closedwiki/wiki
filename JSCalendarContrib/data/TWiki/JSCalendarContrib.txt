@@ -1,15 +1,20 @@
-%META:TOPICINFO{author="TWikiContributor" date="1240889627" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274069340" format="1.1" version="$Rev$"}%
+---+!! JS Calendar Contrib
 <!--
-   Contributions to this contrib package are appreciated. Please update this page
-   at http://twiki.org/cgi-bin/view/Plugins/JSCalendarContrib or provide feedback
-   at http://twiki.org/cgi-bin/view/Plugins/JSCalendarContribDev.
+   Contributions to this contrib package are appreciated. Please update this page at
+   http://twiki.org/cgi-bin/view/Plugins/JSCalendarContrib or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/JSCalendarContribDev.
    If you are a TWiki contributor please update the extension in the SVN repository.
 -->
----+!! JS Calendar Contrib
-<img src="%ATTACHURL%/screenshot.gif" style="float:right"/>
-This module packages the [[http://www.dynarch.com/projects/calendar/][Mishoo JSCalendar]], a DHTML pop-up calendar in a form suitable for use in TWiki forms and TWiki applications.
-
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC%
+</div>
+<img src="%ATTACHURL%/screenshot.gif" style="float:right" />
+%SHORTDESCRIPTION%
+
+---++ Introduction
+
+This module packages the [[http://www.dynarch.com/projects/calendar/][Mishoo JSCalendar]], a DHTML pop-up calendar in a form suitable for use in TWiki forms and TWiki applications.
 
 ---++ Using the Calendar in user forms
 
@@ -47,11 +52,12 @@ If the contrib is installed, you will see such a field here:
    * Set SHORTDESCRIPTION = Mishoo JSCalendar: A pop-up calendar for use in TWiki forms and TWiki applications
 
 |  Author: | TWiki:Main/CrawfordCurrie http://c-dot.co.uk |
-|  Version: | %$VERSION% of the Mishoo calendar |
-|  Copyright &copy;: | See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] |
+|  Copyright: | &copy; See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] for Mishoo JSCalendar %BR% &copy; 2007-2010 TWiki:TWiki/TWikiContributor for TWiki !JSCalendarContrib |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
-| Change History: | &nbsp; |
+|  Version: | %$VERSION% |
+| Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-05-16: | TWikibug:Item6433 - doc improvements |
 |  2009-04-27 | TWikibug:Item6254 Adding "JSCalendarContrib Settings" section to configure; changing default to ISO date format; improved documentation (TWiki:Main/PeterThoeny) |
 |  2008-09-10 | TWikibug:Item5991 Applied patch to fix rendering on IE7 |
 |  2007-09-06 | TWikibug:Item4030 Added doc for using the calendar in user forms |
@@ -71,4 +77,4 @@ If the contrib is installed, you will see such a field here:
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiForms
 
-%META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" version="1"}%
+%META:FILEATTACHMENT{name="screenshot.gif" attachment="screenshot.gif" attr="h" comment="" date="1274067851" path="screenshot.gif" size="8912" user="TWikiContributor" version="1"}%
