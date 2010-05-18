@@ -1,6 +1,7 @@
 # Copyright (C) 2005 ILOG http://www.ilog.fr
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
+# Copyright (C) 2005-2010 TWiki Contributor
+# All Rights Reserved. TWiki Contributors are listed in the 
+# AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or

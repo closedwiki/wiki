@@ -1,6 +1,7 @@
 # Copyright (C) 2005 ILOG http://www.ilog.fr
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
+# Copyright (C) 2005-2010 TWiki Contributor
+# All Rights Reserved. TWiki Contributors are listed in the 
+# AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
@@ -416,9 +417,9 @@ HERE
           exec => $HTML2TML,
           name => 'noppedVariable',
           html => <<HERE,
-%${nop}MAINWEB%</nop>
+%${nop}USERSWEB%</nop>
 HERE
-          tml => '%<nop>MAINWEB%'
+          tml => '%<nop>USERSWEB%'
          },
       {
           exec => $HTML2TML,#|$TML2HTML|$ROUNDTRIP,
@@ -459,11 +460,11 @@ HERE
       {
           exec => $TML2HTML|$ROUNDTRIP,
           name => 'variousWikiWords',
-          html => "<p>${linkon}WebPreferences${linkoff}</p><p>$protecton<br />%MAINWEB%$protectoff.TWikiUsers</p><p>${linkon}CompleteAndUtterNothing${linkoff}</p><p>${linkon}LinkBox$linkoff${linkon}LinkBoxs${linkoff}${linkon}LinkBoxies${linkoff}${linkon}LinkBoxess${linkoff}${linkon}LinkBoxesses${linkoff}${linkon}LinkBoxes${linkoff}</p>",
+          html => "<p>${linkon}WebPreferences${linkoff}</p><p>$protecton<br />%USERSWEB%$protectoff.TWikiUsers</p><p>${linkon}CompleteAndUtterNothing${linkoff}</p><p>${linkon}LinkBox$linkoff${linkon}LinkBoxs${linkoff}${linkon}LinkBoxies${linkoff}${linkon}LinkBoxess${linkoff}${linkon}LinkBoxesses${linkoff}${linkon}LinkBoxes${linkoff}</p>",
           tml => <<'YYY',
 WebPreferences
 
-%MAINWEB%.TWikiUsers
+%USERSWEB%.TWikiUsers
 
 CompleteAndUtterNothing
 
@@ -473,24 +474,24 @@ YYY
       {
           exec => $HTML2TML | $ROUNDTRIP,
           name => 'variousWikiWordsNopped',
-          html => "${nop}${linkon}WebPreferences${linkoff} %${nop}MAINWEB%.TWikiUsers ${nop}CompleteAndUtterNothing",
-          tml => '<nop>WebPreferences %<nop>MAINWEB%.TWikiUsers <nop>CompleteAndUtterNothing',
+          html => "${nop}${linkon}WebPreferences${linkoff} %${nop}USERSWEB%.TWikiUsers ${nop}CompleteAndUtterNothing",
+          tml => '<nop>WebPreferences %<nop>USERSWEB%.TWikiUsers <nop>CompleteAndUtterNothing',
       },
       {
           exec => $ROUNDTRIP,
           name => 'squabsWithVars',
           html => <<HERE,
-${linkon}[[wiki syntax]]$linkoff$linkon\[[%MAINWEB%.TWiki users]]${linkoff}
+${linkon}[[wiki syntax]]$linkoff$linkon\[[%USERSWEB%.TWiki users]]${linkoff}
 escaped:
 [<nop>[wiki syntax]]
 HERE
           tml => <<'THERE',
-[[wiki syntax]][[%MAINWEB%.TWiki users]]
+[[wiki syntax]][[%USERSWEB%.TWiki users]]
 escaped:
 ![[wiki syntax]]
 THERE
           finaltml => <<'EVERYWHERE',
-[[wiki syntax]][[%MAINWEB%.TWiki users]] escaped: ![[wiki syntax]]
+[[wiki syntax]][[%USERSWEB%.TWiki users]] escaped: ![[wiki syntax]]
 EVERYWHERE
       },
       {
@@ -510,16 +511,16 @@ EVERYWHERE
       {
           exec => $ROUNDTRIP,
           name => 'plingedVarOne',
-          html => '!<span class="WYSIWYG_PROTECTED">%MAINWEB%</span>nowt',
-          tml => '!%MAINWEB%nowt',
-          finaltml => '!%MAINWEB%nowt',
+          html => '!<span class="WYSIWYG_PROTECTED">%USERSWEB%</span>nowt',
+          tml => '!%USERSWEB%nowt',
+          finaltml => '!%USERSWEB%nowt',
       },
       {
           exec => $ROUNDTRIP,
           name => 'plingedVarTwo',
-          html => 'nowt!<span class="WYSIWYG_PROTECTED">%MAINWEB%</span>',
-          tml => 'nowt!%MAINWEB%',
-          finaltml => 'nowt!%MAINWEB%',
+          html => 'nowt!<span class="WYSIWYG_PROTECTED">%USERSWEB%</span>',
+          tml => 'nowt!%USERSWEB%',
+          finaltml => 'nowt!%USERSWEB%',
       },
       {
           exec => $ROUNDTRIP,
@@ -573,14 +574,14 @@ EVERYWHERE
       {
           exec => $ROUNDTRIP,
           name => 'USERSWEBvar',
-          html => "${protecton}%MAINWEB%${protectoff}",
-          tml => '%MAINWEB%',
+          html => "${protecton}%USERSWEB%${protectoff}",
+          tml => '%USERSWEB%',
       },
       {
           exec => $ROUNDTRIP,
           name => 'SYSTEMWEBvar',
-          html => "${protecton}%TWIKIWEB%${protectoff}",
-          tml => '%TWIKIWEB%',
+          html => "${protecton}%SYSTEMWEB%${protectoff}",
+          tml => '%SYSTEMWEB%',
       },
       {
           exec => $ROUNDTRIP,
@@ -957,14 +958,14 @@ HERE
       {
           exec => $ROUNDTRIP,
           name => 'twikiWebSnarf',
-          html => $linkon.'[[%TWIKIWEB%.TopicName][bah]]'.$linkoff,
-          tml  => '[[%TWIKIWEB%.TopicName][bah]]',
+          html => $linkon.'[[%SYSTEMWEB%.TopicName][bah]]'.$linkoff,
+          tml  => '[[%SYSTEMWEB%.TopicName][bah]]',
       },
       {
           exec => $ROUNDTRIP,
           name => 'mainWebSnarf',
-          html => "${linkon}\[[%MAINWEB%.TopicName][bah]]$linkoff",
-          tml  => '[[%MAINWEB%.TopicName][bah]]',
+          html => "${linkon}\[[%USERSWEB%.TopicName][bah]]$linkoff",
+          tml  => '[[%USERSWEB%.TopicName][bah]]',
       },
       {
           exec => $ROUNDTRIP,
