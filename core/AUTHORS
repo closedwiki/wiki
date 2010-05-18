@@ -1,18 +1,18 @@
-TWiki (TM) was written by Peter Thoeny, based on parts of Ward Cunningham's
+TWiki (R) was written by Peter Thoeny, based on parts of Ward Cunningham's
 original Wiki and Jos Wiki, and has been further developed by Peter and other
-TWiki contributors.
+TWiki Contributors.
 
-TWiki (TM) is copyright as described in the file COPYRIGHT in the root of
-this distribution and is licensed under the terms of the GNU General Public
+TWiki is copyright as described in the file COPYRIGHT in the root of this 
+distribution and is licensed under the terms of the GNU General Public
 License as described in the file LICENSE accompanying this notice. The people
 listed below are identified as joint copyright owners.
 
-A TWiki contributor is defined as a person who has contributed:
+A TWiki Contributor is defined as a person who has contributed:
    * features that were taken into the TWiki distribution, or
    * considerably to the TWiki documentation, or
    * major contribtions to translations.
 
-This document identifies these people as authors of TWiki.
+This document identifies the following people as authors of TWiki.
 
 | *Name*               | *Contact*                      | *Country*   |
 | Adam Theo            | TWiki:Main.AdamTheo            | USA         |
@@ -45,7 +45,8 @@ This document identifies these people as authors of TWiki.
 | Crawford Currie      | http://c-dot.co.uk             | UK          |
 | Cris Bailiff         | TWiki:Main.CrisBailiff         | Australia   |
 | Dan Boitnott         | TWiki:Main.DanBoitnott         | USA         |
-| Dave Harris          | drh@bhresearch.co.uk           | UK          |
+| Dave Harris          | drh[at]bhresearch.co.uk        | UK          |
+| David Sachitano      | TWiki:Main.DavidSachitano      | USA         |
 | David Warman         | TWiki:Main.DavidWarman         | USA         |
 | E. A. Cohen          | TWiki:Main.EaCohen             | USA         |
 | Erik Aman            | TWiki:Main.ErikAman            | Sweden      |
@@ -84,7 +85,7 @@ This document identifies these people as authors of TWiki.
 | Marco Antonio Gonzalez Parra |                        | Mexico      |
 | Mario Frasca         | TWiki:Main.MarioFrasca         | Italy       |
 | Markus Hesse         | TWiki:Main.MarkusHesse         | Germany     |
-| Markus Peter         | !SPiN !GmbH (warpi@spin.de)    | Germany     |
+| Markus Peter         | !SPiN !GmbH (warpi[at]spin.de) | Germany     |
 | Markus Ueberall      | TWiki:Main.MarkusUeberall      | Germany     |
 | Martin Cleaver       | http://www.cleaver.org         | Canada /UK  |
 | Martin Gregory       | TWiki:Main.MartinGregory       | Australia   |
@@ -92,7 +93,7 @@ This document identifies these people as authors of TWiki.
 | Marzia Mastrogiacomo | TWiki:Main.MarziaMastrogiacomo | Italy       |
 | Massimo Mancini      | TWiki:Main.MassimoMancini      | Italy       |
 | Matt Wilkie          | TWiki:Main.MattWilkie          | Canada      |
-| MeredithLesly        | TWiki:Main.MeredithLesly       | USA         |
+| Meredith Lesly       | TWiki:Main.MeredithLesly       | USA         |
 | Michael Daum         | TWiki:Main.MichaelDaum         | Germany     |
 | Michael Sparks       | http://kamaelia.org/Michael.html | UK        |
 | Miguel A. Bayona     | TWiki:Main.MiguelABayona       | Spain       |
@@ -100,7 +101,7 @@ This document identifies these people as authors of TWiki.
 | Mike Salisbury       | TWiki:Main.MikeSalisbury       | USA         |
 | Mirian Bruckschen    | TWiki:Main.MirianBruckschen    | Brazil      |
 | Moritz Naumann       | TWiki:Main.MoritzNaumann       | Germany     |
-| Neil McCurdy         | TWiki:Main.NeilMcCurdy         | USA         |
+| Neil !McCurdy        | TWiki:Main.NeilMcCurdy         | USA         |
 | Nicholas Lee         | TWiki:Main.NicholasLee         | New Zealand |
 | Niels Koldso         | TWiki:Main.NielsKoldso         | Denmark     |
 | Oliver Krueger       | TWiki:Main.OliverKrueger       | Germany     |
@@ -126,7 +127,7 @@ This document identifies these people as authors of TWiki.
 | Sopan Shewale        | TWiki:Main.SopanShewale        | India       |
 | Spiros Denaxas       | TWiki:Main.SpirosDenaxas       | UK          |
 | Stanley Knutson      | TWiki:Main.StanleyKnutson      | USA         |
-| Steffen Poulsen      | TWiki.Main.SteffenPoulsen      | Denmark     |
+| Steffen Poulsen      | TWiki:Main.SteffenPoulsen      | Denmark     |
 | Stephane Lenclud     | TWiki:Main.StephaneLenclud     | Germany     |
 | Steve Milner         | TWiki:Main.SteveMilner         | USA         |
 | Sue Blake            | TWiki:Main.SueBlake            | Australia   |
