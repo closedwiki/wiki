@@ -1,9 +1,19 @@
-%META:TOPICINFO{author="TWikiContributor" date="1270075617" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274162195" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/TwistyPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TwistyPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC%
+</div>
+%SHORTDESCRIPTION%
 
-*A "twisty" is an interface toggle control to show and hide content.*
+---++ Introduction
 
-!TwistyPlugin gives you several options to control the appearance of a twisty:
+The !TwistyPlugin gives you several options to control the appearance of a twisty:
    * use link text or buttons
    * position an icon left or right
    * remember the state at the next visit of the page
@@ -14,10 +24,10 @@
 
 Twisty has a fallback mechanism in case !JavaScript is not available: all content is displayed and the control buttons are hidden.
 
-%TOC{title="On this page:"}%
-
 ---++ Usage examples
+
 ---+++ Triad
+
 A Twisty consists of 3 elements:
    1 Show button
    1 Hide button
@@ -51,6 +61,7 @@ You may have noticed that no parameters are passed to =%<nop>TWISTY{}%= but the 
 
 
 ---+++ Twisty with icons
+
 We will use =mode="div"= to put the collapsing content below the button (the default mode is ="span"=).
 
 <verbatim>
@@ -100,9 +111,8 @@ hideimgright="%ICONURLPATH{toggleclose-small}%"
 %GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
-
-
 ---+++ Make it remember
+
 To store the last state in a TWIKIPREF cookie, add the parameter =remember="on"=.%BR%
 To test this, reload the page after toggling.
 
@@ -162,9 +172,8 @@ Note that =id= sets a sitewide cookie. To create a unique id, add topic or web v
 id="%WEB%_%TOPIC%_currentCustomerList"
 </verbatim>
 
-
-
 ---+++ Make it obey
+
 To let the Twisty start with its content folded open, add parameter =start="show"=. 
 
 <verbatim>
@@ -205,11 +214,9 @@ start="hide"
 %GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
-
-
 ---+++ Make it obey only the first time
-To let the Twisty start with its content folded open the first time the visitor sees the Twisty, add the parameter =firststart="show"=.
-If =remember="on"= is used, subsequential visits to the page will display the Twisty according the cookie setting.
+
+To let the Twisty start with its content folded open the first time the visitor sees the Twisty, add the parameter =firststart="show"=. If =remember="on"= is used, subsequential visits to the page will display the Twisty according the cookie setting.
 
 <verbatim>
 %TWISTY{
@@ -229,8 +236,7 @@ firststart="show"
 %GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
-
----+++ Other use: hide interface parts in case of no !JavaScript
+---+++ Other use: Hide interface if no !JavaScript
 
 You can use Twisty to show interface elements that should only be visible with !JavaScript enabled. For instance the textbox control buttons in the edit screen need !JavaScript to work. If a visitor does not have !JavaScript on it would not make sense to show these buttons.
 
@@ -276,9 +282,8 @@ start="show"
 <input type="submit" class="twikiButton" value="You might have !JavaScript" />
 %ENDTWISTY%
 
-
-
 ---+++ Styling the Twisty
+
 Use parameter =class= to style the content div or class:
 
 <verbatim>
@@ -302,8 +307,8 @@ class="twikiHelp"
 %GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
-
 ---+++ Twisty headers
+
 To be able to use header tags like =&lt;h2>=, use the properties =prefix= and =suffix=. Because we have identical show and hide links we can use the shorthand property =link=.
 
 <verbatim>
@@ -356,14 +361,13 @@ When you want to use links, write:
 <a href="#TOGGLE" class="twistyCollapseAll">Collapse all</a>
 </verbatim>
 
-
 #VarTOGGLE
 
 <a href="#TOGGLE" class="twistyExpandAll">Expand all</a> &nbsp; 
 <a href="#TOGGLE" class="twistyCollapseAll">Collapse all</a>
 
-
 ---++ Special syntax: format tokens
+
 If you use TWiki variables inside TWISTY parameters chances are it will mess up the variable, or the rendered html. Use format tokens to 'delay' rendering of these variables until the Twisty parameters are parsed.
 
 The format tokens are the same as with %SYSTEMWEB%.FormattedSearch:
@@ -374,7 +378,6 @@ The format tokens are the same as with %SYSTEMWEB%.FormattedSearch:
 | =$quot= | Double quote (="=) |
 | =$percnt= | Percent sign (=%=) |
 | =$dollar= | Dollar sign (=$=) |
-
 
 For example, to show an icon inside the link, do not write:
 <verbatim>
@@ -398,7 +401,7 @@ hideimgleft="%ICONURLPATH{toggleclose-small}%"
 my twisty content
 %ENDTWISTY%
 
-Or a more complex example using %SYSTEMWEB%.SpreadsheetPlugin; do not write:
+Or a more complex example using %SYSTEMWEB%.SpreadSheetPlugin; do not write:
 
 <verbatim>
 link="Count: (%CALC{"$GET(infoCount)"}%)"
@@ -415,6 +418,7 @@ link="Count: ($percntCALC{$quot$dollarGET(infoCount)$quot}$percnt)"
 
 #VarTWISTY
 ---+++ TWISTY
+
 This renders the button as well as the toggled content section contained within this and the closing ENDTWISTY tag. %BR%
 Usage: =%<nop>TWISTY{ ... }% Toggable contents %<nop>ENDTWISTY%=
 
@@ -444,6 +448,7 @@ Usage: =%<nop>TWISTY{ ... }% Toggable contents %<nop>ENDTWISTY%=
 
 #VarENDTWISTY
 ---+++ ENDTWISTY
+
 *Twisty closure, complements the opening TWISTY tag.*
    * Syntax: =%<nop>ENDTWISTY%=
 
@@ -457,6 +462,7 @@ Ocassionally you might need to create a custom set of individual Twisty componen
 
 #VarTWISTYBUTTON
 ---+++ TWISTYBUTTON
+
 *Shorthand version for TWISTYSHOW &amp; TWISTYHIDE*
 This is useful if both the show and the hide button take the same arguments.
    * Supported parameters: all parameters supported by [[#VarTWISTYSHOW][TWISTY]], except for =noscript= and =class= (only used for 'toggle' content)
@@ -471,6 +477,7 @@ This is useful if both the show and the hide button take the same arguments.
 
 #VarTWISTYSHOW
 ---+++ TWISTYSHOW
+
 *Show/open link*
    * Syntax: =%<nop>TWISTYSHOW{id="myid" ... }%=
    * Supported parameters:
@@ -489,6 +496,7 @@ This is useful if both the show and the hide button take the same arguments.
 
 #VarTWISTYHIDE
 ---+++ TWISTYHIDE
+
 *Hide/close link*
    * Syntax: =%<nop>TWISTYHIDE{id="myid" ... }%=
    * Supported parameters:
@@ -505,6 +513,7 @@ This is useful if both the show and the hide button take the same arguments.
 
 #VarTWISTYTOGGLE
 ---+++ TWISTYTOGGLE
+
 *Twisty Toggle contents section*
    * Syntax: =%<nop>TWISTYTOGGLE{id="myid"}%=
    * Supported parameters:
@@ -521,6 +530,7 @@ This is useful if both the show and the hide button take the same arguments.
 
 #VarENDTWISTYTOGGLE
 ---+++ ENDTWISTYTOGGLE
+
 *The Twisty closure*
    * Syntax: =%<nop>ENDTWISTYTOGGLE%=
       * Will end the most inner unclosed Twisty Toggle section, using the proper tag
@@ -542,8 +552,7 @@ Major features are:
 #PluginSettings
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TWISTYPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TWISTYPLUGIN_SHORTDESCRIPTION%==
 
    * Set TWISTYSHOWLINK = %MAKETEXT{"More..."}%
       * For example: =More...=
@@ -558,6 +567,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
    * Set DEBUG = 0
    
 ---++ Plugin Installation Instructions
+
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your root ($TWIKI_ROOT) directory. Content:
    | *File:* | *Description:* |
@@ -593,16 +603,16 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
    None
    * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
-
 ---++ Plugin Info
 
 |  Authors: | TWiki:Main/RafaelAlvarez, TWiki:Main/ArthurClemens, TWiki:Main/PeterThoeny |
-|  Copyright &copy;: | 2005 Rafael Alvarez; 2006-2008 Arthur Clemens; 2010 Peter Thoeny |
-|  License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
+|  Copyright: | &copy; 2005 Rafael Alvarez;%BR% &copy; 2006-2008 Arthur Clemens;%BR% &copy; 2010 Peter Thoeny;%BR% &copy; 2005-2010 TWiki:TWiki/TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | None |
-|  Plugin&nbsp;Version: | 2010-03-31 (version 1.5) |
+|  Plugin&nbsp;Version: | 2010-05-17 (version 1.6) |
 |  Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-03-31 | 1.5 TWikibug:Item6354, Peter Thoeny: Make !TwistyPlugin work with TWiki:Plugins/VarCachePlugin; added VarTWISTY variable documentation |
+|  2010-05-17: | 1.6 TWikibug:Item6433 - doc improvements -- Peter Thoeny |
+|  2010-03-31: | 1.5 TWikibug:Item6354 - make !TwistyPlugin work with TWiki:Plugins/VarCachePlugin; added VarTWISTY variable documentation -- Peter Thoeny |
 |  08 Oct 2008 | 1.4.11, 1.4.12 It is now possible to have a twisty on the same line without a linebreak. |
 |  03 Aug 2008 | 1.4.10 TWiki 4.2.1 release version |
 |  13 Dec 2007 | 1.4.9 fix to the loading order of javascript files in head |
