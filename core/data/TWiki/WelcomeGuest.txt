@@ -51,6 +51,6 @@ Welcome to <nop>%WIKITOOLNAME%! This is a TWikiSite (pronounced _twee-kee site_)
 
    * ==Raw edit== a topic and paste !YouTube videos, Twitter feeds and other objects.
 
-__Related topics:__ TWikiTutorial, ATasteOfTWiki, TWikiVariables, WikiSyntax, TWikiDocGraphics
+__Related topics:__ UserDocumentationCategory, TWikiTutorial, ATasteOfTWiki, TWikiVariables, WikiSyntax, TWikiDocGraphics
 
 -- __Contributors:__ TWiki:Main/GrantBow, TWiki:Main/JonReid, TWiki:Main/MikeMannix, TWiki:Main/PeterThoeny
