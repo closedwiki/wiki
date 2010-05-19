@@ -1,6 +1,6 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2007 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 1999-2010 Peter Thoeny, peter@thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -12,7 +12,7 @@
 # http://search.cpan.org/~lds/CGI.pm-3.29/CGI.pm and
 # http://search.cpan.org/author/ANDYA/CGI-Simple-1.103/lib/CGI/Simple.pm
 # http://search.cpan.org/~gaas/libwww-perl-5.808/lib/HTTP/Headers.pm
-# 
+#
 # for credits and liscence details.
 #
 # This program is free software; you can redistribute it and/or
@@ -57,7 +57,7 @@ Constructs a TWiki::Response object.
 sub new {
     my $proto = shift;
     my $class = ref($proto) || $proto;
-    my $this = {
+    my $this  = {
         status  => undef,
         headers => {},
         body    => undef,
@@ -118,14 +118,15 @@ sub header {
 
     # Ugly hack to avoid html escape in CGI::Util::rearrange
     local $CGI::Q = { escape => 0 };
-    my ( $type, $status, $cookie, $charset, $expires, $attachment, @other ) = rearrange(
+    my ( $type, $status, $cookie, $charset, $expires, $attachment, @other ) =
+      rearrange(
         [
             [ 'TYPE',   'CONTENT_TYPE', 'CONTENT-TYPE' ], 'STATUS',
-            [ 'COOKIE', 'COOKIES' ],    'CHARSET', 'EXPIRES',
-            'ATTACHMENT',
+            [ 'COOKIE', 'COOKIES' ],    'CHARSET',
+            'EXPIRES', 'ATTACHMENT',
         ],
         @p
-    );
+      );
 
     if ( defined $charset ) {
         $this->charset($charset);
@@ -135,6 +136,7 @@ sub header {
     }
 
     foreach (@other) {
+
         # Don't use \s because of perl bug 21951
         next unless my ( $header, $value ) = /([^ \r\n\t=]+)=\"?(.+?)\"?$/;
         $header = lc $header;
@@ -155,15 +157,16 @@ sub header {
 
     $type ||= 'text/html' unless defined($type);
     $type .= "; charset=$charset"
-        if $type ne ''
-            and $type =~ m!^text/!
-            and $type !~ /\bcharset\b/
-            and $charset ne '';
+      if $type ne ''
+          and $type =~ m!^text/!
+          and $type !~ /\bcharset\b/
+          and $charset ne '';
 
-    if ( $status ) {
+    if ($status) {
         $this->{headers}->{Status} = $status;
-        $this->status( $status );
+        $this->status($status);
     }
+
     # push all the cookies -- there may be several
     if ($cookie) {
         my @cookie =
@@ -191,13 +194,27 @@ are scalars for single-valued headers or arrayref for multivalued ones.
 =cut
 
 sub headers {
-    my ($this, $hdr) = @_;
+    my ( $this, $hdr ) = @_;
     if ($hdr) {
         my %headers = ();
-        while ( my ($key, $value) = each %$hdr ) {
+        while ( my ( $key, $value ) = each %$hdr ) {
             $key =~ s/(?:^|(?<=-))(.)([^-]*)/\u$1\L$2\E/g;
             $headers{$key} = $value;
         }
+
+        $headers{Expires} = expires( $headers{Expires}, 'http' )
+          if defined $headers{Expires};
+        $headers{Date} = expires( 0, 'http' )
+          if defined $headers{'Set-Cookie'} || defined $headers{Expires};
+        if ( defined $headers{'Set-Cookie'} ) {
+            my @cookies =
+              ref( $headers{'Set-Cookie'} ) eq 'ARRAY'
+              ? @{ $headers{'Set-Cookie'} }
+              : ( $headers{'Set-Cookie'} );
+            $this->cookies( \@cookies );
+        }
+
+        $this->status( $headers{Status} ) if defined $headers{Status};
         $this->{headers} = \%headers;
     }
     return $this->{headers};
@@ -218,7 +235,7 @@ sub getHeader {
     return keys %{ $this->{headers} } unless $hdr;
     $hdr =~ s/(?:^|(?<=-))(.)([^-]*)/\u$1\L$2\E/g;
     my $value = $this->{headers}->{$hdr};
-    return ref $value ? @$value : ( $value );
+    return ref $value ? @$value : ($value);
 }
 
 =begin twiki
@@ -250,7 +267,7 @@ sub pushHeader {
 
     $hdr =~ s/(?:^|(?<=-))(.)([^-]*)/\u$1\L$2\E/g;
     my $cur = $this->{headers}->{$hdr};
-    if ( $cur ) {
+    if ($cur) {
         if ( ref $cur ) {
             push @{ $this->{headers}->{$hdr} }, $value;
         }
@@ -289,7 +306,7 @@ sub body {
     my ( $this, $body ) = @_;
     if ( defined $body ) {
         $this->{body} = $body;
-        { 
+        {
             use bytes;
             $this->{headers}->{'Content-Length'} = length $body;
         }
@@ -313,19 +330,15 @@ CGI Compatibility Note: It doesn't support -target or -nph
 =cut
 
 sub redirect {
-    my ($this, @p) = @_;
-    my ($url, $status, $cookies) = rearrange(
-            [
-                [ qw(LOCATION URL URI) ], 'STATUS', 
-                [ qw(COOKIE COOKIES)   ],
-            ],
-            @p
-    );
-    
+    my ( $this, @p ) = @_;
+    my ( $url, $status, $cookies ) =
+      rearrange( [ [qw(LOCATION URL URI)], 'STATUS', [qw(COOKIE COOKIES)], ],
+        @p );
+
     return undef unless $url;
     return undef if ( $status && $status !~ /^\s*3\d\d.*/ );
-    
-    my @headers = (-Location => $url);
+
+    my @headers = ( -Location => $url );
     push @headers, '-Status' => ( $status || '302 Found' );
     push @headers, '-Cookie' => $cookies if $cookies;
     $this->header(@headers);
