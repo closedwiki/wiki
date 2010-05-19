@@ -38,7 +38,7 @@ The buttons at the top and the color-coded control strip at the bottom of the pa
    * ==Raw View== - show the source text without editing the topic
    * ==Attach== - attach files to a topic (discussed later)
    * ==Backlinks== - find out what other topics link to this topic (reverse link)
-   * ==Printable== - goes to a stripped down version of the page, good for printing
+   * ==Print version== - goes to a stripped down version of the page, good for printing
    * ==History== - topics are under revision control - =History= shows you the complete change history of the topic, for example, who changed what and when
    * ==r3 &gt; r2 &gt; r1== - view a previous version of the topic or the difference between two versions
    * ==More topic actions== - additional controls, such as rename/move, version control and setting the topic's parent.
@@ -94,7 +94,7 @@ You can attach _any_ type of file to a topic - documents, images, programs, what
 
 That's it! You're now equipped with all the TWiki essentials. You are ready to roll.
 
-__NOTE:__ When first using TWiki, it will probably seem strange to be able to change other people's postings - we're used to _separating_ individual messages, with  e-mail, message boards, non-wiki collaboration platforms. __Don't worry about it.__ You can't accidentally delete important stuff - you can always check previous versions, and copy-and-paste from them if you want to undo any changes. After a short while, TWiki-style free-form communication becomes second-nature. You'll expect it everywhere!
+__%T% Note:__ When first using TWiki, it will probably seem strange to be able to change other people's postings - we're used to _separating_ individual messages, with  e-mail, message boards, non-wiki collaboration platforms. __Don't worry about it.__ You can't accidentally delete important stuff - you can always check previous versions, and copy-and-paste from them if you want to undo any changes. After a short while, TWiki-style free-form communication becomes second-nature. You'll expect it everywhere!
 
 __Related Topics:__ UserDocumentationCategory, WelcomeGuest, ATasteOfTWiki, TWikiVariables, WikiSyntax, TWikiDocGraphics
 
