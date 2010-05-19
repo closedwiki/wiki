@@ -626,7 +626,7 @@ sub writeCompletePage {
         chomp($text);
     }
 
-    $this->generateHTTPHeaders( undef, $pageType, $contentType );
+    $this->generateHTTPHeaders( $pageType, $contentType );
 	my $hdr;
     foreach my $header ( keys %{ $this->{response}->headers } ) {
         $hdr .= $header . ': ' . $_ . "\x0D0A"
@@ -643,11 +643,10 @@ sub writeCompletePage {
 
 =pod
 
----++ ObjectMethod generateHTTPHeaders( $query, $pageType, $contentType, $contentLength ) -> $header
+---++ ObjectMethod generateHTTPHeaders ($pageType, $contentType, $contentLength ) -> $header
 
 All parameters are optional.
 
-   * =$query= CGI query object | Session CGI query (there is no good reason to set this)
    * =$pageType= - May be "edit", which will cause headers to be generated that force caching for 24 hours, to prevent Codev.BackFromPreviewLosesText bug, which caused data loss with IE5 and IE6.
    * =$contentType= - page content type | text/html
    * =$contentLength= - content-length | no content-length will be set if this is undefined, as required by HTTP1.1
@@ -662,9 +661,9 @@ Does *not* add a =Content-length= header.
 =cut
 
 sub generateHTTPHeaders {
-    my( $this, $query, $pageType, $contentType ) = @_;
+    my( $this, $pageType, $contentType ) = @_;
 
-    $query = $this->{request} unless $query;
+    my $query = $this->{request};
 
     # Handle Edit pages - future versions will extend to caching
     # of other types of page, with expiry time driven by page type.
