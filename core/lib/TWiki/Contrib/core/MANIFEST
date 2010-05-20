@@ -1,11 +1,12 @@
-#DO NOT UNCOMMENT THE INCLUDES - this is a _just_ the core directory, and will be build up into the final 
-#release package elsewhere.
+# DO NOT UNCOMMENT THE INCLUDES - this is _just_ the core directory, and 
+# will be build up into the final release package elsewhere.
 #!include BehaviourContrib/lib/TWiki/Contrib/BehaviourContrib
 #!include ClassicSkin/lib/TWiki/Contrib/ClassicSkin
 #!include CommentPlugin/lib/TWiki/Plugins/CommentPlugin
 #!include EditTablePlugin/lib/TWiki/Plugins/EditTablePlugin
 #!include EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin
 #!include InterwikiPlugin/lib/TWiki/Plugins/InterwikiPlugin
+#!include JQueryPlugin/lib/TWiki/Plugins/JQueryPlugin
 #!include JSCalendarContrib/lib/TWiki/Contrib/JSCalendarContrib
 #!include MailerContrib/lib/TWiki/Contrib/MailerContrib
 #!include PatternSkin/lib/TWiki/Contrib/PatternSkin
@@ -17,7 +18,10 @@
 #!include TablePlugin/lib/TWiki/Plugins/TablePlugin
 #!include TipsContrib/lib/TWiki/Contrib/TipsContrib
 #!include TinyMCEPlugin/lib/TWiki/Plugins/TinyMCEPlugin
+#!include TopMenuSkin/lib/TWiki/Contrib/TopMenuSkin
 #!include TWikiUserMappingContrib/lib/TWiki/Contrib/TWikiUserMappingContrib
+#!include TWikiNetSkin/lib/TWiki/Contrib/TWikiNetSkin
+#!include TWikiNetSkinPlugin/lib/TWiki/Plugins/TWikiNetSkinPlugin
 #!include TwistyContrib/lib/TWiki/Contrib/TwistyContrib
 #!include TwistyPlugin/lib/TWiki/Plugins/TwistyPlugin
 #!include WysiwygPlugin/lib/TWiki/Plugins/WysiwygPlugin
@@ -1115,6 +1119,7 @@ templates/oopsalertsnohtml.tmpl 0444
 templates/oopsattention.tmpl 0444
 templates/oopschangelanguage.tmpl 0444
 templates/oopsgeneric.tmpl 0444
+templates/oopsinvalidtoken.tmpl 0444
 templates/oopslanguagechanged.tmpl 0444
 templates/oopsleaseconflict.tmpl 0444
 templates/oopsmore.tmpl 0444
