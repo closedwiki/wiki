@@ -101,11 +101,13 @@ Could not find existing configuration file $this->{LocalSiteDotCfg}.
 <p />
 This may be because this is the first time you have run configure.
 <p />
-If so, please fill in the required paths in the
-<a rel="nofollow" href="#" onclick="foldBlock('GeneralPathSettings'); return false;">
-General path settings</a> section below and click 'Next' to save before returning to configure to complete configuration.
+<b>If so, please specify a password below, continue to the configure screen,
+fill in the required paths in the "General path settings" section, click
+'Next' to save, then return to configure to complete the configuration.</b>
 <p />
-If you previously ran configure and saved the configuration, then please check for the existence of lib/LocalSite.cfg, and make sure the webserver user can read it.
+If you previously ran configure and saved the configuration, then please 
+check for the existence of lib/LocalSite.cfg, and make sure the webserver 
+user can read it.
 HERE
             $badLSC = 3;
         }
