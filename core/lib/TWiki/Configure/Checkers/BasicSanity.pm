@@ -92,7 +92,7 @@ HERE
 Configuration file $this->{LocalSiteDotCfg} does not exist, and I cannot
 write a new configuration file due to these errors:
 <pre>$errs</pre>
-You can view the default configuration, but you will not be able to save.
+You will not be able to save the password or any other configure changes.
 HERE
             $badLSC = 2;
         } else {
