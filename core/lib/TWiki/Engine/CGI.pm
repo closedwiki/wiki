@@ -1,14 +1,12 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2007 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 1999-2010 Peter Thoeny, peter@thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
 # This module is based/inspired on Catalyst framework. Refer to
-#
 # http://search.cpan.org/~mramberg/Catalyst-Runtime-5.7010/lib/Catalyst.pm
-# 
 # for credits and liscence details.
 #
 # This program is free software; you can redistribute it and/or
