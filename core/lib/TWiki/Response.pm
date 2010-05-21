@@ -4,8 +4,7 @@
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
-#
-# Partial Copyright (C) 2008-2009  Foswiki Contributors
+# Partial code copyright (C) 2008-2009 Foswiki Contributors.
 #
 # This module is based/inspired on Catalyst framework, and also CGI,
 # CGI::Simple and HTTP::Headers modules. Refer to

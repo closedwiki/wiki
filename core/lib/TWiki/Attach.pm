@@ -1,6 +1,6 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2007 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2010 Peter Thoeny, peter@thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
