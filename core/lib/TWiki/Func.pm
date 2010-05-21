@@ -1940,8 +1940,9 @@ sub expandTemplate {
 
 ---+++ writeHeader( )
 
-Prints a basic content-type HTML header for text/html to standard out
-Return:             none
+Print a basic content-type HTML header for text/html to standard out. No return value.
+
+Note: In TWiki versions earlier than TWiki::Plugins::VERSION 1.3, this function used to have =$query= and =$contentLength= parameters. Both were marked "you should _not_ pass this parameter".
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
 
@@ -3135,7 +3136,7 @@ $TWiki::Plugins::VERSION 1.000
    * =webExists($web) -> $boolean=
    * =wikiToUserName($wiki) -> $loginName=
    * =writeDebug($text)=
-   * =writeHeader($query)=
+   * =writeHeader()=
    * =writeWarning($text)=
 
 ---+++ TWikiRelease01Feb2003 (Beijing)
