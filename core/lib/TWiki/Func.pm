@@ -3263,6 +3263,20 @@ $TWiki::Plugins::VERSION 1.2
    * <strike> =permissionsSet($web) -> $boolean= </strike>
    * <strike> =getOopsUrl( $web, $topic, $template, $param1, $param2, $param3, $param4 ) -> $url= </strike>
 
+---+++ TWiki-4.3 (Georgetown Release)
+$TWiki::Plugins::VERSION 1.2
+---++++ EmptyPlugin.pm
+No changes
+---++++ Func.pm
+No changes
+
+---+++ TWiki-5.0 (Helsinki Release)
+$TWiki::Plugins::VERSION 1.3
+---++++ EmptyPlugin.pm
+No changes
+---++++ Func.pm
+   * =buildWikiWord( $text ) -> $text=
+
 =cut
 
 1;
