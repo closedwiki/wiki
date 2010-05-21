@@ -1,7 +1,11 @@
+# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# TWiki Enterprise Collaboration Platform, http://TWiki.org/
+# Copyright (C) 2000-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
-# Copyright (C) 2000-2006 TWiki Contributors.
+# Additional copyrights apply to some or all of the code in this
+# file as follows:
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,6 +18,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # As per the GPL, removal of this notice is prohibited.
+
 package TWiki::Configure::Checkers::WebMasterEmail;
 
 use strict;
