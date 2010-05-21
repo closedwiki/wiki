@@ -1,4 +1,21 @@
-# See bottom of file for license and copyright information
+# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2000-2010 Peter Thoeny, peter@thoeny.org
+# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# are listed in the AUTHORS file in the root of this distribution.
+# NOTE: Please extend that file, not this notice.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# As per the GPL, removal of this notice is prohibited.
 
 =pod
 
@@ -9,17 +26,18 @@
 
 _Official list of stable TWiki functions for Plugin developers_
 
-This module defines official functions that [[%SYSTEMWEB%.TWikiPlugins][Plugins]]
+This module defines official functions that [[%SYSTEMWEB%.TWikiPlugins][TWiki plugins]]
 can use to interact with the TWiki engine and content.
 
-Refer to TWiki.EmptyPlugin and lib/TWiki/Plugins/EmptyPlugin.pm for a template Plugin and documentation on how to write a Plugin.
+Refer to TWiki.EmptyPlugin and lib/TWiki/Plugins/EmptyPlugin.pm for a template
+plugin and documentation on how to write a plugin.
 
 Plugins should *only* use functions published in this module. If you use
 functions in other TWiki libraries you might create a security hole and
-you will probably need to change your Plugin when you upgrade TWiki.
+you will probably need to change your plugin when you upgrade TWiki.
 
 Deprecated functions will still work in older code, though they should
-_not_ be called in new Plugins and should be replaced in older Plugins
+_not_ be called in new plugins and should be replaced in older plugins
 as soon as possible.
 
 The version of the TWiki::Func module is defined by the VERSION number of the
@@ -3061,32 +3079,11 @@ sub checkDependencies {
     return $report;
 }
 
-1;
+=pod
 
-__DATA__
+---++ TWiki API History
 
-Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
-
-Copyright (C) 2000-2007 Peter Thoeny, peter@thoeny.org
-and TWiki Contributors. All Rights Reserved. TWiki Contributors
-are listed in the AUTHORS file in the root of this distribution.
-NOTE: Please extend that file, not this notice.
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version. For
-more details read LICENSE in the root of this distribution.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-As per the GPL, removal of this notice is prohibited.
-
----++ API History
-
----+++ twiki-20010901-release (Athens)
+---+++ TWiki-2001-09-01 (Athens Release)
 $TWiki::Plugins::VERSION 1.000
 ---++++ EmptyPlugin.pm
    * =commonTagsHandler($text, $topic, $web)=
@@ -3139,7 +3136,7 @@ $TWiki::Plugins::VERSION 1.000
    * =writeHeader()=
    * =writeWarning($text)=
 
----+++ TWikiRelease01Feb2003 (Beijing)
+---+++ TWiki-2003-02-01 (Beijing Release)
 $TWiki::Plugins::VERSION 1.010
 ---++++ EmptyPlugin.pm
    * =afterEditHandler($text, $topic, $web)=
@@ -3155,7 +3152,7 @@ $TWiki::Plugins::VERSION 1.010
    * =saveTopicText($web, $topic, $text, $ignorePermissions, $dontNotify) -> $oopsUrl=
    * =setTopicEditLock($web, $topic, $lock) -> $oopsUrl=
 
----+++ twiki-20040902-release (Cairo)
+---+++ TWiki-2004-09-02 (Cairo Release)
 $TWiki::Plugins::VERSION 1.025
 ---++++ EmptyPlugin.pm
    * =afterCommonTagsHandler($text, $topic, $web)=
@@ -3172,7 +3169,7 @@ $TWiki::Plugins::VERSION 1.025
    * =getPluginPreferencesValue($key) -> $value=
    * =getRegularExpression($regexName) -> $pattern=
 
----+++ TWikiRelease04x00x00 (Dakar)
+---+++ TWiki-4.0.0 (Dakar Release)
 $TWiki::Plugins::VERSION 1.1
 ---++++ EmptyPlugin.pm
    * =mergeHandler($diff, $old, $new, \%info) -> $text=
@@ -3221,21 +3218,21 @@ $TWiki::Plugins::VERSION 1.1
    * <strike> =getPublicWebList() -> @webs= </strike>
    * <strike> =getScriptUrlPath() -> $path= </strike>
 
----+++ TWikiRelease04x00x01
+---+++ TWiki-4.0.1 (Dakar Patch Release)
 $TWiki::Plugins::VERSION 1.1
 ---++++ EmptyPlugin.pm
    * =afterSaveHandler($text, $topic, $web, $error, $meta)=
    * =beforeSaveHandler($text, $topic, $web, $meta)=
 ---++++ Func.pm
 
----+++ TWikiRelease04x01x00
+---+++ TWiki-4.1 (Edinburgh Release)
 $TWiki::Plugins::VERSION 1.11
 ---++++ EmptyPlugin.pm
    * =afterRenameHandler($oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment)=
 ---++++ Func.pm
 No changes
 
----+++ TWikiRelease04x02x00
+---+++ TWiki-4.2 (Freetown Release)
 $TWiki::Plugins::VERSION 1.2
 ---++++ EmptyPlugin.pm
    * =afterCommonTagsHandler($text, $topic, $web, $meta)=
@@ -3266,3 +3263,6 @@ $TWiki::Plugins::VERSION 1.2
    * <strike> =permissionsSet($web) -> $boolean= </strike>
    * <strike> =getOopsUrl( $web, $topic, $template, $param1, $param2, $param3, $param4 ) -> $url= </strike>
 
+=cut
+
+1;
