@@ -1,9 +1,8 @@
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2007 TWiki Contributors. All Rights Reserved.
+# Copyright (C) 1999-2010 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
-# this distribution.
-# NOTE: Please extend that file, not this notice.
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # Additional copyrights apply to some or all of the code in this
 # file as follows:
