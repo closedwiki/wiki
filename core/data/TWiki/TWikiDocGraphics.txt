@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273715477" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274421075" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. Doc graphics are defined at %CALC{$SET(icontopics, $LISTIF($NOT($EXACT($item,)), $LISTMAP($IF($EXISTS($item), [[$item]], ), %ICONTOPIC%)))$GET(icontopics)}%.
@@ -279,6 +279,8 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{go_forward}% | =%<nop>ICON{go_forward}%= | Go forward | gif | 16x16 |  |
 | %ICON{go_ff}% | =%<nop>ICON{go_ff}%= | Go fast forward | gif | 16x16 |  |
 | %ICON{go_end}% | =%<nop>ICON{go_end}%= | Go to end | gif | 16x16 |  |
+| %ICON{menu-down}% | =%<nop>ICON{menu-down}%= | Menu dropdown | gif | 14x16 |  |
+| %ICON{menu-right}% | =%<nop>ICON{menu-right}%= | Menu arrow right | gif | 10x16 |  |
 
 ---+++ %ICON{toggleclose}% Interface icons
 
@@ -641,6 +643,8 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="mechanics.gif" attr="h" comment="" date="1260335693" path="mechanics.gif" size="970" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="meeting.gif" attr="h" comment="" date="1196729838" path="meeting.gif" size="958" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="megaphone.gif" attr="h" comment="" date="1196729838" path="megaphone.gif" size="995" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="menu-down.gif" attr="h" comment="" date="1274419106" path="menu-down.gif" size="113" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="menu-right.gif" attr="h" comment="" date="1274419106" path="menu-right.gif" size="110" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="minus.gif" attr="h" comment="" date="1169565034" path="minus.gif" size="83" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="mobile.gif" attr="h" comment="" date="1193349525" path="mobile.gif" size="333" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="monospace.gif" attr="h" comment="" date="1169565034" path="monospace.gif" size="145" user="TWikiContributor" version=""}%
