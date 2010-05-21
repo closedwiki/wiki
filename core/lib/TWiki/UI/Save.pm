@@ -526,7 +526,7 @@ WARN
             'accessdenied',
             def => 'only_group',
             web => $web, topic => $topic,
-            params => [ $TWiki::cfg{SuperAdminGroup} ] );
+            params => [ "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" ] );
     }
 
     #success - redirect to topic view (unless its a checkpoint save)

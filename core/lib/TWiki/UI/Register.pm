@@ -174,7 +174,7 @@ sub bulkRegister {
         throw TWiki::OopsException(
             'accessdenied', def => 'only_group',
             web => $web, topic => $topic,
-            params => [ $TWiki::cfg{SuperAdminGroup} ] );
+            params => [ "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" ] );
     }
 
     #-- Read the topic containing the table of people to be registered
@@ -499,7 +499,7 @@ sub resetPassword {
             throw TWiki::OopsException
               ( 'accessdenied', def => 'only_group',
                 web => $web, topic => $topic,
-                params => [ $TWiki::cfg{SuperAdminGroup} ] );
+                params => [ "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" ] );
         }
     } else {
         # Anyone can reset a single password - important because by definition

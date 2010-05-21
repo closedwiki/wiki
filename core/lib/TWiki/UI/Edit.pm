@@ -171,7 +171,7 @@ sub init_edit {
             'accessdenied',
             def=>'only_group',
             web => $webName, topic => $topic,
-            params => [ $TWiki::cfg{SuperAdminGroup} ] );
+            params => [ "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" ] );
     }
 
 
