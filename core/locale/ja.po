@@ -5,17 +5,17 @@
 #   TWiki:Main/Ken, 05/20 2010
 msgid ""
 msgstr ""
-"Project-Id-Version: TWiki $Id\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2010-05-20 20:00-0800\n"
-"Last-Translator: Ken <ken.yuminaga at gmail.com>;\n"
-"Language-Team: TWiki Japanese &lt;<ken.yuminaga at gmail.com>&gt;\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
-"X-Poedit-Country: JAPAN\n"
-"X-Poedit-SourceCharset: utf-8\n"
+"Project-Id-Version: TWiki $Id"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE"
+"PO-Revision-Date: 2010-05-20 20:00-0800"
+"Last-Translator: Ken <ken.yuminaga at gmail.com>;"
+"Language-Team: TWiki Japanese &lt;<ken.yuminaga at gmail.com>"
+"MIME-Version: 1.0"
+"Content-Type: text/plain; charset=UTF-8"
+"Content-Transfer-Encoding: 8bit"
+"Report-Msgid-Bugs-To: "
+"X-Poedit-Country: JAPAN"
+"X-Poedit-SourceCharset: utf-8"
 
 #: ../core/data/TWiki/TWikiPreferences.txt:318
 msgid "$text (this topic does not yet exist; you can create it)"
@@ -3793,11 +3793,11 @@ msgstr ""
 #: ../core/templates/viewtopicactionbuttons.tmpl:14
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
 msgstr ""
-"title='画像又はファイルをこのトピックに添付します' accesskey='a'&gt;添付"
+"title='画像又はファイルをこのトピックに添付します' accesskey='a'>添付"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:4
 msgid "title='Create new topic' accesskey='c'>&Create"
-msgstr "title='新しいトピックを作成します' accesskey='c'&gt;作成"
+msgstr "title='新しいトピックを作成します' accesskey='c'>作成"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:17
 msgid ""
@@ -3805,7 +3805,7 @@ msgid ""
 "revisions' accesskey='m'>&More topic actions"
 msgstr ""
 "title='このトピックの削除、又はリネーム。親トピックの設定。バージョンの確認、"
-"比較' accesskey='m'&gt;もっと多くのトピックアクション"
+"比較' accesskey='m'>もっと多くのトピックアクション"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:10
 msgid "title='Edit this topic text' accesskey='e'"
@@ -3813,7 +3813,7 @@ msgstr "title='このトピックを編集します' accesskey='e'"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:7
 msgid "title='Edit this topic text' accesskey='e'>%1 &Edit"
-msgstr "title='このトピックを編集します' accesskey='e'&gt;%1編集"
+msgstr "title='このトピックを編集します' accesskey='e'>%1編集"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:34
 msgid "title='Printable version of this topic' accesskey='p'"
@@ -3823,48 +3823,48 @@ msgstr ""
 #: ../core/templates/viewtopicactionbuttons.tmpl:21
 msgid "title='Printable version of this topic' accesskey='p'>&Print version"
 msgstr ""
-"title='このトピックの印刷用バージョン' accesskey='p'&gt;印刷用バージョン"
+"title='このトピックの印刷用バージョン' accesskey='p'>印刷用バージョン"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:9
 msgid "title='Raw Edit this topic text' accesskey='w'>Ra&w edit"
-msgstr "title='このトピックソースを編集します' accesskey='w'&gt;編集"
+msgstr "title='このトピックソースを編集します' accesskey='w'>編集"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:28
 msgid ""
 "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
 msgstr ""
 "title='全てのウェブからここにリンクするトピックを検索します' "
-"accesskey='l'&gt;全てのウェブ"
+"accesskey='l'>全てのウェブ"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:30
 msgid ""
 "title='Search the %1 Web for topics that link to here' "
 "accesskey='b'>&Backlinks"
 msgstr ""
-"title='%1ウェブからここにリンクするトピックを検索します' accesskey='b'&gt;"
+"title='%1ウェブからここにリンクするトピックを検索します' accesskey='b'>"
 "バックリンク"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:26
 msgid ""
 "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
 msgstr ""
-"title='%1ウェブからここにリンクするトピックを検索します' accesskey='b'&gt;"
+"title='%1ウェブからここにリンクするトピックを検索します' accesskey='b'>"
 "ウェブ"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:38
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
 msgstr ""
-"title='フォーマットされていない元のテキストを確認します' accesskey='r'&gt;確"
+"title='フォーマットされていない元のテキストを確認します' accesskey='r'>確"
 "認"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:11
 msgid "title='View topic' accesskey='v'>&View topic"
-msgstr "title='トピックを確認します' accesskey='v'&gt;トピック確認"
+msgstr "title='トピックを確認します' accesskey='v'>トピック確認"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:33
 #: ../core/templates/viewtopicactionbuttons.tmpl:35
 msgid "title='View total topic history' accesskey='h'>&History"
-msgstr "title=''トピックの履歴を確認します' accesskey='h'&gt;履歴"
+msgstr "title=''トピックの履歴を確認します' accesskey='h'>履歴"
 
 #: ../core/lib/TWiki.pm:4415
 msgid "user list truncated"
@@ -3938,11 +3938,11 @@ msgstr ""
 #~ msgstr " [[%1][ここ]]で差異を確認することができます"
 
 #~ msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
-#~ msgstr "title='このトピックを作成します' accesskey='w'&gt;作成(&WYSIWYG)"
+#~ msgstr "title='このトピックを作成します' accesskey='w'>作成(&WYSIWYG)"
 
 #~ msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
 #~ msgstr ""
-#~ "title='このトピックのテキストを編集します' accesskey='w'&gt;WYSIWYG "
+#~ "title='このトピックのテキストを編集します' accesskey='w'>WYSIWYG "
 
 #~ msgid "value='Checkpoint' accesskey='k'"
 #~ msgstr "value='チェックポイント' accesskey='k'"
