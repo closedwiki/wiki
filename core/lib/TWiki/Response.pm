@@ -5,6 +5,8 @@
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
+# Partial Copyright (C) 2008-2009  Foswiki Contributors
+#
 # This module is based/inspired on Catalyst framework, and also CGI,
 # CGI::Simple and HTTP::Headers modules. Refer to
 #
@@ -342,6 +344,43 @@ sub redirect {
     push @headers, '-Status' => ( $status || '302 Found' );
     push @headers, '-Cookie' => $cookies if $cookies;
     $this->header(@headers);
+}
+
+=begin twiki
+
+---++ ObjectMethod  setDefaultHeaders ( {$name =>$value, ...} ) 
+
+Sets the header, this does not modify the existing key=>value from  
+$this->{headers}. Sets only new values.
+ 
+
+=cut
+
+sub setDefaultHeaders {
+    my ( $this, $hopt ) = @_;
+    return unless $hopt && keys %$hopt;
+
+
+    while ( my ( $hdr, $value ) = each %$hopt ) {
+        $hdr =~ s/(?:^|(?<=-))(.)([^-]*)/\u$1\L$2\E/g;
+        unless ( exists $this->{headers}->{$hdr} ) {
+            if ( $hdr eq 'Status' ) {
+                $this->status($hdr);
+            }
+            elsif ( $hdr eq 'Expires' ) {
+                $value = expires( $value, 'http' );
+            }
+            elsif ( $hdr eq 'Set-Cookie' ) {
+                my @cookies = ref($value) eq 'ARRAY' ? @$value : ($value);
+                $this->cookies( \@cookies );
+            }
+            $this->{headers}->{$hdr} = $value;
+        }
+    }
+    $this->{headers}{Date} = expires( 0, 'http' )
+      if !exists $this->{headers}{Date}
+          && (   defined $this->{headers}{Expires}
+              || defined $this->{headers}{'Set-Cookie'} );
 }
 
 1;

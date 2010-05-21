@@ -720,7 +720,7 @@ sub generateHTTPHeaders {
     # add cookie(s)
     $this->{users}->{loginManager}->modifyHeader( $hopts );
 
-    $this->{response}->headers( $hopts );
+    $this->{response}->setDefaultHeaders( $hopts );
 }
 
 =pod
