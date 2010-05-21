@@ -2,12 +2,12 @@
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005-2007 Peter Thoeny, and TWiki Contributors.
 # Translators:
-#   TWiki:Main/KenYuminaga, 2008
+#   TWiki:Main/Ken, 05/20 2010
 msgid ""
 msgstr ""
 "Project-Id-Version: TWiki $Id\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2008-08-03 19:36-0800\n"
+"PO-Revision-Date: 2010-05-20 20:00-0800\n"
 "Last-Translator: Ken <ken.yuminaga at gmail.com>;\n"
 "Language-Team: TWiki Japanese &lt;<ken.yuminaga at gmail.com>&gt;\n"
 "MIME-Version: 1.0\n"
@@ -18,9 +18,8 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: ../core/data/TWiki/TWikiPreferences.txt:318
-#, fuzzy
 msgid "$text (this topic does not yet exist; you can create it)"
-msgstr "注意：このトピックは存在しません"
+msgstr "注意：このトピックは存在しません。あなたはこのトピックを作成することができます"
 
 #. ($days)
 #: ../core/lib/TWiki/Time.pm:292
@@ -189,7 +188,6 @@ msgid "%1 topic does not exist"
 msgstr "%1 トピックは存在しません"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:24
-#, fuzzy
 msgid "&Attach"
 msgstr "ファイルを添付します"
 
@@ -198,7 +196,6 @@ msgid "&Cancel"
 msgstr "キャンセル"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:12
-#, fuzzy
 msgid "&Edit"
 msgstr "編集"
 
@@ -349,7 +346,7 @@ msgstr "(そうしないと、%1 ウェブのみ検索されます)"
 #: ../PatternSkin/templates/view.pattern.tmpl:45
 #: ../TWikiNetSkin/templates/view.twikinet.tmpl:23
 msgid "(raw view)"
-msgstr "(元のビュー)"
+msgstr "(元データビュー)"
 
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:13
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:7
@@ -593,9 +590,8 @@ msgid "Access keys"
 msgstr "アクセスキー"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:19
-#, fuzzy
 msgid "Account"
-msgstr "変更"
+msgstr "アカウント"
 
 #: ../core/templates/attachtables.tmpl:37
 #: ../core/templates/attachtables.tmpl:4 ../core/templates/changeform.tmpl:10
@@ -706,9 +702,8 @@ msgid "Attach"
 msgstr "ファイルを添付します"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:26
-#, fuzzy
 msgid "Attach file or image"
-msgstr "ファイルを %1に添付します"
+msgstr "ファイル又は画像を添付します"
 
 #: ../PatternSkin/templates/attachnew.pattern.tmpl:4
 #: ../core/templates/attachnew.tmpl:4
@@ -1027,9 +1022,8 @@ msgid "Compare revisions"
 msgstr "バージョン比較"
 
 #: ../core/templates/messages.tmpl:199
-#, fuzzy
 msgid "Confirm registration"
-msgstr "登録"
+msgstr "登録します"
 
 #: ../core/templates/renameconfirm.tmpl:7
 #: ../core/templates/renamewebconfirm.tmpl:7
@@ -1429,9 +1423,8 @@ msgid "Errors"
 msgstr "エラー"
 
 #: ../core/templates/messages.tmpl:411
-#, fuzzy
 msgid "Example:"
-msgstr "良い例:"
+msgstr "例:"
 
 #: ../core/templates/messages.tmpl:463
 msgid "Failed to include URL %1"
@@ -1449,9 +1442,8 @@ msgid "File has been uploaded with different name"
 msgstr "ファイルは既に他の名称でアップロードされました"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:21
-#, fuzzy
 msgid "Find backlinks"
-msgstr "バックリンク"
+msgstr "バックリンクを検索します"
 
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:18
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:20
@@ -1480,9 +1472,8 @@ msgid "Forgotten your password?"
 msgstr "パスワードを忘れましたか？"
 
 #: ../PatternSkin/data/TWiki/PatternSkinCustomization.txt:432
-#, fuzzy
 msgid "Form"
-msgstr "又は"
+msgstr "フォーム"
 
 #: ../core/templates/messages.tmpl:319
 msgid "Form Definition %1 missing"
@@ -1572,7 +1563,6 @@ msgid "Hierarchical Webs is currently disabled, you cannot create Nested webs."
 msgstr ""
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:22
-#, fuzzy
 msgid "History"
 msgstr "履歴"
 
@@ -2292,9 +2282,8 @@ msgid "Raw edit"
 msgstr "ソースを編集"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:19
-#, fuzzy
 msgid "Raw view"
-msgstr "(元のビュー)"
+msgstr "(Rawデータを表示)"
 
 #: ../core/templates/registernotify.tmpl:10
 msgid ""
@@ -2313,9 +2302,8 @@ msgid "Read on"
 msgstr "読みます"
 
 #: ../core/data/Trash/WebHome.txt:10
-#, fuzzy
 msgid "Recently Deleted Topics"
-msgstr "最新変更されたトピック"
+msgstr "最近削除されたトピック"
 
 #: ../core/data/Sandbox/WebHome.txt:21 ../core/data/TWiki/WebSearch.txt:46
 #: ../core/data/TWiki/WebSearchAdvanced.txt:88
@@ -2861,9 +2849,8 @@ msgid "The %1 topic already exists"
 msgstr "トピック%1は既に存在しています"
 
 #: ../core/data/TWiki/RenameWeb.txt:3
-#, fuzzy
 msgid "The %1 web cannot be renamed."
-msgstr "新ウェブは既に作成されています"
+msgstr "%1ウェブはリネームできません"
 
 #: ../core/templates/messages.tmpl:485
 msgid "The %1 web does not exist"
@@ -3284,9 +3271,8 @@ msgid "User Reference"
 msgstr "ユーザープロパティ"
 
 #: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:12
-#, fuzzy
 msgid "User registration"
-msgstr "登録"
+msgstr "ユーザ登録"
 
 #: ../PatternSkin/data/TWiki/PatternSkinElements.txt:182
 #: ../core/templates/login.tmpl:42
@@ -3522,7 +3508,7 @@ msgstr "重複登録できません。%1は既に登録されました"
 #: ../core/templates/messages.tmpl:142 ../core/templates/messages.tmpl:151
 #: ../core/templates/messages.tmpl:230 ../core/templates/messages.tmpl:239
 msgid "You have *not* been registered."
-msgstr "*ま *登録していません"
+msgstr "*ま *登録していません"
 
 #: ../core/templates/messages.tmpl:357
 msgid ""
@@ -3649,9 +3635,8 @@ msgstr ""
 "[3のスペース] * [スペース] Set [スペース] VARIABLENNAME [スペース] = [値]"
 
 #: ../core/data/TWiki/RenameWeb.txt:3
-#, fuzzy
 msgid "__Note:__"
-msgstr "注意__:"
+msgstr "__注意:__"
 
 # please enter the name of your language here (written in the native language):
 #: ../core/lib/TWiki/I18N.pm:292
@@ -3801,10 +3786,9 @@ msgid "scans links in _all public webs_"
 msgstr "全てのパブリックウェブの中のリンクを検索します"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:22
-#, fuzzy
 msgid "title='Attach an image or document to this topic' accesskey='a'"
 msgstr ""
-"title='画像又はファイルをこのトピックに添付します' accesskey='a'&gt;添付"
+"title='画像又はファイルをこのトピックに添付します' accesskey='a'"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:14
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
@@ -3824,20 +3808,17 @@ msgstr ""
 "比較' accesskey='m'&gt;もっと多くのトピックアクション"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:10
-#, fuzzy
 msgid "title='Edit this topic text' accesskey='e'"
-msgstr "title='このトピックを編集します' accesskey='e'&gt;編集"
+msgstr "title='このトピックを編集します' accesskey='e'"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:7
-#, fuzzy
 msgid "title='Edit this topic text' accesskey='e'>%1 &Edit"
-msgstr "title='このトピックを編集します' accesskey='e'&gt;編集"
+msgstr "title='このトピックを編集します' accesskey='e'&gt;%1編集"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:34
-#, fuzzy
 msgid "title='Printable version of this topic' accesskey='p'"
 msgstr ""
-"title='このトピックの印刷用バージョン' accesskey='p'&gt;印刷用バージョン"
+"title='このトピックの印刷用バージョン' accesskey='p'"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:21
 msgid "title='Printable version of this topic' accesskey='p'>&Print version"
