@@ -44,7 +44,7 @@ msgstr "%*(%1,秒)"
 #: ../core/templates/oopsgeneric.tmpl:12 ../core/templates/oopsgeneric.tmpl:14
 #: ../core/templates/oopsgeneric.tmpl:16 ../core/templates/oopsgeneric.tmpl:7
 msgid "%1"
-msgstr ""
+msgstr "%1"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:116
 #: ../core/templates/registernotify.tmpl:3
@@ -210,7 +210,7 @@ msgstr "履歴"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:36
 msgid "&Print version"
-msgstr ""
+msgstr "印刷"
 
 #: ../core/templates/messages.tmpl:262
 msgid "'%1' is not a valid %2 "
@@ -222,7 +222,7 @@ msgstr "'新規トピックス作成'ページが移動されました"
 
 #: ../core/templates/login.tmpl:12
 msgid "(%1 login)"
-msgstr ""
+msgstr "(%1 ログイン)"
 
 #: ../PatternSkin/templates/rdiff.pattern.tmpl:6
 #: ../core/templates/rdiff.tmpl:4
@@ -231,11 +231,11 @@ msgstr "(%1 対 %2)"
 
 #: ../core/data/TWiki/WebSearchAdvanced.txt:75
 msgid "(=all= to show all topics)"
-msgstr "(=全て= 全てのトピックを表示します)"
+msgstr "(=all= 全てのトピックを表示します)"
 
 #: ../core/data/Sandbox/WebHome.txt:9
 msgid "(Use a topic name in TWiki.WikiNotation)"
-msgstr "( TWiki.WikiNotationの中で一つのトピック名を使用します)"
+msgstr "( TWiki.WikiNotation の中で一つのトピック名を使用します)"
 
 #: ../core/templates/messages.tmpl:156
 msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
@@ -260,7 +260,7 @@ msgstr "(全てのウェブの中のバックリンク)"
 
 #: ../core/templates/searchbookview.tmpl:3
 msgid "(book view)"
-msgstr ""
+msgstr "(ブックビュウ)"
 
 #: ../core/templates/changeform.tmpl:4
 msgid "(change form)"
@@ -346,7 +346,7 @@ msgstr "(そうしないと、%1 ウェブのみ検索されます)"
 #: ../PatternSkin/templates/view.pattern.tmpl:45
 #: ../TWikiNetSkin/templates/view.twikinet.tmpl:23
 msgid "(raw view)"
-msgstr "(元データビュー)"
+msgstr "(生確認)"
 
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:13
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:7
@@ -494,7 +494,7 @@ msgstr ""
 
 #: ../core/lib/TWiki/I18N/Extract.pm:104
 msgid "..."
-msgstr "…"
+msgstr "..."
 
 #: ../core/templates/oopsmore.tmpl:14
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
@@ -532,7 +532,7 @@ msgstr ""
 
 #: ../core/templates/messages.tmpl:354
 msgid "A =.txt= extension is appended to some filenames for security reasons"
-msgstr "安全のため、複数のファイルに=.txt=拡張子をつけました"
+msgstr "安全のため、複数のファイルに =.txt= 拡張子をつけました"
 
 #: ../core/templates/messages.tmpl:123
 msgid ""
@@ -791,11 +791,11 @@ msgstr "可能なフォームテンプレート"
 
 #: ../core/data/TWiki/WebTemplateTopics.txt:6
 msgid "Available templates in %1 Web:"
-msgstr ""
+msgstr "%1 ウェブに存在するテンプレート:"
 
 #: ../PatternSkin/templates/twiki.pattern.tmpl:9
 msgid "Back to topic"
-msgstr "トピックに戻ります"
+msgstr "トピックに戻る"
 
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:17
 #: ../core/templates/oopsmore.tmpl:37
@@ -1039,7 +1039,7 @@ msgstr ""
 #: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:5
 #: ../core/templates/oopsleaseconflict.tmpl:6
 msgid "Conflict"
-msgstr "一致しません"
+msgstr "コンフリクト"
 
 #: ../core/templates/messages.tmpl:473 ../core/templates/messages.tmpl:479
 #: ../core/templates/messages.tmpl:500 ../core/templates/messages.tmpl:511
@@ -1091,7 +1091,7 @@ msgstr "作成 '%1'"
 
 #: ../core/data/Sandbox/WebHome.txt:18
 msgid "Create <nop>TestTopic###"
-msgstr "<nop>テストトピック###を作成します"
+msgstr "<nop>TestTopic###を作成します"
 
 #: ../PatternSkin/data/Main/WebLeftBar.txt:5
 #: ../PatternSkin/data/Sandbox/WebLeftBar.txt:5
@@ -1222,7 +1222,7 @@ msgstr "%1 のスペルは正しいですか？"
 
 #: ../core/data/TWiki/VarMAKETEXT.txt:19
 msgid "Did you want to [[%1][reset %2's password]]?"
-msgstr " [[%1][%2のパスワード]をリセット]したいですか?"
+msgstr " [[%1][%2のパスワードをリセット]]したいですか?"
 
 #: ../PatternSkin/templates/rdiff.pattern.tmpl:14
 msgid "Difference:"
@@ -1239,7 +1239,7 @@ msgstr "添付ファイルをテーブルに表示しません"
 
 #: ../core/data/TWiki/WebSearchAdvanced.txt:69
 msgid "Do show:"
-msgstr "Anzeigen:"
+msgstr "表示する："
 
 #: ../core/data/TWiki/WebTopicViewTemplate.txt:26
 msgid "Do you wish to create the topic %1?"
@@ -1316,33 +1316,33 @@ msgstr "強制編集します"
 
 #: ../PatternSkin/templates/edit.pattern.tmpl:16
 msgid "Edit help"
-msgstr "ヘルプを編集します"
+msgstr "編集のヘルプ"
 
 #: ../PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:5
 msgid "Edit personal data"
-msgstr "個人データを編集します"
+msgstr "個人データを編集する"
 
 #: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:176
 msgid "Edit table"
-msgstr "テーブルを編集します"
+msgstr "テーブルを編集する"
 
 #: ../PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
 msgid "Edit text"
-msgstr "テキストを編集します"
+msgstr "テキストを編集する"
 
 #: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:177
 msgid "Edit this table"
-msgstr "このテーブルを編集します"
+msgstr "このテーブルを編集する"
 
 #: ../PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:18
 msgid "Edit this topic text"
-msgstr "このトピックのテキストを編集します"
+msgstr "このトピックのテキストを編集する"
 
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:60
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:27
 #: ../core/templates/oopsmore.tmpl:13
 msgid "Edit topic preference settings"
-msgstr "属性設定を編集します"
+msgstr "属性設定を編集する"
 
 #: ../core/templates/messages.tmpl:297
 msgid ""
@@ -1361,7 +1361,7 @@ msgstr ""
 
 #: ../core/lib/TWiki/UI/Register.pm:432 ../core/lib/TWiki/UI/Register.pm:479
 msgid "Email has been disabled for this TWiki installation"
-msgstr ""
+msgstr "メールは無効にされています"
 
 #: ../PatternSkin/templates/twiki.pattern.tmpl:76
 msgid "Enlarge edit box"
@@ -1568,7 +1568,7 @@ msgstr "履歴"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinHomeMenu.txt:10
 msgid "Home"
-msgstr ""
+msgstr "ホーム"
 
 #: ../core/templates/registernotify.tmpl:16
 msgid "How about attaching your photo?"
@@ -1968,11 +1968,11 @@ msgstr "新ウェブ名が失われました"
 
 #: ../core/templates/messages.tmpl:145
 msgid "New User Registration disabled"
-msgstr ""
+msgstr "ユーザー登録が無効になっています"
 
 #: ../core/templates/messages.tmpl:136
 msgid "New User Registration not supported"
-msgstr ""
+msgstr "ユーザー登録はサポートされていません"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:35
 msgid "New e-mails (space-separated list)"
@@ -2158,11 +2158,11 @@ msgstr "個人設定"
 #: ../core/data/TWiki/WebCreateNewTopicTemplate.txt:56
 #: ../core/templates/oopsmore.tmpl:56
 msgid "Pick from a list"
-msgstr ""
+msgstr "一覧から選択する"
 
 #: ../core/templates/messages.tmpl:125
 msgid "Pick one of the %1."
-msgstr "%1から一つ選択します。"
+msgstr "%1から一つを選択する。"
 
 #: ../core/data/Trash/TrashAttachment.txt:3
 msgid "Placeholder for trashed attachments"
@@ -2247,7 +2247,7 @@ msgstr "設定"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:20
 msgid "Print version"
-msgstr ""
+msgstr "印刷"
 
 #: ../PatternSkin/templates/attach.pattern.tmpl:54
 msgid "Properties"
@@ -2261,7 +2261,7 @@ msgstr ""
 
 #: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:179
 msgid "Quiet save"
-msgstr ""
+msgstr "静的保存"
 
 #: ../PatternSkin/data/Main/WebLeftBar.txt:10
 #: ../PatternSkin/data/Sandbox/WebLeftBar.txt:10
@@ -2274,16 +2274,16 @@ msgstr ""
 #: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:19
 #: ../TopMenuSkin/data/_default/WebTopMenu.txt:16
 msgid "RSS Feed"
-msgstr ""
+msgstr "RSSフィード"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:25
 #: ../core/templates/viewtopicactionbuttons.tmpl:61
 msgid "Raw edit"
-msgstr "ソースを編集"
+msgstr "生編集"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:19
 msgid "Raw view"
-msgstr "(Rawデータを表示)"
+msgstr "生表示"
 
 #: ../core/templates/registernotify.tmpl:10
 msgid ""
@@ -3827,7 +3827,7 @@ msgstr ""
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:9
 msgid "title='Raw Edit this topic text' accesskey='w'>Ra&w edit"
-msgstr "title='このトピックソースを編集します' accesskey='w'>編集"
+msgstr "title='このトピックを生編集します' accesskey='w'>生編集"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:28
 msgid ""
@@ -3854,8 +3854,7 @@ msgstr ""
 #: ../core/templates/viewtopicactionbuttons.tmpl:38
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
 msgstr ""
-"title='フォーマットされていない元のテキストを確認します' accesskey='r'>確"
-"認"
+"title='フォーマットされていない元のテキストを確認します' accesskey='r'>生確認"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:11
 msgid "title='View topic' accesskey='v'>&View topic"
