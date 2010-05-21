@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1271570661" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274422748" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkinDefaultWebTopMenu"}%
 ---+ Topic Menu of !TopMenuSkin
 
@@ -10,18 +10,18 @@ This topic defines the Topic pulldown menu with topic actions, used by the TopMe
    * %META{
  "parent"
  nowebhome="on"
- prefix="<img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-arrow-right.gif' alt='' width='10' height='16' />$n   * "
- separator="$n   * <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-arrow-right.gif' alt='' width='10' height='16' />$n   * "
+ prefix="<img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-right.gif' alt='' width='10' height='16' />$n   * "
+ separator="$n   * <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-right.gif' alt='' width='10' height='16' />$n   * "
  format="<a href='%SCRIPTURL{view}%/$web/$topic' alt='$topic' title='$topic (parent topic)'>P</a>"
 }%
-   * <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-arrow-right.gif' alt='' width='10' height='16' />
-   * <a href="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" alt="%BASETOPIC%" title="%MAKETEXT{"View"}% <nop>%BASETOPIC%">%MAKETEXT{"View"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' /></a>
+   * <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-right.gif' alt='' width='10' height='16' />
+   * <a href="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" alt="%BASETOPIC%" title="%MAKETEXT{"View"}% <nop>%BASETOPIC%">%MAKETEXT{"View"}% %ICON{menu-down}%</a>
       * [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?raw=on][%MAKETEXT{"Raw view"}%]]
       * [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?cover=print][%MAKETEXT{"Print version"}%]]
       * [[%SCRIPTURL{oops}%/%BASEWEB%/%BASETOPIC%?template=backlinksweb][%MAKETEXT{"Find backlinks"}%]]
       * [[%SCRIPTURL{rdiff}%/%BASEWEB%/%BASETOPIC%?type=history][%MAKETEXT{"History"}%]]
       * [[%SCRIPTURL{oops}%/%BASEWEB%/%BASETOPIC%?template=oopsmore][%MAKETEXT{"More topic actions"}%]]
-   * <a href="%SCRIPTURL{edit}%/%BASEWEB%/%BASETOPIC%?t=%SERVERTIME{$epoch}%" alt="%BASETOPIC%" title="%MAKETEXT{"Edit"}% <nop>%BASETOPIC%">%MAKETEXT{"Edit"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' /></a>
+   * <a href="%SCRIPTURL{edit}%/%BASEWEB%/%BASETOPIC%?t=%SERVERTIME{$epoch}%" alt="%BASETOPIC%" title="%MAKETEXT{"Edit"}% <nop>%BASETOPIC%">%MAKETEXT{"Edit"}% %ICON{menu-down}%</a>
       * [[%SCRIPTURL{edit}%/%BASEWEB%/%BASETOPIC%?t=%SERVERTIME{$epoch}%;nowysiwyg=1][%MAKETEXT{"Raw edit"}%]]
       * [[%SCRIPTURL{attach}%/%BASEWEB%/%BASETOPIC%][%MAKETEXT{"Attach file or image"}%]]
       * [[%SCRIPTURL{manage}%/%BASEWEB%/%BASETOPIC%?t=%SERVERTIME{$epoch}%;action=editSettings][%MAKETEXT{"Edit topic preference settings"}%]]

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272773856" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274422573" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -43,7 +43,7 @@ To preserve the "you are here" breadcrumb, it is important to add additional pul
 Example !WebTopBar menu structure with additional "Bugs" pulldown menu:
 <verbatim>
 %INCLUDE{%SYSTEMWEB%.TopMenuSkinHomeMenu}%
-   * [[%BASEWEB%.%HOMETOPIC%][<img src="%ICONURL{web-bg}%" border="0" alt="" width="16" height="16" style="background-color:%WEBBGCOLOR%" /> <nop>%MAKETEXT{"[_1] Web" args="%BASEWEB{format="$current"}%"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
+   * [[%BASEWEB%.%HOMETOPIC%][<img src="%ICONURL{web-bg}%" border="0" alt="" width="16" height="16" style="background-color:%WEBBGCOLOR%" /> <nop>%MAKETEXT{"[_1] Web" args="%BASEWEB{format="$current"}%"}% %ICON{menu-down}%]]
       * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebCreateNewTopic?topicparent=%BASETOPIC%][ %ICON{"newtopic"}% %MAKETEXT{"Create New Topic"}%]]
       * [[%BASEWEB%.WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]
       * [[%BASEWEB%.WebSearch][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
@@ -53,7 +53,7 @@ Example !WebTopBar menu structure with additional "Bugs" pulldown menu:
       * [[%BASEWEB%.WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]
       * [[%BASEWEB%.WebPreferences][ %ICON{"wrench"}% %MAKETEXT{"Preferences"}%]]
 %INCLUDE{%SYSTEMWEB%.TopMenuSkinTopicMenu}%
-   * [[BugTracker][%ICON{bug}% Bugs <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
+   * [[BugTracker][%ICON{bug}% Bugs %ICON{menu-down}%]]
       * [[NewReport][Create bug report]]
       * [[OpenBugs][Open bugs]]
       * [[ConfirmedBugs][Confirmed bugs]]
@@ -74,10 +74,10 @@ A menu-bar can be added anywhere in a topic:
 Example:<verbatim>
 %INCLUDE{"%SYSTEMWEB%.TopMenuSkin"}%
 <div class="twTopMenuTab">
-   * [[WebHome][%ICON{home}% Home]]
+   * [[WebHome][%ICON{home}% Home %ICON{menu-down}%]]
       * [[WebNotify][Subscribe]]
       * [[WebStatistics][Statistics]]
-   * [[WebSearch][%ICON{searchtopic}% Search]]
+   * [[WebSearch][%ICON{searchtopic}% Search %ICON{menu-down}%]]
       * [[WebSearchAdvanced][Advanced search]]
       * [[SearchHelp][Search help]]
 </div>
@@ -85,15 +85,15 @@ Example:<verbatim>
 
 Renders as:
 <div class="twTopMenuTab">
-   * [[WebHome][%ICON{home}% Home]]
+   * [[WebHome][%ICON{home}% Home %ICON{menu-down}%]]
       * [[WebNotify][Subscribe]]
       * [[WebStatistics][Statistics]]
-   * [[WebSearch][%ICON{searchtopic}% Search]]
+   * [[WebSearch][%ICON{searchtopic}% Search %ICON{menu-down}%]]
       * [[WebSearchAdvanced][Advanced search]]
       * [[SearchHelp][Search help]]
 </div>
 
-__NOTE:__ The pulldown menus only work if the TWiki:Plugins/JQueryPlugin is installed.
+__NOTE:__ The pulldown menus only work if the TWiki:Plugins/JQueryPlugin is installed and enabled.
 
 ---++ CSS and !JavaScript
 
@@ -209,6 +209,7 @@ document.onclick = twTopMenuClose;
    * *Note* on using this skin on TWiki 4.2 and 4.3:
       * This skin depends on TWiki 5.0 specific feature =%<nop>WEB{format="$current"}%= to show the current web in the Web menu. To use this skin on TWiki 4.2 or 4.3, remove the parameter from the WEB variable (to show only =%<nop>WEB%=), or apply patch TWiki:Item6424 (to add the format parameter feature).
       * Apply patch TWikibug:Item6430 so that Edit and Attach buttons point to the current topic instead of !TopMenuSkinTopBar.
+      * Attach %ATTACHURL%/menu-down.gif and %ATTACHURL%/menu-right.gif to %SYSTEMWEB%.TWikiDocGraphics.
       * If you have more than 30 webs, apply TWikibug:Item6429 to limit the number of webs shown in the "Home" menu.
 
 ---++ Creating your own look
@@ -228,8 +229,9 @@ The !TopMenuSkin disables the sidebar and activates a different top bar in =twik
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2010-05-01 (v1.2) |
+|  Skin Version: | 2010-05-20 (v1.3) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-05-20: | TWikibug:Item6455 - Use %<nop>ICON{menu-down}% instead of long img tag in menu-bars |
 |  2010-05-01: | TWikibug:Item6437 - removed loading of jQuery Javascript library to avoid double load issue; require !JQueryPlugin installed and enabled |
 |  2010-04-26: | TWikibug:Item6435 - doc improvements |
 |  2010-04-21: | TWikibug:Item6431 - fix hardcoded reference to !JQueryPlugin CSS and JS; doc improvements |
