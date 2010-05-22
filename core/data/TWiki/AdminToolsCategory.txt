@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273167157" format="1.1" version="$Rev $"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274515741" format="1.1" version="$Rev$"}%
 ---+ Admin tools
 Manage whole <b>TWiki</b> site from one screen.
 
@@ -56,6 +56,4 @@ see also: TWikiPlugins
    * TWiki engine: %WIKIVERSION%
    * Plugin API: %PLUGINVERSION{}%
 
-
-
-__Related Topics:__ AdminDocumentationCategory
+__Related topics:__ %SEARCH{".*Category\b" excludetopic="%TOPIC%" type="regex" scope="topic" nonoise="on" format="[[$topic]]" separator=", "}%
