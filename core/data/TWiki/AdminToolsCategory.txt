@@ -1,23 +1,21 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274515741" format="1.1" version="$Rev$"}%
----+ Admin tools
-Manage whole <b>TWiki</b> site from one screen.
+%META:TOPICINFO{author="TWikiContributor" date="1274517734" format="1.1" version="$Rev$"}%
+---+ Admin Tools
+
+_Manage whole <b>TWiki</b> site from one screen._
 
    * %ICON{help}% Documentation: [[TWikiReferenceManual][TWiki Reference Manual]]
    * %ICON{wrench}% [[TWikiSiteTools][Site Tools]]: [[%SCRIPTURLPATH{"configure"}%][Configure]], %WIKIPREFSTOPIC%, InterWikis, [[TWikiVariables][Variables]], [[TWikiDocGraphics][Doc Graphics]]
    * %ICON{persons}% Manage [[%USERSWEB%.%WIKIUSERSTOPIC%][Users]]: [[TWikiRegistration][Register]], %SYSTEMWEB%.NewUserTemplate, %SYSTEMWEB%.UserForm, ResetPassword, ChangePassword
    * %ICON{indexlist}% Manage Content: [[ManagingTopics][Topics]], [[ManagingWebs][Webs]], YouAreHere
-   * %ICON{folder}% Webs:
-  <table width="100%" border="0" cellspacing="2" bgcolor="#dddddd" cellpadding="3">
-  <tr bgcolor="#99CCCC">
-    <th>Web</th>
-    <th>Tools</th>
-  </tr>
-    %SEARCH{ "^%WEBPREFSTOPIC%$" web="all" scope="topic" type="regex" nototal="on" nosearch="on" format=" <tr bgcolor=\"$pattern(.*?\* Set WEBBGCOLOR\s*=\s*([^\s]*).*)\">$n <td> <b>[[$web.%HOMETOPIC%][$web]]</b>: $pattern(.*?\* Set SITEMAPWHAT\s*=([^\n\r]*).*)</td>$n <td> [[$web.%HOMETOPIC%][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/home.gif\" alt=\"Home\" title=\"Home of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebSearch][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/searchtopic.gif\" alt=\"Search\" title=\"Search <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebChanges][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/recentchanges.gif\" alt=\"Changes\" title=\"Recent changes in the <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%NOTIFYTOPIC%][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/notify.gif\" alt=\"Notification\" title=\"Get notified of changes to the <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%WEBPREFSTOPIC%][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/wrench.gif\" alt=\"Preferences\" title=\"Preferences of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebTopMenu][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/sitetree.gif\" alt=\"Top menu\" title=\"Top menu of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%STATISTICSTOPIC%][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/statistics.gif\" alt=\"Statistics\" title=\"Statistics of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebTopicList][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/indexlist.gif\" alt=\"All topics\" title=\"Bullet list of all topics\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebIndex][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/index.gif\" alt=\"Topic details\" title=\"Index of all topics\" width=\"16\" height=\"16\" border=\"0\">]]</td></tr>" }%
-  <tr bgcolor="#ffffff">
-    <td colspan="2">This table is updated automatically based on <nop>WebPreferences settings of the individual webs.</td>
-  </tr>
-  </table>
+   * %ICON{folder}% Webs: %TABLE{sort="off"}%
+     | *%MAKETEXT{web}%* | *Tools* |
+%WEBLIST{
+ "     | <span style=\"white-space:nowrap; font-weight:700\"><a href=\"%SCRIPTURLPATH{"view"}%/$name/%HOMETOPIC%\"><img src=\"%ICONURL{web-bg}%\" border=\"0\" alt=\"\" width=\"16\" height=\"16\" style=\"background-color:%$markerVAR{\"WEBBGCOLOR\" web=$qname}$marker%\" />&nbsp;<nop>$indentedname</a></span>: %$markerVAR{\"SITEMAPWHAT\" web=$qname}$marker% | [[$name.%HOMETOPIC%][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/home.gif\" alt=\"Home\" title=\"Home of <nop>$name web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$name.WebSearch][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/searchtopic.gif\" alt=\"Search\" title=\"Search <nop>$name web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$name.WebChanges][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/recentchanges.gif\" alt=\"Changes\" title=\"Recent changes in the <nop>$name web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$name.%NOTIFYTOPIC%][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/notify.gif\" alt=\"Notification\" title=\"Get notified of changes to the <nop>$name web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$name.%WEBPREFSTOPIC%][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/wrench.gif\" alt=\"Preferences\" title=\"Preferences of <nop>$name web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$name.WebTopMenu][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/sitetree.gif\" alt=\"Top menu\" title=\"Top menu of <nop>$name web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$name.%STATISTICSTOPIC%][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/statistics.gif\" alt=\"Statistics\" title=\"Statistics of <nop>$name web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$name.WebTopicList][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/indexlist.gif\" alt=\"All topics\" title=\"Bullet list of all topics\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$name.WebIndex][<img src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/index.gif\" alt=\"Topic details\" title=\"Index of all topics\" width=\"16\" height=\"16\" border=\"0\">]] |"
+}%
   <table border="0" cellspacing="2" cellpadding="3">
+  <tr bgcolor="#ffffff">
+    <td colspan="6"> This table is updated automatically based on <nop>WebPreferences settings of the individual webs. </td>
+  </tr>
   <tr bgcolor="#ffffff">
     <td valign="top"> Legend: </td>
     <td valign="top"> &nbsp;</td>
@@ -45,14 +43,18 @@ Manage whole <b>TWiki</b> site from one screen.
   </table>
 
 ---++ All Admin Tools Category topics
+
 %SEARCH{"%TOPIC%" excludetopics="%TOPIC%" nonoise="on" format="   * $web.$topic: $summary(100, noheader)"}%
 
 ---++ Plugins
+
 Administrators can enable and disable plugins using [[%SCRIPTURLPATH{"configure"}%][configure]].
 %PLUGINDESCRIPTIONS%
-see also: TWikiPlugins
+
+See also: TWikiPlugins
 
 ---++ TWiki Version
+
    * TWiki engine: %WIKIVERSION%
    * Plugin API: %PLUGINVERSION{}%
 
