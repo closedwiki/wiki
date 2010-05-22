@@ -1,9 +1,9 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004 Wind River Systems Inc.
-# Copyright (C) 1999-2006 TWiki Contributors.
-# All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
+# Copyright (C) 2004-2010 Peter Thoeny, peter@thoeny.org and
+# TWiki Contributors. All Rights Reserved. TWiki Contributors are
+# listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ require TWiki::Contrib::MailerContrib::UpData;
 use vars qw ( $VERSION $RELEASE $verbose );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-04-25';
+$RELEASE = '2010-05-21';
 
 # PROTECTED STATIC ensure the contrib is initernally initialised
 sub initContrib {
