@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274422811" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274515909" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkin"}%
 ---+ Top Menu of <nop>%WEB% Web
 
@@ -20,7 +20,7 @@ This topic defines the menu structure of the <nop>%WEB% web, used by the [[TopMe
       * [[%BASEWEB%.WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]
       * [[%BASEWEB%.WebPreferences][ %ICON{"wrench"}% %MAKETEXT{"Preferences"}%]]
 %INCLUDE{%SYSTEMWEB%.TopMenuSkinTopicMenu}%
-   * [[%HOMETOPIC%][%MAKETEXT{"User Reference"}% %ICON{menu-down}%]]
+   * [[UserDocumentationCategory][%MAKETEXT{"User Reference"}% %ICON{menu-down}%]]
       * [[ATasteOfTWiki]]
       * [[TextFormattingRules]]
       * [[TWikiVariables]]
@@ -36,7 +36,7 @@ This topic defines the menu structure of the <nop>%WEB% web, used by the [[TopMe
       * [[TWikiSiteTools]]
       * [[%WIKIPREFSTOPIC%]]
       * [[%WEBPREFSTOPIC%]]
-   * [[%HOMETOPIC%][%MAKETEXT{"Categories"}% %ICON{menu-down}%]]
+   * [[CategoryCategory][%MAKETEXT{"Categories"}% %ICON{menu-down}%]]
       * [[AdminDocumentationCategory][Admin Documentation]]
       * [[AdminToolsCategory][Admin Tools]]
       * [[DeveloperDocumentationCategory][Developer Doc]]
