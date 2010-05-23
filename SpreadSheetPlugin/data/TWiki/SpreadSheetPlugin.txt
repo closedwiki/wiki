@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273987580" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274592253" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -628,7 +628,7 @@ Conventions for Syntax:
 
 #FuncTIME
 ---+++ TIME( text ) -- convert a date string into a serialized date number
-   * Serialized date is seconds since the Epoch, e.g. midnight, 01 Jan 1970. Current time is taken if the date string is empty. Supported date formats: =31 Dec 2009=; =31 Dec 2009 GMT=; =31 Dec 09=; =31-Dec-2009=; =31/Dec/2009=; =2009/12/31=; =2009-12-31=; =2009/12/31=; =2009/12/31 23:59=; =2009/12/31 - 23:59=; =2009-12-31-23-59=; =2009/12/31 - 23:59:59=; =2009.12.31.23.59.59=. Date is assumed to be server time; add =GMT= to indicate Greenwich time zone
+   * Serialized date is seconds since the Epoch, e.g. midnight, 01 Jan 1970. Current time is taken if the date string is empty. Supported date formats: =31 Dec 2009=; =31 Dec 2009 GMT=; =31 Dec 09=; =31-Dec-2009=; =31/Dec/2009=; =31 Dec 2003 - 23:59=; =31 Dec 2003 - 23:59:59=; =2009/12/31=; =2009-12-31=; =2009/12/31=; =2009/12/31 23:59=; =2009/12/31 - 23:59=; =2009-12-31-23-59=; =2009/12/31 - 23:59:59=; =2009.12.31.23.59.59=. DOY (Day of Year) formats: =DOY2003.365=, =DOY2003.365.23.59=, =DOY2003.365.23.59.59=. Date is assumed to be server time; add =GMT= to indicate Greenwich time zone
    * Syntax: ==$TIME( _text_ )==
    * Example: ==%<nop>CALC{"$TIME(2003/10/14 GMT)"}%== returns ==1066089600==
    * Related: =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncFORMATTIMEDIFF][$FORMATTIMEDIFF()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=, =[[#FuncTODAY][$TODAY()]]=, =[[#FuncWORKINGDAYS][$WORKINGDAYS()]]=
@@ -771,8 +771,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Copyright: | &copy; 2001-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% (2010-05-15) |
-|  2010-05-15: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-05-22: | TWikibug:Item6472 - adding support for DOY in $TIME(), contributed by TWiki:Main/EmanueleCupido |
+|  2010-05-15: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  2010-02-27: | Doc improvements |
 |  2009-11-22: | Enhanced $NOP(): Added $quot replacement for quote character, changed $per replacement with $percnt, contributed by TWiki:Main/HorstEsser |
 |  09 May 2009: | Fixed bug in $WORKINGDAYS(): Incorrect number of days if daylight savings time change happens between start date and end date |

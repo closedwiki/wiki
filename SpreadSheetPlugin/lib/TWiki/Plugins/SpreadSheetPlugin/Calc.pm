@@ -28,6 +28,7 @@ package TWiki::Plugins::SpreadSheetPlugin::Calc;
 
 use strict;
 use Time::Local;
+use Time::Local qw( timegm_nocheck timelocal_nocheck );  # Necessary for DOY
 
 
 # =========================
@@ -1203,7 +1204,23 @@ sub _date2serial
 
     my $sec = 0; my $min = 0; my $hour = 0; my $day = 1; my $mon = 0; my $year = 0;
 
-    if( $theText =~ m|([0-9]{1,2})[-\s/]+([A-Z][a-z][a-z])[-\s/]+([0-9]{4})[-\s/]+([0-9]{1,2}):([0-9]{1,2})| ) {
+    # Handle DOY (Day of Year)
+    if( $theText =~ m|([Dd][Oo][Yy])\s*([0-9]{4})[\.]([0-9]{1,3})[\.]([0-9]{1,2})[\.]([0-9]{1,2})[\.]([0-9]{1,2})| ) {
+        # "DOY2003.122.23.15.59", "DOY2003.2.9.3.5.9" i.e. year.ddd.hh.mm.ss
+        $year = $2 - 1900; $day = $3; $hour = $4; $min = $5; $sec = $6;	 # Note: $day is in fact doy
+    } elsif( $theText =~ m|([Dd][Oo][Yy])\s*([0-9]{4})[\.]([0-9]{1,3})[\.]([0-9]{1,2})[\.]([0-9]{1,2})| ) {
+        # "DOY2003.122.23.15", "DOY2003.2.9.3" i.e. year.ddd.hh.mm
+        $year = $2 - 1900; $day = $3; $hour = $4; $min = $5;
+    } elsif( $theText =~ m|([Dd][Oo][Yy])\s*([0-9]{4})[\.]([0-9]{1,3})[\.]([0-9]{1,2})| ) {
+        # "DOY2003.122.23", "DOY2003.2.9" i.e. year.ddd.hh
+        $year = $2 - 1900; $day = $3; $hour = $4;
+    } elsif( $theText =~ m|([Dd][Oo][Yy])\s*([0-9]{4})[\.]([0-9]{1,3})| ) {
+        # "DOY2003.122", "DOY2003.2" i.e. year.ddd
+        $year = $2 - 1900; $day = $3;
+    } elsif ($theText =~ m|([0-9]{1,2})[-\s/]+([A-Z][a-z][a-z])[-\s/]+([0-9]{4})[-\s/]+([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})| ) {
+        # "31 Dec 2003 - 23:59:59", "31-Dec-2003 - 23:59:59", "31 Dec 2003 - 23:59:59 - any suffix"
+        $day = $1; $mon = $mon2num{$2} || 0; $year = $3 - 1900; $hour = $4; $min = $5; $sec = $6;
+    } elsif ($theText =~ m|([0-9]{1,2})[-\s/]+([A-Z][a-z][a-z])[-\s/]+([0-9]{4})[-\s/]+([0-9]{1,2}):([0-9]{1,2})| ) {
         # "31 Dec 2003 - 23:59", "31-Dec-2003 - 23:59", "31 Dec 2003 - 23:59 - any suffix"
         $day = $1; $mon = $mon2num{$2} || 0; $year = $3 - 1900; $hour = $4; $min = $5;
     } elsif( $theText =~ m|([0-9]{1,2})[-\s/]+([A-Z][a-z][a-z])[-\s/]+([0-9]{2,4})| ) {
@@ -1230,14 +1247,26 @@ sub _date2serial
         # unsupported format
         return 0;
     }
-    if( ( $sec > 60 ) || ( $min > 59 ) || ( $hour > 23 ) || ( $day < 1 ) || ( $day > 31 ) || ( $mon > 11 ) ) {
+    if( ( $sec > 60 ) || ( $min > 59 ) || ( $hour > 23 ) || ( $day < 1 ) || ( $day > 365 ) || ( $mon > 11 )) {
         # unsupported, out of range
         return 0;
     }
+
+    # To handle DOY, use timegm_nocheck or timelocal_nocheck that won't check input data range.
+    # This is necessary because with DOY, $day must be able to be greater than 31 and timegm
+    # and timelocal won't allow it. Keep using timegm or timelocal for non-DOY stuff.
     if( $theText =~ /gmt/i ) {
-        return timegm( $sec, $min, $hour, $day, $mon, $year );
+        if( $theText =~ /DOY/i ) {
+            return timegm_nocheck( $sec, $min, $hour, $day, $mon, $year);
+        } else {
+            return timegm( $sec, $min, $hour, $day, $mon, $year );
+        }
     } else {
-        return timelocal( $sec, $min, $hour, $day, $mon, $year );
+        if( $theText =~ /DOY/i ) {
+            return timelocal_nocheck( $sec, $min, $hour, $day, $mon, $year);
+        } else {
+            return timelocal( $sec, $min, $hour, $day, $mon, $year );
+        }
     }
 }
 
