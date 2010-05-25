@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1233237974" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274763999" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarENDSECTION
 ---+++ ENDSECTION{"name"} -- marks the end of a named section within a topic
@@ -11,4 +11,4 @@
      | ="name"= | Name of the section. |
      | =type="..."= | Type of the section being terminated; supported types ="section"=, ="include"=, ="templateonly"=, ="expandvariables"= |
    * If the =STARTSECTION= is named, the corresponding =ENDSECTION= must also be named with the same name. If the =STARTSECTION= specifies a type, then the corresponding =ENDSECTION= must also specify the same type. If the section is unnamed, =ENDSECTION= will match with the nearest unnamed =%<nop>STARTSECTION%= *of the same type* above it. 
-   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSTARTSECTION][STARTSECTION]]
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENDSECTION][ENDSECTION]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarINCLUDE][INCLUDE]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSTARTINCLUDE][STARTINCLUDE]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSTARTSECTION][STARTSECTION]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSTOPSECTION][STOPSECTION]]
