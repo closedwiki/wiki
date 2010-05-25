@@ -8,7 +8,7 @@
      | ="format"= | Format of revision information, see supported variables below | ="r1.$rev - $date - $wikiusername"= |
      | =web="..."= | Name of web | Current web |
      | =topic="..."= | Topic name | Current topic |
-     | =rev="1.5"= | Specific revison number | Latest revision |
+     | =rev="5"= | Specific revison number. Old RCS format ="1.5"= is also supported. | Latest revision |
    * Supported variables in format:
      | *Variable:* | *Unit:* | *Example* |
      | =$web= | Name of web | Current web |
