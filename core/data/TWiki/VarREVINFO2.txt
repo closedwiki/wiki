@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1158898025" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274760357" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarREVINFO2
 ---+++ REVINFO{"format"} -- formatted revision information of topic
@@ -13,7 +13,7 @@
      | *Variable:* | *Unit:* | *Example* |
      | =$web= | Name of web | Current web |
      | =$topic= | Topic name | Current topic |
-     | =$rev= | Revison number. Prefix =r1.= to get the usual =r1.5= format | =5= |
+     | =$rev= | Revison number. Add prefix =r= to get the usual =r5= format | =5= |
      | =$username= | Login username of revision | =jsmith= |
      | =$wikiname= | WikiName of revision | =JohnSmith= |
      | =$wikiusername= | <nop>WikiName with %USERSWEB% web prefix | =%USERSWEB%.JohnSmith= |
