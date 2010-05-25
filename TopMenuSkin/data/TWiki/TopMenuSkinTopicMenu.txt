@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274422748" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274760357" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkinDefaultWebTopMenu"}%
 ---+ Topic Menu of !TopMenuSkin
 
@@ -15,7 +15,7 @@ This topic defines the Topic pulldown menu with topic actions, used by the TopMe
  format="<a href='%SCRIPTURL{view}%/$web/$topic' alt='$topic' title='$topic (parent topic)'>P</a>"
 }%
    * <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-right.gif' alt='' width='10' height='16' />
-   * <a href="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" alt="%BASETOPIC%" title="%MAKETEXT{"View"}% <nop>%BASETOPIC%">%MAKETEXT{"View"}% %ICON{menu-down}%</a>
+   * <a href="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" alt="%BASETOPIC%" title="%MAKETEXT{"Topic"}% <nop>%BASETOPIC% -- %REVINFO{ "<nop>$wikiname - $date" web="%BASEWEB%" topic="%BASETOPIC%" }%">%MAKETEXT{"View"}% %ICON{menu-down}%</a>
       * [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?raw=on][%MAKETEXT{"Raw view"}%]]
       * [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?cover=print][%MAKETEXT{"Print version"}%]]
       * [[%SCRIPTURL{oops}%/%BASEWEB%/%BASETOPIC%?template=backlinksweb][%MAKETEXT{"Find backlinks"}%]]
