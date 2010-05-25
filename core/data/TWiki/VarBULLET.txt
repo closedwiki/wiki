@@ -1,8 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273851326" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274763999" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarBULLET
 
----+++ BULLET -- bullet character
+---+++ BULLET -- bullet sign
+   * Bullet sign, useful to create a bullet list in a TWiki table, such as =| %<nop>BULLET% One %<nop>BB% Two %<nop>BB% Three |=
    * Type: Preference variable - TWikiRenderingShortcut.
    * Syntax: =%<nop>BULLET%=
    * Expands to: %BULLET%
