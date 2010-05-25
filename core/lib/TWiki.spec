@@ -1235,6 +1235,7 @@ $TWiki::cfg{Plugins}{TablePlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{EditTablePlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{SlideShowPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{HeadlinesPlugin}{Enabled} = 1;
+$TWiki::cfg{Plugins}{TagMePlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{TWikiNetSkinPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{TwistyPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{TinyMCEPlugin}{Enabled} = 1;

@@ -16,6 +16,7 @@
 #!include SmiliesPlugin/lib/TWiki/Plugins/SmiliesPlugin
 #!include SpreadSheetPlugin/lib/TWiki/Plugins/SpreadSheetPlugin
 #!include TablePlugin/lib/TWiki/Plugins/TablePlugin
+#!include TagMePlugin/lib/TWiki/Plugins/TagMePlugin
 #!include TipsContrib/lib/TWiki/Contrib/TipsContrib
 #!include TinyMCEPlugin/lib/TWiki/Plugins/TinyMCEPlugin
 #!include TopMenuSkin/lib/TWiki/Contrib/TopMenuSkin
