@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273884549" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274798687" format="1.1" version="$Rev$"}%
 ---+!! TWiki Release 5.0.0 Release Candidate 3 (Helsinki), 2010-05-17
 
 %TOC%
@@ -79,6 +79,10 @@ TODO
 
 <noautolink>
 TODO
+| [[%BUGS%/Item6452][Item6452]] | Edit Table shows EDITTABLE variable after edit session  |
+| [[%BUGS%/Item6461][Item6461]] | issue with redirect subroutine in TWiki dot pm |
+| [[%BUGS%/Item6334][Item6334]] | upgrade tinyMCE to latest version in TinyMCEPlugin (trunk branch)  |
+| [[%BUGS%/Item6453][Item6453]] | Don't use red color in topic action, implies red-links |
 | [[%BUGS%/Item6454][Item6454]] | Configure script fails if twiki/lib in non-standard location |
 </noautolink>
 
