@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273993921" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274846162" format="1.1" version="Rev$"}%
 ---+!! Edit Table Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -216,8 +216,9 @@ __Note:__ This is a pre-installed TWiki plugin. You should not need to install t
 |  Plugin Author: | Arthur Clemens, TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2008 Arthur Clemens;%BR% &copy; 2002-2010 TWiki:Main/PeterThoeny, [[http://www.twiki.net/][Twiki, Inc.]];%BR% &copy; 2002-2010 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 5.0 (2010-05-16) |
+|  Plugin Version: | 5.1 (2010-05-25) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-05-25: | 5.1: TWikibug:Item6324 - Fix for editing a table removing EDITCELL from another table - patch by TWiki:Main/NickThorpe |
 |  2010-05-16: | 5.0: TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  17 Apr 2009: | 4.9.1: Save of table can only be done with http POST method, not GET |
 |  01 Nov 2008: | 4.9: Arthur Clemens: Fixed rendering of =verbatim= blocks when editing. Added parameter =buttonrow="top"= to allow the buttons to be positioned at the top of the table. |

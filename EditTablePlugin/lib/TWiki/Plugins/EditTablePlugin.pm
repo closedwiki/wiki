@@ -29,7 +29,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '5.0';
+$RELEASE = '5.1';
 
 $encodeStart = '--EditTableEncodeStart--';
 $encodeEnd   = '--EditTableEncodeEnd--';
