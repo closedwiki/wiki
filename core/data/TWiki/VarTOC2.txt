@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1240608917" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274835505" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarTOC2
 ---+++ TOC{"Topic"} -- table of contents
-   * Table of Contents. Shows a TOC that is generated automatically based on headings of a topic. Headings in WikiSyntax (="---++ text"=) and HTML (="&lt;h2&gt;text&lt;/h2&gt;"=) are taken into account. Any heading text after ="!!"= is excluded from the TOC; for example, write ="---+!! text"= if you do not want to list a header in the TOC
+   * Table of Contents. Shows a TOC that is generated automatically based on headings of a topic. Headings in WikiSyntax (="---++ text"=) and HTML (="&lt;h2&gt;text&lt;/h2&gt;"=) are taken into account. Any heading text after ="!!"= is excluded from the TOC; for example, write ="---+!! text"= if you do _not_ want to list a header in the TOC. An abbreviated heading can be shown in the TOC, such as ="---++ text!! this is excluded from TOC"=.
    * Syntax: =%<nop>TOC{"SomeTopic" ...}%=
    * Supported parameters:
     | *Parameter:* | *Description:* | *Default:* |
