@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274917113" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiFAQ"}%
 ---++ FAQ:
 
@@ -10,7 +10,7 @@ These two questions are answered together because often when you think you want 
 
 You can rename, move and delete topics directly from your browser. Moving lets you transfer a topic from one web to another. The soft delete moves a topic to the special ==Trash== web, where it's hidden but can be "undeleted" with system administrator access. 
 
-Click ==[More]== on the control bar at the bottom of the page you want to change, then choose ==[Rename/move]==, and make your changes to that screen. There's a link that launches to the ManagingTopics reference page in a pop-up window.
+Click ==[More topic actions]== on the control bar at the bottom of the page you want to change, then choose ==[Rename/move topic]==, and make your changes to that screen. There's a link that launches to the ManagingTopics reference page in a pop-up window.
 
 __NOTE:__ The configuration of your site and your own access permissions determine whether you can access these functions.
 
@@ -18,6 +18,4 @@ Note for site administrators: To remove a topic permanently move it to the Trash
 
 __Back to:__ TWikiFAQ
 
-
 __Related Topics:__ UserDocumentationCategory
-

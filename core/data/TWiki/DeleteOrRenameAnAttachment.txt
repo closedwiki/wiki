@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274917205" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiFAQ"}%
 ---++ FAQ:
 
@@ -8,7 +8,7 @@ How do I delete or rename a file attachment?
 
 You can move and delete attachments directly from your browser. Moving lets you transfer an attachment from one topic to another. The soft delete moves an attachment to the special ==TrashAttachment== topic in the ==Trash== web, where it's hidden but can be "undeleted" with system administrator access. Please note that you cannot rename an attachment in the current TWiki release.
 
-Click on ==action== on the file in the FileAttachment table, then in the *Update attachment* screen choose ==[Move attachment]==, and make your changes to that screen.
+Click on ==[action]== on the file in the FileAttachment table, then in the *Update attachment* screen choose ==[Move attachment]==, and make your changes to that screen.
 
 __NOTE:__ The configuration of your site and your own access permissions determine whether you can access these functions.
 
@@ -16,6 +16,4 @@ Note for system administrators: To remove an attachment permanently move it to t
 
 __Back to:__ TWikiFAQ
 
-
 __Related Topics:__ UserDocumentationCategory
-
