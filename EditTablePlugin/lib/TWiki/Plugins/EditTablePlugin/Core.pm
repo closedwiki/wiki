@@ -1372,7 +1372,7 @@ sub handleTableRow {
                 $text .= $element;
             }
         }
-    }
+    }elsif($doSave){$text .= $theRow;}
     else {
         $theRow =~ s/%EDITCELL{(.*?)}%/viewEditCell($1)/geo;
         $text .= $theRow;
