@@ -1,5 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273967610" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274842763" format="1.1" version="$Rev$"}%
 ---+ <nop>%WIKITOOLNAME% Site Map
+
+_TWiki is devided up into webs, also known as workspaces or collaboration spaces._
+
 %STARTINCLUDE%
 %TABLE{ sort="off" }%
 | *TWiki Web* | *Description of Web* | *Links* |
