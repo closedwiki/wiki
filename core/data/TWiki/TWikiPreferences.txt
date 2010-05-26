@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274816858" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274900747" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -368,17 +368,19 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
 
    * User-friendly synonyms for system webs
       * Set DOCWEB = %SYSTEMWEB%
-      
-   * show extra help for !ApacheLogin users for Main.TWikiAdminUser login
+
+   * Show extra help for !ApacheLogin users for %USERSWEB%.TWikiAdminUser login
       * Set ADMINLOGIN = %IF{"{LoginManager} = 'TWiki::LoginManager::ApacheLogin' AND NOT context authenticated"
         then="TWiki is configured using <nop>ApacheLogin, please [[%LOGINURL%][login]] as a normal user first. Then the Admin Login will replace this text"
         else="[[%SCRIPTURL{login}%?sudo=sudo;origurl=%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%][internal admin login]] (use the username suggested and the password set in configure)."}%
 
----++ Access Control Settings
+---++ Security Settings
 
-   * No-one (except admins) should change this topic
+   * Only TWiki administrators are allowed to change this topic:
       * Set ALLOWTOPICCHANGE = %USERSWEB%.TWikiAdminGroup
       * Set ALLOWTOPICRENAME = %USERSWEB%.TWikiAdminGroup
+   * Disable WYSIWYG editor for this preferences topic only:
+      * Local TINYMCEPLUGIN_DISABLE = on
 
 ---++ Creating New Preference Variables
  
@@ -404,7 +406,7 @@ never be attempted set or altered in any preference topic or topic settings.
    * User topics in %USERSWEB% can have optional user preferences.
    * %SYSTEMWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%=.
    * %SYSTEMWEB%.TWikiAccessControl explains how to restrict access by users or groups.
-   * TWiki:Plugins.PreferencesPlugin makes editing preferences a snap.
+   * %SYSTEMWEB%.PreferencesPlugin makes editing preferences a snap.
 
 __Note__: Can't edit?
 [[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on][View raw topic]]
