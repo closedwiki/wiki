@@ -407,11 +407,10 @@ sub parsePageSubscriptions {
 
 sub _subscribeTopic {
     my ( $this, $who, $unsubscribe, $webTopic, $options, $childDepth ) = @_;
-    
+
     my ($web, $topic) = TWiki::Func::normalizeWebTopicName($this->{web}, $webTopic);
-    $this->_alert('warning: ignoring web prefix on '.$webTopic) if ($web ne $this->{web});
-    
-#print STDERR "_subscribeTopic($topic)\n";
+
+    #print STDERR "_subscribeTopic($topic)\n";
     my $opts = 0;
     if ($options) {
 	$opts |= $MailerConst::FULL_TOPIC;

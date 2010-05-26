@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274485908" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274910420" format="1.1" version="$Rev$"}%
 ---+!! Mailer Contrib
 <!--
    Contributions to this TWiki extension are appreciated. Please update the page at
@@ -169,6 +169,7 @@ Many thanks to the following sponsors for supporting this work:
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-05-26: | TWikibug:Item6474 - Fix for mailnotify failing due to non-existing _alert method |
 |  2010-05-21: | TWikibug:Item6433 - more doc fixes |
 |  2010-04-25: | TWikibug:Item6433 - doc fixes, no code changes |
 |  15 Oct 2008 | TWikibug:Item: generalised code to enable TWiki:Codev.SubscribePlugin to delegate parsing to %TOPIC% - TWiki:Main.SvenDowideit |
