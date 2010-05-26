@@ -1,6 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1274763999" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
-#VarINCLUDE
+#VarQUERYPARAMS
 ---+++ QUERYPARAMS -- show paramaters to the query
    * Expands the parameters to the query that was used to display the page.
    * Syntax: =%<nop>QUERYPARAMS{...}%=
