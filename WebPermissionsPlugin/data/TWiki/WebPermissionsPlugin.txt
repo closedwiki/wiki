@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributors" date="1272178101" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1272178101" format="1.1" version="$Rev$"}%
 ---+ Web Permissions Plugin
 <!--
     Contributions to this plugin are appreciated. Please update the plugin page
@@ -6,6 +6,9 @@
     at http://twiki.org/cgi-bin/view/Plugins/WysiwygPluginDev.
     If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents" depth="3"}%
+</div>
 %SHORTDESCRIPTION%
 <!--
    * Set C = <img src="%ATTACHURL%/CHANGE.gif" />
@@ -13,13 +16,17 @@
    * Set Y = <input checked="checked" type="checkbox" />
    * Set N = <input type="checkbox" />
 -->
+
+---++ Introduction
+
 This plugin provides a centralized interface to TWiki permissions.
 
 Web permissions are presented as a matrix that has columns of webs and rows of users. For each web, you can control which users can view or change that web. All user webs, every registered user (except admin users), and every group (except admin groups) are shown in the matrix.
 
 To interactively edit topic permissions, it adds an "Edit topic ACLs" option to the "More Actions" page.
 
----++++ Web Permissions
+---++ Web Permissions
+
 This interface allows you to control 
 <table class="twikiTable">
 <tr><th width="50%"> Viewing </th><th width="50%"> Editing </th></tr>
@@ -53,7 +60,8 @@ This control model is very useful in cases such as a web per project environment
 
 The plugin tries very hard to keep the permissions specification you started with, though it does move them to METADATA.
 
----++++ Topic Permissions
+---++ Topic Permissions
+
 <!--
    * Set LEFT = <img src="%ATTACHURL%/leftarrow.png"  alt="<"/>
    * Set RIGHT = <img src="%ATTACHURL%/rightarrow.png"  alt=">"/>
@@ -113,8 +121,8 @@ The web permissions matrix can be viewed (and edited) by entering =%<nop>WEBPERM
 
 The topic permissions UI can be viewed (and edited) by entering =%<nop>TOPICPERMISSIONS%= anywhere in a topic (or accesing it via the 'More topic actions' page). You have to have write permissions to that topic to view/edit the UI.
 
-
 ---+++ =WEBPERMISSIONS=
+
 The =WEBPERMISSIONS= TWiki variable accepts the following parameters:
    * =repeatheads= - if set to a number, headings will be repeated every this number of rows. This is very useful when you have a lot of users and groups.
    * =webs= - a comma-separated list of webs to show. Default is to show all webs.
@@ -142,11 +150,13 @@ Select the webs, users and groups you want to change permissions for from the li
 <!-- TO HERE -->
 
 ---+++ =TOPICPERMISSIONS=
+
 The topic permissions tool can be viewed (and edited) by entering =%<nop>TOPICPERMISSIONS%= anywhere in a topic. 
 
 To add  an "Edit ACLS" option to the "More topic actions" screen  add =webpermissions= to the front of the SKIN setting (e.g. =Set SKIN=webpermissions,pattern=)
 
 ---++ Plugin Settings
+
 <!--
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = View and edit web permissions
@@ -170,11 +180,11 @@ Many thanks to the following sponsors for supporting this work:
    * Further work supported by [[http://www.spanlink.com/][Spanlink Communications]]
 
 |  Plugin Author: | TWiki:Main.CrawfordCurrie & TWiki:Main.SvenDowideit, http://wikiring.com |
-|  Copyright: | &copy; 2006, Evolved Media, Spanlink Communications and !WikiRing, 2006-2010 TWiki:Main/TWikiContributors |
+|  Copyright: | &copy; 2006, Evolved Media, Spanlink Communications and !WikiRing;%BR% &copy; 2006-2010 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-04-24 | TWikibug:Item6433 - doc improvements |
+|  2010-05-26 | TWikibug:Item6433 - doc improvements |
 |  4 Dec 2007 | TWikibug:Item4901 fixed templates TWikibug:Item5072 added users parameter to select a subset of users/groups in the web permissions interface |
 |  8 Sep 2007 | Updated for TWiki-4.2.0 |
 |  July 2006 | add Topic ACLs user interface via More topic actions - SvenDowideit@WikiRing.com |

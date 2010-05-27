@@ -38,7 +38,7 @@ use Error;
 $pluginName = 'WebPermissionsPlugin';
 
 $VERSION = '$Rev: 160$';
-$RELEASE = '2010-04-24';
+$RELEASE = '2010-05-26';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
