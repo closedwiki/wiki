@@ -45,6 +45,7 @@ sub ui {
     TWiki::Configure::TWikiCfg::save($root, $valuer, $this);
 
     if( $this->{log} && defined( $TWiki::cfg{ConfigurationLogName} )) {
+        $TWiki::cfg{ConfigurationLogName} =~ /(.*)/; $TWiki::cfg{ConfigurationLogName} =$1; #untaintt 
         if (open(F, '>>', $TWiki::cfg{ConfigurationLogName} )) {
             print F $this->{log};
             close(F);
