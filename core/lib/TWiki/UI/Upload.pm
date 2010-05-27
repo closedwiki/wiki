@@ -374,7 +374,41 @@ sub upload {
             );
         }
 
-    }
+    }else { # case of only properties change
+
+           my $filename = $query->param('filename');
+           try {
+                $session->{store}->saveAttachment(
+                    $webName, $topic,
+                    $filename,
+                    $user,
+                    {
+                        dontlog     => !$TWiki::cfg{Log}{upload},
+                        comment     => $fileComment,
+                        hide        => $hideFile,
+                        createlink  => $createLink,
+                        stream      => undef,
+                        filepath    => $filename,
+                        filesize    => '',
+                        filedate    => '',
+                        tmpFilename => '',
+                    }
+                );
+            }
+            catch Error::Simple with {
+                throw TWiki::OopsException(
+                    'attention',
+                    def    => 'save_error',
+                    web    => $webName,
+                    topic  => $topic,
+                    params => [ shift->{-text} ]
+                );
+            };
+
+
+}
+
+
 
  # generate a message useful for those calling this script from the command line
     my $message =
