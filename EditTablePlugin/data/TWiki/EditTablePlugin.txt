@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274846162" format="1.1" version="Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274846162" format="1.1" version="$Rev$"}%
 ---+!! Edit Table Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
