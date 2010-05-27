@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274798687" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributors" date="1274947221" format="1.1" version="$Rev$"}%
 ---+!! TWiki Release 5.0.0 Release Candidate 3 (Helsinki), 2010-05-17
 
 %TOC%
@@ -17,6 +17,8 @@ __Note:__ !JQueryPlugin and !TopMenuSkin are new in TWiki-5.0.0.
 
    * *Security Enhancements*
       * TODO
+      * Run configure only after authentication 
+  
    * *Usability Enhancements*
       * Attach multiple files at once.
       * New TopMenuSkin with pulldown menus for better usability and corporate/modern look&amp;feel.
