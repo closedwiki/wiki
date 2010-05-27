@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273038748" format="1.1" version="Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273038748" format="1.1" version="$Rev$"}%
 ---+!! !SafeWikiPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -8,11 +8,10 @@
 
    * Set SHORTDESCRIPTION = Secure your TWiki so it can't be attacked using cross-scripting (XSS)
 -->
-%SHORTDESCRIPTION%
-
-<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
-%TOC%
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
 </div>
+%SHORTDESCRIPTION%
 
 ---++ What it does
 
@@ -140,7 +139,7 @@ All plugin configuration is done through =configure=.
 |  Copyright: | &copy; 2007-2008 C-Dot Consultants http://c-dot.co.uk; <br /> &copy; 2008-2010, TWiki:TWiki/TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
-|  2010-05-04: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
+|  2010-05-26: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  2008-08-06: | Plugin configuration is done through configure |
 |  2008-01-30: | Initial version |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
