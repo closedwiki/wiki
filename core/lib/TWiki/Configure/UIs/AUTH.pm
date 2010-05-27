@@ -63,11 +63,10 @@ sub ui {
 
     if ($TWiki::cfg{Password} ne '') {
         $output .= CGI::div( { class=>'twikiFormStep' },
-        	CGI::p( CGI::strong('Forgotten your password?' )) .
+        	CGI::p( CGI::strong('Please click on above Save button to Save the Changes' )) .
         	CGI::p(<<'HERE'));
-To reset the password, log in to the server and delete the
-<code>$TWiki::cfg{Password} = '...';</code> line from
-<code>lib/LocalSite.cfg</code>
+If you are not happy with the changes, please click on "Return to configuration" link below and start again.
+
 HERE
     }
 
