@@ -1,7 +1,7 @@
 #
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005 TWiki Contributors. All Rights Reserved.
+# Copyright (C) 2005-2010 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root
 # of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -32,7 +32,7 @@ use vars qw ( $VERSION $RELEASE );
 use Carp;
 
 $VERSION = '$Rev: 10183$';
-$RELEASE = '2010-04-25';
+$RELEASE = '2010-05-26';
 
 BEGIN {
     $SIG{__DIE__} = sub { Carp::confess $_[0] };

@@ -1,13 +1,15 @@
-%META:TOPICINFO{author="TWikiContibutor" date="1272236908" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1272236908" format="1.1" version="$Rev$"}%
 ---+!! <nop>MailInContrib for TWiki
 <!--
-   contributions to this plugin are appreciated. Please update the extension page at
+   Contributions to this extension are appreciated. Please update the extension page at
    http://twiki.org/cgi-bin/view/Plugins/MailInContrib or provide feedback at
    http://twiki.org/cgi-bin/view/Plugins/MailInContribDev.
-   If you are a TWiki contributor please update the plugin in the SVN repository.
+   If you are a TWiki contributor please update the extension in the SVN repository.
 -->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
 %SHORTDESCRIPTION%
-%TOC%
 
 ---++ Introduction
 
@@ -100,7 +102,7 @@ Many thanks to the following sponsors for supporting this work:
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 | Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-04-25 | TWikibug:Item6433 - doc improvements |
+|  2010-05-26 | TWikibug:Item6433 - doc improvements |
 |  1 Aug 2008 | Bugs:Item5450: minor doc fix |
 |  8 Sep 2007 | Bugs:Item4575 various ideas from Dev topic, tested against 4.2.0 |
 |  12412 | Fixed Bugs:Item3334 by removing dependency on !FuncUsersContrib |

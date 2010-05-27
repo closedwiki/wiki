@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContibutor" date="1272237068" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1272237068" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="MailInContrib"}%
 ---+ Templates for the !MailInContrib
 
