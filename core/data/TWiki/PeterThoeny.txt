@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-Peter Thoeny is the founder of TWiki and TWiki.org, is a [[TWiki:Codev.CoreTeam][Core Team]] member, and a TWikiContributor.
+%META:TOPICINFO{author="TWikiContributor" date="1274920117" format="1.1" version="$Rev$"}%
+---+ Peter Thoeny
 
-See home page at TWiki:Main.PeterThoeny
+Founder and BDFL of TWiki and [[http://twiki.org/][TWiki.org]], co-founder and CTO of [[http://www.twiki.net/][Twiki Inc]], inventor of [[TWiki:Codev/StructuredWiki][structured wikis]], co-author of [[http://www.amazon.com/Wikis-Dummies-Computer/dp/0470043997][Wikis for Dummies]] book, speaker.
+
+See home page at TWiki:Main/PeterThoeny
