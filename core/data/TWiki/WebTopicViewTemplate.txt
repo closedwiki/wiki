@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1273876894" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1273876894" format="1.1" version="$Rev$"}%
 ---+ %MAKETEXT{"Note: This topic does not exist"}%
 
 _%MAKETEXT{"The topic [_1] you are trying to access does not exist, yet." args="'%BASETOPIC%'"}%_
