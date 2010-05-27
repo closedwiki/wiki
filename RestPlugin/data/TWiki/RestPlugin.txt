@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1272705187" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1272705187" format="1.1" version="$Rev$"}%
 ---+!! !RestPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -8,11 +8,11 @@
 
    * Set SHORTDESCRIPTION = Full implementation of REST - starting with !FormFields
 -->
-%SHORTDESCRIPTION%
-
-<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
-%TOC%
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px;
+padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
 </div>
+%SHORTDESCRIPTION%
 
 <img src="%PUBURL%/%WEB%/%TOPIC%/formfield_example.png" style="padding:6px" />
 
@@ -75,9 +75,9 @@ You do not need to install anything in the browser to use this extension. The fo
 |  Copyright: | &copy; 2008 SvenDowideit@distributedINFORMATION.com; <br /> &copy; 2008-2010, TWiki:TWiki/TWikiContributor |
 |  Gear Icon | based on eXperience Crystal, by David Christian Berg |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Plugin Version: | 2010-05-01 v1.1 |
+|  Plugin Version: | 2010-05-26 v1.1 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-05-01: | TWikibug:Item6433 - doc improvements |
+|  2010-05-26: | TWikibug:Item6433 - doc improvements |
 |  2008-03-19: | Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/RestPlugin |
