@@ -805,7 +805,7 @@ register</a> as a normal user first and then add your wikiname to the <a rel="no
 HERE
         if ( !$expertsMode ) {
             print <<HERE
- EXPERT options are hidden unless you click the <form><input type="submit" style="background-color:#eef" value="Yes, I've read all the documentation"/><input type="hidden" name="t" value="@{[time()]}" /><input type="hidden" name="expert" value="1" /><input type="hidden" name="cfgAccess" value="$cfgAccess" /></form> button.
+ EXPERT options are hidden unless you click the <form method="post"><input type="submit" style="background-color:#eef" value="Yes, I've read all the documentation"/><input type="hidden" name="t" value="@{[time()]}" /><input type="hidden" name="expert" value="1" /><input type="hidden" name="cfgAccess" value="$cfgAccess" /></form> button.
 HERE
         }
         print <<HERE;
