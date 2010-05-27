@@ -12,3 +12,5 @@ _TWiki is devided up into webs, also known as workspaces or collaboration spaces
 | Legend: | %ICON{home}% Go to the home of the web | %ICON{recentchanges}% See recent changes in the web |
 |^| %ICON{searchtopic}% Search the web | %ICON{notify}% Subscribe to get notified of changes by e-mail |
 %STOPINCLUDE%
+
+__Related topics:__ SiteChanges, TWikiSite, SitePermissions, UserDocumentationCategory
