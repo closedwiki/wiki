@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274515909" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274934250" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkin"}%
 ---+ Top Menu of <nop>%WEB% Web
 
@@ -8,7 +8,7 @@ This topic defines the menu structure of the <nop>%WEB% web, used by the [[TopMe
 %INCLUDE{"%SYSTEMWEB%.TopMenuSkin"}%
 <div class="twTopMenuTab">%STARTINCLUDE%
 %INCLUDE{%SYSTEMWEB%.TopMenuSkinHomeMenu}%
-   * [[%BASEWEB%.%HOMETOPIC%][ <img src="%ICONURL{web-bg}%" border="0" alt="" width="16" height="16" style="background-color:%WEBBGCOLOR%" /> <nop>%MAKETEXT{"[_1] Web" args="%BASEWEB{format="$current"}%"}% %ICON{menu-down}%]]
+   * [[%BASEWEB%.%HOMETOPIC%][ <img src="%ICONURL{web-bg}%" border="0" alt="" width="16" height="16" style="background-color:%WEBBGCOLOR%" /> <nop>%MAKETEXT{"[_1] Web" args="%BASEWEB{format="$current"}%"}% %ICONURL{menu-down}% ]]
       * [[%BASEWEB%.TWikiRegistration][ %ICON{"edittable"}% %MAKETEXT{"User registration"}%]]
       * %IF{"istopic '%USERSWEB%.TWikiUsers'" else=" $percntICON{\"person\"}$percnt $percntMAKETEXT{\"Users\"}$percnt" then="[[$percntUSERSWEB$percnt.TWikiUsers][ $percntICON{\"person\"}$percnt $percntMAKETEXT{\"Users\"}$percnt]]"}%
       * [[%USERSWEB%.TWikiGroups][ %ICON{"group"}% %MAKETEXT{"Groups"}%]]
@@ -20,7 +20,7 @@ This topic defines the menu structure of the <nop>%WEB% web, used by the [[TopMe
       * [[%BASEWEB%.WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]
       * [[%BASEWEB%.WebPreferences][ %ICON{"wrench"}% %MAKETEXT{"Preferences"}%]]
 %INCLUDE{%SYSTEMWEB%.TopMenuSkinTopicMenu}%
-   * [[UserDocumentationCategory][%MAKETEXT{"User Reference"}% %ICON{menu-down}%]]
+   * [[UserDocumentationCategory][%MAKETEXT{"User Reference"}% %ICONURL{menu-down}% ]]
       * [[ATasteOfTWiki]]
       * [[TextFormattingRules]]
       * [[TWikiVariables]]
@@ -29,14 +29,14 @@ This topic defines the menu structure of the <nop>%WEB% web, used by the [[TopMe
       * [[TWikiDocGraphics]]
       * [[TWikiSkinBrowser]]
       * [[InstalledPlugins]]
-   * [[AdminToolsCategory][%MAKETEXT{"Admin Maintenance"}% %ICON{menu-down}%]]
+   * [[AdminToolsCategory][%MAKETEXT{"Admin Maintenance"}% %ICONURL{menu-down}% ]]
       * [[TWikiReferenceManual][Reference Manual]]
       * [[InterWikis]]
       * [[ManagingWebs]]
       * [[TWikiSiteTools]]
       * [[%WIKIPREFSTOPIC%]]
       * [[%WEBPREFSTOPIC%]]
-   * [[CategoryCategory][%MAKETEXT{"Categories"}% %ICON{menu-down}%]]
+   * [[CategoryCategory][%MAKETEXT{"Categories"}% %ICONURL{menu-down}% ]]
       * [[AdminDocumentationCategory][Admin Documentation]]
       * [[AdminToolsCategory][Admin Tools]]
       * [[DeveloperDocumentationCategory][Developer Doc]]

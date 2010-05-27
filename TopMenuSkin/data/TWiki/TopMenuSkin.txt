@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274422573" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274935722" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -6,18 +6,21 @@
    http://twiki.org/cgi-bin/view/Plugins/TopMenuSkinDev.
    If you are a TWiki contributor please update the skin in the SVN repository.
 -->
-The !TopMenuSkin adds pulldown menus to the PatternSkin.
-<div style="float: right; text-align: center; padding: 10px; background-color: #f0f0f8">
-This skin is%BR% sponsored by:%BR%
-[[http://twiki.net/?ref=twiki.org/topmenuskin.logo][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" alt="Twiki, Inc." title="Twiki, Inc." />]]
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
 </div>
-%TOC%
+The !TopMenuSkin adds pulldown menus to the PatternSkin.
 
 ---++ Screen Shot
 
 %SEARCH{ "%TOPIC%" scope="topic" nosearch="on" nototal="on" format="$pattern(.*\| *Screenshot\:[^\|]*\|([^\|]*).*)" }%
 
 ---++ Tob Bar and Menu Structure
+
+<div style="float:right; text-align: center; padding:10px; width:150px; background-color:#EBEEF0">
+This skin is%BR% sponsored by:%BR%
+[[http://twiki.net/?ref=twiki.org/topmenuskin.logo][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" alt="Twiki, Inc." title="Twiki, Inc." />]]
+</div>
 
    * TopMenuSkinTopBar - top bar with menu bar, logo and search boxes (replacing WebTopBar)
 
@@ -60,7 +63,7 @@ Example !WebTopBar menu structure with additional "Bugs" pulldown menu:
       * [[FixedBugs][Fixed bugs]]
 </verbatim>
 
----++ Use !TopMenuSkin Menu-Bar in Topics
+---++ Use Menu-Bars in Topics
 
 A menu-bar can be added anywhere in a topic:
    * Include the "%SYSTEMWEB%.TopMenuSkin" topic - this pulls in the CSS and !JavaScript needed for the menu-bar.
@@ -229,9 +232,10 @@ The !TopMenuSkin disables the sidebar and activates a different top bar in =twik
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2010-05-20 (v1.3) |
+|  Skin Version: | 2010-05-26 (v1.4) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2010-05-20: | TWikibug:Item6455 - Use %<nop>ICON{menu-down}% instead of long img tag in menu-bars |
+|  2010-05-26: | TWikibug:Item6471 - show topic info in tooltip of View menu; show tooltip help in View and Edit menu items; point raw view and print version to actual topic revision |
+|  2010-05-20: | TWikibug:Item6455 - use %<nop>ICON{menu-down}% instead of long img tag in menu-bars |
 |  2010-05-01: | TWikibug:Item6437 - removed loading of jQuery Javascript library to avoid double load issue; require !JQueryPlugin installed and enabled |
 |  2010-04-26: | TWikibug:Item6435 - doc improvements |
 |  2010-04-21: | TWikibug:Item6431 - fix hardcoded reference to !JQueryPlugin CSS and JS; doc improvements |
