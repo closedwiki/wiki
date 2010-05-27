@@ -1,29 +1,92 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273967746" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1274947152" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
 %TOC%
 
-#GeorgetownRelease
----++ TWiki Release 4.3.1 (Georgetown) released on 2009-04-29
+#HelsinkiRelease
+---++ TWiki Release 5.0 (Helsinki) released on 2010-05-28
 
-__New Features and Enhancements of TWiki Release 4.3.1__
+__New Features and Enhancements of TWiki Release 5.0__
 
    * *Security Enhancements*
-      * Reduced risk of CSRF ([[http://en.wikipedia.org/wiki/Cross-site_request_forgery][cross-site request forgery]]) - TWiki:Codev/SecurityAlert-CVE-2009-1339
-   * *Usability Enhancements* 
-      * Use ISO date format by default 
+      * TODO
 
----++ TWiki Release 4.3 (Georgetown) released 2009-03-30
+   * *Usability Enhancements* 
+      * Attach multiple files at once.
+      * New TopMenuSkin with pulldown menus for better usability and corporate/modern look&feel. 
+      * Pre-installed TagMePlugin to tag topics
+      * TODO
+
+   * *Enterprise Collaboration Enhancements*
+      * Pre-installed JQueryPlugin to create client side dynamic functionality
+
+   * *Search Enhancements*
+      * TODO
+
+   * *Miscellaneous Feature Enhancements*
+      * TODO
+
+   * *Plugin Enhancements*
+      * SpreadSheetPlugin: Adding support for DOY in $TIME()
+      * TODO
+
+   * *Bug Fixes*
+      * More than FIXME bug fixes since 4.3.2
+
+#HelsinkiHallOfFame
+__Hall of Fame of TWiki Release 5.0__
+
+Many people have been involved in creating TWiki 5.0. Special thanks go to the most active contributors in the following areas:
+
+   * *Sponsor and facilitator:* TWiki:Main.PeterThoeny
+   * *Testing and bug fixing:* TWiki:Main.SopanShewale, TWiki:Main.PeterThoeny, TWiki:Main.TimotheLitt, TWiki:Main.BarryLake, TWiki:Main.BryanKitts, TWiki:Main.JoenioCosta
+   * *Spec and code:* TWiki:Main.PeterThoeny, TWiki:Main.SopanShewale, TWiki:Main.PeterJones, TWiki:Main.TimotheLitt
+   * *Documentation:* TWiki:Main.PeterThoeny, TWiki:Main.SopanShewale, TWiki:Main.EaCohen
+   * *Release package builds:* TWiki:Main.SopanShewale
+   * *Usability:* TWiki:Main.PeterThoeny
+   * *Translations:* Coordinated by TWiki:Main.PeterThoeny
+      * Bulgarian: TWiki:Main.KrassimirBerov
+      * Chinese (simplified and traditional): TWiki:Main.CheDong
+      * Czech: TWiki:Main.IvanKuncl
+      * Danish: TWiki:Main.SteffenPoulsen
+      * Dutch: TWiki:Main.WoutMertens
+      * Finnish: TWiki:Main.HeikkiToivonen
+      * French: TWiki:Main.BenVoui
+      * German: TWiki:Main.MartinRaabe
+      * Italian: TWiki:Main.MassimoMancini
+      * Japanese: TWiki:Main.KenYuminaga
+      * Korean: TWiki:Main.JustinKim
+      * Polish: TWiki:Main.ZbigniewKulesza
+      * Portuguese: TWiki:Main.CarlinhosCecconi
+      * Russian: TWiki:Main.AndreyTkachenko, TWiki:Main.SergejZnamenskij, TWiki:Main.SergeyJSinx
+      * Spanish: TWiki:Main.SebastianKlus, TWiki:Main.MiguelABayona
+      * Swedish: TWiki:Main.ErikAman
+      * Ukrainian: TWiki:Main.SerhijDubyk
+   * *Marketing:* TWiki:Main.PeterThoeny, TWiki:Main.WillThomas
+   * *Public relations:* TWiki:Main.PeterThoeny, TWiki:Main.WillThomas
+   * *Meetups:* TWiki:Main.PeterThoeny
+   * *TWiki.org wiki champions:* TWiki:Main.SopanShewale, TWiki:Main.PeterThoeny, TWiki:Main.PeterJones, TWiki:Main.IanKluft, TWiki:Main.AaronLWalker, TWiki:Main.DanielRohde <!-- Blog, Codev, Main, Plugins, TWiki webs -->
+   * *Customer support:* TWiki:Main.PeterThoeny, TWiki:Main.SeanCMorgan, TWiki:Main.SopanShewale, TWiki:Main.AaronLWalker <!-- Support web -->
+   * *System administration:* TWiki:Main.ChrisLahti, TWiki:Main.PeterThoeny, TWiki:Main.SopanShewale
+
+If you find an omission please fix it at TWiki:TWiki/TWikiHistory. For the full list of contributors see TWikiContributor.
+
+See more details on the TWiki 5.0 release at TWikiReleaseNotes05x00.
+
+#GeorgetownRelease
+---++ TWiki Release 4.3 (Georgetown) released on 2009-04-29
 
 __New Features and Enhancements of TWiki Release 4.3__
 
    * *Security Enhancements*
+      * Reduced risk of CSRF ([[http://en.wikipedia.org/wiki/Cross-site_request_forgery][cross-site request forgery]]) - TWiki:Codev/SecurityAlert-CVE-2009-1339
       * Reduced risk of XSS ([[http://en.wikipedia.org/wiki/Cross-site_scripting][cross-site scripting]])
       * S/MIME support to sign administrative e-mails
 
    * *Usability Enhancements*
       * Replace question mark links with red-links to point to non-existing topics
+      * Use ISO date format by default 
 
    * *Enterprise Collaboration Enhancements*
       * Pre-installed HeadlinesPlugin to show headline newsfeeds in TWiki topics
