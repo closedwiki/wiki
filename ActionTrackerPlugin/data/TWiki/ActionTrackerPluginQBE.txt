@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272235705" format="1.1" version="$rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1272235705" format="1.1" version="$Rev$"}%
 ---+ Query-by-example action search
 
 <form name="searchaction" action="%SCRIPTURL{view}%/%WEB%/%TOPIC%#QueryByExample">

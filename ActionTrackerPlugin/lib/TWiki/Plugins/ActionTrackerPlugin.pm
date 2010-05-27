@@ -27,7 +27,7 @@ require TWiki::Plugins;
 use vars qw( $VERSION $RELEASE $initialised $SHORTDESCRIPTION );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-04-25';
+$RELEASE = '2010-05-26';
 $SHORTDESCRIPTION = 'Create action items in topics, and get automatic notification of action statuses';
 $initialised = 0;
 

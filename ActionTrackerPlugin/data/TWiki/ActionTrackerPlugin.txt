@@ -408,11 +408,11 @@ Thanks are due to the following sponsors, who have helped make this plugin possi
    * [[http://www.goldstarevents.com/][Goldstar Events]]
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
-|  Copyright: | &copy; 2002-2003 Motorola; &copy; 2004-2008 Crawford Currie http://c-dot.co.uk; &copy; 2008-2010 TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2002-2003 Motorola;%BR% &copy; 2004-2008 Crawford Currie http://c-dot.co.uk;%BR% &copy; 2008-2010 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-04-25 | TWikibug:Item6433 - doc improvements |
+|  2010-05-26 | TWikibug:Item6433 - doc improvements |
 |  7 May 2008 | TWikibug:Item5607: http: was being doubled up on URLs in mail due to a core bug |
 |  13 Apr 2008 | TWikibug:Item4649: merged TWiki:Main.JoaquinBuendia's fix for AJAX updates on IE. TWikibug:Item4760: fixed WYSIWYG editing of topics containing actions TWikibug:Item5531: added simple button option for state changes |
 |  17 Sep 2007 | TWikibug:Item4648 $formfield wasn't working on 4.1.2 |
