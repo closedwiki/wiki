@@ -13,8 +13,6 @@
 
 ---++ Introduction
 
-<div class="twikiBroadcastMessage" style="background-color:#ffc;">WARNING: TWiki-4 only. If you want to use this extension with an earlier version of TWiki, please use [[http://twiki.org/cgi-bin/attach/Plugins/%TOPIC%?filename=%TOPIC%.zip&revInfo=1][revision 7 of the zip]].</div>
-
 Mails for twiki can be pulled out of mail folders using [[CPAN:Email::Folder::POP3][POP3]], [[CPAN:Email::Folder::IMAP][IMAP]], or anything else supported by CPAN:Email::Folder.
 
 The implementation is very simple; a script called =mailincron= is run every so often (usually by =cron= or an equivalent offline job scheduler). The script trawls the mail folders you specify and grabs messages that it recognises as being for the TWiki.
