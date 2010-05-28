@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributors" date="1275033367" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributors" date="1275034387" format="1.1" version="$Rev$"}%
 ---+!! TWiki Release 5.0.0 (Helsinki), 2010-05-29
 
 %TOC%
@@ -25,6 +25,7 @@ It is highly recommended to upgrade to TWiki-5.0.0. Users will find this release
    * *Search Enhancements*
       * TODO
    * *Miscellaneous Feature Enhancements*
+      * Adding 51 new TWikiDocGraphics icons, and 11 updated icons
       * TODO
    * *Plugin Enhancements*
       * SpreadSheetPlugin: Adding support for DOY in $TIME() 
