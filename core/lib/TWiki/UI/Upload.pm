@@ -413,6 +413,8 @@ sub upload {
                 );
             };
 
+      $session->redirect(
+            $session->getScriptUrl( 1, 'view', $webName, $topic ), undef, 1 );
 
 }
 
