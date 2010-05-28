@@ -7,6 +7,8 @@ The following settings are __web preferences__ of the <nop>%WEB% web. These pref
 
 __Preferences:__
 
+   * Edit Method 
+      * Set EDITMETHOD = rawedit
    * List of topics of the <nop>%WEB% web:
       * Set WEBTOPICLIST = [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
 
