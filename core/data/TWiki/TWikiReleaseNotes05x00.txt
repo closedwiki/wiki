@@ -1,35 +1,33 @@
-%META:TOPICINFO{author="TWikiContributors" date="1274947221" format="1.1" version="$Rev$"}%
----+!! TWiki Release 5.0.0 Release Candidate 3 (Helsinki), 2010-05-17
+%META:TOPICINFO{author="TWikiContributors" date="1275033367" format="1.1" version="$Rev$"}%
+---+!! TWiki Release 5.0.0 (Helsinki), 2010-05-29
 
 %TOC%
 
 ---++ Introduction
 
-| __<span style="white-space:nowrap">%X% NOTE:</span>__ | This is Release Candidate 3, not recommended for production use! Below release notes are preliminary for the upcoming TWiki-5.0.0 release. |
-
-TWiki-5.0.0 released on 2010-05-24 is a major release introducing usability enhancements, feature enhancements, and adds extensions to strengthen TWiki as an enterprise collaboration platform.
+TWiki-5.0.0 released on 2010-05-29 is a major release introducing usability enhancements, feature enhancements, and adds extensions to strengthen TWiki as an enterprise collaboration platform.
 
 It is highly recommended to upgrade to TWiki-5.0.0. Users will find this release much more stable and secure in daily use.
-
-__Note:__ !JQueryPlugin and !TopMenuSkin are new in TWiki-5.0.0.
 
 ---++ New Features Highlights
 
    * *Security Enhancements*
-      * TODO
       * Run configure only after authentication 
-  
+      * TODO
    * *Usability Enhancements*
-      * Attach multiple files at once.
-      * New TopMenuSkin with pulldown menus for better usability and corporate/modern look&amp;feel.
+      * Attach multiple files at once
+      * New TopMenuSkin with pulldown menus for better usability and corporate/modern look&amp;feel
+      * Pre-installed TagMePlugin to tag topics 
+      * TODO
    * *Enterprise Collaboration Enhancements*
+      * Pre-installed JQueryPlugin, adding a lightweight cross-browser !JavaScript library designed to simplify the client-side scripting of HTML
       * TODO
    * *Search Enhancements*
       * TODO
    * *Miscellaneous Feature Enhancements*
       * TODO
    * *Plugin Enhancements*
-      * TODO
+      * SpreadSheetPlugin: Adding support for DOY in $TIME() 
 
 See the full list of bug fixes at the bottom of this topic.
 
@@ -37,13 +35,21 @@ See the full list of bug fixes at the bottom of this topic.
 
 TWiki-5.0.0 ships with:
 
-   * *Plugins:* !CommentPlugin, !EditTablePlugin, !EmptyPlugin, !HeadlinesPlugin, !InterwikiPlugin, !JQueryPlugin, !PreferencesPlugin, !RenderListPlugin, !SlideShowPlugin, !SmiliesPlugin, !SpreadSheetPlugin, !TablePlugin, !TinyMCEPlugin, !TWikiNetSkinPlugin, !TwistyPlugin, !WysiwygPlugin
-   * *Contribs:* !BehaviourContrib, !JSCalendarContrib, !MailerContrib, !TipsContrib, !TWikiUserMappingContrib, !TwistyContrib
-   * *Skins:* !ClassicSkin, !PatternSkin, !TopMenuSkin, !TWikiNetSkin,
+   * *Plugins:* CommentPlugin, EditTablePlugin, EmptyPlugin, HeadlinesPlugin, InterwikiPlugin, JQueryPlugin, PreferencesPlugin, RenderListPlugin, SlideShowPlugin, SmiliesPlugin, SpreadSheetPlugin, TablePlugin, TinyMCEPlugin, TagMePlugin, TWikiNetSkinPlugin, TwistyPlugin, WysiwygPlugin
+   * *Contribs:* BehaviourContrib, JSCalendarContrib, MailerContrib, TipsContrib, TWikiUserMappingContrib, TwistyContrib
+   * *Skins:* ClassicSkin, PatternSkin, TopMenuSkin, TWikiNetSkin,
+
+__Note:__ JQueryPlugin, TagMePlugin and TopMenuSkin are new in TWiki-5.0.0.
 
 ---++ Deprecation Notices
 
-TODO
+   * From TWiki 5.0 on, the ClassicSkin is deprecated and will be removed in a future release.
+
+   * From TWiki 4.2 on, the %<nop>MAINWEB% and %<nop>TWIKIWEB% variables have been deprecated. For compatibility reasons they are unlikely to ever be removed completely, but you should use the %<nop>USERSWEB% and %<nop>SYSTEMWEB% variables instead.
+
+   * From TWiki 4.2 on, functions TWiki::Func::getOopsUrl and TWiki::Func::permissionsSet have been declared deprecated. There is no plan to remove them yet. 
+
+   * From TWiki 4.0 on, the syntax "* Set DENYTOPICVIEW = " (nothing) in a topic means deny noone. Even if ALLOWTOPICVIEW is set to people or group setting DENYTOPICCHANGE to nothing means allow anyone. You have to remove the DENYTOPICVIEW or comment it out to have the ALLOWTOPICVIEW working. The reason for this behavior is that it enables limiting access to an entire web by setting a blank DENYTOPICVIEW setting. Same rule applies for DENYTOPICCHANGE and DENYTOPICRENAME. The rule does not apply for access rights defined for webs. Ie. "*Set DENYWEBCHANGE = " does not allow anyone to edit topics in the web. There has been strong oppinions against the syntax "* Set DENYTOPICXXXX = " meaning giving all access. So please be warned that we will change the syntax to a more transparent and logical syntax in future but we will ensure that it is still possible to secure a web and open up individual topics in future also. 
 
 ---++ Notes for TWiki Administrators and Wiki Champions
 
@@ -53,22 +59,7 @@ TODO
 
 ---++ TWiki-5.0.0 Major Release - Details
 
-TWiki-5.0.0 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x03 revision TODO (2010-05-24)
-
----+++ Highlights
-
-<noautolink>
-   * Security:
-      * TODO
-   * Rendering:
-      * TODO
-   * Users and groups:
-      * TODO
-   * Editing:
-      * TODO
-   * Miscellaneous:
-      * TODO
-</noautolink>
+TWiki-5.0.0 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x00 revision TODO (2010-05-29)
 
 ---+++ Enhancements
 
