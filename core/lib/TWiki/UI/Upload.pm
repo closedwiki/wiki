@@ -222,13 +222,12 @@ sub upload {
     $fileComment =~ s/^\s*//o;
     $fileComment =~ s/\s*$//o;
 
-    # below - @fileNames is array of files being uploaded 
-    # below - @upload_objs are array of TWiki::Request::Upload objects 
+    # below - @fileNames is array of files being uploaded
+    # below - @upload_objs are array of TWiki::Request::Upload objects
 
     my @fileNames = grep { defined $query->{uploads}{$_} }
-       map { $query->param("filepath$_") } ('', 1 .. 9);
-    my @upload_objs = @{$query->{uploads}}{@fileNames}; 
-    
+      map { $query->param("filepath$_") } ( '', 1 .. 9 );
+    my @upload_objs = @{ $query->{uploads} }{@fileNames};
 
     my @origNames = ();    # If filenames are changed after uploading to
                            # topic, those should be shown to the user
@@ -242,7 +241,7 @@ sub upload {
         my $i = 0;
         my $j = 0;
 
-        # Following loop just makes sure we have at least some non-empty file 
+        # Following loop just makes sure we have at least some non-empty file
         # available to upload  to topic
 
         foreach my $fh (@upload_objs) {
@@ -265,8 +264,8 @@ sub upload {
             }
         }
 
-        # Creating Array of original names for files, need to inform users about filename changes
-        
+# Creating Array of original names for files, need to inform users about filename changes
+
         $j = 0;
         foreach my $f (@fileNames) {
 
@@ -279,9 +278,8 @@ sub upload {
           $session->{prefs}->getPreferencesValue('ATTACHFILESIZELIMIT');
         $maxSize = 0 unless ( $maxSize =~ /([0-9]+)/o );
 
-
         $j = 0;
-        my @stream_fhs = grep { defined $_ } map {$_->handle()} @upload_objs;
+        my @stream_fhs = grep { defined $_ } map { $_->handle() } @upload_objs;
 
         foreach my $stream (@stream_fhs) {
 
@@ -374,51 +372,49 @@ sub upload {
             );
         }
 
-    }else { # case of only properties change
+    }
+    else {  # only properties change
 
-           my $filePath = $query->param( 'filepath' ) || '';
-           my $fileName = $query->param( 'filename' ) || '';
-           if ( $filePath && ! $fileName ) {
-                $filePath =~ m|([^/\\]*$)|;
-                $fileName = $1;
-           }
-           my $stream; 
+        my $filePath = $query->param('filepath') || '';
+        my $fileName = $query->param('filename') || '';
+        if ( $filePath && !$fileName ) {
+            $filePath =~ m|([^/\\]*$)|;
+            $fileName = $1;
+        }
 
+        try {
+            $session->{store}->saveAttachment(
+                $webName, $topic,
+                $fileName,
+                $user,
+                {
+                    dontlog     => !$TWiki::cfg{Log}{upload},
+                    comment     => $fileComment,
+                    hide        => $hideFile,
+                    createlink  => $createLink,
+                    stream      => undef,
+                    filepath    => $filePath,
+                    filesize    => '',
+                    filedate    => '',
+                    tmpFilename => '',
+                }
+            );
+        }
+        catch Error::Simple with {
+            throw TWiki::OopsException(
+                'attention',
+                def    => 'save_error',
+                web    => $webName,
+                topic  => $topic,
+                params => [ shift->{-text} ]
+            );
+        };
 
-           try {
-                $session->{store}->saveAttachment(
-                    $webName, $topic,
-                    $fileName,
-                    $user,
-                    {
-                        dontlog     => !$TWiki::cfg{Log}{upload},
-                        comment     => $fileComment,
-                        hide        => $hideFile,
-                        createlink  => $createLink,
-                        stream      => $stream,
-                        filepath    => $filePath,
-                        filesize    => '',
-                        filedate    => '',
-                        tmpFilename => '',
-                    }
-                );
-            }
-            catch Error::Simple with {
-                throw TWiki::OopsException(
-                    'attention',
-                    def    => 'save_error',
-                    web    => $webName,
-                    topic  => $topic,
-                    params => [ shift->{-text} ]
-                );
-            };
+        $session->redirect(
+            $session->getScriptUrl( 1, 'view', $webName, $topic ),
+            undef, 1 );
 
-      $session->redirect(
-            $session->getScriptUrl( 1, 'view', $webName, $topic ), undef, 1 );
-
-}
-
-
+    }
 
  # generate a message useful for those calling this script from the command line
     my $message =
