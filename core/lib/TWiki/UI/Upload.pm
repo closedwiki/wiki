@@ -376,19 +376,27 @@ sub upload {
 
     }else { # case of only properties change
 
-           my $filename = $query->param('filename');
+           my $filePath = $query->param( 'filepath' ) || '';
+           my $fileName = $query->param( 'filename' ) || '';
+           if ( $filePath && ! $fileName ) {
+                $filePath =~ m|([^/\\]*$)|;
+                $fileName = $1;
+           }
+           my $stream; 
+
+
            try {
                 $session->{store}->saveAttachment(
                     $webName, $topic,
-                    $filename,
+                    $fileName,
                     $user,
                     {
                         dontlog     => !$TWiki::cfg{Log}{upload},
                         comment     => $fileComment,
                         hide        => $hideFile,
                         createlink  => $createLink,
-                        stream      => undef,
-                        filepath    => $filename,
+                        stream      => $stream,
+                        filepath    => $filePath,
                         filesize    => '',
                         filedate    => '',
                         tmpFilename => '',
