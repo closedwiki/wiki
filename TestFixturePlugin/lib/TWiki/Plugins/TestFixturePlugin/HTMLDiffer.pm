@@ -154,7 +154,8 @@ sub _rexeq {
     }
     # escape regular expression chars
     $a = quotemeta($a);
-    $a =~ s/\\\@DATE/[0-3]\\d [JFMASOND][aepuco][nbrylgptvc] [12][09]\\d\\d/g;
+    #$a =~ s/\\\@DATE/[0-3]\\d [JFMASOND][aepuco][nbrylgptvc] [12][09]\\d\\d/g; #This was ok for %GMTIME{"$day $mon $year"}% 
+    $a =~ s/\\\@DATE/\\d\\d\\d\\d[-][012]\\d[-]\\d\\d/g;
     $a =~ s/\\\@TIME/[012]\\d:[0-5]\\d/g;
     my $wikiword = '[A-Z]+[a-z]+[A-Z]+\w+';
     $a =~ s/\\\@WIKIWORD/$wikiword/g;
