@@ -10,15 +10,16 @@
 
 # The first parameter will be part of the URL to your installation e.g.
 # http://example.com/twiki/bin/view/...
-# The second parameter must point to the physical path on your disk. Be
-# careful not to lose any trailing /'s.
+#### You can change the first parameter to a short /do -- this parameter
+#    and {ScriptUrlPath} configure setting must be the same.
+# The second parameter must point to the physical path on your disk.
 #### Change the _second_ path to match your local installation
-ScriptAlias /twiki/bin/ "/home/httpd/twiki/bin/"
+ScriptAlias /twiki/bin "/home/httpd/twiki/bin"
 
 # This defines a url that points to the twiki pub directory, which contains
 # attachments and other files like CSS stylesheets and icons. 
 #### Change the path to match your local installation
-Alias /twiki/ "/home/httpd/twiki/"
+Alias /twiki/pub "/home/httpd/twiki/pub"
 
 # Block access to typical spam related attachments (.htm and .html files)
 # Except the TWiki directory which is read only and does have attached html files.
