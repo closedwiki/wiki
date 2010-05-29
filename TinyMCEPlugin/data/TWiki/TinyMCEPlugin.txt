@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272172865" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1275122548" format="1.1" version="$Rev$"}%
 ---+!! !TinyMCEPlugin
 <!--
-   Contributions to this plugin are appreciated. Please update the plugin page
-   at http://twiki.org/cgi-bin/view/Plugins/TinyMCEPlugin or provide feedback
-   at http://twiki.org/cgi-bin/view/Plugins/TinyMCEPluginDev.
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/TinyMCEPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TinyMCEPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 
    * Set SHORTDESCRIPTION = Integration of the !TinyMCE WYSIWYG Editor
@@ -22,12 +22,14 @@ Unlike the other editor integrations in TWiki, which install "Word in a Browser"
 The editor automatically "switches itself off" (i.e. reverts to the old text-only window) when editing topics that contain TWiki content it can't handle, such as complex TWiki variables.
 
 ---++ Editor Notes
+
 The editor uses a translator module to convert from TWiki markup language (TML) to HTML and back. The translator converts special TWiki tags - such as %<nop>VARIABLES% - to plain text, and encloses them within HTML spans using a special style called =WYSIWYG_PROTECTED=. In this way the editor can detect text that is not meant to be HTML formatted. This style is _also_ used to protect special text you enter into the editor from being interpreted when the topic is translated back into TML. If you want to add any special TWiki features that are sensitive to formatting, such as =Set= statements, then you have to format those regions using 'Protect on save' or 'Protect forever'.
 
 ---++ Installation Instructions
 
 __NOTES:__
-   * This plugin comes pre-installed on TWiki 4.2.X. You should only need to re-install if there is an upgrade to the plugin.
+
+   * This plugin comes pre-installed on TWiki. You should only need to re-install if there is an upgrade to the plugin.
    * It requires the very latest revision of WysiwygPlugin. It will *not* work with the version shipped with TWiki 4.1.2.
    * When installed, it *replaces* the old "textarea" editor. If you want to maintain access to the old editor from the standard screens, follow the instructions under [[#InstallingOnOldTWikis][Configuring the buttons on TWiki < 4.2.0]].
 
@@ -40,6 +42,7 @@ First follow the installation instructions to install the Plugin:
    * *Click* on edit of any topic.
 
 ---++ Settings
+
 You can override this setting by defining TINYMCEPLUGIN_DEBUG to enable some simple debug features.
    * Set DEBUG = 0
 
@@ -126,7 +129,8 @@ Many thanks to the following sponsors for supporting this work:
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | 2010-04-24 %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-04-24 | Doc improvements, prepare for TWiki 5.0 release |
+|  2010-04-24 | TWikibug:Item6433: Doc improvements, prepare for TWiki 5.0 release |
+|  2009-09-08 | TWikibug:Item6334: Upgrade plugin to latest tinyMCE 3.2.4.1 |
 |  03 Aug 2008 | TWiki 4.2.1 release version |
 |  04 May 2008 | TWikibug:Item5547: Change mechanism by which TMCE recognises textareas to camp on. Use class instead of element name. |
 |  12 Apr 2008 | TWikibug:Item4946: I think I have finally fixed non-iso-8859-1 character sets. Painful. |
