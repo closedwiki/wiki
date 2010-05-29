@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1275127991" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1275131714" format="1.1" version="$Rev$"}%
 ---+!! TWiki Release 5.0.0 (Helsinki), 2010-05-29
 
 %TOC%
@@ -59,7 +59,9 @@ __Note:__ JQueryPlugin, TagMePlugin and TopMenuSkin are new in TWiki-5.0.0.
 
 ---+++ Upgrade From Earlier Releases
 
-TODO
+Follow the TWikiUpgradeGuide to install TWiki and migrate data from your existing TWiki.
+
+The new TopMenuSkin adds pulldown menus for better usability and corporate/modern look&amp;feel. This skin is based on the PatternSkin, which used the WebLeftBar in each web for navigation. The TopMenuSkin has a new WebTopBar that defines the menu structure in each web. A default menu is shown in case !WebTopBar is missing, so you do not need to add a !WebTopBar topic to all your existing webs. See TopMenuSkin#WebSpecific instructions in case you need a customized menu structure in a web.
 
 ---++ TWiki-5.0.0 Major Release - Details
 

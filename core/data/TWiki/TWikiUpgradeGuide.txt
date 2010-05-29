@@ -1,27 +1,26 @@
-%META:TOPICINFO{author="TWikiContributor" date="1239428509" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1275131588" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Upgrade Guide
 
-_This guide covers upgrading from a previous version of TWiki (such as Cairo or TWiki-4.0) to TWiki-4.3_
+_This guide covers upgrading from a previous version of TWiki (such as TWiki-4.3) to TWiki-5.0_
 
 %TOC%
 
 ---++ Overview
 
-TWiki-4.0.0 was a major new release. TWiki-4.1.x, TWiki-4.2.x, TWiki-4.3.x minor releases containing new features that can be seen by the end user, a large number of bug fixes. Use the TWikiInstallationGuide if you do not have data to carry forward.
+TWiki-5.0.0 is a major release introducing usability enhancements, feature enhancements, and adds extensions to strengthen TWiki as an enterprise collaboration platform. Use this guide to upgrade a previous TWiki release to 5.0. Use the TWikiInstallationGuide if you do not have data to carry forward.
 
 ---++ Upgrade Requirements
 
    * Please review the AdminSkillsAssumptions before you upgrade TWiki
-   * Review TWiki:TWiki.TWikiUpgradeTo04x03 for latest information and experience notes.
-   * To upgrade from a release prior to TWiki Release 01-Sep-2004, start with TWiki:TWiki.UpgradingTWiki on TWiki.org
-   * To upgrade from a standard TWiki Release 01-Sep-2004 to the latest TWiki-4.3 Production Release, follow the instructions below
+   * Review supplemental document TWiki:TWiki/TWikiUpgradeTo05x00 for latest information and experience notes.
+   * To upgrade from a release prior to TWiki Release 01-Sep-2004, start with TWiki:TWiki/UpgradingTWiki on TWiki.org
+   * To upgrade from a standard TWiki Release 01-Sep-2004 to the latest TWiki-5.0 Production Release, follow the instructions below
    * Once the upgrade has been applied, an existing earlier installation will still be able to read all the topics, but should not be used to write. Make sure you take a backup!
 
 ---++ Major Changes Compared to Earlier TWiki Releases
 
-See TWikiReleaseNotes04x00, TWikiReleaseNotes04x01, TWikiReleaseNotes04x02 and TWikiReleaseNotes04x03
-
+See TWikiReleaseNotes04x00, TWikiReleaseNotes04x01, TWikiReleaseNotes04x02, TWikiReleaseNotes04x03 and TWikiReleaseNotes05x00
 
 #ManualUpgradeProcedure
 ---++ Upgrade Procedure
@@ -31,35 +30,33 @@ The following steps are a rough guide to upgrading only. It is impossible to giv
 The main steps are:
 
    1 Install the new TWiki version, configure it, and get it to work similar to the old version
-   1 Install additional extensions (Plugins). Make sure to use the latest versions
+   1 Install additional extensions (plugins) -- make sure to use the latest versions
    1 Copy all the non-default webs from the old installation to the new
-   1 Copy the users from old installation to the new incl all their topics from Main
-   1 Apply tailorings to your Skin (logos, menu bars etc)
+   1 Copy the users from old installation to the new including all their topics from Main
+   1 Apply customizations to your skin (logos, menu bars etc)
    1 Apply preferences from old installation
 
 %T% After the extensions are installed (or upgraded) in step 2, take a "golden" backup. That will come in handy for your next patch or upgrade: By checking the differences between the golden copy and your production copy, you will be able to identify all the modifications that you have applied to the core or extensions.
    
 ---+++ Installation
 
-   * Follow the installation instructions in INSTALL.html which you find in the root of the new installation. Install the new release in a new directory. Do not install on top of the old release.
+   * Follow the installation instructions at TWiki:TWiki/TWikiInstallationGuide. Install the new release in a new directory. Do not install on top of the old release.
    * Use the [[%SCRIPTURL{configure}%][configure]] script to configure TWiki.
       * If you are upgrading from a 4.x.x release, you can carry over the configure settings from the old release.
       * You need to run configure and save the configuration once when you upgrade as this will update the altered and added settings.
-      * You can also choose to start with a fresh configuration and walk through all the settings using your old !LocalSite.cfg as a reference. This way you will not have old obsolete settings in the new !LocalSite.cfg.
-      * If at any time during the installation you want to start over from fresh all you need to do is delete the =lib/LocalSite.cfg= file and re-run configure.
+      * You can also choose to start with a fresh configuration and walk through all the settings using your old =twiki/lib/LocalSite.cfg= as a reference. This way you will not have old obsolete settings in the new =LocalSite.cfg=.
+      * If at any time during the installation you want to start over from fresh, delete the =LocalSite.cfg= file and re-run configure.
    * Additional resources
-      * TWiki:TWiki.UpgradingTWiki04x00PatchReleases
-      * TWiki:TWiki.InstallingTWiki#OtherPlatforms
-      * TWiki:TWiki.ApacheConfigGenerator
-      * TWiki:TWiki.SettingFileAccessRightsLinuxUnix
+      * TWiki:TWiki/InstallingTWiki#OtherPlatforms
+      * TWiki:TWiki/ApacheConfigGenerator
+      * TWiki:TWiki/SettingFileAccessRightsLinuxUnix
       * If you upgrade from an older TWiki your =lib/TWiki.cfg= from the old TWiki installation is a good resource for some of the settings you will need but you cannot reuse the old TWiki.cfg.
    * Make sure you have a working basic TWiki before you continue
 
 ---+++ Install Extensions
 
-   * Note that not all extensions that worked in Cairo have been updated to work with TWiki-4.0. Many Cairo plugins work fine. Some do not. Many plugins have been upgraded to work with TWiki-4.0 and later.
-   * From TWiki-4.1.0 the [[%SCRIPTURLPATH{"configure"}%][configure]] script which you ran during installation supports installation of additional plugins.
-   * Manual installation is possible. Follow the instruction on the Plugin page at twiki.org.
+   * From TWiki-4.1.0 on the [[%SCRIPTURLPATH{"configure"}%][configure]] script which you ran during installation supports installation of additional plugins.
+   * Manual installation is possible. Follow the instruction on the plugin page at twiki.org.
    * Check the plugin topics from your old TWiki installation. There may be plugin settings that you want to transfer to the new TWiki installation.
      %BR% __%H% Hint:__ For an easier upgrade later on, set the plugin preferences settings in the [[%LOCALSITEPREFS%]] topic, not in the plugin topic. To identify the plugin, prefix the name of the setting with the capitalized name of the plugin. For example, to change the =DEFAULT_TYPE= setting of the CommentPlugin, create a =COMMENTPLUGIN_DEFAULT_TYPE= setting in <nop>%LOCALSITEPREFS%.
    * Typical plugin settings you may have altered.
@@ -68,13 +65,14 @@ The main steps are:
       * InterwikiPlugin - Set RULESTOPIC
       * InterWikis - If you added your own rules you should save this topic and not overwrite it.
       * SlideShowPlugin - Make sure you did not change the embedded 'Default Slide Template' If you did you should save it. It is a bad idea to do. It is better to define your own slide show templates as separate topics that do not get overwritten when you upgrade.
-      * SmiliesPlugin - Did you add your own smileys? No real changes were made to the smilies topic October 2005 so you can just leave this topic as it is.
-      * TablePlugin - Set TABLEATTRIBUTES   
+      * SmiliesPlugin - Did you add your own smileys?
+      * TablePlugin - Set TABLEATTRIBUTES.
    * Remember that a plugin must be activated in [[%SCRIPTURLPATH{"configure"}%][configure]].
-   * To avoid having to re-apply plugin settings each time you upgrade a plugin or TWiki itself, define the altered plugin settings in =Main.TWikiPreferences= instead
+   * To avoid having to re-apply plugin settings each time you upgrade a plugin or TWiki itself, define the altered plugin settings in <nop>%LOCALSITEPREFS% instead.
 
 ---+++ Copy your old webs to new TWiki
 
+   * Webs come in pairs, such as =twiki/data/Engineering= (for page content) and =twiki/pub/Engineering= (for attachments).
    * When upgrading from Cairo or earlier it may be necessary to unlock the rcs files in data and pub directories from the old installation using the following shell commands:
       * =find data -name '*,v' -exec rcs -u -M '{}' \;=
       * =find pub -name '*,v' -exec rcs -u -M '{}' \;=
@@ -88,14 +86,13 @@ The main steps are:
    * Manually merge all the users from the old =Main.TWikiUsers= topic to the new TWiki. If you upgrade from Cairo you can simply use the old file and add the missing new system users to the list of users. If you upgrade from TWiki-4.0.x simply use the old topic. Starting from 4.2.0 TWiki no longer ships with a =Main.TWikiUsers= topic. When you register the first user TWiki now checks for an existing =Main.TWikiUsers= and if it does not exist it gets created.
    * If you use =data/.htpasswd= for authentication copy this file from the old TWiki to the new.
       * If you upgrade from Cairo and you are using the Htpasswd login manager, then note that email addresses for users have moved out of user topics and into the password file. There is a script that performs this extra upgrade step for you - see =tools/upgrade_emails.pl=.
-   * The old sandbox web may have a lot of useful topic and users may use it actively for drafts. Manually select the topics (remember the corresponding pub directories) from the old Sandbox web and copy them to the new TWiki. Decide if you want to overwrite the sandbox homepage and left menu bar or keep the new.
+   * The old Sandbox web may have a lot of useful topic and users may use it actively for drafts. Manually select the topics (remember the corresponding pub directories) from the old Sandbox web and copy them to the new TWiki. Decide if you want to overwrite the sandbox homepage and left menu bar or keep the new.
    * If you added or removed fields from the user topic form you may also have tailored =TWiki.TWikiRegistration=. Make sure you either reuse the registration topic from the old installation or apply the same field changes to the new =TWiki.TWikiRegistration= topic.
-   * Starting from 4.2.0 TWiki ships with =NewUserTemplate= and =UserForm= in the TWiki web. If you choose to tailor anything you are strongly adviced to copy =NewUserTemplate= and =UserForm= to the Main web and tailor the Main web copies. TWiki will look for the =NewUserTemplate= in the Main web first and if it does not exist it uses the default from the TWiki web. By creating a =Main.NewUserTemplate= and its =Main.UserForm= you will not loose your tailorings next time you upgrade TWiki.
+   * Starting from 4.2.0 TWiki ships with =NewUserTemplate= and =UserForm= in the TWiki web. If you choose to tailor anything you are strongly advised to copy =NewUserTemplate= and =UserForm= to the Main web and tailor the Main web copies. TWiki will look for the =NewUserTemplate= in the Main web first and if it does not exist it uses the default from the TWiki web. By creating a =Main.NewUserTemplate= and its =Main.UserForm= you will not loose your tailorings next time you upgrade TWiki.
    * Make sure all data and pub files and directories are owned by the webserver user.
 
 ---+++ Apply Customizations To The Skin
 
-   * Not many of the old Cairo skins work well with TWiki-4.0 and later.
    * Add Logos, update top bar and left bar as required.
    * Apply any desired changes to style sheets and templates. The default PatternSkin has been totally rewritten since Cairo and once more in 4.0.2. Since then changes to PatternSkin have been minor and you may be able to carry over most simpler tailorings directly from 4.0.2-4.0.5.
    * Additional resources:
@@ -146,7 +143,7 @@ Your Cairo [[Main.TWikiUsers][Main.TWikiUsers]] topic will work in TWiki-4 but y
 
 You additionally need to ensure that !TWikiUsers has the =Set ALLOWTOPICCHANGE = !TWikiAdminGroup, !TWikiRegistrationAgent=. Otherwise people will not be able to register.
 
----++ Important Changes since 4.0.5
+---++ Important Changes since TWiki-4.0.5
 
 ---+++ Supported Perl version
 
@@ -189,7 +186,7 @@ From Twiki 4.1.0 the old template definition will add an empty line before the n
 
 The advantage of the spec change is that now you can add leading and trailing white space including new lines. This was not possible before.
 
----++ Important Changes since 4.1.0
+---++ Important Changes since TWiki-4.1.0
 
 ---+++ New location for session and other temporary files
 
@@ -199,7 +196,7 @@ The directory for passthrough files and session files have been replaced by a co
 
 It is highly recommended no longer to use the tmp directory common to other web applications and the new default will work fine for most. You may want to delete all the old session files in /tmp after the upgrade to 4.1.1. They all start with cgisess_. It is additionally highly recommended to limit write access to the ={TempfileDir}= for security reasons if you have non-admin users with login access to the webserver just like you would do with the other webserver directories.
 
----++ Important Changes since 4.1.2
+---++ Important Changes since TWiki-4.1.2
 
 ---+++ New WYSIWYG Editor
 
@@ -249,6 +246,12 @@ Take care for that change if you run your own routine to delete obsolete session
 ---+++ New Internal Admin Login
 
 TWiki 4.2 introduces a new _Internal Admin Login_ feature which uses "admin" (configurable) as username and the password used for configure to become temporary administrator. When you do a new installation you need to use this feature as !Main.TWikiAdminGroup is now access restricted by default to avoid security attacks during the hours an installation may take. From configure there is a link to the !TWikiAdminGroup topic and on !TWikiAdminGroup the step by step instructions are written in a yellow box. Our advice is not to remove this help text in case you need it later.
+
+---++ Important Changes since TWiki-5.0.0
+
+---+++ New !TopMenuSkin
+
+The TopMenuSkin adds pulldown menus for better usability and corporate/modern look&amp;feel. This skin is based on the PatternSkin, which used the WebLeftBar in each web for navigation. The TopMenuSkin has a new WebTopBar that defines the menu structure in each web. A default menu is shown in case !WebTopBar is missing, so you do not need to add a !WebTopBar topic to all your existing webs. See TopMenuSkin#WebSpecific instructions in case you need a customized menu structure in a web.
 
 %STOPINCLUDE%
 
