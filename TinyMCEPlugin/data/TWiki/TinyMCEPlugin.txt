@@ -47,6 +47,7 @@ You can override this setting by defining TINYMCEPLUGIN_DEBUG to enable some sim
    * Set DEBUG = 0
 
 This setting contains all the options passed to the !TinyMCE editor on startup. For a full explanation of the available options, and guidance on reconfiguring !TinyMCE, see the [[http://wiki.moxiecode.com/index.php/TinyMCE:Configuration][Moxicode TinyMCE Wiki]]. Note the inclusion of the Pattern Skin standard CSS files in the =content_css= setting.
+
 <verbatim>
    * Set INIT = mode:"textareas",
    editor_selector : "twikiTextarea",
@@ -114,23 +115,24 @@ You can override these settings in the same way as any other TWiki variable, by 
 
 #InstallingOnOldTWikis
 ---++ Configuring the buttons on TWiki < 4.2.0
+
 When installed on TWiki versions before 4.2.0, this plugin *replaces* the old textarea editor with the !TinyMCE editor. The shock of this change can be too much for some older contributors, so we have written instructions for reconfiguring your templates in TWiki:Plugins.TinyMCEFrequentlyAskedQuestions.
 
 ---++ Plugin Info
 
 Many thanks to the following sponsors for supporting this work:
-   * [[http://ilog.fr][ILOG]]
-   * [[http://www.carrier.com][Carrier Corporation]]
-   * [[http://twiki.net][TWIKI.NET]]
+   * [[http://ilog.fr/][ILOG]]
+   * [[http://www.carrier.com/][Carrier Corporation]]
+   * [[http://twiki.net/][Twiki, Inc.]]
 
 |  Plugin Author: | TWiki:Main.CrawfordCurrie |
 |  Copyright: | &copy; 2007-2008 Crawford Currie http://c-dot.co.uk, 2007-2010 TWiki:Main/TWikiContributors |
-|             | This package also includes the complete sources for version 2.1.1.1 of the !TinyMCE editor |
+|             | This package also includes the complete sources for version 3.2.4.1 of the !TinyMCE editor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | 2010-04-24 %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  2010-04-24 | TWikibug:Item6433: Doc improvements, prepare for TWiki 5.0 release |
-|  2009-09-08 | TWikibug:Item6334: Upgrade plugin to latest tinyMCE 3.2.4.1 |
+|  2009-09-08 | TWikibug:Item6334: Upgrade plugin to latest !TinyMCE version 3.2.4.1 from 2.1.1.1 |
 |  03 Aug 2008 | TWiki 4.2.1 release version |
 |  04 May 2008 | TWikibug:Item5547: Change mechanism by which TMCE recognises textareas to camp on. Use class instead of element name. |
 |  12 Apr 2008 | TWikibug:Item4946: I think I have finally fixed non-iso-8859-1 character sets. Painful. |
