@@ -126,13 +126,13 @@ Many thanks to the following sponsors for supporting this work:
    * [[http://twiki.net/][Twiki, Inc.]]
 
 |  Plugin Author: | TWiki:Main.CrawfordCurrie |
-|  Copyright: | &copy; 2007-2008 Crawford Currie http://c-dot.co.uk, 2007-2010 TWiki:Main/TWikiContributors |
+|  Copyright: | &copy; 2007-2008 Crawford Currie http://c-dot.co.uk, %BR% &copy; 2007-2010 TWiki:TWiki/TWikiContributor |
 |             | This package also includes the complete sources for version 3.2.4.1 of the !TinyMCE editor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | 2010-04-24 %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  2010-04-24 | TWikibug:Item6433: Doc improvements, prepare for TWiki 5.0 release |
-|  2009-09-08 | TWikibug:Item6334: Upgrade plugin to latest !TinyMCE version 3.2.4.1 from 2.1.1.1 |
+|  2009-09-08 | TWikibug:Item6334: Upgrade plugin to latest !TinyMCE version 3.2.4.1 from 2.1.1.1 -- TWiki:Main/SopanShewale |
 |  03 Aug 2008 | TWiki 4.2.1 release version |
 |  04 May 2008 | TWikibug:Item5547: Change mechanism by which TMCE recognises textareas to camp on. Use class instead of element name. |
 |  12 Apr 2008 | TWikibug:Item4946: I think I have finally fixed non-iso-8859-1 character sets. Painful. |
