@@ -65,7 +65,7 @@ The new TopMenuSkin adds pulldown menus for better usability and corporate/moder
 
 ---++ TWiki-5.0.0 Major Release - Details
 
-TWiki-5.0.0 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x00 revision TODO (2010-05-29)
+TWiki-5.0.0 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x00 revision r18860 (2010-05-29)
 
 ---+++ Enhancements
 
