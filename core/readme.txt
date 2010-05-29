@@ -4,31 +4,25 @@ TWiki (R) - the Open Source Enterprise Wiki and Web 2.0 Application Platform
 What is TWiki?
 --------------
 
-Welcome to TWiki, a flexible, powerful, and easy to use 
-enterprise wiki, enterprise collaboration platform and 
-knowledge management system. It is a Structured Wiki, 
-typically used to run a project development space, a 
-document management system, a knowledge base, or any 
-other groupware tool, on an intranet or on the internet. 
-Web content can be created collaboratively by using 
-just a browser. Users without programming skills can create 
-web applications. Developers can extend the functionality 
-of TWiki with Plugins. TWiki fosters information flow 
-within an organization; lets distributed teams work together
-seamlessly and productively; and eliminates the 
-one-webmaster syndrome of outdated intranet content.
+Welcome to TWiki, a powerful, and easy to use enterprise wiki, 
+enterprise collaboration platform, and web application platform. 
+It is a Structured Wiki, typically used to run a project 
+development space, a document management system, a knowledge 
+base, or any other groupware tool, on an intranet, extranet or 
+the Internet. Users without programming skills can create web 
+applications. Developers can extend the functionality of TWiki 
+with plugins. TWiki fosters information flow within an 
+organization, lets distributed teams work together seamlessly 
+and productively, and eliminates the one-webmaster syndrome of 
+outdated intranet content. TWiki has been downloaded over 
+500,000 times and is used daily by millions of people in over 
+100 countries. Some larger deployments have several 100,000 
+pages and over 10,000 users. TWiki is developed by an active 
+open source community on http://twiki.org.
 
-Major companies like British Telecom, Sun Microsystems, 
-Motorola, Yahoo and SAP depend on the TWiki platform to increase 
-the productivity of their engineering teams. 
-
-Features include automatic link generation, full text 
-search, authorization based on groups, Web form handling, 
-email notification of changes, file attachments to Web 
-pages, revision control of pages and attachments, and 
-more. A developers with begining level programming skills 
-can develop Web2.0 Applications using server-side TWiki Plugin API. 
-
+Major companies such as Amazon.com, AMD, British Telecom, IBM, 
+Oracle, Motorola, SAP and many others depend on the TWiki 
+platform to increase the productivity of their teams. 
 
 The GPLed TWiki software and over hundreds of Plugins can be 
 downloaded from the TWiki.org web site, http://TWiki.org/.
@@ -38,23 +32,23 @@ TWiki Distribution and License
 ------------------------------
 
 TWiki is open source software and is distributed under the 
-terms of the GNU General Public License. You can request 
-the latest version of TWiki from http://TWiki.org/ .
+terms of the GNU General Public License. You can request the 
+latest version of TWiki from http://TWiki.org/ .
 
 The LICENSE file, located in the root of the TWiki 
 distribution package, shows your rights and duties on how to 
 use, redistribute and/or modify it. We would appreciate if 
-redistributions of TWiki and its clones retain the 
-license.txt file in its entire form, thus acknowledging the 
-origin of TWiki and the thousands of hours the core team and 
-contributors put into creating this product.
+redistributions of TWiki and its clones retain the AUTHORS,
+COPYING, COPYRIGHT and LICENSE files in their entire form, 
+thus acknowledging the origin of TWiki and the tens of 
+thousands of hours contributors put into creating this 
+product.
 
 
 TWiki Installation, Support
 ---------------------------
 
-It is important to follow the installation instructions in
-INSTALL.html located in the distribution, also at
+It is important to follow the installation instructions at
 http://twiki.org/cgi-bin/view/TWiki/TWikiInstallationGuide
 
 Important note: Once you installed TWiki on your own system, 
@@ -86,4 +80,4 @@ Happy collaboration and twiki'ing.
 
 Best regards,
 
-The TWiki Developers
+Peter Thoeny and TWiki Contributors
