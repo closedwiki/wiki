@@ -1,38 +1,37 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274947152" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1275128184" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
 %TOC%
 
 #HelsinkiRelease
----++ TWiki Release 5.0 (Helsinki) released on 2010-05-28
+---++ TWiki Release 5.0 (Helsinki) released on 2010-05-29
 
 __New Features and Enhancements of TWiki Release 5.0__
 
    * *Security Enhancements*
-      * TODO
-
-   * *Usability Enhancements* 
-      * Attach multiple files at once.
-      * New TopMenuSkin with pulldown menus for better usability and corporate/modern look&feel. 
-      * Pre-installed TagMePlugin to tag topics
-      * TODO
-
-   * *Enterprise Collaboration Enhancements*
-      * Pre-installed JQueryPlugin to create client side dynamic functionality
-
+      * Configure script requires authentication to reduce exposure of internal system settings.
+      * The twiki root directory is no longer HTML doc enabled, reducing the odds of exposing data due to webserver misconfiguration.
+   * *Usability Enhancements*
+      * New TopMenuSkin with pulldown menus for better usability and corporate/modern look&amp;feel.
+      * Attach multiple files at once, useful when attaching many files.
+      * Pre-installed TagMePlugin, useful to tag topics to quickly access content in a large TWiki.
+      * Upgraded TinyMCEPlugin to latest !TinyMCE 3.2.4.1 for better WYSIWYG editing experience.
+   * *TWiki Application Platform Enhancements*
+      * Pre-installed JQueryPlugin, adding a lightweight cross-browser !JavaScript library designed to simplify the client-side scripting of HTML.
+      * Improvements to ENCODE, IF, URLPARAM, WEB and WEBLIST variables.
    * *Search Enhancements*
-      * TODO
-
+      * Query syntax with array size, useful to query TWiki forms and attachments.
+      * Query syntax can be used in format parameter of search, giving more control over formatting.
    * *Miscellaneous Feature Enhancements*
-      * TODO
-
+      * Adding 51 new TWikiDocGraphics icons, and 11 updated icons.
+      * The TWiki doc graphics library is now aware of image size and is cached for speed.
    * *Plugin Enhancements*
-      * SpreadSheetPlugin: Adding support for DOY in $TIME()
-      * TODO
-
+      * SpreadSheetPlugin: Improvements to $TIME() and $NOP() functions.
+      * HeadlinesPlugin: New touch parameter in HEADLINES variable to alert users via e-mail notification of news updates
+      * API: New TWiki::Func::buildWikiWord function
    * *Bug Fixes*
-      * More than FIXME bug fixes since 4.3.2
+      * 38 bug fixes since TWiki-4.3.2
 
 #HelsinkiHallOfFame
 __Hall of Fame of TWiki Release 5.0__
