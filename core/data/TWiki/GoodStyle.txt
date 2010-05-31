@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1174436429" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1275287772" format="1.1" version="$Rev$"}%
 ---+ <nop>GoodStyle Collaboration Tips
 
    * TWiki has a very simple *[[TWikiShorthand][text formatting shorthand]]*. In any case, you won't go wrong if you simply:
@@ -32,10 +32,10 @@
 
    * For *external site links*, you can type URLs directly into the text - =http://etcete.ra/...= - it'll be clear to anyone where they're headed on click. 
 
-   * TWiki is intended for world-wide use, and an internationally understood date format like ==01 Sep %SERVERTIME{$year}%== or ==%SERVERTIME{$year}%-09-01== is preferred. It's clearer than the xx/xx/xx format, where a date like 9/1/01 can mean either Jan or Sep, depending on the local conventions of the readers. For months, use the first three letters: Jan, Feb, Mar, Apr,...
+   * TWiki is intended for world-wide use, and an internationally understood date format like ==%SERVERTIME{$year}%-09-01== (ISO 8601 date format) or ==01 Sep %SERVERTIME{$year}%== (RFC 5322 date format) is preferred. It's clearer than the ==xx/xx/xx== format, where a date like 9/1/01 can mean either January or September, depending on the local conventions of the readers. For months, use the first three letters: Jan, Feb, Mar, Apr,...
 
-   * *TIP:* Check the source when you want to find out how something is formatted: click ==Edit== on the lower toolbar. To see earlier versions, click ==More==, then check ==Raw text format== and click ==View revision==. A bit of HTML experience can't hurt, but you'll soon see with TWikiShorthand how far that is from necessary. 
+   * *TIP:* Check the source when you want to find out how something is formatted: click =[Edit]= on the lower toolbar. To see earlier versions, click =[More topic actions]=, then check ="Raw text format"= and click =[View revision]=. A bit of HTML experience can't hurt, but you'll soon see with TWikiShorthand how far that is from necessary.
 
 __Related Topics:__ UserDocumentationCategory
 
--- __Contributors:__ TWiki:Main.MikeMannix, TWiki:Main.PeterThoeny
+-- __Contributors:__ TWiki:Main/MikeMannix, TWiki:Main/PeterThoeny
