@@ -1,7 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1273851326" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarBR
-
 ---+++ BR -- line break
    * Type: Preference variable - TWikiRenderingShortcut.
    * Syntax: =%<nop>BR%=
