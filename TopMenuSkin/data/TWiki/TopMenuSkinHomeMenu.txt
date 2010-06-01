@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274933666" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1275365196" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkinDefaultWebTopMenu"}%
 ---+ Home Menu of !TopMenuSkin
 
@@ -7,6 +7,7 @@ This topic defines the Home pulldown menu, used by the TopMenuSkin.
 -----
 %INCLUDE{"TopMenuSkin"}%
 <div class="twTopMenuTab">%STARTINCLUDE%<nop>
+   * <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-vbar.png' alt='' width='4' height='22' />
    * <a href="%WEBLOGOURL%" alt="Home" title="TWiki home --- Tip: This menu-bar is also a 'You are here' breadcrumb">%ICON{"twiki"}% <nop>%MAKETEXT{"Home"}% %ICONURL{menu-down}%</a>
       * <a href="%SCRIPTURLPATH{view}%/%SYSTEMWEB%/SiteMap" alt="Site map" title="Site map listing all webs">%ICON{sitetree}% %MAKETEXT{"Site map"}%</a>
 %WEBLIST{
@@ -14,7 +15,7 @@ This topic defines the Home pulldown menu, used by the TopMenuSkin.
  limit="30"
  overlimit="      * [[%SYSTEMWEB%.SiteMap][<img src=\"%ICONURL{dot_ur}%\" border=\"0\" alt=\"\" width=\"16\" height=\"16\" /> %MAKETEXT{"More..."}%]]"
 }%
-   * <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-right.gif' alt='' width='10' height='16' />
+   * <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-right.png' alt='' width='8' height='22' />
 <nop>%STOPINCLUDE%</div>
 -----
 
