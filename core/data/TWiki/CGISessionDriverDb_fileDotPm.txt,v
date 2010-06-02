@@ -1,0 +1,51 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2008.01.22.03.21.24;	author TWikiContributor;	state Exp;
+branches;
+next	;
+
+
+desc
+@buildrelease
+@
+
+
+1.1
+log
+@buildrelease
+@
+text
+@---+ Package ==
+
+%TOC%
+=head1 NAME
+
+CGI::Session::Driver::db_file - CGI::Session driver for BerkeleyDB using DB_File
+
+=head1 SYNOPSIS
+
+    $s = new CGI::Session("driver:db_file", $sid);
+    $s = new CGI::Session("driver:db_file", $sid, {FileName=>'/tmp/cgisessions.db'});
+
+=head1 DESCRIPTION
+
+B<db_file> stores session data in BerkelyDB file using L<DB_File|DB_File> - Perl module. All sessions will be stored 
+in a single file, specified in I<FileName> driver argument as in the above example. If I<FileName> isn't given, 
+defaults to F</tmp/cgisess.db>, or its equivalent on a non-UNIX system.
+
+If the directory hierarchy leading to the file does not exist, will be created for you.
+
+This module takes a B<UMask> option which will be used if DB_File has to create the database file for you. By default
+the umask is 0660.
+
+=head1 LICENSING
+
+For support and licensing information see L<CGI::Session|CGI::Session>
+
+@

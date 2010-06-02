@@ -1,0 +1,54 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2008.01.22.03.21.29;	author TWikiContributor;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.06.25.16.26.29;	author TWikiContributor;	state Exp;
+branches;
+next	;
+
+
+desc
+@buildrelease
+@
+
+
+1.2
+log
+@buildrelease
+@
+text
+@%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="2"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarSCRIPTURLPATH2
+---+++ SCRIPTURLPATH{"script"} -- URL path of TWiki script
+   * As =%<nop>SCRIPTURL{"script"}%=, but doesn't include the protocol and host part of the URL
+   * Syntax: =%<nop>SCRIPTURLPATH{"script"}%=
+   * Expands to: =%SCRIPTURLPATH{"script"}%=
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarPUBURLPATH][PUBURLPATH]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTNAME][SCRIPTNAME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURL][SCRIPTURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURL2][SCRIPTURL{"script"}]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURLPATH][SCRIPTURLPATH]]
+
+@
+
+
+1.1
+log
+@buildrelease
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.2" version="1"}%
+a3 1
+
+d8 1
+a8 1
+   * Related: [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTNAME][SCRIPTNAME]], [[#VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[#VarSCRIPTURL][SCRIPTURL]], [[#VarSCRIPTURL2][SCRIPTURL{"script"}]], [[#VarSCRIPTURLPATH][SCRIPTURLPATH]]
+@

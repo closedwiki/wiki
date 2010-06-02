@@ -1,0 +1,82 @@
+head	1.3;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2008.08.03.22.17.45;	author TWikiContributor;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2008.01.22.03.21.27;	author TWikiContributor;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.06.25.16.26.28;	author TWikiContributor;	state Exp;
+branches;
+next	;
+
+
+desc
+@buildrelease
+@
+
+
+1.3
+log
+@buildrelease
+@
+text
+@%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="3"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarFORMFIELD
+---+++ FORMFIELD{"fieldname"} -- renders a field in the form attached to some topic
+   * Syntax: =%<nop>FORMFIELD{"fieldname"}%=
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default:* |
+     | ="fieldname"= | The name of a [[TWikiForms][TWiki form]] field | required |
+     | =topic="..."= | Topic where form data is located. May be of the form =Web.<nop>TopicName= | Current topic |
+     | =format="..."= | Format string. =$value= expands to the field value, and =$title= expands to the fieldname (also expands $name, $attributes, $type, $size and $definingTopic) | ="$value"= |
+     | =default="..."= | Text shown when no value is defined for the field | =""= |
+     | =alttext="..."= | Text shown when field is not found in the form | =""= |
+   * Example: =%<nop>FORMFIELD{"<nop>ProjectName" topic="Projects.<nop>SushiProject" default="(not set)" alttext="<nop>ProjectName field found"}%= 
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSEARCH][SEARCH]]
+
+@
+
+
+1.2
+log
+@buildrelease
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="2"}%
+d10 1
+a10 1
+     | =format="..."= | Format string. =$value= expands to the field value, and =$title= expands to the fieldname | ="$value"= |
+@
+
+
+1.1
+log
+@buildrelease
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.2" version="1"}%
+a3 1
+
+d10 1
+a10 1
+     | =format="..."= | Format string. =$value= expands to the field value, and =$title= expands to the field title | ="$value"= |
+d14 1
+a14 1
+   * Related: [[#VarSEARCH][SEARCH]]
+@

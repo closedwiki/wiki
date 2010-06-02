@@ -1,0 +1,64 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2010.05.29.14.44.11;	author TWikiContributor;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2008.01.22.03.21.25;	author TWikiContributor;	state Exp;
+branches;
+next	;
+
+
+desc
+@buildrelease
+@
+
+
+1.2
+log
+@buildrelease
+@
+text
+@%META:TOPICINFO{author="TWikiContributor" date="1274838685" format="1.1" version="2"}%
+---+ Formatting Tokens
+
+TWiki defines some standard special tokens that can be used to replace characters in some parameters - notably those to FormattedSearch and IfStatements - to defer evaluation of the parameter until later. These special tokens are often called "escapes", because they allow the character to "escape" from its normal meaning. 
+
+%STARTINCLUDE%     | =$n= or =$n()= | New line. Use =$n()= if followed by alphanumeric character, e.g. write =Foo$n()Bar= instead of =Foo$nBar= |
+     | =$nop= or =$nop()= | Is a "no operation". This variable gets removed; useful for nested search |
+     | =$quot= | Double quote (="=) (\" also works) |
+     | =$percnt= | Percent sign (=%=) |
+     | =$dollar= | Dollar sign (=$=) |
+%STOPINCLUDE%
+
+If you ever find yourself needing to escape an escape, you can use =$dollar= to escape the leading dollar, thus: =$dollarpercnt=.
+
+__Related topics:__ FormattedSearch, IfStatements, QuerySearch, TWikiForms
+@
+
+
+1.1
+log
+@buildrelease
+@
+text
+@d1 2
+a2 1
+---++ Formatting Tokens
+d5 6
+a10 5
+%STARTINCLUDE%| =$n= or =$n()= | New line. Use =$n()= if followed by alphanumeric character, e.g. write =Foo$n()Bar= instead of =Foo$nBar= |
+| =$nop= or =$nop()= | Is a "no operation". This variable gets removed; useful for nested search |
+| =$quot= | Double quote (="=) (\" also works) |
+| =$percnt= | Percent sign (=%=) |
+| =$dollar= | Dollar sign (=$=) |
+d12 4
+a15 1
+If you ever find yourself needing to escape an escape, you can use =$dollar= to escape the leading dollar, thus: =$dollarpercnt=.@

@@ -1,0 +1,34 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2007.03.03.14.51.46;	author TWikiContributor;	state Exp;
+branches;
+next	;
+
+
+desc
+@buildrelease
+@
+
+
+1.1
+log
+@buildrelease
+@
+text
+@---+ Package =TWiki::Store::SearchAlgorithms::PurePerl=
+
+Pure perl implementation of the RCS cache search.
+
+---++ search($searchString, $topics, $options, $sDir) -> \%seen
+Search .txt files in $dir for $string. See RcsFile::searchInWebContent
+for details.
+
+
+%TOC%
+@

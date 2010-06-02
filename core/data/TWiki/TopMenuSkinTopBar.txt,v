@@ -1,0 +1,97 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2010.05.29.14.44.28;	author TWikiContributor;	state Exp;
+branches;
+next	;
+
+
+desc
+@buildrelease
+@
+
+
+1.1
+log
+@buildrelease
+@
+text
+@%META:TOPICINFO{author="TWikiContributor" date="1274422665" format="1.1" version="1"}%
+%META:TOPICPARENT{name="TopMenuSkin"}%
+---+ Top Bar of !TopMenuSkin
+
+Top bar of TopMenuSkin, replacing WebTopBar.
+
+-----
+%STARTINCLUDE%%INCLUDE{%SYSTEMWEB%.TopMenuSkin}%
+<div style="position: absolute; margin-left: 217px; margin-top: 30px; z-index: 1"><a href="http://www.twiki.net/?ref=twiki.org/topmenuskin.topbar" style="display: block; width: 100px; height: 48px;"><div></div></a></div>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr style="background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/menu-gray-bg.png); background-repeat: repeat-x;">
+<td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="1" /></td>
+<td width="99%">
+<div class="twTopMenuTab">%IF{
+ "istopic '%BASEWEB%.WebTopMenu'"
+ then="$percntINCLUDE{%BASEWEB%.WebTopMenu}$percnt"
+ else="$percntINCLUDE{%SYSTEMWEB%.TopMenuSkinDefaultWebTopMenu}$percnt"
+}%
+</div></td><td><div class="twTopMenuTab">
+   * [[%WIKIUSERNAME%][ %ICON{"person"}% %MAKETEXT{"Account"}% %ICON{menu-down}%]]
+%IF{
+ "context authenticated"
+ then='      * [[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]'
+ else="<nop>"
+}%
+%IF{
+ "$ LOGOUT != '' AND context authenticated"
+ then='      * %LOGOUT%'
+ else="<nop>"
+}%
+%IF{
+ "$ LOGIN != '' AND NOT context authenticated"
+ then='      * %LOGIN%'
+ else="<nop>"
+}%
+%IF{
+ "$ LOGIN != '' AND NOT context authenticated AND context registration_supported AND context registration_enabled"
+ then="      * [[%SYSTEMWEB%.TWikiRegistration][%MAKETEXT{"Register"}%]]"
+ else="<nop>"
+}%
+%IF{
+ "'%USERNAME%'!='guest' AND istopic '%USERSWEB%.%WIKINAME%LeftBar'"
+ then="      * [[%USERSWEB%.%WIKINAME%LeftBar][---- %MAKETEXT{My links}% ----]]$n$percntSEARCH{\"^[ ]+\*[ ]*[\[<]\" type=\"regex\" web=\"%USERSWEB%\" topic=\"%WIKINAME%LeftBar\" multiple=\"on\" nonoise=\"on\" format=\"      * $dollarpattern([ ]+\*[ ]*([^\n\r]*).*)\"}$percnt"
+ else="%IF{"'%USERNAME%'!='guest'" then="      * <a href='%SCRIPTURLPATH{edit}%/%USERSWEB%/%WIKINAME%LeftBar?templatetopic=%SYSTEMWEB%.WebLeftBarPersonalTemplate&amp;topicparent=%WIKINAME%'>%MAKETEXT{Create personal sidebar}%</a>" else="<nop>"}%"
+}%
+</div></td>
+<td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="1" /></td>
+</tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr style="background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/banner-bg.png); background-repeat: repeat-x;"><td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="58" /></td>
+<td width="30">
+<span id="twikiLogo" class="twikiImage"><a href="%WEBLOGOURL%"><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" style="border:none;" /></a></span></td>
+<td align="right" class="patternMetaMenu">
+<noautolink>
+   * <form name="jumpForm" action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%"><input id="jumpFormField" type="text" class="twikiInputField" name="topic" value="" size="10" /><noscript>&nbsp;<input type="submit" class="twikiButton" size="5" name="submit" value="%MAKETEXT{"Jump"}%" />&nbsp;</noscript>
+   </form>
+   * <form name="quickSearchForm" action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/WebSearch"><input type="text" class="twikiInputField" id="quickSearchBox" name="search" value="" size="10" /><input type="hidden" name="scope" value="all" /><input type="hidden" name="web" value="%BASEWEB%" /><noscript>&nbsp;<input type="submit" size="5" class="twikiButton" name="submit" value="%MAKETEXT{"Search"}%" />&nbsp;</noscript>
+   </form>
+   * %INCLUDE{%SYSTEMWEB%.LanguageSelector}%
+</noautolink>
+</td>
+<td width="15"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="15" height="1" /></td>
+<td width="165" valign="bottom"><div id="twTopBarButtons">
+   * %TMPL:P{"activatable_edit_or_create"}%
+   * %TMPL:P{"activatable_attach"}%
+</div></td>
+<td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="1" /></td>
+</tr>
+</table>%STOPINCLUDE%
+-----
+
+__Related topics:__ TopMenuSkin, TopMenuSkinTopBar, TopMenuSkinDefaultWebTopMenu, WebTopMenu
+@

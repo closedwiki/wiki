@@ -1,0 +1,49 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2008.01.22.03.21.32;	author TWikiContributor;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.06.25.16.26.28;	author TWikiContributor;	state Exp;
+branches;
+next	;
+
+
+desc
+@buildrelease
+@
+
+
+1.2
+log
+@buildrelease
+@
+text
+@%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="2"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarALLVARIABLES
+---+++ ALLVARIABLES -- list of currently defined !TWikiVariables
+   * Syntax: =%<nop>ALLVARIABLES%=
+   * Expands to: a table showing all defined TWikiVariables in the current context
+
+@
+
+
+1.1
+log
+@buildrelease
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.2" version="1"}%
+a3 1
+
+@

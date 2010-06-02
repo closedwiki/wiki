@@ -1,0 +1,54 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2008.01.22.03.21.36;	author TWikiContributor;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.06.25.16.26.30;	author TWikiContributor;	state Exp;
+branches;
+next	;
+
+
+desc
+@buildrelease
+@
+
+
+1.2
+log
+@buildrelease
+@
+text
+@%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="2"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarWIKIUSERSTOPIC
+---+++ WIKIUSERSTOPIC -- name of topic listing all registers users
+   * Syntax: =%<nop>WIKIUSERSTOPIC%=
+   * Expands to: =%WIKIUSERSTOPIC%=, with %USERSWEB% prefix renders as %USERSWEB%.%WIKIUSERSTOPIC%
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarWIKIUSERNAME][WIKIUSERNAME]]
+
+@
+
+
+1.1
+log
+@buildrelease
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.2" version="1"}%
+a3 1
+
+d6 2
+a7 2
+   * Expands to: =%WIKIUSERSTOPIC%=, with %MAINWEB% prefix renders as %MAINWEB%.%WIKIUSERSTOPIC%
+   * Related: [[#VarWIKIUSERNAME][WIKIUSERNAME]]
+@

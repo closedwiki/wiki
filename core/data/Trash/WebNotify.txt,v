@@ -1,0 +1,34 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2009.03.30.09.18.24;	author TWikiContributor;	state Exp;
+branches;
+next	;
+
+
+desc
+@buildrelease
+@
+
+
+1.1
+log
+@buildrelease
+@
+text
+@%META:TOPICINFO{author="TWikiContributor" date="1093678218" format="1.1" version="1"}%
+%META:TOPICPARENT{name="WebHome"}%
+%MAKETEXT{"This is a subscription service to be automatically notified by e-mail when topics change in this [_1] web. This is a convenient service, so you do not have to come back and check all the time if something has changed. To subscribe, please add a bullet with your [_2] in alphabetical order to this list:" args="*<nop>%WEB%*,%SYSTEMWEB%.WikiName"}%
+
+   * Main.TWikiGuest - example@@your.company
+
+%INCLUDE{"%SYSTEMWEB%.WebChangesAlert"}%
+
+__%MAKETEXT{"Related topics:"}%__ %SYSTEMWEB%.WebChangesAlert, %SYSTEMWEB%.TWikiRegistration
+
+@

@@ -1,0 +1,275 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2010.05.29.14.44.30;	author TWikiContributor;	state Exp;
+branches;
+next	;
+
+
+desc
+@buildrelease
+@
+
+
+1.1
+log
+@buildrelease
+@
+text
+@%META:TOPICINFO{author="TWikiContributor" date="1274935722" format="1.1" version="1"}%
+---+!! !TopMenuSkin
+<!--
+   Contributions to this skin are appreciated. Please update the skin page at
+   http://twiki.org/cgi-bin/view/Plugins/TopMenuSkin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TopMenuSkinDev.
+   If you are a TWiki contributor please update the skin in the SVN repository.
+-->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+The !TopMenuSkin adds pulldown menus to the PatternSkin.
+
+---++ Screen Shot
+
+%SEARCH{ "%TOPIC%" scope="topic" nosearch="on" nototal="on" format="$pattern(.*\| *Screenshot\:[^\|]*\|([^\|]*).*)" }%
+
+---++ Tob Bar and Menu Structure
+
+<div style="float:right; text-align: center; padding:10px; width:150px; background-color:#EBEEF0">
+This skin is%BR% sponsored by:%BR%
+[[http://twiki.net/?ref=twiki.org/topmenuskin.logo][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" alt="Twiki, Inc." title="Twiki, Inc." />]]
+</div>
+
+   * TopMenuSkinTopBar - top bar with menu bar, logo and search boxes (replacing WebTopBar)
+
+   * WebTopMenu - bullet list defining menu bar for %WEB% web
+   * TopMenuSkinDefaultWebTopMenu - bullet list defining menu bar for webs that do not have a !WebTopMenu topic
+      * TopMenuSkinHomeMenu - "Home" pulldown menu with web list, included by !WebTopMenu
+      * TopMenuSkinTopicMenu - "Topic" pulldown menu with topic actions, included by !WebTopMenu
+
+__NOTE:__ The skin is designed to incorporate the "you are here" breadcrumb into the pulldown menus:%BR% "Home" menu => "Web" menu => List of parent topics, if any (shown as "P"s) => Current topic ("View" menu).
+
+#WebSpecific
+---++ Web-specific Menu-Bars
+
+The TopMenuSkinDefaultWebTopMenu defines the default menu structure used in any web. A !WebTopMenu topic in a web can redefine the default menu structure. If the !WebTopMenu topic is missing in a web, create one with content of [[_default.WebTopMenu]] and customize it. Bullets must be of format =[<nop>[...][...]]= or =&lt;a href="..."&gt;...&lt;/a&gt;=, and may not contain any text next to the link.
+
+To preserve the "you are here" breadcrumb, it is important to add additional pulldown menus _after_ the INCLUDE of !%SYSTEMWEB%.TopMenuSkinTopicMenu. The top level menu-bar should have this structure:
+
+   * INCLUDE of !%SYSTEMWEB%.TopMenuSkinHomeMenu
+   * Current Web menu
+   * INCLUDE of !%SYSTEMWEB%.TopMenuSkinTopicMenu
+   * Additional pulldown menu(s) as needed (optional)
+
+Example !WebTopBar menu structure with additional "Bugs" pulldown menu:
+<verbatim>
+%INCLUDE{%SYSTEMWEB%.TopMenuSkinHomeMenu}%
+   * [[%BASEWEB%.%HOMETOPIC%][<img src="%ICONURL{web-bg}%" border="0" alt="" width="16" height="16" style="background-color:%WEBBGCOLOR%" /> <nop>%MAKETEXT{"[_1] Web" args="%BASEWEB{format="$current"}%"}% %ICON{menu-down}%]]
+      * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebCreateNewTopic?topicparent=%BASETOPIC%][ %ICON{"newtopic"}% %MAKETEXT{"Create New Topic"}%]]
+      * [[%BASEWEB%.WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]
+      * [[%BASEWEB%.WebSearch][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
+      * [[%BASEWEB%.WebChanges][ %ICON{"changes"}% %MAKETEXT{"Changes"}%]]
+      * [[%BASEWEB%.WebNotify][ %ICON{"notify"}% %MAKETEXT{"Notifications"}%]]
+      * [[%BASEWEB%.WebRss][ %ICON{"feed"}% %MAKETEXT{"RSS Feed"}%]]
+      * [[%BASEWEB%.WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]
+      * [[%BASEWEB%.WebPreferences][ %ICON{"wrench"}% %MAKETEXT{"Preferences"}%]]
+%INCLUDE{%SYSTEMWEB%.TopMenuSkinTopicMenu}%
+   * [[BugTracker][%ICON{bug}% Bugs %ICON{menu-down}%]]
+      * [[NewReport][Create bug report]]
+      * [[OpenBugs][Open bugs]]
+      * [[ConfirmedBugs][Confirmed bugs]]
+      * [[FixedBugs][Fixed bugs]]
+</verbatim>
+
+---++ Use Menu-Bars in Topics
+
+A menu-bar can be added anywhere in a topic:
+   * Include the "%SYSTEMWEB%.TopMenuSkin" topic - this pulls in the CSS and !JavaScript needed for the menu-bar.
+   * Create a nested bullet list with links:
+      * The top level bullets define the menu-bar items. Bullets with/without links are supported.
+      * Second level bullets define the pulldown options within a menu-bar item.
+         * A second level bullet must contain exactly one link (format =[<nop>[...][...]]= or =&lt;a href="..."&gt;...&lt;/a&gt;=) without any text next to the link.
+      * Third level bullets are not supported.
+   * Enclose the bullet list with a =&lt;div class="twTopMenuTab"&gt;= tag.
+
+Example:<verbatim>
+%INCLUDE{"%SYSTEMWEB%.TopMenuSkin"}%
+<div class="twTopMenuTab">
+   * [[WebHome][%ICON{home}% Home %ICON{menu-down}%]]
+      * [[WebNotify][Subscribe]]
+      * [[WebStatistics][Statistics]]
+   * [[WebSearch][%ICON{searchtopic}% Search %ICON{menu-down}%]]
+      * [[WebSearchAdvanced][Advanced search]]
+      * [[SearchHelp][Search help]]
+</div>
+</verbatim>
+
+Renders as:
+<div class="twTopMenuTab">
+   * [[WebHome][%ICON{home}% Home %ICON{menu-down}%]]
+      * [[WebNotify][Subscribe]]
+      * [[WebStatistics][Statistics]]
+   * [[WebSearch][%ICON{searchtopic}% Search %ICON{menu-down}%]]
+      * [[WebSearchAdvanced][Advanced search]]
+      * [[SearchHelp][Search help]]
+</div>
+
+__NOTE:__ The pulldown menus only work if the TWiki:Plugins/JQueryPlugin is installed and enabled.
+
+---++ CSS and !JavaScript
+
+This section defines the CSS and !JavaScript. ([[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][View Raw]] to see the source.)
+
+%STARTINCLUDE%<!--<pre>-->
+<script type="text/javascript">
+var twtimeout = 600;
+var twclosetimer = null;
+var twmenuitem = null;
+function twTopMenuOpen() {
+ twTopMenuCancelTimer();
+ twTopMenuClose();
+ twmenuitem = $(this).find('ul').css('visibility', 'visible'); 
+}
+function twTopMenuClose() {
+ if(twmenuitem) { twmenuitem.css('visibility', 'hidden'); } 
+}
+function twTopMenuTimer() {
+ twclosetimer = window.setTimeout(twTopMenuClose, twtimeout); 
+}
+function twTopMenuCancelTimer() {
+ if(twclosetimer) { window.clearTimeout(twclosetimer); twclosetimer = null; } 
+}
+$(document).ready(function() {
+ $('.twTopMenuTab > ul li').bind('mouseover', twTopMenuOpen);
+ $('.twTopMenuTab > ul').bind('mouseout',  twTopMenuTimer);
+});
+document.onclick = twTopMenuClose;
+</script>
+<style type="text/css" media="all">
+.twTopMenuTab
+{
+  height: 22px;
+  width: auto;
+  color: #111111;
+  background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/menu-gray-bg.png);
+  background-repeat: repeat-x;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.twTopMenuTab ul
+{
+  height: 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.twTopMenuTab ul li
+{
+  float: left;
+  font: 13px Tahoma, Arial;
+  vertical-align: middle;
+  width: auto;
+  white-space: nowrap;
+}
+.twTopMenuTab ul li a
+{
+  display: block;
+  padding: 2px 8px 3px 8px;
+  text-decoration: none;
+  color: #111111;
+}
+.twTopMenuTab ul li a:hover
+{
+  background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/menu-reverse-bg.png);
+  color: #111111;
+  text-decoration: none;
+}
+.twTopMenuTab ul li ul
+{
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  visibility: hidden;
+  border-top: 1px solid white;
+  color: #111111;
+  z-index: 9000;
+}
+.twTopMenuTab ul li ul li
+{
+  float: none;
+  display: inline;
+}
+.twTopMenuTab ul li ul li a
+{
+  width: auto;
+  background-color: #F7F8F8;
+  background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/menu-pulldown-bg.png);
+  background-repeat: repeat-y;
+  padding: 3px 8px;
+}
+.twTopMenuTab ul li ul li a:hover
+{
+  background-color: #AFB3C5;
+  background-repeat: repeat;
+}
+</style>
+<!--</pre>-->%STOPINCLUDE%
+
+---++ Installation
+
+*Note:* You do not need to install anything on the browser to use this skin. The following instructions are for the administrator who installs the skin on the server where TWiki is running.
+
+   * Download the ZIP file from the Skin homepage (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory
+   * Install TWiki:Plugins/JQueryPlugin and enable it using configure (if not done already)
+   * To turn on the skin, write in !Main.TWikiPreferences: %BR%
+     =* Set SKIN = topmenu, pattern=
+   * [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Test if installed]]
+   * *Note* on upgrading existing TWiki:
+      * See [[#WebSpecific][Web-specific Menu-Bars]] above on how to retrofit and customize menu-bars.
+   * *Note* on using this skin on TWiki 4.2 and 4.3:
+      * This skin depends on TWiki 5.0 specific feature =%<nop>WEB{format="$current"}%= to show the current web in the Web menu. To use this skin on TWiki 4.2 or 4.3, remove the parameter from the WEB variable (to show only =%<nop>WEB%=), or apply patch TWiki:Item6424 (to add the format parameter feature).
+      * Apply patch TWikibug:Item6430 so that Edit and Attach buttons point to the current topic instead of !TopMenuSkinTopBar.
+      * Attach %ATTACHURL%/menu-down.gif and %ATTACHURL%/menu-right.gif to %SYSTEMWEB%.TWikiDocGraphics.
+      * If you have more than 30 webs, apply TWikibug:Item6429 to limit the number of webs shown in the "Home" menu.
+
+---++ Creating your own look
+
+This skin is based on PatternSkin, and the same rules for customization apply.
+
+The !TopMenuSkin disables the sidebar and activates a different top bar in =twiki/templates/view.topmenu.tmpl=. Details in PatternSkinCustomization and PatternSkinCssCookbook.
+
+---++ Skin Info
+
+   * Set SHORTDESCRIPTION = Skin with pulldown menus in top bar
+
+|  Skin Author: | TWiki:Main/PeterThoeny |
+|  Copyright: | &copy; 2010, TWiki:Main/PeterThoeny, [[http://twiki.net][Twiki, Inc.]] |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Description: | Top-menu skin |
+|  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Click for full screen image" width="600" height="130" /></a> |
+|  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
+|  Base Name: | topmenu,pattern |
+|  Skin Version: | 2010-05-26 (v1.4) |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-05-26: | TWikibug:Item6471 - show topic info in tooltip of View menu; show tooltip help in View and Edit menu items; point raw view and print version to actual topic revision |
+|  2010-05-20: | TWikibug:Item6455 - use %<nop>ICON{menu-down}% instead of long img tag in menu-bars |
+|  2010-05-01: | TWikibug:Item6437 - removed loading of jQuery Javascript library to avoid double load issue; require !JQueryPlugin installed and enabled |
+|  2010-04-26: | TWikibug:Item6435 - doc improvements |
+|  2010-04-21: | TWikibug:Item6431 - fix hardcoded reference to !JQueryPlugin CSS and JS; doc improvements |
+|  2010-04-19: | TWikibug:Item6413 - initial release (v1.0) |
+|  Dependencies: | TWiki 4.2 or later; TWiki:Plugins/PatternSkin; TWiki:Plugins/JQueryPlugin |
+|  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related topics:__ WebTopMenu, TopMenuSkinDefaultWebTopMenu, TopMenuSkinHomeMenu, TopMenuSkinTopBar, TopMenuSkinTopicMenu, %SYSTEMWEB%.TWikiSkins, %SYSTEMWEB%.TWikiSkinBrowser, %SYSTEMWEB%.UserDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory
+
+%META:FILEATTACHMENT{name="fullscreen.png" attachment="fullscreen.png" attr="h" comment="" date="1271719988" path="fullscreen.png" size="36985" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1271719875" path="screenshot.png" size="15762" user="TWikiContributor" version="1"}%
+@

@@ -1,0 +1,163 @@
+head	1.4;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2010.05.29.14.44.27;	author TWikiContributor;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2009.09.02.13.43.08;	author TWikiContributor;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2009.04.29.20.53.28;	author TWikiContributor;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2009.03.30.09.18.12;	author TWikiContributor;	state Exp;
+branches;
+next	;
+
+
+desc
+@buildrelease
+@
+
+
+1.4
+log
+@buildrelease
+@
+text
+@%META:TOPICINFO{author="TWikiContributor" date="1273211493" format="1.1" version="4"}%
+---+!! !TWikiNetSkin Plugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/TWikiNetSkinPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TWikiNetSkinPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC%
+</div>
+Helps TWikiNetSkin to render tables and h2 headers. This plugin is only enabled if the skin is set to =twikinet=.
+
+---++ Syntax Rules
+
+(none)
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TWIKINETSKINPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Helps TWikiNetSkin to render tables and h2 headers
+
+   * Debug plugin: ( TWiki sets =$debug= in your plugin. See output in =data/debug.txt=.)
+      * Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your root ($TWIKI_ROOT) directory. Content:
+   | *File:* | *Description:* |
+   | ==data/TWiki/%TOPIC%.txt== |  |
+   | ==lib/TWiki/Plugins/%TOPIC%.pm== |  |
+
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Set the skin to =twikinet= (together with =pattern=): %BR%
+   =* Set SKIN = twikinet,pattern=
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.ArthurClemens |
+|  Copyright: | &copy; 2007-2010 [[http://www.twiki.net/][Twiki, Inc.]] |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 18607 (2010-05-29) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-05-06: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
+|  2007-07-30: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  Dependencies: | %$DEPENDENCIES |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 99%, %TOPIC% 99% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ TWikiNetSkin, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+@
+
+
+1.3
+log
+@buildrelease
+@
+text
+@d1 11
+a11 3
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="3"}%
+---+ TWikiNetSkin Plugin
+
+d20 1
+a20 2
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TWIKINETSKINPLUGIN_SHORTDESCRIPTION%==
+d22 1
+a22 1
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+d29 1
+a35 3
+   * Optionally, if it exists, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
+   * Alternatively, manually make sure the dependencies listed in the table below are resolved.
+   None
+a39 1
+
+d43 1
+d45 1
+a45 1
+|  Plugin Version: | 17859 (02 Sep 2009) |
+d47 2
+a48 1
+|  30 Jul 2007: | Initial version |
+d51 1
+a51 1
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
+d56 1
+a56 1
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+@
+
+
+1.2
+log
+@buildrelease
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="2"}%
+d40 1
+a40 1
+|  Plugin Version: | 17859 (29 Apr 2009) |
+@
+
+
+1.1
+log
+@buildrelease
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="1"}%
+d40 1
+a40 1
+|  Plugin Version: | 17859 (30 Mar 2009) |
+@

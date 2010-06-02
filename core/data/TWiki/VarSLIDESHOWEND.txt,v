@@ -1,0 +1,32 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2008.01.22.03.21.23;	author TWikiContributor;	state Exp;
+branches;
+next	;
+
+
+desc
+@buildrelease
+@
+
+
+1.1
+log
+@buildrelease
+@
+text
+@%META:TOPICINFO{author="TWikiContributor" date="1191133909" format="1.1" version="1"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarSLIDESHOWEND
+---+++ SLIDESHOWEND -- end slideshow
+   * The =%<nop>SLIDESHOWEND%= variable is handled by the SlideShowPlugin
+   * Syntax: =%<nop>SLIDESHOWEND%=
+   * Example: See SLIDESHOWSTART
+   * Related: [[#VarSLIDESHOWSTART][SLIDESHOWSTART]], SlideShowPlugin
+@

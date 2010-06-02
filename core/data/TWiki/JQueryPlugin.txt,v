@@ -1,0 +1,155 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2010.05.29.14.44.22;	author TWikiContributor;	state Exp;
+branches;
+next	;
+
+
+desc
+@buildrelease
+@
+
+
+1.1
+log
+@buildrelease
+@
+text
+@%META:TOPICINFO{author="TWikiContributor" date="1272259587" format="1.1" version="1"}%
+---+!! JQuery Plugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page
+   at http://twiki.org/cgi-bin/view/Plugins/JQueryPlugin or provide feedback
+   at http://twiki.org/cgi-bin/view/Plugins/JQueryPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+
+   * Set SHORTDESCRIPTION = jQuery <nop>JavaScript library for TWiki
+-->
+%SHORTDESCRIPTION%
+
+%TOC%
+
+---++ Description
+This plugin contains the latest version of the [[http://jquery.com/][jQuery]] <nop>JavaScript library. 
+
+<blockquote>
+"jQuery is a fast, concise, <nop>JavaScript Library that simplifies how you traverse HTML documents, handle events, perform animations, and add Ajax interactions to your web pages."
+</blockquote>
+
+See the Sandbox.JQueryPluginExamples page for a demo of a couple of widgets used by TWiki.
+
+---++ Included libraries
+   1 jquery
+   1 jquery.bgiframe
+   1 jquery.blockUI
+   1 jquery.debug
+   1 jquery.dimensions
+   1 jquery.dom 
+   1 jquery.easing
+   1 jquery.hoverIntent
+   1 jquery.innerfade
+   1 jquery.metadata 
+   1 jquery.nifty
+   1 jquery.shrinkurls
+   1 jquery.spinner
+   1 jquery.superfish
+   1 jquery.tabpane (non-ui version)
+   1 jquery.tooltip
+   1 jquery.treeview
+   1 ui.accordion
+   1 ui.datepicker
+   1 ui.dialog
+   1 ui.draggable
+   1 ui.droppable
+   1 ui.mouse
+   1 ui.resizable
+   1 ui.selectable
+   1 ui.slider
+   1 ui.sortable
+   1 ui.tabs
+
+---++ JQuery Library Documentation
+   * [[http://docs.jquery.com/How_jQuery_Works][Getting the feet wet]]
+   * [[http://docs.jquery.com/Tutorials][Tutorials]]
+   * [[http://docs.jquery.com/Main_Page][Reference API]]
+   * [[http://docs.jquery.com/Using_jQuery_with_Other_Libraries][Using jQuery with other libraries]]
+   * [[http://docs.jquery.com/Plugins][Plugin repository]]
+
+---++ Syntax Rules
+
+   * =%<nop>JQSCRIPT{"jquery.js"}%= - include the specified script. Keep in mind that the =jquery.js= script must be loaded before plug-ins scripts.
+   * =%<nop>JQTHEME{"mythemename"}%= - include the specified theme. Better load the desired theme before any script.
+   * =%<nop>JQIMAGESURLPATH{"myimage.png"}%= - expand to the specified image path.
+   * =%<nop>JQIMAGESURLPATH%/myimage.png= - Same result as the above.
+
+---++ Themes
+
+The following themes are provided:
+   * =flora= theme
+   * =ogray= theme
+
+---++ Examples
+
+   * Sandbox.PluginTestJQueryPlugin 	 	
+   * Sandbox.JQueryPluginExamples
+
+---++ Installation Instructions
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | =data/Sandbox/JQueryPluginExamples.txt= | Example topic |
+     | =data/Sandbox/PluginTestJQueryPlugin.txt= | Test topic |
+     | =data/TWiki/JQueryPlugin.txt= | Plugin documentation topic |
+     | =lib/CPAN/lib/CSS/Minifier.pm= | Perl module |
+     | =lib/CPAN/lib/JavaScript/Minifier.pm= | Perl module |
+     | =lib/TWiki/Plugins/JQueryPlugin/Core.pm= | Perl module |
+     | =lib/TWiki/Plugins/JQueryPlugin.pm= | Perl module |
+     | =pub/TWiki/JQueryPlugin/Makefile= | Makefile |
+     | =pub/TWiki/JQueryPlugin/jquery-all.css= | Main stylesheet file |
+     | =pub/TWiki/JQueryPlugin/jquery-all.js= | Main Javascript file |
+     | =pub/TWiki/JQueryPlugin/jquery-all.js.gz= | Main Javascript file, compressed |
+     | =pub/TWiki/JQueryPlugin/*.js= | Javascript files |
+     | =pub/TWiki/JQueryPlugin/*.gif= | Image files |
+     | =pub/TWiki/JQueryPlugin/*.png= | Image files |
+     | =pub/TWiki/JQueryPlugin/i18n/*.js= | Style sheets for internationalization |
+     | =pub/TWiki/JQueryPlugin/images/*.gif= | Image library |
+     | =pub/TWiki/JQueryPlugin/themes/*= | Themes |
+     | =tools/minifycss= | Utility |
+     | =tools/minifyjs= | Utility |
+   * TWiki 4 and up: Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Test [[Sandbox.JQueryPluginExamples]] for functionality.
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/MichaelDaum |
+|  Copyright: | &copy; 2007-2008 Michael Daum http://michaeldaumconsulting.com <br /> &copy; 2008-2010 TWiki:TWiki/TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 1.1 (2010-04-25) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-04-25: | TWikibug:Item6436 - renamed too generic variable names BUTTON, TOGGLE, CLEAR, TABPANE, ENDTABPANE, TAB, ENDTAB to JQBUTTON, JQTOGGLE, JQCLEAR, JQTABPANE, JQENDTABPANE, JQTAB, JQENDTAB, respectively. Old variables names available if configure setting is set: =$TWiki::cfg{JQueryPlugin}{Legacy2008} = 1;= -- TWiki:Main/PeterThoeny |
+|  2010-04-22: | TWikibug:Item6433 - doc improvements, no code changes |
+|  15 Jul 2008: | updated to ui-1.5.2; added async treeview; added async options to tabpane |
+|  03 Jul 2008: | updated to ui-1.5.1 |
+|  05 Jun 2008: | updated to jquery-1.2.6 and ui-1.5-RC1 |
+|  30 Apr 2008: | repackaged to contain jquery UI |
+|  13 Feb 2008: | upgrade to jquery-1.2.3, as well as most plugins |
+|  17 Jan 2008: | added jquery.metadata plugin; \
+                  implemented a jquery.tabpane plugin; \
+                  updated jquery.dimensions plugin; \
+                  added jquery.empty plugin to ease development of new plugins |
+|  15 Nov 2007: | use skin independent way to add javascript files to header |
+|  10 Oct 2007: | upgraded to jQuery-1.1.4; compressed js and css |
+|  12 Jul 2007: | initial package containing jQuery-1.1.3.1 |
+|  Dependencies: | None |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/JQueryPlugin |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/JQueryPluginDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/JQueryPluginAppraisal |
+
+__Related topics:__ Sandbox.PluginTestJQueryPlugin, Sandbox.JQueryPluginExamples, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory
+@

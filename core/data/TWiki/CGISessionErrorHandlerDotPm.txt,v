@@ -1,0 +1,55 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2008.01.22.03.21.35;	author TWikiContributor;	state Exp;
+branches;
+next	;
+
+
+desc
+@buildrelease
+@
+
+
+1.1
+log
+@buildrelease
+@
+text
+@---+ Package ==
+
+%TOC%
+=head1 NAME
+
+CGI::Session::ErrorHandler - error handling routines for CGI::Session
+
+=head1 SYNOPSIS
+
+    require CGI::Session::ErrorHandler
+    @@ISA = qw( CGI::Session::ErrorHandler );
+
+    sub some_method {
+        my $self = shift;
+        unless (  $some_condition ) {
+            return $self->set_error("some_method(): \$some_condition isn't met");
+        }
+    }
+
+=head1 DESCRIPTION
+
+CGI::Session::ErrorHandler provides set_error() and errstr() methods for setting and accessing error messages from within CGI::Session's components. This method should be used by driver developers for providing CGI::Session-standard error handling routines for their code
+
+=head2 METHODS
+
+=over 4
+
+=item set_error($message)
+
+Implicitly defines $pkg_name::errstr and sets its value to $message. Return value is B<always> undef.
+
+@
