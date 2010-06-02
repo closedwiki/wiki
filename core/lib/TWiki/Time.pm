@@ -195,15 +195,40 @@ sub formatTime  {
         $outputTimeZone = 'gmtime';
     }
 
-    my( $sec, $min, $hour, $day, $mon, $year, $wday, $tz_str);
-    if( $outputTimeZone eq 'servertime' ) {
-        ( $sec, $min, $hour, $day, $mon, $year, $wday ) =
-          localtime( $epochSeconds );
-        $tz_str = 'Local';
+    my( $sec, $min, $hour, $day, $mon, $year, $wday );
+    my $tz_str = 'GMT';
+    if( $outputTimeZone eq 'gmtime' ) {
+        ( $sec, $min, $hour, $day, $mon, $year, $wday ) = gmtime( $epochSeconds );
+
     } else {
-        ( $sec, $min, $hour, $day, $mon, $year, $wday ) =
-          gmtime( $epochSeconds );
-        $tz_str = 'GMT';
+        ( $sec, $min, $hour, $day, $mon, $year, $wday ) = localtime( $epochSeconds );
+        if( $formatString =~ /(\$tz|iso)/i ) {
+            # spcial case for local time zone offset calculation
+            my( $tz_day, $tz_hour, $tz_min);
+            my ( $gsec, $gmin, $ghour, $gday, $gmon, $gyear, $gwday ) =
+                gmtime( $epochSeconds );
+            $tz_day = $wday - $gwday;
+            $tz_hour = $hour - $ghour;
+            $tz_min = $min - $gmin;
+            $tz_day -= 7 if ($tz_day > 3);
+            $tz_day += 7 if ($tz_day < -3);
+            $tz_hour += (24 * $tz_day);
+            $tz_min += (60 * $tz_hour);
+            if ($tz_min < 0) {
+                $tz_str = '-';
+                $tz_min *= -1;
+            } else {
+                $tz_str = '+';
+            }
+            $tz_hour = $tz_min/60;
+            $tz_min %= 60;
+            $tz_str .= sprintf('%.2u',$tz_hour);
+            $tz_str .= ':' if( $formatString =~ /iso/i );
+            $tz_str .= sprintf('%.2u',$tz_min);
+            if (($tz_hour == 0) && ($tz_min == 0)) {
+                $tz_str = 'GMT';
+            }
+        }
     }
 
     #standard twiki date time formats
@@ -216,14 +241,9 @@ sub formatTime  {
         $formatString = '$wday, $day $month $year $hour:$min:$sec $tz';
     } elsif ( $formatString =~ /iso/i ) {
         # ISO Format, see spec at http://www.w3.org/TR/NOTE-datetime
-        # e.g. "2002-12-31T19:30:12Z"
-        $formatString = '$year-$mo-$dayT$hour:$min:$sec';
-        if( $outputTimeZone eq 'gmtime' ) {
-            $formatString = $formatString.'Z';
-        } else {
-            #TODO:            $formatString = $formatString.
-            # TZD  = time zone designator (Z or +hh:mm or -hh:mm) 
-        }
+        # "2002-12-31T19:30:12Z" or "2002-12-31T12:30:12-07:00"
+        $formatString = '$year-$mo-$dayT$hour:$min:$sec$tz';
+        $tz_str = 'Z' if( $tz_str eq 'GMT' );
     }
 
     $value = $formatString;
@@ -239,9 +259,6 @@ sub formatTime  {
     $value =~ s/\$year?/sprintf('%.4u',$year+1900)/gei;
     $value =~ s/\$ye/sprintf('%.2u',$year%100)/gei;
     $value =~ s/\$epoch/$epochSeconds/gi;
-
-    # SMELL: how do we get the different timezone strings (and when
-    # we add usertime, then what?)
     $value =~ s/\$tz/$tz_str/geoi;
 
     return $value;
