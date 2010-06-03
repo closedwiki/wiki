@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1174329144" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1275533057" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarGMTIME2
 
@@ -17,7 +17,7 @@
      | =$mo= | 2 digit month | 12 |
      | =$year= | 4 digit year | 1999 |
      | =$ye= | 2 digit year | 99 |
-     | =$tz= | either "GMT" (if set to gmtime), or "Local" (if set to servertime) | GMT |
+     | =$tz= | either "GMT" (if set to gmtime),<br /> or offset such as "-0700" (if set to servertime) | GMT |
      | =$iso= | ISO format timestamp | %GMTIME{"$iso"}% |
      | =$rcs= | RCS format timestamp | %GMTIME{"$rcs"}% |
      | =$http= | E-mail & http format timestamp | %GMTIME{"$http"}% |
