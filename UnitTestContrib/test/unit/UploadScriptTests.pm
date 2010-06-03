@@ -266,4 +266,23 @@ sub test_propschanges {
     $this->assert_str_equals('Educate the hedgehog', $at->{comment});
 }
 
+# Test two file upload
+
+sub test_twofile_upload_one {
+    my $this = shift;
+    local $/;
+    my $result = $this->do_multiple_upload(
+        {  
+        ## TODO  - add filename/data
+        },
+        hidefile => 0,
+        filecomment => 'MY NAME IS COMMENT',
+        createlink => 0,
+        changeproperties => 0,
+       );
+    $this->assert($result =~ /^OK/, $result);
+}
+
+
+
 1;
