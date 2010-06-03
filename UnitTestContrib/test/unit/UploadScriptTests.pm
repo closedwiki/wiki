@@ -26,6 +26,7 @@ sub set_up {
         "   * Set ATTACHFILESIZELIMIT = 511\n", undef );
 }
 
+# Following subroutine uploads single file 
 sub do_upload {
     my $this = shift;
     my $fn = shift;
@@ -77,6 +78,86 @@ sub do_upload {
 
     my ($text, $result) = $this->capture( \&TWiki::UI::Upload::upload, $this->{twiki});
     return $text;
+}
+# upload two files 
+# TODO - make it generic later
+sub do_multipe_upload {
+    my $this = shift;
+    my $filedata = shift;   # hash filepath=>, data=>, filepath0=>, data0=>
+    my %params = @_;
+    my %args = (
+        webName => [ $this->{test_web} ],
+        topicName => [ $this->{test_topic} ],
+       );
+    while( scalar(@_)) {
+        my $k = shift(@_);
+        my $v = shift(@_);
+        $args{$k} = [ $v ];
+    }
+   
+
+    my $query = new Unit::Request(\%args);
+    $query->path_info( "/$this->{test_web}/$this->{test_topic}" );
+   
+    $query->request_method('POST');
+    $TWiki::cfg{CryptToken}{Enable}=0;
+  
+    my $tmpfile = new CGITempFile(0);  #This package is part of CGI module
+    my $tmpfiletwo = new CGITempFile(0); #TODO - check if this opens another tmp file
+                                         #If does not work, use other module to open 
+                                         # tmp files
+
+    my $fnone = $filedata->{filepath};
+    my $fhone = Fh->new($fnone, $tmpfile->as_string, 0);
+
+    my $fntwo = $filedata->{filepath0};
+    my $fhtwo = Fh->new($fntwo, $tmpfiletwo->as_string, 0); 
+
+    print $fhone $filedata->{data};
+    print $fhtwo $filedata->{data0};
+
+    seek($fhone,0,0);
+    seek($fhtwo,0,0);
+
+    my ( $release ) = $TWiki::RELEASE =~ /-(\d+)\.\d+\.\d+/;
+    if ( $release >= 5 ) {
+        $query->param( -name => 'filepath', -value => $fnone );
+        $query->param( -name => 'filepath0', -value => $fntwo );
+        my %uploads = ();
+        require TWiki::Request::Upload;
+        $uploads{$fhone} = new TWiki::Request::Upload(
+            headers => {},
+            tmpname => $tmpfile->as_string
+        );
+        $uploads{$fhtwo} = new TWiki::Request::Upload(
+            headers => {},
+            tmpname => $tmpfiletwo->as_string
+        );
+        $query->uploads( \%uploads );
+    } else {
+        $query->{'.tmpfiles'}->{$$fhone} = { hndl => $fhone, name => $tmpfile, info => {}, };
+        push( @{ $query->{'filepath'} }, $fhone );
+        $query->param( 'filepath', $fhone );
+        $query->{'.tmpfiles'}->{$$fhtwo} = { hndl => $fhtwo, name => $tmpfiletwo, info => {}, };
+        push( @{ $query->{'filepath0'} }, $fhtwo );
+        $query->param( 'filepath0', $fhtwo );
+    }
+
+
+    my $stream = $query->upload( 'filepath' );
+    seek($stream,0,0);
+
+    my $streamone = $query->upload( 'filepath0' );
+    seek($streamone,0,0);
+
+
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
+
+    my ($text, $result) = $this->capture( \&TWiki::UI::Upload::upload, $this->{twiki});
+    return $text;
+
+ 
 }
 
 sub test_simple_upload {
