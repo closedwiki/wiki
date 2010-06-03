@@ -283,6 +283,34 @@ sub test_twofile_upload_one {
     $this->assert($result =~ /^OK/, $result);
 }
 
+sub test_twofile_upload_two {
+    my $this = shift;
+    local $/;
+    my $result = $this->do_multiple_upload(
+        {  
+        ## TODO  - add filename/data
+        },
+        hidefile => 1,
+        filecomment => 'MY NAME IS COMMENT',
+        createlink => 0,
+        changeproperties => 0,
+       );
+    $this->assert($result =~ /^OK/, $result);
+}
 
+sub test_twofile_upload_three {
+    my $this = shift;
+    local $/;
+    my $result = $this->do_multiple_upload(
+        {  
+        ## TODO  - add filename/data
+        },
+        hidefile => 1,
+        filecomment => 'MY NAME IS COMMENT',
+        createlink => 1,
+        changeproperties => 0,
+       );
+    $this->assert($result =~ /^OK/, $result);
+}
 
 1;
