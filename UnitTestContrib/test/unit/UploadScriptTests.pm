@@ -10,6 +10,8 @@ use Unit::Request;
 use TWiki::UI::Upload;
 use CGI;
 use Error qw( :try );
+use File::Temp qw/tmpnam/;
+
 
 sub new {
     my $self = shift()->SUPER::new("UploadScript", @_);
@@ -81,7 +83,7 @@ sub do_upload {
 }
 # upload two files 
 # TODO - make it generic later
-sub do_multipe_upload {
+sub do_multiple_upload {
     my $this = shift;
     my $filedata = shift;   # hash filepath=>, data=>, filepath0=>, data0=>
     my %params = @_;
@@ -102,16 +104,16 @@ sub do_multipe_upload {
     $query->request_method('POST');
     $TWiki::cfg{CryptToken}{Enable}=0;
   
-    my $tmpfile = new CGITempFile(0);  #This package is part of CGI module
-    my $tmpfiletwo = new CGITempFile(0); #TODO - check if this opens another tmp file
+    my $tmpfile = tmpnam();  #This package is part of CGI module
+    my $tmpfiletwo = tmpnam(); #TODO - check if this opens another tmp file
                                          #If does not work, use other module to open 
                                          # tmp files
 
     my $fnone = $filedata->{filepath};
-    my $fhone = Fh->new($fnone, $tmpfile->as_string, 0);
+    my $fhone = Fh->new($fnone, $tmpfile, 0);
 
     my $fntwo = $filedata->{filepath0};
-    my $fhtwo = Fh->new($fntwo, $tmpfiletwo->as_string, 0); 
+    my $fhtwo = Fh->new($fntwo, $tmpfiletwo, 0); 
 
     print $fhone $filedata->{data};
     print $fhtwo $filedata->{data0};
@@ -127,11 +129,11 @@ sub do_multipe_upload {
         require TWiki::Request::Upload;
         $uploads{$fhone} = new TWiki::Request::Upload(
             headers => {},
-            tmpname => $tmpfile->as_string
+            tmpname => $tmpfile
         );
         $uploads{$fhtwo} = new TWiki::Request::Upload(
             headers => {},
-            tmpname => $tmpfiletwo->as_string
+            tmpname => $tmpfiletwo
         );
         $query->uploads( \%uploads );
     } else {
