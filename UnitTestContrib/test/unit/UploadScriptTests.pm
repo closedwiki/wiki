@@ -273,7 +273,10 @@ sub test_twofile_upload_one {
     local $/;
     my $result = $this->do_multiple_upload(
         {  
-        ## TODO  - add filename/data
+          filepath=>'POTATOONE.txt',
+          data=>'POTATO',
+          filepath0=>'POTATOTWO.txt',
+          data0=>'POTATOPOTATO', 
         },
         hidefile => 0,
         filecomment => 'MY NAME IS COMMENT',
@@ -288,7 +291,10 @@ sub test_twofile_upload_two {
     local $/;
     my $result = $this->do_multiple_upload(
         {  
-        ## TODO  - add filename/data
+          filepath=>'POTATOONE.txt',
+          data=>'POTATO',
+          filepath0=>'POTATOTWO.txt',
+          data0=>'POTATOPOTATO', 
         },
         hidefile => 1,
         filecomment => 'MY NAME IS COMMENT',
@@ -303,7 +309,10 @@ sub test_twofile_upload_three {
     local $/;
     my $result = $this->do_multiple_upload(
         {  
-        ## TODO  - add filename/data
+          filepath=>'POTATOONE.txt',
+          data=>'POTATO',
+          filepath0=>'POTATOTWO.txt',
+          data0=>'POTATOPOTATO', 
         },
         hidefile => 1,
         filecomment => 'MY NAME IS COMMENT',
