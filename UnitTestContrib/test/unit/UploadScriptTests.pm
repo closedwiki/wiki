@@ -104,13 +104,11 @@ sub do_multiple_upload {
     $query->request_method('POST');
     $TWiki::cfg{CryptToken}{Enable}=0;
   
-    my $tmpfile = tmpnam();  #This package is part of CGI module
-    my $tmpfiletwo = tmpnam(); #TODO - check if this opens another tmp file
-                                         #If does not work, use other module to open 
-                                         # tmp files
+    my $tmpfile = tmpnam();  # Using from File::Temp
+    my $tmpfiletwo = tmpnam(); 
 
     my $fnone = $filedata->{filepath};
-    my $fhone = Fh->new($fnone, $tmpfile, 0);
+    my $fhone = Fh->new($fnone, $tmpfile, 0);   # Fh is package under CGI
 
     my $fntwo = $filedata->{filepath0};
     my $fhtwo = Fh->new($fntwo, $tmpfiletwo, 0); 
@@ -286,6 +284,19 @@ sub test_twofile_upload_one {
         changeproperties => 0,
        );
     $this->assert($result =~ /^OK/, $result);
+  
+    $this->assert(open(F, "<$TWiki::cfg{PubDir}/$this->{test_web}/$this->{test_topic}/POTATOONE.txt"));
+    $this->assert_str_equals("POTATO", <F>);
+ 
+    #$this->assert(open(FF, "<$TWiki::cfg{PubDir}/$this->{test_web}/$this->{test_topic}/POTATOTWO.txt"));
+    #$this->assert_str_equals("POTATOPOTATO", <FF>);
+    my ($meta, $text) = TWiki::Func::readTopic($this->{test_web}, $this->{test_topic});
+
+    # Check the meta
+    my $at = $meta->get('FILEATTACHMENT', 'POTATOONE.txt');
+    $this->assert($at);
+    $this->assert_str_equals('MY NAME IS COMMENT', $at->{comment});
+
 }
 
 sub test_twofile_upload_two {
