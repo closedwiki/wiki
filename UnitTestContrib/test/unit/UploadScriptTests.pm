@@ -144,11 +144,11 @@ sub do_multiple_upload {
     }
 
 
-    my $stream = $query->upload( 'filepath' );
-    seek($stream,0,0);
+    #my $stream = $query->upload( 'filepath' );
+    #seek($stream,0,0);
 
-    my $streamone = $query->upload( 'filepath0' );
-    seek($streamone,0,0);
+    #my $streamone = $query->upload( 'filepath0' );
+    #seek($streamone,0,0);
 
 
     $this->{twiki}->finish();
@@ -315,6 +315,19 @@ sub test_twofile_upload_two {
         changeproperties => 0,
        );
     $this->assert($result =~ /^OK/, $result);
+    $this->assert(open(F, "<$TWiki::cfg{PubDir}/$this->{test_web}/$this->{test_topic}/POTATOONE.txt"));
+    $this->assert_str_equals("POTATO", <F>);
+
+    #$this->assert(open(FF, "<$TWiki::cfg{PubDir}/$this->{test_web}/$this->{test_topic}/POTATOTWO.txt"));
+    #$this->assert_str_equals("POTATOPOTATO", <FF>);
+    my ($meta, $text) = TWiki::Func::readTopic($this->{test_web}, $this->{test_topic});
+
+    # Check the meta
+    my $at = $meta->get('FILEATTACHMENT', 'POTATOONE.txt');
+    $this->assert($at);
+    $this->assert_str_equals('MY NAME IS COMMENT', $at->{comment});
+
+
 }
 
 sub test_twofile_upload_three {
@@ -333,6 +346,19 @@ sub test_twofile_upload_three {
         changeproperties => 0,
        );
     $this->assert($result =~ /^OK/, $result);
+      $this->assert(open(F, "<$TWiki::cfg{PubDir}/$this->{test_web}/$this->{test_topic}/POTATOONE.txt"));
+    $this->assert_str_equals("POTATO", <F>);
+
+    #$this->assert(open(FF, "<$TWiki::cfg{PubDir}/$this->{test_web}/$this->{test_topic}/POTATOTWO.txt"));
+    #$this->assert_str_equals("POTATOPOTATO", <FF>);
+    my ($meta, $text) = TWiki::Func::readTopic($this->{test_web}, $this->{test_topic});
+
+    # Check the meta
+    my $at = $meta->get('FILEATTACHMENT', 'POTATOONE.txt');
+    $this->assert($at);
+    $this->assert_str_equals('MY NAME IS COMMENT', $at->{comment});
+
+
 }
 
 1;
