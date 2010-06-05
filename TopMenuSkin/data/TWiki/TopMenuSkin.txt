@@ -212,7 +212,7 @@ document.onclick = twTopMenuClose;
    * *Note* on using this skin on TWiki 4.2 and 4.3:
       * This skin depends on TWiki 5.0 specific feature =%<nop>WEB{format="$current"}%= to show the current web in the Web menu. To use this skin on TWiki 4.2 or 4.3, remove the parameter from the WEB variable (to show only =%<nop>WEB%=), or apply patch TWiki:Item6424 (to add the format parameter feature).
       * Apply patch TWikibug:Item6430 so that Edit and Attach buttons point to the current topic instead of !TopMenuSkinTopBar.
-      * Attach %ATTACHURL%/menu-down.gif and %ATTACHURL%/menu-right.gif to %SYSTEMWEB%.TWikiDocGraphics.
+      * Attach %ATTACHURL%/menu-down.gif to %SYSTEMWEB%.TWikiDocGraphics.
       * If you have more than 30 webs, apply TWikibug:Item6429 to limit the number of webs shown in the "Home" menu.
 
 ---++ Creating your own look
