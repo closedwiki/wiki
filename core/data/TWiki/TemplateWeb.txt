@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1275720025" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="ManagingWebs"}%
 %TOC%
 
@@ -6,7 +6,11 @@
 
 ---++ Purpose
 
-Template webs were created to act as templates in creating webs.  It is now possible to create webs via the %SYSTEMWEB%.ManagingWebs topic.  In the not so distant past TWiki webs were created by hand.  The data directory contains the different webs such as *Main* and *TWiki*.  A web that begins with an underscore &quot;_&quot; character is considered invisible and a template.  All files in the *_default* (or any other web that begins with an underscore) template web will be copied into your new web.  The [[_default.%HOMETOPIC%][_default]] web template contains the following topics: =<nop>%HOMETOPIC%, <nop>WebChanges, <nop>WebIndex, <nop>WebNotify, <nop>WebPreferences, <nop>WebSearch, <nop>WebStatistics and <nop>WebTopicList.=
+Template webs contain a set of default topics and act as templates when creating a new web. Names of template webs begin with an underscore "_" character, such as =_default=. Names of regular webs begin with an uppercase letter, such as =%USERSWEB%=. 
+
+An administrator can select a template web from the "based on web" picklist when creating a new web in the ManagingWebs topic. Template webs are otherwise invisible.
+
+The [[_default.%HOMETOPIC%][_default]] web template contains the following topics: =<nop>%HOMETOPIC%, <nop>WebAtom, <nop>WebChanges, <nop>WebCreateNewTopic, <nop>WebIndex, <nop>WebLeftBar, <nop>WebNotify, <nop>WebPreferences, <nop>WebRss, <nop>WebSearch, <nop>WebSearchAdvanced, <nop>WebStatistics, <nop>WebTopicList and <nop>WebTopMenu.=
 
 ---++ Customizing
 
@@ -14,6 +18,6 @@ The web template is useful for administrators to design for creating webs of a c
 
 Simply create a web with an underscore for the first character.  These can be used by authorized users to create webs from this template.
 
+__Related topics:__ ManagingWebs, AdminToolsCategory
 
-
-
+-- __Contributor:__ TWiki:Main/GrantBow, TWiki:Main/PeterThoeny
