@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274935722" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1275778699" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -232,8 +232,9 @@ The !TopMenuSkin disables the sidebar and activates a different top bar in =twik
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2010-05-26 (v1.4) |
+|  Skin Version: | 2010-06-05 (v1.5) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-06-05: | TWikibug:Item6475 - better indication of breadcrumb in top menu using large arrows |
 |  2010-05-26: | TWikibug:Item6471 - show topic info in tooltip of View menu; show tooltip help in View and Edit menu items; point raw view and print version to actual topic revision |
 |  2010-05-20: | TWikibug:Item6455 - use %<nop>ICON{menu-down}% instead of long img tag in menu-bars |
 |  2010-05-01: | TWikibug:Item6437 - removed loading of jQuery Javascript library to avoid double load issue; require !JQueryPlugin installed and enabled |
