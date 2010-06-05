@@ -429,6 +429,9 @@ BEGIN {
     $regex{defaultWebNameRegex} = qr/_[$regex{mixedAlphaNum}_]+/o;
     $regex{anchorRegex} = qr/\#[$regex{mixedAlphaNum}_]+/o;
     $regex{abbrevRegex} = qr/[$regex{upperAlpha}]{3,}s?\b/o;
+    # used by _fixIncludeLink: (the last OR pattern is for Interwiki link fix Item6463)
+    $regex{excludeFixIncludeLinkRegex} =
+        qr/($regex{webNameRegex}\.|$regex{defaultWebNameRegex}\.|$regex{linkProtocolPattern}:|\/|[$regex{upperAlpha}][$regex{mixedAlphaNum}]+:)/o;
 
     # Simplistic email regex, e.g. for WebNotify processing - no i18n
     # characters allowed
@@ -2024,8 +2027,8 @@ sub _rewriteURLInInclude {
 sub _fixIncludeLink {
     my( $web, $link, $label ) = @_;
 
-    # Detect absolute and relative URLs and web-qualified wikinames
-    if( $link =~ m#^($regex{webNameRegex}\.|$regex{defaultWebNameRegex}\.|$regex{linkProtocolPattern}:|/)#o ) {
+    # Detect absolute and relative URLs, web-qualified wikinames and Interwiki links
+    if( $link =~ m/^$regex{excludeFixIncludeLinkRegex}/o ) {
         if( $label ) {
             return "[[$link][$label]]";
         } else {
