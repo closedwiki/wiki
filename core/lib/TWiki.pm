@@ -3387,6 +3387,8 @@ are handled:
 | =$quot= | Double quote (="=) |
 | =$percnt= | Percent sign (=%=) |
 | =$dollar= | Dollar sign (=$=) |
+| =$lt= | Less than sign (=<=) |
+| =$gt= | Greater than sign (=>=) |
 
 =cut
 
@@ -3398,6 +3400,8 @@ sub expandStandardEscapes {
     $text =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
     $text =~ s/\$percnt(\(\))?/\%/gos; # expand percent
     $text =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
+    $text =~ s/\$lt\b(\(\))?/\</gos;   # expand less than sign
+    $text =~ s/\$gt\b(\(\))?/\>/gos;   # expand greater than sign
     return $text;
 }
 
