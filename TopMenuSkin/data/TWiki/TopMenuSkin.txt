@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1275778699" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1275881468" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -127,7 +127,9 @@ $(document).ready(function() {
 });
 document.onclick = twTopMenuClose;
 </script>
-<style type="text/css" media="all">
+<!--</pre>-->%ADDTOHEAD{
+ "TOPMENUSKIN_CSS"
+ text="<style type=\"text/css\" media=\"all\">
 .twTopMenuTab
 {
   height: 22px;
@@ -194,8 +196,8 @@ document.onclick = twTopMenuClose;
   background-color: #AFB3C5;
   background-repeat: repeat;
 }
-</style>
-<!--</pre>-->%STOPINCLUDE%
+</style>"
+}%<nop>%STOPINCLUDE%
 
 ---++ Installation
 
@@ -229,11 +231,12 @@ The !TopMenuSkin disables the sidebar and activates a different top bar in =twik
 |  Copyright: | &copy; 2010, TWiki:Main/PeterThoeny, [[http://twiki.net][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Description: | Top-menu skin |
-|  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Click for full screen image" width="600" height="130" /></a> |
+|  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Screenshot" title="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2010-06-05 (v1.5) |
+|  Skin Version: | 2010-06-06 (v1.6) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-06-06: | TWikibug:Item6482 - XHTML validation fixes; moving CSS to HTML head using ADDTOHEAD variable |
 |  2010-06-05: | TWikibug:Item6475 - better indication of breadcrumb in top menu using large arrows |
 |  2010-05-26: | TWikibug:Item6471 - show topic info in tooltip of View menu; show tooltip help in View and Edit menu items; point raw view and print version to actual topic revision |
 |  2010-05-20: | TWikibug:Item6455 - use %<nop>ICON{menu-down}% instead of long img tag in menu-bars |
