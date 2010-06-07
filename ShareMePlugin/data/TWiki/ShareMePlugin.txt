@@ -1,26 +1,29 @@
-%META:TOPICINFO{author="TWikiContributor" date="1263277220" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1275876337" format="1.1" version="$Rev$"}%
 ---+!! Share-Me Plugin
-
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/ShareMePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/ShareMePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
 Add a bar of icons to share a TWiki page on popular social media sites and bookmarking sites such as Digg, Facebook, !StumbleUpon, Twitter.
-
-<table width="100%"><tr><td>
-%TOC%
-</td><td align="center" valign="top">
-This plugin is%BR% sponsored by:%BR%
-[[http://twiki.net/][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" alt="Twiki, Inc." title="Twiki, Inc." />]]
-</td></tr></table>
 
 ---++ Syntax Rules
 
 Add =%<nop>SHAREME%= anywhere in a TWiki page or preferably in a TWiki skin:
-<style type="text/css">
- .example-hover { opacity: .4; -moz-opacity: .4; filter: alpha(opacity=40); }
- .example-hover:hover { opacity: 1; -moz-opacity: 1; filter: alpha(opacity=100); }
-</style>
+%ADDTOHEAD{ "SHAREMEPLUGIN_EXAMPLE" text="<style type=\"text/css\" media=\"all\"> .example-hover { opacity: .4; -moz-opacity: .4; filter: alpha(opacity=40); } .example-hover:hover { opacity: 1; -moz-opacity: 1; filter: alpha(opacity=100); } </style>" }%
 
+%TABLE{sort="off"}%
 | *Write this:* | *Renders as: (if installed)* | *Simulated example:* |
-| =%<nop>SHAREME%= | %SHAREME{Delicious,Facebook,StumbleUpon,Twitter}% | <a href="http://delicious.com/post?url=%SCRIPTURL{view}%/%WEB%/%TOPIC%&amp;title=%TOPIC%&amp;notes=Icon+bar+to+share+a+TWiki+page+on+popular+social+media+sites+such+as+Facebook,+StumbleUpon,+Twitter" target='_shareme' rel='nofollow' style='border-style: none;'><img src="%ATTACHURLPATH%/delicious.png" alt="Delicious" title="Delicious" width='16' height='16' border='0' class='example-hover' /></a> <a href="http://www.facebook.com/share.php?u=%SCRIPTURL{view}%/%WEB%/%TOPIC%&amp;t=%TOPIC%" target='_shareme' rel='nofollow' style='border-style: none;'><img src="%ATTACHURLPATH%/facebook.png" alt="Facebook" title="Facebook" width='16' height='16' border='0' class='example-hover' /></a> <a href="http://www.stumbleupon.com/submit?url=%SCRIPTURL{view}%/%WEB%/%TOPIC%&amp;title=%TOPIC%" target='_shareme' rel='nofollow' style='border-style: none;'><img src="%ATTACHURLPATH%/stumbleupon.png" alt="StumbleUpon" title="StumbleUpon" width='16' height='16' border='0' class='example-hover' /></a> <a href="http://twitter.com/home?status=%TOPIC%+-+%SCRIPTURL{view}%/%WEB%/%TOPIC%" target='_shareme' rel='nofollow' style='border-style: none;'><img src="%ATTACHURLPATH%/twitter.png" alt="Twitter" title="Twitter" width='16' height='16' border='0' class='example-hover' /></a> |
+| =%<nop>SHAREME%= | %SHAREME{Delicious,Facebook,StumbleUpon,Twitter}% | <a href="http://delicious.com/post?url=%SCRIPTURL{view}%/%WEB%/%TOPIC%&amp;title=%TOPIC%&amp;notes=Icon+bar+to+share+a+TWiki+page+on+popular+social+media+sites+such+as+Facebook,+StumbleUpon,+Twitter" target='_shareme' rel='nofollow' style='border-style: none;'><img src="%ATTACHURLPATH%/delicious.png" title="Delicious" width='16' height='16' border='0' class='example-hover' /></a> <a href="http://www.facebook.com/share.php?u=%SCRIPTURL{view}%/%WEB%/%TOPIC%&amp;t=%TOPIC%" target='_shareme' rel='nofollow' style='border-style: none;'><img src="%ATTACHURLPATH%/facebook.png" title="Facebook" width='16' height='16' border='0' class='example-hover' /></a> <a href="http://www.stumbleupon.com/submit?url=%SCRIPTURL{view}%/%WEB%/%TOPIC%&amp;title=%TOPIC%" target='_shareme' rel='nofollow' style='border-style: none;'><img src="%ATTACHURLPATH%/stumbleupon.png" title="StumbleUpon" width='16' height='16' border='0' class='example-hover' /></a> <a href="http://twitter.com/home?status=%TOPIC%+-+%SCRIPTURL{view}%/%WEB%/%TOPIC%" target='_shareme' rel='nofollow' style='border-style: none;'><img src="%ATTACHURLPATH%/twitter.png" title="Twitter" width='16' height='16' border='0' class='example-hover' /></a> |
 
+<div style="float:right; text-align: center; padding:10px; width:150px; background-color:#EBEEF0">
+This skin is%BR% sponsored by:%BR%
+[[http://twiki.net/?ref=twiki.org/sharemeplugin.logo][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" title="Twiki, Inc." />]]
+</div>
 Optionally, a list of social media sites (defined below) can be specified, such as:%BR% =%<nop>SHAREME{"Delicious, Facebook, !StumbleUpon, Twitter"}%=.
 
 ---++ Social Media Sites
@@ -93,8 +96,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] |
 |  Copyright: | &copy; 2010, TWiki:Main/PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-01-16 (18283) |
+|  Plugin Version: | 2010-06-06 (18925) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-06-06: | XHTML validation fixes; moving CSS to HTML head using TWiki::Func::addToHEAD |
 |  2010-01-16: | Doc fixes |
 |  2010-01-09: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
@@ -110,7 +114,7 @@ This plugin is inspired by [[http://wordpress.org/extend/plugins/sociable/][Soci
 
 __Related Topics:__ VarSHAREME, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
--- TWiki:Main/PeterThoeny - 2010-01-09
+-- TWiki:Main/PeterThoeny - 2010-06-06
 
 %META:FILEATTACHMENT{name="delicious.png" attachment="delicious.png" attr="h" comment="" date="1262853889" path="delicious.png" size="103" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="digg.png" attachment="digg.png" attr="h" comment="" date="1262853914" path="digg.png" size="223" user="TWikiContributor" version="1"}%

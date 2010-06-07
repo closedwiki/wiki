@@ -34,7 +34,7 @@ require TWiki::Plugins; # For the API version
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $installWeb $debug $defaultSites $pluginName $NO_PREFS_IN_TOPIC $siteDefs );
 
-$VERSION = '2010-01-16 (18283)';
+$VERSION = '2010-06-06 (18925)';
 
 $RELEASE = 'TWiki';
 
@@ -120,6 +120,12 @@ sub _initSitesDef {
     }
     # add a dummy entry to avoid a re-init at each variable expansion in case of error
     $siteDefs->{_dummy} = { img => '', url => '' } unless $siteDefs;
+    # Add style sheet to HTML head:
+    my $text = "<style type=\"text/css\" media=\"all\">\n"
+             . ".shareme-hover { width: 16px; height: 16px; opacity: .4; -moz-opacity: .4; filter: alpha(opacity=40); }\n"
+             . ".shareme-hover:hover { opacity: 1; -moz-opacity: 1; filter: alpha(opacity=100); }\n"
+             . "</style>";
+    TWiki::Func::addToHEAD( "\U$pluginName\E_CSS", $text );
 }
 
 =pod
@@ -135,9 +141,6 @@ sub _siteIcons {
 
     # no newlines so that icons can be placed in a TWiki table
     my $text = '<span class="shareme">';
-    $text .= '<style type="text/css">'
-          .  ' .shareme-hover { width: 16px; height: 16px; opacity: .4; -moz-opacity: .4; filter: alpha(opacity=40); }'
-          .  ' .shareme-hover:hover { opacity: 1; -moz-opacity: 1; filter: alpha(opacity=100); }</style>';
     my $pubUrl = TWiki::Func::getPubUrlPath();
     my $link = "\%ENCODE{\%SCRIPTURL{view}\%/$theWeb/$theTopic}\%";
     my $title = "\%ENCODE{\%SPACEOUT{$theTopic}\%}\%";
