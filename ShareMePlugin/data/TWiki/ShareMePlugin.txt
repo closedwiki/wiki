@@ -96,7 +96,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] |
 |  Copyright: | &copy; 2010, TWiki:Main/PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-06-06 (18925) |
+|  Plugin Version: | 2010-06-06 (18927) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  2010-06-06: | XHTML validation fixes; moving CSS to HTML head using TWiki::Func::addToHEAD |
 |  2010-01-16: | Doc fixes |
@@ -113,8 +113,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 This plugin is inspired by [[http://wordpress.org/extend/plugins/sociable/][Sociable plugin for !WordPress]]. Some GPLed icons have been taken from that plugin.
 
 __Related Topics:__ VarSHAREME, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
-
--- TWiki:Main/PeterThoeny - 2010-06-06
 
 %META:FILEATTACHMENT{name="delicious.png" attachment="delicious.png" attr="h" comment="" date="1262853889" path="delicious.png" size="103" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="digg.png" attachment="digg.png" attr="h" comment="" date="1262853914" path="digg.png" size="223" user="TWikiContributor" version="1"}%
