@@ -153,7 +153,7 @@ sub _siteIcons {
         $url =~ s/\$summary/$summary/g;
         $url =~ s/\$site/\%HTTP_HOST\%/g;
         $text .= "<a href='$url' target='_shareme' rel='nofollow' style='border-style: none;'>"
-              . "<img src='$pubUrl/$siteDefs->{$site}{img}'"
+              . "<img src='$pubUrl/$siteDefs->{$site}{img}' alt='$site'"
               . " title='$site' class='shareme-hover'"
               . " style='background: transparent url($pubUrl/$siteDefs->{$site}{img});' />"
               . "</a> ";

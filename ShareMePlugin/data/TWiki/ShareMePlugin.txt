@@ -96,7 +96,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] |
 |  Copyright: | &copy; 2010, TWiki:Main/PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-06-06 (18927) |
+|  Plugin Version: | 2010-06-06 (18930) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  2010-06-06: | XHTML validation fixes; moving CSS to HTML head using TWiki::Func::addToHEAD |
 |  2010-01-16: | Doc fixes |
