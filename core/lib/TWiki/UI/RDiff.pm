@@ -49,7 +49,7 @@ my %format =
 #main gets the info (NO MAJOR CHANGES NEEDED)
 #parseDiffs reads the diffs and interprets the information into types {"+", "-", "u", "c", "l"} (add, remove, unchanged, changed, lineNumber} where line number is for diffs that skip unchanged lines (diff -u etc)
 #so renderDiffs would get an array of [changeType, $oldstring, $newstring] 
-#		corresponding to Algorithm::Diff's output
+#        corresponding to Algorithm::Diff's output
 #renderDiffs iterates through the interpreted info and makes it into TML / HTML? (mmm)
 #and can be over-ridden :)
 #(now can we do this in a way that automagically can cope eith word / letter based diffs?)
@@ -183,33 +183,32 @@ sub _renderDebug
     $right =~ s/&/&amp;/go;
     $right =~ s/</&lt;/go;
     $right =~ s/>/&gt;/go;
-	
-	$result = CGI::Tr(
-		CGI::td( 'type: '. $diffType ));
-		
-	my %classMap =
-	  (
-	   '+' => [ 'twikiDiffAddedText'],
-	   '-' => [ 'twikiDiffDeletedText'],
-	   'c' => [ 'twikiDiffChangedText'],
-	   'u' => [ 'twikiDiffUnchangedText'],
-	   'l' => [ 'twikiDiffLineNumberHeader']
-	  );
-  
-  	my $styleClass = ' '.$classMap{$diffType}[0] || '';
-  	my $styleClassLeft = ($diffType ne 'c') ? $styleClass : '';
-  	my $styleClassRight = $styleClass;
-  	
-	if ($diffType ne '+') {
-   	    $result .= CGI::Tr( {class=>'twikiDiffDebug'},
-		    CGI::td( {class=>'twikiDiffDebugLeft '.$styleClassLeft}, CGI::div( $left) ));
-	}
-	if (($diffType ne '-') && ($diffType ne 'l')) {
-	    $result .= CGI::Tr( {class=>'twikiDiffDebug'},
-		    CGI::td( {class=>'twikiDiffDebugRight '.$styleClassRight}, CGI::div( $right) ));
-	}
-        # unhide html comments (<!-- --> type tags)
-        $result =~  s/<!--(.*?)-->/<pre>&lt;--$1--&gt;<\/pre>/gos;
+
+    $result = CGI::Tr( CGI::td( 'type: '. $diffType ) );
+
+    my %classMap =
+      (
+       '+' => [ 'twikiDiffAddedText'],
+       '-' => [ 'twikiDiffDeletedText'],
+       'c' => [ 'twikiDiffChangedText'],
+       'u' => [ 'twikiDiffUnchangedText'],
+       'l' => [ 'twikiDiffLineNumberHeader']
+      );
+
+    my $styleClass = ' '.$classMap{$diffType}[0] || '';
+    my $styleClassLeft = ($diffType ne 'c') ? $styleClass : '';
+    my $styleClassRight = $styleClass;
+      
+    if ($diffType ne '+') {
+        $result .= CGI::Tr( {class=>'twikiDiffDebug'},
+            CGI::td( {class=>'twikiDiffDebugLeft '.$styleClassLeft}, CGI::div( $left) ));
+    }
+    if (($diffType ne '-') && ($diffType ne 'l')) {
+        $result .= CGI::Tr( {class=>'twikiDiffDebug'},
+            CGI::td( {class=>'twikiDiffDebugRight '.$styleClassRight}, CGI::div( $right) ));
+    }
+    # unhide html comments (<!-- --> type tags)
+    $result =~  s/<!--(.*?)-->/<pre>&lt;--$1--&gt;<\/pre>/gos;
 
     return $result;
 }
@@ -317,49 +316,48 @@ sub _renderRevisionDiff
 
 #combine sequential array elements that are the same diffType
     my @diffArray = ();
-	foreach my $ele ( @$sdiffArray_ref ) {
-		if( ( @$ele[1] =~ /^\%META\:TOPICINFO/ ) || ( @$ele[2] =~ /^\%META\:TOPICINFO/ ) ) {
-			# do nothing, ignore redundant topic info
-			# FIXME: Intelligently remove followup lines in case META:TOPICINFO is the only change
-		} elsif( ( @diffArray ) && ( @{$diffArray[$#diffArray]}[0] eq @$ele[0] ) ) {
-			@{$diffArray[$#diffArray]}[1] .= "\n".@$ele[1];
-			@{$diffArray[$#diffArray]}[2] .= "\n".@$ele[2];
-		} else {
-			# Store doesn't expand REVINFO and we don't have rev info available now; escape tags to avoid confusion
-			@$ele[1] =~ s/\%REVINFO/\%<nop>REVINFO/ unless $renderStyle eq 'debug';
-			@$ele[2] =~ s/\%REVINFO/\%<nop>REVINFO/ unless $renderStyle eq 'debug';
-			push @diffArray, $ele;
-		}
-	}
-	my $diffArray_ref = \@diffArray;
-
+    foreach my $ele ( @$sdiffArray_ref ) {
+        if( ( @$ele[1] =~ /^\%META\:TOPICINFO/ ) || ( @$ele[2] =~ /^\%META\:TOPICINFO/ ) ) {
+            # do nothing, ignore redundant topic info
+            # FIXME: Intelligently remove followup lines in case META:TOPICINFO is the only change
+        } elsif( ( @diffArray ) && ( @{$diffArray[$#diffArray]}[0] eq @$ele[0] ) ) {
+            @{$diffArray[$#diffArray]}[1] .= "\n".@$ele[1];
+            @{$diffArray[$#diffArray]}[2] .= "\n".@$ele[2];
+        } else {
+            # Store doesn't expand REVINFO and we don't have rev info available now; escape tags to avoid confusion
+            @$ele[1] =~ s/\%REVINFO/\%<nop>REVINFO/ unless $renderStyle eq 'debug';
+            @$ele[2] =~ s/\%REVINFO/\%<nop>REVINFO/ unless $renderStyle eq 'debug';
+            push @diffArray, $ele;
+        }
+    }
+    my $diffArray_ref = \@diffArray;
 
     my $result = "";
     my $data = '';
     my $diff_ref = undef;
     for my $next_ref ( @$diffArray_ref ) {
-    	if (( @$next_ref[0] eq 'l' ) && ( @$next_ref[1] eq 0 ) && (@$next_ref[2] eq 0)) {
+        if (( @$next_ref[0] eq 'l' ) && ( @$next_ref[1] eq 0 ) && (@$next_ref[2] eq 0)) {
             next;
-		}
-		if (! $diff_ref ) {
+        }
+        if (! $diff_ref ) {
             $diff_ref = $next_ref;
             next;
-		}
-		if (( @$diff_ref[0] eq '-' ) && ( @$next_ref[0] eq '+' )) {
-		    $diff_ref = ['c', @$diff_ref[1], @$next_ref[2]];
+        }
+        if (( @$diff_ref[0] eq '-' ) && ( @$next_ref[0] eq '+' )) {
+            $diff_ref = ['c', @$diff_ref[1], @$next_ref[2]];
             $next_ref = undef;
-		}
-		if ( $renderStyle eq 'sequential' ) {
-		    $result .= _renderSequential( $session, $web, $topic, @$diff_ref );
-		} elsif ( $renderStyle eq 'sidebyside' ) {
+        }
+        if ( $renderStyle eq 'sequential' ) {
+            $result .= _renderSequential( $session, $web, $topic, @$diff_ref );
+        } elsif ( $renderStyle eq 'sidebyside' ) {
             $result .= CGI::Tr(CGI::td({ width=>'50%'}, ''),
                                CGI::td({ width=>'50%'}, ''));
-		    $result .= _renderSideBySide( $session, $web, $topic, @$diff_ref );
-		} elsif ( $renderStyle eq 'debug' ) {
-		    $result .= _renderDebug( @$diff_ref );
-		}
-		$diff_ref = $next_ref;
-	}
+            $result .= _renderSideBySide( $session, $web, $topic, @$diff_ref );
+        } elsif ( $renderStyle eq 'debug' ) {
+            $result .= _renderDebug( @$diff_ref );
+        }
+        $diff_ref = $next_ref;
+    }
     #don't forget the last one ;)
     if ( $diff_ref ) {
         if ( $renderStyle eq 'sequential' ) {
@@ -412,8 +410,8 @@ sub diff {
     TWiki::UI::checkTopicExists( $session, $webName, $topic, 'diff' );
 
     my $renderStyle = $query->param('render') ||
-      $session->{prefs}->getPreferencesValue( 'DIFFRENDERSTYLE' ) ||
-        'sequential';
+                      $session->{prefs}->getPreferencesValue( 'DIFFRENDERSTYLE' ) ||
+                      'sequential';
     my $diffType = $query->param('type') || 'history';
     my $contextLines = $query->param('context');
     unless( defined $contextLines ) {
