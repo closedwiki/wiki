@@ -1,0 +1,13 @@
+%META:TOPICINFO{author="TWikiContributor" date="1275970350" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarADDTOHEAD
+---+++ ADDTOHEAD -- add HTML to the HTML head section of the current page
+   * Useful for TWiki applications to add custom CSS or !JavaScript to the HTML head section of a topic. Supplied TWiki variables will be expanded. =%<nop>ADDTOHEAD{}%= expands in-place to an empty string, unless there is an error in which case the variable expands to an error string.
+   * Syntax: =%<nop>ADDTOHEAD{ "..." text="..." }%=
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Comment:* |
+     | ="..."= | ID of the head block, such as ="MY_CSS"= | Optional but recommended |
+     | =text="..."= | HTML text to add to the head section | Mutually exclusive with =topic=""= |
+     | =topic="Web.TopicName"= | Name of topic that contains the full HTML text to add to the head section, such as =topic="%USERSWEB%.MyCssTopic"= | Mutually exclusive with =text=""= |
+     | =requires="..., ..."= | Comma-separated list of other IDs this one depends on | Optional |
+   * Example: =%<nop>ADDTOHEAD{ "MYBOX_CSS" text="&lt;style type=\"text/css\"&gt; .myBox { height: 22px; background-color: #AFB3C5; } &lt;/style&gt;" }%=
