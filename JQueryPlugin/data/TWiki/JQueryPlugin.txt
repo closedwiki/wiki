@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272259587" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1276063560" format="1.1" version="$Rev$"}%
 ---+!! JQuery Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
@@ -8,11 +8,12 @@
 
    * Set SHORTDESCRIPTION = jQuery <nop>JavaScript library for TWiki
 -->
-%SHORTDESCRIPTION%
-
-%TOC%
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
 
 ---++ Description
+
 This plugin contains the latest version of the [[http://jquery.com/][jQuery]] <nop>JavaScript library. 
 
 <blockquote>
@@ -22,6 +23,7 @@ This plugin contains the latest version of the [[http://jquery.com/][jQuery]] <n
 See the Sandbox.JQueryPluginExamples page for a demo of a couple of widgets used by TWiki.
 
 ---++ Included libraries
+
    1 jquery
    1 jquery.bgiframe
    1 jquery.blockUI
@@ -52,6 +54,7 @@ See the Sandbox.JQueryPluginExamples page for a demo of a couple of widgets used
    1 ui.tabs
 
 ---++ JQuery Library Documentation
+
    * [[http://docs.jquery.com/How_jQuery_Works][Getting the feet wet]]
    * [[http://docs.jquery.com/Tutorials][Tutorials]]
    * [[http://docs.jquery.com/Main_Page][Reference API]]
@@ -77,12 +80,14 @@ The following themes are provided:
    * Sandbox.JQueryPluginExamples
 
 ---++ Installation Instructions
+
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | =data/Sandbox/JQueryPluginExamples.txt= | Example topic |
      | =data/Sandbox/PluginTestJQueryPlugin.txt= | Test topic |
      | =data/TWiki/JQueryPlugin.txt= | Plugin documentation topic |
+     | =data/TWiki/VarJQ*.txt= | Variable documentation topics |
      | =lib/CPAN/lib/CSS/Minifier.pm= | Perl module |
      | =lib/CPAN/lib/JavaScript/Minifier.pm= | Perl module |
      | =lib/TWiki/Plugins/JQueryPlugin/Core.pm= | Perl module |
@@ -99,7 +104,7 @@ The following themes are provided:
      | =pub/TWiki/JQueryPlugin/themes/*= | Themes |
      | =tools/minifycss= | Utility |
      | =tools/minifyjs= | Utility |
-   * TWiki 4 and up: Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
    * Test [[Sandbox.JQueryPluginExamples]] for functionality.
 
 ---++ Plugin Info
@@ -109,6 +114,7 @@ The following themes are provided:
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 1.1 (2010-04-25) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-06-08: | TWikibug:Item6486 - upgrade to latest jquery-1.4.2 release -- TWiki:Main/SopanShewale; add variable documentation topics !VarJQTABPANE, !VarJQTAB, !VarJQENDTAB, !VarJQENDTABPANE -- TWiki:Main/PeterThoeny |
 |  2010-04-25: | TWikibug:Item6436 - renamed too generic variable names BUTTON, TOGGLE, CLEAR, TABPANE, ENDTABPANE, TAB, ENDTAB to JQBUTTON, JQTOGGLE, JQCLEAR, JQTABPANE, JQENDTABPANE, JQTAB, JQENDTAB, respectively. Old variables names available if configure setting is set: =$TWiki::cfg{JQueryPlugin}{Legacy2008} = 1;= -- TWiki:Main/PeterThoeny |
 |  2010-04-22: | TWikibug:Item6433 - doc improvements, no code changes |
 |  15 Jul 2008: | updated to ui-1.5.2; added async treeview; added async options to tabpane |
@@ -128,4 +134,5 @@ The following themes are provided:
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/JQueryPluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/JQueryPluginAppraisal |
 
-__Related topics:__ Sandbox.PluginTestJQueryPlugin, Sandbox.JQueryPluginExamples, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory
+__Related topics:__ VarJQTABPANE, VarJQTAB, VarJQENDTAB, VarJQENDTABPANE, Sandbox.PluginTestJQueryPlugin, Sandbox.JQueryPluginExamples, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory
+

@@ -1,6 +1,10 @@
 data/Sandbox/JQueryPluginExamples.txt 0644
 data/Sandbox/PluginTestJQueryPlugin.txt 0644
 data/TWiki/JQueryPlugin.txt 0644
+data/TWiki/VarJQENDTABPANE.txt 0644
+data/TWiki/VarJQENDTAB.txt 0644
+data/TWiki/VarJQTABPANE.txt 0644
+data/TWiki/VarJQTAB.txt 0644
 lib/CPAN/lib/CSS/Minifier.pm 0644
 lib/CPAN/lib/JavaScript/Minifier.pm 0644
 lib/TWiki/Plugins/JQueryPlugin/Core.pm 0644
