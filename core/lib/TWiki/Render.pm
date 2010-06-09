@@ -105,10 +105,10 @@ sub _newLinkFormat {
     my $this = shift;
     unless( $this->{NEWLINKFORMAT} ) {
         $this->{NEWLINKFORMAT} =
-          $this->{session}->{prefs}->getPreferencesValue('NEWLINKFORMAT')
-            || '<span class="twikiNewLink"><a href="%SCRIPTURLPATH{edit}%/$web/$topic?topicparent=%WEB%.%TOPIC%" '.
-              'rel="nofollow" title="%MAKETEXT{"Create this topic"}%">'.
-                '$text</a></span>';
+             $this->{session}->{prefs}->getPreferencesValue('NEWLINKFORMAT') ||
+             '<span class="twikiNewLink"><a href="%SCRIPTURLPATH{edit}%/$web/$topic?topicparent=%WEB%.%TOPIC%" '
+           . 'rel="nofollow" title="%MAKETEXT{"Create this topic"}%">'
+           . '$text</a></span>';
     }
     return $this->{NEWLINKFORMAT};
 }
@@ -147,8 +147,7 @@ sub renderParent {
     my @stack;
 
     while( $parent ) {
-        ( $pWeb, $pTopic ) =
-          $this->{session}->normalizeWebTopicName( $pWeb, $parent );
+        ( $pWeb, $pTopic ) = $this->{session}->normalizeWebTopicName( $pWeb, $parent );
         $parent = $pWeb.'.'.$pTopic;
         last if( $noWebHome &&
                  ( $pTopic eq $TWiki::cfg{HomeTopicName} ) ||
@@ -186,10 +185,8 @@ sub renderMoved {
     $web =~ s#\.#/#go;
 
     if( $moved ) {
-        my( $fromWeb, $fromTopic ) =
-          $this->{session}->normalizeWebTopicName( $web, $moved->{from} );
-        my( $toWeb, $toTopic ) =
-          $this->{session}->normalizeWebTopicName( $web, $moved->{to} );
+        my( $fromWeb, $fromTopic ) = $this->{session}->normalizeWebTopicName( $web, $moved->{from} );
+        my( $toWeb, $toTopic )     = $this->{session}->normalizeWebTopicName( $web, $moved->{to} );
         my $by = $moved->{by};
         my $u = $by;
         my $users = $this->{session}->{users};
@@ -199,19 +196,19 @@ sub renderMoved {
         # Only allow put back if current web and topic match stored information
         my $putBack = '';
         if( $web eq $toWeb && $topic eq $toTopic ) {
-            $putBack  = ' - '.
-              CGI::a( { title=>($this->{session}->i18n->maketext(
-                                  'Click to move topic back to previous location, with option to change references.')
-                               ),
-                        href => $this->{session}->getScriptUrl
-                        ( 0, 'rename', $web, $topic,
-                         newweb => $fromWeb,
-                         newtopic => $fromTopic,
-                         confirm => 'on',
-                         nonwikiword => 'checked' ),
-                        rel => 'nofollow'
-                      },
-                      $this->{session}->i18n->maketext('put it back') );
+            $putBack  = ' - '
+                . CGI::a( { title=>($this->{session}->i18n->maketext(
+                                'Click to move topic back to previous location, with option to change references.')
+                             ),
+                          href => $this->{session}->getScriptUrl
+                            ( 0, 'rename', $web, $topic,
+                              newweb => $fromWeb,
+                              newtopic => $fromTopic,
+                              confirm => 'on',
+                              nonwikiword => 'checked' ),
+                            rel => 'nofollow'
+                          },
+                          $this->{session}->i18n->maketext('put it back') );
         }
         $text = CGI::i(
           $this->{session}->i18n->maketext("[_1] moved from [_2] on [_3] by [_4]",
@@ -503,8 +500,7 @@ sub _linkToolTipInfo {
     my( $this, $theWeb, $theTopic ) = @_;
     unless( defined( $this->{LINKTOOLTIPINFO} )) {
         $this->{LINKTOOLTIPINFO} =
-          $this->{session}->{prefs}->getPreferencesValue('LINKTOOLTIPINFO')
-            || '';
+          $this->{session}->{prefs}->getPreferencesValue('LINKTOOLTIPINFO') || '';
         $this->{LINKTOOLTIPINFO} = '$username - $date - r$rev: $summary'
           if( 'on' eq lc($this->{LINKTOOLTIPINFO}) );
     }
@@ -528,8 +524,7 @@ sub _linkToolTipInfo {
     $text =~ s/\$wikiname/$users->getWikiName($user)/ge;  # 'JohnSmith'
     $text =~ s/\$wikiusername/$users->webDotWikiName($user)/ge; # 'Main.JohnSmith'
     if( $text =~ /\$summary/ ) {
-        my $summary = $store->readTopicRaw
-          ( undef, $theWeb, $theTopic, undef );
+        my $summary = $store->readTopicRaw( undef, $theWeb, $theTopic, undef );
         $summary = $this->makeTopicSummary( $summary, $theTopic, $theWeb );
         $summary =~ s/[\"\']//g;       # remove quotes (not allowed in title attribute)
         $text =~ s/\$summary/$summary/g;
@@ -569,7 +564,7 @@ sub internalLink {
     $theWeb =~ s/\/\Z//o;
 
     if($theLinkText eq $theWeb) {
-      $theLinkText =~ s/\//\./go;
+        $theLinkText =~ s/\//\./go;
     }
 
     #WebHome links to tother webs render as the WebName
@@ -615,21 +610,19 @@ sub _renderWikiWord {
         $singular = TWiki::Plurals::singularForm($theWeb, $theTopic);
         if( $singular ) {
             $topicExists = $store->topicExists( $theWeb, $singular );
-            $theTopic = $singular if $topicExists;
+            $theTopic = $singular if( $topicExists );
         }
     }
 
-    if( $topicExists) {
-        return _renderExistingWikiWord($this, $theWeb,
-                                       $theTopic, $theLinkText, $theAnchor);
+    if( $topicExists ) {
+        return _renderExistingWikiWord( $this, $theWeb, $theTopic, $theLinkText, $theAnchor );
     }
     if( $doLinkToMissingPages ) {
         # CDot: disabled until SuggestSingularNotPlural is resolved
         # if ($singular && $singular ne $theTopic) {
         #     #unshift( @topics, $singular);
         # }
-        return _renderNonExistingWikiWord($this, $theWeb, $theTopic,
-                                          $theLinkText);
+        return _renderNonExistingWikiWord($this, $theWeb, $theTopic, $theLinkText );
     }
     if( $doKeepWeb ) {
         return $theWeb.'.'.$theLinkText;
@@ -675,8 +668,7 @@ sub _renderNonExistingWikiWord {
     $ans =~ s/\$web/$web/g;
     $ans =~ s/\$topic/$topic/g;
     $ans =~ s/\$text/$text/g;
-    $ans = $this->{session}->handleCommonTags(
-        $ans, $this->{session}{webName}, $this->{session}{topicName});
+    $ans = $this->{session}->handleCommonTags( $ans, $this->{session}{webName}, $this->{session}{topicName} );
     return $ans;
 }
 
@@ -728,8 +720,7 @@ sub _handleWikiWord {
     # other
     # TODO: check the spec of doKeepWeb vs $doLinkToMissingPages
 
-    return $this->internalLink( $web, $topic, $text, $anchor,
-                                $linkIfAbsent, $keepWeb, undef );
+    return $this->internalLink( $web, $topic, $text, $anchor, $linkIfAbsent, $keepWeb, undef );
 }
 
 
@@ -901,15 +892,13 @@ sub renderFORMFIELD {
     unless ( $meta ) {
         try {
             my $dummyText;
-            ( $meta, $dummyText ) =
-              $store->readTopic(
+            ( $meta, $dummyText ) = $store->readTopic(
                   $this->{session}->{user}, $formWeb, $formTopic, $rev );
             $this->{ffCache}{$formWeb.'.'.$formTopic} = $meta;
         } catch TWiki::AccessControlException with {
             # Ignore access exceptions; just don't read the data.
             my $e = shift;
-            $this->{session}->writeWarning(
-                "Attempt to read form data failed: ".$e->stringify());
+            $this->{session}->writeWarning( "Attempt to read form data failed: ".$e->stringify() );
         };
     }
 
@@ -984,22 +973,16 @@ sub getRenderedVersion {
     $text = $this->takeOutBlocks( $text, 'verbatim', $removed );
     $text = $this->takeOutBlocks( $text, 'literal', $removed );
 
-    $text = $this->_takeOutProtected( $text, qr/<\?([^?]*)\?>/s,
-                                     'comment', $removed );
-    $text = $this->_takeOutProtected( $text, qr/<!DOCTYPE([^<>]*)>?/mi,
-                                     'comment', $removed );
-    $text = $this->_takeOutProtected( $text, qr/<head.*?<\/head>/si,
-                                     'head', $removed );
-    $text = $this->_takeOutProtected( $text, qr/<textarea\b.*?<\/textarea>/si,
-                                     'textarea', $removed );
-    $text = $this->_takeOutProtected( $text, qr/<script\b.*?<\/script>/si,
-                                     'script', $removed );
+    $text = $this->_takeOutProtected( $text, qr/<\?([^?]*)\?>/s,               'comment',  $removed );
+    $text = $this->_takeOutProtected( $text, qr/<!DOCTYPE([^<>]*)>?/mi,        'comment',  $removed );
+    $text = $this->_takeOutProtected( $text, qr/<head.*?<\/head>/si,           'head',     $removed );
+    $text = $this->_takeOutProtected( $text, qr/<textarea\b.*?<\/textarea>/si, 'textarea', $removed );
+    $text = $this->_takeOutProtected( $text, qr/<script\b.*?<\/script>/si,     'script',   $removed );
 
     # DEPRECATED startRenderingHandler before PRE removed
     # SMELL: could parse more efficiently if this wasn't
     # here.
-    $plugins->dispatch(
-        'startRenderingHandler', $text, $theWeb, $theTopic );
+    $plugins->dispatch( 'startRenderingHandler', $text, $theWeb, $theTopic );
 
     $text = $this->takeOutBlocks( $text, 'pre', $removed );
 
@@ -1228,18 +1211,15 @@ sub getRenderedVersion {
     $plugins->dispatch( 'endRenderingHandler', $text );
 
     # replace verbatim with pre in the final output
-    $this->putBackBlocks( \$text, $removed,
-                          'verbatim', 'pre', \&verbatimCallBack );
+    $this->putBackBlocks( \$text, $removed, 'verbatim', 'pre', \&verbatimCallBack );
     $text =~ s|\n?<nop>\n$||o; # clean up clutch
 
-    $this->_putBackProtected( \$text, 'script', $removed, \&_filterScript );
-    $this->putBackBlocks( \$text, $removed,
-                          'literal', '', \&_filterLiteral );
-
-    $this->_putBackProtected( \$text, 'literal', $removed );
-    $this->_putBackProtected( \$text, 'comment', $removed );
-    $this->_putBackProtected( \$text, 'head', $removed );
-    $this->_putBackProtected( \$text, 'textarea', $removed );
+    $this->_putBackProtected( \$text,       'script',   $removed, \&_filterScript );
+    $this->putBackBlocks( \$text, $removed, 'literal', '', \&_filterLiteral );
+    $this->_putBackProtected( \$text,       'literal',  $removed );
+    $this->_putBackProtected( \$text,       'comment',  $removed );
+    $this->_putBackProtected( \$text,       'head',     $removed );
+    $this->_putBackProtected( \$text,       'textarea', $removed );
 
     $this->{session}->{users}->{loginManager}->endRenderingHandler( $text );
 
@@ -1316,8 +1296,7 @@ sub TML2PlainText {
     } else {
         $text =~ s/%WEB%/$web/g;
         $text =~ s/%TOPIC%/$topic/g;
-        my $wtn = $this->{session}->{prefs}->getPreferencesValue(
-            'WIKITOOLNAME' ) || '';
+        my $wtn = $this->{session}->{prefs}->getPreferencesValue( 'WIKITOOLNAME' ) || '';
         $text =~ s/%WIKITOOLNAME%/$wtn/g;
         if( $opts =~ /showvar/ ) {
             $text =~ s/%(\w+({.*?}))%/$1/g; # defuse
@@ -1451,21 +1430,21 @@ sub makeTopicSummary {
 # WARNING: if you want to take out &lt;!-- comments --> you _will_ need
 # to re-write all the takeOuts to use a different placeholder
 sub _takeOutProtected {
-	my( $this, $intext, $re, $id, $map ) = @_;
+    my( $this, $intext, $re, $id, $map ) = @_;
 
-	$intext =~ s/($re)/_replaceBlock($1, $id, $map)/ge;
+    $intext =~ s/($re)/_replaceBlock($1, $id, $map)/ge;
 
-	return $intext;
+    return $intext;
 }
 
 sub _replaceBlock {
-	my( $scoop, $id, $map ) = @_;
-	my $placeholder = $placeholderMarker;
+    my( $scoop, $id, $map ) = @_;
+    my $placeholder = $placeholderMarker;
     $placeholderMarker++;
-	$map->{$id.$placeholder}{text} = $scoop;
+    $map->{$id.$placeholder}{text} = $scoop;
 
-	return '<!--'.$TWiki::TranslationToken.$id.$placeholder.
-      $TWiki::TranslationToken.'-->';
+    return '<!--'.$TWiki::TranslationToken.$id.$placeholder
+        .  $TWiki::TranslationToken.'-->';
 }
 
 # _putBackProtected( \$text, $id, \%map, $callback ) -> $text
@@ -1523,13 +1502,13 @@ sub takeOutBlocks {
     my $tagParams;
 
     foreach my $token ( split/(<\/?$tag[^>]*>)/i, $intext ) {
-    	if ($token =~ /<$tag\b([^>]*)?>/i) {
-    		$depth++;
-    		if ($depth eq 1) {
-    			$tagParams = $1;
-    			next;
-    		}
-    	} elsif ($token =~ /<\/$tag>/i) {
+        if ($token =~ /<$tag\b([^>]*)?>/i) {
+            $depth++;
+            if ($depth eq 1) {
+                $tagParams = $1;
+                next;
+            }
+        } elsif ($token =~ /<\/$tag>/i) {
             if ($depth > 0) {
                 $depth--;
                 if ($depth eq 0) {
@@ -1537,30 +1516,27 @@ sub takeOutBlocks {
                     $placeholderMarker++;
                     $map->{$placeholder}{text} = $scoop;
                     $map->{$placeholder}{params} = $tagParams;
-                    $out .= '<!--'.$TWiki::TranslationToken.$placeholder.
-                      $TWiki::TranslationToken.'-->';
+                    $out .= '<!--'.$TWiki::TranslationToken.$placeholder.$TWiki::TranslationToken.'-->';
                     $scoop = '';
                     next;
                 }
             }
-    	}
-    	if ($depth > 0) {
-    		$scoop .= $token;
-    	} else {
-    		$out .= $token;
-    	}
+        }
+        if ($depth > 0) {
+            $scoop .= $token;
+        } else {
+            $out .= $token;
+        }
     }
 
-	# unmatched tags
-	if (defined($scoop) && ($scoop ne '')) {
-		my $placeholder = $tag.$placeholderMarker;
-		$placeholderMarker++;
-		$map->{$placeholder}{text} = $scoop;
-		$map->{$placeholder}{params} = $tagParams;
-		$out .= '<!--'.$TWiki::TranslationToken.$placeholder.
-          $TWiki::TranslationToken.'-->';
-	}
-
+    # unmatched tags
+    if (defined($scoop) && ($scoop ne '')) {
+        my $placeholder = $tag.$placeholderMarker;
+        $placeholderMarker++;
+        $map->{$placeholder}{text} = $scoop;
+        $map->{$placeholder}{params} = $tagParams;
+        $out .= '<!--'.$TWiki::TranslationToken.$placeholder.$TWiki::TranslationToken.'-->';
+    }
 
     return $out;
 }
@@ -1606,10 +1582,10 @@ sub putBackBlocks {
             my $val = $map->{$placeholder}{text};
             $val = &$callback( $val ) if ( defined( $callback ));
             if ($newtag eq '') {
-            	$$text =~ s(<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->)($val);
+                $$text =~ s(<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->)($val);
             } else {
-            	$$text =~ s(<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->)
-              	(<$newtag$params>$val</$newtag>);
+                $$text =~ s(<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->)
+                  (<$newtag$params>$val</$newtag>);
             }
             delete( $map->{$placeholder} );
         }
@@ -1648,9 +1624,8 @@ sub renderRevisionInfo {
         $rrev = $store->cleanUpRevID( $rrev );
     }
 
-	#normalise.
-    ( $web, $topic ) =
-		$this->{session}->normalizeWebTopicName( $web, $topic );
+    # normalise
+    ( $web, $topic ) = $this->{session}->normalizeWebTopicName( $web, $topic );
 
     my( $date, $user, $rev, $comment );
     if( $meta ) {
@@ -1742,16 +1717,12 @@ sub summariseChanges {
     if( $nrev && $nrev > 1 && $orev ne $nrev ) {
         my $metaPick = qr/^[A-Z](?!OPICINFO)/; # all except TOPICINFO
         # there was a prior version. Diff it.
-        $ntext = $this->TML2PlainText(
-            $ntext, $web, $topic, 'nonop' )."\n".
-              $nmeta->stringify( $metaPick );
+        $ntext = $this->TML2PlainText( $ntext, $web, $topic, 'nonop' )."\n".$nmeta->stringify( $metaPick );
 
         my( $ometa, $otext ) = $store->readTopic( $user, $web, $topic, $orev );
-        $otext = $this->TML2PlainText(
-            $otext, $web, $topic, 'nonop' )."\n".
-              $ometa->stringify( $metaPick );
+        $otext = $this->TML2PlainText( $otext, $web, $topic, 'nonop' )."\n".$ometa->stringify( $metaPick );
 
-	require TWiki::Merge;
+    require TWiki::Merge;
         my $blocks = TWiki::Merge::simpleMerge( $otext, $ntext, qr/[\r\n]+/ );
         # sort through, keeping one line of context either side of a change
         my @revised;
@@ -2072,29 +2043,24 @@ sub replaceWebInternalReferences {
     my( $this, $text, $meta, $oldWeb, $oldTopic, $newWeb, $newTopic ) = @_;
 
     my @topics = $this->{session}->{store}->getTopicNames( $oldWeb );
-    my $options =
-      {
-       # exclude this topic from the list
-          topics => [ grep { !/^$oldTopic$/ } @topics ],
-       inWeb => $oldWeb,
-          inTopic => $oldTopic,
-       oldWeb => $oldWeb,
-          newWeb => $oldWeb,
-      };
+    my $options = {
+             # exclude this topic from the list
+             topics  => [ grep { !/^$oldTopic$/ } @topics ],
+             inWeb   => $oldWeb,
+             inTopic => $oldTopic,
+             oldWeb  => $oldWeb,
+             newWeb  => $oldWeb,
+           };
 
     $$text = $this->forEachLine( $$text, \&_replaceInternalRefs, $options );
 
-    $meta->forEachSelectedValue( qw/^(FIELD|TOPICPARENT)$/, undef,
-                                 \&_replaceInternalRefs, $options );
-    $meta->forEachSelectedValue( qw/^TOPICMOVED$/, qw/^by$/,
-                                 \&_replaceInternalRefs, $options );
-    $meta->forEachSelectedValue( qw/^FILEATTACHMENT$/, qw/^user$/,
-                                 \&_replaceInternalRefs, $options );
+    $meta->forEachSelectedValue( qw/^(FIELD|TOPICPARENT)$/, undef, \&_replaceInternalRefs, $options );
+    $meta->forEachSelectedValue( qw/^TOPICMOVED$/,       qw/^by$/, \&_replaceInternalRefs, $options );
+    $meta->forEachSelectedValue( qw/^FILEATTACHMENT$/, qw/^user$/, \&_replaceInternalRefs, $options );
 
     ## Ok, let's do it again, but look for links to topics in the new web and remove their full paths
     @topics = $this->{session}->{store}->getTopicNames( $newWeb );
-    $options =
-      {
+    $options = {
           # exclude this topic from the list
           topics => [ @topics ],
           fullPaths => 0,
@@ -2102,17 +2068,13 @@ sub replaceWebInternalReferences {
           inTopic => $oldTopic,
           oldWeb => $newWeb,
           newWeb => $newWeb,
-      };
+        };
 
     $$text = $this->forEachLine( $$text, \&_replaceInternalRefs, $options );
 
-    $meta->forEachSelectedValue( qw/^(FIELD|TOPICPARENT)$/, undef,
-                                 \&_replaceInternalRefs, $options );
-    $meta->forEachSelectedValue( qw/^TOPICMOVED$/, qw/^by$/,
-                                 \&_replaceInternalRefs, $options );
-    $meta->forEachSelectedValue( qw/^FILEATTACHMENT$/, qw/^user$/,
-                                 \&_replaceInternalRefs, $options );
-
+    $meta->forEachSelectedValue( qw/^(FIELD|TOPICPARENT)$/, undef, \&_replaceInternalRefs, $options );
+    $meta->forEachSelectedValue( qw/^TOPICMOVED$/,       qw/^by$/, \&_replaceInternalRefs, $options );
+    $meta->forEachSelectedValue( qw/^FILEATTACHMENT$/, qw/^user$/, \&_replaceInternalRefs, $options );
 }
 
 # callback used by replaceWebInternalReferences
