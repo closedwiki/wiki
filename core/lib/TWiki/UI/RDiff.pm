@@ -173,7 +173,7 @@ sub _renderSideBySide
 #| TODO: | this should move to Render.pm |
 sub _renderDebug
 {
-    my ( $diffType, $left, $right ) = @_;
+    my ( $session, $diffType, $left, $right ) = @_;
     my $result = '';
 
     #de-html-ize
@@ -189,7 +189,8 @@ sub _renderDebug
     $right =~ s/\n/<br \/>\n/gos;
 
     if( $diffType eq 'l' ) {
-        $result = "\n" . CGI::Tr( CGI::td( {class=>'twikiDiffLineNumberHeader', colspan=>2}, "Line: $left" ) );
+        $result = "\n" . CGI::Tr( CGI::td( {class=>'twikiDiffLineNumberHeader', colspan=>2},
+            ($session->i18n->maketext( 'Line: [_1]',$left )) ) );
         return $result;
     }
 
@@ -363,7 +364,7 @@ sub _renderRevisionDiff
                                CGI::td({ width=>'50%'}, ''));
             $result .= _renderSideBySide( $session, $web, $topic, @$diff_ref );
         } elsif ( $renderStyle eq 'debug' ) {
-            $result .= _renderDebug( @$diff_ref );
+            $result .= _renderDebug( $session, @$diff_ref );
         }
         $diff_ref = $next_ref;
     }
@@ -376,7 +377,7 @@ sub _renderRevisionDiff
                                CGI::td({ width=>'50%'}, ''));
             $result .= _renderSideBySide( $session, $web, $topic, @$diff_ref );
         } elsif ( $renderStyle eq 'debug' ) {
-            $result .= _renderDebug( @$diff_ref );
+            $result .= _renderDebug( $session, @$diff_ref );
         }
     }
     return CGI::table( { class => 'twikiDiffTable',
