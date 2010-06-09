@@ -180,11 +180,18 @@ sub _renderDebug
     $left =~ s/&/&amp;/go;
     $left =~ s/</&lt;/go;
     $left =~ s/>/&gt;/go;
+    $left =~ s/  /&nbsp; /gos;
+    $left =~ s/\n/<br \/>\n/gos;
     $right =~ s/&/&amp;/go;
     $right =~ s/</&lt;/go;
     $right =~ s/>/&gt;/go;
+    $right =~ s/  /&nbsp; /gos;
+    $right =~ s/\n/<br \/>\n/gos;
 
-    $result = CGI::Tr( CGI::td( 'type: '. $diffType ) );
+    if( $diffType eq 'l' ) {
+        $result = "\n" . CGI::Tr( CGI::td( {class=>'twikiDiffLineNumberHeader', colspan=>2}, "Line: $left" ) );
+        return $result;
+    }
 
     my %classMap =
       (
@@ -192,23 +199,25 @@ sub _renderDebug
        '-' => [ 'twikiDiffDeletedText'],
        'c' => [ 'twikiDiffChangedText'],
        'u' => [ 'twikiDiffUnchangedText'],
-       'l' => [ 'twikiDiffLineNumberHeader']
       );
 
-    my $styleClass = ' '.$classMap{$diffType}[0] || '';
-    my $styleClassLeft = ($diffType ne 'c') ? $styleClass : '';
+    my $styleClass = $classMap{$diffType}[0] || '';
+    my $styleClassLeft = ($diffType eq 'c') ? 'twikiDiffDeletedText' : $styleClass;
     my $styleClassRight = $styleClass;
-      
-    if ($diffType ne '+') {
-        $result .= CGI::Tr( {class=>'twikiDiffDebug'},
-            CGI::td( {class=>'twikiDiffDebugLeft '.$styleClassLeft}, CGI::div( $left) ));
+
+    if( $diffType =~ /(\-|c|u)/o ) {
+        my $char = $diffType;
+        $char = '' if( $diffType eq 'u' );
+        $char = '-' if( $diffType eq 'c' );
+        $result .= "\n" . CGI::Tr( {class=>'twikiDiffDebug'},
+            CGI::td( {class=>'twikiDiffDebugLeft '.$styleClassLeft, width=>5}, CGI::tt( $char ) ),
+            CGI::td( {class=>'twikiDiffDebugLeft '.$styleClassLeft}, "\n", CGI::tt( $left ) ));
     }
-    if (($diffType ne '-') && ($diffType ne 'l')) {
-        $result .= CGI::Tr( {class=>'twikiDiffDebug'},
-            CGI::td( {class=>'twikiDiffDebugRight '.$styleClassRight}, CGI::div( $right) ));
+    if( $diffType =~ /(\+|c)/o ) {
+        $result .= "\n" . CGI::Tr( {class=>'twikiDiffDebug'},
+            CGI::td( {class=>'twikiDiffDebugRight '.$styleClassRight, width=>5}, CGI::tt( '+' ) ),
+            CGI::td( {class=>'twikiDiffDebugRight '.$styleClassRight}, "\n", CGI::tt( $right ) ));
     }
-    # unhide html comments (<!-- --> type tags)
-    $result =~  s/<!--(.*?)-->/<pre>&lt;--$1--&gt;<\/pre>/gos;
 
     return $result;
 }
