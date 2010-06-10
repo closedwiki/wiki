@@ -48,20 +48,28 @@ is disabled.
 
 Here's an overview of how it works:
 
-Early in TWiki::new, the login manager is created. The creation of the login manager does two things:
-   1 If sessions are in use, it loads CGI::Session but doesn't initialise the session yet.
-   1 Creates the login manager object
+Early in TWiki::new, the login manager is created. The creation of the login 
+manager does two things:
+   1. If sessions are in use, it loads CGI::Session but doesn't initialise the
+      session yet.
+   2. Creates the login manager object
+
 Slightly later in TWiki::new, loginManager->loadSession is called.
-   1 Calls loginManager->getUser to get the username *before* the session is created
+   1. Calls loginManager->getUser to get the username *before* the session is created
       * TWiki::LoginManager::ApacheLogin looks at REMOTE_USER (only for authenticated scripts)
       * TWiki::LoginManager::TemplateLogin just returns undef
-   1 reads the TWIKISID cookie to get the SID (or the TWIKISID parameters in the CGI query if cookies aren't available, or IP2SID mapping if that's enabled).
-   1 Creates the CGI::Session object, and the session is thereby read.
-   1 If the username still isn't known, reads it from the cookie. Thus TWiki::LoginManager::ApacheLogin overrides the cookie using REMOTE_USER, and TWiki::LoginManager::TemplateLogin *always* uses the session.
+   2. reads the TWIKISID cookie to get the SID (or the TWIKISID parameters in
+      the CGI query if cookies aren't available, or IP2SID mapping if that's enabled).
+   3. Creates the CGI::Session object, and the session is thereby read.
+   4. If the username still isn't known, reads it from the cookie. Thus
+      TWiki::LoginManager::ApacheLogin overrides the cookie using REMOTE_USER, and
+      TWiki::LoginManager::TemplateLogin *always* uses the session.
 
-Later again in TWiki::new, plugins are given a chance to *override* the username found from the loginManager.
+Later again in TWiki::new, plugins are given a chance to *override* the username 
+found from the loginManager.
 
-The last step in TWiki::new is to find the user, using whatever user mapping manager is in place.
+The last step in TWiki::new is to find the user, using whatever user mapping 
+manager is in place.
 
 ---++ ObjectData =twiki=
 
@@ -98,14 +106,14 @@ sub makeLoginManager {
     ASSERT($twiki->isa( 'TWiki')) if DEBUG;
     
     #user is trying to sudo login - use BaseUserMapping
-    if ($twiki->{request}->param('sudo')) {
+    if( $twiki->{request}->param('sudo' ) ) {
         #promote / login to internal twiki admin
-        $twiki->enterContext('sudo_login');
+        $twiki->enterContext( 'sudo_login' );
     }
 
     if( $TWiki::cfg{UseClientSessions} &&
-          !$twiki->inContext( 'command_line' )) {
-        
+        !$twiki->inContext( 'command_line' ) ) {
+
         my $use = 'use TWiki::LoginManager::Session';
         if( $TWiki::cfg{Sessions}{UseIPMatching} ) {
             $use .= ' qw(-ip-match)';
@@ -129,7 +137,7 @@ sub makeLoginManager {
         # Rename from old "Client" to new "LoginManager" - see Bugs:Item3375
         $TWiki::cfg{LoginManager} =~ s/::Client::/::LoginManager::/;
         my $loginManager = $TWiki::cfg{LoginManager};
-        if ($twiki->inContext('sudo_login')) {   #TODO: move selection into BaseUserMapper
+        if( $twiki->inContext( 'sudo_login' ) ) {   #TODO: move selection into BaseUserMapper
             $loginManager = 'TWiki::LoginManager::TemplateLogin';
         }
         eval "require $loginManager";
@@ -138,7 +146,6 @@ sub makeLoginManager {
     }
     return $mgr;
 }
-
 
 =pod
 
@@ -159,13 +166,13 @@ sub new {
       split( /[\s,]+/, $TWiki::cfg{AuthScripts} );
 
     # register tag handlers and values
-    TWiki::registerTagHandler('LOGINURL', \&_LOGINURL);
-    TWiki::registerTagHandler('LOGIN', \&_LOGIN);
-    TWiki::registerTagHandler('LOGOUT', \&_LOGOUT);
-    TWiki::registerTagHandler('LOGOUTURL', \&_LOGOUTURL);
-    TWiki::registerTagHandler('SESSION_VARIABLE', \&_SESSION_VARIABLE);
-    TWiki::registerTagHandler('AUTHENTICATED', \&_AUTHENTICATED);
-    TWiki::registerTagHandler('CANLOGIN', \&_CANLOGIN);
+    TWiki::registerTagHandler( 'LOGINURL', \&_LOGINURL );
+    TWiki::registerTagHandler( 'LOGIN', \&_LOGIN );
+    TWiki::registerTagHandler( 'LOGOUT', \&_LOGOUT );
+    TWiki::registerTagHandler( 'LOGOUTURL', \&_LOGOUTURL );
+    TWiki::registerTagHandler( 'SESSION_VARIABLE', \&_SESSION_VARIABLE );
+    TWiki::registerTagHandler( 'AUTHENTICATED', \&_AUTHENTICATED );
+    TWiki::registerTagHandler( 'CANLOGIN', \&_CANLOGIN );
 
     return $this;
 }
@@ -213,12 +220,11 @@ if( $TWiki::cfg{Trace}{LoginManager} ) {
     *_trace = sub { undef };
 }
 
-
 =pod
 
 ---++ ClassMethod _IP2SID ($session, $impl)
 
- read/write IP to SID map, return SID
+read/write IP to SID map, return SID
 
 =cut
 
@@ -231,7 +237,7 @@ sub _IP2SID {
     return undef unless $ip; # no IP address, can't map
 
     my %ips;
-    if( open( IPMAP, '<', $TWiki::cfg{WorkingDir}.'/tmp/ip2sid' )) {
+    if( open( IPMAP, '<', $TWiki::cfg{WorkingDir}.'/tmp/ip2sid' ) ) {
         local $/ = undef;
         %ips = map { split( /:/, $_ ) } split( /\r?\n/, <IPMAP> );
         close(IPMAP);
@@ -240,7 +246,8 @@ sub _IP2SID {
         # known SID, map the IP addr to it
         $ips{$ip} = $sid;
         open( IPMAP, '>', $TWiki::cfg{WorkingDir}.'/tmp/ip2sid') ||
-          die "Failed to open ip2sid map for write. Ask your administrator to make sure that the {Sessions}{Dir} is writable by the webserver user.";
+          die "Failed to open ip2sid map for write. Ask your administrator to make "
+            . "sure that the {Sessions}{Dir} is writable by the webserver user.";
         print IPMAP map { "$_:$ips{$_}\n" } keys %ips;
         close(IPMAP);
     } else {
@@ -285,9 +292,9 @@ sub loadSession {
 
     _trace($this, "URL ".$query->url());
     if( $this->{_haveCookie} ) {
-        _trace($this, "Cookie ".$this->{_haveCookie});
+        _trace( $this, "Cookie ".$this->{_haveCookie} );
     } else {
-        _trace($this, "No cookie ");
+        _trace( $this, "No cookie " );
     }
 
     # Item3568: CGI::Session from 4.0 already does the -d and creates the
@@ -295,8 +302,8 @@ sub loadSession {
     # only test for and create session file directory for older CGI::Session
     if( $TWiki::LoginManager::Session::VERSION < 4.0 ) {
         unless ( -d "$TWiki::cfg{WorkingDir}/tmp" ) {
-            unless ( mkdir($TWiki::cfg{WorkingDir}) &&
-                       mkdir("$TWiki::cfg{WorkingDir}/tmp") ) {
+            unless ( mkdir( $TWiki::cfg{WorkingDir} ) &&
+                     mkdir( "$TWiki::cfg{WorkingDir}/tmp" ) ) {
                 die "Could not create $TWiki::cfg{WorkingDir}/tmp for session files";
             }
         }
@@ -314,7 +321,7 @@ sub loadSession {
             $this->{_cgisession} = TWiki::LoginManager::Session->new(
                 undef, undef,
                 { Directory => "$TWiki::cfg{WorkingDir}/tmp" } );
-            _trace($this, "New IP2SID session");
+            _trace( $this, "New IP2SID session" );
             $this->_IP2SID( $this->{_cgisession}->id() );
         }
     } else {
@@ -324,16 +331,16 @@ sub loadSession {
     }
 
     die TWiki::LoginManager::Session->errstr() unless $this->{_cgisession};
-    _trace($this, "Opened session");
+    _trace( $this, "Opened session" );
 
-    _trace($this, "Webserver says user is $authUser") if( $authUser );
+    _trace( $this, "Webserver says user is $authUser" ) if( $authUser );
     
     my $sessionUser = TWiki::Sandbox::untaintUnchecked(
             $this->{_cgisession}->param( 'AUTHUSER' ));
-    _trace($this, "session says user is ".($sessionUser||'undef'));
-    if ((!defined($authUser)) || ($sessionUser  && $sessionUser eq $TWiki::cfg{AdminUserLogin})) {
-    	$authUser = $sessionUser;
-	    #_trace($this, "session set to $authUser");
+    _trace( $this, "session says user is ".($sessionUser||'undef') );
+    if( ( !defined($authUser) ) || ($sessionUser  && $sessionUser eq $TWiki::cfg{AdminUserLogin} ) ) {
+        $authUser = $sessionUser;
+        #_trace($this, "session set to $authUser");
     }
     
     # if we couldn't get the login manager or the http session to tell
@@ -343,37 +350,37 @@ sub loadSession {
     if( $authUser ) {
         my $cUID = TWiki::Sandbox::untaintUnchecked(
             $this->{_cgisession}->param( 'cUID' )) || '';    
-        _trace($this, "Session says user is $authUser - $cUID");
+        _trace( $this, "Session says user is $authUser - $cUID" );
     } else {
         # Use remote user provided from "new TWiki" call. This is mainly
         # for testing.
         $authUser = $defaultUser;
-        _trace($this, "TWiki object says user is $authUser") if $authUser;
+        _trace( $this, "TWiki object says user is $authUser" ) if $authUser;
     }
 
     $authUser ||= $defaultUser;
 
     # is this a logout?
-    if (($authUser  && $authUser ne $TWiki::cfg{DefaultUserLogin}) &&
-    	( $query && $query->param( 'logout' ) )) {
-        my $sudoUser = TWiki::Sandbox::untaintUnchecked(
-            $this->{_cgisession}->param( 'SUDOFROMAUTHUSER' ));
+    if ( ($authUser  && $authUser ne $TWiki::cfg{DefaultUserLogin}) &&
+         ( $query && $query->param( 'logout' ) ) ) {
+
+        my $sudoUser = TWiki::Sandbox::untaintUnchecked( $this->{_cgisession}->param( 'SUDOFROMAUTHUSER' ) );
        
-        if ($sudoUser) {
-        	_trace($this, "User is logging out to $sudoUser");
-        	$twiki->writeLog( 'sudologout', '', 'from '.($authUser ||''), $sudoUser );
-        	$this->{_cgisession}->clear( 'SUDOFROMAUTHUSER' );
-        	$authUser = $sudoUser;
+        if( $sudoUser ) {
+            _trace( $this, "User is logging out to $sudoUser" );
+            $twiki->writeLog( 'sudologout', '', 'from '.($authUser ||''), $sudoUser );
+            $this->{_cgisession}->clear( 'SUDOFROMAUTHUSER' );
+            $authUser = $sudoUser;
         } else {
-	        _trace($this, "User is logging out");
-	        my $origurl = $query->referer() || $query->url().$query->path_info();
+            _trace( $this, "User is logging out" );
+            my $origurl = $query->referer() || $query->url().$query->path_info();
             #TODO:
-	        $query->delete('logout');	#lets avoid infinite loops
-    	    $this->redirectCgiQuery( $query, $origurl );
-        	$authUser = undef;
+            $query->delete( 'logout' );  #lets avoid infinite loops
+            $this->redirectCgiQuery( $query, $origurl );
+            $authUser = undef;
         }
     }
-    $query->delete('logout');
+    $query->delete( 'logout' );
     $this->userLoggedIn( $authUser );
 
     $twiki->{SESSION_TAGS}{SESSIONID} = $this->{_cgisession}->id();
@@ -401,7 +408,8 @@ sub checkAccess {
     return undef if $twiki->inContext( 'command_line' );
 
     unless( $twiki->inContext( 'authenticated' ) ||
-              $TWiki::cfg{LoginManager} eq 'none' ) {
+            $TWiki::cfg{LoginManager} eq 'none' ) {
+
         my $script = $twiki->{request}->action;
 
         if( defined $script && $this->{_authScripts}{$script} ) {
@@ -409,9 +417,10 @@ sub checkAccess {
             my $web = $twiki->{webName};
             require TWiki::AccessControlException;
             throw TWiki::AccessControlException(
-                $script, $twiki->{user},
-                $web, $topic,
-                'authentication required' );
+                  $script, $twiki->{user},
+                  $web, $topic,
+                  'authentication required'
+                );
         }
     }
 }
@@ -430,9 +439,8 @@ sub complete {
 
     if( $this->{_cgisession} ) {
         $this->{_cgisession}->flush();
-        die $this->{_cgisession}->errstr()
-          if $this->{_cgisession}->errstr();
-        _trace($this, "Flushed");
+        die $this->{_cgisession}->errstr() if $this->{_cgisession}->errstr();
+        _trace( $this, "Flushed" );
     }
 
     return unless( $TWiki::cfg{Sessions}{ExpireAfter} > 0 );
@@ -457,10 +465,9 @@ sub expireDeadSessions {
     my $exp = $TWiki::cfg{Sessions}{ExpireAfter} || 36000; # 10 hours
     $exp = -$exp if $exp < 0;
 
-    opendir(D, "$TWiki::cfg{WorkingDir}/tmp") || return;
-    foreach my $file ( grep { /^(passthru|cgisess)_[0-9a-f]{32}/ } readdir(D) ) {
-        $file = TWiki::Sandbox::untaintUnchecked(
-            "$TWiki::cfg{WorkingDir}/tmp/$file" );
+    opendir( D, "$TWiki::cfg{WorkingDir}/tmp" ) || return;
+    foreach my $file ( grep { /^(passthru|cgisess)_[0-9a-f]{32}/ } readdir( D ) ) {
+        $file = TWiki::Sandbox::untaintUnchecked( "$TWiki::cfg{WorkingDir}/tmp/$file" );
         my @stat = stat( $file );
         # CGI::Session updates the session file each time a browser views a
         # topic setting the access and expiry time as values in the file. This 
@@ -508,20 +515,22 @@ sub userLoggedIn {
         }
     }
     if( $authUser && $authUser ne $TWiki::cfg{DefaultUserLogin} ) {
-        _trace($this, "Session is authenticated");
-        _trace($this, 'converting from '.($twiki->{remoteUser}||'undef').' to '.$authUser);
-        #TODO: right now anyone that makes a template login url can log in multiple times - should i forbid it
+        _trace( $this, "Session is authenticated" );
+        _trace( $this, 'converting from '.($twiki->{remoteUser}||'undef').' to '.$authUser );
+        # TODO: right now anyone that makes a template login url can log in multiple times -
+        # should i forbid it
         if( $TWiki::cfg{UseClientSessions} ) {
-	        if (defined($twiki->{remoteUser}) && $twiki->inContext('sudo_login')) {
-        		$twiki->writeLog( 'sudologin', '', 'from '.($twiki->{remoteUser}||''), $authUser );
-          	    $this->{_cgisession}->param( 'SUDOFROMAUTHUSER', $twiki->{remoteUser} );
-        	}   
-        	#TODO: these are bare login's, so if and when there are multiple usermappings, this would need to include cUID..     
+            if( defined( $twiki->{remoteUser} ) && $twiki->inContext( 'sudo_login' ) ) {
+                $twiki->writeLog( 'sudologin', '', 'from '.($twiki->{remoteUser}||''), $authUser );
+                $this->{_cgisession}->param( 'SUDOFROMAUTHUSER', $twiki->{remoteUser} );
+            }   
+            # TODO: these are bare login's, so if and when there are multiple usermappings, 
+            # this would need to include cUID..     
             $this->{_cgisession}->param( 'AUTHUSER', $authUser );
         }
         $twiki->enterContext( 'authenticated' );
     } else {
-        _trace($this, "Session is NOT authenticated");
+        _trace( $this, "Session is NOT authenticated" );
         # if we are not authenticated, expire any existing session
         $this->{_cgisession}->clear( [ 'AUTHUSER' ] )
           if( $TWiki::cfg{UseClientSessions} );
@@ -531,7 +540,7 @@ sub userLoggedIn {
         # flush the session, to try to fix Item1820 and Item2234
         $this->{_cgisession}->flush();
         die $this->{_cgisession}->errstr() if $this->{_cgisession}->errstr();
-        _trace($this, "Flushed");
+        _trace( $this, "Flushed" );
     }
 }
 
@@ -539,8 +548,6 @@ sub userLoggedIn {
 =pod
 
 ---++ ObjectMethod _myScriptURLRE ($thisl)
-
-
 
 =cut
 
@@ -566,11 +573,9 @@ sub _myScriptURLRE {
     return $s;
 }
 
-
 =pod
 
 ---++ ObjectMethod _rewriteURL ($thisl)
-
 
 =cut
 
@@ -631,7 +636,7 @@ sub _rewriteFORM {
 
     if( $url !~ /:/ || $url =~ /^($s)/ ) {
         $rest .= CGI::hidden( -name => $TWiki::LoginManager::Session::NAME,
-                              -value => $this->{_cgisession}->id());
+                              -value => $this->{_cgisession}->id() );
     }
     return $url.$rest;
 }
@@ -679,11 +684,9 @@ sub endRenderingHandler {
     $_[0] =~ s/%SKINSELECT%/_skinSelect( $this )/geo;
 }
 
-
 =pod
 
 ---++ ObjectMethod _pushCookie ($thisl)
-
 
 =cut
 
@@ -699,8 +702,8 @@ sub _pushCookie {
     # login managers where the authority is cached in the browser and
     # *not* in the session. Otherwise another user might be able to login
     # on the same machine and inherit the authorities of a prior user.
-    if ($TWiki::cfg{Sessions}{ExpireCookiesAfter} &&
-          $this->getSessionValue( 'REMEMBER' )) {
+    if( $TWiki::cfg{Sessions}{ExpireCookiesAfter} &&
+        $this->getSessionValue( 'REMEMBER' ) ) {
         require TWiki::Time;
         my $exp = TWiki::Time::formatTime(
             time() + $TWiki::cfg{Sessions}{ExpireCookiesAfter},
@@ -783,10 +786,10 @@ sub redirectCgiQuery {
     }
 
     if( $TWiki::cfg{Sessions}{MapIP2SID} ) {
-        _trace($this, "Redirect to $url WITHOUT cookie");
+        _trace( $this, "Redirect to $url WITHOUT cookie" );
         $this->{twiki}->{response}->redirect( -url => $url );
     } else {
-        _trace($this, "Redirect to $url with cookie");
+        _trace( $this, "Redirect to $url with cookie" );
         $this->{twiki}->{response}->redirect( -url => $url, -cookie => $this->{_cookies} );
     }
 
@@ -838,8 +841,9 @@ sub setSessionValue {
 
     # We do not allow setting of AUTHUSER.
     if( $this->{_cgisession} &&
-          $key ne 'AUTHUSER' &&
-            defined( $this->{_cgisession}->param( $key, $value ))) {
+        $key ne 'AUTHUSER' &&
+        defined( $this->{_cgisession}->param( $key, $value ) ) ) {
+
         return 1;
     }
 
@@ -860,8 +864,9 @@ sub clearSessionValue {
 
     # We do not allow clearing of AUTHUSER.
     if( $this->{_cgisession} &&
-          $key ne 'AUTHUSER' &&
-            defined( $this->{_cgisession}->param( $key ))) {
+        $key ne 'AUTHUSER' &&
+        defined( $this->{_cgisession}->param( $key ) ) ) {
+
         $this->{_cgisession}->clear( [ $_[1] ] );
 
         return 1;
@@ -937,17 +942,15 @@ sub _LOGIN {
 
     my $url = $this->loginUrl();
     if( $url ) {
-        my $text = $twiki->templates->expandTemplate('LOG_IN');
+        my $text = $twiki->templates->expandTemplate( 'LOG_IN' );
         return CGI::a( { href=>$url }, $text );
     }
     return '';
 }
 
-
 =pod
 
 ---++ ObjectMethod _LOGOUTURL ($thisl)
-
 
 =cut
 
@@ -962,11 +965,9 @@ sub _LOGOUTURL {
         'logout' => 1 );
 }
 
-
 =pod
 
 ---++ ObjectMethod _LOGOUT ($thisl)
-
 
 =cut
 
@@ -978,17 +979,15 @@ sub _LOGOUT {
 
     my $url = _LOGOUTURL( @_ );
     if( $url ) {
-        my $text = $twiki->templates->expandTemplate('LOG_OUT');
+        my $text = $twiki->templates->expandTemplate( 'LOG_OUT' );
         return CGI::a( {href=>$url }, $text );
     }
     return '';
 }
 
-
 =pod
 
 ---++ ObjectMethod _AUTHENTICATED ($thisl)
-
 
 =cut
 
@@ -1020,7 +1019,6 @@ sub _CANLOGIN {
     }
 }
 
-
 =pod
 
 ---++ ObjectMethod _SESSION_VARIABLE ($thisl)
@@ -1030,7 +1028,7 @@ sub _CANLOGIN {
 sub _SESSION_VARIABLE {
     my( $twiki, $params ) = @_;
     my $this = $twiki->{users}->{loginManager};
- 	my $name = $params->{_DEFAULT};
+    my $name = $params->{_DEFAULT};
  
     if( defined( $params->{set} ) ) {
         $this->setSessionValue( $name, $params->{set} );
@@ -1043,11 +1041,9 @@ sub _SESSION_VARIABLE {
     }
 }
 
-
 =pod
 
 ---++ ObjectMethod _LOGINURL ($thisl)
-
 
 =cut
 
@@ -1097,7 +1093,7 @@ TODO: what does it do?
 sub _skinSelect {
     my $this = shift;
     my $twiki = $this->{twiki};
-    my $skins = $twiki->{prefs}->getPreferencesValue('SKINS');
+    my $skins = $twiki->{prefs}->getPreferencesValue( 'SKINS' );
     my $skin = $twiki->getSkin();
     my @skins = split( /,/, $skins );
     unshift( @skins, 'default' );
@@ -1105,15 +1101,13 @@ sub _skinSelect {
     foreach my $askin ( @skins ) {
         $askin =~ s/\s//go;
         if( $askin eq $skin ) {
-            $options .= CGI::option(
-                { selected => 'selected', name => $askin }, $askin );
+            $options .= CGI::option( { selected => 'selected', name => $askin }, $askin );
         } else {
             $options .= CGI::option( { name => $askin }, $askin );
         }
     }
     return CGI::Select( { name => 'stickskin' }, $options );
 }
-
 
 =pod
 
@@ -1122,7 +1116,6 @@ Takes the input as session and returns the MD5 hash string.
 This subroutine is responsible for updating the token database
 
 The tokens solve the CSRF issue
-
 
 =cut
 
@@ -1135,29 +1128,30 @@ sub createCryptToken {
     my $cgisess = $this->{_cgisession};
     my $id      = $cgisess->id();
     my $session =
-      CGI::Session->new( undef, $id,
-        { Directory => "$TWiki::cfg{WorkingDir}/tmp" } );
+      CGI::Session->new( undef, $id, { Directory => "$TWiki::cfg{WorkingDir}/tmp" } );
 
     #Token is just MD5 hash of current time, so every request
     #creates the new random token
     use Digest::MD5;
     my $md5 = new Digest::MD5();
     my $now = time();
-    my $random = rand(10000);
+    my $random = rand( 10000 );
     $md5->add($random);
     my $cryptid = $md5->hexdigest();
 
     #Tokens are stored as hash - with time as key and token as value.
     #The are stored in Session database as array of Token hashes.
 
-    my $currentCrypt = $session->param('CryptToken');
-    if ( defined $currentCrypt ) { push @$currentCrypt, { $now => $cryptid }; }
-    else                         { $currentCrypt = [ { $now => $cryptid } ]; }
+    my $currentCrypt = $session->param( 'CryptToken' );
+    if ( defined $currentCrypt ) {
+        push @$currentCrypt, { $now => $cryptid };
+    } else {
+        $currentCrypt = [ { $now => $cryptid } ];
+    }
 
     $session->param( 'CryptToken', $currentCrypt );
 
     return $cryptid;
-
 }
 
 =pod
@@ -1167,8 +1161,6 @@ sub cleanCryptTokens($session, $token)
 This subroutine takes care of cleaning used tokens
 Usually called from token verification subroutines.
 
-
-
 =cut
 
 sub cleanCryptToken {
@@ -1176,15 +1168,11 @@ sub cleanCryptToken {
     my $cgisess = $this->{_cgisession};
     my $id      = $cgisess->id();
 
-
-
-
- #Open the session database for updating Tokens database
+    #Open the session database for updating Tokens database
     my $session =
-      CGI::Session->new( undef, $id,
-        { Directory => "$TWiki::cfg{WorkingDir}/tmp" } );
+      CGI::Session->new( undef, $id, { Directory => "$TWiki::cfg{WorkingDir}/tmp" } );
 
-    my $crypttokens = $session->param('CryptToken');
+    my $crypttokens = $session->param( 'CryptToken' );
 
     #Assuming $token is present in this array for sure.
     my $NewTokens = undef;
@@ -1192,13 +1180,10 @@ sub cleanCryptToken {
         foreach ( keys %$token ) {
             if ( $token->{$_} ne $crypttoken ) {
                 push @$NewTokens, { $_ => $token->{$_} };
-          }
-
+            }
         }
     }
-   $session->param( 'CryptToken', $NewTokens ) if defined $NewTokens;
-
-
+   $session->param( 'CryptToken', $NewTokens ) if( defined $NewTokens );
 }
 
 =pod
@@ -1219,15 +1204,11 @@ sub addCryptTokeninForm {
         return $htmlform;
     }
     else {
-        my $cryptstring = createCryptToken($this);
+        my $cryptstring = createCryptToken( $this );
         $htmlform =~
 s/(<form[^>]*?method=['"]?POST(?=['" >])[^>]*>)/$1.'<input type="hidden" name="crypttoken" value="'.$cryptstring.'" \/>'/gieos;
         return $htmlform;
-
     }
 }
-
-
-
 
 1;
