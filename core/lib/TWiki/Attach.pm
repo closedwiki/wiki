@@ -83,17 +83,17 @@ sub renderMetaData {
 
     my $showAll = $attrs->{all};
     my $showAttr = $showAll ? 'h' : '';
-	my $A = ( $showAttr ) ? ':A' : '';
+    my $A = ( $showAttr ) ? ':A' : '';
     my $title = $attrs->{title} || '';
-	my $tmplname = $attrs->{template} || 'attachtables';
+    my $tmplname = $attrs->{template} || 'attachtables';
 
-	my @attachments = $meta->find( 'FILEATTACHMENT' );
+    my @attachments = $meta->find( 'FILEATTACHMENT' );
     return '' unless @attachments;
 
     my $templates = $this->{session}->templates;
     $templates->readTemplate($tmplname);
 
-	my $rows = '';
+    my $rows = '';
     my $row = $templates->expandTemplate('ATTACH:files:row'.$A);
     foreach my $attachment (
         sort { ( $a->{name} || '') cmp ( $b->{name} || '' )}
@@ -132,8 +132,7 @@ sub formatVersions {
 
     my $store = $this->{session}->{store};
     my $users = $this->{session}->{users};
-    my $latestRev =
-      $store->getRevisionNumber( $web, $topic, $attrs{name} );
+    my $latestRev = $store->getRevisionNumber( $web, $topic, $attrs{name} );
 
     my $templates = $this->{session}->templates;
     $templates->readTemplate('attachtables');
@@ -200,8 +199,7 @@ sub _expandAttrs {
         return $1;
     }
     elsif ( $attr eq 'URL' ) {
-        return $this->{session}->getScriptUrl
-          ( 0, 'viewfile', $web, $topic,
+        return $this->{session}->getScriptUrl( 0, 'viewfile', $web, $topic,
             rev => $info->{version} || undef, filename => $file );
     }
     elsif ( $attr eq 'SIZE' ) {
@@ -337,7 +335,7 @@ sub _imgsize {
     my( $x, $y) = ( 0, 0 );
 
     if( defined( $file ) ) {
-        binmode( $file );		# For Windows
+        binmode( $file );     # For Windows
         my $s;
         return ( 0, 0 ) unless ( read( $file, $s, 4 ) == 4 );
         seek( $file, 0, 0 );
@@ -375,10 +373,11 @@ sub _OLDgifsize {
     my( $GIF ) = @_;
     my( $type, $a, $b, $c, $d, $s ) = ( 0, 0, 0, 0, 0, 0 );
 
-    if( defined( $GIF )              &&
-        read( $GIF, $type, 6 )       &&
-        $type =~ /GIF8[7,9]a/        &&
-        read( $GIF, $s, 4 ) == 4     ) {
+    if( defined( $GIF )           &&
+        read( $GIF, $type, 6 )    &&
+        $type =~ /GIF8[7,9]a/     &&
+        read( $GIF, $s, 4 ) == 4
+      ) {
         ( $a, $b, $c, $d ) = unpack( 'C'x4, $s );
         return( $b<<8|$a, $d<<8|$c );
     }
@@ -484,11 +483,12 @@ sub _jpegsize {
     my( $c1, $c2, $ch, $s, $length, $dummy ) = ( 0, 0, 0, 0, 0, 0 );
     my( $a, $b, $c, $d );
 
-    if( defined( $JPEG )             &&
-        read( $JPEG, $c1, 1 )        &&
-        read( $JPEG, $c2, 1 )        &&
-        ord( $c1 ) == 0xFF           &&
-        ord( $c2 ) == 0xD8           ) {
+    if( defined( $JPEG )      &&
+        read( $JPEG, $c1, 1 ) &&
+        read( $JPEG, $c2, 1 ) &&
+        ord( $c1 ) == 0xFF    &&
+        ord( $c2 ) == 0xD8
+      ) {
         while ( ord( $ch ) != 0xDA && !$done ) {
             # Find next marker (JPEG markers begin with 0xFF)
             # This can hang the program!!
@@ -525,13 +525,14 @@ sub _pngsize {
     my ($PNG) = @_;
     my ($head) = '';
     my($a, $b, $c, $d, $e, $f, $g, $h)=0;
-    if( defined($PNG)                              &&
-       read( $PNG, $head, 8 ) == 8                 &&
-       $head eq "\x89\x50\x4e\x47\x0d\x0a\x1a\x0a" &&
-       read($PNG, $head, 4) == 4                   &&
-       read($PNG, $head, 4) == 4                   &&
-       $head eq 'IHDR'                             &&
-       read($PNG, $head, 8) == 8 ){
+    if( defined($PNG)                               &&
+        read( $PNG, $head, 8 ) == 8                 &&
+        $head eq "\x89\x50\x4e\x47\x0d\x0a\x1a\x0a" &&
+        read($PNG, $head, 4) == 4                   &&
+        read($PNG, $head, 4) == 4                   &&
+        $head eq 'IHDR'                             &&
+        read($PNG, $head, 8) == 8
+      ) {
         ($a,$b,$c,$d,$e,$f,$g,$h)=unpack('C'x8,$head);
         return ($a<<24|$b<<16|$c<<8|$d, $e<<24|$f<<16|$g<<8|$h);
     }
