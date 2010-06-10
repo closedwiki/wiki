@@ -129,7 +129,7 @@ sub finish {
     my $this = shift;
     undef $this->{web};
     undef $this->{topic};
-    foreach (@{$this->{fields}}) {
+    foreach ( @{$this->{fields}} ) {
         $_->finish();
     }
     undef $this->{fields};
@@ -177,7 +177,8 @@ sub _parseFormDefinition {
         if( $inBlock && $line =~ s/^\s*\|\s*// ) {
             $line =~ s/\\\|/\007/g; # protect \| from split
             my( $title, $type, $size, $vals, $tooltip, $attributes ) =
-              map { s/\007/|/g; $_ } split( /\s*\|\s*/, $line );
+                map { s/\007/|/g; $_ }
+                split( /\s*\|\s*/, $line );
 
             $title ||= '';
 
@@ -188,15 +189,13 @@ sub _parseFormDefinition {
             $type = 'text' if( ! $type );
 
             $size ||= '';
-            $size = $this->{session}->handleCommonTags(
-                $size, $this->{web}, $this->{topic}, $meta);
+            $size = $this->{session}->handleCommonTags( $size, $this->{web}, $this->{topic}, $meta );
             $size =~ s/<\/?(nop|noautolink)\/?>//go;
             $size =~ s/^\s+//g;
             $size =~ s/\s+$//g;
 
             $vals ||= '';
-            $vals = $this->{session}->handleCommonTags(
-                $vals, $this->{web}, $this->{topic}, $meta);
+            $vals = $this->{session}->handleCommonTags( $vals, $this->{web}, $this->{topic}, $meta );
             $vals =~ s/<\/?(nop|noautolink)\/?>//go;
             $vals =~ s/^\s+//g;
             $vals =~ s/\s+$//g;
@@ -232,17 +231,18 @@ sub _parseFormDefinition {
             }
 
             my $fieldDef = $this->createField(
-                $type,
-                name => $name,
-                title => $title,
-                size => $size,
-                value => $vals,
-                tooltip => $tooltip,
-                attributes => $attributes,
-                definingTopic => $definingTopic,
-                web => $this->{web},
-                topic => $this->{topic});
-            push( @fields, $fieldDef);
+                  $type,
+                  name => $name,
+                  title => $title,
+                  size => $size,
+                  value => $vals,
+                  tooltip => $tooltip,
+                  attributes => $attributes,
+                  definingTopic => $definingTopic,
+                  web => $this->{web},
+                  topic => $this->{topic}
+                );
+            push( @fields, $fieldDef );
 
             $this->{mandatoryFieldsPresent} ||= $fieldDef->isMandatory();
         } else {
@@ -262,11 +262,12 @@ sub createField {
 
     my $class = $type;
     $class =~ /^(\w*)/; # cut off +buttons etc
-	#The following is a workaround for a bug in Perl 5.8.4 that was ultimately fixed on Perl 5.8.7-8
-	# see http://bugs.debian.org/303308
-	# using $class=TWiki::Sandbox::untaintUnchecked($class) also works but is one more method call.
+
+    # The following is a workaround for a bug in Perl 5.8.4 that was ultimately fixed on Perl 5.8.7-8
+    # see http://bugs.debian.org/303308
+    # using $class=TWiki::Sandbox::untaintUnchecked($class) also works but is one more method call.
     my $workaround=$1;
-    $class = 'TWiki::Form::'.ucfirst($workaround);
+    $class = 'TWiki::Form::'.ucfirst( $workaround );
 
     eval 'require '.$class;
     if( $@ ) {
@@ -285,13 +286,11 @@ sub _link {
     $string =~ s/[\[\]]//go;
 
     $topic ||= $string;
-    my $defaultToolTip = $this->{session}->i18n->maketext(
-        'Details in separate window');
+    my $defaultToolTip = $this->{session}->i18n->maketext( 'Details in separate window' );
     $tooltip ||= $defaultToolTip;
 
     my $web;
-    ( $web, $topic ) =
-      $this->{session}->normalizeWebTopicName( $this->{web}, $topic );
+    ( $web, $topic ) = $this->{session}->normalizeWebTopicName( $this->{web}, $topic );
 
     my $link;
 
@@ -299,16 +298,16 @@ sub _link {
     if( $store->topicExists( $web, $topic ) ) {
         $link =
           CGI::a(
-              { target => $topic,
-                onclick => 'return launchWindow("'.$web.'","'.$topic.'")',
-                title => $tooltip,
-                href =>$this->{session}->getScriptUrl( 0, 'view',
-                                                       $web, $topic ),
-                rel => 'nofollow'
-               }, $string );
+               { target => $topic,
+                 onclick => 'return launchWindow( "'.$web.'","'.$topic.'" )',
+                 title => $tooltip,
+                 href =>$this->{session}->getScriptUrl( 0, 'view', $web, $topic ),
+                 rel => 'nofollow'
+               },
+               $string
+              );
     } else {
-        my $expanded = $this->{session}->handleCommonTags(
-            $string, $web, $topic, $meta );
+        my $expanded = $this->{session}->handleCommonTags( $string, $web, $topic, $meta );
         if ( $tooltip ne $defaultToolTip ) {
             $link = CGI::span ( { title => $tooltip }, $expanded );
         } else {
@@ -345,10 +344,8 @@ sub renderForEdit {
     $tmpl = $session->handleCommonTags( $tmpl, $web, $topic, $meta );
 
     # Note: if WEBFORMS preference is not set, can only delete form.
-    $tmpl =~ s/%FORMTITLE%/_link(
-        $this, $meta, $this->{web}.'.'.$this->{topic})/ge;
-    my( $text, $repeatTitledText, $repeatUntitledText, $afterText ) =
-      split( /%REPEAT%/, $tmpl );
+    $tmpl =~ s/%FORMTITLE%/_link( $this, $meta, $this->{web}.'.'.$this->{topic} )/ge;
+    my( $text, $repeatTitledText, $repeatUntitledText, $afterText ) = split( /%REPEAT%/, $tmpl );
 
     foreach my $fieldDef ( @{$this->{fields}} ) {
 
@@ -357,14 +354,13 @@ sub renderForEdit {
         my $definingTopic = $fieldDef->{definingTopic};
         my $title = $fieldDef->{title};
         my $tmp = '';
-        if (! $title && !$fieldDef->isEditable()) {
+        if(! $title && !$fieldDef->isEditable() ) {
             # Special handling for untitled labels.
             # SMELL: Assumes that uneditable fields are not multi-valued
             $tmp = $repeatUntitledText;
             $value =
               $session->{renderer}->getRenderedVersion(
-                  $session->handleCommonTags(
-                      $fieldDef->{value}, $web, $topic, $meta ));
+                  $session->handleCommonTags( $fieldDef->{value}, $web, $topic, $meta ) );
         } else {
             $tmp = $repeatTitledText;
 
@@ -377,8 +373,7 @@ sub renderForEdit {
             unless( defined( $value )) {
                 my $dv = $fieldDef->getDefaultValue( $value );
                 if( defined( $dv )) {
-                    $dv = $this->{session}->handleCommonTags(
-                        $dv, $web, $topic, $meta );
+                    $dv = $this->{session}->handleCommonTags( $dv, $web, $topic, $meta );
                     $value = TWiki::expandStandardEscapes( $dv ); # Item2837
                 }
             }
@@ -387,24 +382,23 @@ sub renderForEdit {
             # col 0 :-(
             # SMELL: assumes that the field value is a string
             my $output = $session->{plugins}->dispatch(
-                'renderFormFieldForEditHandler',
-                $fieldDef->{name}, $fieldDef->{type},
-                $fieldDef->{size}, $value, $fieldDef->{attributes},
-                $fieldDef->{value} );
+                  'renderFormFieldForEditHandler',
+                  $fieldDef->{name}, $fieldDef->{type},
+                  $fieldDef->{size}, $value, $fieldDef->{attributes},
+                  $fieldDef->{value}
+                );
 
             if( $output ) {
                 $value = $output;
             } else {
-                ( $extra, $value ) = $fieldDef->renderForEdit(
-                    $web, $topic, $value );
+                ( $extra, $value ) = $fieldDef->renderForEdit( $web, $topic, $value );
             }
 
             if( $fieldDef->isMandatory() ) {
                 $extra .= CGI::span( { class => 'twikiAlert' }, ' *' );
             }
 
-            $tmp =~ s/%ROWTITLE%/_link(
-                $this, $meta, $title, $tooltip, $definingTopic )/ge;
+            $tmp =~ s/%ROWTITLE%/_link( $this, $meta, $title, $tooltip, $definingTopic )/ge;
             $tmp =~ s/%ROWEXTRA%/$extra/g;
         }
         $tmp =~ s/%ROWVALUE%/$value/g;
@@ -467,8 +461,7 @@ sub getFieldValuesFromQuery {
     my @old = $meta->find( 'FIELD' );
     $meta->remove('FIELD');
     foreach my $fieldDef ( @{$this->{fields}} ) {
-        my( $set, $present ) =
-          $fieldDef->populateMetaFromQueryData( $query, $meta, \@old );
+        my( $set, $present ) = $fieldDef->populateMetaFromQueryData( $query, $meta, \@old );
         if( $present ) {
             $seen++;
         }
@@ -517,7 +510,7 @@ define the field.
 sub getField {
     my( $this, $name ) = @_;
     foreach my $fieldDef ( @{$this->{fields}} ) {
-        return $fieldDef if ( $fieldDef->{name} && $fieldDef->{name} eq $name);
+        return $fieldDef if ( $fieldDef->{name} && $fieldDef->{name} eq $name );
     }
     return undef;
 }
@@ -542,11 +535,11 @@ sub renderForDisplay {
     my( $this, $meta ) = @_;
 
     my $templates = $this->{session}->templates;
-    $templates->readTemplate('formtables');
+    $templates->readTemplate( 'formtables' );
 
-    my $text = $templates->expandTemplate('FORM:display:header');
+    my $text = $templates->expandTemplate( 'FORM:display:header' );
 
-	my $rowTemplate = $templates->expandTemplate('FORM:display:row');
+    my $rowTemplate = $templates->expandTemplate( 'FORM:display:row' );
     foreach my $fieldDef ( @{$this->{fields}} ) {
         my $fm = $meta->get( 'FIELD', $fieldDef->{name} );
         next unless $fm;
@@ -559,7 +552,7 @@ sub renderForDisplay {
             $text .= $fieldDef->renderForDisplay( $row, $fm->{value} );
         }
     }
-    $text .= $templates->expandTemplate('FORM:display:footer');
+    $text .= $templates->expandTemplate( 'FORM:display:footer' );
     $text =~ s/%A_TITLE%/$this->{web}.$this->{topic}][$this->{topic}/g;
     return $text;
 }

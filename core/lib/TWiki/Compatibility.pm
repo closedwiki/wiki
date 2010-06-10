@@ -201,14 +201,14 @@ sub upgradeCategoryTable {
 sub _getOldAttachAttr {
     my( $session, $atext ) = @_;
     my $fileName='';
-	my $filePath='';
-	my $fileSize='';
-	my $fileDate='';
-	my $fileUser='';
-	my $fileComment='';
+    my $filePath='';
+    my $fileSize='';
+    my $fileDate='';
+    my $fileUser='';
+    my $fileComment='';
     my $before='';
-	my $item='';
-	my $after='';
+    my $item='';
+    my $after='';
     my $users = $session->{users};
 
     ( $before, $fileName, $after ) = split( /<(?:\/)*TwkFileName>/, $atext );
