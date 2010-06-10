@@ -161,13 +161,12 @@ Return false if attribute set is not empty.
 =cut
 
 sub isEmpty {
-  my $this = shift;
+    my $this = shift;
 
-
-  foreach my $k ( keys %$this ) {
-      return 0 if $k ne $RAWKEY;
-  }
-  return 1;
+    foreach my $k ( keys %$this ) {
+        return 0 if $k ne $RAWKEY;
+    }
+    return 1;
 }
 
 =pod
@@ -181,10 +180,10 @@ Remove an attr value from the map, return old value. After a call to
 =cut
 
 sub remove {
-  my ( $this, $attr ) = @_;
-  my $val = $this->{$attr};
-  delete( $this->{$attr} ) if ( exists $this->{$attr} );
-  return $val;
+    my ( $this, $attr ) = @_;
+    my $val = $this->{$attr};
+    delete( $this->{$attr} ) if ( exists $this->{$attr} );
+    return $val;
 }
 
 =pod
@@ -198,18 +197,18 @@ syntax observed (no {} brackets, though).
 =cut
 
 sub stringify {
-  my $this = shift;
-  my $key;
-  my @ss;
-  foreach $key ( sort keys %$this ) {
-	if ( $key ne $ERRORKEY && $key ne $RAWKEY ) {
-	  my $es = ( $key eq $DEFAULTKEY ) ? '' : $key.'=';
-	  my $val = $this->{$key};
-      $val =~ s/"/\\"/g;
-      push( @ss, $es.'"'.$val.'"' );
-	}
-  }
-  return join( ' ', @ss );
+    my $this = shift;
+    my $key;
+    my @ss;
+    foreach $key ( sort keys %$this ) {
+        if ( $key ne $ERRORKEY && $key ne $RAWKEY ) {
+            my $es = ( $key eq $DEFAULTKEY ) ? '' : $key.'=';
+            my $val = $this->{$key};
+            $val =~ s/"/\\"/g;
+            push( @ss, $es.'"'.$val.'"' );
+        }
+    }
+    return join( ' ', @ss );
 }
 
 
