@@ -63,10 +63,8 @@
 			return this.filter(":has(>ul)");
 		},
 		applyClasses: function(settings, toggler) {
-			this.filter(":has(>ul):not(:has(>a))").find(">span").unbind("click.treeview").bind("click.treeview", function(event) {
-				// don't handle click events on children, eg. checkboxes
-				if ( this == event.target )
-					toggler.apply($(this).next());
+			this.filter(":has(>ul):not(:has(>a))").find(">span").click(function(event) {
+				toggler.apply($(this).next());
 			}).add( $("a", this) ).hoverClass();
 			
 			if (!settings.prerendered) {
