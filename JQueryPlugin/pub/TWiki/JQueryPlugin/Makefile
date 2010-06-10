@@ -1,4 +1,4 @@
-TWIKIROOT=~/twiki/MAIN
+TWIKIROOT=/var/www/trunk/core
 TARGET= \
   jquery-all.js \
   jquery-all.css \

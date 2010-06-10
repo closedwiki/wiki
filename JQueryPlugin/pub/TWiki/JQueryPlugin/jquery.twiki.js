@@ -1,3 +1,4 @@
+/var/www/trunk/core/lib /var/www/trunk/core/lib/CPAN/lib/ /etc/perl /usr/local/lib/perl/5.10.0 /usr/local/share/perl/5.10.0 /usr/lib/perl5 /usr/share/perl5 /usr/lib/perl/5.10 /usr/share/perl/5.10 /usr/local/lib/site_perl .
 var twiki;if(!twiki){twiki={};}
 twiki.JQueryPlugin=new function(){var self=this;}
 twiki.JQueryPlugin.toggle=function(target,effect){switch(effect){case"fade":$(target).animate({height:'toggle',opacity:'toggle'},"fast");break;case"slide":$(target).slideToggle("fast");break;case"ease":$(target).slideToggle({duration:200,easing:'easeInOutQuad'});break;case"bounce":if($(target).is(":visible")){$(target).slideUp({duration:200,easing:'easeInOutQuad'});}else{$(target).slideDown({duration:500,easing:'easeOutBounce'});}
