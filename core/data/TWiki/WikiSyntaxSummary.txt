@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1276272745" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1276272996" format="1.1" version="$Rev$"}%
 ---+ TWiki Syntax Summary
 
 This page provides online help for new TWiki users when editing a page.  If there's some formatting that your contributors use often, you can customize this for your site's particular needs.
@@ -20,3 +20,5 @@ The following help text is shown at the top of the edit window:
    * <a target="TextFormattingRules" class="twikiPopUp" href="%SCRIPTURLPATH{"view"}%/%SYSTEMWEB%/TextFormattingRules">%MAKETEXT{"More formatting help"}%</a> %MAKETEXT{"and"}% <a target="GoodStyle" class="twikiPopUp" href="%SCRIPTURLPATH{"view"}%/%SYSTEMWEB%/GoodStyle">%MAKETEXT{"hints on good style"}%</a>
 %STOPINCLUDE%
 ---
+
+__Related topics:__ WikiSyntax, WikiWord, WikiNotation, TextFormattingRules, TWikiEditingShorthand, TWikiRenderingShortcut, TWikiShorthand
