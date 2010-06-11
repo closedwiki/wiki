@@ -120,7 +120,7 @@ sub getExternalResource {
         $protocol = $1;
     } else {
         require TWiki::Net::HTTPResponse;
-        return new TWiki::Net::HTTPResponse("Bad URL: $url");
+        return new TWiki::Net::HTTPResponse( "Bad URL: $url" );
     }
 
     eval "use LWP";
@@ -131,19 +131,18 @@ sub getExternalResource {
     # Fallback mechanism
     if( $protocol ne 'http') {
         require TWiki::Net::HTTPResponse;
-        return new TWiki::Net::HTTPResponse(
-            "LWP not available for handling protocol: $url");
+        return new TWiki::Net::HTTPResponse( "LWP not available for handling protocol: $url" );
     }
 
     my $response;
     try {
         $url =~ s!^\w+://!!; # remove protocol
         my ( $user, $pass );
-        if ($url =~ s!([^/\@:]+)(?::([^/\@:]+))?@!!) {
+        if( $url =~ s!([^/\@:]+)(?::([^/\@:]+))?@!! ) {
             ( $user, $pass ) = ( $1, $2 || '');
         }
 
-        unless ($url =~ s!([^:/]+)(?::([0-9]+))?!! ) {
+        unless( $url =~ s!([^:/]+)(?::([0-9]+))?!! ) {
             die "Bad URL: $url";
         }
         my( $host, $port ) = ( $1, $2 || 80);
@@ -168,12 +167,12 @@ sub getExternalResource {
         my ($proxyHost, $proxyPort);
         if ($this->{session} && $this->{session}->{prefs}) {
             my $prefs = $this->{session}->{prefs};
-            $proxyHost = $prefs->getPreferencesValue('PROXYHOST');
-            $proxyPort = $prefs->getPreferencesValue('PROXYPORT');
+            $proxyHost = $prefs->getPreferencesValue( 'PROXYHOST' );
+            $proxyPort = $prefs->getPreferencesValue( 'PROXYPORT' );
         }
         $proxyHost ||= $TWiki::cfg{PROXY}{HOST};
         $proxyPort ||= $TWiki::cfg{PROXY}{PORT};
-        if($proxyHost && $proxyPort) {
+        if( $proxyHost && $proxyPort ) {
             $req = "GET http://$host:$port$url HTTP/1.0\r\n";
             $host = $proxyHost;
             $port = $proxyPort;
@@ -202,7 +201,7 @@ sub getExternalResource {
         print SOCK $req;
         my $result = '';
         $result = <SOCK>;
-        unless( close( SOCK )) {
+        unless( close( SOCK ) ) {
             die "close faied: $!";
         }
         select STDOUT;
@@ -213,37 +212,39 @@ sub getExternalResource {
         if ($@) {
             # Nope, no HTTP::Response, have to do things the hard way :-(
             require TWiki::Net::HTTPResponse;
-            $response = TWiki::Net::HTTPResponse->parse($result);
+            $response = TWiki::Net::HTTPResponse->parse( $result );
         } else {
-            $response = HTTP::Response->parse($result);
+            $response = HTTP::Response->parse( $result );
         }
     } catch Error::Simple with {
         require TWiki::Net::HTTPResponse;
-        $response = new TWiki::Net::HTTPResponse(shift);
+        $response = new TWiki::Net::HTTPResponse( shift );
     };
     return $response;
 }
 
+# =======================================
 sub _GETUsingLWP {
     my( $this, $url ) = @_;
 
     my ( $user, $pass );
-    if ($url =~ s!([^/\@:]+)(?::([^/\@:]+))?@!!) {
+    if( $url =~ s!([^/\@:]+)(?::([^/\@:]+))?@!! ) {
         ( $user, $pass ) = ( $1, $2 );
     }
     my $request;
     require HTTP::Request;
-    $request = HTTP::Request->new(GET => $url);
+    $request = HTTP::Request->new( GET => $url );
     '$Rev$'=~/([0-9]+)/;
     my $revstr=$1;
-    $request->header('User-Agent' => 'TWiki::Net/'.$revstr." libwww-perl/$LWP::VERSION");
+    $request->header( 'User-Agent' => 'TWiki::Net/'.$revstr." libwww-perl/$LWP::VERSION" );
     require TWiki::Net::UserCredAgent;
-    my $ua = new TWiki::Net::UserCredAgent($user, $pass);
-    my $response = $ua->request($request);
+    my $ua = new TWiki::Net::UserCredAgent( $user, $pass );
+    my $response = $ua->request( $request );
     return $response;
 }
 
 # pick a default mail handler
+# =======================================
 sub _installMailHandler {
     my $this = shift;
     my $handler = 0; # Not undef
@@ -260,9 +261,8 @@ sub _installMailHandler {
         # See Codev.RegisterFailureInsecureDependencyCygwin for why
         # this must be untainted
         require TWiki::Sandbox;
-        $this->{MAIL_HOST} =
-          TWiki::Sandbox::untaintUnchecked( $this->{MAIL_HOST} );
-        eval {	# May fail if Net::SMTP not installed
+        $this->{MAIL_HOST} = TWiki::Sandbox::untaintUnchecked( $this->{MAIL_HOST} );
+        eval {   # May fail if Net::SMTP not installed
             require Net::SMTP;
         };
         if( $@ ) {
@@ -322,11 +322,11 @@ sub sendEmail {
         _installMailHandler( $this );
     }
 
-    return 'No mail handler available' unless $this->{mailHandler};
+    return 'No mail handler available' unless( $this->{mailHandler} );
 
     # Put in a Date header, mainly for Qmail
     require TWiki::Time;
-    my $dateStr = TWiki::Time::formatTime(time, '$email');
+    my $dateStr = TWiki::Time::formatTime( time, '$email' );
     $text = "Date: " . $dateStr . "\n" . $text;
 
     my $errors = '';
@@ -354,6 +354,7 @@ sub sendEmail {
     return $errors;
 }
 
+# =======================================
 sub _fixLineLength {
     my( $addrs ) = @_;
     # split up header lines that are too long
@@ -362,6 +363,7 @@ sub _fixLineLength {
     return $addrs;
 }
 
+# =======================================
 sub _sendEmailBySendmail {
     my( $this, $text ) = @_;
 
@@ -377,6 +379,7 @@ sub _sendEmailBySendmail {
     die "ERROR: Exit code $? from TWiki::cfg{MailProgram}" if $?;
 }
 
+# =======================================
 sub _sendEmailByNetSMTP {
     my( $this, $text ) = @_;
 
