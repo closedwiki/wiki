@@ -72,18 +72,18 @@ sub new {
     # filter the support based on what platforms are proven
     # not to work.
     #from the Activestate Docco this is _only_ defined on ActiveState Perl
-    if( defined( &Win32::BuildNumber )) {	
+    if( defined( &Win32::BuildNumber ) ) {
          $this->{REAL_SAFE_PIPE_OPEN} = 0;
          $this->{EMULATED_SAFE_PIPE_OPEN} = 0;
     }
 
     # 'Safe' means no need to filter in on this platform - check 
     # sandbox status at time of filtering
-    $this->{SAFE} = ($this->{REAL_SAFE_PIPE_OPEN} ||
-                       $this->{EMULATED_SAFE_PIPE_OPEN});
+    $this->{SAFE} = ( $this->{REAL_SAFE_PIPE_OPEN} ||
+                      $this->{EMULATED_SAFE_PIPE_OPEN} );
 
     # Shell quoting - shell used only on non-safe platforms
-    if ($os eq 'UNIX' or ($os eq 'WINDOWS' and $realOS eq 'cygwin'  ) ) {
+    if( $os eq 'UNIX' or ( $os eq 'WINDOWS' and $realOS eq 'cygwin'  ) ) {
         $this->{CMDQUOTE} = '\'';
     } else {
         $this->{CMDQUOTE} = '"';
@@ -121,7 +121,7 @@ places using grep.
 sub untaintUnchecked {
     my ( $string ) = @_;
 
-    if ( defined( $string) && $string =~ /^(.*)$/ ) {
+    if( defined( $string) && $string =~ /^(.*)$/ ) {
         return $1;
     }
     return $string;            # Can't happen.
@@ -139,35 +139,35 @@ metacharacters and even control characters.
 =cut
 
 sub normalizeFileName {
-    my ($string) = @_;
+    my ( $string ) = @_;
     return '' unless $string;
-    my ($volume, $dirs, $file) = File::Spec->splitpath($string);
+    my ( $volume, $dirs, $file ) = File::Spec->splitpath( $string );
     my @result;
     my $first = 1;
-    foreach my $component (File::Spec->splitdir($dirs)) {
-        next unless (defined($component) && $component ne '' || $first);
+    foreach my $component ( File::Spec->splitdir( $dirs ) ) {
+        next unless( defined( $component ) && $component ne '' || $first );
         $first = 0;
         $component ||= '';
-        next if $component eq '.';
-        if ($component eq '..') {
+        next if( $component eq '.' );
+        if( $component eq '..' ) {
             throw Error::Simple( 'relative path in filename '.$string );
-        } elsif ($component =~ /$TWiki::cfg{NameFilter}/) {
-            throw Error::Simple( 'illegal characters in file name component '.
-                                   $component.' of filename '.$string );
+        } elsif( $component =~ /$TWiki::cfg{NameFilter}/ ) {
+            throw Error::Simple( 'illegal characters in file name component '
+                               . $component.' of filename '.$string );
         }
-        push(@result, $component);
+        push( @result, $component );
     }
 
-    if (scalar(@result)) {
-        $dirs = File::Spec->catdir(@result);
+    if( scalar( @result ) ) {
+        $dirs = File::Spec->catdir( @result );
     } else {
         $dirs = '';
     }
-    $string = File::Spec->catpath($volume, $dirs, $file);
+    $string = File::Spec->catpath( $volume, $dirs, $file );
 
     # We need to untaint the string explicitly.
     # FIXME: This might be a Perl bug.
-    return untaintUnchecked($string);
+    return untaintUnchecked( $string );
 }
 
 =pod
@@ -183,16 +183,16 @@ file names to legal server names.
 =cut
 
 sub sanitizeAttachmentName {
-    my $fileName = shift;		# Full pathname if browser is IE
-    
+    my $fileName = shift;    # Full pathname if browser is IE
+
     # Homegrown split equivalent because File::Spec functions will assume that
     # directory path is using / in UNIX and \ in Windows as defined in the HOST
     # environment.  And we don't know the client OS. Problem is specific to IE
     # which sends the full original client path when you upload files. See
     # Item2859 and Item2225 before trying again to use File::Spec functions and
     # remember to test with IE.  
-    $fileName =~ s{[\\/]+$}{};		# Get rid of trailing slash/backslash (unlikely)
-    $fileName =~ s!^.*[\\/]!!;		# Get rid of directory part
+    $fileName =~ s{[\\/]+$}{};  # Get rid of trailing slash/backslash (unlikely)
+    $fileName =~ s!^.*[\\/]!!;  # Get rid of directory part
 
     my $origName = $fileName;
     # Change spaces to underscore
@@ -202,12 +202,12 @@ sub sanitizeAttachmentName {
     $fileName =~ s/^([\.\/\\]*)*(.*?)$/$2/go;
 
     if ( $TWiki::cfg{UseLocale} ) {
-	# Filter out (less secure) only if using locales
-	# TODO: Make this use filtering in, using locales or full Codev.UnicodeSupport
-	$fileName =~ s/$TWiki::cfg{NameFilter}//goi;
+        # Filter out (less secure) only if using locales
+        # TODO: Make this use filtering in, using locales or full Codev.UnicodeSupport
+        $fileName =~ s/$TWiki::cfg{NameFilter}//goi;
     } else {
-    	# No I18N, so just filter in alphanumeric etc 
-	$fileName =~ s/$TWiki::regex{filenameInvalidCharRegex}//g;
+        # No I18N, so just filter in alphanumeric etc 
+        $fileName =~ s/$TWiki::regex{filenameInvalidCharRegex}//g;
     }
 
     # Append .txt to some files
@@ -216,7 +216,7 @@ sub sanitizeAttachmentName {
     # Untaint
     $fileName = untaintUnchecked($fileName);
 
-    return ($fileName, $origName);
+    return( $fileName, $origName );
 }
 
 # $template is split at whitespace, and '%VAR%' strings contained in it
@@ -234,12 +234,12 @@ sub sanitizeAttachmentName {
 #   * D rcs format date
 
 sub _buildCommandLine {
-    my ($this, $template, %params) = @_;
+    my ( $this, $template, %params ) = @_;
     my @arguments;
 
     $template ||= '';
 
-    for my $tmplarg (split /\s+/, $template) {
+    for my $tmplarg ( split /\s+/, $template ) {
         next if $tmplarg eq ''; # ignore leading/trailing whitespace
 
         # Split single argument into its parts.  It may contain
@@ -247,52 +247,52 @@ sub _buildCommandLine {
 
         my @tmplarg = $tmplarg =~ /([^%]+|%[^%]+%)/g;
         my @targs;
-        for my $t (@tmplarg) {
-            if ($t =~ /%(.*?)(|\|[A-Z])%/) {
-                my ($p, $flag) = ($1, $2);
-                if (! exists $params{$p}) {
+        for my $t ( @tmplarg ) {
+            if( $t =~ /%(.*?)(|\|[A-Z])%/ ) {
+                my ( $p, $flag ) = ( $1, $2 );
+                unless( exists $params{$p} ) {
                     throw Error::Simple( 'unknown parameter name '.$p );
                 }
                 my $type = ref $params{$p};
                 my @params;
-                if ($type eq '') {
+                if( $type eq '' ) {
                     @params = ($params{$p});
-                } elsif ($type eq 'ARRAY') {
+                } elsif( $type eq 'ARRAY' ) {
                     @params =  @{$params{$p}};
                 } else {
                     throw Error::Simple( $type.' reference passed in '.$p );
                 }
 
-                for my $param (@params) {
-                    unless ($flag) {
-                        push @targs, $param;
+                for my $param ( @params ) {
+                    unless( $flag ) {
+                        push( @targs, $param );
                         next;
                     }
-                    if ($flag =~ /U/) {
-                        push @targs, untaintUnchecked($param);
+                    if( $flag =~ /U/ ) {
+                        push( @targs, untaintUnchecked( $param ) );
                     } elsif ($flag =~ /F/) {
-                        $param = normalizeFileName($param);
+                        $param = normalizeFileName( $param );
                         $param = "./$param" if $param =~ /^-/;
                         push @targs, $param;
-                    } elsif ($flag =~ /N/) {
+                    } elsif( $flag =~ /N/ ) {
                         # Generalized number.
-                        if ( $param =~ /^([0-9A-Fa-f.x+\-]{0,30})$/ ) {
-                            push @targs, $1;
+                        if( $param =~ /^([0-9A-Fa-f.x+\-]{0,30})$/ ) {
+                            push( @targs, $1 );
                         } else {
                             throw Error::Simple( "invalid number argument '$param' $t" );
                         }
-                    } elsif ($flag =~ /S/) {
+                    } elsif( $flag =~ /S/ ) {
                         # "Harmless" string. Aggressively filter-in on unsafe
                         # platforms.
                         if( $this->{SAFE} || $param =~ /^[-0-9A-Za-z.+_]+$/ ) {
-                            push @targs, untaintUnchecked( $param );
+                            push( @targs, untaintUnchecked( $param ) );
                         } else {
                             throw Error::Simple( "invalid string argument '$param' $t" );
                         }
-                    } elsif ($flag =~ /D/) {
+                    } elsif( $flag =~ /D/ ) {
                         # RCS date.
-                        if ( $param =~ m|^(\d\d\d\d/\d\d/\d\d \d\d:\d\d:\d\d)$| ) {
-                            push @targs, $1;
+                        if( $param =~ m|^(\d\d\d\d/\d\d/\d\d \d\d:\d\d:\d\d)$| ) {
+                            push( @targs, $1 );
                         } else {
                             throw Error::Simple( "invalid date argument '$param' $t" );
                         }
@@ -301,18 +301,18 @@ sub _buildCommandLine {
                     }
                 }
             } else {
-                push @targs, $t;
+                push( @targs, $t );
             }
         }
 
         # Recombine the argument if the template argument contained
         # multiple parts.
 
-        if (@tmplarg == 1) {
-            push @arguments, @targs;
+        if( @tmplarg == 1 ) {
+            push( @arguments, @targs );
         } else {
-            map { ASSERT(defined($_)) } @targs if( DEBUG );
-            push @arguments, join ('', @targs);
+            map { ASSERT( defined( $_ ) ) } @targs if( DEBUG );
+            push( @arguments, join ( '', @targs ) );
         }
     }
 
@@ -365,11 +365,11 @@ sub sysCommand {
     # child execution fails. Child can't throw exceptions
     # cause they are separated processes, so it's up to
     # the parent.
-    my $key = int(rand(255)) + 1;
+    my $key = int( rand( 255 ) ) + 1;
 
     # Build argument list from template
     my @args = _buildCommandLine( $this, $pTmpl, %params );
-    if ( $this->{REAL_SAFE_PIPE_OPEN} ) {
+    if( $this->{REAL_SAFE_PIPE_OPEN} ) {
         # Real safe pipes, open from process directly - works
         # for most Unix/Linux Perl platforms and on Cygwin.  Based on
         # perlipc(1).
@@ -377,31 +377,31 @@ sub sysCommand {
         # Note that there doesn't seem to be any way to redirect
         # STDERR when using safe pipes.
 
-        my $pid = open($handle, '-|');
+        my $pid = open( $handle, '-|' );
 
-        throw Error::Simple( 'open of pipe failed: '.$! ) unless defined $pid;
+        throw Error::Simple( 'open of pipe failed: '.$! ) unless( defined $pid );
 
-        if ( $pid ) {
+        if( $pid ) {
             # Parent - read data from process filehandle
             local $/ = undef; # set to read to EOF
             $data = <$handle>;
             close $handle;
             $exit = ( $? >> 8 );
-            if ( $exit == $key && $data =~ /$key: (.*)/ ) {
+            if( $exit == $key && $data =~ /$key: (.*)/ ) {
                 throw Error::Simple( 'exec failed: '. $1 .' '.$path );
             }
         } else {
             # Child - run the command
-            untie(*STDERR);
-            open (STDERR, '>'.File::Spec->devnull()) || die "Can't kill STDERR: '$!'";
-            unless ( exec( $path, @args ) ) {
-                syswrite(STDOUT, $key . ": $!\n");
-                exit($key);
+            untie( *STDERR );
+            open( STDERR, '>'.File::Spec->devnull() ) || die "Can't kill STDERR: '$!'";
+            unless( exec( $path, @args ) ) {
+                syswrite( STDOUT, $key . ": $!\n" );
+                exit( $key );
             }
             # can never get here
         }
 
-    } elsif ( $this->{EMULATED_SAFE_PIPE_OPEN} ) {
+    } elsif( $this->{EMULATED_SAFE_PIPE_OPEN} ) {
         # Safe pipe emulation mostly on Windows platforms
 
         # Create pipe
@@ -414,7 +414,7 @@ sub sysCommand {
         my $pid = fork();
         throw Error::Simple( 'fork() failed: '.$! ) unless defined( $pid );
 
-        if ( $pid ) {
+        if( $pid ) {
             # Parent - read data from process filehandle and remove newlines
 
             close( $writeHandle ) or die;
@@ -424,7 +424,7 @@ sub sysCommand {
             close( $readHandle );
             $pid = wait; # wait for child process so we can get exit status
             $exit = ( $? >> 8 );
-            if ( $exit == $key && $data =~ /$key: (.*)/ ) {
+            if( $exit == $key && $data =~ /$key: (.*)/ ) {
                 throw Error::Simple( 'exec failed: '. $1 .' '.$path );
             }
 
@@ -440,15 +440,15 @@ sub sysCommand {
             # that tees the output. Unfortunately, what we need here is a plain
             # file handle, so we need to make sure we untie it. untie is a
             # NOP if STDOUT is not tied.
-            untie(*STDOUT);
-            untie(*STDERR);
+            untie( *STDOUT );
+            untie( *STDERR );
 
-            open(STDOUT, ">&=".fileno( $writeHandle )) or die;
+            open( STDOUT, ">&=".fileno( $writeHandle ) ) or die;
 
-            open (STDERR, '>'.File::Spec->devnull());
-            unless ( exec( $path, @args ) ) {
-                syswrite(STDOUT, $key . ": $!\n");
-                exit($key);
+            open( STDERR, '>'.File::Spec->devnull() );
+            unless( exec( $path, @args ) ) {
+                syswrite( STDOUT, $key . ": $!\n" );
+                exit( $key );
             }
             # can never get here
         }
@@ -459,29 +459,28 @@ sub sysCommand {
 
         # This appears to be the only way to get ActiveStatePerl working
         # Escape the cmd quote using \
-        if ($cq eq '"') {
+        if( $cq eq '"' ) {
             # DOS shell :-( Tried dozens of ways of trying to get the quotes
             # right, but it just won't play nicely
-            $cmd = $path.' "'.join('" "', @args).'"';
+            $cmd = $path.' "'.join( '" "', @args ).'"';
         } else {
             $cmd = $path.' '.$cq.
-              join($cq.' '.$cq, map { s/$cq/\\$cq/g; $_ } @args).$cq;
+              join( $cq.' '.$cq, map { s/$cq/\\$cq/g; $_ } @args ).$cq;
         }
-        
 
-        if (($TWiki::cfg{DetailedOS} eq 'MSWin32') && 
-            (length($cmd) > 8192)) {
+        if( ( $TWiki::cfg{DetailedOS} eq 'MSWin32' ) && 
+            ( length( $cmd ) > 8192 ) ) {
             #heck, on pre WinXP its only 2048 - http://support.microsoft.com/kb/830473
-            print STDERR "WARNING: Sandbox::sysCommand commandline probably too long (".length($cmd).")\n";
+            print STDERR "WARNING: Sandbox::sysCommand commandline probably too long (".length( $cmd ).")\n";
         }
         
         open( OLDERR, '>&STDERR' ) || die "Can't steal STDERR: $!";
-        open( STDERR, '>'.File::Spec->devnull());
+        open( STDERR, '>'.File::Spec->devnull() );
         $data = `$cmd`;
         # restore STDERR
         close( STDERR );
         open( STDERR, '>&OLDERR' ) || die "Can't restore STDERR: $!";
-        close(OLDERR);
+        close( OLDERR );
 
         $exit = ( $? >> 8 );
         # Do *not* return the error message; it contains sensitive path info.
@@ -491,7 +490,7 @@ sub sysCommand {
     if( TRACE ) {
         $cmd ||= $path.' '.$cq.join($cq.' '.$cq, @args).$cq;
         $data ||= '';
-        print STDERR $cmd,' -> ',$data,"\n";
+        print( STDERR $cmd, ' -> ', $data, "\n" );
     }
     return ( $data, $exit );
 }
