@@ -11,14 +11,14 @@
 %{ Instantiate either lease_active or lease_old }%
 %INSTANTIATE%
 
-<form action="%SCRIPTURLPATH{"%PARAM4%"}%/%WEB%/%TOPIC%" method="post">
+<form action="%SCRIPTURLPATH{"%PARAM5%"}%/%WEB%/%TOPIC%" method="post">
 <literal>
 %QUERYPARAMS{format="<input type='hidden' name='$name' value='$percntENCODE{$quot()$value$quot type=$quot()html$quot}$percnt' />"}%
 </literal>
-%MAKETEXT{"To see if [_1] has finished editing yet, click " args="%PARAM1%"}%
+%MAKETEXT{"To see if [_1] has finished editing yet, click " args="[[%PARAM1%][%PARAM2%]]"}%
 <input type="submit" class="twikiButton" value='%MAKETEXT{"Try Again"}%' />
 </form>
-<form action="%SCRIPTURLPATH{"%PARAM4%"}%/%WEB%/%TOPIC%" method="post">
+<form action="%SCRIPTURLPATH{"%PARAM5%"}%/%WEB%/%TOPIC%" method="post">
 %MAKETEXT{"To edit the topic anyway, click "}%
 <input type="hidden" name="breaklock" value="on" />
 <literal>
