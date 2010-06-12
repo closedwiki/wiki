@@ -11,7 +11,7 @@
 
 %TMPL:DEF{"topicinfo"}%---
 %MAKETEXT{"This topic:"}% <nop>%WEB%%META{"parent" prefix="%TMPL:P{"topicpathseparator"}%" suffix=""}%%TMPL:P{"topicpathseparator"}%%TOPIC%</span> %BR%
-%MAKETEXT{"Topic revision:"}% %REVINFO%%TMPL:END%
+%MAKETEXT{"Topic revision:"}% %REVINFO{format="r$rev - $date - <nop>$wikiname"}%%TMPL:END%
 
 
 %TMPL:DEF{"content"}%%TEXT%
