@@ -243,7 +243,7 @@ sub _expandAttrs {
             }
         }
 
-        return $users->webDotWikiName($cUID);
+        return "[[".$users->webDotWikiName($cUID)."][".$users->getWikiName($cUID)."]]";
     }
     else {
         return $TWiki::TranslationToken.'A_'.$attr.$TWiki::TranslationToken;
