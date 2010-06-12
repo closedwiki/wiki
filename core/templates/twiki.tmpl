@@ -22,7 +22,7 @@
 %TMPL:DEF{"script:skintemplate"}%%TMPL:END%
 %TMPL:DEF{"script:topictemplate"}%%TMPL:END%
 
-%TMPL:DEF{"windowtitle"}%<title>%TMPL:P{"titleaction"}% <nop>%TOPIC%%TMPL:P{"titlesep"}%%WEB%%TMPL:P{"titlesep"}%<nop>%WIKITOOLNAME%</title>%TMPL:END%
+%TMPL:DEF{"windowtitle"}%<title>%TMPL:P{"titleaction"}% <nop>%TOPIC%%TMPL:P{"titlesep"}%<nop>%WEB%%TMPL:P{"titlesep"}%<nop>%WIKITOOLNAME%</title>%TMPL:END%
 
 %TMPL:DEF{"head"}%<head>
 %TMPL:P{"windowtitle"}%
@@ -66,7 +66,7 @@
 %TMPL:DEF{"simpleheader"}%
 <div style="margin:0 0 0 0em; padding:3px; background-color:%WEBBGCOLOR%">
 <div><div class="twikiLeft"  style="padding-right:2em;"><noautolink><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" /></noautolink></div>
-<div class="twikiLeft"> %WEB%&nbsp; %TOPIC% %TMPL:P{"titleaction"}%</div><br class="twikiClear" /> </div></div>%TMPL:P{"headerhelp"}%%TMPL:END%
+<div class="twikiLeft"> <nop>%WEB%&nbsp; %TOPIC% %TMPL:P{"titleaction"}%</div><br class="twikiClear" /> </div></div>%TMPL:P{"headerhelp"}%%TMPL:END%
 
 %TMPL:DEF{"copyright"}%<div class="twikiCopyright">%WEBCOPYRIGHT%</div>%TMPL:END%
 
