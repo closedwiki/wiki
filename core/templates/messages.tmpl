@@ -78,7 +78,7 @@
 %TMPL:END%
 %TMPL:DEF{"rename_web_exists"}%
 ---+++ %MAKETEXT{"Rename failed"}%
-%MAKETEXT{"Cannot rename [_1] to [_2] because it already exists." args="%WEB%, <nop>%PARAM1%"}%
+%MAKETEXT{"Cannot rename [_1] to [_2] because it already exists." args="<nop>%WEB%, <nop>%PARAM1%"}%
 
 %MAKETEXT{"Please go _back_ in your browser and try a new name."}%
 %TMPL:END%
@@ -309,7 +309,7 @@ __%MAKETEXT{"Note:"}%__
 %TMPL:END%
 %TMPL:DEF{"mandatory_field"}%
 ---+++ %MAKETEXT{"Topic Save Error"}%
-%MAKETEXT{"Could not save [_1]." args="%WEB%.%TOPIC%"}%
+%MAKETEXT{"Could not save [_1]." args="<nop>%WEB%.%TOPIC%"}%
 
 %MAKETEXT{"The required field [_1] was not filled in." args="*<noautolink>%PARAM1%</noautolink>*"}%
 
@@ -449,7 +449,7 @@ __%MAKETEXT{"Note:"}%__
     Messages for oopsleaseconflict
 }%
 %TMPL:DEF{"lease_active"}%
-%MAKETEXT{"[_1] is editing [_2]." args="%PARAM1%, %WEB%.%TOPIC%"}%
+%MAKETEXT{"[_1] is editing [_2]." args="%PARAM1%, [[%WEB%.%TOPIC%]]"}%
 
 %MAKETEXT{"[_1] has been editing the topic for [_2] and the lease is still active for another [_3]." args="%PARAM1%, %PARAM2%, %PARAM3%"}%
 
@@ -457,7 +457,7 @@ __%MAKETEXT{"Note:"}%__
 
 %TMPL:END%
 %TMPL:DEF{"lease_old"}%
-%MAKETEXT{"[_1] may still be editing [_2]." args="%PARAM1%, %WEB%.%TOPIC%"}%
+%MAKETEXT{"[_1] may still be editing [_2]." args="%PARAM1%, [[%WEB%.%TOPIC%]]"}%
 
 %MAKETEXT{"The lease on this topic expired [_1] ago." args="%PARAM2%"}%
 
