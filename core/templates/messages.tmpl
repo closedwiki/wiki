@@ -66,13 +66,13 @@
 %TMPL:END%
 %TMPL:DEF{"topic_exists"}%
 ---+++ %MAKETEXT{"The [_1] topic already exists" args="\"%TOPIC%\""}%
-%MAKETEXT{"Cannot create [_1] because it already exists." args="%TOPIC%"}%
+%MAKETEXT{"Cannot create [_1] because it already exists." args="[[%TOPIC%]]"}%
 
 %MAKETEXT{"Please go _back_ in your browser and try a new name."}%
 %TMPL:END%
 %TMPL:DEF{"rename_topic_exists"}%
 ---+++ %MAKETEXT{"Rename failed"}%
-%MAKETEXT{"Cannot rename [_1] to [_2] because it already exists." args="%TOPIC%, <nop>%PARAM1%.<nop>%PARAM2%"}%
+%MAKETEXT{"Cannot rename [_1] to [_2] because it already exists." args="<nop>%TOPIC%, <nop>%PARAM1%.<nop>%PARAM2%"}%
 
 %MAKETEXT{"Please go _back_ in your browser and try a new name."}%
 %TMPL:END%
