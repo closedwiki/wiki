@@ -157,7 +157,7 @@ sub init_edit {
                         topic => $topic,
                         keep => 1,
                         params =>
-                          [ $who, $past, $future, 'edit' ] );
+                          [ $who, $users->getWikiName($lease->{user}), $past, $future, 'edit' ] );
                 }
             }
         }
