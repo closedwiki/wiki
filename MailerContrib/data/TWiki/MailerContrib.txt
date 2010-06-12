@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274910420" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1276386240" format="1.1" version="$Rev$"}%
 ---+!! Mailer Contrib
 <!--
    Contributions to this TWiki extension are appreciated. Please update the page at
@@ -7,7 +7,7 @@
    If you are a TWiki contributor please update the extension in the SVN repository.
 -->
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
-%TOC%
+%TOC{title="Page contents"}%
 </div>
 %SHORTDESCRIPTION%
 
@@ -43,6 +43,7 @@ group name. If _subscriber_ contains any characters that are not legal in
 an email address, then it must be enclosed in 'single' or "double" quotes.
 
 _topics_ is an optional space-separated list of topics:
+
    * ... *without* a _Web._ prefix
    * ...that exist in this web.
 Users may further customize the specific content they will receive using the following controls:
@@ -169,6 +170,7 @@ Many thanks to the following sponsors for supporting this work:
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-06-12: | TWikibug:Item6489 - Separate WIKITOOLNAME from WEB name; escape WEB name to avoid auto-linking in case web is !WikiWord |
 |  2010-05-26: | TWikibug:Item6474 - Fix for mailnotify failing due to non-existing _alert method |
 |  2010-05-21: | TWikibug:Item6433 - more doc fixes |
 |  2010-04-25: | TWikibug:Item6433 - doc fixes, no code changes |
