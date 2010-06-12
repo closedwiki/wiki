@@ -1,2 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-Wiki links topics automatically when you use WikiWord notation.
+%META:TOPICINFO{author="TWikiContributor" date="1276313121" format="1.1" version="$Rev$"}%
+---+ Wiki Notation
+
+TWiki links topics automatically when you use WikiWord notation.
+
+__Related topics:__ WikiSyntax, WikiWord, WikiNotation, TextFormattingRules, TWikiEditingShorthand, TWikiRenderingShortcut, TWikiShorthand

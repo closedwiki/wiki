@@ -1,9 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1259170824" format="1.1" version="$Rev$"}%
----++ TWiki Editing Shorthand
+%META:TOPICINFO{author="TWikiContributor" date="1276313220" format="1.1" version="$Rev$"}%
+---+ TWiki Editing Shorthand
 
 %STARTINCLUDE%
-
-%TABLE{}%
 <table class="twikiTable" border="1" cellpadding="3" bgcolor="#ffffff">
 <tr bgcolor="#ffffff">
 <th width="50%" class="twikiFirstCol">
@@ -502,5 +500,5 @@ This div is required
 </td>
 </tr>
 </table>
-
 %STOPINCLUDE%
+__Related topics:__ WikiSyntax, WikiWord, WikiNotation, TextFormattingRules, TWikiRenderingShortcut, TWikiShorthand

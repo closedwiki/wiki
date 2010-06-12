@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1276239950" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1276313153" format="1.1" version="$Rev$"}%
 ---+!! What is a !WikiWord?
 
 A !WikiWord consists of two or more words with initial capitals, run together. *WikiWords are topic names.* A TWiki topic name always has a fixed format: two or more words with initial capitals, run together. Like the name of the current topic: *WikiWord*. When you type the name of a topic, you create a link to that topic. You type =%HOMETOPIC%= and on saving the page this becomes %HOMETOPIC%. It's as easy as that.
@@ -83,7 +83,7 @@ When you write the name of a topic, it becomes a link. There are more ways:
    * %X% When linking to a <nop>%HOMETOPIC% topic _in another web_, the link will be rendered as the name of the web, e.g. =Sandbox.%HOMETOPIC%= becomes Sandbox.%HOMETOPIC%.
    * %X% Dots (.) are used as seperators between webs, subwebs, and topics. It is not possible to use dots in topic names. TWiki does not attempt to guess if a dot could be part of a topic name.
 
-__Related Topics:__ WikiSyntax, TextFormattingRules
+__Related topics:__ WikiSyntax, WikiNotation, TextFormattingRules, TWikiEditingShorthand, TWikiRenderingShortcut, TWikiShorthand
 %STOPINCLUDE%
 
 -- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens, TWiki:Main.CrawfordCurrie
