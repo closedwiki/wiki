@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273963073" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1276410683" format="1.1" version="$Rev$"}%
 ---+!! !TWikiUserMappingContrib
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -11,7 +11,7 @@ One line description, required for extensions repository catalog:
 -->
 %SHORTDESCRIPTION%
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
-%TOC%
+%TOC{title="Page contents"}%
 </div>
 
 ---++ Introduction
@@ -68,8 +68,9 @@ It's a part of the default distribution of the TWiki Core.
 |  Contrib Authors: | Sven Dowideit, SvenDowideit@WikiRing.com and TWiki Contributors. |
 |  Copyright: | &copy; 2007 Sven Dowideit;%BR% &copy; 2007-2010 TWiki:TWiki/TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Contrib Version: | 4.4 (2010-05-26) |
+|  Contrib Version: | 4.5 (2010-06-12) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-06-12: | TWikibug:Item5335: Force-linking some WikiWords so that TWiki can work with NOAUTOLINK set or cleared |
 |  2010-05-26: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  4.3 | TWikibug:Item6417 - fix issue so that LDAP users can login if 'TWiki::Users::TWikiUserMapping' is used |
 |  4.2.1 | 03 Aug 2008 - Distributed with TWiki 4.2.1 |
