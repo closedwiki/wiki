@@ -35,8 +35,8 @@ use vars qw(
   $topicsRegex $action $style $label $header $footer $button
 );
 
-$VERSION    = '1.6';
-$RELEASE    = '2010-05-26';
+$VERSION    = '1.7';
+$RELEASE    = '2010-06-12';
 $pluginName = 'TagMePlugin';    # Name of this Plugin
 
 $initialized = 0;
