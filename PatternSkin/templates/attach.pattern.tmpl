@@ -60,11 +60,7 @@ function doIt(obj, fm) {
   }
   var fileNo = $('input.upload').size();
   $(obj).hide();
-  $(obj).parent().prepend('<input type="file" class="upload" name="filepath'+fileNo+'" value ="" size="50" />').find("input").change(
-    function() {
-      doIt(this, fm);
-    }
-  );
+  $(obj).parent().prepend('<input type="file" class="upload" name="filepath'+fileNo+'" value="" size="50" onchange="doIt(this, '+fm+');" />');
   var v = obj.value;
   if(v != '') {
     $("div#files_list").append('<div>'+'<input type="image" src="%ICONURL{remove}%" width="12" height="12" border="0"  alt="Remove file" title="Remove file" value="" style="margin:-2px 0px 0px 0px; border:none; padding:0px; width:12px; height:12px; background-color:transparent;" /> '+v+'</div>').find("input").click(
