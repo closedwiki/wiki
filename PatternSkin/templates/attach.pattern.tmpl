@@ -40,7 +40,43 @@ hideimgleft="%ICONURLPATH{toggleclose}%"}%</div><!--//patternTop-->%TMPL:END%
 </div><!-- /twikiFormStep-->%TMPL:P{"changepropertiesaction"}%%TMPL:END%
 
 %TMPL:DEF{"multiple-file-javascript"}%
-<script type="text/javascript"> $(document).ready(function(){	var fileMax = 10; $('#attachlist').after('<div id="files_list"></div>'); $("input.upload").change(function(){ doIt(this, fileMax); }); });	function doIt(obj, fm) { if($('input.upload').size() > fm) {alert('Max files is '+fm); obj.value='';return true;} var fileNo = $('input.upload').size(); $(obj).hide(); $(obj).parent().prepend('<input type="file" class="upload" name="filepath'+fileNo+'" value ="%FILEPATH%" size="50" />').find("input").change(function() {doIt(this, fm)}); var v = obj.value; if(v != '') { $("div#files_list").append('<div>'+'<input type="image" src="%ICONURL{remove}%" width="12" height="12" border="0"  alt="Remove file" title="Remove file" value="" style="margin:-2px 0px 0px 0px; border:none; padding:0px; width:12px; height:12px; background-color:transparent;" />  '+v+'</div>') .find("input").click(function(){ $(this).parent().remove(); $(obj).remove(); return true; }); } }; </script> %TMPL:END%
+<script type="text/javascript">
+$(document).ready(
+  function(){
+    var fileMax = 10;
+    $('#attachlist').after('<div id="files_list"></div>');
+    $("input.upload").change(
+      function(){
+        doIt(this, fileMax);
+      }
+    );
+  }
+);
+function doIt(obj, fm) {
+  if($('input.upload').size() > fm) {
+    alert('Max files is '+fm);
+    obj.value='';
+    return true;
+  }
+  var fileNo = $('input.upload').size();
+  $(obj).hide();
+  $(obj).parent().prepend('<input type="file" class="upload" name="filepath'+fileNo+'" value ="" size="50" />').find("input").change(
+    function() {
+      doIt(this, fm);
+    }
+  );
+  var v = obj.value;
+  if(v != '') {
+    $("div#files_list").append('<div>'+'<input type="image" src="%ICONURL{remove}%" width="12" height="12" border="0"  alt="Remove file" title="Remove file" value="" style="margin:-2px 0px 0px 0px; border:none; padding:0px; width:12px; height:12px; background-color:transparent;" /> '+v+'</div>').find("input").click(
+      function(){
+        $(this).parent().remove();
+        $(obj).remove();
+        return true;
+      }
+    );
+  }
+};
+</script> %TMPL:END%
 
 %TMPL:DEF{"content"}%%TMPL:P{"toolbar"}%
 %TMPL:P{"pagehelp"}%
