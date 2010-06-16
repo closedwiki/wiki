@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1275432172" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1276665774" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -121,8 +121,8 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * Set WIKILOGOURL = %SCRIPTURL{view}%/%USERSWEB%/%HOMETOPIC%
       * Set WIKILOGOALT = Home - this site is powered by TWiki(R)
 
-   * Home page of this site
-      * Set WIKIHOMEURL = %SCRIPTURLPATH{"view"}%
+   * Home page of this site. This is DEPRECATED, please use %<nop>WIKILOGOURL% instead.
+      * Set WIKIHOMEURL = %SCRIPTURLPATH{"view"}%/%USERSWEB%/%HOMETOPIC%
 
    * List of <nop>%WIKITOOLNAME% webs - on the first line of the upper toolbar (to add a new web, see ManagingWebs and %SYSTEMWEB%.SiteMap):
       * Set WIKIWEBLIST = [[%USERSWEB%.%HOMETOPIC%][%USERSWEB%]] %SEP% [[%SYSTEMWEB%.%HOMETOPIC%][%SYSTEMWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]]
