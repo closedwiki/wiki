@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1275630249" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1276663933" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
@@ -192,7 +192,7 @@ __Hall of Fame of TWiki Release 4.2__
 
 Many people have been involved in creating TWiki 4.2. Special thanks go to the most active contributors in the following areas:
    * Release management led by TWiki:Main.KennethLavrsen, ably assisted by TWiki:Main.SvenDowideit
-   * Design and development driven by TWiki:Main.CrawfordCurrie, TWiki:Main.ArthurClemens, TWiki.Main.KennethLavrsen and TWiki:Main.SvenDowideit
+   * Design and development driven by TWiki:Main.CrawfordCurrie, TWiki:Main.ArthurClemens, TWiki:Main.KennethLavrsen and TWiki:Main.SvenDowideit
    * Testing driven by TWiki:Main.KennethLavrsen
 
 Many thanks also to the contributors in the following areas:

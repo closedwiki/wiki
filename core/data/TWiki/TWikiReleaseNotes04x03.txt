@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273881423" format="1.1" version="$Rev$"}%
----+!! TWiki Release 4.3.2 (Georgetown), 2009-09-02
+%META:TOPICINFO{author="TWikiContributor" date="1276664289" format="1.1" version="$Rev$"}%
+---+!! Release Notes of TWiki-4.3.2 (Georgetown), 2009-09-02
 
 __Note:__ _This is the release note for the previous major release version 4.3.X. This note, TWikiReleaseNotes04x00, TWikiReleaseNotes04x01 and TWikiReleaseNotes04x02 are included with 5.0.X because they contain valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes05x00 for the 5.0.X release notes._
 

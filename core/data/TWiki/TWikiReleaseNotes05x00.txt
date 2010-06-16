@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1275131714" format="1.1" version="$Rev$"}%
----+!! TWiki Release 5.0.0 (Helsinki), 2010-05-29
+%META:TOPICINFO{author="TWikiContributor" date="1276664353" format="1.1" version="$Rev$"}%
+---+!! Release Notes of TWiki-5.0.0 (Helsinki), 2010-05-29
 
 %TOC%
 
@@ -81,8 +81,8 @@ TWiki-5.0.0 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRele
 | TWikibug:Item6334 | TinyMCEPlugin: Upgrade plugin to latest TinyMCE 3.2.4.1  |
 | TWikibug:Item6364 | SpreadSheetPlugin: SpreadSheetPlugin Nop Function Enhancement |
 | TWikibug:Item6365 | Forms: Forms Should Evaluate the Size Field |
-| TWikibug:Item6380 | TWiki.TWikiDocGraphics: TWiki Doc Graphics: Adding search path, icon size defined in topics, adding cache |
-| TWikibug:Item6381 | TWiki.TWikiDocGraphics: 51 new TWiki Doc Graphics images for TWiki 5.0.0 |
+| TWikibug:Item6380 | TWikiDocGraphics: TWiki Doc Graphics: Adding search path, icon size defined in topics, adding cache |
+| TWikibug:Item6381 | TWikiDocGraphics: 51 new TWiki Doc Graphics images for TWiki 5.0.0 |
 | TWikibug:Item6385 | Func/Plugins/Renderer: New TWiki::Func::buildWikiWord Function |
 | TWikibug:Item6393 | TWikiUserMappingContrib: Ability to pre-populate TWiki registration form fields with URL parameters |
 | TWikibug:Item6396 | Query syntax with array size for TWiki forms and attachments |
