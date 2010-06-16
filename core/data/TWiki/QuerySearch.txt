@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1265790321" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1276711839" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %STARTINCLUDE%
 ---+ Query Search
@@ -17,7 +17,7 @@ Query searches are defined using a simple SQL-like query language. The language 
 You use field specifiers to say what value from the topic you are interested
 in.
 
-All meta-data in a topic is referenced according to a to a simple plan.
+All meta-data in a topic is referenced according to a simple plan.
  
    * =name= - name of the topic
    * =web= - name of the web the topic is within
