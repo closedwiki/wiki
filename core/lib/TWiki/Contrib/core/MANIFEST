@@ -324,6 +324,9 @@ data/TWiki/VarWEBLIST.txt 0644
 data/TWiki/VarWEBPREFSTOPIC.txt 0644
 data/TWiki/VarWHITE.txt 0644
 data/TWiki/VarWIKIHOMEURL.txt 0644
+data/TWiki/VarWIKILOGOALT.txt 0644
+data/TWiki/VarWIKILOGOIMG.txt 0644
+data/TWiki/VarWIKILOGOURL.txt 0644
 data/TWiki/VarWIKINAME.txt 0644
 data/TWiki/VarWIKIPREFSTOPIC.txt 0644
 data/TWiki/VarWIKITOOLNAME.txt 0644
