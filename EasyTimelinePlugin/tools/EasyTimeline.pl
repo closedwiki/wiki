@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 
-# Copyright (C) 2004 Erik Zachte, email:erikzachte@+++.com (nospam: +++=infodisiac).
+# http://svn.wikimedia.org/viewvc/mediawiki/trunk/extensions/timeline
+
+# Copyright (C) 2004 Erik Zachte , email xxx\@chello.nl (nospam: xxx=epzachte)
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License version 2
 # as published by the Free Software Foundation.
@@ -13,7 +15,7 @@
 # history:
 # 1.5 May 27 2004 :
 # - when a chart contains only one bar this bar was always centered in the image
-#     now AlignBars works well in this case aslo ("justify" treated as "center")
+#     now AlignBars works well in this case also ("justify" treated as "center")
 # - interwiki links reinstalled e.g. [[de:Gorbachev]]
 # - error msgs corrected
 # - minimum image size fixed
@@ -62,7 +64,64 @@
 #   by undercore or unaccented version of character
 #   this is a make do solution until full unicode support with external fonts will be added
 
-  $version = "1.9" ;
+# 1.12 August 2004
+# - http://bugzilla.wikipedia.org/show_bug.cgi?id=3:
+#   bug:
+#   In a classic Wiki, a link [[Toto]] do link to the URL http://fr.wikipedia.org/wiki/Toto
+#   In easyTimeLine it links to http://fr.wikipedia.org/w/wiki.phtml/Toto
+#   solution:
+#   EasyTimeline was using the script path instead of the article path and simply
+#   appending / and the article title on the end. This doesn't produce the desired
+#   links on all configurations, and will fail entirely on a server using PHP in CGI
+#   or apache2filter mode where that link style doesn't work.
+# - Use $wgArticlePath to create proper link URLs for both 'ugly', 'pretty',
+#   and custom article paths.
+
+# 1.13 April 2005
+# - http://bugzilla.wikipedia.org/show_bug.cgi?id=1820:
+#   OS-detection in EasyTimeline.pl fails on Mac OS X
+
+# 1.14 November 2005
+# - http://bugzilla.wikipedia.org/show_bug.cgi?id=3965:
+#   Support UTF-8 text, with FreeSans.ttf free font and current version of Ploticus compiled with GD support
+#   (command-line fixes from Piotr Matuszewski)
+# - http://bugzilla.wikipedia.org/show_bug.cgi?id=9:
+#   Make UTF-8 wiki links work properly
+# - explicitly specify html click map filename to Ploticus (ploticus default changed on 2.31)
+
+# 1.15 December 2005
+#   major change: 
+# - Real unicode support that deals with Ploticus limitations (no embedded links) instead of 1.14 quick fix
+#   when one or more fonts have been specified in input, input will be expected to be unicode compatible, 
+#   otherwise input will still be seen as ascii (with incomplete char set as well) for downward compatibility 
+# - default unicode font is Vera.ttf
+
+#   minor changes:
+# - optionally trace flow
+# - max image width 1600x2000 -> 4000x2000 (by the way, this safety measure is only to avoid xGb images on Wikipedia)
+# - added barset:stay = stay on same level for next bar (= do not auto increment)
+# - BarData barset can now be accompanied by maxbars, specify integer after which autobreak occurs
+
+#----------------------------------------------------------------------------------------------------
+
+# Wishlist  
+# - Support multiple fonts on svg
+# - Allow more date formats  
+# - Variable link color
+# - ScaleMajor/Minor add 'end:...' similar to 'start:...' (+ allow start before Period from)
+# - Accept 'till:xxx' where xxx > Period:till treat as 'till:end'
+
+# Investigate user feedback (may be obsolete):
+# - Can´t get working links in timelines with parenthesis. 
+#   some links in these timelines seem to be replacing spaces with 5F in URLs, where it should in fact be %5F, 
+#   and thus breaking the links. This seems to occur only after a comma or an accented character
+#   parentheses and anchors. To make an anchor (like caca#5) I was able to use caca%235. But caca (food)%235 doesn't work - 
+#   the link looks like caca28%food#5) - and using a %28 gives caca 25(food)#5. Replacing the space with %20 worked. Argh, but now the anchors aren't carrying through. 
+#   The URL has the anchor but when I click it doesn't actually use it. 15 works fine.
+# - ET does not generate a clickmap when no links are found in the PlotData section (fixed ?) 
+# - I want to get the Bar titles at the top of the bar, instead of at the bottom. 
+
+  $version = "1.15" ;
 
   use Time::Local ;
   use Getopt::Std ;
@@ -72,13 +131,14 @@
 
   print "EasyTimeline version $version\n" .
         "Copyright (C) 2004 Erik Zachte\n" .
-        "Email erikzachte\@+++.com (nospam: +++=infodisiac)\n\n" .
+        "Email xxx\@chello.nl (nospam: xxx=epzachte)\n\n" .
         "This program is free software; you can redistribute it\n" .
         "and/or modify it under the terms of the \n" .
         "GNU General Public License version 2 as published by\n" .
         "the Free Software Foundation\n" .
         "------------------------------------------------------\n" ;
 
+  &InitVars ;
   &SetImageFormat ;
   &ParseArguments ;
   &InitFiles ;
@@ -87,18 +147,34 @@
   @lines = <FILE_IN> ;
   close "FILE_IN" ;
 
-  # until real unicode support is available: translate extended ASCII chars
+  # check if fonts are specified in input, if so expect unicode compatible input
+  $fonts_specified = $false ;
   foreach $line (@lines)
+  { 
+    if ($line =~ / font\:/)
+    { $fonts_specified = $true ; last ; }
+  }  
+  
+  if ($fonts_specified) 
+  { 
+    &GetFontPath ;
+    print "\nExternal font(s) specified in input ->\nTreat input as unicode compatible.\n\n" ; 
+  }
+  else
   {
-    $line =~ s/([\xc0-\xdf][\x80-\xbf]|
-                [\xe0-\xef][\x80-\xbf]{2}|
-                [\xf0-\xf7][\x80-\xbf]{3})/&UnicodeToAscii($1)/gxeo ;
-    # unfortunately Ploticus uses an odd character mapping lots of unicode chars
-    # in extended ascii range are not available
-    $line =~ tr /¡¢£¥¦©ª«¬­®¯±²³µ¶·¹º»¼½¾¿ÀÅÆÇÈÊÌÏÒÖØÛÞàåæèêìïðòøþÿ/_________________________AAACEEIIOO0Ü_aaaeeii_o0_y/ ;
+    # until real unicode support is available (= support of external fonts): translate extended ASCII chars
+    print "\nNo external fonts specified in input ->\nTreat input as ascii and use internal Ploticus font.\n\n" ; 
+    foreach $line (@lines)
+    {
+       $line =~ s/([\xc0-\xdf][\x80-\xbf]|
+                   [\xe0-\xef][\x80-\xbf]{2}|
+                   [\xf0-\xf7][\x80-\xbf]{3})/&UnicodeToAscii($1)/gxeo ;
+      # unfortunately Ploticus uses an odd character mapping lots of unicode chars
+      # in extended ascii range are not available
+      $line =~ tr /¡¢£¥¦©ª«¬­®¯±²³µ¶·¹º»¼½¾¿ÀÅÆÇÈÊÌÏÒÖØÛÞàåæèêìïðòøþÿ/_________________________AAACEEIIOO0Ü_aaaeeii_o0_y/ ;
+    }
   }
 
-  &InitVars ;
   &ParseScript ;
 
   if ($CntErrors == 0)
@@ -137,12 +213,13 @@
     { print "\nREADY\nNo errors found.\n" ; }
   }
 
+  close "FILE_TRACE" ;
   exit ;
 
 sub ParseArguments
 {
   my $options ;
-  getopt ("iTAPe", \%options) ;
+  getopt ("ixTAPe", \%options) ;
 
   &Abort ("Specify input file as: -i filename") if (! defined (@options {"i"})) ;
 
@@ -159,10 +236,27 @@ sub ParseArguments
   $plcommand = @options {"P"} ; # For MediaWiki: full path of ploticus command
   $articlepath=@options {"A"} ; # For MediaWiki: Path of an article, relative to this servers root
 
-  if (! defined @options {"A"} )
-  { $articlepath="http://en.wikipedia.org/wiki/"; }
+  $file_trace  = @options {"x"} ; # debug: path for log file
+  if ($file_trace ne "")
+  {
+    $trace = $true ;
+    open "FILE_TRACE", ">", $file_trace ;
+    &Trace ("Arguments:\n" .
+            "b - '" . @options {"b"} . "'\n" .
+            "d - '" . @options {"d"} . "'\n" .
+            "h - '" . @options {"h"} . "'\n" .
+            "i - '" . @options {"i"} . "'\n" .
+            "l - '" . @options {"l"} . "'\n" .
+            "m - '" . @options {"m"} . "'\n" .
+            "A - '" . @options {"A"} . "'\n" .
+            "P - '" . @options {"P"} . "'\n" .
+            "T - '" . @options {"T"} . "'\n\n") ;
+  }
 
-  $articlepath =~ s/\/$// ;     # remove trailing backslash, if any
+  if (! defined @options {"A"} )
+  { $articlepath="http://en.wikipedia.org/wiki/\$1"; }
+
+  &Trace ("Article path = '$articlepath'\n") ;
 
   if (! -e $file_in)
   { &Abort ("Input file '" . $file_in . "' not found.") ; }
@@ -172,6 +266,7 @@ sub InitVars
 {
   $true  = 1 ;
   $false = 0 ;
+  $trace = $false ;
   $CntErrors = 0 ;
   $LinkColor = "brightblue" ;
   $MapPNG = $false ; # switched when link or hint found
@@ -221,6 +316,7 @@ sub InitFiles
   if (-e $file_htmlmap)  { unlink $file_htmlmap ; }
   if (-e $file_html)     { unlink $file_html ; }
   if (-e $file_errors)   { unlink $file_errors ; }
+  if (-e $file_trace)    { unlink $file_trace ; }
 }
 
 sub SetImageFormat
@@ -231,19 +327,56 @@ sub SetImageFormat
 # if ($dir =~ /\\/) { $env = "Windows" ; $fmt = "gif" ; $pathseparator = "\\";}
 # cwd always to returns '/'s ? ->
   $OS = $^O ;
-  if ($OS =~ /win/i)
+  if (($OS =~ /darwin/i) || ($OS =~ /cygwin/i))
+  { $env = "Linux";    $fmt = "png" ; $pathseparator = "/";}
+  elsif ($OS =~ /win/i)
   { $env = "Windows" ; $fmt = "gif" ; $pathseparator = "\\";}
   else
   { $env = "Linux" ;   $fmt = "png" ; $pathseparator = "/";}
 
   if ($env ne "")
-  { print "\nOS $env detected -> create image in $fmt format.\n" ; }
+  { print "\nOS $OS detected -> environment = $env, create image in $fmt format.\n" ; }
   else
   {
     print "\nOS not detected. Assuming Windows -> create image in $fmt format.\n" ;
     $env = "Windows" ;
   }
 }
+
+sub GetFontPath
+{
+  $fontpath = $ENV {"GDFONTPATH"} ;
+  print "Freetype font path (GDFONTPATH) is set to '$fontpath'\n\n" ;
+  $fontpath .= $pathseparator ;
+
+  if ($fontpath ne "")
+  {
+    opendir (DIR, $fontpath);
+    while (my $file = readdir (DIR))
+    {
+      if ($file =~ /\.ttf$/i)
+      {
+        $file =~ s/\.ttf//i ;
+        @fonts     {$file}      = $true ;
+        @fontfiles {lc ($file)} = $file ;
+      }
+    }
+    closedir DIR ;
+  }
+  foreach $font (sort keys %fonts)
+  { $fontlist .= "$font, " ; }
+  $fontlist =~ s/,$// ;
+  
+  $fonts_available ="Truetype fonts available:  $fontlist\n\n" ;
+  print $fonts_available ;
+  
+  if (@fonts {"Vera"} eq "")
+  { &Abort ("Default font Vera.ttf not found in fonts folder $fontpath.") ; }
+  @Fonts {"default"} = "Vera" ;
+  
+  undef (%fonts) ;
+}
+
 sub ParseScript
 {
   my $command ; # local version, $Command = global
@@ -284,7 +417,7 @@ sub ParseScript
 
     if ((! ($name =~ /^(?:Define)\s/)) &&
         (! ($name =~ /^(?:AlignBars|BarData|
-                          BackgroundColors|Colors|DateFormat|LineData|
+                          BackgroundColors|Colors|DateFormat|Fonts|LineData|
                           ScaleMajor|ScaleMinor|
                           LegendLeft|LegendTop|
                           ImageSize|PlotArea|Legend|
@@ -294,7 +427,7 @@ sub ParseScript
       &GetCommand ; next ; }
 
     $value =~ s/^\s*(.*?)\s*// ;
-    if (! ($name =~ /^(?:BarData|Colors|LineData|PlotData|TextData)$/i))
+    if (! ($name =~ /^(?:BarData|Colors|Fonts|LineData|PlotData|TextData)$/i))
     {
       if ((! (defined ($value))) || ($value eq ""))
       {
@@ -336,6 +469,7 @@ sub ParseScript
     elsif ($Command =~ /^Colors/i)           { &ParseColors ; }
     elsif ($Command =~ /^DateFormat/i)       { &ParseDateFormat ; }
     elsif ($Command =~ /^Define/i)           { &ParseDefine ; }
+    elsif ($Command =~ /^Fonts/i)            { &ParseFonts ; }
     elsif ($Command =~ /^ImageSize/i)        { &ParseImageSize ; }
     elsif ($Command =~ /^Legend/i)           { &ParseLegend ; }
     elsif ($Command =~ /^LineData/i)         { &ParseLineData ; }
@@ -606,7 +740,7 @@ sub ParseBarData
   if ($NoData)
   { &Error ("Data expected for command 'BarData', but line is not indented.\n") ; return ; }
 
-  my ($bar, $text, $link, $hint, $barset) ; # , $barcount) ;
+  my ($bar, $text, $link, $hint, $barset, $maxbars) ;
 
   BarData:
   while ((! $InputParsed) && (! $NoData))
@@ -614,7 +748,7 @@ sub ParseBarData
     if (! &ValidAttributes ("BarData"))
     { &GetData ; next ;}
 
-    $bar = "" ; $link = "" ; $hint = "" ; $barset = "" ; # $barcount = "" ;
+    $bar = "" ; $link = "" ; $hint = "" ; $barset = "" ; $maxbars = "" ;
 
     my $data2 = $data ;
     ($data2, $text) = &ExtractText ($data2) ;
@@ -632,13 +766,6 @@ sub ParseBarData
       {
         $barset = $attrvalue ;
       }
-      # elsif ($attribute =~ /^BarCount$/i)
-      # {
-      #   $barcount = $attrvalue ;
-      # if (($barcount !~ /^\d?\d?\d$/) || ($barcount < 2) || ($barcount > 200))
-      # { &Error ("BarData attribute 'barcount' invalid. Specify a number between 2 and 200\n") ;
-      #   &GetData ; next BarData ; }
-      # }
       elsif ($attribute =~ /^Text$/i)
       {
         $text = $attrvalue ;
@@ -663,6 +790,14 @@ sub ParseBarData
 
         $MapPNG = $true ;
       }
+      elsif ($attribute =~ /^MaxBars$/i)
+      {
+        if (($attrvalue !~ /^\d+$/) || ($attrvalue < 2))
+        { &Error ("BarData attribute 'maxbars' invalid. Specify a integral number, larger than 1\n") ;
+          &GetData ; next BarData ; }
+
+        $maxbars = $attrvalue ;
+      }
     }
 
     if (($bar eq "") && ($barset eq ""))
@@ -673,16 +808,12 @@ sub ParseBarData
     { &Error ("BarData attributes 'bar' and 'barset' are mutually exclusive.\nSpecify one of these per data line\n") ;
       &GetData ; next BarData ; }
 
-    # if (($barset ne "") && ($barcount eq ""))
-    # { &Error ("BarData attribute 'barset' specified without attribute 'barcount'.\n") ;
-    #   &GetData ; next BarData ; }
-
-    # if (($barset eq "") && ($barcount ne ""))
-    # { &Error ("BarData attribute 'barcount' specified without attribute 'barset'.\n") ;
-    #   &GetData ; next BarData ; }
-
     if (($barset ne "") && ($link ne ""))
     { &Error ("BarData attribute 'link' not valid in combination with attribute 'barset'.\n") ;
+      &GetData ; next BarData ; }
+
+    if (($barset eq "") && ($maxbars ne ""))
+    { &Error ("BarData attribute 'maxbars' only valid in combination with attribute 'barset'.\n") ;
       &GetData ; next BarData ; }
 
     if ($link ne "")
@@ -719,23 +850,20 @@ sub ParseBarData
     }
     else
     {
-#     for ($b = 1 ; $b <= $barcount ; $b++)
-#     {
-#       $bar = $barset . "#" . $b ;
+      $bar = $barset . "#1" ;
+      if (@Axis {"time"} eq "x")
+      { push @Bars, $bar ; }
+      else
+      { unshift @Bars, $bar ; }
 
-        $bar = $barset . "#1" ;
-        if (@Axis {"time"} eq "x")
-        { push @Bars, $bar ; }
-        else
-        { unshift @Bars, $bar ; }
-
-        if ($text ne "")
-        { @BarLegend {lc ($bar)} = $text . " - " . $b ; }
-        else
-        { @BarLegend {lc ($bar)} = " " ; }
-#     }
+      if ($text ne "")
+      { @BarLegend {lc ($bar)} = $text . " - " . $b ; }
+      else
+      { @BarLegend {lc ($bar)} = " " ; }
+      
+      if ($maxbars ne "")
+      { @BarSetMaxBars {$barset} = $maxbars ; }
     }
-
 
     &GetData ;
   }
@@ -893,6 +1021,84 @@ sub ParseDefine
 
   $value =~ s/($hDollar[a-zA-Z0-9]+)/&GetDefine($command,$1)/ge ;
   @Consts {lc ($name)} = $value ;
+}
+
+sub ParseFonts
+{
+  my $listfonts = $false ;
+
+  &GetData ;
+  if ($NoData)
+  { &Error ("Data expected for command 'Fonts', but line is not indented.\n") ; return ; }
+
+  Fonts:
+  while ((! $InputParsed) && (! $NoData))
+  {
+    if (! &ValidAttributes ("Fonts"))
+    { &GetData ; next ; }
+
+    my %sizes ;
+    @sizes {"xs"} = 7 ;
+    @sizes {"s" } = 8 ;
+    @sizes {"m" } = 9 ;
+    @sizes {"l" } = 13 ;
+    @sizes {"xl"} = 17 ;
+
+    foreach $attribute (keys %Attributes)
+    {
+      my $attrvalue = @Attributes {$attribute} ;
+
+      if ($attribute =~ /Id/i)
+      {
+        $fontid = $attrvalue ;
+      }
+      elsif ($attribute =~ /Font/i)
+      {
+        $fontfile = $attrvalue ;
+      }
+      elsif ($attribute =~ /^(?:xs|s|m|l|xl)$/)
+      {
+        if (! ($attrvalue =~ /^\d+(?:\.\d+)?$/))
+        { &Error ("Fonts attribute '$attribute' invalid. Specify numeric value.") ; 
+        	 &GetData ; next FontData ; }
+        @sizes {lc ($attribute)} = $attrvalue ; 
+      }
+    }
+    
+    if (@fontfiles {lc ($fontfile)} eq "")
+    {
+    	 $listfonts = $true ;
+    	 &Error ("Section Fonts invalid. Attribute 'font': file '$fontfile.ttf' not available.") ;
+      &GetData ; next Fonts ; 
+    }
+    
+    if ($fontid !~ /^default$/i)
+    {
+      if (@Fonts {lc ($fontid)} ne "")
+      { &Error ("Font id '$fontid' already defined.") ;            
+      	 &GetData ; next Fonts ; }
+    }  
+
+    if (@files {lc ($fontfile)} ne "")
+    { &Error ("Font '$fontfile' already assigned.") ;            
+    	 &GetData ; next Fonts ; }
+
+  	 @files {lc ($fontfile)} = $fontfile ; 
+    
+  	 @Fonts {lc ($fontid)} = $fontfile ; 
+    
+    @FontSizes {lc ($fontfile).":xs"} = @sizes {"xs"} ;
+    @FontSizes {lc ($fontfile).":s" } = @sizes {"s" } ;
+    @FontSizes {lc ($fontfile).":m" } = @sizes {"m" } ;
+    @FontSizes {lc ($fontfile).":l" } = @sizes {"l" } ;
+    @FontSizes {lc ($fontfile).":xl"} = @sizes {"xl"} ;
+
+    &GetData ;
+  }
+  
+	 if ($listfonts)
+	 { push @Errors, $fonts_available ; }
+  undef %files ;
 }
 
 sub ParseLineData
@@ -1347,7 +1553,7 @@ sub ParsePlotData
   { &Error ("Data expected for command 'PlotData', but line is not indented.\n") ; return ; }
 
   my ($bar, $at, $from, $till, $color, $bgcolor, $textcolor, $fontsize, $width,
-      $text, $anchor, $align, $shift, $shiftx, $shifty, $mark, $markcolor, $link, $hint) ;
+      $text, $anchor, $align, $shift, $shiftx, $shifty, $mark, $markcolor, $link, $hint, $font) ;
 
   @PlotDefs {"anchor"} = "middle" ;
 
@@ -1363,6 +1569,13 @@ sub ParsePlotData
     $text = "" ; $align = "left" ; $shift = "" ; $shiftx = "" ; $shifty = "" ; $anchor = "" ;
     $mark = "" ; $markcolor = "" ;
     $link = "" ; $hint = "" ;
+    $font = "" ;
+
+    if ($fonts_specified) # set default when external fonts are used in input
+    { 
+      my $fontname = @Fonts {'default'} ;
+      $font = @fontfiles {lc ($fontname)} ;
+    }
 
     &CheckPreset ("PlotData") ;
 
@@ -1379,6 +1592,7 @@ sub ParsePlotData
     if (defined (@PlotDefs {"shifty"}))    { $shifty    = @PlotDefs {"shifty"} ; }
     if (defined (@PlotDefs {"mark"}))      { $mark      = @PlotDefs {"mark"} ; }
     if (defined (@PlotDefs {"markcolor"})) { $markcolor = @PlotDefs {"markcolor"} ; }
+    if (defined (@PlotDefs {"font"}))      { $font      = @PlotDefs {"font"} ; }
 #   if (defined (@PlotDefs {"link"}))      { $link      = @PlotDefs {"link"} ; }
 #   if (defined (@PlotDefs {"hint"}))      { $hint      = @PlotDefs {"hint"} ; }
 
@@ -1428,6 +1642,11 @@ sub ParsePlotData
         elsif ($attrvalue =~ /skip/i)
         {
           $barndx ++ ;
+          &BarDefined ($prevbar . "#" . $barndx) ;
+        }
+        elsif ($attrvalue =~ /stay/i)
+        {
+          $barndx -- ;
           &BarDefined ($prevbar . "#" . $barndx) ;
         }
         else
@@ -1649,11 +1868,26 @@ sub ParsePlotData
         else
         { $markcolor = "black" ; }
       }
+      elsif ($attribute =~ /^Font$/i)
+      {
+        if (! defined (@Fonts {lc ($attrvalue)}))
+        { &Error ("PlotData invalid. Attribute '$attribute' contains unknown font id '$attrvalue'.\n" .
+                  "  Specify in command 'Fonts' before this command.") ;
+          &GetData ; next PlotData ; }
+          
+        $fontname = @Fonts {lc ($attrvalue)} ;
+        my $filename = @fontfiles {lc ($fontname)} ;
+        $font = $filename ;
+      }
       else
       { &Error ("PlotData invalid. Unknown attribute '$attribute' found.") ;
         &GetData ; next PlotData ; }
     }
 
+    if (($font eq "") && ($fonts_specified))
+    { $font = @fontfiles {"default"} ; }
+  	
+    
 #    if ($text =~ /\[\[.*\[\[/s)
 #    { &Error ("PlotData invalid. Text segment '$text' contains more than one wiki link. Only one allowed.") ;
 #      &GetData ; next PlotData ; }
@@ -1689,6 +1923,7 @@ sub ParsePlotData
       if ($shifty     ne "") { @PlotDefs {"shifty"}    = $shifty ; }
       if ($mark       ne "") { @PlotDefs {"mark"}      = $mark ; }
       if ($markcolor  ne "") { @PlotDefs {"markcolor"} = $markcolor ; }
+      if ($font       ne "") { @PlotDefs {"font"}      = $font ; }
 #     if ($link       ne "") { @PlotDefs {"link"}      = $link ; }
 #     if ($hint       ne "") { @PlotDefs {"hint"}      = $hint ; }
       &GetData ; next PlotData ;
@@ -1734,6 +1969,10 @@ sub ParsePlotData
       if (($from ne "") || ($at ne "") || ($text eq " ")) # data line ?
       {
         $barndx++ ;
+        
+        if ((@BarSetMaxBars {$bar} > 0) && ($barndx > @BarSetMaxBars {$bar})) # auto break on max bars reached
+        { $barndx = 1 ; }
+        
         if (! &BarDefined ($bar . "#" . $barndx))
         { $barndx = 1 ; }
         $bar = $bar . "#" . $barndx ;
@@ -1879,7 +2118,8 @@ sub ParsePlotData
         $hint      =~ s/\,/\#\%\$/g ;
         $shift     =~ s/\,/\#\%\$/g ;
         $textcolor =~ s/\,/\#\%\$/g ;
-        push @PlotText, sprintf ("%s,%s,%s,%s,%s,%s,%s,%s,%s", $at, $bar, $text, $textcolor, $fontsize, $align, $shift, $link, $hint) ;
+        $font      =~ s/\,/\#\%\$/g ;
+        push @PlotText, sprintf ("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", $at, $bar, $text, $textcolor, $fontsize, $align, $shift, $link, $hint, $font) ;
       }
     }
 
@@ -2089,7 +2329,9 @@ sub ParseTextData
   if ($NoData)
   { &Error ("Data expected for command 'TextData', but line is not indented.\n") ; return ; }
 
-  my ($pos, $tabs, $fontsize, $lineheight, $textcolor, $text, $link, $hint) ;
+  my ($pos, $posexplicit, $tabs, $fontsize, $lineheight, $lineheightexplicit, $textcolor, $text, $link, $hint, $font) ;
+  $lineheightexplicit = $false ;
+  $posexplicit        = $false ;
 
   TextData:
   while ((! $InputParsed) && (! $NoData))
@@ -2099,12 +2341,19 @@ sub ParseTextData
 
     &CheckPreset ("TextData") ;
 
-    $pos = "" ; $tabs = "" ; $fontsize = "" ; $lineheight = "" ; $textcolor = "" ; $link = "" ; $hint = "" ;
+    $pos = "" ; $tabs = "" ; $fontsize = "" ; $lineheight = "" ; $textcolor = "" ; $link = "" ; $hint = "" ; $font = "" ;
 
+    if ($fonts_specified) # set default when external fonts are used in input
+    { 
+      my $fontname = @Fonts {'default'} ;
+      $font = @fontfiles {lc ($fontname)} ;
+    }
+    
     if (defined (@TextDefs {"tabs"}))       { $tabs       = @TextDefs {"tabs"} ; }
     if (defined (@TextDefs {"fontsize"}))   { $fontsize   = @TextDefs {"fontsize"} ; }
     if (defined (@TextDefs {"lineheight"})) { $lineheight = @TextDefs {"lineheight"} ; }
     if (defined (@TextDefs {"textcolor"}))  { $textcolor  = @TextDefs {"textcolor"} ; }
+    if (defined (@TextDefs {"font"}))       { $font       = @TextDefs {"font"} ; }
 
     my $data2 = $data ;
     ($data2, $text) = &ExtractText ($data2) ;
@@ -2134,6 +2383,7 @@ sub ParseTextData
       }
       elsif ($attribute =~ /^LineHeight$/i)
       {
+        $lineheightexplicit = $true ;
         $lineheight = &Normalize ($attrvalue) ;
         if (($lineheight < -0.4) || ($lineheight > 0.4))
         {
@@ -2145,6 +2395,7 @@ sub ParseTextData
       }
       elsif ($attribute =~ /^Pos$/i)
       {
+        $posexplicit = $true ;
         $attrvalue =~ s/\s*$hBrO (.*) $hBrC\s*/$1/x ;
         ($posx,$posy) = split (",", $attrvalue) ;
         $posx = &Normalize ($posx) ;
@@ -2183,12 +2434,29 @@ sub ParseTextData
         $link = &ParseText ($attrvalue) ;
         $link = &EncodeURL (&NormalizeURL ($link)) ;
       }
+      elsif ($attribute =~ /^Font$/i)
+      {
+        if (! defined (@Fonts {lc ($attrvalue)}))
+        { &Error ("TextData invalid. Attribute '$attribute' contains unknown font id '$attrvalue'.\n" .
+                  "  Specify in command 'Fonts' before this command.") ;
+          &GetData ; next TextData ; }
+          
+        $fontname = @Fonts {lc ($attrvalue)} ;
+        my $filename = @fontfiles {lc ($fontname)} ;
+        $font = $filename ;
+      }
     }
 
+    if (($font eq "") && ($fonts_specified))
+    { $font = @fontfiles {"default"} ; }
+    	
     if ($fontsize eq "")
     { $fontsize = "S" ; }
 
-    if ($lineheight eq "")
+    if (($fontsize =~ /^(?:XS|S|M|L|XL)$/i) && ($font ne ""))
+    { $fontsize = @FontSizes {lc("$font\:$fontsize")} ; }
+    
+    if (! $lineheightexplicit)
     {
       if ($fontsize =~ /^(?:XS|S|M|L|XL)$/i)
       {
@@ -2200,7 +2468,7 @@ sub ParseTextData
       }
       else
       {
-        $lineheight = sprintf ("%.2f", (($fontsize * 1.2) / 100)) ;
+        $lineheight = sprintf ("%.2f", (($fontsize * 1.6) / 100)) ;
         if ($lineheight < $fontsize/100 + 0.02)
         { $lineheight = $fontsize/100 + 0.02 ; }
       }
@@ -2209,20 +2477,6 @@ sub ParseTextData
     if ($textcolor eq "")
     { $textcolor = "black" ; }
 
-    if ($pos eq "")
-    {
-      $pos = @TextDefs {"pos"} ;
-      ($posx,$posy) = split (",", $pos) ;
-      $posy -= $lineheight ;
-      if ($posy < 0)
-      { $posy = 0 ; }
-      $pos = "$posx,$posy" ;
-      @TextDefs {"pos"} = $pos ;
-    }
-
-#    if ($link ne "")
-#    { ($text, $link, $hint) = &ProcessWikiLink ($text, $link, $hint) ; }
-
     if ($text eq "") # upd defaults
     {
       if ($pos        ne "") { @TextDefs {"pos"}        = $pos ; }
@@ -2230,6 +2484,7 @@ sub ParseTextData
       if ($fontsize   ne "") { @TextDefs {"fontsize"}   = $fontsize ; }
       if ($textcolor  ne "") { @TextDefs {"textcolor"}  = $textcolor ; }
       if ($lineheight ne "") { @TextDefs {"lineheight"} = $lineheight ; }
+      if ($font       ne "") { @TextDefs {"font"}       = $font ; }
       &GetData ; next TextData ;
     }
 
@@ -2270,7 +2525,39 @@ sub ParseTextData
         &GetData ; next TextData ; }
     }
 
-    &WriteText ("^", "", 0, $posx, $posy, $text, $textcolor, $fontsize, "left", $link, $hint, $tabs) ;
+    # substract fontsize / 100  (= char height in pixels) from start height -> text starts below posy
+    if ($fontsize > 0)
+    { $fontsize2 = $fontsize / 100 ; }
+    else
+    {
+      if     ($fontsize =~ /XS/i) { $fontsize2 = 0.07 ; }
+      elsif  ($fontsize =~ /S/i)  { $fontsize2 = 0.08 ; }
+      elsif  ($fontsize =~ /M/i)  { $fontsize2 = 0.09 ; }
+      elsif  ($fontsize =~ /XL/i) { $fontsize2 = 0.13 ; }
+      else                        { $fontsize2 = 0.17 ; }
+    }  
+    
+    $posy -= $fontsize2 ;
+    if ($posy < 0)
+    { $posy = 0 ; }
+
+    &WriteText ("^", "", 0, $posx, $posy, $text, $textcolor, $fontsize, "left", $link, $hint, $tabs, $font) ;
+
+    if ($fontsize > 0)
+    { $posy -= 0.18 * $fontsize2 + 0.03 ; }
+    else
+    {
+      # internal fixed font 
+      if     ($fontsize =~ /XS/i) { $posy -= 0.04 ; }
+      elsif  ($fontsize =~ /S/i)  { $posy -= 0.05 ; }
+      elsif  ($fontsize =~ /M/i)  { $posy -= 0.065 ; }
+      elsif  ($fontsize =~ /XL/i) { $posy -= 0.11 ; }
+      else                        { $posy -= 0.12 ; }
+    }
+    if ($posy < 0)
+    { $posy = 0 ; }
+    $pos = "$posx,$posy" ;
+    @TextDefs {"pos"} = $pos ;
 
     &GetData ;
   }
@@ -2442,10 +2729,10 @@ sub ValidateAndNormalizeDimensions
   if (@PlotArea {"top"} ne "")
   { @PlotArea {"height"} = @Image {"height"} - @PlotArea {"top"} - @PlotArea {"bottom"} ; }
 
-  if ((@Image {"width"} > 16) || (@Image {"height"} > 20))
+  if ((@Image {"width"} > 40) || (@Image {"height"} > 20))
   {
     if (! $bypass)
-    { &Error2 ("Maximum image size is 1600x2000 pixels = 16x20 inch\n" .
+    { &Error2 ("Maximum image size is 4000x2000 pixels = 40x20 inch\n" .
                "  Run with option -b (bypass checks) when this is correct.\n") ; return ; }
   }
 
@@ -2574,34 +2861,49 @@ sub WriteProcAnnotate
   my $align       = shift ;
   my $link        = shift ;
   my $hint        = shift ;
+  my $font        = shift ;
+
+  my $freetype = $false ;
+  
+  if ($font ne "") 
+  {
+    &WriteProcAnnotateFreeType ($bar, $shiftx, $xpos, $ypos, $text, $textcolor, $fontsize, $align, $link, $hint, $font) ;
+    $freetype = $true ;
+  }
 
   if (length ($text) > 250)
   {  &Error ("Text segments can be up to 250 characters long. This segment is " . length ($text) . " chars.\n" .
              "  You can either shorten the text or\n" .
              "  - PlotData: insert line breaks (~)\n" .
-             "  - TextData: insert tabs (~) to produce columns\n") ; return ; }
+             "  - TextData: insert tabs (^) to produce columns\n") ; return ; }
 
   if ($textcolor eq "")
   { $textcolor = "black" ; }
 
   my $textdetails = "  textdetails: align=$align size=$fontsize color=$textcolor"  ;
 
-  push @PlotTextsPng, "#proc annotate\n" ;
+  if (! $freetype)
+  {
+    push @PlotTextsPng, "#proc annotate\n" ;
+    push @PlotTextsPng, "  location: $xpos $ypos\n" ;
+    push @PlotTextsPng, $textdetails . "\n" ;
+  }
+
   push @PlotTextsSvg, "#proc annotate\n" ;
-
-  push @PlotTextsPng, "  location: $xpos $ypos\n" ;
   push @PlotTextsSvg, "  location: $xpos $ypos\n" ;
-
-  push @PlotTextsPng, $textdetails . "\n" ;
   push @PlotTextsSvg, $textdetails . "\n" ;
 
   $text2 = $text ;
   $text2 =~ s/\[\[//g ;
   $text2 =~ s/\]\]//g ;
-  if ($text2 =~ /^\s/)
-  { push @PlotTextsPng, "  text: \n\\$text2\n\n"  ; }
-  else
-  { push @PlotTextsPng, "  text: $text2\n\n"  ; }
+
+  if (! $freetype)
+  {
+    if ($text2 =~ /^\s/)
+    { push @PlotTextsPng, "  text: \n\\$text2\n\n"  ; }
+    else
+    { push @PlotTextsPng, "  text: $text2\n\n"  ; }
+  }
 
   $text2 = $text ;
   if ($link ne "")
@@ -2632,6 +2934,10 @@ sub WriteProcAnnotate
   { push @PlotTextsSvg, "  text: \n\\$text3\n\n"  ; }
   else
   { push @PlotTextsSvg, "  text: $text3\n\n"  ; }
+
+
+  if ($freetype)
+  {  return ; }
 
   if ($link ne "")
   {
@@ -2701,6 +3007,185 @@ sub WriteProcAnnotate
   }
 }
 
+sub WriteProcAnnotateFreeType
+{
+  my $bar         = shift ;
+  my $shiftx      = shift ;
+  my $xpos        = shift ;
+  my $ypos        = shift ;
+  my $text        = shift ;
+  my $textcolor   = shift ;
+  my $fontsize    = shift ;
+  my $align       = shift ;
+  my $link        = shift ;
+  my $hint        = shift ;
+  my $font        = shift ;
+
+  if ($font eq "")
+  { return ; }
+
+  if ($link ne "")
+  { $MapPNG = $true ; }
+
+  if (length ($text) > 250)
+  {  &Error ("Text segments can be up to 250 characters long. This segment is " . length ($text) . " chars.\n" .
+             "  You can either shorten the text or\n" .
+             "  - PlotData: insert line breaks (~)\n" .
+             "  - TextData: insert tabs (^) to produce columns\n") ; return ; }
+
+  if ($textcolor eq "")
+  { $textcolor = "black" ; }
+
+  $fontsize =~ s/XS/7/gi ;
+  $fontsize =~ s/XL/17/gi ;
+  $fontsize =~ s/s/8/gi ;
+  $fontsize =~ s/m/9/gi ;
+  $fontsize =~ s/L/13/gi ;
+
+  my ($part1,$part2,$part3) ;
+  ($part1,$part2) = split ('\[\[', $text) ;
+  ($part2,$part3) = split ('\]\]', $part2) ;
+
+
+  if ($align =~ /left/i)
+  {
+    &WriteProcAnnotateSegment ($part1, $font, $fontsize, $align, $textcolor, $shiftx, $xpos, $ypos, ''  , ''   , $hint, '+', '') ;
+    &WriteProcAnnotateSegment ($part2, $font, $fontsize, $align, $textcolor, $shiftx, $xpos, $ypos, $bar, $link, $hint, '+', $part1) ;
+    &WriteProcAnnotateSegment ($part3, $font, $fontsize, $align, $textcolor, $shiftx, $xpos, $ypos, ''  , ''   , $hint, '+', $part1.$part2) ;
+  }
+  elsif ($align =~ /right/i)
+  {
+    &WriteProcAnnotateSegment ($part3, $font, $fontsize, $align, $textcolor, $shiftx, $xpos, $ypos, ''  , ''   , $hint, '-', '') ;
+    &WriteProcAnnotateSegment ($part2, $font, $fontsize, $align, $textcolor, $shiftx, $xpos, $ypos, $bar, $link, $hint, '-', $part3) ;
+    &WriteProcAnnotateSegment ($part1, $font, $fontsize, $align, $textcolor, $shiftx, $xpos, $ypos, ''  , ''   , $hint, '-', $part2.$part3) ;
+  }
+  else
+  {
+    $align = 'center' ;
+    if ($part2.$part3 eq "")
+    { &WriteProcAnnotateSegment ($part1, $font, $fontsize, $align, $textcolor, $shiftx, $xpos, $ypos, ''  , ''   , $hint, '', '') ; }
+    elsif ($part1.$part3 eq "")
+    { &WriteProcAnnotateSegment ($part2, $font, $fontsize, $align, $textcolor, $shiftx, $xpos, $ypos, $bar, $link, $hint, '', '') ; }
+    else
+    {
+      &WriteProcAnnotateSegment ($part1, $font, $fontsize, $align, $textcolor, $shiftx, $xpos, $ypos, ''  , ''   , $hint, '+', '',            $part1.$part2.$part3) ;
+      &WriteProcAnnotateSegment ($part2, $font, $fontsize, $align, $textcolor, $shiftx, $xpos, $ypos, $bar, $link, $hint, '+', $part1,        $part1.$part2.$part3) ;
+      &WriteProcAnnotateSegment ($part3, $font, $fontsize, $align, $textcolor, $shiftx, $xpos, $ypos, ''  , ''   , $hint, '+', $part1.$part2, $part1.$part2.$part3) ;
+    }
+  }
+}
+
+sub WriteProcAnnotateSegment
+{
+  my $part      = shift ;
+  my $font      = shift ;
+  my $fontsize  = shift ;
+  my $align     = shift ;
+  my $textcolor = shift ;
+  my $shiftx    = shift ;
+  my $xpos      = shift ;
+  my $ypos      = shift ;
+  my $bar       = shift ;
+  my $link      = shift ;
+  my $hint      = shift ;
+  my $opcode    = shift ;
+  my $partsdone = shift ;
+  my $parts123  = shift ;
+
+  if ($part eq "")
+  { return ; }
+
+  $macroshift = $false ;
+
+  # shift centered freetype texts one pixel to the right
+  if (($align eq 'center') && ($font ne '') && ($xpos !~ /[+-]\d/))
+  { $xpos .= "+0.01" ; }
+
+
+  if ($parts123 ne "") # start centered texts half of full text width to the left, than treat as left aligned
+  {
+    $align= 'left' ;
+    $macroshift = $true ;
+                  push @PlotTextsPng, "#set XSHIFT = \$textwidth(\"$parts123\", \"$font\", $fontsize)\n" ;
+                  push @PlotTextsPng, "#set XSHIFT = \$arith(-\@XSHIFT\/2)\n" ;
+  }
+
+  if ($partsdone ne "")
+  {
+    if (! $macroshift)
+    { push @PlotTextsPng, "#set XSHIFT = \$textwidth(\"$partsdone\", \"$font\", $fontsize)\n" ;  }
+    else
+    {
+      push @PlotTextsPng, "#set DXSHIFT = \$textwidth(\"$partsdone\", \"$font\", $fontsize)\n" ;
+      push @PlotTextsPng, "#set XSHIFT = \$arith(\@XSHIFT+\@DXSHIFT)\n" ;
+    }
+    $macroshift = $true ;
+  }
+
+  if (($macroshift) && ($xpos =~ /[+-]\d/))
+  {
+    $dxpos = $xpos ;
+    $xpos  =~ s/^(.*)[+-]\d.*$/$1/ ;
+    $dxpos =~ s/^.*([+-]\d.*)$/$1/ ;
+    $opcode2 = substr ($dxpos,0,1) ;
+    $dxpos   = substr ($dxpos,1) ;
+    if ($opcode eq '-')
+    {
+      if ($opcode2 eq '-')
+      { $opcode2 = '+' ; }
+      else
+      { $opcode2 = '-' ; }
+    }
+    push @PlotTextsPng, "#set XSHIFT = \$arith(\@XSHIFT$opcode2$dxpos)\n" ;
+  }
+
+  if ($macroshift)
+  {
+    push @PlotTextsPng, "#proc annotate\n" ;
+    push @PlotTextsPng, "  location: $xpos$opcode\@XSHIFT $ypos\n" ;
+  }
+  else
+  {
+    push @PlotTextsPng, "#proc annotate\n" ;
+    push @PlotTextsPng, "  location: $xpos $ypos\n" ;
+  }
+
+  my  $textdetails = "  textdetails: align=$align size=$fontsize color=$textcolor font=$font"  ;
+  if ($link ne "")
+  {
+    $textdetails = "  textdetails: align=$align size=$fontsize color=$LinkColor font=$font"  ;
+
+    if ($align ne "right")
+    {
+      push @PlotTextsPng, "  clickmapurl: $link\n" ;
+      if ($hint ne "")
+      { push @PlotTextsPng, "  clickmaplabel: $hint\n" ; }
+    }
+    else
+    {
+      if ($bar eq "")
+      {
+        if ($WarnOnRightAlignedText ++ == 0)
+        { &Warning2 ("Links on right aligned texts are only supported for svg output,\npending Ploticus bug fix.") ; }
+        return ;
+      }
+      else
+      {
+        push @PlotTextsPng, "  clickmapurl: $link\&\&$shiftx\n" ;
+        if ($hint ne "")
+        { push @PlotTextsPng, "  clickmaplabel: $hint\n" ; }
+      }
+    }
+  }
+
+  push @PlotTextsPng, $textdetails . "\n" ;
+
+  if ($part =~ /^\s/)
+  { push @PlotTextsPng, "  text: \n\\$part\n\n"  ; }
+  else
+  { push @PlotTextsPng, "  text: $part\n\n"  ; }
+}
+
 sub WriteText
 {
   my $mode      = shift ;
@@ -2715,8 +3200,10 @@ sub WriteText
   my $link      = shift ;
   my $hint      = shift ;
   my $tabs      = shift ;
+  my $font      = shift ;
   my ($link2, $hint2, $tab) ;
   my $outside = $false ;
+  
   if (@Axis {"order"} =~ /reverse/i)
   {
     if (@Axis {"time"} eq "y")
@@ -2809,7 +3296,7 @@ sub WriteText
       if ($hint2 eq "")
       { $hint2 = $hint ; }
 
-      &WriteProcAnnotate ($bar, $shiftx, $posx, $posy, $text, $textcolor, $fontsize, $align, $link2, $hint2) ;
+      &WriteProcAnnotate ($bar, $shiftx, $posx, $posy, $text, $textcolor, $fontsize, $align, $link2, $hint2, $font) ;
     }
 
     if ($#Tabs >= 0)
@@ -2898,15 +3385,16 @@ sub WritePlotFile
   else
   { $file_script = "EasyTimeline.txt" ; }
 
-  print "Ploticus input file = ".$file_script."\n";
+  print "Ploticus input file = '$file_script'\n";
+  &Trace ("Ploticus input file = '$file_script'\n") ;
 
   # $fmt = "gif" ;
   open "FILE_OUT", ">", $file_script ;
 
   #proc settings
-#  $script .= "#proc settings\n" ;
-#  $script .= "  xml_encoding: utf-8\n" ;
-#  $script .= "\n" ;
+  $script .= "#proc settings\n" ;
+  $script .= "  xml_encoding: utf-8\n" ;
+  $script .= "\n" ;
 
   # proc page
   $script .= "#proc page\n" ;
@@ -3165,8 +3653,16 @@ sub WritePlotFile
         { ($text, $link, $hint) = &ProcessWikiLink ($text, $link, $hint) ; }
       }
 
-      $text =~ s/\[+([^\]]*)\]+/$1/ ;
-      $scriptPng2 .= "$text\n" ;
+      if ($text =~ /\[.*\]/) # text contains link ? do not write in black, ugly with freetype antialiased font
+      {                      # blue on black, black still visible
+               $scriptPng2 .= "\\\n" ;
+        $text =~ s/\[+([^\]]*)\]+/$1/ ;
+             }
+      else
+      {
+        $text =~ s/\[+([^\]]*)\]+/$1/ ;
+        $scriptPng2 .= "$text\n" ;
+      }
       if (defined ($link))
       {
         push @linksSVG, $link ;
@@ -3333,7 +3829,8 @@ sub WritePlotFile
     { $pl = "pl" ; }
   }
 
-  print "Using ploticus command \"".$pl."\" (".$plcommand.")\n";
+  print "Invoke Ploticus exe file as '$pl'\n";
+  &Trace ("Invoke Ploticus exe file as '$pl'\n") ;
 
   $script_save = $script ;
 
@@ -3392,7 +3889,7 @@ sub WritePlotFile
   print FILE_OUT &DecodeInput($script) ;
   close "FILE_OUT" ;
 
-  $map = ($MapPNG && $linkmap) ? "-csmap" : "";
+  $map = ($MapPNG && $linkmap) ? "-csmap -mapfile $file_htmlmap" : "";
   if ($linkmap && $showmap)
   { $map .= " -csmapdemo" ; }
 
@@ -3402,8 +3899,18 @@ sub WritePlotFile
 # $cmd = "$pl $map -" . $fmt . " -o $file_bitmap $file_script -tightcrop -diagfile $file_pl_info -errfile $file_pl_err" ;
   $cmd = EscapeShellArg($pl) . " $map -" . $fmt . " -o " .
     EscapeShellArg($file_bitmap) . " " . EscapeShellArg($file_script) . " -tightcrop" ;
+    
+  if ($fonts_specified) # tell Ploticus to use freetype lib and set default font
+  { $cmd .= " -font vera" ; }
+    
+  &Trace ("\n" . uc ($fmt) . ": Execute command\n$cmd\n\n") ;
   print "$cmd\n";
   system ($cmd) ;
+
+  if (-e $file_bitmap)
+  { &Trace ("Bitmap '$file_bitmap' created\n") ; }
+  else
+  { &Trace ("Bitmap '$file_bitmap' not found!\n") ; }
 
   if ((-e $file_bitmap) && (-s $file_bitmap > 500 * 1024))
   {
@@ -3423,6 +3930,14 @@ sub WritePlotFile
 
     if (! (-e $file_png))
     { print "PNG file not created (is nconvert.exe missing?)\n\n" ; }
+  }
+
+  if ($file_htmlmap ne "")
+  {
+    if (-e $file_htmlmap)
+    { &Trace ("Map file '$file_htmlmap' created\n") ; }
+    else
+    { &Trace ("No map file created!\n") ; }
   }
 
   if (-e $file_htmlmap) # correct click coordinates of right aligned texts (Ploticus bug)
@@ -3456,6 +3971,17 @@ sub WritePlotFile
     open "FILE_OUT", ">", $file_htmlmap ;
     print FILE_OUT @map2 ;
     close "FILE_OUT" ;
+
+    &Trace ("Final content map file:\n\n") ;
+    foreach my $line (@map2)
+    { &Trace ($line) ; }
+    &Trace ("\n\n") ;
+  }
+
+  if ($file_htmlmap ne "")
+  {
+    if (! -e $file_htmlmap)
+    { &Trace ("Patched map file '$file_htmlmap' not found!\n") ; }
   }
 
   if (-e $file_vector)
@@ -3549,12 +4075,17 @@ sub WriteTexts
   my ($line, $xpos, $ypos) ;
   foreach $line (@PlotText)
   {
-    my ($at, $bar, $text, $textcolor, $fontsize, $align, $shift, $link, $hint) = split (",", $line) ;
+    my ($at, $bar, $text, $textcolor, $fontsize, $align, $shift, $link, $hint, $font) = split (",", $line) ;
+
     $text      =~ s/\#\%\$/\,/g ;
     $link      =~ s/\#\%\$/\,/g ;
     $hint      =~ s/\#\%\$/\,/g ;
     $shift     =~ s/\#\%\$/\,/g ;
     $textcolor =~ s/\#\%\$/\,/g ;
+    $font      =~ s/\#\%\$/\,/g ;
+    
+    if (($fontsize =~ /^(?:XS|S|M|L|XL)$/i) && ($font ne ""))
+    { $fontsize = @FontSizes {lc("$font\:$fontsize")} ; }
 
     my $barcnt = 0 ;
     for ($b = 0 ; $b <= $#Bars ; $b++)
@@ -3581,7 +4112,7 @@ sub WriteTexts
       { $ypos .= "$shifty" ; }
     }
 
-    &WriteText ("~", $bar, $shiftx, $xpos, $ypos, $text, $textcolor, $fontsize, $align, $link, $hint) ;
+    &WriteText ("~", $bar, $shiftx, $xpos, $ypos, $text, $textcolor, $fontsize, $align, $link, $hint, "", $font) ;
   }
 }
 
@@ -4224,11 +4755,13 @@ sub ValidAttributes
   { return (CheckAttributes ($command, "", "canvas,bars")) ; }
 
   if ($command =~ /^BarData$/i)
-# { return (CheckAttributes ($command, "", "bar,barset,barcount,link,text")) ; }
-  { return (CheckAttributes ($command, "", "bar,barset,link,text")) ; }
+  { return (CheckAttributes ($command, "", "bar,barset,link,maxbars,text")) ; }
 
   if ($command =~ /^Colors$/i)
   { return (CheckAttributes ($command, "id,value", "legend")) ; }
+
+  if ($command =~ /^Fonts$/i)
+  { return (CheckAttributes ($command, "id,font", "xs,s,m,l,xl")) ; }
 
   if ($command =~ /^ImageSize$/i)
   { return (CheckAttributes ($command, "", "width,height,barincrement")) ; }
@@ -4246,13 +4779,13 @@ sub ValidAttributes
   { return (CheckAttributes ($command, "", "left,bottom,width,height,right,top")) ; }
 
   if ($command =~ /^PlotData$/i)
-  { return (CheckAttributes ($command, "", "align,anchor,at,bar,barset,color,fontsize,from,link,mark,shift,text,textcolor,till,width")) ; }
+  { return (CheckAttributes ($command, "", "align,anchor,at,bar,barset,color,font,fontsize,from,link,mark,shift,text,textcolor,till,width")) ; }
 
   if ($command =~ /^Scale/i)
   { return (CheckAttributes ($command, "increment,start", "unit,grid,gridcolor,text")) ; }
 
   if ($command =~ /^TextData$/i)
-  { return (CheckAttributes ($command, "", "fontsize,lineheight,link,pos,tabs,text,textcolor")) ; }
+  { return (CheckAttributes ($command, "", "font,fontsize,lineheight,link,pos,tabs,text,textcolor")) ; }
 
   if ($command =~ /^TimeAxis$/i)
   { return (CheckAttributes ($command, "", "orientation,format,order")) ; }
@@ -4466,75 +4999,26 @@ sub ProcessWikiLink
       { $link = "[[" . $link . "]]" ; }
 
       $text =~ s/(\[+) [^\|\]]+ \| ([^\]]*) (\]+)/$1$2$3/gx ;
-      $text =~ s/(https?)\:/$1colon/gx ;
+      #$text =~ s/(https?)\:/$1colon/gx ;
 #     $text =~ s/(\[+) [^\:\]]+ \: ([^\]]*) (\]+)/$1$2$3/gx ;  #???
 
       # remove interwiki link prefix
-      $text =~ s/(\[+) (?:.{2,3}|(?:zh\-.*)|simple|minnan|tokipona) \: ([^\]]*) (\]+)/$1$2$3/gxi ;  #???
+      #$text =~ s/(\[+) (?:.{2,3}|(?:zh\-.*)|simple|minnan|tokipona) \: ([^\]]*) (\]+)/$1$2$3/gxi ;  #???
 
       $text =~ s/\[+ ([^\]]+) \]+/{{{$1}}}/x ;
       $text =~ s/\[+ ([^\]]+) \]+/$1/gx ;
       $text =~ s/\{\{\{ ([^\}]*) \}\}\}/[[$1]]/x ;
     }
-#    if ($text =~ /\[\[.+\]\]/)
-#    {
-#      $wikilink = $true ;
-#      $link = $text ;
-#      $link =~ s/\n//g ;
-#      $link =~ s/^.*?\[\[/[[/x ;
-#      $link =~ s/\| .*? \]\].*$/]]/x ;
-#      $link =~ s/\]\].*$/]]/x ;
-#      $text =~ s/\[\[ [^\|\]]+ \| (.*?) \]\]/[[$1]]/x ;
-#      $text =~ s/\[\[ [^\:\]]+ \: (.*?) \]\]/[[$1]]/x ;
-
-#      # remove remaining links
-#      $text =~ s/\[\[ ([^\]]+) \]\]/^%#$1#%^/x ;
-#      $text =~ s/\[+ ([^\]]+) \]+/$1/gx ;
-#      $text =~ s/\^$hPerc\# (.*?) \#$hPerc\^/[[$1]]/x ;
-#    }
-#    elsif ($text =~ /\[.+\]/)
-#    {
-#      $link = $text ;
-#      $link =~ s/\n//g ;
-#      $link =~ s/^.*?\[/[/x ;
-#      $link =~ s/\| .*? \].*$/]/x ;
-#      $link =~ s/\].*$/]/x ;
-#      $link =~ s/\[ ([^\]]+) \]/$1/x ;
-#      $text =~ s/\[ [^\|\]]+ \| (.*?) \]/[[$1]]/x ;
-
-#      # remove remaining links
-#      $text =~ s/\[\[ ([^\]]+) \]\]/^%#$1#%^/x ;
-#      $text =~ s/\[+ ([^\]]+) \]+/$1/gx ;
-#      $text =~ s/\^$hPerc\# (.*?) \#$hPerc\^/[[$1]]/x ;
-##     $text =~ s/\[\[ (.*) \]\]/$1/gx ;
-#    }
 
   }
 
   if ($wikilink)
   {
-#   if ($link =~ /^\[\[.+\:.+\]\]$/) # has a colon in its name
-    if ($link =~ /^\[\[ (?:.{2,3}|(?:zh\-.*)|simple|minnan|tokipona) \: .+\]\]$/xi) # has a interwiki link prefix
-    {
-      $wiki  = lc ($link) ;
-      $title = $link ;
-      $wiki  =~ s/\[\[([^\:]+)\:.*$/$1/x ;
-      $title =~ s/^[^\:]+\:(.*)\]\]$/$1/x ;
-      $title =~ s/ /_/g ;
-      $link = "http://$wiki.wikipedia.org/wiki/$title" ;
-      if (($hint eq "") && ($title ne ""))
-      { $hint = "$wiki: $title" ; }
-    }
-    else
-    {
-    # $wiki = "en" ;
-      $title = $link ;
-      $title =~ s/^\[\[(.*)\]\]$/$1/x ;
-      $title =~ s/ /_/g ;
-      $link = $articlepath . "/$title" ;
-      if (($hint eq "") && ($title ne ""))
-      { $hint = "$title" ; }
-    }
+      $link =~ s/^\[\[(.*)\]\]$/$1/x ;
+      $link =~ s/ /_/g ;
+      if (($hint eq "") && ($link ne ""))
+      { $hint = "$link" ; }
+    
     $hint =~ s/_/ /g ;
   }
   else
@@ -4547,7 +5031,6 @@ sub ProcessWikiLink
   { $text = "[[" . $text . "]]" ; }
 
   $hint = &EncodeHtml ($hint) ;
-  $link = &EncodeURL  ($link) ;
   return ($text, $link, $hint) ;
 }
 
@@ -4587,7 +5070,10 @@ sub EncodeHtml
 sub EncodeURL
 {
   my $url = shift ;
-  $url =~ s/([^0-9a-zA-Z\%\:\/\.])/"%".sprintf ("%X",ord($1))/ge ;
+  # For some reason everything gets run through this weird internal
+  # encoding that's similar to URL-encoding. Armor against this as well,
+  # or else adjacent encoded bytes will be corrupted.
+  $url =~ s/([^0-9a-zA-Z\%\:\/\._])/"%25%".sprintf ("%02X",ord($1))/ge ;
   return ($url) ;
 }
 
@@ -4648,6 +5134,9 @@ sub Abort
 {
   my $msg = &DecodeInput(shift) ;
 
+  &Trace ("\n\n***** " . $msg . " *****\n\n") ;
+  &Trace (@errors) ;
+
   print "\n\n***** " . $msg . " *****\n\n" ;
   print @Errors ;
   print "Execution aborted.\n" ;
@@ -4673,13 +5162,22 @@ sub Abort
   exit ;
 }
 
+sub Trace
+{
+  if ($trace)
+  { print FILE_TRACE (shift) ; }
+}
+
 sub EscapeShellArg
 {
   my $arg = shift;
-  if ($env eq "Linux") {
+  if ($env eq "Linux")
+  {
     $arg =~ s/'/\\'/;
     $arg = "'$arg'";
-  } else {
+  }
+  else
+  {
     $arg =~ s/"/\\"/;
     $arg = "\"$arg\"";
   }
@@ -4719,4 +5217,3 @@ sub UnicodeToAscii {
     { return "?" ; }
   }
 }
-

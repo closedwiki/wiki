@@ -1,4 +1,8 @@
-# Plugin for TWiki Collaboration Platform, http://TWiki.org/
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2006-2010 TWiki Contributors
+# Copyright (C) 2009-2010 Andrew Jones, http://andrew-jones.com
+# Copyright (C) 2006 Mike Marion
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -13,13 +17,6 @@
 #
 # =========================
 #
-# Each plugin is a package that may contain these functions:        VERSION:
-#
-#   initPlugin              ( $topic, $web, $user, $installWeb )    1.000
-#   commonTagsHandler       ( $text, $topic, $web )                 1.000
-#
-# =========================
-#
 # This plugin creates a png file by using the ploticus graph utility.
 # See http://meta.wikimedia.org/wiki/EasyTimeline for more information.
 
@@ -27,83 +24,47 @@ package TWiki::Plugins::EasyTimelinePlugin;
 
 # =========================
 use vars qw(
-  $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-  $debug $exampleCfgVar $sandbox $isInitialized
+ $VERSION $RELEASE $pluginName $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION $sandbox
 );
 
-use vars qw( %TWikiCompatibility );
-
-# This should always be $Rev: 9845 $ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev: 9845 $';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
-$pluginName = 'EasyTimelinePlugin';
 use Digest::MD5 qw( md5_hex );
 
 #the MD5 and hash table are used to create a unique name for each timeline
 use File::Path;
 
-my $HASH_CODE_LENGTH    = 32;
-my %hashed_math_strings = ();
+our $VERSION = '$Rev$';
+our $RELEASE = '1.2';
+our $SHORTDESCRIPTION = 'Generate graphical timeline diagrams from markup text';
+our $NO_PREFS_IN_TOPIC = 1;
+our $pluginName = 'EasyTimelinePlugin';
 
-# Please update sandbox command string to fit your environment:
-my $cmd =
-'/usr/bin/perl /home/httpd/twiki/tools/EasyTimeline.pl -i %INFILE|F% -m -P /usr/bin/ploticus -T %TMPDIR|F% -A /twiki/bin/view/%WEB|F%';
-
-my $tmpDir  = '/tmp/' . $pluginName . "$$";
-my $tmpFile = '/tmp/' . $pluginName . "$$" . '/' . $pluginName . "$$";
 
 # =========================
 sub initPlugin {
-    ( $topic, $web, $user, $installWeb ) = @_;
-
-    # check for Plugins.pm versions
-    if ( $TWiki::Plugins::VERSION < 1 ) {
-        TWiki::Func::writeWarning(
-            "Version mismatch between $pluginName and Plugins.pm");
+    my ( $topic, $web ) = @_;
+    
+    # need a path to script in tool directory
+    unless( $TWiki::cfg{Plugins}{$pluginName}{EasyTimelineScript} ){
+        # throw error, do not init
+        logWarning(
+            "$pluginName cant find EasyTimeline.pl - Try running configure");
+        return 0;
+    }
+    # need a path to Ploticus
+    unless( $TWiki::cfg{Plugins}{$pluginName}{PloticusCmd} ){
+        # throw error, do not init
+        logWarning(
+            "$pluginName cant find Ploticus (pl) - Try running configure");
         return 0;
     }
 
-    # Get plugin debug flag
-    $debug = TWiki::Func::getPreferencesFlag("\U$pluginName\E_DEBUG");
-
     # Plugin correctly initialized
-    TWiki::Func::writeDebug(
-        "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK")
-      if $debug;
+    writeDebug(
+        "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK");
+
+    $sandbox = undef;
+
     return 1;
-}
-
-sub doInit {
-    return if $isInitialized;
-
-    unless ( defined &TWiki::Sandbox::new ) {
-        eval "use TWiki::Contrib::DakarContrib;";
-        $sandbox = new TWiki::Sandbox();
-    }
-    else {
-        $sandbox = $TWiki::sharedSandbox;
-    }
-
-    &writeDebug("called doInit");
-
-    # for getRegularExpression
-    if ( $TWiki::Plugins::VERSION < 1.020 ) {
-        eval 'use TWiki::Contrib::CairoContrib;';
-
-        #writeDebug("reading in CairoContrib");
-    }
-
-    &writeDebug("doInit( ) is OK");
-    $isInitialized = 1;
-
-    return '';
 }
 
 # =========================
@@ -111,19 +72,23 @@ sub commonTagsHandler {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
     TWiki::Func::writeDebug("- ${pluginName}::commonTagsHandler( $_[2].$_[1] )")
-      if $debug;
+      if $TWiki::cfg{Plugins}{$pluginName}{Debug};
 
-    # This is the place to define customized tags and variables
-    # Called by sub handleCommonTags, after %INCLUDE:"..."%
-
-    # Pass everything within <easytimeline> tags to handleTimeline function
-    $_[0] =~ s/<easytimeline>(.*?)<\/easytimeline>/&handleTimeline($1)/giseo;
+    # Old syntax, using <easytimeline>.....</easytimeline>
+    #$_[0] =~ s/<easytimeline>(.*?)<\/easytimeline>/&handleTimeline($1, $_[2], $_[1])/giseo;
+    
+    # New syntax, using %TIMELINE%.....%ENDTIMELINE%
+    $_[0] =~ s/%TIMELINE%\s*(.*?)%ENDTIMELINE%/&handleTimeline($1, $_[2], $_[1])/egs;
 }
 
 # =========================
 sub handleTimeline {
-    my $errMsg = &doInit();
-    return $errMsg if $errMsg;
+    
+    my( $text, $web, $topic ) = @_;
+    
+    my $tmpDir  = TWiki::Func::getWorkArea( $pluginName ) . '/tmp/' . $pluginName . "$$";
+    my $tmpFile = $tmpDir . '/' . $pluginName . "$$";
+    my %hashed_math_strings = ();
 
     # Create topic directory "pub/$web/$topic" if needed
     my $dir = TWiki::Func::getPubDir() . "/$web/$topic";
@@ -131,14 +96,14 @@ sub handleTimeline {
         umask(002);
         mkpath( $dir, 0, 0755 )
           or return
-          "<noc>EasyTimelinePlugin Error: *folder $dir could not be created*";
+          "!$pluginName Error: *folder $dir could not be created*";
     }
 
     # compute the MD5 hash of this string
-    my $hash_code = md5_hex("EASYTIMELINE$_[0]");
+    my $hash_code = md5_hex("EASYTIMELINE$text");
 
     # store the string in a hash table, indexed by the MD5 hash
-    $hashed_math_strings{"$hash_code"} = $_[0];
+    $hashed_math_strings{"$hash_code"} = $text;
 
     my $image = "${dir}/graph${hash_code}.png";
 
@@ -152,28 +117,49 @@ sub handleTimeline {
         unless ( -e "$tmpDir" ) {
             umask(002);
             mkpath( $tmpDir, 0, 0755 )
-              or return "<noc>EasyTimelinePlugin Error: *tmp folder $tmpDir could not be created*";
+              or return "!$pluginName Error: *tmp folder $tmpDir could not be created*";
         }
 
+        # convert links
+        $text =~ s/\[\[([$TWiki::regex{mixedAlphaNum}\._\:\/-]*)\]\[([$TWiki::regex{mixedAlphaNum} \/&\._-]*)\]\]/&renderLink($1, $2, $web, $topic)/egs;
+        
         # output the timeline text into the tmp file
         open OUTFILE, ">$tmpFile.txt"
-          or return "<noc>EasyTimelinePlugin Error: could not create file";
-        print OUTFILE $_[0];
+          or return "!$pluginName Error: could not create file";
+        print OUTFILE $text;
         close OUTFILE;
 
-        # create the png
+        # run the command and create the png
+        my $cmd =
+            'perl ' .
+            $TWiki::cfg{Plugins}{$pluginName}{EasyTimelineScript} . # /var/www/twiki/tools/EasyTimeline.pl
+            ' -i %INFILE|F% -m -P ' .
+            $TWiki::cfg{Plugins}{$pluginName}{PloticusCmd} . # /usr/local/bin/pl
+            ' -T %TMPDIR|F% -A ' .
+            $TWiki::cfg{ScriptUrlPath} . 'view' . $TWiki::cfg{ScriptSuffix}; # /bin/view/
+        &writeDebug("Command: $cmd");
+        unless( $sandbox ) {
+            if( $TWiki::Plugins::VERSION >= 1.1 ) {
+            # Dakar provides a sandbox
+            $sandbox = $TWiki::sharedSandbox ||
+                $TWiki::sandbox;    # for TWiki 4.2
+            } else {
+                # in Cairo, must use the contrib package
+                eval("use TWiki::Contrib::DakarContrib;");
+                $sandbox = new TWiki::Sandbox();
+            }
+        }
         my ( $output, $status ) = $sandbox->sysCommand(
             $cmd,
             INFILE => $tmpFile . '.txt',
-            WEB    => $web,
             TMPDIR => $tmpDir,
         );
-        &writeDebug("EasyTimelinePlugin: output $output status $status");
+        &writeDebug("$pluginName: output $output status $status");
         if ($status) {
-
-            # errors existed so remove created files
+            
             my @errLines;
-            cleanTmp($tmpDir) unless $debug;
+            cleanTmp($tmpDir) unless $TWiki::cfg{Plugins}{$pluginName}{Debug};
+            
             return &showError( $status, $output,
                 $hashed_math_strings{"$hash_code"} );
         }
@@ -183,7 +169,7 @@ sub handleTimeline {
             open( ERRFILE, "$tmpFile.err" );
             my @errLines = <ERRFILE>;
             close(ERRFILE);
-            cleanTmp($tmpDir) unless $debug;
+            cleanTmp($tmpDir) unless $TWiki::cfg{Plugins}{$pluginName}{Debug};
             return &showError( $status, $output, join( "", @errLines ) );
         }
 
@@ -196,7 +182,7 @@ sub handleTimeline {
                 file     => "$tmpFile.png",
                 filesize => $stats[7],
                 filedate => $stats[9],
-                comment  => '<nop>EasyTimelinePlugin: Timeline graphic',
+                comment  => "!$pluginName: Timeline graphic",
                 hide     => 1,
                 dontlog  => 1
             }
@@ -214,7 +200,7 @@ sub handleTimeline {
                     filesize => $stats[7],
                     filedate => $stats[9],
                     comment  =>
-                      '<nop>EasyTimelinePlugin: Timeline clientside map file',
+                      "!$pluginName: Timeline clientside map file",
                     hide    => 1,
                     dontlog => 1
                 }
@@ -222,7 +208,7 @@ sub handleTimeline {
 
         }
         # Clean up temporary files
-        cleanTmp($tmpDir) unless $debug;
+        cleanTmp($tmpDir) unless $TWiki::cfg{Plugins}{$pluginName}{Debug};
     }
 
     if ( -e "${dir}/graph${hash_code}.map" ) {
@@ -251,21 +237,21 @@ sub handleTimeline {
     }
 }
 
+# converts TWiki style links into absolute Mediawiki style links that work with the EasyTimelne.pl script
+sub renderLink {
+    # [[$link][$title]]
+    my ($link, $title, $web, $topic) = @_;
+    
+    if( $link =~ m!^http://! ){
+        return "[[$link|$title]]"
+    } else {
+        my ( $linkedWeb, $linkedTopic ) = TWiki::Func::normalizeWebTopicName( '', $link );
+        my $url = TWiki::Func::getScriptUrl( $linkedWeb, $linkedTopic, 'view' );
+        return "[[$url|$title]]";
+    }
+}
+
 # =========================
-sub showError {
-    my ( $status, $output, $text ) = @_;
-
-    $output =~ s/^.*: (.*)/$1/;
-    my $line = 1;
-    $text =~ s/\n/sprintf("\n%02d: ", $line++)/ges;
-    $output .= "<pre>$text\n</pre>";
-    return "<noautolink><font color=\"red\"><nop>EasyTimelinePlugin Error ($status): $output</font></noautolink>";
-}
-
-sub writeDebug {
-    &TWiki::Func::writeDebug( "$pluginName - " . $_[0] ) if $debug;
-}
-
 sub cleanTmp {
     my $dir    = shift;
     my $rmfile = "";
@@ -290,6 +276,21 @@ sub cleanTmp {
     }
     close(DIR);
     rmdir("$dir");
+}
+
+# =========================
+sub showError {
+    my ( $status, $output, $text ) = @_;
+
+    $output =~ s/^.*: (.*)/$1/;
+    my $line = 1;
+    $text =~ s/\n/sprintf("\n%02d: ", $line++)/ges;
+    $output .= "<pre>$text\n</pre>";
+    return "<noautolink><span class='twikiAlert'>!$pluginName Error ($status): $output</span></noautolink>";
+}
+
+sub writeDebug {
+    &TWiki::Func::writeDebug( "$pluginName - " . $_[0] ) if $TWiki::cfg{Plugins}{$pluginName}{Debug};
 }
 
 sub logWarning {

@@ -1,0 +1,4 @@
+# Dependencies for the EasyTimelinePlugin
+Digest::MD5,>0,cpan,Required
+File::Path,>0,cpan,Required
+Ploticus,>2.4.0,C,Required. Available from http://ploticus.sourceforge.net/doc/welcome.html. Version 2.3.2 is known to cause problems. Other versions have not been tested, so we recommend the latest

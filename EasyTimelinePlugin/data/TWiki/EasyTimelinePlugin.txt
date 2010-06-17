@@ -1,24 +1,40 @@
-%META:TOPICINFO{author="TWikiContributor" date="1145659803" format="1.0" version="1.1"}%
----+!! Easy Timeline Plugin 
+%META:TOPICINFO{author="TWikiContributor" date="1276734167" format="1.1" version="$Rev$"}%
+---+!! Easy Timeline Plugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/EasyTimelinePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/EasyTimelinePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+
+One line description, required for plugins repository catalog.
+   * Set SHORTDESCRIPTION = Generate graphical timeline diagrams from markup text
+-->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+%SHORTDESCRIPTION%
+
+---++ Introduction
 
 As the saying goes: a picture is worth a thousand words. This is certainly true for graphical timelines. A detailed listing of events and dates in tabular form may offer the reader a lot of specifics, but may fail to provide an overview, a grand perspective.
 
-This plugin allows one to use &lt;easytimeline> tags to generate a timeline on the fly. This plugin is equal in function to the [[http://meta.wikimedia.org/wiki/EasyTimeline][EasyTimeline Plugin for MediaWiki]], on which this is based.
+This plugin allows one to use a %<nop>TIMELINE% variable to generate a timeline on the fly. This plugin is equal in function to the [[http://meta.wikimedia.org/wiki/EasyTimeline][EasyTimeline Plugin for MediaWiki]] by Erik Zachte, on which this is based.
 
 For first time users <nop>%TOPIC% may not seem that easy at all. As with all script languages it takes some getting used to. Also the syntax description may be a bit bewildering due to its sheer size. Fortunately many elements of the script language are optional.
 
 The 'Easy' in <nop>%TOPIC% conveys the message that once a timeline exists it is not that hard to understand, enhance or correct.
 
-Full syntax and markup description is available at http://infodisiac.com/Wikipedia/EasyTimeline/Syntax.htm (or in the full mirrored copy of the website that is shipped with the plugin).
+Full syntax and markup description is available at http://www.mediawiki.org/wiki/Extension:EasyTimeline/syntax.
 
-%TOC%
+Note that sometimes the WYSIWYG editor can break the timelines, by removing white space and the macros. To prevent the WYSIWYG editor from being used on a topic with the timelines, you can use the following setting:
+   * Set NOWYSIWYG = 1
 
 ---++ Syntax
 
 <verbatim>
-<easytimeline>
+%TIMELINE%
 Timeline markup
-</easytimeline>
+%ENDTIMELINE%
 </verbatim>
 
 ---++ Examples
@@ -29,15 +45,15 @@ Pretty standard timeline, easy to extend.
 
 <table>
 <tr>
-<td>
+<td valign="top">
 Pre-rendered sample:
 
 <img src="%ATTACHURLPATH%/IcelandicHeritageExample.png" alt="IcelandicHeritageExample.png" width='270' height='300' />
 </td>
-<td>
+<td valign="top">
 Plugin (if installed):
 
-<easytimeline>
+%TIMELINE%
 ImageSize = width:270 height:300
 PlotArea  = left:45 right:0 bottom:20 top:20
 AlignBars = early
@@ -57,17 +73,17 @@ Colors=
 PlotData=
   bar:Leaders width:25 mark:(line,black) align:left fontsize:S shift:(25,-5) anchor:middle
 
-  from:start  till:1952 color:1  text:"1944-1952_[[Sveinn Bj�rnsson|Sveinn Bj�rnsson]]"
-  from:1952   till:1968 color:2  text:"1952-1968_[[�sgeir �sgeirsson|�sgeir �sgeirsson]]"
-  from:1968   till:1980 color:3  text:"1968-1980_[[Kristj�n Eldj�rn|Kristj�n Eldj�rn]]"
-  from:1980   till:1996 color:4  text:"1980-1996_[[Vigd�s Finnbogad�ttir|Vigd�s Finnbogad�ttir]]"
-  from:1996   till:end  color:5  text:"1996-_[[�lafur Ragnar Gr�msson|�lafur Ragnar Gr�msson]]"
-</easytimeline>
+  from:start  till:1952 color:1  text:"1944-1952_Sveinn Bjoernsson"
+  from:1952   till:1968 color:2  text:"1952-1968_Asgeir Asgeirsson"
+  from:1968   till:1980 color:3  text:"1968-1980_Kristjan Eldjarn"
+  from:1980   till:1996 color:4  text:"1980-1996_Vigdis Finnbogadottir"
+  from:1996   till:end  color:5  text:"1996-_Olafur Ragnar Grimsson"
+%ENDTIMELINE%
 </td>
-<td>
+<td valign="top">
 Verbatim:
 <verbatim>
-<easytimeline>
+%TIMELINE%
 ImageSize = width:270 height:300
 PlotArea  = left:45 right:0 bottom:20 top:20
 AlignBars = early
@@ -87,13 +103,14 @@ Colors=
 PlotData=
   bar:Leaders width:25 mark:(line,black) align:left fontsize:S shift:(25,-5) anchor:middle
 
-  from:start till:1952 color:1  text:"1944-1952_[[Sveinn Bj�rnsson|Sveinn Bj�rnsson]]"
-  from:1952  till:1968 color:2  text:"1952-1968_[[�sgeir �sgeirsson|�sgeir �sgeirsson]]"
-  from:1968  till:1980 color:3  text:"1968-1980_[[Kristj�n Eldj�rn|Kristj�n Eldj�rn]]"
-  from:1980  till:1996 color:4  text:"1980-1996_[[Vigd�s Finnbogad�ttir|Vigd�s Finnbogad�ttir]]"
-  from:1996  till:end  color:5  text:"1996-_[[�lafur Ragnar Gr�msson|�lafur Ragnar Gr�msson]]"
-</easytimeline>
+  from:start  till:1952 color:1  text:"1944-1952_Sveinn Bjoernsson"
+  from:1952   till:1968 color:2  text:"1952-1968_Asgeir Asgeirsson"
+  from:1968   till:1980 color:3  text:"1968-1980_Kristjan Eldjarn"
+  from:1980   till:1996 color:4  text:"1980-1996_Vigdis Finnbogadottir"
+  from:1996   till:end  color:5  text:"1996-_Olafur Ragnar Grimsson"
+%ENDTIMELINE%
 </verbatim>
+</td>
 </tr>
 </table>
 
@@ -103,8 +120,8 @@ An example of multiple parallel timelines. View Raw Text of this topic to see so
 
 <img src="%ATTACHURLPATH%/WindowsVersionsExample.png" alt="WindowsVersionsExample.png" width='800' height='140' />
 
-<!-- hidden source
-<easytimeline>
+<!-- Hidden source. Remove the <nop> when using the timeline
+%<nop>TIMELINE%
 ImageSize = width:800 height:142
 PlotArea  = width:720 height:112 left:65 bottom:25
 AlignBars = justify
@@ -163,7 +180,7 @@ PlotData=
   at:2000.25 text:Windows~CE 3.0
   at:2002.17 text:CE~4.0
   at:2003.67 text:Mobile~2003
-</easytimeline>
+%ENDTIMELINE%
 -->
 
 ---+++ Binary Logic Example
@@ -172,8 +189,8 @@ This plugin might be of help in descriping binary logic execution patterns, as f
 
 <img src="%ATTACHURLPATH%/BinaryLogicExample.png" alt="BinaryLogicExample.png" width='400' height='63' />
 
-<!-- hidden timeline source
-<easytimeline>
+<!-- Hidden source. Remove the <nop> when using the timeline
+%<nop>TIMELINE%
 ImageSize  = width:400 height:60
 PlotArea   = left:30 bottom:30 top:0 right:20
 DateFormat = x.y
@@ -194,17 +211,19 @@ PlotData=
   from:1 till:2
   from:4 till:5
   from:10 till:15
-</easytimeline>
+%ENDTIMELINE%
 -->
 
 ---+++ UNIX Versions Example
 
 Information dense graphic, heavy use of mouseover areas. View Raw Text of this topic to see source.
 
+This example also shows how to use hyperlinks in the timeline. Although this only uses external links, you can also use internal TWiki links such as [<nop>[Main.WebHome][Home]]. Note that the links need to be in the longhand form as shown. Links such as [<nop>[WebHome]] and WikiWords are not currently supported.
+
 <img src="%ATTACHURLPATH%/UNIXVersionsExample.png" alt="UNIXVersionsExample.png" width='606' height='550' />
 
-<!--
-<easytimeline>
+<!-- Hidden source. Remove the <nop> when using the timeline
+%<nop>TIMELINE%
 ImageSize  = width:600 height:550
 PlotArea   = left:50 right:0 bottom:20 top:10
 
@@ -216,114 +235,114 @@ ScaleMajor = unit:year increment:5 start:1965
 PlotData=
 
   bar:UNIX color:red width:25 mark:(line,red) align:left fontsize:M
-  at:1969 text:"[[UNICS]]"
-  at:1971 text:"[[UNIX]] V1"
-  at:1972 text:"[[UNIX]] V2"
-  at:1973 text:"[[UNIX]] V3 & V4"
-  at:1974 text:"[[UNIX]] V5"
-  at:1976 text:"[[UNIX]] V6"
-  at:1979 text:"[[UNIX]] V7"
-  at:1981 text:"[[UNIX|System III]]"
-  at:1982 text:"[[UNIX|System IV]]"
-  at:1983 text:"[[UNIX|System V]]"
-  at:1984 text:"[[UNIX|System V]] R2"
-  at:1985 text:"[[UNIX]] V8"
-  at:1986 text:"[[UNIX]] V9"
-  at:1987 text:"[[UNIX|System V]] R3.2"
-  at:1988 text:"[[UNIX|System V]] R4"
-  at:1989 text:"[[UNIX]] V10"
-  at:1992 text:"[[UNIX|Unix Ware]] 1"
-  at:1993 text:"[[UNIX|Unix Ware]] 1.1"
-  at:1994 text:"[[UNIX|Unix Ware]] 1.1.1"
-  at:1995 text:"[[UNIX|Unix Ware]] 2.0"
-  at:1996 text:"[[UNIX|Unix Ware]] 2.1"
-  at:1998 text:"[[UNIX|Unix Ware]] 7"
-  at:1999 text:"[[UNIX|Unix Ware]] 7.1"
-  at:2000 text:"[[UNIX|Unix Ware]] 7.1.1"
-  at:2001 text:"[[UNIX|Open UNIX]] 8"
-  at:2002 text:"[[UNIX|SCO Unix Ware]] 7.1.3"
-  at:2003 text:"[[UNIX|Tru64 Unix]] V5.1B"
-  at:2004 text:"[[UNIX|SCO Unix Ware]] 7.1.4"
+  at:1969 text:"[[http://en.wikipedia.org/wiki/UNICS][UNICS]]"
+  at:1971 text:"[[http://en.wikipedia.org/wiki/UNIX][UNIX V1]]"
+  at:1972 text:"[[http://en.wikipedia.org/wiki/UNIX][UNIX V2]]"
+  at:1973 text:"[[http://en.wikipedia.org/wiki/UNIX][UNIX V3 & V4]]"
+  at:1974 text:"[[http://en.wikipedia.org/wiki/UNIX][UNIX V5]]"
+  at:1976 text:"[[http://en.wikipedia.org/wiki/UNIX][UNIX V6]]"
+  at:1979 text:"[[http://en.wikipedia.org/wiki/UNIX][UNIX V7]]"
+  at:1981 text:"[[http://en.wikipedia.org/wiki/UNIX][System III]]"
+  at:1982 text:"[[http://en.wikipedia.org/wiki/UNIX][System IV]]"
+  at:1983 text:"[[http://en.wikipedia.org/wiki/UNIX][System V]]"
+  at:1984 text:"[[http://en.wikipedia.org/wiki/UNIX][System V R2]]"
+  at:1985 text:"[[http://en.wikipedia.org/wiki/UNIX][UNIX V8]]"
+  at:1986 text:"[[http://en.wikipedia.org/wiki/UNIX][UNIX V9]]"
+  at:1987 text:"[[http://en.wikipedia.org/wiki/UNIX][System V R3.2]]"
+  at:1988 text:"[[http://en.wikipedia.org/wiki/UNIX][System V R4]]"
+  at:1989 text:"[[http://en.wikipedia.org/wiki/UNIX][UNIX V10]]"
+  at:1992 text:"[[http://en.wikipedia.org/wiki/UNIX][Unix Ware 1]]"
+  at:1993 text:"[[http://en.wikipedia.org/wiki/UNIX][Unix Ware 1.1]]"
+  at:1994 text:"[[http://en.wikipedia.org/wiki/UNIX][Unix Ware 1.1.1]]"
+  at:1995 text:"[[http://en.wikipedia.org/wiki/UNIX][Unix Ware 2.0]]"
+  at:1996 text:"[[http://en.wikipedia.org/wiki/UNIX][Unix Ware 2.1]]"
+  at:1998 text:"[[http://en.wikipedia.org/wiki/UNIX][Unix Ware 7]]"
+  at:1999 text:"[[http://en.wikipedia.org/wiki/UNIX][Unix Ware 7.1]]"
+  at:2000 text:"[[http://en.wikipedia.org/wiki/UNIX][Unix Ware 7.1.1]]"
+  at:2001 text:"[[http://en.wikipedia.org/wiki/UNIX][Open UNIX 8]]"
+  at:2002 text:"[[http://en.wikipedia.org/wiki/UNIX][SCO Unix Ware 7.1.3]]"
+  at:2003 text:"[[http://en.wikipedia.org/wiki/UNIX][Tru64 Unix V5.1B]]"
+  at:2004 text:"[[http://en.wikipedia.org/wiki/UNIX][SCO Unix Ware 7.1.4]]"
 
 
   bar:BSD color:red width:25 mark:(line,red) align:left fontsize:M
-  at:1978 text:"1[[BSD]]"
-  at:1979 text:"2[[BSD]]"
-  at:1980 text:"4.0[[BSD]]"
-  at:1981 text:"4.1[[BSD]]"
-  at:1982 text:"2.8.1[[BSD]]"
-  at:1983 text:"4.2[[BSD]]"
-  at:1985 text:"2.9[[BSD]]-Siscmo"
-  at:1986 text:"4.3[[BSD]]"
-  at:1987 text:"2.10[[BSD]]"
-  at:1988 text:"4.3[[BSD]] Tahoe"
-  at:1989 text:"2.10.1[[BSD]]"
-  at:1990 text:"4.3[[BSD]] Reno"
-  at:1991 text:"[[BSD]] Net/2"
-  at:1992 text:"386[[BSD]]"
-  at:1993 text:"[[FreeBSD]] 1.0"
-  at:1994 text:"[[NetBSD]] 1.0"
-  at:1995 text:"[[OpenBSD]] 1.0"
-  at:1996 text:"[[OpenBSD]] 2.0"
-  at:1997 text:"[[BSD]]/OS 3.0"
-  at:1998 text:"4.4[[BSD]] Lite 2"
-  at:1999 text:"[[BSD]]/OS 4.1"
-  at:2000 text:"[[FreeBSD]] 4.0"
-  at:2001 text:"[[OpenBSD]] 3.0"
-  at:2002 text:"[[MirBSD]]"
-  at:2003 text:"[[FreeBSD]] 5.0"
-  at:2004 text:"[[DragonFly BSD]] 1.0"
-  at:2005 text:"[[FreeBSD]] 4.11"
+  at:1978 text:"1[[http://en.wikipedia.org/wiki/BSD][BSD]]"
+  at:1979 text:"2[[http://en.wikipedia.org/wiki/BSD][BSD]]"
+  at:1980 text:"4.0[[http://en.wikipedia.org/wiki/BSD][BSD]]"
+  at:1981 text:"4.1[[http://en.wikipedia.org/wiki/BSD][BSD]]"
+  at:1982 text:"2.8.1[[http://en.wikipedia.org/wiki/BSD][BSD]]"
+  at:1983 text:"4.2[[http://en.wikipedia.org/wiki/BSD][BSD]]"
+  at:1985 text:"2.9[[http://en.wikipedia.org/wiki/BSD][BSD-Siscmo]]"
+  at:1986 text:"4.3[[http://en.wikipedia.org/wiki/BSD][BSD]]"
+  at:1987 text:"2.10[[http://en.wikipedia.org/wiki/BSD][BSD]]"
+  at:1988 text:"4.3[[http://en.wikipedia.org/wiki/BSD][BSD Tahoe]]"
+  at:1989 text:"2.10.1[[http://en.wikipedia.org/wiki/BSD][BSD]]"
+  at:1990 text:"4.3[[http://en.wikipedia.org/wiki/BSD][BSD Reno]]"
+  at:1991 text:"[[http://en.wikipedia.org/wiki/BSD][BSD Net/2]]"
+  at:1992 text:"386[[http://en.wikipedia.org/wiki/BSD][BSD]]"
+  at:1993 text:"[[http://en.wikipedia.org/wiki/FreeBSD][FreeBSD 1.0]]"
+  at:1994 text:"[[http://en.wikipedia.org/wiki/NetBSD][NetBSD 1.0]]"
+  at:1995 text:"[[http://en.wikipedia.org/wiki/OpenBSD][OpenBSD 1.0]]"
+  at:1996 text:"[[http://en.wikipedia.org/wiki/OpenBSD][OpenBSD 2.0]]"
+  at:1997 text:"[[http://en.wikipedia.org/wiki/BSD][BSD/OS 3.0]]"
+  at:1998 text:"4.4[[http://en.wikipedia.org/wiki/BSD][BSD Lite 2]]"
+  at:1999 text:"[[http://en.wikipedia.org/wiki/BSD][BSD/OS 4.1]]"
+  at:2000 text:"[[http://en.wikipedia.org/wiki/FreeBSD][FreeBSD 4.0]]"
+  at:2001 text:"[[http://en.wikipedia.org/wiki/OpenBSD][OpenBSD 3.0]]"
+  at:2002 text:"[[http://en.wikipedia.org/wiki/MirBSD][MirBSD]]"
+  at:2003 text:"[[http://en.wikipedia.org/wiki/FreeBSD][FreeBSD 5.0]]"
+  at:2004 text:"[[http://en.wikipedia.org/wiki/DragonFly][DragonFly BSD 1.0]]"
+  at:2005 text:"[[http://en.wikipedia.org/wiki/FreeBSD][FreeBSD 4.11]]"
 
   bar:GNU/Linux* color:red width:25 mark:(line,red) align:left fontsize:M
-  at:1991 text:"[[Linux]] 0.01"
-  at:1992 text:"[[Linux]] 0.12"
-  at:1993 text:"[[Linux]] 0.99.11"
-  at:1994 text:"[[Linux]] 1.0"
-  at:1995 text:"[[Linux]] 1.2"
-  at:1996 text:"[[Linux]] 2.0"
-  at:1997 text:"[[Linux]] 2.1.32"
-  at:1998 text:"[[Linux]] 2.0.36"
-  at:1999 text:"[[Linux]] 2.2.0"
-  at:2000 text:"[[Linux]] 2.4.0 test 1"
-  at:2001 text:"[[Linux]] 2.4.0"
-  at:2002 text:"[[Linux]] 2.2.22"
-  at:2003 text:"[[Linux]] 2.4.21"
-  at:2004 text:"[[Linux]] 2.6.1"
-  at:2005 text:"[[Linux]] 2.6.11"
+  at:1991 text:"[[http://en.wikipedia.org/wiki/Linux][Linux]] 0.01"
+  at:1992 text:"[[http://en.wikipedia.org/wiki/Linux][Linux]] 0.12"
+  at:1993 text:"[[http://en.wikipedia.org/wiki/Linux][Linux]] 0.99.11"
+  at:1994 text:"[[http://en.wikipedia.org/wiki/Linux][Linux]] 1.0"
+  at:1995 text:"[[http://en.wikipedia.org/wiki/Linux][Linux]] 1.2"
+  at:1996 text:"[[http://en.wikipedia.org/wiki/Linux][Linux]] 2.0"
+  at:1997 text:"[[http://en.wikipedia.org/wiki/Linux][Linux]] 2.1.32"
+  at:1998 text:"[[http://en.wikipedia.org/wiki/Linux][Linux]] 2.0.36"
+  at:1999 text:"[[http://en.wikipedia.org/wiki/Linux][Linux]] 2.2.0"
+  at:2000 text:"[[http://en.wikipedia.org/wiki/Linux][Linux]] 2.4.0 test 1"
+  at:2001 text:"[[http://en.wikipedia.org/wiki/Linux][Linux]] 2.4.0"
+  at:2002 text:"[[http://en.wikipedia.org/wiki/Linux][Linux]] 2.2.22"
+  at:2003 text:"[[http://en.wikipedia.org/wiki/Linux][Linux]] 2.4.21"
+  at:2004 text:"[[http://en.wikipedia.org/wiki/Linux][Linux]] 2.6.1"
+  at:2005 text:"[[http://en.wikipedia.org/wiki/Linux][Linux]] 2.6.11"
 
   bar:Others color:red width:25 mark:(line,red) align:left fontsize:M
-  at:1974 text:"[[MERT]]"
+  at:1974 text:"[[http://en.wikipedia.org/wiki/MERT][MERT]]"
   at:1977 text:"TS 1.0"
   at:1978 text:"USG 2.0"
   at:1979 text:"UNSW 04"
-  at:1980 text:"[[Xenix]] OS"
-  at:1981 text:"[[QNX]]QUNIX"
-  at:1982 text:"[[SunOS]] 1.0"
+  at:1980 text:"[[http://en.wikipedia.org/wiki/Xenix][Xenix]] OS"
+  at:1981 text:"[[http://en.wikipedia.org/wiki/QNX][QNX]]QUNIX"
+  at:1982 text:"[[http://en.wikipedia.org/wiki/SunOS][SunOS]] 1.0"
   at:1983 text:"Coherent"
-  at:1984 text:"[[QNX]] 1.0"
+  at:1984 text:"[[http://en.wikipedia.org/wiki/QNX][QNX]] 1.0"
   at:1985 text:"Interactive 386/ix"
-  at:1986 text:"[[Plan 9]]"
-  at:1987 text:"[[Minix]] 1.0"
-  at:1988 text:"[[HP-UX]] 2.0"
-  at:1989 text:"[[NeXTSTEP]] 1.0"
-  at:1990 text:"[[Solaris]] 1"
-  at:1991 text:"[[GNU/Hurd]]"
-  at:1992 text:"[[Ultrix]] 4.3"
-  at:1993 text:"[[Irix]] 5.3"
-  at:1994 text:"[[AIX]] 4.1"
-  at:1995 text:"[[Unicos]] 9.0"
-  at:1996 text:"[[Mach]]4 UK22"
-  at:1997 text:"[[OPENSTEP]] 4.2"
-  at:1998 text:"[[QNX/Neutrino]] 2.0"
-  at:1999 text:"[[Darwin (kernel)|Darwin]] 0.1"
-  at:2000 text:"[[GNU-Darwin]] Beta 2.5"
-  at:2001 text:"[[Mac OS X]] 10.0"
-  at:2002 text:"[[Solaris]] 8"
-  at:2003 text:"[[Minix]] 2.0.4"
-  at:2004 text:"[[QNX]] 6.3"
-  at:2005 text:"[[Darwin (kernel)|Darwin]] 7.8"
-</easytimeline>
+  at:1986 text:"[[http://en.wikipedia.org/wiki/Plan9][Plan 9]]"
+  at:1987 text:"[[http://en.wikipedia.org/wiki/Minix][Minix]] 1.0"
+  at:1988 text:"[[http://en.wikipedia.org/wiki/HP-UX][HP-UX]] 2.0"
+  at:1989 text:"[[http://en.wikipedia.org/wiki/NeXTSTEP][NeXTSTEP]] 1.0"
+  at:1990 text:"[[http://en.wikipedia.org/wiki/Solaris][Solaris]] 1"
+  at:1991 text:"GNU/Hurd"
+  at:1992 text:"[[http://en.wikipedia.org/wiki/Ultrix][Ultrix]] 4.3"
+  at:1993 text:"[[http://en.wikipedia.org/wiki/Irix][Irix]] 5.3"
+  at:1994 text:"[[http://en.wikipedia.org/wiki/AIX][AIX]] 4.1"
+  at:1995 text:"[[http://en.wikipedia.org/wiki/Unicos][Unicos]] 9.0"
+  at:1996 text:"[[http://en.wikipedia.org/wiki/Mach][Mach4 UK22]"
+  at:1997 text:"[[http://en.wikipedia.org/wiki/OPENSTEP][OPENSTEP]] 4.2"
+  at:1998 text:"QNX/Neutrino 2.0"
+  at:1999 text:"Darwin 0.1"
+  at:2000 text:"GNU-Darwin Beta 2.5"
+  at:2001 text:"Mac OS X 10.0"
+  at:2002 text:"[[http://en.wikipedia.org/wiki/Solaris][Solaris]] 8"
+  at:2003 text:"[[http://en.wikipedia.org/wiki/Minix][Minix]] 2.0.4"
+  at:2004 text:"[[http://en.wikipedia.org/wiki/QNX][QNX]] 6.3"
+  at:2005 text:"Darwin 7.8"
+%ENDTIMELINE%
 -->
 
 ---+++ Kurdistan Workers Party Example
@@ -332,8 +351,8 @@ Very condensed timeline. Not taking up much space, but very informative in it's 
 
 <img src="%ATTACHURLPATH%/KurdistanWorkersPartyExample.png" alt="KurdistanWorkersPartyExample.png" width='600' height='69' />
 
-<!-- hidden source
-<easytimeline>
+<!-- Hidden source. Remove the <nop> when using the timeline
+%<nop>TIMELINE%
 ImageSize  = width:600px height:70px
 PlotArea   = width:570px height:20px left:20px bottom:20px
 AlignBars  = late
@@ -383,7 +402,7 @@ PlotData =
     from:01/12/1984 till:end        $narrow   $center2   color:pink         textcolor:pink        text:Vacuum at N-Iraq
     from:01/01/1996 till:01/04/1999 $broad    $center1   color:blue         textcolor:blue        text:Undecleared War
     from:01/08/1998 till:01/04/1999 $large    $center0   color:red          textcolor:red         text:Capture
-</easytimeline>
+%ENDTIMELINE%
 -->
 
 ---+++ New Kingdom Example
@@ -394,8 +413,8 @@ Btw: There's no hinderance to having the bars overlap if wanted. (I guess that's
 
 <img src="%ATTACHURLPATH%/NewKingdomExample.png" alt="NewKingdomExample.png" width='800' height='435' />
 
-<!-- hidden source
-<easytimeline>
+<!-- Hidden source. Remove the <nop> when using the timeline
+%<nop>TIMELINE%
 ImageSize = width:800 height:auto barincrement:12
 PlotArea  = top:10 bottom:30 right:130 left:20
 AlignBars  = justify
@@ -422,50 +441,50 @@ PlotData=
   align:center textcolor:black fontsize:8 mark:(line,black) width:25 shift:(0,-5)
   bar:eon color:eon
 
-  from: -1550   till:    -1292   text:[[18th dynasty of Egypt]]
-  from: -1292   till:    -1185   text:[[19th dynasty of Egypt]]
-  from: -1185   till:    -1072   text:[[20th dynasty of Egypt]]
+  from: -1550   till:    -1292   text:18th dynasty of Egypt
+  from: -1292   till:    -1185   text:19th dynasty of Egypt
+  from: -1185   till:    -1072   text:20th dynasty of Egypt
 
   width:5 align:left fontsize:S shift:(5,-4) anchor:till
   barset:Rulers
 
-  from: -1550 till: -1525 color:PA text:"[[Ahmose I]]"
-  from: -1525 till: -1504 color:PA text:"[[Amenhotep I]]"
-  from: -1504 till: -1492 color:PA text:"[[Thutmose I]]"
-  from: -1492 till: -1479 color:PA text:"[[Thutmose II]]"
-  from: -1479 till: -1425 color:PA text:"[[Thutmose III]]"
-  from: -1479 till: -1457 color:PA text:"[[Hatshepsut]]"
-  from: -1425 till: -1399 color:PA text:"[[Amenhotep II]]"
-  from: -1399 till: -1389 color:PA text:"[[Thutmose IV]]"
-  from: -1389 till: -1351 color:PA text:"[[Amenhotep III]]"
-  from: -1351 till: -1344 color:PA text:"[[Akhenaten]]"
-  from: -1336 till: -1334 color:PA text:"[[Smenkhkare]]"
-  from: -1334 till: -1325 color:PA text:"[[Tutankhamun]]"
-  from: -1325 till: -1321 color:PA text:"[[Ay|Kheperkheprure Ay]]"
-  from: -1321 till: -1292 color:PA text:"[[Horemheb]]"
+  from: -1550 till: -1525 color:PA text:"Ahmose I"
+  from: -1525 till: -1504 color:PA text:"Amenhotep I"
+  from: -1504 till: -1492 color:PA text:"Thutmose I"
+  from: -1492 till: -1479 color:PA text:"Thutmose II"
+  from: -1479 till: -1425 color:PA text:"Thutmose III"
+  from: -1479 till: -1457 color:PA text:"Hatshepsut"
+  from: -1425 till: -1399 color:PA text:"Amenhotep II"
+  from: -1399 till: -1389 color:PA text:"Thutmose IV"
+  from: -1389 till: -1351 color:PA text:"Amenhotep III"
+  from: -1351 till: -1344 color:PA text:"Akhenaten"
+  from: -1336 till: -1334 color:PA text:"Smenkhkare"
+  from: -1334 till: -1325 color:PA text:"Tutankhamun"
+  from: -1325 till: -1321 color:PA text:"Kheperkheprure Ay"
+  from: -1321 till: -1292 color:PA text:"Horemheb"
 
-  from: -1292 till: -1290 color:PA text:"[[Ramesses I]] ([[1292 BC]] - [[1290 BC]])"
-  from: -1290 till: -1279 color:PA text:"[[Seti I]] ([[1290 BC]] - [[1279 BC]])"
-  from: -1279 till: -1213 color:PA text:"[[Ramesses II|Ramesses the Great]] ([[1279 BC]] - [[1213 BC]])"
-  from: -1213 till: -1203 color:PA text:"[[Merneptah]] ([[1213 BC]] - [[1203 BC]])"
-  from: -1203 till: -1199 color:PA text:"[[Amenmesse]] ([[1203 BC]] - [[1199 BC]])"
-  from: -1199 till: -1193 color:PA text:"[[Seti II]] ([[1199 BC]] - [[1193 BC]])"
-  from: -1193 till: -1187 color:PA text:"[[Siptah]] ([[1193 BC]] - [[1187 BC]])"
-  from: -1187 till: -1185 color:PA text:"[[Twosret]] ([[1187 BC]] - [[1185 BC]])"
+  from: -1292 till: -1290 color:PA text:"Ramesses I (1292 BC - 1290 BC)"
+  from: -1290 till: -1279 color:PA text:"Seti I (1290 BC - 1279 BC)"
+  from: -1279 till: -1213 color:PA text:"Ramesses the Great (1279 BC - 1213 BC)"
+  from: -1213 till: -1203 color:PA text:"Merneptah (1213 BC - 1203 BC)"
+  from: -1203 till: -1199 color:PA text:"Amenmesse (1203 BC - 1199 BC)"
+  from: -1199 till: -1193 color:PA text:"Seti II (1199 BC - 1193 BC)"
+  from: -1193 till: -1187 color:PA text:"Siptah (1193 BC - 1187 BC)"
+  from: -1187 till: -1185 color:PA text:"Twosret (1187 BC - 1185 BC)"
 
-  from: -1186 till: -1183 color:PA text:"[[Setnakhte]]"
-  from: -1183 till: -1152 color:PA text:"[[Ramesses III]]"
-  from: -1152 till: -1146 color:PA text:"[[Ramesses IV]]"
-  from: -1146 till: -1142 color:PA text:"[[Ramesses V]]"
-  from: -1142 till: -1134 color:PA text:"[[Ramesses VI]]"
-  from: -1134 till: -1129 color:PA text:"[[Ramesses VII]]"
-  from: -1129 till: -1125 color:PA text:"[[Ramesses VIII]]"
-  from: -1125 till: -1107 color:PA text:"[[Ramesses IX]]"
-  from: -1107 till: -1103 color:PA text:"[[Ramesses X]]"
-  from: -1103 till: -1072 color:PA text:"[[Ramesses XI]]"
+  from: -1186 till: -1183 color:PA text:"Setnakhte"
+  from: -1183 till: -1152 color:PA text:"Ramesses III"
+  from: -1152 till: -1146 color:PA text:"Ramesses IV"
+  from: -1146 till: -1142 color:PA text:"Ramesses V"
+  from: -1142 till: -1134 color:PA text:"Ramesses VI"
+  from: -1134 till: -1129 color:PA text:"Ramesses VII"
+  from: -1129 till: -1125 color:PA text:"Ramesses VIII"
+  from: -1125 till: -1107 color:PA text:"Ramesses IX"
+  from: -1107 till: -1103 color:PA text:"Ramesses X"
+  from: -1103 till: -1072 color:PA text:"Ramesses XI"
 
   barset:skip
-</easytimeline>
+%ENDTIMELINE%
 -->
 
 ---+++ Freeciv Timeline Example
@@ -474,8 +493,8 @@ Very spartanic look, only a few colours used. View Raw Text of this topic to see
 
 <img src="%ATTACHURLPATH%/FreecivTimelineExample.png" alt="FreecivTimelineExample.png" width='800' height='109' />
 
-<!-- hidden source
-<easytimeline>
+<!-- Hidden source. Remove the <nop> when using the timeline
+%<nop>TIMELINE%
 ImageSize  = width:800 height:110
 PlotArea   = left:80 right:50 bottom:20 top:10
 AlignBars  = justify
@@ -506,7 +525,7 @@ PlotData=
 
   bar:Others color:black width:20 mark:(line,red) align:left fontsize:S
   at:05/04/1999 text:" Civilization: Call to Power"
-</easytimeline>
+%ENDTIMELINE%
 -->
 
 ---+++ Vocal and Instrumental Pitch Ranges
@@ -514,8 +533,8 @@ PlotData=
 An example on displaying something that is not chronological at all. View Raw Text of this topic to see source.
 
 <img src="%ATTACHURLPATH%/Vocal_and_Instrumental_Pitch_Ranges_Example.png" alt="Vocal_and_Instrumental_Pitch_Ranges_Example.png" width='700' height='1227' />
-<!-- hidden source
-<easytimeline>
+<!-- Hidden source. Remove the <nop> when using the timeline
+%<nop>TIMELINE%
 ImageSize  = width:700 height:auto barincrement:17
 PlotArea   = left:0 right:0 top:0 bottom:0
 AlignBars  = justify
@@ -603,75 +622,75 @@ Define $max  = 650
 PlotData=
   align:center textcolor:black fontsize:8 mark:(line,black) width:12 shift:(0,-4)
   barset:ranges
-  color:a from:0    till:$max text:[[human voice]]
-  color:b from:$ee  till:$e1  text:[[basso|bass]]
-  color:b from:$aa  till:$a1  text:[[baritone]]
-  color:b from:$c   till:$c2  text:[[tenor]]
-  color:b from:$e   till:$e2  text:[[alto%20%28voice%29|contralto]]
-  color:b from:$a   till:$a2  text:[[mezzo-soprano]]
-  color:b from:$c1  till:$c3  text:[[soprano]]
-  color:a from:0    till:$max text:[[string instrument]]
+  color:a from:0    till:$max text:human voice
+  color:b from:$ee  till:$e1  text:bass
+  color:b from:$aa  till:$a1  text:baritone
+  color:b from:$c   till:$c2  text:tenor
+  color:b from:$e   till:$e2  text:contralto
+  color:b from:$a   till:$a2  text:mezzo-soprano
+  color:b from:$c1  till:$c3  text:soprano
+  color:a from:0    till:$max text:string instrument
   color:c from:0    till:$max text:instruments where the strings are usually bowed
-  color:b from:$ee1 till:$a   text:[[double bass]]
-  color:b from:$cc  till:$g2  text:[[cello]]
-  color:b from:$c   till:$e3  text:[[viola]]
-  color:b from:$g   till:$c5  text:[[violin]]
+  color:b from:$ee1 till:$a   text:double bass
+  color:b from:$cc  till:$g2  text:cello
+  color:b from:$c   till:$e3  text:viola
+  color:b from:$g   till:$c5  text:violin
   color:c from:0    till:$max text:instruments where the strings are usually plucked
-  color:b from:$hh2 till:$f4  text:[[harp]]
-  color:b from:$ff1 till:$f3  text:[[harpsichord]]
-  color:b from:$ee  till:$a2  text:[[guitar]]
-  color:b from:$g   till:$d4  text:[[mandolin]]
-  color:b from:$d   till:$a2  text:[[5-string banjo]]
+  color:b from:$hh2 till:$f4  text:harp
+  color:b from:$ff1 till:$f3  text:harpsichord
+  color:b from:$ee  till:$a2  text:guitar
+  color:b from:$g   till:$d4  text:mandolin
+  color:b from:$d   till:$a2  text:5-string banjo
   color:c from:0    till:$max text:instruments where the strings are usually struck
-  color:b from:$aa2 till:$c5  text:[[piano]]
-  color:b from:$aa2 till:$a4  text:[[cymbalum]]
-  color:a from:0    till:$max text:[[woodwind instrument]]
-  color:c from:0    till:$max text:[[double reed]]
-  color:b from:$aa2 till:$f   text:[[contrabassoon]]
-  color:b from:$aa1 till:$d2  text:[[bassoon]]
-  color:b from:$e   till:$h2  text:[[cor anglais]]
-  color:b from:$a   till:$f3  text:[[oboe]]
-  color:c from:0    till:$max text:[[single reed]]
-  color:b from:$gg1 till:$d1  text:[[saxophone|basso saxophone]]
-  color:b from:$aa1 till:$g2  text:[[bass clarinet]]
-  color:b from:$cc  till:$g1  text:[[saxophone|baritone sax]]
-  color:b from:$gg  till:$e2  text:[[saxophone|tenor saxophone]]
-  color:b from:$c   till:$a2  text:[[alto saxophone]]
-  color:b from:$d   till:$g3  text:[[clarinet]]
-  color:b from:$g   till:$d3  text:[[soprano saxophone]]
-  color:b from:$g   till:$c4  text:[[clarinet|sopranino clarinet]]
-  color:c from:0    till:$max text:[[free reed]]
-  color:b from:$cc  till:$c4  text:[[harmonium]]
-  color:b from:$gg  till:$a3  text:[[accordion]]
-  color:c from:0    till:$max text:[[transverse flute]]
-  color:b from:$c   till:$c3  text:[[flute|bass flute]]
-  color:b from:$g   till:$g3  text:[[flute|alto flute]]
-  color:b from:$c1  till:$c4  text:[[flute]]
-  color:b from:$c2  till:$c5  text:[[piccolo]]
-  color:c from:0    till:$max text:[[recorder|fipple flute]]
-  color:b from:$f   till:$c3  text:[[recorder|bass recorder]]
-  color:b from:$c1  till:$g3  text:[[recorder|tenor recorder]]
-  color:b from:$f1  till:$c4  text:[[recorder|alto recorder]]
-  color:b from:$c2  till:$g4  text:[[recorder|soprano (descant) recorder]]
-  color:b from:$f2  till:$c5  text:[[recorder|sopranino recorder]]
+  color:b from:$aa2 till:$c5  text:piano
+  color:b from:$aa2 till:$a4  text:cymbalum
+  color:a from:0    till:$max text:woodwind instrument
+  color:c from:0    till:$max text:double reed
+  color:b from:$aa2 till:$f   text:contrabassoon
+  color:b from:$aa1 till:$d2  text:bassoon
+  color:b from:$e   till:$h2  text:cor anglais
+  color:b from:$a   till:$f3  text:oboe
+  color:c from:0    till:$max text:single reed
+  color:b from:$gg1 till:$d1  text:basso saxophone
+  color:b from:$aa1 till:$g2  text:bass clarinet
+  color:b from:$cc  till:$g1  text:baritone sax
+  color:b from:$gg  till:$e2  text:tenor saxophone
+  color:b from:$c   till:$a2  text:alto saxophone
+  color:b from:$d   till:$g3  text:clarinet
+  color:b from:$g   till:$d3  text:soprano saxophone
+  color:b from:$g   till:$c4  text:sopranino clarinet
+  color:c from:0    till:$max text:free reed
+  color:b from:$cc  till:$c4  text:harmonium
+  color:b from:$gg  till:$a3  text:accordion
+  color:c from:0    till:$max text:transverse flute
+  color:b from:$c   till:$c3  text:bass flute
+  color:b from:$g   till:$g3  text:alto flute
+  color:b from:$c1  till:$c4  text:flute
+  color:b from:$c2  till:$c5  text:piccolo
+  color:c from:0    till:$max text:fipple flute
+  color:b from:$f   till:$c3  text:bass recorder
+  color:b from:$c1  till:$g3  text:tenor recorder
+  color:b from:$f1  till:$c4  text:alto recorder
+  color:b from:$c2  till:$g4  text:soprano (descant) recorder
+  color:b from:$f2  till:$c5  text:sopranino recorder
   color:c from:0    till:$max text:combination of flutes and reeds
-  color:b from:$cc2 till:$c6  text:[[organ (music)|organ]]
-  color:a from:0    till:$max text:[[brass instrument]]
-  color:b from:$ee1 till:$d1  text:[[tuba]]
-  color:b from:$aa1 till:$d2  text:[[trombone]]
-  color:b from:$aa1 till:$e2  text:[[horn (instrument)|horn]]
-  color:b from:$e   till:$c3  text:[[trumpet]]
-  color:b from:$e   till:$c3  text:[[cornet]]
-  color:a from:0    till:$max text:[[percussion]]
-  color:c from:0    till:$max text:[[membranophone]]
-  color:b from:$cc  till:$c1  text:[[timpani]]
-  color:c from:0    till:$max text:[[idiophone]]
-  color:b from:$cc  till:$c4  text:[[marimba]]
-  color:b from:$c   till:$f1  text:[[tubular bell|tubular bells]]
-  color:b from:$c   till:$c5  text:[[celesta]]
-  color:b from:$f   till:$f3  text:[[vibraphone]]
-  color:b from:$f1  till:$c5  text:[[xylophone]]
-  color:b from:$g2  till:$c5  text:[[glockenspiel]]
+  color:b from:$cc2 till:$c6  text:organ
+  color:a from:0    till:$max text:brass instrument
+  color:b from:$ee1 till:$d1  text:tuba
+  color:b from:$aa1 till:$d2  text:trombone
+  color:b from:$aa1 till:$e2  text:horn
+  color:b from:$e   till:$c3  text:trumpet
+  color:b from:$e   till:$c3  text:cornet
+  color:a from:0    till:$max text:percussion
+  color:c from:0    till:$max text:membranophone
+  color:b from:$cc  till:$c1  text:timpani
+  color:c from:0    till:$max text:idiophone
+  color:b from:$cc  till:$c4  text:marimba
+  color:b from:$c   till:$f1  text:tubular bells
+  color:b from:$c   till:$c5  text:celesta
+  color:b from:$f   till:$f3  text:vibraphone
+  color:b from:$f1  till:$c5  text:xylophone
+  color:b from:$g2  till:$c5  text:glockenspiel
 
   color:f textcolor:blue align:left fontsize:S mark:(line,white) shift:(3,-4)
   
@@ -734,7 +753,7 @@ PlotData=
   at:502   text:2000
   at:544   text:3000
   at:583   text:4400 Hz
-</easytimeline>
+%ENDTIMELINE%
 -->
 
 ---+++ Timeline of Conquests of the Ottoman Empire Example
@@ -743,8 +762,8 @@ A somewhat dense and graphic timeline; could probably be lightened with good eff
 
 <img src="%ATTACHURLPATH%/Timeline_of_Conquests_of_the_Ottoman_Empire_Example.png" alt="Timeline_of_Conquests_of_the_Ottoman_Empire_Example.png" width='600' height='293' />
 
-<!-- hidden source
-<easytimeline>
+<!-- Hidden source. Remove the <nop> when using the timeline
+%<nop>TIMELINE%
 DateFormat=yyyy
 ImageSize = width:600 height:auto barincrement:12
 Period = from:1299 till:1922
@@ -769,30 +788,30 @@ TextData =
 
 PlotData=
     textcolor:black align:center shift:(0,-4) 
-  bar:Hun from:1526 till:1718 color:Europe text:"[[History of Hungary|Hungary]]"
-  bar:Mol from:1512 till:1792 color:Europe text:"[[History of Moldova|Moldova]]"
-  bar:Her from:1482 till:1878 color:Europe text:"[[History of Bosnia and Herzegovina|Herzegovina]]"
-  bar:Cri from:1475 till:1774 color:Europe text:"[[Crimean Islands|Crimea]]"
-  bar:Bos from:1463 till:1878 color:Europe text:"[[History of Bosnia and Herzegovina|Bosnia]]"
-  bar:Gre from:1453 till:1832 color:Europe text:"[[Ottoman Greece|Greece]]"
-  bar:Bul from:1396 till:1878 color:Europe text:"[[History of Ottoman Bulgaria|Bulgaria]]"
-  bar:Alb from:1385 till:1913 color:Europe text:"[[History of Ottoman Albania|Albenia]]"
-  bar:Ser from:1371 till:1791 color:Europe text:"[[History_of_Ottoman_Serbia|Serbia]]"
-  bar:Con from:1453 till:1922 color:Europe text:[[Istanbul]]
-  bar:Bur from:1339 till:1918 color:Anatolia text:"[[Bursa]]"
-  bar:Sog from:1299 till:1918 color:Anatolia text:"[[Sogut]]"
-  bar:Tra from:1450 till:1918 color:Anatolia text:"[[Trabzon]]"
-  bar:Kon from:1460 till:1918 color:Anatolia text:"[[Konya]]"
-  bar:Van from:1500 till:1880 color:Anatolia text:"[[Van, Turkey|Van]]"
+  bar:Hun from:1526 till:1718 color:Europe text:"Hungary"
+  bar:Mol from:1512 till:1792 color:Europe text:"Moldova"
+  bar:Her from:1482 till:1878 color:Europe text:"Herzegovina"
+  bar:Cri from:1475 till:1774 color:Europe text:"Crimea"
+  bar:Bos from:1463 till:1878 color:Europe text:"Bosnia"
+  bar:Gre from:1453 till:1832 color:Europe text:"Greece"
+  bar:Bul from:1396 till:1878 color:Europe text:"Bulgaria"
+  bar:Alb from:1385 till:1913 color:Europe text:"Albenia"
+  bar:Ser from:1371 till:1791 color:Europe text:"Serbia"
+  bar:Con from:1453 till:1922 color:Europe text:Istanbul
+  bar:Bur from:1339 till:1918 color:Anatolia text:"Bursa"
+  bar:Sog from:1299 till:1918 color:Anatolia text:"Sogut"
+  bar:Tra from:1450 till:1918 color:Anatolia text:"Trabzon"
+  bar:Kon from:1460 till:1918 color:Anatolia text:"Konya"
+  bar:Van from:1500 till:1880 color:Anatolia text:"Van"
 
-  bar:Syr from:1530 till:1918 color:MiddleEast text:"[[History of Syria|Syria]]"
-  bar:Bag from:1540 till:1918 color:MiddleEast text:"[[History of Iraq|Bagdat]]"
-  bar:Mus from:1550 till:1918 color:MiddleEast text:"[[Musul]]"
+  bar:Syr from:1530 till:1918 color:MiddleEast text:"Syria"
+  bar:Bag from:1540 till:1918 color:MiddleEast text:"Bagdat"
+  bar:Mus from:1550 till:1918 color:MiddleEast text:"Musul"
 
-  bar:Eqy from:1517 till:1882 color:Africa text:"[[History of Ottoman Egypt|Eqypt]]"
-  bar:Alg from:1518 till:1830 color:Africa text:"[[History of Ottoman Algeria|Algeria]]"
-  bar:Tun from:1534 till:1881 color:Africa text:"[[Tunis]]"
-  bar:Tri from:1551 till:1918 color:Africa text:"[[Tripoli]]"
+  bar:Eqy from:1517 till:1882 color:Africa text:"Eqypt"
+  bar:Alg from:1518 till:1830 color:Africa text:"Algeria"
+  bar:Tun from:1534 till:1881 color:Africa text:"Tunis"
+  bar:Tri from:1551 till:1918 color:Africa text:"Tripoli"
 LineData =
   layer:front                                            # all lines in front of bars unless stated otherwise
   at:1551                         color:yellow              
@@ -804,62 +823,59 @@ LineData =
  points:(504,249)(533,196)     color:blue    width:2
 ScaleMajor = gridcolor:line unit:year increment:100 start:1400
 ScaleMinor = gridcolor:liteline unit:year increment:20 start:1300
-</easytimeline>
+%ENDTIMELINE%
 -->
 
----++ Plugin Settings
+---++ Upgrading from Earlier Plugin Versions
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>EASYTIMELINEPLUGIN_SHORTDESCRIPTION%==
+If you are using plugin version 20 Jul 2006 or older you will need to be aware that the syntax of this plugin has changed. Previous syntax:
 
-   * One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Generate graphical timeline diagrams from markup text
+<verbatim>
+<easytimeline>
+...
+<easytimeline>
+</verbatim>
 
-   * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 0
+This syntax has been changed to the %<nop>VARIABLE% syntax because the old syntax can cause problems when using a WYSIWYG editor. New syntax:
 
----++ Plugin Installation Instructions
+<verbatim>
+%TIMELINE%
+...
+%ENDTIMELINE%
+</verbatim>
 
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+The included script =tools/EasyTimelinePlugin_convert.pl= can convert topics using the old syntax to the new. Always test on a copy of your data first!
 
-These instructions assume that the ploticus executable is already installed. Both the ploticus source and pre-complied binaries for a number of platforms are available. Visit web sites listed in dependencies below for more information on how to install ploticus.
+---++ Installation Instructions
 
-   * Download the ZIP/TGZ file from the Plugin web (see attachments at bottom of this page)
-   * Unzip/Untar ==%TOPIC%.zip/tgz== in your twiki installation directory. Contents:
-     | *File:* | *Description:* |
-     | ==EasyTimelinePlugin_installer.pl== | Installer script |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-     | ==tools/EasyTimeline.pl== | Mediawiki Easytimeline script (provided for convenience)|
-     | ==pub/TWiki/%TOPIC%/*== | Images for plugin topic, and zipped-up mirror of home page |
-   * Run the installer script. 
-   * Update sandbox execution command in =lib/TWiki/Plugins/%TOPIC%.pm= to fit your environment. One of the items to set is the path to the ploticus executable. Another the relative url to your twiki installation, this link is needed if you use image maps / clickable items in your timelines.
-   * Enable the plugin in =configure= (Dakar only)
-   * Test if the plugin is correctly installed by looking at the "Icelandic Heritage Example" above
+You do not need to install anything in the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+%$INSTALL_INSTRUCTIONS%
+
+Once you have installed the plugin you should visit =configure= and check that the paths for Ploticus and the !EasyTimeline.pl script are correct.
 
 ---++ Plugin Info
 
-
-|  Plugin Author: | TWiki:Main.MikeMarion |
-|  Copyright: | &copy; 2006, Mike Marion |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 22 Apr 2006 (v2.1) |
+|  Plugin Author(s): | TWiki:Main.AndrewJones |
+|  Previous Author(s): | TWiki:Main.SteffenPoulsen, TWiki:Main.MikeMarion |
+|  Copyright: | &copy; 2006 - 2010, TWiki:TWiki/TWikiContributor,<br /> &copy; 2009 - 2010, Andrew Jones,<br /> &copy; 2006, Mike Marion |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Plugin Release: | 1.2 |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  20 Jul 2006: | v2.1 - Support for hierarchical webs. (TWiki:Main.SteffenPoulsen)  |
-|  22 Apr 2006: | v2.0 - Rewrote plugin from scratch. Multiple timelines per topic and sandbox security mechanism. Generated files attached to timeline topic. <nop>EasyTimeline.pl script now shipped in plugin. Multiple demonstration samples added. Doc updated. (TWiki:Main.SteffenPoulsen)  |
-|  11 Feb 2006: | v1.0 - Initial version |
-|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | none |
-|  Other Dependencies: | !EasyTimline.pl from http://infodisiac.com/Wikipedia/EasyTimeline/Introduction.htm (now included in plugin), and ploticus from http://ploticus.sourceforge.net/doc/download.html |
-|  Perl Version: | 5.8+ |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 99% |
+|  11 Feb 2010  | v1.2 - Missing screenshot; Set NOWYSIWYG for plugin topic; Update =pl= dependency. Thanks to TWiki:Main.BryanThale. - TWiki:Main.AndrewJones |
+|  22 Oct 2009  | v1.1 - Fix hyperlinks and upgrade docs - TWiki:Main.AndrewJones |
+|  13 Mar 2009  | v1.0 - New standard syntax and script to convert; Updated EasyTimeline.pl script; Changes to code to use more of the official extension API; Configuration items now set in configure - TWiki:Main.AndrewJones |
+|  20 Jul 2006: | Support for hierarchical webs. (TWiki:Main.SteffenPoulsen)  |
+|  22 Apr 2006: | Rewrote plugin from scratch. Multiple timelines per topic and sandbox security mechanism. Generated files attached to timeline topic. <nop>EasyTimeline.pl script now shipped in plugin. Multiple demonstration samples added. Doc updated. (TWiki:Main.SteffenPoulsen)  |
+|  11 Feb 2006: | Initial version |
+|  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main.MikeMarion - 11 Feb 2006
-
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences, %USERSWEB%.TWikiPreferences
 
 %META:FILEATTACHMENT{name="graph4fff4b45dd4894a8885a05656a9393ee.png" attr="h" autoattached="1" comment="<nop>EasyTimelinePlugin: Timeline graphic" date="1145657487" path="graph4fff4b45dd4894a8885a05656a9393ee.png" size="2012" user="Main.TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="graph30f924ff6702cb34da62144e6802ad0a.png" attr="h" autoattached="1" comment="<nop>EasyTimelinePlugin: Timeline graphic" date="1145657488" path="graph30f924ff6702cb34da62144e6802ad0a.png" size="4963" user="Main.TWikiContributor" version="1"}%
