@@ -1,4 +1,3 @@
-/var/www/trunk/core/lib /var/www/trunk/core/lib/CPAN/lib/ /etc/perl /usr/local/lib/perl/5.10.0 /usr/local/share/perl/5.10.0 /usr/lib/perl5 /usr/share/perl5 /usr/lib/perl/5.10 /usr/share/perl/5.10 /usr/local/lib/site_perl .
 (function($){$.widget("ui.droppable",{init:function(){this.element.addClass("ui-droppable");this.isover=0;this.isout=1;var o=this.options,accept=o.accept;o=$.extend(o,{accept:o.accept&&o.accept.constructor==Function?o.accept:function(d){return $(d).is(accept);}});this.proportions={width:this.element.outerWidth(),height:this.element.outerHeight()};$.ui.ddmanager.droppables.push(this);},plugins:{},ui:function(c){return{draggable:(c.currentItem||c.element),helper:c.helper,position:c.position,absolutePosition:c.positionAbs,options:this.options,element:this.element};},destroy:function(){var drop=$.ui.ddmanager.droppables;for(var i=0;i<drop.length;i++)
 if(drop[i]==this)
 drop.splice(i,1);this.element

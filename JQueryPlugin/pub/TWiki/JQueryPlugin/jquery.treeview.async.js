@@ -1,4 +1,3 @@
-/var/www/trunk/core/lib /var/www/trunk/core/lib/CPAN/lib/ /etc/perl /usr/local/lib/perl/5.10.0 /usr/local/share/perl/5.10.0 /usr/lib/perl5 /usr/share/perl5 /usr/lib/perl/5.10 /usr/share/perl/5.10 /usr/local/lib/site_perl .
 ;(function($){function load(settings,root,child,container){$.getJSON(settings.url,{root:root},function(response){function createNode(parent){var current=$("<li/>").attr("id",this.id||"").html("<span>"+this.text+"</span>").appendTo(parent);if(this.classes){current.children("span").addClass(this.classes);}
 if(this.expanded){current.addClass("open");}else{current.addClass("closed");}
 if(this.hasChildren||this.children&&this.children.length){var branch=$("<ul/>").appendTo(current);if(this.hasChildren){current.addClass("hasChildren");createNode.call({classes:"placeholder",text:"&nbsp;",children:[]},branch);}
