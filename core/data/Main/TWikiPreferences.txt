@@ -9,7 +9,7 @@
 ---++ Site Specific Site-wide Preferences
 <!-- Add site-wide preferences here -->
 
-   * Set NOAUTOLINK = 1
+
 
 ---++ Final Preferences
 
