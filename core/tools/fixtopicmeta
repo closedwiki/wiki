@@ -1,0 +1,79 @@
+#!/usr/bin/perl
+#
+# Utility for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2010 Peter Thoeny, peter@thoeny.org and
+# TWiki Contributors.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+
+if ( $#ARGV < 0 ) {
+   showUsage();
+   exit( 1 );
+}
+foreach my $topic ( @ARGV ) { 
+  fixTopicMeta( $topic );
+}
+exit( 0 );
+
+#=========================
+sub showUsage
+{
+  print "Utility to fix the META:TOPICINFO to list TWikiContributor,\n";
+  print "current time, and SVN Rev for version. Usage:\n";
+  print "% fixtopicmeta TopicOne.txt TopicTwo.txt ...\n";
+}
+
+#=========================
+sub fixTopicMeta
+{
+  my ( $topic ) = @_;
+  my $epoc = time();
+
+  print "- fixing $topic ...";
+  my $text = readFile( $topic );
+  if( $text ) {
+    # %META:TOPICINFO{author="TWikiContributor" date="1273879046" format="1.1" version="Rev"}%
+    $text =~ s/(\%META:TOPICINFO{author=")[^"]*(" date=")[^"]*(" format="[^"]*" ).*?(version=")[^"]*("[^\n\r]*)/$1TWikiContributor$2$epoc$3$4\$Rev\$$5/;
+    saveFile( $topic, $text );
+    print " done\n";
+  }
+}
+
+#=========================
+sub readFile {
+  my $name = shift;
+  my $data = '';
+  unless ( open( IN_FILE, "<$name" ) ) {
+    print "  ERROR: Can't read file $name - $!\n";
+    return;
+  }
+  local $/ = undef; # set to read to EOF
+  $data = <IN_FILE>;
+  close( IN_FILE );
+  $data = '' unless $data; # no undefined
+  return $data;
+}
+
+#=========================
+sub saveFile {
+  my( $name, $text ) = @_;
+
+  unless ( open( FILE, ">$name" ) )  {
+    print "  ERROR: Can't update file $name - $!\n";
+    return;
+  }
+  print FILE $text;
+  close( FILE);
+}
+
+#=========================
