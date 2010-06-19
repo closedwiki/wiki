@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274842763" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1276909482" format="1.1" version="$Rev$"}%
 ---+ <nop>%WIKITOOLNAME% Site Map
 
 _TWiki is devided up into webs, also known as workspaces or collaboration spaces._
@@ -13,4 +13,4 @@ _TWiki is devided up into webs, also known as workspaces or collaboration spaces
 |^| %ICON{searchtopic}% Search the web | %ICON{notify}% Subscribe to get notified of changes by e-mail |
 %STOPINCLUDE%
 
-__Related topics:__ SiteChanges, TWikiSite, SitePermissions, UserDocumentationCategory
+__Related topics:__ SiteChanges, TWikiSite, SitePermissions, UserDocumentationCategory, AdminToolsCategory
