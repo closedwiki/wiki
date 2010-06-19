@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1275722494" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1276974781" format="1.1" version="$Rev$"}%
 ---+ Wabi-Sabi
 
 <img src="%ATTACHURLPATH%/wabisabi.gif" width="251" height="79" alt="Wabi Sabi" align="right">
@@ -23,7 +23,7 @@ Material characteristics of wabi-sabi:
 
 For more about wabi-sabi, see http://en.wikipedia.org/wiki/Wabi-sabi
 
-__Related Topics:__ WikiCulture, TWikiSite
+__Related Topics:__ WikiCulture, TWikiSite, UserDocumentationCategory
 
 -- __Contributors:__ TWiki:Main/PeterThoeny, TWiki:Main/MikeMannix
 

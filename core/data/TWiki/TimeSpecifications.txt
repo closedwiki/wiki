@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1275721397" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1276974712" format="1.1" version="$Rev$"}%
 ---+ Time Specifications
 
 TWiki recognizes the following formats for date/time strings. For all strings the time is optional.
@@ -70,6 +70,6 @@ If only one date is specified (e.g. the interval string is =1999=) it will be tr
 
 If you are entering a date at both ends of the time interval string, the end date must include all leading fields, even if these are the same as in the start date. This limitation forms a proper restriction to the ISO8601 standard. i.e. ISO 8601 specifies that =2003-12-12/14= means 12th Dec 2003 00:00 to 14th Dec 2003 23:59:59. However this shorthand is not supported by TWiki and must be written as =2003-12-12/2003-12-14=.
 
-__Related topics:__ QuerySearch, TWikiScripts, VarGMTIME2, VarSEARCH
+__Related topics:__ QuerySearch, TWikiScripts, VarGMTIME2, VarSEARCH, UserDocumentationCategory, AdminDocumentationCategory
 
 -- __Contributors:__ TWiki:Main/CrawfordCurrie, TWiki:Main/PeterThoeny
