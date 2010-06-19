@@ -44,6 +44,7 @@ sub fixTopicMeta
   if( $text ) {
     # %META:TOPICINFO{author="TWikiContributor" date="1273879046" format="1.1" version="Rev"}%
     $text =~ s/(\%META:TOPICINFO{author=")[^"]*(" date=")[^"]*(" format="[^"]*" ).*?(version=")[^"]*("[^\n\r]*)/$1TWikiContributor$2$epoc$3$4\$Rev\$$5/;
+    $text =~ s/[\n\r]*$/\n/s;
     saveFile( $topic, $text );
     print " done\n";
   }
