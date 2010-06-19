@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1276663933" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1276981956" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
@@ -899,7 +899,7 @@ __Major New Features__
    * *27 Jul 1998* - TWiki:Main.PeterThoeny
       * Added automatic links to topics in other TWiki webs by specifying &lt;web name&gt;.&lt;topic name&gt;, e.g. =Know.WebSeach= . 
    * *23 Jul 1998* - TWiki:Main.PeterThoeny
-      * Installed initial version, based on the JOS Wiki. See WikiWikiClones for details.
+      * Installed initial version, based on the JOS Wiki.
 
 ---++ Dev Flow
 

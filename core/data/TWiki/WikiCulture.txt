@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1276981956" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiFAQ"}%
 ---++ FAQ:
 
@@ -6,7 +6,7 @@ Everybody can edit any page, this is scary. Doesn't that lead to chaos?
 
 ---++ Answer:
 
-TWiki is one of many WikiWikiClones, the first one was built by Ward Cunningham. Collaborating the Wiki way is different from other collaboration tools like Usenet. A distinct __Wiki culture__ forms around these tools:
+TWiki is one of many [[http://en.wikipedia.org/wiki/Wiki_software][wiki engines]], the first one was built by Ward Cunningham. Collaborating the wiki way is different from other collaboration tools like Usenet. A distinct __wiki culture__ forms around these tools:
 
    * Any and all information can be deleted by anyone. Wiki pages represent nothing but discussion and consensus because it's much easier to delete flames, spam and trivia than to indulge them. What remains is naturally meaningful. 
 
@@ -21,6 +21,3 @@ TWiki is one of many WikiWikiClones, the first one was built by Ward Cunningham.
 __Related topics:__ TWikiSite, WelcomeGuest, GoodStyle, WikiSyntax, TWikiFAQ, WhatIsWikiWiki, WabiSabi, TWikiAccessControl
 
 __Back to:__ TWikiFAQ
-
-
-
