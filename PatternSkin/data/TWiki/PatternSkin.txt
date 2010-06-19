@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1276410203" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1276987903" format="1.1" version="$Rev$"}%
 ---+!! Pattern Skin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -93,9 +93,10 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 |  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.png" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this skin]] |
 |  Base Name: | pattern |
-|  Skin Version: | 2010-06-12 |
+|  Skin Version: | 2010-06-19 |
 |  History: | <!-- specify latest version first -->&nbsp; |
-|  2010-06-12: | TWikibug:Item5335: Conditional signature based on NOAUTOLINK setting, either user =Main.FirstLast= or =[<nop>[Main.Firstlast][Firstlast]]=; force-linking user name in topic info in case NOAUTOLINK set -- TWiki:Main/PeterThoeny |
+|  2010-06-19: | TWikibug:Item6499 - less screeming submit button and cancel button, aligning with color palette of TWiki:Plugins/TopMenuSkin -- TWiki:Main/PeterThoeny |
+|  2010-06-12: | TWikibug:Item5335 - conditional signature based on NOAUTOLINK setting, either user =Main.FirstLast= or =[<nop>[Main.Firstlast][Firstlast]]=; force-linking user name in topic info in case NOAUTOLINK set -- TWiki:Main/PeterThoeny |
 |  2010-05-25: | TWikibug:Item6453 - don't use red color in topic action, implies red-links -- TWiki:Main/PeterThoeny and TWiki:Main/SopanShewale |
 |  2010-04-28: | TWikibug:Item6416 - fix for only two pages printing in FF 3.6 -- TWiki:Main/PeterThoeny |
 |  03 Aug 2008: | v.3.0.1 - TWiki 4.2.1 (Edinburgh) RELEASE VERSION |
@@ -138,3 +139,4 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 Other skins:
    * %SYSTEMWEB%.TWikiSkins
    * %SYSTEMWEB%.TWikiSkinBrowser
+   * %SYSTEMWEB%.TopMenuSkin
