@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1186906075" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1276980794" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiSite"}%
 ---+!! References on Wiki and Collaboration
 
@@ -56,3 +56,4 @@ Some useful articles and books around collaboration and the Wiki technology in p
 
    * Book: Extreme Programming Explored; by William C. Wake and Bill Wake; Addison-Wesley Pub Co; ISBN:0201733978
 
+__Related topics:__ WhatIsWikiWiki, WikiCulture, WabiSabi, UserDocumentationCategory
