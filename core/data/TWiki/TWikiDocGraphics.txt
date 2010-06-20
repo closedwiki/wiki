@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277011220" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277066697" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. Doc graphics are defined at %CALC{$SET(icontopics, $LISTIF($NOT($EXACT($item,)), $LISTMAP($IF($EXISTS($item), [[$item]], ), %ICONTOPIC%)))$GET(icontopics)}%.
@@ -480,12 +480,18 @@ Is equivalent to:
 
 Additional doc graphic images can be defined. Do not add them to this topic because the modifications will be lost on the next TWiki upgrade. Instead add them to %CALC{$IF($EXISTS(%USERSWEB%.SiteDocGraphics), $SET(usericontopic, [[%USERSWEB%.SiteDocGraphics]]), $SET(usericontopic, [[%SCRIPTURL{edit}%/%USERSWEB%/SiteDocGraphics?templatetopic=%SYSTEMWEB%.TWikiDocGraphicsTemplate;topicparent=none][%USERSWEB%.SiteDocGraphics]]))$GET(usericontopic)}%.
 
-__Note:__ Documentation graphics are defined in %CALC{$GET(icontopics)}%. The list of topics is defined by the ICONTOPIC setting in [[%SYSTEMWEB%.TWikiPreferences]] and can be overloaded in [[%LOCALSITEPREFS%]].
+__Note:__ Documentation graphics are defined in %CALC{$GET(icontopics)}%. The list of documentation graphics topics is defined by the ICONTOPIC setting in [[%SYSTEMWEB%.TWikiPreferences]] and can be overloaded in [[%LOCALSITEPREFS%]].
+
+#RefreshIconCache
+---+++ Refresh icon cache
+
+TWiki caches icons for performance. The cache gets updated automatically when you update !TWikiDocGraphics topics or !TWikiPreferences topics. You can force a cache refresh with =%<nop>ICON{action:refresh-cache}%=.
+
+Interactive example: %IF{ "$'URLPARAM{icon-cache}'='refresh'" then="$percntICON{\"action:refresh-cache\" format=\"ICON cache is refreshed. [[%SCRIPTURL{view}%/%WEB%/%TOPIC%#RefreshIconCache][OK]].\"}$percnt" else="[[%SCRIPTURL{view}%/%WEB%/%TOPIC%?icon-cache=refresh#RefreshIconCache][Refresh ICON cache]]." }%
 
 __Related Topics:__ VarICON, %CALC{$GET(icontopics)}%, TWikiDocGraphicsTemplate, TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
 
 __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny. Many of the original icons were recreated by TWiki:Main.ArthurClemens.
-
 
 %META:FILEATTACHMENT{name="addon.gif" attr="h" comment="" date="1169565034" path="addon.gif" size="370" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="air.gif" attr="h" comment="" date="1169565034" path="air.gif" size="356" user="TWikiContributor" version=""}%
