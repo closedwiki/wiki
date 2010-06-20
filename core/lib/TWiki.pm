@@ -1339,6 +1339,14 @@ Leave empty if you assume icon files exist in the default location.
 sub formatIcon {
     my( $this, $iconName, $format, $default ) = @_;
 
+    if( $iconName eq 'action:refresh-cache' ) {
+        $this->cacheIconData( 'delete' );
+        my $text = $format ||
+                   "ICON cache is refreshed. "
+                 . "[[$this->{SESSION_TAGS}{BASEWEB}.$this->{SESSION_TAGS}{BASETOPIC}][OK]].";
+        return $text;
+    }
+
     unless( $this->{_ICONDATA} ) {
         # try to read cache
         $this->cacheIconData( 'read' );
