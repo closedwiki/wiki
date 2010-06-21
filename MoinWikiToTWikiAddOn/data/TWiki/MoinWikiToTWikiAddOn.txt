@@ -1,0 +1,72 @@
+%META:TOPICINFO{author="TaitCyrus" date="1276794993" format="1.1" version="1.2"}%
+---+ !MoinWikiToTWikiAddOn Add-On
+
+This is a command line tool to import !MoinWiki pages and !MoinWiki images/attachments into TWiki. It attempts to convert !MoinWiki syntax into equivalent TWiki syntax. It also attempts to convert !MoinWiki hierarchies into TWiki hierarchies. So a !MoinWiki page like:
+   * Grandparent/Parent/OurPage
+will be converted into TWiki page *OurPage* with a parent of *Parent*. The only exception is if there are !MoinWiki pages like:
+   * Grandparent/Parent1/OurData
+   * Grandparent/Parent2/OurData
+where the actual !MoinWiki pages have identical names ( *OurPage*). In this case the TWiki pages created would be *Parent1OurData* and *Parent2OurData* (so the parent name is prepended to the front of the TWiki page name).
+
+Other features provides:
+   1 This script creates a new !MoinWiki page called !CurrentWikiIndex which contains links to all !MoinWiki pages converted.
+   1 This script creates a new TWiki page called !ConvertIndexWiki which contains links to all new TWiki pages. This allows you to have side-by-side browsers showing !MoinWiki pages and TWiki pages making it easy to see any differences in formating
+   1 This script creates an Apache mapping file that can be used by an Apache configuration file allowing Apache to easily map between !MoinWiki URLs and TWiki URLs.
+
+---++ Add-On Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running.
+
+   * Download the ZIP file from the Add-on Home (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+| *File:* | *Description:* |
+| ==data/TWiki/MoinWikiToTWikiAddOn.txt== |  Add-on topic |
+| ==tools/moin2twiki.pl== |  convert script |
+   * Edit file *tools/moin2twiki.pl* updating the following three (3) variables: 
+      1 $TWikiHome - Change to point to the top level of your TWiki installation
+      1 $TWikiWeb - The TWiki web where you want the !MoinWiki pages copied into
+      1 $moinPages - Change to point to where your !MoinWiki pages are located
+   * Create a new TWiki web with the name specified in $TWikiWeb
+   * Now just run *tools/moin2twiki.pl*
+   * Optionally look at the created TWiki page $TWikiPage/CurrentWikiIndex and the page created in !MoinWiki !CurrentWikiIndex.
+
+---++ How to run
+
+After editing *tools/moin2twiki.pl* just run the script and you are done.
+
+---++ Optional Apache configuration setup
+
+If you desire to set Apache up such that the same !MoinWiki URLs work in the TWiki environment, the following Apache configuration can be used as a template to set this up.
+<verbatim>
+    RewriteMap moinToTwiki txt:/var/www/TWiki/moin2TWikiMapping.txt
+    # If not /bin and not /pub then it doesn't appear to be a TWiki url so
+    # it is probably an old Moin url so we map to the TWiki name.
+    RewriteCond %{REQUEST_URI}  !^/bin/.*
+    RewriteCond %{REQUEST_URI}  !^/pub/.*
+    RewriteRule (.*) ${moinToTwiki:$1} [R]
+</verbatim>
+
+---++ Known Issues
+If a !MoinWiki page has a line with multiple {{{ }}} constructs, this convert script does not handle this correctly.  The script is designed to only handle a single set of {{{ }}} per line.
+
+---++ Add-On Info
+
+   * Set SHORTDESCRIPTION = !MoinWiki to TWiki conversion tool
+
+|  Add-on Author: | TWiki:Main.TaitCyrus |
+|  Copyright: | © 2010, TWiki:Main.TaitCyrus |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Add-on Version: | 2010-06-11 (V1.000) |
+|  Change History: | <!-- versions below in reverse order --> |
+|  2010-06-11: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 4.0) |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.8.8 |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+
+-- TWiki:Main/TaitCyrus - 2010-06-11
