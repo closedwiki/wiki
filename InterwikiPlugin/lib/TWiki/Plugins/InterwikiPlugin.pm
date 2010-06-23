@@ -51,7 +51,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-05-15';
+$RELEASE = '2010-06-23';
 
 BEGIN {
     # 'Use locale' for internationalisation of Perl sorting and searching - 
@@ -130,8 +130,13 @@ sub _link {
     if( defined( $interSiteTable{$site} ) ) {
         my $tooltip = $interSiteTable{$site}{tooltip};
         my $url = $interSiteTable{$site}{url};
+        my $label = "$site:$page";
+        if( $site eq 'TWiki' ) {
+            $tooltip =~ s/\$page/$page/g;
+            # TWikibug:Item6503 - hack to prettify TWiki.org link URL
+            $page =~ s/^([A-Za-z0-9]+)\./$1\//; # change first '.' to '/' 
+        }
         $url .= $page unless( $url =~ /\$page/ );
-        my $label = '$site:$page';
 
         if( $postfix ) {
             # [[...]] or [[...][...]] interwiki link
