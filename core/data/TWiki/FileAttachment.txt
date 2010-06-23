@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277272356" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ File Attachments
 
@@ -16,7 +16,7 @@ File Attachments can be used to archive data, or to create powerful customized g
 
 ---+++ File Sharing
 
-   * For file sharing, FileAttachments on a series of topics can be used to quickly create a well-documented, categorized digital download center for all types of files: documents; graphics and other media; drivers and patches; applications; anything you can safely upload!
+   * For file sharing, !FileAttachments on a series of topics can be used to quickly create a well-documented, categorized digital download center for all types of files: documents; graphics and other media; drivers and patches; applications; anything you can safely upload!
 
 ---+++ Web Authoring
 
@@ -41,14 +41,14 @@ File Attachments can be used to archive data, or to create powerful customized g
    * Click on the file in the [[#FileAttachmentTable][File Attachment table]].
 #AttachmentAccess
 
-   * %X% _NOTE:_ There is no access control on individual attachments. If you need control over single files, create a separate topic per file and set topic-level [[TWikiDocumentation#TWikiAccessControl][access restrictions]] for each.
+   * %X% _NOTE:_ There is no access control on individual attachments. If you need control over single files, create a separate topic per file and set topic-level [[TWikiAccessControl][access restrictions]] for each.
 
 ---++ Moving Attachment Files
 
 An attachment can be moved between topics. 
    * Click ==Manage== on the Attachment to be moved.
    * On the control screen, select the new web and/or topic.
-   * Click ==Move==. The attachment and its version history are moved. The original location is stored as [[TWikiDocumentation#Meta_Data_Definition][topic Meta Data]].
+   * Click ==Move==. The attachment and its version history are moved. The original location is stored as [[TWikiMetaData][topic Meta Data]].
 
 ---++ Deleting Attachments
 
@@ -126,11 +126,11 @@ Describe the file so other people know what it is.
 ---++ Known Issues
 
    * Unlike topics, attachments are not locked during editing. As a workaround, you can change the comment to indicate an attachment file is being worked on - the comment on the specific version isn't lost, it's there when you list all versions of the attachment.
-   * Attachments are not secured. Anyone can read them if they know the name of the web, topic and attachment.
-   
+   * Attachments are not secured by default. Anyone can read them if they know the name of the web, topic and attachment. Ask your TWiki administrator if TWiki is [[TWikiAccessControl#SecuringAttachments][configured to secure attachments]].
+
 %STOPINCLUDE%
 
-__Related Topics:__ UserDocumentationCategory
+__Related Topics:__ UserDocumentationCategory, TWikiAccessControl
 
 %META:FILEATTACHMENT{name="Sample.txt" attr="" comment="Just a sample" date="964294620" path="C:\DATA\Sample.txt" size="30" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="Smile.gif" attr="" comment="Smiley face" date="964294680" path="C:\DATA\Smile.gif" size="94" user="TWikiContributor" version=""}%
