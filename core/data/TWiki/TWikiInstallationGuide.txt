@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277273356" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277275868" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Installation Guide
 
@@ -22,7 +22,7 @@ If you are upgrading from an earlier major version of TWiki such as Cairo (TWiki
 
 One of the more difficult tasks is installation of addition !CPAN libraries. See TWiki:TWiki.HowToInstallCpanModules for detailed information on how to install !CPAN libraries.
 
-If you need help, ask a question in the TWiki:Support.Webhome web or on TWiki:Codev.TWikiIRC (irc.freenode.net, channel #twiki).
+If you need help, ask a question in the TWiki:Support.WebHome web or on TWiki:Codev.TWikiIRC (irc.freenode.net, channel #twiki).
 
 #StandardInstallation
 ---++ Basic Installation
