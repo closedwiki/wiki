@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273879046" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277358495" format="1.1" version="$Rev$"}%
 <sticky>
 <div style="float:right;width:255px;padding:1em;text-align:center;">
 <a href="http://twiki.org"><img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiLogos/T-logo-235x67-t.gif" style="margin:.3em 0;" width="235" height="67" alt="Collaborate with TWiki -- visit TWiki.org" title="Collaborate with TWiki -- visit TWiki.org" border="0" /></a>
 <br />The official TWiki<sup>&reg;</sup> site is <a href="http://twiki.org"><span class="twikiLinkLabel">twiki.org</span></a>
 </div>
 </sticky>
----+!! Welcome to the TWiki<sup>&reg;</sup> Documentation Web
+---+!! Welcome to the TWiki Documentation Web
 
 _The place to learn about TWiki features and perform TWiki system maintenance._
 
