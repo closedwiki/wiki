@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1275131588" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277350819" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Upgrade Guide
 
@@ -13,8 +13,8 @@ TWiki-5.0.0 is a major release introducing usability enhancements, feature enhan
 ---++ Upgrade Requirements
 
    * Please review the AdminSkillsAssumptions before you upgrade TWiki
-   * Review supplemental document TWiki:TWiki/TWikiUpgradeTo05x00 for latest information and experience notes.
-   * To upgrade from a release prior to TWiki Release 01-Sep-2004, start with TWiki:TWiki/UpgradingTWiki on TWiki.org
+   * Review supplemental document TWiki:TWiki.TWikiUpgradeTo05x00 for latest information and experience notes.
+   * To upgrade from a release prior to TWiki Release 01-Sep-2004, start with TWiki:TWiki.UpgradingTWiki on TWiki.org
    * To upgrade from a standard TWiki Release 01-Sep-2004 to the latest TWiki-5.0 Production Release, follow the instructions below
    * Once the upgrade has been applied, an existing earlier installation will still be able to read all the topics, but should not be used to write. Make sure you take a backup!
 
@@ -40,16 +40,16 @@ The main steps are:
    
 ---+++ Installation
 
-   * Follow the installation instructions at TWiki:TWiki/TWikiInstallationGuide. Install the new release in a new directory. Do not install on top of the old release.
+   * Follow the installation instructions at TWiki:TWiki.TWikiInstallationGuide. Install the new release in a new directory. Do not install on top of the old release.
    * Use the [[%SCRIPTURL{configure}%][configure]] script to configure TWiki.
       * If you are upgrading from a 4.x.x release, you can carry over the configure settings from the old release.
       * You need to run configure and save the configuration once when you upgrade as this will update the altered and added settings.
       * You can also choose to start with a fresh configuration and walk through all the settings using your old =twiki/lib/LocalSite.cfg= as a reference. This way you will not have old obsolete settings in the new =LocalSite.cfg=.
       * If at any time during the installation you want to start over from fresh, delete the =LocalSite.cfg= file and re-run configure.
    * Additional resources
-      * TWiki:TWiki/InstallingTWiki#OtherPlatforms
-      * TWiki:TWiki/ApacheConfigGenerator
-      * TWiki:TWiki/SettingFileAccessRightsLinuxUnix
+      * TWiki:TWiki.InstallingTWiki#OtherPlatforms
+      * TWiki:TWiki.ApacheConfigGenerator
+      * TWiki:TWiki.SettingFileAccessRightsLinuxUnix
       * If you upgrade from an older TWiki your =lib/TWiki.cfg= from the old TWiki installation is a good resource for some of the settings you will need but you cannot reuse the old TWiki.cfg.
    * Make sure you have a working basic TWiki before you continue
 
@@ -86,7 +86,7 @@ The main steps are:
    * Manually merge all the users from the old =Main.TWikiUsers= topic to the new TWiki. If you upgrade from Cairo you can simply use the old file and add the missing new system users to the list of users. If you upgrade from TWiki-4.0.x simply use the old topic. Starting from 4.2.0 TWiki no longer ships with a =Main.TWikiUsers= topic. When you register the first user TWiki now checks for an existing =Main.TWikiUsers= and if it does not exist it gets created.
    * If you use =data/.htpasswd= for authentication copy this file from the old TWiki to the new.
       * If you upgrade from Cairo and you are using the Htpasswd login manager, then note that email addresses for users have moved out of user topics and into the password file. There is a script that performs this extra upgrade step for you - see =tools/upgrade_emails.pl=.
-   * The old Sandbox web may have a lot of useful topic and users may use it actively for drafts. Manually select the topics (remember the corresponding pub directories) from the old Sandbox web and copy them to the new TWiki. Decide if you want to overwrite the sandbox homepage and left menu bar or keep the new.
+   * The old Sandbox web may have a lot of useful topic and users may use it actively for drafts. Manually select the topics (remember the corresponding pub directories) from the old Sandbox web and copy them to the one of the new TWiki. Decide if you want to overwrite the sandbox homepage and left menu bar or keep the new.
    * If you added or removed fields from the user topic form you may also have tailored =TWiki.TWikiRegistration=. Make sure you either reuse the registration topic from the old installation or apply the same field changes to the new =TWiki.TWikiRegistration= topic.
    * Starting from 4.2.0 TWiki ships with =NewUserTemplate= and =UserForm= in the TWiki web. If you choose to tailor anything you are strongly advised to copy =NewUserTemplate= and =UserForm= to the Main web and tailor the Main web copies. TWiki will look for the =NewUserTemplate= in the Main web first and if it does not exist it uses the default from the TWiki web. By creating a =Main.NewUserTemplate= and its =Main.UserForm= you will not loose your tailorings next time you upgrade TWiki.
    * Make sure all data and pub files and directories are owned by the webserver user.
@@ -94,7 +94,7 @@ The main steps are:
 ---+++ Apply Customizations To The Skin
 
    * Add Logos, update top bar and left bar as required.
-   * Apply any desired changes to style sheets and templates. The default PatternSkin has been totally rewritten since Cairo and once more in 4.0.2. Since then changes to PatternSkin have been minor and you may be able to carry over most simpler tailorings directly from 4.0.2-4.0.5.
+   * Apply any desired changes to style sheets and templates. The default TopMenuSkin is based on the PatternSkin.
    * Additional resources:
       * TWiki:TWiki.UpgradingTWiki04x00PatchReleases
       * PatternSkinCustomization
@@ -126,7 +126,7 @@ In TWiki-4 it is assumed that each web has a favicon.ico file attached to the !W
    * Attach a favicon.ico file to !WebPreferences in each web.
    * Preferred: Change the setting of the location of favicon.ico in !TWikiPreferences so all webs use the favicon.ico from the TWiki web. This is the fastest and easiest solution.
 
-To change the location of favicon.ico in !TWikiPreferences to the TWiki web add this line to Main.TWikiPreferences
+To change the location of favicon.ico in !TWikiPreferences to the TWiki web add the following setting to [[%LOCALSITEPREFS%]]:
 
 <verbatim>
    * Set FAVICON = %PUBURLPATH%/%SYSTEMWEB%/%WEBPREFSTOPIC%/favicon.ico
@@ -134,14 +134,22 @@ To change the location of favicon.ico in !TWikiPreferences to the TWiki web add 
 
 ---+++ !TWikiUsers topic in Main web
 
-Your Cairo [[Main.TWikiUsers][Main.TWikiUsers]] topic will work in TWiki-4 but you will need to ensure that these 4 users from the default TWiki-4 version of !TWikiUsers are copied to the existing !TWikiUsers topic. !TWikiGuest is probably already there but the others are new
-   * *TWikiContributor* - placeholder for a TWiki developer, and is used in TWiki documentation
-   * *TWikiGuest* - guest user, used as a fallback if the user can't be identified
-   * *TWikiRegistrationAgent* - special user used during the new user registration process
-   * *UnknownUser* - used where the author of a previously stored piece of data can't be determined
+Your old [[Main.TWikiUsers][Main.TWikiUsers]] topic will work in the new TWiki but you will need to ensure that the following four users from the TWikiUsersTemplate topic are copied to the existing !TWikiUsers topic in proper alphabetical order:
 
+<verbatim>
+   * TWikiContributor - 2005-01-01
+   * TWikiGuest - guest - 1999-02-10
+   * TWikiRegistrationAgent - 2005-01-01
+   * UnknownUser - 2005-01-01
+</verbatim>
 
-You additionally need to ensure that !TWikiUsers has the =Set ALLOWTOPICCHANGE = !TWikiAdminGroup, !TWikiRegistrationAgent=. Otherwise people will not be able to register.
+What these users are:
+   * !TWikiContributor - placeholder for a TWiki developer, and is used in TWiki documentation
+   * !TWikiGuest - guest user, used as a fallback if the user can't be identified
+   * !TWikiRegistrationAgent - special user used during the new user registration process
+   * !UnknownUser - used where the author of a previously stored piece of data can't be determined
+
+You additionally need to ensure that !TWikiUsers has the =Set ALLOWTOPICCHANGE = !TWikiAdminGroup, !TWikiRegistrationAgent= access control setting. Otherwise people will not be able to register.
 
 ---++ Important Changes since TWiki-4.0.5
 
@@ -155,13 +163,13 @@ See the [[http://twiki.org/cgi-bin/view/Codev/WhatVersionsOfPerlAreSupported][Wh
 
 ---+++ Template spec changed
 
-Until TWiki 4.0.5 TWiki.TWikiTemplates the text inside template definition blocks (anything between %<nop>TMPL:DEF{"block"}% and %<nop>TMPL:END% was stripped of leading and trailing white space incl new lines.
+Until TWiki 4.0.5 TWiki.TWikiTemplates the text inside template definition blocks (anything between =%<nop>TMPL:DEF{"block"}%= and =%<nop>TMPL:END%= was stripped of leading and trailing white space incl new lines.
 
 This caused a lot of problems for skin developers when you wanted a newline before or after the block text.
 
 From TWiki 4.1.0 this has changed so that white space is no longer stripped. Skins like !PatternSkin and !NatSkin have been updated so that they work with the new behavior. But if you use an older skin or have written your own you will most likely need to make some adjustments.
 
-It is not difficult. The general rule is - if you get mysterious blank lines in your skin, the newline after the %<nop>TMPL:DEF{"block"}% needs to be removed. Ie. the content of the block must follow on the same line as the TMPL:DEF.
+It is not difficult. The general rule is - if you get mysterious blank lines in your skin, the newline after the =%<nop>TMPL:DEF{"block"}%= needs to be removed. Ie. the content of the block must follow on the same line as the TMPL:DEF.
 
 The spec change have the same impact on CommentPlugin templates where you may have to remove the first line break after the TMPL:DEF. See the CommentPluginTemplate for examples of how comment template definitions should look like in TWiki-4.1.X
 
@@ -251,7 +259,7 @@ TWiki 4.2 introduces a new _Internal Admin Login_ feature which uses "admin" (co
 
 ---+++ New !TopMenuSkin
 
-The TopMenuSkin adds pulldown menus for better usability and corporate/modern look&amp;feel. This skin is based on the PatternSkin, which used the WebLeftBar in each web for navigation. The TopMenuSkin has a new WebTopBar that defines the menu structure in each web. A default menu is shown in case !WebTopBar is missing, so you do not need to add a !WebTopBar topic to all your existing webs. See TopMenuSkin#WebSpecific instructions in case you need a customized menu structure in a web.
+The TopMenuSkin adds pulldown menus for better usability and corporate/modern look&amp;feel. This skin is based on the PatternSkin, which used the WebLeftBar in each web for navigation. The TopMenuSkin has a new WebTopBar that defines the menu structure in each web. A default menu is shown in case !WebTopBar is missing in a web, so you do not need to add a !WebTopBar topic to all your existing webs. See TopMenuSkin#WebSpecific instructions in case you need a customized menu structure in a specific web.
 
 %STOPINCLUDE%
 
