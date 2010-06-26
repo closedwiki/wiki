@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274592253" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277515464" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -770,8 +770,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | %$VERSION% (2010-05-15) |
+|  Plugin Version: | %$VERSION% (2010-06-25) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-06-25: | TWikibug:Item5163 - fix for plugin causing table to misrender an empty "&#124;&#124;" row |
 |  2010-05-22: | TWikibug:Item6472 - adding support for DOY in $TIME(), contributed by TWiki:Main/EmanueleCupido |
 |  2010-05-15: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  2010-02-27: | Doc improvements |

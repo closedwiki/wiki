@@ -106,6 +106,7 @@ sub CALC
                 $line =~ s/^(\s*\|)(.*)\|\s*$/$2/o;
                 $before = $1;
                 @row  = split( /\|/o, $line, -1 );
+                $row[0] = '' unless( @row );
                 push( @tableMatrix, [ @row ] );
                 $rPos++;
                 $line = "$before";
