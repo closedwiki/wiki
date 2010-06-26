@@ -1,43 +1,73 @@
-%META:TOPICINFO{author="BaseUserMapping_333" date="1224123278" format="1.1" reprev="1.7" version="1.7"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277540468" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="Plugins"}%
 ---+!! Directed Graph Plugin
-%TABLE{databg="#AAAAFF"}%
-| To avoid topic corruption, please do not edit with WYSIWYG Editor |
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/DirectedGraphPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/DirectedGraphPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
 
-%TOC%
+   * Set SHORTDESCRIPTION = Draw graphs using the !GraphViz utility
+-->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+%SHORTDESCRIPTION%
 
 ---++ Introduction
 
+<div style="float:left">
+<img src="%ATTACHURLPATH%/graphsample2_antialiased.png" alt="Directed Graph Plugin" title="Directed Graph Plugin" />
+</div>
 Graph visualization is a way of representing structural information as diagrams of abstract graphs and networks. Automatic graph drawing has many important applications in software engineering, database and web design, networking, and in visual interfaces for many other domains.
 
-This plugin uses [[http://www.graphviz.org/][Graphviz's]] applications to create an image of a directed graph. The directed graph is described using a simple text markup called "The DOT Language".  This markup is written between <verbatim><dot> ... </dot></verbatim> tags.   By default, a png image attachment is created and displayed inline, replacing the <verbatim><dot></verbatim> markup.  Any other requested formats are saved as attachments.  
-
-| %X% By default, this version of the plugin uses the TWik API to manipulate the attached graphs.  The first user to view a topic containing a directed graph will be denied access if they do not have update permission.  If defaults or DOT parameters have changed, viewing the topic may modify attachments, which will require update permission. |
-
-| %X% *Caution* The plugin will also update attached files during __Preview__.  if the edit is subsequently canceled, the attachments will be regenerated again. |
-
-A MD5 hash is calculated for each dot command input and the results saved in the TWiki work_area directory. The hash file is named with the Web name, the Topic name, and the string ==-filehash==  The location of the workarea has changed in recent TWiki releases.  If the calculated hash matches on subsequent page visits, the attached graphics files are used without rerunning Graphviz. If the hash doesn't match, the attachments are regenerated.  
-
-Default behavior is to leave any previously generated attachments even if the =&lt;dot&gt;= tags are removed from the file.  If the configuration setting DELETEATTACHMENTS is enabled, then the plugin will remove any old attachments that are not needed.  However if the final =&lt;dot&gt;= tag is removed, the plugin is not invoked, and the attachments will not be deleted. 
-
-<blockquote>
-| %X% *Caution!* If a topic has not previously been processed by this version of the plugin, attachments named using the original "Graph[32 character hex checksum].jpg will *all* be deleted from the topic when this parameter is enabled! Once the new ==-filehash== file has been created, old style attachments will not be deleted.  If you want to go back and clean up the old atachment filenames, you can remove the =Web_Topic-filehash= file from the workare directory. |
-</blockquote>
-
-In TWiki 4.2.0 and later, if a topic is renamed, the ==-filehash== file in the TWiki workarea directory will be renamed as well and regeneration of attachment files will be avoided.  In previous versions, there is no afterRenameHandler.  The hash file will be orphaned, and the graphics attachments will be regenerated when the page is displayed.
-
-
-| %X% *Caution* =&lt;dot&gt;= syntax is not currently compatible with the WYSIWYG editor.  Raw editing is recommended, or use &lt;sticky&gt; tags to protect the dot tags. |
-
-Also note that after changes that modify the order of generated image names, it may be necessary to refresh the browser cache with shift-reload.
+This plugin uses [[http://www.graphviz.org/][Graphviz's]] applications to create an image of a directed graph. The directed graph is described using a simple text markup called "The _dot_ Language". This markup is written between =&lt;dot&gt;= and =&lt;/dot&gt;= tags. By default, a png image attachment is created and displayed inline, replacing the =&lt;dot&gt;= markup. Any other requested formats are saved as attachments.
 
 Visit the [[http://www.graphviz.org/Gallery.php][Graphviz gallery]] to see some examples on what can be achieved with this plugin and Graphviz. Full documentation is available at http://graphviz.org/Documentation.php.
 
+| %X% *Caution* =&lt;dot&gt;= syntax is not compatible with versions of TWiki:Extensions.WysiwygPlugin prior to 28 June 2009. It is recommended that you upgrade !WysiwygPlugin if you are running an older version. If that is not practical then raw editing is recommended, or use &lt;sticky&gt; tags to protect the dot tags. |
+
+---+++ Attachment Handling
+
+| %X% *By default, this version of the plugin uses the TWiki API to manipulate the attached graphs. The first user to view a topic containing a directed graph will be denied access if they do not have update permission. If defaults or =dot= parameters have changed, viewing the topic may modify attachments, which will require update permission.* |
+
+The files generated by the =&lt;dot&gt;= command are cached as attachments to the topic. Any change to the =&lt;dot&gt;= input will result in the attachments being updated.
+
+By default, each generated file is attached to the topic using the TWiki attachment API. This results in revision control of the attached files, and updates to the topic for each generated file. If TWiki is configured to increment a new revision for each update (See TWiki:TWiki.ForceNewRevision and config parameter =$TWiki::cfg{ReplaceIfEditedAgainWithin} = 0= ), then every updated attachment will result in a new topic revision due to the changed metadata.
+
+The alternative to this behavior is to use the expert parameter attachPath - set in bin/configure - to configure the plugin to do direct file I/O and bypass the attach API. Direct file I/O results in a considerable performance improvement. Initial rendering of this topic on a test system resulted in a reduction of time to generate the attachments and initially display from 60 seconds down to approximately 8 seconds.
+
+| %X% *Caution* The plugin will also update attached files during __Preview__. If the edit is subsequently cancelled, the attachments will be regenerated again. |
+
+A MD5 hash is calculated for each =dot= command input and the hash is saved in the TWiki work_area directory. The hash file is named with the Web name, the Topic name, and the suffix ==-filehash== If the calculated hash matches on subsequent page visits, the attached graphics files are used without rerunning Graphviz. If the hash doesn't match, the attachments are regenerated.
+
+Default behavior is to leave any previously generated attachments even if the =&lt;dot&gt;= tags are removed from the file. If the configuration setting DELETEATTACHMENTS is enabled, then the plugin will remove any old attachments that are not needed. However if the final =&lt;dot&gt;= tag is removed, the plugin is not invoked, and the attachments will not be deleted.
+
+| %X% *Caution!* If a topic has not previously been processed by this version of the plugin, attachments named using the original "Graph[32 character hex checksum].jpg will *all* be deleted from the topic when this parameter is enabled! Once the new ==-filehash== file has been created, old style attachments will not be deleted. If you want to go back and clean up the old atachment filenames, you can remove the =Web_Topic-filehash= file from the workare directory. |
+
+If a topic is renamed, the ==-filehash== file in the workarea directory will be renamed as well and regeneration of attachment files will be avoided.
+
+Also note that after changes that modify the order of generated image names, it may be necessary to refresh the browser cache with shift-reload.
+
+---+++ Inline Graphics
+
+The plugin will embed the generated image inline into the resulting HTML page. The inline format defaults to =PNG=. =JPG= and =SVG= formats are also supported.
+   * A client side image map can be generated and used for active links within =JPG= and =PNG= images. =SVG= graphics support links natively and do not require Image Maps, however a map can be generated for fallback images used by older browsers.
+   * =JPG= and =PNG= images can be created using antialiased text. See more details below. Antialiased text is not applicable to =SVG= graphics.
+   * =SVG= images are inserted inline using the &lt;object&gt; tag. 
+      * Antialias is disabled when =SVG= images are requested
+      * A =PNG= image will be automatically generated and inserted as a fallback image to support older browsers without =SVG= support.
+      * Links within the =SVG= file will be altered to include a =target="_top"= parameter to get consistent link behaviour across browsers.
+
+---+++ The !GraphViz Engine
+
 <nop>DirectedGraphPlugin supports the following engines:
 
-   * =dot= - makes "hierarchical" or layered drawings of directed graphs. The layout algorithm aims edges in the same direction (top to bottom, or left to right) and then attempts to avoid edge crossings and reduce edge length.  This is the default engine.
+   * =dot= - makes "hierarchical" or layered drawings of directed graphs. The layout algorithm aims edges in the same direction (top to bottom, or left to right) and then attempts to avoid edge crossings and reduce edge length. This is the default engine.
    * =neato= and =fdp= - make "spring model" layouts. neato uses the Kamada-Kawai algorithm, which is equivalent to statistical multi-dimensional scaling. fdp implements the Fruchterman-Reingold heuristic including a multigrid solver that handles larger graphs and clustered undirected graphs.
    * =twopi= - radial layout, after Graham Wills 97.
    * =circo= - circular layout, after Six and Tollis 99, Kauffman and Wiese 02. Suitable for certain diagrams of multiple cyclic structures.
+The markup is always entered between &lt;dot&gt; tags regardless of the chosen engine.
 
 ---++ Syntax Rules
 
@@ -47,21 +77,19 @@ You can use the following parameters in the =dot= tag to control the rendering o
 
 | *Parameter:* | *Description:* | *Default:* |
 | =map="on"= | Create a client side map for the generated image. This will turn any =[URL="..."];= attribute in the graph description into a clickable area (see demonstration below). | =off= |
-| =vectorformats="ps svg"= | The PNG file created from the graph per default is a bitmap file. If you need a vector based file rendering or other bitmap types as well, you can specify =ps=, =svg= and =jpg= formats (will be attached to topic, visible under attachments view). Any format supported by !GraphViz is supported by this plugin. It is mapped to the =-T= parameter. | none |
+| =vectorformats="ps svg"= | The PNG file created from the graph per default is a bitmap file. If you need a vector based file rendering or other bitmap types, add them to this list, separated by a space. (If the TWiki attach API is used, they will be attached to topic, visible under attachments view). Any format supported by !GraphViz is supported by this plugin and is mapped to the =-T= parameter.  Examples include jpg, ps, gif, etc.  The type =dot= will attach the parsed input to the topic. | none |
 | =engine="neato"= | Which layout engine to use for the graph: One of =dot=, =neato=, =twopi=, =circo= or =fdp=. | =dot= |
-| =library="Main.GroupIcons"= | Which icon library topic to use for custom shapes ([shapefile] parameter). Needs to be explicitly set, also if icons are attached locally to the current graph topic. See demo below. | =TWiki.DirectedGraphPlugin= |
+| =library="Main.GroupIcons"= | Which icon library topic to use for custom shapes ([shapefile] parameter). Needs to be explicitly set, also if icons are attached locally to the current graph topic. See demo below. | (this topic) |
 | =file="file_prefix"= | Overrides the dynamically generated filenames. If specified, must be unique for each graph within a single topic! Suffix is still generated automatically based upon file type.  | =graph_nn= nn increments per graph |
 | =hideattachments="on"= | Set whether or not attachments should be hidden from the attachment table | =on= |
-| =inlineattachment="png"= | Specifies the type of file to be attached inline to the page.  Must be png or jpg. | =png= |
+| =inline="png"<br />inlineattach="png"= | Specifies the type of file to be attached inline to the page. Must be png or jpg or svg. | =png= |
 | =linkattachments="off"= | Add links for file types other than the inline type if present | =off= |
-| =dothash="on"= | Controls the hash calculation against the dot command input. If the dot hash is disabled, a previously created .png file will not be recreated unless the attachment is deleted, or the =dothash= parameter is enabled or removed. This can be used to create a portable topic and attachments that can be moved without regenerating all of the graphs. Used in the HowtoDirectedGraphs topic. | =on= |
-| =forceattachapi="off"= | Force standard TWiki attachment API processing.  Ignores setting of configure attachPath and attachUrlPath parameters.  Used to create portable topic across TWiki installations. | =off= |
+| =dothash="on"= | Controls the hash calculation against the =dot= command input. If the =dot= hash is disabled, a previously created .png file will not be recreated unless the attachment is deleted, or the =dothash= parameter is enabled or removed. This can be used to create a portable topic and attachments that can be moved without regenerating all of the graphs. Used in the HowtoDirectedGraphs topic. | =on= |
+| =forceattachapi="off"= | Force standard TWiki attachment API processing. Ignores setting of configure attachPath and attachUrlPath parameters. Used if revision control is desired for the attachments. | =off= |
 | *Postscript based Antialiasing (optional)* |||
-| =antialias="on"= | Enable antialiasing of current graph by setting this to =on=. Note that if Graphviz is installed with the cairo rendering engine, this option should not be needed. When enabled, a postscript image is created, and post-processed with the ImageMagick "convert" utility. | =off= |
-| =density="300"= | Passed to the imagemagick =convert= utility. Specifies the dots per inch used for image generation.  | =300= |
-| =size="2000x1600"= | Passed to the imagemagick =convert= as the ="-geometry"= parameter and controls size of rendered image (use =size= parameter in graph description for controlling the size of the image with antialiasing =off=). | =800x600= |
-
-Sitewide default settings are set in this topic and can be overwritten for each graph. When you change a setting the graph will be re-generated unless the =dothash= option is set to =off=.
+| =antialias="on"= | Enable antialiasing of current graph by setting this to =on=. Note that if Graphviz is installed with the cairo rendering engine, this option should not be needed. When enabled, a postscript image is created, and post-processed with the !ImageMagick "convert" utility. | =off= |
+| =density="300"= | Passed to the imagemagick =convert= utility. Specifies the dots per inch used for image generation. This should be significantly higher than the =dpi= used by !GraphViz | =300= |
+| =size="2000x1600"= | Passed to the imagemagick =convert= as the ="-geometry"= parameter and controls size of rendered image (use =size= parameter in graph description for controlling the size of the image with antialiasing =off=). If set to =size="auto"=, the size will be taken from a .png file generated by !GraphViz. | =auto= |
 
 ---++ Howto
 
@@ -93,10 +121,10 @@ digraph G {
 </dot> 
 </verbatim>
 <table><tr><td valign="top" width="50%">
-__You get: (simulated)__ <br />
+__You get: (simulated)__ %BR%
 <img src="%ATTACHURLPATH%/graphsample.png" alt="graphsample.png"  width="344" height="570"  />
 </td><td valign="top" width="50%">
-__You get: (if installed)__ <br />
+__You get: (if installed)__ %BR%
 <dot >
 digraph G {
     subgraph cluster_c0 {a0 -> a1 -> a2 -> a3}
@@ -114,17 +142,16 @@ digraph G {
     label="Cole's Example";
 }
 </dot> 
-</td></tr></table>
-</sticky>
+</td></tr></table></sticky>
 
----+++ Clientside imagemap (clickable nodes and edges)
+---+++ Client side imagemap (clickable nodes and edges)
 
 __You type:__
 <sticky>
 <verbatim>
-<dot map="1">
+<dot map="1" size="auto" antialias="on">
 digraph G {
-    URL="http://www.twiki.org";
+    URL="http://twiki.org";
     Plugins [URL="http://twiki.org/cgi-bin/view/Plugins/PluginPackage"];
     DirectedGraphPlugin [URL="http://twiki.org/cgi-bin/view/Plugins/DirectedGraphPlugin"];
     Plugins -> DirectedGraphPlugin;
@@ -132,15 +159,15 @@ digraph G {
 </dot>
 </verbatim>
 <table><tr><td valign="top" width="25%">
-__You get: (simulated)__ <br />
+__You get: (simulated)__ %BR%
 <map id="sample" name="sample">
-<area shape="rect" href="http://twiki.org/cgi&#45;bin/view/Plugins/PluginPackage" title="Plugins" alt="" coords="60,8,150,56" />
-<area shape="rect" href="http://twiki.org/cgi&#45;bin/view/Plugins/DirectedGraphPlugin" title="DirectedGraphPlugin" alt="" coords="8,104,202,152" />
+<area shape="rect" href="http://twiki.org/cgi-bin/view/Plugins/PluginPackage" title="Plugins" alt="" coords="60,8,150,56" />
+<area shape="rect" href="http://twiki.org/cgi-bin/view/Plugins/DirectedGraphPlugin" title="DirectedGraphPlugin" alt="" coords="8,104,202,152" />
 <area shape="rect" href="http://www.twiki.org" alt="" coords="8,8,202,152" />
 </map>
 <img usemap="#sample" src="%ATTACHURLPATH%/graphsample2.png"/>
 </td><td valign="top" width="25%">
-__You get: (if installed)__ <br />
+__You get: (if installed)__ %BR%
 <dot map="1">
 digraph G {
     URL="http://www.twiki.org";
@@ -151,12 +178,12 @@ digraph G {
 </dot>
 </td>
 <td valign="top" width="25%">
-__You get: (simulated, antialiasing on)__ <br />
+__You get: (simulated, antialiasing on)__ %BR%
 <img usemap="#sample" src="%ATTACHURLPATH%/graphsample2_antialiased.png" alt="graphsample2_antialiased.png" width='205' height='154' />
 </td>
 <td valign="top" width="25%">
-__You get: (if installed, antialiasing on)__ <br />
-<dot map="1" antialias="on" size="205x155">
+__You get: (if installed, antialiasing on)__ %BR%
+<dot map="1" antialias="on" size="auto">
 digraph G {
     URL="http://www.twiki.org";
     Plugins [URL="http://twiki.org/cgi-bin/view/Plugins/PluginPackage"];
@@ -165,23 +192,21 @@ digraph G {
 }
 </dot>
 </td>
-</tr></table>
-</sticky>
+</tr></table></sticky>
 
 ---+++ Usecase description / state diagram
 
-View source of this page to see graph description.
-
+To view the =dot= input for this example, click the =[dot]= link located below the diagram.
 <sticky>
 <table><tr><td valign="top" width="25%">
-__You get: (simulated)__ <br />
+__You get: (simulated)__ %BR%
 <img src="%ATTACHURLPATH%/usecase_sample.png" alt="usecase_sample.png" width='534' height='1000' />
 </td>
 <td valign="top" width="25%">
-__You get: (if installed)__ <br />
-<dot antialias="on" size="1000x1000">
+__You get: (if installed)__ %BR%
+<dot antialias="on" size="auto" vectorformats="dot">
 digraph G {
- size="7,7";
+ size="9";
  graph [rankdir="TB" label="1st Time Use/Phone Registration" fontsize=12 bgcolor="#eeeeff"];
    node [shape=box fontsize=9];
    edge [color=blue fontsize=8 font="Arial"];
@@ -228,23 +253,21 @@ digraph G {
 }
 </dot>
 </td>
-</tr></table>
-</sticky>
+</tr></table></sticky>
 
----+++ Component architecture
+---+++ Component architecture (inline SVG)
 
-This is a typical example of a component architecture drawing (This kind of graph is also easy to do in TWiki:Plugins.TWikiDrawPlugin if you like the look but you prefer to draw it manually using your mouse).
+This is a typical example of a component architecture drawing (This kind of graph is also easy to do in TWiki:Extensions.JHotDrawPlugin if you like the look but you prefer to draw it manually using your mouse).
 
-View source of this page for graph description.
-
+Click the =[dot]= link located below the diagram to view the input. Note that this example is an inline =SVG= with fallback to =PNG=
 <sticky>
 <table><tr><td valign="top" width="25%">
-__You get: (simulated)__ <br />
+__You get: (simulated)__ %BR%
 <img src="%ATTACHURLPATH%/sample_component_architecture.png" alt="sample_component_architecture.png" width='918' height='251' />
 </td></tr>
 <tr><td valign="top" width="25%">
-__You get: (if installed)__ <br />
-<dot antialias="on" size="918x251" map="on">
+__You get: (if installed)__ %BR%
+<dot inline="svg" map="1" vectorformats="dot">
 digraph G {
   graph [rankdir=LR, size="9.5,2.5"]
   subgraph cluster_0 {
@@ -259,9 +282,9 @@ digraph G {
     pdfplugin -> browser [dir=back]
     {
       graph [rank=same]
-      pngpage [label=PNG shape=box URL="/cgi-bin/webdot/webdot/demo.dot.dot.png"]
-      svgpage [label=SVGZ shape=box URL="/cgi-bin/webdot/webdot/demo.dot.dot.svgz"]
-      pdfpage [label=PDF shape=box URL="/cgi-bin/webdot/webdot/demo.dot.dot.pdf"]
+      pngpage [label=PNG shape=box URL="/webdot/webdot/demo.dot.dot.png"]
+      svgpage [label=SVGZ shape=box URL="/webdot/webdot/demo.dot.dot.svgz"]
+      pdfpage [label=PDF shape=box URL="/webdot/webdot/demo.dot.dot.pdf"]
     }
     pngpage -> browser [dir=none style=dotted]
     svgpage -> svgplugin [dir=none style=dotted]
@@ -283,23 +306,21 @@ digraph G {
 }
 </dot>
 </td>
-</tr></table>
-</sticky>
+</tr></table></sticky>
 
 ---+++ Simple LAN setup (custom icons / shapefiles)
 
 This type of graph can also easily be extended, for instance making network nodes clickable, pointing to asset databases or similar.
 
-View source of this page for graph description.
-
+Click the =[dot]= link below the diagram to view the input.
 <sticky>
 <table><tr><td valign="top" width="25%">
-__You get: (simulated)__ <br />
+__You get: (simulated)__ %BR%
 <img src="%ATTACHURLPATH%/sample_simple_lan_setup.png" alt="sample_simple_lan_setup.png" width='206' height='300' />
 </td>
 <td valign="top" width="25%">
-__You get: (if installed)__ <br />
-<dot engine="dot"  size="300x300" library="TWiki.DirectedGraphPlugin">
+__You get: (if installed)__ %BR%
+<dot engine="dot"  library="%SYSTEMWEB%.DirectedGraphPlugin" vectorformats="dot">
 digraph G { size="2,3!"; dpi="100";
     edge [arrowhead=none color=blue];
     node [fontcolor=blue color=white];
@@ -320,8 +341,8 @@ digraph G { size="2,3!"; dpi="100";
 </dot>
 </td>
 <td valign="top" width="25%">
-__You get: (if installed, antialiased)__ <br />
-<dot engine="dot"  antialias="1" size="300x300" density="100" library="TWiki.DirectedGraphPlugin">
+__You get: (if installed, antialiased)__ %BR%
+<dot engine="dot"  antialias="1" size="auto" library="%SYSTEMWEB%.DirectedGraphPlugin" vectorformats="dot">
 digraph G { size="2,3!"; dpi="100";
     edge [arrowhead=none color=blue];
     node [fontcolor=blue color=white];
@@ -341,134 +362,237 @@ digraph G { size="2,3!"; dpi="100";
 }
 </dot>
 </td>
-</tr></table>
-</sticky>
+</tr></table></sticky>
 
----++ <nop>%TOPIC% Global Settings
+---++ Plugin Configuration
 
-Changes to the settings marked %X% will cause changes to the file hash.  This will result in the attached graphcs being regenerated on the next view.
+---+++ <nop>%TOPIC% Global Preference Settings
 
-   * One line description, shown in the %TWIKIWEB%.TextFormattingRules topic: 
-      * Set SHORTDESCRIPTION = Embed directed graphs in TWiki topics (using the Graphviz package)
+%X% *Note: This version of the plugin no longer reads setting from this topic*. Copy the below settings to your %USERSWEB%.TWikiPreferences topic and remove the # if changes are required. These settings can be placed in %USERSWEB%.TWikiPreferences, WebPreferences, User topics, or any individual topic.
 
-   * %X% Layout engine to use per default. Can be one of =dot=, =neato=, =twopi=, =circo=, =fdp= 
-      * Set ENGINE = dot
+---++++ Sample settings
 
-   * %X% Antialias option. If set to =on= the plugin will use the =convert= binary from the imagemagick package to pretty print graphs. This option should not be used with clientside maps as pixel dimensions are usually altered in this process and therefore the "hot spot" locations will not match the generated image. With antialiasing off, rendering size is controlled by =dot= (can be effected by an eventual size parameter in the digraph description), with antialiasing on you set the final image size in pixels explicitly with the size parameter. (If you must use an image map with this option, take care manually that the two generated pixel sizes match). 
-      * Set ANTIALIAS = off
+<verbatim>
+   * #Set DIRECTEDGRAPHPLUGIN_ENGINE = dot
+   * #Set DIRECTEDGRAPHPLUGIN_ANTIALIAS = off
+   * #Set DIRECTEDGRAPHPLUGIN_DENSITY = 300
+   * #Set DIRECTEDGRAPHPLUGIN_HIDEATTACHMENTS = on
+   * #Set DIRECTEDGRAPHPLUGIN_INLINEATTACHMENT = png
+   * #Set DIRECTEDGRAPHPLUGIN_SVGFALLBACK= png
+   * #Set DIRECTEDGRAPHPLUGIN_SVGLINKTARGET = on
+   * #Set DIRECTEDGRAPHPLUGIN_LINKATTACHMENTS = on
+   * #Set DIRECTEDGRAPHPLUGIN_DELETEATTACHMENTS = off
+   * #Set DIRECTEDGRAPHPLUGIN_LEGACYCLEANUP = off
+   * #Set DIRECTEDGRAPHPLUGIN_FORCEATTACHAPI = off
+   * #Set DIRECTEDGRAPHPLUGIN_SIZE = 800x600
+   * #Set DIRECTEDGRAPHPLUGIN_VECTORFORMATS = none
+   * #Set DIRECTEDGRAPHPLUGIN_LIBRARY = %SYSTEMWEB%.DirectedGraphPlugin
+   * #Set DIRECTEDGRAPHPLUGIN_DEBUG = 0
+</verbatim>
 
-   * %X% Default density (dpi) for antialias option. 300 dpi should be sufficient for most purposes (if your graphs look blurred at large image sizes try using a higher value). 
-      * Set DENSITY = 300
+---++++ Description of the settings
 
-   * %X% Set whether or not attached files should be automatically hidden in the attachments table. 
-      * Set HIDEATTACHMENTS = on
+Changes to the settings marked %X% will cause changes to the file hash. This will result in the attached graphcs being regenerated on the next view
 
-   * %X% Set the format for inline attachment files. 
-      * Set INLINEATTACHMENT = png
+*All settings are prefixed with =DIRECTEDGRAPHPLUGIN_= as shown above*  _The prefix is ommited from this table to improve layout_
 
-   * Include links for other attachment types if specified. 
-      * Set LINKATTACHMENTS = on
+| *Setting* | *Description* | *dot override* | *Default* |
+| ENGINE | %X% Layout engine to use per default. Can be one of =dot=, =neato=, =twopi=, =circo= or =fdp= | engine="dot" | =dot= |
+| ANTIALIAS | %X% Antialias option. If set to =on= the plugin will use the =convert= binary from the imagemagick package to pretty print graphs. This option should not be used with clientside maps as pixel dimensions are usually altered in this process and therefore the "hot spot" locations will not match the generated image. With antialiasing off, rendering size is controlled by =dot= (can be effected by an eventual size parameter in the digraph description), with antialiasing on you set the final image size in pixels explicitly with the size parameter. (If you must use an image map with this option, take care manually that the two generated pixel sizes match). | antialias="off" | =off= |
+| DENSITY | %X% Default density (dpi) for antialias option. 300 dpi should be sufficient for most purposes (if your graphs look blurred at large image sizes try using a higher value). | density="300" | =300= |
+| HIDEATTACHMENTS | %X% Set whether or not attached files should be automatically hidden in the attachments table. (n/a for direct file I/O) | hideattachments="on" | =on= |
+| INLINEATTACHMENT | %X% Set the format for inline attachment files. png, jpg or svg | inline="png" | =png= |
+| SVGFALLBACK | Set a fallback image type for older browsers when SVG inline is set. Set to =png= or =jpg= | svgfallback="png" | =png= |
+| SVGLINKTARGET | Modify the generated SVG with a =target="_top"= attribute. This makes link behaviour compatible between IE and Firefox | svglinktarget="on" | =on= |
+| LINKATTACHMENTS | Include links for other attachment types if specified. Generates links in the format of =[ps]=, =[pdf]= following the inline image. | linkattachments="on" | =on= |
+| DELETEATTACHMENTS | If enabled, the plugin will delete any remaining attachments when a =&lt;dot&gt;= is removed or modified. | [n/a] | =off= |
+| LEGACYCLEANUP | If enabled, the plugin will attempt to convert older TWiki style attachments and hash entries into the new TWiki format. Only enable if migrating topics and the working directory from a TWiki installation. | [n/a] | =off= |
+| FORCEATTACHAPI | If enabled, the plugin will ignore the "configure" settings of =attachPath= and =attachUrlPath=. Forcing use of the attachment API can be used to create topics that are portable across TWiki installations. (for example, the HowtoDirectedGraphs topic) It can be also used to get standard attachment revision history handling on the generated attachments. This parameter is ignored and the TWiki attachment API always used if the configure settings =attachPath= and =attachUrlPath= are not supplied. | forceattachapi="off" | =off= |
+| SIZE | %X% Default image size (pixels, =widthxheight=) for antialias option (keeps aspect ratio; enlarges until max of one of the dimensions is reached). | size="800x600" | =800x600= |
+| VECTORFORMATS | %X% Additional output formats to create per default. Displayed version defaults to PNG, others are attached. Options are =ps= and =svg= (space separated). Any output format supported by !GraphViz can be specified. The =ps= format is useful to have handy if you are later converting your document to <nop>LaTeX or other typesetting / publication utility. The =svg= format has inline clickable map if used. | vectorformats="png,jpg" | =none= |
+| LIBRARY | %X% Default topic to read library icons (shapefiles) from | library="Web.Topic" | (this topic) |
+| DEBUG | Debug plugin: (See output in =data/debug.txt=) | [n/a] | =0= |
 
-   * If enabled, the plugin will delete any remaining attachments when  a =&lt;dot&gt;= is removed or modified.
-      * Set DELETEATTACHMENTS = off
+---+++ TWiki bin/configure settings
 
-   * If enabled, the plugin will ignore the "configure" settings of =attachPath= and =attachUrlPath=.  Forcing use of the attachment API can be used to create topics that are portable across TWiki installations.  (for example, the HowtoDirectedGraphs topic)  It can be also used to get standard attachment revision history handling on the generated attachments. [This parameter is ignored and the TWiki attachment API always used if the configure settings =attachPath= and =attachUrlPath= are not supplied.
-      * Set FORCEATTACHAPI = off
+All settings start with =$TWiki::cfg{Plugins}{DirectedGraphPlugin}=, and on many systems, these are optional.
 
-   * %X% Default image size (pixels, =widthxheight=) for antialias option (keeps aspect ratio; enlarges until max of one of the dimensions is reached). 
-      * Set SIZE = 800x600
+---++++ Standard Settings
 
-   * %X% Additional vector formats to create per default. Displayed version defaults to PNG, others are attached. Options are =ps= and =svg= (space separated). Any output format supported by !GraphViz can be specified. The =ps= format is useful to have handy if you are later converting your document to <nop>LaTeX or other typesetting / publication utility. The =svg= format has inline clickable map if used. 
-      * Set VECTORFORMATS = none
+| ={{Enabled}= | Set to 1 to enable the plugin |
+| ={enginePath}= | Path to the !GraphViz executable. On many systems this is not required if the !GraphViz executables are on the default path |
+| ={magickPath}= | Path to the !ImageMagick convert utility. Again optional if the imagemagick utilities ( =convert= ) can be found on the default path |
+| ={toolsPath}= | Path to the TWiki tools directory. The DirectedGraphPlugin.pl helper script is found in this directory. Typically found in the web server root along with bin, data, pub, etc. If not provided the plugin will guess based upon the current working directory |
+| ={perlCmd}= | Perl command used on this system. On many systems this can just be the "perl" command, and the default will be acceptable if =perl= is found on the default path. |
 
-   * %X% Default topic to read library icons (shapefiles) from 
-      * Set LIBRARY = TWiki.DirectedGraphPlugin
+---++++ Expert settings
 
-   * Debug plugin: (See output in =data/debug.txt=) 
-      * Set DEBUG = 0
+| ={Module}= | Required. Set to ='TWiki::Plugins::DirectedGraphPlugin'= Do not change |
+| ={generateRevAttachments}= | Flag specifying if the plugin should generate graphs when viewing previous topic revisions. If the plugin generates attachments when viewing old revisions, this can result in out of date attachments, and significant overhead regenerating the attachments. Enable this flag to restore previous behavior of the plugin Note that by default, old revisions of attachments can be viewed using the attach dialog. |
+| ={generateDiffAttachments}= | Flag specifying if the plugin should generate graphs when comparing two topic revisions. If the plugin generates attachments during compare operations, this can result in out of date attachments, and significant overhead regenerating the attachments. Enable this setting to restore the prior behavior of the plugin. |
+| ={attachPath}= | Path for plugin to store generated attachments. (Optional). If not provided, plugin will manage attachments using the standard TWiki attachment functions. If not provided, first visit to %SYSTEMWEB%.DirectedGraphPlugin will require admin / sudo login so that the plugin can save the example attachments. If set to the full path to the pub directory, generated attachments will be stored along with regular attachments but will be invisible to TWiki topics. This directory must be web readable. If not set to the "General Path Settings" {PubDir} path web server changes will be required to enable access. |
+| ={attachUrlPath}= | URL Path for generated attachments (Optional). Only required if attachPath is provided, and is not the same as the "General Path settings" {PubDir} path. If not provided, plugin will use the value of "General Path Settings" {PubUrlPath} for linking to attachments. If the attachPath is not provided, then this parameter will be ignored. |
 
 ---++ Plugin Installation Instructions
 
-__Note:__ The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
-   * Install the Graphviz package
-   * On Linux install cairo and the graphviz-cairo plugin if desired
-   * Install required web fonts
-   * Install the <nop>ImageMagick package
-   * Install the Perl module Digest::MD5
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory.
-   * Using the TWiki =configure= interface, set the paths to the graphviz =dot= and <nop>ImageMagick =convert= commands, along with perl, and the TWiki tools directory.
-   * [Optional] Set the attachPath and attachUrlPath.  These can be set to match the TWiki pubUrlPath and pubDir settings, or set to a web-readable directory outside of TWiki.  
-      * If not set, the standard TWiki "attach" API will be used by the plugin. View users will require "update" permission if the plugin needs to regenerate the attached files.
-      * If the attachPath is set, standard TWiki attachment handling will be bypassed and files will be written directly to this path.  Attachments will not be subject to revision controls.
-      * If the attachPath is _not_ the TWiki pub directory, then the attachUrlPath must be configured for the plugin to generate correct URLs.
-      * %X% The plugin does not attempt to manage attachments across changes between direct file I/O and the TWiki API.  Attachments can be orphaned when these parameters are changed.
+---+++ Before you upgrade!
 
-   * %X% For TWiki 4.0.1, the =configure= interface does not set plugin variables.  Manually insert the following lines into the lib/TWiki.cfg file 
-      * =$TWiki::cfg{DirectedGraphPlugin}{enginePath} = '/usr/bin/';=
-      * =$TWiki::cfg{DirectedGraphPlugin}{magickPath} = '/usr/bin/';=
-      * =$TWiki::cfg{DirectedGraphPlugin}{toolsPath} = '[complete path of twiki/tools/ directory]';=
-      * =$TWiki::cfg{DirectedGraphPlugin}{perlCmd} = '/usr/bin/perl';=
-      * =$TWiki::cfg{DirectedGraphPlugin}{attachPath} = '';=   [optional]
-      * =$TWiki::cfg{DirectedGraphPlugin}{attachUrlPath} = '';= [optional]
+   * This version of the plugin changes the default for the =size= parameter to =size="auto"=.  Image size for antialiasing will be detected from the !GraphViz  output.
+   * This version also now uses the !ImageMagick =identify= utility to extract the image size
+   * Significant changes in the previous release:
+      * The plugin will not longer generate graphs when it detects that a topic revision is being viewed, or a topic comparison is being performed. See the expert configuration parameters to restore the prior behavior.
+      * Support for inline SVG - Scalable Vector Graphics - has been added.
 
-   * Verify your installation
-      * Ensure that the =dot= command can manually generate a png file.  
-      * If using the antialias option, ensure that ImageMagic =convert= command can convert from a .ps to .png format.
+---+++ Installation
 
-   * Errors returned by the plugin:
+   1 <em>follow instructions for your distribution. </em>Install !GraphViz, Imagemagick, ghostscript. If available, install the msttcorefonts. Also install perl modules Digest::MD5, Storable, File::Copy, File::Path, File::Spec, and File::Temp using CPAN whatever is appropriate for your distribution.
+   1 Use the "Extensions" tab in bin/configure Click the "Find More Extensions" button, locate the DirectedGraphPlugin and click the "Install" button. 
+      * Alternative - manually install the plugin from the shell: 
+         a. Retrieve installer and the .tgz or .zip file, attached to [[http://twiki.org/cgi-bin/view/Plugins/DirectedGraphPlugin][TWiki.org]]
+         a. Put the installer and archive into your twiki root directory
+         a. Run the installer and follow the prompts perl !DirectedGraphPlugin_installer.pl
+   1 Using the TWiki configure interface, set the paths to the graphviz dot and !ImageMagick convert commands, along with perl, and the TWiki tools directory. __(If perl and the default tools are found on the default system path, configuration is not required)__
+   1 Enable the plugin in the configuration settings.
+   1 Optionally set the attachPath and attachUrlPath Expert settings. (Click the button to expose expert settings) These can be set to match the TWiki pubUrlPath and pubDir settings, or set to a web-readable directory outside of TWiki. This improves performance but loses revision tracking of generated files.
+
+---+++ Debian users
+
+   1 Install the prerequisites and plugin using apt-get 
+      * apt-get install graphviz
+      * apt-get install imagemagick
+      * apt-get install msttcorefonts
+      * apt-get install ghostscript-gpl
+   1 Proceed with step 2 above
+
+---+++ Reminders
+
+   * If not set, the standard TWiki "attach" API will be used by the plugin. View users will require "update" permission if the plugin needs to regenerate the attached files.
+   * If the attachPath is set, standard TWiki attachment handling will be bypassed and files will be written directly to this path. Attachments will not be subject to revision controls.
+   * If the attachPath is _not_ the TWiki pub directory, then the attachUrlPath must be configured for the plugin to generate correct URLs. The web server must be configured to permit access to this directory.
+   * %X% The plugin does not attempt to manage attachments across changes between direct file I/O and the TWiki API. Attachments can be orphaned when these parameters are changed.
+
+---+++ Verify your installation
+
+   * Ensure that the =dot= command can manually generate a png file. From a command prompt, enter =dot -v= Then ^c and examine the output. You should see =png= as a listed device, and can confirm that textlayout uses =cairo=.
+   * If using the antialias option, ensure that ImageMagic =convert= command can convert from a .ps to .png format.
+
+---+++ Errors returned by the plugin
+
 | *Error* | *Description* |
 | ==DirectedGraph Error (1):== on all examples. | Verify the value of =perlCmd= in lib/LocalSite.cfg |
 | ==DirectedGraph Error (2):== on all examples | Verify the value of =toolsPath= in lib/LocalSite.cfg |
-| ==DirectedGraph Error (9): <br /> The system cannot find the path specified.== on all examples | Verify the value of =enginePath= in lib/LocalSite.cfg | 
-| ==DirectedGraph Error (9): <br /> !DirectedGraphPlugin error:Format: "png" not recognized.==  Format might be any of =png=, =ps=, or =cmapx= | !GraphViz was not configured or built correctly.  Try running ==dot -c -vV== to reconfigure and show the file formats supported by the installation |
-| ==DirectedGraph Error (1):==  on the antialias examples | Verify the =magickPath= in lib/LocalSite.cfg |
-| ==DirectedGraph Error (1):==  on the antialias examples | Verify that !GhostScript is installed correctly.  From a command prompt attempt to convert a .ps file to .gif format.   If !ImageMagick reports =="Postscript delegate failed:"== error, then the problem is probably with !GhostScript |
+| ==DirectedGraph Error (9): <br /> The system cannot find the path specified.== on all examples | Verify the value of =enginePath= in lib/LocalSite.cfg |
+| ==DirectedGraph Error (25):== | Verify the =enginePath= in lib/LocalSite.cfg - dot utility was not found|
+| ==DirectedGraph Error (9): <br /> !DirectedGraphPlugin error:Format: "png" not recognized.== Format might be any of =png=, =ps=, or =cmapx= | !GraphViz was not configured or built correctly. Try running ==dot -c -vV== to reconfigure and show the file formats supported by the installation |
+| ==DirectedGraph Error (1):== on the antialias examples | Verify the =magickPath= in lib/LocalSite.cfg |
+| ==DirectedGraph Error (20):== on the antialias examples | Verify the =magickPath= in lib/LocalSite.cfg - convert utility was not found|
+| ==DirectedGraph Error (1):== on the antialias examples | Verify that !GhostScript is installed correctly. From a command prompt attempt to convert a .ps file to .gif format. If !ImageMagick reports =="Postscript delegate failed:"== error, then the problem is probably with !GhostScript |
 
-Plugin zip content:
+---+++ Plugin zip content
+
 | *File:* | *Description:* |
-| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-| ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-| ==lib/TWiki/Plugins/%TOPIC%/Config.spec== | Template file for configure interface |
-| ==tools/%TOPIC%.pl== | Helper application |
-| ==pub/TWiki/%TOPIC%/graphsample.png== | sample image |
-| ==pub/TWiki/%TOPIC%/graphsample2.png== | sample image |
+   | ==data/TWiki/DirectedGraphPlugin.txt== | Plugin topic |
+   | ==data/TWiki/HowtoDirectedGraphs.txt== | Basic Howto topic |
+   | ==lib/TWiki/Plugins/DirectedGraphPlugin.pm== | Plugin module |
+   | ==lib/TWiki/Plugins/DirectedGraphPlugin/Config.spec== | Config template |
+   | ==tools/DirectedGraphPlugin.pl== | Helper script used to execute graphviz commands |
+   | ==pub/TWiki/DirectedGraphPlugin/Cloud-Filled.jpg== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/Cloud-Filled.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/Laptop.jpg== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/Laptop.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/Printer.jpg== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/Printer.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/Sun_Workstation.jpg== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/Sun_Workstation.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/Wireless_Router.jpg== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/Wireless_Router.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/Workgroup_Switch.jpg== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/Workgroup_Switch.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/graphsample.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/graphsample2.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/graphsample2_antialiased.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/sample_component_architecture.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/sample_simple_lan_setup.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/DirectedGraphPlugin/usecase_sample.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/add_subgraphs.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/added_attributes.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/arrow_dot.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/arrow_inv.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/arrow_invdot.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/arrow_invodot.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/arrow_none.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/arrow_normal.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/arrow_odot.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/example1.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/grouping_nodes.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/ladder_diagram.cmapx== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/ladder_diagram.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_Mcircle.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_Mdiamond.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_Msquare.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_box.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_circle.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_diamond.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_doublecircle.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_doubleoctagon.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_egg.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_ellipse.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_hexagon.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_house.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_invhouse.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_invtrapezium.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_invtriangle.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_octagon.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_parallelogram.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_plaintext.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_point.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_polygon.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_trapezium.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_triangle.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/shape_tripleoctagon.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/simple_two_nodes.png== | Sample image used in examples (noci) |
+   | ==pub/TWiki/HowtoDirectedGraphs/with_labels.png== | Sample image used in examples (noci) |
 
-Dependencies:
-| *Package:* | *Description:* |
+---+++ Dependencies
+
+| *Package:* | *Description:* ||
 | Graphviz dot | Preprocessor for drawing directed graphs | http://graphviz.org/ |
-| cairo | cairo graphics processor for native !GraphViz antialiasing (optional) | |
+| cairo | cairo graphics processor for native !GraphViz antialiasing (optional) | http://www.cairographics.org/ |
 | graphviz-cairo plugin | cairo rendering plugin for !Graphviz (optional - not needed in latest versions of !GraphViz) | |
 | <nop>ImageMagick | Postprocessor for antialiasing rendered graphs (optional) | http://imagemagick.org/ |
 | <nop>GhostScript | Postprocessor required by !ImageMagick for antialiasing to convert from .ps back to .png | http://ghostscript.com/awki |
-| Digest::MD5, Storable, File::Copy, File::Path, File::Spec, File::Temp | Perl modules |
-| Web fonts | Fonts required for dot's png creations on non-Windows servers. |
+| Digest::MD5, Storable, File::Copy, File::Path, File::Spec, File::Temp | Perl modules | |
+| Web fonts | Fonts required for dot's png creations on non-Windows servers. | http://www.graphviz.org/pub/graphviz/webfonts-1.0-5.noarch.rpm |
 
-The webfonts package installs the Microsoft =andalemo=, =arial=, =comic=, =courier=, =georgia=, =impact=, =times=, =trebuc=, =veranda= and =webdings= Truetype fonts on non-Windows systems.   To install the web fonts, download this [[http://biostat.mc.vanderbilt.edu/twiki/pub/TWiki/DirectedGraphPlugin/webfonts-1.0-5.noarch.rpm][rpm]] and run the command *rpm --install webfonts-1.0-5.noarch.rpm*   See http://en.wikipedia.org/wiki/Core_fonts_for_the_Web for more information on the webfonts.
+The webfonts package installs the Microsoft =andalemo=, =arial=, =comic=, =courier=, =georgia=, =impact=, =times=, =trebuc=, =veranda= and =webdings= Truetype fonts on non-Windows systems. To install the web fonts, download this [[http://biostat.mc.vanderbilt.edu/twiki/pub/TWiki/DirectedGraphPlugin/webfonts-1.0-5.noarch.rpm][rpm]] and run the command *rpm --install webfonts-1.0-5.noarch.rpm* See http://en.wikipedia.org/wiki/Core_fonts_for_the_Web for more information on the webfonts.
 
 ---+++ Notes on antialiasing
 
-There are two ways to accomplish antialiased output. The older method, enabled by the ==antialias="on"== parameter::
-   * generate the graph output in postscript format (.ps)
-   * convert to png format using <nop>ImageMagick (convert) command
-   * <nop>ImageMagick uses <nop>GhostScript internally to from postscript.
+There are three ways to accomplish antialiased output. 
+   * Postscript based antialiasing,  enabled by the ==antialias="on"== parameter
+   * Native antialiasing performed by !GraphViz when the cairo rendering engine is installed.
+   * _Scalable Vector Graphics_ (.svg) output are antialiased by the browser, so no special processing is required._
 
-This method is not compatible with client side image maps unless the imagesize rendered by graphviz is the same as the final output from ImageMagick. For example, the following parameters will result in compatible maps.
+The plugin performs no special processing for the last two cases.
 
-   $ dot parameters passed to =convert=: antialias="1" size="300x300" density="100" library="TWiki.DirectedGraphPlugin" 
-      * Size the image size in dots, density is dots per inch.
-   $ graph parameters used by =dot=: digraph G { size="2,3!"; dpi="100"; 
-      * Size is the image size in inches, ! = scale to fill one dimension.
+If ==antialias="on"== is specified, the following method used:
+   1 !GraphViz generates the graph output in both postscript format (.ps) and in the inline format (.jpg or .png)
+      * _GraphViz_ uses the graph =size= parameter to set the image size in inches, and =dpi= to set expected displayed dots per inch (default 96)
+         * %T% Don't confuse the graph parameters with the plugin parameters
+         * Example: =digraph G { size="2,3!"; dpi="96";=
+   1 The plugin uses it's =size= and =density= parameters to control the conversion from postscript to the inline format
+      * Example:  =&lt;dot size="500x300" density="300"&gt;=
+      * If =size="auto"= is set, the !ImageMagick utility =identify= is used to extract the geometry of the inline format image.
+   1 Finally, the !ImageMagick =convert= utility converts the postscript (.ps) file to the inline format.  The =density= parameter is set higher than the =dpi= used by !GraphViz.  This causes the image to be internally rendered at a larger size, that is then reduced back to the original dimensions set by the =size= parameter.   When the image is reduced, the fonts are antialiased. 
+      * (<nop>ImageMagick =convert= uses <nop>GhostScript internally to from postscript)
 
-The other method is to directly render the graph with graphviz using the cairo backend, "which has antialiased, path-based graphics".
+Antialiasing is not applicable with inline =svg= graphics, but will be applied to the fallback image generated for older browsers.
 
 As documented on the [[http://www.graphviz.org/doc/FAQ.html#Q8][graphviz FAQ]] on the "Linux bleeding edge", install the cairo graphics backend library, along with the graphviz-cairo plugin. (It appears that the current graphviz includes cairo support without the plugin.)
 
 You can determine what rendering engine is used for any specified file type by running the =dot= command from the command shell. *If the rendering is done with cairo, you already have antialiased output and should not need to use the =antialias="on"= parameter.*
 
-<pre>
-dot -v -Tpng -V 
+<pre>dot -v -Tpng -V 
 Activated plugin library: libgvplugin_pango.so.5 
 Using textlayout: textlayout:cairo 
 Activated plugin library: libgvplugin_dot_layout.so.5 
@@ -483,16 +607,29 @@ Details on how to install cairo, graphviz and imagemagick are beyond the scope o
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/ColeBeck, TWiki:Main/GeorgeClark |
+|  Copyright: | &copy; 2004-2005 Cole Beck, cole.beck[at]vanderbilt.edu<br /> &copy; 2004-2010 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
-|  Change History: | <!-- versions below in reverse order --> |
-|  11 Oct 2008: | TWikibug:Item6058: Incompatibilities with Windows, improved some error messages. --TWiki:Main.GeorgeClark | 
-|  31 Aug 2008: | TWikibug:Item5954: DirectedGraphPlugin should permit direct file I/O --TWiki:Main.GeorgeClark | 
-|  26 Jul 2008: | TWikibug:Item5332 - Attachment handing needs improvements.  Remove old attachments, Add support for inline .jpg files, Use single workarea file per topic.<br />  TWikibug:Item5349 - DirectedGraphPlugin uses too many global variables  -- TWiki:Main.GeorgeClark |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  <span style="white-space:nowrap">28 Mar 2010 (1.8):</span> | Add support for Graphviz 2.26<br/> Add support for mod_perl2<br/> |
+|  8 Mar 2010 (1.7): | Resolve some taint issues.  Release as 1.7 |
+|  12 Feb 2010: | Insert image size in &lt;/img> and &lt;object tags |
+|  31 Jan 2010: | Clean up global variables; documentation updates; automate the size= parameter for antialiasing |
+|  8 Nov 2009: | Bypass plungin processing for diff operations and viewing of topic revisions.  |
+|  8 Nov 2009: | Add support for inline SVG objects. Fix issues with recursive rendering, CGI acceleration, diff and rev handling  |
+|  8 Nov 2009: | Fix imagemaps when attachpath is used |
+|  8 Nov 2009: | Add DEPENDENCIES on htmldoc and other external applications. |
+|  28 Jun 2009: | Notify !WysiwygPlugin about &lt;dot&gt; markup so that it is protected in WYSIWYG editors -- TWiki:Main.MichaelTempest |
+|  5 Apr 2009: | Improve defaults, configure settings now optional -- TWiki:Main.GeorgeClark |
+|  25 Mar 2009: | Configure script fails on perl 5.10; direct File I/O fails. -- TWiki:Main.GeorgeClark |
+|  8 Jan 2009: | Uninitialized variables reported in server Error log.-- TWiki:Main.GeorgeClark |
+|  11 Oct 2008: | TWikibug:Item6058: Incompatibilities with Windows, improved some error messages. -- TWiki:Main.GeorgeClark |
+|  31 Aug 2008: | TWikibug:Item5954: DirectedGraphPlugin should permit direct file I/O -- TWiki:Main.GeorgeClark |
+|  26 Jul 2008: | TWikibug:Item5332 - Attachment handing needs improvements. Remove old attachments, Add support for inline .jpg files, Use single workarea file per topic.<br /> TWikibug:Item5349 - DirectedGraphPlugin uses too many global variables -- TWiki:Main.GeorgeClark |
 |  10 Apr 2008: | TWikibug:Item5508 - Wiki Words in graph label text results in corrupted image maps. |
 |  03 Mar 2008: | TWikibug:Item5403 - Cannot create graphs in subwebs -- TWiki:Main.GeorgeClark |
-|  17 Jan 2008: | TWikibug:Item5264 - Leaving 0 byte temporary files behind. Also added "hideattachments" option. <br /> TWikibug:Item5259 - Strip whitespace from default settings.-- TWiki:Main.GeorgeClark |
-|  13 Jan 2008: | TWikibug:Item5212 Added named graphs, store hash tables in _work_area, Added dothash parameter, Moved all program paths to the configure interface. Manual edits are no longer required. All file manipulation now done using TWiki::Func. Use TWiki defined temporary directory. <br /> TWikibug:Item5231 - Correct sandbox issue on TWiki 4.2 -- TWiki:Main.GeorgeClark |
+|  17 Jan 2008: | TWikibug:Item5264 - Leaving 0 byte temporary files behind. Also added "hideattachments" option. <br /> TWikibug:Item5259 - Strip whitespace from default settings. -- TWiki:Main.GeorgeClark |
+|  13 Jan 2008: | TWikibug:Item5212 - Added named graphs, store hash tables in _work_area, Added dothash parameter, Moved all program paths to the configure interface. Manual edits are no longer required. All file manipulation now done using TWiki::Func. Use TWiki defined temporary directory. <br /> TWikibug:Item5231 - Correct sandbox issue on TWiki 4.2 -- TWiki:Main.GeorgeClark |
 |  02 Mar 2007: | Updated link generation (img src) to be compatible with <nop>I18N webs and topics -- TWiki:Main.SteffenPoulsen |
 |  27 Jul 2006: | Error messages from graphviz binary now reported to topic. Check for succesful graphviz binary execution corrected (patch by TWiki:Main.JChristophFuchs). -- TWiki:Main.SteffenPoulsen |
 |  12 Jun 2006: | Optional antialias parameter added (using <nop>ImageMagick). Support for custom icons (shapefiles) added. Support for five layout engines added. Support for attaching vectorbased renderings added. -- TWiki:Main.SteffenPoulsen |
@@ -509,27 +646,23 @@ Details on how to install cairo, graphviz and imagemagick are beyond the scope o
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main.ColeBeck - 01 Jul 2004
-
-
+__Related Topics:__ %SYSTEMWEB%.HowtoDirectedGraphs, %USERSWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 %META:FILEATTACHMENT{name="graphsample2.png" attr="h" autoattached="1" comment="Sample DOT graph" date="1172906345" path="graphsample2.png" size="1364" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="graphsample2_antialiased.png" attr="h" autoattached="1" comment="Antialiased sample" date="1172906345" path="graphsample2_antialiased.png" size="12577" user="Main.TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="graphsample2_antialiased.png" attr="h" autoattached="1" comment="Antialiased sample" date="1172906345" path="graphsample2_antialiased.png" size="12577" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="Cloud-Filled.png" attr="h" autoattached="1" comment="Cisco library icon for sample graph" date="1172906345" path="Cloud-Filled.png" size="8648" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="Workgroup_Switch.png" attr="h" autoattached="1" comment="Cisco library icon for sample graph" date="1172906345" path="Workgroup_Switch.png" size="6688" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="Laptop.png" attr="h" autoattached="1" comment="Cisco library icon for sample graph" date="1172906345" path="Laptop.png" size="7372" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="graphsample.png" attr="h" autoattached="1" comment="Sample DOT graph" date="1172906345" path="graphsample.png" size="5197" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="sample_component_architecture.png" attr="h" autoattached="1" comment="Sample DOT graph" date="1172906345" path="sample_component_architecture.png" size="51946" user="Main.TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="sample_component_architecture.png" attr="h" autoattached="1" comment="Sample DOT graph" date="1172906345" path="sample_component_architecture.png" size="51946" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="Sun_Workstation.png" attr="h" autoattached="1" comment="Cisco library icon for sample graph" date="1172906345" path="Sun_Workstation.png" size="6223" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="Printer.png" attr="h" autoattached="1" comment="Cisco library icon for sample graph" date="1172906345" path="Printer.png" size="7747" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="Wireless_Router.png" attr="h" autoattached="1" comment="Cisco library icon for sample graph" date="1172906345" path="Wireless_Router.png" size="7771" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="usecase_sample.png" attr="h" autoattached="1" comment="DOT usecase sample" date="1172906345" path="usecase_sample.png" size="109307" user="Main.TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="sample_simple_lan_setup.png" attr="h" autoattached="1" comment="Sample DOT graph" date="1172906345" path="sample_simple_lan_setup.png" size="28102" user="Main.TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="Cloud-Filled.jpg" attachment="Cloud-Filled.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223776982" path="Cloud-Filled.jpg" size="4986" stream="IO::File=GLOB(0x8bded24)" tmpFilename="/usr/tmp/CGItemp11791" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="Laptop.jpg" attachment="Laptop.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223777001" path="Laptop.jpg" size="4583" stream="IO::File=GLOB(0x8be0c84)" tmpFilename="/usr/tmp/CGItemp11788" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="Printer.jpg" attachment="Printer.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223777024" path="Printer.jpg" size="4349" stream="IO::File=GLOB(0x8be0ca4)" tmpFilename="/usr/tmp/CGItemp11908" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="Sun_Workstation.jpg" attachment="Sun_Workstation.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223777052" path="Sun_Workstation.jpg" size="4481" stream="IO::File=GLOB(0x8be103c)" tmpFilename="/usr/tmp/CGItemp11800" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="Wireless_Router.jpg" attachment="Wireless_Router.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223777069" path="Wireless_Router.jpg" size="5046" stream="IO::File=GLOB(0x8be1434)" tmpFilename="/usr/tmp/CGItemp11852" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="Workgroup_Switch.jpg" attachment="Workgroup_Switch.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223777089" path="Workgroup_Switch.jpg" size="4483" stream="IO::File=GLOB(0x8be155c)" tmpFilename="/usr/tmp/CGItemp11850" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="usecase_sample.png" attr="h" autoattached="1" comment="DOT usecase sample" date="1172906345" path="usecase_sample.png" size="109307" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="sample_simple_lan_setup.png" attr="h" autoattached="1" comment="Sample DOT graph" date="1172906345" path="sample_simple_lan_setup.png" size="28102" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Cloud-Filled.jpg" attachment="Cloud-Filled.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223776982" path="Cloud-Filled.jpg" size="4986" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Laptop.jpg" attachment="Laptop.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223777001" path="Laptop.jpg" size="4583" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Printer.jpg" attachment="Printer.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223777024" path="Printer.jpg" size="4349" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Sun_Workstation.jpg" attachment="Sun_Workstation.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223777052" path="Sun_Workstation.jpg" size="4481" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Wireless_Router.jpg" attachment="Wireless_Router.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223777069" path="Wireless_Router.jpg" size="5046" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Workgroup_Switch.jpg" attachment="Workgroup_Switch.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223777089" path="Workgroup_Switch.jpg" size="4483" user="TWikiContributor" version="1"}%
