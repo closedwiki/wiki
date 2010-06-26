@@ -521,8 +521,7 @@ sub doFunc
         my( $num1, $num2 ) = split( /,\s*/, $theAttr, 2 );
         $result = _workingDays( _getNumber( $num1 ), _getNumber( $num2 ) );
 
-    } elsif( $theFunc =~ /^(MULT|PRODUCT)$/ ) {   # MULT is deprecated, no not remove
-        $result = 0;
+    } elsif( $theFunc =~ /^(MULT|PRODUCT)$/ ) {   # MULT is deprecated (no not remove)
         my @arr = getListAsFloat( $theAttr );
         $result = 1;
         foreach $i ( @arr ) {
@@ -1100,7 +1099,7 @@ sub getListAsFloat
     my @list = getList( $theAttr );
     (my $baz = "foo") =~ s/foo//;  # reset search vars. defensive coding
     for my $i (0 .. $#list ) {
-        $val = $list[$i] || "";
+        $val = $list[$i];
         # search first float pattern, skip over HTML tags
         if( $val =~ /^\s*(?:<[^>]*>)*\$?([\-\+]*[0-9\.]+).*/o ) {
             $list[$i] = $1;  # untainted variable, possibly undef
@@ -1121,7 +1120,7 @@ sub getListAsDays
     my @arr = getList( $theAttr );
     (my $baz = "foo") =~ s/foo//;  # reset search vars. defensive coding
     for my $i (0 .. $#arr ) {
-        $val = $arr[$i] || "";
+        $val = $arr[$i];
         # search first float pattern
         if( $val =~ /^\s*([\-\+]*[0-9\.]+)\s*d/oi ) {
             $arr[$i] = $1;      # untainted variable, possibly undef

@@ -772,7 +772,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% (2010-06-25) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2010-06-25: | TWikibug:Item5163 - fix for plugin causing table to misrender an empty "&#124;&#124;" row |
+|  2010-06-25: | TWikibug:Item6493 - fix for $PRODUCT(0,4) returning 4 instead of 0<br /> TWikibug:Item5163 - fix for plugin causing table to misrender an empty "&#124;&#124;" row |
 |  2010-05-22: | TWikibug:Item6472 - adding support for DOY in $TIME(), contributed by TWiki:Main/EmanueleCupido |
 |  2010-05-15: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  2010-02-27: | Doc improvements |
