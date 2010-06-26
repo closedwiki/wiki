@@ -1,6 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004-2005 Cole Beck, cole.beck@vanderbilt.edu
+# Copyright (C) 2004-2010 TWikiContributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,8 +18,8 @@
 #
 # This plugin creates a png file by using the graphviz dot command.
 # See http://www.graphviz.org/ for more information.
-# Note that png files created with this plugin can only be deleted manually;
-# it stays there even after the dot tags are removed.
+# Note that png files created with this plugin can only be deleted
+# manually; It stays there even after the dot tags are removed.
 
 package TWiki::Plugins::DirectedGraphPlugin;
 
@@ -1195,7 +1196,7 @@ sub _deleteAttach {
                 &_writeDebug(' ### Creating missing TrashAttachment topic ');
                 my $text =
                   "---+ %MAKETEXT{\"Placeholder for trashed attachments\"}%\n";
-                TWiki::Func::saveTopic( "$Foswiki::cfg{TrashWebName}",
+                TWiki::Func::saveTopic( "$TWiki::cfg{TrashWebName}",
                     "TrashAttachment", undef, $text, undef );
             }    # if (! TWiki::Func::topicExists
 
