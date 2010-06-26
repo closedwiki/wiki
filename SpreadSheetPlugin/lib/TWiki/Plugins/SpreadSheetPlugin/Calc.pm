@@ -851,11 +851,12 @@ sub doFunc
         my( $sep, $str ) = _properSplit( $theAttr, 2 );
         $str = "" unless( defined( $str ) );
         $result = _listToDelimitedString( getList( $str ) );
-        $sep = ", " unless( $sep );
+        $sep = ", " if( !defined $sep || $sep eq '' );
         $sep =~ s/\$comma/,/go;
         $sep =~ s/\$sp/ /go;
+        $sep =~ s/\$nop//go;
         $sep =~ s/\$n/\n/go;
-        $result =~ s/, /$sep/go;
+        $result =~ s/, */$sep/go;
 
     } elsif( $theFunc eq "LISTSIZE" ) {
         my @arr = getList( $theAttr );
