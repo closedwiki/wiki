@@ -14,4 +14,4 @@ To link to a file attachment in another topic, use the =[[VarPUBURL][%<nop>PUBUR
 
 [[TWikiTipsOfTheDay][See More Tips...]]
 
--- __Contributor:__ TWiki:Main.PaulineCheung
+-- __Contributors:__ TWiki:Main.PaulineCheung

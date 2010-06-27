@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1107568818" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277623424" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiTipsOfTheDay"}%
 ---+ E-mail alert of topic changes
 
@@ -6,5 +6,4 @@ Subscribing to WebNotify will enable TWiki to send you details of changes made o
 
 [[TWikiTipsOfTheDay][See More Tips...]]
 
--- TWiki:Main.PaulineCheung - 19 Jan 2005
-
+-- __Contributors:__ TWiki:Main.PaulineCheung

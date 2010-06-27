@@ -8,4 +8,4 @@ To exclude a heading from a =%<nop>TOC%= add =!!= to the end of the syntax for a
 
 [[TWikiTipsOfTheDay][See More Tips...]]
 
--- __Contributor:__ TWiki:Main.PaulineCheung
+-- __Contributors:__ TWiki:Main.PaulineCheung

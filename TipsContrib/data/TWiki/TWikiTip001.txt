@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273873593" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277623479" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiTipsOfTheDay"}%
 ---+ The Jump Box as a browser
 
@@ -6,4 +6,4 @@ The JumpBox is not only a tool to allow you to jump from page to page, you can u
 
 [[TWikiTipsOfTheDay][See More Tips...]]
 
--- __Contributors:__ TWiki:Main/PaulineCheung - 2005-01-10
+-- __Contributors:__ TWiki:Main.PaulineCheung
