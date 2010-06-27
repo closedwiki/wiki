@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277616733" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277617167" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -709,13 +709,14 @@ To repeat the same formula in all cells of a table row define the formula once i
 | C | 3 | %CALC{%MYFORMULA%}% |
 </verbatim>
 
+#CalcInINCLUDE
 ---++ CALC in Included Topics
 
 By default, CALCs in an included topic are evaluated with delay. The SKIPINCLUDE setting tells the plugin to evaluate the CALCs once all INCLUDEs are processed. This default behavior is chosen so that it is possible to compose a bigger table from several includes and do some spreadsheet calculation over the whole table.
 
 __%X% Attention:__ You can get unexpected results if you [[%SYSTEMWEB%.VarINCLUDE][INCLUDE]] a topic that has other variables taking action on CALCs. For example, a CHART in an included topic sees unprocessed CALCs, which may result in a chart with incorrect values. To get he desired result you need to set the following preference setting in the topic that _includes_ the topic containing the CHART:
 
-   * Set SPREADSHEETPLUGIN_SKIPINCLUDE = 0
+   * Set <nop>SPREADSHEETPLUGIN_SKIPINCLUDE = 0
 
 This setting tells the !SpreadSheetPlugin to process the CALCs in the included page, e.g. it will not delay the evaluation of the formulae.
 
@@ -753,7 +754,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>S
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
 
-   * Do not handle =%<nop>CALC{}%= variable in included topic while including topic: (default: 1)
+   * Do not handle =%<nop>CALC{}%= variable in included topic while including topic: (default: 1) (See note [[#CalcInINCLUDE][CALC in Included Topics]])
       * Set SKIPINCLUDE = 1
 
 <noautolink>
