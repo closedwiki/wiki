@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277522912" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277616733" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -709,6 +709,16 @@ To repeat the same formula in all cells of a table row define the formula once i
 | C | 3 | %CALC{%MYFORMULA%}% |
 </verbatim>
 
+---++ CALC in Included Topics
+
+By default, CALCs in an included topic are evaluated with delay. The SKIPINCLUDE setting tells the plugin to evaluate the CALCs once all INCLUDEs are processed. This default behavior is chosen so that it is possible to compose a bigger table from several includes and do some spreadsheet calculation over the whole table.
+
+__%X% Attention:__ You can get unexpected results if you [[%SYSTEMWEB%.VarINCLUDE][INCLUDE]] a topic that has other variables taking action on CALCs. For example, a CHART in an included topic sees unprocessed CALCs, which may result in a chart with incorrect values. To get he desired result you need to set the following preference setting in the topic that _includes_ the topic containing the CHART:
+
+   * Set SPREADSHEETPLUGIN_SKIPINCLUDE = 0
+
+This setting tells the !SpreadSheetPlugin to process the CALCs in the included page, e.g. it will not delay the evaluation of the formulae.
+
 ---++ Bug Tracking Example
 
 | *Bug#:*  | *Priority:* | *Subject:* | *Status:* | *Days to fix* |
@@ -751,7 +761,6 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>S
       * Set DONTSPACE = CodeWarrior, MacDonald, McIntosh, RedHat, SuSE
 </noautolink>
 
-
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. Below installation instructions are for the administrator who needs to install this plugin on the TWiki server. 
@@ -770,8 +779,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | %$VERSION% (2010-06-26) |
+|  Plugin Version: | %$VERSION% (2010-06-27) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-05-27: | TWikibug:Item6506 - document delayed evaluation of CALC in included topics |
 |  2010-05-26: | TWikibug:Item6504 - add empty ($nop) separator to $LISTJOIN() |
 |  2010-06-25: | TWikibug:Item6493 - fix for $PRODUCT(0,4) returning 4 instead of 0<br /> TWikibug:Item5163 - fix for plugin causing table to misrender an empty "&#124;&#124;" row |
 |  2010-05-22: | TWikibug:Item6472 - adding support for DOY in $TIME(), contributed by TWiki:Main/EmanueleCupido |
