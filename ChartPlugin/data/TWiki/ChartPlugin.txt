@@ -183,16 +183,16 @@ Charts can be created dynamically based on TWiki tables with SEARCH and CALC.
 %TABLE{name="exampleTableWithCALC"}%
 |   | A | B | Total |
 | 1 | 7 | 9 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
-| 3 | 4 | 2 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
-| 2 | 6 | 6 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
+| 2 | 5 | 2 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
+| 3 | 5 | 7 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
 </verbatim>
 </td><td>&nbsp;</td><td valign="top">
 *Table:*
 %TABLE{name="exampleTableWithCALC"}%
 |   | A | B | Total |
 | 1 | 7 | 9 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
-| 3 | 4 | 2 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
-| 2 | 6 | 6 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
+| 2 | 5 | 2 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
+| 3 | 5 | 7 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
 </td><td>&nbsp;</td><td valign="top">
 *Resulting chart:* %BR%
 %CHART{ type="line" table="exampleTableWithCALC" name="line3" data="R2:C2..R4:C7" legend="R1:C2..R1:C7" xaxis="R2:C1..R4:C1" yaxis="on" datalabel="on" ymin="0" ymax="20" width="250" height="140" }%
