@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1120842601" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277620687" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+ TWiki User's Guide
 
@@ -29,6 +29,6 @@ _Documentation for TWiki users._
 
 
    * *Help on InstalledPlugins*
-<blockquote>
+<div style="margin-left:3em">
 %PLUGINDESCRIPTIONS%
-</blockquote>
+</div>
