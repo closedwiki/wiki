@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1267683174" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277693107" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiTipsOfTheDay"}%
 ---+ Comment box with !CommentPlugin 
 
-The CommentPlugin allows users to quickly post comments to a page without an edit/preview/save cycle. 
+The CommentPlugin allows users to quickly post comments to a page without an edit/save cycle. 
 
 Write =%<nop>COMMENT{ attributes }%= or simply =%<nop>COMMENT%= anywhere in a TWiki topic.
 
@@ -15,4 +15,4 @@ Example:
 
 [[TWikiTipsOfTheDay][See More Tips...]]
 
--- __Contributors:__ TWiki:Main/PaulineCheung - 2005-01-29
+-- __Contributors:__ TWiki:Main.PaulineCheung
