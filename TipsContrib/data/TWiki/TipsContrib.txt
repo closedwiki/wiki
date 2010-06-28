@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273973851" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277705156" format="1.1" version="$Rev$"}%
 ---+!! Tips Contrib Package
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -7,7 +7,7 @@
    If you are a TWiki contributor please update the contrib in the SVN repository.
 -->
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
-%TOC%
+%TOC{title="Page contents"}%
 </div>
 Displays a rotating "TWiki Tip of the Day" to help familiarize new users with TWiki features. Includes an application for creating custom tips for local installation.
 
@@ -47,12 +47,13 @@ __Note:__ You do not need to install anything on the browser to use this contrib
 
 ---++ Contrib Info
 
-|  Author: | TWiki:Main/PeterThoeny, TWiki:Main/PaulineCheung |
-|  Copyright: | &copy; 2005-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]%BR% &copy; 2005-2010 TWiki:TWiki/TWikiContributor |
+|  Author: | TWiki:Main.PeterThoeny, TWiki:Main.PaulineCheung |
+|  Copyright: | &copy; 2005-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]%BR% &copy; 2005-2010 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Dependencies: | TWiki:Plugins/SpreadSheetPlugin |
-|  Version: | 2010-05-15 |
+|  Dependencies: | TWiki:Plugins.SpreadSheetPlugin |
+|  Version: | 2010-06-27 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-06-27: | TWikibug:Item6479 - more doc improvements |
 |  2010-05-15: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  2007-01-04: | Performance improvement |
 |  10 Oct 2005: | Initial version - Packaging by TWiki:Main.LynnwoodBrown |

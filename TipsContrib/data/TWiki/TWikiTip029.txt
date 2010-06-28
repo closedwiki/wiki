@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273973125" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277704923" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiTipsOfTheDay"}%
 ---+ <nop>RSS news feed of topic changes
 
@@ -18,4 +18,4 @@ __See also:__
 
 [[TWikiTipsOfTheDay][See More Tips...]]
 
--- __Contributor:__ TWiki:Main.PeterThoeny - 2005-05-15
+-- __Contributors:__ TWiki:Main.PeterThoeny
