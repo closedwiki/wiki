@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1107571231" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277689756" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiTipsOfTheDay"}%
 ---+ Commenting with hidden text
 
-To hide sections of a TWiki topic, use HTML comments. 
+To hide some text within a TWiki topic, use HTML comments. 
 
 Example comment within a sentence:
 
@@ -11,13 +11,11 @@ Example comment within a sentence:
 Example spanning multiple lines:
 <verbatim>
 <!--
-	* Useful to hide settings:
-		* Set EXAMPLE = This is hidden
+   * Useful to hide settings:
+      * Set EXAMPLE = This is hidden
 -->
 </verbatim>
 
-
 [[TWikiTipsOfTheDay][See More Tips...]]
 
--- TWiki:Main.PaulineCheung - 29 Jan 2005
-
+-- __Contributors:__ TWiki:Main.PaulineCheung
