@@ -293,7 +293,7 @@ sub getAttachmentLink {
 
         if( $nx > 0 && $ny > 0 ) {
             push( @attrs, width=>$nx, height=>$ny );
-            $imgSize = "width='$nx' height='$ny'";
+            $imgSize = "width=\"$nx\" height=\"$ny\"";
         }
 
         $fileLink = $prefs->getPreferencesValue( 'ATTACHEDIMAGEFORMAT' );
@@ -318,8 +318,8 @@ sub getAttachmentLink {
     # Expand \t and \n early (only in the format, not in the comment) - Bugs:Item4581
     $fileLink =~ s/\\t/\t/go;
     $fileLink =~ s/\\n/\n/go;
-    $fileLink =~ s/\$comment/$fileComment/g;
     $fileLink =~ s/\$size/$imgSize/g;
+    $fileLink =~ s/\$comment/$fileComment/g;
     $fileLink =~ s/([^\n])$/$1\n/;
 
     return $fileLink;
