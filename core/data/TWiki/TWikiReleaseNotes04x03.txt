@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1276664289" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277915590" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-4.3.2 (Georgetown), 2009-09-02
 
 __Note:__ _This is the release note for the previous major release version 4.3.X. This note, TWikiReleaseNotes04x00, TWikiReleaseNotes04x01 and TWikiReleaseNotes04x02 are included with 5.0.X because they contain valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes05x00 for the 5.0.X release notes._
@@ -198,4 +198,4 @@ TODO
 <!-- Note: Do not use TWikibug: interwiki links because interwiki rule might not be defined
    * Set BUGS = http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs
 -->
-__Related Topic:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide
+__Related Topics:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide, %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%

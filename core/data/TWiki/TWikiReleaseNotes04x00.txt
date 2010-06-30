@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273969316" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277915589" format="1.1" version="$Rev$"}%
 ---+!! TWiki Release 4.0 (Dakar)
 
 __Note:__ This is the release note for the previous major release version 4.0.X. It is included with 4.1.X because it contains valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes04x01 for the 4.1.X release notes.
@@ -853,3 +853,5 @@ The following fixes have been addressed in this release:
 No enhancements
 
 The 4.0.5 release was built from SVN http://svn.twiki.org/svn/twiki/tags/TWikiRelease04x00x05 revision *11821*...
+
+__Related Topics:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide, %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%

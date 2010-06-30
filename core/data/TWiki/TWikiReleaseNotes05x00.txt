@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1276664353" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277915590" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.0.0 (Helsinki), 2010-05-29
 
 %TOC%
@@ -150,4 +150,4 @@ Total: 33
 </noautolink>
 Total: 38
 
-__Related Topic:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide
+__Related Topics:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide, %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%
