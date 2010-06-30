@@ -1,9 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1277877521" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarPUBURL
 ---+++ PUBURL -- the base URL of attachments
    * Syntax: =%<nop>PUBURL%=
    * Expands to: =%PUBURL%=
    * Example: You can refer to a file attached to another topic with =%<nop>PUBURL%/%<nop>WEB%/OtherTopic/image.gif=
-   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarATTACHURL][ATTACHURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarATTACHURLPATH][ATTACHURLPATH]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarPUBURLPATH][PUBURLPATH]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURL][SCRIPTURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURL][SCRIPTURLPATH]], FileAttachments
-
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarATTACHURL][ATTACHURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarATTACHURLPATH][ATTACHURLPATH]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarPUBURLPATH][PUBURLPATH]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURL][SCRIPTURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURLPATH][SCRIPTURLPATH]], FileAttachments
