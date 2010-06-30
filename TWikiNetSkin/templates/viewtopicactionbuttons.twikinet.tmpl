@@ -1,9 +1,18 @@
-%{ "This template overrides the button links 'create topic', 'edit topic', 'view topic', 'attach' and 'printable' by separating the url part and the link label part" }%
+%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"action_activatable_edit_or_create"}%%TMPL:P{"action_activatable_attach"}%%TMPL:P{"action_printablepdf"}%%TMPL:P{"action_printable"}%%SUBSCRIBE%%TMPL:P{"sep"}%%TMPL:P{"action_raw_or_view"}%%TMPL:P{"action_raw_edit"}%%TMPL:P{"action_backlinks_simple"}%%TMPL:P{"action_revisions"}%%TMPL:P{"activatable_more"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"create_topic_link"}%<span class="patternButton"><a href="%TMPL:P{"create_topic_link:url"}%" rel="nofollow" %TMPL:P{"create_topic_link:label"}%</a></span>%TMPL:END%
+
+%TMPL:DEF{"create_topic_link:url"}%%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%%TMPL:P{"url_param_editaction"}%%TMPL:END%
+
+%TMPL:DEF{"create_topic_link:label"}%%MAKETEXT{"title='Create new topic' accesskey='c'>&Create"}%%TMPL:END%
+
 
 
 %TMPL:DEF{"edit_topic_link"}%<span class="patternButton"><a href='%TMPL:P{"edit_topic_link:url"}%' rel='nofollow' %TMPL:P{"edit_topic_link:label"}%</a></span>%TMPL:END%
 
-%TMPL:DEF{"edit_topic_link:url"}%%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%%TMPL:P{"url_param_editaction"}%%IF{"context TinyMCEPluginEnabled" else=";nowysiwyg=1"}%%TMPL:END%
+%TMPL:DEF{"edit_topic_link:url"}%%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%%TMPL:P{"url_param_editaction"}%%IF{"context TinyMCEPluginEnabled" then=";nowysiwyg=%IF{ "$ EDITMETHOD='wysiwyg'" then="0" else="1" }%"}%%TMPL:END%
 
 %TMPL:DEF{"edit_topic_link:label"}%%TMPL:P{"edit_topic_link:titlelabel"}%>%TMPL:P{"edit_topic_link:linklabel"}%%TMPL:END%
 
@@ -12,6 +21,29 @@
 %TMPL:DEF{"edit_topic_link:linklabel"}%%MAKETEXT{"&Edit"}%%TMPL:END%
 
 
+
+
+%TMPL:DEF{"edit_wysiwyg_link"}%<span class="patternButton"><a href='%TMPL:P{"edit_wysiwyg_link:url"}%' rel='nofollow' %TMPL:P{"edit_wysiwyg_link:label"}%</a></span>%TMPL:END%
+
+%TMPL:DEF{"edit_wysiwyg_link:url"}%%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?cover=%COMPOSER%&t=%GMTIME{"$epoch"}%%TMPL:END%
+
+%TMPL:DEF{"edit_wysiwyg_link:label"}%%MAKETEXT{"title='Edit this topic text' accesskey='w'>&WYSIWYG"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"wysiwyg_create_topic_link"}%<span class="patternButton"><a href='%TMPL:P{"wysiwyg_create_topic_link:url"}%' rel='nofollow' %TMPL:P{"wysiwyg_create_topic_link:label"}%</a></span>%TMPL:END%
+
+%TMPL:DEF{"wysiwyg_create_topic_link:url"}%%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?cover=%COMPOSER%&t=%GMTIME{"$epoch"}%%TMPL:END%
+
+%TMPL:DEF{"wysiwyg_create_topic_link:label"}%%MAKETEXT{"title='Create this topic' accesskey='w'>Create (&WYSIWYG)"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"view_topic_link"}%<span class='patternButton'><a href='%TMPL:P{"view_topic_link:url"}%' rel='nofollow' %TMPL:P{"view_topic_link:label"}%</a></span>%TMPL:END%
+
+%TMPL:DEF{"view_topic_link:url"}%%SCRIPTURL{"view"}%/%WEB%/%TOPIC%%TMPL:END%
+
+%TMPL:DEF{"view_topic_link:label"}%%MAKETEXT{"title='View topic' accesskey='v'>&View topic"}%%TMPL:END%
 
 %TMPL:DEF{"attach_link"}%<span class='patternButton'><a href='%TMPL:P{"attach_link:url"}%' rel='nofollow' %TMPL:P{"attach_link:label"}%</a></span>%TMPL:END%
 
@@ -25,12 +57,128 @@
 
 
 
+%TMPL:DEF{"action_printable"}%%TMPL:P{"printable"}%%TMPL:P{"sep"}%%TMPL:END%
+
 %TMPL:DEF{"printable"}%<span class='patternButton'><a href='%TMPL:P{"printable:url"}%' rel='nofollow' %TMPL:P{"printable:label"}%</a></span>%TMPL:END%
 
 %TMPL:DEF{"printable:url"}%%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?cover=print%QUERYPARAMSTRING%%REVARG%%TMPL:END%
 
-%TMPL:DEF{"printable:label"}%%TMPL:P{"printable:titlelabel"}%>%TMPL:P{"printable:linklabel"}%%TMPL:END%
+%TMPL:DEF{"printable:label"}%%MAKETEXT{"title='Printable version of this topic' accesskey='p'>&Print version"}%%TMPL:END%
 
-%TMPL:DEF{"printable:titlelabel"}%%MAKETEXT{"title='Printable version of this topic' accesskey='p'"}%%TMPL:END%
+%TMPL:DEF{"activatable_printable"}%%TMPL:P{"printable"}%%TMPL:END%
 
-%TMPL:DEF{"printable:linklabel"}%%MAKETEXT{"&Print version"}%%TMPL:END%
+%TMPL:DEF{"action_printablepdf"}%%TMPL:P{"printablepdf"}%%TMPL:P{"sep"}%%TMPL:END%
+
+%TMPL:DEF{"printablepdf"}%<span class='patternButton'><a href='%TMPL:P{"printablepdf:url"}%' rel='nofollow' %TMPL:P{"printablepdf:label"}%</a></span>%TMPL:END%
+
+%TMPL:DEF{"printablepdf:url"}%%SCRIPTURLPATH{"genpdf"}%/%WEB%/%TOPIC%?cover=print%QUERYPARAMSTRING%%REVARG%%TMPL:END%
+
+%TMPL:DEF{"printablepdf:label"}%%MAKETEXT{"title='PDF version of this topic'>&PDF version"}%%TMPL:END%
+
+%TMPL:DEF{"activatable_printablepdf"}%%TMPL:P{"printablepdf"}%%TMPL:END%
+
+
+%TMPL:DEF{"raw_link"}%<span class='patternButton'><a href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on%REVARG%' rel='nofollow' %MAKETEXT{"title='View raw text without formatting' accesskey='r'>&Raw View"}%</a></span>%TMPL:END%
+
+
+%TMPL:DEF{"raw_edit_topic_link"}%<span class="patternButton"><a href='%TMPL:P{"raw_edit_topic_link:url"}%' rel='nofollow' %TMPL:P{"raw_edit_topic_link:label"}%</a></span>%TMPL:END%
+
+%TMPL:DEF{"raw_edit_topic_link:url"}%%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%&nowysiwyg=%IF{ "$ EDITMETHOD!='wysiwyg'" then="0" else="1" }%%TMPL:P{"url_param_editaction"}%%TMPL:END%
+
+%TMPL:DEF{"raw_edit_topic_link:label"}%%MAKETEXT{"title='%IF{ "$ EDITMETHOD!='wysiwyg'" then="WYSIWYG editor" else="Raw Edit this topic text" }%' accesskey='w'>%IF{ "$ EDITMETHOD!='wysiwyg'" then="WYSIWYG" else="Ra&w edit" }%"}%%TMPL:END%
+
+
+%TMPL:DEF{"more_link"}%<span class='patternButton'><a href='%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%' rel='nofollow' %MAKETEXT{"title='Delete or rename this topic; set parent topic; view and compare revisions' accesskey='m'>&More topic actions"}%</a></span>%TMPL:END%
+
+
+
+%TMPL:DEF{"backlinks_web_link"}%<span class='patternButton'><a href='%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb' rel='nofollow' %MAKETEXT{"title='Search the [_1] Web for topics that link to here' accesskey='b'>We&b" args="<nop>%WEB%"}%</a></span>%TMPL:END%
+
+%TMPL:DEF{"backlinks_all_link"}%<span class='patternButton'><a href='%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksallwebs' rel='nofollow' %MAKETEXT{"title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"}%</a></span>%TMPL:END%
+
+%TMPL:DEF{"backlinks_link"}%<span class='patternButton'><a href='%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb' rel='nofollow' %MAKETEXT{"title='Search the [_1] Web for topics that link to here' accesskey='b'>&Backlinks" args="<nop>%WEB%"}%</a></span>%TMPL:END%
+
+
+
+%TMPL:DEF{"history_rdiff_link"}%<span class='patternButton'><a href='%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%?type=history' rel='nofollow' %MAKETEXT{"title='View total topic history' accesskey='h'>&History"}%</a></span>%TMPL:END%
+
+%TMPL:DEF{"history_history_link"}%<span class='patternButton'><a href='%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopshistory' rel='nofollow' %MAKETEXT{"title='View total topic history' accesskey='h'>&History"}%</a></span>%TMPL:END%
+
+
+
+
+
+
+%TMPL:DEF{"inactive_edit_with_view_topic"}%<span class="patternButton"><strike>%MAKETEXT{"Edit"}%</strike></span>%TMPL:END%
+
+%TMPL:DEF{"inactive_wysiwyg"}%<span class="patternButton"><strike>%MAKETEXT{"WYSIWYG"}%</strike></span>%TMPL:END%
+
+%TMPL:DEF{"url_param_editaction"}%%IF{"defined EDITACTION" then="&action=%EDITACTION%" else=""}%%TMPL:END%
+
+%TMPL:DEF{"edit_or_create"}%%TMPL:P{context="new_topic" then="create_topic_link" else="edit_topic_link"}%%TMPL:END%
+
+%TMPL:DEF{"action_wysiwyg"}%%TMPL:P{"wysiwyg"}%%TMPL:P{"sep"}%%TMPL:END%
+
+%TMPL:DEF{"wysiwyg"}%%TMPL:P{"activatable_edit_wysiwyg"}%%TMPL:END%
+
+%TMPL:DEF{"activatable_edit_wysiwyg"}%%TMPL:P{context="inactive" then="inactive_wysiwyg" else="wysiwyg_edit_or_create"}%%TMPL:END%
+
+%TMPL:DEF{"wysiwyg_edit_or_create"}%%TMPL:P{context="new_topic" then="wysiwyg_create_topic_link" else="edit_wysiwyg_link"}%%TMPL:END%
+
+%TMPL:DEF{"action_activatable_edit_or_create"}%%TMPL:P{"activatable_edit_or_create"}%%TMPL:P{"sep"}%%TMPL:END%
+
+%TMPL:DEF{"activatable_edit_or_create"}%%TMPL:P{context="inactive" then="inactive_edit_with_view_topic" else="edit_or_create"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"active_attach"}%%TMPL:P{"attach_link"}%%TMPL:END%
+
+%TMPL:DEF{"inactive_attach"}%<span class="patternButton"><strike>%MAKETEXT{"Attach"}%</strike></span>%TMPL:END%
+
+%TMPL:DEF{"action_activatable_attach"}%%TMPL:P{"activatable_attach"}%%TMPL:P{"sep"}%%TMPL:END%
+
+%TMPL:DEF{"activatable_attach"}%%TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"active_more"}%%TMPL:P{"more_link"}%%TMPL:END%
+
+%TMPL:DEF{"inactive_more"}%<span class="patternButton"><strike>%MAKETEXT{"More topic actions..."}%</strike></span>%TMPL:END%
+
+%TMPL:DEF{"action_activatable_more"}%%TMPL:P{"activatable_more"}%%TMPL:END%
+
+%TMPL:DEF{"activatable_more"}%%TMPL:P{context="inactive" then="inactive_more" else="active_more"}%%TMPL:END%
+
+
+%TMPL:DEF{"action_raw_or_view"}%%TMPL:P{"raw_or_view"}%%TMPL:P{"sep"}%%TMPL:END%
+
+%TMPL:DEF{"raw_or_view"}%%IF{"defined raw" then="%TMPL:P{"view_topic_link"}%" else="%TMPL:P{"raw_link"}%"}%%TMPL:END%
+
+%TMPL:DEF{"action_raw_edit"}%%TMPL:P{"raw_edit"}%%TMPL:P{"sep"}%%TMPL:END%
+
+%TMPL:DEF{"raw_edit"}%%TMPL:P{"raw_edit_topic_link"}%%TMPL:END%
+
+%TMPL:DEF{"action_backlinks"}%%TMPL:P{"backlinks"}%%TMPL:P{"sep"}%%TMPL:END%
+
+%TMPL:DEF{"backlinks"}%%MAKETEXT{"Backlinks"}%: %TMPL:P{"backlinks_web_link"}%, %TMPL:P{"backlinks_all_link"}%%TMPL:END%
+
+%TMPL:DEF{"backlinks_simple"}%%TMPL:P{"backlinks_link"}%%TMPL:END%
+
+%TMPL:DEF{"action_backlinks_simple"}%%TMPL:P{"backlinks_simple"}%%TMPL:P{"sep"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"history_rdiff"}%%TMPL:P{"history_rdiff_link"}%%TMPL:END%
+
+
+%TMPL:DEF{"history_history"}%%TMPL:P{"history_history_link"}%%TMPL:END%
+
+
+%TMPL:DEF{"revisions_rdiff"}%%REVISIONS%%TMPL:END%
+
+
+%TMPL:DEF{"revisions_compare"}%%RDIFF2COMPARE{"%REVISIONS%"}%%TMPL:END%
+
+%TMPL:DEF{"action_revisions"}%%TMPL:P{"revisions"}%%TMPL:P{"sep"}%%TMPL:END%
+
+%TMPL:DEF{"revisions"}%<span class="patternRevision">%TMPL:P{context="HistoryPluginEnabled" then="history_history" else="history_rdiff"}%: %TMPL:P{context="CompareRevisionsAddonPluginEnabled" then="revisions_compare" else="revisions_rdiff"}%</span>%TMPL:END%
