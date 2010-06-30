@@ -1,0 +1,69 @@
+%META:TOPICINFO{author="TWikiContributor" date="1277916647" format="1.1" version="$Rev$"}%
+---+!! Placeholder for Release Notes of TWiki-5.1 (Istanbul), 2010-FIXME
+
+%TOC%
+
+---++ Introduction
+
+FIXME
+
+---++ New Features Highlights
+
+   * *Security Enhancements*
+      * 
+   * *TWiki Application Platform Enhancements*
+      * 
+   * *Miscellaneous Feature Enhancements*
+      * 
+   * *Plugin Enhancements*
+      * 
+
+See the full list of new features and bug fixes further below.
+
+---++ Pre-installed Extensions
+
+TWiki-5.1 ships with:
+
+   * *Plugins:* CommentPlugin, EditTablePlugin, EmptyPlugin, HeadlinesPlugin, InterwikiPlugin, JQueryPlugin, PreferencesPlugin, RenderListPlugin, SlideShowPlugin, SmiliesPlugin, SpreadSheetPlugin, TablePlugin, TinyMCEPlugin, TagMePlugin, TWikiNetSkinPlugin, TwistyPlugin, WysiwygPlugin
+   * *Contribs:* BehaviourContrib, JSCalendarContrib, MailerContrib, TipsContrib, TWikiUserMappingContrib, TwistyContrib
+   * *Skins:* ClassicSkin, PatternSkin, TopMenuSkin, TWikiNetSkin,
+
+__Note:__ FIXME are new in TWiki-5.1.
+
+---++ Deprecation Notices
+
+   * From TWiki 5.0 on, the ClassicSkin is deprecated and will be removed in a future release.
+
+   * From TWiki 4.2 on, the %<nop>MAINWEB% and %<nop>TWIKIWEB% variables have been deprecated. For compatibility reasons they are unlikely to ever be removed completely, but you should use the %<nop>USERSWEB% and %<nop>SYSTEMWEB% variables instead.
+
+   * From TWiki 4.2 on, functions TWiki::Func::getOopsUrl and TWiki::Func::permissionsSet have been declared deprecated. There is no plan to remove them yet. 
+
+   * From TWiki 4.0 on, the syntax "* Set DENYTOPICVIEW = " (nothing) in a topic means deny noone. Even if ALLOWTOPICVIEW is set to people or group setting DENYTOPICCHANGE to nothing means allow anyone. You have to remove the DENYTOPICVIEW or comment it out to have the ALLOWTOPICVIEW working. The reason for this behavior is that it enables limiting access to an entire web by setting a blank DENYTOPICVIEW setting. Same rule applies for DENYTOPICCHANGE and DENYTOPICRENAME. The rule does not apply for access rights defined for webs. Ie. "*Set DENYWEBCHANGE = " does not allow anyone to edit topics in the web. There has been strong oppinions against the syntax "* Set DENYTOPICXXXX = " meaning giving all access. So please be warned that we will change the syntax to a more transparent and logical syntax in future but we will ensure that it is still possible to secure a web and open up individual topics in future also. 
+
+---++ Notes for TWiki Administrators and Wiki Champions
+
+---+++ Upgrade From Earlier Releases
+
+Follow the TWikiUpgradeGuide to install TWiki and migrate data from your existing TWiki.
+
+FIXME
+
+---++ TWiki-5.1.0 Major Release - Details
+
+TWiki-5.1.0 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x01 revision rFIXME (2010-FIXME)
+
+---+++ Enhancements
+
+<noautolink>
+| TWikibug:ItemFIXME | FIXME |
+</noautolink>
+Total: FIXME
+
+---+++ Fixes
+
+<noautolink>
+| TWikibug:ItemFIXME | FIXME |
+</noautolink>
+Total: FIXME
+
+__Related Topics:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide, %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%
