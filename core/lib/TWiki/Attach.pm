@@ -273,6 +273,7 @@ sub getAttachmentLink {
 
     my $fileLink = '';
     my $imgSize = '';
+    my( $imgWidth, $imgHeight ) = ( '', '' );
     my $prefs = $this->{session}->{prefs};
     my $store = $this->{session}->{store};
     # I18N: URL-encode the attachment filename 
@@ -294,6 +295,7 @@ sub getAttachmentLink {
         if( $nx > 0 && $ny > 0 ) {
             push( @attrs, width=>$nx, height=>$ny );
             $imgSize = "width=\"$nx\" height=\"$ny\"";
+	    $imgWidth = $nx; $imgHeight = $ny;
         }
 
         $fileLink = $prefs->getPreferencesValue( 'ATTACHEDIMAGEFORMAT' );
@@ -319,6 +321,8 @@ sub getAttachmentLink {
     $fileLink =~ s/\\t/\t/go;
     $fileLink =~ s/\\n/\n/go;
     $fileLink =~ s/\$size/$imgSize/g;
+    $fileLink =~ s/\$width/$imgWidth/g;
+    $fileLink =~ s/\$height/$imgHeight/g;
     $fileLink =~ s/\$comment/$fileComment/g;
     $fileLink =~ s/([^\n])$/$1\n/;
 
@@ -349,7 +353,7 @@ sub _imgsize {
                 #  PNG 89 50 4e 47
                 ( $x, $y ) = _pngsize( $file );
             } elsif ( $a == 0xFF && $b == 0xD8 &&
-                      $c == 0xFF && $d == 0xE0 ) {
+                      $c == 0xFF && ($d == 0xE0 || $d == 0xE1) ) {
                 #  JPG ff d8 ff e0
                 ( $x, $y ) = _jpegsize( $file );
             }
