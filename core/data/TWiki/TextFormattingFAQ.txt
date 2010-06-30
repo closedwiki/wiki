@@ -1,25 +1,25 @@
-%META:TOPICINFO{author="TWikiContributor" date="1269905591" format="1.1" version="$Rev$"}%
----++ Text Formatting FAQ
+%META:TOPICINFO{author="TWikiContributor" date="1277875715" format="1.1" version="$Rev$"}%
+---+!! Text Formatting FAQ
 
-The most frequently asked questions about text formatting are answered. Also, TextFormattingRules contains the complete TWiki shorthand system on one quick reference page.
+This topics lists frequently asked questions on text formatting. Text formatting applies to people who edit TWiki pages in raw edit mode. TextFormattingRules contains the complete TWiki shorthand syntax on one quick reference page.
 
 %TOC%
 
----
----+++ How do I make a separator?
+-----
+---++ How do I make a separator?
 
 Create a separator - a horizontal rule - by entering three dashes at the beginning of a blank line: =---=. You can enter more than three if you like, for a more visible separator in edit mode: <br />
 =--------------=
 
---------------
----+++ How do I create a heading?
-
-You can create six sizes of headings - &lt;h1&gt;...&lt;h6&gt; in HTML - by typing, from the beginning of a line, three dashes (-), from one to six plus signs (+), a space, and your heading text. The FAQ questions on this page are created with: =---+++ Have a question?=.
-   * You can insert a nested table of contents, generated from headings, by placing =%<nop>TOC%= wherever you like on a page (see %SYSTEMWEB%.TWikiVariables for more =%<nop>TOC%= options).
-
 -----
+---++ How do I create a heading?
+
+You can create six sizes of headings - &lt;h1&gt;...&lt;h6&gt; in HTML - by typing, from the beginning of a line, three dashes (-), from one to six plus signs (+), a space, and your heading text. The FAQ questions on this page are created with: =---++ Have a question?=.
+   * You can insert a nested table of contents, generated from headings, by placing =%<nop>TOC%= wherever you like on a page (see TWikiVariables for more =%<nop>TOC%= options).
+
 #TextEnclosed
----+++ Text enclosed in angle brackets like &lt;filename&gt; is not displayed. How can I show it as it is?
+-----
+---++ Text enclosed in angle brackets like &lt;filename&gt; is not displayed. How can I show it as it is?
 
 TWiki interprets text as HTML, and the '&lt;' and '&gt;' characters define where HTML commands start and end. Text _inside_ angle brackets is treated as HTML, and ignored if it doesn't actually do anything - either way, the brackets and its contents are not displayed.
 
@@ -30,8 +30,8 @@ If you want to display angle brackets, enter them as HTML codes instead of typin
    * __You enter:__ =(a &amp;gt; 0)= <p /> 
      __Result:__ =(a &gt; 0)=
 
----
----+++ Some words appear highlighted with a red-link. How can I prevent that?
+-----
+---++ Some words appear highlighted with a red-link. How can I prevent that?
 
 A red-link points to a topic that doesn't exist yet - click on it to create the new page. This is a TWiki feature - typing a MeaningfulTitle in a comment is an invitation for someone else to add a new branch to the topic.  
 
@@ -39,24 +39,24 @@ To prevent auto-linking - say you want to enter a word like <nop>JavaScript - pr
 
    * =!WikiStyleWord= displays as !WikiStyleWord
 
----
----+++ How do I start a word with an exclamation mark?
+-----
+---++ How do I start a word with an exclamation mark?
 
 A leading exclamation point is used to escape wiki formatting, as we have learned in the previous question. Sometimes it has an unwanted effect, such as when you want to write "!=" (e.g. "not equal"), you will not see the exclamation mark.
 
 To escape the exclamation mark escape, try prefixing a =&lt;nop>=, e.g. write =A &lt;nop>!=<nop> B= to get "A <nop>!= B". Alternatively, use the HTML entity =&amp;#33;=, which renders as an exclamation mark, e.g. write =A &amp;#33;=<nop> B= to get "A &#33;= B". 
 
----
----+++ How can I write fixed font text?
+-----
+---++ How can I write fixed font text?
 
 The quickest way is to enclose the text in equal signs:
 
    * __You enter:__ =Proportional text, <nop>=fixed font=<nop>, proportional again.= <p />
      __Result:__ Proportional text, =fixed font=, proportional again.
 
----
 #VerbatimText
----+++ Text I enter gets wrapped around. How can I keep the formatting as it is?
+-----
+---++ Text I enter gets wrapped around. How can I keep the formatting as it is?
 
 TWiki interprets text as HTML, so you can use the =preformatted= HTML option to keep the new line of text as is. Enclose the text in &lt;pre&gt; &lt;/pre&gt;, or in TWiki's own &lt;verbatim&gt; &lt;/verbatim&gt; tag:
 <pre>
@@ -74,8 +74,8 @@ __NOTE:__ VARIABLES are still Set within verbatim tags (this is a historical pec
 
 __NOTE:__ The =verbatim= opening and closing tags are converted into =pre= tags; any HTML attributes (e.g., =class=, =id=) in the opening =verbatim= tag are included in the corresponding =pre= tag.
 
----
----+++ How do I create tables?
+-----
+---++ How do I create tables?
 
 There are three possibilities:
    1 Use Wiki rule with "|" vertical bars.
@@ -126,9 +126,8 @@ __Result:__
 See [[#VerbatimText]["Text I enter gets wrapped around..."]] 
 
 
----
-
----+++ Can I include images on a page?
+-----
+---++ Can I include images on a page?
 
 Yes. The easiest way is to [[FileAttachment][attach]] a GIF, JPG or PNG file to a topic and then to place it with: =%<nop>ATTACHURL%/myImage.gif=. This works only for the topic where the image is attached to.
 
@@ -154,7 +153,7 @@ This is a manual process where you have more control over the rendering of the i
     __Result:__ <br /> <img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiLogos/T-logo-80x15.gif" width="80" height="15" border="0" alt="logo" /> logo.
 
 -----
----+++ Can I write colored text?
+---++ Can I write colored text?
 
 TWikiPreferences defines some commonly used colors: *%YELLOW% %<nop>YELLOW%%ENDCOLOR%, %RED% %<nop>RED%%ENDCOLOR%, %PINK% %<nop>PINK%%ENDCOLOR%, %PURPLE% %<nop>PURPLE%%ENDCOLOR%, %TEAL% %<nop>TEAL%%ENDCOLOR%, %NAVY% %<nop>NAVY%%ENDCOLOR%, %BLUE% %<nop>BLUE%%ENDCOLOR%, %AQUA% %<nop>AQUA%%ENDCOLOR%, %LIME% %<nop>LIME%%ENDCOLOR%, %GREEN% %<nop>GREEN%%ENDCOLOR%, %OLIVE% %<nop>OLIVE%%ENDCOLOR%, %MAROON% %<nop>MAROON%%ENDCOLOR%, %BLACK% %<nop>BLACK%%ENDCOLOR%, %GRAY% %<nop>GRAY%%ENDCOLOR%, %SILVER% %<nop>SILVER%%ENDCOLOR%* and *%<nop>ENDCOLOR%*.
 
