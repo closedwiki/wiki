@@ -232,6 +232,7 @@ BEGIN {
         META              => \&META,
         METASEARCH        => \&METASEARCH,
         NOP               => \&NOP,
+        PARENTTOPIC       => \&PARENTTOPIC,
         PLUGINVERSION     => \&PLUGINVERSION,
         PUBURL            => \&PUBURL,
         PUBURLPATH        => \&PUBURLPATH,
@@ -4325,6 +4326,16 @@ sub META {
     }
 
     return expandStandardEscapes($result);
+}
+
+sub PARENTTOPIC {
+    my ( $this, $params, $topic, $web ) = @_;
+    my $metaParams = {
+        _DEFAULT => 'parent',
+        format   => $params->{format} || '$topic',
+        dontrecurse => 'on',
+      };
+    return $this->META( $metaParams, $topic, $web );
 }
 
 # Remove NOP tag in template topics but show content. Used in template
