@@ -184,7 +184,8 @@ sub buildNewTopic {
 
     my $forceNewRev = $query->param( 'forcenewrevision' );
     $saveOpts->{forcenewrevision} = $forceNewRev;
-    my $newParent = $query->param( 'topicparent' );
+    my $newParent = $query->param( 'topicparent' )
+                 || $query->param( 'parenttopic' ); # the latter is undocumented
 
     if( defined( $newText) ) {
         # text is defined in the query, save that text
@@ -447,7 +448,7 @@ WARN
         # redirect to a sensible place (a topic that exists)
         my( $w, $t ) = ( '', '' );
         foreach my $test ( $topic,
-                           $query->param( 'topicparent' ),
+                           $query->param( 'topicparent' ) || $query->param( 'parenttopic' ),
                            $TWiki::cfg{HomeTopicName} ) {
             ( $w, $t ) =
               $session->normalizeWebTopicName( $web, $test );

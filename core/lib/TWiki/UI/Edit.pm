@@ -56,7 +56,7 @@ Most parameters are in the CGI query:
 | =formtemplate= | name of the form for the topic; will replace existing form |
 | =templatetopic= | name of the topic to copy if creating a new topic |
 | =skin= | skin(s) to use |
-| =topicparent= | what to put in the topic prent meta data |
+| =topicparent= | name of parent topic (optional), undocumented =parenttopic= parameter can be used as well |
 | =text= | text that will replace the old topic text if a formtemplate is defined (what the heck is this for?) |
 | =contenttype= | optional parameter that defines the application type to write into the CGI header. Defaults to text/html. |
 | =action= | Optional. If supplied, use the edit${action} template instead of the standard edit template. An empty value means edit both form and text, "form" means edit form only, "text" means edit text only |
@@ -92,7 +92,7 @@ sub init_edit {
     my $cgiAppType = $query->param( 'contenttype' ) ||
       $query->param( 'apptype' ) || 'text/html';
     my $skin = $session->getSkin();
-    my $theParent = $query->param( 'topicparent' ) || '';
+    my $theParent = $query->param( 'topicparent' ) || $query->param( 'parenttopic' ) || '';
     my $ptext = $query->param( 'text' );
     my $revision = $query->param( 'rev' ) || undef;
     my $store = $session->{store};
