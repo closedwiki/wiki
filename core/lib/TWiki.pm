@@ -4331,8 +4331,9 @@ sub META {
 sub PARENTTOPIC {
     my ( $this, $params, $topic, $web ) = @_;
     my $metaParams = {
-        _DEFAULT => 'parent',
-        format   => $params->{format} || '$topic',
+        _DEFAULT    => 'parent',
+        format      => $params->{format} || '$topic',
+        topic       => $params->{topic}  || "$web.$topic",
         dontrecurse => 'on',
       };
     return $this->META( $metaParams, $topic, $web );
