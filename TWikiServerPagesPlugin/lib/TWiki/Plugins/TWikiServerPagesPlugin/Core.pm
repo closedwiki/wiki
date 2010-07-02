@@ -19,9 +19,9 @@
 #
 # =========================
 #
-# This is the core module for TWikiTemplatePlugin.
+# This is the core module of the TWikiServerPagesPlugin.
 
-package TWiki::Plugins::TWikiTemplatePlugin::Core;
+package TWiki::Plugins::TWikiServerPagesPlugin::Core;
 
 # =========================
 use vars qw(
@@ -35,7 +35,7 @@ sub VarGET
 {
     my ( $session, $params, $theTopic, $theWeb ) = @_;
     my $rawParam = $params->{_RAW};
-    my $text = "TWiki::Plugins::TWikiTemplatePlugin::Core::VarGET( $rawParam ) called";
+    my $text = "TWiki::Plugins::TWikiServerPagesPlugin::Core::VarGET( $rawParam ) called";
     return $text;
 }
 
@@ -44,7 +44,7 @@ sub VarSET
 {
     my ( $session, $params, $theTopic, $theWeb ) = @_;
     my $rawParam = $params->{_RAW};
-    my $text = "TWiki::Plugins::TWikiTemplatePlugin::Core::VarSET( $rawParam ) called";
+    my $text = "TWiki::Plugins::TWikiServerPagesPlugin::Core::VarSET( $rawParam ) called";
     return $text;  
 }
 

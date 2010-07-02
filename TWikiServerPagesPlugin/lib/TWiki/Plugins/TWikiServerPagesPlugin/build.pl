@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #
-# Build for TWikiTemplatePlugin
+# Build for TWikiServerPagesPlugin
 #
 BEGIN {
   foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
@@ -11,7 +11,7 @@ BEGIN {
 use TWiki::Contrib::Build;
 
 # Create the build object
-$build = new TWiki::Contrib::Build( 'TWikiTemplatePlugin' );
+$build = new TWiki::Contrib::Build( 'TWikiServerPagesPlugin' );
 
 # Build the target on the command line, or the default target
 $build->build($build->{target});

@@ -19,9 +19,9 @@
 #
 # =========================
 #
-# This is TWiki's Template Plugin.
+# This is the TWiki Server Pages Plugin.
 
-package TWiki::Plugins::TWikiTemplatePlugin;
+package TWiki::Plugins::TWikiServerPagesPlugin;
 
 
 # =========================
@@ -42,7 +42,7 @@ sub initPlugin
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1 ) {
-        TWiki::Func::writeWarning( "Version mismatch between TWikiTemplatePlugin and Plugins.pm" );
+        TWiki::Func::writeWarning( "Version mismatch between TWikiServerPagesPlugin and Plugins.pm" );
         return 0;
     }
 
@@ -53,7 +53,7 @@ sub initPlugin
     TWiki::Func::registerTagHandler( 'SET',    \&_SET );
 
     # Plugin correctly initialized
-    TWiki::Func::writeDebug( "- TWiki::Plugins::TWikiTemplatePlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
+    TWiki::Func::writeDebug( "- TWiki::Plugins::TWikiServerPagesPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
     $doInit = 1;
     return 1;
 }
@@ -62,16 +62,16 @@ sub initPlugin
 sub _GET
 {
 #   my ( $session, $params, $theTopic, $theWeb ) = @_;
-    require TWiki::Plugins::TWikiTemplatePlugin::Core;
-    return  TWiki::Plugins::TWikiTemplatePlugin::Core::VarGET( @_ );
+    require TWiki::Plugins::TWikiServerPagesPlugin::Core;
+    return  TWiki::Plugins::TWikiServerPagesPlugin::Core::VarGET( @_ );
 }
 
 # =========================
 sub _SET
 {
 #   my ( $session, $params, $theTopic, $theWeb ) = @_;
-    require TWiki::Plugins::TWikiTemplatePlugin::Core;
-    return  TWiki::Plugins::TWikiTemplatePlugin::Core::VarSET( @_ );
+    require TWiki::Plugins::TWikiServerPagesPlugin::Core;
+    return  TWiki::Plugins::TWikiServerPagesPlugin::Core::VarSET( @_ );
 }
 
 1;

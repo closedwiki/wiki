@@ -1,0 +1,5 @@
+data/TWiki/TWikiServerPagesPlugin.txt 0644
+data/TWiki/VarGET.txt 0644
+data/TWiki/VarSET.txt 0644
+lib/TWiki/Plugins/TWikiServerPagesPlugin.pm 0444
+lib/TWiki/Plugins/TWikiServerPagesPlugin/Core.pm 0444
