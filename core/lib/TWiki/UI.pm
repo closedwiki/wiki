@@ -381,8 +381,7 @@ sub checkAccess {
 
 ---++ StaticMethod readTemplateTopic( $session, $theTopicName ) -> ( $meta, $text )
 
-Read a topic from the TWiki web, or if that fails from the current
-web.
+Search for a template topic in current web, Main web, and TWiki web, in that order.
 
 =cut
 
@@ -396,9 +395,11 @@ sub readTemplateTopic {
     if( $session->{store}->topicExists( $session->{webName}, $theTopicName )) {
         # try to read from current web, if found
         $web = $session->{webName};
+    } elsif( $session->{store}->topicExists( $TWiki::cfg{UsersWebName}, $theTopicName )) {
+        # try to read from current web, if found
+        $web = $TWiki::cfg{UsersWebName};
     }
-    return $session->{store}->readTopic(
-        $session->{user}, $web, $theTopicName, undef );
+    return $session->{store}->readTopic( $session->{user}, $web, $theTopicName, undef );
 }
 
 =pod
