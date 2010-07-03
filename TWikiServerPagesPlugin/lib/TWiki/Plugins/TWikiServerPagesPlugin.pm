@@ -62,6 +62,7 @@ sub initPlugin
 sub _GET
 {
 #   my ( $session, $params, $theTopic, $theWeb ) = @_;
+    # Lazy loading, e.g. compile core module only when required
     require TWiki::Plugins::TWikiServerPagesPlugin::Core;
     return  TWiki::Plugins::TWikiServerPagesPlugin::Core::VarGET( @_ );
 }

@@ -33,19 +33,34 @@ undef $vars;
 # =========================
 sub VarGET
 {
-    my ( $session, $params, $theTopic, $theWeb ) = @_;
+    my ( $session, $params, $topic, $web ) = @_;
     my $rawParam = $params->{_RAW};
-    my $text = "TWiki::Plugins::TWikiServerPagesPlugin::Core::VarGET( $rawParam ) called";
-    return $text;
+    my $name = $params->{_DEFAULT};
+    if( $params->{topic} ) {
+        $topic = $params->{topic};
+        ( $web, $topic ) = TWiki::Func::normalizeWebTopicName( $web, $topic );
+    }
+    if( $name && defined $vars->{"$web.$topic"}{$name} ) {
+        return $vars->{"$web.$topic"}{$name};
+    }
+    return '';
 }
 
 # =========================
 sub VarSET
 {
-    my ( $session, $params, $theTopic, $theWeb ) = @_;
+    my ( $session, $params, $topic, $web ) = @_;
     my $rawParam = $params->{_RAW};
-    my $text = "TWiki::Plugins::TWikiServerPagesPlugin::Core::VarSET( $rawParam ) called";
-    return $text;  
+    my $name  = $params->{_DEFAULT};
+    my $value = $params->{value};
+    if( $params->{topic} ) {
+        $topic = $params->{topic};
+        ( $web, $topic ) = TWiki::Func::normalizeWebTopicName( $web, $topic );
+    }
+    if( $name && defined $value ) {
+        $vars->{"$web.$topic"}{$name} = $value;
+    }
+    return '';
 }
 
 1;
