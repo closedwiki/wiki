@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1275432023" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1278225417" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WEB% Web Preferences
 
 The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in [[%SYSTEMWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, eg: %USERSWEB%.%WIKINAME% in the [[%USERSWEB%.%HOMETOPIC%][%USERSWEB%]] web).
@@ -24,8 +24,9 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
       * Use auto linking for the TWiki documentation pages:
          * Set NOAUTOLINK = 0
 
-   * Default template for *new topics* for this web:
-      * WebTopicEditTemplate: Site-level default topic template
+   * Default template for *new topics* in this web:
+      * WebTopicEditTemplate: System-level default topic template (do not modify! Create a site-level template in the %USERS% web instead)
+      * [[%USERSWEB%.WebTopicEditTemplate]]: Site-level default topic template (if it exists, it overides the system-level template for topics created in webs other than the %SYSTEMWEB% web)
 
    * Comma separated list of *forms* that can be attached to topics in this web. See [[%SYSTEMWEB%.TWikiForms][TWikiForms]] for more information.
       * Set WEBFORMS = TWikiPreferencesForm

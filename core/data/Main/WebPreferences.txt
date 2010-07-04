@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273167157" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1278225412" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WEB% Web Preferences
 
 The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in [[%SYSTEMWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, eg: %USERSWEB%.%WIKINAME% in the [[%USERSWEB%.%HOMETOPIC%][%USERSWEB%]] web).
@@ -15,9 +15,9 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
       * Set SITEMAPWHAT = <nop>%WIKITOOLNAME% home where [[%USERSWEB%.%WIKIUSERSTOPIC%][users]] and [[%USERSWEB%.TWikiGroups][groups]] are located
       * Set SITEMAPLIST = on
 
-   * Default template for *new topics* for this web:
-      * WebTopicEditTemplate: Default template for new topics in this web. (Site-level is used if topic does not exist)
-      * [[%SYSTEMWEB%.WebTopicEditTemplate]]: Site-level default topic template
+   * Default template for *new topics* in this web:
+      * [[%USERSWEB%.WebTopicEditTemplate]]: Site-level default topic template (if it exists, it overides the system-level template)
+      * [[%SYSTEMWEB%.WebTopicEditTemplate]]: System-level default topic template (do not modify! Create a site-level template in this web instead)
 
    * Comma separated list of *forms* that can be attached to topics in this web. See %SYSTEMWEB%.TWikiForms for more information.
       * Set WEBFORMS = %SYSTEMWEB%.UserForm
