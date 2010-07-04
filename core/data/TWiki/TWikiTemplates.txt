@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273992617" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1278225640" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Templates
 
@@ -152,6 +152,7 @@ When you create a new topic using the =edit= script, TWiki locates a topic to us
    1 A topic name specified by the =templatetopic= CGI parameter
       * if no web is specified, the current web is searched first and then the %SYSTEMWEB% web
    1 <nop>WebTopicEditTemplate in the current web
+   1 <nop>WebTopicEditTemplate in the %USERSWEB% web
    1 <nop>WebTopicEditTemplate in the %SYSTEMWEB% web
 
 #TemplateTopicsVars
