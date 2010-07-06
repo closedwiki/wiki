@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274916924" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1278396677" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %STARTINCLUDE%
 ---+ Managing Topics
@@ -34,12 +34,14 @@ The =Trash= web should be be cleared periodically, by archiving (saving) the tex
 
 ---++ Redirecting from an Old Topic
 
-You can use TWikiMetaData to place a command in the %SYSTEMWEB%.WebTopicViewTemplate and %SYSTEMWEB%.WebTopicNonWikiTemplate that will indicate that a topic has been moved by searching for =%<nop>META:TOPICMOVED{...}%=. Customize something like this:
+You can use TWikiMetaData to place a command in the WebTopicViewTemplate and WebTopicNonWikiTemplate that will indicate that a topic has been moved by searching for =%<nop>META:TOPICMOVED{...}%=. Customize something like this:
 
 <verbatim>
 %METASEARCH{type="topicmoved" web="%WEB%" topic="%TOPIC%" 
 title="This topic used to exist and was moved to: "}%
 </verbatim>
+
+__Note:__ Do not modify the [[%SYSTEMWEB%.WebTopicViewTemplate]] - modifications would be lost on the next TWiki upgrade. Instead, create a !WebTopicViewTemplate in the <nop>%USERSWEB% web with the same content and modify it to your needs.
 
 ---++ How Rename/Move Works
 
