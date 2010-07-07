@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274835505" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1278478314" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarTOC2
 ---+++ TOC{"Topic"} -- table of contents
@@ -12,5 +12,4 @@
     | =title="Some text"= | Title to appear at top of TOC | none |
    * Example: =%<nop>TOC{depth="2"}%=
    * Example: =%<nop>TOC{"TWikiDocumentation" web="%SYSTEMWEB%" title="Contents:"}%=
-   * Example: see TWiki:Sandbox.TestTopicInclude
-   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarTOC][TOC]]
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarINCLUDE][INCLUDE]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarTOC][TOC]]
