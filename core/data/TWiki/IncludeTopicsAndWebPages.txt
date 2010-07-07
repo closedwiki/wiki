@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273005047" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1278463962" format="1.1" version="$Rev$"}%
 ---+!! Include Topics and Web Pages Using =%<nop>INCLUDE{...}%= Variable
 
 Use the =%<nop>INCLUDE{...}%= variable to embed the content of another topic or web page inside a TWiki topic. The whole content or only parts of a page can be included. If needed, set a proxy server in %WIKIPREFSTOPIC%.
@@ -9,7 +9,7 @@ Use the =%<nop>INCLUDE{...}%= variable to embed the content of another topic or 
 
 =%<nop>INCLUDE{ "page" pattern="reg-exp" rev="2" warn="off" section="clients" PARAMETER1="value" PARAMETER2="Some value"}%=
 
-The =pattern= parameter is optional and allows you to extract some parts of a web page. Specify a %SYSTEMWEB%.RegularExpression that scans from start (='^'=) to end and contains the text you want to keep in parenthesis, e.g., =pattern="^.*?(from here.*?to here).*"=. You need to make sure that the integrity of a web page is not compromised; for example, if you include a table, make sure to include everything including the table end tag.
+The =pattern= parameter is optional and allows you to extract some parts of a web page. Specify a %SYSTEMWEB%.RegularExpression that scans from start (='^'=) to end and contains the text you want to keep in parenthesis, e.g., =pattern="^.*?(from here.*?to here).*"=. You need to make sure that the integrity of a web page is not compromised; for example, if you include an HTML table, make sure to include everything including the table end tag.
 
 The example parameters PARAMETER1 and PARAMETER2 will be defined as a variable within the scope of the included topic. The example parameters shown will result in %PARAMETER1% and %PARAMETER2% being defined within the included topic.
 
@@ -39,7 +39,23 @@ __Note:__ All text of a topic is included unless it contains a =%<nop>STARTINCLU
    * You get:
       * Tokyo: %INCLUDE{"http://TWiki.org/cgi-bin/xtra/tzdate?tz=Asia/Tokyo" pattern="^.*<\!--tzdate:date-->(.*?)<\!--/tzdate:date-->.*"}%
 
----+++ 4. Include a topic !MyTopic with two parameters
+---+++ 4. Create a big document of many included topics
+
+If you create a big document (such as a manual or book) it is better to split up content into topics. You can do that by chapter or sub-section. If needed you can adjust the heading level when you include the chapters into the master document. For example, in the master document you might want to show chapter's H1 heading as H2. Example:
+
+<verbatim>
+  ---+!! Breadslicer Users Guide
+  %TOC{ depth="3" }%
+  %INCLUDE{ "UsersGuidePreface"  headingoffset="1" }%
+  %INCLUDE{ "UsersGuideChapter1" headingoffset="1" }%
+  %INCLUDE{ "UsersGuideChapter2" headingoffset="1" }%
+  %INCLUDE{ "UsersGuideChapter3" headingoffset="1" }%
+  %INCLUDE{ "UsersGuideChapter4" headingoffset="1" }%
+  %INCLUDE{ "UsersGuideAppendix" headingoffset="1" }%
+  %INCLUDE{ "UsersGuideIndex"    headingoffset="1" }%
+</verbatim>
+
+---+++ 5. Include a topic !MyTopic with two parameters
 
 You include the topic with this line
 <verbatim>
@@ -56,7 +72,7 @@ The result would be
 
    * I like apples better than oranges.
 
----+++ 5. Alert Box using Parameterized Include
+---+++ 6. Alert Box using Parameterized Include
 
 Create a topic called !AlertBox with the following content:
 
@@ -85,7 +101,7 @@ Now you can write =%<nop>INCLUDE{ "AlertBox" TITLE="Alert" MESSAGE="This a test 
 
 The =TITLE=""= and =MESSAGE=""= parameters are passed into the include. Using this approach, you can create a library of boxes in the %USERSWEB% web, such as <nop>%USERSWEB%.NoteBox, <nop>%USERSWEB%.InfoBox.
 
----+++ 6. Create a Widget Library
+---+++ 7. Create a Widget Library
 
 You can create a library of [[http://en.wikipedia.org/wiki/GUI_widget][GUI widgets]] using a topic with named sections:
 
