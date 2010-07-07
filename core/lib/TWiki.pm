@@ -3552,6 +3552,15 @@ sub IF {
     return $result;
 }
 
+sub _fixHeaderOffset
+{
+    my ( $prefix, $level, $offset ) = @_;
+    $level += $offset;
+    $level = 1 if( $level < 1);
+    $level = 6 if( $level > 6);
+    return $prefix . '+' x $level;
+}
+
 # Processes a specific instance %<nop>INCLUDE{...}% syntax.
 # Returns the text to be inserted in place of the INCLUDE command.
 # $topic and $web should be for the immediate parent topic in the
@@ -3565,9 +3574,13 @@ sub INCLUDE {
     # Remove params, so they don't get expanded in the included page
     my $path = $params->remove('_DEFAULT') || '';
     my $pattern = $params->remove('pattern');
+    my $headingoffset = $params->remove('headingoffset') || '';
     my $rev = $params->remove('rev');
     my $section = $params->remove('section');
-    undef $section if (defined($section) && $section eq '');     #no sense in considering an empty string as an unfindable section
+
+    # no sense in considering an empty string as an unfindable section:
+    undef $section if (defined($section) && $section eq '');
+
     my $raw = $params->remove('raw') || '';
     my $warn = $params->remove('warn')
       || $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' );
@@ -3710,6 +3723,10 @@ sub INCLUDE {
                                             noautolink => 1} );
         # handle tags again because of plugin hook
         expandAllTags( $this, \$text, $includedTopic, $includedWeb, $meta );
+    }
+
+    if( $headingoffset =~ s/.*?([-+]?[0-9]).*/$1/ ) {
+        $text =~ s/^(---*)(\++)/_fixHeaderOffset( $1, length( $2 ), $headingoffset )/gem;
     }
 
     # restore the tags
