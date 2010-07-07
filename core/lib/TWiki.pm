@@ -3575,6 +3575,8 @@ sub INCLUDE {
     my $path = $params->remove('_DEFAULT') || '';
     my $pattern = $params->remove('pattern');
     my $headingoffset = $params->remove('headingoffset') || '';
+    my $hidetoc = isTrue( $params->remove('hidetoc') )
+      || isTrue( $this->{prefs}->getPreferencesValue( 'TOC_HIDE_IF_INCLUDED' ) );
     my $rev = $params->remove('rev');
     my $section = $params->remove('section');
 
@@ -3696,9 +3698,9 @@ sub INCLUDE {
 
     $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
 
-    # Do not show TOC in included topic if TOC_HIDE_IF_INCLUDED
-    # preference has been set
-    if( isTrue( $this->{prefs}->getPreferencesValue( 'TOC_HIDE_IF_INCLUDED' ))) {
+    # Do not show TOC in included topic if hidetoc parameter or
+    # TOC_HIDE_IF_INCLUDED preference setting has been set
+    if( $hidetoc ) {
         $text =~ s/%TOC(?:{(.*?)})?%//g;
     }
 
