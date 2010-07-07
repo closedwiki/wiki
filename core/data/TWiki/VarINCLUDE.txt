@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1278463961" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1278476260" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarINCLUDE
 ---+++ INCLUDE{"page"} -- include other topic or web page
@@ -11,6 +11,7 @@
      | ="http://..."= | A full qualified URL, i.e. =%<nop>INCLUDE{"http://twiki.org:80/index.html"}%=. Supported content types are =text/html= and =text/plain=. <br /> %I% if the URL resolves to an attachment file on the server this will _automatically_ translate to a server-side include. | |
      | =pattern="..."= |Include a subset of a topic or a web page. Specify a RegularExpression that scans from start (='^'=) to end and contains the text you want to keep in parenthesis, e.g., =pattern="^.*?(from here.*?to here).*"=. IncludeTopicsAndWebPages has more. | none |
      | =headingoffset="2"= | Adjust the level of headings in the included topic. A ="2"= or ="+2"= increases the level by two, e.g. a =---+= H1 turns into a =---+++= H3. Positive and negative values are supported. Adjusted min and max levels are H1 and H6, respectively. | no adjustment |
+     | =hidetoc="on"= | Remove =%<nop>TOC%= in included content. Useful to show table of contents in individual topics, while suppressing them if included in a big master document. | =TOC_HIDE_IF_%BR%INCLUDED= setting |
      | =rev="2"= | Include a previous topic revision; N/A for URLs | top revision |
      | =raw="on"= | When a page is included, normally %WIKITOOLNAME% will process it, doing the following: 1) Alter relative links to point back to originating host, 2) Remove some basic HTML tags (html, head, body, script) and finally 3) Remove newlines from HTML tags spanning multiple lines. If you prefer to include _exactly_ what is in the source of the originating page set this to =on=. %BR% =raw="on"= is short for =disableremoveheaders="on"=, =disableremovescript="on"=, =disableremovebody="on"=, =disablecompresstags="on"= and =disablerewriteurls="on"=. | disabled |
      | =literal="on"= | While using the =raw= option will indeed include the raw content, the included content will still be processed and rendered like regular topic content. To disable parsing of the included content, set the =literal= option to ="on"=. | disabled |
