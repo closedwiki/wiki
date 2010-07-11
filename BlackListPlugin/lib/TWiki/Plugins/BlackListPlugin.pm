@@ -111,8 +111,8 @@ sub initPlugin
                 _writeLog( "REGEXPIRE: Magic $magic is missing, bad or expired" );
                 my $msg = TWiki::Func::getPreferencesValue( "${pluginUpper}_REGMESSAGE" ) ||
                       "Registration failed, please try again.";
-                $ok = "[[%TWIKIWEB%.TWikiRegistration][OK]]";
-                my $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg, $ok );
+                my $link = $TWiki::cfg{SystemWebName} . '.TWikiRegistration';
+                my $url = TWiki::Func::getOopsUrl( $web, $topic, 'oopsblacklist', $msg, $link );
                 _redirect( $url );
                 exit 0; # should never reach this
             }
@@ -188,8 +188,8 @@ sub initPlugin
             # other scripts: redirect to oops message
             my $msg = TWiki::Func::getPreferencesValue( "${pluginUpper}_BLACKLISTMESSAGE" ) ||
                       "You are black listed at %WIKITOOLNAME%.";
-            my $ok = "[[http://en.wikipedia.org/wiki/Link_spam][OK]]";
-            my $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg, $ok );
+            my $link = 'http://en.wikipedia.org/wiki/Blog_spam';
+            my $url = TWiki::Func::getOopsUrl( $web, $topic, 'oopsblacklist', $msg, $link );
             _redirect( $url );
             exit 1; # should never reach this; force a "500 Internal Server Error" error
         }
@@ -323,8 +323,8 @@ sub _oopsMessage
         my $msg = TWiki::Func::getPreferencesValue( "${pluginUpper}_WIKISPAMMESSAGE" ) ||
                   "Spam detected, '%WIKISPAMWORD%' is a banned word and cannot be saved.";
         $msg =~ s/%WIKISPAMWORD%/$badword/;
-        my $ok = "[[http://en.wikipedia.org/wiki/Spamdexing][OK]]";
-        $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg, $ok );
+        my $link = 'http://en.wikipedia.org/wiki/Spamdexing';
+        $url = TWiki::Func::getOopsUrl( $web, $topic, 'oopsblacklist', $msg, $link );
         _redirect( $url );
         exit 0; # should never reach this
     }
