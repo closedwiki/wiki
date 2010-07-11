@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1278812260" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1278813181" format="1.1" version="$Rev$"}%
 ---+!! Black List Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -37,7 +37,8 @@ To fight Wiki-spam, the Plugin can also add a =rel="nofollow"= parameter to exte
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
 ---+++ General settings
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Utility to keep malicious users away from a public TWiki site
 
    * Debug plugin: (See output in =data/debug.txt=)
@@ -47,10 +48,11 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
       * Set LOGACCESS = 1
 
    * Access restriction:
-      * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
-      * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+      * Set ALLOWTOPICCHANGE = %USERSWEB%.TWikiAdminGroup
+      * Set ALLOWTOPICRENAME = %USERSWEB%.TWikiAdminGroup
 
 ---+++ WHITELIST, BLACKLIST and BANLIST settings
+
    * WHITELIST: Comma delimited list of IP addresses; possible to use partial addresses ending in a dot
       * Set WHITELIST = 127.0.0.1
 
@@ -58,7 +60,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
       * Set BLACKLIST = 203.88.152., 203.88.155., 219.65.75.
 
 #BanList
-<form name="banlist" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%#BanList" method="post">
+<form name="banlist" action="%SCRIPTURL{viewauth}%/%WEB%/%TOPIC%#BanList" method="post">
    * BANLIST: Automatically updated list of IP addresses based on BANLIST configuration
       * Action: <select name="ban_action"> <option></option> <option value="ban_add">Add</option> <option value="ban_remove">Remove</option> </select> IP address(es) <input type="text" name="ip" size="16" value="" /> <input type="submit" value="Submit" /> %BLACKLISTPLUGIN{ action="%URLPARAM{ban_action}%" value="%URLPARAM{ip}%" }%
       * Current list: %BLACKLISTPLUGIN{ action="ban_show" }%
@@ -78,6 +80,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
       * Set BLACKLISTMESSAGE = Your IP address %REMOTE_ADDR% is black listed at the %WIKITOOLNAME% web site due to excessive access or suspicious activities. Please contact site administrator %WIKIWEBMASTER% if you got on the list by mistake.
 
 ---+++ Wiki-spam filtering settings
+
    * Filter wiki-spam on topic save and HTML file uploads based on SPAMLIST: (0 or 1)
       * Set FILTERWIKISPAM = 1
 
@@ -85,15 +88,15 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
       * Set SPAMEXCLUDETOPICS = 
 
 #SpamList
-<form name="spamlist" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%#SpamList" method="post">
-   * Local SPAMLIST: Manually maintained list of spam patterns (NOTE: *Must be* %TWIKIWEB%.RegularExpression patterns)
+<form name="spamlist" action="%SCRIPTURL{viewauth}%/%WEB%/%TOPIC%#SpamList" method="post">
+   * Local SPAMLIST: Manually maintained list of spam patterns (NOTE: *Must be* %SYSTEMWEB%.RegularExpression patterns)
       * Action: <select name="spam_action"> <option></option> <option value="spam_add">Add</option> <option value="spam_remove">Remove</option> </select> wiki-spam regex pattern(s) <code>http://.*?</code><input type="text" name="spam" size="32" value="" /> <input type="submit" value="Submit" /> %BLACKLISTPLUGIN{ action="%URLPARAM{spam_action}%" value="%URLPARAM{spam}%" }%
       * Current list: %BLACKLISTPLUGIN{ action="spam_show" }%
 </form>
 
 #ExcludeList
-<form name="spamlist" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%#ExcludeList" method="post">
-   * EXCLUDELIST: Manually maintained list of exceptions to public wiki-spam patterns, useful to exclude patterns listed incorrectly as spam (NOTE: *Must be* %TWIKIWEB%.RegularExpression patterns)
+<form name="spamlist" action="%SCRIPTURL{viewauth}%/%WEB%/%TOPIC%#ExcludeList" method="post">
+   * EXCLUDELIST: Manually maintained list of exceptions to public wiki-spam patterns, useful to exclude patterns listed incorrectly as spam (NOTE: *Must be* %SYSTEMWEB%.RegularExpression patterns)
       * Action: <select name="exclude_action"> <option></option> <option value="exclude_add">Add</option> <option value="exclude_remove">Remove</option> </select> exclude spam regex pattern(s) <code>http://.*?</code><input type="text" name="spam" size="32" value="" /> <input type="submit" value="Submit" /> %BLACKLISTPLUGIN{ action="%URLPARAM{exclude_action}%" value="%URLPARAM{spam}%" }%
       * Current list: %BLACKLISTPLUGIN{ action="exclude_show" }%
 </form>
@@ -111,6 +114,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
       * Set WIKISPAMMESSAGE = Wiki-spam detected: "%WIKISPAMWORD%" is a banned word and cannot be saved. Your IP address %REMOTE_ADDR% is black listed at the %WIKITOOLNAME% web site due to suspicious activities. Please contact site administrator %WIKIWEBMASTER% if you got on the list by mistake.
 
 ---+++ Registration protection settings
+
    * Protect registration: (number of minutes to expire, 15 minutes is recommended, 0 to disable)
       * Set REGEXPIRE = 0
       * If enabled, a magic number is protecting the registration process. TWiki expects a form field with a magic number. An error message is shown if not valid or if expired. This makes it harder to register a user by a script. A hidden field needs to be added to the registration form:%BR% =&lt;input type="hidden" name="rx" value="%<nop>BLACKLISTPLUGIN{ action="magic" }%" /&gt;=
@@ -119,6 +123,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
       * Set REGMESSAGE = Registration failed, please try again.
 
 ---+++ Nofollow link setting
+
    * Add a =rel="nofollow"= parameter to external URLs. Use this is to fight Wiki-spam. Search engines will not follow the link if a URL has a nofollow parameter, such as =&lt;a href="http://spammer.com/" rel="nofollow"&gt;=. Specify topic age in hours for which the nofollow parameter should appear (set it to a value that gives you enough time to remove spam); set it to -1 to add the nofollow parameter unconditionally to external URLs; or 0 to disable: (-1, 0, 1...N)
       * Set NOFOLLOWAGE = -1
 
@@ -135,8 +140,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
      | ==pub/TWiki/%TOPIC%/.htaccess== | Apache access control to protect pub dir |
      | ==templates/oopsblacklist.tmpl== | Generic oops message |
    * Make sure =pub/TWiki/%TOPIC%/= is writable by the CGI user (typically =nobody=)
-   * Add the hidden form field to the registration form as described in the "Registration protection settings" section (this is already in TWiki 4.0)
-   * From TWiki 4.0 release on: Run the configure utility in your browser to enable the Plugin
+   * Run the configure utility in your browser to enable the Plugin
    * Make sure that non-administrators cannot edit this plugin topic. By default, this topic is write protected with an =ALLOWTOPICCHANGE = !TWikiAdminGroup= setting.
    * Test if the installation was successful:
       1 Using above form, add the IP address of one of your workstations to the BANLIST
@@ -179,9 +183,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 97% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 99%, %TOPIC% 97% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, [[http://directory.google.com/Top/Computers/Internet/Abuse/Spam/Wikispam/][Google wiki spam directory]]
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, TWiki:Codev.WikiSpam
