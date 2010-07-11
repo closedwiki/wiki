@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004-2007 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2004-2010 Peter Thoeny, peter@thoeny.org
 #
 # For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -24,24 +24,18 @@ package TWiki::Plugins::BlackListPlugin;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
+        $web $topic $user $installWeb $VERSION $RELEASE $pluginName $pluginUpper
         $debug %cfg
         $userScore $isBlackSheep
     );
 use vars qw( %TWikiCompatibility );
 
-BEGIN {
-# This should always be $Rev: 13186 $ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev: 13186 $';
+$RELEASE = '2010-07-10';
 
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'any TWiki';
-
-    $pluginName = 'BlackListPlugin';  # Name of this Plugin
+BEGIN {
+    $pluginName  = 'BlackListPlugin';  # Name of this Plugin
+    $pluginUpper = 'BLACKLISTPLUGIN';
     %cfg =
         (
             "ptReg"   => 10,
@@ -82,7 +76,7 @@ sub initPlugin
     }
 
     # get debug flag
-    $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
+    $debug = TWiki::Func::getPreferencesFlag( "${pluginUpper}_DEBUG" );
 
     my $cgiQuery = TWiki::Func::getCgiQuery();
 
@@ -90,7 +84,7 @@ sub initPlugin
     if( ( $cgiQuery ) && ( $ENV{'SCRIPT_NAME'} ) && ( $ENV{'SCRIPT_NAME'} =~ /^.*\/register/ ) ) {
         my $magic = $cgiQuery->param('rx') || "";
         $magic = "" unless( $magic =~ s/.*?([0-9]+).*/$1/s );
-        my $expire = TWiki::Func::getPreferencesValue( "\U$pluginName\E_REGEXPIRE" ) || 0;
+        my $expire = TWiki::Func::getPreferencesValue( "${pluginUpper}_REGEXPIRE" ) || 0;
         $expire = 0 unless( $expire =~ s/.*?([0-9]+).*/$1/s );
         if( $TWiki::Plugins::VERSION >= 1.1 ) {
             # look at magic number only for register, not for verify, resetPassword or approve
@@ -115,11 +109,11 @@ sub initPlugin
             unless( $ok ) {
                 # magic number expired
                 _writeLog( "REGEXPIRE: Magic $magic is missing, bad or expired" );
-                my $msg = TWiki::Func::getPreferencesValue( "\U$pluginName\E_REGMESSAGE" ) ||
+                my $msg = TWiki::Func::getPreferencesValue( "${pluginUpper}_REGMESSAGE" ) ||
                       "Registration failed, please try again.";
                 $ok = "[[%TWIKIWEB%.TWikiRegistration][OK]]";
                 my $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg, $ok );
-                print $cgiQuery->redirect( $url );
+                _redirect( $url );
                 exit 0; # should never reach this
             }
         }
@@ -127,7 +121,7 @@ sub initPlugin
 
     # initialize for rel="nofollow" links
     $urlHost = TWiki::Func::getUrlHost();
-    $noFollowAge = TWiki::Func::getPreferencesValue( "\U$pluginName\E_NOFOLLOWAGE" ) || 0;
+    $noFollowAge = TWiki::Func::getPreferencesValue( "${pluginUpper}_NOFOLLOWAGE" ) || 0;
     $noFollowAge = 0 unless( $noFollowAge =~ s/.*?(\-?[0-9]*.*)/$1/s );
     if( $noFollowAge > 0 ) {
         $noFollowAge *= 3600;
@@ -139,7 +133,7 @@ sub initPlugin
     my $whiteList = _getWhiteListRegex();
 
     # black list
-    my $blackList = TWiki::Func::getPreferencesValue( "\U$pluginName\E_BLACKLIST" ) || "";
+    my $blackList = TWiki::Func::getPreferencesValue( "${pluginUpper}_BLACKLIST" ) || "";
     $blackList = join( "|", map { quotemeta } split( /,\s*/, $blackList ) );
 
     # ban list
@@ -165,7 +159,7 @@ sub initPlugin
             # check for new candidate of black sheep
 
             my( $c1, $c2, $c3, $c4, $c5, $c6 ) =
-                split( /,\s*/, TWiki::Func::getPreferencesValue( "\U$pluginName\E_BANLISTCONFIG" ) );
+                split( /,\s*/, TWiki::Func::getPreferencesValue( "${pluginUpper}_BANLISTCONFIG" ) );
             $cfg{ "ptReg" }   = $c1 || 10;
             $cfg{ "ptChg" }   = $c2 || 5;
             $cfg{ "ptView" }  = $c3 || 1;
@@ -192,15 +186,12 @@ sub initPlugin
             # show oops message normal
         } else {
             # other scripts: redirect to oops message
-            unless( $cgiQuery ) {
-                exit 1; # Force a "500 Internal Server Error" error
-            }
-            my $msg = TWiki::Func::getPreferencesValue( "\U$pluginName\E_BLACKLISTMESSAGE" ) ||
+            my $msg = TWiki::Func::getPreferencesValue( "${pluginUpper}_BLACKLISTMESSAGE" ) ||
                       "You are black listed at %WIKITOOLNAME%.";
             my $ok = "[[http://en.wikipedia.org/wiki/Link_spam][OK]]";
             my $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg, $ok );
-            print $cgiQuery->redirect( $url );
-            exit 0; # should never reach this
+            _redirect( $url );
+            exit 1; # should never reach this; force a "500 Internal Server Error" error
         }
     }
 
@@ -253,10 +244,10 @@ sub beforeSaveHandler
     # This handler is called by TWiki::Store::saveTopic just before the save action.
 
     # Bail out unless spam filtering is enabled
-    return unless( TWiki::Func::getPreferencesFlag( "\U$pluginName\E_FILTERWIKISPAM" ) );
+    return unless( TWiki::Func::getPreferencesFlag( "${pluginUpper}_FILTERWIKISPAM" ) );
 
     # Bail out for excluded topics
-    my @arr = split( /,\s*/, TWiki::Func::getPreferencesValue( "\U$pluginName\E_SPAMEXCLUDETOPICS" ) );
+    my @arr = split( /,\s*/, TWiki::Func::getPreferencesValue( "${pluginUpper}_SPAMEXCLUDETOPICS" ) );
     foreach( @arr ) {
         return if( ( /^(.*)/ ) && ( $1 eq "$_[2].$_[1]" ) );
     }
@@ -296,7 +287,7 @@ sub beforeAttachmentSaveHandler
     writeDebug( "beforeAttachmentSaveHandler( $_[2].$_[1], $attachmentName )" );
 
     # Bail out unless spam filtering is enabled
-    return unless( TWiki::Func::getPreferencesFlag( "\U$pluginName\E_FILTERWIKISPAM" ) );
+    return unless( TWiki::Func::getPreferencesFlag( "${pluginUpper}_FILTERWIKISPAM" ) );
 
     # test only attachments of type .html and a few more
     return unless( $attachmentName =~ m/\.(html?|txt|js|css)$/i );
@@ -325,17 +316,16 @@ sub _oopsMessage
 {
     my ( $type, $badword, $remoteAddr ) = @_;
 
-    my $cgiQuery = TWiki::Func::getCgiQuery();
-    if( $cgiQuery ) {
+    if( TWiki::Func::getCgiQuery() ) {
         _handleBanList( "add", $remoteAddr );
         _writeLog( "SPAMLIST add: $remoteAddr, $type spam '$badword'" );
 
-        my $msg = TWiki::Func::getPreferencesValue( "\U$pluginName\E_WIKISPAMMESSAGE" ) ||
+        my $msg = TWiki::Func::getPreferencesValue( "${pluginUpper}_WIKISPAMMESSAGE" ) ||
                   "Spam detected, '%WIKISPAMWORD%' is a banned word and cannot be saved.";
         $msg =~ s/%WIKISPAMWORD%/$badword/;
         my $ok = "[[http://en.wikipedia.org/wiki/Spamdexing][OK]]";
         $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg, $ok );
-        print $cgiQuery->redirect( $url );
+        _redirect( $url );
         exit 0; # should never reach this
     }
     # else (unlikely case) force a "500 Internal Server Error" error
@@ -345,7 +335,7 @@ sub _oopsMessage
 # =========================
 sub _getWhiteListRegex
 {
-    my $regex = TWiki::Func::getPreferencesValue( "\U$pluginName\E_WHITELIST" ) || "127.0.0.1";
+    my $regex = TWiki::Func::getPreferencesValue( "${pluginUpper}_WHITELIST" ) || "127.0.0.1";
     $regex = join( "|", map { quotemeta } split( /,\s*/, $regex ) );
     return "($regex)";
 }
@@ -353,7 +343,7 @@ sub _getWhiteListRegex
 # =========================
 sub _getSpamListRegex
 {
-    my $refresh = TWiki::Func::getPreferencesValue( "\U$pluginName\E_SPAMREGEXREFRESH" ) || 5;
+    my $refresh = TWiki::Func::getPreferencesValue( "${pluginUpper}_SPAMREGEXREFRESH" ) || 5;
     $refresh = 1 unless( $refresh =~ s/.*?([0-9]+).*/$1/s );
     $refresh = 1 if( $refresh < 1 );
 
@@ -384,9 +374,9 @@ sub _getSpamListRegex
 # =========================
 sub _getSpamMergeText
 {
-    my $url = TWiki::Func::getPreferencesValue( "\U$pluginName\E_SPAMLISTURL" ) ||
+    my $url = TWiki::Func::getPreferencesValue( "${pluginUpper}_SPAMLISTURL" ) ||
               'http://arch.thinkmo.de/cgi-bin/spam-merge';
-    my $refresh = TWiki::Func::getPreferencesValue( "\U$pluginName\E_SPAMLISTREFRESH" ) || 10;
+    my $refresh = TWiki::Func::getPreferencesValue( "${pluginUpper}_SPAMLISTREFRESH" ) || 10;
     $refresh = 10 unless( $refresh =~ s/.*?([0-9]+).*/$1/s );
     $refresh = 10 if( $refresh < 10 );
 
@@ -582,7 +572,7 @@ sub _handleBlackList
     if( $action eq "magic" ) {
         $text = int( rand( 100000 ) ) + 1;
         my $time = time();
-        my $expire = TWiki::Func::getPreferencesValue( "\U$pluginName\E_REGEXPIRE" ) || 0;
+        my $expire = TWiki::Func::getPreferencesValue( "${pluginUpper}_REGEXPIRE" ) || 0;
         $expire = 0 unless( $expire =~ s/.*?([0-9]+).*/$1/s );
         $expire *= 60;
         $expire = $time - $expire;
@@ -803,13 +793,20 @@ sub _makeFileDir
 sub _writeLog
 {
     my ( $theText ) = @_;
-    if( TWiki::Func::getPreferencesFlag( "\U$pluginName\E_LOGACCESS" ) ) {
+    if( TWiki::Func::getPreferencesFlag( "${pluginUpper}_LOGACCESS" ) ) {
         # FIXME: Call to unofficial function
         $TWiki::Plugins::SESSION > 1.1
           ? $TWiki::Plugins::SESSION->writeLog( "blacklist", "$web.$topic", $theText )
           : TWiki::Store::writeLog( "blacklist", "$web.$topic", $theText );
         writeDebug( "BLACKLIST access, $web/$topic, $theText" );
     }
+}
+
+# =========================
+sub _redirect
+{
+    my ( $theUrl ) = @_;
+    print "Status: 302 Moved\nLocation: $theUrl\n\n";
 }
 
 # =========================
