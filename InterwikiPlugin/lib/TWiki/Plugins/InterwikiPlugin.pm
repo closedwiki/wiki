@@ -51,7 +51,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-06-23';
+$RELEASE = '2010-07-12';
 
 BEGIN {
     # 'Use locale' for internationalisation of Perl sorting and searching - 
@@ -77,7 +77,7 @@ sub initPlugin {
     my $man = TWiki::Func::getRegularExpression('mixedAlphaNum');
     my $ua = TWiki::Func::getRegularExpression('upperAlpha');
     $sitePattern    = "([$ua][$man]+)";
-    $pagePattern    = "([${man}_\/][$man" . '\.\/\+\_\,\&\;\:\=\!\?\%\#\@\-]*?)';
+    $pagePattern    = "([${man}\_\~\%\/][$man" . '\.\/\+\_\~\,\&\;\:\=\!\?\%\#\@\-]*?)';
 
     # Get plugin preferences from InterwikiPlugin topic
     $interLinkFormat =

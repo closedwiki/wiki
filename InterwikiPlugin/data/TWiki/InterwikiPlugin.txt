@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277277222" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1278993542" format="1.1" version="$Rev$"}%
 ---+!! Interwiki Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page
@@ -62,8 +62,9 @@ __%X% Note:__ This plugin is included in the TWiki distribution package. You do 
 |  Plugin Author: | TWiki:Main/AndreaSterbini, TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2009 Andrea Sterbini,%BR% &copy; 2001-2010 Peter Thoeny ([[http://www.twiki.net/][Twiki, Inc.]]),%BR% &copy; 2001-2010 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-06-23 %$VERSION% |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-07-12: | TWikibug:Item6521 - add ~ and % to allowed characters in page part of Site:page link |
 |  2010-06-23: | TWikibug:Item6503 - fix TWiki.org specific !TWiki:Web.Topic interwiki links to have .../view/Web/Topic type URLs |
 |  2010-05-15: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  28 Feb 2009: | 17851 - TWikibug:Item5025 - Added === and =&amp;= to page regex, allowing links such as =Site:ID=1234&amp;sel=56= |
