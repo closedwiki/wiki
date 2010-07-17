@@ -684,8 +684,10 @@ sub doFunc
             my $string = $1;
             my $from = $2;
             my $to   = $3;
-            $from =~ s/\$comma/,/g;  $from =~ s/\$sp/ /g;  $from = quotemeta( $from );
-            $to   =~ s/\$comma/,/g;  $to   =~ s/\$sp/ /g;  $to   = quotemeta( $to );
+            $from =~ s/\$comma/,/g;      $to =~ s/\$comma/,/g;
+            $from =~ s/\$sp/ /g;         $to =~ s/\$sp/ /g;
+            $from =~ s/\$n/\n/g;         $to =~ s/\$n/\n/g; # the $from is silly, CALC can't be multi-line, yet
+            $from = quotemeta( $from );  $to = quotemeta( $to );
             $from =~ s/([a-zA-Z0-9])\\\-([a-zA-Z0-9])/$1\-$2/g; # fix quotemeta (allow only ranges)
             $to   =~ s/([a-zA-Z0-9])\\\-([a-zA-Z0-9])/$1\-$2/g;
             $result = $string;
