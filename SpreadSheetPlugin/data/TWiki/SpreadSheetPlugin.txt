@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277617167" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1279434253" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -620,7 +620,7 @@ Conventions for Syntax:
 
 #FuncTRANSLATE
 ---+++ TRANSLATE( text, from, to ) -- translate text from one set of characters to another
-   * The translation is done =from= a set =to= a set, one character by one. The =text= may contain commas; all three parameters are required. In the =from= and =to= parameters you can write =$comma= to escape comma, =$sp= to escape space
+   * The translation is done =from= a set =to= a set, one character by one. The =text= may contain commas; all three parameters are required. In the =from= and =to= parameters you can add token =$comma= for comma, =$sp= for space, and =$n= for newline
    * Syntax: ==$TRANSLATE( text, from, to )==
    * Example: ==%<nop>CALC{"$TRANSLATE(boom,bm,cl)"}%== returns ==cool==
    * Example: ==%<nop>CALC{"$TRANSLATE(one, two,$comma,;)"}%== returns ==one; two==
@@ -780,8 +780,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | %$VERSION% (2010-06-27) |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-07-17: | TWikibug:Item6525 - add $n token to TRANSLATE for newline |
 |  2010-05-27: | TWikibug:Item6506 - document delayed evaluation of CALC in included topics |
 |  2010-05-26: | TWikibug:Item6504 - add empty ($nop) separator to $LISTJOIN() |
 |  2010-06-25: | TWikibug:Item6493 - fix for $PRODUCT(0,4) returning 4 instead of 0<br /> TWikibug:Item5163 - fix for plugin causing table to misrender an empty "&#124;&#124;" row |
