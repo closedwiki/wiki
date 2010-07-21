@@ -126,9 +126,12 @@ sub _readPasswd {
     my $line = '';
     while ( defined( $line = <IN_FILE> ) ) {
         if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {    # htdigest format
-            if ($line =~ /^([^:]*):([^:]*):([^:]*):([^:]*)(?::([^:]*)(?::([^:]*)(?::([^:]*)
-(?::(.*))?)?)?)?$/) 
-                   
+            if (
+                $line =~
+/^([^:]*):([^:]*):([^:]*):([^:]*)(?::([^:]*)(?::([^:]*)(?::([^:]*)
+(?::(.*))?)?)?)?$/
+              )
+
             {
                 $data->{$1}->{pass} = $3;
                 $data->{$1}->{emails} = $4 || '';
@@ -139,8 +142,11 @@ sub _readPasswd {
             }
         }
         else {    # htpasswd format
-            if ($line =~ /^([^:]*):([^:]*):([^:]*)(?::([^:]*)(?::([^:]*)(?::([^:]*)
-(?::(.*))?)?)?)?$/ )
+            if (
+                $line =~
+                /^([^:]*):([^:]*):([^:]*)(?::([^:]*)(?::([^:]*)(?::([^:]*)
+(?::(.*))?)?)?)?$/
+              )
             {
                 $data->{$1}->{pass} = $2;
                 $data->{$1}->{emails} = $3 || '';
@@ -166,11 +172,19 @@ sub _dumpPasswd {
                 $_ . ':'
               . $TWiki::cfg{AuthRealm} . ':'
               . $db->{$_}->{pass} . ':'
-              . $db->{$_}->{emails} . "\n";
+              . $db->{$_}->{emails} . ':'
+              . $db->{$_}->{flag} . ':'
+              . $db->{$_}->{pass_change} . ':'
+              . $db->{$_}->{flag_change} . "\n";
         }
         else {                                               # htpasswd format
             $s .=
-              $_ . ':' . $db->{$_}->{pass} . ':' . $db->{$_}->{emails} . "\n";
+                $_ . ':'
+              . $db->{$_}->{pass} . ':'
+              . $db->{$_}->{emails} . ":"
+              . $db->{$_}->{flag} . ":"
+              . $db->{$_}->{pass_change} . ":"
+              . $db->{$_}->{flag_change} . "\n";
         }
     }
     return $s;
