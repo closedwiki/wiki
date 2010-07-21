@@ -126,15 +126,29 @@ sub _readPasswd {
     my $line = '';
     while ( defined( $line = <IN_FILE> ) ) {
         if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {    # htdigest format
-            if ( $line =~ /^(.*?):(.*?):(.*?)(?::(.*))?$/ ) {
+            if ($line =~ /^([^:]*):([^:]*):([^:]*):([^:]*)(?::([^:]*)(?::([^:]*)(?::([^:]*)
+(?::(.*))?)?)?)?$/) 
+                   
+            {
                 $data->{$1}->{pass} = $3;
                 $data->{$1}->{emails} = $4 || '';
+                $data->{$1}->{flag} =
+                  ( ( defined $5 ) && ( $5 == 0 ) ) ? 0 : ( $5 || '' );
+                $data->{$1}->{pass_change} = $6 || '';
+                $data->{$1}->{flag_change} = $7 || '';
             }
         }
-        else {                                               # htpasswd format
-            if ( $line =~ /^(.*?):(.*?)(?::(.*))?$/ ) {
+        else {    # htpasswd format
+            if ($line =~ /^([^:]*):([^:]*):([^:]*)(?::([^:]*)(?::([^:]*)(?::([^:]*)
+(?::(.*))?)?)?)?$/ )
+            {
                 $data->{$1}->{pass} = $2;
                 $data->{$1}->{emails} = $3 || '';
+                $data->{$1}->{flag} =
+                  ( ( defined $4 ) && ( $4 == 0 ) ) ? 0 : ( $4 || '' );
+                $data->{$1}->{pass_change} = $5 || '';
+                $data->{$1}->{flag_change} = $6 || '';
+
             }
         }
     }
