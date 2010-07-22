@@ -120,44 +120,30 @@ sub _readPasswd {
     if ( !-e $TWiki::cfg{Htpasswd}{FileName} ) {
         return $data;
     }
+
     open( IN_FILE, "<$TWiki::cfg{Htpasswd}{FileName}" )
       || throw Error::Simple(
         $TWiki::cfg{Htpasswd}{FileName} . ' open failed: ' . $! );
-    my $line = '';
-    while ( defined( $line = <IN_FILE> ) ) {
+  
+   while (<IN_FILE> ) {
+          next if /^\s*(?:$|#)/; #skip comments/raw lines
+          my @line = split /:/; 
+          my $key = shift @line || throw Error::Simple ("Bad data at line " . $.); 
+ 
         if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {    # htdigest format
-            if (
-                $line =~
-/^([^:]*):([^:]*):([^:]*):([^:]*)(?::([^:]*)(?::([^:]*)(?::([^:]*)
-(?::(.*))?)?)?)?$/
-              )
+             my @cols = qw/ authrealm pass emails flag pass_change flag_change /;
+             @{ $data->{ $key }}{@cols} = @line;
+             $data->{ $key }{flag} ||=0;
 
-            {
-                $data->{$1}->{pass} = $3;
-                $data->{$1}->{emails} = $4 || '';
-                $data->{$1}->{flag} =
-                  ( ( defined $5 ) && ( $5 == 0 ) ) ? 0 : ( $5 || '' );
-                $data->{$1}->{pass_change} = $6 || '';
-                $data->{$1}->{flag_change} = $7 || '';
-            }
         }
         else {    # htpasswd format
-            if (
-                $line =~
-                /^([^:]*):([^:]*):([^:]*)(?::([^:]*)(?::([^:]*)(?::([^:]*)
-(?::(.*))?)?)?)?$/
-              )
-            {
-                $data->{$1}->{pass} = $2;
-                $data->{$1}->{emails} = $3 || '';
-                $data->{$1}->{flag} =
-                  ( ( defined $4 ) && ( $4 == 0 ) ) ? 0 : ( $4 || '' );
-                $data->{$1}->{pass_change} = $5 || '';
-                $data->{$1}->{flag_change} = $6 || '';
+             my @cols = qw/ pass emails flag pass_change flag_change /;
+             @{ $data->{ $key }}{@cols} = @line;
+             $data->{ $key }{flag} ||=0;
 
             }
         }
-    }
+   
     close(IN_FILE);
     $this->{passworddata} = $data;
     return $data;
@@ -171,20 +157,20 @@ sub _dumpPasswd {
             $s .=
                 $_ . ':'
               . $TWiki::cfg{AuthRealm} . ':'
-              . $db->{$_}->{pass} . ':'
-              . $db->{$_}->{emails} . ':'
-              . $db->{$_}->{flag} . ':'
-              . $db->{$_}->{pass_change} . ':'
-              . $db->{$_}->{flag_change} . "\n";
+              . $db->{$_}{pass} . ':'
+              . $db->{$_}{emails} . ':'
+              . $db->{$_}{flag} . ':'
+              .($db->{$_}{pass_change} ||='').":"     # converting undef to ''
+              .($db->{$_}{flag_change} ||=''). "\n";  # converting undef to ''
         }
         else {                                               # htpasswd format
             $s .=
-                $_ . ':'
-              . $db->{$_}->{pass} . ':'
-              . $db->{$_}->{emails} . ":"
-              . $db->{$_}->{flag} . ":"
-              . $db->{$_}->{pass_change} . ":"
-              . $db->{$_}->{flag_change} . "\n";
+              $_ . ':' 
+             . $db->{$_}{pass} . ':' 
+             . $db->{$_}{emails} . ":"
+             . $db->{$_}{flag} . ":"
+              .($db->{$_}{pass_change} ||='').":"      # converting undef to ''
+              .($db->{$_}{flag_change} ||=''). "\n";   # converting undef to ''
         }
     }
     return $s;
