@@ -124,26 +124,28 @@ sub _readPasswd {
     open( IN_FILE, "<$TWiki::cfg{Htpasswd}{FileName}" )
       || throw Error::Simple(
         $TWiki::cfg{Htpasswd}{FileName} . ' open failed: ' . $! );
-  
-   while (<IN_FILE> ) {
-          next if /^\s*(?:$|#)/; #skip comments/raw lines
-          my @line = split /:/; 
-          my $key = shift @line || throw Error::Simple ("Bad data at line " . $.); 
- 
+
+    while (<IN_FILE>) {
+        next if /^\s*(?:$|#)/;    #skip comments/raw lines
+        chomp;
+        my @line = split /:/;
+        my $key  = shift @line
+          || throw Error::Simple( "Bad data at line " . $. );
+
         if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {    # htdigest format
-             my @cols = qw/ authrealm pass emails flag pass_change flag_change /;
-             @{ $data->{ $key }}{@cols} = @line;
-             $data->{ $key }{flag} ||=0;
+            my @cols = qw/ authrealm pass emails flag pass_change flag_change /;
+            @{ $data->{$key} }{@cols} = @line;
+            $data->{$key}{flag} ||= 0;
 
         }
-        else {    # htpasswd format
-             my @cols = qw/ pass emails flag pass_change flag_change /;
-             @{ $data->{ $key }}{@cols} = @line;
-             $data->{ $key }{flag} ||=0;
+        else {                                               # htpasswd format
+            my @cols = qw/ pass emails flag pass_change flag_change /;
+            @{ $data->{$key} }{@cols} = @line;
+            $data->{$key}{flag} ||= 0;
 
-            }
         }
-   
+    }
+
     close(IN_FILE);
     $this->{passworddata} = $data;
     return $data;
@@ -151,7 +153,13 @@ sub _readPasswd {
 
 sub _dumpPasswd {
     my $db = shift;
-    my $s  = '';
+
+    open( F, ">/tmp/dumpdump" );
+    use Data::Dumper;
+    print F Data::Dumper->Dump( [$db] );
+    close(F);
+
+    my $s = '';
     foreach ( sort keys %$db ) {
         if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {    # htdigest format
             $s .=
@@ -160,17 +168,21 @@ sub _dumpPasswd {
               . $db->{$_}{pass} . ':'
               . $db->{$_}{emails} . ':'
               . $db->{$_}{flag} . ':'
-              .($db->{$_}{pass_change} ||='').":"     # converting undef to ''
-              .($db->{$_}{flag_change} ||=''). "\n";  # converting undef to ''
+              . ( $db->{$_}{pass_change} ||= '' )
+              . ":"    # converting undef to ''
+              . ( $db->{$_}{flag_change} ||= '' )
+              . "\n";    # converting undef to ''
         }
-        else {                                               # htpasswd format
+        else {           # htpasswd format
             $s .=
-              $_ . ':' 
-             . $db->{$_}{pass} . ':' 
-             . $db->{$_}{emails} . ":"
-             . $db->{$_}{flag} . ":"
-              .($db->{$_}{pass_change} ||='').":"      # converting undef to ''
-              .($db->{$_}{flag_change} ||=''). "\n";   # converting undef to ''
+                $_ . ':'
+              . $db->{$_}{pass} . ':'
+              . $db->{$_}{emails} . ":"
+              . $db->{$_}{flag} . ":"
+              . ( $db->{$_}{pass_change} ||= '' )
+              . ":"      # converting undef to ''
+              . ( $db->{$_}{flag_change} ||= '' )
+              . "\n";    # converting undef to ''
         }
     }
     return $s;
