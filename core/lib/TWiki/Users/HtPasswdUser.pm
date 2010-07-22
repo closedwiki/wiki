@@ -154,11 +154,6 @@ sub _readPasswd {
 sub _dumpPasswd {
     my $db = shift;
 
-    open( F, ">/tmp/dumpdump" );
-    use Data::Dumper;
-    print F Data::Dumper->Dump( [$db] );
-    close(F);
-
     my $s = '';
     foreach ( sort keys %$db ) {
         if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {    # htdigest format
