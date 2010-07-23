@@ -135,6 +135,9 @@ sub login {
     my $twiki = $this->{twiki};
     my $users = $twiki->{users};
 
+
+
+
     my $origurl = $query->param( 'origurl' );
     my $loginName = $query->param( 'username' );
     my $loginPass = $query->param( 'password' );
@@ -175,6 +178,13 @@ sub login {
                 $origurl = $twiki->getScriptUrl( 0, 'view', $web, $topic );
             }
             #SUCCESS our user is authenticated..
+
+            my $passflag = $users->passwordChangeFlag($loginName);
+            if ($passflag) {
+             #TODO - add the logic to take user to change password prompt  
+            }           
+
+ 
             $query->delete('sudo'); #remove the sudo param - its only to tell TemplateLogin that we're using BaseMapper..
             # Redirect with passthrough
             $twikiSession->redirect($origurl, 1 );
@@ -183,6 +193,7 @@ sub login {
             $banner = $twiki->templates->expandTemplate('UNRECOGNISED_USER');
         }
     }
+
 
     # TODO: add JavaScript password encryption in the template
     # to use a template)
