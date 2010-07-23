@@ -914,4 +914,25 @@ sub removeUser {
     $this->_getMapping($cUID)->removeUser($cUID);
 }
 
+
+=pod 
+
+
+---++ passwordChangeFlag ( $this, $login, $flag) -> $boolean 
+this subroutine helps to set the flag or just returns the current flag. 
+helpful if the flag is 1, then user is prompted to change the password
+
+
+
+
+=cut 
+
+sub passwordChangeFlag {
+    my ( $this, $login, $flag ) = @_;
+    my $mapping = $this->_getMapping(undef, $login, undef, 0);
+    return $mapping->passwordChangeFlag( $login, $flag );
+
+}
+
+
 1;
