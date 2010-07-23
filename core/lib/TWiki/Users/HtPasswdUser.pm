@@ -302,6 +302,11 @@ sub setPassword {
         $db->{$login}->{pass} = $this->encrypt( $login, $newUserPassword, 1 );
         $db->{$login}->{emails} ||= '';
         $db->{$login}->{pass_change} = time();
+        if ( $db->{$login}->{flag} ) {
+            $db->{$login}->{flag}        = 0;
+            $db->{$login}->{flag_change} = time();
+        }
+
         _savePasswd($db);
     }
     catch Error::Simple with {
