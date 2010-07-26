@@ -3,6 +3,7 @@
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
 # Copyright (C) 2006-2007 Stéphane Lenclud, twiki@lenclud.com
+# Copyright (C) 2000-2010 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,17 +22,9 @@
 # a. allow custom icons for the nodes (could either use prefix to text
 #    (see RenderListPlugin) or pass in %TREEBROWSER% tag
 # b. Allow wrapping of long text
-#
-#    
-#
-#   initPlugin              ( $topic, $web, $user, $installWeb )    1.000
-#   startRenderingHandler   ( $text, $web )                         1.000
-#
-
 
 # =========================
 package TWiki::Plugins::TreeBrowserPlugin;
-
 
 # =========================
 use vars qw(
@@ -39,7 +32,9 @@ use vars qw(
         $debug $js
     );
 
-$VERSION = 'v1.8';
+$VERSION = '$Rev$';
+$RELEASE = '2010-07-25';
+
 $pluginName = 'TreeBrowserPlugin';
 
 # =========================
