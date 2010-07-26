@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272609327" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1280114338" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -8,7 +8,7 @@
 -->
 %SHORTDESCRIPTION%
 <div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
-%TOC%
+%TOC{title="Page contents"}%
 </div>
 
 ---++ Description
@@ -179,8 +179,9 @@ Compare with [[http://en.wikipedia.org/wiki/Category:Philosophy_articles_needing
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright: | &copy; 2005-2008, Michael Daum http://michaeldaumconsulting.com <br /> &copy; 2005-2010, TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.6 |
+|  Plugin Version: | 2010-07-25 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-07-25: | TWikibug:Item6530 - doc improvements |
 |  2010-04-29: | TWikibug:Item6433 - doc improvements |
 |  03 Jul 2008: | sorting a list _before_, not _after_, formatting it in FORMATLIST |
 |  08 May 2008: | added 'text' parameter to SUBST and EXTRACT; \
