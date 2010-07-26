@@ -7,7 +7,7 @@
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
-%TOC%
+%TOC{title="Page contents"}%
 </div>
 Display TWiki links spaced out: [[%TOPIC%][WebHome]] is displayed as [[%TOPIC%][Web Home]]. %BR%
 Or use this plugin to display "underscore topic names" like [[%TOPIC%][Topic_name]] as [[%TOPIC%][Topic name]].
