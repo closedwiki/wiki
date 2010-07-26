@@ -1,5 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
+# Copyright (C) 2005-2010 TWiki Contributors
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -30,15 +32,8 @@ my %sortInputTable = (
       $TWiki::Plugins::TopicDataHelperPlugin::sortDirections{'DESCENDING'},
 );
 
-# This should always be $Rev: 14207 $ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev: 14207 $';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.3';
+$RELEASE = '2010-07-25';
 
 $pluginName = 'AttachmentListPlugin';
 
