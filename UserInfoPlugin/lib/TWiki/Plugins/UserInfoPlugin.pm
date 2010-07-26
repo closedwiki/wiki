@@ -1,6 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2005-2010 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,7 +21,7 @@ use strict;
 use vars qw( $VERSION $RELEASE $uipCore );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.53';
+$RELEASE = '2010-07-25';
 
 ###############################################################################
 sub initPlugin {
