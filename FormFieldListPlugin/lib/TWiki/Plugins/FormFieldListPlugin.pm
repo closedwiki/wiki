@@ -3,6 +3,7 @@
 # Copyright (C) 2004 Rafael Alvarez, soronthar@flashmail.com
 # Copyright (C) 2004 Bernd Raichle, bernd.raichle@gmx.de
 # Copyright (C) 2008 Arthur Clemens, arthur@visiblearea.com
+# Copyright (C) 2004-2010 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,15 +28,8 @@ use vars qw($VERSION $RELEASE $pluginName
   $debug $defaultFormat $STORE_FILENAME
 );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '2.010';
+$RELEASE = '2010-07-25';
 
 $STORE_FILENAME = 'field_data.txt';
 
