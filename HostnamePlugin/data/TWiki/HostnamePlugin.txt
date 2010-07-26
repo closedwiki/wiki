@@ -1,12 +1,18 @@
-%META:TOPICINFO{author="TWikiContributor" date="1182547552" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1280115168" format="1.1" version="$Rev$"}%
 ---+!! !HostnamePlugin
 <!--
-One line description, required for extensions repository catalog.
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/HostnamePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/HostnamePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+
+   One line description, required for extensions repository catalog:
    * Set SHORTDESCRIPTION = Displays the hostname of the server serving TWiki.
 -->
 %SHORTDESCRIPTION%
-
-%TOC%
+<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
+%TOC{title="Page contents"}%
+</div>
 
 ---++ Usage
 
@@ -14,8 +20,8 @@ One line description, required for extensions repository catalog.
    * Displays the hostname of the server.
    * Syntax: =%HOS<nop>TNAME%=
    * Expands to: =%HOSTNAME%=
-   * Related: [[#VarHTTPHOST][HTTP_HOST]], [[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
-%ENDSECTION{"usage"}%
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarHTTPHOST][HTTP_HOST]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEADDR][REMOTE_ADDR]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEPORT][REMOTE_PORT]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEUSER][REMOTE_USER]]
+<nop>%ENDSECTION{"usage"}%
 
 ---++ Installation Instructions
 
@@ -29,16 +35,15 @@ One line description, required for extensions repository catalog.
 ---++ Plugin Info
 
 |  Plugin Author(s): | TWiki:Main.AndrewRJones |
-|  Copyright: | &copy; 2007, TWiki:Main.AndrewRJones |
+|  Copyright: | &copy; 2007 TWiki:Main.AndrewRJones,%BR% &copy; 2007-2010 TWiki:TWiki/TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-07-25 | TWikibug:Item6530 - doc fixes |
 |  14486 | Bugs:Item4420 - Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/HostnamePlugin |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/HostnamePluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/HostnamePluginAppraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiVariables
-
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
+__Related Topics:__ VarHOSTNAME, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiVariables
