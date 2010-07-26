@@ -2,8 +2,8 @@
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
-   http://twiki.org/cgi-bin/view/Plugins/TreePlugin or provide feedback at
-   http://twiki.org/cgi-bin/view/Plugins/TreePluginDev.
+   http://twiki.org/cgi-bin/view/Plugins/TagCloudPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TagCloudPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
