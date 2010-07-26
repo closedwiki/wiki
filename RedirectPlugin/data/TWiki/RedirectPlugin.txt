@@ -1,31 +1,41 @@
-%META:TOPICINFO{author="smokris" date="1056159480" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1280121034" format="1.1" version="$Rev$"}%
 ---+!! Redirect Plugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/RedirectPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/RedirectPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+%SHORTDESCRIPTION%
 
-Create a redirect to another topic or website.
+You can use this plugin to make easy-to-type shortforms/acronyms of topic names.  For example:
 
-I typically use this to make easy-to-type shortforms/acronyms of topic names.  For example:
-	* Actual content appears under =<nop>Main.LightweightDirectoryAccessProtocol=
-	* =<nop>Main.LDAP= contains just a redirect tag.  Referencing =<nop>Main.LDAP= anywhere or entering it in the _Go_ box takes one directly to =<nop>Main.LightweightDirectoryAccessProtocol=
-
-%TOC%
+   * Actual content appears under =%USERSWEB%.LightweightDirectoryAccessProtocol=
+   * =%USERSWEB%.LDAP= contains just a redirect tag.  Referencing =%USERSWEB%.LDAP= anywhere or entering it in the Jump Box takes one directly to =%USERSWEB%.LightweightDirectoryAccessProtocol=
 
 ---++ Syntax Rules
-	* Redirect to a topic within the web: =%<nop>REDIRECT{"SomeTopic"}%=
-	* Redirect to a topic in another web: =%<nop>REDIRECT{"Someweb.SomeTopic"}%=
-	* Redirect to any URL: =%<nop>REDIRECT{"http://domain.com/"}%=
-	* Pass parameters:
-	   * Url parameters are passed on: =http://domain.com/twiki/bin/view/Main/TopicThatContainsARedirect?q=LDAP"}%=. The landing topic url will contain these parameters
-	   * Parameters can also be passed to the variable: =%<nop>REDIRECT{"Someweb.SomeTopic?q=LDAP"}%=
-	   * =REDIRECT= parameters override url parameters
-	
+
+   * Redirect to a topic within the web: =%<nop>REDIRECT{"SomeTopic"}%=
+   * Redirect to a topic in another web: =%<nop>REDIRECT{"Someweb.SomeTopic"}%=
+   * Redirect to any URL: =%<nop>REDIRECT{"http://domain.com/"}%=
+   * Pass parameters:
+      * Url parameters are passed on: =http://domain.com/twiki/bin/view/%USERSWEB%/TopicThatContainsARedirect?q=LDAP"}%=. The landing topic url will contain these parameters
+      * Parameters can also be passed to the variable: =%<nop>REDIRECT{"Someweb.SomeTopic?q=LDAP"}%=
+      * =REDIRECT= parameters override url parameters
+
 ---++ Prevent redirecting
+
 To view the topic that contains a =REDIRECT=, pass parameter =noredirect=on= to the url. For example:
 
 <verbatim>
 http://domain.com/twiki/bin/view/Main/WebHome?noredirect=on
-</verbatim>	
-	
+</verbatim>   
+   
 ---++ Wikipedia like "Redirected from..."
+
 A redirect now appends the =redirectedfrom= parameter to the url which contains the Web.Topic that the user has been redirected from. This allows us to display Wikipedia like "Redirected from ..." text on the destination topic. You can use the =%<nop>URLPARAM{redirectedfrom}%= variable to access the parameter and create the "Redirected from..." text. 
 
 Below is an example you can put in your template:
@@ -39,38 +49,43 @@ Which will display the following on topics that have been redirected:
 <span class="twikiGrayText">(Redirected from <a href="?noredirect=on">Web.Topic</a>)</span>
 
 ---++ Related Topics
-	* http://twiki.org/cgi-bin/view/Codev/RedirectPage
-	* http://twiki.org/cgi-bin/view/Codev/PageRedirectTag
-	* http://twiki.org/cgi-bin/view/Codev/TopicAliases
-	* http://twiki.org/cgi-bin/view/Codev/RedirectToRenamedPage
+
+   * http://twiki.org/cgi-bin/view/Codev/RedirectPage
+   * http://twiki.org/cgi-bin/view/Codev/PageRedirectTag
+   * http://twiki.org/cgi-bin/view/Codev/TopicAliases
+   * http://twiki.org/cgi-bin/view/Codev/RedirectToRenamedPage
 
 ---++ Plugin Settings
 
-	* Set SHORTDESCRIPTION = Create a redirect to another topic or website
-	* Set DEBUG = 0
+   * Set SHORTDESCRIPTION = Create a redirect to another topic or website
+   * Set DEBUG = 0
 
 ---++ Test topics
+
 If installed:
-	* Sandbox.RedirectPluginTest - this topic should redirect to landing page:
-	* Sandbox.RedirectPluginDestination
+   * Sandbox.RedirectPluginTest - this topic should redirect to landing page:
+   * Sandbox.RedirectPluginDestination
 
 ---++ Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* Test if the installation was successful (see above syntax notes)
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Test if the installation was successful (see above syntax notes)
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/SteveMokris |
-|  Plugin Version: | 24 Nov 2008 |
+|  Plugin Author: | TWiki:Main.SteveMokris |
+|  Copyright: | &copy; 2003 TWiki:Main.SteveMokris, %BR% &copy; 2003-2010 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2010-07-25 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-07-25: | TWikibug:Item6530 - doc fixes |
 |  24 Nov 2008: | TWiki:Main.AndrewRJones: Ability to display Wikipedia like "Redirected from..." |
 |  22 Apr 2007: | Arthur Clemens: url parameters are now passed on. Adapted from TWiki:Main.JohnRouillard. |
 |  21 Apr 2007: | Arthur Clemens: fixed redirect to non-wiki word topics; added =noredirect=on= parameter; added support for TWiki:Codev.ShorterURLs. |
@@ -82,4 +97,3 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Perl Version: | 5.005 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/RedirectPlugin |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/RedirectPluginDev |
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
