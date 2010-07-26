@@ -1,17 +1,25 @@
-%META:TOPICINFO{author="Main.TWikiContributor" date="1173012480" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1280119465" format="1.1" version="$Rev$"}%
 ---+!! !RenderTableDataPlugin
-
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/RenderTableDataPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/RenderTableDataPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
 *Separate data storage from display: render table data in any different way.*
 
 Main features:
+
    * Pass a custom format to render the table data
    * Choose a subsection of the table to be rendered: row and column ranges can be set
    * Optionally render the data in a different topic the table is in
    * Sort results on any table column
 
-%TOC{title="On this page:"}%
-
 ---++ Motivation
+
 Our intranet shows an introductory page with all new employees. Each person is listed with a picture and a personally written message. I wanted these 'person' blocks to be nicely formatted in HTML and CSS, while at the same time keeping the data very easy to update.
      
 So data entry and data display are separated, leading to:
@@ -27,7 +35,9 @@ The same principle illustrated with information about Vermeer's paintings:
 </div>
 
 ---++ Limitations
+
 The current implementation has the following caveats:
+
    * Tables need to be uniform: merged cells (rowspans and colspans) are not supported
    * Only tables created by TWiki syntax are supported
    
@@ -55,6 +65,7 @@ The current implementation has the following caveats:
 Any one of the parameters is optional.
 
 ---+++ Parameters
+
 %TABLE{columnwidths="10%,50%,20%,20%"}%
 | *Parameter* | *Description* | *Default value* | *Examples* |
 | =topic=     | Topic the table is in. | =none= (the current topic) | =topic="WebHome"=, =topic="Main.WebHome"= |
@@ -85,9 +96,10 @@ Likewise use =show="..-5"= to show results up to the fifth item from the end. | 
 | =aftertext= | Text to display after the rendered data. | =none= | =aftertext="For more information see..."= |
 
 ---+++ Format tokens
+
 If you use TWiki variables inside TABLEDATA parameters chances are it will mess up the variable, or the rendered html. Use format tokens to 'delay' rendering of these variables until the TABLEDATA parameters are parsed.
 
-The format tokens are the same as with %TWIKIWEB%.FormattedSearch:
+The format tokens are the same as with %SYSTEMWEB%.FormattedSearch:
 
 | *Escape:* | *Expands To:* |
 | =$n= or =$n()= | New line. Use =$n()= if followed by alphanumeric character, e.g. write =Foo$n()Bar= instead of =Foo$nBar= |
@@ -131,31 +143,32 @@ separator="$n()"
 ---+++ Data from another topic
 <verbatim>
 %TABLEDATA{
-topic="%TWIKIWEB%.TWikiMetaData"
+topic="%SYSTEMWEB%.TWikiMetaData"
 rows="2.."
 format="   * *$C1*
       * _$C2_"
 separator="$n()"      
 sortcolumn="1"
 beforetext="---+++!! TOPICINFO $n()"
-aftertext="From [[%TWIKIWEB%.TWikiMetaData#META_TOPICINFO][TWikiMetaData]]"
+aftertext="From [[%SYSTEMWEB%.TWikiMetaData#META_TOPICINFO][TWikiMetaData]]"
 }%
 </verbatim>
 
 Results in:
 
 %TABLEDATA{
-topic="%TWIKIWEB%.TWikiMetaData"
+topic="%SYSTEMWEB%.TWikiMetaData"
 rows="2.."
 format="   * *$C1*
       * _$C2_"
 separator="$n()"      
 sortcolumn="1"
 beforetext="*TOPICINFO* $n()"
-aftertext="From [[%TWIKIWEB%.TWikiMetaData#META_TOPICINFO][TWikiMetaData]]"
+aftertext="From [[%SYSTEMWEB%.TWikiMetaData#META_TOPICINFO][TWikiMetaData]]"
 }%
 
 ---+++ Evaluating values
+
 In this example links with a link label are created if a URL exists in the table row, otherwise only the title is displayed.
 
 <noautolink>
@@ -185,11 +198,10 @@ sortdirection="descending"
 format="   * $C1$C3(\"isempty\" then=\" $C4\" else=\" [[$C3][$C4]]\") %BR%   $C2$n()"
 }%
 
-
 #PluginTest
 ---++ Plugin Test
-   * This plugin is %IF{"context RenderTableDataPluginEnabled" then='%GREEN%enabled%ENDCOLOR%' else ='%RED%not enabled%ENDCOLOR%'}%.
 
+   * This plugin is %IF{"context RenderTableDataPluginEnabled" then='%GREEN%enabled%ENDCOLOR%' else ='%RED%not enabled%ENDCOLOR%'}%.
 
 ---++ Settings
 
@@ -200,17 +212,16 @@ format="   * $C1$C3(\"isempty\" then=\" $C4\" else=\" [[$C3][$C4]]\") %BR%   $C2
 
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your ($TWIKI_ROOT) directory.
-   * Alternatively,
-      * Manually resolve the dependencies listed below.
-      %$DEPENDENCIES%
       
 ---++ Plugin Info
 
-| Authors: | TWiki:Main.ArthurClemens |
-| Copyright &copy;: | 2007-2008 Arthur Clemens |
-| License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
-| Dependencies: | %$DEPENDENCIES% |
-| Plugin&nbsp;Version: | 24 Mar 2008 (version 1.2.1)  |
+|  Authors: | TWiki:Main.ArthurClemens |
+|  Copyright: | &copy; 2007-2008 Arthur Clemens, %BR% &copy; 2002-2010 TWiki:TWiki/TWikiContributor |
+|  License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Plugin Version: | %$VERSION% |
+|  History: | <!-- specify latest version first -->&nbsp; |
+|  2010-07-25: | TWikibug:Item6530 - doc fixes |
 | 24 Mar 2008 | Arthur Clemens: 1.2.1 Added parameter =preservevariables= |
 | 27 Feb 2008 | Arthur Clemens: 1.2 Added cell value evaluation. Added unit tests. |
 | 25 Jan 2008 | Arthur Clemens: 1.1 Adds parameters =id=, =separator= and =escapequotes=. |
@@ -221,11 +232,9 @@ format="   * $C1$C3(\"isempty\" then=\" $C4\" else=\" [[$C3][$C4]]\") %BR%   $C2
 | 08 Mar 2007 | Arthur Clemens: 1.0.2 Fixed sorting bug. Added params =beforetext=, =aftertext=, =show= and =condition="random"=.  |
 | 07 Mar 2007 | Arthur Clemens: 1.0.1 Fixed CSS bug in Win Explorer 6 in example.  |
 | 04 Mar 2007 | Arthur Clemens: 1.0 First release.  |
-| Demo url:  |   |
 | Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 | Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 | Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
-
 
 %META:FILEATTACHMENT{name="renderTableDataExample.png" attachment="renderTableDataExample.png" attr="" comment="Edit and render example" date="1173012452" path="renderTableDataExample.png" size="217811" stream="renderTableDataExample.png" user="Main.TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="renderTableDataExample_thumb.gif" attachment="renderTableDataExample_thumb.gif" attr="h" comment="Thumbnail to example image" date="1173012479" path="renderTableDataExample_thumb.gif" size="18396" stream="renderTableDataExample_thumb.gif" user="Main.TWikiContributor" version="1"}%

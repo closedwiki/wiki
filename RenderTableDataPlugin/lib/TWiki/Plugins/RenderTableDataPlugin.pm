@@ -1,8 +1,9 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (c) 2006 by Meredith Lesly, Kenneth Lavrsen
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
+# Copyright (c) 2006 by Meredith Lesly, Kenneth Lavrsen.
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 # NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
@@ -31,15 +32,8 @@ use vars qw( $VERSION $RELEASE $debug $pluginName
   $format $shouldRenderTableData @isoMonth %mon2num %columnType
   %regex );
 
-# This should always be $Rev: 11069$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev: 11069$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.2.1';
+$RELEASE = '2010-07-25';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'RenderTableDataPlugin';
