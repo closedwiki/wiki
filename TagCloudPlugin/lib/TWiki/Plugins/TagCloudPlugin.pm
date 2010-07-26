@@ -1,6 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2006-2010 TWiki Contributors
 #
 # Additional copyrights apply to some or all of the code in this
 # file as follows:
@@ -24,7 +25,8 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v1.01';
+$RELEASE = '2010-07-26';
+
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Renders a tag cloud given a list of terms';
 
