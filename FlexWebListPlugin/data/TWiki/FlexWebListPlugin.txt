@@ -1,29 +1,28 @@
-%META:TOPICINFO{author="TWikiContributor" date="1198821769" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1280128775" format="1.1" version="$Rev$"}%
+---+!! <nop>FlexWebListPlugin
 <!--
-
-   PLEASE DO NOT EDIT THIS TOPIC
-
-   It is automatically generated from the subversion repository, and any changes
-   you make will simply be overwritten the next time a release is generated.
-
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/FlexWebListPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/FlexWebListPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
----+!! <nop>%TOPIC%
-%TOC%
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+%SHORTDESCRIPTION%
+
 ---++ Description
-This is a replacement for TWiki's standard [[%TWIKIWEB%.VarWEBLIST][WEBLIST]] variable.
-It is extended to improve the display of hierarchical web structures,
-a feature added to TWiki4 and adds more flexibility when used in
-<nop>TWikiApplications. The FLEXWEBLIST can be used for example 
-to generate a hierarchical navigatio scheme or a nested sitemap.
+
+This is a replacement for TWiki's standard [[%SYSTEMWEB%.VarWEBLIST][WEBLIST]] variable. It is extended to improve the display of hierarchical web structures, a feature added to TWiki-4 and adds more flexibility when used in <nop>TWikiApplications. The FLEXWEBLIST can be used for example to generate a hierarchical navigation scheme or a nested site map.
 
 ---++ Syntax
+
 =%<nop>FLEXWEBLIST{...}%=
 
-This tag iterates over all specified webs and all of their subwebs recursively
-while using the specified format strings to produce the output. 
+This tag iterates over all specified webs and all of their subwebs recursively while using the specified format strings to produce the output.
 
 Parameters:
+
    * =webs=: a list of webs to be displayed and/or 
      "public" - a list of all non-hidden webs, 
      "webtemplate" - a list of all template webs; 
@@ -66,12 +65,10 @@ Parameters:
      (e.g. map="TWiki=System,Main=Home" will expand the variable =$name= as "System" instead of TWiki
      and as "Home" instead "Main")
 
-Parameters default to the emtpy string if not mentioned otherwise. Note, that some
-of them although similar to WEBLIST have different default values. 
+Parameters default to the emtpy string if not mentioned otherwise. Note, that some of them although similar to WEBLIST have different default values.
 
-*Pseudo-variables*: Each of the above format strings (format, header, footer, 
-subformat, subheader, subfooter and markerformat) may contain special variables
-that are replaced with a current value:
+*Pseudo-variables*: Each of the above format strings (format, header, footer, subformat, subheader, subfooter and markerformat) may contain special variables that are replaced with a current value:
+
    * =$web=: the full name of the web, e.g. =Main/Foo/Bar=
    * =$qname=: the full name of the web in quotes, e.g. ="Main/Foo/Bar"= (deprecated)
    * =$name=: the name of the web without the leading parent webs, e.g. =Bar=
@@ -133,43 +130,40 @@ The following picture illustrates when which format strings are used
 </style>
 
 ---++ Examples
+
 See the FlexWebListExamples.
 
 ---++ Plugin Installation Instructions
 
-
-   * [[%ATTACHURL%/%TOPIC%.zip][Download]] the ZIP file
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
    | *File:* | *Description:* |
 %$MANIFEST%
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
-<!-- provided for compatibility only
-   * Set SHORTDESCRIPTION = Flexible way to display hierarchical weblists
--->
 
+<!--
+   * Set SHORTDESCRIPTION = Flexible way to display hierarchical web lists
+-->
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2006-2008, Michael Daum http://michaeldaumconsulting.com |
+|  Copyright: | &copy; 2006-2008 Michael Daum http://michaeldaumconsulting.com; %BR% &copy; 2006-2010 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.24 |
-|  Change History: | &nbsp; |
+|  Plugin Version: | %$VERSION% |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-07-25: | TWikibug:Item6530 - doc fixes, changing TWIKIWEB to SYSTEMWEB |
 |  03 Jul 2008: | don't blat if there's a subweb with no parent web, habbens in Trash from time to time |
 |  15 Feb 2008: | explicitly disable unwanted webs |
-|  17 Jan 2008: | added treeview example based on TWiki:Plugins/JQueryPlugin |
+|  17 Jan 2008: | added treeview example based on TWiki:Plugins.JQueryPlugin |
 |  03 Jan 2008: | fixed hiding of subwebs |
 |  13 Sep 2007: | added adminwebs feature |
 |  21 May 2007: | added <nop>FlexWebListNavi |
 |  08 May 2007: | docu fixes, respect HOMETOPIC in the examples |
 |  10 Mar 2007: | fixed expansion of $n and $nop |
 |  13 Oct 2006: | don't bail out entering a non-existing web |
-|  31 Aug 2006: | added NO_PREFS_IN_TOPIC;\
-                  removed commonTagsHandler thus dropping support for cairo |
+|  31 Aug 2006: | added NO_PREFS_IN_TOPIC; removed commonTagsHandler thus dropping support for cairo |
 |  03 Aug 2006: | fixed use of uninitialized value |
 |  &nbsp;       | start counting =$indent= at zero, not one; fixed the examples accordingly |
-|  02 Aug 2006: | added =publiccurrent= pseudo-web which is the sorted list of all public webs \
-                  including the current one; fixed =$indent= not to assume multiples of 3 items \
-                  to indent |
+|  02 Aug 2006: | added =publiccurrent= pseudo-web which is the sorted list of all public webs including the current one; fixed =$indent= not to assume multiples of 3 items to indent |
 |  31 Jul 2006: | don't filter webs that have been added explicitly added to =webs= |
 |  &nbsp;       | more fixes related to web filtering; fixed some testcases |
 |  28 Jul 2006: | preserve order in webs parameter |
@@ -177,9 +171,9 @@ See the FlexWebListExamples.
 |  05 Jul 2006: | initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.8 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
-|  Plugin Home: | TWiki:Plugins/%TOPIC% |
-|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
-|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 15 Feb 2008
+__Related Topics:__ FlexWebListExamples, FlexWebListNavi, FlexWebListTree, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.VarWEBLIST
