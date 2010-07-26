@@ -1,9 +1,16 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1219941873" format="1.1" reprev="1.21" version="1.21"}%
+%META:TOPICINFO{author="TWikiContributor" date="1280122165" format="1.1" version="$Rev$"}%
 ---+!! Tree Plugin
-
-Renders topics' parent-child relationships as hierarchical tree view. Useful for dynamic site maps and threads.
-
-%TOC%
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/TreePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TreePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+%SHORTDESCRIPTION%
+Useful for dynamic site maps and threads.
 
 ---++ Syntax Rules
 
@@ -61,7 +68,7 @@ For instance if you know that every topic in your tree has a common prefix you c
 ---++ Plugin Settings
 
 <!--
-   * Set SHORTDESCRIPTION = Dynamic generation of TWiki topic trees 
+   * Set SHORTDESCRIPTION = Dynamically generate TWiki topic trees based on the parent-child relationship of topics
 -->
 
 Specify plug-in settings in =LocalSite.cfg=:
@@ -77,35 +84,36 @@ Specify plug-in settings in =LocalSite.cfg=:
 
 ---++ Plugin Info
 
-| Authors: | TWiki:Main.SlavaKozlov (alpha release), TWiki:Main.StephaneLenclud (2006-2008)  |
-| Copyright ©: | Copyright (C) 2002 Slava Kozlov. All Rights Reserved. |
-| License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
-| Dependencies: | None |
-| CPAN Dependencies: | none _(test package relies on Wiki:PerlUnit)_ |
-| Version: | 1.7 |
-| Change History: | <!-- specify latest version first --> |
-| 28 Aug 2008 | 1.7 - Fixing warnings in apache logs. Fixing broken cache generation when using =excludetopic= or =includetopic=. Better support for Sub Webs and Non-Wiki words from TWiki:Main.ColasNahaboo. By TWiki:Main.StephaneLenclud |
-| 10 Apr 2008 | 1.6 - File cache implementation. Massive performance improvement for Topic tree. No performance gain for Web tree. Added =nocache= parameter. Now using =LocalLib.cfg= for settings. By TWiki:Main.StephaneLenclud |
-| 10 Apr 2008 | 1.5 - Slight performance improvement. Improved =header= parameter. Added =footer= and =zero= parameter. By TWiki:Main.StephaneLenclud |
-| 29 Mar 2008 | 1.4 - Fixed endless loop in =imageoutline:thread=. Added =separator= parameter. By TWiki:Main.StephaneLenclud |
-| 11 Jul 2007 | 1.3 - Fixed =$onum= to =$outnum= in documentation. Fixed endless loop on inconsistent/looping parent/child relationship. Not supporting =bookview= any more. Fixed =imageoutline:thread= not rendering. By TWiki:Main.StephaneLenclud |
-| 7 Apr 2007 | 1.2 - Documentation improvement. Adding =includetopic= parameter. By TWiki:Main.StephaneLenclud |
-| 6 Apr 2007 | 1.1 - Even more code cleaning. Rewrote tree building algorithm. Orphaned topics are now sorted as if child of the web root. No more blank line in the middle of the tree. Adding =nodiv= parameter. By TWiki:Main.StephaneLenclud |
-| 6 Apr 2007 | 1.0 - More code cleaning. Testing most formatting. Better support for =web="all"=. By TWiki:Main.StephaneLenclud |
-| 6 Apr 2007 | 0.9 - Support for TWiki.FormattedSearch pseudo-variables. Code cleaning in =TreePlugin.pm=. Removed some dead code. Improved documentation. By TWiki:Main.StephaneLenclud |
-| 4 Apr 2007 | 0.8 - Adding =excludetopic= parameter. Adding =%<nop>TREE%= as synonym tag. Code cleaning in =TreePlugin.pm=. Fix root issue when no =topic= specified. By TWiki:Main.StephaneLenclud |
-| 14 Mar 2007 | 0.7.1 - Arthur Clemens: Made =startlevel= and =stoplevel= relative to the root topic. |
-| 14 Mar 2007 | 0.7 - Arthur Clemens: =web= parameter is now actually used. Added parameter =startlevel=. |
-| 01 Oct 2006 | 0.6 - TWiki:Main.StephaneLenclud: adding =$index= format subsitution. Useful when used in combination with TWiki:Plugins/TreeBrowserPlugin. Also attempting to restore compatibility with Cairo, but still waiting for someone to test it.  |
-| 16 Sep 2006 | 0.5 - TWiki:Main.StephaneLenclud: adding =levelprefix= parameter to unable usage in combination with TWiki:Plugins/TreeBrowserPlugin. |
-| 26 Jul 2006: | 0.4 - TWiki:Main.SteffenPoulsen: Ported to TWiki 4 (Dakar). Leading text removed, less warnings, no double bracket links, CSS classnames around output. |
-| 15 Feb 2002 | Alpha (0.2) release |
-| 08 Feb 2002 | Internal (0.1) release |
-| Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-| Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
-| Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+|  Authors: | TWiki:Main.SlavaKozlov (alpha release), TWiki:Main.StephaneLenclud (2006-2008)  |
+|  Copyright: | &copy; 2002-2004 2002 Slava Kozlov, %BR% &copy; 2002-2010 TWiki:TWiki/TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2010-07-25 |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-07-25: | TWikibug:Item6530 - doc fixes, changing TWIKIWEB to SYSTEMWEB |
+|  28 Aug 2008 | 1.7 - Fixing warnings in apache logs. Fixing broken cache generation when using =excludetopic= or =includetopic=. Better support for Sub Webs and Non-Wiki words from TWiki:Main.ColasNahaboo. By TWiki:Main.StephaneLenclud |
+|  10 Apr 2008 | 1.6 - File cache implementation. Massive performance improvement for Topic tree. No performance gain for Web tree. Added =nocache= parameter. Now using =LocalLib.cfg= for settings. By TWiki:Main.StephaneLenclud |
+|  10 Apr 2008 | 1.5 - Slight performance improvement. Improved =header= parameter. Added =footer= and =zero= parameter. By TWiki:Main.StephaneLenclud |
+|  29 Mar 2008 | 1.4 - Fixed endless loop in =imageoutline:thread=. Added =separator= parameter. By TWiki:Main.StephaneLenclud |
+|  11 Jul 2007 | 1.3 - Fixed =$onum= to =$outnum= in documentation. Fixed endless loop on inconsistent/looping parent/child relationship. Not supporting =bookview= any more. Fixed =imageoutline:thread= not rendering. By TWiki:Main.StephaneLenclud |
+|  7 Apr 2007 | 1.2 - Documentation improvement. Adding =includetopic= parameter. By TWiki:Main.StephaneLenclud |
+|  6 Apr 2007 | 1.1 - Even more code cleaning. Rewrote tree building algorithm. Orphaned topics are now sorted as if child of the web root. No more blank line in the middle of the tree. Adding =nodiv= parameter. By TWiki:Main.StephaneLenclud |
+|  6 Apr 2007 | 1.0 - More code cleaning. Testing most formatting. Better support for =web="all"=. By TWiki:Main.StephaneLenclud |
+|  6 Apr 2007 | 0.9 - Support for TWiki.FormattedSearch pseudo-variables. Code cleaning in =TreePlugin.pm=. Removed some dead code. Improved documentation. By TWiki:Main.StephaneLenclud |
+|  4 Apr 2007 | 0.8 - Adding =excludetopic= parameter. Adding =%<nop>TREE%= as synonym tag. Code cleaning in =TreePlugin.pm=. Fix root issue when no =topic= specified. By TWiki:Main.StephaneLenclud |
+|  14 Mar 2007 | 0.7.1 - Arthur Clemens: Made =startlevel= and =stoplevel= relative to the root topic. |
+|  14 Mar 2007 | 0.7 - Arthur Clemens: =web= parameter is now actually used. Added parameter =startlevel=. |
+|  01 Oct 2006 | 0.6 - TWiki:Main.StephaneLenclud: adding =$index= format subsitution. Useful when used in combination with TWiki:Plugins/TreeBrowserPlugin. Also attempting to restore compatibility with Cairo, but still waiting for someone to test it.  |
+|  16 Sep 2006 | 0.5 - TWiki:Main.StephaneLenclud: adding =levelprefix= parameter to unable usage in combination with TWiki:Plugins/TreeBrowserPlugin. |
+|  26 Jul 2006: | 0.4 - TWiki:Main.SteffenPoulsen: Ported to TWiki 4 (Dakar). Leading text removed, less warnings, no double bracket links, CSS classnames around output. |
+|  15 Feb 2002 | Alpha (0.2) release |
+|  08 Feb 2002 | Internal (0.1) release |
+|  Dependencies: | None |
+|  CPAN Dependencies: | none _(test package relies on Wiki:PerlUnit)_ |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 %META:FILEATTACHMENT{name="oT.gif" attr="h" autoattached="1" comment="" date="1158432770" path="oT.gif" size="879" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="I.gif" attr="h" autoattached="1" comment="" date="1158432770" path="I.gif" size="869" user="UnknownUser" version=""}%

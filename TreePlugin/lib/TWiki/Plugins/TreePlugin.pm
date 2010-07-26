@@ -1,8 +1,8 @@
-
-# TWiki ($wikiversion has version info)
+# Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2002 Slava Kozlov,
 # Copyright (C) 2006-2008 Stéphane Lenclud,
+# Copyright (C) 2002-2010 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,8 +14,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
-#
-# =========================
 
 # =========================
 package TWiki::Plugins::TreePlugin;
@@ -39,8 +37,10 @@ use vars qw(
   $noCache
 );
 
+$VERSION = '$Rev$';
+$RELEASE = '2010-07-25';
+
 $pluginName = 'TreePlugin';
-$VERSION = '1.7';
 $RootLabel = "_RootLabel_";    # what we use to label the root of a tree if not a topic
 
 # =========================
