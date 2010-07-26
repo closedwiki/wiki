@@ -216,7 +216,7 @@ format="   * $C1$C3(\"isempty\" then=\" $C4\" else=\" [[$C3][$C4]]\") %BR%   $C2
 ---++ Plugin Info
 
 |  Authors: | TWiki:Main.ArthurClemens |
-|  Copyright: | &copy; 2007-2008 Arthur Clemens, %BR% &copy; 2002-2010 TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2007-2008 Arthur Clemens, %BR% &copy; 2007-2010 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Version: | %$VERSION% |
