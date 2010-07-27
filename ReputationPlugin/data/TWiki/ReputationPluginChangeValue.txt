@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="JoonaKannisto" date="1259092259" format="1.1" reprev="1.2" version="1.2"}%
+---+Update your trust values
+This page can be used for updating the level of trust you have in another TWiki user. 
+
+%REPUTATION{rpaction="addtrust" addvalue="%URLPARAM{addvalue}%" user="%URLPARAM{wikiname}%"}% 
+<form name="newnegative" action="ReputationPluginChangeValue"><input type="text" name="wikiname" value="Wikiname"/> <input type="text" name="addvalue" value=""/>
+     <input type="submit" class="twikiSubmit" value="Change Wikiname's trust value" /></form>
+
+---++Current trust values (999 is the maximum and 1 is the minimum)
+
+%REPUTATION{rpaction="showtrusted"}% 
+
+
+
