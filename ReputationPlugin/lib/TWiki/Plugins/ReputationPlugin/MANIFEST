@@ -1,0 +1,4 @@
+data/TWiki/ReputationPlugin.txt 0644
+data/TWiki/ReputationPluginChangeValue.txt 0644
+lib/TWiki/Plugins/ReputationPlugin.pm 0444
+templates/view.reputation.tmpl 0444
