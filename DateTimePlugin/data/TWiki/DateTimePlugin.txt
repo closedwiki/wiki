@@ -1,15 +1,23 @@
+%META:TOPICINFO{author="TWikiContributor" date="1280218562" format="1.1" version="$Rev$"}%
 ---+!! <nop>DateTimePlugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/DateTimePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/DateTimePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+%SHORTDESCRIPTION%
+<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
+%TOC{title="Page contents"}%
+</div>
 
-Display date and time with formatting options and localized dates.
+---++ Introduction
 
-This plugin is an extension of the TWiki variable [[%TWIKIWEB%.VarGMTIME2][GMTIME{"format"}]] (that only allows to show the current date date and time). %BR%
+This plugin is an extension of the TWiki variable [[%SYSTEMWEB%.VarGMTIME2][GMTIME{"format"}]] (that only allows to show the current date date and time). %BR%
 !DateTimePlugin lets you show any date and time before or after 'now', and it will return any part of a date such as the month name.
 
 With !DateTimePlugin you can write: %BR%
 In five days will be: =%<nop>DATETIME{incdays="5"}%= and will have a always coherent phrase.
-
-
-%TOC%
 
 ---++ Syntax Rules
 
@@ -20,7 +28,7 @@ For more options use: =%<nop>DATETIME{"format" &lt;optional parameters&gt;}%=
 ---+++ Parameters
 
 | *Parameter* | *Description* | *Example* |
-| ="..."= or =format="..."= | Format of date string; see [[%TWIKIWEB%.VarGMTIME2][GMTIME{"format"}]] for formatting variables | =%<nop>DATETIME{"$wday"}%= |
+| ="..."= or =format="..."= | Format of date string; see [[%SYSTEMWEB%.VarGMTIME2][GMTIME{"format"}]] for formatting variables | =%<nop>DATETIME{"$wday"}%= |
 | =date="..."= | Any date in one of the following formats: %BR%%BR% \
 Default TWiki format %BR% \
 &nbsp;&nbsp;&nbsp; =31 Dec 2001 - 23:59= %BR%%BR% \
@@ -47,7 +55,8 @@ The local timezone will be assumed. %BR%%BR% \
 | =incseconds="..."= | Increase the date by any number of seconds (may be a negative number) | =%<nop>DATETIME{date="31 Dec 2001" format="$seconds" incseconds="20"}%= |
 
 ---+++ Formatting parameters
-See [[%TWIKIWEB%.VarGMTIME2][GMTIME{"format"}]] for general date and time formatting parameters to pass to =format=. !DateTimePlugin supports the following additional paramters:
+
+See [[%SYSTEMWEB%.VarGMTIME2][GMTIME{"format"}]] for general date and time formatting parameters to pass to =format=. !DateTimePlugin supports the following additional paramters:
 
 | *Parameter* | *Description* | *Example* |
 | =$i_month= | The localized short name of the month. | =Ago= |
@@ -57,7 +66,8 @@ See [[%TWIKIWEB%.VarGMTIME2][GMTIME{"format"}]] for general date and time format
 | =$lwday= | The English long name of the day of the week. | =Wednesday= |
 | =$i_lwday= | The localized long name of the day of the week. | =Quarta-feira= |
 
----++++ Overview of all formatting variables
+---+++ Overview of all formatting variables
+
 %DATETIME{format="
 | =$<nop>seconds= | $seconds |
 | =$<nop>minutes= | $minutes |
@@ -114,21 +124,23 @@ incdays="1"
 }%
 
 ---++ Limitations
-Due to date handling in Perl, !DateTimePlugin cannot handle dates earlier than 1970.
 
+Due to date handling in Perl, !DateTimePlugin cannot handle dates earlier than 1970.
 
 #PluginSettings
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>DATETIMEPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Display date and time with formatting options and localized dates
 
 ---+++ Localization
+
 Localized dates are read from [[%SCRIPTURL{configure}%][configure]].
 
 ---+++ Debugging
+
 Visit [[%SCRIPTURL{configure}%][configure]] and set ={DateTimePlugin}{Debug}= to 1.
 
 ---++ Plugin Installation Instructions
@@ -141,14 +153,19 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.AurelioAHeckert (2004), TWiki:Main.ArthurClemens (2008) |
-|  Plugin Version: | 28 Feb 2008 (V1.0)  |
+|  Plugin Author: | TWiki:Main.AurelioAHeckert, TWiki:Main.ArthurClemens |
+|  Copyright: | &copy; 2004 TWiki:Main.AurelioAHeckert, &copy; 2008 TWiki:Main.ArthurClemens, %BR% &copy; 2004-2010 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  28 Feb 2008 | 1.0 Arthur Clemens: Major rewrite to make this plugin compatible with (and use from) =TWiki::Time=. Localized language strings are now read from configure. |
 |  27 Jul 2004 | 0.90 Aurelio A Heckert: First release |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.UserDocumentationCategory

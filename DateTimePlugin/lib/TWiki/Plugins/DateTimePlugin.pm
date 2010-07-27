@@ -4,6 +4,7 @@
 # For DateTimePlugin.pm:
 # Copyright (C) 2004 Aurélio A. Heckert, aurelio@im.ufba.br
 # Copyright (C) 2008 Arthur Clemens, arthur@visiblearea.com
+# Copyright (C) 2004-2010 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -29,15 +30,8 @@ use vars qw(
   %fullMonth2IsoMonth $monthLongNamesReStr
 );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.0';
+$RELEASE = '2010-07-27';
 
 $pluginName = 'DateTimePlugin';    # Name of this Plugin
 
