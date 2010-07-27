@@ -1,103 +1,154 @@
-%META:TOPICINFO{author="JoonaKannisto" date="1259095621" format="1.1" reprev="1.7" version="1.7"}%
+%META:TOPICINFO{author="TWikiContributor" date="1280204852" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/ReputationPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/ReputationPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+%SHORTDESCRIPTION%
+<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
+%TOC{title="Page contents"}%
+</div>
 
-Plugin for creating and maintaining user reputation in a TWiki site. Reputation is managed by voting topics which makes topic's  authors either more or less trusted, depending on the vote. Plugin calculates a score for every article based on users own past experiences with topic's voters and with past experience of users who are trustworthy from user's perspective. It also counts the number of backlinks which lead to this topic, this is used as a metric for topic's popularity. 
+---++ Introduction
 
-Plugin is provided mainly as a prototype and basis for future development. It works, but needs more work to achieve its full potential. Much of the code is taken from [[TWiki:TagmePlugin]] because I didn't want to start from scratch, as this was my first TWiki Plugin and the first thing I've written in Perl. 
- 
+Plugin for creating and maintaining user reputation in a TWiki site. Reputation is managed by voting topics which makes topic's authors either more or less trusted, depending on the vote. Plugin calculates a score for every article based on users own past experiences with topic's voters and with past experience of users who are trustworthy from user's perspective. It also counts the number of backlinks which lead to this topic, this is used as a metric for topic's popularity.
 
+Plugin is provided mainly as a prototype and basis for future development. It works, but needs more work to achieve its full potential. Much of the code is taken from TWiki:Plugins.TagMePlugin because I didn't want to start from scratch, as this was my first TWiki Plugin and the first thing I've written in Perl.
 
----++Syntax
----+++Commands for topic voting
-|%REPU%NOP%TATION{rpaction="vote" vote="negative"}%| Prints voting buttons and adds negative vote for this topic. |
-|%REPU%NOP%TATION{rpaction="remove" vote="positive"}%| Prints voting buttons and tries to remove positive vote for this topic. |
-|%REPU%NOP%TATION{rpaction="%URL%NOP%PARAM{rpaction}%" vote="%URL%NOP%PARAM{vote}%"}%| Prints voting buttons and reads the user input from current page view url. |
-Wanted action is given to the plugin with "rpaction"-parameter. Additional parameters are needed for:
-   * vote - Adds vote given with "vote"-parameter for the currently viewed topic
-   * remove - Removes vote given with "vote"-parameter from currently viewed topic's votes
----+++Listing voted topics and trusted users
-|%REPU%NOP%TATION{rpaction="showtopics"}%| Lists all the topics which current user has voted. List includes authors as they were on the time of the vote. |
-|%REPU%NOP%TATION{rpaction="showtrusted"}%| List of users who have been authors of voted topics and their respective scores. |
----+++Trust value manipulation
-|%REPU%NOP%TATION{rpaction="addtrust" addvalue="30" user="TWikiGuest"}%| Adds given value to selected user's trust score. |
-|%REPU%NOP%TATION{rpaction="addtrust" addvalue="%URL%NOP%PARAM{addvalue}%" user="%URL%NOP%PARAM{wikiname}%"}%| Can be used with a form to collect the user and a addvalue from url parameters|
+---++ Syntax
+
+---+++ Commands for topic voting
+
+| =%<nop>REPUTATION{ rpaction="vote" vote="negative" }%= | Prints voting buttons and adds negative vote for this topic. |
+| =%<nop>REPUTATION{ rpaction="remove" vote="positive" }%= | Prints voting buttons and tries to remove positive vote for this topic. |
+| =%<nop>REPUTATION{ rpaction="%<nop>URLPARAM{rpaction}%" vote="%<nop>URLPARAM{vote}%" }%= | Prints voting buttons and reads the user input from current page view URL. |
+
+Wanted action is given to the plugin with =rpaction= parameter. Additional parameters are needed for: 
+
+   * =vote= - Adds vote given with =vote= parameter for the currently viewed topic
+   * =remove= - Removes vote given with =vote= parameter from currently viewed topic's votes
+
+---+++ Listing voted topics and trusted users
+
+| =%<nop>REPUTATION{ rpaction="showtopics" }%= | Lists all the topics which current user has voted. List includes authors as they were on the time of the vote. |
+| =%<nop>REPUTATION{ rpaction="showtrusted" }%= | List of users who have been authors of voted topics and their respective scores. |
+
+---+++ Trust value manipulation
+
+| =%<nop>REPUTATION{ rpaction="addtrust" addvalue="30" user="TWikiGuest" }%= | Adds given value to selected user's trust score. |
+| =%<nop>REPUTATION{ rpaction="addtrust" addvalue="%<nop>URLPARAM{addvalue}%" user="%<nop>URLPARAM{wikiname}%" }%= | Can be used with a form to collect the user and a =addvalue= from URL parameters |
+
 ---++ Example commands
-%REPU%NOP%TATION{rpaction="%URL%NOP%PARAM{rpaction}%" vote="%URL%NOP%PARAM{vote}%"}% Example output:
 
-Popularity: 7/20 Rating 0.00<form name="newnegative" action="ReputationPlugin"> <input type="hidden" name="rpaction" value="vote"/><input type="hidden" name="vote" value="negative"/>
-     <input type="submit" class="twikiSubmit" value="Vote  negative (0)" /></form><form name="newpositive" action="ReputationPlugin"><input type="hidden" name="rpaction" value="vote"/><input type="hidden" name="vote" value="positive"/> <input type="submit" class="twikiSubmit" value="Vote  positive (0)" /></form><form name="newexcellent" action="ReputationPlugin"> <input type="hidden" name="rpaction" value="vote"/><input type="hidden" name="vote" value="excellent"/> <input type="submit" class="twikiSubmit" value="Vote  excellent (0)" /></form> 
-   
+*Example 1:* =%<nop>REPUTATION{ rpaction="%<nop>URLPARAM{rpaction}%" vote="%<nop>URLPARAM{vote}%" }%=
 
-%REPU%NOP%TATION{rpaction="showtopics"}% Example output:
+*Output:*
 
-<p><p>positive, <a href="/cgi-bin/twiki/view/TWiki/ReputationPlugin" class="twikiLink">ReputationPlugin</a>, <span class="twikiNewLink">TestUser1<a href="/cgi-bin/twiki/edit/Sandbox/TestUser1?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>positive, <a href="/cgi-bin/twiki/view/Sandbox/WebPreferences" class="twikiLink">WebPreferences</a>, <span class="twikiNewLink">TestUser1<a href="/cgi-bin/twiki/edit/Sandbox/TestUser1?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> , <span class="twikiNewLink">TestUser2<a href="/cgi-bin/twiki/edit/Sandbox/TestUser2?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> , <span class="twikiNewLink">TWikiContributor<a href="/cgi-bin/twiki/edit/Sandbox/TWikiContributor?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> , <span class="twikiNewLink">TestUser3<a href="/cgi-bin/twiki/edit/Sandbox/TestUser3?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> , <span class="twikiNewLink">TestUser5<a href="/cgi-bin/twiki/edit/Sandbox/TestUser5?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> , <span class="twikiNewLink">TestUser4<a href="/cgi-bin/twiki/edit/Sandbox/TestUser4?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>positive, <a href="/cgi-bin/twiki/view/Sandbox/TestTopic3" class="twikiCurrentTopicLink twikiLink">TestTopic3</a>, <span class="twikiNewLink">TestUser1<a href="/cgi-bin/twiki/edit/Sandbox/TestUser1?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>positive, <a href="/cgi-bin/twiki/view/Sandbox/TagTest" class="twikiLink">TagTest</a>, <span class="twikiNewLink">TestUser1<a href="/cgi-bin/twiki/edit/Sandbox/TestUser1?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>positive, <a href="/cgi-bin/twiki/view/Sandbox/SivuTiedot" class="twikiLink">SivuTiedot</a>, <span class="twikiNewLink">TestUser2<a href="/cgi-bin/twiki/edit/Sandbox/TestUser2?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>negative, <a href="/cgi-bin/twiki/view/Sandbox/TestiArtikkeli1" class="twikiLink">TestiArtikkeli1</a>, <span class="twikiNewLink">TestUser2<a href="/cgi-bin/twiki/edit/Sandbox/TestUser2?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>negative, <a href="/cgi-bin/twiki/view/Sandbox/TestTopic2" class="twikiLink">TestTopic2</a>, <span class="twikiNewLink">TestUser1<a href="/cgi-bin/twiki/edit/Sandbox/TestUser1?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>negative, <a href="/cgi-bin/twiki/view/Main/TestUser1" class="twikiLink">TestUser1</a>, <span class="twikiNewLink">TestUser1<a href="/cgi-bin/twiki/edit/Sandbox/TestUser1?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> , <span class="twikiNewLink">TWikiRegistrationAgent<a href="/cgi-bin/twiki/edit/Sandbox/TWikiRegistrationAgent?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>excellent, <a href="/cgi-bin/twiki/view/Sandbox/TestiArtikkeli2" class="twikiLink">TestiArtikkeli2</a>, <span class="twikiNewLink">TestUser2<a href="/cgi-bin/twiki/edit/Sandbox/TestUser2?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> , <span class="twikiNewLink">OpettajaOlio<a href="/cgi-bin/twiki/edit/Sandbox/OpettajaOlio?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>excellent, <a href="/cgi-bin/twiki/view/Sandbox/TestTopic1" class="twikiLink">TestTopic1</a>, <span class="twikiNewLink">TestUser6<a href="/cgi-bin/twiki/edit/Sandbox/TestUser6?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> , <span class="twikiNewLink">TestUser3<a href="/cgi-bin/twiki/edit/Sandbox/TestUser3?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> , <span class="twikiNewLink">TeppoTesti<a href="/cgi-bin/twiki/edit/Sandbox/TeppoTesti?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>excellent, <a href="/cgi-bin/twiki/view/Sandbox/TestTopic0" class="twikiLink">TestTopic0</a>, <span class="twikiNewLink">TWikiGuest<a href="/cgi-bin/twiki/edit/Sandbox/TWikiGuest?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> , <span class="twikiNewLink">TestUser1<a href="/cgi-bin/twiki/edit/Sandbox/TestUser1?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> , <span class="twikiNewLink">TestUser3<a href="/cgi-bin/twiki/edit/Sandbox/TestUser3?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>
+Popularity: 7/20 Rating 0.00<form name="newnegative" action="ReputationPlugin"> <input type="hidden" name="rpaction" value="vote"/><input type="hidden" name="vote" value="negative"/> <input type="submit" class="twikiSubmit" value="Vote  negative (0)" /></form><form name="newpositive" action="ReputationPlugin"><input type="hidden" name="rpaction" value="vote"/><input type="hidden" name="vote" value="positive"/> <input type="submit" class="twikiSubmit" value="Vote  positive (0)" /></form><form name="newexcellent" action="ReputationPlugin"> <input type="hidden" name="rpaction" value="vote"/><input type="hidden" name="vote" value="excellent"/> <input type="submit" class="twikiSubmit" value="Vote  excellent (0)" /></form>
 
-<p />
+-----
+*Example 2:* =%<nop>REPUTATION{ rpaction="showtopics" }%=
 
-%REPU%NOP%TATION{rpaction="showtrusted"}% Example output:
+*Output:*
 
-<p>999, <span class="twikiNewLink">TWikiContributor<a href="/cgi-bin/twiki/edit/Sandbox/TWikiContributor?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>999, <span class="twikiNewLink">TestUser3<a href="/cgi-bin/twiki/edit/Sandbox/TestUser3?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>999, <span class="twikiNewLink">TestUser2<a href="/cgi-bin/twiki/edit/Sandbox/TestUser2?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>999, <span class="twikiNewLink">TestUser5<a href="/cgi-bin/twiki/edit/Sandbox/TestUser5?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>503, <span class="twikiNewLink">TestUser4<a href="/cgi-bin/twiki/edit/Sandbox/TestUser4?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>502, <span class="twikiNewLink">TestUser6<a href="/cgi-bin/twiki/edit/Sandbox/TestUser6?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>502, <span class="twikiNewLink">TeppoTesti<a href="/cgi-bin/twiki/edit/Sandbox/TeppoTesti?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>502, <span class="twikiNewLink">TWikiGuest<a href="/cgi-bin/twiki/edit/Sandbox/TWikiGuest?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>502, <span class="twikiNewLink">OpettajaOlio<a href="/cgi-bin/twiki/edit/Sandbox/OpettajaOlio?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>499, <span class="twikiNewLink">TWikiRegistrationAgent<a href="/cgi-bin/twiki/edit/Sandbox/TWikiRegistrationAgent?topicparent=Sandbox.TestTopic3" rel="nofollow" title="Create this topic">?</a></span> <p>
+positive, !ReputationPlugin, !TestUser1
 
+positive, !WebPreferences, !TestUser1, !TestUser2, !TWikiContributor, !TestUser3, !TestUser5, !TestUser4
 
+positive, !TestTopic3, !TestUser1
 
+positive, !TestUser1
+
+positive, !SivuTiedot, !TestUser2
+
+negative, !TestiArtikkeli1, !TestUser2
+
+negative, !TestTopic2, !TestUser1, !TestUser1
+
+negative, !TestUser1, !TestUser1, !TWikiRegistrationAgent
+
+excellent, !TestiArtikkeli2, !TestUser2, !OpettajaOlio
+
+excellent, !TestUser6, !TestUser3, !TeppoTesti
+
+excellent, !TestTopic0, !TWikiGuest, !TestUser1, !TestUser3
+
+-----
+*Example 3:* =%<nop>REPUTATION{ rpaction="showtrusted" }%=
+
+*Output:*
+
+999, !TWikiContributor
+
+999, !TestUser3
+
+999, !TestUser2
+
+999, !TestUser5
+
+503, !TestUser4
+
+502, !TestUser6
+
+502, !TeppoTest
+
+502, !TWikiGuest
+
+502, !OpettajaOlio
+
+499, !TWikiRegistrationAgent
 
 ---++ Plugin Settings
 
-Plugin settings can be altered in !LocalSite.cfg
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Create and maintain user reputation in a TWiki site
 
-Setting:
-<verbatim> $TWiki::cfg{Plugins}{ReputationPlugin}{Backlinkmax} = 5;</verbatim>
-Changes the maximum backlinkcount to five. Setting this number to zero disables backlink functionality altogether. 
-If raw scores are needed instead of the scores derived from trust values, setting:
-<verbatim>$TWiki::cfg{Plugins}{ReputationPlugin}{Absolute}=1;</verbatim>
+   * Optional Plugin settings, can be added to TWiki configure, =twiki/lib/LocalSite.cfg=:
+      * =$TWiki::cfg{Plugins}{ReputationPlugin}{Backlinkmax} = 5;= --- changes the maximum back-link count to five. Setting this number to zero disables back-link functionality altogether.
+      * =$TWiki::cfg{Plugins}{ReputationPlugin}{Absolute} = 1;= --- set if raw scores are needed instead of the scores derived from trust values.
 
 ---++ Plugin Installation Instructions
 
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
 
    * Download the ZIP file from the Plugin Home (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==data/TWiki/ReputationPluginChangeValue.txt== | Topic for altering trust values|
+     | ==templates/view.reputation.tmpl==| View template for including plugin as a skin|
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
    * Configure the Plugin:
-      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+      * Run the [[%SCRIPTURL{configure}%][configure]] script to enable the Plugin
       * Change the Plugin settings as needed
-   * Test if the installation was successful:
-      <verbatim>%REPUTATION{rpaction="%URLPARAM{rpaction}%" vote="%URLPARAM{vote}%"}%</verbatim>
-%REPUTATION{rpaction="%URLPARAM{rpaction}%" vote="%URLPARAM{vote}%"}%
----+++Make the plugin appear on every page
-Inside the zip file is a skin template that makes this plugin to show up just before the topic's text content. Skin can be enabled for a web (For all webs [[%MAINWEB%.TWikiPreferences]] for a single web, for example Sandbox web Sandbox.WebPreferences ) or for a single topic in Topic's preferences 
-<pre>
-   * Set S<nop>KIN = reputation,pattern
-</pre>
-Skin can be excluded from any topic or web by setting its skin without Reputation%NOP%Plugin's skin eg:  
+   * Test if the installation was successful: <verbatim>%REPUTATION{rpaction="%URLPARAM{rpaction}%" vote="%URLPARAM{vote}%"}%</verbatim>
+%REPUTATION{rpaction="%URLPARAM{rpaction}%" vote="%URLPARAM{vote}%"}% 
 
-<pre>
-   * Set S<nop>KIN = pattern
-</pre>
+---+++ Make the plugin appear on every page
+
+Inside the zip file is a skin template that makes this plugin to show up just before the topic's text content. Skin can be enabled for a web (For all webs [[%USERSWEB%.TWikiPreferences]] for a single web, for example Sandbox web Sandbox.WebPreferences ) or for a single topic in Topic's preferences <pre>   * Set S<nop>KIN = reputation,pattern </pre> Skin can be excluded from any topic or web by setting its skin without Reputation%NOP%Plugin's skin eg:
+
+<pre>   * Set S<nop>KIN = pattern </pre>
+
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.JoonaKannisto |
-|  Copyright: | &copy; 2009, TWiki:Main.JoonaKannisto |
+|  Copyright: | &copy; 2009 TWiki:Main.JoonaKannisto, %BR% &copy; 2009-2010 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | %DATE% (V1.000) |
-|  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  %DATE%: | Initial version |
+|  Plugin Version: | 2010-07-26 (V1.1) |
+|  Change History: | <!-- versions below in reverse order --> |
+|  2010-07-26 | TWikibug:Item6532 - move to SVN repository; doc fixes; changing TWIKIWEB to SYSTEMWEB |
+|  2009-11-24: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
-
-
-
--- Main.JoonaKannisto - 04 Nov 2009
-
-%META:FILEATTACHMENT{name="ReputationPlugin.zip" attachment="ReputationPlugin.zip" attr="" comment="ReputationPlugin perl module and Plugin Topic" date="1259091629" path="ReputationPlugin.zip" size="13539" stream="ReputationPlugin.zip" user="Main.JoonaKannisto" version="2"}%
+__Related Topics:__ ReputationPluginChangeValue, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences

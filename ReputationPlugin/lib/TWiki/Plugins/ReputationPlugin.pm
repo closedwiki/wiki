@@ -6,6 +6,8 @@
 # Copyright (c) 2007 Sven Dowideit, SvenDowideit@DistributedINFORMATION.com
 # Copyright (c) 2007 Arthur Clemens, arthur@visiblearea.com
 # Copyright (c) 2009 Joona Kannisto 
+# Copyright (C) 2006-2010 TWiki Contributors
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -29,22 +31,16 @@ use strict;
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package.
 # Global variables used in this plugin
-use vars qw($web $topic $user $installWeb $VERSION $RELEASE $SHORTDESCRIPTION $debug $initialized $pluginName  $NO_PREFS_IN_TOPIC $workAreaDir
+use vars qw($web $topic $user $installWeb $VERSION $RELEASE $SHORTDESCRIPTION
+   $debug $initialized $pluginName  $NO_PREFS_IN_TOPIC $workAreaDir
    $logAction $tagLinkFormat $action $absolute $backlinkmax);
 
-# This should always be $Rev: 12445$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev: 12445$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2010-07-26';
 
 # Short description of this plugin
 # One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-$SHORTDESCRIPTION = 'Build and manage reputation';
+$SHORTDESCRIPTION = 'Create and maintain user reputation in a TWiki site';
 
 # You must set $NO_PREFS_IN_TOPIC to 0 if you want your plugin to use preferences
 # stored in the plugin topic. This default is required for compatibility with
