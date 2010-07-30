@@ -153,7 +153,7 @@ data/TWiki/TWikiContribs.txt 0644
 data/TWiki/TWikiContributor.txt 0644
 data/TWiki/TWikiCss.txt 0644
 data/TWiki/TWikiDocGraphics.txt 0644
-data/TWiki/TWikiDocGraphicsTemplate 0644
+data/TWiki/TWikiDocGraphicsTemplate.txt 0644
 data/TWiki/TWikiDocumentation.txt 0644
 data/TWiki/TWikiDownload.txt 0644
 data/TWiki/TWikiEditingShorthand.txt 0644
@@ -998,7 +998,7 @@ pub/TWiki/TWikiDocGraphics/uweb-bo12.gif 0644
 pub/TWiki/TWikiDocGraphics/uweb-g.gif 0644
 pub/TWiki/TWikiDocGraphics/uweb-gs.gif 0644
 pub/TWiki/TWikiDocGraphics/uweb-m12.gif 0644
-pub/TWiki/TWikiDocGraphics/uweb-m14.gif 0644
+pub/TWiki/TWikiDocGraphics/uweb-o14.gif 0644
 pub/TWiki/TWikiDocGraphics/uweb-o.gif 0644
 pub/TWiki/TWikiDocGraphics/uweb-o12.gif 0644
 pub/TWiki/TWikiDocGraphics/uweb-oo.gif 0644
