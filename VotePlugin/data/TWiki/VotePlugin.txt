@@ -1,47 +1,36 @@
-%META:TOPICINFO{author="TWikiContributor" date="1180543279" format="1.1" version="$Rev$"}%
-<!--
-
-   PLEASE DO NOT EDIT THIS TOPIC
-
-   It is automatically generated from the subversion repository, and any changes
-   you make will simply be overwritten the next time a release is generated.
-
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
--->
+%META:TOPICINFO{author="TWikiContributor" date="1280559612" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
-This plugin can be used to build an online-voting system, or _poll_.
-There are two ways to vote for an item:
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/TimeSincePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TimeSincePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+%SHORTDESCRIPTION%
+<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
+%TOC{title="Page contents"}%
+</div>
+
+---++ Introduction
+
+This plugin can be used to build an online-voting system, or _poll_. There are two ways to vote for an item:
+
    * *select*: vote for a given choice from a selection  <br /><img src="%ATTACHURLPATH%/example_select.gif" />
    * *rate*: give something a rating (a number of stars) <br /><img src="%ATTACHURLPATH%/example_stars.gif" />
 A single poll can mix and match the different vote types.
 
-%TOC%
+Polls can be _open_ or _closed_. You don't have to log in to vote in an open poll, but you are restricted to one vote per poll per user per calendar date. You have to log in to vote on a closed vote, but you are restricted toone vote per user. You can change your vote in either open or closed votes, though if you do that on a different date in an open vote, it will count as a new vote. Polls are _open_ by default.
 
-Polls can be _open_ or _closed_. You don't have to log in to vote in an open
-poll, but you are restricted to one vote per poll per user per calendar
-date. You have to log in to vote on a closed vote, but you are restricted to
-one vote per user. You can change your vote in either open or closed votes,
-though if you do that on a different date in an open vote, it will count as
-a new vote. Polls are _open_ by default.
+The results of a poll can be held in _secret_. If a poll is secret, no records are kept of who voted for what. Polls are _secret_ by default.
 
-The results of a poll can be held in _secret_. If a poll is secret, no
-records are kept of who voted for what. Polls are _secret_ by default.
+You can choose whether to save the resuts of the vote in a _topic_ or in a _secret place_. If you choose to save the results in a topic, you can protect that topic using the normal TWiki access control mechanisms, and the vote will still work. Saving in a topic has the advantage that you can easily post-process the results in TWiki, but it's a bit more work to set up so polls are saved in a _secret place_ by default.
 
-You can choose whether to save the resuts of the vote in a _topic_ or in a
-_secret place_. If you choose to save the results in a topic, you can protect
-that topic using the normal TWiki access control mechanisms, and the vote
-will still work. Saving in a topic has the advantage that you can easily
-post-process the results in TWiki, but it's a bit more work to set up so
-polls are saved in a _secret place_ by default.
-
-Polls are either _local_ to the topic they are defined in, or are _global_ to
-the entire TWiki. Each poll has an _ID_ which distinguishes it from other
-polls. These IDs are local to the topic for local polls, but can be shared
-between topics if the poll is made _global_.
+Polls are either _local_ to the topic they are defined in, or are _global_ to the entire TWiki. Each poll has an _ID_ which distinguishes it from other polls. These IDs are local to the topic for local polls, but can be shared between topics if the poll is made _global_.
 
 The result of a poll is displayed in the polling form.
 
 ---++ Example
+
 You create a poll using the %VOTE twiki variable. For example,
 
 =%<nop>VOTE{id="FavouriteMeal" select1="Drink" options1="Beer,Wine,Milk,Water" select2="Food" options2="Steak,Bread,Pasta,Pizza"}%=
@@ -61,6 +50,7 @@ displays as
 ---++ Syntax Rules
 
 ---++ Syntax
+
 #StandardAttrs
 Write =%<nop>VOTE{ ... }%= in the text of a a TWiki topic to define a poll
 %STARTSECTION{"vote_attributes"}%
@@ -109,9 +99,11 @@ the [[TWikiVariables][TWikiVariable]] =VOTEPLUGIN_DEFAULTS= to be a parameter st
 
 #FormattingResults
 ---+++ Formatting the Results of a Poll
+
 Each item in the poll has a results display next to it (are as part of it in the case of stars). The =format= parameter is used to control how this is displayed. It is usually used to define a row in a TWiki table, and is expands once for each =stars= and once for each option in a =select=.
 
 The =format= parameter is a string that can include the following formatting tokens:
+
 | =$key= | Expands to the name of the item (e.g. the value of =select1=). |
 | =$prompt= | Expands to a drop-down selector that allows the user to pick the option they want to vote for (for =select= items only) |
 | =$bars= | Expands to a sorted list of bar charts showing the number of votes for this option. Each bar in the chart is formatted according to the format defined in the corresponding =chart= parameter. |
@@ -124,6 +116,7 @@ The =format= parameter is a string that can include the following formatting tok
 | =$reset= | Expands to a reset button, if the viewer has reset rights (see [[#Reset][Resetting a Poll]], below). Without reset rights, expands to nothing. |
 
 The =chart= parameter defines the format of each bar in the bar chart that is generated for each option in the corresponding =select=.
+
 | =$bar(<i>N</i>)= | Expands to the coloured bar used to show the popularity of this option. <i>N</i> is the required total width of the bar in pixels. |
 | =$option= | Expands to the name of the option that this bar is for |
 | =$perc= | Expands to =100*$score/$sum= |
@@ -135,32 +128,31 @@ The =chart= parameter defines the format of each bar in the bar chart that is ge
 
 The default =separator= is a newline.
 
-=select=, =option=, =format= and =chart= can all use the standard
-formatting tokens
-=$percnt=, =$dollar=, =$quot= and =$n= to render the respective characters.
+=select=, =option=, =format= and =chart= can all use the standard formatting tokens =$percnt=, =$dollar=, =$quot= and =$n= to render the respective characters.
 
-The %<nop>VOTE{ ... }% will generate the selection box(es) and the poll
-results.
+The %<nop>VOTE{ ... }% will generate the selection box(es) and the poll results.
 
 ---+++ Weighting the vote
-You can weight the vote results by setting the !TWikiPreference
-=%<nop>VOTEPLUGIN_WEIGHTINGS%= to the name of a topic that is used
-to weight the votes of certain members of the community in the final result.
-For example,
+
+You can weight the vote results by setting the !TWikiPreference =%<nop>VOTEPLUGIN_WEIGHTINGS%= to the name of a topic that is used to weight the votes of certain members of the community in the final result. For example,
 <verbatim>
 | *Name* | *Weight* |
 | AlbertCamus | 100 |
 | SunTszu | 50 |
 | NiccoloMachiavelli | 1000 |
 </verbatim>
+
 The numbers are percentages. A user who isn't otherwise weighted has a weighting of 100. A weighting lower that 100 reduces their influence on the vote, and a weighting higher than 100 increases it. In the example above,
+
    * !AlbertCamus has a weight of 100, as does !AdamSmith (who gets the default)
    * !SunTszu's votes only count for half as much as !AlbertCamus'
    * !NiccoloMachiavelli has ten times as much influence as !AlbertCamus and !AdamSmith, and twenty times as much as !SunTszu.
+
 The weighting topic applies to all votes in the scope of the =%<nop>VOTEPLUGIN_WEIGHTINGS%= setting.
 
 #Reset
 ---+++ Resetting a Poll
+
 Sometimes you want to be able to clear the results of a poll. Access to this feature is controlled using the =VOTEPLUGIN_RESETTERS= TWiki variable. This variable defines a (semicolon-separated) list of wiki names and a (comma-separated) list of the IDs of votes they are allowed to reset. You can use =*= as a wildcard in the vote IDs. For example, in a =Web<nop>Preferences= topic you can write
 <verbatim>
    * Set VOTEPLUGIN_RESETTERS = GeorgeWBush(*);RobertMugabe(zimbabwe);SimonCowell(*Idol, XFactor)
@@ -175,6 +167,7 @@ If a user has sufficient rights to reset a vote, then a button will be generated
 Note that it is important to finalise the setting, otherwise it can be overridden in individual topics by anyone with =CHANGE= access. If you don't define =VOTEPLUGIN_RESETTERS= no-one can reset _any_ votes.
 
 ---++ Plugin Installation Instructions
+
 %$INSTALL_INSTRUCTIONS%
 
 %X% *IMPORTANT* If you don't want anyone to be able to reset votes on your site, then make sure you:
@@ -185,14 +178,16 @@ in Main.<nop>TWikiPreferences, and add =VOTEPLUGIN_RESETTERS= to =FINALPREFERENC
 </verbatim>
 
 ---++ Plugin Info
-<!-- provided for compatibility only
+
+<!--
    * Set SHORTDESCRIPTION = Simple way to count votes
 -->
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Copyright &copy;: | 2005-2007, Michael Daum http://wikiring.de |
+|  Copyright: | &copy; 2005-2007 Michael Daum http://wikiring.de, %BR% &copy; 2005-2010 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
-|  Change History: | &nbsp; | 
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-07-30: | TWikibug:Item6530 - doc fixes |
 |  14 Oct 2008 | TWikibug:Item6070 works for hierarchical webs now.  - TWiki:Main/ColasNahaboo |
 |  10 Aug 2008 | TWikibug:Item5768 suppress submission of individual ratings in a multi-row vote TWikibug:Item5769 correct default handling of transcluded rates TWikibug:Item5766 $large is once again large TWikibug:Item5771 support for resetting votes. |
 |  1 Jul 2007: | TWikibug:Item4310 : abstracted out TWiki:Plugins.RatingContrib, and modified the code to be tolerant of forms within forms - TWiki:Main/CrawfordCurrie |
@@ -217,7 +212,7 @@ in Main.<nop>TWikiPreferences, and add =VOTEPLUGIN_RESETTERS= to =FINALPREFERENC
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.UserDocumentationCategory
+
 %META:FILEATTACHMENT{name="example_select.gif" attr="h" comment="" version="1"}%
 %META:FILEATTACHMENT{name="example_stars.gif" attr="h" comment="" version="1"}%
-
--- TWiki:Main.MichaelDaum - 31 Aug 2006
