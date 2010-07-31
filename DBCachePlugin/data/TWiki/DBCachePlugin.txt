@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272597338" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1280553983" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -8,7 +8,7 @@
 -->
 %SHORTDESCRIPTION%
 <div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
-%TOC%
+%TOC{title="Page contents"}%
 </div>
 
 ---++ Description
@@ -183,8 +183,8 @@ Traverse topic-to-topic relations, like the intrinsic parent-child relation
 
 *Syntax:*
 | *%<nop>DBRECURSE{"&lt;topic>" ...}%* ||
-| =&lt;topic>= | starting point, can be in web.topic format, defaults to the current topic |
-| =web="...=" | web where to recurse, defaults to the web given in the =topic= parameter or the current web |
+| ="&lt;topic>"= | starting point, can be in web.topic format, defaults to the current topic |
+| =web="..."= | web where to recurse, defaults to the web given in the =topic= parameter or the current web |
 | =format="..."= | format string for each found topic defaults to ='   $indent* [<nop>[$web.$topic][$topic]]'= |
 | =single="..."= | format string used when only one topic is found, defaults to value of =format= parameter |
 | =separator="..."= | separator string to be put between formatted topics, defaults to ='\n'= |
@@ -358,10 +358,11 @@ If  $TWiki::cfg{DBCache}{alwaysUpdateCache}  is set to FALSE (defaults to TRUE f
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Copyright: | &copy; 2005-2008, Michael Daum http://michaeldaumconsulting.comi; <br /> &copy; 2005-2010, TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2005-2008, Michael Daum http://michaeldaumconsulting.comi; <br /> &copy; 2005-2010, TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | v2.1 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-07-30: | TWikibug:Item6530 - minor doc fixes |
 |  2010-04-29: | TWikibug:Item6433 - doc improvements |
 |  03 Jul 2008: | fixed calculation of a topic title; \
                   disabled =renderWikiWordHandler= for TWikis before 4.2, \
