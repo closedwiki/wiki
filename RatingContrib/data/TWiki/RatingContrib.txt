@@ -73,8 +73,6 @@ is good if you want (for example) to update values using a REST handler.
 
 ---++ Installation Instructions
 
-You do not need to install anything in the browser to use this extension. The following instructions are for the administrator who installs the extension on the server where TWiki is running.
-
 %$INSTALL_INSTRUCTIONS%
 
 ---++ Contrib Info
