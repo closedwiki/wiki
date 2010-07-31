@@ -1,19 +1,27 @@
+%META:TOPICINFO{author="TWikiContributor" date="1280558592" format="1.1" version="$Rev$"}%
 ---+!! !RatingContrib
 <!--
-One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = Rating widget for TWiki forms
+   Contributions to this extension are appreciated. Please update the documentation page at
+   http://twiki.org/cgi-bin/view/Plugins/RatingContrib or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/RatingContribDev.
+   If you are a TWiki contributor please update the extension in the SVN repository.
+
+One line description, required for extensions repository catalog:
+   * Set SHORTDESCRIPTION = Rating widget for TWiki forms using "line of stars" style input field
 -->
 %SHORTDESCRIPTION%
-
-%TOC%
-
-This is a rating widget that can support a "line of stars" style input field.
+<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
+%TOC{title="Page contents"}%
+</div>
 
 ---++ Usage
+
 ---+++ In TWiki < 4.2
-The rating widget can be used with the [[TWiki:Plugins.VotePlugin][VotePlugin]]. The widget is like the [[TWiki:Plugins.JSCalendarContrib][JSCalendarContrib]] in that once it is installed, it can be used with any plugin that requires a line - of - stars rating bar. 
+
+The rating widget can be used with the TWiki:Plugins.VotePlugin. The widget is like the TWiki:Plugins.JSCalendarContrib in that once it is installed, it can be used with any plugin that requires a line - of - stars rating bar. 
 
 ---+++ In TWiki 4.2 and later
+
 You can use the new =rating= type in form fields. The result of the rating is captured as an integer, and displayed as a line of stars. For example,
 
 <img src="%ATTACHURLPATH%/example_stars.gif" />
@@ -32,14 +40,9 @@ looks like this when it is edited:
 
 <img src="%ATTACHURLPATH%/edit_example.gif" />
 
----++ Installation Instructions
-
-%$INSTALL_INSTRUCTIONS%
-
 ---++ Using the Contrib in a Plugin
-A typical application of this widget is its use to capture a rating
-under the control of a plugin. It is straightforward to use in this role.
-The API to the contrib is:
+
+A typical application of this widget is its use to capture a rating under the control of a plugin. It is straightforward to use in this role. The API to the contrib is:
 
 =TWiki::Contrib::RatingContrib::renderRating($name, $size, $small, $value, $input_attrs) -> $html=
 
@@ -68,19 +71,24 @@ $html = TWiki::Contrib::RatingContrib::renderRating('rating', 5, 0, 0,
 Of course, when you use the =onchange= event, you don't need a form. This model
 is good if you want (for example) to update values using a REST handler.
 
+---++ Installation Instructions
+
+You do not need to install anything in the browser to use this extension. The following instructions are for the administrator who installs the extension on the server where TWiki is running.
+
+%$INSTALL_INSTRUCTIONS%
+
 ---++ Contrib Info
 
 |  Contrib Author(s): | Crawford Currie http://c-dot.co.uk |
-|  Copyright: | &copy; 2007 C-Dot Consultants |
-|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Copyright: | &copy; 2007 C-Dot Consultants; %BR% &copy; 2007-2010 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Contrib Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-07-27: | TWikibug:Item6530 - doc fixes |
 |  27 Jun 2006: | First version |
-|  Dependencies: | %$DEPENDENCIES% |
+|  Dependencies: | None |
 |  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/RatingContrib |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/RatingContribDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/RatingContribAppraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiContribs, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
-
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
+__Related Topics:__ %SYSTEMWEB%.TWikiContribs, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences

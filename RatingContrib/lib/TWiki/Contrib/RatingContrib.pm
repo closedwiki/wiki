@@ -1,4 +1,22 @@
-# See bottom of file for license and copyright information
+# Contrib for TWiki Collaboration Platform, http://TWiki.org/
+#
+# Author: Crawford Currie http://c-dot.co.uk
+# Copyright (C) 2007 C-Dot Consultants
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at
+# http://www.gnu.org/copyleft/gpl.html
+#
 package TWiki::Contrib::RatingContrib;
 
 use strict;
@@ -62,19 +80,3 @@ HEAD
 }
 
 1;
-__DATA__
-
-Contrib for TWiki Collaboration Platform, http://TWiki.org/
-
-Author: Crawford Currie http://c-dot.co.uk
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details, published at
-http://www.gnu.org/copyleft/gpl.html
