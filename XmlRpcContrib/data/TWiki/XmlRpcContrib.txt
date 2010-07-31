@@ -1,64 +1,64 @@
-%META:TOPICINFO{author="TWikiContributor" date="1023947640" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1280555133" format="1.1" version="$Rev$"}%
+---+!! XML-RPC Contrib
 <!--
-
-   PLEASE DO NOT EDIT THIS TOPIC
-
-   It is automatically generated from the subversion repository, and any changes
-   you make will simply be overwritten the next time a release is generated.
-
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
+   Contributions to this extension are appreciated. Please update the documentation page at
+   http://twiki.org/cgi-bin/view/Plugins/XmlRpcContrib or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/XmlRpcContribDev.
+   If you are a TWiki contributor please update the extension in the SVN repository.
 -->
----+!! %TOPIC%
+%SHORTDESCRIPTION%
+<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
+%TOC{title="Page contents"}%
+</div>
 
-XML-RPC services for TWiki
+---++ Introduction
 
-%TOC%
-
-This package allows to register handlers for remote procedures the same way tags
-are registered to the TWiki engine. The xmlrpc cgi will then call them on request.
+This package allows to register handlers for remote procedures the same way tags are registered to the TWiki engine. The xmlrpc cgi will then call them on request.
 
 ---++ =XmlRpcContrib=
----+++ =registerRPCHandler($name, $impl)=
-register an implementation for a handler
 
-*Parameters*: %BR%
+---+++ =registerRPCHandler($name, $impl)=
+
+Register an implementation for a handler
+
+*Parameters*:
    * $name: symbolic method name
    * $impl: implementation of a handler for the given method name
 
 ---+++ =dispatch($session, $data)=
-process a remote procedure call
 
-*Parameters*: %BR%
+Process a remote procedure call
+
+*Parameters*:
    * $session: the current TWiki session objecet
    * $data: the net data to be processed (optional)
 
-If no data is passed it is requested from the CGI query object.
-During execution the context =xmlrpc= is entered as well as the context of the
-symbolic method name.
+If no data is passed it is requested from the CGI query object. During execution the context =xmlrpc= is entered as well as the context of the symbolic method name.
 
-This call will be delegate to =XmlRpcContrib::Server::dispatch= and print
-out its result to STDOUT.
+This call will be delegate to =XmlRpcContrib::Server::dispatch= and print out its result to STDOUT.
 
 ---++ =XmlRpcContrib::Server=
-light implementation of an XML-RPC server
+
+Light implementation of an XML-RPC server
 
 ---+++ =new(%handler)=
-create a new server object
 
-*Parameters*: %BR%
+Create a new server object
+
+*Parameters*:
    * %handler: hash mapping method names to their implementation
 
 The server is a singleton object in the =XmlRpcContrib= namespace.
 
 ---+++ =dispatch($session, $data)=
-carry out the procedure call
 
-*Parameters*: %BR%
-   * $session: the current TWiki session objecet
+Carry out the procedure call
+
+*Parameters*:
+   * $session: the current TWiki session object
    * $data: xml request data
 
-This will call the method implementation if available or return
-an error if not available. A method must implement the interface
+This will call the method implementation if available or return an error if not available. A method must implement the interface
 
 <verbatim>
 ($status, $error, $result) = handleRPCCall($session, $requestargs)
@@ -73,13 +73,11 @@ The handler must return an array ($status, $error, $result) where
    * $error: error code
    * $result: the procedure's result data
 
-If $error is null, a response is created using $result if it is
-an RPC::XML object already, or create an RPC::XML::string from it.
-If $error is a non-null value a server error occured and an RPC::XML::fault
-object is respondend (see =getError()=).
+If $error is null, a response is created using $result if it is an RPC::XML object already, or create an RPC::XML::string from it. If $error is a non-null value a server error occured and an RPC::XML::fault object is respondend (see =getError()=).
 
 ---+++ =getResponse($status, $data)=
-create a well-formated =RPC::XML::response= that can be printed to STDOUT on completion
+
+Create a well-formated =RPC::XML::response= that can be printed to STDOUT on completion
 
 *Parameters:*
    * $status: response status value
@@ -88,8 +86,8 @@ create a well-formated =RPC::XML::response= that can be printed to STDOUT on com
 returns the formatted response
 
 ---+++ =getError($status, $error, $data)=
-creates a =RPC::XML::fault= object using the $error and its $data
-and returns the formatted error response.
+
+Creates a =RPC::XML::fault= object using the $error and its $data and returns the formatted error response.
 
 ---++ Settings
 
@@ -105,21 +103,19 @@ and returns the formatted error response.
    | ==data/TWiki/XmlRpcContrib.txt== | contrib topic |
    | ==lib/TWiki/Contrib/XmlRpcContrib.pm== | perl module |
    | ==lib/TWiki/Contrib/XmlRpcContrib/Server.pm== | server module |
-   * possibly enable/secure the xmlrpc in =bin/.htaccess= so that it gets
-     recognized as a cgi script at least
+   * possibly enable/secure the xmlrpc in =bin/.htaccess= so that it gets recognized as a cgi script at least
 
 ---++ Contrib Info
 
 |  Author: | TWiki:Main/MichaelDaum |
-|  Copyright &copy;: | 2006, MichaelDaum http://wikiring.com |
+|  Copyright: | &copy; 2006, MichaelDaum http://wikiring.com, %BR% &copy; 2006-2010 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  CPAN Dependencies: | CPAN:RPC::XML |
-|  Version: | v0.03 |
-|  Change History: | &nbsp; |
+|  Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-07-27: | TWikibug:Item6530 - doc fixes |
 |  15 June 2006: | first public release |
 |  28 May 2006: | Initial version |
-|  Home: | TWiki:Plugins/%TOPIC% |
-|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
-|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
-
--- TWiki:Main/MichaelDaum - 15 June 2006
+|  CPAN Dependencies: | CPAN:RPC::XML |
+|  Home: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |

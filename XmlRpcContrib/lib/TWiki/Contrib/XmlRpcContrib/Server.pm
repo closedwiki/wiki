@@ -1,6 +1,9 @@
 # XML-RPC server 4 TWiki
 #
 # Copyright (C) 2006 MichaelDaum@WikiRing.com
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution. NOTE: Please extend that file, not this notice.

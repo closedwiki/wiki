@@ -1,9 +1,9 @@
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2006 MichaelDaum@WikiRing.com
-#
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
-# this distribution. NOTE: Please extend that file, not this notice.
+# this distribution.
 #
 # Additional copyrights apply to some or all of the code in this
 # file as follows:
@@ -26,7 +26,7 @@ use vars qw( $VERSION $RELEASE $SERVER %handler);
 
 use strict;
 $VERSION = '$Rev$';
-$RELEASE = '0.03';
+$RELEASE = '2010-07-30';
 
 ################################################################################
 # register an implementation for a handler
