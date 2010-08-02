@@ -54,7 +54,7 @@ Bug 234 is in status RESOLVED and was assigned to another_user@bugzilla.com<br>
 
    * Set URL = https://marvin.in.idoox.com/bugzilla/
    * Set FORMAT = | $bug_id | $bug_severity | $priority | $bug_status | $resolution | $reporter | $product | $short_desc |
-   * Set SHORTDESCRIPTION = This plugin is useful to display links or data results from Bugzilla.
+   * Set SHORTDESCRIPTION = Display links or data results from Bugzilla
    * Set SHOWBUGSCRIPT = show_bug.cgi
    * Set BUGLISTSCRIPT = buglist.cgi
    * Set BUGZILLA_DB_HOST =
