@@ -1,9 +1,9 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (c) 2006 by Meredith Lesly, Kenneth Lavrsen
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,11 +27,8 @@ use strict;
 use vars qw( $VERSION $RELEASE $debug $pluginName );
 use vars qw( $savedAlready $defaultKeepPars $defaultComment ); 
 
-# This should always be $Rev: 11069$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev: 11069$';
-$RELEASE = '2.2.0';
+$RELEASE = '2010-08-01';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'AttachContentPlugin';

@@ -1,2 +1,3 @@
-data/TWiki/AttachContentPlugin.txt  Plugin doc page
-lib/TWiki/Plugins/AttachContentPlugin.pm  Plugin Perl module 
+data/TWiki/AttachContentPlugin.txt 0644
+lib/TWiki/Plugins/AttachContentPlugin.pm 0644
+lib/TWiki/Plugins/AttachContentPlugin/Config.spec 0644
