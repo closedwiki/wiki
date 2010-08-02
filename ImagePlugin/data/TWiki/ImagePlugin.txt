@@ -2,8 +2,8 @@
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
-   http://twiki.org/cgi-bin/view/Plugins/TimeSincePlugin or provide feedback at
-   http://twiki.org/cgi-bin/view/Plugins/TimeSincePluginDev.
+   http://twiki.org/cgi-bin/view/Plugins/ImagePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/ImagePluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
 %SHORTDESCRIPTION%
