@@ -142,11 +142,11 @@ After the layout has been formatted any further TWiki markup that might be conta
    * Set SHORTDESCRIPTION = Control the display and alignment of images using an easy syntax
 
 |  Plugin Author: | TWiki:Main.CraigMeyer |
-|  Copyright: | &copy; 2006, TWiki:Main.CraigMeyer, %BR% &copy; 2006-2008 Michael Daum http://michaeldaumconsulting.com, %BR% &copy; 2005-2010 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2006, TWiki:Main.CraigMeyer, %BR% &copy; 2006-2008 Michael Daum http://michaeldaumconsulting.com, %BR% &copy; 2006-2010 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-07-27: | TWikibug:Item6530 - doc fixes; changing TWIKIWEB to SYSTEMWEB |
+|  2010-08-01: | TWikibug:Item6530 - doc fixes; changing TWIKIWEB to SYSTEMWEB |
 |  03 Jul 2008: | fixed parsing the type parameter; \
                   fixing docu about the default THUMBNAIL_SIZE; \
                   added new default format =plain=; \

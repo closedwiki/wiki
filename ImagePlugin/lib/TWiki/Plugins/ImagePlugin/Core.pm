@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2006 Craig Meyer, meyercr@gmail.com
 # Copyright (C) 2006-2008 Michael Daum http://michaeldaumconsulting.com
-# Copyright (C) 20016-2010 TWiki Contributors. All Rights Reserved.
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 #
