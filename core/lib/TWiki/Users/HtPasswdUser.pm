@@ -129,8 +129,7 @@ sub _readPasswd {
         next if /^\s*(?:$|#)/;    #skip comments/raw lines
         chomp;
         my @line = split /:/;
-        my $key  = shift @line
-          || throw Error::Simple( "Bad data at line " . $. );
+        my $key  = shift @line or next; # just ignore lines if no login name
 
         if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {    # htdigest format
             my @cols = qw/ authrealm pass emails flag pass_change flag_change /;
