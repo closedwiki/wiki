@@ -3,10 +3,9 @@
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2006 Meredith Lesly, msnomer@spamcop.net
 # Copyright (C) 2008 Timothe Litt, litt@acm.ort
-#
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,7 +26,7 @@ use strict;
 use vars qw( $VERSION $RELEASE );
 
 $VERSION = '$Rev: 10608$';
-$RELEASE = 'Dakar';
+$RELEASE = '2010-08-01';
 
 ###############################################################################
 sub initPlugin {

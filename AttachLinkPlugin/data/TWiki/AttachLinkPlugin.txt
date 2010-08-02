@@ -1,81 +1,87 @@
----+ %TOPIC%
-
-_Standard links to attachments_ 
-
-<br />%TOC%
+%META:TOPICINFO{author="TWikiContributor" date="1280731568" format="1.1" version="$Rev$"}%
+---+!! <nop>%TOPIC%
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/AttachLinkPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/AttachLinkPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+%SHORTDESCRIPTION%
+<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
+%TOC{title="Page contents"}%
+</div>
 
 ---++ Syntax Rules
 
-%ATTAC%NOP%HMENT{ name="filename" topic="TopicName" web="Webname" label="sometimes_text_sometimes_magic" }%
+%<nop>ATTACHMENT{ name="filename" topic="TopicName" web="Webname" label="sometimes_text_sometimes_magic" }%
 
 This apparently trivial plugin turns out to be quite useful. Besides syntactic sugar, it actually makes previously hard things easier!
 
-Until now, referencing an attachment in a TWiki topic has required escape to HTML, with lots of ugly TWiki variables like %PUBU%NOP%RLPATH% and %ATT%NOP%ACHURL% to do the simplest things. AttachLinkPlugin fixes that!
+Until now, referencing an attachment in a TWiki topic has required escape to HTML, with lots of ugly TWiki variables like %<nop>PUBURLPATH% and %<nop>ATTACHURL% to do the simplest things. AttachLinkPlugin fixes that!
 
 Further, it makes it easy to have clickable images - for example, thumbnails that when clicked, expand to a full-size picture.
 
 Here are the syntax details:
+
    * name - The filename that you upload. Just the name, no path. The name= is optional, but the quotes are not.
    * topic - the topic that manages the attachment. The default is the current topic, so you can usually omit this.
    * web - the web that contains the topic that manages the attachment. The default is the current web, so again, you can usually omit this.
    * label - the thing that you want visible to represent the link. This can be text - or another object. The default is the filename, so you can omit it too. See the examples for details.
+
 ---++ Examples
 
-%ATT%NOP%ACHMENT{ "foo.jpg" }% Create a link to foo.jpg in the current topic, which will look like: %BLUE%foo.jpg %ENDCOLOR%underlined. (Can WYSIWYG underline?)
+%<nop>ATTACHMENT{ "foo.jpg" }% Create a link to foo.jpg in the current topic, which will look like: %BLUE%foo.jpg %ENDCOLOR%underlined. (Can WYSIWYG underline?)
 
-%ATTA%NOP%CHMENT{ "foo.jpg" label="The foomobile afloat" }% gives you a hyperlink to the same file, like this: %BLUE%The foomobile afloat%ENDCOLOR%
+%<nop>ATTACHMENT{ "foo.jpg" label="The foomobile afloat" }% gives you a hyperlink to the same file, like this: %BLUE%The foomobile afloat%ENDCOLOR%
 
-%ATTA%NOP%CHMENT{ "foo.jpg" label="%IM%NOP%G{ "foo_thumb.jpg" align="left" width="40" class="none" }%}% will display foo_thumb.jpg inline. You can click on the image, and if you do, foo.jpg will display.
+%<nop>ATTACHMENT{ "foo.jpg" label="%<nop>IMG{ "foo_thumb.jpg" align="left" width="40" class="none" }%" }% will display foo_thumb.jpg inline. You can click on the image, and if you do, foo.jpg will display.
 
-So you essentially have the power of ![[WikiWord][PrettyText]] links, for images and other attachments. And anything else that will take an HTML anchor tag.
+So you essentially have the power of ![[%SYSTEMWEB%.WikiWord][PrettyText]] links, for images and other attachments. And anything else that will take an HTML anchor tag.
 
-A rather surprising result for less than 10 executable statements of perl. If %A%NOP%TT% is not in use (do we have a registry of variables?), I would be receptive to adding the line to add it as an alias for %ATTA%NOP%CHMENT% - I already have 10s of thousands of instances of %ATTA%NOP%CHMENT%
+A rather surprising result for less than 10 executable statements of perl. If %<nop>ATT% is not in use (do we have a registry of variables?), I would be receptive to adding the line to add it as an alias for %<nop>ATTACHMENT% - I already have 10s of thousands of instances of %<nop>ATTACHMENT%
 
 Enjoy it as much as I do.
+
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write *%&lt;nop&gt;&lt;plugin&gt;_&lt;setting&gt;%*, i.e. *%&lt;nop&gt;NEWPLUGIN_SHORTDESCRIPTION%*
+Plugin settings are stored as preferences variables. To reference a plugin setting write =%<nop>&lt;plugin&gt;_&lt;setting&gt;%=, i.e. =%<nop>ATTACHLINKPLUGIN_SHORTDESCRIPTION%=
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic: 
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic: 
       * Set SHORTDESCRIPTION = Painless links to attachments 
 
    * There are no other settings for this plugin. 
+
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
 
    * Download the ZIP file from the Plugin Home (see below)
    * Unzip *%TOPIC%.zip* in your twiki installation directory. Content:
-
-| *File:* | *Description:* |
-| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-| ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
    * Configure the Plugin: 
-      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
-      * Change the Plugin settings as needed
+      * Run the [[%SCRIPTURL{configure}%][configure]] script to enable the plugin
+      * Change the plugin settings as needed
    * Test if the installation was successful: 
       * _enter samples here_
 
 ---++ Plugin Info
 
-| Plugin Author: | TWiki:Main.TimotheLitt |
-| Copyright: | © 2007, TWiki:Main.TimotheLitt |
-| License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-| Plugin Version: | 21 Dec 2008 (V1.000) |
-| Change History: | &lt;!-- versions below in reverse order --&gt; |
-| 20 Dec 2008: | Initial version |
-| TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-| CPAN Dependencies: | none |
-| Other Dependencies: | none |
-| Perl Version: | 5.005 |
-| [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
-| Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-| Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
-| Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+|  Plugin Author: | TWiki:Main.TimotheLitt |
+|  Copyright: | &copy; 2007, TWiki:Main.TimotheLitt, %BR% &copy; 2007-2010 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-08-01: | TWikibug:Item6530 - doc fixes; changing TWIKIWEB to SYSTEMWEB |
+|  20 Dec 2008: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
-
-<br />%TOPICCREATE{ template="Plugins.PluginDevTemplate" topic="AttachLinkPluginDev" disable="NewPluginTemplate" parameters="pluginName=AttachLinkPlugin&RelatedTopics=AttachLinkPlugin, AttachLinkPluginAppraisal" }% %TOPICCREATE{ template="Plugins.PluginAppraisalTemplate" topic="AttachLinkPluginAppraisal" disable="NewPluginTemplate" parameters="RelatedTopics=AttachLinkPlugin, AttachLinkPluginDev" }% -- TWiki:Main.TimotheLitt - 21 Dec 2008
-
--- Main.TimotheLitt - 21 Dec 2008
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
