@@ -1054,6 +1054,7 @@ sub safeEvalPerl
     $theText =~ s/\%\s*[^\-\+\*\/0-9\.\(\)]+//go; # defuse %hash but keep modulus
     # keep only numbers and operators (shh... don't tell anyone, we support comparison operators)
     $theText =~ s/[^\!\<\=\>\-\+\*\/\%0-9e\.\(\)]*//go;
+    $theText =~ s/\b0+(?=[0-9])//go;  # remove leading 0s to defuse interpretation of numbers as octals
     $theText =~ s/(^|[^0-9])e/$1/go;  # remove "e"-s unless in expression such as "123e-4"
     $theText =~ /(.*)/;
     $theText = $1;  # untainted variable
@@ -1065,6 +1066,8 @@ sub safeEvalPerl
         $result =~ s/[\n\r]//go;
         $result =~ s/\[[^\]]+.*view.*?\:\s?//o;                   # Cut "[Mon Mar 15 23:31:39 2004] view: "
         $result =~ s/\s?at \(eval.*?\)\sline\s?[0-9]*\.?\s?//go;  # Cut "at (eval 51) line 2."
+        $result =~ s/at end of line\.?//go;                       # Cut "at end of line"
+        $result =~ s/,?\s*$//o;
         $result = "ERROR: $result";
 
     } else {

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1279434253" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1280964980" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -782,6 +782,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-08-04: | TWikibug:Item6537 - fix for $EVAL(2+08) returning "illegal octal digit" error instead of 10 |
 |  2010-07-17: | TWikibug:Item6525 - add $n token to TRANSLATE for newline |
 |  2010-05-27: | TWikibug:Item6506 - document delayed evaluation of CALC in included topics |
 |  2010-05-26: | TWikibug:Item6504 - add empty ($nop) separator to $LISTJOIN() |
