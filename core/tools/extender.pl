@@ -50,6 +50,9 @@ my $MANIFEST;
 
 BEGIN {
     $installationRoot = Cwd::getcwd();
+    $installationRoot =~ /^(.*)$/;
+    $installationRoot = $1; # untaint - this is safe
+
     my $check_perl_module = sub {
         my $module = shift;
 
@@ -980,6 +983,9 @@ sub install {
     my @deps;
     foreach my $row (split(/\r?\n/, $data{DEPENDENCIES})) {
         my ($module, $condition, $trigger, $type, $desc) = split(',', $row, 5);
+        $module =~ s/[^a-zA-Z0-9\:\_\-]//g;                    # allow limited chars only
+        $module = TWiki::Sandbox::untaintUnchecked( $module ); # untaint safe module name
+
         push(@deps, {
             name=>$module,
             type=>$type,
