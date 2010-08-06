@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1281076294" format="1.1" version="$Rev$"}%
----+ <nop>%TOPIC%
+---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
    http://twiki.org/cgi-bin/view/Plugins/ChildTopicTemplatePlugin or provide feedback at
