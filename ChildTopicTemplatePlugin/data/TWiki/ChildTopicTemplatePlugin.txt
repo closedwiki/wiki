@@ -1,50 +1,72 @@
-%META:TOPICINFO{author="DeanCording" date="1086408449" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1281076294" format="1.1" version="$Rev$"}%
 ---+ <nop>%TOPIC%
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/ChildTopicTemplatePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/ChildTopicTemplatePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+%SHORTDESCRIPTION%
+<sticky><div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
+%TOC{title="Page contents"}%
+</div></sticky>
 
-This plugin allows you to specify in a topic what template should be used when a child topic is created via Twiki's '?' link.  A number of different templates can be specified thoughout a topic to allow different child topics to be created in different sections of the parent.
+---++ Introduction
+
+This plugin allows you to specify in a topic what template should be used when a child topic is created via TWiki's red-link.  A number of different templates can be specified throughout a topic to allow different child topics to be created in different sections of the parent.
 
 ---++ Syntax Rules
 
-	* Write the command =%<nop>CHILDTOPICTEMPLATE {= _NameOfTopicTemplate_ =}%= anywhere in your text.
-	* All subsequent unlinked WikiWords will be created using the specified topic template.
-	* Use =%<nop>CHILDTOPICTEMPLATE {}%= to remove the child topic template.
-	* A topic can contain any number of CHILDTOPICTEMPLATE commands. 
+   * Write the command =%<nop>CHILDTOPICTEMPLATE{ "NameOfTopicTemplate" }%= anywhere in your text.
+   * All subsequent red-linked %SYSTEMWEB%.WikiWords will be created using the specified topic template.
+   * Use =%<nop>CHILDTOPICTEMPLATE{}%= to remove the child topic template.
+   * A topic can contain any number of CHILDTOPICTEMPLATE commands. 
 
----++ Examples
+---++ Example
 
-	* =%<nop>CHILDTOPICTEMPLATE {= !NewTopicTemplate =}%=
+<verbatim>
+NewTestTopic1 -- this red-link uses the default template topic
+%CHILDTOPICTEMPLATE{ "NewTopicTemplate" }% -- set custom template topic NewTopicTemplate
+NewTestTopic2 -- this red-link uses template topic NewTopicTemplate
+%CHILDTOPICTEMPLATE{}% -- disable custom template topic
+NewTestTopic3 -- this red-link uses the default template topic again
+</verbatim>
 
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>CHILDTOPICTEMPLATEPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Allows templates to be specified for automatic child topic creation.
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Specify a template when creating a child topic via red-link
 
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
-
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* Test if the installation was successful:
-		* =%<nop>CHILDTOPICTEMPLATE{ %WEB%.%TOPIC% }%= %CHILDTOPICTEMPLATE{ %WEB%.%TOPIC% }%
-		* Sandbox.NewChildTopicTemplateLinkTest
-
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Test if the installation was successful:
+      * Sandbox.NewChildTopicTemplateLinkTest1 -- red-link to topic using default template topic
+      * =%<nop>CHILDTOPICTEMPLATE{ "%WEB%.%TOPIC%" }%= %CHILDTOPICTEMPLATE{ "%WEB%.%TOPIC%" }%
+      * Sandbox.NewChildTopicTemplateLinkTest2 -- red-link to topic using "%WEB%.%TOPIC%" as template topic
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/DeanCording |
-|  Plugin Version: | 01 Jun 2004 (V1.000) |
+|  Plugin Author: | TWiki:Main.DeanCording |
+|  Copyright: | &copy; 2004 TWiki:Main.DeanCording, %BR% &copy; 2004-2010 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-08-05: | TWikibug:Item6530 - use postRenderingHandler callback instead of endRenderingHandler; fixed link parsing for red-links; more robust parsing of CHILDTOPICTEMPLATE with parameters; doc enhancements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  28 Jun 2004: | Added more robust handling of parameters -- TWiki:Main.ChristopherOezbek |
+|  10 Jun 2004: | Fixed problem causing some pages (like Attach New File) to not render correctly |
 |  01 Jun 2004: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
@@ -52,8 +74,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main/DeanCording - 01 Jun 2004
-
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
