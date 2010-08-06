@@ -1,5 +1,11 @@
+# Plugin for TWiki Collaboration Platform, http://TWiki.org/
+#
 # Copyright (C) 2002 Mike Barton, Marco Carnut, Peter HErnst
-#	(C) 2003 Martin Cleaver, (C) 2004 Matt Wilkie (C) 2007 Crawford Currie
+# Copyright (C) 2003 Martin Cleaver, (C) 2004 Matt Wilkie
+# Copyright (C) 2007 Crawford Currie
+# Copyright (C) 2002-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License

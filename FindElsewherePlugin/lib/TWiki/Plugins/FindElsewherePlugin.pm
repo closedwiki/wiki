@@ -1,5 +1,11 @@
+# Plugin for TWiki Collaboration Platform, http://TWiki.org/
+#
 # Copyright (C) 2002 Mike Barton, Marco Carnut, Peter HErnst
-#	(C) 2003 Martin Cleaver, (C) 2004 Matt Wilkie (C) 2007 Crawford Currie
+# Copyright (C) 2003 Martin Cleaver, (C) 2004 Matt Wilkie
+# Copyright (C) 2007 Crawford Currie
+# Copyright (C) 2002-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,13 +28,14 @@ package TWiki::Plugins::FindElsewherePlugin;
 use strict;
 
 use vars qw(
-            $VERSION $RELEASE $NO_PREFS_IN_TOPIC $disabled
+            $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION $disabled
            );
 
-$NO_PREFS_IN_TOPIC = 1;
+$RELEASE = '$Rev$';
+$VERSION = '2010-08-06';
 
-$RELEASE = '$Date$';
-$VERSION = '$Rev$';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = "Automatically link to topic in other web(s) if it isn't found in the current web";
 
 sub initPlugin {
     #my( $topic, $web, $user, $installWeb ) = @_;
