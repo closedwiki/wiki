@@ -59,7 +59,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.DeanCording |
+|  Plugin Author: | TWiki:Main.DeanCording, TWiki:Main.ChristopherOezbek, TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2004 TWiki:Main.DeanCording, %BR% &copy; 2004-2010 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
