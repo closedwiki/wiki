@@ -1,6 +1,9 @@
-# TWiki WikiClone ($wikiversion has version info)
+# Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2003 Chris Winters, chris@cwinters.com
+# Copyright (C) 2003-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,24 +25,14 @@
 
 package TWiki::Plugins::SourceHighlightPlugin;
 
-# $Id$
-
 use strict;
 use vars qw( $VERSION $RELEASE );
 
 use File::Spec;
 use File::Temp;
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
+$RELEASE = '2010-08-06';
 
 # These are set at initialization
 
@@ -110,12 +103,21 @@ sub initPlugin {
 
 sub commonTagsHandler {
     # &TWiki::Func::writeDebug( "- SourceHighlightPlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-    $_[0] =~ s/%CODE({"([a-z0-9]+)"})?%(.*?)%ENDCODE%/&render_code($2, $3)/gseo;
+    $_[0] =~ s/%CODE(.*?)%(.*?)%ENDCODE%/&render_code($1, $2)/gseo;
 }
 
 
 sub render_code {
     my ( $lang, $data )  = @_;
+
+    if ($lang =~ m/{"(.*)"}/) {
+        $lang = $1;
+    } else {
+        if ($DEFAULT_LANG eq '') {
+            $DEFAULT_LANG = 'cpp';
+        }
+        $lang = $DEFAULT_LANG;
+    }
 
     # Ensure the command is defined
 
@@ -147,6 +149,7 @@ sub render_code {
                           "Failed to open temp file [$tmp_file] for writing: $@" );
     }
     print TMP $data;
+    print TMP "\n";
     close( TMP );
 
     # Send the temp file data to the source-highlight command,
