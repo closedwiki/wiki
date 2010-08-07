@@ -254,7 +254,9 @@ data/TWiki/VarLANGUAGES.txt 0644
 data/TWiki/VarLIME.txt 0644
 data/TWiki/VarLOCALSITEPREFS.txt 0644
 data/TWiki/VarLOGIN.txt 0644
+data/TWiki/VarLOGINURL.txt 0644
 data/TWiki/VarLOGOUT.txt 0644
+data/TWiki/VarLOGOUTURL.txt 0644
 data/TWiki/VarM.txt 0644
 data/TWiki/VarMAINWEB.txt 0644
 data/TWiki/VarMAKETEXT.txt 0644
