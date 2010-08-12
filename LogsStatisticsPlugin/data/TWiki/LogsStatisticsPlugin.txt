@@ -1,0 +1,106 @@
+%META:TOPICINFO{author="BaseUserMapping_333" date="1280229417" format="1.1" version="1.8"}%
+---+ LogsStatistics Plugin
+
+%TOC%
+
+---++ Description 
+The LogsStatisticsPlugin handles the tag =STATISTICSLOGS=  that inserts a summary of data from the TWiki log files based on user criteria.
+
+Besides standard statistical usage the LogsStatisticsPlugin can be used to identify problems with oversize numbers of requests or to present usage statistics based on TWiki logs.
+
+
+---++ Syntax Rules 
+==%<nop>STATISTICSLOGS{...}%==
+
+| *Argument * | *Comment* | *Default value * | *Values to choose* | *Comment on values* | *Example*|
+| <verbatim>date</verbatim> | set time period to analyze | <verbatim>today</verbatim> | <verbatim>today</verbatim> | analyze only today's data | <verbatim>date="today"</verbatim> |
+| ^ | ^ | ^ | <verbatim>yesterday</verbatim> | analyze only yesterday's data | <verbatim>date="yesterday"</verbatim> |
+| ^ | ^ | ^ | <verbatim>month</verbatim> | analyze data from the current month | <verbatim>date="month"</verbatim> |
+| ^ | ^ | ^ | <verbatim>last X days</verbatim> | analyze data from last X days  | <verbatim>date="last 13 days"</verbatim> |
+| ^ | ^ | ^ | <verbatim>dd MMM yyy</verbatim> | analyze data from a specific date | <verbatim>date="01 Jun 2010"</verbatim> |
+| ^ | ^ | ^ | <verbatim>dd MMM yyy - dd MMM yyyy</verbatim> | analyze data from a specific period | <verbatim>date="31 Mar 2010 - 01 Jun 2010"</verbatim> |
+| <verbatim>type</verbatim> | set type of the summary | <verbatim>top5 users</verbatim> | <verbatim>topX (users|webs|topics|crawlers)</verbatim> | returns top X users, webs, topics or crawlers | <verbatim>type="top10 webs"</verbatim> |
+| ^ | ^ | ^ | <verbatim>unique (users|webs|topics|crawlers)</verbatim> | returns number of unique users, webs, topics or crawlers | <verbatim>type="unique webs"</verbatim> |
+| <verbatim>output</verbatim> | set output type for the summary | <verbatim>table</verbatim> | <verbatim>table</verbatim> | returns summary as a table with headings | <verbatim>output="table"</verbatim> |
+| ^ | ^ | ^ | <verbatim>list</verbatim> | returns summary as a list | <verbatim>output="list"</verbatim> |
+| ^ | ^ | ^ | <verbatim>description</verbatim> | prints a line with parameters summary under the table/list  | <verbatim>output="table, description"</verbatim> |
+
+
+It is also possible to narrow data to the records containing specific values. Different parameters of the same type should be divided with commas, spaces will be automaticly deleted.
+| *Argument * | *Comment* | *Example*|
+| <verbatim>user</verbatim> | narrow data to the records coming from a specific user | <verbatim>user="WikiName"</verbatim><verbatim>user="WikiName1, WikiName2"</verbatim> |
+| <verbatim>web</verbatim> | narrow data to the records coming from a specific web | <verbatim>web="SandBox"</verbatim><verbatim>web="SandBox, Main"</verbatim> |
+| <verbatim>topic</verbatim> | narrow data to the records coming from a specific topic | <verbatim>topic="WebHome"</verbatim><verbatim>topic="WebHome, TestPage"</verbatim> |
+| <verbatim>action</verbatim> | narrow data to the records coming from a specific TWiki actions | <verbatim>action="view"</verbatim><verbatim>action="view, edit"</verbatim> |
+| <verbatim>ip</verbatim> | narrow data to the records coming from a specific ip address | <verbatim>ip="127.0.0.1"</verbatim><verbatim>ip="127.0.0.1, 192.168.1.1"</verbatim> |
+
+*Notes and hints:*
+   * The more parameters, the slower it will work.
+   * If the summary period covers the current day then the result data may vary every time when the LogsStatisticsPlugin is being called, this is because the log files are continuously updated.
+   * One can define a period covering future dates, but the plugins will analyze data only up to the servers date.
+   * If the log file for a specific month does not exists then the plugin will not report any errors.
+   * Output parameter should be divided with commas, spaces will be automaticly deleted.
+   * If the =output= attribute with the =table= value is used then one can customize it using for example TablePlugin or ChartPlugin. <verbatim>%TABLE{ name="tableAL1" sort="on" tableborder="0"  headerbg="#D5CCB1" headercolor="#666666" databg="#FAF0D4, #F3DFA8" headerrows="2" footerrows="1" }%%STATISTICSLOGS{date="last 10 days" type="top3 users"}%</verbatim>or<verbatim>%TABLE{ name="tableAL"} }%%STATISTICSLOGS{date="last 10 days" type="top3 webs"}%
+%CHART{ type="bar" name="bar" table="tableAL" data="R2:C2..R4:C2"  legend="R1:C2..R1:C2" xaxis="R2:C1..R4:C1" }%</verbatim>
+
+---++ Example
+   * Which 5 users are making the most requests today? <verbatim>%STATISTICSLOGS{date="today" type="top5 users"}%</verbatim>
+   * How many unique topics have been viewed in the Atlas web in the current month? <verbatim>%STATISTICSLOGS{date="month" type="unique topics" action="view" web="Atlas"}%</verbatim>
+   * Customizing tables: <verbatim>%TABLE{ name="tableAL1" sort="on" tableborder="0"  headerbg="#D5CCB1" headercolor="#666666" databg="#FAF0D4, #F3DFA8" headerrows="2" footerrows="1" }%%STATISTICSLOGS{date="last 10 days" type="top3 users"}%</verbatim>
+%TABLE{ name="tableAL1" sort="on" tableborder="0"  headerbg="#D5CCB1" headercolor="#666666" databg="#FAF0D4, #F3DFA8" headerrows="2" footerrows="1" }%
+| *Top users* | *Number of entires* |
+| WikiName1 | 187268 |
+| WikiName2 | 76007 |
+| WikiName3 | 63056 |
+   * Creating charts from reports <verbatim>%TABLE{ name="tableAL" }%%STATISTICSLOGS{date="last 10 days" type="top3 webs"}%
+%CHART{ type="bar" name="bar" table="tableAL" data="R2:C2..R4:C2"  legend="R1:C2..R1:C2" xaxis="R2:C1..R4:C1" }%</verbatim>
+
+%TABLE{ name="tableAL"}%
+| *Top webs* | *Number of entires* |
+| Main | 265189 |
+| TWiki | 101910 |
+| Sandbox | 26183 |
+%CHART{ type="bar" name="bar2" table="tableAL" data="R2:C2..R4:C2"  legend="R1:C2..R1:C2" xaxis="R2:C1..R4:C1" }%
+
+
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>LOGSSTATISTICSPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Create statistics from the log files
+
+   * Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
+      * Set DEBUG = 0
+
+   * Set a path to the log files (if no option then by default set to ==$TWiki::cfg{LogFileName}==). Path should containt =%<nop>DATE%=
+      * Set LOGSDIRECTORY = 
+
+   * Set a list of groups and/or users allowed to use the plugin. If the user name and the group name applys for the current user then the user name parameters will be set. Names should be divided with semicolons, spaces will be automaticly deleted. One can specify a list of webs for the user/group ==UserName: web="Sandox, Main"==.
+      * Set ALLOWUSAGE = TWikiAdminGroup; TWikiSupport
+
+   * Set to ==yes== if you want the plugin to cache the results for queries which don't contain server's current date. The load generated by the plugin will be significantly reduced, if this option is enabled then the plugin will need to analyze log files only once for each unique query (which doesn't include the server's current date). 
+      * Set CACHEOLDRESULTS = yes
+
+   * Set to ==all== or ==months== if you want the plugin to cache the results for queries which contains a server's current date. The load generated by the plugin will be significantly reduced. Cache stored in this way can be reused for the same queries for different time periods, if this option is enabled then the plugin will need to analyze every time only the current month's log files. This option can enable caching results in two different ways. 
+      * If the option ==months== is enabled then the plugin will store results for all the past months.
+      * If the option ==all== is enabled then the plugin will store results for all the past months and every day of the current months besides the current server's date.
+      * Set CACHECURRENTDATERESULTS = all
+
+   * Set a directory where the plugin can store it's cache files (if no option then by default set to the plugin's working area). Files will be written only if caching is enabled
+      * Set CACHEDIR = 
+
+---++ Plugin Installation Instructions
+
+   * Download the ZIP file from the Plugin web
+   * Unzip the zip file in your root ($TWIKI_ROOT) directory.
+   * Visit configure in your TWiki installation, and enable the plugin in the {Plugins} section. 
+
+---++ Notes and hints
+   * If any manual changes were made to the server's log files (editing, adding, deleting log files) and if caching results is enabled then the administrator should remove all the files from the plugin's working area.
+   * It is advisable to remove daily files (starting wit letter 'd') from the plugin's working area at the beginning of month. Daily files from the previous month will not be used anymore.
+   
+---++ Plugin Info 
+
