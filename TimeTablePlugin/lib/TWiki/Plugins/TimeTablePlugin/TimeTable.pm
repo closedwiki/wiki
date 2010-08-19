@@ -35,7 +35,7 @@ use vars qw( $session $theTopic $theWeb $topic $web $attributes $text $refText
 	     $year_rx $monthyear_rx $monthyearrange_rx
 	     $hour_rx $minute_rx $am_rx $pm_rx $ampm_rx $time_rx $timerange_rx $timerangestrict_rx $duration_rx
 	     $dowrange_rx 
-	     $cgi $pluginName
+	     $cgi $tcgi $pluginName
 	     $ttid 
 	     %TIMEZONES
 	 );
@@ -99,7 +99,8 @@ sub inflate {
 
         &_initRegexs(); 
 
-	$cgi = &TWiki::Func::getCgiQuery();
+	$tcgi = &TWiki::Func::getCgiQuery();
+	$cgi = new CGI({});
 
 	my ($starttime, $endtime, $duration, $fgcolor, $bgcolor) = &_getTTCMValues($attributes);
 
@@ -276,12 +277,13 @@ sub _initOptions {
         }
         return 0 if $#unknownParams != -1; 
 
-        $cgi = &TWiki::Func::getCgiQuery();
+        $tcgi = &TWiki::Func::getCgiQuery();
+        $cgi = new CGI({});
 
         # Setup options (attributes>plugin preferences>defaults):
         %options= ();
         foreach my $option (@allOptions) {
-                my $v = $cgi->param("ttp_${option}");
+                my $v = $tcgi->param("ttp_${option}");
                 $v = $params{$option} unless defined $v;
                 if (defined $v) {
                         if (grep /^\Q$option\E$/, @flagOptions) {
@@ -986,9 +988,8 @@ sub _renderNav {
 	my ($next) = @_;
 	my $nav="";
 	return "" if !$options{'compatmode'};
-	my $query = &TWiki::Func::getCgiQuery();
 
-	my $ttppage = $query->param('ttppage'.$ttid) ? &_parseInt($query->param('ttppage'.$ttid)) : 0;
+	my $ttppage = $tcgi->param('ttppage'.$ttid) ? &_parseInt($tcgi->param('ttppage'.$ttid)) : 0;
 
 	$ttppage+= ($next?+1:-1);
 
@@ -1373,7 +1374,7 @@ sub _getStartDate() {
 		($yy,$mm,$dd)=Add_Delta_Days($yy, $mm, $dd, 1-$dow);
 	}
 	if ($options{'compatmode'}) {
-		my $qpttppage = &_parseInt($cgi->param('ttppage'.$ttid));
+		my $qpttppage = &_parseInt($tcgi->param('ttppage'.$ttid));
 		($yy,$mm,$dd) = Add_Delta_Days($yy, $mm, $dd, $qpttppage*$options{'days'}) if defined $qpttppage;
 	}
 

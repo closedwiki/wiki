@@ -280,8 +280,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.017 (23 Oct 2009) |
+|  Plugin Version: | V1.018 (19 Aug 2010) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.018 (19 Aug 2010) | TWiki:Main.DanielRohde: fixed TWiki 5 problems |
 |  V1.017 (23 Oct 2009) | TWiki:Main.DanielRohde: added hidettcm attribute requested by TWiki:Main.StevenCorfman; fixed line breakes in rotated tables; |
 |  V1.016 (14 Nov 2008) | TWiki:Main.DanielRohde: added overflow:auto style; fixed unknownparamsmsg bug; |
 |  V1.015 (29 Jul 2008) | TWiki:Main.DanielRohde: fixed rotated table bugs (tooltips, showweekend="off") |
