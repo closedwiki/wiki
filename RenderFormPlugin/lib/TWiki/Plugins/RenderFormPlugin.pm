@@ -9,7 +9,8 @@ $VERSION = '$Rev: 17581 (05 Oct 2008) $';
 $RELEASE = 'Dakar';
 
 
-$REVISION = '1.003'; #dro# fixed performance problem (see Benchmarks - Switch module removed) 
+$REVISION = '1.004'; #dro# fixed TWiki 5.0 problems
+#$REVISION = '1.003'; #dro# fixed performance problem (see Benchmarks - Switch module removed) 
 #$REVISION = '1.002'; #dro# added layout feature; fixed date field bug; added missing docs;
 #$REVISION = '1.001'; #dro# changed topicparent default; added and fixed docs; fixed date field bug; fixed non-word character in field names bug;
 #$REVISION = '1.000'; #dro# initial version

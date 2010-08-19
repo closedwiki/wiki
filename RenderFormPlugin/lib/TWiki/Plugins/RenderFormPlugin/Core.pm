@@ -7,7 +7,7 @@ package TWiki::Plugins::RenderFormPlugin::Core;
 #use strict;
 
 
-use vars qw( $pluginName %defaults @requiredOptions @flagOptions %validOptions %options $defaultsInitialized @unknownParams @missingParams @invalidParams $formCounter );
+use vars qw( $pluginName %defaults @requiredOptions @flagOptions %validOptions %options $defaultsInitialized @unknownParams @missingParams @invalidParams $formCounter $cgi $tcgi);
 
 $pluginName="RenderFormPlugin";
 
@@ -76,8 +76,6 @@ sub _initOptions {
 	my $tmplName = $params{template};
 	$tmplName = ( TWiki::Func::getPreferencesValue("\U${pluginName}_TEMPLATE\E") || undef) unless defined $tmplName;
 
-	my $cgi = TWiki::Func::getCgiQuery();
-
 
 	$formCounter++;
 	my $formName = defined $params{formName} ? $params{formName} : "renderForm$web$formCounter"; 
@@ -85,8 +83,8 @@ sub _initOptions {
 
         %options= ();
         foreach my $option (@allOptions) {
-                my $v = (!defined $cgi->param('rfp_s_formName')) || ($cgi->param('rfp_s_formName') eq $formName) 
-				? $cgi->param("rfp_${option}") : undef;
+                my $v = (!defined $tcgi->param('rfp_s_formName')) || ($tcgi->param('rfp_s_formName') eq $formName) 
+				? $tcgi->param("rfp_${option}") : undef;
                 $v = $params{$option} unless defined $v;
 
 		if ((defined $tmplName)&&(!defined $v)) {
@@ -162,6 +160,9 @@ sub render {
 
 	_initDefaults() unless $defaultsInitialized;
 
+	$cgi = new CGI({});
+	$tcgi = TWiki::Func::getCgiQuery();
+
 	## prevent possible mod_perl problems:
 	local(%options, @unknownParams, @missingParams, @invalidParams);
 
@@ -182,7 +183,6 @@ sub render {
 	my %titl = %{$titlRef};
 
 	my $text = "";
-	my $cgi = TWiki::Func::getCgiQuery();
 
 	#_dump(\@defs);
 
@@ -247,7 +247,6 @@ sub _layoutTopicExists {
 sub _renderUserLayout {
 	my ($topic,$web,$a) = @_;
 
-	my $cgi = TWiki::Func::getCgiQuery();
 	my $formName = $options{formName};
 
 	my $text = _readUserLayout($web);
@@ -328,7 +327,6 @@ sub _readUserLayout {
 sub _getSwitchButton {
 	my ($theTopic,$theWeb) = @_;
 	my $formName = $options{formName};
-	my $cgi = TWiki::Func::getCgiQuery();
 	my $buttonmode = $options{mode} eq 'view' ? 'edit' : $options{mode} eq 'edit' ? 'view' : '';
 
 	## preserve all query parameters and overwrite some 
