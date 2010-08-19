@@ -1,0 +1,6 @@
+lib/TWiki/Plugins/ChecklistTablePlugin/Core.pm 0644 Plugin module
+lib/TWiki/Plugins/ChecklistTablePlugin.pm 0644 Plugin module
+pub/TWiki/ChecklistTablePlugin/example.png 0644 Example image
+pub/TWiki/ChecklistTablePlugin/cltpinsertform.js 0644 JavaScript
+data/TWiki/ChecklistTablePlugin.txt 0644 Documentation
+data/TWiki/VarCHECKLISTTABLE.txt 0644 Documentation

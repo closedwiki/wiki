@@ -27,7 +27,7 @@ package TWiki::Plugins::ChecklistTablePlugin::Core;
 use strict;
 ## use warnings;
 
-use vars qw( %defaults @flagOptions $defaultsInitialized  %options $cgi $STARTENCODE $ENDENCODE @unknownParams );
+use vars qw( %defaults @flagOptions $defaultsInitialized  %options $cgi $tcgi $STARTENCODE $ENDENCODE @unknownParams );
 
 $STARTENCODE = '--CHECKLISTTABLEPLUGIN_ENCODED[ ';
 $ENDENCODE = ' ]CHECKLISTTABLEPLUGIN_ENCODED--';
@@ -71,15 +71,14 @@ sub _render {
 			$foundTable = 1;
 			$row = -1;
 			$tablenum++;
-			$options{'_EDITTABLE_'} = (defined $cgi->param('ettablenr')) && ($cgi->param('ettablenr') == $tablenum+1)
-						 && (grep(/^et(save|qsave|addrow|delrow|edit)$/,$cgi->param()));
+			$options{'_EDITTABLE_'} = (defined $tcgi->param('ettablenr')) && ($tcgi->param('ettablenr') == $tablenum+1)
+						 && (grep(/^et(save|qsave|addrow|delrow|edit)$/,$tcgi->param()));
 		} elsif ($foundTable) {
 			if ($line =~ /^\s*\|[^\|]*\|/) {
 				$row++;
 				_collectTableData(\@table, $tablenum, $line, $row);
 				$line = undef;
 			}  else {
-				
 				$line = _renderTable( _sortTable($tablenum,\@table), $tablenum).$line;
 				$foundTable = 0;
 			}
@@ -126,7 +125,7 @@ sub _renderTable {
 	$text.=$cgi->a({-name=>$an});
 
 
-	if (!defined $cgi->param("cltp_action_$tablenum") && !$options{'_EDITTABLE_'}) {
+	if (!defined $tcgi->param("cltp_action_$tablenum") && !$options{'_EDITTABLE_'}) {
 		if ($#$tableRef>-1) {
 			$text.=_renderButtons('edittable',$tablenum);
 			$text.=_renderButtons('first',$tablenum);
@@ -143,40 +142,40 @@ sub _renderTable {
 	foreach my $tableEntry ( @{$tableRef} ) {
 		my $row = "";
 
-		if (defined $cgi->param("cltp_action_${tablenum}_first") && !$firstRendered && !$$tableEntry{'header'}) {
-			$row .= _renderForm('insertfirst',$tablenum, undef, 0) if defined $cgi->param("cltp_action_${tablenum}_first");
+		if (defined $tcgi->param("cltp_action_${tablenum}_first") && !$firstRendered && !$$tableEntry{'header'}) {
+			$row .= _renderForm('insertfirst',$tablenum, undef, 0) if defined $tcgi->param("cltp_action_${tablenum}_first");
 			$firstRendered = 1;
 		}
 
 		if ($$tableEntry{'header'} && $options{'headerislabel'}) {
 			$row.=_renderTableHeader($tablenum, $tableEntry);
-		} elsif ($cgi->param("cltp_action_${tablenum}_editrow_$$tableEntry{'row'}")) {
+		} elsif ($tcgi->param("cltp_action_${tablenum}_editrow_$$tableEntry{'row'}")) {
 			$row.=_renderForm('editrow', $tablenum, $tableEntry);
-		} elsif ($cgi->param("cltp_action_${tablenum}_edittable")) {
+		} elsif ($tcgi->param("cltp_action_${tablenum}_edittable")) {
 			$row.=_renderForm('edittable.editrow', $tablenum, $tableEntry);
 		} else {
 			$row.=_renderTableData($tablenum, $tableEntry);
 		}
-		if (defined $cgi->param("cltp_action_${tablenum}_ins_$$tableEntry{'row'}")) {
+		if (defined $tcgi->param("cltp_action_${tablenum}_ins_$$tableEntry{'row'}")) {
 			$row.=_renderForm('insertrow',$tablenum, undef, $$tableEntry{'row'});
 		}
 		$row=~s/%EDITCELL{(.*?)}%/_handleEditCell($tablenum,$1)/eg;
 		$text.=$row;
 	}
-	$text.= _renderForm('addrow',$tablenum,undef,$#$tableRef + 1) if (!defined $cgi->param("cltp_action_$tablenum"))&&($options{'changerows'}!~/^(off|false|0|no)$/i)&&($options{'quickadd'});
-	$text.= _renderButtons('edittable', $tablenum) unless defined $cgi->param("cltp_action_$tablenum") || $#$tableRef<0 || $options{'_EDITTABLE_'};
-	$text.= _renderButtons('savetable', $tablenum) if defined $cgi->param("cltp_action_${tablenum}_edittable");
+	$text.= _renderForm('addrow',$tablenum,undef,$#$tableRef + 1) if (!defined $tcgi->param("cltp_action_$tablenum"))&&($options{'changerows'}!~/^(off|false|0|no)$/i)&&($options{'quickadd'});
+	$text.= _renderButtons('edittable', $tablenum) unless defined $tcgi->param("cltp_action_$tablenum") || $#$tableRef<0 || $options{'_EDITTABLE_'};
+	$text.= _renderButtons('savetable', $tablenum) if defined $tcgi->param("cltp_action_${tablenum}_edittable");
 
 	### preserve table sort order of all checklist tables:
-	foreach my $param (grep(/^cltp_\d+_sort/,$cgi->param())) {
-		$text .= $cgi->hidden(-name=>$param,-value=>$cgi->param($param));
+	foreach my $param (grep(/^cltp_\d+_sort/,$tcgi->param())) {
+		$text .= $cgi->hidden(-name=>$param,-value=>$tcgi->param($param));
 	}
 
 
 	$text.=$cgi->end_form();
 
 	### add a hidden form for a quick insert:
-	if ($options{'quickinsert'}) {
+	if ($options{'quickinsert'}||!$options{'quickadd'}) {
 		my $hiddenTable="";
 		$hiddenTable.=$cgi->div({-style=>'text-align:left;background-color:gray;width:auto;'},
 			$cgi->a({-style=>'color:yellow;',-title=>'Close Insert Window',-onClick=>"cltpCloseInputForm('CLTP_HIDDEN_$tablenum')"},'[x]')
@@ -376,12 +375,12 @@ sub _renderTableHeader {
 			$cell=~s/^\s*\*//;
 			$cell=~s/\*\s*$//;
 			my $dir = 'asc';
-			$dir = 'desc' if (defined $cgi->param($param) && $cgi->param($param)=~/^${c}_asc/);
-			$dir = "default" if (defined $cgi->param($param) && $cgi->param($param)=~/^${c}_desc/);
+			$dir = 'desc' if (defined $tcgi->param($param) && $tcgi->param($param)=~/^${c}_asc/);
+			$dir = "default" if (defined $tcgi->param($param) && $tcgi->param($param)=~/^${c}_desc/);
 
 			my $sortmarker="";
 			$sortmarker=$dir eq "desc" ? $cgi->span({-title=>'ascending order'},'^') :  $cgi->span({-title=>'descending order'},'v') 
-						if (defined $cgi->param($param) && $cgi->param($param)=~/^${c}_(asc|desc)$/);
+						if (defined $tcgi->param($param) && $tcgi->param($param)=~/^${c}_(asc|desc)$/);
 			my $ncgi=new CGI($cgi);
 			$ncgi->param($param,"${c}_${dir}");
 			$cell = $cgi->a({-href=>$ncgi->self_url()."#CLTP_TABLE_$tablenum", -title=>"sort table"}, $cell) . " $sortmarker";
@@ -418,13 +417,13 @@ sub _renderTableData {
 
 		if ($options{'buttonpos'}=~/^(left|both)$/i) {
 			my $ntext = '| *&nbsp;';
-			$ntext .= _renderButtons('show', $tablenum, $row, $rowcount, 'left') unless defined $cgi->param("cltp_action_$tablenum");
+			$ntext .= _renderButtons('show', $tablenum, $row, $rowcount, 'left') unless defined $tcgi->param("cltp_action_$tablenum");
 			$ntext .= '&nbsp;*';
 			$text = $ntext.$text;
 		} 
 		if ($options{'buttonpos'}=~/^(right|both)$/i) {
 			$text .= '*&nbsp;';
-			$text .= _renderButtons('show', $tablenum, $row, $rowcount, 'right') unless defined $cgi->param("cltp_action_$tablenum");
+			$text .= _renderButtons('show', $tablenum, $row, $rowcount, 'right') unless defined $tcgi->param("cltp_action_$tablenum");
 			$text .= '&nbsp;* |';
 		}
 
@@ -453,12 +452,12 @@ sub _renderButtons {
 		sub _renderInsertRowButton {
 			my ($tablenum,$row,$rowcount) = @_;
 			my $text ="";
-			if ((!$options{'quickadd'}) || (($row < $rowcount)&&($options{'changerows'}!~/^(off|no|false|0)$/i))) {
+			if ((!$options{'quickadd'}&&$options{changerows}!~/^(off|no|false|0)$/i && $row==$rowcount)||(($row < $rowcount)&&($options{'changerows'}!~/^(off|no|false|0|add)$/i))) {
 				$text.=$cgi->img({-id=>"cltp_action_${tablenum}_ins_${row}",-name=>"cltp_action_${tablenum}_ins_${row}", -title=>'Insert Entry', -alt=>' + ',-src=>$options{'insertrowicon'}, 
-						-onClick=>$options{'quickinsert'}?"cltpShowInsertForm('CLTP_HIDDEN_${tablenum}','cltp_action_${tablenum}_ins_${row}',0,15,1,$tablenum,$row);":""
+						-onClick=>($options{'quickinsert'}||(!$options{quickadd}))?"cltpShowInsertForm('CLTP_HIDDEN_${tablenum}','cltp_action_${tablenum}_ins_${row}',0,15,1,$tablenum,$row);":""
 						});
 			} else {
-				$text.=$cgi->image_button(-border=>0,-name=>"cltp_action_${tablenum}_cancel", -title=>'Insert Entry', -value=>'   ',-src=>$options{'dummyicon'}); 
+				$text.=$cgi->img({-border=>0,-name=>"cltp_action_${tablenum}_cancel", -alt=>'', -title=>'', -value=>'   ',-src=>$options{'dummyicon'}}) if $options{changerows}!~/^(off|no|false|0|add)$/; 
 			}
 			return $text;
 		};
@@ -515,7 +514,7 @@ EOT
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_saverow_${row}", -value=>'Save');
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_qsaverow_${row}", -value=>'Quiet Save') if $options{'quietsave'};
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_cancel", -value=>'Cancel');
-	} elsif ($what eq 'first' && ($options{'changerows'} !~ /^(off|no|0|false)$/i)) {
+	} elsif ($what eq 'first' && ($options{'changerows'} !~ /^(off|no|0|false|add)$/i)) {
 		if ($options{'quickinsert'}) {
 			$text.=$cgi->img({-id=>"cltp_action_${tablenum}_first",-name=>"cltp_action_${tablenum}_first", -title=>"Insert entry", -alt=>' + ',-src=>$options{'insertrowicon'},
 				-onClick=>$options{'quickinsert'}?"cltpShowInsertForm('CLTP_HIDDEN_${tablenum}','cltp_action_${tablenum}_first',0,15,1,$tablenum,-1);":""
@@ -546,7 +545,7 @@ sub _handleActions {
 	my ($text,$theTopic,$theWeb) = @_;
 	
 
-	my @cltpactions = grep(/^cltp_action_\d+_(ins|first|edittable|editrow|addrow|delrow|up|down|cancel|saverow|qsaverow|savetable|qsavetable|insertfirst)(_\d+)?/, $cgi->param());
+	my @cltpactions = grep(/^cltp_action_\d+_(ins|first|edittable|editrow|addrow|delrow|up|down|cancel|saverow|qsaverow|savetable|qsavetable|insertfirst)(_\d+)?/, $tcgi->param());
 	return 0 if ($#cltpactions < 0);
 
 	#### support for EDITTABLE tag before CHECKLISTTABLE
@@ -579,7 +578,7 @@ sub _handleActions {
 	}
 
 	my $action = $cltpactions[0];
-	$cgi->param($action,"1") if $action =~ s/\.(x|y)$//;
+	$tcgi->param($action,"1") if $action =~ s/\.(x|y)$//;
 
 	$action =~ s/^cltp_action_(\d+)_([^_]+)(_(\d+))?.*$/$2/;
 	my ($tablenum, $rownum) = ($1,$4);
@@ -592,7 +591,7 @@ sub _handleActions {
 		}
 	}
 
-	$cgi->param("cltp_action_$tablenum","1");
+	$tcgi->param("cltp_action_$tablenum","1");
 	if ($action =~ /^(cancel|saverow|qsaverow|savetable|qsavetable|addrow|delrow|up|down|insertfirst)$/) {
 		my $error;
 		$error = _handleChangeAction($theTopic, $theWeb, $action, $tablenum, $rownum) unless $action eq 'cancel';
@@ -605,8 +604,8 @@ sub _handleActions {
 			my $anchor;
 			$anchor = $1 if ($url=~s/(\#.*)$//);
 			$url.="?";
-			foreach my $param (grep(/^cltp_\d+_sort$/,$cgi->param())) {
-				$url.="$param=".$cgi->param($param).";";
+			foreach my $param (grep(/^cltp_\d+_sort$/,$tcgi->param())) {
+				$url.="$param=".$tcgi->param($param).";";
 			}
 			$url.=$anchor if defined $anchor;
 		}
@@ -727,13 +726,13 @@ sub _createRowFromCgi {
 	for (my $c=0; $c<=$#formats; $c++) {
 		my $paramname = "cltp_val_${tablenum}_${row}_$c";
 
-		$paramname = "cltp_val_ins_${tablenum}_${row}_$c" unless defined $cgi->param($paramname);
+		$paramname = "cltp_val_ins_${tablenum}_${row}_$c" unless defined $tcgi->param($paramname);
 
 		my $value;
-		$value  = _encode(join(', ',$cgi->param($paramname))) if defined $cgi->param($paramname);
+		$value  = _encode(join(', ',$tcgi->param($paramname))) if defined $tcgi->param($paramname);
 
 		my $format = $formats[$c];
-		$format = $cgi->param($paramname.'_f') if (defined $cgi->param($paramname.'_f')); 
+		$format = $tcgi->param($paramname.'_f') if (defined $tcgi->param($paramname.'_f')); 
 		my ($type,$attribute,$val) = split(/,/,$format);
 
 		$value = $val unless defined $value;
@@ -796,7 +795,9 @@ sub _initDefaults {
 		'initdirection'=>undef,
 	);
 	@flagOptions = ('allowmove', 'quietsave', 'headerislabel', 'sort','quickadd','quickinsert');
-	$cgi = TWiki::Func::getCgiQuery();
+	$tcgi = TWiki::Func::getCgiQuery();
+	$cgi = new CGI({});
+
 	$defaultsInitialized = 1;
 }
 # =========================
@@ -914,8 +915,8 @@ sub _sortTable {
 	my @newtabledata = @{$tabledataRef};
 
 	my ($column, $dir) = (undef, undef);
-	foreach my $param (grep /^cltp_\Q$tablenum\E_sort$/, $cgi->param()) {
-		($column,$dir)=split(/\_/,$cgi->param($param));
+	foreach my $param (grep /^cltp_\Q$tablenum\E_sort$/, $tcgi->param()) {
+		($column,$dir)=split(/\_/,$tcgi->param($param));
 	}
 
 	if ((defined $options{'initsort'})&&(!defined $column)&&(!defined $dir)) {
@@ -925,8 +926,8 @@ sub _sortTable {
 		($column,$dir) = split(/\_/,$options{'initsort'}) if ($options{'initsort'}=~/^\d+_(asc|desc)/);
 		$column=1 if $column !~ /^\d+$/;
 		$column--; ## start with 1 but here we need 0
-		$cgi->param('sort',1);
-		$cgi->param("cltp_${tablenum}_sort","${column}_${dir}");
+		$tcgi->param('sort',1);
+		$tcgi->param("cltp_${tablenum}_sort","${column}_${dir}");
 	}
 
 	if (defined $column && defined $dir && $dir ne "default") {

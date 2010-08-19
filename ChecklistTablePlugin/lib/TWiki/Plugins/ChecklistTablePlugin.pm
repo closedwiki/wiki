@@ -30,7 +30,8 @@ $TWikiCompatibility{endRenderingHandler} = 1.1;
 
 $VERSION = '$Rev$';
 
-$RELEASE = 'v1.004'; # dro - added initsort and initdirection feature; fixed numeric eq error; fixed missing default value rendering of 'date' format type;
+$RELEASE = 'v1.005'; # dro - fixed changerows - quickadd combination bug; fixed TWiki 5 problems
+#$RELEASE = 'v1.004'; # dro - added initsort and initdirection feature; fixed numeric eq error; fixed missing default value rendering of 'date' format type;
 #$RELEASE = 'v1.003'; # dro - added quick insert feature; added new attributes (quickadd, quickinsert, buttonpos); fixed typos; fixed whitespaces in format bug; fixed (forced) link in text(area) bug; 
 #$RELEASE = 'v1.002'; # dro - fixed major pre/verbatim bug; fixed and added documenation; added sort feature; added changerows attribute; added EDITCELL feature; fixed Opera bug; fixed topic lock bug
 #$RELEASE = 'v1.001'; # dro - initial version
