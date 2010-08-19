@@ -1,4 +1,5 @@
 lib/TWiki/Plugins/RackPlannerPlugin/RackPlanner.pm
 lib/TWiki/Plugins/RackPlannerPlugin.pm
 data/TWiki/RackPlannerPlugin.txt
+data/TWiki/VarRACKPLANNER.txt
 pub/TWiki/RackPlannerPlugin/rackplannertooltips.js

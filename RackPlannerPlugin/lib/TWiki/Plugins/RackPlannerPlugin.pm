@@ -40,7 +40,8 @@ $VERSION = '$Rev: 8670$';
 $RELEASE = 'Dakar';
  
 
-$REVISION = '1.006'; #dro# fixed minor tooltip foreground/background color bug; added device icon shortcut feature; added some base device icons;
+$REVISION = '1.007'; #dro# allowed ';' instead of ',' to separate colors/images; added overflow:auto style; added maxheight parameter; fixed TWiki 5 problems
+#$REVISION = '1.006'; #dro# fixed minor tooltip foreground/background color bug; added device icon shortcut feature; added some base device icons;
 #$REVISION = '1.005'; #dro# fixed links in 'connected to' or 'owner' field bug; added new attribute (clicktooltip...); added documentation
 #$REVISION = '1.004'; #dro# fixed replacement in tooltipformat bug; improved tooltipformat; improved HTML rendering performance;  added and fixed documenation;
 #$REVISION = '1.003'; #dro# fixed displayowner/displaynotes bug reported by TWiki:Main.PatrickTuite; added horizontal rendering feature requested by TWiki:Main.OlofStockhaus; added new attributes (columnwidth, textdir); fixed HTML validation bug;

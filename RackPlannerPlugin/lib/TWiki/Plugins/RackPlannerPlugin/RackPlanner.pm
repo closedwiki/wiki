@@ -94,7 +94,7 @@ sub _initDefaults {
 		'unitcolumnpos' => 'left',
 		'unitcolumnfgcolor' => undef,	
 		'unitcolumnbgcolor' => undef,
-		'columnwidth' => "",
+		'columnwidth' => undef,
 		'textdir' => 'leftright',
 		'enablejstooltips'=>1,
 		'tooltipfixleft'=>-163,
@@ -104,6 +104,7 @@ sub _initDefaults {
 		'tooltipformat'=>'<b><span title="Device name"> %DEVICE%: </span></b> <span title="Form factor">%FORMFACTOR%</span> (<span title="Start-End units">%SUNIT%-%EUNIT%</span>, <span title="Rack name"> %RACK%</span>)<div title="Owner">%OWNERICON% %OWNER% </div><div title="Connected to">%CONNECTEDTOICON% %CONNECTEDTO% </div><div title="Notes">%NOTESICON% %NOTES% </div> <div style="font-size:xx-small;text-align:right;"><span style="background-color:red;" title="Close tooltip">%CLOSEBUTTON%</span></div>',
 		'clicktooltip'=> 0,
 		'clicktooltiptext'=>'click for information',
+		'maxheight' => undef,
 	);
 
 	@renderedOptions = ( 'name', 'notesicon','conflicticon', 'connectedtoicon', 'ownericon', 'emptytext' );
@@ -162,7 +163,7 @@ sub _initOptions {
 
         @processedTopics = ( );
 
-	$cgi = &TWiki::Func::getCgiQuery();
+	$cgi = new CGI({});
 
         return 1;
 }
@@ -245,7 +246,7 @@ sub _renderHorizontal {
 		if ($options{'displayunitcolumn'}) {
 			my $f = $options{'unitcolumnformat'};
 			$f=~s/\%U/abs($unit)/esg;
-			$unitRow .= $cgi->td({-align=>'center', -width=>$options{'columnwidth'}}, $f);
+			$unitRow .= $cgi->td({-align=>'center', -style=>"".(defined $options{columnwidth}?"width:".$options{columnwidth}:"")}, $f);
 		}
 
 		### rack rows:
@@ -254,7 +255,7 @@ sub _renderHorizontal {
 			if ($unit == $startUnit) {
 				$statsRefs[$rackNumber] = &_getRackStatistics($$entriesRef{$rack});
 				push @stats, $statsRefs[$rackNumber];
-				$rackRows[$rackNumber] = $cgi->Td({-align=>'center' }, " $rack ");
+				$rackRows[$rackNumber] = $cgi->td({-align=>'center' }, " $rack ");
 				$fillCols[$rackNumber] = 0;
 			}
 
@@ -289,9 +290,8 @@ sub _renderHorizontal {
 						-align=>($options{'textdir'}=~/^topdown$/i)?'center':'left', 
 						-valign=>'top', 
 						-colspan=>$colspan, 
-						-style=>$style,
+						-style=>$style .(defined $options{columnwidth}?";width:".$options{columnwidth}:""),
 						-bgcolor=>$bgcolor,
-						-width=>$options{'columnwidth'},
 						-id=>$unitId,
 						-onmouseover=>$onmouseover,
 						-onclick=>$onclick,
@@ -309,9 +309,9 @@ sub _renderHorizontal {
 
 			} else {
 				if ($fillCols[$rackNumber]<=0) {
-					$rackRows[$rackNumber] .= $cgi->td({-align=>'center',-valign=>'top', -width=>$options{'columnwidth'},
+					$rackRows[$rackNumber] .= $cgi->td({-align=>'center',-valign=>'top',
 									-title=>&_encodeTitle(abs($unit)),
-									-style=>"background-color:$options{'emptybgcolor'};color:$options{'emptyfgcolor'}" },
+									-style=>"background-color:$options{'emptybgcolor'};color:$options{'emptyfgcolor'}".(defined $options{columnwidth}?";width:".$options{columnwidth}:"") },
 									&_renderEmptyText($rack,$unit));
 				}
 				$fillCols[$rackNumber]-- if $fillCols[$rackNumber]>0;
@@ -342,8 +342,7 @@ sub _renderHorizontal {
 
 	$text.=$cgi->end_table();
 	$text.=$tooltips;
-
-	$text = $cgi->div({-style=>'font-size:'.$options{'fontsize'}}, $text);
+	$text = $cgi->div({-style=>"overflow:auto".(defined $options{maxheight}?";max-height:$options{maxheight}":"").";font-size:$options{fontsize};"}, $text);
 
 	return $text;
 }
@@ -364,7 +363,7 @@ sub _render {
 		$startUnit=1;
 	}
 	$text .= '<noautolink>';
-	$text .= $cgi->start_table({-cellpadding=>'0',-cellspacing=>'1',-class=>'rackPlannerPluginTable'});
+	$text .= $cgi->start_table({-cellpadding=>'0',-cellspacing=>'1', -class=>'rackPlannerPluginTable'});
 
 	### render table header:
 	my $tr = "";
@@ -443,9 +442,9 @@ sub _render {
 					$itd = $cgi->td({
 						-title=>$options{'enablejstooltips'}&&$options{'clicktooltip'}?$options{'clicktooltiptext'}:&_encodeTitle($title),
 						-valign=>'top', 
-						-rowspan=>$rowspan, 
+						-rowspan=>$rowspan,
 						-nowrap=>'nowrap',
-						-style=>$style,
+						-style=>$style.(defined $options{columnwidth}?";width:".$options{columnwidth}:""),
 						-bgcolor=>$bgcolor,
 						-id=>$unitId,
 						-onmouseover=>$onmouseover,
@@ -459,7 +458,7 @@ sub _render {
 				if ($#$entryListRef!=-1) {
 					$itd .= &_renderConflictCell(abs($unit), $entryListRef, $conflictIcon);
 				} else {
-					$itd .= $cgi->td({-title=>&_encodeTitle(abs($unit))},'&nbsp;') if ($rowspan>1);
+					$itd .= $cgi->td({-title=>&_encodeTitle(abs($unit), -style=>(defined $options{columnwidth}?";width:".$options{columnwidth}:""))},'&nbsp;') if ($rowspan>1);
 				}
 
 			} else {
@@ -481,7 +480,7 @@ sub _render {
 					$fillRows--;
 				}
 				$style="background-color:$bgcolor;color:$fgcolor";
-				$itd = $cgi->td({-title=>&_encodeTitle(abs($unit)), -style=>$style, -bgcolor=>$bgcolor}, $itd);
+				$itd = $cgi->td({-title=>&_encodeTitle(abs($unit)), -style=>$style.(defined $options{columnwidth}?";width:".$options{columnwidth}:""), -bgcolor=>$bgcolor}, $itd);
 			}
 			$td .= $cgi->Tr($itd);
 			
@@ -506,7 +505,7 @@ sub _render {
 	$text .= $cgi->end_table();
 	$text .= '</noautolink>';
 	$text .= $tooltips;
-	$text = $cgi->div({-style=>"font-size:$options{'fontsize'};"}, $text);
+	$text = $cgi->div({-style=>"overflow:auto;".(defined $options{maxheight}?";max-height:$options{maxheight}":"").";font-size:$options{'fontsize'};"}, $text);
 
 	return $text;
 }
@@ -575,7 +574,7 @@ sub _renderTextContent {
 	my @owners = split /\s+[\/\#]\s+/, $$entryRef{'owner'};
 	my @notes  = split /\s+[\/\#]\s+/, $$entryRef{'notes'};
 
-	foreach my $s (split(/\s+[\/\#]\s+/,$$entryRef{'server'})) {
+	foreach my $s (split(/\s[\/\#]\s/,$$entryRef{'server'})) {
 		my $colors = "";
 		$colors = shift @colors if $#colors !=-1;
 		my $owner = undef; 
@@ -613,7 +612,7 @@ sub _renderTextContent {
 		}
 
 		#$text = $cgi->span({-style=>'font-size:'.$options{'fontsize'}.";$style", -title=>&_encodeTitle($owner,1)}, $text);
-		$text = $cgi->span({-style=>$style, -title=>&_encodeTitle($owner,1)}, $text);
+		$text = $cgi->span({-style=>$style, -title=>&_encodeTitle($owner,1)}, $text).'&nbsp;';
 		$text .= '<br/>' if ($options{'dir'}=~/^(leftright|rightleft)$/i);
 		$ret.=$text;
 	}
@@ -674,7 +673,7 @@ sub _getColorsAndStyle {
 			.'background-image:url('.TWiki::Func::getPubUrlPath().'/'.TWiki::Func::getTwikiWebname().'/'.$pluginName.'/'.$1.'.png)';
 			
 	}
-	foreach my $colimg (split(/\s*,\s*/, $colors)) {
+	foreach my $colimg (split(/\s*[,;]\s*/, $colors)) {
 		if ($colimg=~/[^\s][\.\/\:]/) {
 			$style .= $style eq '' ? '' : ';';
 			$style .= 'background-position:center;background-repeat:no-repeat;background-image:url('._encode_entities($colimg).');';
