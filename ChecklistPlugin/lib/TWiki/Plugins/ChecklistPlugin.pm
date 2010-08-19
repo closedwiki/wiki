@@ -29,7 +29,7 @@ use vars qw(
     	$resetDone $stateChangeDone $saveDone
 	$initText %itemsCollected $dryrun
         $web $topic $user
-	$idOffset
+	$idOffset $cgi
     );
 
 use strict;
@@ -42,7 +42,8 @@ $VERSION = '$Rev$';
 $RELEASE = 'Cairo, Dakar, Edinburgh, ...';
 
 
-$REVISION = '1.026'; #dro# added timestamp feature requested by TWiki:Main.VickiBrown; fixed uninitialized value bugs;
+$REVISION = '1.027'; #dro# fixed TWiki 5 problems
+#$REVISION = '1.026'; #dro# added timestamp feature requested by TWiki:Main.VickiBrown; fixed uninitialized value bugs;
 #$REVISION = '1.025'; #dro# added documentation requested by TWiki:Main.PeterThoeny; added hide entries feature requested by Christian Holzmann; added log feature requested by TWiki:Main.VickiBrown
 #$REVISION = '1.024'; #dro# fixed missing ')' in generated JavaScript commands
 #$REVISION = '1.023'; #dro# fixed minor anchor link bug reported by TWiki:Main.KeithHelfrich; fixed tooltip position bug
@@ -150,6 +151,8 @@ sub handleAllTags {
 sub initDefaults {
 	my ($web, $topic) = @_;
 	TWiki::Func::writeDebug("- ${pluginName}::initDefaults") if $debug;
+
+	$cgi = new CGI({});
 
 	my $pubUrlPath = TWiki::Func::getPubUrlPath();
 	%globalDefaults = (
@@ -331,7 +334,7 @@ sub renderLegend {
 		my ($iconsrc) = &getImageSrc($icon);
 		my $heState = &htmlEncode($state);
 		$iconsrc="" unless defined $iconsrc;
-		$legend.=$query->img({src=>$iconsrc, alt=>$heState, title=>$heState});
+		$legend.=$cgi->img({src=>$iconsrc, alt=>$heState, title=>$heState});
 		$legend.=qq@ - $heState @;
 	}
 	$legend.=qq@) @;
@@ -394,12 +397,12 @@ sub handleChecklist {
  
 		$text.=qq@<noautolink>@;
 
-		$text.=$query->a({name=>"reset${name}"}, '&nbsp;') if $options{'anchors'} && !$options{'useajax'};
+		$text.=$cgi->a({name=>"reset${name}"}, '&nbsp;') if $options{'anchors'} && !$options{'useajax'};
 		$text.=$legend;
 		my $linktext="";
 		my $imgparams = {title=>$title, alt=>$title, border=>0};
 		$$imgparams{src}=$imgsrc if (defined $imgsrc ); # && ($imgsrc!~/^\s*$/s);
-		$linktext.=$query->img($imgparams);
+		$linktext.=$cgi->img($imgparams);
 		$linktext.=qq@ ${title}@ if ($title!~/^\s*$/i)&&($imgsrc ne "");
 		$action="javascript:submitItemStateChange('$action');" if $options{'useajax'} && ($state ne 'STATESEL');
 		my $id = &urlEncode("${name}_${state}_".$namedResetIds{$name});
@@ -407,7 +410,7 @@ sub handleChecklist {
 			$text.=&createHiddenDirectResetSelectionDiv($namedResetIds{$name},$name,\@states,\@icons); 
 			$action="javascript:clpTooltipShow('CLP_SM_DIV_RESET_${name}_$namedResetIds{$name}', 'CLP_A_$id',".(10+int($options{'tooltipfixleft'})).",".(10+int($options{'tooltipfixtop'})).",true);";
 		}
-		$text.=$query->a({href=>$action,id=>'CLP_A_'.$id}, $linktext);
+		$text.=$cgi->a({href=>$action,id=>'CLP_A_'.$id}, $linktext);
 
 		$text.=qq@</noautolink>@;
 	} else {
@@ -417,7 +420,7 @@ sub handleChecklist {
 		my $state="";
 		$state = $1 if ($options{hide}=~s/\@(\S+)//g);
 		$state = "" if $state eq $options{hide};
-		$text .= $query->a({href=>"javascript:  clpHideShowToggle('$options{name}','$state')"}, $options{hide});
+		$text .= $cgi->a({href=>"javascript:  clpHideShowToggle('$options{name}','$state')"}, $options{hide});
 	}
 
 	return $text;
@@ -442,7 +445,7 @@ sub createHiddenDirectResetSelectionDiv {
 	my ($id, $name, $statesRef, $iconsRef) = @_;
 	my $selTxt ="";
 	my $query = &TWiki::Func::getCgiQuery();
-	$selTxt=$query->sup($query->a({-href=>"javascript:clpTooltipHide('CLP_SM_DIV_RESET_${name}_$id');"},'[X]'));
+	$selTxt=$cgi->sup($cgi->a({-href=>"javascript:clpTooltipHide('CLP_SM_DIV_RESET_${name}_$id');"},'[X]'));
 	for (my $i=0; $i<=$#$statesRef; $i++) {
 		my $s = $$statesRef[$i];
 		my $action = &createResetAction($name, $s);
@@ -450,12 +453,12 @@ sub createHiddenDirectResetSelectionDiv {
 		my $imgsrc = (&getImageSrc($$iconsRef[$i]))[0];
 		my $imgalt = (defined $imgsrc)?"":$s;
 		$imgsrc="" unless defined $imgsrc;
-		$selTxt.=$query->a({-href=>$action,-title=>$s,-style=>'vertical-align:bottom;'}, 
-			$query->img({src=>$imgsrc,alt=>$imgalt,border=>0,style=>'cursor:move;vertical-align:bottom'}));
+		$selTxt.=$cgi->a({-href=>$action,-title=>$s,-style=>'vertical-align:bottom;'}, 
+			$cgi->img({src=>$imgsrc,alt=>$imgalt,border=>0,style=>'cursor:move;vertical-align:bottom'}));
 		$selTxt.='&nbsp;';
 	}
 
-	return $query->div({-id=>"CLP_SM_DIV_RESET_${name}_$id",
+	return $cgi->div({-id=>"CLP_SM_DIV_RESET_${name}_$id",
 			    -style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};" }, $selTxt);
 }
 # =========================
@@ -743,8 +746,8 @@ sub createAction {
 	$action.=";clpscns=".&urlEncode($nextstate) if defined $nextstate;
 	$action.=';skin='.&urlEncode($options{'ajaxtopicstyle'}) if $options{'useajax'};
 
-	my $query = &TWiki::Func::getCgiQuery();
-	my %queryVars = $query->Vars();
+	my $query = TWiki::Func::getCgiQuery();
+	my %queryVars = $query->param();
 	foreach my $p (keys %queryVars) {
 		$action.=";$p=".&urlEncode($queryVars{$p}) 
 			unless ($p =~ /^(clp.*|clreset.*|contenttype|skin)$/i)||(!$queryVars{$p});
@@ -765,8 +768,8 @@ sub createTitle {
 	$title =~ s/\%STATECOUNT\%/($#$statesRef+1)/esg;
 	$title =~ s/\%STATES\%/join(", ",@{$statesRef})/esg;
 	$title =~ s/\%LEGEND\%/&renderLegend()/esg;
-	$title =~ s/\%STATEICON\%/$query->img({alt=>$state,src=>(&getImageSrc($icon))[0]})/esg;
-	$title =~ s/\%NEXTSTATEICON\%/$query->img({alt=>$nextstate,src=>(&getImageSrc($nextstateicon))[0]})/esg;
+	$title =~ s/\%STATEICON\%/$cgi->img({alt=>$state,src=>(&getImageSrc($icon))[0]})/esg;
+	$title =~ s/\%NEXTSTATEICON\%/$cgi->img({alt=>$nextstate,src=>(&getImageSrc($nextstateicon))[0]})/esg;
 	$title =~ s/\%TIMESTAMP\%/$timestamp/esg;
 	return $title;
 }
@@ -807,11 +810,11 @@ sub renderChecklistItem {
 
 	$text.=qq@<noautolink>@;
 	
-	$text.=$query->comment('CLTABLEPLUGINSORTFIX:');
-	$text.=$query->div({-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;" },$heState);
-	$text.=$query->comment(':CLTABLEPLUGINSORTFIX');
+	$text.=$cgi->comment('CLTABLEPLUGINSORTFIX:');
+	$text.=$cgi->div({-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;" },$heState);
+	$text.=$cgi->comment(':CLTABLEPLUGINSORTFIX');
 
-	$text.=$query->a({name=>"$name$uetId"}, '&nbsp;') if $options{'anchors'} && !$options{'useajax'};
+	$text.=$cgi->a({name=>"$name$uetId"}, '&nbsp;') if $options{'anchors'} && !$options{'useajax'};
 
 	my $linktext="";
 	if (lc($options{'clipos'}) ne 'left') {
@@ -823,7 +826,7 @@ sub renderChecklistItem {
 	$linktext.=qq@$textBef@ if $textBef;
 	my $imgalt = (!defined $iconsrc)?$state:"";
 	$iconsrc = "" unless defined $iconsrc;
-	$linktext.=$query->img({-name=>"CLP_IMG_$name$uetId", -src=>$iconsrc, -border=>0, -alt=>$imgalt});
+	$linktext.=$cgi->img({-name=>"CLP_IMG_$name$uetId", -src=>$iconsrc, -border=>0, -alt=>$imgalt});
 	$linktext.=qq@$textAft@ if $textAft;
 	if (lc($options{'clipos'}) eq 'left') {
 		$linktext.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
@@ -833,13 +836,13 @@ sub renderChecklistItem {
 	$action="javascript:submitItemStateChange('$action');" if $options{'useajax'};
 	$onmouseover="clpTooltipShow('CLP_TT_$name$uetId','CLP_A_$name$uetId',".(20+int($options{'tooltipfixleft'})).",".(20+int($options{'tooltipfixtop'})).",true);";
 	$onmouseout="clpTooltipHide('CLP_TT_$name$uetId');";
-	$text .= $query->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
+	$text .= $cgi->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
 	if ($options{'statesel'} && (!$options{'static'})) {
 		$action="javascript:clpTooltipShow('CLP_SM_DIV_$name$uetId','CLP_A_$name$uetId',".(10+int($options{'tooltipfixleft'})).",".(10+int($options{'tooltipfixtop'})).",true);";
 		$text .= &createHiddenDirectSelectionDiv($uetId, $name, $state, $icon, \@states, \@icons, $tId, $timestamp);
 	}
 	$action = "javascript:;" if $options{'static'};
-	$text .= $query->a({-onmouseover=>$onmouseover,-onmouseout=>$onmouseout,-id=>"CLP_A_$name$uetId",-name=>"CLP_A_$name$uetId",-href=>$action}, $linktext);
+	$text .= $cgi->a({-onmouseover=>$onmouseover,-onmouseout=>$onmouseout,-id=>"CLP_A_$name$uetId",-name=>"CLP_A_$name$uetId",-href=>$action}, $linktext);
 
 	$text.=qq@</noautolink>@;
 
@@ -852,7 +855,7 @@ sub createHiddenDirectSelectionDiv {
 	
 	my $query = &TWiki::Func::getCgiQuery();
 	my $sl="";
-	$sl.=$query->sup($query->a({-href=>"javascript:clpTooltipHide('CLP_SM_DIV_$name$id');", -title=>'close'},'[X]'));
+	$sl.=$cgi->sup($query->a({-href=>"javascript:clpTooltipHide('CLP_SM_DIV_$name$id');", -title=>'close'},'[X]'));
 	for (my $i=0; $i<=$#$statesRef; $i++) {
 		my ($s, $ic) = ($$statesRef[$i], $$iconsRef[$i]);
 		my $action = &createAction($id, $name, $state, $s);
@@ -862,22 +865,22 @@ sub createHiddenDirectSelectionDiv {
 			$submitAction = "submitItemStateChange('$action');clpTooltipHide('CLP_SM_DIV_$name$id');";
 			$action="javascript:$submitAction";
 		}
-		$text .= $query->div({-id=>"CLP_SM_TT_$name${id}_$i",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:3;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title); 
+		$text .= $cgi->div({-id=>"CLP_SM_TT_$name${id}_$i",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:3;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title); 
 		my $imgsrc = (&getImageSrc($ic))[0];
 		my $imgalt = (defined $imgsrc)?"":$s;
 		$imgsrc="" if !defined $imgsrc;
-		$sl.=$query->a({
+		$sl.=$cgi->a({
 					-id=>"CLP_SM_A_$name${id}_$i", 
 					-href=>"$action",
 					-style=>'vertical-align:bottom;',
 					-onmouseover=>"clpTooltipShow('CLP_SM_TT_$name${id}_$i','CLP_SM_IMG_$name${id}_$i',".(20+int($options{'tooltipfixleft'})).",".(20+int($options{'tooltipfixtop'})).");", 
 					-onmouseout=>"clpTooltipHide('CLP_SM_TT_$name${id}_$i');",
 				},
-				$query->img({src=>$imgsrc,id=>"CLP_SM_IMG_$name${id}_$i",alt=>$imgalt,border=>0,style=>'vertical-align:bottom;cursor:move;'}));
+				$cgi->img({src=>$imgsrc,id=>"CLP_SM_IMG_$name${id}_$i",alt=>$imgalt,border=>0,style=>'vertical-align:bottom;cursor:move;'}));
 		$sl.='&nbsp;';
 	}
 
-	$text.= $query->div({-id=>"CLP_SM_DIV_$name$id",
+	$text.= $cgi->div({-id=>"CLP_SM_DIV_$name$id",
 			-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"}, $sl);
 
 	return $text;
@@ -1084,8 +1087,8 @@ sub collectAllChecklistItems {
 sub postRenderingHandler  {
 	my $query = TWiki::Func::getCgiQuery();
 	if (defined $query) {
-		my $startTag=$query->comment('CLTABLEPLUGINSORTFIX:');
-		my $endTag=$query->comment(':CLTABLEPLUGINSORTFIX');
+		my $startTag=$cgi->comment('CLTABLEPLUGINSORTFIX:');
+		my $endTag=$cgi->comment(':CLTABLEPLUGINSORTFIX');
 		$_[0]=~s/\Q$startTag\E.*?\Q$endTag\E//sg;
 	}
 }
