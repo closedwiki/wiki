@@ -123,13 +123,14 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | navdays | defines the days to navigate to (default: value of the =days= attribute) | =navdays="30"= |
 | order | changes the sorting order of entries and contains a comma separated list of names or special tags (default: alphanumerical order); hint: order attribute can also be used as a filter: show only listed persons (e.g. =order="Bob,Bill"=); specials: =[:ralpha:]= - sort persons reverse alphanumerical; =[:nextfirst:]= - next person with an entry will be shown first; =[:rest:]= - will be replaced by missing persons if =order= contains an uncomplete person list (e.g. =order="Bob,Bill,[:rest:]"=); =[:num:] ([:rnum])= - (reverse) numerical order | undefined / =order="Bob,Bill,Alice,Jane,[:rest:]"= |
 | removeatwork | set to "1" to remove persons without calendar entries from table | =removeatwork="0"= |
-| showmonthheader | enabes/disables month header | =showmonthheader="1"= |
+| showmonthheader | enables/disables month header | =showmonthheader="1"= |
 | showoptions | shows a navigation form | =showoptions="0"= |
 | showpubholidays | shows public holidays as separate lines (rows) in table (related: enablepubholidays, pubholidayicon) | =showpubholidays="0"= |
 | showstatcol | enables/disables statistics column(s) | =showstatcol="off"= | 
 | showstatrow | enables/disables statistics row(s) | =showstatrow="off"= | 
 | showstatsum | enables/disables statistics summary below/behind the statistics columns/rows; works only in conjunction with showstatcol and/or showstatrow | =showstatsum="on"= | 
 | showweekends | shows weekends if set to 1 | =showweekends="0"= |
+| showwnheader | enables/disables week number header (related: wnheaderformat, wnheadertitle); only ISO/European week numbers are supported (week starts with Monday) | =showwnheader="off"= | 
 | startdate | a start date (e.g. '1 Oct 2005') or a day offset (e.g. '10', '+30' or '-30') | =startdate="+0"= |
 | topic | a comma separated list of source topics | =topic="%<nop>TOPIC%"= |
 | week | set a week (1..52) or a week offset (-1, +0, +1, +2, ...) | =week="+0"= |
@@ -178,6 +179,8 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | todayfgcolor | foreground color for today cells (usefull for a dark todaybgcolor) | =todayfgcolor="black"= |
 | weekendbgcolor | background color of weekend header and data table cells | =weekendbgcolor="%<nop>WEBBGCOLOR%"= |
 | width | width of table in pixels or percent | =width="100%"= |
+| wnheaderformat | week number header format  | =wnheaderformat="&lt;font size=\"-2\">%V&lt;/font>"= | 
+| wnheadertitle | week number header title | =wnheadertitle="Week Number"= |
 |  *Table Formatting - Statistics<br/>(%X% showstatcol or showstatrow should be enabled)*  |||
 | statcolformat | statistics column format (related: showstatcol, statcolheader, statcoltitle); see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statcolformat="%{hh}"= -or- =statcolofrmat="%{h}"= (if =showweekends= set to ="on"=) |
 | statcolheader | statistics header (related: showstatcol, statcolformat, statcoltitle); use '&#124;' to separate multiple column headers | =statcolheader="#"= |
@@ -195,6 +198,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | statrowheader | statistics header (related: showstatrow, statrowformat, statrowtitle); use '&#124;' to separate multiple row headers | =statrowheader="#"= |
 | statrowtitle | statistics tooltip (related: showstatrow, statrowformat, statrowheader); see  [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statrowtitle="%{ll}"= -or- =statrowtitle="%{l}"= (if =showweekends= set to ="on"=) |
 | stattitle | statistics tooltip; overrides statrowtitle and statcoltitle | undefined / =stattitle="%{ll}"= |
+
 
 
 *Hints:* 
@@ -215,6 +219,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
    * you can use variables in the  =&lt;column/row? format&gt;= definitions (see table below), e.g. =statcolformat="%{l}"= 
    * if you use the same format definitions for statrowformat and statcolformat, statrowtitle and statcoltitle or statrowheader and statcolheader you should use the statformat, stattitle or statheader attributes
    * %X% =statcolheader/statrowheader= should have the same number of columns/rows (count of ='|'= should be equal)
+   * you can add a multiplier to every statistics variable (before ':' and after letters), e.g. use <code>%{l*2:sick}</code> in stat(col|row)(format|title) to count 'sick' entries double; or %{d*0.5} let every day counts as a half day
 *Example:* 
    * display three statistics columns and rows; tooltips with percentage of days without weekends and public holidays:
      <verbatim>
@@ -254,7 +259,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 #HolidaylistPluginExample
 ---++ Example
 
-%HOLIDAYLIST{startdate="1 Jun 2005" showstatrow="on" showstatcol="on" days="70" showoptions="on" namecolors="Bill:lightblue,Alice:#ffaaaa" showmonthheader="on" namepos="both"}%
+%HOLIDAYLIST{lang="English" showwnheader="on" wnheaderformat="<font size=\"-2\">Week %V</font>" startdate="1 Jun 2005" showstatrow="on" showstatcol="on" days="70" showoptions="on" namecolors="Bill:lightblue,Alice:#ffaaaa" showmonthheader="on" namepos="both"}%
 
 	* 02 Jan 2005 - 28 Feb 2005 - Bill
 	* 27 Mar 2005 - 20 Apr 2005 - Bob
@@ -320,8 +325,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.030 (24 Nov 2009) |
+|  Plugin Version: | v1.031 (19 Aug 2010) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.031 (19 Aug 2010) | TWiki:Main.DanielRohde: added week number header feature requested by Frank Olzog; fixed week number bug (week number should not be 0); added multiplier feature for statistics rows/columns requested by Oliver Stund; fixed TWiki 5.0 problems reported by Jean-Francois Macaud and TWiki:Main.ThomasBAndersen|
 |  v1.030 (24 Nov 2009) | TWiki:Main.DanielRohde: improved INCLUDE support requested by Foswiki:Main.IngoKappler; added multi language support for entry definitions; fixed unknown language bug; fixed performance issue reported by Foswiki:Main.IngoKappler (thx Foswiki:Main.MichaelDaum) | 
 |  v1.029 (6 Mar 2009) | TWiki:Main.DanielRohde: changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields |
 |  v1.026 (28 Oct 2008) | TWiki:Main.DanielRohde: added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order); added namepos attribute (place names left and/or right of a row) |

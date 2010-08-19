@@ -57,7 +57,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 
 
-$REVISION = '1.0.30'; #dro# improved INCLUDE support requested by Foswiki:Main.IngoKappler; added multi language support for entry definitions; fixed unknown language bug
+$REVISION = '1.0.31'; #dro# added week number header feature requested by Frank Olzog; fixed week number bug (week number should not be 0); added multiplier feature for statistics rows/columns requested by Oliver Stund; fixed TWiki 5.0 problems reported by Jean-Francois Macaud and TWiki:Main.ThomasBAndersen
+#$REVISION = '1.0.30'; #dro# improved INCLUDE support requested by Foswiki:Main.IngoKappler; added multi language support for entry definitions; fixed unknown language bug
 #$REVISION = '1.0.29'; #dro# changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields
 #$REVISION = '1.0.26'; #dro# added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order); added namepos attribute (place names left and/or right of a row)
 #$REVISION = '1.0.25'; #dro# added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs;
@@ -214,6 +215,9 @@ sub initDefaults() {
 		namepos => 'left',
 		maxheight => undef,
 		allowvarsininclude => 0,
+		showwnheader => 0,			# shows week number row
+		wnheaderformat => '<font size="-2">%V</font>',
+		wnheadertitle => 'Week Number',
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
@@ -861,6 +865,7 @@ sub mystrftime($$$$) {
 
 	my $doy = Day_of_Year($yy,$mm,$dd);
 	my $wn = Week_Number($yy,$mm,$dd);
+	$wn = Week_Number($yy-1,12,31) if $wn==0;
 	my $t_wn = $wn<10?"0$wn":$wn;
 
 	my $y = substr("$yy",-2,2);
@@ -913,7 +918,11 @@ sub renderHolidaylist() {
 
 	my $header = "";
 	my $namecell = "";
-	$namecell .= CGI::th({-align=>'left',-width=>$options{nwidth}, -rowspan=>($options{showmonthheader}?2:1) },
+	my $nrowspan = 1;
+	$nrowspan++ if $options{showmonthheader};
+	$nrowspan++ if $options{showwnheader};
+
+	$namecell .= CGI::th({-align=>'left',-width=>$options{nwidth}, -rowspan=>$nrowspan },
 			$options{name}.($options{'navenable'}?&renderNav(-1).&renderNav(0).&renderNav(1):''));
 
 	my ($dd,$mm,$yy) = getStartDate();
@@ -930,10 +939,32 @@ sub renderHolidaylist() {
 			($yy1,$mm1,$dd1) = Add_Delta_Days($yy1,$mm1,$dd1, $daysdiff);
 			$restdays -= $daysdiff;
 		}
-		if ($options{showstatcol}) {
-			foreach my $h (split(/\|/,getStatOption('statheader','statcolheader'))) {
-				$monthheader .= CGI::th({-valign=>'bottom', -align=>'center', rowspan=>2, -bgcolor=>$options{tableheadercolor}}, $h);
-			}
+	}
+	# render week number header:
+	my $wnheader = "";
+	if ($options{showwnheader}) {
+		my $restdays = $options{days};
+		my ($yy1,$mm1,$dd1) = ($yy, $mm, $dd);
+		while ($restdays > 0) {
+			my $daysdiff = 8 - Day_of_Week($yy1,$mm1,$dd1);
+			$daysdiff = 1 if $daysdiff==8;
+			$daysdiff = $restdays if ($restdays-$daysdiff<0);
+			$wnheader .= CGI::th({-colspan=>$daysdiff, -align=>'center', -title=>$options{wnheadertitle} },
+					mystrftime($yy1,$mm1,$dd1,$options{wnheaderformat}));
+			($yy1,$mm1,$dd1) = Add_Delta_Days($yy1,$mm1,$dd1, $daysdiff);
+			$restdays -= $daysdiff;
+		}
+	}
+	# render statistics header:
+	if ($options{showstatcol} && ($options{showmonthheader} || $options{showwnheader})) {
+		my $rowspan=1;
+		$rowspan++ if $options{showmonthheader};
+		$rowspan++ if $options{showwnheader};
+		foreach my $h (split(/\|/,getStatOption('statheader','statcolheader'))) {
+			my $sh = CGI::th({-valign=>'bottom', -align=>'center', rowspan=>$rowspan, -bgcolor=>$options{tableheadercolor}}, $h);
+			$monthheader .= $sh if $options{showmonthheader};
+			$wnheader .= $sh if !$options{showmonthheader};
+
 		}
 	}
 
@@ -953,14 +984,16 @@ sub renderHolidaylist() {
 		$params{-style}='color:'.$options{todayfgcolor} if ($today==$date)&&(defined $options{todayfgcolor});
 		$header .= CGI::th(\%params, (($dow < 6)|| $options{showweekends}) ? &mystrftime($yy1,$mm1,$dd1) : '&nbsp;');
 	}
-	if ((!$options{showmonthheader}) && $options{showstatcol}) {
+	if ((!$options{showmonthheader}) && (!$options{showwnheader}) && $options{showstatcol}) {
+		my $rowspan = 1;
+		$rowspan++ if $options{showwnheader};
 		foreach my $h (split(/\|/,getStatOption('statheader','statcolheader'))) {
-			$header.=CGI::th({-valign=>'bottom',-align=>'center',-bgcolor=>$options{tableheadercolor}}, $h);
+			$header.=CGI::th({-valign=>'bottom',-align=>'center',-rowspan=>$rowspan,-bgcolor=>$options{tableheadercolor}}, $h);
 		}
 	
 	}
-	$text .= CGI::Tr({-bgcolor=>$options{tableheadercolor}}, ($options{namepos}=~/^(left|both)$/i?$namecell:'').$monthheader.($options{namepos}=~/^(right|both)$/i?$namecell:'')).CGI::Tr($header) if $options{showmonthheader};
-	$text .= CGI::Tr({-bgcolor=>$options{tableheadercolor}}, ($options{namepos}=~/^(left|both)$/i?$namecell:'').$header.($options{namepos}=~/^(right|both)$/i?$namecell:'')) unless $options{showmonthheader};
+	$text .= CGI::Tr({-bgcolor=>$options{tableheadercolor}}, ($options{namepos}=~/^(left|both)$/i?$namecell:'').$monthheader.($options{namepos}=~/^(right|both)$/i?$namecell:'')).($options{showwnheader}?CGI::Tr({-bgcolor=>$options{tableheadercolor}},$wnheader):'').CGI::Tr($header) if $options{showmonthheader};
+	$text .= CGI::Tr({-bgcolor=>$options{tableheadercolor}}, ($options{namepos}=~/^(left|both)$/i?$namecell:'').($options{showwnheader}?$wnheader:$header).($options{namepos}=~/^(right|both)$/i?$namecell:'')). ($options{showwnheader}?CGI::Tr($header):'') unless $options{showmonthheader};
 
 	# create table with names and dates:
 
@@ -1253,32 +1286,39 @@ sub _substStatisticsVars {
 		$text=~s/\%{i:?}/$t/g;
 	}
 	sub _vz {
-		return defined $_[0]?$_[0]:defined $options{statformat_0}?$options{statformat_0}:0;
+		my ($factor, $value) = @_;
+		if (defined $factor && $factor=~ /^\*/ ) {
+			$factor=~s/^\*//;
+			$value=$options{statformat_0} unless defined $value;
+			$value=$value * $factor;
+		}
+
+		return defined $value?$value:defined $options{statformat_0}?$options{statformat_0}:0;
 	};
-	$text=~s/\%{i:([^}]+)}/_vz($statistics{icons}{$1})/egi;
-	$text=~s/\%{ii:([^}]+)}/_vz($statistics{'icons-w'}{$1})/egi;
-	$text=~s/\%{l:([^}]+)}/_vz($statistics{locations}{$1})/egi;
-	$text=~s/\%{ll:([^}]+)}/_vz($statistics{'locations-w'}{$1})/egi;
+	$text=~s/\%{i(\*[\d\.]+)?:([^}]+)}/_vz($1,$statistics{icons}{$2})/egi;
+	$text=~s/\%{ii(\*[\d\.]+)?:([^}]+)}/_vz($1,$statistics{'icons-w'}{$2})/egi;
+	$text=~s/\%{l(\*[\d\.]+)?:([^}]+)}/_vz($1,$statistics{locations}{$2})/egi;
+	$text=~s/\%{ll(\*[\d\.]+)?:([^}]+)}/_vz($1,$statistics{'locations-w'}{$2})/egi;
 
-	$text=~s/\%hh/_vz($statistics{'holidays-w'})/egi;
-	$text=~s/\%h/_vz($statistics{holidays})/egi;
-	$text=~s/\%{h:?}/_vz($statistics{holidays})/egi;
-	$text=~s/\%{hh:?}/_vz($statistics{'holidays-w'})/egi;
+	$text=~s/\%hh(\*[\d\.]+)?/_vz($1,$statistics{'holidays-w'})/egi;
+	$text=~s/\%h(\*[\d\.]+)?/_vz($1,$statistics{holidays})/egi;
+	$text=~s/\%{h(\*[\d\.]+)?:?}/_vz($1,$statistics{holidays})/egi;
+	$text=~s/\%{hh(\*[\d\.]+)?:?}/_vz($1,$statistics{'holidays-w'})/egi;
 
-	$text=~s/\%pp/_vz($statistics{'pubholidays-w'})/egi;
-	$text=~s/\%p/_vz($statistics{pubholidays})/egi;
-	$text=~s/\%{p:?}/_vz($statistics{pubholidays})/egi;
-	$text=~s/\%{pp:?}/_vz($statistics{'pubholidays-w'})/egi;
+	$text=~s/\%pp(\*[\d\.]+)?/_vz($1,$statistics{'pubholidays-w'})/egi;
+	$text=~s/\%p(\*[\d\.]+)?/_vz($1,$statistics{pubholidays})/egi;
+	$text=~s/\%{p(\*[\d\.]+)?:?}/_vz($1,$statistics{pubholidays})/egi;
+	$text=~s/\%{pp(\*[\d\.]+)?:?}/_vz($1,$statistics{'pubholidays-w'})/egi;
 
-	$text=~s/\%ww/_vz($statistics{'work-w'})/egi;
-	$text=~s/\%w/_vz($statistics{work})/egi;
-	$text=~s/\%{w:?}/_vz($statistics{work})/egi;
-	$text=~s/\%{ww:?}/_vz($statistics{'work-w'})/egi;
+	$text=~s/\%ww(\*[\d\.]+)?/_vz($1,$statistics{'work-w'})/egi;
+	$text=~s/\%w(\*[\d\.]+)?/_vz($1,$statistics{work})/egi;
+	$text=~s/\%{w(\*[\d\.]+)?:?}/_vz($1,$statistics{work})/egi;
+	$text=~s/\%{ww(\*[\d\.]+)?:?}/_vz($1,$statistics{'work-w'})/egi;
 
-	$text=~s/\%dd/_vz($statistics{'days-w'})/egi;
-	$text=~s/\%d/_vz($statistics{days})/egi;
-	$text=~s/\%{d:?}/_vz($statistics{days})/egi;
-	$text=~s/\%{dd:?}/_vz($statistics{'days-w'})/egi;
+	$text=~s/\%dd(\*([\d\.]+))?/_vz($2,$statistics{'days-w'})/egi;
+	$text=~s/\%d(\*([\d\.]+))?/_vz($2,$statistics{days})/egi;
+	$text=~s/\%{d(\*([\d\.]+))?:?}/_vz($2,$statistics{days})/egi;
+	$text=~s/\%{dd(\*([\d\.]+))?:?}/_vz($2,$statistics{'days-w'})/egi;
 
 
 	# percentages:
@@ -1286,49 +1326,54 @@ sub _substStatisticsVars {
 		return defined $_[0]?$_[0]:0;
 	};
 	sub _perc {
-		return _dz($_[1])==0 ? "n.d." : sprintf($options{statformat_perc},(_dz($_[0]) * 100 / _dz($_[1])));
+		my ($factor, $val1, $val2) = @_;
+		if (defined $factor && $factor =~/^\*/) {
+			$factor=~s/^\*//;
+			$val1 = $val1 * $factor if defined $val1;
+		}
+		return _dz($val2)==0 ? "n.d." : sprintf($options{statformat_perc},(_dz($val1) * 100 / _dz($val2)));
 	}
 	# locations to days:
-	$text=~s/\%{ld:([^}]+)}/_perc($statistics{locations}{$1}, $statistics{days})/egi;
-	$text=~s/\%{ldd:([^}]+)}/_perc($statistics{locations}{$1}, $statistics{'days-w'})/egi;
-	$text=~s/\%{lld:([^}]+)}/_perc($statistics{locations}{$1}, $statistics{days})/egi;
-	$text=~s/\%{lldd:([^}]+)}/_perc($statistics{locations}{$1}, $statistics{'days-w'})/egi;
+	$text=~s/\%{ld(\*[\d\.]+)?:([^}]+)}/_perc($1,$statistics{locations}{$2}, $statistics{days})/egi;
+	$text=~s/\%{ldd(\*[\d\.]+)?:([^}]+)}/_perc($1,$statistics{locations}{$2}, $statistics{'days-w'})/egi;
+	$text=~s/\%{lld(\*[\d\.]+)?:([^}]+)}/_perc($1,$statistics{locations}{$2}, $statistics{days})/egi;
+	$text=~s/\%{lldd(\*[\d\.]+)?:([^}]+)}/_perc($1,$statistics{locations}{$2}, $statistics{'days-w'})/egi;
 
 	# locations to holidays:
-	$text=~s/\%{lh:([^}]+)}/_perc($statistics{locations}{$1}, $statistics{holidays})/egi;
-	$text=~s/\%{lhh:([^}]+)}/_perc($statistics{locations}{$1}, $statistics{'holidays-w'})/egi;
-	$text=~s/\%{llh:([^}]+)}/_perc($statistics{locations}{$1}, $statistics{holidays})/egi;
-	$text=~s/\%{llhh:([^}]+)}/_perc($statistics{locations}{$1}, $statistics{'holidays-w'})/egi;
+	$text=~s/\%{lh(\*[\d\.]+)?:([^}]+)}/_perc($1,$statistics{locations}{$2}, $statistics{holidays})/egi;
+	$text=~s/\%{lhh(\*[\d\.]+)?:([^}]+)}/_perc($1,$statistics{locations}{$2}, $statistics{'holidays-w'})/egi;
+	$text=~s/\%{llh(\*[\d\.]+)?:([^}]+)}/_perc($1,$statistics{locations}{$2}, $statistics{holidays})/egi;
+	$text=~s/\%{llhh(\*[\d\.]+)?:([^}]+)}/_perc($1,$statistics{locations}{$2}, $statistics{'holidays-w'})/egi;
 
 	# icons to days:
-	$text=~s/\%{id:([^}]+)}/_perc($statistics{icons}{$1}, $statistics{days})/egi;
-	$text=~s/\%{idd:([^}]+)}/_perc($statistics{icons}{$1}, $statistics{'days-w'})/egi;
-	$text=~s/\%{iid:([^}]+)}/_perc($statistics{icons}{$1}, $statistics{days})/egi;
-	$text=~s/\%{iidd:([^}]+)}/_perc($statistics{icons}{$1}, $statistics{'days-w'})/egi;
+	$text=~s/\%{id(\*[\d\.]+)?:([^}]+)}/_perc($1,$statistics{icons}{$2}, $statistics{days})/egi;
+	$text=~s/\%{idd(\*[\d\.]+)?:([^}]+)}/_perc($1,$statistics{icons}{$2}, $statistics{'days-w'})/egi;
+	$text=~s/\%{iid(\*[\d\.]+)?:([^}]+)}/_perc($1,$statistics{icons}{$2}, $statistics{days})/egi;
+	$text=~s/\%{iidd(\*[\d\.]+)?:([^}]+)}/_perc($1,$statistics{icons}{$2}, $statistics{'days-w'})/egi;
 
 	# icons to holidays:
-	$text=~s/\%{ih:([^}]+)}/_perc($statistics{icons}{$1}, $statistics{holidays})/egi;
-	$text=~s/\%{ihh:([^}]+)}/_perc($statistics{icons}{$1}, $statistics{'holidays-w'})/egi;
-	$text=~s/\%{iih:([^}]+)}/_perc($statistics{icons}{$1}, $statistics{holidays})/egi;
-	$text=~s/\%{iihh:([^}]+)}/_perc($statistics{icons}{$1}, $statistics{'holidays-w'})/egi;
+	$text=~s/\%{ih(\*[\d\.]+)?:([^}]+)}/_perc($1,$statistics{icons}{$2}, $statistics{holidays})/egi;
+	$text=~s/\%{ihh(\*[\d\.]+)?:([^}]+)}/_perc($1,$statistics{icons}{$2}, $statistics{'holidays-w'})/egi;
+	$text=~s/\%{iih(\*[\d\.]+)?:([^}]+)}/_perc($1,$statistics{icons}{$2}, $statistics{holidays})/egi;
+	$text=~s/\%{iihh(\*[\d\.]+)?:([^}]+)}/_perc($1,$statistics{icons}{$2}, $statistics{'holidays-w'})/egi;
 
 	# holidays to days:
-	$text=~s/\%{hd:?}/_perc($statistics{holidays},$statistics{days})/egi;
-	$text=~s/\%{hdd:?}/_perc($statistics{holidays},$statistics{'days-w'})/egi;
-	$text=~s/\%{hhd:?}/_perc($statistics{'holidays-w'}, $statistics{days})/egi;
-	$text=~s/\%{hhdd:?}/_perc($statistics{'holidays-w'}, $statistics{'days-w'})/egi;
+	$text=~s/\%{hd(\*[\d\.]+)?:?}/_perc($1,$statistics{holidays},$statistics{days})/egi;
+	$text=~s/\%{hdd(\*[\d\.]+)?:?}/_perc($1,$statistics{holidays},$statistics{'days-w'})/egi;
+	$text=~s/\%{hhd(\*[\d\.]+)?:?}/_perc($1,$statistics{'holidays-w'}, $statistics{days})/egi;
+	$text=~s/\%{hhdd(\*[\d\.]+)?:?}/_perc($1,$statistics{'holidays-w'}, $statistics{'days-w'})/egi;
 
 	# public holidays to days:
-	$text=~s/\%{pd:?}/_perc($statistics{pubholidays},$statistics{days})/egi;
-	$text=~s/\%{pdd:?}/_perc($statistics{pubholidays},$statistics{'days-w'})/egi;
-	$text=~s/\%{ppd:?}/_perc($statistics{'pubholidays-w'}, $statistics{days})/egi;
-	$text=~s/\%{ppdd:?}/_perc($statistics{'pubholidays-w'}, $statistics{'days-w'})/egi;
+	$text=~s/\%{pd(\*[\d\.]+)?:?}/_perc($1,$statistics{pubholidays},$statistics{days})/egi;
+	$text=~s/\%{pdd(\*[\d\.]+)?:?}/_perc($1,$statistics{pubholidays},$statistics{'days-w'})/egi;
+	$text=~s/\%{ppd(\*[\d\.]+)?:?}/_perc($1,$statistics{'pubholidays-w'}, $statistics{days})/egi;
+	$text=~s/\%{ppdd(\*[\d\.]+)?:?}/_perc($1,$statistics{'pubholidays-w'}, $statistics{'days-w'})/egi;
 
 	# working days to days:
-	$text=~s/\%{wd:?}/_perc($statistics{work}, $statistics{days})/egi;
-	$text=~s/\%{wdd:?}/_perc($statistics{work}, $statistics{'days-w'})/egi;
-	$text=~s/\%{wwd:?}/_perc($statistics{'work-w'}, $statistics{days})/egi;
-	$text=~s/\%{wwdd:?}/_perc($statistics{'work-w'}, $statistics{'days-w'})/egi;
+	$text=~s/\%{wd(\*[\d\.]+)?:?}/_perc($1,$statistics{work}, $statistics{days})/egi;
+	$text=~s/\%{wdd(\*[\d\.]+)?:?}/_perc($1,$statistics{work}, $statistics{'days-w'})/egi;
+	$text=~s/\%{wwd(\*[\d\.]+)?:?}/_perc($1,$statistics{'work-w'}, $statistics{days})/egi;
+	$text=~s/\%{wwdd(\*[\d\.]+)?:?}/_perc($1,$statistics{'work-w'}, $statistics{'days-w'})/egi;
 	
 	return $text;
 }
@@ -1514,9 +1559,13 @@ sub renderNav {
 	$halftext = $options{'navprevhalf'} if $nextp==-1;
 
 
-	$nav.=$cgi->a({-href=>$halfhref,-title=>$halftitle}, $halftext) if ($nextp==1);
-	$nav.=$cgi->a({-href=>$href,-title=>$title}, $text);
-	$nav.=$cgi->a({-href=>$halfhref,-title=>$halftitle}, $halftext) if ($nextp==-1);
+	#$nav.=$cgi->a({-href=>$halfhref,-title=>$halftitle}, $halftext) if ($nextp==1);
+	#$nav.=$cgi->a({-href=>$href,-title=>$title}, $text);
+	#$nav.=$cgi->a({-href=>$halfhref,-title=>$halftitle}, $halftext) if ($nextp==-1);
+	### TWiki 5.0 - CGI implementation is incomplete, so...
+	$nav.=qq@<a href="$halfhref" title="$halftitle">$halftext</a>@ if ($nextp==1);
+	$nav.=qq@<a href="$href" title="$title">$text</a>@;
+	$nav.=qq@<a href="$halfhref" title="$halftitle">$halftext</a>@ if ($nextp==-1);
 
 
 	return $nav;
