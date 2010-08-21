@@ -319,6 +319,15 @@ sub _makeTopicPattern {
     return '^(' . join( '|', @arr ) . ')$';
 }
 
+sub _fixHeadingOffset
+{
+    my ( $prefix, $level, $offset ) = @_;
+    $level += $offset;
+    $level = 1 if( $level < 1);
+    $level = 6 if( $level > 6);
+    return $prefix . '+' x $level;
+}
+
 =pod
 
 ---++ ObjectMethod searchWeb (...)
@@ -369,6 +378,8 @@ sub searchWeb {
     my $doExpandVars  = TWiki::isTrue( $params{expandvariables} );
     my $format        = $params{format} || '';
     my $header        = $params{header};
+    my $headingoffset = $params{headingoffset} || 0;
+    $headingoffset    =~ s/.*?([-+]?[0-9]).*/$1/ || 0;
     my $footer        = $params{footer};
     my $inline        = $params{inline};
     my $limit         = $params{limit} || '';
@@ -795,7 +806,9 @@ sub searchWeb {
             # Special handling for format='...'
             if( $format ) {
                 ( $meta, $text ) = _getTextAndMeta( $this, $topicInfo, $web, $topic );
-
+                if( $headingoffset ) {
+                    $text =~ s/^(---*)(\++)/_fixHeadingOffset( $1, length( $2 ), $headingoffset )/gem;
+                }
                 if( $doExpandVars ) {
                     if( $web eq $baseWeb && $topic eq $baseTopic ) {
 
@@ -810,8 +823,12 @@ sub searchWeb {
             if( $doMultiple ) {
                 my $pattern = $tokens[$#tokens];   # last token in an AND search
                 $pattern = quotemeta( $pattern ) if( $type ne 'regex' );
-                ( $meta, $text ) = _getTextAndMeta( $this, $topicInfo, $web, $topic )
-                  unless $text;
+                unless( $text ) {
+                    ( $meta, $text ) = _getTextAndMeta( $this, $topicInfo, $web, $topic );
+                    if( $headingoffset ) {
+                        $text =~ s/^(---*)(\++)/_fixHeadingOffset( $1, length( $2 ), $headingoffset )/gem;
+                    }
+                }
                 if ($caseSensitive) {
                     @multipleHitLines = reverse grep { /$pattern/ } split( /[\n\r]+/, $text );
                 }
@@ -864,10 +881,13 @@ sub searchWeb {
                             $this, $web, $topic, 'wikiusername', $r1info )/ges;
 
                     if ( $out =~ m/\$text/ ) {
-                        ( $meta, $text ) = _getTextAndMeta( $this, $topicInfo, $web, $topic )
-                          unless $text;
+                        unless( $text || $doMultiple ) {
+                            ( $meta, $text ) = _getTextAndMeta( $this, $topicInfo, $web, $topic );
+                            if( $headingoffset ) {
+                                $text =~ s/^(---*)(\++)/_fixHeadingOffset( $1, length( $2 ), $headingoffset )/gem;
+                            }
+                        }
                         if ( $topic eq $session->{topicName} ) {
-
                             # defuse SEARCH in current topic to prevent loop
                             $text =~ s/%SEARCH{.*?}%/SEARCH{...}/go;
                         }
@@ -906,7 +926,7 @@ sub searchWeb {
                     $out =~ s/%TEXTHEAD%/$text/go;
 
                 }
-                elsif ($format) {
+                elsif( $format ) {
                     $out =~
 s/\$summary(?:\(([^\)]*)\))?/$renderer->makeTopicSummary( $text, $topic, $web, $1 )/ges;
                     $out =~
