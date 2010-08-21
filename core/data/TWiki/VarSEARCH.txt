@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1241731556" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1282363304" format="1.1" reprev="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarSEARCH
 ---+++ SEARCH{"text"} -- search content
@@ -26,6 +26,7 @@
      | =nototal="on"= | Do not show number of topics found | Show number |
      | =zeroresults="off"= | Suppress all output if there are no hits | =zeroresults="on"=, displays: "Number of topics: 0" |
      | =noempty="on"= | Suppress results for webs that have no hits. | Show webs with no hits |
+     | =headingoffset="2"= | Adjust the level of headings in text of topics found, taking effect in =$text= and =$pattern()= of a FormattedSearch. A ="2"= or ="+2"= increases the level by two, e.g. a =---+= H1 turns into a =---+++= H3. Positive and negative values are supported. Adjusted min and max levels are H1 and H6, respectively. | no adjustment |
      | =header="..."= <br /> =format="..."= <br /> =footer="..."= | Custom format results: see *[[FormattedSearch]]* for usage, variables &amp; examples | Results in table |
      | =expandvariables="on"= | Expand variables before applying a FormattedSearch on a search hit. Useful to show the expanded text, e.g. to show the result of a SpreadSheetPlugin =%<nop>CALC{}%= instead of the formula | Raw text |
      | =multiple="on"= | Multiple hits per topic. Each hit can be [[FormattedSearch][formatted]]. The last token is used in case of a regular expression ";" _and_ search | Only one hit per topic |
