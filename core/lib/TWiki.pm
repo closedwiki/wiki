@@ -3552,7 +3552,7 @@ sub IF {
     return $result;
 }
 
-sub _fixHeaderOffset
+sub _fixHeadingOffset
 {
     my ( $prefix, $level, $offset ) = @_;
     $level += $offset;
@@ -3728,7 +3728,7 @@ sub INCLUDE {
     }
 
     if( $headingoffset =~ s/.*?([-+]?[0-9]).*/$1/ ) {
-        $text =~ s/^(---*)(\++)/_fixHeaderOffset( $1, length( $2 ), $headingoffset )/gem;
+        $text =~ s/^(---*)(\++)/_fixHeadingOffset( $1, length( $2 ), $headingoffset )/gem;
     }
 
     # restore the tags
