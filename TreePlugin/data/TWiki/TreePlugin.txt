@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1280122165" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1282412603" format="1.1" version="$Rev$"}%
 ---+!! Tree Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -87,8 +87,9 @@ Specify plug-in settings in =LocalSite.cfg=:
 |  Authors: | TWiki:Main.SlavaKozlov (alpha release), TWiki:Main.StephaneLenclud (2006-2008)  |
 |  Copyright: | &copy; 2002-2004 2002 Slava Kozlov, %BR% &copy; 2002-2010 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-07-25 |
+|  Plugin Version: | 2010-08-21 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-08-21: | TWikibug:Item6562 - fix error Global symbol $RELEASE requires explicit package name |
 |  2010-07-25: | TWikibug:Item6530 - doc fixes, changing TWIKIWEB to SYSTEMWEB |
 |  28 Aug 2008 | 1.7 - Fixing warnings in apache logs. Fixing broken cache generation when using =excludetopic= or =includetopic=. Better support for Sub Webs and Non-Wiki words from TWiki:Main.ColasNahaboo. By TWiki:Main.StephaneLenclud |
 |  10 Apr 2008 | 1.6 - File cache implementation. Massive performance improvement for Topic tree. No performance gain for Web tree. Added =nocache= parameter. Now using =LocalLib.cfg= for settings. By TWiki:Main.StephaneLenclud |

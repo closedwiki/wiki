@@ -32,13 +32,13 @@ use TWiki::Plugins::TreePlugin::ImgNodeFormatter;
 
 # =========================
 use vars qw(
-  $gWeb $gTopic $user $installWeb $VERSION $debug $INTREE
+  $gWeb $gTopic $user $installWeb $VERSION $RELEASE $debug $INTREE
   %FormatMap $RootLabel $AGdebugmsg $pluginName $workAreaDir
   $noCache
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-07-25';
+$RELEASE = '2010-08-21';
 
 $pluginName = 'TreePlugin';
 $RootLabel = "_RootLabel_";    # what we use to label the root of a tree if not a topic
