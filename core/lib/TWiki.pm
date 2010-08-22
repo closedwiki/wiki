@@ -510,7 +510,7 @@ BEGIN {
     if (!defined $TWiki::cfg{Engine}) {
         # Caller did not define an engine; try and work it out (mainly for
         # the benefit of pre-5.0 CGI scripts)
-        if ( defined $ENV{GATEWAY_INTERFACE} ) {
+        if ( defined $ENV{GATEWAY_INTERFACE} or defined $ENV{MOD_PERL} ) {
             $TWiki::cfg{Engine} = 'TWiki::Engine::CGI';
             use CGI::Carp qw(fatalsToBrowser);
             $SIG{__DIE__} = \&CGI::Carp::confess;
