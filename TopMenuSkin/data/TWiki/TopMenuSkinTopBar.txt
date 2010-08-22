@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1276122859" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1282453009" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkin"}%
 ---+ Top Bar of !TopMenuSkin
 
@@ -10,13 +10,13 @@ Top bar of TopMenuSkin, replacing WebTopBar.
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr style="background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/menu-gray-bg.png); background-repeat: repeat-x;">
 <td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="1" alt="" /></td>
-<td width="99%">
+<td width="80%">
 <div class="twTopMenuTab">%IF{
  "istopic '%BASEWEB%.WebTopMenu'"
  then="$percntINCLUDE{%BASEWEB%.WebTopMenu}$percnt"
  else="$percntINCLUDE{%SYSTEMWEB%.TopMenuSkinDefaultWebTopMenu}$percnt"
 }%
-</div></td><td><div class="twTopMenuTab">
+</div></td><td><div class="twTopMenuTab" style="float:right">
    * [[%WIKIUSERNAME%][ %ICON{"person"}% %MAKETEXT{"Account"}% %ICON{menu-down}%]]
 %IF{
  "context authenticated"
