@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277275868" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1282526349" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Installation Guide
 
@@ -293,6 +293,7 @@ See TWiki:TWiki.HowToInstallCpanModules for detailed information on how to insta
 | Digest::SHA1 | &nbsp; | &nbsp; |
 | Jcode | &nbsp; | Used for !I18N support with perl 5.6 |
 | Locale::Maketext::Lexicon | &gt;=0 | Used for !I18N support |
+| Authen::SASL | &nbsp; | Used for SMTP Authentication |
 | Net::SMTP | &gt;=2.29 | Used for sending mail |
 | Unicode::Map | &nbsp; | Used for !I18N support with perl 5.6 |
 | Unicode::Map8 | &nbsp; | Used for !I18N support with perl 5.6 |
