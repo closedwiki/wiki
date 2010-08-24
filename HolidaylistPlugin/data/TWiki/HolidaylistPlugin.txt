@@ -325,8 +325,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.031 (19 Aug 2010) |
+|  Plugin Version: | v1.032 (23 Aug 2010) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.032 (23 Aug 2010) | TWiki:Main.DanielRohde: fixed TWiki 5 problems |
 |  v1.031 (19 Aug 2010) | TWiki:Main.DanielRohde: added week number header feature requested by Frank Olzog; fixed week number bug (week number should not be 0); added multiplier feature for statistics rows/columns requested by Oliver Stund; fixed TWiki 5.0 problems reported by Jean-Francois Macaud and TWiki:Main.ThomasBAndersen|
 |  v1.030 (24 Nov 2009) | TWiki:Main.DanielRohde: improved INCLUDE support requested by Foswiki:Main.IngoKappler; added multi language support for entry definitions; fixed unknown language bug; fixed performance issue reported by Foswiki:Main.IngoKappler (thx Foswiki:Main.MichaelDaum) | 
 |  v1.029 (6 Mar 2009) | TWiki:Main.DanielRohde: changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields |

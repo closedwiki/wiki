@@ -45,6 +45,7 @@ use vars qw(
 	@processedTopics
 	$hlid 
 	%rendererCache
+	$cgi $tcgi
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -57,7 +58,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 
 
-$REVISION = '1.0.31'; #dro# added week number header feature requested by Frank Olzog; fixed week number bug (week number should not be 0); added multiplier feature for statistics rows/columns requested by Oliver Stund; fixed TWiki 5.0 problems reported by Jean-Francois Macaud and TWiki:Main.ThomasBAndersen
+$REVISION = '1.0.32'; #dro# fixed TWiki 5 problems
+#$REVISION = '1.0.31'; #dro# added week number header feature requested by Frank Olzog; fixed week number bug (week number should not be 0); added multiplier feature for statistics rows/columns requested by Oliver Stund; fixed TWiki 5.0 problems reported by Jean-Francois Macaud and TWiki:Main.ThomasBAndersen
 #$REVISION = '1.0.30'; #dro# improved INCLUDE support requested by Foswiki:Main.IngoKappler; added multi language support for entry definitions; fixed unknown language bug
 #$REVISION = '1.0.29'; #dro# changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields
 #$REVISION = '1.0.26'; #dro# added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order); added namepos attribute (place names left and/or right of a row)
@@ -234,6 +236,9 @@ sub initDefaults() {
 
 	$hlid = 0;
 
+	$cgi = new CGI({});
+	$tcgi = TWiki::Func::getCgiQuery();
+
 	$defaultsInitialized = 1;
 
 }
@@ -268,13 +273,11 @@ sub initOptions() {
 	}
 	return 0 if $#unknownParams != -1; 
 
-	my $cgi = TWiki::Func::getCgiQuery();
-
 	# Setup options (attributes>plugin preferences>defaults):
 	%options= ();
 	foreach my $option (@allOptions) {
-		my $v = $cgi->param("hlp_${option}_$hlid") ;
-		if (!defined $v) { $v = (!defined $cgi->param("hlp_id")) || ($cgi->param("hlp_id") eq $hlid) ? $cgi->param("hlp_${option}") : undef; }
+		my $v = $tcgi->param("hlp_${option}_$hlid") ;
+		if (!defined $v) { $v = (!defined $tcgi->param("hlp_id")) || ($tcgi->param("hlp_id") eq $hlid) ? $tcgi->param("hlp_${option}") : undef; }
 		$v = $params{$option} unless defined $v;
 		if (defined $v) {
 			if (grep /^\Q$option\E$/, @flagOptions) {
@@ -438,9 +441,8 @@ sub getStartDate() {
 		($yy,$mm,$dd) = Monday_of_Week($week, $yy) if ($matched);
 	}
 	# handle paging:
-	my $cgi=TWiki::Func::getCgiQuery();
-	if (defined $cgi->param('hlppage'.$hlid)) {
-		if ($cgi->param('hlppage'.$hlid) =~ m/^([\+\-]?[\d\.]+)$/) {
+	if (defined $tcgi->param('hlppage'.$hlid)) {
+		if ($tcgi->param('hlppage'.$hlid) =~ m/^([\+\-]?[\d\.]+)$/) {
 			my $hlppage = $1; 
 			my $days = int( (defined $options{'navdays'}?$options{'navdays'}:$options{'days'}) * $hlppage );
 			($yy,$mm,$dd) = Add_Delta_Days($yy,$mm,$dd, $days);
@@ -1384,7 +1386,6 @@ sub getStatOption {
 # =========================
 sub renderStatisticsSumRow {
 	my ($sumstatisticsref) = @_;
-	my $cgi=TWiki::Func::getCgiQuery();
 	my $text = "";
 	my $row="";
 	my @stattitles=split(/\|/,getStatOption('stattitle','statcoltitle'));
@@ -1404,7 +1405,6 @@ sub renderStatisticsSumRow {
 # =========================
 sub renderStatisticsRow {
 	my ($statisticsref, $sumstatisticsref) = @_;
-	my $cgi=TWiki::Func::getCgiQuery();
 	my $text = "";
 	my ($dd,$mm,$yy) = getStartDate();
 
@@ -1472,7 +1472,6 @@ sub renderStatisticsRow {
 sub renderStatisticsCol {
 	my ($statisticsref) = @_;
 	my $text="";
-	my $cgi=TWiki::Func::getCgiQuery();
 
 	my @statcoltitles = split(/\|/, getStatOption('stattitle','statcoltitle'));
 	foreach my $statcol (split /\|/, getStatOption('statformat','statcolformat')) {
@@ -1489,13 +1488,12 @@ sub renderNav {
 	my ($nextp) = @_;
 	my $nav = "";
 
-	my $cgi = &TWiki::Func::getCgiQuery();
 	my $newcgi = new CGI($cgi);
 	my $newhalfcgi = new CGI($cgi);
 
 	my $days = (defined $options{'navdays'})?$options{'navdays'}:$options{'days'};
 
-	my $qphlppage = $cgi->param('hlppage'.$hlid);
+	my $qphlppage = $tcgi->param('hlppage'.$hlid);
 	$qphlppage = "0" unless defined $qphlppage;
 	$qphlppage =~ m/^([\+\-]?[\d\.]+)$/;
 	my $hlppage = $1;
@@ -1559,13 +1557,9 @@ sub renderNav {
 	$halftext = $options{'navprevhalf'} if $nextp==-1;
 
 
-	#$nav.=$cgi->a({-href=>$halfhref,-title=>$halftitle}, $halftext) if ($nextp==1);
-	#$nav.=$cgi->a({-href=>$href,-title=>$title}, $text);
-	#$nav.=$cgi->a({-href=>$halfhref,-title=>$halftitle}, $halftext) if ($nextp==-1);
-	### TWiki 5.0 - CGI implementation is incomplete, so...
-	$nav.=qq@<a href="$halfhref" title="$halftitle">$halftext</a>@ if ($nextp==1);
-	$nav.=qq@<a href="$href" title="$title">$text</a>@;
-	$nav.=qq@<a href="$halfhref" title="$halftitle">$halftext</a>@ if ($nextp==-1);
+	$nav.=$cgi->a({-href=>$halfhref,-title=>$halftitle}, $halftext) if ($nextp==1);
+	$nav.=$cgi->a({-href=>$href,-title=>$title}, $text);
+	$nav.=$cgi->a({-href=>$halfhref,-title=>$halftitle}, $halftext) if ($nextp==-1);
 
 
 	return $nav;
