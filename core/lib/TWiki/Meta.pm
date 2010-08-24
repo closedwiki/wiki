@@ -430,7 +430,7 @@ sub getRevisionInfo {
     if( $topicinfo ) {
         $date = $topicinfo->{date} ;
         $author = $topicinfo->{author};
-        $rev = $topicinfo->{version};
+        $rev = $topicinfo->{version} || '1';
         $rev =~ s/^\$Rev(:\s*\d+)?\s*\$$/0/; # parse out SVN keywords in doc
         $rev =~ s/^\d+\.//;
         $comment = '';
