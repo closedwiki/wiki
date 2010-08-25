@@ -58,7 +58,7 @@ Test podplugin - testing podplugin
 |  Copyright: | &copy; 2007, TWiki:Main.JoenioCosta, %BR% &copy; 2007-2010 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-08-06: | TWikibug:Item6530 - fix issue in Exporter import; doc enhancements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2010-08-25: | TWikibug:Item6530 - fix issue in Exporter import; doc enhancements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  28 Mai 2008: | First public version |
 |  22 Mai 2008: | resuming development of the plugin |
 |  21 Mar 2004: | Added afterSaveHandler |
