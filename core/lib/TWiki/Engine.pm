@@ -386,9 +386,10 @@ sub finalizeBody {
     return unless $body;
     $this->prepareWrite($res);
     if ( Scalar::Util::blessed($body) && $body->can('read') or ref $body eq 'GLOB' ) {
-        while (!eof $body ) {
-            read $body, my $buffer, 4096;
-            last unless $this->write( $buffer );
+        my $buffer;
+        while( !eof $body ) {
+            read( $body, $buffer, 4096 );
+            last unless( $this->write( $buffer ) );
         }
         close $body;
     }
