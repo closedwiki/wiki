@@ -5,9 +5,10 @@ use locale;	# make \w work right in non-ASCII lands
 use Carp;
 use File::Spec::Unix;
 
-use vars qw( @EXPORT $Ignore );
+use vars qw( @EXPORT @ISA $Ignore );
 
-use Exporter qw(import);
+require Exporter;
+@ISA = qw(Exporter);
 @EXPORT = qw(pod2html);
 
 BEGIN {

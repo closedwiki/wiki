@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005-2008  TWiki Contributors.
+# Copyright (C) 2005-2010  TWiki Contributors.
 # All Rights Reserved. TWiki Contributors are listed in the
 # AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -24,7 +24,7 @@ use TWiki::Plugins::PodPlugin::Pod2Html;
 use vars qw( $web $topic $user $installWeb $SHORTDESCRIPTION $VERSION $RELEASE $pluginName $debug $do_index );
 
 $VERSION = '$Rev: 8170 $';
-$RELEASE = '0.1';
+$RELEASE = '0.2';
 $pluginName = 'PodPlugin';
 $SHORTDESCRIPTION = 'Extract Perl Old Documentation (POD) online. (Write TWiki topics in POD!!!)';
 

@@ -1,20 +1,23 @@
+%META:TOPICINFO{author="TWikiContributor" date="1282721686" format="1.1" version="$Rev$"}%
 ---+!! !PodPlugin
 <!--
-One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = %$SHORTDESCRIPTION%
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/PodPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/PodPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
 %SHORTDESCRIPTION%
-
-%TOC%
+<sticky><div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
+%TOC{title="Page contents"}%
+</div></sticky>
 
 ---++ Usage
 
-Just install the plugin and it will look for PODs to convert. (A POD is generally recognized by a =<nop>head1 tag)
+Just install the plugin and it will look for topics in POD format and render them to HTML. (A POD is generally recognized by a =<nop>head1 tag)
 
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>PODPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>PODPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Extract Perl documentation (POD) online. Write TWiki topics in POD.
@@ -34,10 +37,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    | *File:* | *Description:* |
 %$MANIFEST%
    * Configure the Plugin:
-      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
-      * Change the Plugin settings as needed
+      * Run the [[%SCRIPTURL{configure}%][configure]] script to enable the plugin
+      * Change the plugin settings as needed
    * Test if the installation was successful:
-      * Create a topic with the content above and check if result is rendered in HTML:
+      * Create a topic with below content and check if result is rendered in HTML:
 <code>
 
 =head1 NAME
@@ -52,9 +55,10 @@ Test podplugin - testing podplugin
 
 |  Plugin Author(s): | TWiki:Main.JoenioCosta, TWiki:Main.NelsonFerraz, TWiki:Main.AndreaSterbini |
 |  Plugin Version: | %$VERSION% |
-|  Copyright: | &copy; 2007, TWiki:Main.JoenioCosta |
+|  Copyright: | &copy; 2007, TWiki:Main.JoenioCosta, %BR% &copy; 2007-2010 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-08-06: | TWikibug:Item6530 - fix issue in Exporter import; doc enhancements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  28 Mai 2008: | First public version |
 |  22 Mai 2008: | resuming development of the plugin |
 |  21 Mar 2004: | Added afterSaveHandler |
@@ -65,6 +69,4 @@ Test podplugin - testing podplugin
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
-
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
