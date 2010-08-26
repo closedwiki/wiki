@@ -1,5 +1,13 @@
+%META:TOPICINFO{author="TWikiContributor" date="1282801382" format="1.1" version="$Rev$"}%
 ---+!! Perl Doc Plugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/PerlDocPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/PerlDocPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
 
+   * Set SHORTDESCRIPTION = Extract the Perl documentation (POD) from a Perl module and display it in a topic
+-->
 %SHORTDESCRIPTION%
 
 %TOC%
@@ -51,27 +59,26 @@ Silly paragraph
 =cut
 </pre>
 
-<!--
-		* Set SHORTDESCRIPTION = Extract the Perl documentation (POD) from a Perl module and display it in a topic.
--->
-
 ---+ Limitations
 
-	* Links (=L&lt;....&gt;=) are not supported
+   * Links (=L&lt;....&gt;=) are not supported
 
 ---+ Plugin Installation Instructions
 %$INSTALL_INSTRUCTIONS%
 
 ---+ Plugin Info
 
-|  Plugin Author: | TWiki:Main/PeterThoeny |
+|  Plugin Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2002-2010, TWiki:Main.PeterThoeny; <br /> &copy; 2008-2010, TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  20 May 2007 | Fixed for TWiki-4, added =pod, repackaged with =BuildContrib= - TWiki:Main.CrawfordCurrie |
+|  2010-08-25: | TWikibug:Item6530 - fix for TWiki-5.0; doc improvements; changing TWIKIWEB to SYSTEMWEB |
+|  20 May 2007 | Fixed for TWiki-4, added "=pod", repackaged with !BuildContrib - TWiki:Main.CrawfordCurrie |
 |  07 Dec 2002: | Removed "=pod" from showing up in html or twiki blocks |
 |  01 Dec 2002: | Initial version |
 |  Dependencies: | %$DEPENDENCIES |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.AdminToolsCategory

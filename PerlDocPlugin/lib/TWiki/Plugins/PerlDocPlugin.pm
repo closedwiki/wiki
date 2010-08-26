@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2006 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2002-2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2008-2010 TWiki Contributor. All Rights Reserved.
 #
 # For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -17,34 +17,16 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 #
-# =========================
-#
-# Each plugin is a package that contains the subs:
-#
-#   initPlugin           ( $topic, $web, $user, $installWeb )
-#   commonTagsHandler    ( $text, $topic, $web )
-#   startRenderingHandler( $text, $web )
-#   outsidePREHandler    ( $text )
-#   insidePREHandler     ( $text )
-#   endRenderingHandler  ( $text )
-#   beforeSaveHandler    ( $text, $topic, $web )
-#
-# initPlugin is required, all other are optional.
-# For increased performance, all handlers except initPlugin are
-# disabled. To enable a handler remove the leading DISABLE_ from
-# the function name.
-#
-# NOTE: To interact with TWiki use the official TWiki functions
-# in the &TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
 
 =begin twiki
+
 ---+ Testing TWiki formatting
 | *simple* | *table* |
 | cell 1 | cell 2 |
    * a bullet
    * again
       * with indent
+
 ---++ Level 2 heading
 normal paragraph text with *bold* and =fixed font= text.
 
@@ -65,7 +47,7 @@ use vars qw( $VERSION $RELEASE );
 
 $VERSION = '$Rev$';
 
-$RELEASE = 'Dakar';
+$RELEASE = '2010-08-25';
 
 
 # =========================
@@ -76,12 +58,8 @@ sub initPlugin {
         return 0;
     }
 
-    if (TWiki::Func::getPreferencesFlag( 'PERLDOCPLUGIN_ENABLE' )) {
-        TWiki::Func::registerTagHandler('PERLDOC', \&perlDocHandler);
-        return 1;
-    }
-
-    return 0;
+    TWiki::Func::registerTagHandler('PERLDOC', \&perlDocHandler);
+    return 1;
 }
 
 sub perlDocHandler {
@@ -94,7 +72,7 @@ sub perlDocHandler {
     $libFile =~ s/[^a-zA-Z0-9_\/]//g;
     $libFile =~ /(.*)/;  # untaint
     $libFile = $1;
-    return "%TWIKIWEB%.PerlDocPlugin: Nothing to do, no module specified." unless( $libName );
+    return "%SYSTEMWEB%.PerlDocPlugin: Nothing to do, no module specified." unless( $libName );
 
     my $fileName = "";
     foreach( @INC ) {
@@ -104,7 +82,7 @@ sub perlDocHandler {
     }
     unless( $filename ) {
         my $path = join( ", ", @INC );
-        return "%TWIKIWEB%.PerlDocPlugin: Module =$libName= not found in lib path =$path=.";
+        return "%SYSTEMWEB%.PerlDocPlugin: Module =$libName= not found in lib path =$path=.";
     }
 
     my $rText = TWiki::Func::readFile( $filename );
@@ -123,7 +101,7 @@ sub perlDocHandler {
     $text = translatePod2TWiki( $text, ( $format eq "pod" ) );
 
     unless( $text ) {
-        return "%TWIKIWEB%.PerlDocPlugin:  Module =$libName= has no documentation.";
+        return "%SYSTEMWEB%.PerlDocPlugin:  Module =$libName= has no documentation.";
     }
 
     if( $format =~ /(pod|twiki|raw)/ ) {
