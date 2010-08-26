@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
-
-# Copyright (C) 2008 Michael Daum http://michaeldaumconsulting.com
+# 
+# Copyright (C) 2008-2009 Michael Daum http://michaeldaumconsulting.com
 # Copyright (C) 2008-2010 TWiki Contributor. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
@@ -19,12 +19,13 @@
 package TWiki::Plugins::RenderPlugin;
 
 require TWiki::Func;
+require TWiki::Sandbox;
 use strict;
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.2';
+$RELEASE = '3.0';
 
 $SHORTDESCRIPTION = 'Render <nop>TWikiApplications asynchronously';
 $NO_PREFS_IN_TOPIC = 1;
@@ -42,6 +43,7 @@ sub initPlugin {
   my ($topic, $web, $user, $installWeb) = @_;
 
   TWiki::Func::registerRESTHandler('tag', \&restTag);
+  TWiki::Func::registerRESTHandler('template', \&restTemplate);
   TWiki::Func::registerRESTHandler('expand', \&restExpand);
   TWiki::Func::registerRESTHandler('render', \&restRender);
 
@@ -80,8 +82,44 @@ sub restExpand {
 }
 
 ###############################################################################
+sub restTemplate {
+  my ($session, $subject, $verb) = @_;
+
+  my $query = TWiki::Func::getCgiQuery();
+  my $theTemplate = $query->param('name');
+  return '' unless $theTemplate;
+
+  my $theExpand = $query->param('expand');
+  return '' unless $theExpand;
+
+  my $theRender = $query->param('render') || 0;
+
+  $theRender = ($theRender =~ /^\s*(1|on|yes|true)\s*$/) ? 1:0;
+  my $theTopic = $query->param('topic') || $session->{topicName};
+  my $theWeb = $query->param('web') || $session->{webName};
+  my ($web, $topic) = TWiki::Func::normalizeWebTopicName($theWeb, $theTopic);
+
+  TWiki::Func::loadTemplate($theTemplate);
+
+  require TWiki::Attrs;
+  my $attrs = new TWiki::Attrs($theExpand);
+
+  my $tmpl = $session->templates->tmplP($attrs);
+
+  # and render it
+  my $result = TWiki::Func::expandCommonVariables($tmpl, $topic, $web) || ' ';
+  if ($theRender) {
+    $result = TWiki::Func::renderText($result, $web);
+  }
+
+  return $result;
+}
+
+###############################################################################
 sub restTag {
   my ($session, $subject, $verb) = @_;
+
+  #writeDebug("called restTag($subject, $verb)");
 
   # get params
   my $query = TWiki::Func::getCgiQuery();
@@ -97,10 +135,10 @@ sub restTag {
 
   # construct parameters for tag
   my $params = $theDefault?'"'.$theDefault.'"':'';
-  my %params = $query->Vars();
-  foreach my $key (keys %params) {
-    next if $key =~ /^(name|param|topic|XForms:Model)$/;
-    $params .= ' '.$key.'="'.$params{$key}.'" ';
+  foreach my $key ($query->param()) {
+    next if $key =~ /^(name|param|render|topic|XForms:Model)$/;
+    my $value = $query->param($key);
+    $params .= ' '.$key.'="'.$value.'" ';
   }
 
   # create TML expression
