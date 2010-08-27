@@ -1283,6 +1283,8 @@ sub _serial2date
 
     my( $sec, $min, $hour, $day, $mon, $year, $wday, $yday ) = ( $isGmt ? gmtime( $theTime ) : localtime( $theTime ) );
 
+    $theStr =~ s/\$isoweek\(([^\)]*)\)/_isoWeek( $1, $day, $mon, $year, $wday, $theTime )/geoi;
+    $theStr =~ s/\$isoweek/_isoWeek( '$week', $day, $mon, $year, $wday, $theTime )/geoi;
     $theStr =~ s/\$sec[o]?[n]?[d]?[s]?/sprintf("%.2u",$sec)/geoi;
     $theStr =~ s/\$min[u]?[t]?[e]?[s]?/sprintf("%.2u",$min)/geoi;
     $theStr =~ s/\$hou[r]?[s]?/sprintf("%.2u",$hour)/geoi;
@@ -1295,8 +1297,6 @@ sub _serial2date
     $theStr =~ s/\$wday/substr($wdayArr[$wday],0,3)/geoi;
     $theStr =~ s/\$wd/$wday+1/geoi;
     $theStr =~ s/\$weekday/$wdayArr[$wday]/goi;
-    $theStr =~ s/\$isoweek\(([^\)]*)\)/_isoWeek( $1, $day, $mon, $year, $wday, $theTime )/geoi;
-    $theStr =~ s/\$isoweek/_isoWeek( 'week', $day, $mon, $year, $wday, $theTime )/geoi;
 
     return $theStr;
 }
@@ -1330,11 +1330,11 @@ sub _isoWeek
     my $isoday = $wday;
     $isoday = 7 unless( $isoday );
 
-    $format =~ s/iso/$isoyear-W$isoweek/go;
-    $format =~ s/year/$isoyear/go;
-    $format =~ s/week/$isoweek/go;
-    $format =~ s/wk/$isowk/go;
-    $format =~ s/day/$isoday/go;
+    $format =~ s/\$iso/$isoyear-W$isoweek/go;
+    $format =~ s/\$year/$isoyear/go;
+    $format =~ s/\$week/$isoweek/go;
+    $format =~ s/\$wk/$isowk/go;
+    $format =~ s/\$day/$isoday/go;
 
     return $format;
 }

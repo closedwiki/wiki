@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1282897045" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1282934103" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -236,15 +236,15 @@ Conventions for Syntax:
       * =$weekday= - day of the week, Sunday..Saturday
       * =$yearday= - day of the year, 1..365, or 1..366 in leap years
       * =$isoweek= - ISO 8601 week number, one or two digits, 1..53
-      * =$isoweek(format)= - formatted [[http://en.wikipedia.org/wiki/ISO_8601#Week_dates][ISO 8601 week number]], format may contain =year= for ISO week-numbering year, =week= for 1 to 2 digit ISO week number, =wk= for 2 digit ISO week number, =day= for ISO weekday number, =iso= for ISO year-week number. Examples:
-         * =$isoweek(year)= - year of ISO 8601 week number, such as =2009= for 2010-01-03
-         * =$isoweek(wk)= - 2 digit ISO 8601 week number, such as =53= for 2010-01-03
-         * =$isoweek(day)= - day of ISO 8601 week number, starting with 1 for Monday, such as =7= for 2010-01-03
-         * =$isoweek(iso)= - full year-week ISO week number, such as =2009-W53= for 2010-01-03
-         * =$isoweek(yearWwkday)= - full year-week-day ISO week number, such as =2009W537= for 2010-01-03
-         * =$isoweek(year-Wwk-day)= - full year-week-day ISO week number, such as =2009-W53-7= for 2010-01-03
-         * =$isoweek(year-Wwk)= - year-week ISO 8601 week number, such as =2009-W53= for 2010-01-03
-   * Date is assumed to be server time; add =GMT= to =text= to indicate Greenwich time zone.
+      * =$isoweek(format)= - formatted [[http://en.wikipedia.org/wiki/ISO_8601#Week_dates][ISO 8601 week number]]. These variables are expanded in =format=:
+         * =$isoweek($year)= - year of ISO 8601 week number, such as =2009= for 2010-01-03
+         * =$isoweek($wk)= - 2 digit ISO 8601 week number, such as =53= for 2010-01-03
+         * =$isoweek($day)= - day of ISO 8601 week number, starting with 1 for Monday, such as =7= for 2010-01-03
+         * =$isoweek($iso)= - full year-week ISO week number, such as =2009-W53= for 2010-01-03
+         * =$isoweek($yearW$wk$day)= - full year-week-day ISO week number, such as =2009W537= for 2010-01-03
+         * =$isoweek($year-W$wk-$day)= - full year-week-day ISO week number, such as =2009-W53-7= for 2010-01-03
+         * =$isoweek($year-W$wk)= - year-week ISO 8601 week number, such as =2009-W53= for 2010-01-03
+   * Date is assumed to be server time; add =GMT= to =text= to indicate Greenwich time zone, or use =$FORMATGMTIME()=.
    * Syntax: ==$FORMATTIME( serial, text )==
    * Example: ==%<nop>CALC{"$FORMATTIME(0, $year/$month/$day GMT)"}%== returns ==1970/01/01 GMT==
    * Related: =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncFORMATTIMEDIFF][$FORMATTIMEDIFF()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=, =[[#FuncTODAY][$TODAY()]]=
