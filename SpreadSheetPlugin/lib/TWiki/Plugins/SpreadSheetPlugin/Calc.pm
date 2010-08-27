@@ -1296,7 +1296,7 @@ sub _serial2date
     $theStr =~ s/\$wd/$wday+1/geoi;
     $theStr =~ s/\$weekday/$wdayArr[$wday]/goi;
     $theStr =~ s/\$isoweek\(([^\)]*)\)/_isoWeek( $1, $day, $mon, $year, $wday, $theTime )/geoi;
-    $theStr =~ s/\$isoweek/_isoWeek( 'wk', $day, $mon, $year, $wday, $theTime )/geoi;
+    $theStr =~ s/\$isoweek/_isoWeek( 'week', $day, $mon, $year, $wday, $theTime )/geoi;
 
     return $theStr;
 }
@@ -1325,13 +1325,15 @@ sub _isoWeek
 
     # calculate GMT of just past midnight today
     my $today_gmt = timegm( 0, 0, 0, $day, $mon, $year );
-    my $isoweek = sprintf("%.2u", int( ( $today_gmt - $yearserial ) / ( 7 * 24 * 3600 ) ) + 1 );
+    my $isoweek = int( ( $today_gmt - $yearserial ) / ( 7 * 24 * 3600 ) ) + 1 ;
+    my $isowk = sprintf("%.2u", $isoweek );
     my $isoday = $wday;
     $isoday = 7 unless( $isoday );
 
     $format =~ s/iso/$isoyear-W$isoweek/go;
     $format =~ s/year/$isoyear/go;
-    $format =~ s/wk/$isoweek/go;
+    $format =~ s/week/$isoweek/go;
+    $format =~ s/wk/$isowk/go;
     $format =~ s/day/$isoday/go;
 
     return $format;
