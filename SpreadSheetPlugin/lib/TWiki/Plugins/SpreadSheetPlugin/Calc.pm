@@ -1281,8 +1281,7 @@ sub _serial2date
 {
     my ( $theTime, $theStr, $isGmt ) = @_;
 
-    my( $sec, $min, $hour, $day, $mon, $year, $wday, $yday ) = localtime( $theTime );
-    (   $sec, $min, $hour, $day, $mon, $year, $wday, $yday ) = gmtime( $theTime ) if( $isGmt );
+    my( $sec, $min, $hour, $day, $mon, $year, $wday, $yday ) = ( $isGmt ? gmtime( $theTime ) : localtime( $theTime ) );
 
     $theStr =~ s/\$sec[o]?[n]?[d]?[s]?/sprintf("%.2u",$sec)/geoi;
     $theStr =~ s/\$min[u]?[t]?[e]?[s]?/sprintf("%.2u",$min)/geoi;
@@ -1296,8 +1295,69 @@ sub _serial2date
     $theStr =~ s/\$wday/substr($wdayArr[$wday],0,3)/geoi;
     $theStr =~ s/\$wd/$wday+1/geoi;
     $theStr =~ s/\$weekday/$wdayArr[$wday]/goi;
+    $theStr =~ s/\$isoweek\(([^\)]*)\)/_isoWeek( $1, $day, $mon, $year, $wday, $theTime )/geoi;
+    $theStr =~ s/\$isoweek/_isoWeek( 'wk', $day, $mon, $year, $wday, $theTime )/geoi;
 
     return $theStr;
+}
+
+# =========================
+sub _isoWeek
+{
+    my ( $format, $day, $mon, $year, $wday, $serial ) = @_;
+
+    # Contributed by PeterPayne - 22 Oct 2007
+    # Enhanced by PeterThoeny 2010-08-27
+    # Calculate the ISO8601 week number from the serial.
+
+    my $isoyear = $year + 1900;
+    my $yearserial = _year2isoweek1serial( $year + 1900, 1 );
+    if ( $mon >= 11 ) { # check if date is in next year's first week
+        my $yearnextserial = _year2isoweek1serial( $year + 1900 + 1, 1 );
+        if ( $serial >= $yearnextserial ) {
+            $yearserial = $yearnextserial;
+            $isoyear += 1;
+        }
+    } elsif ( $serial < $yearserial ) {
+        $yearserial = _year2isoweek1serial( $year + 1900 - 1, 1 );
+        $isoyear -= 1;
+    }
+
+    # calculate GMT of just past midnight today
+    my $today_gmt = timegm( 0, 0, 0, $day, $mon, $year );
+    my $isoweek = sprintf("%.2u", int( ( $today_gmt - $yearserial ) / ( 7 * 24 * 3600 ) ) + 1 );
+    my $isoday = $wday;
+    $isoday = 7 unless( $isoday );
+
+    $format =~ s/iso/$isoyear-W$isoweek/go;
+    $format =~ s/year/$isoyear/go;
+    $format =~ s/wk/$isoweek/go;
+    $format =~ s/day/$isoday/go;
+
+    return $format;
+}
+
+# =========================
+sub _year2isoweek1serial
+{
+    my ( $year, $isGmt ) = @_;
+
+    # Contributed by PeterPayne - 22 Oct 2007
+    # Calculate the serial of the beginning of week 1 for specified year.
+    # Year is 4 digit year (e.g. "2000")
+
+    $year -= 1900;
+
+    # get Jan 4
+    my @param = ( 0, 0, 0, 4, 0, $year );
+    my $jan4epoch = ( $isGmt ? timegm( @param ) : timelocal( @param ) );
+
+    # what day does Jan 4 fall on?
+    my $jan4day = ( $isGmt ? (gmtime($jan4epoch))[6] : (localtime($jan4epoch))[6] );
+
+    $jan4day += 7 if ( $jan4day < 1 );
+
+    return( $jan4epoch - ( 24 * 3600 * ( $jan4day - 1 ) ) );
 }
 
 # =========================
