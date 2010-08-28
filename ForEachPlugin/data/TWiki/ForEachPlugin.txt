@@ -1,12 +1,16 @@
-%META:TOPICINFO{author="MagnusLewisSmith" date="1127960187" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="TWikiContributor" date="1282983442" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="Sandbox.PluginDevelopment"}%
 ---+!! <nop>%TOPIC%
-
-This plugin provides basic =FOR= and =FOREACH= loop constructions.
-
-%TOC%
-
-------
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/ForEachPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/ForEachPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+%SHORTDESCRIPTION%
+<sticky><div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
+%TOC{title="Page contents"}%
+</div></sticky>
 
 ---++ Syntax Rules
 
@@ -25,25 +29,25 @@ This plugin provides basic =FOR= and =FOREACH= loop constructions.
 | ="stop"="..."= | Stop integer |
 | ="step"="..."= | Increment/decrement =var= in steps of =step=.  __THIS IS REQUIRED__ |
 
-	* *All parameters are required, and must appear in the specified order.*
+   * *All parameters are required, and must appear in the specified order.*
 
 ---++ =FOREACH= Examples
 
 ---+++!! Basic Usage
 <verbatim>
 %FOREACH{"web" in="Main, Sandbox, TWiki"}%
-	* [[$web.WebHome]]
+   * [[$web.WebHome]]
 %NEXT{"web"}%
 </verbatim>
 
 ... gives ...
-	* [[Main.WebHome]]
-	* [[Sandbox.WebHome]]
-	* [[TWiki.WebHome]]
+   * [[Main.WebHome]]
+   * [[Sandbox.WebHome]]
+   * [[TWiki.WebHome]]
 
 ... if installed.
 %FOREACH{"web" in="Main, Sandbox, TWiki"}%
-	* [[$web.WebHome]]
+   * [[$web.WebHome]]
 %NEXT{"web"}%
 
 ---+++!! Nested loops are possible:
@@ -53,7 +57,7 @@ This plugin provides basic =FOR= and =FOREACH= loop constructions.
 %FOREACH{"i" in="1, 2, 3"}% %FOREACH{"j" in="a, b, c"}% $i$j %NEXT{"j"}% %NEXT{"i"}%
 
 ---+++!! Lists may contain TWiki Variables or other plugins.  
-	* The body of the loop may need to delay expansion:  use =$percnt= to replace =%= if necessary.
+   * The body of the loop may need to delay expansion:  use =$percnt= to replace =%= if necessary.
 <verbatim>
 %FOREACH{"web" in="%WEBLIST{"$name" separator=", "}%"}%
 | $web | $percntFORMFIELD{"STATUS" topic="$web.%HOMETOPIC%" default="Formfield STATUS not defined in $web" alttext="Formfield STATUS not found in $web"}$percnt |
@@ -66,74 +70,72 @@ This plugin provides basic =FOR= and =FOREACH= loop constructions.
 ---++ =FOR= Examples 
 
 ---+++!! Count up and down in steps
-	* =%<nop>FOR{"counta" start="1" stop="10" step="2"}% $counta %NEXT{"counta"}%=
-	* %FOR{"counta" start="1" stop="10" step="2"}% $counta %NEXT{"counta"}%
-	* =%<nop>FOR{"countb" start="1" stop="10" step="1"}% $countb %NEXT{"countb"}%=
-	* %FOR{"countb" start="1" stop="10" step="1"}% $countb %NEXT{"countb"}%
-	* =%<nop>FOR{"countc" start="10" stop="1" step="-1"}% $countc %NEXT{"countc"}%=
-	* %FOR{"countc" start="10" stop="1" step="-1"}% $countc %NEXT{"countc"}%
+   * =%<nop>FOR{"counta" start="1" stop="10" step="2"}% $counta %NEXT{"counta"}%=
+   * %FOR{"counta" start="1" stop="10" step="2"}% $counta %NEXT{"counta"}%
+   * =%<nop>FOR{"countb" start="1" stop="10" step="1"}% $countb %NEXT{"countb"}%=
+   * %FOR{"countb" start="1" stop="10" step="1"}% $countb %NEXT{"countb"}%
+   * =%<nop>FOR{"countc" start="10" stop="1" step="-1"}% $countc %NEXT{"countc"}%=
+   * %FOR{"countc" start="10" stop="1" step="-1"}% $countc %NEXT{"countc"}%
 
 ---+++!! Nested loops are possible:
 <verbatim>
 %FOR{"outer" start="1" stop="3" step="1"}%
 %FOR{"inner" start="3" stop="1" step="-1"}%
-	* $outer - $inner 
+   * $outer - $inner 
 %NEXT{"inner"}%
 %NEXT{"outer"}%
 </verbatim>
 %FOR{"outer" start="1" stop="3" step="1"}%
 %FOR{"inner" start="103" stop="100" step="-1"}%
-	* $outer - $inner 
+   * $outer - $inner 
 %NEXT{"inner"}%
 %NEXT{"outer"}%
 
 ---+++ Error trapping
-	* =%<nop>FOR{"countd" start="10" stop="1" step="1"}% $countd %NEXT{"countd"}%= (invalid step)
-	* %FOR{"countd" start="10" stop="1" step="1"}% $countd %NEXT{"countd"}%
-	* =%<nop>FOR{"counte" start="a" stop="b" step="c"}% $countd %NEXT{"counte"}%= (non-integers)
-	* %FOR{"counte" start="a" stop="b" step="c"}% $countd %NEXT{"counte"}%
+   * =%<nop>FOR{"countd" start="10" stop="1" step="1"}% $countd %NEXT{"countd"}%= (invalid step)
+   * %FOR{"countd" start="10" stop="1" step="1"}% $countd %NEXT{"countd"}%
+   * =%<nop>FOR{"counte" start="a" stop="b" step="c"}% $countd %NEXT{"counte"}%= (non-integers)
+   * %FOR{"counte" start="a" stop="b" step="c"}% $countd %NEXT{"counte"}%
 
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Loop over successive elements of a list, or a range of numbers.
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Loop over successive elements of a list, or a range of numbers
 
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
-
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* Test if the installation was successful:
-		* _enter samples here_
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Test if the installation was successful:
+      * See if above examples work
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MagnusLewisSmith |
-|  Plugin Version: | 28 Sep 2005 (V1.000) |
+|  Copyright: | &copy; 2005, TWiki:Main.MagnusLewisSmith; <br /> &copy; 2005-2010, TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  28 Sep 2005: | Initial version |
+|  2010-08-28: | TWikibug:Item6571 - doc improvements; changing TWIKIWEB to SYSTEMWEB |
+|  2005-09-28: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main.MagnusLewisSmith - 28 Sep 2005
-
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
