@@ -2,7 +2,7 @@ package TWiki::Plugins::FormPlugin::Validate;
 
 =pod
 
-Changes for TWiki.FormPlugin:
+Changes for %SYSTEMWEB%.FormPlugin:
 - changed package name from CGI::Validate to TWiki::Plugins::FormPlugin::Validate 
 - added an order parameter
 - created array ErrorFields to collect all error fields with data structure:
@@ -130,7 +130,7 @@ require Exporter;
     vars => [qw(%Missing %Invalid %Blank %InvalidType @ErrorFields)],
     subs => [qw(addExtensions GetFormData CheckFormData)],
 );
-$VERSION = do { my @r = ( q$Revision: 2.0 $ =~ /\d+/g ); sprintf '%d.%03d' . '%02d' x ( $#r - 1 ), @r };
+#$VERSION = do { my @r = ( q$Revision: 7528 $ =~ /\d+/g ); sprintf '%d.%03d' . '%02d' x ( $#r - 1 ), @r };
 
 use CGI 2.30;
 use Carp;
@@ -167,12 +167,13 @@ sub addExtensions {
 }
 
 sub GetFormData {
+    my $query = shift || new CGI;
     my %fields = ();    ## We load this latter from @_
-    my %form   = ();    ## Values from the form actually gave us
+#    my %form   = $query->param();    ## Values from the form actually gave us
 
     ## Damn CGI changed it's frigging interface... :-(
-    my $query = new CGI;
-    %form = %{$query};
+    ## and so did TWiki - you can't presume we're using CGI anymore my $query = new CGI;
+    #%form = %{$query};
 
 ## Use this code below if the CGI object form gets changed.  Yes, we're breaking OO rules, so kill me I need the speed!
     #	foreach my $name ($query->param) {
@@ -195,6 +196,7 @@ sub GetFormData {
 
         ## Moron check...
         unless ($field) {
+print STDERR "no field\n";
             $Error =
 qq(Invalid arg "$_[$arg]" given to GetFormData(): No field name???);
             return;
@@ -229,7 +231,7 @@ qq(Invalid reference type "@{[ ref ($fields{$field}{reference}) ]}" given for "$
     if ($Complete) {
         foreach my $field ( keys %fields ) {
             ## Make sure we have it
-            unless ( exists $form{$field} ) {
+            unless ( defined $query->param ($field) ) {
                 $Missing{$field} = qq(Missing required form element "$field");
                 _addErrorField( $field, 'missing', $fields{$field}{order} );
             }
@@ -249,9 +251,12 @@ qq(Invalid reference type "@{[ ref ($fields{$field}{reference}) ]}" given for "$
             next;
         }
 
-        # my @values = $query->param ($field);
+        my @values = $query->param ($field);
 
-        unless ( scalar @{ $form{$field} } or $fields{$field}{optional} ) {
+        # use Data::Dumper;
+        # print STDERR "----".$field."\n---".Dumper(%fields)."\n";
+
+        unless ( scalar @values or $fields{$field}{optional} ) {
             $Blank{$field} = qq(Required field "$field" contains no data);
             _addErrorField( $field, 'blank', $fields{$field}{order} );
             next;
@@ -259,7 +264,7 @@ qq(Invalid reference type "@{[ ref ($fields{$field}{reference}) ]}" given for "$
 
         ## Type checking
         my $argNum = 0;
-        foreach my $arg ( @{ $form{$field} } ) {
+        foreach my $arg ( @values ) {
             $argNum++;
 
             # right type?
@@ -273,7 +278,7 @@ qq(Invalid reference type "@{[ ref ($fields{$field}{reference}) ]}" given for "$
                     # nothing entered
                     unless ( $fields{$field}{optional} ) {
                         ## Hmm, blank field in multi-select?  Odd if that's the case
-                        if ( scalar @{ $form{$field} } > 1 ) {
+                        if ( scalar @values > 1 ) {
                             $Blank{$field} =
 qq(Required field "$field" contains no data in $argNum segment);
                             _addErrorField( $field, 'blank',
@@ -288,7 +293,7 @@ qq(Required field "$field" contains no data in $argNum segment);
                     }
                     next;
                 }
-                if ( scalar @{ $form{$field} } > 1 ) {
+                if ( scalar @values > 1 ) {
                     $InvalidType{$field} =
 qq(Invalid data type found for array field $field, indices $argNum ($fields{$field}{type}[0] expected, found "$arg"));
                     _addErrorField(
@@ -309,10 +314,10 @@ qq(Invalid data type found for field $field ($fields{$field}{type}[0] expected, 
             }
         }
         if ( ref $fields{$field}{reference} eq 'ARRAY' ) {
-            @{ $fields{$field}{reference} } = @{ $form{$field} };
+            @{ $fields{$field}{reference} } = @values;
         }
         else {
-            ${ $fields{$field}{reference} } = $form{$field}->[0];
+            ${ $fields{$field}{reference} } = $values[0];
         }
     }
 

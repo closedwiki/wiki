@@ -1,0 +1,15 @@
+%META:TOPICINFO{author="BaseUserMapping_333" comment="reprev" date="1274078706" format="1.1" reprev="2" version="2"}%
+%META:TOPICPARENT{name="FormPluginExamples"}%
+#CarbonCopy
+---++ Result of carbon copy
+Value of =<nop>CarbonCopy=: %URLPARAM{"CarbonCopy"}%
+
+#FormValidation
+---++ Result of form validation
+   * =Your name=: %URLPARAM{"Your name"}%
+   * =Your salary=: %URLPARAM{"Estimated team earnings"}%
+   * =Team members=: %URLPARAM{"Team members" multiple="on" separator=", "}%   
+
+   * friends = %URLPARAM{"friends" multiple="on" separator=", "}%
+   * subject = %URLPARAM{"subject" multiple="on" separator=", "}%
+   * friends = %URLPARAM{"friends" multiple="on" separator=", "}%

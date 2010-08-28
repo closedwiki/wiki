@@ -1,0 +1,40 @@
+%{ this is the default header for FormPlugin, using the TWiki Javascript and CSS files }%
+
+%TMPL:DEF{formplugin:header}%<style type="text/css" media="all">
+@import url("%PUBURL%/%SYSTEMWEB%/FormPlugin/formplugin.css");
+</style>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/JavascriptFiles/foswikilib.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/JavascriptFiles/foswikiCSS.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/JavascriptFiles/foswikiForm.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/JavascriptFiles/foswikiString.js"></script>
+%TMPL:END%
+
+%TMPL:DEF{formplugin:format:element:title}% $t <br />%TMPL:END%
+%TMPL:DEF{formplugin:format:element}%<p>$titleformat $e $m $h </p>%TMPL:END% %{ titleformat will be substituted by the plugin}%
+%TMPL:DEF{formplugin:format:element:hidden}%$e%TMPL:END%
+    
+%TMPL:DEF{formplugin:message:not_filled_in_correctly}%Some required information is missing or incomplete:%TMPL:END%
+
+%TMPL:DEF{formplugin:message:error:invalid}%- enter a different value%TMPL:END%
+%TMPL:DEF{formplugin:message:error:invalidtype}%- enter a different value%TMPL:END%
+%TMPL:DEF{formplugin:message:error:blank}%- please enter a value%TMPL:END%
+%TMPL:DEF{formplugin:message:error:missing}%- please enter a value%TMPL:END%
+%TMPL:DEF{formplugin:message:hint:integer}%(a rounded number, like '2')%TMPL:END%
+%TMPL:DEF{formplugin:message:hint:float}%(a floating number or a rounded number)%TMPL:END%
+%TMPL:DEF{formplugin:message:hint:email}%(an e-mail address)%TMPL:END%
+
+%TMPL:DEF{formplugin:message:start}%<strong><nop>FormPlugin error:</strong> %TMPL:END%
+%TMPL:DEF{formplugin:message:author:missing_name_and_action}%%TMPL:P{formplugin:message:start}%parameters =name= and =action= are required for =STARTFORM=.%TMPL:END%
+%TMPL:DEF{formplugin:message:author:missing_name}%%TMPL:P{formplugin:message:start}%parameter =name= is required for =STARTFORM= (missing at form with action: =$action=).%TMPL:END%
+%TMPL:DEF{formplugin:message:author:missing_action}%%TMPL:P{formplugin:message:start}%parameter =action= is required for =STARTFORM= (missing at form with name: =$name=).%TMPL:END%
+%TMPL:DEF{formplugin:message:author:missing_rest_action}%%TMPL:P{formplugin:message:start}%if you set =action=\"rest\"=, you also must set a rest action. Add =restaction=\"my_rest_action\"= to =FORMSTART=.%TMPL:END%
+%TMPL:DEF{formplugin:message:author:missing_element_name_and_type}%%TMPL:P{formplugin:message:start}%parameters =name= and =type= are required for this =FORMELEMENT=.%TMPL:END%
+%TMPL:DEF{formplugin:message:author:missing_element_type}%%TMPL:P{formplugin:message:start}%parameter =type= is required for =FORMELEMENT= (missing at element with name: $name).%TMPL:END%
+%TMPL:DEF{formplugin:message:author:missing_element_name}%%TMPL:P{formplugin:message:start}%parameter =name= is required for =FORMELEMENT= (missing at element with type: =$type=).%TMPL:END%
+
+%TMPL:DEF{formplugin:message:no_redirect:title}%Could not redirect%TMPL:END%
+%TMPL:DEF{formplugin:message:no_redirect:body}% Check if =AllowRedirectUrl= has been set in [[%SCRIPTURL{configure}%#Environment$SecurityAndAuthentication][configure]] and if the url [[$url]] is listed in configure's [[%SCRIPTURL{configure}%#GeneralPathSettings][General path settings]].%TMPL:END%
+
+%TMPL:DEF{formplugin:javascript:focus:inline}%<script type="text/javascript">foswiki.Form.setFocus("$formName", "$fieldName");</script>%TMPL:END%
+
+%TMPL:DEF{formplugin:javascript:beforeclick:inline}%<script type="text/javascript">var formName="$formName";var el=foswiki.Form.getFormElement(formName, "$fieldName"); foswiki.Form.initBeforeFocusText(el,"$beforeclick");</script>%TMPL:END%
