@@ -45,22 +45,16 @@ sub expand {
 	($attributes, $text, $topic, $web) = @_;
 	$refText = $text; $theWeb=$web; $theTopic=$topic;
 
-TWiki::Func::writeDebug( "- expand( $attributes, $text, $topic, $web )" );
-
 	&_initDefaults() unless $defaultsInitialized;
 
 	local(%options);
 	return &_createUnknownParamsMessage() unless &_initOptions($attributes);
-
-#return( ".-----$topic-----" );
 
 	if ($options{'autotopic'} && defined $options{'racks'}) {
 		$options{'topic'} .= ($options{'topic'} eq ""?'':','). $options{'racks'};
 	}
 
 	$rpId++;
-
-#return( ".0-----$topic-----" );
 
 	return ($options{'dir'}=~/^(leftright|rightleft)$/i) 
 			? &_renderHorizontal(&_fetch (&_getTopicText())) 
@@ -224,8 +218,6 @@ sub _renderJSTooltipText {
 # =========================
 sub _renderHorizontal {
 
-return( ".h-----$topic-----" );
-
 	my ($entriesRef) = @_;
 
 	my @racks = split /\s*\,\s*/, $options{'racks'};
@@ -359,8 +351,6 @@ return( ".h-----$topic-----" );
 sub _render {
 	my ($entriesRef) = @_;
 	my $text="";
-
-return( ".2-----$topic-----" );
 
 	my @racks = split /\s*\,\s*/, $options{'racks'};
 
