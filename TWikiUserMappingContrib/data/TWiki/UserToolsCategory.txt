@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1277269756" format="1.1" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1283069488" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="CategoryCategory"}%
 ---+ List of TWiki User Tools
 
