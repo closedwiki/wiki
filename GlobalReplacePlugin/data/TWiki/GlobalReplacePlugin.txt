@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1223161550" format="1.0" version="$Rev$"}%
 ---+!! Global Replace Plugin
 
 %TOC%
@@ -75,13 +75,17 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/PaulineCheung |
-|  Plugin Version: | 03 Nov 2004 (V1.002) |
+|  Plugin Author: | TWiki:Main/PaulineCheung, TWiki:Main/PeterThoeny |
+|  Copyright: | &copy; 2004-2006, Wind River; 2007-2008 Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 05 Oct 2008 (V1.1) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  05 Oct 2008: | TWiki:Main/PeterThoeny: Selectable web; TWiki 4.x compatible |
 |  31 Oct 2005: | TWiki:Main.MikkoLaakso: Added some examples, tested on W2K. |
 |  03 Nov 2004: | TWiki:Main/PeterThoeny: Added $topic to replace string |
 |  16 Mar 2004: | Fixed bug where topics with underlines did not get handled properly |
 |  07 Feb 2004: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.0 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | TWiki:Plugins/SpreadSheetPlugin |
 |  Perl Version: | 5.005 |
@@ -92,4 +96,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main/PeterThoeny - 03 Nov 2004
+-- TWiki:Main/PeterThoeny - 05 Oct 2008

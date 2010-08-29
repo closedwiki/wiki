@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_333" date="1196240328" format="1.1" reprev="1.3" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1279771211" format="1.1" version="1.2"}%
 -- Main.TWikiAdminUser - 02 Nov 2007
 
 This Item's form comes from TWiki:Plugins.BugsContrib
@@ -10,4 +10,5 @@ This Item's form comes from TWiki:Plugins.BugsContrib
 %META:FIELD{name="Priority" attributes="M" title="[[Priority]]" value="Enhancement"}%
 %META:FIELD{name="CurrentState" attributes="M" title="CurrentState" value="New"}%
 %META:FIELD{name="WaitingFor" attributes="" title="WaitingFor" value=""}%
+%META:TOPICMOVED{by="PeterThoeny" date="1279771210" from="Sandbox.BugItem1" to="Trash.SandboxBugItem1"}%
 %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Set" value="ItemView"}%

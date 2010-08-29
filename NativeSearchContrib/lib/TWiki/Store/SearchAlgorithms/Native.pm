@@ -1,4 +1,4 @@
-# TWiki Enterprise Collaboration Platform, http://TWiki.org/
+# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2007 WikiRing.
 # Copyright (C) 2007-2010 TWiki Contributor. All Rights Reserved.
@@ -16,7 +16,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # As per the GPL, removal of this notice is prohibited.
-#
+
 package TWiki::Store::SearchAlgorithms::Native;
 
 use Assert;

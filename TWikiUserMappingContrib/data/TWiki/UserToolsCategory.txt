@@ -1,4 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274515634" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1277269756" format="1.1" version="1.3"}%
+%META:TOPICPARENT{name="CategoryCategory"}%
 ---+ List of TWiki User Tools
 
 %SEARCH{"%TOPIC%" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic: $summary(80, noheader)"}%
