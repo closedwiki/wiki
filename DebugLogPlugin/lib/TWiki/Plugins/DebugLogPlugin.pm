@@ -1,4 +1,7 @@
-# Plugin for TWiki Collaboration Platform, http://TWiki.org/
+# Plugin for TWiki Enterprise Collaboration Platform, http://twiki.org/
+#
+# Copyright (C) 2008 TWiki:Main.SvenDowideit
+# Copyright (C) 2008-2010 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -10,6 +13,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
+#
+# As per the GPL, removal of this notice is prohibited.
 
 =pod
 
@@ -30,11 +35,11 @@ plugin.
 __NOTE:__ When developing a plugin it is important to remember that
 TWiki is tolerant of plugins that do not compile. In this case,
 the failure will be silent but the plugin will not be available.
-See %TWIKIWEB%.TWikiPlugins#FAILEDPLUGINS for error messages.
+See %SYSTEMWEB%.InstalledPlugins#FAILEDPLUGINS for error messages.
 
 __NOTE:__ Defining deprecated handlers will cause the handlers to be 
-listed in %TWIKIWEB%.TWikiPlugins#FAILEDPLUGINS. See
-%TWIKIWEB%.TWikiPlugins#Handlig_deprecated_functions
+listed in %SYSTEMWEBWEB%.InstalledPlugins#FAILEDPLUGINS. See
+%SYSTEMWEB%.InstalledPlugins#Handlig_deprecated_functions
 for information on regarding deprecated handlers that are defined for
 compatibility with older TWiki versions.
 
@@ -46,7 +51,6 @@ the text had been included from another topic.
 
 =cut
 
-
 package TWiki::Plugins::DebugLogPlugin;
 
 # Always use strict to enforce variable scoping
@@ -55,35 +59,16 @@ use strict;
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
-# $VERSION is referred to by TWiki, and is the only global variable that
-# *must* exist in this package.
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC
-            $Current_topic $Current_web $Current_user $installWeb);
+             $Current_topic $Current_web $Current_user $installWeb
+           );
 
-# This should always be $Rev: 0 (17 Jan 2008) $ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev: 0 (17 Jan 2008) $';
+$VERSION = '$Rev$';
+$RELEASE = '2010-08-29';
 
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'TWiki-4.2';
-
-# Short description of this plugin
-# One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-$SHORTDESCRIPTION = 'Detailed Debug logging for TWiki';
-
-# You must set $NO_PREFS_IN_TOPIC to 0 if you want your plugin to use preferences
-# stored in the plugin topic. This default is required for compatibility with
-# older plugins, but imposes a significant performance penalty, and
-# is not recommended. Instead, use $TWiki::cfg entries set in LocalSite.cfg, or
-# if you want the users to be able to change settings, then use standard TWiki
-# preferences that can be defined in your Main.TWikiPreferences and overridden
-# at the web and topic level.
+$SHORTDESCRIPTION = 'Detailed debug logging of CGI requests for TWiki';
 $NO_PREFS_IN_TOPIC = 1;
 
-# Name of this Plugin, only used in this module
 $pluginName = 'DebugLogPlugin';
 
 =pod
@@ -130,13 +115,15 @@ sub initPlugin {
     # Example code of how to get a preference value, register a variable handler
     # and register a RESTHandler. (remove code you do not need)
     
-    writePOST() if (TWiki::Func::getCgiQuery()->request_method() eq 'POST');
-    
+    if ( my $method = TWiki::Func::getCgiQuery()->request_method() ) {
+	writePOST() if $method eq 'POST';
+	writeGET() if $method eq 'GET';
+    }
 
     # Set plugin preferences in LocalSite.cfg, like this:
     # $TWiki::cfg{Plugins}{DebugLogPlugin}{ExampleSetting} = 1;
     # Always provide a default in case the setting is not defined in
-    # LocalSite.cfg. See TWiki.TWikiPlugins for help in adding your plugin
+    # LocalSite.cfg. See %SYSTEMWEB%.InstalledPlugins for help in adding your plugin
     # configuration to the =configure= interface.
     my $setting = $TWiki::cfg{Plugins}{DebugLogPlugin}{ExampleSetting} || 0;
     $debug = $TWiki::cfg{Plugins}{DebugLogPlugin}{Debug} || 0;
@@ -159,26 +146,46 @@ sub writePOST {
     #totally non-blocking tick - one file per twiki op - will scale up to the point where there are too many
     #requests for the FS to deal with
     my $dir = TWiki::Func::getWorkArea(${pluginName});
-    my $script = TWiki::Func::getCgiQuery()->script_name();
-    $script =~ /([^\s\/\\]*)[\/\\]?$/;      #i really don't know why CGI does not intaint this one
-    $script = $1;
+    my $script = TWiki::Func::getCgiQuery()->action();
     #TODO: use TWiki session id's if available
-    my $session = TWiki::Func::getCgiQuery()->remote_host();
+    my $session = TWiki::Func::getCgiQuery()->remote_addr();
     $session =~ /^(.*)$/;      #i really don't know why CGI does not intaint this one
     $session = $1;
 
-    my $file = join('-', ('POST', $script,
-                          $Current_web.'.'.$Current_topic, $Current_user, $session,
-                          TWiki::Func::formatTime(time(), '$ye:$mo:$day:$hours:$minutes:$seconds', 'gmtime'), rand()
-                          ));
-    my $tickfile = '>'.$dir.'/'.$file;
+    my $file = _buildFilename( 'POST', $script, $session );
+    my $tickfile = $dir.'/'.$file;
 
     TWiki::Func::writeDebug( "$tickfile" ) if $debug;
 
     $tickfile =~ /^(.*)$/;      #TODO: need to remove this and untaint at the right source
     $tickfile = $1;
 
-    open( TICK, $tickfile);
+    open( TICK, '>', $tickfile) or warn "$!";
+    #print TICK $text;       #a nothing :)
+    TWiki::Func::getCgiQuery()->save(\*TICK);   #save the CGI query params
+    close( TICK );
+}
+
+sub writeGET {
+    my $text = '';
+    #totally non-blocking tick - one file per twiki op - will scale up to the point where there are too many
+    #requests for the FS to deal with
+    my $dir = TWiki::Func::getWorkArea(${pluginName});
+    my $script = TWiki::Func::getCgiQuery()->action();
+    #TODO: use TWiki session id's if available
+    my $session = TWiki::Func::getCgiQuery()->remote_addr();
+    $session =~ /^(.*)$/;      #i really don't know why CGI does not intaint this one
+    $session = $1;
+
+    my $file = _buildFilename( 'GET', $script, $session );
+    my $tickfile = $dir.'/'.$file;
+
+    TWiki::Func::writeDebug( "$tickfile" ) if $debug;
+
+    $tickfile =~ /^(.*)$/;      #TODO: need to remove this and untaint at the right source
+    $tickfile = $1;
+
+    open( TICK, '>', $tickfile) or warn "$!";
     #print TICK $text;       #a nothing :)
     TWiki::Func::getCgiQuery()->save(\*TICK);   #save the CGI query params
     close( TICK );
@@ -189,30 +196,36 @@ sub writeTEXT {
     #totally non-blocking tick - one file per twiki op - will scale up to the point where there are too many
     #requests for the FS to deal with
     my $dir = TWiki::Func::getWorkArea(${pluginName});
-    my $script = TWiki::Func::getCgiQuery()->script_name();
-    $script =~ /([^\s\/\\]*)[\/\\]?$/;      #i really don't know why CGI does not intaint this one
-    $script = $1;
+    my $script = TWiki::Func::getCgiQuery()->action();
     #TODO: use TWiki session id's if available
-    my $session = TWiki::Func::getCgiQuery()->remote_host();
+    my $session = TWiki::Func::getCgiQuery()->remote_addr();
     $session =~ /^(.*)$/;      #i really don't know why CGI does not intaint this one
     $session = $1;
 
-    my $file = join('-', ('topic', $script,
-                          $Current_web.'.'.$Current_topic, $Current_user, $session,
-                          TWiki::Func::formatTime(time(), '$ye:$mo:$day:$hours:$minutes:$seconds', 'gmtime'), rand()
-                          ));
-    my $tickfile = '>'.$dir.'/'.$file;
+    my $file = _buildFilename( 'topic', $script, $session );
+    my $tickfile = $dir.'/'.$file;
 
     TWiki::Func::writeDebug( "$tickfile" ) if $debug;
 
     $tickfile =~ /^(.*)$/;      #TODO: need to remove this and untaint at the right source
     $tickfile = $1;
 
-    open( TICK, $tickfile);
+    open( TICK, '>', $tickfile) or warn $!;
     TWiki::Func::getCgiQuery()->save(\*TICK);   #save the CGI query params
     print TICK "\n==============\n";
     print TICK $text;       #a nothing :)
     close( TICK );
+}
+
+sub _buildFilename {
+    my( $type, $script, $session ) = @_;
+    my $filename = join( '-', (
+            TWiki::Func::formatTime( time(), '$year-$mo-$day-$hours-$minutes-$seconds', 'gmtime' ),
+            sprintf("%03d", rand(999)),
+            $type, $script,
+            $Current_web.'.'.$Current_topic, $Current_user, $session
+        ));
+    return $filename;
 }
 
 # The function used to handle the %EXAMPLETAG{...}% variable
@@ -232,419 +245,6 @@ sub _EXAMPLETAG {
     # For example, %EXAMPLETAG{'hamburger' sideorder="onions"}%
     # $params->{_DEFAULT} will be 'hamburger'
     # $params->{sideorder} will be 'onions'
-}
-
-=pod
-
----++ earlyInitPlugin()
-
-This handler is called before any other handler, and before it has been
-determined if the plugin is enabled or not. Use it with great care!
-
-If it returns a non-null error string, the plugin will be disabled.
-
-=cut
-
-sub DISABLE_earlyInitPlugin {
-    return undef;
-}
-
-=pod
-
----++ initializeUserHandler( $loginName, $url, $pathInfo )
-   * =$loginName= - login name recovered from $ENV{REMOTE_USER}
-   * =$url= - request url
-   * =$pathInfo= - pathinfo from the CGI query
-Allows a plugin to set the username. Normally TWiki gets the username
-from the login manager. This handler gives you a chance to override the
-login manager.
-
-Return the *login* name.
-
-This handler is called very early, immediately after =earlyInitPlugin=.
-
-*Since:* TWiki::Plugins::VERSION = '1.010'
-
-=cut
-
-sub DISABLE_initializeUserHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $loginName, $url, $pathInfo ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::initializeUserHandler( $_[0], $_[1] )" ) if $debug;
-}
-
-=pod
-
----++ registrationHandler($web, $wikiName, $loginName )
-   * =$web= - the name of the web in the current CGI query
-   * =$wikiName= - users wiki name
-   * =$loginName= - users login name
-
-Called when a new user registers with this TWiki.
-
-*Since:* TWiki::Plugins::VERSION = '1.010'
-
-=cut
-
-sub DISABLE_registrationHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $web, $wikiName, $loginName ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::registrationHandler( $_[0], $_[1] )" ) if $debug;
-}
-
-=pod
-
----++ commonTagsHandler($text, $topic, $web, $included, $meta )
-   * =$text= - text to be processed
-   * =$topic= - the name of the topic in the current CGI query
-   * =$web= - the name of the web in the current CGI query
-   * =$included= - Boolean flag indicating whether the handler is invoked on an included topic
-   * =$meta= - meta-data object for the topic MAY BE =undef=
-This handler is called by the code that expands %<nop>TAGS% syntax in
-the topic body and in form fields. It may be called many times while
-a topic is being rendered.
-
-For variables with trivial syntax it is far more efficient to use
-=TWiki::Func::registerTagHandler= (see =initPlugin=).
-
-Plugins that have to parse the entire topic content should implement
-this function. Internal TWiki
-variables (and any variables declared using =TWiki::Func::registerTagHandler=)
-are expanded _before_, and then again _after_, this function is called
-to ensure all %<nop>TAGS% are expanded.
-
-__NOTE:__ when this handler is called, &lt;verbatim> blocks have been
-removed from the text (though all other blocks such as &lt;pre> and
-&lt;noautolink> are still present).
-
-__NOTE:__ meta-data is _not_ embedded in the text passed to this
-handler. Use the =$meta= object.
-
-*Since:* $TWiki::Plugins::VERSION 1.000
-
-=cut
-
-sub DISABLE_commonTagsHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web, $included, $meta ) = @_;
-    
-    # If you don't want to be called from nested includes...
-    #   if( $_[3] ) {
-    #   # bail out, handler called from an %INCLUDE{}%
-    #         return;
-    #   }
-
-    TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/%XYZ%/&handleXyz()/ge;
-    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
-}
-
-=pod
-
----++ beforeCommonTagsHandler($text, $topic, $web, $meta )
-   * =$text= - text to be processed
-   * =$topic= - the name of the topic in the current CGI query
-   * =$web= - the name of the web in the current CGI query
-   * =$meta= - meta-data object for the topic MAY BE =undef=
-This handler is called before TWiki does any expansion of it's own
-internal variables. It is designed for use by cache plugins. Note that
-when this handler is called, &lt;verbatim> blocks are still present
-in the text.
-
-__NOTE__: This handler is called once for each call to
-=commonTagsHandler= i.e. it may be called many times during the
-rendering of a topic.
-
-__NOTE:__ meta-data is _not_ embedded in the text passed to this
-handler.
-
-__NOTE:__ This handler is not separately called on included topics.
-
-=cut
-
-sub DISABLE_beforeCommonTagsHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web, $meta ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
-}
-
-=pod
-
----++ afterCommonTagsHandler($text, $topic, $web, $meta )
-   * =$text= - text to be processed
-   * =$topic= - the name of the topic in the current CGI query
-   * =$web= - the name of the web in the current CGI query
-   * =$meta= - meta-data object for the topic MAY BE =undef=
-This handler is after TWiki has completed expansion of %TAGS%.
-It is designed for use by cache plugins. Note that when this handler
-is called, &lt;verbatim> blocks are present in the text.
-
-__NOTE__: This handler is called once for each call to
-=commonTagsHandler= i.e. it may be called many times during the
-rendering of a topic.
-
-__NOTE:__ meta-data is _not_ embedded in the text passed to this
-handler.
-
-=cut
-
-sub DISABLE_afterCommonTagsHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web, $meta ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::afterCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
-}
-
-=pod
-
----++ preRenderingHandler( $text, \%map )
-   * =$text= - text, with the head, verbatim and pre blocks replaced with placeholders
-   * =\%removed= - reference to a hash that maps the placeholders to the removed blocks.
-
-Handler called immediately before TWiki syntax structures (such as lists) are
-processed, but after all variables have been expanded. Use this handler to 
-process special syntax only recognised by your plugin.
-
-Placeholders are text strings constructed using the tag name and a 
-sequence number e.g. 'pre1', "verbatim6", "head1" etc. Placeholders are 
-inserted into the text inside &lt;!--!marker!--&gt; characters so the 
-text will contain &lt;!--!pre1!--&gt; for placeholder pre1.
-
-Each removed block is represented by the block text and the parameters 
-passed to the tag (usually empty) e.g. for
-<verbatim>
-<pre class='slobadob'>
-XYZ
-</pre>
-the map will contain:
-<pre>
-$removed->{'pre1'}{text}:   XYZ
-$removed->{'pre1'}{params}: class="slobadob"
-</pre>
-Iterating over blocks for a single tag is easy. For example, to prepend a 
-line number to every line of every pre block you might use this code:
-<verbatim>
-foreach my $placeholder ( keys %$map ) {
-    if( $placeholder =~ /^pre/i ) {
-       my $n = 1;
-       $map->{$placeholder}{text} =~ s/^/$n++/gem;
-    }
-}
-</verbatim>
-
-__NOTE__: This handler is called once for each rendered block of text i.e. 
-it may be called several times during the rendering of a topic.
-
-__NOTE:__ meta-data is _not_ embedded in the text passed to this
-handler.
-
-Since TWiki::Plugins::VERSION = '1.026'
-
-=cut
-
-sub DISABLE_preRenderingHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    #my( $text, $pMap ) = @_;
-}
-
-=pod
-
----++ postRenderingHandler( $text )
-   * =$text= - the text that has just been rendered. May be modified in place.
-
-__NOTE__: This handler is called once for each rendered block of text i.e. 
-it may be called several times during the rendering of a topic.
-
-__NOTE:__ meta-data is _not_ embedded in the text passed to this
-handler.
-
-Since TWiki::Plugins::VERSION = '1.026'
-
-=cut
-
-sub DISABLE_postRenderingHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    #my $text = shift;
-}
-
-=pod
-
----++ beforeEditHandler($text, $topic, $web )
-   * =$text= - text that will be edited
-   * =$topic= - the name of the topic in the current CGI query
-   * =$web= - the name of the web in the current CGI query
-This handler is called by the edit script just before presenting the edit text
-in the edit box. It is called once when the =edit= script is run.
-
-__NOTE__: meta-data may be embedded in the text passed to this handler 
-(using %META: tags)
-
-*Since:* TWiki::Plugins::VERSION = '1.010'
-
-=cut
-
-sub DISABLE_beforeEditHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeEditHandler( $_[2].$_[1] )" ) if $debug;
-}
-
-=pod
-
----++ afterEditHandler($text, $topic, $web, $meta )
-   * =$text= - text that is being previewed
-   * =$topic= - the name of the topic in the current CGI query
-   * =$web= - the name of the web in the current CGI query
-   * =$meta= - meta-data for the topic.
-This handler is called by the preview script just before presenting the text.
-It is called once when the =preview= script is run.
-
-__NOTE:__ this handler is _not_ called unless the text is previewed.
-
-__NOTE:__ meta-data is _not_ embedded in the text passed to this
-handler. Use the =$meta= object.
-
-*Since:* $TWiki::Plugins::VERSION 1.010
-
-=cut
-
-sub DISABLE_afterEditHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::afterEditHandler( $_[2].$_[1] )" ) if $debug;
-}
-
-=pod
-
----++ beforeSaveHandler($text, $topic, $web, $meta )
-   * =$text= - text _with embedded meta-data tags_
-   * =$topic= - the name of the topic in the current CGI query
-   * =$web= - the name of the web in the current CGI query
-   * =$meta= - the metadata of the topic being saved, represented by a TWiki::Meta object.
-
-This handler is called each time a topic is saved.
-
-__NOTE:__ meta-data is embedded in =$text= (using %META: tags). If you modify
-the =$meta= object, then it will override any changes to the meta-data
-embedded in the text. Modify *either* the META in the text *or* the =$meta=
-object, never both. You are recommended to modify the =$meta= object rather
-than the text, as this approach is proof against changes in the embedded
-text format.
-
-*Since:* TWiki::Plugins::VERSION = '1.010'
-
-=cut
-
-sub DISABLE_beforeSaveHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
-}
-
-=pod
-
----++ afterSaveHandler($text, $topic, $web, $error, $meta )
-   * =$text= - the text of the topic _excluding meta-data tags_
-     (see beforeSaveHandler)
-   * =$topic= - the name of the topic in the current CGI query
-   * =$web= - the name of the web in the current CGI query
-   * =$error= - any error string returned by the save.
-   * =$meta= - the metadata of the saved topic, represented by a TWiki::Meta object 
-
-This handler is called each time a topic is saved.
-
-__NOTE:__ meta-data is embedded in $text (using %META: tags)
-
-*Since:* TWiki::Plugins::VERSION 1.025
-
-=cut
-
-sub DISABLE_afterSaveHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web, $error, $meta ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::afterSaveHandler( $_[2].$_[1] )" ) if $debug;
-}
-
-=pod
-
----++ afterRenameHandler( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment )
-
-   * =$oldWeb= - name of old web
-   * =$oldTopic= - name of old topic (empty string if web rename)
-   * =$oldAttachment= - name of old attachment (empty string if web or topic rename)
-   * =$newWeb= - name of new web
-   * =$newTopic= - name of new topic (empty string if web rename)
-   * =$newAttachment= - name of new attachment (empty string if web or topic rename)
-
-This handler is called just after the rename/move/delete action of a web, topic or attachment.
-
-*Since:* TWiki::Plugins::VERSION = '1.11'
-
-=cut
-
-sub DISABLE_afterRenameHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::afterRenameHandler( " .
-                             "$_[0].$_[1] $_[2] -> $_[3].$_[4] $_[5] )" ) if $debug;
-}
-
-=pod
-
----++ beforeAttachmentSaveHandler(\%attrHash, $topic, $web )
-   * =\%attrHash= - reference to hash of attachment attribute values
-   * =$topic= - the name of the topic in the current CGI query
-   * =$web= - the name of the web in the current CGI query
-This handler is called once when an attachment is uploaded. When this
-handler is called, the attachment has *not* been recorded in the database.
-
-The attributes hash will include at least the following attributes:
-   * =attachment= => the attachment name
-   * =comment= - the comment
-   * =user= - the user id
-   * =tmpFilename= - name of a temporary file containing the attachment data
-
-*Since:* TWiki::Plugins::VERSION = 1.025
-
-=cut
-
-sub DISABLE_beforeAttachmentSaveHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ###   my( $attrHashRef, $topic, $web ) = @_;
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
-}
-
-=pod
-
----++ afterAttachmentSaveHandler(\%attrHash, $topic, $web, $error )
-   * =\%attrHash= - reference to hash of attachment attribute values
-   * =$topic= - the name of the topic in the current CGI query
-   * =$web= - the name of the web in the current CGI query
-   * =$error= - any error string generated during the save process
-This handler is called just after the save action. The attributes hash
-will include at least the following attributes:
-   * =attachment= => the attachment name
-   * =comment= - the comment
-   * =user= - the user id
-
-*Since:* TWiki::Plugins::VERSION = 1.025
-
-=cut
-
-sub DISABLE_afterAttachmentSaveHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ###   my( $attrHashRef, $topic, $web ) = @_;
-    TWiki::Func::writeDebug( "- ${pluginName}::afterAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
 }
 
 =pod
@@ -698,131 +298,6 @@ sub mergeHandler {
     use Data::Dumper;
 
     writeTEXT(Dumper(@_));
-}
-
-=pod
-
----++ modifyHeaderHandler( \%headers, $query )
-   * =\%headers= - reference to a hash of existing header values
-   * =$query= - reference to CGI query object
-Lets the plugin modify the HTTP headers that will be emitted when a
-page is written to the browser. \%headers= will contain the headers
-proposed by the core, plus any modifications made by other plugins that also
-implement this method that come earlier in the plugins list.
-<verbatim>
-$headers->{expires} = '+1h';
-</verbatim>
-
-Note that this is the HTTP header which is _not_ the same as the HTML
-&lt;HEAD&gt; tag. The contents of the &lt;HEAD&gt; tag may be manipulated
-using the =TWiki::Func::addToHEAD= method.
-
-*Since:* TWiki::Plugins::VERSION 1.1
-
-=cut
-
-sub DISABLE_modifyHeaderHandler {
-    my ( $headers, $query ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::modifyHeaderHandler()" ) if $debug;
-}
-
-=pod
-
----++ redirectCgiQueryHandler($query, $url )
-   * =$query= - the CGI query
-   * =$url= - the URL to redirect to
-
-This handler can be used to replace TWiki's internal redirect function.
-
-If this handler is defined in more than one plugin, only the handler
-in the earliest plugin in the INSTALLEDPLUGINS list will be called. All
-the others will be ignored.
-
-*Since:* TWiki::Plugins::VERSION 1.010
-
-=cut
-
-sub DISABLE_redirectCgiQueryHandler {
-    # do not uncomment, use $_[0], $_[1] instead
-    ### my ( $query, $url ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::redirectCgiQueryHandler( query, $_[1] )" ) if $debug;
-}
-
-=pod
-
----++ renderFormFieldForEditHandler($name, $type, $size, $value, $attributes, $possibleValues) -> $html
-
-This handler is called before built-in types are considered. It generates 
-the HTML text rendering this form field, or false, if the rendering 
-should be done by the built-in type handlers.
-   * =$name= - name of form field
-   * =$type= - type of form field (checkbox, radio etc)
-   * =$size= - size of form field
-   * =$value= - value held in the form field
-   * =$attributes= - attributes of form field 
-   * =$possibleValues= - the values defined as options for form field, if
-     any. May be a scalar (one legal value) or a ref to an array
-     (several legal values)
-
-Return HTML text that renders this field. If false, form rendering
-continues by considering the built-in types.
-
-*Since:* TWiki::Plugins::VERSION 1.1
-
-Note that since TWiki-4.2, you can also extend the range of available
-types by providing a subclass of =TWiki::Form::FieldDefinition= to implement
-the new type (see =TWiki::Plugins.JSCalendarContrib= and
-=TWiki::Plugins.RatingContrib= for examples). This is the preferred way to
-extend the form field types, but does not work for TWiki < 4.2.
-
-=cut
-
-sub DISABLE_renderFormFieldForEditHandler {
-}
-
-=pod
-
----++ renderWikiWordHandler($linkText, $hasExplicitLinkLabel, $web, $topic) -> $linkText
-   * =$linkText= - the text for the link i.e. for =[<nop>[Link][blah blah]]=
-     it's =blah blah=, for =BlahBlah= it's =BlahBlah=, and for [[Blah Blah]] it's =Blah Blah=.
-   * =$hasExplicitLinkLabel= - true if the link is of the form =[<nop>[Link][blah blah]]= (false if it's ==<nop>[Blah]] or =BlahBlah=)
-   * =$web=, =$topic= - specify the topic being rendered (only since TWiki 4.2)
-
-Called during rendering, this handler allows the plugin a chance to change
-the rendering of labels used for links.
-
-Return the new link text.
-
-*Since:* TWiki::Plugins::VERSION 1.1
-
-=cut
-
-sub DISABLE_renderWikiWordHandler {
-    my( $linkText, $hasExplicitLinkLabel, $web, $topic ) = @_;
-    return $linkText;
-}
-
-=pod
-
----++ completePageHandler($html, $httpHeaders)
-
-This handler is called on the ingredients of every page that is
-output by the standard TWiki scripts. It is designed primarily for use by
-cache and security plugins.
-   * =$html= - the body of the page (normally &lt;html>..$lt;/html>)
-   * =$httpHeaders= - the HTTP headers. Note that the headers do not contain
-     a =Content-length=. That will be computed and added immediately before
-     the page is actually written. This is a string, which must end in \n\n.
-
-*Since:* TWiki::Plugins::VERSION 1.2
-
-=cut
-
-sub DISABLE_completePageHandler {
-    #my($html, $httpHeaders) = @_;
-    # modify $_[0] or $_[1] if you must change the HTML or headers
 }
 
 =pod
