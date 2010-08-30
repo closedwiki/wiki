@@ -42,7 +42,8 @@ $VERSION = '$Rev$';
 $RELEASE = 'Cairo, Dakar, Edinburgh, ...';
 
 
-$REVISION = '1.027'; #dro# fixed TWiki 5 problems
+$REVISION = '1.028'; #dro# fixed last TWiki 5 problem; code cleanup
+#$REVISION = '1.027'; #dro# fixed TWiki 5 problems
 #$REVISION = '1.026'; #dro# added timestamp feature requested by TWiki:Main.VickiBrown; fixed uninitialized value bugs;
 #$REVISION = '1.025'; #dro# added documentation requested by TWiki:Main.PeterThoeny; added hide entries feature requested by Christian Holzmann; added log feature requested by TWiki:Main.VickiBrown
 #$REVISION = '1.024'; #dro# fixed missing ')' in generated JavaScript commands
@@ -324,7 +325,6 @@ sub initStates {
 }
 # =========================
 sub renderLegend {
-	my $query = &TWiki::Func::getCgiQuery();
 	my @states = split /\|/, $options{'states'};
 	my @icons = split /\|/, $options{'stateicons'};
 	my $legend.=qq@<noautolink>@;
@@ -444,7 +444,6 @@ sub createResetAction {
 sub createHiddenDirectResetSelectionDiv {
 	my ($id, $name, $statesRef, $iconsRef) = @_;
 	my $selTxt ="";
-	my $query = &TWiki::Func::getCgiQuery();
 	$selTxt=$cgi->sup($cgi->a({-href=>"javascript:clpTooltipHide('CLP_SM_DIV_RESET_${name}_$id');"},'[X]'));
 	for (my $i=0; $i<=$#$statesRef; $i++) {
 		my $s = $$statesRef[$i];
@@ -760,7 +759,6 @@ sub createAction {
 sub createTitle {
 	my ($name,$state,$icon,$statesRef, $nextstate, $nextstateicon, $tId, $timestamp) = @_;
 	($nextstate, $nextstateicon) = &getNextState($name,$state) unless defined $nextstate;
-	my $query = &TWiki::Func::getCgiQuery();
 	my $title = $options{'tooltip'};
 	$title = $state unless defined $title;
 	$title =~ s/\%STATE\%/$state/sg;
@@ -776,7 +774,6 @@ sub createTitle {
 # =========================
 sub renderChecklistItem {
 	TWiki::Func::writeDebug("- ${pluginName}::renderChecklistItem()") if $debug;
-	my $query = &TWiki::Func::getCgiQuery();
 	my $text = "";
 	my $name = $options{'name'};
 
@@ -853,9 +850,8 @@ sub createHiddenDirectSelectionDiv {
 	my ($id, $name, $state, $icon, $statesRef, $iconsRef, $tId, $timestamp) =  @_;
 	my $text ="";
 	
-	my $query = &TWiki::Func::getCgiQuery();
 	my $sl="";
-	$sl.=$cgi->sup($query->a({-href=>"javascript:clpTooltipHide('CLP_SM_DIV_$name$id');", -title=>'close'},'[X]'));
+	$sl.=$cgi->sup($cgi->a({-href=>"javascript:clpTooltipHide('CLP_SM_DIV_$name$id');", -title=>'close'},'[X]'));
 	for (my $i=0; $i<=$#$statesRef; $i++) {
 		my ($s, $ic) = ($$statesRef[$i], $$iconsRef[$i]);
 		my $action = &createAction($id, $name, $state, $s);
