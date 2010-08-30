@@ -1,6 +1,6 @@
-data/TWiki/BugzillaLinkPlugin.txt NEW
-lib/TWiki/Plugins/BugzillaLinkPlugin.pm NEW
-pub/TWiki/BugzillaLinkPlugin/bug.gif NEW
-pub/TWiki/BugzillaLinkPlugin/bug_small.gif NEW
-pub/TWiki/BugzillaLinkPlugin/bug_small.png NEW
-pub/TWiki/BugzillaLinkPlugin/bug_small_white.png NEW
+data/TWiki/BugzillaLinkPlugin.txt 0644
+lib/TWiki/Plugins/BugzillaLinkPlugin.pm 0444
+pub/TWiki/BugzillaLinkPlugin/bug.gif 0644
+pub/TWiki/BugzillaLinkPlugin/bug_small.gif 0644
+pub/TWiki/BugzillaLinkPlugin/bug_small.png 0644
+pub/TWiki/BugzillaLinkPlugin/bug_small_white.png 0644
