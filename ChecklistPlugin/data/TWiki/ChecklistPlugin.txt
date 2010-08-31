@@ -392,8 +392,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.028 (30 Aug 2010) |
+|  Plugin Version: | v1.029 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.029 (BETA) | TWiki:Main.DanielRohde: fixed Item6342 (Set parent topic to checklist topic) |
 |  v1.028 (30 Aug 2010) | TWiki:Main.DanielRohde: fixed last TWiki 5 problem; code cleanup |
 |  v1.027 (19 Aug 2010) | TWiki:Main.DanielRohde: fixed TWiki 5 problems |
 |  v1.026 (21 Oct 2009) | TWiki:Main.DanielRohde: added timestamp feature requested by TWiki:Main.VickiBrown; fixed uninitialized value bugs; |

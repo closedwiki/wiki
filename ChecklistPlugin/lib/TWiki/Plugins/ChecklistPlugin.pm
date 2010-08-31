@@ -42,7 +42,8 @@ $VERSION = '$Rev$';
 $RELEASE = 'Cairo, Dakar, Edinburgh, ...';
 
 
-$REVISION = '1.028'; #dro# fixed last TWiki 5 problem; code cleanup
+$REVISION = '1.029'; #dro# fixed Item6342 (Set parent topic to checklist topic)
+#$REVISION = '1.028'; #dro# fixed last TWiki 5 problem; code cleanup
 #$REVISION = '1.027'; #dro# fixed TWiki 5 problems
 #$REVISION = '1.026'; #dro# added timestamp feature requested by TWiki:Main.VickiBrown; fixed uninitialized value bugs;
 #$REVISION = '1.025'; #dro# added documentation requested by TWiki:Main.PeterThoeny; added hide entries feature requested by Christian Holzmann; added log feature requested by TWiki:Main.VickiBrown
@@ -1047,7 +1048,13 @@ sub saveChecklistItemStateTopic {
 		$topicText.="\n$perm\n" if $perm;
 	}
 	$topicText.="\n-- $installWeb.$pluginName - ".&TWiki::Func::formatTime(time(), "rcs")."\n";
-	TWiki::Func::saveTopicText($web, $clisTopicName, $topicText, 1, !$options{'notify'});
+
+	##TWiki::Func::saveTopicText($web, $clisTopicName, $topicText, 1, !$options{'notify'});
+	#### replacement:
+	my $meta = TWiki::Meta->new($TWiki::Plugins::SESSION, $web, $clisTopicName, $topicText);
+	$meta->put( 'TOPICPARENT', { name=>"$web.$topic" });
+	TWiki::Func::saveTopic($web, $clisTopicName, $meta, $topicText, { minor=>!$options{'notify'} });
+	
 	TWiki::Func::setTopicEditLock($web, $clisTopicName, 0);
 }
 # =========================
