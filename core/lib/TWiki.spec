@@ -1092,6 +1092,11 @@ $TWiki::cfg{PROXY}{HOST} = '';
 # are using a TWikiPreferences topic from a previous release of TWiki.
 $TWiki::cfg{PROXY}{PORT} = '';
 
+# **STRING 30 EXPERT**
+# Domains excluded from proxy, such as
+# <code>intra.example.com, bugs.example.com</code>
+$TWiki::cfg{PROXY}{SkipProxyForDomains} = '';
+
 #---+ Miscellaneous settings
 
 # **NUMBER**

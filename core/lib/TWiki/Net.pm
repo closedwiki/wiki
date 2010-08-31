@@ -163,19 +163,32 @@ sub getExternalResource {
             $req .= "Authorization: Basic $base64";
         }
 
-        # SMELL: Reference to TWiki variables used for compatibility
-        my ($proxyHost, $proxyPort);
-        if ($this->{session} && $this->{session}->{prefs}) {
-            my $prefs = $this->{session}->{prefs};
-            $proxyHost = $prefs->getPreferencesValue( 'PROXYHOST' );
-            $proxyPort = $prefs->getPreferencesValue( 'PROXYPORT' );
-        }
-        $proxyHost ||= $TWiki::cfg{PROXY}{HOST};
-        $proxyPort ||= $TWiki::cfg{PROXY}{PORT};
-        if( $proxyHost && $proxyPort ) {
-            $req = "GET http://$host:$port$url HTTP/1.0\r\n";
-            $host = $proxyHost;
-            $port = $proxyPort;
+        my $useproxy = 1;
+        if( defined( $TWiki::cfg{PROXY}{SkipProxyForDomains} ) ) { 
+            my @skipdomains = split( /[\,\s]+/,  $TWiki::cfg{PROXY}{SkipProxyForDomains} );
+            foreach my $domain ( @skipdomains ) {
+                if( $url =~ /$domain$/ ) {
+                    $useproxy = 0;
+                }
+            }
+       }
+ 
+        if ($useproxy) {
+
+            # SMELL: Reference to TWiki variables used for compatibility
+            my ($proxyHost, $proxyPort);
+            if ($this->{session} && $this->{session}->{prefs}) {
+                my $prefs = $this->{session}->{prefs};
+                $proxyHost = $prefs->getPreferencesValue( 'PROXYHOST' );
+                $proxyPort = $prefs->getPreferencesValue( 'PROXYPORT' );
+            }
+            $proxyHost ||= $TWiki::cfg{PROXY}{HOST};
+            $proxyPort ||= $TWiki::cfg{PROXY}{PORT};
+            if( $proxyHost && $proxyPort ) {
+                $req = "GET http://$host:$port$url HTTP/1.0\r\n";
+                $host = $proxyHost;
+                $port = $proxyPort;
+            }
         }
 
         '$Rev$'=~/([0-9]+)/;
@@ -238,7 +251,7 @@ sub _GETUsingLWP {
     my $revstr=$1;
     $request->header( 'User-Agent' => 'TWiki::Net/'.$revstr." libwww-perl/$LWP::VERSION" );
     require TWiki::Net::UserCredAgent;
-    my $ua = new TWiki::Net::UserCredAgent( $user, $pass );
+    my $ua = new TWiki::Net::UserCredAgent( $user, $pass, $url );
     my $response = $ua->request( $request );
     return $response;
 }
