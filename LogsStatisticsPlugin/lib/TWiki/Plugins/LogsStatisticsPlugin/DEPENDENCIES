@@ -1,0 +1,6 @@
+Date::Calc,>=0,cpan,Required. Download from CPAN:Date::Calc
+Storable,>=0,cpan,Required. Download from CPAN:Storable
+Data::Dumper,>=0,cpan,Required. Download from CPAN:Data::Dumper
+Date::Manip,>=0,cpan,Required. Download from CPAN:Date::Manip
+List::Util,>=0,cpan,Required. Download from CPAN:List::Util
+Time::Local,>=0,cpan,Required. Download from CPAN:Time::Local
