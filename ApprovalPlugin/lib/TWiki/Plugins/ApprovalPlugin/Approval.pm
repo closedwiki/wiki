@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2008 Andrew Jones, andrewjones86@googlemail.com
+# Copyright (C) 2008 - 2009 Andrew Jones, andrewjones86@googlemail.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,53 +21,56 @@ require TWiki::Plugins::ApprovalPlugin::Transition;
 
 use strict;
 
-use fields qw(currentWeb currentTopic definitionWeb definitionTopic history state transition preference);
+use fields
+  qw(currentWeb currentTopic definitionWeb definitionTopic history state transition preference);
 
 # stores all things about the approval (web, topic, history, etc)
 # also has pointers for state and transition objects
 
 sub new {
-    my ($class, $currentWeb, $currentTopic, $definitionWeb, $definitionTopic, $history, $state, $transition) = @_;
-    
+    my ( $class, $currentWeb, $currentTopic, $definitionWeb, $definitionTopic,
+        $history, $state, $transition )
+      = @_;
+
     my $self = {};
-    
-    # TODO
-    $self->{currentWeb} = $currentWeb;
-    $self->{currentTopic} = $currentTopic;
-    $self->{definitionWeb} = $definitionWeb;
+
+    $self->{currentWeb}      = $currentWeb;
+    $self->{currentTopic}    = $currentTopic;
+    $self->{definitionWeb}   = $definitionWeb;
     $self->{definitionTopic} = $definitionTopic;
-    $self->{history} = $history;
-    $self->{state} = $state; # TWiki::Plugins::ApprovalPlugin::State Object
-    #$self->{transition} = $transition; # TWiki::Plugins::ApprovalPlugin::Transition Object
-    
+    $self->{history}         = $history;
+    $self->{state} = $state;    # TWiki::Plugins::ApprovalPlugin::State Object
+      #$self->{transition} = $transition; # TWiki::Plugins::ApprovalPlugin::Transition Object
+
     return bless( $self, $class );
 }
 
 # empty constructor
 sub create {
     my $class = shift;
-    
+
     my $self = {};
-    
+
     $self->{currentWeb};
     $self->{currentWeb};
     $self->{currentTopic};
     $self->{definitionWeb};
     $self->{definitionTopic};
     $self->{history};
-    $self->{state} = TWiki::Plugins::ApprovalPlugin::State->create();
+    $self->{state}      = TWiki::Plugins::ApprovalPlugin::State->create();
     $self->{transition} = {};
     $self->{preference} = {};
-    
+
     return bless( $self, $class );
 }
 
 # resets some keys before they are re-written
 sub resetObj {
     my $self = shift;
+
     #$self->{state} = TWiki::Plugins::ApprovalPlugin::State->create();
     $self->{transition} = {};
-    
+
     # Call others
     $self->{state}->resetObj();
 }
@@ -115,9 +118,10 @@ sub state {
 
 # return the transition objects in a hash by actions
 sub transitions {
+
     #my $self = shift;
-    my( $self, $transition ) = @_;
-    if ( $transition ) {
+    my ( $self, $transition ) = @_;
+    if ($transition) {
         $self->{transition} = $transition;
     }
     return $self->{transition};
@@ -125,8 +129,9 @@ sub transitions {
 
 # return the transition object for the action
 sub transitionByAction {
+
     #my $self = shift;
-    my( $self, $action, $transition ) = @_;
+    my ( $self, $action, $transition ) = @_;
     if ( $action && $transition ) {
         $self->{transition}->{$action} = $transition;
     }
@@ -135,8 +140,8 @@ sub transitionByAction {
 
 # set hash of preferences or return hash
 sub preferences {
-    my( $self, $preferences ) = @_;
-    if ( $preferences ) {
+    my ( $self, $preferences ) = @_;
+    if ($preferences) {
         $self->{preference} = $preferences;
     }
     return $self->{preference};
@@ -144,8 +149,9 @@ sub preferences {
 
 # get or set preference by key
 sub preferenceByKey {
+
     #my $self = shift;
-    my( $self, $key, $preference ) = @_;
+    my ( $self, $key, $preference ) = @_;
     if ( $key && $preference ) {
         $self->{preference}->{$key} = $preference;
     }

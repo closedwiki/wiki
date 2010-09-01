@@ -1,6 +1,5 @@
-# ---+ Extensions
-# ---++ PLUGINS
-# ---+++ ApprovalPlugin
+# ---+ Plugins
+# ---++ ApprovalPlugin
 # **BOOLEAN** 
 # Disables all notification emails being sent from this plugin.
 $TWiki::cfg{Plugins}{ApprovalPlugin}{DisableNotify} = 0;

@@ -12,13 +12,14 @@
 # Note: Always test on a COPY of your data first!
 
 while (<>) {
-  $_ =~ s/WORKFLOWHISTORYFORMAT/APPROVALHISTORYFORMAT/geo;
-  $_ =~ s/WORKFLOWSTATEMESSAGE/APPROVAL{"statemessage"}/go;
-  $_ =~ s/WORKFLOWTRANSITION/APPROVAL{"transition"}/go;
-  $_ =~ s/REVIEWEDBY/APPROVAL{"reviewedby"}/go;
-  $_ =~ s/\%META:WORKFLOWHISTORY{(.*?)}%/\%META:APPROVALHISTORY{name="APPROVALHISTORY" $1 }%/go;
-  $_ =~ s/WORKFLOWHISTORY/APPROVAL{"history"}/go;
-  $_ =~ s/\%META:WORKFLOW(.*?)\{/\%META:APPROVAL$1\{/go;
-  $_ =~ s/Set WORKFLOW/Set APPROVALDEFINITION/go;
-  print $_;
+    $_ =~ s/WORKFLOWHISTORYFORMAT/APPROVALHISTORYFORMAT/geo;
+    $_ =~ s/WORKFLOWSTATEMESSAGE/APPROVAL{"statemessage"}/go;
+    $_ =~ s/WORKFLOWTRANSITION/APPROVAL{"transition"}/go;
+    $_ =~ s/REVIEWEDBY/APPROVAL{"reviewedby"}/go;
+    $_ =~
+s/\%META:WORKFLOWHISTORY{(.*?)}%/\%META:APPROVALHISTORY{name="APPROVALHISTORY" $1 }%/go;
+    $_ =~ s/WORKFLOWHISTORY/APPROVAL{"history"}/go;
+    $_ =~ s/\%META:WORKFLOW(.*?)\{/\%META:APPROVAL$1\{/go;
+    $_ =~ s/Set WORKFLOW/Set APPROVALDEFINITION/go;
+    print $_;
 }

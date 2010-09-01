@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2008 Andrew Jones, andrewjones86@googlemail.com
+# Copyright (C) 2008 - 2009 Andrew Jones, andrewjones86@googlemail.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,18 +23,18 @@ use fields qw(action allowedUsers nextState notify signoff totalAllowed);
 # stores all things about the transition between states
 
 sub new {
-    my ($class, $action, $allowedUsers, $nextState, $notify, $signoff) = @_;
-    
+    my ( $class, $action, $allowedUsers, $nextState, $notify, $signoff ) = @_;
+
     my $self = {};
-    
-    $self->{action} = $action;
+
+    $self->{action}       = $action;
     $self->{allowedUsers} = $allowedUsers;
-    $self->{nextState} = $nextState;
-    $self->{notify} = $notify;
-    $self->{signoff} = $signoff;
-    
-    $self->{totalAllowed} = scalar( @{ $allowedUsers } );
-    
+    $self->{nextState}    = $nextState;
+    $self->{notify}       = $notify;
+    $self->{signoff}      = $signoff;
+
+    $self->{totalAllowed} = scalar( @{$allowedUsers} );
+
     return bless( $self, $class );
 }
 

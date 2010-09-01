@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2008 Andrew Jones, andrewjones86@googlemail.com
+# Copyright (C) 2008 - 2009 Andrew Jones, andrewjones86@googlemail.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,44 +24,46 @@ use fields qw(currentState defaultState allowedEdit message reviewedBy signoff);
 # is defaultState needed?
 
 sub new {
-    my ($class, $currentState, $defaultState, $allowedEdit, $message, $reviewedBy, $signoff) = @_;
-    
+    my ( $class, $currentState, $defaultState, $allowedEdit, $message,
+        $reviewedBy, $signoff )
+      = @_;
+
     my $self = {};
-    
+
     $self->{currentState} = $currentState;
     $self->{defaultState} = $defaultState;
-    $self->{allowedEdit} = $allowedEdit;
-    $self->{message} = $message;
-    $self->{reviewedBy} = $reviewedBy || '';
-    $self->{signoff} = $signoff || 0;
-    
+    $self->{allowedEdit}  = $allowedEdit;
+    $self->{message}      = $message;
+    $self->{reviewedBy}   = $reviewedBy || '';
+    $self->{signoff}      = $signoff || 0;
+
     return bless( $self, $class );
 }
 
 # empty constructor
 sub create {
     my $class = shift;
-    my $self = {};
-    
+    my $self  = {};
+
     $self->{currentState} = '';
     $self->{defaultState} = '';
-    $self->{allowedEdit} = '';
-    $self->{message} = '';
-    $self->{reviewedBy} = '';
-    $self->{signoff} = 0;
-    
+    $self->{allowedEdit}  = '';
+    $self->{message}      = '';
+    $self->{reviewedBy}   = '';
+    $self->{signoff}      = 0;
+
     return bless( $self, $class );
 }
 
 # resets some keys before they are re-written
 sub resetObj {
     my $self = shift;
-    
+
     $self->{defaultState} = '';
-    $self->{allowedEdit} = '';
-    $self->{message} = '';
-    $self->{reviewedBy} = '';
-    $self->{signoff} = 0;
+    $self->{allowedEdit}  = '';
+    $self->{message}      = '';
+    $self->{reviewedBy}   = '';
+    $self->{signoff}      = 0;
 }
 
 sub currentState {
@@ -107,7 +109,7 @@ sub signoff {
 
 sub anotherSignoffInState {
     my $self = shift;
-    $self->{signoff} ++;
+    $self->{signoff}++;
 }
 
 1;

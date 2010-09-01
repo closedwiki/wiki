@@ -1,21 +1,26 @@
+%META:TOPICINFO{author="TWikiContributor" date="1283332043" format="1.1" version="$Rev$"}%
 ---+!! !ApprovalPlugin
 <!--
-One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = Defines a set of states for one or more topics, with each state requiring approval by one or more users.
--->
+  Contributions to this plugin are appreciated. Please update the plugin page at
+  http://twiki.org/cgi-bin/view/Plugins/ApprovalPlugin or provide feedback at
+  http://twiki.org/cgi-bin/view/Plugins/ApprovalPluginDev.
+  If you are a TWiki contributor please update the plugin in the SVN repository.
+
+One line description, required for plugins repository catalog.
+   * Set SHORTDESCRIPTION = Defines a set of states for one or more topics, with each state requiring approval by one or more users
+--> 
 %SHORTDESCRIPTION%
-
-%X% *Warning: This plugin only works on TWiki 4.2 (Freetown).*
-
-%TOC%
+<sticky><div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px">
+%TOC{title="Page contents"}%
+</div></sticky>
 
 ---++ Introduction
 
-This plugin is a rewrite of the TWiki:Plugins.WorkflowPlugin by TWiki:Main.ThomasWeigert, which supports much the same functionality except a couple of the varaibles (=%<nop>WORKFLOWLASTTIME_State%=, =%<nop>WORKFLOWLASTVERSION_State%=) and the use of %TWIKIWEB%.TWikiForms in states. However, it does support concurrent reviewing and notifications on state change, which is not supported by the Workflow plugin. It was decided to spin this off seperatly as it is not backwords compatible.
+This plugin is a rewrite of the TWiki:Plugins.WorkflowPlugin by TWiki:Main.ThomasWeigert, which supports much the same functionality except a couple of the macros (=%<nop>WORKFLOWLASTTIME_State%=, =%<nop>WORKFLOWLASTVERSION_State%=) and the use of %SYSTEMWEB%.TWikiForms in states. However, it does support concurrent reviewing and notifications on state change, which is not supported by the Workflow plugin. It was decided to spin this off seperatly as it is not backwords compatible.
 
 ---++ Usage
 
-This plugin only applies if the topic is under approval control. This means the variable =APPROVALDEFINITION= must be set. This should point to a topic that describes the approval flow (the approval definition topic).
+This plugin only applies if the topic is under approval control. This means the preference setting =APPROVALDEFINITION= must be set. This should point to a topic that describes the approval flow (the approval definition topic).
 
 ---+++ The Approval Definition Topic
 
@@ -89,7 +94,7 @@ The controlled topic must have the =APPROVALDEFINITION= set to a approval defini
 
 ---++++ Settings
 
-As well as the =APPROVALDEFINITION= setting, the topic may also contain the =APPROVALHISTORYFORMAT= setting. The defines the format of the history, which is updated after each state change. This may also be set in a WebPreferences topic, or in %LOCALSITEPREFS%. The format will expand the variables =$state=, =$wikiusername=, =$date=, =$quot= and =$n=, with the same meaning as in %TWIKIWEB%.FormattedSearch. The default setting is:
+As well as the =APPROVALDEFINITION= setting, the topic may also contain the =APPROVALHISTORYFORMAT= setting. The defines the format of the history, which is updated after each state change. This may also be set in a WebPreferences topic, or in %LOCALSITEPREFS%. The format will expand the variables =$state=, =$wikiusername=, =$date=, =$quot= and =$n=, with the same meaning as in %SYSTEMWEB%.FormattedSearch. The default setting is:
    * Set APPROVALHISTORYFORMAT = "$n$state -- $date"
 
 ---++++ Tags
@@ -131,15 +136,19 @@ __Note__ The examples will only work if the plugin is installed and enabled.
 ---++ Plugin Info
 
 |  Plugin Author(s): | TWiki:Main.AndrewRJones |
-|  Plugin Version: | %$VERSION% |
-|  Copyright: | &copy; 2007 - 2008 TWiki:Main.AndrewRJones |
+|  Copyright: | &copy; 2007-2009 TWiki:Main.AndrewRJones %BR% &copy; 2008-2010, TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Plugin Release: | 1.0 |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  30 Oct 2008 | Bugs:Item6113 - Small improvements, better code |
-|  12 Sep 2008 | Bugs:Item4422 - Initial version |
-|  Dependencies: | %$DEPENDENCIES% |
-|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/ApprovalPlugin |
-|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/ApprovalPluginDev |
-|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/ApprovalPluginAppraisal |
+|  2010-09-01: | TWikibug:Item6530: Doc improvements; changed TWIKIWEB to SYSTEMWEB |
+|  01 Apr 2009 | Released as 1.0 |
+|  03 Feb 2009 | Small doc changes; tested on TWiki |
+|  30 Oct 2008 | Small improvements, better code |
+|  12 Sep 2008 | Initial version |
+|  Dependencies: | None |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %USERSWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins

@@ -1,4 +1,4 @@
-%META:TOPICPARENT{name="TWiki.ApprovalPlugin"}%
+%META:TOPICINFO{author="TWikiContributor" date="1283332039" format="1.1" version="$Rev$"}%
 Below is the setting that places this topic under approval control.
    * Set APPROVALDEFINITION = ApprovalDefinitionExample
 
@@ -8,7 +8,7 @@ We can now use any of the =%<nop>APPROVAL{...}%= tags in this topic:
       * ==%<nop>APPROVAL{"statemessage"}%==
       * %APPROVAL{"statemessage"}%
 
-   * Show a preference defined in the definition topic
+   * Show a preference setting defined in the definition topic
       * ==%<nop>APPROVAL{"pref" name="MYPREF"}%==
       * %APPROVAL{"pref" name="MYPREF"}%
 
