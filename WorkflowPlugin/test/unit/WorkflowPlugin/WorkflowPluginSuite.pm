@@ -1,9 +1,10 @@
 package WorkflowPluginSuite;
 
-use base qw(Unit::TestSuite);
+use Unit::TestSuite;
+our @ISA = qw( Unit::TestSuite );
 
-sub name { 'WorkflowPluginSuite' };
+sub name { 'WorkflowPluginSuite' }
 
-sub include_tests { qw(WorkflowPluginTests) };
+sub include_tests { qw(WorkflowPluginTests) }
 
 1;

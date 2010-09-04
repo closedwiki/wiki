@@ -2,7 +2,8 @@ use strict;
 
 package WorkflowPluginTests;
 
-use base qw(TWikiTestCase);
+use TWikiTestCase;
+our @ISA = qw( TWikiTestCase );
 
 use strict;
 use TWiki;
