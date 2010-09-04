@@ -1,5 +1,7 @@
-#VarWEB
----+++ WORKFLOW* -- macros associated with WorkflowPlugin
+%META:TOPICINFO{author="TWikiContributor" date="1283590767" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarWORKFLOW
+---+++ WORKFLOW* -- variables associated with !WorkflowPlugin
 | *Controlling topics in the workflow* ||
 | =%<nop>WORKATTACHTOPIC%= | Expands to a link that lets you attach to the topic (if the user is not able to modify the topic, either in the workflow sense or according to the standard access controls, the link will be <strike>struck out</strike>).|
 | =%<nop>WORKEDITTOPIC%= | Expands to a link that lets you edit the topic (if the user is not able to modify the topic, either in the workflow sense or according to the standard access controls, the link will be <strike>struck out</strike>).|
