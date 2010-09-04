@@ -1,8 +1,9 @@
+%META:TOPICINFO{author="TWikiContributor" date="1283587851" format="1.1" version="$Rev$"}%
 %WORKFLOWNOTICE%
 
 Some controlled text.
 
-	* Set WORKFLOW = DocumentApprovalWorkflow
+   * Set WORKFLOW = DocumentApprovalWorkflow
 | *Workflow* ||
 | Current state | %WORKFLOWSTATE% |
 | Transitions available | %WORKFLOWTRANSITION% |

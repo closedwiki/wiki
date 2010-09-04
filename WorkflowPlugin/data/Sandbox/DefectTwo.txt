@@ -1,5 +1,5 @@
+%META:TOPICINFO{author="TWikiContributor" date="1283587851" format="1.1" version="$Rev$"}%
 Here will be the detailed description of the %FORMFIELD{IssueType}%.
-
 
 %META:FIELD{name="History" attributes="" title="History" value="%25WORKFLOWHISTORY%25"}%
 %META:WORKFLOWHISTORY{value="Initial -- 23 Apr 2008 - 08:41"}%

@@ -1,25 +1,26 @@
+%META:TOPICINFO{author="TWikiContributor" date="1283587851" format="1.1" version="$Rev$"}%
 ---++ Preferences
 
-	* Set WORKFLOWNOTICE = This topic is under document control. Last approval on %WORKFLOWLASTTIME_APPROVED%: %WORKFLOWLASTVERSION_APPROVED%
+   * Set WORKFLOWNOTICE = This topic is under document control. Last approval on %WORKFLOWLASTTIME_APPROVED%: %WORKFLOWLASTVERSION_APPROVED%
 
-	* Set WORKFLOWBUTTON =  <table border="0" cellspacing="0" cellpadding="0"> <tr><td>You are permitted to change the status of this document:</td><td>%WORKFLOWTRANSITION%</TD></tr></table>
+   * Set WORKFLOWBUTTON =  <table border="0" cellspacing="0" cellpadding="0"> <tr><td>You are permitted to change the status of this document:</td><td>%WORKFLOWTRANSITION%</TD></tr></table>
 
 ---++ States
 
-| State	     | Allow Edit | Message |
+| State      | Allow Edit | Message |
 | Preinitial |            |         |
 | Initial    |            |         |
 | Submitted  |            |         |
 | Terminated |            |         |
 | Approved   |            |         |
-| Hold	     |            |         |
+| Hold       |            |         |
 
 ---++ Transitions
 
-| State	     | Action	 | Next State | Allowed | Form	        |
-| Preinitial | start	 | Initial    |	        | InitialForm	|
-| Initial    | submit	 | Submitted  |	        | SubmittedForm |
-| Initial    | terminate | Terminated |	        | CompletedForm |
-| Submitted  | approve	 | Approved   |	        | CompletedForm |
-| Submitted  | hold	     | Hold	      |	        |               |
-| Hold	     | continue  | Submitted  |	        |               |
+| State      | Action    | Next State | Allowed | Form          |
+| Preinitial | start     | Initial    |         | InitialForm   |
+| Initial    | submit    | Submitted  |         | SubmittedForm |
+| Initial    | terminate | Terminated |         | CompletedForm |
+| Submitted  | approve   | Approved   |         | CompletedForm |
+| Submitted  | hold      | Hold       |         |               |
+| Hold       | continue  | Submitted  |         |               |
