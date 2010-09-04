@@ -1,7 +1,9 @@
-# Plugin for TWiki Collaboration Platform, http://TWiki.org/
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2005 Thomas Hartkens <thomas@hartkens.de>
 # Copyright (C) 2005 Thomas Weigert <thomas.weigert@motorola.com>
+# Copyright (C) 2008-2010 Crawford Currie http://c-dot.co.uk
+# Copyright (C) 2005-2010 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,474 +24,649 @@
 # =========================
 package TWiki::Plugins::WorkflowPlugin;
 
-#use strict 'vars';
 use strict;
 
-# =========================
-use vars qw(
-            $web $topic $user $VERSION $RELEASE $pluginName
-            $debug 
-            $prefWorkflow
-            $prefWorkflowWeb
-            $prefNeedsWorkflow
-            $globWorkflow
-            $globForm
-            $globWebName
-            $globCurrentState $globHistory
-            $globWorkflowMessage $globAllowEdit $globButton
-            $CalledByMyself
-            %globPreferences
-            $SHORTDESCRIPTION
-           );
+use Error ':try';
+use Assert;
 
-$VERSION = '$Rev: 0$';
-$RELEASE = '28 Jan 2008';
-$SHORTDESCRIPTION = 'Supports work flows associated with topics';
+use TWiki::Func ();
+use TWiki::Plugins::WorkflowPlugin::Workflow ();
+use TWiki::Plugins::WorkflowPlugin::ControlledTopic ();
+use TWiki::OopsException ();
+use TWiki::Sandbox ();
 
-$pluginName = 'WorkflowPlugin';  # Name of this Plugin
+our $VERSION          = '$Rev: 8761 (2010-08-25) $';
+our $RELEASE          = '25 Aug 2010';
+our $SHORTDESCRIPTION = 'Associate a "state" with a topic and then control the work flow that the topic progresses through as content is added.';
+our $NO_PREFS_IN_TOPIC = 1;
+our $pluginName       = 'WorkflowPlugin';
+our %cache;
+our $isStateChange;
 
 sub initPlugin {
-    ( $topic, $web ) = @_;
+    my ( $topic, $web ) = @_;
 
-    # Deprecated the plugin debug flag
-    # $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
+    %cache = ();
 
-    $globWebName = $web;
+    TWiki::Func::registerRESTHandler(
+        'changeState', \&_changeState,
+        authenticate => 1, http_allow => 'POST' );
+    TWiki::Func::registerRESTHandler(
+        'fork', \&_restFork,
+        authenticate => 1, http_allow => 'POST' );
 
-    my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
-
-    if(( $prefWorkflow = TWiki::Func::getPreferencesValue( "WORKFLOW" )) &&
-          TWiki::Func::topicExists( $globWebName, $prefWorkflow )) {
-
-        ( $prefWorkflowWeb, $prefWorkflow ) =
-          TWiki::Func::normalizeWebTopicName( $web, $prefWorkflow );
-
-        $prefNeedsWorkflow = 1;
-
-        $globCurrentState = getWorkflowState($meta);
-        #print STDERR("initPlugin State in the document: '" . $globCurrentState->{name} . "'");
-        ( $globWorkflow, $globCurrentState, $globWorkflowMessage,
-         $globAllowEdit, $globForm ) = 
-           parseWorkflow( $prefWorkflowWeb, $prefWorkflow, $globCurrentState );
-
-        $globHistory = $meta->get( 'WORKFLOWHISTORY' ) || '';
-        $globHistory = $globHistory->{value} if $globHistory;
-
-        #$globButton = TWiki::Func::getPreferencesValue( "\U$pluginName\E_BUTTON" ) || '<table><tr><td><div class="twikiChangeFormButton twikiSubmit "> $button </div></td></tr></table>';
-        $globButton = TWiki::Func::getPreferencesValue( "\U$pluginName\E_STYLE" ) || 'style="twikiChangeFormButton twikiSubmit"';
-
-    } else {
-        $prefNeedsWorkflow = 0;
-    }
-
-    TWiki::Func::registerTagHandler( 'WORKFLOWSTATE', \&currentState );
+    TWiki::Func::registerTagHandler(
+        'WORKFLOWSTATE', \&_WORKFLOWSTATE );
+    TWiki::Func::registerTagHandler(
+        'WORKFLOWEDITTOPIC', \&_WORKFLOWEDITTOPIC );
+    TWiki::Func::registerTagHandler(
+        'WORKFLOWATTACHTOPIC', \&_WORKFLOWATTACHTOPIC );
+    TWiki::Func::registerTagHandler(
+        'WORKFLOWSTATEMESSAGE', \&_WORKFLOWSTATEMESSAGE );
+    TWiki::Func::registerTagHandler(
+        'WORKFLOWHISTORY', \&_WORKFLOWHISTORY );
+    TWiki::Func::registerTagHandler(
+        'WORKFLOWTRANSITION', \&_WORKFLOWTRANSITION );
+    TWiki::Func::registerTagHandler(
+        'WORKFLOWFORK', \&_WORKFLOWFORK );
 
     return 1;
 }
 
-sub commonTagsHandler {
-    ### my ( $text, $topic, $web ) = @_;
+# Tag handler
+sub _initTOPIC {
+    my ( $web, $topic ) = @_;
 
-    my $query = TWiki::Func::getCgiQuery();
-    if ($prefNeedsWorkflow && $query) {
-        my $action = $query->param( 'WORKFLOWACTION' );
-        my $state = $query->param( 'WORKFLOWSTATE' );
+    ( $web, $topic ) =
+      TWiki::Func::normalizeWebTopicName( $web, $topic );
 
-        # find out if the user is allowed to perform the action 
-        if( $action && $state eq $globCurrentState->{name}
-              && defined($globWorkflow->{$action} )) {
-            # store new status as meta data
-            changeWorkflowState( $globWorkflow->{$action},
-                                 $globForm->{$action} );
+    my $controlledTopic = $cache{"$web.$topic"};
+    return $controlledTopic if $controlledTopic;
 
-            # we need to parse the workflow again since the state of the
-            # document has
-            # changed which will effect the actions the user can do now. 
-            ($globWorkflow, $globCurrentState, $globWorkflowMessage,
-             $globAllowEdit, $globForm) = parseWorkflow(
-                 $prefWorkflowWeb, $prefWorkflow, $globCurrentState );
-        }
-
-        # replace edit tag
-        if ($globAllowEdit) {
-            $_[0] =~ s!%WORKFLOWEDITTOPIC%!<a href=\"%EDITURL%\"><b>Edit</b></a>!g;
-        } else {
-            $_[0] =~ s!%WORKFLOWEDITTOPIC%! <strike>Edit<\/strike> !g;
-        }
-
-        # show all tags defined by the preferences
-        my $key;
-        foreach $key ( keys %globPreferences ) {
-            if( $key =~ /^WORKFLOW/ ) {
-                $_[0] =~ s/%$key%/$globPreferences{$key}/g;
-            }
-        }
-
-        # show last version tags
-        foreach $key ( keys %{$globCurrentState} ) {
-            if( $key =~ m/^LASTVERSION_/ ) {
-                my $url = TWiki::Func::getScriptUrl( $web, $topic, "view" );
-                my $foo = "<a href='${url}?rev=" . $globCurrentState->{$key}
-                  . "'>revision "
-                    . $globCurrentState->{$key} . "</a>";
-                $_[0] =~ s/%WORKFLOW$key%/$foo/g;
-            }
-        }
-
-        # show last time tags
-        foreach $key (keys %{$globCurrentState}) {
-            if ($key =~ /^LASTTIME_/) {
-                $_[0] =~ s/%WORKFLOW$key%/$globCurrentState->{$key}/g;
-            }
-        }
-
-        # display the message for current status
-        $_[0] =~ s/%WORKFLOWSTATEMESSAGE%/$globWorkflowMessage/g;
-
-        $_[0] =~ s/%WORKFLOWHISTORY%/$globHistory/g;
-
-        #
-        # Build the button to change the current status
-        #
-        my @actions = keys(%{$globWorkflow});
-        my $NumberOfActions = scalar(@actions);
-
-        if ($NumberOfActions > 0) {
-            my $button;
-            my $url = TWiki::Func::getScriptUrl( $web, $topic, "view" );
-
-            if ($NumberOfActions == 1) {
-                $button = <<HERE;
-<FORM METHOD='POST' ACTION='$url'>
- <input type='hidden' name='WORKFLOWSTATE' value='$globCurrentState->{name}'>
- <input type='hidden' name='WORKFLOWACTION' value='$actions[0]'>
- <input type='submit' value='$actions[0]' $globButton />
-</FORM>
-HERE
-            } else {
-                my $select="";
-                foreach $key (@actions) {
-                    $select .= "<option value='$key'> $key </option>";
-                }
-                $button = <<HERE;
-<FORM METHOD=POST ACTION='$url'>
- <input type='hidden' name='WORKFLOWSTATE' value='$globCurrentState->{name}'>
- <select name='WORKFLOWACTION'>$select</select>
- <input type='submit' value='Change status' $globButton />
-</FORM>
-HERE
-            }
-
-            # build the final form
-            # my $form = '<div style="text-align:right;">'.
-            #	'<table width="100%" border="0" cellspacing="0"
-            #    cellpadding="0" class="twikiChangeFormButtonHolder">'.
-            #	'<tr>'.
-            #	"<td align='right'>".$globPreferences{
-            #   "TEXTBEFORECHANGEBUTTON"}." &nbsp; </td>".
-            #	'<td align="right"> '.$button .' </td></tr></table></div>';
-            $button =~ s/\n//g;
-            $_[0] =~ s/%WORKFLOWTRANSITION%/$button/g;
-        }
-
+    if (defined &TWiki::Func::isValidTopicName) {
+        # Allow non-wikiwords
+        return undef unless TWiki::Func::isValidTopicName( $topic, 1 );
     } else {
-        $_[0] =~ s!%WORKFLOWEDITTOPIC%!<a href=\"%EDITURL%\"><b>Edit</b></a>!g;
+        # (tm)wiki doesn't have isValidTopicName
+        # best we can do
+        return undef unless TWiki::Func::isValidWikiWord( $topic );
     }
 
-    # delete all tags which start with the word WORKFLOW
-    $_[0] =~ s/%WORKFLOW([a-zA-Z_]*)%//g;
+    my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
 
+    TWiki::Func::pushTopicContext( $web, $topic );
+    my $workflowName = TWiki::Func::getPreferencesValue('WORKFLOW');
+    TWiki::Func::popTopicContext( $web, $topic );
+
+    if ($workflowName) {
+        ( my $wfWeb, $workflowName ) =
+          TWiki::Func::normalizeWebTopicName( $web, $workflowName );
+
+        return undef unless TWiki::Func::topicExists(
+            $wfWeb, $workflowName );
+
+        my $workflow = new TWiki::Plugins::WorkflowPlugin::Workflow( $wfWeb,
+            $workflowName );
+
+        if ($workflow) {
+            $controlledTopic =
+              new TWiki::Plugins::WorkflowPlugin::ControlledTopic( $workflow,
+                $web, $topic, $meta, $text );
+        }
+    }
+
+    $cache{"$web.$topic"} = $controlledTopic;
+
+    return $controlledTopic;
 }
 
-sub currentState {
-    my ($session, $attributes, $topic, $web) = @_;
-    my $theWeb = $attributes->{web} || $web;
-    my $theTopic = $attributes->{"_DEFAULT"};
-    if( ! $theTopic ) {
-        $theTopic = $attributes->{topic} || $topic;
-    }
-    ( $theWeb, $theTopic ) = TWiki::Func::normalizeWebTopicName(
-        $theWeb, $theTopic );
+sub _getTopicName {
+    my ($attributes, $web, $topic) = @_;
 
-    if ( $theWeb eq $web && $theTopic eq $topic ) {
-        return $globCurrentState->{name} if $globCurrentState;
-        return '';
-    }
-    my( $meta, $text ) = TWiki::Func::readTopic( $theWeb, $theTopic );
-    my $prefWorkflow;
-    if ((($prefWorkflow = TWiki::Func::getPreferencesValue( "WORKFLOW" )) &&
-           TWiki::Func::topicExists( $theWeb, $prefWorkflow)) ||
-               (($prefWorkflow = $meta->get('PREFERENCE', 'WORKFLOW'))
-                  && ($prefWorkflow = $prefWorkflow->{value}) &&
-                    TWiki::Func::topicExists( $theWeb, $prefWorkflow))) {
+    return TWiki::Func::normalizeWebTopicName(
+        $attributes->{web} || $web,
+        $attributes->{_DEFAULT} || $topic );
+}
 
-        (my $prefWorkflowWeb, $prefWorkflow) =
-          TWiki::Func::normalizeWebTopicName($theWeb, $prefWorkflow);
+# Tag handler
+sub _WORKFLOWEDITTOPIC {
+    my ( $session, $attributes, $topic, $web ) = @_;
 
-        my $globCurrentState = getWorkflowState($meta);
-        (my $globWorkflow, $globCurrentState) = 
-          parseWorkflow($prefWorkflowWeb, $prefWorkflow)
-            unless $globCurrentState;
-        return $globCurrentState->{name};
+    ($web, $topic) = _getTopicName($attributes, $web, $topic);
+    my $controlledTopic = _initTOPIC( $web, $topic );
+    return '' unless $controlledTopic;
+
+    # replace edit tag
+    if ( $controlledTopic->canEdit() ) {
+        return CGI::a(
+            {
+                href => TWiki::Func::getScriptUrl(
+                    $web, $topic, 'edit',
+                    t => time() ),
+            }, CGI::strong("Edit") );
     }
     else {
+        return CGI::strike("Edit");
+    }
+}
+
+# Tag handler
+sub _WORKFLOWSTATEMESSAGE {
+    my ( $session, $attributes, $topic, $web ) = @_;
+
+    ($web, $topic) = _getTopicName($attributes, $web, $topic);
+    my $controlledTopic = _initTOPIC( $web, $topic );
+    return '' unless $controlledTopic;
+
+    return $controlledTopic->getStateMessage();
+}
+
+# Tag handler
+sub _WORKFLOWATTACHTOPIC {
+    my ( $session, $attributes, $topic, $web ) = @_;
+
+    ($web, $topic) = _getTopicName($attributes, $web, $topic);
+    my $controlledTopic = _initTOPIC( $web, $topic );
+    return '' unless $controlledTopic;
+
+    # replace attach tag
+    if ( $controlledTopic->canAttach() ) {
+        return CGI::a(
+            {
+                href => TWiki::Func::getScriptUrl(
+                    $web, $topic, 'attach', t => time()
+                )
+            },
+            CGI::strong("Attach")
+        );
+    }
+    else {
+        return CGI::strike("Attach");
+    }
+}
+
+# Tag handler
+sub _WORKFLOWHISTORY {
+    my ( $session, $attributes, $topic, $web ) = @_;
+
+    ($web, $topic) = _getTopicName($attributes, $web, $topic);
+    my $controlledTopic = _initTOPIC( $web, $topic );
+    return '' unless $controlledTopic;
+
+    return $controlledTopic->getHistoryText();
+}
+
+# Tag handler
+sub _WORKFLOWTRANSITION {
+    my ( $session, $attributes, $topic, $web ) = @_;
+
+    ($web, $topic) = _getTopicName($attributes, $web, $topic);
+    my $controlledTopic = _initTOPIC( $web, $topic );
+    return '' unless $controlledTopic;
+
+    #
+    # Build the button to change the current status
+    #
+    my @actions         = $controlledTopic->getActions();
+    my $numberOfActions = scalar(@actions);
+    my $cs              = $controlledTopic->getState();
+
+    unless ($numberOfActions) {
+        return '<span class="twikiAlert">NO AVAILABLE ACTIONS in state '
+          .$cs.'</span>' if $controlledTopic->debugging();
         return '';
     }
+
+    my @fields = (
+        "<input type='hidden' name='WORKFLOWSTATE' value='$cs' />",
+        # Can't use CGI because a top parameter could defeat the value we need
+        "<input type='hidden' name='topic' value='$web.$topic' />",
+        
+        # Use a time field to help defeat the cache
+        "<input type='hidden' name='t' value='".time()."' />"
+       );
+    
+    my $buttonClass =
+      TWiki::Func::getPreferencesValue('WORKFLOWTRANSITIONCSSCLASS')
+          || 'twikiChangeFormButton twikiSubmit"';
+    
+    if ( $numberOfActions == 1 ) {
+        push( @fields,
+              "<input type='hidden' name='WORKFLOWACTION' value='"
+                .$actions[0]."' />" );
+        push(
+            @fields,
+            CGI::submit(
+                -class => $buttonClass,
+                -value => $actions[0]
+            )
+        );
+    }
+    else {
+        push(
+            @fields,
+            CGI::popup_menu(
+                -name   => 'WORKFLOWACTION',
+                -values => \@actions
+            )
+        );
+        push(
+            @fields,
+            CGI::submit(
+                -class => $buttonClass,
+                -value => 'Change status'
+            )
+        );
+    }
+
+    my $url = TWiki::Func::getScriptUrl(
+        $pluginName, 'changeState', 'rest' );
+    my $form =
+        CGI::start_form( -method => 'POST', -action => $url )
+      . join( '', @fields )
+      . CGI::end_form();
+
+    $form =~ s/\r?\n//g;    # to avoid breaking TML
+    return $form;
 }
 
+# Tag handler
+sub _WORKFLOWSTATE {
+    my ( $session, $attributes, $topic, $web ) = @_;
+
+    ($web, $topic) = _getTopicName($attributes, $web, $topic);
+    my $controlledTopic = _initTOPIC( $web, $topic );
+    return '' unless $controlledTopic;
+
+    return $controlledTopic->getState();
+}
+
+# Tag handler
+sub _WORKFLOWFORK {
+    my ( $session, $attributes, $topic, $web ) = @_;
+
+    my $controlledTopic = _initTOPIC( $web, $topic );
+    return '' unless $controlledTopic;
+
+    # Check we can fork
+    return '' unless ($controlledTopic->canFork());
+
+    my $newnames;
+    if (!defined $attributes->{newnames}) {
+        # Old interpretation, for compatibility
+        $newnames = $attributes->{_DEFAULT};
+        $topic = $attributes->{topic} || $topic;
+    } else {
+        ($web, $topic) = _getTopicName($attributes, $web, $topic);
+        $newnames = $attributes->{newnames};
+    }
+    return '' unless $newnames;
+    my $lockdown = TWiki::Func::isTrue($attributes->{lockdown});
+
+    if (!TWiki::Func::topicExists($web, $topic)) {
+        return "<span class='twikiAlert'>WORKFLOWFORK: '$topic' does not exist</span>";
+    }
+    my $errors = '';
+    foreach my $newname ( split(',', $newnames ) ) {
+        my ($w, $t) =
+          TWiki::Func::normalizeWebTopicName( $web, $newname );
+        if (TWiki::Func::topicExists($w, $t)) {
+            $errors .= "<span class='twikiAlert'>WORKFLOWFORK: $w.$t exists</span><br />";
+        }
+    }
+    return $errors if $errors;
+
+    my $label = $attributes->{label} || 'Fork';
+    my $buttonClass =
+      TWiki::Func::getPreferencesValue('WORKFLOWTRANSITIONCSSCLASS')
+      || 'twikiChangeFormButton twikiSubmit"';
+    my $url = TWiki::Func::getScriptUrl( 'WorkflowPlugin', 'fork', 'rest');
+    return <<HTML;
+<form name='forkWorkflow' action='$url' method="POST">
+<input type='hidden' name='topic' value='$web.$topic' />
+<input type='hidden' name='newnames' value='$newnames' />
+<input type='hidden' name='lockdown' value='$lockdown' />
+<input type='hidden' name='endPoint' value='$web.$topic' />
+<input type='submit' class='$buttonClass' value='$label' />
+</form>
+HTML
+}
+
+# Handle actions. REST handler, on changeState action.
+sub _changeState {
+    my ($session) = @_;
+
+    my $query = TWiki::Func::getCgiQuery();
+    return unless $query;
+
+    my $web   = $session->{webName};
+    my $topic = $session->{topicName};
+    die unless $web && $topic;
+
+    my $url;
+    my $controlledTopic = _initTOPIC( $web, $topic );
+
+    unless ($controlledTopic) {
+        $url = TWiki::Func::getScriptUrl(
+            $web, $topic, 'oops',
+            template => "oopssaveerr",
+            param1   => "Could not initialise workflow for "
+              . ( $web   || '' ) . '.'
+                . ( $topic || '' )
+               );
+        TWiki::Func::redirectCgiQuery( undef, $url );
+        return undef;
+    }
+
+    my $action = $query->param('WORKFLOWACTION');
+    my $state  = $query->param('WORKFLOWSTATE');
+    die "BAD STATE $action $state!=", $controlledTopic->getState()
+      unless $action
+        && $state
+          && $state eq $controlledTopic->getState()
+            && $controlledTopic->haveNextState($action);
+
+    my $newForm = $controlledTopic->newForm($action);
+
+    # Check that no-one else has a lease on the topic
+    my $breaklock = $query->param('breaklock');
+    unless (TWiki::Func::isTrue($breaklock)) {
+        my ( $url, $loginName, $t ) = TWiki::Func::checkTopicEditLock(
+            $web, $topic );
+        if ( $t ) {
+            my $currUser = TWiki::Func::getCanonicalUserID();
+            my $locker = TWiki::Func::getCanonicalUserID($loginName);
+            if ($locker ne $currUser) {
+                $t = TWiki::Time::formatDelta(
+                    $t, $TWiki::Plugins::SESSION->i18n );
+                $url = TWiki::Func::getScriptUrl(
+                    $web, $topic, 'oops',
+                    template => 'oopswfplease',
+                    param1   => TWiki::Func::getWikiName($locker),
+                    param2   => $t,
+                    param3   => $state,
+                    param4   => $action,
+                   );
+                TWiki::Func::redirectCgiQuery( undef, $url );
+                return undef;
+            }
+        }
+    }
+
+    try {
+        try {
+            if ($newForm) {
+
+                # If there is a form with the new state, and it's not
+                # the same form as previously, we need to kick into edit
+                # mode to support form field changes. In this case the
+                # transition is delayed until after the edit is saved
+                # (the transition is executed by the beforeSaveHandler)
+                $url =
+                  TWiki::Func::getScriptUrl(
+                      $web, $topic, 'edit',
+                      breaklock             => $breaklock,
+                      t                     => time(),
+                      formtemplate          => $newForm,
+                      # pass info about pending state change
+                      template              => 'workflowedit',
+                      WORKFLOWPENDINGACTION => $action,
+                      WORKFLOWCURRENTSTATE  => $state,
+                      WORKFLOWPENDINGSTATE  =>
+                        $controlledTopic->haveNextState($action),
+                      WORKFLOWWORKFLOW      =>
+                        $controlledTopic->{workflow}->{name},
+                     );
+            }
+            else {
+                $controlledTopic->changeState($action);
+                # Flag that this is a state change to the beforeSaveHandler
+                local $isStateChange = 1;
+                $controlledTopic->save();
+                $url = TWiki::Func::getScriptUrl( $web, $topic, 'view' );
+            }
+
+            TWiki::Func::redirectCgiQuery( undef, $url );
+        } catch Error::Simple with {
+            my $error = shift;
+            throw TWiki::OopsException(
+                'oopssaveerr',
+                web    => $web,
+                topic  => $topic,
+                params => [ $error || '?' ]
+               );
+        };
+    } catch TWiki::OopsException with {
+        my $e = shift;
+        if ( $e->can('generate') ) {
+            $e->generate($session);
+        }
+        else {
+
+            # Deprecated, TWiki compatibility only
+            $e->redirect($session);
+        }
+
+    };
+    return undef;
+}
+
+# Mop up other WORKFLOW tags without individual handlers
+sub commonTagsHandler {
+    my ( $text, $topic, $web ) = @_;
+
+    my $controlledTopic = _initTOPIC( $web, $topic );
+
+    if ( $controlledTopic ) {
+
+        # show all tags defined by the preferences
+        my $url = TWiki::Func::getScriptUrl( $web, $topic, 'view' );
+        $controlledTopic->expandWorkflowPreferences( $url, $_[0] );
+
+        return unless ( $controlledTopic->debugging() );
+    }
+
+    # Clean up unexpanded variables
+    $_[0] =~ s/%WORKFLOW[A-Z_]*%//g;
+}
+
+sub _restFork {
+    my ($session) = @_; 
+    # Update the history in the template topic and the new topic
+    my $query = TWiki::Func::getCgiQuery();
+    my $forkTopic = $query->param('topic');
+    my @newnames = split(/,/, $query->param('newnames'));
+    my $lockdown = $query->param('lockdown');
+
+    (my $forkWeb, $forkTopic) =
+      TWiki::Func::normalizeWebTopicName( undef, $forkTopic );
+
+    if ( TWiki::Func::topicExists( $forkWeb, $forkTopic ) ) {
+        # Validated
+        $forkWeb =
+          TWiki::Sandbox::untaintUnchecked( $forkWeb );
+        $forkTopic =
+          TWiki::Sandbox::untaintUnchecked( $forkTopic );
+    }
+
+    my ($ttmeta, $tttext) = TWiki::Func::readTopic(
+        $forkWeb, $forkTopic);
+
+    my $now = TWiki::Func::formatTime( time(), undef, 'servertime' );
+    my $who = TWiki::Func::getWikiUserName();
+
+    # create the new topics
+    foreach my $newname ( @newnames ) {
+        $newname =
+          TWiki::Sandbox::untaintUnchecked( $newname );
+        my ($w, $t) =
+          TWiki::Func::normalizeWebTopicName( $forkWeb, $newname );
+        if (TWiki::Func::topicExists($w, $t)) {
+            return "<span class='twikiAlert'>WORKFLOWFORK: '$w.$t' already exists</span>";
+        }
+        my $text = $tttext;
+        my $meta = new TWiki::Meta($session, $w, $t);
+        # Clone the template
+        foreach my $k ( keys %$ttmeta ) {
+            # Note that we don't carry over the history from the forked topic
+            next if ( $k =~ /^_/ || $k eq 'WORKFLOWHISTORY' );
+            my @data;
+            foreach my $item ( @{ $ttmeta->{$k} } ) {
+                my %datum = %$item;
+                push( @data, \%datum );
+            }
+            $meta->putAll( $k, @data );
+        }
+        my $history = {
+            value => "<br>Forked from [[$forkWeb.$forkTopic]] by $who at $now",
+        };
+        $meta->put( "WORKFLOWHISTORY", $history );
+        TWiki::Func::saveTopic($w, $t, $meta, $text,
+                                 { forcenewrevision => 1 });
+    }
+
+    my $history = $ttmeta->get('WORKFLOWHISTORY') || {};
+    $history->{value} .= "<br>Forked to " .
+      join(', ', map { "[[$forkWeb.$_]]" } @newnames). " by $who at $now";
+    $ttmeta->put( "WORKFLOWHISTORY", $history );
+
+    if ($lockdown) {
+        $ttmeta->putKeyed("PREFERENCE",
+                          { name => 'ALLOWTOPICCHANGE', value => 'nobody' });
+    }
+
+    TWiki::Func::saveTopic( $forkWeb, $forkTopic, $ttmeta, $tttext,
+                             { forcenewrevision => 1 });
+}
+
+# Used to trap an edit and check that it is permitted by the workflow
 sub beforeEditHandler {
-    ### my ( $text, $topic, $web, $meta ) = @_;
+    my ( $text, $topic, $web, $meta ) = @_;
 
-    return unless $prefNeedsWorkflow;
+    # Check the state change parameters to see if this edit is
+    # part of a state change (state changes may be permitted even
+    # for users who can't edit, so we have to suppress the edit
+    # check in this case)
+    my $changingState = 1;
+    my $query = TWiki::Func::getCgiQuery();
+    foreach my $p qw(WORKFLOWPENDINGACTION WORKFLOWCURRENTSTATE
+                     WORKFLOWPENDINGSTATE WORKFLOWWORKFLOW) {
+        if (!defined $query->param($p)) {
+            # All params must be present to change state
+            $changingState = 0;
+            last;
+        }
+    }
 
-    # This handler is called by the edit script just before presenting
-    # the edit text in the edit box. Use it to process the text before editing.
+    return if $changingState; # permissions check not required
 
-    if (! $globAllowEdit) {
+    my $controlledTopic = _initTOPIC( $web, $topic );
+
+    return unless $controlledTopic; # not controlled, so check not required
+
+    unless ( $controlledTopic->canEdit() ) {
         throw TWiki::OopsException(
             'accessdenied',
-            def => 'topic_access',
-            web => $_[2],
-            topic => $_[1],
-            params => [ 'Edit topic',
-                        'You are not permitted to edit this topic' ] );
-        return 0;
+            status => 403,
+            def    => 'topic_access',
+            web    => $_[2],
+            topic  => $_[1],
+            params => [
+                'Edit topic',
+'You are not permitted to edit this topic. You have been denied access by Workflow Plugin'
+            ]
+        );
     }
 }
 
+# Check that the user is allowed to attach to the topic, if it is controlled
+sub beforeAttachmentSaveHandler {
+    my ( $attrHashRef, $topic, $web ) = @_;
+    my $controlledTopic = _initTOPIC( $web, $topic );
+    return unless $controlledTopic;
+
+    unless ( $controlledTopic->canEdit() ) {
+        throw TWiki::OopsException(
+            'accessdenied',
+            status => 403,
+            def    => 'topic_access',
+            web    => $_[2],
+            topic  => $_[1],
+            params => [
+                'Edit topic',
+'You are not permitted to attach to this topic. You have been denied access by Workflow Plugin'
+            ]
+        );
+    }
+}
+
+# The beforeSaveHandler inspects the request parameters to see if the
+# right params are present to trigger a state change. The legality of
+# the state change is *not* checked - it's assumed that the change is
+# coming as the result of an edit invoked by a state transition.
 sub beforeSaveHandler {
-    ### my ( $text, $topic, $web ) = @_;
+    my ( $text, $topic, $web, $meta ) = @_;
 
-    return unless $prefNeedsWorkflow;
+    # $isStateChange is true if state has just been changed in this session.
+    # In this case we don't need the access check.
+    return if ($isStateChange);
 
-    # This handler is called by TWiki::Store::saveTopic just before
-    # the save action.
+    # Otherwise we need to check if the packet of state change information
+    # is present.
+    my $query = TWiki::Func::getCgiQuery();
+    my $changingState = 1;
+    my %stateChangeInfo;
+    foreach my $p qw(WORKFLOWPENDINGACTION WORKFLOWCURRENTSTATE
+                     WORKFLOWPENDINGSTATE WORKFLOWWORKFLOW) {
+        $stateChangeInfo{$p} = $query->param($p);
+        if (defined $stateChangeInfo{$p}) {
+            $query->delete($p);
+        } else {
+            # All params must be present to change state
+            $changingState = 0;
+            last;
+        }
+    }
 
-    if (! $globAllowEdit && ! $CalledByMyself) {
+    my $controlledTopic;
+
+    if ($changingState) {
+        # See if we are expecting to apply a new state from query
+        # params
+        my ($wfw, $wft) = TWiki::Func::normalizeWebTopicName(
+            undef, $stateChangeInfo{WORKFLOWWORKFLOW} );
+
+        # Can't use initTOPIC, because the data comes from the save
+        my $workflow = new TWiki::Plugins::WorkflowPlugin::Workflow(
+            $wfw, $wft );
+        $controlledTopic =
+          new TWiki::Plugins::WorkflowPlugin::ControlledTopic(
+              $workflow, $web, $topic, $meta, $text );
+
+    } else {
+        # Otherwise we are *not* changing state so we can use initTOPIC
+        $controlledTopic = _initTOPIC( $web, $topic );
+    }
+
+    return unless $controlledTopic;
+
+    if ($changingState) {
+        # The beforeSaveHandler has no way to abort the save,
+        # so we have to do a state change without a topic save.
+        $controlledTopic->changeState($stateChangeInfo{WORKFLOWPENDINGACTION});
+    } elsif ( !$controlledTopic->canEdit() ) {
+        # Not a state change, make sure the AllowEdit in the state table
+        # permits this action
         throw TWiki::OopsException(
             'accessdenied',
-            def => 'topic_access',
-            web => $_[2],
+            def   => 'topic_access',
+            web   => $_[2],
             topic => $_[1],
-            params => [ 'Save topic',
-                        'You are not permitted to edit this topic' ] );
-        return 0;
+            params =>
+              [ 'Save topic',
+'You are not permitted to save this topic. You have been denied access by Workflow Plugin' ]
+             );
     }
-}
-
-sub changeWorkflowState {
-    my ($state, $form) = @_;
-
-    my ($meta, $text) = TWiki::Func::readTopic( $web, $topic );
-    $text = TWiki::Func::expandVariablesOnTopicCreation(
-        $text ); #TW: really needed?
-    my ($revdate, $revuser, $version, $revcmt) =  $meta->getRevisionInfo();
-
-    #print STDERR("changeWorkflowState from $globCurrentState->{name} to $state");
-
-    $globCurrentState->{name}=$state;
-    $globCurrentState->{"LASTVERSION_$state"}="$version";
-    $globCurrentState->{"LASTTIME_$state"} =
-      TWiki::Func::formatTime( time(), undef, 'servertime' );
-
-    $meta->remove( "WORKFLOW" );
-    $meta->put( "WORKFLOW", $globCurrentState);
-
-    my $mixedAlpha = $TWiki::regex{mixedAlpha};
-    my $fmt = TWiki::Func::getPreferencesValue( "WORKFLOWHISTORYFORMAT" )
-      || '$state -- $date';
-    $fmt =~ s/\"//go;
-    $fmt =~ s/\$quot/\"/go;
-    $fmt =~ s/\$n/<br>/go;
-    $fmt =~ s/\$n\(\)/<br>/go;
-    $fmt =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos;
-    $fmt =~ s/\$state/$globCurrentState->{name}/go;
-    $fmt =~ s/\$wikiusername/$revuser->webDotWikiName()/geo;
-    $fmt =~ s/\$date/$globCurrentState->{"LASTTIME_$state"}/geo;
-    $globHistory .= "\r\n" if $globHistory;
-    $globHistory .= $fmt;
-    $meta->remove( "WORKFLOWHISTORY" );
-    $meta->put( "WORKFLOWHISTORY", { value => $globHistory } );
-
-    my $oldForm = $meta->get( 'FORM' );
-
-    my $unlock=1;
-    my $dontNotify=1;
-    $CalledByMyself=1;
-    my $error = TWiki::Func::saveTopic( $web, $topic, $meta, $text,
-                                        { minor => $dontNotify } );
-    if( $error ) {
-        my $url = TWiki::Func::oops( $web, $topic, "saveerr", $error );
-        TWiki::Func::redirectCgiQuery(undef, $url);
-        return 0;
-    }
-
-    # If we want to have a form attached initially, we need to have
-    # values in the topic, due to the TWiki form initialization
-    # algorithm, or pass them here via URL parameters (take from
-    # initialization topic)
-    if( $form && !($oldForm && $oldForm eq $form)) {
-        my $url = TWiki::Func::getScriptUrl( $web, $topic, 'edit' );
-        $url .= "?formtemplate=$form";
-        TWiki::Func::redirectCgiQuery(undef, $url);
-        return 0;
-    }
-
-}
-
-sub getWorkflowState {
-    my $meta = shift;
-    return $meta->get('WORKFLOW');
-}
-
-#
-# return a hash table representing the actions alowed by
-# the current user. The hash-key is the possible action
-# while the value is the next state.
-#
-sub parseWorkflow {
-    my ($WorkflowWeb, $WorkflowTopic, $CurrentState) = @_;
-    my %workflow = ();
-    my %workflowForm = ();
-    my $WorkflowMessage = "";
-    my $AllowEdit = 0;
-
-    # take care that $CurrentState is a HASH table
-    $CurrentState = {} unless defined($CurrentState);
-
-    # the default state is the first row in the state table
-    my $defaultState;
-    my $CurrentStateIsValid = 0;
-
-    # Read topic that defines the statemachine
-    if( TWiki::Func::topicExists( $WorkflowWeb, $WorkflowTopic ) ) {
-        my( $meta, $text ) = TWiki::Func::readTopic(
-            $WorkflowWeb, $WorkflowTopic );
-
-        my $inBlock = 0;
-        # | *Current state* | *Action* | *Next state* | *Allowed* |
-        foreach( split( /\n/, $text ) ) {
-            if ( /^\s*\|.*State[^|]*\|.*Action[^|]*\|.*Next State[^|]*\|.*Allowed[^|]*\|/ ) {
-                # from now on, we are in the TRANSITION table
-                $inBlock = 1;
-            } elsif ( /^\s*\|.*State[^|]*\|.*Allow Edit[^|]*\|.*Message[^|]*\|/ ) {
-                # from now on, we are in the STATE table
-                $inBlock = 2;
-
-            } elsif ( /^(\t+\*\sSet\s)([A-Za-z]+)(\s\=\s*)(.*)$/ ) {
-                # store preferences
-                $globPreferences{$2}=$4;
-            } elsif( ($inBlock == 1) && s/^\s*\|//o ) {
-                # read row in TRANSITION table
-                my( $state, $action, $next, $allowed, $form ) = split( /\s*\|\s*/ );
-                $state = _cleanField($state);
-                if (UserIsAllowed($allowed, $state)
-                      && ($state eq $CurrentState->{name})) {
-                    # store the transition in user's workflow 
-                    $workflow{$action} = $next;
-                    $workflowForm{$action} = $form;
-                }
-
-            } elsif( ($inBlock == 2) && s/^\s*\|//o ) {
-                # read row in STATE table
-                my( $state, $allowedit, $message ) = split( /\s*\|\s*/ );
-                $state = _cleanField($state);
-                #print STDERR("STATE: '$state', $allowedit, $message  CurrentState: '$CurrentState->{name}'");
-
-                # the first state in the table defines the default state
-                if (!defined($defaultState)) {
-                    $defaultState = $state;
-                    $CurrentState->{name} = $state
-                      unless defined($CurrentState->{name});
-                }
-                if ($state eq $CurrentState->{name}) {
-                    $CurrentStateIsValid=1;
-                    $WorkflowMessage = $message;
-                    if (UserIsAllowed($allowedit, $state)) {
-                        $AllowEdit = 1;
-                    }
-                }
-            } else {
-                $inBlock = 0;
-            }
-        }
-
-        # we need to treat the case that the workflow states have changed
-        # and that the  status written in the document is not valid anymore.
-        # In this case we go back to the default status!
-        if (!$CurrentStateIsValid && defined($defaultState)) {
-            $CurrentState->{name}=$defaultState;
-            return parseWorkflow($WorkflowWeb, $WorkflowTopic, $CurrentState);
-        }
-    } else {
-        # FIXME - do what if there is an error?
-    }
-
-    return ( \%workflow, $CurrentState, $WorkflowMessage,
-             $AllowEdit, \%workflowForm );
-}
-
-# finds out if the current user is allowed to do something. They are allowed
-# if their wikiname is in the (comma,space)-separated list $allow, or they
-# are a member of a group in the list.
-sub UserIsAllowed {
-    my ($allow, $state) = @_;
-
-    return 1 unless ( $allow );
-
-    # Always allow members of the admin group to edit
-    if ( defined &TWiki::Func::isAnAdmin ) {
-        # Latest interface, post user objects
-        return 1 if( TWiki::Func::isAnAdmin() );
-    } elsif (ref($TWiki::Plugins::SESSION->{user})
-               && $TWiki::Plugins::SESSION->{user}->can("isAdmin")) {
-        # User object
-        return 1 if( $TWiki::Plugins::SESSION->{user}->isAdmin() );
-    }
-
-    return 0 if( defined( $allow ) && $allow =~ /^\s*nobody\s*$/ );
-
-    if (ref($TWiki::Plugins::SESSION->{user})
-               && $TWiki::Plugins::SESSION->{user}->can("isInList")) {
-        return $TWiki::Plugins::SESSION->{user}->isInList( $allow );
-    } elsif( defined &TWiki::Func::isGroup ) {
-        my $thisUser = TWiki::Func::getWikiName();
-        foreach my $allowed ( split( /\s*,\s*/, $allow )) {
-            (my $waste, $allowed) =
-              TWiki::Func::normalizeWebTopicName(undef, $allowed);
-            if (TWiki::Func::isGroup( $allowed )) {
-                return 1 if TWiki::Func::isGroupMember( $allowed, $thisUser );
-            } else {
-                $allowed = TWiki::Func::getWikiUserName( $allowed );
-                $allowed =~ s/^.*\.//; # strip web
-                return 1 if $thisUser eq $allowed;
-            }
-        }
-    }
-
-    return 0;
-
-}
-
-sub _cleanField {
-    my( $text ) = @_;
-    $text = "" if( ! $text );
-    $text =~ s/^\s*//go;
-    $text =~ s/\s*$//go;
-    $text =~ s/[^A-Za-z0-9_\.]//go; # Need do for web.topic
-    return $text;
-}
-
-sub getWebTopicName {
-    my( $theWebName, $theTopicName ) = @_;
-    $theTopicName =~ s/%MAINWEB%/$theWebName/go;
-    $theTopicName =~ s/%TWIKIWEB%/$theWebName/go;
-    if( $theTopicName =~ /[\.]/ ) {
-        $theWebName = "";  # to suppress warning
-    } else {
-        $theTopicName = "$theWebName\.$theTopicName";
-    }
-    return $theTopicName;
 }
 
 1;
