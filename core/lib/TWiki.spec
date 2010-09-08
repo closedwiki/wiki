@@ -1093,6 +1093,15 @@ $TWiki::cfg{PROXY}{HOST} = '';
 $TWiki::cfg{PROXY}{PORT} = '';
 
 # **STRING 30 EXPERT**
+# User name for proxy that requires authentication. The Perl LWP module
+# is required for authenticated proxy.
+$TWiki::cfg{PROXY}{Username} = '';
+
+# **STRING 30 EXPERT**
+# Password for proxy that requires authentication.
+$TWiki::cfg{PROXY}{Password} = '';
+
+# **STRING 30 EXPERT**
 # Domains excluded from proxy, such as
 # <code>intra.example.com, bugs.example.com</code>
 $TWiki::cfg{PROXY}{SkipProxyForDomains} = '';

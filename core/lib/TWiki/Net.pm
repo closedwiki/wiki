@@ -247,6 +247,11 @@ sub _GETUsingLWP {
     my $request;
     require HTTP::Request;
     $request = HTTP::Request->new( GET => $url );
+
+    if( $TWiki::cfg{PROXY}{Username} && $TWiki::cfg{PROXY}{Password} ) {
+        $request->proxy_authorization_basic( $TWiki::cfg{PROXY}{Username}, $TWiki::cfg{PROXY}{Password} );
+    }
+
     '$Rev$'=~/([0-9]+)/;
     my $revstr=$1;
     $request->header( 'User-Agent' => 'TWiki::Net/'.$revstr." libwww-perl/$LWP::VERSION" );
