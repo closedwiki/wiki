@@ -547,6 +547,8 @@ sub handleChecklistItem {
 
 	TWiki::Func::writeDebug("- ${pluginName}::handleChecklistItem($attributes)") if $debug;
 
+	&initNamedDefaults($attributes);
+
 	local(%options);
 	return &createUnknownParamsMessage() unless &initOptions($attributes);
 
