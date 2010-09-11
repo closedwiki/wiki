@@ -1,13 +1,24 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 6935 $"}%
-
+%META:TOPICINFO{author="TWikiContributor" date="1284173550" format="1.1" version="$Rev$"}%
 ---+!! Slidy Plugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/SlidyPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/SlidyPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+%SHORTDESCRIPTION%
 
-This Plugin converts a topic with headings into a slide show. Analogues to TWiki:Plugins.SlideShowPlugin, but based on W3Cs "HTML Slidy" (presentation at http://www.w3.org/Talks/Tools/Slidy/).
+---++ Introduction
+
+This Plugin converts a topic with headings into a slide show. Analogues to TWiki:Plugins.SlideShowPlugin, but based on !W3Cs "HTML Slidy" (presentation at http://www.w3.org/Talks/Tools/Slidy/).
 
 A few of the technical selling points:
 
    * Slide shows in XHTML
-   * Works across browsers and is operated like PowerPoint
+   * Works across browsers and is operated like !PowerPoint
    * Content scales somewhat with browser window size
    * URLs shown in presentation link back inside slide show (to explicit slide number).
    * Use simple TWiki syntax (TML) or fullblown XHTML Slidy syntax to create slides (Slidy syntax has features like incremental display, expanded/collapsed items, handout comments, etc)
@@ -20,12 +31,10 @@ A few of the technical selling points:
    * The "A" key toggles display of current vs all slides 
       * Use the "A" key when you want to view or print all slides 
    * Font sizes automatically adapt to browser window size 
-      * use < and > keys for additional control (or - and + keys on number pad)   
-   * Switching off JavaScript reveals all slides   
+      * use &lt; and &gt; keys for additional control (or - and + keys on number pad)   
+   * Switching off !JavaScript reveals all slides   
 
-%TOC%
-
----++ Introduction
+---++ Description
 
 (Raw copy from TWiki:Plugins.SlideShowPlugin, needs a refactor)
 
@@ -33,8 +42,8 @@ There is already a defacto standard for presentations, why this Plugin? This Plu
 
 Any topic with headings can be converted into a slide show. Each slide starts with a ="---++"= heading. There are two modes to view a topic:
 
-	* Normal topic view mode: Headings and text is shown in the usual TWiki rendering, representing the outline of the slide show. This mode is useful to print handouts.
-	* Presentation mode: Each heading with text is shown as a slide; the format is based on a slide template. Navigation buttons are added to go to the "First", "Previous", and "Next" slide. Slide navigation is quick because it is done with anchor jumps to the same page. 
+   * Normal topic view mode: Headings and text is shown in the usual TWiki rendering, representing the outline of the slide show. This mode is useful to print handouts.
+   * Presentation mode: Each heading with text is shown as a slide; the format is based on a slide template. Navigation buttons are added to go to the "First", "Previous", and "Next" slide. Slide navigation is quick because it is done with anchor jumps to the same page. 
 
 You can start the presentation by clicking on the "Start presentation" button.
 
@@ -44,10 +53,10 @@ You can start the presentation by clicking on the "Start presentation" button.
 
 ---+++ How to Create a Slide Show
 
-	* Start with =%<nop>SLIDYSTART%=
-	* Create the slides. Start each slide with a ="---+ "= heading and add text like paragraphs, bullets, tables and images.
-		* __Hint:__ You can use an alternate syntax (="---% "=) for the very first slide to create a "cover slide" with an alternate look
-	* End your slide show with =%<nop>SLIDYEND%=
+   * Start with =%<nop>SLIDYSTART%=
+   * Create the slides. Start each slide with a ="---+ "= heading and add text like paragraphs, bullets, tables and images.
+      * __Hint:__ You can use an alternate syntax (="---% "=) for the very first slide to create a "cover slide" with an alternate look
+   * End your slide show with =%<nop>SLIDYEND%=
 
 
 This is a short example of a slide show. You should see a "Start presentation" button if this Plugin is installed:
@@ -67,41 +76,38 @@ Denmark, 26 Apr 2006
 
 ---+ Agenda
 
-	* Silly Introduction
-	* Silly Feature
-	* Silly Conclusion
+   * Silly Introduction
+   * Silly Feature
+   * Silly Conclusion
 
 ---+ Silly Introduction
 
-	* why foo bar
-	* blah blah
+   * why foo bar
+   * blah blah
 
 ---++ Second level heading
 
-	* More bullets
+   * More bullets
 
 ---+ Silly Feature
 
-	* it's foo bar
-	* more foo bar
+   * it's foo bar
+   * more foo bar
 
 ---+ Silly Conclusion
 
-	* foo is bar
-	* bar is foo
+   * foo is bar
+   * bar is foo
 %SLIDYEND%
 
 This text is not part of the slide show
 
 ---++ <nop>%TOPIC% Global Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>SLIDESHOWPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>SLIDYPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Create web based presentations based on topics with headings; operate presentation like an ordinary <nop>PowerPoint presentation.
-
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 1
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Create web based presentations based on topics with headings; operate presentation like an ordinary <nop>PowerPoint presentation.
 
 ---++ Default Slide Template
 
@@ -111,29 +117,30 @@ The part between the rulers defines the default format of a slide:
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	  | ==pub/TWiki/*.gif== | Various button image files |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* Test above example if the installation was successful.
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==pub/TWiki/*.gif== | Various button image files |
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Test above example if the installation was successful.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/SteffenPoulsen |
-|  Plugin Version: | 1.000 |
+|  Plugin Author: | TWiki:Main.SteffenPoulsen |
+|  Copyright: | &copy; 2006 TWiki:Main.SteffenPoulsen <br /> &copy; 2006-2010 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  26 Apr 2006: | (v1.000) - Initial version |
+|  2010-09-05: | TWikibug:Item6530: Doc improvements; changed TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2006-04-09: | (v1.000) - Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 98%, %TWIKIWEB%.FormattedSearch 99%, SlidyPlugin 99% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 98%, %SYSTEMWEB%.FormattedSearch 99%, SlidyPlugin 99% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
