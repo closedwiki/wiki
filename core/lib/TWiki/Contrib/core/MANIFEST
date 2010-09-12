@@ -408,6 +408,7 @@ lib/Assert.pm 0444
 lib/MANIFEST 0444
 lib/Monitor.pm 0444
 lib/CPAN/lib/Algorithm/Diff.pm 0444
+lib/CPAN/lib/DB_File/Lock.pm 0444
 lib/CPAN/lib/Error.pm 0444
 lib/CPAN/lib/Locale/Maketext/Extract.pm 0444
 lib/CPAN/lib/Locale/Maketext/Extract/Run.pm 0444
