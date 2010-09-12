@@ -549,7 +549,8 @@ sub verify_formatted_search_summary_with_exclamation_marks {
     my $session = $this->{twiki};
     
     $this->set_up_for_formatted_search();
-    my $actual, my $expected;
+    my $actual;
+    my $expected;
     $actual = $session->handleCommonTags(
         '%SEARCH{"Anna" topic="FormattedSearchTopic1" type="regex" multiple="on" casesensitive="on" nosearch="on" noheader="on" nototal="on" format="$summary"}%',
         $this->{test_web}, $this->{test_topic});
