@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277915590" format="1.1" version="$Rev$"}%
----+!! Release Notes of TWiki-5.0.0 (Helsinki), 2010-05-29
+%META:TOPICINFO{author="TWikiContributor" date="1284281892" format="1.1" version="$Rev$"}%
+---+!! Release Notes of TWiki-5.0.1-rc1 (Helsinki), 2010-09-12
 
 %TOC%
 
@@ -7,7 +7,9 @@
 
 TWiki-5.0.0 released on 2010-05-29 is a major release introducing usability enhancements, feature enhancements, and adds extensions to strengthen TWiki as an enterprise collaboration platform.
 
-It is highly recommended to upgrade to TWiki-5.0.0. Users will find this release much more stable and secure in daily use.
+TWiki-5.0.1 released on 2009-09-12 is a patch release that adds some minor new features and fixes a number of bugs.
+
+It is highly recommended to upgrade to TWiki-5.0.1. Users will find this release much more stable and secure in daily use.
 
 ---++ New Features Highlights
 
@@ -19,6 +21,8 @@ It is highly recommended to upgrade to TWiki-5.0.0. Users will find this release
       * Attach multiple files at once, useful when attaching many files.
       * Pre-installed TagMePlugin, useful to tag topics to quickly access content in a large TWiki.
       * Upgraded TinyMCEPlugin to latest !TinyMCE 3.2.4.1 for better WYSIWYG editing experience.
+      * Better indication of breadcrumb in top menu of !TopMenuSkin - added in TWiki-5.0.1
+      * Better display of topic diffs in debug mode - added in TWiki-5.0.1
    * *TWiki Application Platform Enhancements*
       * Pre-installed JQueryPlugin, adding a lightweight cross-browser !JavaScript library designed to simplify the client-side scripting of HTML.
       * Improvements to ENCODE, IF, URLPARAM, WEB and WEBLIST variables.
@@ -28,8 +32,10 @@ It is highly recommended to upgrade to TWiki-5.0.0. Users will find this release
    * *Miscellaneous Feature Enhancements*
       * Adding 51 new TWikiDocGraphics icons, and 11 updated icons.
       * The TWiki doc graphics library is now aware of image size and is cached for speed.
+      * Support authenticated proxy - added in TWiki-5.0.1
    * *Plugin Enhancements*
       * SpreadSheetPlugin: Improvements to $TIME() and $NOP() functions.
+      * SpreadSheetPlugin: Add ISO 8601 week number to FORMATTIME - added in TWiki-5.0.1
       * HeadlinesPlugin: New touch parameter in HEADLINES variable to alert users via e-mail notification of news updates
       * API: New TWiki::Func::buildWikiWord function
 
@@ -37,7 +43,7 @@ See the full list of new features and bug fixes further below.
 
 ---++ Pre-installed Extensions
 
-TWiki-5.0.0 ships with:
+TWiki-5.0.1 ships with:
 
    * *Plugins:* CommentPlugin, EditTablePlugin, EmptyPlugin, HeadlinesPlugin, InterwikiPlugin, JQueryPlugin, PreferencesPlugin, RenderListPlugin, SlideShowPlugin, SmiliesPlugin, SpreadSheetPlugin, TablePlugin, TinyMCEPlugin, TagMePlugin, TWikiNetSkinPlugin, TwistyPlugin, WysiwygPlugin
    * *Contribs:* BehaviourContrib, JSCalendarContrib, MailerContrib, TipsContrib, TWikiUserMappingContrib, TwistyContrib
@@ -149,5 +155,54 @@ Total: 33
 | TWikibug:Item6474 | MailerContrib: mailnotify fails due to non-existing _alert method |
 </noautolink>
 Total: 38
+
+
+---++ TWiki-5.0.1 Patch Release - Details
+
+TWiki-5.0.1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x00 revision r19464 (2010-09-12)
+
+---+++ Enhancements
+
+<noautolink>
+| TWikibug:Item6475 | TopMenuSkin v1.5 work: Better indication of breadcrumb in top menu |
+| TWikibug:Item6482 | TopMenuSkin v1.6: XHTML validation fixes; moving CSS to HTML head using ADDTOHEAD variable |
+| TWikibug:Item6483 | Add angle brackets (< and >) to format tokens |
+| TWikibug:Item6488 | Better display of topic diffs in debug mode (rdiff) |
+| TWikibug:Item6499 | PatternSkin: Less screeming submit and cancel buttons, aligning with color palette of TopMenuSkin |
+| TWikibug:Item6500 | Web-interface to refresh ICON cache |
+| TWikibug:Item6504 | SpreadSheetPlugin: Add empty ($nop) separator to LISTJOIN |
+| TWikibug:Item6521 | InterwikiPlugin: Add ~ and % to allowed characters in page part of Site:page link |
+| TWikibug:Item6525 | SpreadSheetPlugin: Add $n token to TRANSLATE for newline |
+| TWikibug:Item6526 | SpreadSheetPlugin: Add ISO 8601 week number to FORMATTIME |
+| TWikibug:Item6576 | Support Authenticated Proxy |
+</noautolink>
+Total: 11
+
+---+++ Fixes
+
+<noautolink>
+| TWikibug:Item5163 | SpreadSheetPlugin causes table to misrender an empty row |
+| TWikibug:Item5335 | Not all pages are prepared for NOAUTOLINK on |
+| TWikibug:Item6231 | Include: List of domains to exclude from proxy with {PROXY}{SkipProxyForDomains} setting |
+| TWikibug:Item6371 | Display proper time zone diff in ISO date and date containing $tz if local time is used, such as 2010-06-02T02:14:57-07:00 |
+| TWikibug:Item6463 | InterwikiPlugin links not working if topic included from different web, such as if used in TopMenuSkin menus |
+| TWikibug:Item6480 | !TWiki.TWikiDocGraphicsTemplate missing in TWiki-5.0.0 distribution |
+| TWikibug:Item6489 | MailerContrib: Separate WIKITOOLNAME from WEB name; escape WEB name to avoid auto-linking in case web is WikiWord |
+| TWikibug:Item6490 | TagMePlugin: Template has hardcoded link to TWiki web |
+| TWikibug:Item6492 | PatternSkin: Can't Attach files on IE-8, TWiki thinks max upload files exceeded |
+| TWikibug:Item6493 | SpreadSheetPlugin: Product function gives wrong result |
+| TWikibug:Item6494 | Attach/remove/attach gives error: Can't call method "binmode" on an undefined value |
+| TWikibug:Item6503 | InterwikiPlugin: Fix TWiki.org specific Web.Topic interwiki links to have .../view/Web/Topic type URLs |
+| TWikibug:Item6506 | SpreadSheetPlugin: Document delayed evaluation of CALC in included topics |
+| TWikibug:Item6508 | ATTACHEDIMAGEFORMAT issues |
+| TWikibug:Item6514 | PatternSkin: Floats overlap topic action bar at bottom if topic is short |
+| TWikibug:Item6524 | TopMenuSkin: No Account pulldown menu on Opera browser |
+| TWikibug:Item6529 | Use of uninitialized value in substitution in Meta.pm and Store.pm |
+| TWikibug:Item6537 | SpreadSheetPlugin: Formula $EVAL(13 - 08) returns error: Illegal octal digit '8' |
+| TWikibug:Item6561 | mod_perl2 incompatible check for ENV{GATEWAY_INTERFACE} |
+| TWikibug:Item6565 | Engine.pm: Parentheses missing |
+| TWikibug:Item6578 | Use of uninitialized value in split at lib/TWiki.pm line 1302 |
+</noautolink>
+Total: 21
 
 __Related Topics:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide, %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%
