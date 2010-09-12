@@ -1300,10 +1300,13 @@ sub cacheIconData {
 
         } else {
             # Remove icon cache if any topic in the ICONTOPIC list changed
-            foreach my $iconTopic (split(/ *, */, $this->{prefs}->getPreferencesValue( 'ICONTOPIC' ))) {
-                my( $iWeb, $iTopic ) = $this->normalizeWebTopicName( $this->{webName}, $iconTopic );
-                if( ( $web eq $iWeb ) && ( $topic eq $iTopic ) ) {
-                    unlink( $cacheFile );
+            my $topics = $this->{prefs}->getPreferencesValue( 'ICONTOPIC' );
+            if( $topics ) {
+                foreach my $iconTopic ( split( / *, */, $topics ) ) {
+                    my( $iWeb, $iTopic ) = $this->normalizeWebTopicName( $this->{webName}, $iconTopic );
+                    if( ( $web eq $iWeb ) && ( $topic eq $iTopic ) ) {
+                        unlink( $cacheFile );
+                    }
                 }
             }
         }
