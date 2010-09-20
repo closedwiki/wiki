@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1278225640" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1284957458" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Templates
 
@@ -113,6 +113,8 @@ Template names are usually derived from the name of the currently executing scri
    * =VIEW_TEMPLATE= sets the template to be used for viewing a topic
    * =EDIT_TEMPLATE= sets the template for editing a topic.
 If these preferences are set locally (using _Local_ instead of _Set_) for a topic, in WebPreferences, in [[%LOCALSITEPREFS%]], or [[%SYSTEMWEB%.TWikiPreferences]] (using _Set_), the indicated templates will be chosen for =view= and =edit= respectively. The template search order is as specified above.
+
+__%T% Tip:__ If you want to override existing templates, without having to worry that your changes will get overwritten by the next TWiki update, change the ={TemplatePath}= so that another directory, such as the =%<nop>USERSWEB%= appears at the front. You can then put your own templates into that directory or web and these will override the standard templates. (Note that such will increase the lookup time for templates by searching your directory first.)
 
 ---+++ TMPL:INCLUDE recursion for piecewise customisation, or mixing in new features
 
