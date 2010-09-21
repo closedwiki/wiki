@@ -108,7 +108,7 @@ sub new {
     my $this = bless( { session => $session }, $class );
 
     require TWiki::LoginManager;
-    $this->{loginManager} = TWiki::LoginManager::makeLoginManager($session);
+    $this->{loginManager} = TWiki::LoginManager::makeLoginManager( $session );
 
     # setup the cgi session, from a cookie or the url. this may return
     # the login, but even if it does, plugins will get the chance to
@@ -142,8 +142,8 @@ sub new {
     # the UI for rego supported/not is different from rego temporarily
     # turned off
     if ( $this->supportsRegistration() ) {
-        $session->enterContext('registration_supported');
-        $session->enterContext('registration_enabled')
+        $session->enterContext( 'registration_supported' );
+        $session->enterContext( 'registration_enabled' )
           if $TWiki::cfg{Register}{EnableNewUserRegistration};
     }
 
@@ -201,7 +201,7 @@ sub loginTemplateName {
 
     #use login.sudo.tmpl for admin logins
     return $this->{basemapping}->loginTemplateName()
-      if ( $this->{session}->inContext('sudo_login') );
+      if ( $this->{session}->inContext( 'sudo_login' ) );
     return $this->{mapping}->loginTemplateName() || 'login';
 }
 
@@ -227,7 +227,7 @@ sub _getMapping {
     # The base mapping and the selected mapping claim not to know about
     # this user. Use the base mapping unless the caller has explicitly
     # requested otherwise.
-    return $this->{basemapping} unless ($noFallBack);
+    return $this->{basemapping} unless ( $noFallBack );
 
     return undef;
 }
@@ -241,7 +241,7 @@ sub _getMapping {
 =cut
 
 sub supportsRegistration {
-    my ($this) = @_;
+    my ( $this ) = @_;
     return $this->{mapping}->supportsRegistration();
 }
 
@@ -389,7 +389,7 @@ support 1:1 login-to-cUID mappings.
 sub mapLogin2cUID {
     my $cUID = shift;
 
-    ASSERT( defined($cUID) ) if DEBUG;
+    ASSERT( defined( $cUID ) ) if DEBUG;
 
     # use bytes to ignore character encoding
     use bytes;
@@ -435,21 +435,21 @@ sub getCanonicalUserID {
         # See if a mapping recognises the identifier as a login name
         my $mapping = $this->_getMapping( undef, $identifier, undef, 1 );
         if ( $mapping ) {
-            if ( $mapping->can('login2cUID') ) {
-                $cUID = $mapping->login2cUID($identifier);
+            if ( $mapping->can( 'login2cUID' ) ) {
+                $cUID = $mapping->login2cUID( $identifier );
 
-            } elsif ( $mapping->can('getCanonicalUserID') ) {
+            } elsif ( $mapping->can( 'getCanonicalUserID' ) ) {
 
                 # Old name of login2cUID. Name changed to avoid confusion
                 # with TWiki::Users::getCanonicalUserID. See
                 # Codev.UserMapperChangesBetween420And421 for more.
-                $cUID = $mapping->getCanonicalUserID($identifier);
+                $cUID = $mapping->getCanonicalUserID( $identifier );
 
             } else {
                 die( "Broken user mapping $mapping; does not implement login2cUID" );
             }
         }
-        unless ($cUID) {
+        unless ( $cUID ) {
 
             # Finally see if it's a valid user wikiname
 
@@ -480,7 +480,7 @@ If $wn is the name of a group, the group will *not* be expanded.
 
 sub findUserByWikiName {
     my ( $this, $wn ) = @_;
-    ASSERT($wn) if DEBUG;
+    ASSERT( $wn ) if DEBUG;
 
     # Trim the (pointless) userweb, if present
     $wn =~ s/^($TWiki::cfg{UsersWebName}|%USERSWEB%|%MAINWEB%)\.//;
@@ -499,7 +499,7 @@ registered with the user mapping managers.
 
 sub findUserByEmail {
     my ( $this, $email ) = @_;
-    ASSERT($email) if DEBUG;
+    ASSERT( $email ) if DEBUG;
 
     my $users = $this->{mapping}->findUserByEmail( $email );
     push @{$users}, @{ $this->{basemapping}->findUserByEmail( $email ) };
@@ -567,7 +567,7 @@ sub isAdmin {
     return $this->{isAdmin}->{$cUID}
       if ( defined( $this->{isAdmin}->{$cUID} ) );
 
-    my $mapping = $this->_getMapping($cUID);
+    my $mapping = $this->_getMapping( $cUID );
     my $otherMapping =
       ( $mapping eq $this->{basemapping} )
       ? $this->{mapping}
@@ -577,7 +577,8 @@ sub isAdmin {
         return $mapping->isAdmin( $cUID );
     }
     $this->{isAdmin}->{$cUID} =
-      ( $mapping->isAdmin($cUID) || $otherMapping->isAdmin($cUID) );
+      ( $mapping->isAdmin( $cUID ) || $otherMapping->isAdmin( $cUID ) );
+
     return $this->{isAdmin}->{$cUID};
 }
 
@@ -611,7 +612,7 @@ sub isInList {
         if ( defined $identCUID ) {
             return 1 if ( $identCUID eq $cUID );
         }
-        if ( $this->isGroup($ident) ) {
+        if ( $this->isGroup( $ident ) ) {
             return 1 if ( $this->isInGroup( $cUID, $ident ) );
         }
     }
@@ -669,7 +670,7 @@ sub getWikiName {
     my $mapping = $this->_getMapping( $cUID );
     $wikiname = $mapping->getWikiName( $cUID ) if( $mapping );
 
-    if ( !defined($wikiname) ) {
+    if ( !defined( $wikiname ) ) {
         if ( $TWiki::cfg{RenderLoggedInButUnknownUsers} ) {
             $wikiname = "UnknownUser (<nop>$cUID)";
         } else {
@@ -712,7 +713,7 @@ known to to the user mapper.
 
 sub userExists {
     my ( $this, $cUID ) = @_;
-    return $this->_getMapping($cUID)->userExists( $cUID );
+    return $this->_getMapping( $cUID )->userExists( $cUID );
 }
 
 =pod
@@ -794,7 +795,7 @@ should not be assumed.
 sub isGroup {
     my $this = shift;
     return ( $this->{basemapping}->isGroup(@_) )
-      || ( $this->{mapping}->isGroup(@_) );
+        || ( $this->{mapping}->isGroup(@_) );
 }
 
 =pod
@@ -814,7 +815,7 @@ sub isInGroup {
       ( $mapping eq $this->{basemapping} )
       ? $this->{mapping}
       : $this->{basemapping};
-    return 1 if $mapping->isInGroup( $cUID, $group );
+    return 1 if( $mapping->isInGroup( $cUID, $group ) );
 
     return $otherMapping->isInGroup( $cUID, $group )
       if ( $otherMapping ne $mapping );
@@ -845,8 +846,8 @@ sub eachMembership {
       ( $mapping eq $this->{basemapping} )
       ? $this->{mapping}
       : $this->{basemapping};
-    if ( $mapping eq $otherMapping ) {
 
+    if ( $mapping eq $otherMapping ) {
         # only using BaseMapping.
         return $mapping->eachMembership( $cUID );
     }
@@ -912,7 +913,7 @@ returns undef if no error
 =cut
 
 sub passwordError {
-    my ($this) = @_;
+    my ( $this ) = @_;
     return $this->_getMapping()->passwordError();
 }
 
