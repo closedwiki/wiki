@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273990422" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1285040561" format="1.1" version="$Rev$"}%
 ---+!! The Smilies Plugin <nop>:-)
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page
@@ -15,51 +15,57 @@
 
 Smilies are common in e-mail messages and bulletin board posts. They are used to convey an emotion, such as a smile :<nop>-) or a frown :<nop>-( . This plugin automatically converts certain smilies to a nice small icon.
 
+---++ Smilies Table
+
 Here is the list of smilies supported by this plugin. To add others, attach new icons to this topic and tweak the table below.
 
-| *You type*      | *You see*                 | *Emotion* |
-| <nop>:-)          | %ATTACHURL%/smile.gif       | "smile" |
+| *You type*      | *You see*                   | *Emotion* |
+| <nop>:-)        | %ATTACHURL%/smile.gif       | "smile" |
 | <nop>:)         | %ATTACHURL%/smile.gif       | "smile" |
-| <nop>8-)          | %ATTACHURL%/cool.gif        | "cool!" |
-| <nop>:cool:       | %ATTACHURL%/cool.gif        | "cool!" |
-| <nop>:-I          | %ATTACHURL%/indifferent.gif | "indifferent" |
+| <nop>8-)        | %ATTACHURL%/cool.gif        | "cool!" |
+| <nop>:cool:     | %ATTACHURL%/cool.gif        | "cool!" |
+| <nop>:-I        | %ATTACHURL%/indifferent.gif | "indifferent" |
 | <nop>:(         | %ATTACHURL%/frown.gif       | "frown" |
-| <nop>:-(          | %ATTACHURL%/frown.gif       | "frown" |
+| <nop>:-(        | %ATTACHURL%/frown.gif       | "frown" |
 | <nop>:o         | %ATTACHURL%/redface.gif     | "embarrassment" |
 | <nop>:D         | %ATTACHURL%/biggrin.gif     | "big grin" |
-| <nop>:-D          | %ATTACHURL%/biggrin.gif     | "big grin" |
+| <nop>:-D        | %ATTACHURL%/biggrin.gif     | "big grin" |
 | <nop>;)         | %ATTACHURL%/wink.gif        | "wink" |
-| <nop>;-)          | %ATTACHURL%/wink.gif        | "wink" |
+| <nop>;-)        | %ATTACHURL%/wink.gif        | "wink" |
 | <nop>:p         | %ATTACHURL%/tongue.gif      | "stick out tongue" |
-| <nop>:-p         | %ATTACHURL%/tongue.gif      | "stick out tongue" |
-| <nop>:rolleyes:   | %ATTACHURL%/rolleyes.gif    | "roll eyes (sarcastic)" |
+| <nop>:-p        | %ATTACHURL%/tongue.gif      | "stick out tongue" |
+| <nop>:rolleyes: | %ATTACHURL%/rolleyes.gif    | "roll eyes (sarcastic)" |
 | <nop>:mad:      | %ATTACHURL%/mad.gif         | "mad!" |
 | <nop>:eek:      | %ATTACHURL%/eek.gif         | "eek!" |
-| <nop>:confused:   | %ATTACHURL%/confused.gif    | "confused" |
-| <nop>&nbsp;>:-)   | %ATTACHURL%/devil.gif       | "hehe!" |
-| <nop>:devil:      | %ATTACHURL%/devil.gif       | "hehe!" |
-| <nop>&nbsp;>;-)   | %ATTACHURL%/devilwink.gif   | "hehe! (friendly)" |
-| <nop>:devilish:   | %ATTACHURL%/devilwink.gif   | "hehe! (friendly)" |
-| <nop>:-X          | %ATTACHURL%/sealed.gif      | "sealed lips" |
-| <nop>:ok:         | %ATTACHURL%/thumbs.gif      | "thumbs up" |
+| <nop>:confused: | %ATTACHURL%/confused.gif    | "confused" |
+| <nop>&nbsp;>:-) | %ATTACHURL%/devil.gif       | "hehe!" |
+| <nop>:devil:    | %ATTACHURL%/devil.gif       | "hehe!" |
+| <nop>&nbsp;>;-) | %ATTACHURL%/devilwink.gif   | "hehe! (friendly)" |
+| <nop>:devilish: | %ATTACHURL%/devilwink.gif   | "hehe! (friendly)" |
+| <nop>:-X        | %ATTACHURL%/sealed.gif      | "sealed lips" |
+| <nop>:ok:       | %ATTACHURL%/thumbs.gif      | "thumbs up" |
 | <nop>:yes:      | %ATTACHURL%/yes.gif         | "yes" |
-| <nop>:no:         | %ATTACHURL%/no.gif          | "no" |
-| <nop>:love:       | %ATTACHURL%/love.gif        | "I love it!" |
-| <nop>:skull:      | %ATTACHURL%/skull.gif       | "dead!" |
+| <nop>:no:       | %ATTACHURL%/no.gif          | "no" |
+| <nop>:love:     | %ATTACHURL%/love.gif        | "I love it!" |
+| <nop>:skull:    | %ATTACHURL%/skull.gif       | "dead!" |
+| <nop>:red:      | %ATTACHURL%/red.gif         | "red" |
+| <nop>:yellow:   | %ATTACHURL%/yellow.gif      | "yellow" |
+| <nop>:green:    | %ATTACHURL%/green.gif       | "green" |
+| <nop>:blue:     | %ATTACHURL%/blue.gif        | "blue" |
 
 ---++ <nop>%TOPIC% Global Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Render smilies as icons, like :-) for =&nbsp;:-)= or :eek: for =&nbsp;:eek:=
+      * Set SHORTDESCRIPTION = Render smilies as icons, like =&nbsp;:-)= for :-) or =&nbsp;:eek:= for :eek:
 
    * The name of the topic containig your Smilies. Default: ==%WEB%.SmiliesPlugin==
-      * #Set TOPIC = %SYSTEMWEB%.SmiliesPlugin
+      * Set TOPIC = %SYSTEMWEB%.SmiliesPlugin
 
-   * The way the _emoticon_ is displayed. You can use ==$emoticon== (e.g. =:<nop>D=), ==$url== (e.g. =%<nop>ATTACHURL%/biggrin.gif=) and ==$tooltip== (e.g. ="big grin"=). Default: ==&lt;img src="$url" alt="$tooltip" title="$tooltip" border="0" /&gt;==
+   * The way the _emoticon_ is displayed. You can use ==$emoticon== (e.g. =:<nop>D=), ==$url== (e.g. =%<nop>ATTACHURL%/biggrin.gif=) and ==$tooltip== (e.g. ="big grin"=).%BR% Default: ==&lt;img src="$url" alt="$tooltip" title="$tooltip" border="0" /&gt;==
 <verbatim>
-      * #Set FORMAT = <img src="$url" alt="$emoticon" title="$emoticon" border="0" />
+      * Set FORMAT = <img src="$url" alt="$tooltip" title="$tooltip" border="0" />
 </verbatim>
 
 ---++ Plugin Installation Instructions
@@ -70,21 +76,21 @@ This plugin is installed by default with a TWiki release. You should not need to
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
      | ==pub/TWiki/%TOPIC%/*.gif== | Plugin icon files |
    * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
    * Test if the plugin is correctly installed:
    * You will see a series of icons on next line: <br />
-     :-) :) :cool: :( :o :D ;) :p :rolleyes: :mad: :eek: :confused: >:-) >;-) :-X :ok: :yes: :no: :love: :skull:
+     :-) :) :cool: :( :o :D ;) :p :rolleyes: :mad: :eek: :confused: >:-) >;-) :-X :ok: :yes: :no: :love: :skull: :red: :green:
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/AndreaSterbini, TWiki:Main/PeterThoeny |
+|  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2001-2007 Andrea Sterbini,%BR% &copy; 2001-2010 Peter Thoeny,%BR% &copy; 2001-2010 TWiki:TWiki/TWikiContributor |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2010-05-15: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
+|  2010-09-20: | TWikibug:Item6580: Added "red", "yellow", "green", "blue" smilies |
+|  2010-05-15: | TWikibug:Item6433: Doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  21 Nov 2007: | Doc improvements |
 |  16 Mar 2005: | Fixed typo "scull" |
 |  5 Mar 2005: | 1.004 Crawford Currie prepared for Dakar |
@@ -127,3 +133,7 @@ __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 %META:FILEATTACHMENT{name="no.gif" attr="h" comment="" date="1093124458" path="no.gif" size="468" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="love.gif" attr="h" comment="" date="1093124471" path="love.gif" size="379" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="skull.gif" attr="h" comment="" date="1093124482" path="skull.gif" size="1006" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="red.gif" attr="h" comment="" date="1285020468" path="red.gif" size="943" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="yellow.gif" attr="h" comment="" date="1285020468" path="yellow.gif" size="944" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="green.gif" attr="h" comment="" date="1285020468" path="green.gif" size="944" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="blue.gif" attr="h" comment="" date="1285020468" path="blue.gif" size="944" user="TWikiContributor" version="1"}%

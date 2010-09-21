@@ -1,7 +1,8 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2002-2006 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2002-2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2010 TWiki Contributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -30,7 +31,7 @@ use vars qw( $VERSION $RELEASE
             $smiliesPubUrl $allPattern $smiliesFormat );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-05-15';
+$RELEASE = '2010-09-20';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
