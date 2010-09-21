@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1284281892" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1285041755" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.0.1-rc1 (Helsinki), 2010-09-12
 
 %TOC%
@@ -175,6 +175,7 @@ TWiki-5.0.1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRele
 | TWikibug:Item6525 | SpreadSheetPlugin: Add $n token to TRANSLATE for newline |
 | TWikibug:Item6526 | SpreadSheetPlugin: Add ISO 8601 week number to FORMATTIME |
 | TWikibug:Item6576 | Support Authenticated Proxy |
+| TWikibug:Item6580 | SmiliesPlugin: Added "red", "yellow", "green", "blue" smilies |
 </noautolink>
 Total: 11
 
