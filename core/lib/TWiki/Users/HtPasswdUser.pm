@@ -125,22 +125,18 @@ sub _readPasswd {
     open( IN_FILE, "<$TWiki::cfg{Htpasswd}{FileName}" )
       || throw Error::Simple( $TWiki::cfg{Htpasswd}{FileName} . ' open failed: ' . $! );
 
-    while ( <IN_FILE> ) {
-        next if /^\s*(?:$|#)/;    #skip comments/raw lines
-        chomp;
-        my @line = split /:/;
-        my $key  = shift @line or next; # just ignore lines if no login name
-
-        if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {    # htdigest format
-            my @cols = qw/ authrealm pass emails flag pass_change flag_change /;
-            @{ $data->{$key} }{@cols} = @line;
-            $data->{$key}{flag} ||= 0;
-
-        } else {                                             # htpasswd format
-            my @cols = qw/ pass emails flag pass_change flag_change /;
-            @{ $data->{$key} }{@cols} = @line;
-            $data->{$key}{flag} ||= 0;
-
+    my $line = '';
+    while (defined ( $line =<IN_FILE> ) ) {
+        if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) { # htdigest format
+            if( $line =~ /^(.*?):(.*?):(.*?)(?::(.*))?$/ ) {
+                $data->{$1}->{pass}   = $3;
+                $data->{$1}->{emails} = $4 || '';
+            }
+        } else { # htpasswd format
+            if( $line =~ /^(.*?):(.*?)(?::(.*))?$/ ) {
+                $data->{$1}->{pass}   = $2;
+                $data->{$1}->{emails} = $3 || '';
+            }
         }
     }
 
@@ -154,28 +150,20 @@ sub _dumpPasswd {
 
     my $s = '';
     foreach ( sort keys %$db ) {
-        if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {    # htdigest format
-            $s .=
-                $_ . ':'
-              . $TWiki::cfg{AuthRealm} . ':'
-              . $db->{$_}{pass} . ':'
-              . $db->{$_}{emails} . ':'
-              . $db->{$_}{flag} . ':'
-              . ( $db->{$_}{pass_change} ||= '' )
-              . ":"    # converting undef to ''
-              . ( $db->{$_}{flag_change} ||= '' )
-              . "\n";    # converting undef to ''
+        if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {
+            # htdigest format
+            $s .= $_ . ':'
+                . $TWiki::cfg{AuthRealm} . ':'
+                . $db->{$_}->{pass} . ':'
+                . $db->{$_}->{emails}
+                . "\n";
 
-        } else {         # htpasswd format
-            $s .=
-                $_ . ':'
-              . $db->{$_}{pass} . ':'
-              . $db->{$_}{emails} . ":"
-              . $db->{$_}{flag} . ":"
-              . ( $db->{$_}{pass_change} ||= '' )
-              . ":"      # converting undef to ''
-              . ( $db->{$_}{flag_change} ||= '' )
-              . "\n";    # converting undef to ''
+        } else {
+            # htpasswd format
+            $s .= $_ . ':'
+                . $db->{$_}->{pass} . ':'
+                . $db->{$_}->{emails}
+                . "\n";
         }
     }
     return $s;
@@ -294,11 +282,6 @@ sub setPassword {
         my $db = $this->_readPasswd();
         $db->{$login}->{pass} = $this->encrypt( $login, $newUserPassword, 1 );
         $db->{$login}->{emails} ||= '';
-        $db->{$login}->{pass_change} = time();
-        if ( $db->{$login}->{flag} ) {
-            $db->{$login}->{flag}        = 0;
-            $db->{$login}->{flag_change} = time();
-        }
 
         _savePasswd( $db );
 
