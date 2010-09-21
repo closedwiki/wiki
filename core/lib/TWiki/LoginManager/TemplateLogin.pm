@@ -51,12 +51,12 @@ Construct the TemplateLogin object
 sub new {
     my ( $class, $session ) = @_;
     my $this = $class->SUPER::new($session);
-    $session->enterContext('can_login');
+    $session->enterContext( 'can_login' );
     if ( $TWiki::cfg{Sessions}{ExpireCookiesAfter} ) {
-        $session->enterContext('can_remember_login');
+        $session->enterContext( 'can_remember_login' );
     }
     if ( $TWiki::cfg{TemplateLogin}{PreventBrowserRememberingPassword} ) {
-        $session->enterContext('no_auto_complete_login');
+        $session->enterContext( 'no_auto_complete_login' );
     }
     return $this;
 }
@@ -74,7 +74,7 @@ sub forceAuthentication {
     my $this  = shift;
     my $twiki = $this->{twiki};
 
-    unless ( $twiki->inContext('authenticated') ) {
+    unless ( $twiki->inContext( 'authenticated' ) ) {
         my $query = $twiki->{request};
 
         # Redirect with passthrough so we don't lose the original query params
@@ -134,65 +134,59 @@ sub login {
     my $twiki = $this->{twiki};
     my $users = $twiki->{users};
 
-    my $origurl   = $query->param('origurl');
-    my $loginName = $query->param('username');
-    my $loginPass = $query->param('password');
-    my $remember  = $query->param('remember');
+    my $origurl   = $query->param( 'origurl' );
+    my $loginName = $query->param( 'username' );
+    my $loginPass = $query->param( 'password' );
+    my $remember  = $query->param( 'remember' );
 
     # Eat these so there's no risk of accidental passthrough
     $query->delete( 'origurl', 'username', 'password' );
 
     # UserMappings can over-ride where the login template is defined
     my $loginTemplate = $users->loginTemplateName();    #defaults to login.tmpl
-    my $tmpl =
-      $twiki->templates->readTemplate( $loginTemplate, $twiki->getSkin() );
+    my $tmpl = $twiki->templates->readTemplate( $loginTemplate, $twiki->getSkin() );
 
-    my $banner = $twiki->templates->expandTemplate('LOG_IN_BANNER');
+    my $banner = $twiki->templates->expandTemplate( 'LOG_IN_BANNER' );
     my $note   = '';
     my $topic  = $twiki->{topicName};
     my $web    = $twiki->{webName};
 
     my $cgisession = $this->{_cgisession};
 
-    $cgisession->param( 'REMEMBER', $remember ) if $cgisession;
+    $cgisession->param( 'REMEMBER', $remember ) if( $cgisession );
     if (   $cgisession
-        && $cgisession->param('AUTHUSER')
+        && $cgisession->param( 'AUTHUSER' )
         && $loginName
-        && $loginName ne $cgisession->param('AUTHUSER') )
+        && $loginName ne $cgisession->param( 'AUTHUSER' ) )
     {
-        $banner = $twiki->templates->expandTemplate('LOGGED_IN_BANNER');
-        $note   = $twiki->templates->expandTemplate('NEW_USER_NOTE');
+        $banner = $twiki->templates->expandTemplate( 'LOGGED_IN_BANNER' );
+        $note   = $twiki->templates->expandTemplate( 'NEW_USER_NOTE' );
     }
 
     my $error = '';
 
-    if ($loginName) {
+    if( $loginName ) {
         my $validation = $users->checkPassword( $loginName, $loginPass );
         $error = $users->passwordError();
 
-        if ($validation) {
-            $this->userLoggedIn($loginName);
-            $cgisession->param( 'VALIDATION', $validation ) if $cgisession;
+        if( $validation ) {
+            $this->userLoggedIn( $loginName );
+            $cgisession->param( 'VALIDATION', $validation ) if( $cgisession );
             if ( !$origurl || $origurl eq $query->url() ) {
                 $origurl = $twiki->getScriptUrl( 0, 'view', $web, $topic );
             }
 
             #SUCCESS our user is authenticated..
 
-            my $passflag = $users->passwordChangeFlag($loginName);
-            if ($passflag) {
+            # remove the sudo param - its only to tell TemplateLogin that we're using BaseMapper..
+            # Redirect with passthrough
+            $query->delete( 'sudo' );
 
-                #TODO - add the logic to take user to change password prompt
-            }
-
-            $query->delete('sudo')
-              ; #remove the sudo param - its only to tell TemplateLogin that we're using BaseMapper..
-                # Redirect with passthrough
             $twikiSession->redirect( $origurl, 1 );
             return;
-        }
-        else {
-            $banner = $twiki->templates->expandTemplate('UNRECOGNISED_USER');
+
+        } else {
+            $banner = $twiki->templates->expandTemplate( 'UNRECOGNISED_USER' );
         }
     }
 
@@ -212,7 +206,7 @@ sub login {
     $tmpl = $twiki->handleCommonTags( $tmpl, $web, $topic );
     $tmpl = $twiki->renderer->getRenderedVersion( $tmpl, '' );
     $tmpl =~ s/<nop>//g;
-    $twiki->writeCompletePage($tmpl);
+    $twiki->writeCompletePage( $tmpl );
 }
 
 1;
