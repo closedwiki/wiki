@@ -127,20 +127,24 @@ sub _readPasswd {
 
     my $line = '';
     while (defined ( $line =<IN_FILE> ) ) {
-        if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) { # htdigest format
-            if( $line =~ /^(.*?):(.*?):(.*?)(?::(.*))?$/ ) {
-                $data->{$1}->{pass}   = $3;
-                $data->{$1}->{emails} = $4 || '';
-            }
-        } else { # htpasswd format
-            if( $line =~ /^(.*?):(.*?)(?::(.*))?$/ ) {
-                $data->{$1}->{pass}   = $2;
-                $data->{$1}->{emails} = $3 || '';
-            }
+        chomp( $line );
+        my @tokens = split( /:/, $line );
+
+        if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {
+            # htdigest format: UserName:AuthRealm:password:email1,email2
+            next if( $#tokens < 2 );
+            $data->{$tokens[0]}->{pass}   = $tokens[2] || '';
+            $data->{$tokens[0]}->{emails} = $tokens[3] || '';
+
+        } else {
+            # htpasswd format: UserName:password:email1,email2
+            next if( $#tokens < 1 );
+            $data->{$tokens[0]}->{pass}   = $tokens[1] || '';
+            $data->{$tokens[0]}->{emails} = $tokens[2] || '';
         }
     }
-
     close( IN_FILE );
+
     $this->{passworddata} = $data;
     return $data;
 }
