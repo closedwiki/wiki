@@ -213,7 +213,7 @@ sub encrypt {
         my $salt;
         $salt = $this->fetchPass( $login ) unless( $fresh );
         if ( $fresh || !$salt ) {
-            my @saltchars = ( 'a' .. 'z', 'A' .. 'Z', '0' .. '9', '.', '/' );
+            my @saltchars = ( 'a'..'z', 'A'..'Z', '0'..'9', '.', '/' );
             $salt =
                 $saltchars[ int( rand( $#saltchars + 1 ) ) ]
               . $saltchars[ int( rand( $#saltchars + 1 ) ) ];
@@ -230,7 +230,7 @@ sub encrypt {
         my $salt = $this->fetchPass( $login ) unless( $fresh );
         if ( $fresh || !$salt ) {
             $salt = '$1$';
-            my @saltchars = ( '.', '/', 0 .. 9, 'A' .. 'Z', 'a' .. 'z' );
+            my @saltchars = ( '.', '/', 0..9, 'A'..'Z', 'a'..'z' );
             foreach my $i ( 0 .. 7 ) {
 
                 # generate a salt not only from rand() but also mixing in
@@ -267,8 +267,8 @@ sub fetchPass {
                 $this->{error} = 'Login invalid';
                 $ret = undef;
             }
-        }
-        catch Error::Simple with {
+
+        } catch Error::Simple with {
             $this->{error} = $!;
         };
 
@@ -301,8 +301,8 @@ sub setPassword {
         }
 
         _savePasswd( $db );
-    }
-    catch Error::Simple with {
+
+    } catch Error::Simple with {
         $this->{error} = $!;
         print STDERR "ERROR: failed to resetPassword - $!";
         return undef;
@@ -326,8 +326,8 @@ sub removeUser {
             _savePasswd( $db );
             $result = 1;
         }
-    }
-    catch Error::Simple with {
+
+    } catch Error::Simple with {
         $this->{error} = shift->{-text};
     };
     return $result;
