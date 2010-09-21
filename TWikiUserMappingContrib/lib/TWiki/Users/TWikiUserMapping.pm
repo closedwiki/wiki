@@ -1084,19 +1084,4 @@ sub _expandUserList {
     return \@l;
 }
 
-=begin 
-
----++ passwordChangeFlag ( $this, $login, $flag) -> $boolean 
-this subroutine helps to set the flag or just returns the current flag. 
-helpful if the flag is 1, then user is prompted to change the password
-
-
-=cut 
-
-sub passwordChangeFlag {
-    my( $this, $login, $flag ) = @_;
-    return $this->{passwords}->passwordChangeFlag( $login, $flag );
-}
-
-
 1;
