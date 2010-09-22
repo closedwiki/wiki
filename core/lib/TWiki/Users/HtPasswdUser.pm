@@ -127,22 +127,26 @@ sub _readPasswd {
 
     my $line = '';
     if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {
-        # htdigest format: UserName:AuthRealm:password:email1,email2
+        # htdigest format: UserName:AuthRealm:password:email1,email2:mustChgPwd:pwdChgTime
         while (defined ( $line =<IN_FILE> ) ) {
             chomp( $line );
             my @tokens = split( /:/, $line );
             next if( $#tokens < 2 );
-            $data->{$tokens[0]}->{pass}   = $tokens[2] || '';
-            $data->{$tokens[0]}->{emails} = $tokens[3] || '';
+            $data->{$tokens[0]}->{pass}         = $tokens[2] || '';
+            $data->{$tokens[0]}->{emails}       = $tokens[3] || '';
+            $data->{$tokens[0]}->{mustChgPwd}   = $tokens[4] || 0;
+            $data->{$tokens[0]}->{pwdChgTime}   = $tokens[5] || 0;
         }
     } else {
-        # htpasswd format: UserName:password:email1,email2
+        # htpasswd format: UserName:password:email1,email2:mustChgPwd:pwdChgTime
         while (defined ( $line =<IN_FILE> ) ) {
             chomp( $line );
             my @tokens = split( /:/, $line );
             next if( $#tokens < 1 );
-            $data->{$tokens[0]}->{pass}   = $tokens[1] || '';
-            $data->{$tokens[0]}->{emails} = $tokens[2] || '';
+            $data->{$tokens[0]}->{pass}         = $tokens[1] || '';
+            $data->{$tokens[0]}->{emails}       = $tokens[2] || '';
+            $data->{$tokens[0]}->{mustChgPwd}   = $tokens[3] || 0;
+            $data->{$tokens[0]}->{pwdChgTime}   = $tokens[4] || 0;
         }
     }
     close( IN_FILE );
@@ -161,7 +165,9 @@ sub _dumpPasswd {
         $s .= $_ . ':';
         $s .= $TWiki::cfg{AuthRealm} . ':' if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' );
         $s .= $db->{$_}->{pass} . ':'
-            . $db->{$_}->{emails}
+            . $db->{$_}->{emails} . ':'
+            . $db->{$_}->{mustChgPwd} . ':'
+            . $db->{$_}->{pwdChgTime}
             . "\n";
     }
     return $s;
