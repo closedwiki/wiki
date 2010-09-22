@@ -126,24 +126,28 @@ sub _readPasswd {
       || throw Error::Simple( $TWiki::cfg{Htpasswd}{FileName} . ' open failed: ' . $! );
 
     my $line = '';
-    while (defined ( $line =<IN_FILE> ) ) {
-        chomp( $line );
-        my @tokens = split( /:/, $line );
-
-        if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {
-            # htdigest format: UserName:AuthRealm:password:email1,email2
+    if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {
+        # htdigest format: UserName:AuthRealm:password:email1,email2
+        while (defined ( $line =<IN_FILE> ) ) {
+            chomp( $line );
+            my @tokens = split( /:/, $line );
             next if( $#tokens < 2 );
             $data->{$tokens[0]}->{pass}   = $tokens[2] || '';
             $data->{$tokens[0]}->{emails} = $tokens[3] || '';
-
-        } else {
-            # htpasswd format: UserName:password:email1,email2
+        }
+    } else {
+        # htpasswd format: UserName:password:email1,email2
+        while (defined ( $line =<IN_FILE> ) ) {
+            chomp( $line );
+            my @tokens = split( /:/, $line );
             next if( $#tokens < 1 );
             $data->{$tokens[0]}->{pass}   = $tokens[1] || '';
             $data->{$tokens[0]}->{emails} = $tokens[2] || '';
         }
     }
     close( IN_FILE );
+    # use Data::Dumper;
+    # print STDERR Dumper( $data );
 
     $this->{passworddata} = $data;
     return $data;
@@ -154,21 +158,11 @@ sub _dumpPasswd {
 
     my $s = '';
     foreach ( sort keys %$db ) {
-        if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {
-            # htdigest format
-            $s .= $_ . ':'
-                . $TWiki::cfg{AuthRealm} . ':'
-                . $db->{$_}->{pass} . ':'
-                . $db->{$_}->{emails}
-                . "\n";
-
-        } else {
-            # htpasswd format
-            $s .= $_ . ':'
-                . $db->{$_}->{pass} . ':'
-                . $db->{$_}->{emails}
-                . "\n";
-        }
+        $s .= $_ . ':';
+        $s .= $TWiki::cfg{AuthRealm} . ':' if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' );
+        $s .= $db->{$_}->{pass} . ':'
+            . $db->{$_}->{emails}
+            . "\n";
     }
     return $s;
 }
