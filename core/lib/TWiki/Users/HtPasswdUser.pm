@@ -284,9 +284,10 @@ sub setPassword {
 
     try {
         my $db = $this->_readPasswd();
-        $db->{$login}->{pass} = $this->encrypt( $login, $newUserPassword, 1 );
-        $db->{$login}->{emails} ||= '';
-
+        $db->{$login}->{pass}       = $this->encrypt( $login, $newUserPassword, 1 );
+        $db->{$login}->{emails}   ||= '';
+        $db->{$login}->{pwdChgTime} = time();
+        $db->{$login}->{mustChgPwd} = 0;
         _savePasswd( $db );
 
     } catch Error::Simple with {
