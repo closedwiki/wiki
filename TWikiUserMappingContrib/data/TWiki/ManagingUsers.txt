@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273961677" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1285227436" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Manage Users
 
@@ -13,22 +13,41 @@ _Register users on your TWiki site; change/reset/install passwords; remove user 
    * TWikiUserAuthentication describes your options for user authentication
    * TWikiAccessControl describes how to define groups and how to restrict access to content
 
----++ Register User
+---++ List Users
+
+   * %USERSWEB%.%WIKIUSERSTOPIC% - list all registered users
+   * %USERSWEB%.UserList - user list
+   * %USERSWEB%.UserListByDateJoined - user list by date joined
+   * %USERSWEB%.UserListByLocation - user list by location
+
+---++ Register Users
 
 You don't have to have user home pages in TWiki for Authentication to work - see TWikiUserAuthentication for details.
 
    * TWikiRegistration is used when you want new users to individually register with TWiki by filling out a form
-   * You can create a custom versions of %SYSTEMWEB%.NewUserTemplate and %SYSTEMWEB%.UserForm
-   * BulkRegistration is used by administrators to register multiple users at the same time
 
----++ Change, Reset and Install Passwords
+__For administrators only:__
+
+   * BulkRegistration to register multiple users at the same time
+   * Default user profile page form definition and template:
+      * UserForm in %SYSTEMWEB% web - form definition (do not change)
+      * NewUserTemplate in %SYSTEMWEB% web - template page (do not change)
+   * Customized user profile page form definition and template:
+      * %USERSWEB%.UserForm in %USERSWEB% web - form definition (clone from the one in the %SYSTEMWEB% web and customize)
+      * %USERSWEB%.NewUserTemplate in %USERSWEB% web - template page (clone from the one in the %SYSTEMWEB% web and customize)
+
+---++ Query and Edit User Account Data (Passwords, E-mails)
 
 _Note that the below features are only relevant when you use an internal password manager where TWiki can set and reset passwords._
 
    * ChangePassword is for users who _can_ remember their password and want to change it
    * ResetPassword is for users who _cannot_ remember their password; a system generated password is e-mailed to them
-   * BulkResetPassword if for administrators who want to reset many passwords at once
    * ChangeEmailAddress changes the hidden email address stored in the password file
+
+__For administrators only:__
+
+   * QueryUsers to query and edit user account data (password, e-mail etc)
+   * BulkResetPassword to reset many passwords at once
 
 ---++ Changing User Account Names
 
@@ -123,9 +142,10 @@ Your TWiki Admin
 %MAKETEXT{"Submitted content:"}%
 %FORMDATA%
 
-%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%USERSWEB%.TWikiAdminGroup"}%
 </verbatim>
 
 __Note:__ Remember to secure the topic appropriately to prevent attackers from getting emailed sensitive passwords.
 
-__Related Topics:__ AdminDocumentationCategory
+__%MAKETEXT{"Related topics:"}%__ UserToolsCategory, AdminToolsCategory
+
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25USERSWEB%25.TWikiAdminGroup"}%
