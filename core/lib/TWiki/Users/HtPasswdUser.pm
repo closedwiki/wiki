@@ -132,6 +132,12 @@ sub _readPasswd {
             chomp( $line );
             my @tokens = split( /:/, $line );
             next if( $#tokens < 2 );
+            if( $tokens[0] =~ /^#/ ) {
+                $tokens[0] =~ s/^#+ *//;
+                $data->{$tokens[0]}->{disabled} = 1;
+            } else {
+                $data->{$tokens[0]}->{disabled} = 0;
+            }
             $data->{$tokens[0]}->{pass}         = $tokens[2] || '';
             $data->{$tokens[0]}->{emails}       = $tokens[3] || '';
             $data->{$tokens[0]}->{mustChgPwd}   = $tokens[4] || 0;
@@ -143,6 +149,12 @@ sub _readPasswd {
             chomp( $line );
             my @tokens = split( /:/, $line );
             next if( $#tokens < 1 );
+            if( $tokens[0] =~ /^#/ ) {
+                $tokens[0] =~ s/^#+ *//;
+                $data->{$tokens[0]}->{disabled} = 1;
+            } else {
+                $data->{$tokens[0]}->{disabled} = 0;
+            }
             $data->{$tokens[0]}->{pass}         = $tokens[1] || '';
             $data->{$tokens[0]}->{emails}       = $tokens[2] || '';
             $data->{$tokens[0]}->{mustChgPwd}   = $tokens[3] || 0;
@@ -161,16 +173,23 @@ sub _dumpPasswd {
     my $db = shift;
 
     my $s = '';
-    foreach ( sort keys %$db ) {
-        $s .= $_ . ':';
-        $s .= $TWiki::cfg{AuthRealm} . ':' if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' );
-        $s .= $db->{$_}->{pass} . ':'
-            . $db->{$_}->{emails} . ':'
-            . $db->{$_}->{mustChgPwd} . ':'
-            . $db->{$_}->{pwdChgTime}
-            . "\n";
-    }
-    return $s;
+    my $text = join( "\n",
+        sort
+        map{
+            $s  = '';
+            $s .= '#' if( $db->{$_}->{disabled} );
+            $s .= $_ . ':';
+            $s .= $TWiki::cfg{AuthRealm} . ':' if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' );
+            $s .= $db->{$_}->{pass} . ':'
+                . $db->{$_}->{emails} . ':'
+                . $db->{$_}->{mustChgPwd} . ':'
+                . $db->{$_}->{pwdChgTime};
+            $s;
+        }
+        keys( %$db )
+      ) . "\n";
+
+    return $text;
 }
 
 sub _savePasswd {
@@ -253,7 +272,7 @@ sub fetchPass {
     if ( $login ) {
         try {
             my $db = $this->_readPasswd();
-            if ( exists $db->{$login} ) {
+            if ( exists $db->{$login} && ! $db->{$login}{disabled} ) {
                 $ret = $db->{$login}->{pass};
             } else {
                 $this->{error} = 'Login invalid';
@@ -352,7 +371,7 @@ sub getEmails {
 
     # first try the mapping cache
     my $db = $this->_readPasswd();
-    if ( $db->{$login}->{emails} ) {
+    if ( $db->{$login}->{emails} && ! $db->{$login}{disabled} ) {
         return split( /;/, $db->{$login}->{emails} );
     }
 
@@ -386,6 +405,7 @@ sub findUserByEmail {
     my $logins = [];
     my $db     = _readPasswd();
     while ( my ( $k, $v ) = each %$db ) {
+        next if( $v->{disabled} );
         my %ems = map { $_ => 1 } split( ';', $v->{emails} );
         if ( $ems{$email} ) {
             push( @$logins, $k );
