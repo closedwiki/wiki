@@ -1,0 +1,10 @@
+%META:TOPICINFO{author="TWikiContributor" date="1285224910" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="ManagingUsers"}%
+---+!! Query Users
+
+<form action="%SCRIPTURLPATH{view}%/%WEB%/%TOPIC%">
+| Find users: <input type="text" name="filter" value="%URLPARAM{ "filter" encode="entity" }%" size="30" class="twikiInputField" /> <input type="submit" value="Search" class="twikiSubmit" /> |
+</form>
+%USERMANAGER{ action="queryusers" filter="%URLPARAM{ "filter" encode="quote" }%" }%
+
+__%MAKETEXT{"Related topics:"}%__ ManagingUsers, EditUserAccount, AdminToolsCategory

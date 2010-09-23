@@ -1,0 +1,10 @@
+%META:TOPICINFO{author="TWikiContributor" date="1285224910" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="QueryUsers"}%
+---+!! Edit User Account
+
+<form action="%SCRIPTURLPATH{view}%/%WEB%/%TOPIC%">
+| WikiName of user: <input type="text" name="user" value="%URLPARAM{ "user" encode="entity" }%" size="30" class="twikiInputField" /> <input type="submit" value="Submit" class="twikiSubmit" /> &nbsp; or [[QueryUsers][find users]] |
+</form>
+%USERMANAGER{ action="edituser" user="%URLPARAM{ "user" encode="quote" }%" }%
+
+__%MAKETEXT{"Related topics:"}%__ ManagingUsers, QueryUsers, AdminToolsCategory
