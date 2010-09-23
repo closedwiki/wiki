@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277525551" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1285224910" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="CategoryCategory"}%
 ---+ Admin Tools
 
@@ -6,7 +6,7 @@ _Manage whole <b>TWiki</b> site from one screen._
 
    * %ICON{help}% Documentation: [[TWikiReferenceManual][TWiki Reference Manual]]
    * %ICON{wrench}% [[TWikiSiteTools][Site Tools]]: [[%SCRIPTURLPATH{"configure"}%][Configure]], %WIKIPREFSTOPIC%, InterWikis, [[TWikiVariables][Variables]], [[TWikiDocGraphics][Doc Graphics]]
-   * %ICON{persons}% Manage [[%USERSWEB%.%WIKIUSERSTOPIC%][Users]]: [[TWikiRegistration][Register]], %SYSTEMWEB%.NewUserTemplate, %SYSTEMWEB%.UserForm, ResetPassword, ChangePassword
+   * %ICON{persons}% [[ManagingUsers][Manage Users]]: [[%USERSWEB%.%WIKIUSERSTOPIC%][All users]], [[TWikiRegistration][Registration]], QueryUsers, ResetPassword, ChangePassword, ChangeEmailAddress
    * %ICON{indexlist}% Manage Content: [[ManagingTopics][Topics]], [[ManagingWebs][Webs]], YouAreHere
    * %ICON{folder}% Webs: %TABLE{sort="off"}%
      | *TWiki %MAKETEXT{web}%* | *Tools* |
