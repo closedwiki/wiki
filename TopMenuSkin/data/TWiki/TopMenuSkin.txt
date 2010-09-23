@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1282453247" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1285225945" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -234,8 +234,9 @@ The !TopMenuSkin disables the sidebar and activates a different top bar in =twik
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Screenshot" title="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2010-08-21 (v1.8) |
+|  Skin Version: | 2010-09-23 (v1.9) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-09-23: | TWikibug:Item6530 - add !ManagingUsers to top menu of TWiki web |
 |  2010-08-21: | TWikibug:Item6524 - fix for no Account pulldown menu on IE7 Opera browser -- TWiki:Main.MalcolmNeumeyer |
 |  2010-06-09: | TWikibug:Item6485 - fix banner background image position issue on Safari |
 |  2010-06-06: | TWikibug:Item6482 - XHTML validation fixes; moving CSS to HTML head using ADDTOHEAD variable |

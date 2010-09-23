@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274934250" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1285225551" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkin"}%
 ---+ Top Menu of <nop>%WEB% Web
 
@@ -32,6 +32,7 @@ This topic defines the menu structure of the <nop>%WEB% web, used by the [[TopMe
    * [[AdminToolsCategory][%MAKETEXT{"Admin Maintenance"}% %ICONURL{menu-down}% ]]
       * [[TWikiReferenceManual][Reference Manual]]
       * [[InterWikis]]
+      * [[ManagingUsers]]
       * [[ManagingWebs]]
       * [[TWikiSiteTools]]
       * [[%WIKIPREFSTOPIC%]]
