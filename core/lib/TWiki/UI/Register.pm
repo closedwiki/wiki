@@ -710,7 +710,7 @@ sub changePassword {
 
     my $cUID = $users->getCanonicalUserID($login);
     if( defined $email ) {
-        my $return = $users->setEmails($cUID, split(/\s+/, $email) );
+        my $return = $users->setEmails($cUID, split(/[;,\s]+/, $email) );
     }
 
     # OK - password may be changed
