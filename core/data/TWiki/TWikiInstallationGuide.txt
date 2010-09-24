@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1282526349" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1285288282" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Installation Guide
 
@@ -20,7 +20,7 @@ If you are installing TWiki without Unix/Linux root (administrator) privileges (
 
 If you are upgrading from an earlier major version of TWiki such as Cairo (TWiki-3) or TWiki 4.x you will need the information found at TWikiUpgradeGuide.
 
-One of the more difficult tasks is installation of addition !CPAN libraries. See TWiki:TWiki.HowToInstallCpanModules for detailed information on how to install !CPAN libraries.
+One of the more difficult tasks is installation of additional !CPAN libraries. See TWiki:TWiki.HowToInstallCpanModules for detailed information on how to install !CPAN libraries.
 
 If you need help, ask a question in the TWiki:Support.WebHome web or on TWiki:Codev.TWikiIRC (irc.freenode.net, channel #twiki).
 
