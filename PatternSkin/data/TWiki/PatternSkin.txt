@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1278207309" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1285376385" format="1.1" version="$Rev$"}%
 ---+!! Pattern Skin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -86,15 +86,16 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 
 ---++ Skin Info
 
-|  Skin Author: | TWiki:Main/ArthurClemens |
-|  Copyright: | &copy; 2004-2008 TWiki:Main/ArthurClemens; <br /> &copy; 2004-2010 TWiki:TWiki/TWikiContributor |
+|  Skin Author: | TWiki:Main.ArthurClemens |
+|  Copyright: | &copy; 2004-2008 TWiki:Main.ArthurClemens; <br /> &copy; 2004-2010 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Description: | TWiki's default skin; CSS based, flexible and <nop>W3C-compliant |
 |  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.png" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this skin]] |
 |  Base Name: | pattern |
-|  Skin Version: | 2010-07-03 |
+|  Skin Version: | 2010-09-24 |
 |  History: | <!-- specify latest version first -->&nbsp; |
+|  2010-09-24: | TWikibug:Item6544 - fix for Jump box having no help text in IE8 -- TWiki:Main.IanBowles |
 |  2010-07-03: | TWikibug:Item6514 - fix for float overlapping the topic action links at bottom if topic is short -- TWiki:Main/PeterThoeny |
 |  2010-06-19: | TWikibug:Item6499 - less screeming submit button and cancel button, aligning with color palette of TWiki:Plugins/TopMenuSkin -- TWiki:Main/PeterThoeny |
 |  2010-06-12: | TWikibug:Item5335 - conditional signature based on NOAUTOLINK setting, either user =Main.FirstLast= or =[<nop>[Main.Firstlast][Firstlast]]=; force-linking user name in topic info in case NOAUTOLINK set -- TWiki:Main/PeterThoeny |
