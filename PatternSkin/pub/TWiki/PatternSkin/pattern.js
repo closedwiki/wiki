@@ -59,7 +59,7 @@ var patternRules = {
 	'.twikiFormStep h3' : function(el) {
 		Pattern.createTwikiActionFormStepSign(el);
 	},
-	'#jumpFormField' : function(el) {
+	'input#jumpFormField' : function(el) {
 		twiki.Form.initBeforeFocusText(el,TEXT_JUMP);
 		el.onfocus = function() {
 			twiki.Form.clearBeforeFocusText(this);
@@ -68,7 +68,7 @@ var patternRules = {
 			twiki.Form.restoreBeforeFocusText(this);
 		}
 	},
-	'#quickSearchBox' : function(el) {
+	'input#quickSearchBox' : function(el) {
 		twiki.Form.initBeforeFocusText(el,TEXT_SEARCH);
 		el.onfocus = function() {
 			twiki.Form.clearBeforeFocusText(this);
