@@ -845,6 +845,43 @@ sub mapper_setEmails {
         $cUID, $TWiki::cfg{UsersWebName}, $user, $text, $meta );
 }
 
+=pod
+
+---++ ObjectMethod getUserData( $cUID ) -> $dataRef
+
+Return a reference to an array of hashes with user data, used to manage 
+users. Each item is a hash with:
+
+   * ={name}= - name of field, such as "email"
+   * ={title}= - title of field, such as "E-mail"
+   * ={value}= - value of field, such as "jimmy@example.com"
+   * ={type}= - type of field: =text=, =password=, =checkbox=, =label=
+   * ={size}= - size of field, such as =40=
+   * ={note}= - comment note, if any
+
+User management forms can be build dynamically from this data structure.
+Each password manager may return a different set of fields.
+
+=cut
+
+sub getUserData {
+    my( $this, $cUID ) = @_;
+    return $this->{passwords}->getUserData( $cUID );
+}
+
+=pod
+
+---++ ObjectMethod setUserData( $cUID, $dataRef )
+
+Set the user data of a user. Same array of hashes as getUserData is 
+assumed, although only ={name}= and ={value}= are used.
+
+=cut
+
+sub setUserData {
+    my( $this, $cUID, $dataRef ) = @_;
+    return $this->{passwords}->setUserData( $cUID, $dataRef );
+}
 
 =begin twiki
 
