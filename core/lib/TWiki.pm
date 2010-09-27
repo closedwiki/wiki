@@ -4044,6 +4044,8 @@ sub QUERYPARAMS {
 
     my @list;
     foreach my $name ( $this->{request}->param() ) {
+        # clean parameter names of illegal characters
+        $name =~ s/['"<>].*//;
         # Issues multi-valued parameters as separate hiddens
         my $value = $this->{request}->param( $name );
         if ($encoding) {
