@@ -348,6 +348,63 @@ sub getEmails {
 
 =pod
 
+---++ ObjectMethod getUserData( $cUID ) -> $dataRef
+
+Return a reference to an array of hashes with user data, used to manage 
+users. Each item is a hash with:
+
+   * ={name}= - name of field, such as "email"
+   * ={title}= - title of field, such as "E-mail"
+   * ={value}= - value of field, such as "jimmy@example.com"
+   * ={type}= - type of field: =text=, =password=, =checkbox=, =label=
+   * ={size}= - size of field, such as =40=
+   * ={note}= - comment note, if any
+
+User management forms can be build dynamically from this data structure.
+Each password manager may return a different set of fields.
+
+=cut
+
+sub getUserData {
+    my( $this, $cUID ) = @_;
+
+    my $wikiName  = $this->{U2W}->{$cUID} || '';
+    $wikiName     = "[[$TWiki::cfg{UsersWebName}.$wikiName][$wikiName]]" if( $wikiName );
+    my $login     = $this->{U2L}->{$cUID} || '';
+    my $email     = $this->{U2E}->{$cUID} || 'N/A';
+    my $emailNote = '';
+    if( $login eq $TWiki::cfg{AdminUserLogin} ) {
+        $emailNote .= 'Can be changed in {WebMasterEmail} configure setting';
+    }
+    my $pwd       = 'N/A';
+    my $pwdNote   = '';
+    if( $login eq $TWiki::cfg{AdminUserLogin} ) {
+        if( $this->{L2P}->{$login} ) {
+            $pwdNote .= 'Can be changed in {Password} configure setting'; 
+        } else {
+            $pwdNote .= 'Password is not set. To login as ' . $login
+                      . ', you must set {Password} in configure';
+        }
+    }
+
+    my $data;
+    my $i = 0;
+    $data->[$i++] = { name => 'wikiname', title => 'User profile page',
+        value => $wikiName, type => 'label', size  => 40, note => '' };
+    $data->[$i++] = { name => 'cuid',     title => 'Canonical user ID',
+        value => $cUID, type => 'label', size  => 40, note => '' };
+    $data->[$i++] = { name => 'login',    title => 'Login name',
+        value => $login, type => 'label', size  => 40, note => '' };
+    $data->[$i++] = { name => 'emails',   title => 'E-mail',
+        value => $email, type => 'label', size  => 40, note => $emailNote };
+    $data->[$i++] = { name => 'password', title => 'Password',
+        value => $pwd, type => 'label', size  => 40, note => $pwdNote };
+
+    return $data;
+}
+
+=pod
+
 ---++ ObjectMethod findUserByWikiName ($wikiname) -> list of cUIDs associated with that wikiname
 
 See baseclass for documentation.

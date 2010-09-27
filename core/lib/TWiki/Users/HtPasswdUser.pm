@@ -414,5 +414,84 @@ sub findUserByEmail {
     return $logins;
 }
 
+=pod
+
+---++ ObjectMethod getUserData( $cUID ) -> $dataRef
+
+Return a reference to an array of hashes with user data, used to manage 
+users. Each item is a hash with:
+
+   * ={name}= - name of field, such as "email"
+   * ={title}= - title of field, such as "E-mail"
+   * ={value}= - value of field, such as "jimmy@example.com"
+   * ={type}= - type of field: =text=, =password=, =checkbox=, =label=
+   * ={size}= - size of field, such as =40=
+   * ={note}= - comment note, if any
+
+User management forms can be build dynamically from this data structure.
+Each password manager may return a different set of fields.
+
+=cut
+
+sub getUserData {
+    my( $this, $cUID ) = @_;
+
+    my $db = $this->_readPasswd();
+    return undef unless( $db->{$cUID} );
+
+    my $wikiName  = "[[$TWiki::cfg{UsersWebName}.$cUID][$cUID]]";
+    my $login     = $cUID;
+    my $emails    = join( ', ', split( /;/, $db->{$cUID}->{emails} ) );
+    my $pwdChgStr = '';
+    if( $db->{$cUID}->{pwdChgTime} ) {
+        $pwdChgStr = '%CALC{$FORMATGMTIME('
+                 . $db->{$cUID}->{pwdChgTime}
+                 . ', $year-$mo-$day $hour:$min GMT)}%'
+                 . ' (%CALC{$FORMATTIMEDIFF(minute, 1, $TIMEDIFF('
+                 . $db->{$cUID}->{pwdChgTime}
+                 . ', $TIME(), minute))}% ago)';
+    }
+
+    my $data;
+    my $i = 0;
+    $data->[$i++] = { name => 'wikiname', title => 'User profile page',
+        value => $wikiName, type => 'label', size  => 40, note => '' };
+    $data->[$i++] = { name => 'cuid',     title => 'Canonical user ID',
+        value => $cUID, type => 'label', size  => 40, note => '' };
+    $data->[$i++] = { name => 'login',    title => 'Login name',
+        value => $login, type => 'label', size  => 40, note => '' };
+    $data->[$i++] = { name => 'emails',   title => 'E-mail',
+        value => $emails, type => 'text', size  => 40,
+        note => 'Separate multiple e-mail addresses by comma or space' };
+    $data->[$i++] = { name => 'password', title => 'Password',
+        value => '', type => 'password', size  => 40, note => '' };
+    $data->[$i++] = { name => 'confirm',  title => 'Retype password',
+        value => '', type => 'password', size  => 40, note => '' };
+    $data->[$i++] = { name => 'mcp',      title => 'Must change password',
+        value => $db->{$cUID}->{mustChgPwd}, type => 'checkbox', size  => 1, note => '' };
+    $data->[$i++] = { name => 'lpc',      title => 'Last password change', 
+        value => $pwdChgStr, type => 'label', size  => 40, note => '' };
+    $data->[$i++] = { name => 'disable',  title => 'Disable account', 
+        value => $db->{$cUID}->{disabled}, type => 'checkbox', size  => 1,
+        note => 'Disabled accounts cannot login but remain in the system' };
+
+    return $data;
+}
+
+=pod
+
+---++ ObjectMethod setUserData( $cUID, $dataRef )
+
+Set the user data of a user. Same array of hashes as getUserData is 
+assumed, although only ={name}= and ={value}= are used.
+
+=cut
+
+sub setUserData {
+    my( $this, $cUID, $data ) = @_;
+# FIXME
+    return;
+}
+
 1;
 
