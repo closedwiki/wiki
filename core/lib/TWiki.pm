@@ -3843,7 +3843,7 @@ sub REVTITLE {
     my $request = $this->{request};
     my $out = '';
     if( $request ) {
-        my $rev = $request->param('rev');
+        my $rev = $this->{store}->cleanUpRevID( $request->param( 'rev' ) );
         $out = '(r'.$rev.')' if ($rev);
     }
     return $out;
@@ -3854,7 +3854,7 @@ sub REVARG {
     my $request = $this->{request};
     my $out = '';
     if( $request ) {
-        my $rev = $request->param('rev');
+        my $rev = $this->{store}->cleanUpRevID( $request->param( 'rev' ) );
         $out = '&rev='.$rev if ($rev);
     }
     return $out;
