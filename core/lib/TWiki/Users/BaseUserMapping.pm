@@ -374,16 +374,18 @@ sub getUserData {
     my $email     = $this->{U2E}->{$cUID} || 'N/A';
     my $emailNote = '';
     if( $login eq $TWiki::cfg{AdminUserLogin} ) {
-        $emailNote .= 'Can be changed in {WebMasterEmail} configure setting';
+        $emailNote .= 'Can be changed in ={WebMasterEmail}= configure setting';
     }
     my $pwd       = 'N/A';
     my $pwdNote   = '';
     if( $login eq $TWiki::cfg{AdminUserLogin} ) {
         if( $this->{L2P}->{$login} ) {
-            $pwdNote .= 'Can be changed in {Password} configure setting'; 
+            $pwd  = '=******=';
+            $pwdNote .= 'Can be changed in ={Password}= configure setting'; 
         } else {
-            $pwdNote .= 'Password is not set. To login as ' . $login
-                      . ', you must set {Password} in configure';
+            $pwd  = 'Not set!';
+            $pwdNote .= 'To login as ' . $login
+                      . ', you must set ={Password}= in configure';
         }
     }
 
