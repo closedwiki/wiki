@@ -89,6 +89,7 @@ sub _saveUserData {
     my $query   = $session->{request};
     my $cUID    = $session->{user};
     my $user    = $query->param( 'user' ) || '';
+    my $saveMsg = '';
 
     if( $query->request_method() !~ /^POST$/i ) {
         # manage script to save user data can only be called with POST method
@@ -100,8 +101,23 @@ sub _saveUserData {
             params => [ 'manage' ]);
     }
 
-# FIXME
-    my $saveMsg = 'FIXME: Saving of user data';
+    $saveMsg = 'Error: Missing =user= parameter' unless( $user );
+    unless( $saveMsg || $session->{users}->isAdmin( $cUID ) ) {
+        $saveMsg = 'Error: Only administrators can modify user account data';
+    }
+
+    unless( $saveMsg ) {
+        my $data;
+        my $i = 0;
+        foreach my $p ( $query->param() ) {
+            next unless( $p =~ /^ud_(.*)/ );
+            $data->[$i++] = { name => $1, value => $query->param( $p ) };
+        }
+
+        # save user data
+        $saveMsg = $session->{users}->setUserData( $data );
+        $saveMsg = 'User account data has been saved' unless( $saveMsg );
+    }
 
     my $url = $session->getScriptUrl( 1, 'view', $webName, $topic,
         user => $user, saveMsg => $saveMsg );
