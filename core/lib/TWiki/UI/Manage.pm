@@ -91,8 +91,8 @@ sub _saveUserData {
     my $user    = $query->param( 'user' ) || '';
     my $saveMsg = '';
 
+    # POST method is required to save user data
     if( $query->request_method() !~ /^POST$/i ) {
-        # manage script to save user data can only be called with POST method
         throw TWiki::OopsException(
             'attention',
             def => 'post_method_only',
@@ -101,12 +101,24 @@ sub _saveUserData {
             params => [ 'manage' ]);
     }
 
-    $saveMsg = 'Error: Missing =user= parameter' unless( $user );
-    unless( $saveMsg || $session->{users}->isAdmin( $cUID ) ) {
+    # admin group member is required 
+    unless( $session->{users}->isAdmin( $cUID ) ) {
         $saveMsg = 'Error: Only administrators can modify user account data';
     }
 
+    # check user parameter
+    unless( $saveMsg || $user ) {
+        $saveMsg = 'Error: Missing =user= parameter';
+    }
+
+    # check if cUID exists of user
+    $cUID = $session->{users}->getCanonicalUserID( $user, 1 );
+    unless( $saveMsg || $cUID ) {
+        $saveMsg = "Error: User <nop>$user not found";
+    }
+
     unless( $saveMsg ) {
+        # compose user data from CGI parameters
         my $data;
         my $i = 0;
         foreach my $p ( $query->param() ) {
@@ -115,7 +127,7 @@ sub _saveUserData {
         }
 
         # save user data
-        $saveMsg = $session->{users}->setUserData( $data );
+        $saveMsg = $session->{users}->setUserData( $cUID, $data );
         $saveMsg = 'User account data has been saved' unless( $saveMsg );
     }
 
