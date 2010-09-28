@@ -490,7 +490,7 @@ assumed, although only ={name}= and ={value}= are used.
 sub setUserData {
     my( $this, $cUID, $data ) = @_;
 # FIXME
-    return;
+    return '';
 }
 
 1;

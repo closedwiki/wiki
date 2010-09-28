@@ -1059,12 +1059,14 @@ sub _userManagerEditUser {
         }
         my $cgiQuery = $this->{session}->{request};
         if( $cgiQuery && $cgiQuery->param('saveMsg') ) {
+            my $icon = ( $cgiQuery->param('saveMsg') =~ /^Err/ )
+                     ? '%ICON{led-red}%' : '%ICON{led-green}%';
             $text .= $this->_renderUserDataField(
                 {
                     type  => 'label',
                     name  => 'savemsg',
                     value => '<div style="color:#A6000B; background-color:#F5F4AB;'
-                           . ' padding: 0 3px 0 3px"> %ICON{led-orange}% '
+                           . ' padding: 0 3px 0 3px"> ' . $icon . ' '
                            . $cgiQuery->param( 'saveMsg' ) . '</div>'
                 } );
         }
