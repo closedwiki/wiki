@@ -107,6 +107,9 @@ sub new {
     my ( $class, $session ) = @_;
     my $this = bless( { session => $session }, $class );
 
+    # register tag handler for user manager GUI
+    TWiki::registerTagHandler( 'USERMANAGER', \&_USERMANAGER );
+
     require TWiki::LoginManager;
     $this->{loginManager} = TWiki::LoginManager::makeLoginManager( $session );
 
@@ -968,6 +971,128 @@ topics, which may still be linked.
 sub removeUser {
     my ( $this, $cUID ) = @_;
     $this->_getMapping( $cUID )->removeUser( $cUID );
+}
+
+=pod
+
+---++ ObjectMethod _USERMANAGER( $twiki, $params )
+
+=cut
+
+sub _USERMANAGER {
+    my( $twiki, $params ) = @_;
+
+    my $this = $twiki->{users};
+    my $action = $params->{action};
+
+    unless( $this->isAdmin( $this->getCanonicalUserID( $this->{remoteUser} ) ) ) {
+        return "__Note:__ User management is reserved to TWiki administrators.";
+    }
+
+    if( $action eq 'queryusers' ) {
+        return $this->_userManagerQueryUsers( $params );
+
+    } elsif( $action eq 'edituser' ) {
+        return $this->_userManagerEditUser( $params );
+
+    } else {
+        return "User Manager: Unrecognized or missing action parameter.";
+    }
+}
+
+=pod
+
+---++ ObjectMethod _userManagerQueryUsers( $params )
+
+=cut
+
+sub _userManagerQueryUsers {
+    my( $this, $params ) = @_;
+
+    my $filter = $params->{filter};
+    $filter = '.*' if( $filter eq '*' );
+    unless( $filter ) {
+        return "__Note:__ Specify part of a user name, or =*= for all users.";
+    }
+
+    my $text = 'FIXME';
+
+    return $text;
+}
+
+=pod
+
+---++ ObjectMethod _userManagerEditUser( $params )
+
+=cut
+
+sub _userManagerEditUser {
+    my( $this, $params ) = @_;
+
+    my $wikiName = $params->{user};
+
+    return 'Please specify a user' unless( $wikiName );
+
+    my $cUID = $this->getCanonicalUserID( $wikiName, 1 );
+
+    return 'User does not exist' unless( $cUID );
+
+    my $text = '';
+    my $data = $this->getUserData( $cUID );
+    if( $data ) {
+        my $canModify = 0;
+        $text .= "<form>\n";
+        $text .= "<noautolink>\n" . '%TABLE{ sort="off" }%' . "\n";
+        for( my $i=0; $i < scalar @$data; $i++ ) {
+            $canModify = 1 if( $data->[$i]->{type} ne 'label' );
+            $text .= $this->_renderUserDataField( $data->[$i] );
+        }
+        if( $canModify ) {
+            $text .= $this->_renderUserDataField( { type => 'submit', value => 'Save' } );
+        }
+        $text .= "</noautolink>\n</form>\n";
+    }
+
+    return $text;
+}
+
+=pod
+
+---++ ObjectMethod _renderUserDataField( $fieldRef )
+
+=cut
+
+sub _renderUserDataField {
+    my( $this, $field ) = @_;
+    my $cell1 = $field->{title};
+    $cell1   .= ':' if( $field->{title} );
+    my $cell2 = $field->{value};
+    if( $field->{type} =~ /^(text|password)$/ ) {
+        $cell2 = '<input type="' . $field->{type}
+               . '" name="'  . $field->{name}
+               . '" value="' . TWiki::entityEncode( $field->{value} )
+               . '" size="' . $field->{size}
+               . '" class="twikiInputField" />';
+    } elsif( $field->{type} eq 'checkbox' ) {
+        $cell1 = '';
+        my $checked = $field->{value} ? '" checked="checked' : '';
+        $cell2 = '<input type="checkbox'
+               . '" name="'  . $field->{name}
+               . '" id="'  . $field->{name}
+               . $checked
+               . '" class="twikiCheckbox" />'
+               . '<label for="' . $field->{name}
+               . '"> ' . $field->{title} . ' </label>';
+    } elsif( $field->{type} eq 'submit' ) {
+        $cell2 = '<input type="submit'
+               . '" value="' . $field->{value}
+               . '" class="twikiSubmit" />';
+    } else {
+        # 'label'
+    }
+    $cell2 .= ' <br />%ICON{tip}% ' . $field->{note} if( $field->{note} );
+
+    return( "|  $cell1 | $cell2 |\n" );
 }
 
 1;
