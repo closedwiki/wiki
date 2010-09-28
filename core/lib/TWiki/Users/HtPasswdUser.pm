@@ -485,6 +485,9 @@ sub getUserData {
 Set the user data of a user. Same array of hashes as getUserData is 
 assumed, although only ={name}= and ={value}= are used.
 
+Returns an empty string if save action is OK, or an error string 
+starting with 'Error: ' if there is an error.
+
 =cut
 
 sub setUserData {

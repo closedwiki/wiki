@@ -279,9 +279,13 @@ sub getUserData {
 Set the user data of a user. Same array of hashes as getUserData is 
 assumed, although only ={name}= and ={value}= are used.
 
+Sub classes should return an empty string if save action is OK, or an 
+error string starting with 'Error: '.
+
 =cut
 
 sub setUserData {
+    return 'Error: User data cannot be saved in a read-only password handler';
 }
 
 =pod 
