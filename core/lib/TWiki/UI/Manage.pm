@@ -62,6 +62,8 @@ sub manage {
     } elsif ($action eq 'bulkRegister') {
         require TWiki::UI::Register;
         TWiki::UI::Register::bulkRegister( $session );
+    } elsif( $action eq 'saveUserData' ) {
+        _saveUserData( $session );
     } elsif( $action eq 'deleteUserAccount' ) {
         _removeUser( $session );
     } elsif( $action eq 'editSettings' ) {
@@ -77,6 +79,33 @@ sub manage {
     } else {
         throw TWiki::OopsException( 'attention', def => 'missing_action' );
     }
+}
+
+sub _saveUserData {
+    my $session = shift;
+
+    my $webName = $session->{webName};
+    my $topic   = $session->{topicName};
+    my $query   = $session->{request};
+    my $cUID    = $session->{user};
+    my $user    = $query->param( 'user' ) || '';
+
+    if( $query->request_method() !~ /^POST$/i ) {
+        # manage script to save user data can only be called with POST method
+        throw TWiki::OopsException(
+            'attention',
+            def => 'post_method_only',
+            web => $webName,
+            topic => $topic,
+            params => [ 'manage' ]);
+    }
+
+# FIXME
+    my $saveMsg = 'FIXME: Saving of user data';
+
+    my $url = $session->getScriptUrl( 1, 'view', $webName, $topic,
+        user => $user, saveMsg => $saveMsg );
+    $session->redirect( $url, 0 );
 }
 
 # Renames the *current* user's topic (with renaming all links) and

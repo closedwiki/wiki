@@ -1041,14 +1041,32 @@ sub _userManagerEditUser {
     my $data = $this->getUserData( $cUID );
     if( $data ) {
         my $canModify = 0;
-        $text .= "<form>\n";
+        $text .= '<form name="saveuserdata" action="%SCRIPTURLPATH{"manage"}%/'
+               . '%BASEWEB%/%BASETOPIC%" method="post">' . "\n";
+        $text .= '<input type="hidden" name="action" value="saveUserData" />' . "\n";
+        $text .= '<input type="hidden" name="user" value="' . $wikiName . '" />' . "\n";
         $text .= "<noautolink>\n" . '%TABLE{ sort="off" }%' . "\n";
         for( my $i=0; $i < scalar @$data; $i++ ) {
             $canModify = 1 if( $data->[$i]->{type} ne 'label' );
             $text .= $this->_renderUserDataField( $data->[$i] );
         }
         if( $canModify ) {
-            $text .= $this->_renderUserDataField( { type => 'submit', value => 'Save' } );
+            $text .= $this->_renderUserDataField(
+                {
+                    type  => 'submit',
+                    value => 'Save'
+                } );
+        }
+        my $cgiQuery = $this->{session}->{request};
+        if( $cgiQuery && $cgiQuery->param('saveMsg') ) {
+            $text .= $this->_renderUserDataField(
+                {
+                    type  => 'label',
+                    name  => 'savemsg',
+                    value => '<div style="color:#A6000B; background-color:#F5F4AB;'
+                           . ' padding: 0 3px 0 3px"> %ICON{led-orange}% '
+                           . $cgiQuery->param( 'saveMsg' ) . '</div>'
+                } );
         }
         $text .= "</noautolink>\n</form>\n";
     }
@@ -1069,16 +1087,16 @@ sub _renderUserDataField {
     my $cell2 = $field->{value};
     if( $field->{type} =~ /^(text|password)$/ ) {
         $cell2 = '<input type="' . $field->{type}
-               . '" name="'  . $field->{name}
+               . '" name="ud_'  . $field->{name}
                . '" value="' . TWiki::entityEncode( $field->{value} )
-               . '" size="' . $field->{size}
+               . '" size="'  . $field->{size}
                . '" class="twikiInputField" />';
     } elsif( $field->{type} eq 'checkbox' ) {
         $cell1 = '';
         my $checked = $field->{value} ? '" checked="checked' : '';
         $cell2 = '<input type="checkbox'
-               . '" name="'  . $field->{name}
-               . '" id="'  . $field->{name}
+               . '" name="ud_'  . $field->{name}
+               . '" id="'    . $field->{name}
                . $checked
                . '" class="twikiCheckbox" />'
                . '<label for="' . $field->{name}
@@ -1090,6 +1108,7 @@ sub _renderUserDataField {
     } else {
         # 'label'
     }
+
     $cell2 .= ' <br />%ICON{tip}% ' . $field->{note} if( $field->{note} );
 
     return( "|  $cell1 | $cell2 |\n" );
