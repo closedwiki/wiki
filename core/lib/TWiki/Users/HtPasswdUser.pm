@@ -33,7 +33,6 @@ use base 'TWiki::Users::Password';
 
 use strict;
 use Assert;
-use Error qw( :try );
 
 # 'Use locale' for internationalisation of Perl sorting in getTopicNames
 # and other routines - main locale settings are done in TWiki::setupLocale
@@ -115,6 +114,8 @@ sub fetchUsers {
 
 sub _readPasswd {
     my $this = shift;
+    $this->{error} = undef;
+
     return $this->{passworddata} if ( defined( $this->{passworddata} ) );
 
     my $data = {};
@@ -122,8 +123,10 @@ sub _readPasswd {
         return $data;
     }
 
-    open( IN_FILE, "<$TWiki::cfg{Htpasswd}{FileName}" )
-      || throw Error::Simple( $TWiki::cfg{Htpasswd}{FileName} . ' open failed: ' . $! );
+    unless( open( IN_FILE, "<$TWiki::cfg{Htpasswd}{FileName}" ) ) {
+        $this->{error} = $TWiki::cfg{Htpasswd}{FileName} . ' open failed: ' . $!;
+        return $data;
+    }
 
     my $line = '';
     if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {
@@ -193,14 +196,21 @@ sub _dumpPasswd {
 }
 
 sub _savePasswd {
+    my $this = shift;
     my $db = shift;
+    $this->{error} = undef;
 
     umask( 077 );
-    open( FILE, ">$TWiki::cfg{Htpasswd}{FileName}" )
-      || throw Error::Simple( $TWiki::cfg{Htpasswd}{FileName} . ' open failed: ' . $! );
+    unless( open( FILE, ">$TWiki::cfg{Htpasswd}{FileName}" ) ) {
+        $this->{error} = $TWiki::cfg{Htpasswd}{FileName} . ' open failed: ' . $!;
+        return $this->{error};
+    }
 
     print FILE _dumpPasswd( $db );
-    close( FILE );
+    unless( close( FILE ) ) {
+        $this->{error} = $TWiki::cfg{Htpasswd}{FileName} . ' close failed: ' . $!;
+    }
+    return $this->{error};
 }
 
 sub encrypt {
@@ -270,18 +280,15 @@ sub fetchPass {
     my $ret = 0;
 
     if ( $login ) {
-        try {
-            my $db = $this->_readPasswd();
+        my $db = $this->_readPasswd();
+        unless( $this->{error} ) {
             if ( exists $db->{$login} && ! $db->{$login}{disabled} ) {
                 $ret = $db->{$login}->{pass};
             } else {
                 $this->{error} = 'Login invalid';
                 $ret = undef;
             }
-
-        } catch Error::Simple with {
-            $this->{error} = $!;
-        };
+        }
 
     } else {
         $this->{error} = 'No user';
@@ -301,19 +308,18 @@ sub setPassword {
         return 0;
     }
 
-    try {
-        my $db = $this->_readPasswd();
+    my $db = $this->_readPasswd();
+    unless( $this->{error} ) {
         $db->{$login}->{pass}       = $this->encrypt( $login, $newUserPassword, 1 );
         $db->{$login}->{emails}   ||= '';
         $db->{$login}->{pwdChgTime} = time();
         $db->{$login}->{mustChgPwd} = 0;
-        _savePasswd( $db );
-
-    } catch Error::Simple with {
-        $this->{error} = $!;
-        print STDERR "ERROR: failed to resetPassword - $!";
+        $this->_savePasswd( $db );
+    }
+    if( $this->{error} ) {
+        print STDERR "ERROR: failed to resetPassword - " . $this->{error};
         return undef;
-    };
+    }
 
     $this->{error} = undef;
     return 1;
@@ -324,19 +330,16 @@ sub removeUser {
     my $result = undef;
     $this->{error} = undef;
 
-    try {
-        my $db = $this->_readPasswd();
+    my $db = $this->_readPasswd();
+    unless( $this->{error} ) {
         unless ( $db->{$login} ) {
             $this->{error} = 'No such user ' . $login;
         } else {
             delete $db->{$login};
-            _savePasswd( $db );
+            $this->_savePasswd( $db );
             $result = 1;
         }
-
-    } catch Error::Simple with {
-        $this->{error} = shift->{-text};
-    };
+    }
     return $result;
 }
 
@@ -395,7 +398,7 @@ sub setEmails {
     } else {
         $db->{$login}->{emails} = '';
     }
-    _savePasswd( $db );
+    $this->_savePasswd( $db );
     return 1;
 }
 
@@ -466,7 +469,8 @@ sub getUserData {
     $data->[$i++] = { name => 'password', title => 'Password',
         value => '', type => 'password', size  => 40, note => '' };
     $data->[$i++] = { name => 'confirm',  title => 'Retype password',
-        value => '', type => 'password', size  => 40, note => '' };
+        value => '', type => 'password', size  => 40,
+        note => 'Leave password fields empty unless you want to change it' };
     $data->[$i++] = { name => 'mcp',      title => 'Must change password',
         value => $db->{$cUID}->{mustChgPwd}, type => 'checkbox', size  => 1, note => '' };
     $data->[$i++] = { name => 'lpc',      title => 'Last password change', 
@@ -515,29 +519,35 @@ sub setUserData {
         }
     }
 
-    try {
-        my $db = $this->_readPasswd();
+    my $db = $this->_readPasswd();
+    if( $this->{error} ) {
+        return 'Error: Failed to read user data - ' . $this->{error};
+    }
 
-        unless ( $db->{$cUID} ) {
-            return "Error: User =$cUID= does not exist";
+    unless ( $db->{$cUID} ) {
+        return "Error: User =$cUID= does not exist";
+    }
+
+    if( $password && $confirm ) {
+        if( $password ne $confirm ) {
+            return 'Error: Passwords do not match';
+        }
+        if( length( $password ) < $TWiki::cfg{MinPasswordLength} ) {
+            return 'Error: Bad password. This site requires at least '
+                . $TWiki::cfg{MinPasswordLength} . ' character passwords';
         }
 
-        if( $password && $confirm ) {
-            if( $password ne $confirm ) {
-                return 'Error: Passwords do not match';
-            }
-            $db->{$cUID}->{pass}       = $this->encrypt( $cUID, $password, 1 );
-            $db->{$cUID}->{pwdChgTime} = time();
-        }
-        $db->{$cUID}->{emails}     = $emails;
-        $db->{$cUID}->{mustChgPwd} = $mcp;
-        $db->{$cUID}->{disabled}   = $disable;
+        $db->{$cUID}->{pass}       = $this->encrypt( $cUID, $password, 1 );
+        $db->{$cUID}->{pwdChgTime} = time();
+    }
 
-        _savePasswd( $db );
+    $db->{$cUID}->{emails}     = $emails;
+    $db->{$cUID}->{mustChgPwd} = $mcp;
+    $db->{$cUID}->{disabled}   = $disable;
 
-    } catch Error::Simple with {
-        $this->{error} = $!;
-        return 'Error: Failed to update user data - ' . $!;
+    $this->_savePasswd( $db );
+    if( $this->{error} ) {
+        return 'Error: Failed to upate user data - ' . $this->{error};
     }
 
     return '';
