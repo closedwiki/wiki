@@ -445,11 +445,11 @@ sub getUserData {
     my $pwdChgStr = '';
     if( $db->{$cUID}->{pwdChgTime} ) {
         $pwdChgStr = '%CALC{$FORMATGMTIME('
-                 . $db->{$cUID}->{pwdChgTime}
-                 . ', $year-$mo-$day $hour:$min GMT)}%'
-                 . ' (%CALC{$FORMATTIMEDIFF(minute, 1, $TIMEDIFF('
-                 . $db->{$cUID}->{pwdChgTime}
-                 . ', $TIME(), minute))}% ago)';
+                   . $db->{$cUID}->{pwdChgTime}
+                   . ', $year-$mo-$day $hour:$min GMT)}%'
+                   . ' (%CALC{$FORMATTIMEDIFF(sec, 1, $TIMEDIFF('
+                   . $db->{$cUID}->{pwdChgTime}
+                   . ', $TIME(), sec))}% ago)';
     }
 
     my $data;
@@ -492,9 +492,55 @@ starting with 'Error: ' if there is an error.
 
 sub setUserData {
     my( $this, $cUID, $data ) = @_;
-# FIXME
+
+    my $emails   = '';
+    my $password = '';
+    my $confirm  = '';
+    my $mcp      = 0;
+    my $disable  = 0;
+
+    foreach my $item ( @{$data} ) {
+        my $name  = $item->{name};
+        my $value = $item->{value};
+        if( $name eq 'emails' ) {
+            $emails   = join( ';', split( /[,; ]+/, $value ) );
+        } elsif( $name eq 'password' ) {
+            $password = $value;
+        } elsif( $name eq 'confirm' ) {
+            $confirm  = $value;
+        } elsif( $name eq 'mcp' ) {
+            $mcp      = 1 if( $value );
+        } elsif( $name eq 'disable' ) {
+            $disable  = 1 if( $value );
+        }
+    }
+
+    try {
+        my $db = $this->_readPasswd();
+
+        unless ( $db->{$cUID} ) {
+            return "Error: User =$cUID= does not exist";
+        }
+
+        if( $password && $confirm ) {
+            if( $password ne $confirm ) {
+                return 'Error: Passwords do not match';
+            }
+            $db->{$cUID}->{pass}       = $this->encrypt( $cUID, $password, 1 );
+            $db->{$cUID}->{pwdChgTime} = time();
+        }
+        $db->{$cUID}->{emails}     = $emails;
+        $db->{$cUID}->{mustChgPwd} = $mcp;
+        $db->{$cUID}->{disabled}   = $disable;
+
+        _savePasswd( $db );
+
+    } catch Error::Simple with {
+        $this->{error} = $!;
+        return 'Error: Failed to update user data - ' . $!;
+    }
+
     return '';
 }
 
 1;
-
