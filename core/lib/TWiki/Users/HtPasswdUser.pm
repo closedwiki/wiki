@@ -459,8 +459,6 @@ sub getUserData {
     my $i = 0;
     $data->[$i++] = { name => 'wikiname', title => 'User profile page',
         value => $wikiName, type => 'label', size  => 40, note => '' };
-    $data->[$i++] = { name => 'cuid',     title => 'Canonical user ID',
-        value => $cUID, type => 'label', size  => 40, note => '' };
     $data->[$i++] = { name => 'login',    title => 'Login name',
         value => $login, type => 'label', size  => 40, note => '' };
     $data->[$i++] = { name => 'emails',   title => 'E-mail',
