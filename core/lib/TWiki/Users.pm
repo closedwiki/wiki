@@ -1111,7 +1111,7 @@ sub _renderUserDataField {
         # 'label'
     }
 
-    $cell2 .= ' <br />%ICON{tip}% ' . $field->{note} if( $field->{note} );
+    $cell2 .= ' <br /> %GRAY% %BULLET% ' . $field->{note} . ' %ENDCOLOR%' if( $field->{note} );
 
     return( "|  $cell1 | $cell2 |\n" );
 }
