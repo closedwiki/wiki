@@ -1033,8 +1033,17 @@ sub _userManagerEditUser {
 
     return 'Please specify a user' unless( $wikiName );
 
-    my $cUID = $this->getCanonicalUserID( $wikiName, 1 );
-
+    # get cUID the complicated way (not possible to use
+    # getCanonicalUserID because of disabled users)
+    my $cUID = undef;
+    my $iterator = $this->eachUser();
+    while( $iterator->hasNext() ) {
+        my $c = $iterator->next();
+        if( $this->getWikiName( $c ) eq $wikiName ) {
+            $cUID = $c;
+            last;
+        }
+    }
     return 'User does not exist' unless( $cUID );
 
     my $text = '';

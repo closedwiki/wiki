@@ -112,9 +112,21 @@ sub _saveUserData {
     }
 
     # check if cUID exists of user
-    $cUID = $session->{users}->getCanonicalUserID( $user, 1 );
-    unless( $saveMsg || $cUID ) {
-        $saveMsg = "Error: User <nop>$user not found";
+    unless( $saveMsg ) {
+        # get cUID the complicated way (not possible to use
+        # getCanonicalUserID because of disabled users)
+        $cUID = undef;
+        my $iterator = $session->{users}->eachUser();
+        while( $iterator->hasNext() ) {
+            my $c = $iterator->next();
+            if( $session->{users}->getWikiName( $c ) eq $user ) {
+                $cUID = $c;
+                last;
+            }
+        }
+        unless( $cUID ) {
+            $saveMsg = "Error: User <nop>$user not found";
+        }
     }
 
     unless( $saveMsg ) {
