@@ -131,7 +131,7 @@ sub removeUser {
 
 =pod
 
----++ ObjectMethod setPassword( $login, $newPassU, $oldPassU ) -> $boolean
+---++ ObjectMethod setPassword( $login, $newPassU, $oldPassU, $mcp ) -> $boolean
 
 If the $oldPassU matches matches the user's password, then it will
 replace it with $newPassU.
@@ -140,6 +140,8 @@ If $oldPassU is not correct and not 1, will return 0.
 
 If $oldPassU is 1, will force the change irrespective of
 the existing password, adding the user if necessary.
+
+If $mcp is true, the "must change password" flag is set
 
 Otherwise returns 1 on success, undef on failure.
 

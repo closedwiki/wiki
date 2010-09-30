@@ -331,13 +331,14 @@ sub randomPassword {
 
 =pod
 
----++ ObjectMethod addUser($login, $wikiname, $password, $emails) -> $cUID
+---++ ObjectMethod addUser($login, $wikiname, $password, $emails, $mcp) -> $cUID
 
    * =$login= - user login name. If =undef=, =$wikiname= will be used as
      the login name.
    * =$wikiname= - user wikiname. If =undef=, the user mapper will be asked
      to provide it.
    * =$password= - password. If undef, a password will be generated.
+   * =$mcp= - must change password flag. 
 
 Add a new TWiki user identity, returning the canonical user id for the new
 user. Used ONLY for user registration.
@@ -355,7 +356,7 @@ by TWiki to identify the user.
 =cut
 
 sub addUser {
-    my ( $this, $login, $wikiname, $password, $emails ) = @_;
+    my ( $this, $login, $wikiname, $password, $emails, $mcp ) = @_;
     my $removeOnFail = 0;
 
     ASSERT( $login || $wikiname ) if DEBUG;    # must have at least one
@@ -363,7 +364,7 @@ sub addUser {
     # create a new user and get the canonical user ID from the user mapping
     # manager.
     my $cUID =
-      $this->{mapping}->addUser( $login, $wikiname, $password, $emails );
+      $this->{mapping}->addUser( $login, $wikiname, $password, $emails, $mcp );
 
     # update the cached values
     $this->{cUID2Login}->{$cUID}    = $login;

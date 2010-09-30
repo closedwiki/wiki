@@ -169,7 +169,7 @@ sub getLoginName {
 
 =pod
 
----++ ObjectMethod addUser ($login, $wikiname, $password, $emails) -> $cUID
+---++ ObjectMethod addUser ($login, $wikiname, $password, $emails, $mcp) -> $cUID
 
 Add a user to the persistant mapping that maps from usernames to wikinames
 and vice-versa.

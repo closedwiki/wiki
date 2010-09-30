@@ -297,7 +297,7 @@ sub fetchPass {
 }
 
 sub setPassword {
-    my ( $this, $login, $newUserPassword, $oldUserPassword ) = @_;
+    my ( $this, $login, $newUserPassword, $oldUserPassword, $mcp ) = @_;
     if ( defined( $oldUserPassword ) ) {
         unless ( $oldUserPassword eq '1' ) {
             return 0 unless $this->checkPassword( $login, $oldUserPassword );
@@ -313,7 +313,7 @@ sub setPassword {
         $db->{$login}->{pass}       = $this->encrypt( $login, $newUserPassword, 1 );
         $db->{$login}->{emails}   ||= '';
         $db->{$login}->{pwdChgTime} = time();
-        $db->{$login}->{mustChgPwd} = 0;
+        $db->{$login}->{mustChgPwd} = $mcp ? 1 : 0;
         $this->_savePasswd( $db );
     }
     if( $this->{error} ) {
