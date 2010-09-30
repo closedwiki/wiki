@@ -41,7 +41,7 @@ use base 'CGI::Session';
 
 sub load {
     my $this = shift;
-    local %ENV;
+#    local %ENV; # TWikibug:Item6583 - commented out
     $ENV{REMOTE_ADDR} = @_ == 1 ? $_[0]->remoteAddress : $_[1]->remoteAddress;
     $this->SUPER::load(@_);
 }
