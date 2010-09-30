@@ -1028,9 +1028,9 @@ sub _userManagerQueryUsers {
         # It should be data driven like _userManagerEditUser().
         my $data = $this->getUserData( $cUID );
         my $emails  = '';
-        my $mcp     = 0;
+        my $mcp     = '';
         my $lpc     = '';
-        my $disable = 0;
+        my $disable = '';
 
         foreach my $item ( @{$data} ) {
             my $name  = $item->{name};
@@ -1038,13 +1038,13 @@ sub _userManagerQueryUsers {
             if( $name eq 'emails' ) {
                 $emails   = $value;
             } elsif( $name eq 'mcp' ) {
-                $mcp      = 1 if( $value );
+                $mcp      = '%ICON{choice-yes}%' if( $value );
             } elsif( $name eq 'lpc' ) {
                 if( $value =~ '\((\%CALC\{.*)\)' ) {
                     $lpc      = $1;
                 }
             } elsif( $name eq 'disable' ) {
-                $disable  = 1 if( $value );
+                $disable  = '%ICON{choice-yes}%' if( $value );
             }
         }
 
