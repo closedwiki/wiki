@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273962517" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1285830819" format="1.1" version="$Rev$"}%
 ---+ %MAKETEXT{"Registration"}%
 
 %IF{"context registration_supported" 
@@ -117,6 +117,12 @@ function capitalise(name)
      <tr><td align=\"right\"> %MAKETEXT{"Retype password:"}% </td><td><input %NOREGISTRATION% type=\"password\" name=\"Twk0Confirm\" size=\"30\" class=\"twikiInputField\" value=\"%URLPARAM{"Confirm" encode="entity"}%\" /> =<font color=\"red\">**</font>= </td></tr>
 -->
 %IF{"$ ALLOWLOGINNAME < 1" then="%BESPOKE_PASSWORD%"}%
+<!--
+## NOTE: Optional rows for password for administrators
+   * Set ADMIN_PASSWORD = <tr><td align=\"right\"> </td><td> <input %NOREGISTRATION% type=\"checkbox\" name=\"Twk0SystemGeneratedPassword\" id=\"SGP\" class=\"twikiCheckbox\" /><label for=\"SGP\"> %MAKETEXT{"Use system generated password"}% </label> </td></tr>\
+     <tr><td align=\"right\"> </td><td> <input %NOREGISTRATION% type=\"checkbox\" name=\"Twk0MustChangePassword\" id=\"MCP\" class=\"twikiCheckbox\" /><label for=\"MCP\"> %MAKETEXT{"Must change password"}% </label> </td></tr>
+-->
+%IF{"$ ALLOWLOGINNAME < 1 AND '%USERNAME%' ingroup 'TWikiAdminGroup'" then="%ADMIN_PASSWORD%"}%
 <tr>
   <td align="right"> %MAKETEXT{"Organisation name:"}% </td>
   <td><input %NOREGISTRATION%  type="text" name="Twk0OrganisationName" size="40" class="twikiInputField" value="%URLPARAM{"OrganisationName" encode="entity"}%" /></td>

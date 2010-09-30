@@ -257,7 +257,7 @@ sub _userReallyExists {
 
 =begin twiki
 
----++ ObjectMethod addUser ($login, $wikiname, $password, $emails) -> $cUID
+---++ ObjectMethod addUser ($login, $wikiname, $password, $emails, $mcp) -> $cUID
 
 throws an Error::Simple 
 
@@ -279,7 +279,7 @@ if you fail to create a new user (for eg your Mapper has read only access),
 =cut
 
 sub addUser {
-    my ( $this, $login, $wikiname, $password, $emails ) = @_;
+    my ( $this, $login, $wikiname, $password, $emails, $mcp ) = @_;
 
     ASSERT($login) if DEBUG;
 
@@ -301,7 +301,7 @@ sub addUser {
             $password = TWiki::Users::randomPassword();
         }
 
-        unless( $this->{passwords}->setPassword( $login, $password )) {
+        unless( $this->{passwords}->setPassword( $login, $password, undef, $mcp ) ) {
         	#print STDERR "\n Failed to add user:  ".$this->{passwords}->error();
             throw Error::Simple(
                 'Failed to add user: '.$this->{passwords}->error());
@@ -943,7 +943,7 @@ sub checkPassword {
 
 =begin twiki
 
----++ ObjectMethod setPassword( $cUID, $newPassU, $oldPassU ) -> $boolean
+---++ ObjectMethod setPassword( $cUID, $newPassU, $oldPassU, $mcp ) -> $boolean
 
 BEWARE: $user should be a cUID, but is a login when the resetPassword
 functionality is used.
@@ -965,9 +965,9 @@ Otherwise returns 1 on success, undef on failure.
 =cut
 
 sub setPassword {
-    my( $this, $user, $newPassU, $oldPassU ) = @_;
+    my( $this, $user, $newPassU, $oldPassU, $mcp ) = @_;
     return $this->{passwords}->setPassword(
-        $this->getLoginName( $user ), $newPassU, $oldPassU);
+        $this->getLoginName( $user ), $newPassU, $oldPassU, $mcp );
 }
 
 =begin twiki
