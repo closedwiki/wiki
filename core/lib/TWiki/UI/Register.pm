@@ -7,7 +7,7 @@
 #
 # Additional copyrights apply to some or all of the code in this
 # file as follows:
-# Copyright (c) 1999-2004 Peter Thoeny, peter@thoeny.com
+# Copyright (c) 1999-2010 Peter Thoeny, peter@thoeny.com
 #           (c) 2001 Kevin Atkinson, kevin twiki at atkinson dhs org
 #           (c) 2003-2008 SvenDowideit, SvenDowideit@home.org.au
 #           (c) 2003 Graeme Pyle graeme@raspberry dot co dot za
@@ -279,13 +279,13 @@ sub _registerSingleBulkUser {
             $row->{Password}, $row->{Email} );
         $log .= "$b1 $row->{WikiName} has been added to the password and user mapping managers\n";
         
-	    if( $settings->{doOverwriteTopics} ||
-	          !$session->{store}->topicExists( $row->{webName},
-	                                           $row->{WikiName} ) ) {
-	        $log .= _createUserTopic($session, $row);
-	    } else {
-	        $log .= "$b1 Not writing user topic $row->{WikiName}\n";
-	    }
+        if( $settings->{doOverwriteTopics} ||
+              !$session->{store}->topicExists( $row->{webName},
+                                               $row->{WikiName} ) ) {
+            $log .= _createUserTopic($session, $row);
+        } else {
+            $log .= "$b1 Not writing user topic $row->{WikiName}\n";
+        }
         $users->setEmails($cUID, $row->{Email});
 
         $session->writeLog('bulkregister',
@@ -782,16 +782,16 @@ sub complete {
     my $topic = $session->{topicName};
     my $web = $session->{webName};
     my $query = $session->{request};
-	my $code = $query->param('code');
+    my $code = $query->param('code');
 
-	my $data;
-	if ($TWiki::cfg{Register}{NeedVerification}) {
-		$data = _loadPendingRegistration( $session, $code );
-		_clearPendingRegistrationsForUser( $code );
-	} else {
-	    $data = _getDataFromQuery( $query, $query->param() );
-	    $data->{webName} = $web;
-	}
+    my $data;
+    if ($TWiki::cfg{Register}{NeedVerification}) {
+        $data = _loadPendingRegistration( $session, $code );
+        _clearPendingRegistrationsForUser( $code );
+    } else {
+        $data = _getDataFromQuery( $query, $query->param() );
+        $data->{webName} = $web;
+    }
 
     if (! exists $data->{WikiName}) {
         throw Error::Simple( 'no WikiName after reload');
@@ -825,7 +825,7 @@ sub complete {
 
     # Plugin to do some other post processing of the user. 
     # for legacy, (callback to set cookies - now should use LoginHandler)
-    $session->{plugins}->dispatch( 	 	 
+    $session->{plugins}->dispatch(           
                                 'registrationHandler',
                                 $data->{WebName},
                                 $data->{WikiName},
