@@ -50,11 +50,13 @@ my $agent = 'TWikiRegistrationAgent';
 # Keys from the user data that should *not* be included in
 # the user topic.
 my %SKIPKEYS = (
-    'Photo' => 1,
-    'WikiName' => 1,
-    'LoginName' => 1,
-    'Password' => 1,
-    'Email' => 1
+    Photo                   => 1,
+    WikiName                => 1,
+    LoginName               => 1,
+    Password                => 1,
+    Email                   => 1,
+    SystemGeneratedPassword => 1,
+    MustChangePassword      => 1
    );
 
 =pod
@@ -807,8 +809,10 @@ sub complete {
 
     my $users = $session->{users};
     try {
-        my $cUID = $users->addUser( $data->{LoginName}, $data->{WikiName},
-                         $data->{Password}, $data->{Email} );
+        my $cUID = $users->addUser(
+                       $data->{LoginName}, $data->{WikiName},
+                       $data->{Password}, $data->{Email},
+                       $data->{MustChangePassword} );
         my $log = _createUserTopic($session, $data);
         $users->setEmails($cUID, $data->{Email});
     } catch Error::Simple with {
@@ -1341,6 +1345,22 @@ sub _getDataFromQuery {
           defined $data->{FirstName} && defined $data->{LastName}) {
         $data->{Name} = $data->{FirstName}.' '.$data->{LastName};
     }
+
+    if( $data->{SystemGeneratedPassword} ) {
+        # use system generated password
+        require TWiki::Users;
+        my $rand = TWiki::Users::randomPassword();
+        $data->{Password}  = $rand;
+        $data->{passwordA} = $rand;
+        $data->{passwordB} = $rand;
+        foreach my $fd (@{$data->{form}}) {
+            if( $fd->{name} eq 'Password' ) {
+                $fd->{value} = $rand;
+                last;
+            }
+        }
+    }
+
     return $data;
 }
 
