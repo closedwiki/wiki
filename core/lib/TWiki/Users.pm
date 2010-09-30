@@ -1015,7 +1015,61 @@ sub _userManagerQueryUsers {
         return "__Note:__ Specify part of a user name, or =*= for all users.";
     }
 
-    my $text = 'FIXME';
+    my $text = '';
+    my @rows = ();
+    my $iterator = $this->eachUser();
+    while( $iterator->hasNext() ) {
+        my $cUID = $iterator->next();
+        my $wikiName = $this->getWikiName( $cUID );
+        next unless( $wikiName =~ /$filter/i );
+
+        # FIXME: Quick hack that violates data encapsulation: This module
+        # should not assume the data structure of password handlers.
+        # It should be data driven like _userManagerEditUser().
+        my $data = $this->getUserData( $cUID );
+        my $emails  = '';
+        my $mcp     = 0;
+        my $lpc     = '';
+        my $disable = 0;
+
+        foreach my $item ( @{$data} ) {
+            my $name  = $item->{name};
+            my $value = $item->{value};
+            if( $name eq 'emails' ) {
+                $emails   = $value;
+            } elsif( $name eq 'mcp' ) {
+                $mcp      = 1 if( $value );
+            } elsif( $name eq 'lpc' ) {
+                if( $value =~ '\((\%CALC\{.*)\)' ) {
+                    $lpc      = $1;
+                }
+            } elsif( $name eq 'disable' ) {
+                $disable  = 1 if( $value );
+            }
+        }
+
+        my $editUrl = $this->{session}->getScriptUrl(
+            1, 'view', $TWiki::cfg{SystemWebName}, 'EditUserAccount',
+            'user' => $wikiName );
+        $text = "| [[$editUrl][<span style=\"white-space:nowrap\">"
+              . "%ICON{edittopic}% edit</span>]] "
+              . "| [[$TWiki::cfg{UsersWebName}.$wikiName][$wikiName]] "
+              . "| $emails | $mcp | <span style=\"white-space:nowrap\">"
+              . "$lpc</span> | $disable |";
+        push( @rows, $text );
+    }
+
+    unless( scalar ( @rows ) ) {
+        return "__Note:__ No users found. Specify part of a user name, or =*= for all.";
+    }
+
+    $text = "| *Edit* | *User Profile Page* | *E-mail* "
+          . "| *MCP* | *LPC* | *Disbaled* |\n"
+          . join( "\n", sort @rows ) . "\n"
+          . '__Total:__ ' . scalar( @rows ) . "\n"
+          . '%BB% *MCP*: User must change password' . "\n"
+          . '%BB% *LCP*: Last password change' . "\n"
+          . '%BB% *Disabled*: User account is disabled' . "\n";
 
     return $text;
 }
