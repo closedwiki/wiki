@@ -403,6 +403,9 @@ $TWiki::cfg{Register}{EnableNewUserRegistration} = $TRUE;
 # **BOOLEAN EXPERT**
 # Hide password in registration email to the *user*
 # Note that TWiki sends admins a separate confirmation.
+# Regardless of this setting, the password is sent to the user in clear 
+# text if the administrator registers a user with the "system generated 
+# password" checkbox and the "must change password" checkbox checked.
 $TWiki::cfg{Register}{HidePasswd} = $TRUE;
 
 # **BOOLEAN**
