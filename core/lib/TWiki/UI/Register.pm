@@ -991,20 +991,27 @@ sub _getRegFormAsTopicContent {
     return $text;
 }
 
-#Sends to both the WIKIWEBMASTER and the USER notice of the registration
-#emails both the admin 'registernotifyadmin' and the user 'registernotify', 
-#in separate emails so they both get targeted information (and no password to the admin).
+# Sends to both the WIKIWEBMASTER and the USER notice of the registration
+# emails both the admin 'registernotifyadmin' and the user 'registernotify', 
+# in separate emails so they both get targeted information (and no password 
+# to the admin).
 sub _emailRegistrationConfirmations {
     my ( $session, $data ) = @_;
 
     my $skin = $session->getSkin();
     my $template =
       $session->templates->readTemplate( 'registernotify', $skin );
+    # Send clear text password if SGP and MCP flags on, regardless of
+    # {Register}{HidePassword} setting
+    my $hidePasswd = (
+           $TWiki::cfg{Register}{HidePasswd}
+           && ! ( $data->{SystemGeneratedPassword} && $data->{MustChangePassword} )
+         );
     my $email =
       _buildConfirmationEmail( $session,
                                $data,
                                $template,
-                               $TWiki::cfg{Register}{HidePasswd}
+                               $hidePasswd
                              );
 
     my $warnings = $session->net->sendEmail( $email);
