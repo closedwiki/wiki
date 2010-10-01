@@ -1041,8 +1041,9 @@ sub _userManagerQueryUsers {
             } elsif( $name eq 'mcp' ) {
                 $mcp      = '%ICON{choice-yes}%' if( $value );
             } elsif( $name eq 'lpc' ) {
-                if( $value =~ '\((\%CALC\{.*)\)' ) {
-                    $lpc      = $1;
+                $lpc      = $value;
+                if( $value =~ '(.*?) *\((\%CALC\{.*)\)' ) {
+                    $lpc      = "<span title=\"$1\">$2</span>";
                 }
             } elsif( $name eq 'disable' ) {
                 $disable  = '%ICON{choice-yes}%' if( $value );
