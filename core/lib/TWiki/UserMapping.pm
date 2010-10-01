@@ -400,6 +400,18 @@ sub setEmails {
 
 =pod
 
+---++ ObjectMethod getMustChangePassword( $cUID ) -> $flag
+
+Returns 1 if the $cUID must change the password, else 0. Returns undef if $cUID not found.
+
+=cut
+
+sub getMustChangePassword {
+    return undef;
+}
+
+=pod
+
 ---++ ObjectMethod getUserData( $cUID ) -> $dataRef
 
 Return a reference to an array of hashes with user data, used to manage 
