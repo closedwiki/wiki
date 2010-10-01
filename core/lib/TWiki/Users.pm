@@ -1064,7 +1064,7 @@ sub _userManagerQueryUsers {
         return "__Note:__ No users found. Specify part of a user name, or =*= for all.";
     }
 
-    $text = "| *Edit* | *User Profile Page* | *E-mail* "
+    $text = "| *Manage* | *User Profile Page* | *E-mail* "
           . "| *MCP* | *LPC* | *Disbaled* |\n"
           . join( "\n", sort @rows ) . "\n"
           . '__Total:__ ' . scalar( @rows ) . "\n"
