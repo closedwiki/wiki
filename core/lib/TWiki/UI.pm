@@ -375,6 +375,16 @@ sub checkAccess {
                                       [ $mode,
                                         $session->security->getReason()]);
     }
+
+    if( $session->{users}->getMustChangePassword( $user ) 
+        && "$web.$topic" ne "$TWiki::cfg{SystemWebName}.ChangePassword"
+    ) {
+        my $url = $session->getScriptUrl( 1, 'view',
+            $TWiki::cfg{SystemWebName}, 'ChangePassword',
+            username => $user,
+            mcp => '1' );
+        $session->redirect( $url );
+    }
 }
 
 =pod
