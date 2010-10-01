@@ -1078,7 +1078,7 @@ sub _userManagerQueryUsers {
     }
 
     $text = "| *Manage* | *User Profile Page* | *E-mail* "
-          . "| *MCP* | *LPC* | *Disbaled* |\n"
+          . "| *MCP* | *LPC* | *Disabled* |\n"
           . join( "\n", sort @rows ) . "\n"
           . '__Total:__ ' . scalar( @rows ) . "\n"
           . '%BB% *MCP*: User must change password' . "\n"
