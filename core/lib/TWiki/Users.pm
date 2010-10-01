@@ -322,7 +322,7 @@ sub randomPassword {
     return $password
       || join(
         "",
-        ( ".", "/", 0 .. 9, "A" .. "Z", "a" .. "z" )[
+        ( "_", "/", 0 .. 9, "A" .. "Z", "a" .. "z" )[
           rand(64), rand(64), rand(64), rand(64),
         rand(64),   rand(64), rand(64), rand(64)
         ]
