@@ -1039,14 +1039,14 @@ sub _userManagerQueryUsers {
             if( $name eq 'emails' ) {
                 $emails   = $value;
             } elsif( $name eq 'mcp' ) {
-                $mcp      = '%ICON{choice-yes}%' if( $value );
+                $mcp      = '  %ICON{choice-yes}%  ' if( $value );
             } elsif( $name eq 'lpc' ) {
                 $lpc      = $value;
-                if( $value =~ '(.*?) *\((\%CALC\{.*)\)' ) {
-                    $lpc      = "<span title=\"$1\">$2</span>";
+                if( $lpc =~ '(.*?) *\((\%CALC\{.*)\)' ) {
+                    $lpc      = "  <span title=\"$1\" style=\"white-space:nowrap\">$2</span>";
                 }
             } elsif( $name eq 'disable' ) {
-                $disable  = '%ICON{choice-yes}%' if( $value );
+                $disable  = '  %ICON{choice-yes}%  ' if( $value );
             }
         }
 
@@ -1056,8 +1056,7 @@ sub _userManagerQueryUsers {
         $text = "| [[$editUrl][<span style=\"white-space:nowrap\">"
               . "%ICON{edittopic}% edit</span>]] "
               . "| [[$TWiki::cfg{UsersWebName}.$wikiName][$wikiName]] "
-              . "| $emails | $mcp | <span style=\"white-space:nowrap\">"
-              . "$lpc</span> | $disable |";
+              . "| $emails | $mcp | $lpc | $disable |";
         push( @rows, $text );
     }
 
