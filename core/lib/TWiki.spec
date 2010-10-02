@@ -408,6 +408,12 @@ $TWiki::cfg{Register}{EnableNewUserRegistration} = $TRUE;
 # password" checkbox and the "must change password" checkbox checked.
 $TWiki::cfg{Register}{HidePasswd} = $TRUE;
 
+# **BOOLEAN EXPERT**
+# Allow system generated password. The registration form has a
+# "system generated password" checkbox if set and if the logged in user 
+# is an administrator.
+$TWiki::cfg{Register}{AllowSystemGeneratedPassword} = $TRUE;
+
 # **BOOLEAN**
 # Whether registrations must be verified by the user following
 # a link sent in an email to the user's registered email address

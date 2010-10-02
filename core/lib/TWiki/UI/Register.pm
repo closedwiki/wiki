@@ -1326,6 +1326,8 @@ sub _getDataFromQuery {
             my $form = {};
             $form->{required} = $2;
             my $name = $3;
+            next if( $name eq 'SystemGeneratedPassword'
+                     && ! $TWiki::cfg{Register}{AllowSystemGeneratedPassword} );
             my @values = $query->param($1.$2.$3);
             my $value = join(',', @values); #deal with multivalue fields like checkboxen
             $form->{name} = $name;
