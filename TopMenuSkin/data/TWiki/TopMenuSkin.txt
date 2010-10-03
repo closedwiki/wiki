@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1285225945" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1286143190" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -215,6 +215,7 @@ document.onclick = twTopMenuClose;
       * This skin depends on TWiki 5.0 specific feature =%<nop>WEB{format="$current"}%= to show the current web in the Web menu. To use this skin on TWiki 4.2 or 4.3, remove the parameter from the WEB variable (to show only =%<nop>WEB%=), or apply patch TWiki:Item6424 (to add the format parameter feature).
       * Apply patch TWikibug:Item6430 so that Edit and Attach buttons point to the current topic instead of !TopMenuSkinTopBar.
       * Attach %ATTACHURL%/menu-down.gif to %SYSTEMWEB%.TWikiDocGraphics.
+      * Attach %ATTACHURL%/twiki-gray.gif to %SYSTEMWEB%.TWikiDocGraphics.
       * If you have more than 30 webs, apply TWikibug:Item6429 to limit the number of webs shown in the "Home" menu.
 
 ---++ Creating your own look
@@ -234,8 +235,9 @@ The !TopMenuSkin disables the sidebar and activates a different top bar in =twik
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Screenshot" title="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2010-09-23 (v1.9) |
+|  Skin Version: | 2010-10-03 (v1.91) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-10-03: | TWikibug:Item6588 - use gray TWiki icon in top menu bar instead of orange icon |
 |  2010-09-23: | TWikibug:Item6530 - add !ManagingUsers to top menu of TWiki web |
 |  2010-08-21: | TWikibug:Item6524 - fix for no Account pulldown menu on IE7 Opera browser -- TWiki:Main.MalcolmNeumeyer |
 |  2010-06-09: | TWikibug:Item6485 - fix banner background image position issue on Safari |
