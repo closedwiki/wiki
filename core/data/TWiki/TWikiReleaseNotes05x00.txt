@@ -178,8 +178,9 @@ TWiki-5.0.1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRele
 | TWikibug:Item6526 | SpreadSheetPlugin: Add ISO 8601 week number to FORMATTIME |
 | TWikibug:Item6576 | Support Authenticated Proxy |
 | TWikibug:Item6580 | SmiliesPlugin: Added "red", "yellow", "green", "blue" smilies |
+| TWikibug:Item6588 | TopMenuSkin: Use gray TWiki icon in top menu bar instead of orange icon |
 </noautolink>
-Total: 13
+Total: 14
 
 ---+++ Fixes
 
