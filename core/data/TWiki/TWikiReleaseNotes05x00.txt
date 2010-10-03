@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1285041755" format="1.1" version="$Rev$"}%
----+!! Release Notes of TWiki-5.0.1-rc1 (Helsinki), 2010-09-12
+%META:TOPICINFO{author="TWikiContributor" date="1286142314" format="1.1" version="$Rev$"}%
+---+!! Release Notes of TWiki-5.0.1-rc1 (Helsinki), 2010-10-03
 
 %TOC%
 
@@ -7,7 +7,7 @@
 
 TWiki-5.0.0 released on 2010-05-29 is a major release introducing usability enhancements, feature enhancements, and adds extensions to strengthen TWiki as an enterprise collaboration platform.
 
-TWiki-5.0.1 released on 2009-09-12 is a patch release that adds some minor new features and fixes a number of bugs.
+TWiki-5.0.1 released on 2009-10-03 is a patch release that adds some minor new features and fixes a number of bugs.
 
 It is highly recommended to upgrade to TWiki-5.0.1. Users will find this release much more stable and secure in daily use.
 
@@ -165,9 +165,11 @@ TWiki-5.0.1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRele
 
 <noautolink>
 | TWikibug:Item6475 | TopMenuSkin v1.5 work: Better indication of breadcrumb in top menu |
+| TWikibug:Item6479 | Documentation enhancements for TWiki 5.0.1  |
 | TWikibug:Item6482 | TopMenuSkin v1.6: XHTML validation fixes; moving CSS to HTML head using ADDTOHEAD variable |
 | TWikibug:Item6483 | Add angle brackets (< and >) to format tokens |
 | TWikibug:Item6488 | Better display of topic diffs in debug mode (rdiff) |
+| TWikibug:Item6497 | New TWiki Doc Graphics images topmenu, twiki-gray, uweb-o14 |
 | TWikibug:Item6499 | PatternSkin: Less screeming submit and cancel buttons, aligning with color palette of TopMenuSkin |
 | TWikibug:Item6500 | Web-interface to refresh ICON cache |
 | TWikibug:Item6504 | SpreadSheetPlugin: Add empty ($nop) separator to LISTJOIN |
@@ -177,7 +179,7 @@ TWiki-5.0.1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRele
 | TWikibug:Item6576 | Support Authenticated Proxy |
 | TWikibug:Item6580 | SmiliesPlugin: Added "red", "yellow", "green", "blue" smilies |
 </noautolink>
-Total: 11
+Total: 13
 
 ---+++ Fixes
 
@@ -200,10 +202,14 @@ Total: 11
 | TWikibug:Item6524 | TopMenuSkin: No Account pulldown menu on Opera browser |
 | TWikibug:Item6529 | Use of uninitialized value in substitution in Meta.pm and Store.pm |
 | TWikibug:Item6537 | SpreadSheetPlugin: Formula $EVAL(13 - 08) returns error: Illegal octal digit '8' |
+| TWikibug:Item6544 | Jump Box has no help text in IE8 |
 | TWikibug:Item6561 | mod_perl2 incompatible check for ENV{GATEWAY_INTERFACE} |
 | TWikibug:Item6565 | Engine.pm: Parentheses missing |
 | TWikibug:Item6578 | Use of uninitialized value in split at lib/TWiki.pm line 1302 |
+| TWikibug:Item6581 | Allow commas and semicolons as e-mail separator |
+| TWikibug:Item6582 | Sanitize URL parameters |
+| TWikibug:Item6583 | mod_perl error: %ENV is aliased to another variable while running with -T switch |
 </noautolink>
-Total: 21
+Total: 25
 
 __Related Topics:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide, %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%
