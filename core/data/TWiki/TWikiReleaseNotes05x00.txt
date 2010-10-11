@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1286772969" format="1.1" version="$Rev$"}%
----+!! Release Notes of TWiki-5.0.1-rc1 (Helsinki), 2010-10-10
+---+!! Release Notes of TWiki-5.0.1 (Helsinki), 2010-10-10
 
 %TOC%
 
@@ -159,7 +159,7 @@ Total: 38
 
 ---++ TWiki-5.0.1 Patch Release - Details
 
-TWiki-5.0.1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x00 revision 19566 (2010-10-10)
+TWiki-5.0.1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x00 revision 19570 (2010-10-10)
 
 ---+++ Enhancements
 
