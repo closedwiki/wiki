@@ -195,7 +195,7 @@ BEGIN {
     }
 
     # DO NOT CHANGE THE FORMAT OF $VERSION
-    # $VERSION is automatically expanded on checkin of this module
+    # The $VERSION is automatically expanded on checkin of this module
     $VERSION = '$Date$ $Rev$ ';
     $RELEASE = 'TWiki-5.0.1';
     $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$RELEASE, $1, build $2/;
