@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277878473" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1286773363" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
 %TOC%
 
 #HelsinkiRelease
----++ TWiki Release 5.0 (Helsinki) released on 2010-05-29
+---++ TWiki Release 5.0 (Helsinki) released on 2010-05-29 &amp; 2010-10-10
 
 __New Features and Enhancements of TWiki Release 5.0__
 

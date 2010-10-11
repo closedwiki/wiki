@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1286142314" format="1.1" version="$Rev$"}%
----+!! Release Notes of TWiki-5.0.1-rc1 (Helsinki), 2010-10-03
+%META:TOPICINFO{author="TWikiContributor" date="1286772969" format="1.1" version="$Rev$"}%
+---+!! Release Notes of TWiki-5.0.1-rc1 (Helsinki), 2010-10-10
 
 %TOC%
 
@@ -7,7 +7,7 @@
 
 TWiki-5.0.0 released on 2010-05-29 is a major release introducing usability enhancements, feature enhancements, and adds extensions to strengthen TWiki as an enterprise collaboration platform.
 
-TWiki-5.0.1 released on 2009-10-03 is a patch release that adds some minor new features and fixes a number of bugs.
+TWiki-5.0.1 released on 2009-10-10 is a patch release that adds some minor new features and fixes a number of bugs.
 
 It is highly recommended to upgrade to TWiki-5.0.1. Users will find this release much more stable and secure in daily use.
 
@@ -71,7 +71,7 @@ The new TopMenuSkin adds pulldown menus for better usability and corporate/moder
 
 ---++ TWiki-5.0.0 Major Release - Details
 
-TWiki-5.0.0 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x00 revision r18860 (2010-05-29)
+TWiki-5.0.0 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x00 revision 18860 (2010-05-29)
 
 ---+++ Enhancements
 
@@ -159,7 +159,7 @@ Total: 38
 
 ---++ TWiki-5.0.1 Patch Release - Details
 
-TWiki-5.0.1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x00 revision r19464 (2010-09-12)
+TWiki-5.0.1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x00 revision 19566 (2010-10-10)
 
 ---+++ Enhancements
 

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277915589" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1286772964" format="1.1" version="$Rev$"}%
 ---+!! TWiki Release 4.2.4 (Freetown), 2008-12-06
 
 __Note:__ _This is the release note for the previous major release version 4.2.X. This note, TWikiReleaseNotes04x00 and TWikiReleaseNotes04x01 are included with 4.3.X because they contain valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes04x03 for the 4.3.X release notes_
@@ -208,7 +208,7 @@ In Func getOopsUrl and permissionsSet have been declared deprecated. There is no
 
 ---++  TWiki 4.2.0 Minor Release - Details
 
-The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02 revision %$VERSION%. 
+The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02 revision 16277 (2008-01-22).
 
 ---+++ Fixes
 
