@@ -1,0 +1,20 @@
+%META:TOPICINFO{author="PeterThoeny" date="1287035826" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICPARENT{name="ContactDB"}%
+%INCLUDE{ContactHeader}%
+
+---++ Contact Log
+
+%COMMENT%
+
+__Back to:__ ContactDB
+
+%META:FORM{name="ContactForm"}%
+%META:FIELD{name="Salutation" attributes="" title="Salutation" value=""}%
+%META:FIELD{name="Name" attributes="" title="Name" value=""}%
+%META:FIELD{name="JobTitle" attributes="" title="Job Title" value=""}%
+%META:FIELD{name="Company" attributes="" title="Company" value=""}%
+%META:FIELD{name="Phone" attributes="" title="Phone" value=""}%
+%META:FIELD{name="Mobile" attributes="" title="Mobile" value=""}%
+%META:FIELD{name="Fax" attributes="" title="Fax" value=""}%
+%META:FIELD{name="Email" attributes="" title="Email" value=""}%
+%META:FIELD{name="URL" attributes="" title="URL" value=""}%

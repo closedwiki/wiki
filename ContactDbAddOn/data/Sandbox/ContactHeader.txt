@@ -1,0 +1,19 @@
+%META:TOPICINFO{author="PeterThoeny" date="1287035174" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICPARENT{name="ContactTemplate"}%
+---+!! Contact Header
+
+The part between the horizontal rulers gets included by every contact topic.
+
+-----
+%STARTINCLUDE%
+<noautolink>
+---+ Contact: %FORMFIELD{ "Name" topic="%INCLUDINGTOPIC%" }%%IF{ "'%FORMFIELD{ "Company" topic="%INCLUDINGTOPIC%" }%'=''" else=", %FORMFIELD{ "Company" topic="%INCLUDINGTOPIC%" }%" }%
+| %ICON{phone}% %FORMFIELD{ "Phone" topic="%INCLUDINGTOPIC%" }% | %ICON{fax}% %FORMFIELD{ "Fax" topic="%INCLUDINGTOPIC%" }% |
+| %ICON{mobile}% %FORMFIELD{ "Mobile" topic="%INCLUDINGTOPIC%" }% | %ICON{mail}% %FORMFIELD{ "Email" topic="%INCLUDINGTOPIC%" }% |
+</noautolink>
+%STOPINCLUDE%
+-----
+
+__Related:__ ContactDB, ContactForm, ContactTemplate, NewContact
+
+-- TWiki:Main.PeterThoeny - 2010-10-13

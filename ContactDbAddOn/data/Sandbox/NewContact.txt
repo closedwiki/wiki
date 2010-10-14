@@ -1,0 +1,34 @@
+%META:TOPICINFO{author="PeterThoeny" date="1287034970" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICPARENT{name="ContactDB"}%
+---+ Add New Contact
+
+%STARTINCLUDE%
+<script type="text/javascript">
+<!-- Hide JavaScript and <pre> escape TWiki rendering
+function wikify(txt) {
+var sIn = txt; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.length; i++ ) { var ch = sIn.charAt( i ); var ch2 = ''; if((ch=='&#224;')||(ch=='&#225;')||(ch=='&#226;')||(ch=='&#227;')||(ch=='&#229;') ) { ch = 'a'; } if( (ch=='&#232;')||(ch=='&#233;')||(ch=='&#234;') ) { ch = 'e'; } if( ch=='&#231;') { ch = 'c'; } if( ch=='&#241;') { ch = 'n'; } if( (ch=='&#242;')||(ch=='&#243;')||(ch=='&#244;') ) { ch = 'o'; } if( ch=='&#228;') { ch = 'a'; ch2 = 'e'; } if( ch=='&#246;') { ch = 'o'; ch2 = 'e'; } if( (ch=='&#249;')||(ch=='&#250;')||(ch=='&#251;') ) { ch = 'o'; } if( ch=='&#252;') { ch = 'u'; ch2 = 'e'; } if( ch=='&#196;') { ch = 'A'; ch2 = 'e'; } if( ch=='&#214;') { ch = 'O'; ch2 = 'e'; } if( ch=='&#220;') { ch = 'U'; ch2 = 'e'; } if( ch=='&#223;') { ch = 's'; ch2 = 's'; } if( ((ch>='a')&&(ch<='z')) || ((ch>='A')&&(ch<='Z')) ) { if( chgUpper ) { ch = ch.toUpperCase(); chgUpper = false; } sOut+=ch; if( ch2!='') { sOut+=ch2; } } else { if( ch==' ' ) { chgUpper = true; } } } return sOut;
+}
+// Stop hiding and stop </pre> escaping TWiki rendering -->
+</script>
+<form name="new" action="%SCRIPTURLPATH{save}%/%WEB%/" method="post">
+| Salutation: | <select name="Salutation"> <option></option> %SEARCH{ "\| Salutation.*select" type="regex" topic="ContactForm" multiple="on" nonoise="on" format=">>$percntCALC{$LISTJOIN($sp, $LISTMAP(<option>$item</option> , $TRIM($pattern(.*?select[^\|]*\|[^\|]*\|[ ,]*([^\|]*).*))))}$percnt<<" }% </select> |
+| Name: | <input type="text" name="Name" value="" size="40" onblur="this.form.topic.value = wikify(this.value);"  /> Firstname Lastname |
+| Topic name: | <input type="text" name="topic" value="" size="40" /> Use a !WikiWord |
+| Job Title: | <input type="text" name="JobTitle" value="" size="40" /> |
+| Company: | <input type="text" name="Company" value="" size="40" /> |
+| Phone: | <input type="text" name="Phone" value="" size="20" /> |
+| Mobile: | <input type="text" name="Mobile" value="" size="20" /> |
+| Fax: | <input type="text" name="Fax" value="" size="20" /> |
+| Email: | <input type="text" name="Email" value="" size="40" /> |
+| URL: | <input type="text" name="URL" value="" size="40" /> Blog or bio |
+| | <input type="submit" class="twikiSubmit" value="Create New Contact" /> |
+<input type="hidden" name="topicparent" value="ContactDB" />
+<input type="hidden" name="templatetopic" value="ContactTemplate" />
+<input type="hidden" name="onlynewtopic" value="on" />
+<input type="hidden" name="onlywikiname" value="on" />
+</form>
+%STOPINCLUDE%
+
+__Related:__ ContactDB, ContactForm, ContactTemplate, ContactHeader
+
+-- TWiki:Main.PeterThoeny - 2010-10-13

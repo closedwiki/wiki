@@ -1,0 +1,18 @@
+%META:TOPICINFO{author="PeterThoeny" date="1287035470" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICPARENT{name="ContactDB"}%
+---+ Contact Form Definition
+
+| *Name:*| *Type:* | *Size* | *Values:* | *Tooltip message:* |
+| Salutation | select | 1 | , Mr., Ms., Mrs., Miss, Dr. | Pick salutation |
+| Name | text | 40 |  | First name and Last name of person |
+| Job Title | text | 40 |  | Job title |
+| Company | text | 40 |  | Company name |
+| Phone | text | 20 |  | Phone number |
+| Mobile | text | 20 |  | Mobile phone number |
+| Fax | text | 20 |  | FAX number |
+| Email | text | 40 |  | E-mail address |
+| URL | text | 60 |  | URL of homepage |
+
+__Related:__ ContactDB, ContactTemplate, ContactHeader, NewContact
+
+-- TWiki:Main.PeterThoeny - 2010-10-13

@@ -1,0 +1,30 @@
+%META:TOPICINFO{author="PeterThoeny" date="1287037859" format="1.1" reprev="1.2" version="1.2"}%
+---+ Contact Database
+
+%ICON{newtopic}% [[#NewContact][Add entry]]
+&nbsp;
+%ICON{index}% [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?Name=][Show all]]
+<form name="new" action="%SCRIPTURLPATH{view}%/%WEB%/%TOPIC%">
+| *&nbsp;* | *%ICON{person}% Name* | *%ICON{building}% Company* | *%ICON{phone}% Phone* | *%ICON{mobile}% Mobile* | *%ICON{mail}% Email* |
+| *<input type="submit" class="twikiSubmit" value="Filter" />* | *<input type="text" name="Name" value="%URLPARAM{"Name" encode="entity"}%" size="10" class="twikiInputField" />* | *<input type="text" name="Company" value="%URLPARAM{"Company" encode="entity"}%" size="10" class="twikiInputField" />* | *<input type="text" name="Phone" value="%URLPARAM{"Phone" encode="entity"}%" size="10" class="twikiInputField" />* | *<input type="text" name="Mobile" value="%URLPARAM{"Mobile" encode="entity"}%" size="10" class="twikiInputField" />*  | *<input type="text" name="Email" value="%URLPARAM{"Email" encode="entity"}%" size="10" class="twikiInputField" />* |
+%SEARCH{
+ "META:FORM.*[C]ontactForm%IF{
+  "defined 'Name'"
+  else=";imp0ssible_search-string"
+}%;META:FIELD.*name=.Name.*value=.*%URLPARAM{"Name" encode="safe"}%;META:FIELD.*name=.Company.*value=.*%URLPARAM{"Company" encode="safe"}%;META:FIELD.*name=.Phone.*value=.*%URLPARAM{"Phone" encode="safe"}%;META:FIELD.*name=.Mobile.*value=.*%URLPARAM{"Mobile" encode="safe"}%;META:FIELD.*name=.Email.*value=.*%URLPARAM{"Email" encode="safe"}%"
+ type="regex"
+ excludetopic="*Template"
+ nonoise="on"
+ format="|  [[$topic][<img src=\"%ICONURLPATH{viewtopic}%\" alt=\"View entry\" title=\"View entry\" width=\"16\" height=\"16\" border=\"0\" />]][[%SCRIPTURL{edit}%/$web/$topic?t=%SERVERTIME{$hou$min$sec}%][<img src=\"%ICONURLPATH{edittopic}%\" alt=\"Edit entry\" title=\"Edit entry\" width=\"16\" height=\"16\" border=\"0\" />]]  | [[$topic][$formfield(Name)]] | $formfield(Company) | $formfield(Phone) | $formfield(Mobile) | $formfield(Email) |"
+}%
+</form>
+Number of contacts: %CALC{$INT($ROW(-1) - 1)}%
+
+#NewContact
+---++ Add new contact
+
+%INCLUDE{NewContact}%
+
+__Related:__ %SYSTEMWEB%.ContactDbAddOn, TWiki:Blog/BlogEntry201009x1
+
+-- TWiki:Main.PeterThoeny - 2010-10-13

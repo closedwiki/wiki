@@ -1,0 +1,9 @@
+lib/TWiki/Contrib/ContactDbAddOn.pm 0444
+data/TWiki/ContactDbAddOn.txt 0644
+data/Sandbox/ContactDB.txt 0644
+data/Sandbox/ContactHeader.txt 0644
+data/Sandbox/ContactForm.txt 0644
+data/Sandbox/ContactTemplate.txt 0644
+data/Sandbox/NewContact.txt 0644
+pub/TWiki/ContactDbAddOn/screen-db1.png 0644
+pub/TWiki/ContactDbAddOn/screen-db2.png 0644

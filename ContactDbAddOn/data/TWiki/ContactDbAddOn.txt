@@ -1,0 +1,82 @@
+%META:TOPICINFO{author="PeterThoeny" date="1287037728" format="1.1" reprev="1.3" version="1.3"}%
+---+!! Contact DB Add-On
+<!--
+   Contributions to this contrib are appreciated. Please update the contrib page at
+   http://twiki.org/cgi-bin/view/Plugins/%TOPIC% or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/%TOPIC%Dev.
+   If you are a TWiki contributor please update the contrib in the SVN repository.
+-->
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC%
+</div>
+</sticky>
+%SHORTDESCRIPTION%
+
+This is a TWiki application using %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.TWikiTemplates and %SYSTEMWEB%.FormattedSearch queries.
+
+---++ Screenshots
+
+---+++!! Application homepage
+
+<img src="%ATTACHURLPATH%/screen-db1.png" alt="screen-db1.png" width="700" height="580" />
+
+---+++!! Sample contact entry
+
+<img src="%ATTACHURLPATH%/screen-db2.png" alt="screen-db2.png" width="567" height="617" />
+
+---++ Usage
+
+The application homepage !ContactDB contains a report showing the contacts and a form to add a new contact.
+
+Each contact page has a comment box to add unstructured content (notes, etc) and a form that holds the structured content (name, job title, etc).
+
+---++ Customization
+
+You can add/change the form fields. Follow this sequence.
+
+   * !ContactForm - modify the form
+   * !ContactTemplate - edit and save the template page (also if no changes are needed)
+   * !ContactHeader - tweak the contact header if needed
+   * !ContactDB - tweak the report header and SEARCH format as needed
+
+---++ Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running.
+
+   * Download the ZIP file from the Add-on Home (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Add-on documentation page |
+     | ==data/Sandbox/ContactDB.txt== | Contact database home page |
+     | ==data/Sandbox/ContactForm.txt== | Form definition for contact pages |
+     | ==data/Sandbox/ContactTemplate.txt== | Template for new contact pages |
+     | ==data/Sandbox/ContactHeader.txt== | Header for contact pages |
+     | ==data/Sandbox/NewContact.txt== | Create new contact page |
+     | ==lib/TWiki/Contrib/ContactDbAddOn.pm== | Module with version info |
+   * You get a contact database residing in [[Sandbox.ContactDB]]
+   * Duplicate the application pages from the Sandbox web to your own team's web: !ContactDB, !ContactForm, !ContactTemplate, !ContactHeader and !NewContact. You can copy them on the shell level or clone the pages using your browser.
+   * __Note:__ If you are not an administrator you can unzip the package on your computer and create the application pages in your team's web based on the content of the files in =data/Sandbox/=. For example, if your web is Marketing, create a page called !ContactDB in the Marketing web with the content of the =data/Sandbox/ContactDB.txt= file. Repeat for other pages. The =lib/TWiki/Contrib/ContactDbAddOn.pm= files are not needed for a manual installation.
+
+---++ Add-On Info
+
+   * Set SHORTDESCRIPTION = Simple contact database that can be shared by the team
+
+|  Add-on Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2010, TWiki:Main.PeterThoeny |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Add-on Version: | 2010-10-14 (V1.000) |
+|  Change History: | <!-- versions below in reverse order --> |
+|  2010-10-14: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 4.0) |
+|  Other Dependencies: | none |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topic:__ %SYSTEMWEB%.TWikiAddOns
+
+-- TWiki:Main.PeterThoeny - 2010-10-14
+
+%META:FILEATTACHMENT{name="screen-db1.png" attachment="screen-db1.png" attr="h" comment="" date="1287037685" path="screen-db1.png" size="57097" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="screen-db2.png" attachment="screen-db2.png" attr="h" comment="" date="1287030628" path="screen-db2.png" size="56416" user="PeterThoeny" version="1"}%
