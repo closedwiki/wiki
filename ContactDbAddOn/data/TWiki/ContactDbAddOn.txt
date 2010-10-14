@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1287038785" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1287039463" format="1.1" version="$Rev$"}%
 ---+!! Contact DB Add-On
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
-   http://twiki.org/cgi-bin/view/Plugins/%TOPIC% or provide feedback at
-   http://twiki.org/cgi-bin/view/Plugins/%TOPIC%Dev.
+   http://twiki.org/cgi-bin/view/Plugins/ContactDbAddOn or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/ContactDbAddOnDev.
    If you are a TWiki contributor please update the contrib in the SVN repository.
 -->
 <sticky>
