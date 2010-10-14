@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1287035174" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1287038804" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="ContactTemplate"}%
 ---+!! Contact Header
 
