@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1287039463" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1287091444" format="1.1" version="$Rev$"}%
 ---+!! Contact DB Add-On
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -78,5 +78,5 @@ __Related Topic:__ %SYSTEMWEB%.TWikiAddOns
 
 -- TWiki:Main.PeterThoeny - 2010-10-14
 
-%META:FILEATTACHMENT{name="screen-db1.png" attachment="screen-db1.png" attr="h" comment="" date="1287037685" path="screen-db1.png" size="57097" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="screen-db1.png" attachment="screen-db1.png" attr="h" comment="" date="1287091401" path="screen-db1.png" size="56658" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="screen-db2.png" attachment="screen-db2.png" attr="h" comment="" date="1287030628" path="screen-db2.png" size="56416" user="TWikiContributor" version="1"}%
