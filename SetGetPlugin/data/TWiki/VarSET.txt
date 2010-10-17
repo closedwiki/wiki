@@ -1,1 +1,8 @@
-Placeholder topic
+%META:TOPICINFO{author="TWikiContributor" date="1287352254" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarSET
+---+++ SET{"name" value="..."} -- set a variable
+   * Set a named variable, can be retrieved later with =%<nop>GET{}%=.
+   * Syntax: =%<nop>SET{"name" value="..."}%=
+   * Example: =%<nop>SET{"lunch" value="Sushi"}%=
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables' OR '%INCLUDINGTOPIC%'='SetGetPlugin'" then="#"}%VarGET][GET]], SpreadSheetPlugin#FuncSET%STOPINCLUDE%, SetGetPlugin

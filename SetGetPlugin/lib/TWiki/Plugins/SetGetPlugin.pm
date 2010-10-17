@@ -30,8 +30,8 @@ use vars qw(
     );
 
 # Plugin version
-$VERSION = '$Rev$';
-$RELEASE = '2010-10-16';
+$VERSION = 'V1.0 - $Rev$';
+$RELEASE = '2010-10-17';
 
 $moduleLoaded = 0;
 
