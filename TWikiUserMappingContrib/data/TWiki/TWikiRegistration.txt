@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1285980770" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1287702995" format="1.1" version="$Rev$"}%
 ---+ %MAKETEXT{"Registration"}%
 
 %IF{"context registration_supported" 
@@ -113,7 +113,7 @@ function capitalise(name)
 </tr>
 <!--
 ## NOTE: Optional rows for password, enabled by {Register}{AllowLoginName} option in =configure=, we assume that login name means that TWiki does not handle passwords
-   * Set BESPOKE_PASSWORD = <tr><td align=\"right\"> %MAKETEXT{"Your password:"}% </td><td><input %NOREGISTRATION% type=\"password\" name=\"Twk0Password\" size=\"30\" class=\"twikiInputField\" value=\"%URLPARAM{"Password" encode="entity"}%\" /> =<font color=\"red\">**</font>= </td></tr>\
+   * Set BESPOKE_PASSWORD = <tr><td align=\"right\"> %MAKETEXT{"Password:"}% </td><td><input %NOREGISTRATION% type=\"password\" name=\"Twk0Password\" size=\"30\" class=\"twikiInputField\" value=\"%URLPARAM{"Password" encode="entity"}%\" /> =<font color=\"red\">**</font>= </td></tr>\
      <tr><td align=\"right\"> %MAKETEXT{"Retype password:"}% </td><td><input %NOREGISTRATION% type=\"password\" name=\"Twk0Confirm\" size=\"30\" class=\"twikiInputField\" value=\"%URLPARAM{"Confirm" encode="entity"}%\" /> =<font color=\"red\">**</font>= </td></tr>
 -->
 %IF{"$ ALLOWLOGINNAME < 1" then="%BESPOKE_PASSWORD%"}%
