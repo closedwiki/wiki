@@ -1082,7 +1082,7 @@ sub _userManagerQueryUsers {
           . join( "\n", sort @rows ) . "\n"
           . '__Total:__ ' . scalar( @rows ) . "\n"
           . '%BB% *MCP*: User must change password' . "\n"
-          . '%BB% *LCP*: Last password change' . "\n"
+          . '%BB% *LPC*: Last password change' . "\n"
           . '%BB% *Disabled*: User account is disabled' . "\n";
 
     return $text;
