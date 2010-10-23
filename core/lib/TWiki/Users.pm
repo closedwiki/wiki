@@ -1040,13 +1040,15 @@ sub _userManagerQueryUsers {
         # FIXME: Quick hack that violates data encapsulation: This module
         # should not assume the data structure of password handlers.
         # It should be data driven like _userManagerEditUser().
-        my $data = $this->getUserData( $cUID );
-        my $emails  = '';
-        my $mcp     = '';
-        my $lpc     = '';
-        my $disable = '';
+        my $data      = $this->getUserData( $cUID );
+        my $emails    = '';
+        my $mcp       = '';
+        my $lpc       = '';
+        my $disable   = '';
+        my $canModify = 0;
 
         foreach my $item ( @{$data} ) {
+            $canModify = 1 if( $item->{type} ne 'label' );
             my $name  = $item->{name};
             my $value = $item->{value};
             if( $name eq 'emails' ) {
@@ -1063,11 +1065,12 @@ sub _userManagerQueryUsers {
             }
         }
 
-        my $editUrl = $this->{session}->getScriptUrl(
-            1, 'view', $TWiki::cfg{SystemWebName}, 'EditUserAccount',
+        my $script = $canModify ? 'edit' : 'view';
+        my $url = $this->{session}->getScriptUrl(
+            1, $script, $TWiki::cfg{SystemWebName}, 'EditUserAccount',
             'user' => $wikiName );
-        $text = "| [[$editUrl][<span style=\"white-space:nowrap\">"
-              . "%ICON{edittopic}% edit</span>]] "
+        $text = "| [[$url][<span style=\"white-space:nowrap\">"
+              . "\%ICON{${script}topic}% $script</span>]] "
               . "| [[$TWiki::cfg{UsersWebName}.$wikiName][$wikiName]] "
               . "| $emails | $mcp | $lpc | $disable |";
         push( @rows, $text );
