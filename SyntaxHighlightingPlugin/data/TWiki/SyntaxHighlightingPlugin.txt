@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1287887675" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1287893169" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiPreferences"}%
 ---+!! Syntax Highlighting Plugin
 <!--
@@ -86,18 +86,21 @@ The Syntax Highlighting Plugin is used to emphasize the rendering of your wiki t
 To use this plugin, use the following syntax:
 
 <verbatim>
+<sticky>
 %CODE{lang="..." [num="10"]}% 
 ...code...
 %ENDCODE%
+</sticky>
 </verbatim>
 
-The language can be any from the above list. The =num= setting is optional and will set the starting line number.
+The language can be any from the above list. The =num= setting is optional and will set the starting line number. The =&lt;sticky&gt;= tags are required to prevent TWiki's WYSIWYG editor from removing line breaks inside the code block.
 
-----++ Examples
+---++ Examples
 
 The following text:
 
 <verbatim> 
+<sticky>
 %CODE{"c++"}%
 #include <iostream>
 int main()
@@ -105,10 +108,12 @@ int main()
   std::cout << "Hello, world." << std::endl;
 }
 %ENDCODE%
+</sticky>
 </verbatim>
 
 gives (if installed):
 
+<sticky>
 %CODE{"c++"}%
 #include <iostream>
 int main()
@@ -116,10 +121,12 @@ int main()
   std::cout << "Hello, world." << std::endl;
 }
 %ENDCODE%
+</sticky>
 
 You can also output numbered lines starting at 10 with this text:
 
 <verbatim>
+<sticky>
 %CODE{"sh" num="10"}% 
 #!/bin/sh
 languages=`enscript --help-highlight | grep 'Name:' | cut -d ' ' -f 2`
@@ -129,10 +136,12 @@ for l in $languages; do
 EOF
 done
 %ENDCODE% 
+</sticky>
 </verbatim>
 
 gives (if installed):
 
+<sticky>
 %CODE{"sh" num="10"}%
 #!/bin/sh
 languages=`enscript --help-highlight | grep 'Name:' | cut -d ' ' -f 2`
@@ -142,6 +151,7 @@ for l in $languages; do
 EOF
 done
 %ENDCODE%
+</sticky>
 
 ---++ Plugin Settings
 
@@ -174,7 +184,7 @@ This has been changed to be more consistent with other twiki variables. There is
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-10-23: | Bugs:Item6530: Doc improvements - TWiki:Main.PeterThoeny|
+|  2010-10-23: | Bugs:Item6530: Doc improvements - TWiki:Main.PeterThoeny, TWiki:Main.AndreasKeil |
 |  2008-09-11: | Bugs:Item5995: Rewritten to work on TWiki 4.2 |
 |  2002-07-12: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
