@@ -4,6 +4,7 @@
 # Copyright (C) 2008 Andrew Jones, andrewjones86@gmail.com
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2008-2010 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,8 +28,10 @@
 # It uses enscript as syntax highlighter.
 # 
 # Use it in your twiki text by writing %CODE{"language"}% ... %ENDCODE%
-# with language = ada asm awk bash c changelog c++ csh delphi diff diffs diffu elisp fortran fortran_pp haskell html idl inf java javascript
-# ksh m4 mail makefile maple matlab modula_2 nested nroff objc outline pascal perl postscript python rfc scheme sh skill sql states synopsys
+# with language = ada asm awk bash c changelog c++ csh delphi diff diffs
+# diffu elisp fortran fortran_pp haskell html idl inf java javascript
+# ksh m4 mail makefile maple matlab modula_2 nested nroff objc outline
+# pascal perl postscript python rfc scheme sh skill sql states synopsys
 # tcl tcsh tex vba verilog vhdl vrml wmlscript zsh 
 
 package TWiki::Plugins::SyntaxHighlightingPlugin;
@@ -42,11 +45,11 @@ use vars qw(    $VERSION
                 $SHORTDESCRIPTION
                 $pluginName
                 %langs
-                );
+           );
 
-$VERSION = '1.000';
+$VERSION = '1.010';
+$RELEASE = '2010-10-23';
 $SHORTDESCRIPTION = 'Highlights code fragments for many languages using ==enscript==';
-$RELEASE = 'TWiki-4.2';
 $NO_PREFS_IN_TOPIC = 1;
 
 $pluginName = 'SyntaxHighlightingPlugin';

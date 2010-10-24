@@ -1,70 +1,87 @@
-%META:TOPICINFO{author="tisser_n" date="1043231880" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="TWikiContributor" date="1287887675" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiPreferences"}%
+---+!! Syntax Highlighting Plugin
 <!--
-   * Set SHORTDESCRIPTION = This Plugin is used to emphasize the rendering of your wiki text according to several languages.
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/SyntaxHighlightingPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/SyntaxHighlightingPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+
+   * Set SHORTDESCRIPTION = Emphasize the rendering of source code of many languages
 -->
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+</sticky>
+%SHORTDESCRIPTION%
 
----++ Syntax Highlighting Plugin
+---++ Introduction
 
-The Syntax Highlighting Plugin is used to emphasize the rendering of your wiki text according to several languages.
+The Syntax Highlighting Plugin is used to emphasize the rendering of your wiki text according to several languages. It currently uses =enscript= to render its output.
 
-It currently uses =enscript= to render its output.
+---++ Supported languages
 
-It supports the following languages : 
-	* ada
-	* asm
-	* awk
-	* bash
-	* c
-	* changelog
-	* c++
-	* csh
-	* delphi
-	* diff
-	* diffs
-	* diffu
-	* elisp
-	* fortran
-	* fortran_pp
-	* haskell
-	* html
-	* idl
-	* inf
-	* java
-	* javascript
-	* ksh
-	* m4
-	* mail
-	* makefile
-	* maple
-	* matlab
-	* modula_2
-	* nested
-	* nroff
-	* objc
-	* outline
-	* pascal
-	* perl
-	* postscript
-	* python
-	* rfc
-	* scheme
-	* sh
-	* skill
-	* sql
-	* states
-	* synopsys
-	* tcl
-	* tcsh
-	* tex
-	* vba
-	* verilog
-	* vhdl
-	* vrml
-	* wmlscript
-	* zsh
+<table><tr><td valign="top">
+   * ada
+   * asm
+   * awk
+   * bash
+   * c
+   * changelog
+   * c++
+   * csh
+   * delphi
+   * diff
+   * diffs
+   * diffu
+</td><td valign="top">
+   * elisp
+   * fortran
+   * fortran_pp
+   * haskell
+   * html
+   * idl
+   * inf
+   * java
+   * javascript
+   * ksh
+   * m4
+   * mail
+</td><td valign="top">
+   * makefile
+   * maple
+   * matlab
+   * modula_2
+   * nested
+   * nroff
+   * objc
+   * outline
+   * pascal
+   * perl
+   * postscript
+   * python
+</td><td valign="top">
+   * rfc
+   * scheme
+   * sh
+   * skill
+   * sql
+   * states
+   * synopsys
+   * tcl
+   * tcsh
+   * tex
+   * vba
+   * verilog
+</td><td valign="top">
+   * vhdl
+   * vrml
+   * wmlscript
+   * zsh
+</td></tr></table>
 
----+++ Syntax Rules
+---++ Syntax Rules
 
 To use this plugin, use the following syntax:
 
@@ -74,12 +91,11 @@ To use this plugin, use the following syntax:
 %ENDCODE%
 </verbatim>
 
-The language can be any from the above list. The =num= setting is optional and
-will set the starting line number.
+The language can be any from the above list. The =num= setting is optional and will set the starting line number.
 
-----+++ Examples
+----++ Examples
 
-The following text :
+The following text:
 
 <verbatim> 
 %CODE{"c++"}%
@@ -108,8 +124,8 @@ You can also output numbered lines starting at 10 with this text:
 #!/bin/sh
 languages=`enscript --help-highlight | grep 'Name:' | cut -d ' ' -f 2`
 for l in $languages; do
-	 cat << EOF
-	* $l
+    cat << EOF
+   * $l
 EOF
 done
 %ENDCODE% 
@@ -121,19 +137,19 @@ gives (if installed):
 #!/bin/sh
 languages=`enscript --help-highlight | grep 'Name:' | cut -d ' ' -f 2`
 for l in $languages; do
-	 cat << EOF
-	* $l
+    cat << EOF
+   * $l
 EOF
 done
 %ENDCODE%
 
----+++ Plugin Settings
+---++ Plugin Settings
 
 Use configure to change the settings for this plugin.
 
----+++ Change of Syntax
+---++ Change of Syntax
 
-This plugin used to use the following syntax:
+Older version of this plugin used to use the following syntax:
 
 <verbatim>
 %begin sh%
@@ -143,27 +159,28 @@ This plugin used to use the following syntax:
 
 This has been changed to be more consistent with other twiki variables. There is a script included which will replace the old syntax with the new. To use it, copy it from the =tools= directory and into your =data= directory. When you run it, it will look through your webs and replace the syntax. Note that its not the best script in the world, so always test it on a copy of your data first!
 
----+++ Plugin Installation Instructions
+---++ Plugin Installation Instructions
 
 %$INSTALL_INSTRUCTIONS%
 
----+++ Plugin Files
+---++ Plugin Files
 
 %$MANIFEST%
 
----+++ Plugin Info
+---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.AndrewRJones |
 |  Previous Authors: | TWiki:Main.NicolasTisserand, TWiki:Main.NicolasBurrus, Perceval Anichini |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  11 Sep 2008 | Bugs:Item5995 - Rewritten to work on TWiki 4.2 |
-|  12 Jul 2002: | Initial version |
+|  2010-10-23: | Bugs:Item6530: Doc improvements - TWiki:Main.PeterThoeny|
+|  2008-09-11: | Bugs:Item5995: Rewritten to work on TWiki 4.2 |
+|  2002-07-12: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  Dependencies: | enscript, CPAN:IPC::Run |
+|  Dependencies: | enscript >= 1.6.3, CPAN:IPC::Run |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
