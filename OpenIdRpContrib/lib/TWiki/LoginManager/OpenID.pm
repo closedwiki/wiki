@@ -48,7 +48,7 @@ use Cache::FileCache;					# CPAN dependency
 use Net::OpenID::Consumer;      		# CPAN dependency
 
 # class configuration variables
-our ( $debug, @op_list, $no_user_add_id, $no_user_del_id, $ua_class,
+our ( $debug, @op_list, $no_user_add_id, $no_user_del_id, $no_ht_password_login, $ua_class,
 	$required_root, $nonce_pattern, $op_host_whitelist, $op_host_blacklist,
 	$op_dom_whitelist, $op_dom_blacklist, @req_fields1, @opt_fields1,
 	@policy_url1, @req_fields2, @opt_fields2, $auto_register_user,
@@ -92,6 +92,10 @@ sub new {
 	# flag: inhibit user console deletion of OpenID identities
 	$no_user_del_id = ( exists $TWiki::cfg{OpenIdRpContrib}{NoUserDelId})
 		? $TWiki::cfg{OpenIdRpContrib}{NoUserDelId} : 0;
+
+	# flag: Force user to use OpenID for login if they have in the past
+	$no_ht_password_login = ( exists $TWiki::cfg{OpenIdRpContrib}{NoHtPasswordLogin})
+	        ? $TWiki::cfg{OpenIdRpContrib}{NoHtPasswordLogin} : 0;
 
 	# Net::OpenID::Consumer library configuration
 	# The defaults should be adequate for these
@@ -828,8 +832,37 @@ sub login {
     # if no login provided, or login & password, use parent class login
     } elsif (( ! defined $loginName ) or ( ! $loginName )
 		or (( defined $loginName ) and length( $loginName)
-			and ( defined $loginPass ) and length( $loginPass)))
-	{
+                        and ( defined $loginPass ) and length( $loginPass))) {
+        # If true, only let the user user login if they have NOT logged
+        # in with OpenID in the past.
+        if( $no_ht_password_login ) {
+            my $mapping = $session->{users}{mapping};
+
+            # Get the cannonical user ID.
+            # For example, OpenIDMapping_juliancash
+            my $cUID = $mapping->login2cUID( $loginName, 1 );
+
+            # This string will have a value if the user has logged in with
+            # OpenID in the past.
+            my $openidStr = TWiki::Users::OpenIDMapping::cUID2openid($session, $cUID);
+            # If $openidStr is set, then throw an message to the user
+            # telling them to login with OpenID.
+            if( $openidStr ) {
+                my $title  = $TWiki::cfg{OpenIdRpContrib}{NoHtPasswordLoginTitle}
+                          || '!OpenID login required';
+                my $msg1   = $TWiki::cfg{OpenIdRpContrib}{NoHtPasswordLoginMessage1}
+                          || "We recognized your login !%LOGINNAME%. However, for users who "
+                           . "have logged in with !OpenID in the past, only !OpenID should be "
+                           . "used to login.";
+                my $msg2   = $TWiki::cfg{OpenIdRpContrib}{NoHtPasswordLoginMessage2}
+                          || "";
+                $msg1 =~ s/%LOGINNAME%/$loginName/go;
+                $msg2 =~ s/%LOGINNAME%/$loginName/go;
+                throw TWiki::OopsException( 'generic',
+                        web => $session->{web}, topic => $session->{topic},
+                        params => [ $title, $msg1, $msg2, ""]);
+            }
+        }
     	return $this->SUPER::login( $query, $session );
     }
 

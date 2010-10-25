@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272874876" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1287979707" format="1.1" version="$Rev$"}%
 ---+!! !OpenID Relying Party (RP) Contrib Package
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -6,11 +6,12 @@
    http://twiki.org/cgi-bin/view/Plugins/OpenIdRpContribDev.
    If you are a TWiki contributor please update the contrib in the SVN repository.
 -->
-%SHORTDESCRIPTION%
-
-<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
-%TOC%
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
 </div>
+</sticky>
+%SHORTDESCRIPTION%
 
 ---++ Introduction
 
@@ -54,6 +55,10 @@ __Required configuration:__
 | $TWiki::cfg{OpenIdRpContrib}{UserMenuThresh1} | threshold for admin console user menu to split to 2 levels | 25 |
 | $TWiki::cfg{OpenIdRpContrib}{UserMenuThresh2} | threshold for admin console user menu to split to 3 levels | 500 |
 | $TWiki::cfg{OpenIdRpContrib}{ForbiddenAccounts} | accounts not allowed to be accessed by !OpenID | <nop>TWikiContributor, <nop>TWikiGuest, <nop>TWikiRegistrationAgent, <nop>UnknownUser |
+| $TWiki::cfg{OpenIdRpContrib}{NoHtPasswordLogin} | flag to force user to use !OpenID for login if they have logged in with !OpenID in the past | 0 |
+| $TWiki::cfg{OpenIdRpContrib}{NoHtPasswordLoginTitle} | Title of message shown if user does not login with !OpenID | =OpenID login required= |
+| $TWiki::cfg{OpenIdRpContrib}{NoHtPasswordLoginMessage} | Message shown if user does not login with !OpenID | =We recognized your login %<nop>LOGINNAME%. However, for users who have logged in with !OpenID in the past, only !OpenID can be used to login.= |
+| $TWiki::cfg{OpenIdRpContrib}{NoHtPasswordLoginMessage2} | Message (second paragraph) shown if user does not login with !OpenID | (empty) |
 
 See also:
    * $TWiki::cfg{<nop>PermittedRedirectHostUrls} - affects hosts which can be used as OPs
@@ -92,6 +97,10 @@ $TWiki::cfg{OpenIdRpContrib}{AutoCreateUser} = 0; # automatically create user pa
 # $TWiki::cfg{OpenIdRpContrib}{policy_url1} = "http://example.dom/privacypolicy.html"; # default policy URL for OpenID 1.1 SREG systems which require it
 $TWiki::cfg{OpenIdRpContrib}{UserMenuThresh1} = 25; # threshold in total OpenID users for admin console to begin showing 1 level of menu
 $TWiki::cfg{OpenIdRpContrib}{UserMenuThresh2} = 500; # threshold in total OpenID users for admin console to begin showing 2 levels of menus
+$TWiki::cfg{OpenIdRpContrib}{NoHtPasswordLogin} = 0; # flag to force user to use OpenID for login if they have logged in with OpenID in the past. Default this to 0.
+# $TWiki::cfg{OpenIdRpContrib}{NoHtPasswordLoginTitle} = '!OpenID login required'; # Title of message shown if user does not login with OpenID
+# $TWiki::cfg{OpenIdRpContrib}{NoHtPasswordLoginMessage} = 'We recognized your login !%LOGINNAME%. However, for users who have logged in with !OpenID in the past, only !OpenID can be used to login.'; # Message shown if user does not login with OpenID
+# $TWiki::cfg{OpenIdRpContrib}{NoHtPasswordLoginMessage2} = ''; # Message (second paragraph) shown if user does not login with OpenID
 </verbatim>
 
 ---+++ Additional Reading
@@ -147,8 +156,9 @@ __Note:__ You do not need to install anything on the browser to use this contrib
 |  Copyright: | &copy; 2010, [[http://www.twiki.net][TWiki, Inc.]], All Rights Reserved |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
-|  Version: | 2010-05-03 v0.1 |
+|  Version: | 2010-10-24 v0.2 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-10-24: | TWikibug:Item6570: Add a flag to force user to use !OpenID for login if they have in the past -- TWiki:Main.JulianCash |
 |  2010-05-03: | Initial version |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
