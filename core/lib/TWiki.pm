@@ -4065,6 +4065,7 @@ sub URLPARAM {
     my $newLine   = $params->{newline};
     my $encode    = $params->{encode} || 'safe';
     my $multiple  = $params->{multiple};
+    my $format    = $params->{format} || '$value';
     my $separator = $params->{separator};
     $separator="\n" unless (defined $separator);
 
@@ -4090,6 +4091,8 @@ sub URLPARAM {
         }
     }
     if( defined $value ) {
+        $format =~ s/\$value/$value/go;
+        $value = $format;
         if( defined $newLine ) {
             $newLine =~ s/\$br\b/\0-br-\0/go;
             $newLine =~ s/\$n\b/\0-n-\0/go;
