@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1288142357" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288153674" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarURLPARAM
 ---+++ URLPARAM{"name"} -- get value of a URL parameter
@@ -17,7 +17,7 @@
      | =encode="url"= | Encode special characters for URL parameter use, like a double quote into =%22= | =encode="safe"= |
      | =multiple="on"= %BR% =multiple="[<nop>[$item]]"= | If set, gets all selected elements of a =&lt;select multiple="multiple"&gt;= tag. A format can be specified, with =$item= indicating the element, e.g. =multiple="Option: $item"= | first element |
      | =separator=", "= | Separator between multiple selections. Only relevant if multiple is specified | ="\n"= (newline) |
-     | =format="..."= | Format the result. =$value= expands to the URL parameter. If multiple is specified, =$value= expands to the result of the concatenated items. | ="$format"= |
+     | =format="..."= | Format the result. =$value= expands to the URL parameter. If multiple is specified, =$value= expands to the result of the concatenated items. | ="$value"= |
      | =default="..."= | Default value in case parameter is empty or missing. The format parameter is not applied. | empty string |
    * Example: =%<nop>URLPARAM{"skin"}%= returns =print= for a =.../view/%WEB%/%INCLUDINGTOPIC%?skin=print= URL
    * __%X% Notes:__
