@@ -1,10 +1,10 @@
-%META:TOPICINFO{author="PeterThoeny" date="1152440075" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288411416" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="EditSyntaxPlugin"}%
 ---+ Edit Syntax Regex for Wikimedia
 
 This topic contains the syntax rules to convert TML to/from Wikimedia syntax. See EditSyntaxPlugin for format description.
 
-__Note:__ Do not update this topic unless you are familiar with %TWIKIWEB%.RegularExpression syntax. Make sure to create proper pairs, so that an edit roundtrip results in the same text, including whitespace.
+__Note:__ Do not update this topic unless you are familiar with %SYSTEMWEB%.RegularExpression syntax. Make sure to create proper pairs, so that an edit round-trip results in the same text, including whitespace.
 
 ---++ TWiki to Mediawiki
 
@@ -94,12 +94,14 @@ FIXME: Tables conversion
 </verbatim>
 
 __See also:__
+
    * EditSyntaxPlugin - Plugins managing the syntax conversion
    * MediawikiWikiSyntaxSummary - syntax summary shown in the edit screen
    * MediawikiTextFormattingRules - syntax help topic for details on edit syntax
    * MediawikiEditTest - topic to test the two way edit syntax conversions
 
 __Access control:__
-   * #DISABLE Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
 
--- TWiki:Main.PeterThoeny - 09 Jul 2006
+   * Set ALLOWTOPICCHANGE = %USERSWEB%.TWikiAdminGroup
+
+-- TWiki:Main.PeterThoeny - 2010-10-29
