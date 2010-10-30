@@ -1067,7 +1067,7 @@ sub _userManagerQueryUsers {
 
         my $script = $canModify ? 'edit' : 'view';
         my $url = $this->{session}->getScriptUrl(
-            1, $script, $TWiki::cfg{SystemWebName}, 'EditUserAccount',
+            1, 'view', $TWiki::cfg{SystemWebName}, 'EditUserAccount',
             'user' => $wikiName );
         $text = "| [[$url][<span style=\"white-space:nowrap\">"
               . "\%ICON{${script}topic}% $script</span>]] "
