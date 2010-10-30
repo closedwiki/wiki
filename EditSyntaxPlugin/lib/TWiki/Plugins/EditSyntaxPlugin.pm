@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2006-2010 Peter Thoeny, peter@thoeny.org
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,15 +19,8 @@ package TWiki::Plugins::EditSyntaxPlugin;
 use strict;
 use vars qw( $VERSION $RELEASE $debug $pluginName $installWeb );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$VERSION = 'V1.1 - $Rev$';
+$RELEASE = '2010-10-29';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'EditSyntaxPlugin';
@@ -43,12 +36,6 @@ sub initPlugin
         return 0;
     }
 
-    # Example code of how to get a preference value, register a variable handler
-    # and register a RESTHandler. (remove code you do not need)
-
-    # Get plugin preferences variables
-    #my $example = TWiki::Func::getPreferencesValue( "\U$pluginName\E_EXAMPLE" );
-
     # get debug flag
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
 
@@ -59,24 +46,14 @@ sub initPlugin
 }
 
 # ================================================================
-sub DISABLE_commonTagsHandler
-{
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/%XYZ%/&handleXyz()/ge;
-    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
-}
-
-# ================================================================
 sub beforeEditHandler
 {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
     TWiki::Func::writeDebug( "- ${pluginName}::beforeEditHandler( $_[2].$_[1] )" ) if $debug;
+
+    # Bail out if WYSIWYG edit session
+    return if TWiki::Func::getContext()->{textareas_hijacked};
 
     my $editSyntax = TWiki::Func::getPreferencesValue( 'EDITSYNTAX' ) || '';
     $_[0] = _translateText( $_[0], $editSyntax, 'T2X' ) if( $editSyntax );
@@ -88,6 +65,9 @@ sub afterEditHandler
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
     TWiki::Func::writeDebug( "- ${pluginName}::afterEditHandler( $_[2].$_[1] )" ) if $debug;
+
+    # Bail out if WYSIWYG edit session
+    return if TWiki::Func::getContext()->{textareas_hijacked};
 
     my $editSyntax = TWiki::Func::getPreferencesValue( 'EDITSYNTAX' ) || '';
     $_[0] = _translateText( $_[0], $editSyntax, 'X2T' ) if( $editSyntax );
