@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1286169465" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288477773" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. Doc graphics are defined at %CALC{$SET(icontopics, $LISTIF($NOT($EXACT($item,)), $LISTMAP($IF($EXISTS($item), [[$item]], ), %ICONTOPIC%)))$GET(icontopics)}%.
@@ -39,6 +39,8 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{bug}% | =%<nop>ICON{bug}%= | Bug | gif | 16x16 |  |
 | %ICON{chart-bar}% | =%<nop>ICON{chart-bar}%= | Bar chart | gif | 16x16 |  |
 | %ICON{chart-pie}% | =%<nop>ICON{chart-pie}%= | Pie chart | gif | 16x16 |  |
+| %ICON{color-wheel}% | =%<nop>ICON{color-wheel}%= | Color wheel | gif | 16x16 |  |
+| %ICON{color-wheel-bg}% | =%<nop>ICON{color-wheel-bg}%= | Color wheel, transparent | gif | 16x16 |  |
 | %ICON{comments}% | =%<nop>ICON{comments}%= | Comments | gif | 16x16 |  |
 | %ICON{connections}% | =%<nop>ICON{connections}%= | Connections | gif | 16x16 |  |
 | %ICON{database}% | =%<nop>ICON{database}%= | Database | gif | 16x16 |  |
@@ -539,6 +541,8 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="choice-yes.gif" attr="h" comment="" date="1169565034" path="choice-yes.gif" size="159" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="closed.gif" attr="h" comment="" date="1169565034" path="closed.gif" size="379" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="code.gif" attr="h" comment="" date="1169565035" path="code.gif" size="374" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="color-wheel.gif" attr="h" comment="" date="1288477271" path="code.gif" size="998" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="color-wheel-bg.gif" attr="h" comment="" date="1288477271" path="code.gif" size="1043" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="comments.gif" attr="h" comment="" date="1258790911" path="comments.gif" size="924" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="connections.gif" attr="h" comment="" date="1258527559" path="connections.gif" size="957" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="css.gif" attr="h" comment="" date="1169565035" path="css.gif" size="374" user="TWikiContributor" version=""}%
