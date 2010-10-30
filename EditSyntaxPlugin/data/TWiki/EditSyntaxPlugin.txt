@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1288412340" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288412774" format="1.1" version="$Rev$"}%
 ---+!! Edit Syntax Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -53,7 +53,7 @@ The converter topic contains bullets with %SYSTEMWEB%.RegularExpression rules: =
 
    * =TYPE= is =T2X= for "TWiki to External" syntax conversion, or =X2T= for "External to TWiki" syntax conversion.
    * =/from/to/= are regular expressions to convert from one format to the other.
-   * =# comments= to annotate the expressions are optional. The hash sign requires a space to be recognized as a space.
+   * =# comments= to annotate the expressions are optional. The hash sign needs to be prefixed with a leading space to be recognized as a comment.
    * Empty lines are ignored.
    * The sequence of regular expressions is relevant.
 
