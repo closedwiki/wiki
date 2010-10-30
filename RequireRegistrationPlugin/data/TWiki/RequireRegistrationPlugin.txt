@@ -1,21 +1,26 @@
-%META:TOPICINFO{author="TWikiContributor" date="1236214210" format="1.1" version="$Rev: 17818 $"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288414386" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
-   Contributions to this plugin are appreciated. Please update the plugin page
-   at http://twiki.org/cgi-bin/view/Plugins/RequireRegistrationPlugin or provide feedback
-   at http://twiki.org/cgi-bin/view/Plugins/RequireRegistrationPluginDev.
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/RequireRegistrationPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/RequireRegistrationPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+%SHORTDESCRIPTION%
 
-This plugin will redirect a user to the %SYSTEMWEB%.TWikiRegistration topic if their login name is not a WikiWord.
+---++ Introduction
 
-Use this if you have setup single sign-on (SSO) and want to force externally authenticated users to register their WikiName before accessing any wiki content.
+This plugin will redirect a user to the %SYSTEMWEB%.TWikiRegistration topic if their login name is not a %SYSTEMWEB%.WikiWord.
+
+Use this if you have setup single sign-on (SSO) and want to force externally authenticated users to register their %SYSTEMWEB%.WikiName before accessing any wiki content.
 
 The condition for when to redirect can very easily be enhanced to only force users to register when they try to:
+
    * access a protected web
    * edit a page
-
-%TOC%
 
 ---++ Syntax Rules
 
@@ -27,12 +32,12 @@ The condition for when to redirect can very easily be enhanced to only force use
 
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>REQUIREREGISTRATIONPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Force externally authenticated users to register a <nop>WikiName
 
-   * Refresh time in seconds to do a meta refresh redirect to the registration page. Specify -1 to use an immediate redirect CGI queryi:
+   * Refresh time in seconds to do a meta refresh redirect to the registration page. Specify -1 to use an immediate redirect CGI query:
       * Set REFRESH = -1
 
    * Debug plugin: (See output in =data/debug.txt=)
@@ -42,27 +47,27 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
 
-   * Download the ZIP file from the Plugin web (see below)
+   * Download the ZIP file from the plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
    * Configure the Plugin:
-      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
-      * Change the Plugin settings as needed
+      * Run the [[%SCRIPTURL{configure}%][configure]] script to enable the plugin
+      * Change the plugin settings as needed
    * Test if the installation was successful:
       * Log in as a user without a %SYSTEMWEB%.WikiName
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ByronIgoe |
-|  Copyright: | &copy; 2007 TWiki:Main.ByronIgoe, 2009 TWiki:Main/PeterThoeny |
+|  Copyright: | &copy; 2007 TWiki:Main.ByronIgoe, %BR% &copy; 2009-2010 TWiki:Main.PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 04 Mar 2008 (v1.100) |
+|  Plugin Version: | 2010-10-29 (v1.2) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  04 Mar 2008: | Fix bug in addToHEAD, made redirect method and refresh time configurable -- Peter Thoeny |
-|  27 Jul 2007: | Initial version |
+|  2010-10-29: | Doc fixes -- Peter Thoeny |
+|  2008-03-04: | Fix bug in addToHEAD, made redirect method and refresh time configurable -- Peter Thoeny |
+|  2007-08-27: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
@@ -73,7 +78,3 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
-
--- TWiki:Main/ByronIgoe - 27 Jul 2007 %BR%
--- TWiki:Main/PeterThoeny -- 04 Mar 2008
-
