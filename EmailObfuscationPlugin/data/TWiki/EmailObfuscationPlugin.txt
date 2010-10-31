@@ -1,0 +1,68 @@
+%META:TOPICINFO{author="StephenGordon" date="1147838909" format="1.1" version="1.3"}%
+---+!! <nop>%TOPIC%
+
+This plugin replaces characters in email address with their appropriate HTML entity references. This is intended to help prevent email harvesters from recognising addresses.
+
+%TOC%
+
+---++ Syntax Rules
+
+   * N/A
+
+---++ Examples
+
+   * user@example.com (If you view source you should see that the string is encoded).
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
+
+   * Set SHORTDESCRIPTION = Obstuficates e-mail addresses by characters to their HTML character entity references.
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
+   * Range of characters to encode (*NOTE:* Setting a bad range here can result in your TWiki not displaying content, please ensure that a correct range is used and that the Plugin topic is locked to Main.TWikiAdminGroup):
+      * Set ESCAPELIST = \000-\056\072-\100\133-\140\173-\177
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+
+   * Ensure you have the HTML::Entities module installed from CPAN.
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Configure the Plugin:
+      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+      * Change the Plugin settings as needed
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.StephenGordon |
+|  Copyright: | &copy; 2006, TWiki:Main.StephenGordon |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | %DATE% (V1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  %DATE%: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | HTML::Entities |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle 98%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 98% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+-- TWiki:Main.%USERNAME% - %DATE%
+
+
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+
+%META:FILEATTACHMENT{name="EmailObstuficationPlugin.zip" attachment="EmailObstuficationPlugin.zip" attr="" comment="Initial release" date="1147828901" path="EmailObstuficationPlugin.zip" size="5435" stream="EmailObstuficationPlugin.zip" user="Main.StephenGordon" version="3"}%
+%META:TOPICMOVED{by="StephenGordon" date="1147838909" from="TWiki.EmailObstuficationPlugin" to="TWiki.EmailObfuscationPlugin"}%
