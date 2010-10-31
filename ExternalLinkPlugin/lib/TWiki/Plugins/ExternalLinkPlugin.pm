@@ -3,6 +3,7 @@
 # Copyright (C) 2005 Aurélio A Heckert <aurium@gmail.com>,
 #                    Nelson Ferraz <nferraz@gmail.com>,
 #                    Antonio Terceiro <asaterceiro@inf.ufrgs.br>
+# Copyright (C) 2005-2010 TWiki Contributors 
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,11 +20,12 @@ package TWiki::Plugins::ExternalLinkPlugin;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName
+        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
         $debug $externalLinkMark $protocolsPattern
     );
 
-$VERSION = '1.001';
+$VERSION = '1.12';
+$RELEASE = '2010-10-31';
 
 $pluginName = 'ExternalLinkPlugin';  # Name of this Plugin
 
