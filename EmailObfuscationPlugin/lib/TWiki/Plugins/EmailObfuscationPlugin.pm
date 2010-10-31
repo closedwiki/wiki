@@ -6,8 +6,10 @@
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2006 Peter Thoeny, peter@thoeny.org
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
+# Copyright (C) 2006 TWiki:Main.StephenGordon
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved. 
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,7 +33,7 @@ to recognise an address while appearing as normal to all valid browsers.
 
 =cut
 
-use HTML::Entities ();
+use HTML::Entities qw(encode_entities_numeric);
 
 package TWiki::Plugins::EmailObfuscationPlugin;
 
@@ -40,8 +42,7 @@ use strict;
 use vars qw( $VERSION $RELEASE $debug $pluginName );
 
 $VERSION = '$Rev: 9598$';
-
-$RELEASE = 'Dakar';
+$RELEASE = '2010-10-30';
 
 $pluginName = 'EmailObfuscationPlugin';
 

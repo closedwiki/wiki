@@ -1,9 +1,19 @@
-%META:TOPICINFO{author="StephenGordon" date="1147838909" format="1.1" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288508366" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/EmailObfuscationPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/EmailObfuscationPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+%SHORTDESCRIPTION%
 
-This plugin replaces characters in email address with their appropriate HTML entity references. This is intended to help prevent email harvesters from recognising addresses.
+---++ Introduction
 
-%TOC%
+This plugin replaces characters in email address with their appropriate HTML entity references. This is intended to help prevent email harvesters from recognizing addresses.
 
 ---++ Syntax Rules
 
@@ -15,15 +25,19 @@ This plugin replaces characters in email address with their appropriate HTML ent
 
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>EMAILOBFUSCATIONPLUGIN_SHORTDESCRIPTION%==
 
-   * Set SHORTDESCRIPTION = Obstuficates e-mail addresses by characters to their HTML character entity references.
+   * Short description:
+      * Set SHORTDESCRIPTION = Obfuscates e-mail addresses by characters to their HTML character entity references
 
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
 
-   * Range of characters to encode (*NOTE:* Setting a bad range here can result in your TWiki not displaying content, please ensure that a correct range is used and that the Plugin topic is locked to Main.TWikiAdminGroup):
+   * Range of characters to encode (*NOTE:* Setting a bad range here can result in your TWiki not displaying content, please ensure that a correct range is used and that the Plugin topic is locked to %USERSWEB%.TWikiAdminGroup):
       * Set ESCAPELIST = \000-\056\072-\100\133-\140\173-\177
+
+   * Restrict access: (remove the # to enable the access control)
+      * #Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
 
 ---++ Plugin Installation Instructions
 
@@ -34,35 +48,27 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
    * Configure the Plugin:
-      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
-      * Change the Plugin settings as needed
+      * Run the [[%SCRIPTURL{configure}%][configure]] script to enable the plugin
+      * Change the plugin settings as needed. Enable the access control by removing the # from the Set ALLOWTOPICCHANGE
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.StephenGordon |
-|  Copyright: | &copy; 2006, TWiki:Main.StephenGordon |
+|  Copyright: | &copy; 2006, TWiki:Main.StephenGordon %BR% &copy; 2006-2010 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | %DATE% (V1.000) |
+|  Plugin Version: | 2010-10-30 (V1.001) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  %DATE%: | Initial version |
+|  2010-10-30: | TWikibug:Item6530: Doc fixes |
+|  2006-05-17: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | HTML::Entities |
+|  CPAN Dependencies: | CPAN:HTML::Entities |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle 98%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 98% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle 98%, %SYSTEMWEB%.FormattedSearch 99%, %TOPIC% 98% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
-
--- TWiki:Main.%USERNAME% - %DATE%
-
-
-   * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
-
-%META:FILEATTACHMENT{name="EmailObstuficationPlugin.zip" attachment="EmailObstuficationPlugin.zip" attr="" comment="Initial release" date="1147828901" path="EmailObstuficationPlugin.zip" size="5435" stream="EmailObstuficationPlugin.zip" user="Main.StephenGordon" version="3"}%
-%META:TOPICMOVED{by="StephenGordon" date="1147838909" from="TWiki.EmailObstuficationPlugin" to="TWiki.EmailObfuscationPlugin"}%
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
