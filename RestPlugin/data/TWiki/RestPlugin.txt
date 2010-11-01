@@ -8,9 +8,11 @@
 
    * Set SHORTDESCRIPTION = Full implementation of REST - starting with !FormFields
 -->
+<sticky>
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
 </div>
+</sticky>
 %SHORTDESCRIPTION%
 
 <img src="%PUBURL%/%WEB%/%TOPIC%/formfield_example.png" style="padding:6px" />
