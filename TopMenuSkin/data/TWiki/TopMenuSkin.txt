@@ -6,9 +6,11 @@
    http://twiki.org/cgi-bin/view/Plugins/TopMenuSkinDev.
    If you are a TWiki contributor please update the skin in the SVN repository.
 -->
+<sticky>
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
 </div>
+</sticky>
 The !TopMenuSkin adds pulldown menus to the PatternSkin.
 
 ---++ Screen Shot
