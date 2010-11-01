@@ -6,10 +6,12 @@
    http://twiki.org/cgi-bin/view/Plugins/AttachLinkPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
-%SHORTDESCRIPTION%
-<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
 </div>
+</sticky>
+%SHORTDESCRIPTION%
 
 ---++ Syntax Rules
 
