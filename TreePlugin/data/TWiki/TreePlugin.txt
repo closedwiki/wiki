@@ -11,7 +11,7 @@
 %TOC{title="Page contents"}%
 </div>
 </sticky>
-%SHORTDESCRIPTION%
+%SHORTDESCRIPTION%.
 Useful for dynamic site maps and threads.
 
 ---++ Syntax Rules
