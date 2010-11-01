@@ -9,10 +9,12 @@
 One line description, required for extensions repository catalog:
    * Set SHORTDESCRIPTION = Traditional TWiki topic based user management and user mapping
 -->
-%SHORTDESCRIPTION%
+<sticky>
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
 </div>
+</sticky>
+%SHORTDESCRIPTION%
 
 ---++ Introduction
 
