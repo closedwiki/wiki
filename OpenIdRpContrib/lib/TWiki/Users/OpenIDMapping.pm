@@ -372,6 +372,72 @@ sub mapper_setEmails {
 
 =pod
 
+---++ ObjectMethod getMustChangePassword( $cUID ) -> $flag
+
+Returns 1 if the $cUID must change the password, else 0. Returns undef if $cUID not found.
+
+=cut
+
+sub getMustChangePassword {
+    my( $this, $cUID ) = @_;
+    my $mapping = $this->{session}->{users}{mapping};
+    my $wikiname = $cUID;
+    if ( exists $mapping->{U2W}{$cUID}) {
+        $wikiname = $mapping->{U2W}{$cUID};
+    }
+    return $this->{passwords}->getMustChangePassword( $wikiname );
+}
+   
+=pod
+
+---++ ObjectMethod getUserData( $cUID ) -> $dataRef
+
+Return a reference to an array of hashes with user data, used to manage
+users. Each item is a hash with:
+   
+   * ={name}= - name of field, such as "email"
+   * ={title}= - title of field, such as "E-mail"
+   * ={value}= - value of field, such as "jimmy@example.com"
+   * ={type}= - type of field: =text=, =password=, =checkbox=, =label=
+   * ={size}= - size of field, such as =40=
+   * ={note}= - comment note, if any
+
+User management forms can be build dynamically from this data structure.
+Each password manager may return a different set of fields.
+
+=cut
+
+sub getUserData {
+    my( $this, $cUID ) = @_;
+    my $mapping = $this->{session}->{users}{mapping};
+    my $wikiname = $cUID;
+    if ( exists $mapping->{U2W}{$cUID}) {
+        $wikiname = $mapping->{U2W}{$cUID};
+    }
+    return $this->{passwords}->getUserData( $wikiname );
+}
+
+=pod
+
+---++ ObjectMethod setUserData( $cUID, $dataRef )
+
+Set the user data of a user. Same array of hashes as getUserData is
+assumed, although only ={name}= and ={value}= are used.
+
+=cut
+
+sub setUserData {
+    my( $this, $cUID, $dataRef ) = @_;
+    my $mapping = $this->{session}->{users}{mapping};
+    my $wikiname = $cUID;
+    if ( exists $mapping->{U2W}{$cUID}) {
+        $wikiname = $mapping->{U2W}{$cUID};
+    }
+    return $this->{passwords}->setUserData( $wikiname, $dataRef );
+}
+
+=pod
+
 ---++ ObjectMethod findUserByWikiName ($wikiname) -> list of cUIDs associated with that wikiname
 
 This overrides TWiki::Users::TWikiUserMapping::findUserByWikiName in order
@@ -724,9 +790,9 @@ sub _userReallyExists
 	my $login = shift;
 
 	return ( exists $this->{L2U}{$login})
-		or ( exists $this->{W2U}{$login})
-		or ( exists $this->{U2W}{$login})
-		or SUPER::_userReallyExists( $this, $login );
+	        or ( exists $this->{W2U}{$login})
+	        or ( exists $this->{U2W}{$login})
+	        or SUPER::_userReallyExists( $this, $login );
 }
 
 1;
