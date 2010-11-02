@@ -1065,12 +1065,14 @@ sub _userManagerQueryUsers {
             }
         }
 
-        my $script = $canModify ? 'edit' : 'view';
+        my $iconName  = $canModify ? 'edittopic' : 'viewtopic';
+        my $linkLabel = $canModify ? 'edit' : 'view';
+        $linkLabel    = 'N/A' unless( @{$data} ); # Indicate 'N/A' for empty record
         my $url = $this->{session}->getScriptUrl(
             1, 'view', $TWiki::cfg{SystemWebName}, 'EditUserAccount',
             'user' => $wikiName );
         $text = "| [[$url][<span style=\"white-space:nowrap\">"
-              . "\%ICON{${script}topic}% $script</span>]] "
+              . "\%ICON{$iconName}% $linkLabel</span>]] "
               . "| [[$TWiki::cfg{UsersWebName}.$wikiName][$wikiName]] "
               . "| $emails | $mcp | $lpc | $disable |";
         push( @rows, $text );
