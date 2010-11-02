@@ -414,7 +414,16 @@ sub getUserData {
     if ( exists $mapping->{U2W}{$cUID}) {
         $wikiname = $mapping->{U2W}{$cUID};
     }
-    return $this->{passwords}->getUserData( $wikiname );
+    my $data = $this->{passwords}->getUserData( $wikiname );
+
+    # append link to edit user OpenID admin console if OpenID record exists
+    if( cUID2openid( $this->{session}, $cUID ) ) {
+        my $value = '[[%SCRIPTURL{view}%/%SYSTEMWEB%/OpenIDAdminConsole?'
+                  . "user=$wikiname;edituser=1][Edit]]";
+        push( @{$data}, { name => 'openid', title => 'OpenID',
+            value => $value, type => 'label', size  => 40, note => '' } );
+    }
+    return $data;
 }
 
 =pod
