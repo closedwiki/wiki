@@ -1030,7 +1030,7 @@ sub _userManagerQueryUsers {
     }
 
     my $text = '';
-    my @rows = ();
+    my %rows = ();
     my $iterator = $this->eachUser();
     while( $iterator->hasNext() ) {
         my $cUID = $iterator->next();
@@ -1066,26 +1066,26 @@ sub _userManagerQueryUsers {
         }
 
         my $iconName  = $canModify ? 'edittopic' : 'viewtopic';
-        my $linkLabel = $canModify ? 'edit' : 'view';
+        my $linkLabel = $canModify ? 'Edit' : 'View';
         $linkLabel    = 'N/A' unless( @{$data} ); # Indicate 'N/A' for empty record
         my $url = $this->{session}->getScriptUrl(
             1, 'view', $TWiki::cfg{SystemWebName}, 'EditUserAccount',
             'user' => $wikiName );
-        $text = "| [[$url][<span style=\"white-space:nowrap\">"
+        $text = "| <!--$linkLabel--> [[$url][<span style=\"white-space:nowrap\">"
               . "\%ICON{$iconName}% $linkLabel</span>]] "
               . "| [[$TWiki::cfg{UsersWebName}.$wikiName][$wikiName]] "
               . "| $emails | $mcp | $lpc | $disable |";
-        push( @rows, $text );
+        $rows{$wikiName} = $text;
     }
 
-    unless( scalar ( @rows ) ) {
+    unless( scalar ( %rows ) ) {
         return "__Note:__ No users found. Specify part of a user name, or =*= for all.";
     }
 
     $text = "| *Manage* | *User Profile Page* | *E-mail* "
           . "| *MCP* | *LPC* | *Disabled* |\n"
-          . join( "\n", sort @rows ) . "\n"
-          . '__Total:__ ' . scalar( @rows ) . "\n"
+          . join( "\n", map{ $rows{$_} } sort keys( %rows ) ) . "\n"
+          . '__Total:__ ' . keys( %rows ) . "\n"
           . '%BB% *MCP*: User must change password' . "\n"
           . '%BB% *LPC*: Last password change' . "\n"
           . '%BB% *Disabled*: User account is disabled' . "\n";
