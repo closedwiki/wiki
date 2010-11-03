@@ -566,8 +566,8 @@ sub _resetUsersPassword {
 
     require TWiki::Users;
     my $password = TWiki::Users::randomPassword();
-
-    unless( $users->setPassword( $user, $password, 1 )) {
+    my $mcp      = $TWiki::cfg{MustChangePasswordAfterReset};
+    unless( $users->setPassword( $user, $password, 1, $mcp ) ) {
         $$pMess .= $session->inlineAlert(
             'alertsnohtml', 'reset_bad', $user);
         return 0;

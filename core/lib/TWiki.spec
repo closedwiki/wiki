@@ -450,6 +450,11 @@ $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
 # If you want to allow null passwords, set this to 0.
 $TWiki::cfg{MinPasswordLength} = 1;
 
+# **BOOLEAN EXPERT**
+# Force user to change the password after a password reset. Set this to on
+# for better security because the temporary password is sent in clear text. 
+$TWiki::cfg{MustChangePasswordAfterReset} = $TRUE;
+
 # **PATH**
 # Path to the file that stores passwords, for the TWiki::Users::HtPasswdUser
 # password manager. You can use the <tt>htpasswd</tt> Apache program to create a new

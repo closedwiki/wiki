@@ -936,7 +936,7 @@ sub checkPassword {
 
 =pod
 
----++ ObjectMethod setPassword( $cUID, $newPassU, $oldPassU ) -> $boolean
+---++ ObjectMethod setPassword( $cUID, $newPassU, $oldPassU, $mcp ) -> $boolean
 
 If the $oldPassU matches matches the user's password, then it will
 replace it with $newPassU.
@@ -948,12 +948,15 @@ the existing password, adding the user if necessary.
 
 Otherwise returns 1 on success, undef on failure.
 
+$mcp is the "must change password flag" that forces the user to change
+the password on next login
+
 =cut
 
 sub setPassword {
-    my ( $this, $cUID, $newPassU, $oldPassU ) = @_;
+    my ( $this, $cUID, $newPassU, $oldPassU, $mcp ) = @_;
     return $this->_getMapping( $cUID )
-      ->setPassword( $this->getLoginName( $cUID ), $newPassU, $oldPassU );
+      ->setPassword( $this->getLoginName( $cUID ), $newPassU, $oldPassU, $mcp );
 }
 
 =pod
