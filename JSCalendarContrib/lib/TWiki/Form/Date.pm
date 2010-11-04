@@ -56,7 +56,7 @@ sub renderForEdit {
           "return showCalendar('id$this->{name}','$ifFormat')",
         -src=> $TWiki::cfg{PubUrlPath} . '/' .
           $TWiki::cfg{SystemWebName} .
-            '/JSCalendarContrib/img.gif',
+            '/JSCalendarContrib/transparent.gif',
         -alt => 'Calendar',
         -class => 'twikiButton twikiEditFormCalendarButton' );
     $value .= CGI::span(
