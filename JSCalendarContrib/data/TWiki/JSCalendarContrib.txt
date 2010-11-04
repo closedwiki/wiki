@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274069340" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288910026" format="1.1" version="$Rev$"}%
 ---+!! JS Calendar Contrib
 <!--
    Contributions to this contrib package are appreciated. Please update this page at
@@ -57,7 +57,8 @@ If the contrib is installed, you will see such a field here:
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 | Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-05-16: | TWikibug:Item6433 - doc improvements |
+|  2010-11-04: | TWikibug:Item6603: Add transparent image for nicer date button in TWiki Forms |
+|  2010-05-16: | TWikibug:Item6433: Doc improvements |
 |  2009-04-27 | TWikibug:Item6254 Adding "JSCalendarContrib Settings" section to configure; changing default to ISO date format; improved documentation (TWiki:Main/PeterThoeny) |
 |  2008-09-10 | TWikibug:Item5991 Applied patch to fix rendering on IE7 |
 |  2007-09-06 | TWikibug:Item4030 Added doc for using the calendar in user forms |
