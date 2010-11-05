@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1280112385" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288937212" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -6,9 +6,9 @@
    http://twiki.org/cgi-bin/view/Plugins/JQueryTwistyPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
-<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
-</div>
+</div></sticky>
 %SHORTDESCRIPTION%
 
 ---++ About a jQuery rework
