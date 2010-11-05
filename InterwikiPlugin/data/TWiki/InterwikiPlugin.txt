@@ -1,14 +1,14 @@
-%META:TOPICINFO{author="TWikiContributor" date="1278993542" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288937457" format="1.1" version="$Rev$"}%
 ---+!! Interwiki Plugin
 <!--
-   Contributions to this TWiki plugin are appreciated. Please update the plugin page
-   at http://twiki.org/cgi-bin/view/Plugins/InterwikiPlugin or provide feedback
-   at http://twiki.org/cgi-bin/view/Plugins/InterwikiPluginDev.
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/InterwikiPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/InterwikiPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
-<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
-</div>
+</div></sticky>
 %SHORTDESCRIPTION%
 
 ---++ Introduction
