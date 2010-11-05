@@ -1,14 +1,14 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272178101" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288940421" format="1.1" version="$Rev$"}%
 ---+ Web Permissions Plugin
 <!--
-    Contributions to this plugin are appreciated. Please update the plugin page
-    at http://twiki.org/cgi-bin/view/Plugins/WysiwygPlugin or provide feedback
-    at http://twiki.org/cgi-bin/view/Plugins/WysiwygPluginDev.
+    Contributions to this plugin are appreciated. Please update the plugin page at
+    http://twiki.org/cgi-bin/view/Plugins/WysiwygPlugin or provide feedback at
+    http://twiki.org/cgi-bin/view/Plugins/WysiwygPluginDev.
     If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
-<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents" depth="3"}%
-</div>
+</div></sticky>
 %SHORTDESCRIPTION%
 <!--
    * Set C = <img src="%ATTACHURL%/CHANGE.gif" />
