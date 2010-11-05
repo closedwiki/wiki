@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1280119465" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288935346" format="1.1" version="$Rev$"}%
 ---+!! !RenderTableDataPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -6,9 +6,9 @@
    http://twiki.org/cgi-bin/view/Plugins/RenderTableDataPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
-<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
-</div>
+</div></sticky>
 *Separate data storage from display: render table data in any different way.*
 
 Main features:
