@@ -226,7 +226,7 @@ If the required parameters are not defined, then an error message is returned or
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2010-11-04 (v%$VERSION%) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|   2010-06-26: | TWikibug:Item6600: Better doc of data parameter in the case of a scatter graph -- TWiki:Main.VickiBrown |
+|   2010-11-04: | TWikibug:Item6600: Better doc of data parameter in the case of a scatter graph -- TWiki:Main.VickiBrown |
 |   2010-06-26: | TWikibug:Item6003: Document CHARTs with SEARCHes and CALC in an INCLUDEd topic |
 |   2010-04-07: | TWikibug:Item6160: Fixed taint issue with certain combination of Perl/GD; TWikibug:Item6329 - input validation for chart width and height; added VarCHART variable documentation page -- TWiki:Main.PeterThoeny |
 |   2009-10-23: | TWikibug:Item6355: Fixed bug where chart not drawn if table at end of topic; Item6329: Added input validation for all parameters expected to be integers or real numbers - TWiki:Main.PeterThoeny |
