@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277600097" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288931466" format="1.1" version="$Rev$"}%
 ---+!! Chart Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
@@ -6,9 +6,9 @@
    at http://twiki.org/cgi-bin/view/Plugins/ChartPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
-<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
-</div>
+</div></sticky>
 This plugin helps you visualize data in TWiki tables as charts, using a default linear scale or an optional semilogarithmic scale.
 
 ---++ Introduction
@@ -97,7 +97,7 @@ The =%<nop>CHART{...}%= variable gets expanded to an image representing the char
 | =title= | The title placed at the top of the chart | None |
 | =xlabel= | The label placed under the X axis describing the X values | None |
 | =ylabel= | The label placed to the left of the Y axis describing the Y values | None |
-| =data= | The source data to build the chart, defined as a range of table cells. For example for =type="line"=, a =data="R2:C3..R999:C6"= would say that four lines were to be drawn with first line being rows 2-999 column 3 and last line being rows 2-999 column 6. | None; is required for all charts |
+| =data= | The source data to build the chart, defined as a range of table cells. For example for =type="line"=, a =data="R2:C3..R999:C6"= would say that four lines were to be drawn with first line being rows 2-999 column 3 and last line being rows 2-999 column 6. In the case of a scatter graph, data represents the actual Y values. | None; is required for all charts |
 | =defaultdata= | If there is sparse data, then use the value specified by =defaultdata= to fill in the missing data.  A value of ="none"= means only draw actual data points. | Global =DEFAULTDATA= setting |
 | =xaxis= | X-Axis labels: The values are defined as a range of table cells.  In case of scatter graph, =xaxis= represents the actual X values.  The range also defines the orientation -- row or column oriented (if specified). For example ="R2:C2..R999:C2"= would take all of column 2 starting at row 2 and going through row 999.  It would also denote that all remaining data is oriented columnar. | None.  Is required for =type="scatter"=.  If not specified, then no X axis labels shown and data assumed to be in columnar format. |
 | =xaxisangle= | Angle the X-Axis labels are drawn.  Only two angles are supported at this time, ="0"= draws horizontal labels, other numbers draw vertical labels | ="0"= |
@@ -224,11 +224,12 @@ If the required parameters are not defined, then an error message is returned or
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.TaitCyrus |
 |  Copyright: | &copy; 2002-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-06-26 (v%$VERSION%) |
+|  Plugin Version: | 2010-11-04 (v%$VERSION%) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|   2010-06-26: | TWikibug:Item6003 - document CHARTs with SEARCHes and CALC in an INCLUDEd topic |
-|   2010-04-07: | TWikibug:Item6160 - fixed taint issue with certain combination of Perl/GD; TWikibug:Item6329 - input validation for chart width and height; added VarCHART variable documentation page -- TWiki:Main/PeterThoeny |
-|   2009-10-23: | TWikibug:Item6355 - fixed bug where chart not drawn if table at end of topic; Item6329: Added input validation for all parameters expected to be integers or real numbers - TWiki:Main/PeterThoeny |
+|   2010-06-26: | TWikibug:Item6600: Better doc of data parameter in the case of a scatter graph -- TWiki:Main.VickiBrown |
+|   2010-06-26: | TWikibug:Item6003: Document CHARTs with SEARCHes and CALC in an INCLUDEd topic |
+|   2010-04-07: | TWikibug:Item6160: Fixed taint issue with certain combination of Perl/GD; TWikibug:Item6329 - input validation for chart width and height; added VarCHART variable documentation page -- TWiki:Main.PeterThoeny |
+|   2009-10-23: | TWikibug:Item6355: Fixed bug where chart not drawn if table at end of topic; Item6329: Added input validation for all parameters expected to be integers or real numbers - TWiki:Main.PeterThoeny |
 |   18 May 2007: | Added discontinuous ranges - TWiki:Main.CrawfordCurrie |
 |   16 Nov 2004: | V1.401 - Added benchmarks (no code changes) |
 |   30 Aug 2004: | V1.400 - Added support for =subtype="bar"= (includes various global bar settings), updated =gridcolor= to not only define the grid color but allowing the user to define the line style (for drawing user defined dotted lines), add a global for how wide lines are drawn instead of a hard coded value, change the order of how things are drawn so now the order is: areas, grid lines and X/Y axis labels, bars, lines/points/plines, rectangle around chart, data point labels, chart title/X/Y labels, and finally the legends. |
@@ -248,8 +249,6 @@ If the required parameters are not defined, then an error message is returned or
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ VarCHART, ChartPluginTests, ChartPluginTestsRemote, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
-
--- TWiki:Main.TaitCyrus, TWiki:Main.PeterThoeny - 2010-06-26
 
 %META:FILEATTACHMENT{name="line1.png" attr="h" comment="" date="1093917753" path="line1.png" size="1220" user="TWikiContributor" version="1.4"}%
 %META:FILEATTACHMENT{name="line2.png" attr="h" comment="" date="1093917765" path="line2.png" size="1993" user="TWikiContributor" version="1.4"}%
