@@ -1,11 +1,18 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272235642" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288941057" format="1.1" version="$Rev$"}%
 ---+!! Action Tracker Plugin
 <!--
-   contributions to this plugin are appreciated. Please update the plugin page
-   at http://twiki.org/cgi-bin/view/Plugins/ActionTrackerPlugin or provide feedback
-   at http://twiki.org/cgi-bin/view/Plugins/ActionTrackerPluginDev.
+   contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/ActionTrackerPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/ActionTrackerPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Description
+
 It takes the skills of a juggler to keep track of all the demands that modern life makes on us. Wouldn't it be great if we could capture what we have to do _at the time we think of it_, and be able to get a to-do list on demand? No more fighting with post-it notes, no more forgetting actions from the minutes of obscure meetings, and remember your partners birthday every year into the bargain! 
 
 This plugin provides support for tracking actions embedded in TWiki topics. Actions captured this way can then be tracked from anywhere you want.
@@ -23,25 +30,22 @@ But that's not the only application. The action tracker can also be used for:
    * reminding you of important events
 Actions are nicely formatted for display, and automatic notification of actions is supported using 'cron'.
 
-<div class="twikiBroadcastMessage" style="background-color:#ffc;">WARNING: TWiki-4 only. If you want to use this plugin with an earlier version of TWiki, please use [[http://twiki.org/cgi-bin/attach/Plugins/ActionTrackerPlugin?filename=ActionTrackerPlugin.zip&revInfo=1][revision 22 of the zip]].</div>
+---++ Features
 
-%TOC%
-
----+ Features
    * Actions can be embedded in TWiki topics.
    * Actions can be listed using searches.
    * Automatic action state e-mail notification.
    * Actions can be assigned to individuals, or to predefined groups.
    * Fully configurable.
 
----
----+ Syntax Rules
+---++ Syntax Rules
 
----++ Actions
+---+++ Actions
 
 __Note:__ if you have previously used this plugin you will note that the syntax of actions has changed. The plugin still recognises the old syntax, and will automatically upgrade topics when you edit them.
 
 Write the command =%<nop>ACTION{= _attributes_ =}% ...  %<nop>ENDACTION%= anywhere in a TWiki topic, where =...= represents the action description. Standard attributes are
+
    | *Name* | *Value* | *Description* | *Auto-completed* |
    | =who= | See [[#PeopleAnchor][People]] | The person or team responsible for completing the action. | current user |
    | =due= | See [[#DateFormats][Date Formats]] | The due date | |
@@ -68,9 +72,10 @@ The fields with an entry in the 'Auto-completed' column are automatically filled
 
 Note that the =due= field is not auto-completed. If you don't specify a due date for an action, the action is treated as due on a 'to be decided' (TBD) date. TBD actions are always shown in action searches, to help encourage you to timeframe them.
 
----++ Action searches
+---+++ Action searches
 
 Write the command =%<nop>ACTIONSEARCH{= _attributes_ =}%= anywhere in a TWiki topic. Standard attributes are
+
    | *Name* | *Value* | *Description* |
    | =who= | See [[#PeopleAnchor][People]] | Person responsible for closing the action. |
    | =notify= | See [[#PeopleAnchor][People]] | Persons who want to be notified of a change |
@@ -90,6 +95,7 @@ Write the command =%<nop>ACTIONSEARCH{= _attributes_ =}%= anywhere in a TWiki to
    | =orient= | Presentation format | See [[#CustomIsation][Formatting tables]] |
    | =separator= | Presentation format | See [[#CustomIsation][Formatting tables]] |
    | =sort= | Comma-separated list of field names | Fields to sort the matched actions by. For example, <code>sort="$who,$due"</code> will sort by who first and then due. This field is optional; by default the table will be sorted by due date. |
+
 For example,
 <pre>
 %<nop>ACTIONSEARCH{ who="me" state="late" }%
@@ -99,6 +105,7 @@ For example,
 </pre>
 
 When you are searching for fields containing dates (such as =closed=, =created= and =due=) you can prepend one of the conditions <code>&gt;, &lt;, &gt;= and &lt;=</code> to the date. For example, <code>closed=">1-Jan-1999"</code> will match all actions that have been closed at any time since 1-Jan-1999, and <code>created=">= 1-Jan-2000"</code> will match all actions created this century. You can also specify dates relative to the current date and time. See [[#DateFormats][Date Formats]] for details of how to specify relative dates.
+
 For example,
 <pre>
 %<nop>ACTIONSEARCH{ state="closed" closed="> 7 days ago"}%
@@ -109,8 +116,10 @@ will search for all actions closed in the last 7 days.
 ---+++ Date formats
 
 ---++++ Absolute date formats
+
 Absolute dates are required in action specifications. Date formats must be as recognised by =Time::Parse<nop>Date=.
 The following absolute date formats are recognised. Dates containing spaces must be enclosed in double-quotes.
+
    * Dow, dd Month yy
    * Dow, dd Month yyyy
    * Dow, dd Month
@@ -129,7 +138,9 @@ The following absolute date formats are recognised. Dates containing spaces must
 You are *strongly* recommended never to use the 'mm/dd/yy or mm/dd/yyyy' formats, to avoid confusing users outside of the US, Micronesia, the Phillipines and Palau (these are the [[http://en.wikipedia.org/wiki/Calendar_date][only places in the world that use mm/dd/yyyy]]). Note that due to limitations in the Time::Parsedate module, dates before 1970 will not work as expected.
 
 ---++++ Relative date formats
+
 When you are searching for fields containing dates (such as =closed=, =created= and =due=) you can specify dates relative to the current date and time. For example:
+
 | *Syntax* | *Example* | *Notes* |
 | _Dow_ =after next=        | =Tuesday after next= | |
 | _Dow_                     | =Tuesday=            | _last_ Tuesday |
@@ -145,6 +156,7 @@ When you are searching for fields containing dates (such as =closed=, =created= 
 | =+= _count_ _units_       | =+ 31 days=      | |
 | =-= _count_ _units_       | =- 2 months=     | |
 | _count_ _units_ =ago=     | =10 days ago=    | |
+
 Valid _units_ are =minutes=, =hours=, =days=, =weeks=, =years=.
 
 #PeopleAnchor
@@ -163,19 +175,22 @@ You can assign an action to a group defined using a TWiki group topic (see %SYST
 %ACTION<nop>{who=TWikiAdminGroup ...}%
 %ACTION<nop>{who="KnutHaraldsen,MagnusMagnusson" ...}%
 </pre>
+
 %RED%
 __Note__ in general you should *not* use these mechanisms for assigning actions, because the actions so created are not specific. Actions should be assigned to one person only, so that it's clear who is responsible for them.
 %ENDCOLOR%
 
 #UiDs
 ---+++ UIDs
+
 _For administrators only_:
 Each action is assigned a Unique Identifier (UID) when it is created. This UID is a six-digit number, and is generated when the action is first saved by incrementing a number in a special file (<code>pub/_work_areas/ActionTrackerPlugin/UIDRegister</code> under the TWiki installation). If this file is accidentally deleted, or is not writable, then you will have problems and you may get duplicate UIDs. Normally this won't matter a hoot, as UIDs only _have_ to be unique within a single topic, but if the file is persistantly inaccessible it could be a bit of a nuisance.
 
 #NotiFication
----+ Notification
+---++ Notification
 
 ActionTrackerPlugin comes with a notifier script, like the =mailnotify= script used for WebNotify (see TWiki.MonitoringSiteActivity for more information on setting up mailnotify). This script allows you to:
+
    * examine all the actions in all webs (except those specified NOSEARCHALL) and notify owners of the state of actions,
    * find actions that have changed state, and notify people who have registered an interest in that action.
 
@@ -183,7 +198,9 @@ The frequency with which actions are notified depends on how you set up your cro
 
 The =actionnotify= script interprets its parameters as a search expression of the same type as that used in %<nop>ACTIONSEARCH%. All actions which match that expression will be notified to their owners.
 For example:
+
 <pre> actionnotify "header=\"| Assigned to | Due ||\"" format=\"'| $who | $due | $edit |'\" state="open" </pre>
+
 Note that the =actionnotify= script must be run from the =bin= directory. This is so it can pick up the TWiki path configuration file, =setlib.cfg=.
 
 For example, you could set up the cron jobs as follows:
@@ -193,7 +210,9 @@ For example, you could set up the cron jobs as follows:
 0 0 * * * cd /home/twiki/bin && ../tools/actionnotify "state=\"open\" within=\"7\"
 0 0 * * 1 cd /home/twiki/bin && ../tools/actionnotify "state=\"open\" within=\"30\"
 </pre>
+
 (If you don't know cron, the first 5 fields are minute, hour, day of month, month and day of week. * means 'every'). This crontab will notify actions according to the schedule:
+
    1 Actions that are late will be notified every hour, on the hour
    2 Actions that are still open within three days of their due date will be notified twice a day, at 8am and 4pm
    3 Actions that are still open within seven days of their due date will be notified once a day, at midnight.
@@ -222,12 +241,14 @@ The wikiname of the user to be notified is translated to a mail address accordin
 __Note:__ If a name cannot be translated to an e-mail address using the mechanisms described above, a warning will be output to =data/warning.txt=..
 
 The =actionnotify= script is also used to notify users who have registered an interest in being notified when an action changes. This function of the script is activated when you use the =changedsince= parameter. =changedsince= is used to specify the time period within which changed actions are interesting. Any action which has changed in the given period will be notified to all users who have registered an interest in that action using =notify=. The =changedsince= value is a relative date string, which uses the following formats 
+
    * =yesterday=
    * =last= _dow_
    * =last week=
    * =now= - _count_ _units_
    * <code>-</code> _count_ _units_
    * _count_ _units_ =ago=
+
 where _units_ may be minutes, days, hours, weeks, months or even years. _count_ is just an integer. _dow_ is the name of a day of the week. For example:
 <pre>
 changedsince="last monday"
@@ -248,17 +269,18 @@ __Notes:__
    1 If you give the parameter DEBUG to the actionnotify script, it will print out the mails that would have been sent to STDOUT. This is useful for debugging, and may be useful if you have some other processing in mind (such as piping to an alternative mail program).
    1 =changedsince= requires RCS, and will not work with Rcs<nop>Lite.
 
----
 #CustomIsation
----+ Customisation
+---++ Customisation
 
----++ Formatting search tables
+---+++ Formatting search tables
 
 The =header=, =footer, =format=, =separator= and =orient= parameters of =%<nop>ACTIONSEARCH{}%= support formatting of the action table using a similar syntax to that described in %SYSTEMWEB%.FormattedSearch. For example:
 <pre>
 %<nop>ACTIONSEARCH{ web="Directors" state="open" format="|$who|$text|$edit|" header="|*Director*|*Films*||" footer="|*Director*|*Films*|" separator="$n" orient="rows" }%
 </pre>
+
 The available =$formattingtokens= are:
+
 | *Name:* | *Expands To:* |
 | =$who= | Who is responsible for the action |
 | =$due= | When the action is due |
@@ -279,12 +301,13 @@ The available =$formattingtokens= are:
 | =$percnt= | Percent sign (=%=) |
 | =$dollar= | Dollar sign (=$=) |
 | =$statebutton(name,state)= | Displays a button that will change the current state of the action to the named state. If the action is already in that state, nothing is displayed. =name= is the string used in the button and =state= is the name of the target state e.g. =$statebutton(Close,closed)= |
+
 The header and format parameters can also be used with the actionnotify script.
 
 A default format for actions and action search results can be defined in this topic or the Web<nop>Preferences topic of the current web. See [[#SettingsAnchor][Settings]] for more details.
 
 #NonStandardAttributes
----++ Non-standard Attributes
+---+++ Non-standard Attributes
 
 As well as the standard attributes you can add non-standard attributes to actions, and use them in searches. For example:
 <pre>
@@ -292,18 +315,22 @@ As well as the standard attributes you can add non-standard attributes to action
 </pre>
 
 Non-standard attributes must be lower-case words. The following names may not be used for non-standard attributes:
+
 =closed=, =closer=, =created=, =creator=, =dollar=, =due=, =edit=, =format=, =header=, =late=, =n=, =nop=, =notify=, =percnt=, =quot=, =sort=, =state=, =text=, =topic=, =uid=, =web=, =who=, =within=.
 
 To define non-standard attributes you need to set the value of EXTRAS in this topic (or to the Web<nop>Preferences topic of each web) - see [[#SettingsAnchor][Settings]] below. All attributes must be given a type, which is used by the formatter, the search engine and the action editor. For example,
 <pre>
    * <nop>Set EXTRAS = |plaintiffs,names,16|decision,text,16|sentencing,date|sentence,select,"life","5 years","community service"|
 </pre>
+
 The following types are supported:
+
 | *Type* | *Format* | *Description* |
 | =select= | select, <i>size</i>, "option 1", "option 2", ... | Can take one of the string values option1, option2,.... etc. |
 | =names= | names, <i>size</i> | One or more wikinames or e-mail addresses. |
 | =text= | text, <i>size</i> | An arbitrary text field |
 | =date= | date, <i>size</i> | A date in one of the formats described above. See [[#DateFormats][Date Formats]] |
+
 In the above, <i>size</i> is a single number, which is the width (in characters) of the text box in the action editor for =text=, =names= and =date=, and the number of options to show in =select=..
 
 __Note__ that there is one exception to the "no redefinition" rule above; the =state= attribute can be extended to take extra states. However if you want the closure functionality (closed, closer, and late actions) to work, the =closed= state must be retained. To extend the set of states, simply include a definition of =state= in the EXTRAS definition:
@@ -311,12 +338,13 @@ __Note__ that there is one exception to the "no redefinition" rule above; the =s
    * <nop>Set EXTRAS = |state,select,1,"open","fried","boiled","poached","closed"|
 </pre>
 
----++ Searching for non-standard attributes
+---+++ Searching for non-standard attributes
 
 You can of course search for values of non-standard attributes. For example:
 <pre>
 %<nop>ACTIONSEARCH{ sentence="life" }%
 </pre>
+
 If a non-standard attribute is declared as type =text= you can use perl regular expressions in the search. Searches for values of type =names= will match any-to-any. For example,
 
 <pre>
@@ -329,9 +357,8 @@ will match both of the following actions:
 %<nop>ACTION{ car="ToyotaSupra,MercedesCoupe,ColtLancer" ... }% ... %<nop>ENDACTION%
 </pre>
 
----
 #SettingsAnchor
----+ <nop>ActionTrackerPlugin Settings
+---++ <nop>ActionTrackerPlugin Settings
 
 <!--
    * Set SHORTDESCRIPTION = Create action items in topics, and get automatic notification of action statuses
@@ -341,9 +368,10 @@ You can override the defaults for these values in %USERSWEB%.<nop>TWikiPreferenc
    *<nop> Set ACTIONTRACKERPLUGIN_EDITORIENT = rows
 </pre>
 
----++ Formatting how actions are displayed
+---+++ Formatting how actions are displayed
 
 The format of an action output. The following fields can be output: =web=, =topic=, =text=, =who=, =due=, =notify=, =uid=, =creator=, =state=, =edit=, and any =ACTIONTRACKERPLUGIN_EXTRAS= you may have. These settings can be overridden in an =ACTIONSEARCH= command using the =format= and =header= attributes. =TABLEHEADER= defines the column headings, =TABLEFORMAT= defines the contents of the columns, and if =TABLEORIENT= is set to =rows=, action tables will be aligned as rows of values instead of the default columns of values.
+
    * ACTIONTRACKERPLUGIN_TABLEHEADER =| Assigned to | Due date | Description | State | Notify ||=
    * ACTIONTRACKERPLUGIN_TABLEFORMAT =| $who | $due | $text $link | $state | $notify | $edit |=
    * ACTIONTRACKERPLUGIN_TABLEORIENT =cols=
@@ -354,33 +382,42 @@ Full URL of the CSS to use in formatting actions. This file is also called from 
 If an action has no due date defined when it is created, then it is treated (for sorting etc) as if it was due at this time. This is a number of seconds since 1st Jan 1970, and should be 0 to sort actions that have no due date to the start of a list, or a very large number to sort them to the end.
    * ACTIONTRACKERPLUGIN_DEFAULTDUE =9999999999=
 
----++ Formatting actions for editing
+---+++ Formatting actions for editing
 
 The format of the fields in the action editor are set by:
+
    * ACTIONTRACKERPLUGIN_EDITHEADER =| Assigned to | Due date | State | Notify |=
    * ACTIONTRACKERPLUGIN_EDITFORMAT =| $who | $due | $state | $notify |=
    * ACTIONTRACKERPLUGIN_EDITORIENT =cols=
+
 You can also override the default =EDITBOXWIDTH= and =EDITBOXHEIGHT= settings just for the action editor:
+
    * ACTIONTRACKERPLUGIN_EDITBOXWIDTH =%EDITBOXWIDTH%=
    * ACTIONTRACKERPLUGIN_EDITBOXHEIGHT =%EDITBOXHEIGHT%=
 If you prefer the action editor to use the same browser window to edit an action, or you don't have Javascript, set this to =0=. If set to 1 will edit an action in a separate browser window.
    * ACTIONTRACKERPLUGIN_USENEWWINDOW =1=
 
 If you want the action editor to offer a 'Preview Changes' button, instead of the usual 'Save Changes', set this to =0=. If this is set, and =USENEWWINDOW= is =1=, the subwindow _should_ close on save, but it won't because I haven't worked out how to do this safely in Java<nop>Script.
+
    * ACTIONTRACKERPLUGIN_NOPREVIEW =1=
 
 #SettingsNotify
 The fields to scan to detect changes for actionnotify. Changes in other fields are ignored.
+
    * ACTIONTRACKERPLUGIN_NOTIFYCHANGES =$who,$due,$state,$text=
 
 Non-standard attributes - see [[#NonStandardAttributes][Non-standard attributes]] above.
+
    * ACTIONTRACKERPLUGIN_EXTRAS _none_
 
 If set to 1, the action tracker will show action states using a drop-down menu, to allow viewers to quickly and easily change action states. You can disable this feature by setting this to 0.
+
    * ACTIONTRACKERPLUGIN_ENABLESTATESHORTCUT =1=
+
 Note that each state has an associated CSS class (e.g. =atpStateopen=) that is used to render the HTML 'select' element when =ENABLESTATESHORTCUT= is on. If you extend the range of states, you will need to add new CSS classes as well.
 
 The strings used by the =$button$ switch. A =$closebutton= is a special
+
    * ACTIONTRACKERPLUGIN_CLOSEBUTTONNAME =Close=
    * ACTIONTRACKERPLUGIN_CLOSEBUTTONCLOSED =Closed=
  
@@ -389,8 +426,7 @@ The strings used by the =$button$ switch. A =$closebutton= is a special
 Set to 1 to enable debug features, including the undocumented =%<nop>ACTIONNOTIFICATIONS{}%= and =%<nop>ACTIONTRACKERPREFS%= features.
    * ACTIONTRACKERPLUGIN_DEBUG =0=
 
----
----+ Plugin Installation Instructions
+---++ Plugin Installation Instructions
 
 %$INSTALL_INSTRUCTIONS%
    * If the plugin is installed and enabled correctly you should see a formatted action below:
@@ -400,9 +436,10 @@ Set to 1 to enable debug features, including the undocumented =%<nop>ACTIONNOTIF
 
 Note that if you want to use the =action= template shipped with the TWiki:Plugins.CommentPlugin to create actions, then you must put the !CommentPlugin *before* the !ActionTrackerPlugin in the ={PluginsOrder}= configuration option.
 
----+ Plugin Info
+---++ Plugin Info
 
 Thanks are due to the following sponsors, who have helped make this plugin possible:
+
    * [[http://motorola.com/][Motorola]]
    * [[http://windriver.com/][Wind River Systems]]
    * [[http://www.goldstarevents.com/][Goldstar Events]]
@@ -452,8 +489,6 @@ Thanks are due to the following sponsors, who have helped make this plugin possi
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPlugin |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPluginDev |
 
-__Related Topics:__ ActionTrackerPluginQBE, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
-
 ---++ Further development
 
 Further development of this code is welcomed. It is recommended that you unpack the distribution into a development directory and use the supplied build file which provides targets to run the test suite, and install and uninstall your development code into a test installation. Please, please, _please_ run, and extend if necessary, the test set!
@@ -466,5 +501,7 @@ As required for the publication of all extensions to TWiki, this software is pub
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 General Public License for more details, published at http://www.gnu.org/copyleft/gpl.html
+
+__Related Topics:__ ActionTrackerPluginQBE, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 %META:FILEATTACHMENT{name="styles.css" attr="h" comment="Stylesheet for actions" version="1"}%
