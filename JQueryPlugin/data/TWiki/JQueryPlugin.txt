@@ -1,16 +1,17 @@
-%META:TOPICINFO{author="TWikiContributor" date="1276063560" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288938911" format="1.1" version="$Rev$"}%
 ---+!! JQuery Plugin
 <!--
-   Contributions to this plugin are appreciated. Please update the plugin page
-   at http://twiki.org/cgi-bin/view/Plugins/JQueryPlugin or provide feedback
-   at http://twiki.org/cgi-bin/view/Plugins/JQueryPluginDev.
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/JQueryPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/JQueryPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 
    * Set SHORTDESCRIPTION = jQuery <nop>JavaScript library for TWiki
 -->
-<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
-</div>
+</div></sticky>
+%SHORTDESCRIPTION%
 
 ---++ Description
 
@@ -135,4 +136,3 @@ The following themes are provided:
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/JQueryPluginAppraisal |
 
 __Related topics:__ VarJQTABPANE, VarJQTAB, VarJQENDTAB, VarJQENDTABPANE, Sandbox.PluginTestJQueryPlugin, Sandbox.JQueryPluginExamples, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory
-
