@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273038748" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288941243" format="1.1" version="$Rev$"}%
 ---+!! !SafeWikiPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -8,9 +8,9 @@
 
    * Set SHORTDESCRIPTION = Secure your TWiki so it can't be attacked using cross-scripting (XSS)
 -->
-<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
-</div>
+</div></sticky>
 %SHORTDESCRIPTION%
 
 ---++ What it does
