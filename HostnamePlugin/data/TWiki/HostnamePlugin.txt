@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1280115168" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288936488" format="1.1" version="$Rev$"}%
 ---+!! !HostnamePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -9,10 +9,10 @@
    One line description, required for extensions repository catalog:
    * Set SHORTDESCRIPTION = Displays the hostname of the server serving TWiki.
 -->
-%SHORTDESCRIPTION%
-<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
+<sticky><div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
 %TOC{title="Page contents"}%
-</div>
+</div></sticky>
+%SHORTDESCRIPTION%
 
 ---++ Usage
 
