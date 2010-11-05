@@ -2958,7 +2958,18 @@ sub _expandTagOnTopicRendering {
     require TWiki::Attrs;
 
     my $e = $this->{prefs}->getPreferencesValue( $tag );
-    unless( defined( $e )) {
+    if( defined( $e ) ) {
+        if( $args ) {
+            my $attrs = new TWiki::Attrs( $args, $contextFreeSyntax{$tag} );
+            # Not possible to define a _DEFAULT setting, so use DEFAULT:
+            if( ! defined $attrs->{DEFAULT} && defined $attrs->{_DEFAULT} ) {
+                $attrs->{DEFAULT} = $attrs->{_DEFAULT};
+            }
+            while( my ( $key, $value ) = each( %$attrs ) ) {
+                $e =~ s/%${key}%/$value/g;
+            }
+        }
+    } else {
         $e = $this->{SESSION_TAGS}{$tag} unless( $args );
         if( !defined( $e ) && defined( $functionTags{$tag} )) {
             $e = &{$functionTags{$tag}}
