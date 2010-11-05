@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1275122548" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1288940158" format="1.1" version="$Rev$"}%
 ---+!! !TinyMCEPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -8,10 +8,15 @@
 
    * Set SHORTDESCRIPTION = Integration of the !TinyMCE WYSIWYG Editor
 -->
-<img src="%ATTACHURL%/screenshot.gif" align="right" />
+<sticky><div style="float:right; margin:0 0 20px 20px;">
+<div style="background-color:#EBEEF0; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+<img src="%ATTACHURL%/screenshot.gif" alt="" width="400" height="278" />
+</div></sticky>
 %SHORTDESCRIPTION%
 
-%TOC%
+---++ Introduction
 
 This is an integration of the <a href="http://tinymce.moxiecode.com?id=powered_by_tinymce_mini"><img src="http://tinymce.sourceforge.net/buttons/tinymce_button.png" border="0" width="80" height="15" alt="TinyMCE" /></a> WYSIWYG editor. This is great little editor, fast and highly functional, and supporting a wide range of browsers, including Firefox, IE and Safari. At the time of writing it doesn't work with Opera or Konqueror.
 
