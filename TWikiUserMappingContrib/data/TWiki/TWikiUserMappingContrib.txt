@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1276410683" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1289002431" format="1.1" version="$Rev$"}%
 ---+!! !TWikiUserMappingContrib
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -70,8 +70,9 @@ It's a part of the default distribution of the TWiki Core.
 |  Contrib Authors: | Sven Dowideit, SvenDowideit@WikiRing.com and TWiki Contributors. |
 |  Copyright: | &copy; 2007 Sven Dowideit;%BR% &copy; 2007-2010 TWiki:TWiki/TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Contrib Version: | 4.5 (2010-06-12) |
+|  Contrib Version: | 4.6 (2010-11-05) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-11-05 | TWikibug:Item6604: Add documentation for EDITMETHOD setting |
 |  2010-06-12: | TWikibug:Item5335: Force-linking some WikiWords so that TWiki can work with NOAUTOLINK set or cleared |
 |  2010-05-26: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  4.3 | TWikibug:Item6417 - fix issue so that LDAP users can login if 'TWiki::Users::TWikiUserMapping' is used |
