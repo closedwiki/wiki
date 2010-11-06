@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1285288282" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1289003164" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Installation Guide
 
@@ -204,7 +204,9 @@ Some pages are meant to be customized after choice of authentication. If you do 
 
 From TWiki release 4.2.0 on the WYSIWYG editor has been replaced by a much better and more powerful editor and it was decided that WYSIWYG would be the default edit mode. An Edit Raw link is available for those that have a need or preference for this mode.
 
-However you may prefer to have the same user interface as in TWiki 4.1 where _Edit_ was the raw text editor and you had a WYSIWYG button. You can modify the templates that define the buttons by following the description on TWiki:Codev.TWikiRawEditDefault04x02.
+However you may prefer to have the same user interface as in TWiki 4.1 where _Edit_ was the raw text editor and you had a WYSIWYG button. This is possible by adding the following setting in the [[%USERSWEB%.TWikiPreferences]], !WebPreferences or user hompages:
+
+   * Set EDITMETHOD = raw
 
 ---++ Copyright, License and Classification Statements
 
