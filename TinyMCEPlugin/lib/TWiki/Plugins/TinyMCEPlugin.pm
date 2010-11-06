@@ -23,7 +23,7 @@ use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 use Assert;
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-04-24';
+$RELEASE = '2010-11-05';
 $SHORTDESCRIPTION = 'Integration of TinyMCE with WysiwygPlugin';
 
 use TWiki::Func;

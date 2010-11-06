@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1288940158" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1289002747" format="1.1" version="$Rev$"}%
 ---+!! !TinyMCEPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -112,7 +112,8 @@ This setting contains all the options passed to the !TinyMCE editor on startup. 
 
 You can override these settings in the same way as any other TWiki variable, by setting e.g. =TINYMCEPLUGIN_INIT= in the site, web or topic preferences. You are *not* recommended to edit the setting here.
 
-   * You can *disable* the plugin in any web or topic, or for any specific user, by setting the =TINYMCEPLUGIN_DISABLE= variable to 1.
+   * You can *disable* the plugin in any web or topic, or for any specific user, by setting the =TINYMCEPLUGIN_DISABLE= preferences setting to 1.
+      * Alternatively (preferred), you can give the user an option to use the WYSIWYG editor or raw editor with the =EDITMETHOD= preferences setting set to =wysiwyg= (default) or =raw=.
    * Some browsers don't support !TinyMCE. You can prevent the editor from
      being invoked on these browsers by setting =TINYMCEPLUGIN_BAD_BROWSERS= to a regular expression that matches the user-agent string for any broken browsers. The default is =(?i-xsm:Konqueror|Opera)=.   
 
@@ -134,8 +135,9 @@ Many thanks to the following sponsors for supporting this work:
 |  Copyright: | &copy; 2007-2008 Crawford Currie http://c-dot.co.uk, %BR% &copy; 2007-2010 TWiki:TWiki/TWikiContributor |
 |             | This package also includes the complete sources for version 3.2.4.1 of the !TinyMCE editor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Plugin Version: | 2010-04-24 %$VERSION% |
+|  Plugin Version: | 2010-11-05 %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-11-05 | TWikibug:Item6604: Add documentation for EDITMETHOD setting |
 |  2010-04-24 | TWikibug:Item6433: Doc improvements, prepare for TWiki 5.0 release |
 |  2009-09-08 | TWikibug:Item6334: Upgrade plugin to latest !TinyMCE version 3.2.4.1 from 2.1.1.1 -- TWiki:Main/SopanShewale |
 |  03 Aug 2008 | TWiki 4.2.1 release version |
