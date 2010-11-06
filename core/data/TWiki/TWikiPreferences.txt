@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277829785" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1289001006" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -71,7 +71,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
          * Set TOC_HIDE_IF_INCLUDED =
             * If not set: included TOC is shown
             * Possible values: =on= or nothing
-            
+
 ---++ Default User Settings
 
 %X% *NOTE:* They are typically redefined in topics of individual %USERSWEB%.TWikiUsers
@@ -80,32 +80,36 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * Set LINKTOOLTIPINFO = off
       * #Set LINKTOOLTIPINFO = $username - $date - $rev: $summary
 
-   * Horizontal size of text edit box: (can be overwritten by user preferences)
+   * Preference for the editor, default is the WYSIWYG editor. The options are raw, wysiwyg:
+      * Set EDITMETHOD = wysiwyg
+      * #Set EDITMETHOD = raw
+
+   * Horizontal size of text edit box:
       * Set EDITBOXWIDTH = 70
 
-   * Vertical size of text edit box: (can be overwritten by user preferences)
+   * Vertical size of text edit box:
       * Set EDITBOXHEIGHT = 22
 
-   * Style of text edit box. Set to =width: 99%= for full window width (default; this will overwrite the EDITBOXWIDTH setting), or =width: auto= to disable. This setting works for IE and some other recent browsers. (can be overwritten by user preferences)
+   * Style of text edit box. Set to =width: 99%= for full window width (default; this will overwrite the EDITBOXWIDTH setting), or =width: auto= to disable. This setting works for IE and some other recent browsers.
       * Set EDITBOXSTYLE = width:99%
 
-   * Default state of the __Force New Revision__ (ForceNewRevision) check box in preview. Check box is initially checked if =Set FORCENEWREVISIONCHECKBOX = checked="checked"=, or unchecked if empty: (can be overwritten by user preferences)
+   * Default state of the __Force New Revision__ (ForceNewRevision) check box in preview. Check box is initially checked if =Set FORCENEWREVISIONCHECKBOX = checked="checked"=, or unchecked if empty:
       * Set FORCENEWREVISIONCHECKBOX = 
 
-   * Default state of the __Minor Changes, Don't Notify__ (DontNotify) check box in preview. Check box is initially checked if =Set DONTNOTIFYCHECKBOX = checked="checked"=, or unchecked if empty: (can be overwritten by user preferences)
+   * Default state of the __Minor Changes, Don't Notify__ (DontNotify) check box in preview. Check box is initially checked if =Set DONTNOTIFYCHECKBOX = checked="checked"=, or unchecked if empty:
       * Set DONTNOTIFYCHECKBOX = 
 
-   * Default state of the __link__ check box in the attach file page. Checkbox is initially checked if =Set ATTACHLINKBOX = checked="checked"=, or unchecked if empty (=Set ATTACHLINKBOX ==). If checked, a link is created to the attached file at the end of the topic: (can be overwritten by user preferences)
+   * Default state of the __link__ check box in the attach file page. Checkbox is initially checked if =Set ATTACHLINKBOX = checked="checked"=, or unchecked if empty (=Set ATTACHLINKBOX ==). If checked, a link is created to the attached file at the end of the topic:
       * Set ATTACHLINKBOX = 
 
-   * Format of file link when the __link__ check box is checked: (can be overwritten by user preferences)
+   * Format of file link when the __link__ check box is checked:
       * %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==\t== to tab (3 spaces for bullets).
 <!-- verbatim tag required to prevent error in Apache log; does not suppress Set -->
 <verbatim>
       * Set ATTACHEDFILELINKFORMAT = \n   * [[%ATTACHURL%/$name][$name]]: $comment
 </verbatim>
 
-   * Format of images when the __link__ check box is checked: (can be overwritten by user preferences)
+   * Format of images when the __link__ check box is checked:
       * %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==$width== to width of image; ==$height== to height of image; ==$size== to ==width="..." height="..."== attribute of ==img== tag; ==\t== to tab and ==\n== to linefeed. Use 3 leading spaces for bullets.
 <verbatim>
       * Set ATTACHEDIMAGEFORMAT = \n   * $comment: <br />\n     <img src="%ATTACHURLPATH%/$name" alt="$name" $size />
@@ -351,10 +355,6 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
 </verbatim>
 
 ---++ Miscellaneous Settings
-
-   * Preference for the editor, default is raw editor, The options could be rawedit, wysiwyg.
-      * Set EDITMETHOD = wysiwyg
-      * #Set EDITMETHOD = rawedit
 
    * Format of a NewWikiWord link:
    * Note that =$text= is the topic link text, =$topic= is the name of the new topic, and =$web= is the name of the web for the new topic. Values for the 3 are taken from the link syntax =[<nop>[$web.$topic][$text]]=. For normal plain !WikiWord links =$text= and =$topic= are the same. The value of =$web= is the current web unless the link is in the format =$web.$topic=.
