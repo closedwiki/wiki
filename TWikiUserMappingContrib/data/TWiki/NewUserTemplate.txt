@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273964680" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1289001398" format="1.1" version="$Rev$"}%
 ---++ My Links
 
 %STARTSECTION{ type="expandvariables" }%
@@ -14,6 +14,9 @@
 
    * Show tool-tip topic info on mouse-over of [[%SYSTEMWEB%.WikiWord][WikiWord]] links, on or off:
       * Set LINKTOOLTIPINFO = off
+
+   * Preference for the editor, default is the WYSIWYG editor. The options are raw, wysiwyg:
+      * Set EDITMETHOD = wysiwyg
 
 %ENDSECTION{ type="expandvariables" }%
 %INCLUDE{%SYSTEMWEB%.PersonalPreferencesHelp}%
