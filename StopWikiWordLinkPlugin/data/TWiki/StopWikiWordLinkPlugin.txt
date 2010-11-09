@@ -57,7 +57,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2006-2010, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]], <br /> &copy; 2006-2010 TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2006-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc]], <br /> &copy; 2006-2010 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2010-11-09 (V1.002) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
