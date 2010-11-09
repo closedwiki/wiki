@@ -1,0 +1,130 @@
+%META:TOPICINFO{author="DougClaar" date="1149115625" format="1.1" version="1.11"}%
+---+!! <nop>%TOPIC%
+This plugin exists for one reason, and one reason only: To get &lt;meta&gt; tags into the html header. Why? It turns out that some search engines won't index a page without "proper" meta tags. Other search engines give better results with meta tags. Unfortunately, TWiki didn't have a good way to do this. %<nop>HTTP_EQUIV_ON_VIEW% isn't really up to the task, as it only allows you to specify one thing.
+
+%TOC%
+
+---++ Syntax Rules
+
+   * %<nop>HTMLMETA{[name=]"meta name" content="meta content" [visibility="number"]}%
+      * This variable follows the standard TWiki syntax: The first parameter's name is optional.
+      * If "meta name" is not unique, the last one specified wins!
+      * visibility is optional. If not given, the VISIBILITY configuration variable will be used; otherwise, the value of this parameter will be added to the value of the VISIBILITY configration variable. If the resulting value is > 0, then the %<NOP>HTMLMETA% variable will be displayed in the topic's body. Otherwise, and by default, it will not be.
+
+---++ Examples
+
+   * %<nop>HTMLMETA{name="keywords" content="TWiki,plugins,metatags"}%
+ Set meta keywords for this page.
+   * %<nop>HTMLMETA{"description" content="This page describes the <nop>HtmlMeta plugin"}%
+ Set meta description for this page. Name is defaulted.
+   * %<nop>HTMLMETA{name="copyright" content="&<nop>copy;2006" visibility="1"}%
+ Set copyright for this page. The variable will also display on the page.
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = _Insert html "meta name" entries into html header_
+
+   * To get debug messages (in data/debug.txt), set DEBUG to 1. Default: 0
+      * Set DEBUG = 0
+
+   * Master control on visibility in topic of HTMLMETA variable (integer: Added to VISIBILITY in HTMLMETA, if present. If total > 0, show variable, otherwise, don't):
+      * Set VISIBILITY = 0
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Configure the Plugin:
+      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+      * Change the Plugin settings as needed
+   * Test if the installation was successful:
+      * Since this plugin creates Html Metadata in the &lt;head&rt; section, you have to view source to tell if it worked. If so, it will look something like:
+ <verbatim>
+ <!--HTMLMETAkeywords-->
+ <meta name="keywords" content="TWiki wabbit" />
+ </verbatim>
+   * This will be quite a ways down in the source!
+   * Here are a bunch of examples, some good, some not. Note that by default, many of them do not show up in the topic when the plugin is enabled, so I've listed each one twice: Once simulated, once real. If the simulated one would not show up by default, it is in _italics_
+   * This one is good, but invisible by default: %BR%
+ _%<nop>HTMLMETA{name="keywords" content="TWiki"}%_ %BR%
+ %HTMLMETA{name="keywords" content="TWiki"}%
+   * This one is, too %BR%
+ _%<nop>HTMLMETA{name="description" content="It's all about TWiki"}%_ %BR%
+ %HTMLMETA{name="description" content="It's all about TWiki"}%
+   * This one has no content: %BR%
+ %<nop>HTMLMETA{name="nocontent"}% - ERROR (!HtmlMetaPlugin::_HTMLMETATAG): meta content not defined. %BR%
+ %HTMLMETA{name="nocontent"}%
+   * I've been through the desert on an HTMLMETA with no name: %BR%
+ %<nop>HTMLMETA{content="no name"}% - ERROR (!HtmlMetaPlugin::_HTMLMETATAG): meta name not defined. %BR%
+ %HTMLMETA{content="no name"}%
+   * This one is ok, uses default for name, but invisible by default: %BR%
+ _%<nop>HTMLMETA{"default" content="default name"}%_ %BR%
+ %HTMLMETA{"default" content="default name"}%
+   * This one has a bad name: %BR%
+ %<nop>HTMLMETA{name="1Evil1" content="Doesn't start with a letter"}% - ERROR (!HtmlMetaPlugin::_HTMLMETATAG): meta name has invalid characters. %BR%
+ %HTMLMETA{name="1Evil1" content="Doesn't start with a letter"}%
+   * A good name is to be desired, this one doesn't have one: %BR%
+ %<nop>HTMLMETA{name="<html here>" content="Has html in it"}% - ERROR (!HtmlMetaPlugin::_HTMLMETATAG): meta name has invalid characters. %BR%
+ %HTMLMETA{name="<html here>" content="Has html in it"}%
+   * This one has html in the content, should be escaped, but invisible by default: %BR%
+ _%<nop>HTMLMETA{name="ok1" content="<evil html>"}%_ %BR%
+ %HTMLMETA{name="ok1" content="<evil html>"}%
+   * This one has a non-character entity:%BR%
+ %<nop>HTMLMETA{name="bad3" content="&#09;"}% - ERROR (!HtmlMetaPlugin::_HTMLMETATAG): meta content cannot contain non-character entities. %BR%
+ %HTMLMETA{name="bad3" content="&#09;"}%
+   * This one has a hex non-character entity: %BR%
+ %<nop>HTMLMETA{name="bad4" content="&#x0A;"}% - ERROR (!HtmlMetaPlugin::_HTMLMETATAG): meta content cannot contain non-character entities. %BR%
+ %HTMLMETA{name="bad4" content="&#x0A;"}%
+   * This one has an extended character, which is ok, but invisible by default: %BR%
+ _%<nop>HTMLMETA{name="ok2" content="señora"}%_ %BR%
+ %HTMLMETA{name="ok2" content="señora"}%
+   * This one has a (character) entity, which is ok, but invisible by default: %BR%
+ _%<nop>HTMLMETA{name="ok3" content="&copy;2006"}%_ %BR%
+ %HTMLMETA{name="ok3" content="&copy;2006"}%
+   * This one has a ^G, which is not ok: %BR%
+ %<nop>HTMLMETA{name="bad5" content=""}% - ERROR (!HtmlMetaPlugin::_HTMLMETATAG): meta content cannot contain non-characters. %BR%
+ %HTMLMETA{name="bad5" content=""}%
+   * This one has bad visibility, so you can't see it in the header: %BR%
+ %<nop>HTMLMETA{name="bad6" content="bad visibility" visibility="yes"}% - ERROR (!HtmlMetaPlugin::_HTMLMETATAG): visibility must be a number. %BR%
+ %HTMLMETA{name="bad6" content="bad visibility" visibility="yes"}%
+   * This one has positive visibility, so you should see it: %BR%
+ %<nop>HTMLMETA{name="ok4" content="positive visibility" visibility="1"}% %BR%
+ %HTMLMETA{name="ok4" content="positive visibility" visibility="1"}%
+   * If I was invisible...This one has negative visibility, so you shouldn't see it: %BR%
+ _%<nop>HTMLMETA{name="ok5" content="negative visibility" visibility="-1"}%_ %BR%
+ %HTMLMETA{name="ok5" content="negative visibility" visibility="-1"}%
+   * This one is good, but invisible by default. It is also has a duplicate name, so it is used, not the first one: %BR%
+ _%<nop>HTMLMETA{name="keywords" content="TWiki wabbit"}%_ %BR%
+ %HTMLMETA{name="keywords" content="TWiki wabbit"}%
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.DougClaar |
+|  Copyright: | &copy; 2006, TWiki:Main.DougClaar |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 09 May 2006 (V1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  09 May 2006: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 100% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+-- TWiki:Main.DougClaar - 09 May 2006
+
+%META:TOPICMOVED{by="DougClaar" date="1147209048" from="TWiki.HtmlHead" to="TWiki.HtmlMeta"}%
