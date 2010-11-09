@@ -1,10 +1,9 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2006 Peter Thoeny, peter@thoeny.org
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
+# Copyright (C) 2006 TWiki:Main.DougClaar
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,25 +26,14 @@ certain search engines find TWiki pages.
 
 =cut
 
-# change the package name and $pluginName!!!
 package TWiki::Plugins::HtmlMetaPlugin;
 
-# Always use strict to enforce variable scoping
 use strict;
 
-# $VERSION is referred to by TWiki, and is the only global variable that
-# *must* exist in this package
 use vars qw( $VERSION $RELEASE $debug $pluginName $HtmlMetaCfgVisibility);
 
-# This should always be $Rev: 9598$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev: 9598$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2010-11-09';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'HtmlMetaPlugin';
@@ -57,28 +45,6 @@ $pluginName = 'HtmlMetaPlugin';
    * =$web= - the name of the web in the current CGI query
    * =$user= - the login name of the user
    * =$installWeb= - the name of the web the plugin is installed in
-
-REQUIRED
-
-Called to initialise the plugin. If everything is OK, should return
-a non-zero value. On non-fatal failure, should write a message
-using TWiki::Func::writeWarning and return 0. In this case
-%FAILEDPLUGINS% will indicate which plugins failed.
-
-In the case of a catastrophic failure that will prevent the whole
-installation from working safely, this handler may use 'die', which
-will be trapped and reported in the browser.
-
-You may also call =TWiki::Func::registerTagHandler= here to register
-a function to handle variables that have standard TWiki syntax - for example,
-=%MYTAG{"my param" myarg="My Arg"}%. You can also override internal
-TWiki variable handling functions this way, though this practice is unsupported
-and highly dangerous!
-
-__Note:__ Please align variables names with the Plugin name, e.g. if 
-your Plugin is called FooBarPlugin, name variables FOOBAR and/or 
-FOOBARSOMETHING. This avoids namespace issues.
-
 
 =cut
 
