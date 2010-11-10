@@ -11,55 +11,80 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
+# GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
 # =========================
 #
 
 # =========================
-package TWiki::Plugins::ExplicitNumberingPlugin; 
+package TWiki::Plugins::ExplicitNumberingPlugin;
 
 # =========================
-use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-        $debug
-    );
+use strict;
+use warnings;
+
+our $NO_PREFS_IN_TOPIC = 1;
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev$';
+our $VERSION = '$Rev$';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+our $RELEASE = '1.6';
 
-$pluginName = 'ExplicitNumberingPlugin';  # Name of this Plugin
+# One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+our $SHORTDESCRIPTION =
+"Use the ==#<nop>#.,== ==#<nop>#..== etc. notation to insert outline numbering sequences (1, 1.1, 2, 2.1) in topic's text. Also support numbered headings.";
 
-
-my $maxLevels = 6;		# Maximum number of levels
-my %Sequences;			# Numberings, addressed by the numbering name
-my $lastLevel = $maxLevels - 1;	# Makes the code more readable
-my @alphabet = ('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
+my $web;
+my $topic;
+my $user;
+my $installWeb;
+my $debug;    # Debug setting
+my $bold;     # Configuration flag for bold numbers
+my $maxLevels = 6;    # Maximum number of levels
+my %Sequences;        # Numberings, addressed by the numbering name
+my $lastLevel = $maxLevels - 1;    # Makes the code more readable
+my @alphabet  = (
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+    'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+);
 
 # =========================
-sub initPlugin
-{
+sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
+#TWiki::Func::writeDebug('ExplicitNumbering  - Entering initialization routine');
+
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1 ) {
-        TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
+    if ( $TWiki::Plugins::VERSION < 1.1 ) {
+        TWiki::Func::writeWarning( 'Version mismatch between ',
+            __PACKAGE__, ' and Plugins.pm' );
         return 0;
     }
 
 
-    $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
+    $debug = TWiki::Func::getPreferencesFlag("EXPLICITNUMBERINGPLUGIN_DEBUG")
+      || 0;
+    $bold = TWiki::Func::getPreferencesFlag("EXPLICITNUMBERINGPLUGIN_BOLD")
+      || 0;
 
-    # Plugin correctly initialized
-    ##TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
+    my $alphaseq =
+      TWiki::Func::getPreferencesValue("EXPLICITNUMBERINGPLUGIN_ALPHASEQ")
+      || "";
+
+    if ($alphaseq) {
+        $alphaseq =~ s/^\s+//;    #Remove leading spaces
+        $alphaseq =~ s/\s+$//;    #Remove trailing spaces
+        @alphabet = split( ',', $alphaseq );
+    }
+
+    TWiki::Func::writeDebug('ExplicitNumberingPlugin Initialzed ')
+      if ($debug);
 
     return 1;
 }
@@ -69,94 +94,139 @@ sub initPlugin
 # auto-numbering of heading levels, otherwise the TOC lines will have
 # different number than the heading line (must be done before TOC).
 
-sub commonTagsHandler
-{
+sub commonTagsHandler {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
+    TWiki::Func::writeDebug(
+        'ExplicitNumbering  - Entering common tags handler') if ($debug);
 
-    ##TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $web.$topic )" ) if $debug;
+    return if $_[3];    # Called in an include; do not number yet.
 
-    return if $_[3];   # Called in an include; do not number yet.
+    #  Disable the plugin if context not view
+    if (
+        !(
+               TWiki::Func::getContext()->{'view'}
+            || TWiki::Func::getContext()->{'diff'}
+        )
+      )
+    {
+        {
+            TWiki::Func::writeDebug(
+                'ExplicitNumbering  - Disabled  - not view  context');
+            return ;
+        }
+    }
+
+# SMELL:  Use the renderer to remove textarea blocks so that numbers inside of
+#         textarea tags don't increment.   Required to prevent conflicts with the
+#         EditChapterPlugin.  This has been requested to be added to TWiki::Func
+
+    my $renderer         = $TWiki::Plugins::SESSION->{renderer};
+    my $removedTextareas = {};
 
     %Sequences = ();
 
-    $_[0] =~ s/\-\-\-(\#\#*) /&makeHeading(length($1))/geo;
-    $_[0] =~ s/\#\#(\w+\#)?([0-9]+)?\.(\.*)([a-z]?)/&makeExplicitNumber($1,$2,length($3),$4)/geo;
+    eval('$renderer->takeOutBlocks( $_[0], \'textarea\', $removedTextareas )');
+    if ( $@ ne "" ) {
+        $_[0] = TWiki::takeOutBlocks( $_[0], 'textarea', $removedTextareas );
+    }
+
+    $_[0] =~
+      s/(^---+\+*)(\#+)([[:digit:]]*)/$1.&makeHeading(length($2), $3)/gem;
+    $_[0] =~
+s/\#\#(\w+\#)?([[:digit:]]+)?\.(\.*)([[:alpha:]]?)/&makeExplicitNumber($1,$2,length($3),$4)/ge;
+
+    if ( $@ eq "" ) {
+        $renderer->putBackBlocks( \$_[0], $removedTextareas, 'textarea',
+            'textarea' );
+    }
+    else {
+        TWiki::putBackBlocks( \$_[0], $removedTextareas, 'textarea',
+            'textarea' );
+    }
 }
 
 # =========================
 
 sub makeHeading {
-    my $headerlvl = shift || 0;
-    my $headerlevel = ($headerlvl)?'---':'';
-    my $numlevel = '##';
-    for (my $i=0;$i<$headerlvl;$i++) {
-      $headerlevel .= '+';
-      $numlevel .= '.';
+    my ( $level, $init ) = @_;
+
+    $init = '' unless defined $init;
+
+    my $result   = '';
+    my $numlevel = '';
+    for ( my $i = 0 ; $i < $level ; $i++ ) {
+        $result   .= '+';
+        $numlevel .= '.';
     }
-    return $headerlevel . $numlevel . ' ';
+
+    return $result . '##' . $init . $numlevel . ' ';
 }
 
 # Build the explicit outline number
-sub makeExplicitNumber
-{
+sub makeExplicitNumber {
+    my ( $name, $init, $level, $alist ) = @_;
 
     ##TWiki::Func::writeDebug( "- ${pluginName}::makeExplicitNumber( $_[0], $_[1], $_[2], $_[3] )" ) if $debug;
 
-    my $name = '-default-';
-    my $init = '';
-    my $level = $_[2];
-    my $alist = '';
-    $name = $_[0] if defined $_[0];
-    $init = $_[1] if defined $_[1];
-    $alist = $_[3] if defined $_[3];
-    if ( $alist ne '' ) {
-        $level++;
-    }
-
-    my $text = '';
+    $name  = '-default-' unless defined $name;
+    $alist = ''          unless defined $alist;
+    $level++ if $alist ne '';
 
     #...Truncate the level count to maximum allowed
-    if ($level > $lastLevel) { $level = $lastLevel; }
+    if ( $level > $lastLevel ) { $level = $lastLevel; }
 
     #...Initialize a new, or get the current, numbering from the Sequences
     my @Numbering = ();
-    if ( ! defined( $Sequences{$name} ) ) {
-        for $i ( 0 .. $lastLevel ) { $Numbering[$i] = 0; }
-    } else {
-        @Numbering = split(':', $Sequences{$name} );
-	#...Re-initialize the sequence
-	if ( defined $_[1] ) {
-	  $init = (int $init);
-	  if ( $init ) {
-	    $Numbering[$level] = $init - 1;
-	  } else {
-	    for $i ( 0 .. $lastLevel ) { $Numbering[$i] = 0; }
-	}
-	}
+    if ( !defined( $Sequences{$name} ) ) {
+        for my $i ( 0 .. $lastLevel ) { $Numbering[$i] = 0; }
+    }
+    else {
+        @Numbering = @{ $Sequences{$name} };
+
+        #...Re-initialize the sequence
+    }
+
+    if ( defined $init ) {
+        $init = ( int $init );
+        $Numbering[$level] = $init - 1;
     }
 
     #...Increase current level number
-    $Numbering[ $level ] += 1;
+    $Numbering[$level] += 1;
 
     #...Reset all higher level counts
     if ( $level < $lastLevel ) {
-        for $i ( ($level+1) .. $lastLevel ) { $Numbering[$i] = 0; }
+        for my $i ( ( $level + 1 ) .. $lastLevel ) { $Numbering[$i] = 0; }
+
     }
 
     #...Save the altered numbering
-    $Sequences{$name} =  join( ':', @Numbering );
+    $Sequences{$name} = \@Numbering;
 
     #...Construct the number
+    my $text = '';
     if ( $alist eq '' ) {
-	for $i ( 0 .. $level ) {
-	    $text .= "$Numbering[$i]";
-	    $text .= '.' if ( $i < $level );
-	}
-    } else {
-	#...Level is 1-origin, indexing is 0-origin
-	$text .= $alphabet[$Numbering[$level]-1]
+        for my $i ( 0 .. $level ) {
+            $text .= "$Numbering[$i]";
+            $text .= '.' if ( $i < $level );
+        }
+    }
+    else {
+
+        #...Level is 1-origin, indexing is 0-origin
+        if ( $alist =~ /[[:upper:]]/ ) {
+            $text .=
+              uc $alphabet[ ( $Numbering[$level] - 1 ) % scalar @alphabet ];
+        }
+        else {
+            $text .= $alphabet[ ( $Numbering[$level] - 1 ) % scalar @alphabet ];
+        }
     }
 
+    # do we want it bold or not?
+    if ($bold) {
+        $text =~ (s/$text/\*$text\*/);
+    }
     return $text;
 }
 
