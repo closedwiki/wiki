@@ -73,7 +73,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
      | ==pub/TWiki/LightboxPlugin/loading.gif== | image loading animation |
      | ==pub/TWiki/LightboxPlugin/overlay.png== | overlay image |
      | ==pub/TWiki/LightboxPlugin/Dsc05040.jpg== | image example |
-     | ==pub/TWiki/LightboxPlugin/Dsc05040-thumbnail.jpg== | image example |
+     | ==pub/TWiki/LightboxPlugin/Dsc05040-thumb.jpg== | image example |
      | ==pub/TWiki/LightboxPlugin/Dsc05040-simulated.jpg== | image example |
    * Enable the plugin in =configure= or =LocalSite.cfg=
    * Test above example if the installation was successful
