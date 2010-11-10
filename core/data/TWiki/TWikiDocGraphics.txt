@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1288477773" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1289350229" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. Doc graphics are defined at %CALC{$SET(icontopics, $LISTIF($NOT($EXACT($item,)), $LISTMAP($IF($EXISTS($item), [[$item]], ), %ICONTOPIC%)))$GET(icontopics)}%.
@@ -784,7 +784,7 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="twiki-alert.gif" attr="h" comment="" date="1258790911" path="twiki-alert.gif" size="1021" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="twiki-gray.gif" attr="h" comment="" date="1286139742" path="twiki-gray.gif" size="969" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="twiki-irc.gif" attr="h" comment="" date="1239225587" path="twiki-irc.gif" size="948" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="twitter.gif" attr="h" comment="" date="1246047029" path="twitter.gif" size="987" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="twitter.gif" attr="h" comment="" date="1289350229" path="twitter.gif" size="358" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="txt.gif" attr="h" comment="" date="1169565034" path="txt.gif" size="375" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="unchecked.gif" attr="h" comment="" date="1169565034" path="unchecked.gif" size="96" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="unchecked-round.gif" attr="h" comment="" date="1266650841" path="unchecked-round.gif" size="993" user="TWikiContributor" version=""}%
