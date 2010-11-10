@@ -1,9 +1,19 @@
-%META:TOPICINFO{author="TWikiContributor" date="1145692316" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1289337619" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/TopicReferencePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TopicReferencePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
 
 This plugin is used to help find orphaned topics. It can also be used to count the number of references to a particular topic.
-
-%TOC%
 
 ---++ Syntax Rules
 
@@ -34,24 +44,24 @@ This plugin is used to help find orphaned topics. It can also be used to count t
 
 <table>
 <tr>
-<td>
-Plugin output (pre-rendered):
+<td valign="top">
+Plugin output (simulated):
 
 <ul>
-<li> <a href="/%SCRIPTURLPATH%/view/Main/TWikiGuestLeftBar" class="twikiLink">TWikiGuestLeftBar</a> (0)
-</li> <li> <a href="/%SCRIPTURLPATH%/view/Main/NobodyGroup" class="twikiLink">NobodyGroup</a> (0)
-</li> <li> <a href="/%SCRIPTURLPATH%/view/Main/TWikiGuestSideBar" class="twikiLink">TWikiGuestSideBar</a> (0)
-</li> <li> <a href="/%SCRIPTURLPATH%/view/Main/PatternSkinUserViewTemplate" class="twikiLink">PatternSkinUserViewTemplate</a> (0)
-</li> <li> <a href="/%SCRIPTURLPATH%/view/Main/WebLeftBar" class="twikiLink">WebLeftBar</a> (0)
-</li> <li> <a href="/%SCRIPTURLPATH%/view/Main/OrphanTest" class="twikiLink">OrphanTest</a> (0)
+<li> <a href="%SCRIPTURLPATH{view}%/Main/TWikiGuestLeftBar" class="twikiLink">TWikiGuestLeftBar</a> (0)
+</li> <li> <a href="%SCRIPTURLPATH{view}%/Main/NobodyGroup" class="twikiLink">NobodyGroup</a> (0)
+</li> <li> <a href="%SCRIPTURLPATH{view}%/Main/TWikiGuestSideBar" class="twikiLink">TWikiGuestSideBar</a> (0)
+</li> <li> <a href="%SCRIPTURLPATH{view}%/Main/PatternSkinUserViewTemplate" class="twikiLink">PatternSkinUserViewTemplate</a> (0)
+</li> <li> <a href="%SCRIPTURLPATH{view}%/Main/WebLeftBar" class="twikiLink">WebLeftBar</a> (0)
+</li> <li> <a href="%SCRIPTURLPATH{view}%/Main/OrphanTest" class="twikiLink">OrphanTest</a> (0)
 </li></ul>
 </td>
-<td>
+<td valign="top">
 Plugin output (if enabled):
 
 %TOPICREFERENCELIST{"orphans" web="Main"}% 
 </td>
-<td>
+<td valign="top">
 Used syntax:
 <verbatim>
 %TOPICREFERENCELIST{"orphans" web="Main"}% 
@@ -62,8 +72,8 @@ Used syntax:
 
 ---++ Plugin Settings
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Find orphaned topics or topic ref counts.
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Find orphaned topics and topic reference counts
 
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
@@ -72,37 +82,33 @@ Used syntax:
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
 
-   * Download the ZIP file from the Plugin web (see below)
+   * Download the ZIP file from the plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * Configure the Plugin:
-      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+   * Configure the plugin:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script to enable the plugin
       * Change the Plugin settings as needed
    * Test if the installation was successful (verify rendered example above)
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.JeffCrawford |
-|  Copyright: | &copy; 2006, TWiki:Main.JeffCrawford |
+|  Copyright: | &copy; 2006, TWiki:Main.JeffCrawford  <br /> &copy; 2006-2010 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 19 Apr 2006 (V1.001) |
+|  Plugin Version: | 2010-11-09 (V1.002) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  19 Apr 2006: | Changed name of plugin (formerly !OrphanFindPlugin), modified for better speed and added default, added web option |
-|  15 Apr 2006: | Initial version |
+|  2010-11-09: | TWikibug:Item6530: Doc improvements |
+|  2006-04-19: | Changed name of plugin (formerly !OrphanFindPlugin), modified for better speed and added default, added web option |
+|  2006-04-15: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 58% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 99%, %TOPIC% 58% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
-
--- TWiki:Main.JeffCrawford - 19 Apr 2006
-
-%META:REVCOMMENT{ncomments="0"}%
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences

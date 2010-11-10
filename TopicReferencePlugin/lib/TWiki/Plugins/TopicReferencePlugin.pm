@@ -2,42 +2,17 @@
 # TWiki WikiClone ($wikiversion has version info)
 #
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
+# Copyright (C) 2001 Peter Thoeny, Peter[at]Thoeny.org
+# Copyright (C) 2006 TWiki:Main.JeffCrawford
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
-#
-# =========================
-#
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
-#
-# Each plugin is a package that contains the subs:
-#
-#   initPlugin           ( $topic, $web, $user, $installWeb )
-#   commonTagsHandler    ( $text, $topic, $web )
-#   startRenderingHandler( $text, $web )
-#   outsidePREHandler    ( $text )
-#   insidePREHandler     ( $text )
-#   endRenderingHandler  ( $text )
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, all handlers except initPlugin are
-# disabled. To enable a handler remove the leading DISABLE_ from
-# the function name.
-# 
-# NOTE: To interact with TWiki use the official TWiki functions
-# in the &TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
-
 
 # =========================
 package TWiki::Plugins::TopicReferencePlugin;
@@ -47,8 +22,8 @@ use strict;
 # =========================
 use vars qw( $VERSION $RELEASE $debug $pluginName );
 
-$VERSION = '1.001';
-$RELEASE = 'Dakar';
+$VERSION = '1.002';
+$RELEASE = '2010-11-09';
 $pluginName= 'TopicReferencePlugin';
 
 # =========================
@@ -61,9 +36,6 @@ sub initPlugin
         &TWiki::Func::writeWarning( "Version mismatch between TopicReferencePlugin and Plugins.pm" );
         return 0;
     }
-
-    # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    # $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "TOPICREFERENCEPLUGIN_DEBUG" );
