@@ -25,7 +25,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-RELEASE = '2010-09-10';
+$RELEASE = '2010-09-10';
 
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
