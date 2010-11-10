@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1289365794" format="1.1" version="$Rev$"}%
----+ <nop>%TOPIC%
+%META:TOPICINFO{author="TWikiContributor" date="1289367683" format="1.1" version="$Rev$"}%
+---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
    http://twiki.org/cgi-bin/view/Plugins/ExplicitNumberingPlugin or provide feedback at
@@ -81,16 +81,16 @@ If you have the plugin installed, the *Rendered* and *Expected* columns should b
 
 Reset anonymous numbering to ##0. using =#<nop>#0.
 
-<table>
+<table cellpadding="5">
 <tr>
 <td> *Write* </td> <td> *If Installed* </td> <td> *You should see* </td>
 <tr>
 <td> ---# Heading level 1 </td>
 <td>
----# Heading 
+---#!! Heading 
 </td>
 <td>
----+ 1 Heading
+---+!! 1 Heading
 </td>
 </tr>
 <tr>
@@ -99,25 +99,25 @@ Reset anonymous numbering to ##0. using =#<nop>#0.
 ---## Next level 
 </td>
 <td>
----++ 1.1 Next level
+---++!! 1.1 Next level
 </td>
 </tr>
 <tr>
 <td> ---### And another </td>
 <td>
----### And another 
+---###!! And another 
 </td>
 <td>
----+++ 1.1.1 And another
+---+++!! 1.1.1 And another
 </td>
 </tr>
 <tr>
 <td> ---++# Single numbered </td>
 <td>
----++# Single numbered 
+---++#!! Single numbered 
 </td>
 <td>
----+++ 2 Single numbered
+---+++!! 2 Single numbered
 </td>
 </tr>
 </table>
