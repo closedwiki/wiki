@@ -2,9 +2,9 @@
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2006 Peter Thoeny, peter@thoeny.org
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,8 +15,6 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-#
-# For licensing info read LICENSE file in the TWiki root.
 
 =pod
 
@@ -26,28 +24,18 @@ This is a TWiki plugin to add hooks to the lightbox javascript package.
 
 =cut
 
-# change the package name and $pluginName!!!
 package TWiki::Plugins::LightboxPlugin;
 
 # Always use strict to enforce variable scoping
 use strict;
 
-# $VERSION is referred to by TWiki, and is the only global variable that
-# *must* exist in this package
 use vars qw( $VERSION $RELEASE $debug $pluginName $debug %default);
 
-# This should always be $Rev: 9813$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev: 9813$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2010-11-09';
 
 # Name of this Plugin, only used in this module
-$pluginName = 'EmptyPlugin';
+$pluginName = 'LightboxPlugin';
 
 =pod
 
@@ -56,28 +44,6 @@ $pluginName = 'EmptyPlugin';
    * =$web= - the name of the web in the current CGI query
    * =$user= - the login name of the user
    * =$installWeb= - the name of the web the plugin is installed in
-
-REQUIRED
-
-Called to initialise the plugin. If everything is OK, should return
-a non-zero value. On non-fatal failure, should write a message
-using TWiki::Func::writeWarning and return 0. In this case
-%FAILEDPLUGINS% will indicate which plugins failed.
-
-In the case of a catastrophic failure that will prevent the whole
-installation from working safely, this handler may use 'die', which
-will be trapped and reported in the browser.
-
-You may also call =TWiki::Func::registerTagHandler= here to register
-a function to handle variables that have standard TWiki syntax - for example,
-=%MYTAG{"my param" myarg="My Arg"}%. You can also override internal
-TWiki variable handling functions this way, though this practice is unsupported
-and highly dangerous!
-
-__Note:__ Please align variables names with the Plugin name, e.g. if 
-your Plugin is called FooBarPlugin, name variables FOOBAR and/or 
-FOOBARSOMETHING. This avoids namespace issues.
-
 
 =cut
 
@@ -158,25 +124,6 @@ sub _LIGHTBOX {
    * =$text= - text to be processed
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
-This handler is called by the code that expands %TAGS% syntax in
-the topic body and in form fields. It may be called many times while
-a topic is being rendered.
-
-Plugins that want to implement their own %TAGS% with non-trivial
-additional syntax should implement this function. Internal TWiki
-variables (and any variables declared using =TWiki::Func::registerTagHandler=)
-are expanded _before_, and then again _after_, this function is called
-to ensure all %TAGS% are expanded.
-
-For variables with trivial syntax it is far more efficient to use
-=TWiki::Func::registerTagHandler= (see =initPlugin=).
-
-__NOTE:__ when this handler is called, &lt;verbatim> blocks have been
-removed from the text (though all other HTML such as &lt;pre> blocks is
-still present).
-
-__NOTE:__ meta-data is _not_ embedded in the text passed to this
-handler.
 
 =cut
 
@@ -185,10 +132,6 @@ sub commonTagsHandler {
     ### my ( $text, $topic, $web ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/%XYZ%/&handleXyz()/ge;
-    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
 
     $_[0] =~ s/%BEGINLIGHTBOX{(.*?)}%(.*?)%ENDLIGHTBOX%/&handleLightBox($1,$2)/ges;
 
