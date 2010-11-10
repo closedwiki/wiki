@@ -1,0 +1,86 @@
+#!/usr/bin/perl
+#
+# Utility for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2010 Peter Thoeny, peter@thoeny.org and
+# TWiki Contributors.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+
+if ( $#ARGV < 0 ) {
+   showUsage();
+   exit( 1 );
+}
+foreach my $topic ( @ARGV ) { 
+  fixFile( $topic );
+}
+exit( 0 );
+
+#=========================
+sub showUsage
+{
+  print "Utility to fix Foswiki strings to TWiki strings,\n";
+  print "useful to port Foswiki plugins to TWiki. Usage:\n";
+  print "% fos2twiki file1.pm file2.txt ...\n";
+}
+
+#=========================
+sub fixFile
+{
+  my ( $file ) = @_;
+
+  print "- fixing $file ...";
+  my $text = readFile( $file );
+  if( $file ) {
+    $text =~ s/Foswikitask:Item[0-9]+//go;
+    $text =~ s|\.org/Extensions/|.org/cgi-bin/view/Plugins/|go;
+    $text =~ s/Foswiki:Extensions/TWiki:Plugins/go;
+    $text =~ s/Foswiki Macro/TWiki Variable/go;
+    $text =~ s/Foswiki/TWiki/go;
+    $text =~ s/foswiki/twiki/go;
+    $text =~ s/FOSWIKI/TWIKI/go;
+    $text =~ s/DefaultPreferences/TWikiPreferences/go;
+    $text =~ s/SitePreferences/TWikiPreferences/go;
+
+    saveFile( $file, $text );
+    print " done\n";
+  }
+}
+
+#=========================
+sub readFile {
+  my $name = shift;
+  my $data = '';
+  unless ( open( IN_FILE, "<$name" ) ) {
+    print "  ERROR: Can't read file $name - $!\n";
+    return;
+  }
+  local $/ = undef; # set to read to EOF
+  $data = <IN_FILE>;
+  close( IN_FILE );
+  $data = '' unless $data; # no undefined
+  return $data;
+}
+
+#=========================
+sub saveFile {
+  my( $name, $text ) = @_;
+
+  unless ( open( FILE, ">$name" ) )  {
+    print "  ERROR: Can't update file $name - $!\n";
+    return;
+  }
+  print FILE $text;
+  close( FILE);
+}
+
+#=========================
