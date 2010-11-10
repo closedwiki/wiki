@@ -1,15 +1,24 @@
+%META:TOPICINFO{author="TWikiContributor" date="1289372154" format="1.1" version="$Rev$"}%
+---+!! Lightbox Plugin
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/LightboxPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/LightboxPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
----+ Lightbox Plugin
+---++ Introduction
 
-[[http://www.huddletogether.com/projects/lightbox/][Lightbox]] is set of
-Javascript and CSS files that provides improved image viewing
-functionality. When a user clicks on the image, the full size image will
-display _without_ advancing the browser to a new page.
+[[http://www.huddletogether.com/projects/lightbox/][Lightbox]] is set of Javascript and CSS files that provides improved image viewing functionality. When a user clicks on the image, the full size image will display _without_ advancing the browser to a new page.
 
 ---++ Usage
 
    * Attach images and thumbnails to a topic
-   * Use one of the lightbox TWiki tags to display the thumbnail image.  
+   * Use one of the Lightbox TWiki Variable to display the thumbnail image
 
 ---+++ Syntax
 
@@ -27,18 +36,16 @@ or
 
 If successful, a dotted box with a clickable thumbnail should appear.
 
-
-| *option* | *default* | *comments* |
+| *Option* | *Default* | *Comments* |
 | image | '' | The large display image   |
 | thumbnail | '' | The click-able thumbnail image   |
 | float | 'right' | thumbnail placement on topic page   |
 | border |  _see below_  | thumbnail border style    |
-| caption | '' | caption to appear in thumbnail img alt tag and under large image |
+| caption | '' | caption to appear in thumbnail img title tag and under large image |
 
 Note, TWiki-wide defaults can be set using
    * <nop>Set LIGHTBOXPLUGIN_BORDER = 1px dashed #22638C
    * <nop>Set LIGHTBOXPLUGIN_FLOAT = 
-
 
    * %I% If your text is to short, the thumbnail will overlap use height to fix this.
 <verbatim>
@@ -47,16 +54,14 @@ Note, TWiki-wide defaults can be set using
 
 ---+++ Example
 
-<verbatim>
-%LIGHTBOX{ image="img-test.jpg"  thumbnail="tmb-test.jpg" caption="This is a test"}%
-</verbatim>
-
+| *You type* | *You get* | *Simulated thumbnail* |
+| =%<nop>LIGHTBOX{%BR% image="Dsc05040.jpg"%BR% thumbnail="Dsc05040-thumb.jpg"%BR% caption="Rocket is ready for launch"%BR%}%= | %LIGHTBOX{ image="Dsc05040.jpg"  thumbnail="Dsc05040-thumb.jpg" caption="Rocket is ready for launch"}% | <img src="%ATTACHURLPATH%/Dsc05040-simulated.jpg" alt="" title="Rocket is ready for launch" width="159" height="182" /> |
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-   * Download the ZIP file from the Plugin Home (see below)
+   * Download the ZIP file from the plugin home (see below)
    * Unzip ==LightboxPlugin.zip== in the root of your twiki installation %BR% Content:
      | *File:* | *Description:* |
      | ==data/TWiki/LightboxPlugin.txt== | plugin description |
@@ -67,11 +72,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
      | ==pub/TWiki/LightboxPlugin/close.gif== | close image button  |
      | ==pub/TWiki/LightboxPlugin/loading.gif== | image loading animation |
      | ==pub/TWiki/LightboxPlugin/overlay.png== | overlay image |
-     | ==pub/TWiki/LightboxPlugin/ScreenShot001.jpg== | thumbnail example |
+     | ==pub/TWiki/LightboxPlugin/Dsc05040.jpg== | image example |
+     | ==pub/TWiki/LightboxPlugin/Dsc05040-thumbnail.jpg== | image example |
+     | ==pub/TWiki/LightboxPlugin/Dsc05040-simulated.jpg== | image example |
    * Enable the plugin in =configure= or =LocalSite.cfg=
-   * Test if the installation was successful:
-      * A dotted box with a clickable thumbnail should appear. <BR>
-   <img src="%ATTACHURLPATH%/ScreenShot001.jpg" alt="ScreenShot001.jpg" width='545' height='189' />
+   * Test above example if the installation was successful
 
 ---++ Plugin Info
 
@@ -80,12 +85,13 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 This TWiki extension includes v1.0 of Lightbox.
 
 |  Plugin Author: | TWiki:Main.HenriAanstoot, TWiki:Main.ScottHoge |
-|  Copyright: | &copy; 2006, TWiki:Main.HenriAanstoot |
+|  Copyright: | &copy; 2006, TWiki:Main.HenriAanstoot <br /> &copy; 2006-2010 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 5 Apr 2007 (%$VERSION%) |
+|  Plugin Version: | 2010-11-09 - %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-11-09: | TWikibug:Item6530: Doc improvements, adding proper image example -- TWiki:Main.PeterThoeny |
 |   5 Apr 2007: | Added blank.gif to the package |
-|  23 Mar 2007: | Added Plugin code with TWiki Tags |
+|  23 Mar 2007: | Added plugin code with TWiki Variables |
 |  22 Sep 2006: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 4.0) |
 |  CPAN Dependencies: | none |
@@ -97,4 +103,6 @@ This TWiki extension includes v1.0 of Lightbox.
 
 __Related Topic:__ TWiki:Plugins.ImageGalleryPlugin
 
-Contributors: TWiki:Main/HenriAanstoot, TWiki:Main/ScottHoge
+%META:FILEATTACHMENT{name="Dsc05040.jpg" attachment="Dsc05040.jpg" attr="h" comment="" date="1289370765" path="Dsc05040.jpg" size="79278" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Dsc05040-thumb.jpg" attachment="Dsc05040-thumb.jpg" attr="h" comment="" date="1289370780" path="Dsc05040thumb.jpg" size="8935" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Dsc05040-simulated.jpg" attachment="Dsc05040-simulated.jpg" attr="h" comment="" date="1289371726" path="Dsc05040-simulated.jpg" size="17309" user="TWikiContributor" version="1"}%
