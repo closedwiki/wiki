@@ -1,5 +1,5 @@
-data/TWiki/NewPageError.txt NEW
-data/TWiki/PlanTemplate.txt NEW
-data/TWiki/ProjectPlannerPlugin.txt NEW
-data/TWiki/ProjectTemplate.txt NEW
-lib/TWiki/Plugins/ProjectPlannerPlugin.pm NEW
+data/TWiki/NewPageError.txt 0664
+data/TWiki/PlanTemplate.txt 0664
+data/TWiki/ProjectPlannerPlugin.txt 0664
+data/TWiki/ProjectTemplate.txt 0664
+lib/TWiki/Plugins/ProjectPlannerPlugin.pm 0664

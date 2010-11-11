@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="kiran" date="1091479321" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1289458388" format="1.1" version="$Rev$"}%
 <!-- THE TABLES ON THIS PAGE WILL SHOW THE PROJECT STATUS AUTOMATICALLY -->
 <!-- ADDING EXTRA CONTENT TO THIS PAGE IS OPTIONAL - -->
 
@@ -17,4 +17,3 @@
 %PPALLPROJECTSTASKS{%TOPIC%}%
 
 <b>Project details</b>:
-

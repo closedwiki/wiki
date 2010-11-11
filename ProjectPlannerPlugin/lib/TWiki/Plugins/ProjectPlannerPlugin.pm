@@ -16,6 +16,37 @@
 # of Tasks. A Developer is associated with each Task.
 #
 ###########################################################################################
+#
+# Notes
+##################
+#
+# - this module uses a 'cache' of projects and plans to speed up the scanning for
+#   projects and plans.
+#   The filename is typically:
+#       /var/www/html/twiki/pub/{webname}/ProjectPlannerPlugin/_ppcache
+#
+# - a plan can only belong to one project!
+#
+###########################################################################################
+#
+# Example of the contents of the cacheFile
+##################
+#
+# Strip of the '# ' at the beginning
+# 
+# PROJ : ConquerCapital : MyGrandPlan
+# PROJ : SomeThingToDoInTheFuture :
+# PLAN : MyGrandPlan :  :  DriveToCapital  :  MyAlias
+# PLAN : MyGrandPlan :  :  TakeTheMayorAsHostage  :  MyAlias
+# PLAN : MyGrandPlan :  :  ExchangeMayorForMoney  :  unassigned
+#
+###########################################################################################
+#
+# Conventions:
+################
+# - all functions in this module start with prefix pp, e.g. ppFindAllProjPlans.
+#
+############################################################################################
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -87,6 +118,7 @@ package TWiki::Plugins::ProjectPlannerPlugin;
 use strict;
 #use HTTP::Date;
 use Time::Local;
+#use Data::Dumper;
 
 # =========================
 use vars qw(
@@ -96,6 +128,7 @@ use vars qw(
 
 use vars qw ( 
               $cacheFileName
+              $cacheDirName
               %cachedProjPlans
               %cachedPlanProj
               %cachedPlanSummary      
@@ -122,16 +155,8 @@ use vars qw (
              $col_results
              );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
+$VERSION = '2.051';
+$RELEASE = '2010-11-10';
 $pluginName = 'ProjectPlannerPlugin';  # Name of this Plugin
 
 use vars qw ( $TIMESCALE @monthArr @weekdayArr %monthToNum);
@@ -160,18 +185,57 @@ sub initPlugin
     }
     
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $exampleCfgVar = &TWiki::Func::getPreferencesValue("PROJECTPLANNERPLUGIN_EXAMPLE" ) || "default";
+    $exampleCfgVar = TWiki::Func::getPreferencesValue("PROJECTPLANNERPLUGIN_EXAMPLE" ) || "default";
 
     # Get plugin debug flag
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
-    
+
     # Plugin correctly initialized
-    TWiki::Func::writeDebug( "-  TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" )    if $debug;
+    TWiki::Func::writeDebug( "-  TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
+
+    # Check if Web exists
+    if ( !TWiki::Func::webExists( $web ) ) {
+        TWiki::Func::writeDebug( "-  TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) doing nothing, since web $web does not exist" ) if $debug;
+        return 0;
+    }
+
+    # Set the cacheFileName/cacheDirName so it can be used in the rest of the package
+    $cacheDirName = TWiki::Func::getPubDir() . "/$web/$pluginName";
+    -e $cacheDirName or mkdir($cacheDirName);
+
+    $cacheFileName = "$cacheDirName/_ppcache";
+    TWiki::Func::writeDebug("- cacheFileFame = $cacheFileName") if $debug;
 
     &ppReadPlanTemplate($web);
     &ppReadCache($web);
     
     return 1;
+}
+
+# =========================
+sub DISABLE_initializeUserHandler
+{
+### my ( $loginName, $url, $pathInfo ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+
+    TWiki::Func::writeDebug( "- ${pluginName}::initializeUserHandler( $_[0], $_[1] )" ) if $debug;
+
+    # Allows a plugin to set the username based on cookies. Called by TWiki::initialize.
+    # Return the user name, or "guest" if not logged in.
+    # New hook in TWiki::Plugins $VERSION = '1.010'
+
+}
+
+# =========================
+sub DISABLE_registrationHandler
+{
+### my ( $web, $wikiName, $loginName ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+
+    TWiki::Func::writeDebug( "- ${pluginName}::registrationHandler( $_[0], $_[1] )" ) if $debug;
+
+    # Allows a plugin to set a cookie at time of user registration.
+    # Called by the register script.
+    # New hook in TWiki::Plugins $VERSION = '1.010'
+
 }
 
 # =========================
@@ -182,6 +246,12 @@ sub commonTagsHandler
     TWiki::Func::writeDebug( "- $pluginName") if $debug;
     TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
     
+    # Check if Web exists
+    if ( !TWiki::Func::webExists( $web ) ) {
+        TWiki::Func::writeDebug( "-  TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) doing nothing, since web $web does not exist" )    if $debug;
+        return 0;
+    }
+
     # This is the place to define customized tags and variables
     # Called by sub handleCommonTags, after %INCLUDE:"..."%
     
@@ -212,7 +282,9 @@ sub commonTagsHandler
     # %PPALLPROJECTSINFO% - Show all project tasks
     $_[0] =~ s/%PPALLPROJECTSINFO\{(.*?)\}%/&ppAllProjectsInfo($1, $web)/geo;
 
+    #
     # These two use Projects as inputs and show summary by developer
+    #
       
     # %PPDEVSUMMARY% - Show developer summary for listed projects
     $_[0] =~ s/%PPDEVSUMMARY\{(.*?)\}%/&ppAllDevSummary($1, $web, 0)/geo;
@@ -221,8 +293,10 @@ sub commonTagsHandler
     #                  projects. Shows all tasks of developer
     $_[0] =~ s/%PPDEVDETAILS\{(.*?)\}%/&ppAllDevSummary($1, $web, 1)/geo;
 
+    #
     # Show summaries by PlanId
-      
+    #
+  
     # %PPPLANIDSUMMARY% - Show task list by ID for listed projects
     $_[0] =~ s/%PPPLANIDSUMMARY\{(.*?)\}%/&ppAllPlanIdSummary($1, $web)/geo;
 
@@ -243,10 +317,163 @@ sub commonTagsHandler
     return $_[0];      
 }
 
+# =========================
+sub DISABLE_startRenderingHandler
+{
+### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
+
+    TWiki::Func::writeDebug( "- ${pluginName}::startRenderingHandler( $_[1] )" ) if $debug;
+
+    # This handler is called by getRenderedVersion just before the line loop
+
+    # do custom extension rule, like for example:
+    # $_[0] =~ s/old/new/g;
+}
+
+# =========================
+sub DISABLE_outsidePREHandler
+{
+### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
+
+    ##TWiki::Func::writeDebug( "- ${pluginName}::outsidePREHandler( $renderingWeb.$topic )" ) if $debug;
+
+    # This handler is called by getRenderedVersion, once per line, before any changes,
+    # for lines outside <pre> and <verbatim> tags. 
+    # Use it to define customized rendering rules.
+    # Note: This is an expensive function to comment out.
+    # Consider startRenderingHandler instead
+
+    # do custom extension rule, like for example:
+    # $_[0] =~ s/old/new/g;
+}
+
+# =========================
+sub DISABLE_insidePREHandler
+{
+### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
+
+    ##TWiki::Func::writeDebug( "- ${pluginName}::insidePREHandler( $web.$topic )" ) if $debug;
+
+    # This handler is called by getRenderedVersion, once per line, before any changes,
+    # for lines inside <pre> and <verbatim> tags. 
+    # Use it to define customized rendering rules.
+    # Note: This is an expensive function to comment out.
+    # Consider startRenderingHandler instead
+
+    # do custom extension rule, like for example:
+    # $_[0] =~ s/old/new/g;
+}
+
+# =========================
+sub DISABLE_endRenderingHandler
+{
+### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
+
+    TWiki::Func::writeDebug( "- ${pluginName}::endRenderingHandler( $web.$topic )" ) if $debug;
+
+    # This handler is called by getRenderedVersion just after the line loop, that is,
+    # after almost all XHTML rendering of a topic. <nop> tags are removed after this.
+
+}
+
+# =========================
+sub DISABLE_beforeEditHandler
+{
+### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+
+    TWiki::Func::writeDebug( "- ${pluginName}::beforeEditHandler( $_[2].$_[1] )" ) if $debug;
+
+    # This handler is called by the edit script just before presenting the edit text
+    # in the edit box. Use it to process the text before editing.
+    # New hook in TWiki::Plugins $VERSION = '1.010'
+
+}
+
+# =========================
+sub DISABLE_afterEditHandler
+{
+### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+
+    TWiki::Func::writeDebug( "- ${pluginName}::afterEditHandler( $_[2].$_[1] )" ) if $debug;
+
+    # This handler is called by the preview script just before presenting the text.
+    # New hook in TWiki::Plugins $VERSION = '1.010'
+
+}
+
+# =========================
+sub DISABLE_beforeSaveHandler
+{
+### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+
+    TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
+
+    # This handler is called by TWiki::Store::saveTopic just before the save action.
+    # New hook in TWiki::Plugins $VERSION = '1.010'
+
+}
+
+# =========================
+sub DISABLE_writeHeaderHandler
+{
+### my ( $query ) = @_;   # do not uncomment, use $_[0] instead
+
+    TWiki::Func::writeDebug( "- ${pluginName}::writeHeaderHandler( query )" ) if $debug;
+
+    # This handler is called by TWiki::writeHeader, just prior to writing header. 
+    # Return a single result: A string containing HTTP headers, delimited by CR/LF
+    # and with no blank lines. Plugin generated headers may be modified by core
+    # code before they are output, to fix bugs or manage caching. Plugins should no
+    # longer write headers to standard output.
+    # Use only in one Plugin.
+    # New hook in TWiki::Plugins $VERSION = '1.010'
+
+}
+
+# =========================
+sub DISABLE_redirectCgiQueryHandler
+{
+### my ( $query, $url ) = @_;   # do not uncomment, use $_[0], $_[1] instead
+
+    TWiki::Func::writeDebug( "- ${pluginName}::redirectCgiQueryHandler( query, $_[1] )" ) if $debug;
+
+    # This handler is called by TWiki::redirect. Use it to overload TWiki's internal redirect.
+    # Use only in one Plugin.
+    # New hook in TWiki::Plugins $VERSION = '1.010'
+
+}
+
+# =========================
+sub DISABLE_getSessionValueHandler
+{
+### my ( $key ) = @_;   # do not uncomment, use $_[0] instead
+
+    TWiki::Func::writeDebug( "- ${pluginName}::getSessionValueHandler( $_[0] )" ) if $debug;
+
+    # This handler is called by TWiki::getSessionValue. Return the value of a key.
+    # Use only in one Plugin.
+    # New hook in TWiki::Plugins $VERSION = '1.010'
+
+}
+
+# =========================
+sub DISABLE_setSessionValueHandler
+{
+### my ( $key, $value ) = @_;   # do not uncomment, use $_[0], $_[1] instead
+
+    TWiki::Func::writeDebug( "- ${pluginName}::setSessionValueHandler( $_[0], $_[1] )" ) if $debug;
+
+    # This handler is called by TWiki::setSessionValue. 
+    # Use only in one Plugin.
+    # New hook in TWiki::Plugins $VERSION = '1.010'
+
+}
+
 #################################################################################
-# gaugeLite
+# Name: gaugeLite
 #
-# display gauge using html table. Pass in int value for percentange done
+# Purpose: display gauge using html table. Pass in int value for percentange done
+#
 #################################################################################
 
 sub gaugeLite
@@ -259,11 +486,12 @@ sub gaugeLite
     $line .= "</tr></table>";
     return $line;
 }
+
 #################################################################################
-# gaugeTriple
+# Name: gaugeTriple
 #
-# display gauge using html table. Pass in three int value for percentange
-# done and in progress
+# Purpose: display gauge using html table.
+#          Pass in two int values for percentage done and in progress
 #################################################################################
 
 sub gaugeTriple
@@ -279,10 +507,13 @@ sub gaugeTriple
     return $line;
 }
 #################################################################################
-# gaugeFour
+# Name: gaugeFour
 #
-# display gauge using html table. Pass in four int values for percentange
-# done and in progress
+# Purpose: display gauge using html table.
+#          Pass in three int values:
+#          - percentage done,
+#          - waiting,
+#          - in progress
 #################################################################################
 
 sub gaugeFour
@@ -299,16 +530,16 @@ sub gaugeFour
     $line .= "</tr></table>";
     return $line;
 }
-#################################################################################
-# ppReadPlanTemplate
-#
-# Take $web and read PlanTemplate to figure out mapping to column
-# numbers for each Task line by searching for strings
-#
-# maybe it should rewritten to create a hashmap from field names to
-# numbers instead of global variables?
-#################################################################################
 
+#################################################################################
+# Name: ppReadPlanTemplate
+#
+# Purpose: Take $web and read PlanTemplate to figure out mapping to column
+#          numbers for each Task line by searching for strings
+#
+# Note:    maybe it should be rewritten to create a hashmap from field names to
+#          numbers instead of global variables?
+#################################################################################
 sub ppReadPlanTemplate
 {
     my $web = $_[0];
@@ -317,7 +548,7 @@ sub ppReadPlanTemplate
         $col_priority = $col_status = $col_estdays = $col_spentdays =
         $col_effort = $col_dateadded = $col_results = 0;
     
-    my $tmplText = &TWiki::Func::readTopic($web, "PlanTemplate");
+    my (undef, $tmplText) = TWiki::Func::readTopic($web, "PlanTemplate");
     foreach my $line (split(/\n/, $tmplText)) {
         if ($line =~ /.*\|\s*\*Key\*\s*\|.*/) {
             $line =~ s/^\s*(.*?)\s*$/$1/;
@@ -355,51 +586,90 @@ sub ppReadPlanTemplate
 }
 
 #################################################################################
-# ppFindAllProjPlans
+# Name: ppFindAllProjPlans
 #
-# Returns a list of all (proj,plan) pairs in this web by scanning all
-# text files for the Project Template: $projectname tag
+# Purpose: Returns a list of all (proj,plan) pairs in this web by scanning all
+#          text files for the 'PP Project Template' and 'PP Plan Project' tags.
+#
+# Working:
+# - get a list of all topics from TWiki::Func
+#   This is the equivalent of an 'ls' of the web directory.
+# - scan each topic for the occurence of strings that qualify the topic
+#   as a project or as a plan.
+# - build up a list of projects and their plans
+# - return the list
+#
+# Notes:
+# - since a project can have multiple plans, they are separated with ';'
+#
 #################################################################################
 
 sub ppFindAllProjPlans {
+
+    TWiki::Func::writeDebug("- ${pluginName}::ppFindAllProjPlans entry") if $debug;
 
     my $web = $_[0];
     my %allProjPlans;
     
     # Read in all projects in this web
     #opendir(WEB,$dataDir."/".$web);
-    opendir(WEB,TWiki::Func::getDataDir()."/".$web);
-    my @allFiles = grep { s/(.*?).txt$/$1/go } readdir(WEB);
-    closedir(WEB);
-    foreach my $eachF (@allFiles) {
+    foreach my $eachF (TWiki::Func::getTopicList($web)) {
         if ($eachF =~ /.*PlanTemplate.*/) {
             next;
         }
         if ($eachF =~ /.*ProjectTemplate.*/) {
             next;
         }
-        my $planText = &TWiki::Func::readTopic($web, $eachF);
+        TWiki::Func::writeDebug("- ${pluginName}::ppFindAllProjPlans investigating <$eachF>") if $debug;
+        my (undef, $planText) = TWiki::Func::readTopic($web, $eachF);
+	# Is it a project file?
         if ($planText =~ /.*\|.*PP Project Template.*\|.*PROJECTPLANNER.*\|.*/) {
+            TWiki::Func::writeDebug("- ${pluginName}::ppFindAllProjPlans $eachF is a PROJECT file") if $debug;
             $allProjPlans{$eachF} .= "";
         }
+
+	# is it a plan file?
         if ($planText =~ /.*\|.*PP Plan Project.*\|.*\|.*/) {
+	    # This regex does not take a '.' in the filename into account.
+	    # In other words: it only recognizes projectnames (== files) in its
+            # own web, not in other webs.
             $planText =~ /.*\|.*PP Plan Project.*\|\s*(\w+)\s*\|.*/;
             my $eachPr = $1;
-            $allProjPlans{$eachPr} .= "$eachF;";
+            TWiki::Func::writeDebug("- ${pluginName}::ppFindAllProjPlans $eachF is a PLAN of project <$eachPr>") if $debug;
+	    # Consequently if there _is_ a dot in the filename the regex will return ""
+            if (!($eachPr eq "")) {
+		$allProjPlans{$eachPr} .= "$eachF;";
+	    }
         }
     }
                 
+    #TWiki::Func::writeDebug("ProjPlans are".Dumper(%allProjPlans)) if $debug;
+    TWiki::Func::writeDebug("- ${pluginName}::ppFindAllProjPlans exit") if $debug;
     return %allProjPlans;
 }
 #################################################################################
-# ppBuildCache
+# Name: ppBuildCache
 #
-# Take $web and set up the cached info
+# Purpose: convert a list of all projects/plans/tasks to text info and write it
+#          to the cache file
+#
+# Working:
+# - get a list of project and their plans
+# - for each project in the list:
+#   - if there is no plan for the project, write : 'PROJ :' projectname
+#   - else, for each plan write a line containing 'PROJ : ' and the plan
+# - for each plan with a tasklist:
+#   - write 'PLAN : ' <name of the plan> followed by the task details
+# - write the list to the cache file
+#
+# Note: See beginning of file for a description of the cache file
 #
 #################################################################################
 
 sub ppBuildCache
 {
+    TWiki::Func::writeDebug("- ${pluginName}::ppBuildCache entry") if $debug;
+
     my $web = shift;
     my ($eachPr, $eachPl, $line, $task, $dev, @planTask, $planText, $planId);
     my $projCache = "";
@@ -425,7 +695,7 @@ sub ppBuildCache
     
     foreach $eachPl (@allPlans) {
         if (&TWiki::Func::topicExists($web, $eachPl)) {
-            $planText = &TWiki::Func::readTopic($web, $eachPl);
+            (undef, $planText) = TWiki::Func::readTopic($web, $eachPl);
             # To go from Plan -> Task (multiple values)
             $inLoop = 0;
             $planId = "";
@@ -449,40 +719,36 @@ sub ppBuildCache
     }
 
     my $cacheText = $projCache.$planCache;
-    &TWiki::Func::saveFile($cacheFileName, $cacheText);
+    TWiki::Func::saveFile($cacheFileName, $cacheText);
+    TWiki::Func::writeDebug("- ${pluginName}::ppBuildCache exit") if $debug;
 }
 
 #################################################################################
-# ppReadCache
+# Name: ppReadCache
 #
-# Read disk cache file created by ppBuildCache
+# Purpose: Read disk cache file created by ppBuildCache
 #
+# Working:
+# - if cache file doesn't exist, create it
+# - parse file for project/plan entries
+#
+# Note: See beginning of file for a description of the cache file
+# 
 #################################################################################
 sub ppReadCache
 {
-    my $web = shift;
+    TWiki::Func::writeDebug("- ${pluginName}::ppReadCache entry") if $debug;
 
-    $cacheFileName = TWiki::Func::getDataDir()."/$web/.ppcache";
+    my $web = shift;
 
     # if there is no disk cache file, build one
     if (! (-e "$cacheFileName")) {
-       # &TWiki::Func::writeDebug( "NO CACHE, BUILDING DISK CACHE" );
+        TWiki::Func::writeDebug( "- NO CACHE, BUILDING DISK CACHE" );
         &ppBuildCache($web);
-    } else {
-
-        # if cache exists but is not most recent file, rebuild it
-        # Do this by checking directory timestamp
-        my @cacheStat = stat("$cacheFileName");
-        my @latestStat = stat(TWiki::Func::getDataDir()."/$web");
-        # field 9 is the last modified timestamp
-        if($cacheStat[9] < $latestStat[9]) {
-          # &TWiki::Func::writeDebug( "OLD CACHE $cacheStat[9] $latestStat[9]" );
-            &ppBuildCache($web);
-        }
-    }
+    } 
 
     # read disk cache
-    my $cacheText = &TWiki::Func::readFile($cacheFileName);
+    my $cacheText = TWiki::Func::readFile($cacheFileName);
     %cachedProjPlans = ();
     %cachedIdPlans = ();
     $cachedIdPlans{0} = "";
@@ -493,6 +759,7 @@ sub ppReadCache
     my $devs;
     my $planIds;
     
+    # Read all 'PROJ' entries
     while($cacheText =~ s/PROJ : (.*?) : (.*?)\n//) {
         $proj = $1;
         $plan = $2;
@@ -500,18 +767,22 @@ sub ppReadCache
         $plan =~ s/^\s*(.*?)\s*$/$1/;
         $cachedProjPlans{$proj} .= "$plan;";
         $cachedPlanProj{$plan} = "$proj";
+        TWiki::Func::writeDebug( "- project is $proj" ) if $debug;
+        TWiki::Func::writeDebug( "- plan is $plan" ) if $debug;
     }
     # drop the last ";" from each item
     foreach my $item (keys %cachedProjPlans) {
         chop($cachedProjPlans{$item});
     }
-    
+
+    # Read all 'PLAN' entries
     while($cacheText =~ s/PLAN : (.*?) : (.*?) : (.*?) : (.*?)\n//) {
         $plan = $1;
         $planIds = $2;
         $task = $3;
         $devs = $4;
 
+        TWiki::Func::writeDebug( "- plan is $plan (Ids=$planIds, Task=$task, devs=$devs) " ) if $debug;
         $plan =~ s/^\s*(.*?)\s*$/$1/;
         $planIds =~ s/^\s*(.*?)\s*$/$1/;
         $task =~ s/^\s*(.*?)\s*$/$1/;
@@ -546,78 +817,114 @@ sub ppReadCache
     foreach my $item (keys %cachedDevTasks) {
         chop($cachedDevTasks{$item});
     }
-    
+
+    TWiki::Func::writeDebug("- ${pluginName}::ppReadCache exit") if $debug;    
 }
 
 #################################################################################
-# ppSavePage
+# Name: ppSavePage
 #
-# save the page into Wiki Storage
+# Purpose: save the page into Wiki Storage
+#
+# Working:
+# - validation checks ( title must exists, no duplicate, must be a Wiki name)
+# - read the project template file
+# - replace the placeholders by actual values
+# - set TOPICPARENT in metadata
+# - create the topic using Func::saveTopic
+# - rebuild cache if necessary
+# - show the user the topic
+#
 #################################################################################
 
 sub ppSavePage()
 {
     my ( $web ) = @_;
 
+    TWiki::Func::writeDebug( "- ${pluginName}::ppSavePage entry" ) if $debug;
+
+    TWiki::Func::writeDebug( "- web: $web " ) if $debug;
+
     my $title = $query->param( 'topic' );
     my $template = $query->param( 'templatetopic' );
     my $summary = $query->param( 'summary' );
     my $id = $query->param( 'id' );
     
+    TWiki::Func::writeDebug( "- title: $title" ) if $debug;
+    TWiki::Func::writeDebug( "- template: $template" ) if $debug;
+    TWiki::Func::writeDebug( "- summary: $summary" ) if $debug;
+    TWiki::Func::writeDebug( "- id: $id" ) if $debug;
+
     # check the user has entered a non-null string
     if($title eq "") {
-        TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $web, "NewPageError" ) );
+        TWiki::Func::redirectCgiQuery( $query, TWiki::Func::getViewUrl( $web, "NewPageError" ) );
         return;
     }
 
     # check topic does not already exist
     if(TWiki::Func::topicExists($web, $title)) {
-        TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $web, "NewPageError" ) );
+        TWiki::Func::redirectCgiQuery( $query, TWiki::Func::getViewUrl( $web, "NewPageError" ) );
         return;
     }
 
     # check the user has entered a WIKI name
-    if(!TWiki::isWikiName($title)) {
-        TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $web, "NewPageError" ) );
+    my $regex = TWiki::Func::getRegularExpression("wikiWordRegex");
+    if($title !~ /^($regex)$/) {
+        TWiki::Func::redirectCgiQuery( $query, TWiki::Func::getViewUrl( $web, "NewPageError" ) );
         return;
     }
-
-    # we do not use this anymore. Instead we grep for Project Template
-    # | PROJECTPLANNER to find all projects
-    # if creating a Project, check name ends in *Project
-    
-#     if($template eq "ProjectTemplate") {
-#         if(!($title =~ /^[\w]*PPProject$/)) {
-#             TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( "", "NewPageError" ) );
-#             return;
-#         }
-#     }
+    $title = $1;
 
     # load template for page type requested
-    my( $text ) = &TWiki::Func::readTopicText( $web, $template );
+    my ($meta, $text) = TWiki::Func::readTopic( $web, $template );
 
     # write parent name into page
     my $parent = $query->param( 'topicparent' );
+    TWiki::Func::writeDebug( "- ${pluginName}::ppSavePage - parent is $parent" ) if $debug;
+
     $text =~ s/PPPARENTPAGE/$parent/geo;
     $text =~ s/PPSUMMARY/$summary/geo;
     $text =~ s/PPID/$id/geo;
 
-    # save new page and open in browser
-    my $error = &TWiki::Func::saveTopicText( $web, $title, $text );
-    TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $web, $title ) );
+    # Put the TOPICPARENT in the meta section of the page
+    $meta->put( 'TOPICPARENT', { "name" => "$parent" }  );
+
+    # Debug meta info. Need 3 otherwise the contents of meta is not printed.
+    #$Data::Dumper::Maxdepth = 3;
+    #TWiki::Func::writeDebug("$web.$topic META =".Dumper($meta)) if $debug;
+
+    my $error = TWiki::Func::saveTopic( $web, $title, $meta, $text );
+    TWiki::Func::writeDebug( "- ${pluginName}::ppSavePage - Save topic error! <$error<" ) if $debug && $error;
+
+    # if cache exists but is not most the recent file, rebuild it
+    # Do this by checking directory timestamp
+    my @cacheStat = stat("$cacheFileName");
+    my @latestStat = stat("$cacheDirName");
+    TWiki::Func::writeDebug("- ${pluginName}::ppSavePage stat on $cacheFileName failed") if $debug && !@cacheStat;
+    TWiki::Func::writeDebug("- ${pluginName}::ppSavePage stat on $cacheDirName failed") if $debug && !@latestStat;
+
+    # field 9 is the last modified timestamp
+    TWiki::Func::writeDebug( "${pluginName}::ppSavePage $$ OLD CACHE <$cacheStat[9]> <$latestStat[9]>" ) if $debug;
+    if ($cacheStat[9] < $latestStat[9]) { 
+        &ppBuildCache($web);
+    }
+
+    TWiki::Func::redirectCgiQuery( $query, TWiki::Func::getViewUrl( $web, $title ) );
     
-    &TWiki::Func::setTopicEditLock( $web, $title, "on" );
+    TWiki::Func::setTopicEditLock( $title, 1 );
     if( $error ) {
-        my $url = &TWiki::Func::getOopsUrl( $web, $title, "oopssaveerr", $error );
+        my $url = TWiki::Func::getOopsUrl( $web, $title, "oopssaveerr", $error );
         TWiki::Func::redirectCgiQuery( $query, $url );
     }
     
+    TWiki::Func::writeDebug( "- ${pluginName}::ppSavePage exit" ) if $debug;
 }
 
 #################################################################################
-# ppCreateHtmlForm
+# Name: ppCreateHtmlForm
 #
-# Make form to create new subtype
+# Purpose: Make form to create new subtype
+#
 #################################################################################
 
 sub ppCreateHtmlForm {
@@ -641,9 +948,11 @@ sub ppCreateHtmlForm {
 }
 
 #################################################################################
-# ppFindMatchingProjects
+# Name: ppFindMatchingProjects
 #
-# Get all the projects which match a comma separated list of regexp projects
+# Purpose: Get all the projects which match a comma separated list of
+#          regexp projects
+#
 #################################################################################
 
 sub ppFindMatchingProjects {
@@ -679,9 +988,10 @@ sub ppFindMatchingProjects {
 }
 
 #################################################################################
-# ppFindMatchingPlans
+# Name: ppFindMatchingPlans
 #
-# Get all the plans which match a comma separated list of regexp projects
+# Purpose: Get all the plans which match a comma separated list of regexp plans
+#
 #################################################################################
 
 sub ppFindMatchingPlans {
@@ -715,9 +1025,9 @@ sub ppFindMatchingPlans {
 }
 
 #################################################################################
-# ppFindMatchingTasks (plan, regexp)
+# Name: ppFindMatchingTasks (plan, regexp)
 #
-# Get all the tasks which match the regexp in a given plan
+# Purpose: Get all the tasks which match the regexp in a given plan
 #################################################################################
 
 sub ppFindMatchingTasks {
@@ -754,16 +1064,29 @@ sub ppFindMatchingTasks {
 
 
 #################################################################################
-# ppAllProjects
+# name: ppAllProjects
 #
-# Shows all the projects on this web
+# Purpose: Shows all the projects on this web
+#
+# Working:
+# - Retrieve all cached project plans
+# - create a list and set the headers
+# - for each project cached:
+#   - read the summary
+#   - append the project name/summary to the list
+# - append the template to create new projects
+# - return this list to the caller
+#
 #################################################################################
 
 sub ppAllProjects {
 
+    TWiki::Func::writeDebug( "- ${pluginName}::ppAllProjects entry" ) if $debug;
+
     my ($web) = @_;
 
     my @projects = keys %cachedProjPlans;
+    #TWiki::Func::writeDebug( "- ${pluginName}::ppAllProjects ".Dumper(@projects) ) if $debug;
 
     my $list = "<h3>All projects</h3>\n\n";
     $list .= "| *Project* | *Summary* |\n";
@@ -771,7 +1094,7 @@ sub ppAllProjects {
     foreach my $project (@projects) {
         my $summary = "";
         if (&TWiki::Func::topicExists($web, $project)) {
-            my $projText = &TWiki::Func::readTopic($web, $project);
+            my (undef, $projText) = TWiki::Func::readTopic($web, $project);
             if ($projText =~ /.*\|.*PP Project Summary.*\|.*\|.*/) {
                 $projText =~ /.*\|.*PP Project Summary.*\|(.*?)\|.*/;
                 $summary = "$1";
@@ -791,10 +1114,10 @@ sub ppAllProjects {
 }
 
 #################################################################################
-# ppProjectPlansNewForm
+# Name: ppProjectPlansNewForm
 #
-# Show all plans for a project with appropriate status info.
-# Has a form to create a new plan at the bottom.
+# Purpose: Show all plans for a project with appropriate status info.
+#          Has a form to create a new plan at the bottom.
 #
 #################################################################################
 
@@ -822,7 +1145,7 @@ sub ppProjectPlansNewForm {
     $list .= "| *Plan* | *Summary* | *Status By Tasks* | *Done Tasks* | *Total Tasks* | *Status By Days* | *Spent Days* | *Estimated Days* | \n";
     foreach my $eachPl (split(/;/, $cachedProjPlans{$project})) {
         if (&TWiki::Func::topicExists($web, $eachPl)) {
-            $planText = &TWiki::Func::readTopic($web, $eachPl);
+            (undef, $planText) = TWiki::Func::readTopic($web, $eachPl);
             $summary = "";
             if ($planText =~ /.*\|.*PP Plan Summary.*\|.*\|.*/) {
                 $planText =~ /.*\|.*PP Plan Summary.*\|(.*?)\|.*/;
@@ -985,9 +1308,11 @@ sub ppProjectPlansNewForm {
 
 
 #################################################################################
-# ppAllProjectsPlans
+# Name: ppAllProjectsPlans
 #
-# Show all plans for a list of comma separated projects with appropriate status info
+# Purpose: Show all plans for a list of comma separated projects with
+#          appropriate status info
+#
 #################################################################################
 
 sub ppAllProjectPlans {
@@ -1017,7 +1342,7 @@ sub ppAllProjectPlans {
         }
         foreach my $eachPl (split(/;/, $cachedProjPlans{$eachPr})) {
             if (&TWiki::Func::topicExists($web, $eachPl)) {
-                $planText = &TWiki::Func::readTopic($web,  $eachPl);
+                (undef, $planText) = TWiki::Func::readTopic($web,  $eachPl);
                 $summary = "";
                 if ($planText =~ /.*\|.*PP Plan Summary.*\|.*\|.*/) {
                     $planText =~ /.*\|.*PP Plan Summary.*\|(.*?)\|.*/;
@@ -1127,9 +1452,9 @@ sub ppAllProjectPlans {
 
 
 #################################################################################
-# ppAllPlans
+# Name: ppAllPlans
 #
-# Show all plans for all projects
+# Purpose: Show all plans for all projects
 #################################################################################
 
 sub ppAllPlans {
@@ -1150,9 +1475,10 @@ sub ppAllPlans {
 }
 
 #################################################################################
-# ppAllPlansTasksSummary
+# Name: ppAllPlansTasksSummary
 #
-# Show the summary status for a list of plans and tasks subset
+# Purpose: Show the summary status for a list of plans and tasks subset
+#
 #################################################################################
 
 sub ppAllPlansTasksSummary {
@@ -1214,7 +1540,7 @@ sub ppAllPlansTasksSummary {
         } 
         push @matchTasks, @{$allPlansTasks{$eachPl}};
         if (&TWiki::Func::topicExists($web, $eachPl)) {
-            $planText = &TWiki::Func::readTopic($web,  $eachPl);
+            (undef, $planText) = TWiki::Func::readTopic($web,  $eachPl);
             $summary = "";
             if ($planText =~ /.*\|.*PP Plan Summary.*\|.*\|.*/) {
                 $planText =~ /.*\|.*PP Plan Summary.*\|(.*?)\|.*/;
@@ -1387,9 +1713,10 @@ sub ppAllPlansTasksSummary {
 }
 
 #################################################################################
-# ppGetProjectTasks
+# Name: ppGetProjectTasks
 #
-# Show all tasks for all plans for a project
+# Purpose: Show all tasks for all plans for a project
+#
 #################################################################################
 
 sub ppGetProjectTasks {
@@ -1408,7 +1735,7 @@ sub ppGetProjectTasks {
     my $proj = $project; # print project only for first plan
     foreach my $eachPl (split(/;/, $cachedProjPlans{$project})) {
         if (&TWiki::Func::topicExists($web, $eachPl)) {
-            $planText = &TWiki::Func::readTopic($web, $eachPl);
+            (undef, $planText) = TWiki::Func::readTopic($web, $eachPl);
             $planText =~ /.*\|.*PP Plan Id.*\|\s*(.*?)\s*\|.*/;
             my $ids = "$1";
             if ($ids ne "") {
@@ -1446,11 +1773,12 @@ sub ppGetProjectTasks {
 }
 
 
-#################################################################################
-# ppAllProjectTasks
+###############################################################################
+# Name: ppAllProjectTasks
 #
-# Show all tasks for all plans for all projects in a comma separated list
-#################################################################################
+# Purpose: Show all tasks for all plans for all projects in a comma separated
+#          list
+###############################################################################
 
 sub ppAllProjectTasks {
     
@@ -1470,11 +1798,12 @@ sub ppAllProjectTasks {
 }
 
 
-#################################################################################
-# ppGetProjectInfo
+###############################################################################
+# Name: ppGetProjectInfo
 #
-# Show all tasks and the info for task if it exists for all plans for a project
-#################################################################################
+# Prpose: Show all tasks and the info for task if it exists for all plans for
+#         a project
+###############################################################################
 
 sub ppGetProjectInfo {
 
@@ -1484,7 +1813,7 @@ sub ppGetProjectInfo {
     
     foreach my $eachPl (split(/;/, $cachedProjPlans{$project})) {
         if (&TWiki::Func::topicExists($web, $eachPl)) {
-            $planText = &TWiki::Func::readTopic($web, $eachPl);
+            (undef, $planText) = TWiki::Func::readTopic($web, $eachPl);
             $inLoop = 0;
             $planText =~ /.*\|.*PP Plan Id.*\|\s*(.*?)\s*\|.*/;
             my $ids = "$1";
@@ -1503,7 +1832,8 @@ sub ppGetProjectInfo {
                     $plantask[$col_taskname] =~ s/^\s*(.*?)\s*$/$1/;
                     if (&TWiki::Func::topicExists($web, $plantask[$col_taskname])) {
                         $list .= "<b>Description</b>:<br>";
-                        $list .= &TWiki::Func::readTopic($web, $plantask[$col_taskname]);
+                        my (undef, $text) = TWiki::Func::readTopic($web, $plantask[$col_taskname]);
+                        $list .= $text;
                     }
                     $list .= "<br><br>";
                 } elsif ($inLoop) {
@@ -1521,9 +1851,10 @@ sub ppGetProjectInfo {
 
 
 #################################################################################
-# ppAllProjectsInfo
+# Name: ppAllProjectsInfo
 #
-# Show all info for all plans for all projects in a comma separated list
+# Purpose: Show all info for all plans for all projects in a comma separated list
+#
 #################################################################################
 
 sub ppAllProjectsInfo {
@@ -1544,9 +1875,10 @@ sub ppAllProjectsInfo {
 }
 
 #################################################################################
-# ppAllDevSummary
+# Name: ppAllDevSummary
 #
-# Show summary information by developer for list of projects
+# Purpose: Show summary information by developer for list of projects
+#
 #################################################################################
 
 sub ppAllDevSummary {
@@ -1597,7 +1929,7 @@ sub ppAllDevSummary {
                 }
             }
             if (&TWiki::Func::topicExists($web, $eachPl)) {
-                my $planText = &TWiki::Func::readTopic($web, $eachPl);
+                my (undef, $planText) = TWiki::Func::readTopic($web, $eachPl);
                 # To go from Plan -> Task (multiple values)
                 my $line;
                 my $inLoop = 0;
@@ -1718,10 +2050,12 @@ sub ppAllDevSummary {
 }
 
 #################################################################################
-# ppAllPlanIdSummary
+# Name: ppAllPlanIdSummary
 #
-# Show summary information by plan Id for list of projects
-# empty list means all projects
+# Purpose: Show summary information by plan Id for list of projects
+# 
+# Note: empty list means all projects
+#
 #################################################################################
 
 sub ppAllPlanIdSummary {
@@ -1764,7 +2098,7 @@ sub ppAllPlanIdSummary {
             }
             my $results;
             if (&TWiki::Func::topicExists($web, $eachPl)) {
-                my $planText = &TWiki::Func::readTopic($web, $eachPl);
+                my (undef, $planText) = TWiki::Func::readTopic($web, $eachPl);
                 my $summary = "";
                 if ($planText =~ /.*\|.*PP Plan Summary.*\|.*\|.*/) {
                     $planText =~ /.*\|.*PP Plan Summary.*\|(.*?)\|.*/;
@@ -1828,7 +2162,7 @@ sub ppAllPlanIdSummary {
                 }
             }
             if (&TWiki::Func::topicExists($web, $eachPl)) {
-                my $planText = &TWiki::Func::readTopic($web, $eachPl);
+                my (undef, $planText) = TWiki::Func::readTopic($web, $eachPl);
                 # To go from Plan -> Task (multiple values)
                 my $line;
                 my $inLoop = 0;
@@ -1858,7 +2192,9 @@ sub ppAllPlanIdSummary {
 }
 
 #################################################################################
-# converts a date string to a time value based on format
+# Name: _date2serial
+#
+# Purpose: converts a date string to a time value based on format
 #
 #################################################################################
 sub _date2serial
@@ -1901,7 +2237,9 @@ sub _date2serial
 }
 
 #################################################################################
-# converts a time value to a date string based on formatting information
+# Name: _serial2date
+#
+# Purpose: converts a time value to a date string based on formatting information
 #
 #################################################################################
 sub _serial2date
@@ -1928,7 +2266,9 @@ sub _serial2date
 }
 
 #################################################################################
-# adds the specified number of days $value to the $time
+# Name: _timeadd
+#
+# Purpose: adds the specified number of days $value to the $time
 #
 #################################################################################
 sub _timeadd
@@ -1951,10 +2291,12 @@ sub _timeadd
 
     return $result;
 }
+
 #################################################################################
-# convertPlanIdsToUrl
+# Name: convertPlanIdsToUrl
 #
-# compose the Url to point to for a PlanId
+# Purpose: compose the Url to point to for a PlanId
+#
 #################################################################################
 
 sub convertPlanIdsToUrl() {
@@ -1963,9 +2305,10 @@ sub convertPlanIdsToUrl() {
 
 
 #################################################################################
-# convertResultsToUrl
+# Name: convertResultsToUrl
 #
-# compose the Url to point to for Results
+# Purpose: compose the Url to point to for Results
+#
 #################################################################################
 
 sub convertResultsToUrl() {

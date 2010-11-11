@@ -1,10 +1,10 @@
-%META:TOPICINFO{author="kiran" date="1089924508" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1289458388" format="1.1" version="$Rev$"}%
 <h3>!! Error creating new Project Planner page</h3>
 
 One of the following is the cause:
 
-		  * No page name was entered in the form 
-		  * The page name is not a legal <nop>WikiName
-		  * A page with the given name already exists. See WebIndex for current pages.
+   * No page name was entered in the form 
+   * The page name is not a legal <nop>WikiName
+   * A page with the given name already exists. See WebIndex for current pages.
 
 Go back to the previous page and enter a legal name.
