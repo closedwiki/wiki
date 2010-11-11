@@ -1,5 +1,17 @@
-%META:TOPICINFO{author="TWikiContributor" date="1144974136" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1289449540" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/RevCommentPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/RevCommentPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
 
 This plugin allows to enter a short summary of changes made to a topic for a new revision.
 This summary can be displayed e.g. in a history page of the topic or on the !WebChanges page
@@ -12,8 +24,6 @@ have several comments for one revision.
 Furthermore, adding or updating an attachment may also trigger an automatic comment
 for the current revision. This behaviour can be switched on or off with the help
 of  the preference variable ATTACHMENT_COMMENTS (see below).
-
-%TOC%
 
 ---++ Syntax Rules
    
@@ -56,10 +66,10 @@ if the list of comments is not empty.)
 
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>REVCOMMENTPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Allows a short summary of changes to be entered for a new revision.
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Allows a short summary of changes to be entered for each revision
 
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
@@ -75,20 +85,20 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
    * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+   * Unzip ==%TOPIC%.zip== in your TWiki installation directory. Content:
      | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==data/System/%TOPIC%.txt== | Plugin topic |
+     | ==data/System/RevComment.txt== | Help text |
+     | ==data/System/WebChangesWC.txt== | Replacement for ==WebChanges.txt==, see below |
+     | ==data/System/WebRssBaseWC.txt== | RSS base topic |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-     | ==data/TWiki/WebChangesWC.txt== | Replacement for ==WebChanges.txt==, see below |
-     | ==data/TWiki/RevComment.txt== | Help text |
    * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
    * Test if the installation was successful:
      <ul>
       <li> Here should be the comment of this topic: %REVCOMMENT%
-      <li> Look at the recent changes to the TWiki web:
-        TWiki.WebChangesWC
+      <li> Look at the recent changes to the System web:
+        %SYSTEMWEB%.WebChangesWC
       <li> If you have also the [[TWiki:Plugins.HistoryPlugin][HistoryPlugin]] installed,
         look at the history of this document:
         %SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopshistory
@@ -99,7 +109,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    * This distribution contains a topic which can replace an existing
      one. This file has a WC ("with comments") in the name. You should backup
      your old file and rename this file:
-   * =data/TWiki/WebChangesWC.txt= --> =data/TWiki/WebChanges.txt=
+   * =data/System/WebChangesWC.txt= --> =data/System/WebChanges.txt=
    * If [[TWiki:Plugins.HistoryPlugin][HistoryPlugin]] is installed, the template =oopshistory.tmpl= from this plugin is automatically expanded with revision comments once this plugin is installed
    * If you are using other skins than the pattern or classical skin, you have to 
      enter a textfield to =templates/edit.<i>skin</i>.tmpl= and =templates/preview.<i>skin</i>.tmpl= :
@@ -110,23 +120,26 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.JChristophFuchs & TWiki:Main.SteffenPoulsen |
-|  Plugin Version: | 14 Apr 2006 (V1.110) |
+|  Plugin Author: | TWiki:Main.KennethLavrsen & TWiki:Main.SteffenPoulsen |
+|  Copyright: | &copy; 2006, !JChristophFuchs and !Steffen Poulsen;<br /> &copy; 2008 Kenneth Lavrsen;<br /> &copy; 2006-2010 TWiki:TWiki/TWikiContributor | 
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2010-11-10  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-11-10: | TWikibug:Item6530: Doc improvements |
+|  22 Jan 2009: | Kenneth Lavrsen - Added the two example images as attachments to the topic so they also get uploaded to twiki.org. No need to upgrade from 08 Dec 2008 version if you already installed that. |
+|  08 Dec 2008: | Kenneth Lavrsen: Changed the author to myself. !JChristophFuchs is the original author but announced in 2006 that he no longer maintains this plugin. So now I officially take the task as maintainer. Policy is now feel free to modify but please do not break compatibility. |
 |  14 Apr 2006: | &lt;noautolink&gt; added to default pre/post rendering output of REVCOMMENT tag |
 |  14 Apr 2006: | Minor update for Dakar 4.0.2 |
 |  22 Apr 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
-|  Perl Version: | 5.005 |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
-|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+|  Perl Version: | 5.008 |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, [[%USERSWEB%.TWikiPreferences]], %SYSTEMWEB%.TWikiPlugins
 
--- TWiki:Main.JChristophFuchs - 22 Apr 2005
-
+%META:FILEATTACHMENT{name="ExampleHistory.png" attachment="ExampleHistory.png" attr="h" comment="" date="1232646804" path="ExampleHistory.png" size="25374" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="ExampleWebChanges.png" attachment="ExampleWebChanges.png" attr="h" comment="" date="1232646820" path="ExampleWebChanges.png" size="9532" user="TWikiContributor" version="1"}%
+%META:REVCOMMENT{comment_1="This is a test revision comment" minor_1="" ncomments="1" rev_1="" t_1="1289449535"}%
