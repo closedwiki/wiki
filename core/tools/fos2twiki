@@ -41,6 +41,7 @@ sub fixFile
   print "- fixing $file ...";
   my $text = readFile( $file );
   if( $file ) {
+    $text =~ s|# ([A-Za-z]+) for Foswiki[^\r\n]*|# $1 for TWiki Enterprise Collaboration Platform, http://TWiki.org/|o;
     $text =~ s/Foswikitask:Item[0-9]+//go;
     $text =~ s|\.org/Extensions/|.org/cgi-bin/view/Plugins/|go;
     $text =~ s/Foswiki:Extensions/TWiki:Plugins/go;
