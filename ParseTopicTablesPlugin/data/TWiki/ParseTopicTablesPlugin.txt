@@ -1,0 +1,84 @@
+%META:TOPICINFO{author="MikeEggleston" date="1164060773" format="1.1" version="1.2"}%
+---++ %TOPIC%
+
+There are times when many simple tables need to be displayed as a single
+table with specific columns. This plugin simply parses the given topic,
+extracts the given key/value pairs, and creates a new table dynamically.
+
+The first argument is the source topic. The next argument is the primary
+key. The dynamic table is sorted on this primary key. The remaining
+arguments are parsed and displayed in the dynamic table in the order they
+are listed in the command.
+
+---+++ Syntax Rules
+
+<blockquote style="background-color:#f5f5f5">
+   * =%<nop>PARSETOPICTABLES{TOPIC, KEY [, KEY [, KEY...]]}%
+</blockquote>
+
+---+++ Example
+
+Given tables like:
+
+<verbatim>
+| hostname | mailhost |
+| location | work room |
+| user | admin |
+| use | sends mail |
+| port | 99Z |
+| production | yes |
+
+| hostname | loghost |
+| location | closet |
+| user | admin |
+| use | manages server logs |
+| port | 99Z |
+| production | yes |
+
+</verbatim>
+
+   * %<nop>PARSETOPICTABLES{Systems.HardwareDetails, hostname, location, port, production, use}%
+
+The output is:
+
+<verbatim>
+| *hostname* | *location* | *port* | *production* | *use* |
+| mailhost | workroom | 99Z | yes | sends mail |
+| loghost | closet | 99Z | yes | manages server logs |
+</verbatim>
+
+---+++ Plugin Installation Instructions
+
+Extract ParseTopicTables.zip, edit the ParseTopicTablesPlugin-topic to
+your needs and have fun.  There is an install script at the top of
+the unpacked director that might help with installing this plugin.
+Execute this script by:
+
+   * # unzip -v ParseTopicTablePlugin.zip
+   * # cd twikiParseTopicTables
+   * # ./install.sh /var/www/html/twiki
+      * change the above path to where your twiki is installed
+
+---+++ Files
+
+   * ==lib/TWiki/Plugins/ParseTopicTablesPlugin.pm==
+   * ==data/TWiki/ParseTopicTablesPlugin.txt==
+
+---+++ Plugin Info
+
+|  Plugin Author: | %MAINWEB%.MikeEggleston |
+|  Plugin Version: | 1.0 |
+|  Change History: | 12 Jan 07: Initial Version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+---+++ History
+
+   * 1.0: first version
+
+---+++ Contributors
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
