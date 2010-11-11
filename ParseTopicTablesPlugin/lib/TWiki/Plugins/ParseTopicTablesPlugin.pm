@@ -1,5 +1,9 @@
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# ParseTopicTablesPlugin (C) Pointwise, Inc and Mike Eggleston
+# Copyright (C) 2007 Pointwise, Inc and Mike Eggleston
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -11,40 +15,17 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
-#
-# =========================
-#
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
-#
-# Each plugin is a package that contains the subs:
-#
-#   initPlugin           ( $topic, $web, $user, $installWeb )
-#   commonTagsHandler    ( $text, $topic, $web )
-#   startRenderingHandler( $text, $web )
-#   outsidePREHandler    ( $text )
-#   insidePREHandler     ( $text )
-#   endRenderingHandler  ( $text )
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, all handlers except initPlugin are
-# disabled. To enable a handler remove the leading DISABLE_ from
-# the function name.
-# 
-# NOTE: To interact with TWiki use the official TWiki functions
-# in the &TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
-
 
 # =========================
-package TWiki::Plugins::ParseTopicTablesPlugin; 	# change the package name!!!
+package TWiki::Plugins::ParseTopicTablesPlugin;
 
 # =========================
 use vars qw(
-		$web $topic $user $installWeb $VERSION $debug
+  $web $topic $user $installWeb $VERSION $RELEASE $debug
 );
 
-$VERSION = '1.000';
+$VERSION = '1.001';
+$RELEASE = '2010-11-10';
 
 # =========================
 sub initPlugin
@@ -78,61 +59,7 @@ sub commonTagsHandler
 	&TWiki::Func::writeDebug("- ParseTopicTablesPlugin::commonTagsHandler( $_[2].$_[1] )")
 			if $debug;
 
-	# This is the place to define customized tags and variables
-	# Called by sub handleCommonTags, after %INCLUDE:"..."%
-	#$_[0] =~ s/%PARSETOPICTABLES\{([^,]+),([^}]+)\}%/topic=$1, cols=$2/go;
 	$_[0] =~ s/%PARSETOPICTABLES\{([^,]+),([^}]+)\}%/&parseTopic($1, $2)/geo;
-}
-
-# =========================
-sub DISABLE_startRenderingHandler
-{
-### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
-
-    &TWiki::Func::writeDebug("- EmptyPlugin::startRenderingHandler( $_[1].$topic )")
-			if $debug;
-
-    # This handler is called by getRenderedVersion just before the line loop
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/old/new/go;
-}
-
-# =========================
-sub DISABLE_outsidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-	#&TWiki::Func::writeDebug("- EmptyPlugin::outsidePREHandler( $web.$topic )") if $debug;
-
-    # This handler is called by getRenderedVersion, in loop outside of <PRE> tag.
-    # This is the place to define customized rendering rules.
-    # Note: This is an expensive function to comment out.
-    # Consider startRenderingHandler instead
-}
-
-# =========================
-sub DISABLE_insidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-	#&TWiki::Func::writeDebug("- EmptyPlugin::insidePREHandler( $web.$topic )") if $debug;
-
-    # This handler is called by getRenderedVersion, in loop inside of <PRE> tag.
-    # This is the place to define customized rendering rules.
-    # Note: This is an expensive function to comment out.
-    # Consider startRenderingHandler instead
-}
-
-# =========================
-sub DISABLE_endRenderingHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-    #&TWiki::Func::writeDebug("- EmptyPlugin::endRenderingHandler( $web.$topic )") if $debug;
-
-    # This handler is called by getRenderedVersion just after the line loop
-
 }
 
 # =========================

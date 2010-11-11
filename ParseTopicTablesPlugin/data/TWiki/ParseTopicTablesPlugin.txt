@@ -1,24 +1,31 @@
-%META:TOPICINFO{author="MikeEggleston" date="1164060773" format="1.1" version="1.2"}%
----++ %TOPIC%
+%META:TOPICINFO{author="TWikiContributor" date="1289462051" format="1.1" version="$Rev$"}%
+---+!! <nop>%TOPIC%
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/ParseTopicTablesPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/ParseTopicTablesPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-There are times when many simple tables need to be displayed as a single
-table with specific columns. This plugin simply parses the given topic,
-extracts the given key/value pairs, and creates a new table dynamically.
+---++ Introduction
 
-The first argument is the source topic. The next argument is the primary
-key. The dynamic table is sorted on this primary key. The remaining
-arguments are parsed and displayed in the dynamic table in the order they
-are listed in the command.
+There are times when many simple tables need to be displayed as a single table with specific columns. This plugin simply parses the given topic, extracts the given key/value pairs, and creates a new table dynamically.
 
----+++ Syntax Rules
+The first argument is the source topic. The next argument is the primary key. The dynamic table is sorted on this primary key. The remaining arguments are parsed and displayed in the dynamic table in the order they are listed in the command.
 
-<blockquote style="background-color:#f5f5f5">
-   * =%<nop>PARSETOPICTABLES{TOPIC, KEY [, KEY [, KEY...]]}%
-</blockquote>
+---++ Syntax Rules
 
----+++ Example
+<span style="background-color:#f5f5f5">
+=%<nop>PARSETOPICTABLES{TOPIC, KEY [, KEY [, KEY...]]}%=
+</span>
 
-Given tables like:
+---++ Example
+
+Given tables like the following in topic !Systems.HardwareDetails:
 
 <verbatim>
 | hostname | mailhost |
@@ -37,7 +44,9 @@ Given tables like:
 
 </verbatim>
 
-   * %<nop>PARSETOPICTABLES{Systems.HardwareDetails, hostname, location, port, production, use}%
+Write this:
+
+=%<nop>PARSETOPICTABLES{Systems.HardwareDetails, hostname, location, port, production, use}%=
 
 The output is:
 
@@ -47,38 +56,43 @@ The output is:
 | loghost | closet | 99Z | yes | manages server logs |
 </verbatim>
 
----+++ Plugin Installation Instructions
+---++ <nop>%TOPIC% Settings
 
-Extract ParseTopicTables.zip, edit the ParseTopicTablesPlugin-topic to
-your needs and have fun.  There is an install script at the top of
-the unpacked director that might help with installing this plugin.
-Execute this script by:
+Plugin settings are stored as preferences variables. The following variables are used for this plugin.
 
-   * # unzip -v ParseTopicTablePlugin.zip
-   * # cd twikiParseTopicTables
-   * # ./install.sh /var/www/html/twiki
-      * change the above path to where your twiki is installed
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Extract key/value pairs from topics to create a table dynamically
 
----+++ Files
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
 
-   * ==lib/TWiki/Plugins/ParseTopicTablesPlugin.pm==
-   * ==data/TWiki/ParseTopicTablesPlugin.txt==
+---++ Plugin Installation Instructions
 
----+++ Plugin Info
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
 
-|  Plugin Author: | %MAINWEB%.MikeEggleston |
-|  Plugin Version: | 1.0 |
-|  Change History: | 12 Jan 07: Initial Version |
+   * Download the ZIP file from the plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your TWiki installation directory. Content:
+   | *File:* | *Description:* |
+   | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+   | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Test if the installation was successful:
+
+%PARSETOPICTABLES{%WEB%.%TOPIC%, hostname, location, port, production, use}%
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.MikeEggleston |
+|  Copyright: | &copy; 2007, !MikeEggleston <br /> &copy; 2007-2010 TWiki:TWiki.TWikiContributor | 
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2010-11-10 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-11-10: | TWikibug:Item6530: Doc improvements |
+|  2007-01-12: | Initial Version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
----+++ History
-
-   * 1.0: first version
-
----+++ Contributors
-
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, [[%USERSWEB%.TWikiPreferences]], %SYSTEMWEB%.TWikiPlugins
