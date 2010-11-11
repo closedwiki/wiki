@@ -1,2 +1,2 @@
-./lib/TWiki/Plugins/RandomTopicPlugin.pm Plugin code
-./data/TWiki/RandomTopicPlugin.txt Plugin topic
+lib/TWiki/Plugins/RandomTopicPlugin.pm 0664
+data/TWiki/RandomTopicPlugin.txt 0664
