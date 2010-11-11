@@ -19,7 +19,7 @@ Some examples of how the plugin works when installed.
 
 =%<nop>REV{"WebHome" rev="1"}%= becomes [[%SCRIPTURLPATH{"view"}%/%WEB%/WebHome?rev=1][WebHome(1)]]
 
-=%<nop>REV{"WebHome" web="System" rev="1" format="$web.$topic(rev: $rev)"}%= becomes [[%SCRIPTURLPATH{"view"}%/System/WebHome?rev=1][WebHome(rev: 1)]]
+=%<nop>REV{"WebHome" web="TWiki" rev="1" format="$web.$topic(rev: $rev)"}%= becomes [[%SCRIPTURLPATH{"view"}%/TWiki/WebHome?rev=1][WebHome(rev: 1)]]
 
 ---++ Syntax Rules
 
@@ -55,13 +55,13 @@ As default the whole string is used as link to appropriate revision. If you writ
 | %REV{"1"}% | Points to current topic in specified revision |
 | %REV{"1.1"}% | Points to current topic in specified revision (Cairo syntax as input but TWiki as output) |
 | %REV{"CommentPlugin" rev="3"}% | Points to specified topic in specified revision |
-| %REV{"WebHome" web="System" rev="1"}% | Points to specified topic in web |
-| %REV{"WebHome" web="System" rev="1" format="$web.$topic(rev=$rev)"}% | Points to specified topic in web and formats the output |
-| %REV{"ProjectLogos" web="System" rev="1" attachment="twiki-logo.png" format="$web.$topic - $attachment(rev=$rev)"}% | Points to specified attachment of topic formats the output |
+| %REV{"WebHome" web="TWiki" rev="1"}% | Points to specified topic in web |
+| %REV{"WebHome" web="TWiki" rev="1" format="$web.$topic(rev=$rev)"}% | Points to specified topic in web and formats the output |
+| %REV{"ProjectLogos" web="TWiki" rev="1" attachment="twiki-logo.png" format="$web.$topic - $attachment(rev=$rev)"}% | Points to specified attachment of topic formats the output |
 
 
 Example of more complex format attribute:<br />
-%REV{"WebHome" web="System" rev="1" format="| $date | <nop>$user | !$web.$topic(rev: $rev)! | $comment |"}%
+%REV{"WebHome" web="TWiki" rev="1" format="| $date | <nop>$user | !$web.$topic(rev: $rev)! | $comment |"}%
 
 ---++ <nop>%TOPIC% Settings
 
@@ -80,7 +80,7 @@ Plugin settings are stored as preferences variables. The following variables are
    * Download the ZIP file from the plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your TWiki installation directory. Content:
    | *File:* | *Description:* |
-   | ==data/System/%TOPIC%.txt== | Plugin topic |
+   | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
    | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
    * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
    * Test if the installation was successful:
