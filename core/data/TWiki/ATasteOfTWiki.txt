@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1269907315" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1289454578" format="1.1" version="$Rev$"}%
 This is a short introductory training course for TWiki beginners.
 
 %SLIDESHOWSTART%
@@ -9,7 +9,7 @@ The basic function of TWiki is a Wiki (if that helps!)
 
 A Wiki is like a web site, except that you can edit the content in your browser
 
-   * "Wiki" is short for "wiki wiki", the Hawaiian for "Quick"
+   * "Wiki" is short for "wiki wiki", the Hawaiian word for "Quick"
    * The idea originates from [[http://www.hyperdictionary.com/computing/hypercard][Macintosh Hypercard]], via [[http://www.c2.com/cgi/wiki?WardCunningham][Ward Cunningham]]
    * In Ward's words, Wiki is _"the simplest online database that could possibly work"_
    * A Wiki is basically a shared, online, persistent whiteboard
