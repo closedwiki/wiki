@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="guest" date="1094949574" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1289453392" format="1.0" version="$Rev$"}%
 
 %STARTINCLUDE%
 | *Author* | *Saying* | *Category* |
@@ -9,4 +9,3 @@
 | UNIX folklore |Attention Windows users: There is no Windows version of xscreensaver, and there never will be. Please stop asking. That goes double for the ``xmatrix'' mode. No. The answer is no. I don't use any Microsoft products and neither should you.|Software|
 | unknown |At Heathrow airport today an individual, later discovered to be a public school teacher was arrested trying to board a flight while in possession of a compass, a protractor, and a graphing calculator. Authorities believe he is a member of the notorious Al-gebra movement. He is being charged with carrying weapons of math instruction.|Humour|
 %STOPINCLUDE%
-

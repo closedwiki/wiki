@@ -1,4 +1,4 @@
-data/TWiki/RandomQuotePlugin.txt NEW
-data/Main/RandomQuotes.txt NEW
-data/Sandbox/NotableQuotes.txt NEW
-lib/TWiki/Plugins/RandomQuotePlugin.pm NEW
+data/TWiki/RandomQuotePlugin.txt 0664
+data/Main/RandomQuotes.txt 0664
+data/Sandbox/NotableQuotes.txt 0664
+lib/TWiki/Plugins/RandomQuotePlugin.pm 0664
