@@ -7,40 +7,39 @@ package TWiki::Plugins::ActionTrackerPlugin::Options;
 use vars qw ( %options );
 
 my %defaults = (
-    CSS           => '%PUBURL%/%TWIKIWEB%/ActionTrackerPlugin/styles.css',
-    DEBUG         => '0',
-    DEFAULTDUE    => 9999999999, # far in the future
-    EDITBOXHEIGHT => '%EDITBOXHEIGHT%',
+    CSS   => '%PUBURL%/%SYSTEMWEB%/ActionTrackerPlugin/styles.css',
+    DEBUG => '0',
+    DEFAULTDUE    => 9999999999,                             # far in the future
+    EDITBOXHEIGHT => '10',
     EDITBOXWIDTH  => '%EDITBOXWIDTH%',
     EDITFORMAT    => '| $who | $due | $state | $notify |',
-    EDITHEADER    => '| Assigned to | Due date | State | Notify |',
-    EDITORIENT    => 'rows',
+    EDITHEADER          => '| Assigned to | Due date | State | Notify |',
+    EDITORIENT          => 'rows',
     ENABLESTATESHORTCUT => '1',
-    EXTRAS        => '',
-    NOPREVIEW     => '1',
-    NOTIFYCHANGES => '$who,$due,$state,$text',
-    TABLEFORMAT   => '| $who | $due | $text $link | $state | $notify | $edit |',
-    TABLEHEADER   =>
-      '| Assigned to | Due date | Description | State | Notify ||',
-    TABLEORIENT   => 'cols',
-    TEXTFORMAT    => 'Action for $who, due $due, $state$n$text$n',
-    USENEWWINDOW  => '1',
-   );
+    EXTRAS              => '',
+    NOPREVIEW           => '1',
+    NOTIFYCHANGES       => '$who,$due,$state,$text',
+    TABLEFORMAT => '| $who | $due | $text $link | $state | $notify | $edit |',
+    TABLEHEADER => '| Assigned to | Due date | Description | State | Notify ||',
+    TABLEORIENT => 'cols',
+    TEXTFORMAT  => 'Action for $who, due $due, $state$n$text$n',
+    USENEWWINDOW => '1',
+);
 %options = %defaults;
 
 sub load {
-    my ($web, $topic) = @_;
+    my ( $web, $topic ) = @_;
 
     # Set defaults, will be overwritten by user prefs
     %options = %defaults;
 
     require TWiki::Func;
-    foreach my $ky (keys %options) {
-        my $sk = 'ACTIONTRACKERPLUGIN_'.$ky;
-        $sk = TWiki::Func::getPreferencesValue( $sk );
-        $options{$ky} = $sk if (defined $sk);
-        $options{$ky} = TWiki::Func::expandCommonVariables(
-            $options{$ky}, $topic, $web );
+    foreach my $ky ( keys %options ) {
+        my $sk = 'ACTIONTRACKERPLUGIN_' . $ky;
+        $sk = TWiki::Func::getPreferencesValue($sk);
+        $options{$ky} = $sk if ( defined $sk );
+        $options{$ky} =
+          TWiki::Func::expandCommonVariables( $options{$ky}, $topic, $web );
     }
 
     return \%options;

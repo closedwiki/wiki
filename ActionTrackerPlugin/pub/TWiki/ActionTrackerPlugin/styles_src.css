@@ -30,8 +30,12 @@
   color:white;
   padding:2px 5px;
 }
+.atpOrientRows th {
+  text-align: right;
+}
 .atpSearch td {
   padding:2px 5px;
+  border-top: solid #ccc 1px;
 }
 
 /* date style (e.g. late action) */

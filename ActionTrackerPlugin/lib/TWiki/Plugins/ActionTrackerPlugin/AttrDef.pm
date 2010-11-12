@@ -11,7 +11,7 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
+# GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
 use strict;
@@ -23,11 +23,11 @@ sub new {
     my ( $class, $type, $size, $match, $candef, $values ) = @_;
     my $this = ();
 
-    $this->{type} = $type;
-    $this->{size} = $size || 1;
-    $this->{match} = $match || 1;
+    $this->{type}       = $type;
+    $this->{size}       = $size || 1;
+    $this->{match}      = $match || 1;
     $this->{defineable} = $candef;
-    $this->{values} = $values;
+    $this->{values}     = $values;
 
     return bless( $this, $class );
 }
@@ -36,18 +36,18 @@ sub stringify {
     my $this = shift;
     my $text = 'type=' . $this->{type} . ' size=' . $this->{size};
     $text .= ' redefinable' if ( $this->{definable} );
-    $text .= ' matchable' if ( $this->{match} );
-    if ( defined( $this->{values} )) {
-        $text .= ' values=' . join( ',', @{$this->{values}} );
+    $text .= ' matchable'   if ( $this->{match} );
+    if ( defined( $this->{values} ) ) {
+        $text .= ' values=' . join( ',', @{ $this->{values} } );
     }
-    return 'AttrDef('.$text.')';
+    return 'AttrDef(' . $text . ')';
 }
 
 # PUBLIC return the first value in the select set, or undef
 sub firstSelect {
     my $this = shift;
-    if ( defined( $this->{values} )) {
-        return @{$this->{values}}[0];
+    if ( defined( $this->{values} ) ) {
+        return @{ $this->{values} }[0];
     }
     return undef;
 }

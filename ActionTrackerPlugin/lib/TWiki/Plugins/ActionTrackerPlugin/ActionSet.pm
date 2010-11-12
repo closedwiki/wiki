@@ -11,7 +11,7 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
+# GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
 
@@ -28,56 +28,66 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 # PUBLIC constructor
 sub new {
     my $class = shift;
-    my $this = {};
+    my $this  = {};
 
     $this->{ACTIONS} = [];
 
     return bless( $this, $class );
-  }
+}
 
 # PUBLIC Add this action to the list of actions
 sub add {
     my ( $this, $action ) = @_;
 
-    push @{$this->{ACTIONS}}, $action;
+    push @{ $this->{ACTIONS} }, $action;
 }
 
 # PUBLIC STATIC load an action set from a block of text
 sub load {
     my ( $web, $topic, $text, $keepText ) = @_;
 
-    my @blocks = split( /(%ACTION{.*?}%|%ENDACTION%)/, $text );
-    my $actionSet = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
-    my $i = 0;
+    $text =~ s/\r//g;
+    my @blocks       = split( /(%ACTION{.*?}%|%ENDACTION%)/, $text );
+    my $actionSet    = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
+    my $i            = 0;
     my $actionNumber = 0;
-    while ($i < scalar(@blocks)) {
-        my $block = $blocks[$i++];
-        if ($block =~ /^%ACTION{(.*)}%$/) {
+    while ( $i < scalar(@blocks) ) {
+        my $block = $blocks[ $i++ ];
+        if ( $block =~ /^%ACTION{(.*)}%$/ ) {
             my $attrs = $1;
             my $descr;
             # Sniff ahead to see if we have a matching ENDACTION
-            if ($i + 1 < scalar(@blocks) && $blocks[$i + 1] =~ /%ENDACTION%/) {
+            if (   $i + 1 < scalar(@blocks)
+                && $blocks[ $i + 1 ] =~ /%ENDACTION%/ )
+            {
+
                 # Action block
-                $descr = $blocks[$i++]; # action text
-                $i++; # skip %ENDACTION%
-            } else {
+                $descr = $blocks[ $i++ ];    # action text
+                $i++;                        # skip %ENDACTION%
+            }
+            else {
+
                 # Old syntax
-                if ($blocks[$i] =~ s/^\s*<<(\w+)(.*)\r?\n\1//s) {
+                if ( $blocks[$i] =~ s/^\s*<<(\w+)(.*)\n\1//s ) {
                     $descr = $2;
-                    $i++ unless length($blocks[$i]) && $blocks[$i] =~ /\S/;
-                } elsif ($blocks[$i] =~ s/^(.*?)\r?\n//) {
+                    $i++ unless length( $blocks[$i] ) && $blocks[$i] =~ /\S/;
+                }
+                elsif ( $blocks[$i] =~ s/^(.*?)\n/\n/s ) {
                     $descr = $1;
-                } else {
-                    $descr = $blocks[$i++];
+                }
+                else {
+                    $descr = $blocks[ $i++ ];
                 }
             }
-            my $action = new TWiki::Plugins::ActionTrackerPlugin::Action(
-                $web, $topic, $actionNumber++, $attrs, $descr );
+            my $action =
+              new TWiki::Plugins::ActionTrackerPlugin::Action( $web, $topic,
+                $actionNumber++, $attrs, $descr );
             $actionSet->add($action);
-        } elsif ($keepText) {
+        }
+        elsif ($keepText) {
             $actionSet->add($block);
         }
-        $i++ while $i < scalar(@blocks) && !length($blocks[$i]);
+        $i++ while $i < scalar(@blocks) && !length( $blocks[$i] );
     }
     return $actionSet;
 }
@@ -88,38 +98,52 @@ my @_sortfields;
 # PUBLIC sort by due date or, if given, by an ordered sequence
 # of attributes by string value
 sub sort {
-    my ( $this, $order ) = @_;
-    if ( defined( $order ) ) {
+    my ( $this, $order, $reverse ) = @_;
+    my @ordered;
+    if ( defined($order) ) {
         $order =~ s/[^\w,]//g;
         @_sortfields = split( /,\s*/, $order );
-        @{$this->{ACTIONS}} = sort {
-            foreach my $sf ( @_sortfields ) {
+        @ordered = sort {
+            foreach my $sf (@_sortfields)
+            {
                 return -1 unless ref($a);
-                return 1 unless ref($b);
+                return 1  unless ref($b);
                 my ( $x, $y ) = ( $a->{$sf}, $b->{$sf} );
-                if ( defined( $x ) && defined( $y )) {
+                if ( defined($x) && defined($y) ) {
                     my $c = ( $x cmp $y );
                     return $c if ( $c != 0 );
+
                     # COVERAGE OFF should never be needed
-                } elsif ( defined( $x ) ) {
+                }
+                elsif ( defined($x) ) {
                     return -1;
-                } elsif ( defined( $y ) ) {
+                }
+                elsif ( defined($y) ) {
                     return 1;
                 }
+
                 # COVERAGE ON
             }
+
             # default to sorting on due
             my $x = $a->secsToGo();
             my $y = $b->secsToGo();
             return $x <=> $y;
-        } @{$this->{ACTIONS}};
-    } else {
-        @{$this->{ACTIONS}} =
+        } @{ $this->{ACTIONS} };
+    }
+    else {
+        @ordered =
           sort {
-              my $x = $a->secsToGo();
-              my $y = $b->secsToGo();
-              return $x <=> $y;
-          } @{$this->{ACTIONS}};
+            my $x = $a->secsToGo();
+            my $y = $b->secsToGo();
+            return $x <=> $y;
+          } @{ $this->{ACTIONS} };
+    }
+    if ( TWiki::Func::isTrue($reverse) ) {
+        @{ $this->{ACTIONS} } = reverse @ordered;
+    }
+    else {
+        @{ $this->{ACTIONS} } = @ordered;
     }
 }
 
@@ -127,7 +151,7 @@ sub sort {
 sub concat {
     my ( $this, $actions ) = @_;
 
-    push @{$this->{ACTIONS}}, @{$actions->{ACTIONS}};
+    push @{ $this->{ACTIONS} }, @{ $actions->{ACTIONS} };
 }
 
 # PUBLIC Search the set of actions for actions that match the given
@@ -138,9 +162,9 @@ sub search {
     my $action;
     my $chosen = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
 
-    foreach $action ( @{$this->{ACTIONS}} ) {
-        if ( ref($action) && $action->matches( $attrs ) ) {
-            $chosen->add( $action );
+    foreach $action ( @{ $this->{ACTIONS} } ) {
+        if ( ref($action) && $action->matches($attrs) ) {
+            $chosen->add($action);
         }
     }
 
@@ -149,11 +173,12 @@ sub search {
 
 sub stringify {
     my $this = shift;
-    my $txt = '';
-    foreach my $action ( @{$this->{ACTIONS}} ) {
-        if (ref($action)) {
+    my $txt  = '';
+    foreach my $action ( @{ $this->{ACTIONS} } ) {
+        if ( ref($action) ) {
             $txt .= $action->stringify();
-        } else {
+        }
+        else {
             $txt .= $action;
         }
     }
@@ -167,14 +192,14 @@ sub stringify {
 # $newWindow=0 to get jump in same window.
 sub formatAsHTML {
     my ( $this, $format, $jump, $newWindow, $class ) = @_;
-    return $format->formatHTMLTable( \@{$this->{ACTIONS}}, $jump, $newWindow,
-                                    $class );
+    return $format->formatHTMLTable( \@{ $this->{ACTIONS} },
+        $jump, $newWindow, $class );
 }
 
 # PUBLIC format the action set as a plain string
 sub formatAsString {
     my ( $this, $format ) = @_;
-    return $format->formatStringTable( \@{$this->{ACTIONS}} );
+    return $format->formatStringTable( \@{ $this->{ACTIONS} } );
 }
 
 # PUBLIC find actions that have changed.
@@ -188,42 +213,44 @@ sub formatAsString {
 sub findChanges {
     my ( $this, $old, $date, $format, $notifications ) = @_;
 
-    my @news = grep { ref( $_ ) } @{$this->{ACTIONS}};
+    my @news = grep { ref($_) } @{ $this->{ACTIONS} };
     my @unmatched;
 
     # Try and match by UIDs first. If all the actions in your
     # wiki are known to have UIDs, they should all match here.
-    foreach my $oaction (@{$old->{ACTIONS}}) {
+    foreach my $oaction ( @{ $old->{ACTIONS} } ) {
         next unless ref($oaction);
         my $uid = $oaction->{uid};
-        if( defined( $uid )) {
+        if ( defined($uid) ) {
             my $n = 0;
-            while( $n < scalar( @news )) {
+            while ( $n < scalar(@news) ) {
                 my $naction = $news[$n];
-                if (defined( $naction->{uid} ) &&
-                      $naction->{uid} eq $uid ) {
-                    $naction->findChanges($oaction, $format, $notifications );
-                    splice(@news, $n, 1);
+                if ( defined( $naction->{uid} )
+                    && $naction->{uid} eq $uid )
+                {
+                    $naction->findChanges( $oaction, $format, $notifications );
+                    splice( @news, $n, 1 );
                     last;
-                } else {
+                }
+                else {
                     $n++;
                 }
             }
         }
-        push(@unmatched, $oaction);
+        push( @unmatched, $oaction );
     }
 
     # Assume the action _order_ is not changed, but actions may have
     # been inserted or deleted. For each old action,
     # find the next new action that fuzzyMatches the old action starting
     # from the most recently matched new action.
-    foreach my $oaction ( @unmatched ) {
+    foreach my $oaction (@unmatched) {
         my $bestMatch = -1;
         my $bestScore = -1;
-        my $n = 0;
-        while( $n < scalar( @news )) {
+        my $n         = 0;
+        while ( $n < scalar(@news) ) {
             my $naction = $news[$n];
-            my $score = $naction->fuzzyMatches( $oaction );
+            my $score   = $naction->fuzzyMatches($oaction);
             if ( $score > $bestScore ) {
                 $bestMatch = $n;
                 $bestScore = $score;
@@ -233,9 +260,10 @@ sub findChanges {
         if ( $bestScore > 7 ) {
             my $naction = $news[$bestMatch];
             $naction->findChanges( $oaction, $format, $notifications );
-            splice(@news, $bestMatch, 1);
+            splice( @news, $bestMatch, 1 );
         }
     }
+
     # The remaining actions in @news were not matched
 }
 
@@ -244,10 +272,10 @@ sub getActionees {
     my ( $this, $whos ) = @_;
     my $action;
 
-    foreach $action ( @{$this->{ACTIONS}} ) {
+    foreach $action ( @{ $this->{ACTIONS} } ) {
         next unless ref($action);
         my @persons = split( /,\s*/, $action->{who} );
-        foreach my $person ( @persons ) {
+        foreach my $person (@persons) {
             $whos->{$person} = 1;
         }
     }
@@ -260,30 +288,48 @@ sub getActionees {
 # $internal - boolean true if topic permissions can be ignored
 sub allActionsInWeb {
     my ( $web, $attrs, $internal ) = @_;
-    $internal = 0 unless defined ( $internal );
+    $internal = 0 unless defined($internal);
     my $actions = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
-	my @tops = TWiki::Func::getTopicList( $web );
-	my $topics = $attrs->{topic};
+    my @tops    = TWiki::Func::getTopicList($web);
+    my $topics  = $attrs->{topic};
 
-	@tops = grep( /^$topics$/, @tops ) if ( $topics );
-    my $grep =
-      TWiki::Func::searchInWebContent( '%ACTION{.*}%', $web,
-                                       \@tops,
-                                       { type => 'regex',
-                                         files_without_match => 1,
-                                         casesensitive => 1 } );
+    @tops = grep( /^$topics$/, @tops ) if ($topics);
+    my $grep = TWiki::Func::searchInWebContent(
+        '%ACTION{.*}%',
+        $web,
+        \@tops,
+        {
+            type                => 'regex',
+            files_without_match => 1,
+            casesensitive       => 1
+        }
+    );
+
+    if( ref( $grep ) ne 'HASH' ) { # New Func implementation
+        my %oldResultSet;
+        while( $grep->hasNext() ) {
+            my $webtopic = $grep->next();
+            my ($foundWeb, $topic) = TWiki::Func::normalizeWebTopicName($web, $webtopic);
+            $oldResultSet{$topic} = 1;
+        }
+        $grep = \%oldResultSet;
+    }
 
     foreach my $topic ( keys %$grep ) {
         # SMELL: always read the text, because it's faster in the current
         # impl to find the perms embedded in it
-        my $text = TWiki::Func::readTopicText(
-            $web, $topic, undef, $internal );
-        next unless $internal || TWiki::Func::checkAccessPermission(
-            'VIEW', TWiki::Func::getWikiName(), $text, $topic, $web);
-        my $tacts = TWiki::Plugins::ActionTrackerPlugin::ActionSet::load(
-            $web, $topic, $text );
-        $tacts = $tacts->search( $attrs );
-        $actions->concat( $tacts );
+        my $text =
+          TWiki::Func::readTopicText( $web, $topic, undef, $internal );
+        next
+          unless $internal
+          || TWiki::Func::checkAccessPermission( 'VIEW',
+            TWiki::Func::getWikiName(),
+            $text, $topic, $web );
+        my $tacts =
+          TWiki::Plugins::ActionTrackerPlugin::ActionSet::load( $web, $topic,
+            $text );
+        $tacts = $tacts->search($attrs);
+        $actions->concat($tacts);
     }
 
     return $actions;
@@ -293,17 +339,18 @@ sub allActionsInWeb {
 # match the search in $attrs
 sub allActionsInWebs {
     my ( $theweb, $attrs, $internal ) = @_;
-    $internal = 0 unless defined ( $internal );
+    $internal = 0 unless defined($internal);
     my $filter = $attrs->{web} || $theweb;
     my $choice = 'user';
+
     # Exclude webs flagged as NOSEARCHALL
     $choice .= ',public' if $filter ne $theweb;
-    my @webs = grep { /^$filter$/ } TWiki::Func::getListOfWebs( $choice );
+    my @webs = grep { /^$filter$/ } TWiki::Func::getListOfWebs($choice);
     my $actions = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
 
-    foreach my $web ( @webs ) {
+    foreach my $web (@webs) {
         my $subacts = allActionsInWeb( $web, $attrs, $internal );
-        $actions->concat( $subacts );
+        $actions->concat($subacts);
     }
     return $actions;
 }
@@ -312,22 +359,29 @@ sub allActionsInWebs {
 # splitting the rest of the set into before the action,
 # and after the action.
 sub splitOnAction {
-    my( $this, $uid ) = @_;
+    my ( $this, $uid ) = @_;
 
     if ( $uid =~ m/^AcTion(\d+)$/o ) {
         $uid = $1;
     }
 
     my $found = undef;
-    my $pre = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
-    my $post = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
+    my $pre   = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
+    my $post  = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
 
-    foreach my $action (@{$this->{ACTIONS}}) {
-        if( $found ) {
+    foreach my $action ( @{ $this->{ACTIONS} } ) {
+        if ($found) {
             $post->add($action);
-        } elsif (ref($action) && $action->{uid} eq $uid) {
+        }
+        elsif ( ref($action) && !defined( $action->{uid}) &&
+                  $action->{ACTION_NUMBER} eq $uid ) {
             $found = $action;
-        } else {
+        }
+        elsif ( ref($action) && defined( $action->{uid}) &&
+                  $action->{uid} eq $uid ) {
+            $found = $action;
+        }
+        else {
             $pre->add($action);
         }
     }
