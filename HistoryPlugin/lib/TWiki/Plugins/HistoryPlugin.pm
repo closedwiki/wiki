@@ -2,6 +2,9 @@
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2007 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,7 +25,7 @@ use TWiki::Func;
 use vars qw( $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION);
 
 $VERSION = '$Rev$';
-$RELEASE = '1.3';
+$RELEASE = '1.4';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Shows a complete history of a document';
 
