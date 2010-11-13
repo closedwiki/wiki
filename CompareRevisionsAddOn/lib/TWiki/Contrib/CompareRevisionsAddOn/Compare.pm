@@ -1,3 +1,23 @@
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2005-2006 TWiki:Main.JChristophFuchs
+# Copyright (C) 2008-2010 Foswiki Contributors.
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# For licensing info read LICENSE file in the TWiki root.
+#
 #########################################################################
 #
 # Main package for the CompareRevisionsAddOn:
@@ -20,9 +40,7 @@
 package TWiki::Contrib::CompareRevisionsAddOn::Compare;
 
 use strict;
-
-use CGI::Carp qw(fatalsToBrowser);
-use CGI;
+use warnings;
 
 use TWiki::UI;
 use TWiki::Func;
@@ -46,7 +64,7 @@ sub compare {
 
     $TWiki::Plugins::SESSION = $session;
 
-    my $query   = $session->{cgiQuery};
+    my $query   = $session->{request};
     my $webName = $session->{webName};
     my $topic   = $session->{topicName};
 
@@ -59,7 +77,8 @@ sub compare {
 
     # Check, if interweave or sidebyside
 
-    my $renderStyle = $query->param('render')
+    my $renderStyle =
+         $query->param('render')
       || &TWiki::Func::getPreferencesValue( "COMPARERENDERSTYLE", $webName )
       || 'interweave';
     $interweave = $renderStyle eq 'interweave';
@@ -103,6 +122,22 @@ sub compare {
     if ( $tree2 =~ /^http:.*oops/ ) {
         TWiki::Func::redirectCgiQuery( $query, $tree2 );
     }
+
+    # TablePlugin must reinitiatilise to reset all table counters (Item1911)
+    if ( defined &TWiki::Plugins::TablePlugin::initPlugin ) {
+        if ( defined &TWiki::Plugins::TablePlugin::initialiseWhenRender ) {
+            TWiki::Plugins::TablePlugin::initialiseWhenRender();
+        }
+        else {
+
+            # If TablePlugin does not have the reinitialise API
+            # we use try a shameless hack instead
+            if ( defined $TWiki::Plugins::TablePlugin::initialised ) {
+                $TWiki::Plugins::TablePlugin::initialised = 0;
+            }
+        }
+    }
+
     my $tree1 = _getTree( $session, $webName, $topic, $rev1 );
     if ( $tree1 =~ /^http:.*oops/ ) {
         TWiki::Func::redirectCgiQuery( $query, $tree1 );
@@ -126,8 +161,8 @@ sub compare {
 
     # get and process templates
 
-    my $tmpl =
-      TWiki::Func::readTemplate( $interweave ? 'compareinterweave' : 'comparesidebyside' );
+    my $tmpl = TWiki::Func::readTemplate(
+        $interweave ? 'compareinterweave' : 'comparesidebyside' );
 
     $tmpl =~ s/\%META{.*?\}\%\s*//g;    # Meta data already processed
                                         # in _getTree
@@ -137,9 +172,8 @@ sub compare {
     $tmpl =~ s/%REVINFO1%/$revinfo1/g;
     $tmpl =~ s/%REVINFO2%/$revinfo2/g;
     $tmpl = TWiki::Func::renderText( $tmpl, $webName );
-	$tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois
-      ;
-      
+    $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
+
     my (
         $tmpl_before, $tmpl_us, $tmpl_u, $tmpl_c,
         $tmpl_a,      $tmpl_d,  $tmpl_after
@@ -154,8 +188,7 @@ sub compare {
 
     # Start the output
 
-    print $query->header;
-    print $tmpl_before;
+    my $output = $tmpl_before;
 
     # Compare the trees
 
@@ -187,7 +220,7 @@ sub compare {
             if ($skip) {
 
                 unless ($unchangedSkipped) {
-                    print $tmpl_us;
+                    $output .= $tmpl_us;
                     $unchangedSkipped = 1;
                 }
                 next;
@@ -235,7 +268,7 @@ sub compare {
         # Do the replacement of %TEXT1% and %TEXT2% simultaneously
         # to prevent difficulties with text containing '%TEXT2%'
         $tmpl =~ s/%TEXT(1|2)%/$1==1?$text1:$text2/ge;
-        print $tmpl;
+        $output .= $tmpl;
 
     }
 
@@ -260,9 +293,11 @@ sub compare {
               . ( $i - 1 )
               . (
                 $query->param('skin') ? '&skin=' . $query->param('skin') : '' )
-              . ( $query->param('context')
+              . (
+                $query->param('context')
                 ? '&context=' . $query->param('context')
-                : '' )
+                : ''
+              )
               . '&render='
               . $renderStyle
               . '">&lt;</a>';
@@ -284,8 +319,15 @@ sub compare {
     $tmpl_after =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois
       ;    # remove <nop> and <noautolink> tags
 
-    print $tmpl_after;
-    print $query->end_html;
+    $output .= $tmpl_after;
+
+# Break circular references to avoid memory leaks. (Tasks:9127)
+    $tree1 = $tree1->parent() while defined $tree1->parent();
+    $tree1->delete();
+    $tree2 = $tree2->parent() while defined $tree2->parent();
+    $tree2->delete();
+    
+    $session->writeCompletePage( $output, 'view' );
 
 }
 
@@ -297,12 +339,13 @@ sub _getTree {
 
     # Read document
 
-    my ( $meta, $text ) = TWiki::Func::readTopic( $webName, $topicName, $rev );
+    my ( $meta, $text ) =
+      TWiki::Func::readTopic( $webName, $topicName, $rev );
     $text .= "\n" . '%META{"form"}%';
     $text .= "\n" . '%META{"attachments"}%';
 
     $session->enterContext( 'can_render_meta', $meta );
-    $text = TWiki::Func::expandCommonVariables( $text, $topicName, $webName );
+    $text = TWiki::Func::expandCommonVariables( $text, $topicName, $webName, $meta );
     $text = TWiki::Func::renderText( $text, $webName );
 
     $text =~ s/^\s*//;
@@ -313,6 +356,10 @@ sub _getTree {
     my $tree = new HTML::TreeBuilder;
     $tree->implicit_body_p_tag(1);
     $tree->p_strict(1);
+    if ( $TWiki::cfg{UseLocale} ) {
+        require Encode;
+        $text = Encode::decode( $TWiki::cfg{Site}{CharSet}, $text );
+    }
     $tree->parse($text);
     $tree->eof;
     $tree->elementify;

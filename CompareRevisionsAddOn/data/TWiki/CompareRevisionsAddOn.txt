@@ -1,9 +1,21 @@
-%META:TOPICINFO{author="TWikiContributor" date="1144955876" format="1.1" version="1.1"}%
----+ Compare Revisions Add-On
+%META:TOPICINFO{author="TWikiContributor" date="1289635554" format="1.1" version="$Rev$"}%
+---+!! Compare Revisions Add-On
+<!--
+   Contributions to this TWiki add-on are appreciated. Please update the add-on page at
+   http://twiki.org/cgi-bin/view/Plugins/CompareRevisionsAddOn or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/CompareRevisionsAddOnDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
 
-This add-on compares the renderd HTML output of two revisions and shows the differences broken down to the word-by-word level if necessary. The output can be formatted by templates and skins.
+   * Set SHORTDESCRIPTION = Compares two revisions of a document
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-%TOC%
+---++ Introduction
+
+This add-on compares the rendered HTML output of two revisions and shows the differences broken down to the word-by-word level if necessary. The output can be formatted by templates and skins.
 
 ---++ Description
 
@@ -12,7 +24,7 @@ differences in the content of the page).
 
 Furthermore, the differences between the revisions are shown as close as possible. If necessary, this means that different words are marked instead of whole lines or even paragraphs.
 
-The differences may be shown in two formats, either side-by-side or as an interwoven output of the old and new revision (like it is done in  Word or !StarOffice/!OpenOffice):
+The differences may be shown in two formats, either side-by-side or as an interwoven output of the old and new revision (like it is done in  Word or !OpenOffice):
 
    * Screenshot of interwoven output: <br />
      <div class="twikiImage"><img src="%ATTACHURLPATH%/interweave.png" alt="interweave.png" width='714' height='366' /></div>
@@ -56,7 +68,7 @@ format.
 
 The templates itself are broken into 7 parts
 
-<verbatim>
+<verbatim class="tml">
 template for start of page
 %REPEAT%
 template for unchanged section 
@@ -93,29 +105,28 @@ CSS style classes, whose appearance should be defined in the templates.
 
 The following classes are used:
 
-==twikiCompareAdd== %BR%
+==craCompareAdd== %BR%
 Class for added items (i.e. items which are in the newer revision, 
 but not yet in the older one)
 
-==twikiCompareDelete== %BR%
+==craCompareDelete== %BR%
 Class for deleted items (i.e. items which are in the older revision,
 but no more in the newer one)
 
-==twikiCompareChange1== %BR%
+==craCompareChange1== %BR%
 Class for the items from the older revision which have been changed.
 
-==twikiCompareChange2== %BR%
+==craCompareChange2== %BR%
 Class for the items from the newer revision which have been changed.
 
 In the default templates files from the distribution, the classes 
-==twikiCompareAdd== and ==twikiCompareChange1== are defined with
-a light red background and stroken out text, and ==twikiCompareDelete== 
-and ==twikiCompareChange2== are defined with a light green background.
-
+==craCompareAdd== and ==craCompareChange1== are defined with
+a light red background and stroken out text, and ==craCompareDelete== 
+and ==craCompareChange2== are defined with a light green background.
 
 ---++ Add-On Installation Instructions
 
-__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
+__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running.
 
    * This script needs some additional Perl modules.
      If necessary, download and install the required perl modules from [[http://www.cpan.org][CPAN]]. 
@@ -129,8 +140,8 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
          * [[http://cpan.uwinnipeg.ca/module/HTML::Parser][HTML::Parser]]
          * [[http://cpan.uwinnipeg.ca/module/HTML::Tagset][HTML::Tagset]]
       * Algorithm::Diff (which is included in the standard TWiki installation
-   * Download the [[%ATTACHURL%/CompareRevisionsAddOn.zip][ZIP file]] from the Add-on Home (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+   * Download the zip file from the add-on Home (see below)
+   * Unzip ==%TOPIC%.zip== in your TWiki installation directory. Content:
      | *File:*                      | *Description:*   |
      | ==data/TWiki/%TOPIC%.txt==   | Add-on topic     |
      | ==bin/compare==              | Add-on script  |
@@ -154,14 +165,24 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
    * Enable the helper plugin CompareRevisionsAddonPlugin with the configure script
    * This plugin will support the HistoryPlugin, if it is enabled
    * If you disable this plugin, the skin will behave like standard <nop>PatternSkin again
-   
-   
 
 ---++ Add-On Info
 
-|  Add-on Author: | TWiki:Main/JChristophFuchs |
-|  Add-on Version: | 07 Nov 2007 |
+|  Plugin Author: | TWiki:Main.JChristophFuchs, TWiki:Main.KennethLavrsen |
+|  Copyright: | &copy; 2005-2006, !JChristophFuchs; <br /> &copy; 2008-2010 Kenneth Lavrsen and Foswiki Contributors <br /> &copy; 2006-2010 TWiki:TWiki.TWikiContributor | 
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Version: | 2010-11-12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-11-12: | TWikibug:Item6530: Doc improvements; updated for TWiki-5.0 -- TWiki:Main.PeterThoeny |
+|  21 Oct 2010 | Added dependency of HTML::Tree to installer and to core MANIFEST so you see it listed in configure |
+|  04 Oct 2010 | Add CompareRevisionsAddOn.pm stub module to provide Version & Release strings | 
+|  31 Jul 2010 | Paul Harvey: Documentation updates |
+|  19 Sep 2009 | Kenneth Lavrsen: Expert settings in plugins makes configure fail to save. Using the hidden (H) setting instead which is much better anyway as this is not a setting to be altered by a user. |
+|  18 Sep 2009 | Kenneth Lavrsen: Expert settings in plugins makes configure fail to save. Settings therefore un-experted again |
+|  12 Sep 2009 | Kenneth Lavrsen: Fixed problem with tables always showing up as changed even when they were not |
+|  22 Mar 2009 | Gilmar Santos Jr: ported to TWiki:Codev.TWikiStandAlone architecture |
+|  09 Jan 2009 | Gilmar Santos Jr: fixed ambigous print |
+|  08 Dec 2008 | Kenneth Lavrsen: Changed the author to myself. !JChristophFuchs is the original author but announced in 2006 that he no longer maintains this plugin. So now I officially take the task as maintainer. |
 |  07 Nov 2007 | Arthur Clemens: Updated for TWiki 4.2  |
 |  09 Apr 2006 | Updated for new <nop>PatternSkin in [[http://TWiki.org/cgi-bin/view/Codev/TWikiRelease04x00x02][TWikiRelease04x00x02]] |
 |  26 Feb 2006 | Updated for TWiki 4 |
@@ -170,11 +191,12 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  20 Jan 2005 | Initial version |
 |  CPAN Dependencies: | [[http://cpan.uwinnipeg.ca/module/HTML::Parser][HTML::Parser]], [[http://cpan.uwinnipeg.ca/module/HTML::Tagset][HTML::Tagset]], [[http://cpan.uwinnipeg.ca/module/HTML::Tree][HTML::Tree]] |
 |  Other Dependencies: | none |
-|  Perl Version: | 5.005 |
-|  License: | GPL |
-|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
-|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+|  Perl Version: | 5.008 |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/CompareRevisionsAddOn |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/CompareRevisionsAddOnDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/CompareRevisionsAddOnAppraisal |
 
-__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+__Related Topic:__ CompareRevisionsAddonPlugin
 
+%META:FILEATTACHMENT{name="interweave.png" attachment="interweave.png" attr="h" comment="" date="1144955876" path="interweave.png" size="24037" stream="interweave.png" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="sidebyside.png" attachment="sidebyside.png" attr="h" comment="" date="1144955876" path="sidebyside.png" size="35098" stream="interweave.png" user="TWikiContributor" version="1"}%

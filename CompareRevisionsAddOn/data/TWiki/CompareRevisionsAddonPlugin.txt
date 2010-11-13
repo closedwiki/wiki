@@ -1,7 +1,22 @@
-%META:TOPICINFO{author="TWikiContributor" date="1144607735" format="1.1" version="1.1"}%
----+ !CompareRevisionsAddOn Plugin
+%META:TOPICINFO{author="TWikiContributor" date="1289635554" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="CompareRevisionsAddOn"}%
+---+!! !CompareRevisionsAddOn Plugin
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/CompareRevisionsAddonPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/CompareRevisionsAddonPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
 
-This is an helper plugin for the CompareRevisionsAddOn on TWiki 4.
+   * Set SHORTDESCRIPTION = Helper plugin for the CompareRevisionsAddOn
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
+
+This is an helper plugin for the CompareRevisionsAddOn on TWiki
 
 It has two purposes:
    1 It sets the =CompareRevisionAddonPluginEnabled= flag, which can be used by templates (e.g. used by the HistoryPlugin)
@@ -24,17 +39,24 @@ Test: <nop>CompareRevisionsAddOnPlugin is %IF{"context CompareRevisionsAddOnPlug
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.JChristophFuchs |
-|  Plugin Version: | 07 Nov 2006 |
+|  Plugin Author: | TWiki:Main.JChristophFuchs, TWiki:Main.KennethLavrsen |
+|  Copyright: | &copy; 2006, !JChristophFuchs; <br /> &copy; 2008-2010 Kenneth Lavrsen and Foswiki Contributors; <br /> &copy; 2006-2010 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Version: | 2010-11-12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-11-12: | TWikibug:Item6530: Doc improvements; updated for TWiki-5.0 -- TWiki:Main.PeterThoeny |
+|  21 Oct 2010 | Version shipping with 1.1.1 |
+|  12 Sep 2009 | Kenneth Lavrsen: Fixed problem with tables always showing up as changed even when they were not |
+|  22 Mar 2009 | Gilmar Santos Jr: ported to TWiki:Codev.TWikiStandAlone architecture |
+|  09 Jan 2009 | Gilmar Santos Jr: fixed ambigous print |
+|  08 Dec 2008 | Kenneth Lavrsen: Changed the author to myself. !JChristophFuchs is the original author but announced in 2006 that he no longer maintains this plugin. So now I officially take the task as maintainer. |
 |  07 Nov 2007 | Updated for TWiki 4.2.0. |
 |  26 Feb 2006 | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
-|  Perl Version: | 5.0 |
-|  TWiki:Plugins/Benchmark: |  |
+|  Perl Version: | 5.008 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/CompareRevisionsAddOn |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/CompareRevisionsAddOnDev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/CompareRevisionsAddOnAppraisal |
 
-__Related Topics:__ DeveloperDocumentationCategory, AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ DeveloperDocumentationCategory, AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences, [[%USERSWEB%.TWikiPreferences]], %SYSTEMWEB%.TWikiPlugins

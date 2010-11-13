@@ -2,9 +2,10 @@
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2006 Peter Thoeny, peter@thoeny.org
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
+# Copyright (C) 2008-2010 Foswiki Contributors.
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,33 +32,37 @@ package TWiki::Plugins::CompareRevisionsAddonPlugin;
 
 # Always use strict to enforce variable scoping
 use strict;
+use warnings;
 
 use TWiki;
 
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package
-use vars qw( $VERSION $RELEASE $debug $pluginName );
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName );
 
-# This should always be $Rev: 8713$ so that TWiki can determine the checked-in
+# This should always be $Rev: 9660 (2010-10-21) $ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev: 8713$';
+$VERSION = '$Rev: 9660 (2010-10-21) $';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2010-11-12';
+
+$SHORTDESCRIPTION = 'Compares two revisions of a document.';
+
 
 # Name of this Plugin, only used in this module
 $pluginName = 'CompareRevisionsAddonPlugin';
 
-
 sub initPlugin {
-    my( $topic, $web, $user, $installWeb ) = @_;
+    my ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.026 ) {
-        TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
+    if ( $TWiki::Plugins::VERSION < 1.026 ) {
+        TWiki::Func::writeWarning(
+            "Version mismatch between $pluginName and Plugins.pm");
         return 0;
     }
 
@@ -66,10 +71,13 @@ sub initPlugin {
 }
 
 sub commonTagsHandler {
+
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
-    TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
+    TWiki::Func::writeDebug(
+        "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )")
+      if $debug;
 
     $_[0] =~ s/%RDIFF2COMPARE{"?(.*?)"?}%/&_handleRdiff2Compare($1)/ge;
 }
@@ -80,6 +88,7 @@ sub _handleRdiff2Compare {
     $text =~ s{/rdiff  $TWiki::cfg{ScriptSuffix}/}
               {/compare$TWiki::cfg{ScriptSuffix}/}xmsg;
     return $text;
-	 
+
 }
 
+1;
