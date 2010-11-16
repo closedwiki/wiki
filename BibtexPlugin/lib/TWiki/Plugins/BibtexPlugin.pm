@@ -1,7 +1,9 @@
-###############################################################################
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2003 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # Based on parts of the EmbedBibPlugin by TWiki:Main/DonnyKurniawan
 #
@@ -15,8 +17,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
-#
-###############################################################################
 
 ### for custom .bst styles, bibtex processing needs to know where to
 ### find them.  The easiest way is to use a texmf tree below 'HOME'
@@ -40,7 +40,7 @@ use File::Basename;
 
 use strict;
 $VERSION = '$Rev$';
-$RELEASE = '1.5';
+$RELEASE = '1.6';
 $pluginName = 'BibtexPlugin'; 
 $debug = 0; # toggle me
 

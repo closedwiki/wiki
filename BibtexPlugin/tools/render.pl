@@ -1,5 +1,8 @@
 #!/usr/bin/perl -I/var/www/twiki/lib -w
 # Copyright (C) 2005 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #  
 # This file is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
