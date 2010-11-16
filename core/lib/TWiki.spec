@@ -1303,7 +1303,6 @@ $TWiki::cfg{PluginsOrder} = 'SpreadSheetPlugin';
 # </ul>
 # For example,<code>
 # twiki.org=(http://twiki.org/cgi-bin/view/Plugins/,http://twiki.org/p/pub/Plugins/);
-# wikiring.com=(http://wikiring.com/bin/view/Extensions/,http://wikiring.com/bin/viewfile/Extensions/)</code><p />
 $TWiki::cfg{ExtensionsRepositories} = 'TWiki.org=(http://twiki.org/cgi-bin/view/Plugins/,http://twiki.org/p/pub/Plugins/)';
 
 1;
