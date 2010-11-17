@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1289555203" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1290014620" format="1.1" version="$Rev$"}%
 ---+!! Action Tracker Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -48,7 +48,7 @@ Write the command =%<nop>ACTION{= _attributes_ =}% ...  %<nop>ENDACTION%= anywhe
    | *Name* | *Value* | *Description* | *Auto-completed* |
    | =who= | See [[#PeopleAnchor][People]] | The person or team responsible for completing the action. | current user |
    | =due= | See [[#DateFormats][Date Formats]] | The due date | |
-   | =state= | =open= or =closed= | Set to =open= if the action is still open; set to =closed= if the action is closed. To extend the state set, see [[#NonStandardAttributes][Non-standard attributes]]. | open |
+   | =state= | =open= or =closed= | Set to =open= if the action is still open; set to =closed= if the action is closed. To extend the state set, see [[#UserDefinedAttributes][User defined attributes]]. | open |
    | =notify= | See [[#PeopleAnchor][People]] | wikinames, or e-mail addresses, of people to notify when the action changes. See [[#NotiFication][Notification]] for details on action notification. | |
    | =creator= | See [[#PeopleAnchor][People]] | Who created the action. | current user |
    | =created= | See [[#DateFormats][Date Formats]] | Date the action was created. | today |
@@ -88,11 +88,11 @@ Write the command =%<nop>ACTIONSEARCH{= _attributes_ =}%= anywhere in a topic. S
    | =closed= | Absolute or relative date expression. See [[#DateFormats][Date Formats]] | Date the action was closed, if ever. |
    | =closer= | See [[#PeopleAnchor][People]] | Who closed the action. |
    | =uid= | 6 digit number | Unique ID of the action. |
-   | =format= | Presentation format | See [[#CustomIsation][Formatting tables]] |
-   | =header= | Presentation format | See [[#CustomIsation][Formatting tables]] |
-   | =footer= | Presentation format | See [[#CustomIsation][Formatting tables]] |
-   | =orient= | Presentation format | See [[#CustomIsation][Formatting tables]] |
-   | =separator= | Presentation format | See [[#CustomIsation][Formatting tables]] |
+   | =format= | Presentation format | See [[#CustomIzation][Formatting tables]] |
+   | =header= | Presentation format | See [[#CustomIzation][Formatting tables]] |
+   | =footer= | Presentation format | See [[#CustomIzation][Formatting tables]] |
+   | =orient= | Presentation format | See [[#CustomIzation][Formatting tables]] |
+   | =separator= | Presentation format | See [[#CustomIzation][Formatting tables]] |
    | =sort= | Comma-separated list of field names | Fields to sort the matched actions by. For example, <code>sort="$who,$due"</code> will sort by who first and then due. This field is optional; by default the table will be sorted by due date. |
 
 For example,
@@ -272,8 +272,8 @@ __Notes:__
    1 If you give the parameter DEBUG to the actionnotify script, it will print out the mails that would have been sent to STDOUT. This is useful for debugging, and may be useful if you have some other processing in mind (such as piping to an alternative mail program).
    1 =changedsince= requires RCS, and will not work with Rcs<nop>Lite.
 
-#CustomIsation
----++ Customisation
+#CustomIzation
+---++ Customization
 
 ---+++ Formatting search tables
 
@@ -310,8 +310,8 @@ The header and format parameters can also be used with the actionnotify script.
 
 A default format for actions and action search results can be defined in this topic or the Web<nop>Preferences topic of the current web. See [[#SettingsAnchor][Settings]] for more details.
 
-#NonStandardAttributes
----+++ Non-standard Attributes
+#UserDefinedAttributes
+---+++ User Defined Attributes
 
 As well as the standard attributes you can add non-standard attributes to actions, and use them in searches. For example:
 
@@ -319,7 +319,7 @@ As well as the standard attributes you can add non-standard attributes to action
 %<nop>ACTION{ who="EmperorHadrian" due="1 Jan 0053" state="closed" legion="7th" cohort="6th" maniple="3rd" }% Build a wall to keep the Scots out of England %<nop>ENDACTION%
 </pre>
 
-Non-standard attributes must be lower-case words. The following names may not be used for non-standard attributes:
+User defined attributes must be lower-case words. The following names may not be used for non-standard attributes:
 =closed=, =closer=, =created=, =creator=, =dollar=, =due=, =edit=, =format=, =header=, =late=, =n=, =nop=, =notify=, =percnt=, =quot=, =sort=, =state=, =text=, =topic=, =uid=, =web=, =who=, =within=.
 
 To define non-standard attributes you need to set the value of ACTIONTRACKERPLUGIN_EXTRAS - see [[#SettingsAnchor][Settings]] below. All attributes must be given a type, which is used by the formatter, the search engine and the action editor. For example,
@@ -430,7 +430,7 @@ The fields to scan to detect changes for actionnotify. Changes in other fields a
 | *Preference* | *Default* |
 | =ACTIONTRACKERPLUGIN_NOTIFYCHANGES= | =$who,$due,$state,$text= |
 
-Non-standard attributes - see [[#NonStandardAttributes][Non-standard attributes]] above.
+User defined attributes - see [[#UserDefinedAttributes][User defined attributes]] above.
 
 | *Preference* | *Default* |
 | =ACTIONTRACKERPLUGIN_EXTRAS= | _none_ |
@@ -516,8 +516,8 @@ Thanks are due to the following sponsors, who have helped make this plugin possi
 |  19 Nov 2004 | 2.020 Added conditions for date matching, and fixed config so that tests pass again. |
 |  13 Oct 2004 | 2.013 If a user cuts and pastes an action with a uid in it, the action editor would get confused. This update ensures all action UIDs are unique within a topic when it is saved. |
 |  16 Aug 2004 | 2.012 Dependency automation and Cairo readiness, further change to =within= behaviour (bidirectionality) |
-|  3 Feb 2004 | Fixes for internationalisation, name matching, QBE, within= behaviour, documentation. |
-|  21 May 2003 | Non-standard fields. Configurability of tables and action editor. Non-standard attributes. Eliminated chdir. Multi-line actions. Optimisation of notifies. |
+|  3 Feb 2004 | Fixes for internationalization, name matching, QBE, within= behaviour, documentation. |
+|  21 May 2003 | Non-standard (user defined) fields. Configurability of tables and action editor. Non-standard attributes. Eliminated chdir. Multi-line actions. Optimization of notifies. |
 |  30 Apr 2003 | Version 2.0; Large sections rewritten to take advantage of improvements in Plugin support, eliminating two scripts in bin. Added UIDs and formattable action searches |
 |  30 Jan 2003 | Query-by-example action search with notify field; notification of change emails and actions email are sent as one; notify field was added to topic view and edit; various bug fixes by TWiki:Main/PaulineCheung |
 |  26 Sep 2002 | Added changedsince notify support, added support for editing in a seperate window, incorporated attribute syntax corrections contributed by Main.PeterThoeny, sorted ACTIONSEARCH output and action notifications |
