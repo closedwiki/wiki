@@ -35,4 +35,87 @@ $VERSION = '$Rev$';
 $RELEASE = '2010-11-15';
 $SHORTDESCRIPTION = "Color picker, packaged for use by plugins, skins and add-ons";
 
+=begin twiki
+
+---+++ renderForEdit
+
+TWiki::Contrib::ColorPickerContrib::renderForEdit($name, $value, [, \%options]) -> $html
+
+This is the simplest way to use the color picker from a plugin.
+
+   * =$name= is the name of the CGI parameter for the calendar
+     (it should be unique),
+   * =$value= is the color such as '#8899aa' (may be empty)
+   * =\%options= is an optional hash containing base options for
+     the textfield.
+Example:
+<verbatim>
+use TWiki::Contrib::ColorPickerContrib;
+my $html = "<form>\n";
+$html .= TWiki::Contrib::ColorPickerContrib::renderForEdit( 'webcolor' );
+...
+</verbatim>
+
+=cut
+
+sub renderForEdit {
+    my ( $name, $value, $options ) = @_;
+
+    addHEAD('twiki');
+
+    my $head = <<HERE;
+ <script type="text/javascript" charset="utf-8">
+  \$(document).ready(function() {
+    \$('#picker$name').farbtastic('#id$name');
+  });   
+ </script>
+HERE
+    TWiki::Func::addToHEAD( 'COLORPICKERCONTRIB_'.$name, $head );
+
+    $options ||= {};
+    $options->{name} = $name;
+    $options->{id} = 'id'.$name;
+    $options->{value} = $value || '#000000';
+    $options->{size} ||= '8';
+
+    my $text = CGI::textfield( $options );
+
+# To-do: To conserve space, add popup when color button pressed 
+#    $text .= CGI::image_button(
+#               -name => 'img_'.$name,
+#               -onclick =>
+#                 "javascript: return showColorPicker( 'id$name' )",
+#               -src=> TWiki::Func::getPubUrlPath() . '/' .
+#                TWiki::Func::getTwikiWebname() .
+#                  '/ColorPickerContrib/colorpickericon.gif',
+#               -alt => 'ColorPicker',
+#               -align => 'middle');
+
+    $text .= CGI::div( { -id => "picker$name" } );
+
+    return $text;
+}
+
+=begin twiki
+
+---+++ addHEAD
+
+TWiki::Contrib::ColorPickerContrib::addHEAD( )
+
+=addHEAD= can be called from =commonTagsHandler= for adding the header to 
+all pages, or from =beforeEditHandler= just for edit pages.
+
+=cut
+
+sub addHEAD {
+    my $style = $TWiki::cfg{JSCalendarContrib}{style} || 'blue';
+    my $lang = $TWiki::cfg{JSCalendarContrib}{lang} || 'en';
+    my $base = '%PUBURLPATH%/%SYSTEMWEB%/ColorPickerContrib';
+    my $head = <<HERE;
+<script type="text/javascript" src="$base/farbtastic.js"></script>
+<link rel="stylesheet" href="$base/farbtastic.css" type="text/css" />
+HERE
+    TWiki::Func::addToHEAD( 'COLORPICKERCONTRIB', $head );
+}
+
 1;
