@@ -37,7 +37,7 @@ require TWiki::Func;    # The plugins API
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-11-04';
+$RELEASE = '2010-11-17';
 $SHORTDESCRIPTION = "[[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]], packaged for use by plugins, skins and add-ons";
 
 # Max width of different mishoo format components
@@ -212,7 +212,7 @@ sub addHEAD {
     $setup ||= 'calendar-setup';
     my $style = $TWiki::cfg{JSCalendarContrib}{style} || 'blue';
     my $lang = $TWiki::cfg{JSCalendarContrib}{lang} || 'en';
-    my $base = '%PUBURLPATH%/%TWIKIWEB%/JSCalendarContrib';
+    my $base = '%PUBURLPATH%/%SYSTEMWEB%/JSCalendarContrib';
     eval {
         require TWiki::Contrib::BehaviourContrib;
         if (defined(&TWiki::Contrib::BehaviourContrib::addHEAD)) {
@@ -220,7 +220,7 @@ sub addHEAD {
         } else {
             TWiki::Func::addToHEAD(
                 'BEHAVIOURCONTRIB',
-                '<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>');
+                '<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/BehaviourContrib/behaviour.compressed.js"></script>');
         }
     };
     my $head = <<HERE;
