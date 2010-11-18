@@ -32,7 +32,7 @@ require TWiki::Func;    # The plugins API
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-11-15';
+$RELEASE = '2010-11-18';
 $SHORTDESCRIPTION = "Color picker, packaged for use by plugins, skins and add-ons";
 
 =begin twiki
@@ -52,7 +52,7 @@ Example:
 <verbatim>
 use TWiki::Contrib::ColorPickerContrib;
 my $html = "<form>\n";
-$html .= TWiki::Contrib::ColorPickerContrib::renderForEdit( 'webcolor' );
+$html .= TWiki::Contrib::ColorPickerContrib::renderForEdit( 'webcolor'i, $value );
 ...
 </verbatim>
 
