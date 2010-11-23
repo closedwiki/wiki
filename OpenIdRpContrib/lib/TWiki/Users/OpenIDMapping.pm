@@ -228,6 +228,14 @@ sub userExists {
 	my $this = shift;
 	my $cUID = shift;
 
+	# Tell registration handler that OpenID user does not exist if
+	# homepage does not exist
+	if(    $this->{session}->inContext( 'absolute_urls' )
+	    && !TWiki::Store::topicExists( $TWiki::cfg{UsersWebName}, $cUID )
+	  ) {
+	    return 0;
+	}
+
 	return 1 if $this->_userReallyExists( $cUID );
 	return $this->SUPER::userExists( $cUID );
 }

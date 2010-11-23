@@ -21,7 +21,7 @@ package TWiki::Contrib::OpenIdRpContrib;
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-10-24';
+$RELEASE = '2010-11-22';
 $SHORTDESCRIPTION = "Authenticate OpenID users as a Relying Party (RP) or consumer site";
 
 1;
