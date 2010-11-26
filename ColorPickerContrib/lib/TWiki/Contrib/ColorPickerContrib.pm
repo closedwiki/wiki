@@ -32,8 +32,8 @@ require TWiki::Func;    # The plugins API
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-11-18';
-$SHORTDESCRIPTION = "Color picker, packaged for use by plugins, skins and add-ons";
+$RELEASE = '2010-11-26';
+$SHORTDESCRIPTION = "Color picker, packaged for use in TWiki forms and TWiki applications";
 
 =begin twiki
 

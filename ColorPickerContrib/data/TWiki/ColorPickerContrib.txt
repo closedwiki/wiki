@@ -1,1 +1,73 @@
-Placeholder
+%META:TOPICINFO{author="TWikiContributor" date="1290759573" format="1.1" version="$Rev$"}%
+---+!! Color Picker Contrib
+<!--
+   Contributions to this contrib package are appreciated. Please update this page at
+   http://twiki.org/cgi-bin/view/Plugins/ColorPickerContrib or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/ColorPickerContribDev.
+   If you are a TWiki contributor please update the extension in the SVN repository.
+-->
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+<img src="%ATTACHURLPATH%/screenshot-edit.png" alt="screenshot-edit.png" width="201" height="227" style="float:right" />
+</sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
+
+This module packages the [[http://acko.net/dev/farbtastic][Farbtastic color picker]], which is a jQuery plugin developed by Steven Wittens of Acko.net. The package adds a color picker to TWiki forms and TWiki applications.
+
+---++ Using the color picker in !TWikiForms
+
+This package adds a type =color= to %SYSTEMWEB%.TWikiForms. Example form definition:
+
+| *Name:* | *Type:* | *Size* | *Values:* | *Tooltip message:* |
+| Background color | color | 12 | | Select color |
+
+---++ Using the color picker in an HTML form
+
+You can also use the color picker directly in your HTML forms, without having to write any code. Just include this in the topic text:
+<verbatim>
+%INCLUDE{ "%SYSTEMWEB%.ColorPickerContrib" section="code" }%
+%INCLUDE{ "%SYSTEMWEB%.ColorPickerContrib" section="picker" NAME="text_color" SIZE="12" VALUE="#123456" EXTRA="class=\"twikiFormField\"" }%
+</verbatim>
+This will show an HTML input field named "text_color" and a color picker tied to it. The ="code"= section should be included once per topic, the ="picker"= section can be included as many times as needed. The =size=, =value= and =extra= parameters are optional. Use the =extra= parameter to add additional parameters to the HTML input field.
+
+Test: (this works only if the !ColorPickerContrib is installed)
+
+<!--
+%STARTSECTION{code}%<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/ColorPickerContrib/farbtastic.js"></script> <link rel="stylesheet" href="%PUBURL%/%SYSTEMWEB%/ColorPickerContrib/farbtastic.css" type="text/css" />%ENDSECTION{code}%
+<form>
+%STARTSECTION{picker}%<input type="text" id="%NAME%" name="%NAME%" value="%IF{ "defined VALUE" then="$percntVALUE$percnt" else="#808080" }%" size="%IF{ "defined SIZE" then="$percntSIZE$percnt" else="12" }%" %IF{ "defined EXTRA" then="$percntEXTRA$percnt" }% /> <div id="%NAME%picker"></div> <script type="text/javascript"> $(document).ready(function() { $('#%NAME%picker').farbtastic('#%NAME%'); }); </script>%ENDSECTION{picker}%
+</form>
+-->
+%INCLUDE{ "%TOPIC%" section="code" }%
+%INCLUDE{ "%TOPIC%" section="picker" NAME="text_color" SIZE="12" VALUE="#123456" EXTRA="class=\"twikiFormField\"" }%
+
+---++ Detailed Documentation
+
+%$POD%
+
+---++ Installation Instructions
+
+%$INSTALL_INSTRUCTIONS%
+
+---++ Contrib Info
+
+   * Set SHORTDESCRIPTION = Color picker for use in TWiki forms and TWiki applications
+
+|  Author: | TWiki:Main.PeterThoeny, [[http://twiki.net][Twiki Inc]] |
+|  Copyright: | &copy; 2007 [[http://acko.net/about][Steven Wittens]], Acko.net %BR% &copy; 2010 TWiki:Main.PeterThoeny and TWiki:TWiki.TWikiContributor for TWiki !ColorPickerContrib |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Version: | %$VERSION% |
+| Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-11-26: | TWikibug:Item6606: Initial version |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.TWikiContribs
+
+%META:FILEATTACHMENT{name="screenshot-edit.png" attachment="screenshot-edit.png" attr="h" comment="" date="1290756224" path="screenshot-edit.png" size="29633" user="TWikiContributor" version="1"}%
