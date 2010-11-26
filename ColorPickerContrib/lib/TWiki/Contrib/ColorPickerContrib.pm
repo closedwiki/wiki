@@ -19,7 +19,8 @@
 
 =begin twiki
 
-TBD
+This package includes a small Perl module to make it easier to use the 
+color picker from TWiki plugins. This module includes the functions:
 
 =cut
 
