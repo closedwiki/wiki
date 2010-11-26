@@ -1,0 +1,16 @@
+data/TWiki/ColorPickerContrib.txt 0664
+lib/TWiki/Contrib/ColorPickerContrib.pm 0444
+lib/TWiki/Form/Color.pm 0444
+pub/TWiki/ColorPickerContrib/CHANGELOG.html 0664
+pub/TWiki/ColorPickerContrib/color.gif 0664
+pub/TWiki/ColorPickerContrib/color_bg.gif 0664
+pub/TWiki/ColorPickerContrib/demo1.html 0664
+pub/TWiki/ColorPickerContrib/demo2.html 0664
+pub/TWiki/ColorPickerContrib/farbtastic.css 0664
+pub/TWiki/ColorPickerContrib/farbtastic.js 0664
+pub/TWiki/ColorPickerContrib/LICENSE.txt 0664
+pub/TWiki/ColorPickerContrib/marker.png 0664
+pub/TWiki/ColorPickerContrib/mask.png 0664
+pub/TWiki/ColorPickerContrib/README.html 0664
+pub/TWiki/ColorPickerContrib/screenshot-edit.png 0664
+pub/TWiki/ColorPickerContrib/wheel.png 0664
