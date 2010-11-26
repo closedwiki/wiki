@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1290060010" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1290814261" format="1.1" version="$Rev$"}%
 ---+!! JS Calendar Contrib
 <!--
    Contributions to this contrib package are appreciated. Please update this page at
@@ -17,6 +17,18 @@
 ---++ Introduction
 
 This module packages the [[http://www.dynarch.com/projects/calendar/][Mishoo JSCalendar]], a DHTML pop-up calendar in a form suitable for use in TWiki forms and TWiki applications.
+
+---++ Using the Calendar in !TWikiForms
+
+This package adds a =date= type to %SYSTEMWEB%.TWikiForms:
+
+| *Type* | *Description* | *Size* | *Value* |
+| =date= | Single-line text box and a button next to it to pick a date from a popup calendar. The date can also be typed into the text box. The date format can be customized. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[JSCalendarContrib][See details]]." }% | Text box width in number of characters | Initial (default) date |
+
+Example form definition:
+
+| *Name:* | *Type:* | *Size* | *Values:* | *Tooltip message:* |
+| Start date | date | 12 | %SERVERTIME{$year-$mo-$day}% | Select start date |
 
 ---++ Using the Calendar in user forms
 
@@ -59,6 +71,7 @@ If the contrib is installed, you will see such a field here:
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 | Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-11-27: | TWikibug:Item6609: In %SYSTEMWEB%.TWikiForms type table, automatically list the =date= form field type defined in this contrib -- TWiki:Main.PeterThoeny |
 |  2010-11-17: | TWikibug:Item6530: Doc fixes: Changing TWIKIWEB to SYSTEMWEB |
 |  2010-11-04: | TWikibug:Item6603: Add transparent image for nicer date button in TWiki Forms |
 |  2010-05-16: | TWikibug:Item6433: Doc improvements |
