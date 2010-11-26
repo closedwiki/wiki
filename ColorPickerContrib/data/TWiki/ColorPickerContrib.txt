@@ -30,7 +30,7 @@ This package adds a type =color= to %SYSTEMWEB%.TWikiForms. Example form definit
 You can also use the color picker directly in your HTML forms, without having to write any code. Just include this in the topic text:
 <verbatim>
 %INCLUDE{ "%SYSTEMWEB%.ColorPickerContrib" section="code" }%
-%INCLUDE{ "%SYSTEMWEB%.ColorPickerContrib" section="picker" NAME="text_color" SIZE="12" VALUE="#123456" EXTRA="class=\"twikiFormField\"" }%
+%INCLUDE{ "%SYSTEMWEB%.ColorPickerContrib" section="picker" NAME="text_color" SIZE="12" VALUE="#123456" EXTRA="class=\"twikiInputField\"" }%
 </verbatim>
 This will show an HTML input field named "text_color" and a color picker tied to it. The ="code"= section should be included once per topic, the ="picker"= section can be included as many times as needed. The =size=, =value= and =extra= parameters are optional. Use the =extra= parameter to add additional parameters to the HTML input field.
 
@@ -43,7 +43,7 @@ Test: (this works only if the !ColorPickerContrib is installed)
 </form>
 -->
 %INCLUDE{ "%TOPIC%" section="code" }%
-%INCLUDE{ "%TOPIC%" section="picker" NAME="text_color" SIZE="12" VALUE="#123456" EXTRA="class=\"twikiFormField\"" }%
+%INCLUDE{ "%TOPIC%" section="picker" NAME="text_color" SIZE="12" VALUE="#123456" EXTRA="class=\"twikiInputField\"" }%
 
 ---++ Detailed Documentation
 
