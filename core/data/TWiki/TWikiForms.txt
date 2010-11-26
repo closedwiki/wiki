@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1240009323" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1290813836" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Forms
 
@@ -11,6 +11,7 @@ _Add structure to content with forms attached to twiki topics. TWiki forms (with
 By adding form-based input to freeform content, you can structure topics with unlimited, easily searchable categories. A form is enabled for a web and can be added to a topic. The form data is shown in tabular format when the topic is viewed, and can be changed in edit mode using edit fields, radio buttons, check boxes and list boxes. Many different form types can be defined in a web, though a topic can only have one form attached to it at a time.
 
 Typical steps to build an application based on TWiki forms:
+
    1. Define a form template
    1. Enable the form for a web
    1. Add the form to a [[TWikiTemplates#Template_Topics][template topic]]
@@ -18,7 +19,9 @@ Typical steps to build an application based on TWiki forms:
    1. Build a FormattedSearch to list topics that share the same form
 
 ---++ Defining a Form
+
 A Form Template specifies the fields in a form. A Form Template is simply a page containing a TWiki table, where each row of the table specifies one form field.
+
    1. Create a new topic with your form name: ==<nop>YourForm==, ==<nop>ExpenseReportForm==, ==<nop>InfoCategoryForm==, ==<nop>RecordReviewForm==, whatever you need.
    1. Create a TWiki table, with each column representing one element of an entry field: ==Name==, ==Type==, ==Size==, ==Values==, ==Tooltip message==, and ==Attributes== _(see sample below)_.
    1. For each field, fill in a new line; for the type of field, select from the list.
@@ -113,6 +116,7 @@ Forms have to be enabled for each individual web. The ==WEBFORMS== variable in W
    * __%X% Note:__ Initial values will *not* be set in the form of a new topic if you _only_ use the formtemplate parameter.
 
 ---++ Changing a form
+
    * You can change a form definition, and TWiki will try to make sure you don't lose any data from the topics that use that form. 
 
    * If you change the form definition, the changes will not take affect in a topic that uses that form until you edit and save it.
@@ -132,26 +136,27 @@ Each *column* of the table is one element of an entry field: ==Name==, ==Type==,
 
 The =Name=, =Type= and =Size= columns are required. Other columns are optional. The form *must* have a header row (e.g. =| <nop>*Name* | <nop>*Type* | <nop>*Size* |=).
 
-==Name== is the name of the form field.
+*Name column:* ==Name== is the name of the form field.
 
-The ==Type==, ==Size== and ==Value== fields describe the legal values for this field, and how to display them.
-   * ==Type== =checkbox= specifies one or more checkboxes. The =Size= field specifies how many checkboxes will be displayed on each line. The =Value= field should be a comma-separated list of item labels.
-      * ==Type== =checkbox+buttons= will add *Set* and *Clear* buttons to the basic =checkbox= type.
-   * ==Type== =radio= is like =checkbox= except that radio buttons are mutually exclusive; only one can be selected.
-   * ==Type== =label= specifies read-only label text. The =Value= field should contain the text of the label.
-   * ==Type== =select= specifies a select box. The =Value= field should contain a comma-separated list of options for the box. The =Size= field can specify a fixed size for the box (e.g. =1=, or a range e.g. =3..10=. If you specify a range, then the box will never be smaller than 3 items, never larger than 10, and will be 5 high if there are only 5 options.
-      * There are two modifiers that can be applied to the =select= type:
-         * =select+multi= turns multiselect on for the select, to allow Shift+Click and Ctrl+Click to select (or deselect) multiple items.
-         * =select+values= allows the definition of values that are different to the displayed text. For example:
-         <pre>| Field 9 | select+values | 5 | One, Two=2, Three=III, Four | Various values formats |</pre> shows <select size="2"><option>One</option><option>Two</option><option>Three</option><option>Four</option></select> but the values or options =Two= and =Three= are =2= and =III= respectively.<br />
-      You can combine these modifiers e.g. =select+multi+values=
-   * ==Type== =text= specifies a one-line text field. =Size= specifies the text box width in number of characters. =Value= is the initial (default) content when a new topic is created with this form template.
-   * ==Type== =textarea= specifies a multi-line text box. The =Size= field should specify columns x rows, e.g. =80x6=; default size is 40x5. As for =text=, the =Value= field specifies the initial text
-   * ==Type== =date= specifies a single-line text box and a button next to it; clicking on the button will bring up a calendar from which the user can select a date. The date can also be typed into the text box. =Size= specifies the text box width in characters. As for =text=, the =Value= field specifies the initial text
+*Type, Size, Value columns:* ==Type==, ==Size== and ==Value== describe the type, size and initial value for this field:
 
-==Tooltip message== is a message that will be displayed when the cursor is hovered over the field in =edit= view.
+| *Type* | *Description* | *Size* | *Value* |
+| =text= | One-line text field | Text box width in number of characters | Initial (default) content |
+| =textarea= | Multi-line text box | Columns x rows, such as =80x6=; default is =40x5= | Initial (default) content |
+| =label= | Read-only text label | | Text of the label |
+| =checkbox= | One or more checkboxes that can be toggled individually | Number of checkboxes shown per line | Comma-space-separated list of item labels - can be a dynamic SEARCH |
+| =checkbox+buttons= | Like =checkbox=, adding *[Set]* and *[Clear]* buttons |||
+| =radio= | Radio buttons, mutually exclusive; only one can be selected | Number of radio buttons shown per line | Comma-space-separated list of item labels - can be a dynamic SEARCH |
+| =select= | Select box, rendered as a picklist or a multi-row selector box depending on the size value | %BULLET% =1=: Show a picklist %BB% Number &gt; 1: Multi-row selector box of specified size %BB% Range e.g. =3..10=: Multi-row selector box with variable size - the box will never be smaller than 3 items, never larger than 10, and will be 5 high if there are only 5 options | Comma-space-separated list of options of the select box - can be a dynamic SEARCH |
+| =select+multi= | Like =select=, turning multi-select on, to allow Shift+Click and Ctrl+Click to select (or deselect) multiple items |||
+| =select+values= | Like =select=, allowing definition of values that are different to the displayed text. For example:%BR% =&#124; Field 9 &#124; select+values &#124; 3 &#124; One, Two=2, Three=III &#124; Various values formats &#124;= %BR% shows <form><select size="3"><option>One</option><option>Two</option><option>Three</option></select></form> but the values of options =Two= and =Three= are =2= and =III=, respectively. |||
+| =select+multi+values= | Combination of =select+multi= =select+values= |||
+%SEARCH{ "\| *=[a-z0-9\+\-]+= * \|.*%IF.*%TOPIC%" type="regex" topic="*Contrib" nonoise="on" multiple="on" format="$text" }%
 
-==Attributes== specifies special attributes for the field. Multiple attributes can be entered, separated by spaces.
+*Tooltip message column:* The ==Tooltip message== will be displayed when the cursor is hovered over the field in =edit= view.
+
+*Attributes column:* ==Attributes== specifies special attributes for the field. Multiple attributes can be entered, separated by spaces.
+
    * An attribute =H= indicates that this field should not be shown in view mode. However, the field is available for editing and storing information.
    * An attribute =M= indicates that this field is mandatory. The topic cannot be saved unless a value is provided for this field. If the field is found empty during topic save, an error is raised and the user is redirected to an =oops= page. Mandatory fields are indicated by an asterisks next to the field name.
 
@@ -161,14 +166,18 @@ For example, a simple form just supporting entry of a name and a date would look
 | Name   | text   | 80     |
 | Date   | date   | 30     |
 </verbatim>
+
 *Field Name Notes:*
+
    * Field names have to be unique.
    * A very few field names are reserved. If you try to use one of these names, TWiki will automatically append an underscore to the name when the form is used.
    * You can space out the title of the field, and it will still find the topic e.g. =Aeroplane Manufacturers= is equivalent to =AeroplaneManufacturers=.
    * If a =label= field has no name, it will *not* be shown when the form is *viewed*, only when it is *edited*.
    * Field names can in theory include any text, but you should stick to alphanumeric characters. If you want to use a non-wikiname for a =select=, =checkbox= or =radio= field, and want to get the values from another topic, you can use  ==[<nop>[...]]== links. This notation can also be used when referencing another topic to obtain field values, but a name other than the topic name is required as the name of the field. 
    * Leading and trailing spaces are _not_ significant.
+
 *Field Value Notes:*
+
    * The field value will be used to initialize a field when a form is created, unless specific values are given by the topic template or query parameters. The first item in the list for a select or radio type is the default item. For =label=, =text=, and =textarea= fields the value may also contain commas. =checkbox= fields cannot be initialized through the form template.
    * Leading and trailing spaces are _not_ significant.
    * Field values can also be generated through a %SYSTEMWEB%.FormattedSearch, which must yield a suitable table as the result.
@@ -176,11 +185,14 @@ For example, a simple form just supporting entry of a name and a date would look
       * If you want to use a =|= character in the initial values field, you have to precede it with a backslash, thus: =\|=.
       * You can use =&lt;nop>= to prevent TWiki variables from being expanded.
       * The FormatTokens can be used to prevent expansion of other characters.
+
 *General Notes:*
+
    * The topic definition is not read when a topic is viewed.
    * Form definition topics can be protected in the usual manner, using  TWikiAccessControl, to limit who can change the form template and/or individual value lists. Note that view access is required to be able to edit topics that use the form definition, though view access to the form definition is _not_ required to view a topic where the form has been used.
 
 ---+++ Values in Other Topics
+
 As described above, you can also retrieve possible values for select, checkbox or radio types from other topics. For example, if you have a rows defined like this:
 <verbatim>
 | *Name*                 | *Type* | *Size* |
@@ -202,17 +214,22 @@ For example:
    * The ==Values== column *must be empty* in the referring form definition.
  
 ---++ Extending the range of form data types
+
 You can extend the range of data types accepted by forms by using TWikiPlugins. All such extended data types are single-valued (can only have one value) with the following exceptions:
    * any type name starting with =checkbox=
    * any type name with =+multi= anywhere in the name
 Types with names like this can both take multiple values.
 
 ---++ Hints and Tips
+
 ---+++ Build an HTML form to create new Form-based topics
+
    * New topics with a form are created by simple HTML forms asking for a topic name. For example, you can have a =<nop>SubmitExpenseReport= topic where you can create new expense reports, a =<nop>SubmitVacationRequest= topic, and so on. These can specify the required template topic with its associated form. [[TWikiTemplates#TemplateTopics][Template topics]] has more.
 A Form Template specifies the fields in a form. A Form Template is simply a page containing a TWiki table, where each row of the table specifies one form field.
 #UsingFormData
+
 ---+++ Searching for Form Data
+
 TWiki Forms accept user-input data, stored as TWikiMetaData. Meta data also contains program-generated info about changes, attachments, etc. To find, format and display form and other meta data, see TWikiMetaData, ==FORMFIELD==, ==SEARCH== and ==METASEARCH== variables in TWikiVariables, and [[FormattedSearch][TWiki Formatted Search]].
 
 <blockquote>
@@ -226,7 +243,9 @@ format="|<b>[[$web.$topic][$topic]]</b> |<nop>$formfield(TopicClassification) |"
 </blockquote> 
 
 Searching forms this way is obviously pretty inefficient, but it's easy to do. If you want better performance, take a look at some of the structured wiki extensions that support higher performance searching e.g. TWiki:Plugins.DBCachePlugin.
+
 ---+++ Gotcha!
+
    * Some browsers may strip linefeeds from =text= fields when a topic is saved. If you need linefeeds in a field, make sure it is a =textarea=.
 
 %STOPINCLUDE%
