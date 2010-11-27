@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1280558592" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1290843886" format="1.1" version="$Rev$"}%
 ---+!! !RatingContrib
 <!--
    Contributions to this extension are appreciated. Please update the documentation page at
@@ -16,21 +16,23 @@ One line description, required for extensions repository catalog:
 </sticky>
 %SHORTDESCRIPTION%
 
----++ Usage
+---++ Introduction
 
----+++ In TWiki < 4.2
+This module adds a line-of-stars rating bar to TWiki forms and TWiki applications.
 
-The rating widget can be used with the TWiki:Plugins.VotePlugin. The widget is like the TWiki:Plugins.JSCalendarContrib in that once it is installed, it can be used with any plugin that requires a line - of - stars rating bar. 
+---++ Using the color picker in !TWikiForms
 
----+++ In TWiki 4.2 and later
-
-You can use the new =rating= type in form fields. The result of the rating is captured as an integer, and displayed as a line of stars. For example,
+This package adds a =rating= type to %SYSTEMWEB%.TWikiForms. The result of the rating is captured as an integer, and displayed as a line of stars. For example,
 
 <img src="%ATTACHURLPATH%/example_stars.gif" />
 
-Install the contrib into your TWiki. You can immediately use the =rating= type in your forms. Rating values are stored as integers.
+To use it in a TWiki form, use the type =rating=, with the optional modified =+small= for small stars:
 
-To use it in a TWiki form, use the type =rating=, with the optional modified =+small= for small stars. The size field dictates how wide the rating is e.g. 5 means a 5 star range. The value field specifies the initial value. For example, the form definition:
+| *Type* | *Description* | *Size* | *Value* |
+| =rating= | Line-of-stars rating bar. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[RatingContrib][See details]]." }% | Number of stars for rating | Initial value |
+| =rating+small= | Like =rating=, but with small stars. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[RatingContrib][See details]]." }% |||
+
+Example form definition:
 
 <verbatim>
 | *Name*     | *Type*       | *Size* | *Values* |
@@ -38,13 +40,13 @@ To use it in a TWiki form, use the type =rating=, with the optional modified =+s
 | Quality    | rating+small | 10     | 5        |
 | Order Date | date         |        |          |
 </verbatim>
-looks like this when it is edited:
+A topic with this form looks like this when in edit mode:
 
 <img src="%ATTACHURLPATH%/edit_example.gif" />
 
 ---++ Using the Contrib in a Plugin
 
-A typical application of this widget is its use to capture a rating under the control of a plugin. It is straightforward to use in this role. The API to the contrib is:
+A typical application of this widget is its use to capture a rating under the control of a plugin, such as the the TWiki:Plugins.VotePlugin. It is straightforward to use in this role. The API to the contrib is:
 
 =TWiki::Contrib::RatingContrib::renderRating($name, $size, $small, $value, $input_attrs) -> $html=
 
@@ -64,14 +66,12 @@ my $html =
       .CGI::submit("OK"));
 </verbatim>
 
-Say instead that we want to generate an alert when a line of stars has its
-value changed:
+Say instead that we want to generate an alert when a line of stars has its value changed:
 <verbatim>
 $html = TWiki::Contrib::RatingContrib::renderRating('rating', 5, 0, 0,
         {onchange=>'javascript: alert("Rated")'})
 </verbatim>
-Of course, when you use the =onchange= event, you don't need a form. This model
-is good if you want (for example) to update values using a REST handler.
+Of course, when you use the =onchange= event, you don't need a form. This model is good if you want (for example) to update values using a REST handler.
 
 ---++ Installation Instructions
 
@@ -84,8 +84,9 @@ is good if you want (for example) to update values using a REST handler.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Contrib Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-11-27: | TWikibug:Item6609: In %SYSTEMWEB%.TWikiForms type table, automatically list the =rating= form field type defined in this contrib -- TWiki:Main.PeterThoeny |
 |  2010-07-27: | TWikibug:Item6530 - doc fixes |
-|  27 Jun 2006: | First version |
+|  2006-07-27: | First version |
 |  Dependencies: | None |
 |  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/RatingContrib |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/RatingContribDev |
