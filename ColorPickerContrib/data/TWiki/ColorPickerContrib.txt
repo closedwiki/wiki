@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1290815335" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1290815722" format="1.1" version="$Rev$"}%
 ---+!! Color Picker Contrib
 <!--
    Contributions to this contrib package are appreciated. Please update this page at
@@ -63,11 +63,11 @@ Test: (this works only if the !ColorPickerContrib is installed)
    * Set SHORTDESCRIPTION = Color picker for use in TWiki forms and TWiki applications
 
 |  Author: | TWiki:Main.PeterThoeny, [[http://twiki.net][Twiki Inc]] |
-|  Copyright: | &copy; 2007 [[http://acko.net/about][Steven Wittens]], Acko.net %BR% &copy; 2010 TWiki:Main.PeterThoeny and TWiki:TWiki.TWikiContributor for TWiki !ColorPickerContrib |
+|  Copyright: | &copy; 2007 [[http://acko.net/about][Steven Wittens]], Acko.net for Farbtastic jQuery plugin %BR% &copy; 2010 TWiki:Main.PeterThoeny and TWiki:TWiki.TWikiContributor for TWiki !ColorPickerContrib |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
-| Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  2010-11-27: | TWikibug:Item6609: In %SYSTEMWEB%.TWikiForms type table, automatically list the =color= form field type defined in this contrib -- TWiki:Main.PeterThoeny |
 |  2010-11-26: | TWikibug:Item6606: Complete rewrite of contrib using [[http://acko.net/dev/farbtastic][Farbtastic color picker]] -- TWiki:Main.PeterThoeny |
 |  2006-10-27: | Initial version by TWiki:Main.FlavioCurti using Colorpicker by Norman Timmler (inlet media e.K., Hamburg, Germany) |
