@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1290850259" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1291089711" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Forms
 
@@ -151,7 +151,7 @@ The =Name=, =Type= and =Size= columns are required. Other columns are optional. 
 | =select+multi= | Like =select=, turning multi-select on, to allow Shift+Click and Ctrl+Click to select (or deselect) multiple items |||
 | =select+values= | Like =select=, allowing definition of values that are different to the displayed text. For example:%BR% =&#124; Field 9 &#124; select+values &#124; 3 &#124; One, Two=2, Three=III &#124; Various values formats &#124;= %BR% shows <form><select size="3"><option>One</option><option>Two</option><option>Three</option></select></form> but the values of options =Two= and =Three= are =2= and =III=, respectively. |||
 | =select+multi+values= | Combination of =select+multi= and =select+values= |||
-%SEARCH{ "\| *=[a-z0-9\+\-]+= * \|.*%IF.*%TOPIC%" type="regex" topic="*Contrib" nonoise="on" multiple="on" format="$text" }%
+%SEARCH{ "\| *=[a-z0-9\+\-]+= * \|.*%IF.*%TOPIC%" type="regex" topic="*Contrib, *Plugin" nonoise="on" multiple="on" format="$text" }%
 
 *Tooltip message column:* The ==Tooltip message== will be displayed when the cursor is hovered over the field in =edit= view.
 
