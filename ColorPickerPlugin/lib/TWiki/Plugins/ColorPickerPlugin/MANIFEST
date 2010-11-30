@@ -1,0 +1,16 @@
+data/TWiki/ColorPickerPlugin.txt 0664
+lib/TWiki/Plugins/ColorPickerPlugin.pm 0444
+lib/TWiki/Form/Color.pm 0444
+pub/TWiki/ColorPickerPlugin/CHANGELOG.html 0664
+pub/TWiki/ColorPickerPlugin/color.gif 0664
+pub/TWiki/ColorPickerPlugin/color_bg.gif 0664
+pub/TWiki/ColorPickerPlugin/demo1.html 0664
+pub/TWiki/ColorPickerPlugin/demo2.html 0664
+pub/TWiki/ColorPickerPlugin/farbtastic.css 0664
+pub/TWiki/ColorPickerPlugin/farbtastic.js 0664
+pub/TWiki/ColorPickerPlugin/LICENSE.txt 0664
+pub/TWiki/ColorPickerPlugin/marker.png 0664
+pub/TWiki/ColorPickerPlugin/mask.png 0664
+pub/TWiki/ColorPickerPlugin/README.html 0664
+pub/TWiki/ColorPickerPlugin/screenshot-edit.png 0664
+pub/TWiki/ColorPickerPlugin/wheel.png 0664
