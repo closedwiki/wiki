@@ -37,7 +37,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-11-29';
+$RELEASE = '2010-11-30';
 $SHORTDESCRIPTION = "Color picker, packaged for use in TWiki forms and TWiki applications";
 $NO_PREFS_IN_TOPIC = 1;
 

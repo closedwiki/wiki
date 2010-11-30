@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1291105603" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1291106086" format="1.1" version="$Rev$"}%
 ---+!! Color Picker Plugin
 <!--
    Contributions to this plugin package are appreciated. Please update this page at
@@ -23,7 +23,7 @@ This TWiki plugin packages the [[http://acko.net/dev/farbtastic][Farbtastic colo
 This package adds a =color= type to %SYSTEMWEB%.TWikiForms:
 
 | *Type* | *Description* | *Size* | *Value* |
-| =color= | Single-line text box and a color picker to pick a color. The color can also be typed into the text box, such as =#123456=. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[ColorPickerPlugin][See details]]." }% | Text box width in number of characters | Initial (default) color |
+| =color= | %IF{ "'%BASETOPIC%'='TWikiForms'" then="<img src='%PUBURLPATH%/%WEB%/ColorPickerPlugin/screenshot-small.png' alt='screenshot-small' width='150' height='170' align='right' />" }% Single-line text box and a color picker to pick a color. The color can also be typed into the text box, such as =#123456=. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[ColorPickerPlugin][See details]]." }% | Text box width in number of characters | Initial (default) color |
 
 Example form definition:
 
