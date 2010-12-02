@@ -1,0 +1,4 @@
+# Release manifest for PingPlugin
+data/TWiki/PingPlugin.txt 0644 Documentation
+lib/TWiki/Plugins/PingPlugin.pm 0644 Perl module
+
