@@ -1,0 +1,23 @@
+# Release manifest for SliderControlPlugin
+data/TWiki/SliderControlPlugin.txt 0644 Documentation
+lib/TWiki/Plugins/SliderControlPlugin.pm 0664
+pub/TWiki/SliderControlPlugin/jquery.dependClass.js 0644
+pub/TWiki/SliderControlPlugin/jquery.slider-min.js 0644
+pub/TWiki/SliderControlPlugin/jquery.slider.js 0644
+pub/TWiki/SliderControlPlugin/jslider.blue.css 0644
+pub/TWiki/SliderControlPlugin/jslider.blue.ie6.css 0644
+pub/TWiki/SliderControlPlugin/jslider.blue.png 0644
+pub/TWiki/SliderControlPlugin/jslider.css 0644
+pub/TWiki/SliderControlPlugin/jslider.ie6.css 0644
+pub/TWiki/SliderControlPlugin/jslider.plastic.css 0644
+pub/TWiki/SliderControlPlugin/jslider.plastic.ie6.css 0644
+pub/TWiki/SliderControlPlugin/jslider.plastic.png 0644
+pub/TWiki/SliderControlPlugin/jslider.png 0644
+pub/TWiki/SliderControlPlugin/jslider.round.css 0644
+pub/TWiki/SliderControlPlugin/jslider.round.ie6.css 0644
+pub/TWiki/SliderControlPlugin/jslider.round.plastic.css 0644
+pub/TWiki/SliderControlPlugin/jslider.round.plastic.ie6.css 0644
+pub/TWiki/SliderControlPlugin/jslider.round.plastic.png 0644
+pub/TWiki/SliderControlPlugin/jslider.round.png 0644
+
+
