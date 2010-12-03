@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1290843886" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1291366271" format="1.1" version="$Rev$"}%
 ---+!! !RatingContrib
 <!--
    Contributions to this extension are appreciated. Please update the documentation page at
@@ -29,8 +29,8 @@ This package adds a =rating= type to %SYSTEMWEB%.TWikiForms. The result of the r
 To use it in a TWiki form, use the type =rating=, with the optional modified =+small= for small stars:
 
 | *Type* | *Description* | *Size* | *Value* |
-| =rating= | Line-of-stars rating bar. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[RatingContrib][See details]]." }% | Number of stars for rating | Initial value |
-| =rating+small= | Like =rating=, but with small stars. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[RatingContrib][See details]]." }% |||
+| =rating= | <img src='%PUBURLPATH%/%WEB%/RatingContrib/starrating.png' alt='starrating' width='150' height='34' align='right' /> Line-of-stars rating bar. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[RatingContrib][See details]]." }% | Number of stars for rating | Initial value |
+| =rating+small= | <img src='%PUBURLPATH%/%WEB%/RatingContrib/starrating-small.png' alt='starrating-small' width='150' height='30' align='right' /> Like =rating=, but with small stars. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[RatingContrib][See details]]." }% | | |
 
 Example form definition:
 
@@ -84,6 +84,7 @@ Of course, when you use the =onchange= event, you don't need a form. This model 
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Contrib Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-12-03: | TWikibug:Item6609: Add screenshots -- TWiki:Main.PeterThoeny |
 |  2010-11-27: | TWikibug:Item6609: In %SYSTEMWEB%.TWikiForms type table, automatically list the =rating= form field type defined in this contrib -- TWiki:Main.PeterThoeny |
 |  2010-07-27: | TWikibug:Item6530 - doc fixes |
 |  2006-07-27: | First version |
@@ -93,3 +94,6 @@ Of course, when you use the =onchange= event, you don't need a form. This model 
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/RatingContribAppraisal |
 
 __Related Topics:__ %SYSTEMWEB%.TWikiContribs, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+
+%META:FILEATTACHMENT{name="starrating.png" attachment="starrating.png" attr="h" comment="" date="1291365496" path="starrating.png" size="5873" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="starrating-small.png" attachment="starrating-small.png" attr="h" comment="" date="1291365953" path="starrating-small.png" size="4633" user="TWikiContributor" version="1"}%

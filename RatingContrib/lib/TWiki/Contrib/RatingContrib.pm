@@ -26,7 +26,7 @@ require TWiki::Func;    # The plugins API
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-11-27';
+$RELEASE = '2010-12-03';
 $SHORTDESCRIPTION = 'Rating widget for TWiki forms using "line of stars" style input field';
 
 require CGI;
