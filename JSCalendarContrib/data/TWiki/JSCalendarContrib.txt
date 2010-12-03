@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1290814261" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1291363923" format="1.1" version="$Rev$"}%
 ---+!! JS Calendar Contrib
 <!--
    Contributions to this contrib package are appreciated. Please update this page at
@@ -23,7 +23,7 @@ This module packages the [[http://www.dynarch.com/projects/calendar/][Mishoo JSC
 This package adds a =date= type to %SYSTEMWEB%.TWikiForms:
 
 | *Type* | *Description* | *Size* | *Value* |
-| =date= | Single-line text box and a button next to it to pick a date from a popup calendar. The date can also be typed into the text box. The date format can be customized. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[JSCalendarContrib][See details]]." }% | Text box width in number of characters | Initial (default) date |
+| =date= | %IF{ "'%BASETOPIC%'='TWikiForms'" then="<img src='%PUBURLPATH%/%WEB%/JSCalendarContrib/screenshot-small.png' alt='screenshot-small' width='150' height='139' align='right' />" }% Single-line text box and a button next to it to pick a date from a popup calendar. The date can also be typed into the text box. The date format can be customized. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[JSCalendarContrib][See details]]." }% | Text box width in number of characters | Initial (default) date |
 
 Example form definition:
 
@@ -71,7 +71,7 @@ If the contrib is installed, you will see such a field here:
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 | Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-11-27: | TWikibug:Item6609: In %SYSTEMWEB%.TWikiForms type table, automatically list the =date= form field type defined in this contrib -- TWiki:Main.PeterThoeny |
+|  2010-12-03: | TWikibug:Item6609: In %SYSTEMWEB%.TWikiForms type table, automatically list the =date= form field type defined in this contrib -- TWiki:Main.PeterThoeny |
 |  2010-11-17: | TWikibug:Item6530: Doc fixes: Changing TWIKIWEB to SYSTEMWEB |
 |  2010-11-04: | TWikibug:Item6603: Add transparent image for nicer date button in TWiki Forms |
 |  2010-05-16: | TWikibug:Item6433: Doc improvements |
@@ -95,3 +95,4 @@ If the contrib is installed, you will see such a field here:
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiForms
 
 %META:FILEATTACHMENT{name="screenshot.gif" attachment="screenshot.gif" attr="h" comment="" date="1274067851" path="screenshot.gif" size="8912" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="screenshot-small.png" attachment="screenshot-small.png" attr="h" comment="" date="1291363747" path="screenshot-small.png" size="22317" user="TWikiContributor" version="1"}%
