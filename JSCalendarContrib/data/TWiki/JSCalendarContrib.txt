@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1291363923" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1291364551" format="1.1" version="$Rev$"}%
 ---+!! JS Calendar Contrib
 <!--
    Contributions to this contrib package are appreciated. Please update this page at
@@ -10,7 +10,7 @@
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
 </div>
-<img src="%ATTACHURL%/screenshot.gif" style="float:right" />
+<img src="%ATTACHURL%/screenshot.png" width="228" height="196" style="float:right" />
 </sticky>
 %SHORTDESCRIPTION%
 
@@ -94,5 +94,5 @@ If the contrib is installed, you will see such a field here:
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiForms
 
-%META:FILEATTACHMENT{name="screenshot.gif" attachment="screenshot.gif" attr="h" comment="" date="1274067851" path="screenshot.gif" size="8912" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="screenshot-small.png" attachment="screenshot-small.png" attr="h" comment="" date="1291363747" path="screenshot-small.png" size="22317" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1291364339" path="screenshot.png" size="20920" user="TWikiContributor" version="1"}%
