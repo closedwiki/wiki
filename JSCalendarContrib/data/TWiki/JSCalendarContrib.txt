@@ -23,7 +23,7 @@ This module packages the [[http://www.dynarch.com/projects/calendar/][Mishoo JSC
 This package adds a =date= type to %SYSTEMWEB%.TWikiForms:
 
 | *Type* | *Description* | *Size* | *Value* |
-| =date= | %IF{ "'%BASETOPIC%'='TWikiForms'" then="<img src='%PUBURLPATH%/%WEB%/JSCalendarContrib/screenshot-small.png' alt='screenshot-small' width='150' height='139' align='right' />" }% Single-line text box and a button next to it to pick a date from a popup calendar. The date can also be typed into the text box. The date format can be customized. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[JSCalendarContrib][See details]]." }% | Text box width in number of characters | Initial (default) date |
+| =date= | %IF{ "'%BASETOPIC%'='TWikiForms'" then="<img src='%PUBURLPATH%/%WEB%/JSCalendarContrib/screenshot-small.png' alt='screenshot-small' width='150' height='139' align='right' />" else="<nop>" }% Single-line text box and a button next to it to pick a date from a popup calendar. The date can also be typed into the text box. The date format can be customized. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[JSCalendarContrib][See details]]." }% | Text box width in number of characters | Initial (default) date |
 
 Example form definition:
 
