@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1291089711" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1291358903" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Forms
 
@@ -222,12 +222,20 @@ Types with names like this can both take multiple values.
 
 ---++ Hints and Tips
 
----+++ Build an HTML form to create new Form-based topics
+---+++ Editing Just Form Data, Without Topic Text
 
-   * New topics with a form are created by simple HTML forms asking for a topic name. For example, you can have a =<nop>SubmitExpenseReport= topic where you can create new expense reports, a =<nop>SubmitVacationRequest= topic, and so on. These can specify the required template topic with its associated form. [[TWikiTemplates#TemplateTopics][Template topics]] has more.
+In some cases you want to change only the form data. You have the option of hiding the topic text with two methods:
+
+   * To display only the form whenever you edit a topic, set the preference variable EDITACTION to value =form= ([[VarEDITACTION][see details]]).
+   * To change the edit action in a URL, add a =action=form= parameter to the edit URL string, such as%BR% =%<nop>SCRIPTURL{edit}%/%<nop>BASEWEB%/%<nop>BASETOPIC%?t=%<nop>SERVERTIME{$epoch}%;action=form= ([[TWikiScripts#edit][see details]]).
+
+---+++ Build an HTML Form to Create New Form-based Topics
+
+New topics with a form are created by simple HTML forms asking for a topic name. For example, you can have a =<nop>SubmitExpenseReport= topic where you can create new expense reports, a =<nop>SubmitVacationRequest= topic, and so on. These can specify the required template topic with its associated form. [[TWikiTemplates#TemplateTopics][Template topics]] has more.
+
 A Form Template specifies the fields in a form. A Form Template is simply a page containing a TWiki table, where each row of the table specifies one form field.
-#UsingFormData
 
+#UsingFormData
 ---+++ Searching for Form Data
 
 TWiki Forms accept user-input data, stored as TWikiMetaData. Meta data also contains program-generated info about changes, attachments, etc. To find, format and display form and other meta data, see TWikiMetaData, ==FORMFIELD==, ==SEARCH== and ==METASEARCH== variables in TWikiVariables, and [[FormattedSearch][TWiki Formatted Search]].
@@ -250,4 +258,4 @@ Searching forms this way is obviously pretty inefficient, but it's easy to do. I
 
 %STOPINCLUDE%
 
-__Related Topics:__ TWikiTemplates, TWikiScripts, UserDocumentationCategory
+__Related Topics:__ TWikiTemplates, TWikiScripts, VarSEARCH, FormattedSearch, UserDocumentationCategory
