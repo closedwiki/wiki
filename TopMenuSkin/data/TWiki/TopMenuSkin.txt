@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1286143190" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1291340287" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -237,20 +237,21 @@ The !TopMenuSkin disables the sidebar and activates a different top bar in =twik
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Screenshot" title="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2010-10-03 (v1.91) |
+|  Skin Version: | 2010-12-02 (v1.92) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2010-10-03: | TWikibug:Item6588 - use gray TWiki icon in top menu bar instead of orange icon |
-|  2010-09-23: | TWikibug:Item6530 - add !ManagingUsers to top menu of TWiki web |
-|  2010-08-21: | TWikibug:Item6524 - fix for no Account pulldown menu on IE7 Opera browser -- TWiki:Main.MalcolmNeumeyer |
-|  2010-06-09: | TWikibug:Item6485 - fix banner background image position issue on Safari |
-|  2010-06-06: | TWikibug:Item6482 - XHTML validation fixes; moving CSS to HTML head using ADDTOHEAD variable |
-|  2010-06-05: | TWikibug:Item6475 - better indication of breadcrumb in top menu using large arrows |
-|  2010-05-26: | TWikibug:Item6471 - show topic info in tooltip of View menu; show tooltip help in View and Edit menu items; point raw view and print version to actual topic revision |
-|  2010-05-20: | TWikibug:Item6455 - use %<nop>ICON{menu-down}% instead of long img tag in menu-bars |
-|  2010-05-01: | TWikibug:Item6437 - removed loading of jQuery Javascript library to avoid double load issue; require !JQueryPlugin installed and enabled |
-|  2010-04-26: | TWikibug:Item6435 - doc improvements |
-|  2010-04-21: | TWikibug:Item6431 - fix hardcoded reference to !JQueryPlugin CSS and JS; doc improvements |
-|  2010-04-19: | TWikibug:Item6413 - initial release (v1.0) |
+|  2010-12-02: | TWikibug:Item6614: Always show Register User link in Account menu, regardless of login status |
+|  2010-10-03: | TWikibug:Item6588: Use gray TWiki icon in top menu bar instead of orange icon |
+|  2010-09-23: | TWikibug:Item6530: Add !ManagingUsers to top menu of TWiki web |
+|  2010-08-21: | TWikibug:Item6524: Fix for no Account pulldown menu on IE7 Opera browser -- TWiki:Main.MalcolmNeumeyer |
+|  2010-06-09: | TWikibug:Item6485: Fix banner background image position issue on Safari |
+|  2010-06-06: | TWikibug:Item6482: XHTML validation fixes; moving CSS to HTML head using ADDTOHEAD variable |
+|  2010-06-05: | TWikibug:Item6475: Better indication of breadcrumb in top menu using large arrows |
+|  2010-05-26: | TWikibug:Item6471: Show topic info in tooltip of View menu; show tooltip help in View and Edit menu items; point raw view and print version to actual topic revision |
+|  2010-05-20: | TWikibug:Item6455: Use %<nop>ICON{menu-down}% instead of long img tag in menu-bars |
+|  2010-05-01: | TWikibug:Item6437: Removed loading of jQuery Javascript library to avoid double load issue; require !JQueryPlugin installed and enabled |
+|  2010-04-26: | TWikibug:Item6435: Doc improvements |
+|  2010-04-21: | TWikibug:Item6431: Fix hardcoded reference to !JQueryPlugin CSS and JS; doc improvements |
+|  2010-04-19: | TWikibug:Item6413: Initial release (v1.0) |
 |  Dependencies: | TWiki 4.2 or later; TWiki:Plugins/PatternSkin; TWiki:Plugins/JQueryPlugin |
 |  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |

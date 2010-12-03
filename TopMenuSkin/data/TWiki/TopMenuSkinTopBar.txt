@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1282453009" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1291339938" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkin"}%
 ---+ Top Bar of !TopMenuSkin
 
@@ -34,8 +34,8 @@ Top bar of TopMenuSkin, replacing WebTopBar.
  else="<nop>"
 }%
 %IF{
- "$ LOGIN != '' AND NOT context authenticated AND context registration_supported AND context registration_enabled"
- then="      * [[%SYSTEMWEB%.TWikiRegistration][%MAKETEXT{"Register"}%]]"
+ "context registration_supported AND context registration_enabled"
+ then="      * [[%SYSTEMWEB%.TWikiRegistration][%MAKETEXT{"Register User"}%]]"
  else="<nop>"
 }%
 %IF{
