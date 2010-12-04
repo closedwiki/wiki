@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1288939450" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1291501315" format="1.1" version="$Rev$"}%
 ---+!! Share-Me Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -87,7 +87,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
      | ==pub/TWiki/%TOPIC%/*.png== | 16x16 pixel icons of social networking sites |
    * Configure the Plugin:
-      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+      * Run the [[%SCRIPTURL{configure}%][configure]] script to enable the plugin
       * Overload the plugin settings as needed. Do not change the plugin page, but create settings in the %USERSWEB%.TWikiPreferences page. For example, to overload the DEFAULTSITES setting, create a SHAREMEPLUGIN_DEFAULTSITES in the !TWikiPreferences page.
    * Test if the installation was successful: %SHAREME%
 
@@ -96,8 +96,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] |
 |  Copyright: | &copy; 2010, TWiki:Main/PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-06-06 (18930) |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-12-04: | TWikibug:Item6616: Fix to use BASETOPIC instead of TOPIC when referencing topics. This allows to add SHAREME in an included topic, such as !TopMenuSkinTopBar of TWiki:Plugins.TopMenuSkin |
 |  2010-06-06: | XHTML validation fixes; moving CSS to HTML head using TWiki::Func::addToHEAD |
 |  2010-01-16: | Doc fixes |
 |  2010-01-09: | Initial version |

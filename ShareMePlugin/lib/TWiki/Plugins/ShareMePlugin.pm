@@ -34,12 +34,9 @@ require TWiki::Plugins; # For the API version
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $installWeb $debug $defaultSites $pluginName $NO_PREFS_IN_TOPIC $siteDefs );
 
-$VERSION = '2010-06-06 (18927)';
-
-$RELEASE = 'TWiki';
-
+$VERSION = '$Rev$';
+$RELEASE = '2010-12-04';
 $SHORTDESCRIPTION = 'Icon bar to share a TWiki page on popular social media sites such as Facebook, StumbleUpon, Twitter';
-
 $NO_PREFS_IN_TOPIC = 0;
 
 # Name of this Plugin, only used in this module
@@ -91,6 +88,8 @@ sub _SHAREME {
     my( $session, $params, $theTopic, $theWeb ) = @_;
 
     _initSitesDef() unless $siteDefs;
+    $theWeb   = $session->{SESSION_TAGS}{BASEWEB}   || $theWeb;
+    $theTopic = $session->{SESSION_TAGS}{BASETOPIC} || $theTopic;
 
     my @sites = _strToArr( $params->{_DEFAULT} || $defaultSites );
     my $text = _siteIcons( $theWeb, $theTopic, @sites );
