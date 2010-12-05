@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1284795163" format="1.1" version="$Rev$"}%
----+!! Encrypt Plugin
+%META:TOPICINFO{author="CraigMeyer" date="1291526668" format="1.1" reprev="1.4" version="1.4"}%
+---+!! Encrypt Plugin (WORK IN PROGRESS)
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
    http://twiki.org/cgi-bin/view/Plugins/EncryptPlugin or provide feedback at
@@ -9,8 +9,10 @@
    * Set SHORTDESCRIPTION = Securely encrypt text in TWiki topics to be accessible by selected users only
 -->
 <sticky>
-<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+<div style="float:right; margin:0 0 10px 10px">
+<div style="background-color:#eeeeee; padding: 0 10px 0 10px">
 %TOC{title="Page contents"}%
+</div>
 </div>
 </sticky>
 %SHORTDESCRIPTION%
@@ -47,6 +49,11 @@ Note that search cannot find encrypted text. This can be an advantage or a disad
 
 =%<nop>ENCRYPT{"Jimmy Neutron"}%= encrypts text ="Jimmy Neutron"= to be viewable/editable only by the user who added the ENCRYPT variable.
 
+   1. %ENCRYPT{_dont_change="DcoCU7Q8mB+M0P9LHCfULwxUTlMK7zwRcFQ3URdWg/w"}%
+   1. %ENCRYPT{_dont_change="dBEVUsm8SVElzzXZzBkvuCTWuTk5opcVlKH/+IVu2Mc"}%
+   1. %ENCRYPT{_dont_change="cJGOYU+3cUm4VDwL9tvtLTthJ1V+GQGlkrOyFNkqGbE"}%
+
+
 *2. Encrypt text for my group*
 
 =%<nop>ENCRYPT{"Helpdesk password: h3lp-Cu$t" allow="SupportGroup"}%= encrypts text to be viewable/editable by !SupportGroup members only.
@@ -55,34 +62,14 @@ After saving, the ENCRYPT variable is changed to =%<nop>ENCRYPT{_dont_change="PP
 
 Other people see =<nop>*****<nop>= when looking at the page, and =%<nop>ENCRYPT{_dont_change="PPq2ez7j"}%= when editing the page. A non-member could change the ENCRYPT parameter the wiki way, which would invalidate the encrypted text. If this happens, anyone can view and restore the original text from a previous topic version, thus it is possible restore the encrypted text.
 
----++ Installation Instructions
-
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
-
-   * Download the ZIP file from the Plugin Home (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/VarENCRYPT.txt== | Variable documentation |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * Create your asymetric key with openssl (currently only RSA key is supported): %BR%
-     =openssl genrsa -out /var/www/twiki/lib/cryptkey.priv 2048=
-   * Install the CPAN Dependencies listed in the Plugin Info section below
-   * Configure the Plugin:
-      * The TWiki =lib= directory is the default location of the private key file =cryptkey.priv=. If you store it in a different place add this setting to =twiki/lib/LocalSite.cfg=: %BR%
-        =$TWiki::cfg{Plugins}{EncryptPlugin}{PrivateKey} = '/path/to/cryptkey.priv';=
-      * Run the [[%SCRIPTURL{configure}%][configure]] script to enable the Plugin
-   * Test if the installation was successful:
-      * Add =%<nop>ENCRYPT{"any text"}%= to a topic in the Sandbox.WebHome web and verify that the text is viewable by you, and hidden by others.
-
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.PeterThoeny |
+|  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] |
 |  Copyright: | &copy; 2010, TWiki:Main.PeterThoeny %BR% &copy; 2010, TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-09-18: | TWikibug:Item6617: Initial version |
+|  2010-11-15: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | CPAN:Mime::Base64, CPAN:Crypt::CBC, CPAN:Crypt::Rijndael_PP, CPAN:Crypt::RC4, CPAN:Crypt::OpenSSL::RSA |
 |  Other Dependencies: | openssl to generate the asymetric key |
@@ -93,3 +80,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ VarENCRYPT, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+
+-- Main.PeterThoeny - 2010-11-15
+
+%META:ENCRYPTPLUGIN{name="DcoCU7Q8mB+M0P9LHCfULwxUTlMK7zwRcFQ3URdWg/w" allow="SmallGroup" display="%25RED%25You can't see this! %25ENDCOLOR%25" index="0" value="U2FsdGVkX18UiqhEdPJvKlkUSVKWnLlBbS03AfH55/67pa94rw0caIcs4rNRc7g2z0bayxjo/T4=%0a"}%
+%META:ENCRYPTPLUGIN{name="dBEVUsm8SVElzzXZzBkvuCTWuTk5opcVlKH/+IVu2Mc" allow="SmallGroup" display="%25RED%25You can't see this! %25ENDCOLOR%25" index="1" value="U2FsdGVkX1/y1lktK109xGAlVWRtzc29cWp4tvP5chyToijdaRREmu5O5SbXXr0w8laeHdRLTDw=%0a"}%
+%META:ENCRYPTPLUGIN{name="cJGOYU+3cUm4VDwL9tvtLTthJ1V+GQGlkrOyFNkqGbE" allow="SmallGroup" display="%25RED%25You can't see this! %25ENDCOLOR%25" index="2" value="U2FsdGVkX18nGg3HJ1M3SomaqkcgrRSzwBQxDLGzqnDDCGWjoei7d7n9eVEQHEilPw99/yVP8I4=%0a"}%

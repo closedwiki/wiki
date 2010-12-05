@@ -1,3 +1,4 @@
-data/TWiki/EncryptPlugin.txt 0644
-data/TWiki/VarENCRYPT.txt 0664
-lib/TWiki/Plugins/EncryptPlugin.pm 0444
+# Release manifest for EncryptPlugin
+data/TWiki/EncryptPlugin.txt 0644 Documentation
+lib/TWiki/Plugins/EncryptPlugin.pm 0644 Perl module
+

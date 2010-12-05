@@ -1,0 +1,9 @@
+# Dependencies for EncryptPlugin
+# Example:
+# TWiki::Plugins,>=1.15,perl,TWiki 4.1 release.
+# Crypt::OpenSSL::RSA,>=0.25,cpan,Required
+# Crypt::CBC,>=2.30,cpan,Required
+# Crypt::Blowfish,>=2.10,cpan,Required
+# Crypt::RC4,>=2.02,cpan,Required
+# MIME::Base64,>=3.13,cpan,Required
+# Digest::MD6,>=0.11,cpan,Required
