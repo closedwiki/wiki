@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="CraigMeyer" date="1291526668" format="1.1" reprev="1.4" version="1.4"}%
+%META:TOPICINFO{author="CraigMeyer" date="1291529456" format="1.1" reprev="1.4" version="1.4"}%
 ---+!! Encrypt Plugin (WORK IN PROGRESS)
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -49,9 +49,9 @@ Note that search cannot find encrypted text. This can be an advantage or a disad
 
 =%<nop>ENCRYPT{"Jimmy Neutron"}%= encrypts text ="Jimmy Neutron"= to be viewable/editable only by the user who added the ENCRYPT variable.
 
-   1. %ENCRYPT{_dont_change="DcoCU7Q8mB+M0P9LHCfULwxUTlMK7zwRcFQ3URdWg/w"}%
-   1. %ENCRYPT{_dont_change="dBEVUsm8SVElzzXZzBkvuCTWuTk5opcVlKH/+IVu2Mc"}%
-   1. %ENCRYPT{_dont_change="cJGOYU+3cUm4VDwL9tvtLTthJ1V+GQGlkrOyFNkqGbE"}%
+   * %ENCRYPT{_dont_change="6zyX2xxTIITqBl6Z3S63UpUpA8AsuDZY74l389BPaBs"}%
+   * This is what is coded: %<nop>ENCRYPT{"%GREEN% Jimmy Neutron %ENDCOLOR%" allow="CraigMeyer" display="%RED%You can't see this! %ENDCOLOR%"}%
+   * Second copy for testing %ENCRYPT{_dont_change="G5HFYJ6ZI05+Uiz7dUB9vswg6mgDP7M58XNugfjhzeA"}%
 
 
 *2. Encrypt text for my group*
@@ -64,11 +64,12 @@ Other people see =<nop>*****<nop>= when looking at the page, and =%<nop>ENCRYPT{
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] |
-|  Copyright: | &copy; 2010, TWiki:Main.PeterThoeny %BR% &copy; 2010, TWiki:TWiki.TWikiContributor |
+|  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]], TWiki:Main.CraigMeyer |
+|  Copyright: | &copy; 2010 TWiki:Main.CraigMeyer, &copy; 2010, TWiki:Main.PeterThoeny %BR% &copy; 2010, TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-12-5: | First working version - still some loose ends |
 |  2010-11-15: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | CPAN:Mime::Base64, CPAN:Crypt::CBC, CPAN:Crypt::Rijndael_PP, CPAN:Crypt::RC4, CPAN:Crypt::OpenSSL::RSA |
@@ -86,3 +87,6 @@ __Related Topics:__ VarENCRYPT, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperD
 %META:ENCRYPTPLUGIN{name="DcoCU7Q8mB+M0P9LHCfULwxUTlMK7zwRcFQ3URdWg/w" allow="SmallGroup" display="%25RED%25You can't see this! %25ENDCOLOR%25" index="0" value="U2FsdGVkX18UiqhEdPJvKlkUSVKWnLlBbS03AfH55/67pa94rw0caIcs4rNRc7g2z0bayxjo/T4=%0a"}%
 %META:ENCRYPTPLUGIN{name="dBEVUsm8SVElzzXZzBkvuCTWuTk5opcVlKH/+IVu2Mc" allow="SmallGroup" display="%25RED%25You can't see this! %25ENDCOLOR%25" index="1" value="U2FsdGVkX1/y1lktK109xGAlVWRtzc29cWp4tvP5chyToijdaRREmu5O5SbXXr0w8laeHdRLTDw=%0a"}%
 %META:ENCRYPTPLUGIN{name="cJGOYU+3cUm4VDwL9tvtLTthJ1V+GQGlkrOyFNkqGbE" allow="SmallGroup" display="%25RED%25You can't see this! %25ENDCOLOR%25" index="2" value="U2FsdGVkX18nGg3HJ1M3SomaqkcgrRSzwBQxDLGzqnDDCGWjoei7d7n9eVEQHEilPw99/yVP8I4=%0a"}%
+%META:ENCRYPTPLUGIN{name="6zyX2xxTIITqBl6Z3S63UpUpA8AsuDZY74l389BPaBs" allow="CraigMeyer" display="%25RED%25You can't see this! %25ENDCOLOR%25" index="0" value="U2FsdGVkX19/kK0FGd0cZsqz92olhlG3MxvLrsfabQy9sTqDpgjEkQZ/heChlI60S9188grylP4=%0a"}%
+%META:ENCRYPTPLUGIN{name="G5HFYJ6ZI05+Uiz7dUB9vswg6mgDP7M58XNugfjhzeA" allow="CraigMeyer" display="%25RED%25You can't see this! %25ENDCOLOR%25" index="1" value="U2FsdGVkX1/w8qq3FMwrfNMVBXEBK6bftGTDMrxvqNynhQqMRpBlAimJaODG0TzUdu+hm0j4RTs=%0a"}%
+%META:ENCRYPTPLUGIN{name="JiSMaFKDs66GTj5K6rTVOj/c107+kXjwaAa0SmFppGw" allow="CraigMeyer" display="%25RED%25You can't see this! %25ENDCOLOR%25" index="2" value="U2FsdGVkX19g0fX3xdZkT+/oz7zFHtC4eQwwAaqX6oOLo7I6KmOiuowbbQjVCiTAKztCQNhTxso=%0a"}%
