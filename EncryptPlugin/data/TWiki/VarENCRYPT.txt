@@ -1,0 +1,9 @@
+%META:TOPICINFO{author="TWikiContributor" date="1264833049" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarENCRYPT
+---+++ ENCRYPT -- encrypt text in TWiki topics to be accessible by selected users only
+   * The =%<nop>ENCRYPT{}%= variable is handled by the EncryptPlugin
+   * Syntax: =%<nop>ENCRYPT{"any text"}%= or =%<nop>ENCRYPT{"any text" allow="AnyGroup"}%=
+   * Parameter =allow="..."=: TWiki group or list of users allowed to view/edit encrypted text (comma space delimited list of !WikiWords)
+   * Example: =%<nop>SHAREME{"top secret stuff" allow="TWikiAdminGroup"}%= encrypts text, only the !TWikiAdminGroup can view/change the text
+   * Related: EncryptPlugin
