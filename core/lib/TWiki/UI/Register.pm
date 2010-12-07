@@ -7,7 +7,7 @@
 #
 # Additional copyrights apply to some or all of the code in this
 # file as follows:
-# Copyright (c) 1999-2010 Peter Thoeny, peter@thoeny.com
+# Copyright (c) 1999-2004 Peter Thoeny, peter@thoeny.com
 #           (c) 2001 Kevin Atkinson, kevin twiki at atkinson dhs org
 #           (c) 2003-2008 SvenDowideit, SvenDowideit@home.org.au
 #           (c) 2003 Graeme Pyle graeme@raspberry dot co dot za
@@ -813,7 +813,7 @@ sub complete {
                        $data->{LoginName}, $data->{WikiName},
                        $data->{Password}, $data->{Email},
                        $data->{MustChangePassword} );
-        my $log = _createUserTopic($session, $data);
+        my $log = _createUserTopic( $session, $data, $query->param('topicparent') );
         $users->setEmails($cUID, $data->{Email});
     } catch Error::Simple with {
         my $e = shift;
@@ -885,7 +885,7 @@ sub complete {
 #I use RegistrationHandler::register to prevent certain fields (like password) 
 #appearing in the homepage and to fetch photos into the topic
 sub _createUserTopic {
-    my ($session, $row) = @_;
+    my ($session, $row, $parent) = @_;
     my $store = $session->{store};
     my $template = 'NewUserTemplate';
     my( $meta, $text );
@@ -902,7 +902,7 @@ sub _createUserTopic {
     my $log = $b1 . ' Writing topic '.$TWiki::cfg{UsersWebName} . '.'
       . $row->{WikiName}."\n"
         . "$b1 !RegistrationHandler:\n"
-          . _writeRegistrationDetailsToTopic( $session, $row, $meta, $text );
+          . _writeRegistrationDetailsToTopic( $session, $row, $meta, $text, $parent );
     return $log;
 }
 
@@ -910,7 +910,7 @@ sub _createUserTopic {
 # or FormFields on the user's topic.
 #
 sub _writeRegistrationDetailsToTopic {
-    my ($session, $data, $meta, $text) = @_;
+    my ($session, $data, $meta, $text, $parent) = @_;
 
     ASSERT($data->{WikiName}) if DEBUG;
 
@@ -937,7 +937,8 @@ sub _writeRegistrationDetailsToTopic {
     my $user = $data->{WikiName};
     $text = $session->expandVariablesOnTopicCreation( $text, $user, $TWiki::cfg{UsersWebName}, $user );
 
-    $meta->put( 'TOPICPARENT', { 'name' => $TWiki::cfg{UsersTopicName}} );
+    $parent = $TWiki::cfg{UsersTopicName} unless( $parent ); 
+    $meta->put( 'TOPICPARENT', { 'name' => $parent} );
 
     $session->{store}->saveTopic($session->{users}->getCanonicalUserID($agent), $TWiki::cfg{UsersWebName},
                                  $user, $text, $meta );
