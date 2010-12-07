@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273167157" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1291755710" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki CGI and Command Line Scripts
 
@@ -204,6 +204,7 @@ TODO:
 
 | *Parameter* | *Description* | *Default* |
 | =action= | =register= or =verify= or =resetPassword= or =approve= | |
+| =topicparent= | The parent topic of the new user homepage | ={UsersTopicName}= configure setting |
 
 __Note:__ The =register= script can only be called via http POST method, not GET. Make sure to specify the ="post"= method if you call the =register= script via a form action.
 
@@ -390,7 +391,7 @@ Used for viewing topics.
 | =contenttype= | Allows you to specify a different *Content-Type:* (e.g. =contenttype=text/plain=) | |
 | =rev= | Revision to view (e.g. =rev=45=) | |
 | =template= | Allows you to specify a different skin template, overriding the 'view' template the view script would normally use. The default template is =view=. For example, you could specify [[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?template=edit][%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?template=edit]]. This is mainly useful when you have specialised templates for a TWiki Application. | |
-| =topic= | redirects (at the beging of the cgi script running) to show the spcified Web.Topic, or, redirects to a URL, if allowed by {AllowRedirectUrl} and {PermittedRedirectHostUrls} | |
+| =topic= | redirects (at the beging of the cgi script running) to show the spcified Web.Topic, or, redirects to a URL, if allowed by ={AllowRedirectUrl}= and ={PermittedRedirectHostUrls}= configure settings | |
 
 %X% For historical reasons, the view script has a special interpretation of the =text= skin. In earlier TWiki versions the =skin=text= parameter was used like this:
 =http<nop>://.../view/MyWeb/MyTopic?skin=text&contenttype=text/plain&raw=on=
