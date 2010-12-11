@@ -30,7 +30,7 @@ require TWiki::Plugins;
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-05-16';
+$RELEASE = '2010-12-11';
 
 $SHORTDESCRIPTION = 'Allows users to quickly post comments to a page without an edit/preview/save cycle';
 

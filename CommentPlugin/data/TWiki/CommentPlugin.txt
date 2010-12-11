@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274066532" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1292110340" format="1.1" version="$Rev$"}%
 ---+!! Comment Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -77,18 +77,18 @@ A set of default comment templates are shipped with the plugin - see also Commen
 | =threadmode= | Wiki thread mode comment, signed and dated (server time) |
 | =tableprepend= | Comments, signed and dated (server time), formatted as an HTML table row, added below the anchor (which must be in an HTML &lt;table>) |
 | =tableappend= | Comments, signed and dated (server time), formatted as an HTML table row, added above the anchor (which must be in an HTML &lt;table>) |
-| =action= | Action added to action table directly above comment box (see <a href="#Installation">Plugin Installation Instructions</a> below for immportant notes) |
+| =action= | Action added to action table directly above comment box (see <a href="#Installation">Plugin Installation Instructions</a> below for important notes) |
 | =table= | Tablerows adding on end |
 | =toctalk= | Talk using TOC adding on end |
 | =bookmark= | Create a list of annotated bookmarks |
 | =return= | Post to a different topic and return |
 
-Your local installation may add more template types as well - see [[#TemPlates][Customisation]], below.
+Your local installation may add more template types as well - see [[#TemPlates][Customization]], below.
 
 #TemPlates
----++ Customisation
+---++ Customization
 
-Customisation of the comment plugin requires
+Customization of the comment plugin requires
    * familiarity with HTML forms
    * some familiarity with the [[%SYSTEMWEB%.TWikiTemplates][TWiki templating language]].
 
@@ -96,6 +96,7 @@ To define a comment type, you have to provide two simple template definitions in
 
 The plugin picks up these template definitions from a standard TWiki template file, =templates/comments.tmpl=. This allows different templates to be defined for different TWiki skins.
 
+#CustomTemplates
 ---+++ Defining custom templates
 
 By default, =templates/comments.tmpl= includes the topic %SYSTEMWEB%.CommentPluginTemplate, which contains all the shipped standard templates and in turn includes %SYSTEMWEB%.<nop>UserCommentsTemplate that can include non-standard customizations.
@@ -106,20 +107,26 @@ This allows for several levels of customization:
    1 To override templates on a *web-by-web basis*, add a topic =UserCommentsTemplate= to the web (this will replace %SYSTEMWEB%.<nop>UserCommentsTemplate)
    1 To override templates *for a specific skin*, add them to %SYSTEMWEB%.<nop>UserComments&lt;Skin&gt;Template (where &lt;Skin&gt; is the name of the skin with the first letter capitalized, e.g. Pattern)
 
-You can also define a *comment template in a topic*, by passing the topic location with =templatetopic=. For example:
-<blockquote>
+#PerTopicTemplate
+---+++ Per topic custom comment template
+
+You can also define a *comment template in a topic*, by passing the topic location with a =templatetopic= parameter. For example:
 <verbatim>
 %COMMENT{type="blogpost" templatetopic="BlogPostCommentTemplate" target="%TOPIC%" button="Add comment" }%
 </verbatim>
 
-=templatetopic= accepts =topic= or =web.topic= syntax. See an example in [[CommentPluginExamples#TemplateTopic][CommentPluginExamples:templatetopic]].
-</blockquote>
+=templatetopic= accepts =topic= or =web.topic= syntax. See an example in [[CommentPluginExamples#TemplateTopic][CommentPluginExamples#TemplateTopic]].
 
+If you use any topic other than %SYSTEMWEB%.UserCommentTemplate, it is critically important that you include this line at the end of your comment template topic:
+<pre>
+%<nop>TMPL:INCLUDE{"%<nop>SYSTEMWEB%.CommentPlugin"}%
+</pre>
+Without this line your templates will not be picked up.
 
-%X% Templates are picked up by following the [[TWikiTemplates#Finding_Templates][standard TWiki rules]] for locating template files. Note that you can use =%TMPL:INCLUDE= to include other files of templates. %BR%
+%X% Templates are picked up by following the [[TWikiTemplates#Finding_Templates][standard TWiki rules]] for locating template files. Note that you can use =%<nop>TMPL:INCLUDE%= to include other files of templates. %BR%
 %X% Note that from TWiki release 4.1.0 leading and trailing whitespace is no longer stripped. This means that when you upgrade to TWiki 4.1.X you may need to remove the first line break in your custom comment templates. See TWiki.TWikiReleaseNotes04x01 for more information.
 
----+++ Customisation example
+---+++ Customization example
 
 Provide both a =PROMPT= and an =OUTPUT= definition:
 
@@ -185,7 +192,7 @@ Note that =comment_location= overrides =comment_anchor=, and both override =comm
 </form>
 </verbatim>
 
----++++ Customisation example!! with custom form template
+---++++ Customization example!! with custom form template
 
 Write a custom form in a topic.
    * In the form set the location of the prompt with =%<nop>COMMENTPROMPT%=; the prompt will be positioned here.
@@ -264,6 +271,7 @@ Note that if you want to use the =action= template then you must also:
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-12-11: | TWikibug:Item6530 - doc improvements -- TWiki:Main.ScottGutman |
 |  2010-05-16: | TWikibug:Item6433 - doc improvements |
 |  2010-03-19 | TWikibug:Item6404 Use $br in newline parameter for break tag instead of turning off encoding -- TWiki:Main/PeterThoeny |
 |  2010-02-27 | TWikibug:Item6276 Cannot specify percentBRpercent for newline value -- TWiki:Main/SopanShewale |
