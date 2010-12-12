@@ -1,5 +1,17 @@
-%META:TOPICINFO{author="EtherMage" date="1043186415" format="1.0" version="1.4"}%
----+ RecursiveRenderPlugin
+%META:TOPICINFO{author="TWikiContributor" date="1292134666" format="1.1" version="$Rev$"}%
+---+!! <nop>%TOPIC%
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/RecursiveRenderPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/RecursiveRenderPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
 
 This plugin adds the ability to tell the TWiki renderer to render a portion of a page as if it were a page all to itself.
 
@@ -14,15 +26,27 @@ Syntax 2:
 <verbatim>
 ~macro
 This is a macro definition.
-	* This is a list inside the macro.
-	* For demonstration purposes.
+   * This is a list inside the macro.
+   * For demonstration purposes.
 ~~
 | This is a macro usage: <br /> ~macro |
 </verbatim>
-Produces:
-<table border="1" cellspacing="1" cellpadding="0">
+<table><tr><td valign="top">
+If installed:
+<!--
+~macro
+This is a macro definition.
+   * This is a list inside the macro.
+   * For demonstration purposes.
+~~
+-->
+| This is a macro usage: <br /> ~macro |
+</td><td>
+&nbsp; &nbsp;
+</td><td valign="top">
+Should produce:
+<table border="1" cellspacing="1" cellpadding="5">
 <tr><td> This is a macro usage: <br /> This is a macro definition.
-
 <ul>
 <li> This is a list inside the macro.
 </li>
@@ -30,36 +54,38 @@ Produces:
 </li>
 </ul></td></tr>
 </table>
+</td></tr></table>
 
 ---++ <nop>%TOPIC% Global Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>RECURSIVERENDERPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = This plugin adds =&lt;render&gt;= tags and =~macros=.
+   * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Mix and match any TWiki markup, such as bullets with a table
 
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* Test if the plugin is correctly installed:
-		* Place the above code for syntax 2 in a Sandbox topic and see if it produces the correct results.
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Test if the plugin is correctly installed:
+      * Place the above code for syntax 2 in a Sandbox topic and see if it produces the correct results.
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.WalterMundt |
-|  Plugin Version: | 01 May 2007 (V0.3) |
+|  Copyright: | &copy; 2003 TWiki:Main.WalterMundt <br /> &copy; 2006-2010 TWiki:TWiki.TWikiContributor |
+|  Plugin Version: | 2010-12-11 (V0.4) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-12-11: | 0.4 TWikibug:Item6530: Doc improvements, changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  01 May 2007  | 0.3 Validated TWiki4.x operation |
 |  21 Jan 2003: | 0.2: Bugfix release. |
 |  20 Jan 2003: | 0.1: Inital release. |
@@ -69,4 +95,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
--- TWiki:Main.WalterMundt - 20 Jan 2003
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
