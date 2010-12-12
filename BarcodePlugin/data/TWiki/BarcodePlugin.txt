@@ -1,7 +1,18 @@
-%META:TOPICINFO{author="StevenSprouse" date="1100553250" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="TWikiContributor" date="1292195982" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="SearchResult"}%
----+ <nop>%TOPIC%
+---+!! <nop>%TOPIC%
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/BarcodePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/BarcodePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
+---++ Introduction
 
 This plugin is used to create embedded barcodes in topics. Currently only Code128 codes are supported.
 Support for other standard codes could easily be added for any standard supported by Perl Barcode
@@ -11,7 +22,7 @@ The original inspiration for this was so I could generate barcodes that can be r
 
 One useful application is to print out a page with the Topic name encoded in the barcode. Then use the scanner to quickly jump to the Wiki page for editing. ie. =%<nop>BARCODE{text="%<nop>TOPIC%"}%=
 
----+++ Syntax Rules
+---++ Syntax Rules
 
 The =%<nop>BARCODE{parm="value" ...}%= variable gets expanded to an image representing the barcode. 
 
@@ -25,27 +36,26 @@ The =%<nop>BARCODE{parm="value" ...}%= variable gets expanded to an image repres
 | =font_align= | Align the text ("left", "right", or "center") |  "center"  |
 | =transparent_text= | 0/1: use transparent background for text?  |  1 - Transparent  |
 | =show_text= | 0/1: Show text under the barcode  |  1 - Text is shown  |
-| =cue_cat= | 0/1: Swap upper and lower case for Cue Cat	|  0 - No swap  |
+| =cue_cat= | 0/1: Swap upper and lower case for Cue Cat   |  0 - No swap  |
 
----+++ <nop>%TOPIC% Settings
+---++ <nop>%TOPIC% Settings
 
 Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>DEFAULTPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = This plugin creates embedded Code128 barcodes in a page.
+   * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Create Code128 barcodes embedded in TWiki pages
 
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
 
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
+---++ Examples
 
----+++ Examples
 | *You type ...* |  *Expect output*  |  *If Installed*  |
 |=%<nop>BARCODE{text="Hello" transparent_text="0" height="0" }%= |  <img src="%ATTACHURLPATH%/example_0.png" alt="example_0.png"  />  |  %BARCODE{text="Hello" transparent_text="0" height="50"}%  |
 |=%<nop>BARCODE{text="BarcodePlugin2004" scale="1"}%=  |  <img src="%ATTACHURLPATH%/example_1.png" alt="example_1.png"  />  |  %BARCODE{text="Barcode01234" scale="1"}%  |
 
 I use this to generate a table of topics with the topic encoded in a barcode. I then use a cuecat to scan the barcode and take me to the relevent page. Here is the verbatim code, note the use of the "$percent" to escape the BARCODE tag in the formatted search:
-
 
 <verbatim>
 %TABLE{ sort="on" tableborder="1" cellpadding="1" cellspacing="3" headerbg="#666699" 
@@ -57,32 +67,31 @@ headercolor="#FFFFCC" databg="#CCCCCC, #EFEFEF" headerrows="1" footerrows="1" }%
 | $percntBARCODE{text=$topic scale=1 padding=20}$nop% 
 |$formfield(Description)|" }%
 </verbatim>
----+++ Plugin Installation Instructions
+
+---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on your browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-	* Make sure your Perl administrator has installed the Barcode::Code128 module. (perl -MCPAN -e "install Barcode::Code128")
-	* Make sure you have GD 1.20 or later installed. 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==pub/TWiki/BarcodePlugin/example_0.png== | Sample =barcode= image |
-	  | ==pub/TWiki/BarcodePlugin/example_1.png== | Sample =barcode= image|
-	  | ==pub/TWiki/BarcodePlugin/example_0.png,v== | Sample =barcode= repository |
-	  | ==pub/TWiki/BarcodePlugin/example_1.png,v== | Sample =barcode= repository |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* Test if the plugin is correctly installed:
-		* Check above examples if the "if installed" column shows images instead of variables.
+   * Make sure your Perl administrator has installed the Barcode::Code128 module. (perl -MCPAN -e "install Barcode::Code128")
+   * Make sure you have GD 1.20 or later installed. 
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==pub/TWiki/BarcodePlugin/example_0.png== | Sample =barcode= image |
+     | ==pub/TWiki/BarcodePlugin/example_1.png== | Sample =barcode= image|
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Test if the plugin is correctly installed:
+      * Check above examples if the "if installed" column shows images instead of variables.
 
+---++ Plugin Info
 
----+++ Plugin Info
-
-|  Plugin Author: | TWiki:Main/StevenSprouse |
-|  Plugin Version: | 8 Sep 2004 |
-|  Change History: | |
+|  Plugin Author: | TWiki:Main.StevenSprouse |
+|  Copyright: | &copy; 2004 TWiki:Main.StevenSprouse <br /> &copy; 2004-2010 TWiki:TWiki.TWikiContributor |
+|  Plugin Version: | 2010-12-12 |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-12-12: | TWikibug:Item6530: Doc improvements, changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  11 Nov 2004| v1.002 - Improved benchmarks by changing Perl module load timing. |
 |  5 Nov 2004| v1.001 - Added cue_cat flag |
 |  4 Nov 2004| v1.000 - Initial release |
@@ -91,12 +100,11 @@ __Note:__ You do not need to install anything on your browser to use this plugin
 |  | GD v1.20 or later |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 100% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 100%, %SYSTEMWEB%.FormattedSearch 100%, %TOPIC% 100% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev &amp; TWiki:Main/StevenSprouse |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, EmptyPlugin
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, EmptyPlugin
 
-
-%META:FILEATTACHMENT{name="example_1.png" attr="" comment="" date="1099600975" path="example_1.png" size="270" user="StevenSprouse" version="1.1"}%
-%META:FILEATTACHMENT{name="example_0.png" attr="" comment="" date="1099600987" path="example_0.png" size="198" user="StevenSprouse" version="1.1"}%
+%META:FILEATTACHMENT{name="example_1.png" attr="" comment="h" date="1099600975" path="example_1.png" size="270" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="example_0.png" attr="" comment="h" date="1099600987" path="example_0.png" size="198" user="TWikiContributor" version="1"}%
