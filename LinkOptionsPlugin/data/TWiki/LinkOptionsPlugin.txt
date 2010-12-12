@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1292114732" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1292115766" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -28,9 +28,9 @@ Some new options and CSS sets can be used simultaneously, separated by a pipe (|
 |  ==Class==  |  %GREEN%Name%ENDCOLOR%  | The name of a class (to define CSS style) |
 |  ==ID==  |  %GREEN%Name%ENDCOLOR%  | This %GREEN%Name%ENDCOLOR% must be unique on the web page |
 |  ==Skin==  |  %GREEN%<nop>SkinName%ENDCOLOR%  | %GREEN%SkinName%ENDCOLOR% must be a valid TWiki skin |
-|  ==CSS==  |  %GREEN%CSS Code%ENDCOLOR%  | %GREEN%CSS Code%ENDCOLOR% is any CSS formatatin code. You can repeat this option <p/> ==color== is a CSS properti, and you can put values like =%GREEN%#00A0F0%ENDCOLOR%= or =%GREEN%red%ENDCOLOR%=. See more colors in %SYSTEMWEB%.StandardColors. You can use any CSS properti (valid for links) hire. See more in the [[http://www.w3.org/TR/REC-CSS2/cover.html#minitoc][CSS2 Specification in the W3C Web Site]]. |
+|  ==CSS==  |  %GREEN%CSS Code%ENDCOLOR%  | %GREEN%CSS Code%ENDCOLOR% is any valid CSS property and value that would apply to hyper links. You can insert as many properties as you like. For Example, ==color== is a CSS property, and you can put values like =%GREEN%#00A0F0%ENDCOLOR%= or =%GREEN%red%ENDCOLOR%=. See more colors in %TWIKIWEB%.StandardColors. See more in the [[http://www.w3.org/TR/REC-CSS2/cover.html#minitoc][CSS2 Specification in the W3C Web Site]] for CSS Link appropriate properties. |
 
-The option names are case insensitive for LinkOptionsPlugin or CSS, but the W3C defines the CSS properties in lower case and it is important to validade. Write the LinkOptionsPlugin optins as  you prefer.
+The option names are case <strong><em>in</em></strong>sensitive for LinkOptionsPlugin or !CSS, but the !W3C defines that !CSS properties should be in lower case and it is important to code validation. The LinkOptionsPlugin options will work any way you prefer.
 
 ---++ Examples
 
@@ -52,8 +52,8 @@ Opening in other target:
 Opening in a new window (with options):
 
    * *Code:* =[<nop>[%SYSTEMWEB%.TWikiVariables][See the TWiki Variables][NewWin:600x500|Name:winTWikiVariables|Skin:plain]]=
-   * *Expand to:* <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%SYSTEMWEB%/TWikiVariables?skin=plain" target="winTWikiVariables"\
- onclick="open('%SCRIPTURL%/view%SCRIPTSUFFIX%/%SYSTEMWEB%/TWikiVariables?skin=plain',\
+   * *Expand to:* <a href="%SCRIPTURL{view}%/%SYSTEMWEB%/TWikiVariables?skin=plain" target="winTWikiVariables"\
+ onclick="open('%SCRIPTURL{view}%/%SYSTEMWEB%/TWikiVariables?skin=plain',\
  'winTWikiVariables', 'titlebar=0,width=600,height=500,resizable,scrollbars'); return false;">See the TWiki Variables</a>
       * *If installed:* [[%SYSTEMWEB%.TWikiVariables][See the TWiki Variables][NewWin:600x500|Name:winTWikiVariables|Skin:plain]]
 
@@ -93,7 +93,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Copyright: | &copy; 2005-2006, TWiki:Main.AurelioAHeckert <br /> &copy; 2006-2010 TWiki:TWiki.TWikiContributor |
 |  Plugin Version: | 2010-12-11 (v1.1) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-12-11: | TWikibug:Item6530: Doc improvements, changing TWIKIWEB to SYSTEMWEB |
+|  2010-12-11: | TWikibug:Item6530: Doc improvements, changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.ScottGutman |
 |  27 Jul 2006 | (v1.001) - TWiki:Main.AntonioTerceiro: Dakar compatibility |
 |  29 Mar 2005 | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
