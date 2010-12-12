@@ -1,9 +1,19 @@
-%META:TOPICINFO{author="BaseUserMapping_333" date="1221616557" format="1.1" reprev="1.16" version="1.16"}%
+%META:TOPICINFO{author="TWikiContributor" date="1292137332" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/ToolTipPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/ToolTipPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
 
 This is a plugin to generate dynamic Tool Tips in HTML + javascript (mouseover event). This tooltip is based on http://www.walterzorn.com/tooltip/tooltip_e.htm
-
-%TOC%
 
 ---++ Examples
 
@@ -68,8 +78,8 @@ All walterzorn tooltip parameters are allowed and simply passed to the javascrip
 
 ---++ General Settings
 
-   * One line description, shown in the %TWIKIWEB%.TextFormattingRules topic: 
-      * Set SHORTDESCRIPTION = create Tool Tips for links
+   * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic: 
+      * Set SHORTDESCRIPTION = Create Tool Tips for links
 
    * Debug plugin: (See output in =data/debug.txt=) 
       * Set DEBUG = 0
@@ -80,31 +90,32 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
    * Download the ZIP file from the Plugin web (see below)
    * Unzip *%TOPIC%.zip* in your twiki installation directory. Content:
-| *File:* | *Description:* |
-| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-| ==pub/TWiki/ToolTipPlugin/ToolTipBackground.jpg== | sample image |
-| ==pub/TWiki/ToolTipPlugin/ToolTipPhoto.gif== | sample image |
-| ==pub/TWiki/ToolTipPlugin/wz_tooltip.js== | wz tooltip library |
-| ==pub/TWiki/ToolTipPlugin/tip_centerwindow.js== | Support for tip centering |
-| ==pub/TWiki/ToolTipPlugin/tip_followscroll.js== | Support for tip to remain stationary as page scrolls behind it. |
-| ==pub/TWiki/ToolTipPlugin/tip_balloon.js== | Support for "Balloon" tips |
-| | |
-| ==pub/TWiki/ToolTipPlugin/lt.gif== | Images used to build "Balloon Tips" |
-| ==pub/TWiki/ToolTipPlugin/background.gif== | |
-| ==pub/TWiki/ToolTipPlugin/b.gif== | |
-| ==pub/TWiki/ToolTipPlugin/rt.gif== | |
-| ==pub/TWiki/ToolTipPlugin/l.gif== | |
-| ==pub/TWiki/ToolTipPlugin/stemt.gif== | |
-| ==pub/TWiki/ToolTipPlugin/lb.gif== | |
-| ==pub/TWiki/ToolTipPlugin/r.gif== | |
-| ==pub/TWiki/ToolTipPlugin/rb.gif== | |
-| ==pub/TWiki/ToolTipPlugin/t.gif== | |
-| ==pub/TWiki/ToolTipPlugin/stemb.gif== | |
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==pub/TWiki/ToolTipPlugin/ToolTipBackground.jpg== | sample image |
+     | ==pub/TWiki/ToolTipPlugin/ToolTipPhoto.gif== | sample image |
+     | ==pub/TWiki/ToolTipPlugin/wz_tooltip.js== | wz tooltip library |
+     | ==pub/TWiki/ToolTipPlugin/tip_centerwindow.js== | Support for tip centering |
+     | ==pub/TWiki/ToolTipPlugin/tip_followscroll.js== | Support for tip to remain stationary as page scrolls behind it. |
+     | ==pub/TWiki/ToolTipPlugin/tip_balloon.js== | Support for "Balloon" tips |
+     | | |
+     | ==pub/TWiki/ToolTipPlugin/lt.gif== | Images used to build "Balloon Tips" |
+     | ==pub/TWiki/ToolTipPlugin/background.gif== | |
+     | ==pub/TWiki/ToolTipPlugin/b.gif== | |
+     | ==pub/TWiki/ToolTipPlugin/rt.gif== | |
+     | ==pub/TWiki/ToolTipPlugin/l.gif== | |
+     | ==pub/TWiki/ToolTipPlugin/stemt.gif== | |
+     | ==pub/TWiki/ToolTipPlugin/lb.gif== | |
+     | ==pub/TWiki/ToolTipPlugin/r.gif== | |
+     | ==pub/TWiki/ToolTipPlugin/rb.gif== | |
+     | ==pub/TWiki/ToolTipPlugin/t.gif== | |
+     | ==pub/TWiki/ToolTipPlugin/stemb.gif== | |
 
 *Note:* ==pub/TWiki/ToolTipPlugin/wz_tooltip.js== has been left with the default debug parameter enabled. The script recommends that the parameter be set to false when debugging of tooltips is no longer necessary. ==var tt_Debug = true==
 
    * Test if the installation was successful:
+
 ---+++ Testing the plugin
 
 The same tooltip is displayed if Plugin is installed and not:
@@ -121,21 +132,23 @@ The same tooltip is displayed if Plugin is installed and not:
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/PatrickNomblot  |
+|  Plugin Author: | TWiki:Main.PatrickNomblot  |
+|  Copyright: | &copy; 2004 TWiki:Main.PatrickNomblot <br /> &copy; 2004-2010 TWiki:TWiki.TWikiContributor |
 |  Plugin Version: | %$VERSION% |
-|  Change History: | |
-|  2 Aug 2008 | TWiki:Main/GeorgeClark:  TWikibug:Item6040: Incomplete implementation of a TWiki::Func routine has security implications |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-12-11: | TWikibug:Item6530: Doc improvements, changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  28 Aug 2008 | TWiki:Main/GeorgeClark: TWikibug:Item5966: Syntax changed for calling wz_tooltip.js, updated to =wz_tooltip.js= V5.20, reworked documentation, .js file only included when %TOOLTIP is present in the topic. Also added support for optional extensions for balloon, scrolling and centered tips. |
+|  2 Aug 2008 | TWiki:Main/GeorgeClark:  TWikibug:Item6040: Incomplete implementation of a TWiki::Func routine has security implications |
 |  15 Apr 2006 | TWiki:Main/SteffenPoulsen: Updated with new version of =wz_tooltip.js= (updated browser support), support for Dakar, cleaned up doc a bit |
-|  21 Nov 2003 | TWiki:Main/PatrickNomblot: Initial version |
-|  10 Sep 2004 | TWiki:Main/PatrickNomblot: tooltip text can comes from any TOPIC |
 |  29 Dec 2005 | TWiki:Main/AndreUlrich: updated to wz_tooltip.js v. 3.38; added further parameters |
+|  10 Sep 2004 | TWiki:Main/PatrickNomblot: tooltip text can comes from any TOPIC |
+|  21 Nov 2003 | TWiki:Main/PatrickNomblot: Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 -- TWiki:Main/PatrickNomblot - 21 Nov 2003
 
