@@ -26,7 +26,7 @@ use vars qw(
     );
 
 $VERSION = '1.1';
-$RELEASE = '2010-12-11'
+$RELEASE = '2010-12-11';
 $pluginName = 'JavaDocPlugin';  # Name of this Plugin
 
 # =========================
