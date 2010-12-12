@@ -1,56 +1,69 @@
-%META:TOPICINFO{author="LaurentBovet" date="1049470860" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1292124821" format="1.1" version="$Rev$"}%
 ---+ <nop>%TOPIC%
-
-Write links to javadoc classes
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/HtmlMetaPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/HtmlMetaPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
 ---++ Syntax Rules
 
-	* Write the command =%<nop>JAVADOC{source:fullclassname}%= anywhere in your topics. It will be replaced by a link to the javadoc page.
-	* The source refers to a preference variable setting the URL to the javadoc root
-	* You can ommit the source and write =%<nop>JAVADOC{fullclassname}%=, in this case a default source is used (see settings below) 
+   * Write the command =%<nop>JAVADOC{source:fullclassname}%= anywhere in your topics. It will be replaced by a link to the javadoc page.
+   * The source refers to a preference variable setting the URL to the javadoc root
+   * You can omit the source and write =%<nop>JAVADOC{fullclassname}%=, in this case a default source is used (see settings below) 
 
 ---++ Examples
 
-	| *You type...* | *You should see...* | *If installed...*|
-	| =%<nop>JAVADOC{L4J:org.apache.log4j.Logger}%= |<A HREF="http://jakarta.apache.org/log4j/docs/api/org/apache/log4j/Logger.html">Logger</A>| %JAVADOC{L4J:org.apache.log4j.Logger}%|
-	| =%<nop>JAVADOC{java.lang.String}%= |<A HREF="http://java.sun.com/j2se/1.4.1/docs/api/java/lang/String.html">String</A> | %JAVADOC{java.lang.String}%|
-	| =%<nop>JAVADOC{IO:BufferedOutputStream}%= |<A HREF="http://java.sun.com/j2se/1.4.1/docs/api/java/io/BufferedOutputStream.html">BufferedOutputStream</A>| %JAVADOC{IO:BufferedOutputStream}%|
+| *You type...* | *You should see...* | *If installed...*|
+| =%<nop>JAVADOC{L4J:org.apache.log4j.Logger}%= |<A HREF="http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/Logger.html">Logger</A>| %JAVADOC{L4J:org.apache.log4j.Logger}%|
+| =%<nop>JAVADOC{java.lang.String}%= |<A HREF="http://download.oracle.com/javase/6/docs/api/java/lang/String.html">String</A> | %JAVADOC{java.lang.String}%|
+| =%<nop>JAVADOC{IO:BufferedOutputStream}%= |<A HREF="http://download.oracle.com/javase/6/docs/api/java/io/BufferedOutputStream.html">BufferedOutputStream</A>| %JAVADOC{IO:BufferedOutputStream}%|
 
-	In the last example, the source contain the package, so you need only to write the class name.
+In the last example, the source contain the package, so you need only to write the class name.
 
 ---++ <nop>%TOPIC% Global Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Write links to javadoc classes
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Write links to javadoc classes
 
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
 
-	* javadoc sources
-		* Set DEFAULT = http://java.sun.com/j2se/1.4.1/docs/api/
-		* Set L4J = http://jakarta.apache.org/log4j/docs/api/
-		* Set IO = http://java.sun.com/j2se/1.4.1/docs/api/java/io/
+<noautolink>
+   * javadoc sources
+      * Set DEFAULT = http://download.oracle.com/javase/6/docs/api/
+      * Set L4J = http://jakarta.apache.org/log4j/docs/api/
+      * Set IO = http://download.oracle.com/javase/6/docs/api/java/io/
+</noautolink>
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* Test if the installation was successful:
-		* %JAVADOC{java.lang.String}%
+   * Download the ZIP file from the repository on twiki.org (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Test if the installation was successful:
+      * %JAVADOC{java.lang.String}%
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.LaurentBovet |
-|  Plugin Version: | 04 Apr 2003 (V1.000) |
+|  Copyright: | &copy; 2003 TWiki:Main.LaurentBovet <br /> &copy; 2006-2010 TWiki:TWiki.TWikiContributor |
+|  Plugin Version: | 2010-12-11 (V1.1) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-12-11: | TWikibug:Item6530: Doc improvements, changing TWIKIWEB to SYSTEMWEB |
 |  04 Apr 2003: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
@@ -58,6 +71,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main.LaurentBovet - 04 Apr 2003
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
