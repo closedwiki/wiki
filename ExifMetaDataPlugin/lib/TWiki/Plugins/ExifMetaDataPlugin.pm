@@ -1,6 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004 Pascal Buchbinder, pascal@joebar.ch
+# Copyright (C) 2005-2010 TWiki:TWiki.TWikiContributor
 #
 # $Id$
 #
@@ -26,6 +27,14 @@
 package TWiki::Plugins::ExifMetaDataPlugin;
 
 use strict;
+
+# =========================
+use vars qw(
+    $web $topic $user $installWeb $VERSION $RELEASE $debug
+);
+
+$VERSION = '$Rev$';
+$RELEASE = '2010-12-13';
 
 # =========================
 # markers are FFXX where XX is one of those below
@@ -121,22 +130,6 @@ my %tagid = (
         0xA40a => "Sharpness",
         0xA40c => "SubjectDistanceRange",
 );
-
-# =========================
-use vars qw(
-    $web $topic $user $installWeb $VERSION $RELEASE $debug
-);
-
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
 
 # =========================
 sub initPlugin {
