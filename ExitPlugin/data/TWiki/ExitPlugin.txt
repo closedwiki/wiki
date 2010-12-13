@@ -1,0 +1,114 @@
+%META:TOPICINFO{author="IanBygrave" date="1231863898" format="1.1" version="1.33"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+---+!! <nop>%TOPIC%
+
+This plugin redirects links to external sites via a page of your choice.
+You might want to do that to display a disclaimer
+("You are leaving %WIKITOOLNAME%, come back soon.")
+or to remove topic names from HTTP referer headers.
+
+%TOC%
+
+------
+
+---++ Syntax Rules
+
+This plugin does not extend TWiki markup syntax.
+
+---++ Examples
+
+If <nop>%TOPIC% is installed, the following link should take you to =<nop>%REDIRECTVIA%http://www.google.com/=
+
+http://www.google.com/
+
+Note that these links will not be affected if the =NOEXIT= setting lists =twiki.org=.
+
+http://twiki.org/download.html
+
+http://develop.twiki.org/
+
+---+++ Known Issues
+
+---++++ Cross linked images
+
+Cross linked images (like the following) are not handled by this plugin and can still leak page names via HTTP referer headers.
+
+<verbatim>
+<img src="http://www.example.com/logo.png" alt="Someone else's logo"/>
+</verbatim>
+
+As images are loaded with the page (unlike links) no user action is needed to leak page names.
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = This plugin redirects links to external sites via a page of your choice.
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
+   * Disable exit page - sitewide (here), per web (in WebPreferences) or per topic
+      * Set DISABLEEXITPLUGIN = 0
+
+   * URI schemes to be redirected
+      * Set SCHEMES = http https
+
+   * Exit handler
+      * Set REDIRECTVIA = %SCRIPTURL%/exit.cgi?url=
+
+   * Hosts for which no exit page should be shown.
+      * Set NOEXIT = .bygrave.me.uk .ibygrave.no-ip.org
+
+   * External link marks (you can use an image if you want). These are optional.
+      * Set PREMARK =
+      * Set POSTMARK = &nbsp;<image src="%PUBURL%/TWiki/ExitPlugin/external.png" />
+      * Set MARKSINLINK = off
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==bin/exit.cgi== | CGI script to generate the redirction page |
+   * Test if the installation was successful:
+      * Click on links in above examples, and check that they are redirected via =<nop>%REDIRECTVIA%=
+      * Check that internal links do not redirect. Fix the setting of =NOEXIT= if they do.
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.IanBygrave |
+|  Plugin Version: | 13 Jan 2009 (V1.50) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13 Jan 2009: | Remove <nop> tags from the url. |
+|  08 Jan 2007: | New DISABLEEXITPLUGIN preference to allow per-web or -topic disabling of the plugin. Stop using deprecated handler. |
+|  21 Jul 2006: | Make the set of redirectable URI schemes configurable with SCHEMES preference. |
+|  26 Mar 2006: | Performance improvements. |
+|  24 Mar 2006: | Add MARKSINLINK pref. Match more links. |
+|  22 Mar 2006: | Add TWiki:Plugins.ExternalLinkPlugin functionality to ExitPlugin. |
+|  13 Feb 2006: | Fix url escaping, which got removed by a previous change. |
+|  11 Feb 2006: | The NOEXIT configuration parameter is now a whitespace seperated list of internal domains. |
+|  04 Feb 2006: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  CPAN Dependencies: | ==CGI== %BR% ==URI::Escape== |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle 95%, %TWIKIWEB%.FormattedSearch 96%, %TOPIC% 95% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- TWiki:Main.IanBygrave - 04 Feb 2006
+
+%META:FILEATTACHMENT{name="exit.cgi" attr="" autoattached="1" comment="" date="1139131524" path="exit.cgi" size="588" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="external.png" attr="" autoattached="1" comment="" date="1143197542" path="external.png" size="165" user="IanBygrave" version="1.1"}%
+%META:FILEATTACHMENT{name="ExitPlugin.zip" attr="" autoattached="1" comment="" date="1168215351" path="ExitPlugin.zip" size="9181" user="Main.IanBygrave" version="4"}%
