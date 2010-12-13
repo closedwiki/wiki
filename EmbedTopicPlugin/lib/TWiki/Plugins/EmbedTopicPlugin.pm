@@ -2,6 +2,8 @@
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2004 TWiki:Main.DavidBourget
+# Copyright (C) 2004-2010 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -13,9 +15,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
-
-
-
+#
 # =========================
 # EmbedTopicPlugin 1.051
 # David Bourget (moi@dbourget.com)
@@ -40,15 +40,8 @@ use vars qw(
         $debug $bgcolor $hdcolor
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2010-12-12';
 
 $pluginName = 'EmbedTopicPlugin';  # Name of this Plugin
 
