@@ -1,6 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2006 Ian Bygrave, ian@bygrave.me.uk
+# Copyright (C) 2006-2010 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,11 +23,12 @@ package TWiki::Plugins::ExitPlugin;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName
+        $web $topic $user $installWeb $VERSIONi $RELEASE $pluginName
         $debug $disable $initStage $redirectVia $noExit $preMark $postMark $marksInLink $schemepat
     );
 
-$VERSION = '1.50';
+$VERSION = '1.6';
+$RELEASE = '2010-12-12';
 $pluginName = 'ExitPlugin';  # Name of this Plugin
 
 # =========================

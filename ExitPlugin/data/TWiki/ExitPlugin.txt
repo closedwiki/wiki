@@ -1,15 +1,20 @@
-%META:TOPICINFO{author="IanBygrave" date="1231863898" format="1.1" version="1.33"}%
+%META:TOPICINFO{author="TWikiContributor" date="1292219561" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiPreferences"}%
 ---+!! <nop>%TOPIC%
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/ExitPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/ExitPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-This plugin redirects links to external sites via a page of your choice.
-You might want to do that to display a disclaimer
-("You are leaving %WIKITOOLNAME%, come back soon.")
-or to remove topic names from HTTP referer headers.
+---++ Introduction
 
-%TOC%
-
-------
+This plugin redirects links to external sites via a page of your choice. You might want to do that to display a disclaimer ("You are leaving %WIKITOOLNAME%, come back soon.") or to remove topic names from HTTP referrer headers.
 
 ---++ Syntax Rules
 
@@ -43,8 +48,8 @@ As images are loaded with the page (unlike links) no user action is needed to le
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = This plugin redirects links to external sites via a page of your choice.
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Redirect links to external sites via a page of your choice, such as to remove topic names from HTTP referrer headers
 
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
@@ -63,7 +68,8 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
    * External link marks (you can use an image if you want). These are optional.
       * Set PREMARK =
-      * Set POSTMARK = &nbsp;<image src="%PUBURL%/TWiki/ExitPlugin/external.png" />
+      * Set POSTMARK =
+      * #Set POSTMARK = &nbsp;<image src="%PUBURL%/%SYSTEMWEB%/ExitPlugin/external.png" />
       * Set MARKSINLINK = off
 
 ---++ Plugin Installation Instructions
@@ -77,6 +83,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
      | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
      | ==bin/exit.cgi== | CGI script to generate the redirction page |
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
    * Test if the installation was successful:
       * Click on links in above examples, and check that they are redirected via =<nop>%REDIRECTVIA%=
       * Check that internal links do not redirect. Fix the setting of =NOEXIT= if they do.
@@ -84,8 +91,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.IanBygrave |
-|  Plugin Version: | 13 Jan 2009 (V1.50) |
+|  Copyright: | &copy; 2006-2009 TWiki:Main.IanBygrave <br /> &copy; 2006-2010 TWiki:TWiki.TWikiContributor |
+|  Plugin Version: | 2010-12-12 (V1.6) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-12-12: | TWikibug:Item6530: Doc improvements, changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  13 Jan 2009: | Remove <nop> tags from the url. |
 |  08 Jan 2007: | New DISABLEEXITPLUGIN preference to allow per-web or -topic disabling of the plugin. Stop using deprecated handler. |
 |  21 Jul 2006: | Make the set of redirectable URI schemes configurable with SCHEMES preference. |
@@ -100,15 +109,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle 95%, %TWIKIWEB%.FormattedSearch 96%, %TOPIC% 95% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle 95%, %SYSTEMWEB%.FormattedSearch 96%, %TOPIC% 95% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main.IanBygrave - 04 Feb 2006
-
-%META:FILEATTACHMENT{name="exit.cgi" attr="" autoattached="1" comment="" date="1139131524" path="exit.cgi" size="588" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="external.png" attr="" autoattached="1" comment="" date="1143197542" path="external.png" size="165" user="IanBygrave" version="1.1"}%
-%META:FILEATTACHMENT{name="ExitPlugin.zip" attr="" autoattached="1" comment="" date="1168215351" path="ExitPlugin.zip" size="9181" user="Main.IanBygrave" version="4"}%
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
