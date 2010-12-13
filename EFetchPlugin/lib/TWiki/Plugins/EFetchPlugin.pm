@@ -1,6 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004 Cole Beck, cole.beck@vanderbilt.edu
+# Copyright (C) 2004-2010 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,10 +22,6 @@
 #
 # Thanks to FEH and JRH
 #
-# Each plugin is a package that may contain these functions:        VERSION:
-#
-#   initPlugin              ( $topic, $web, $user, $installWeb )    1.000
-#   commonTagsHandler       ( $text, $topic, $web )                 1.000
 # =========================
 package TWiki::Plugins::EFetchPlugin;
 
@@ -34,15 +31,8 @@ use vars qw(
         $debug $doOldInclude $renderingWeb
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2010-12-12';
 
 $pluginName = 'EFetchPlugin';  # Name of this Plugin
 use LWP::Simple;
