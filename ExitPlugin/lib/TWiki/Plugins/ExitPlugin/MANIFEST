@@ -1,0 +1,3 @@
+bin/exit.cgi 0755
+data/TWiki/ExitPlugin.txt 0644
+lib/TWiki/Plugins/ExitPlugin.pm 0444
