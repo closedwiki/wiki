@@ -134,20 +134,24 @@ my %tagid = (
 # =========================
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
+
+    TWiki::Func::registerTagHandler( 'EXIFMETADATA', \&_handleEXIFMETADATA );
+
     return 1;
 }
 
 # =========================
-sub handleExifMetaData {
-    my( $args ) = @_;
+sub _handleEXIFMETADATA {
+    my( $session, $params, $topic, $web ) = @_;
+
     %tags = ();
 
-    my $filename = TWiki::Func::extractNameValuePair( $args, "file" );
+    my $filename = $params->{file} || $params->{_DEFAULT};
     return "EXIF-ERROR-01" if( $filename =~/^\s*$/ );
 
-    $debug = &TWiki::Func::getPreferencesFlag( "EXIFMETADATAPLUGIN_DEBUG" );
+    $debug = TWiki::Func::getPreferencesFlag( "EXIFMETADATAPLUGIN_DEBUG" );
 
-    my $tags_string = TWiki::Func::extractNameValuePair( $args, "tags" );
+    my $tags_string = $params->{tags};
     if( $tags_string eq "" ) {
         foreach my $myKey (keys %defaulttag) {
             $tags{$myKey} = "selected";
@@ -164,6 +168,9 @@ sub handleExifMetaData {
     }
 
     my $exif = "";
+
+    my $topic = $params->{topic} || $topic;
+    ( $web, $topic ) = TWiki::Func::normalizeWebTopicName( $web, $topic );
 
     my ( $meta, $page ) = &TWiki::Func::readTopic( $web, $topic );
     my @attachments = $meta->find( 'FILEATTACHMENT' );
@@ -482,13 +489,4 @@ sub readLong {
 }
 
 # =========================
-sub commonTagsHandler {
-    $_[0] =~ s/%EXIFMETADATA%/&handleExifMetaData()/geo;
-    $_[0] =~ s/%EXIFMETADATA{(.*?)}%/&handleExifMetaData($1)/geo;
-}
-
-# =========================
-
-
-
 1;
