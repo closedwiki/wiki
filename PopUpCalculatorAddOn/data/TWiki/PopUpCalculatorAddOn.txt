@@ -1,9 +1,27 @@
-<table><tr><td>
----+ Pop Up Calculator Add-On
+%META:TOPICINFO{author="TWikiContributor" date="1292312319" format="1.1" version="$Rev$"}%
+---+!! Pop Up Calculator Add-On
+<!--
+   Contributions to this TWiki add-on are appreciated. Please update the add-on page at
+   http://twiki.org/cgi-bin/view/Plugins/PopUpCalculatorAddOn or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/PopUpCalculatorAddOnDev.
+   If you are a TWiki contributor please update the add-on in the SVN repository.
+-->
+<sticky><div style="float:right; margin:0 0 20px 20px;">
+<div style="background-color:#EBEEF0; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+<div style="text-align: right">
+<img src="%ATTACHURL%/Calculator.gif" alt="Calculator" />
+</div>
+</div></sticky>
+%SHORTDESCRIPTION%
 
-Addressing a community of Engineers on an intranet, I find it valuable to offer a popup calculator. This particular one is nice-looking and works no matter your browser (ie / firefox) / operating system (MS-windows / linux).
+---++ Introduction
 
-I got permission from the author to redistribute it:
+Addressing a community of Engineers on an intranet, it is valuable to offer a popup calculator. This particular one is nice-looking and works in any modern browser (IE, Firefox) and operating system (Windows, Linux).
+
+We got permission from the author to redistribute it:
+%TWISTY{}%
 <verbatim>
 Subject:    Re: permission to reproduce ScientificCalculator ?
 Date:    Tue, 16 Nov 2004 16:12:40 -0500
@@ -27,53 +45,79 @@ Woodbridge, ON, Canada
 L4L 7Y8
 Phone: (905) 265-7369
 Fax: (905) 265-0340
-Email: info@kriostech.com
+Email: info[at]kriostech.com
 </verbatim>
-</td><td><img src="%ATTACHURL%/Calculator.gif" alt="Calculator"></img>
-</td></tr></table>
+%ENDTWISTY%
 
 ---++ Usage
-<table width="100%"><tr><td>
-  Put a *calc* link in your TWiki.WebTopBar as described in Support.ReplaceJumpWithSearch
 
-Here's a working one (Thanks to Main.MartinCleaver) %COMMENT{type=scientificCalculator noform=on}%
-
-</td><td align="right">
-<img src="%PUBURL%/Support/ReplaceJumpWithSearch/twikisearch02.jpg">
-</td></tr></table>
----++ Add-On Installation Instructions
-
-__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
-
-   * Download the ZIP file from the Add-on Home (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki pub directory as pub/ScientificCalculator2.1
-   * unpack it as pub/ScientificCalculator2.1
-   * edit your templates/twiki.pattern.tmpl, look where it defines SCRIPT, and add:
+1. Add a <u>calc</u> link in any TWiki page using this code:
 <verbatim>
-%TMPL:DEF{"script"}%
+%INCLUDE{ "%SYSTEMWEB%.PopUpCalculatorAddOn" section="javascript" }%
+%INCLUDE{ "%SYSTEMWEB%.PopUpCalculatorAddOn" section="link" }%
+</verbatim>
+
+This will produce a link like this:
+
+%STARTSECTION{"javascript"}%
 <script type="text/javascript">
-<!-- HIDE
-/*****************************/
-/*      openPopupWin         */
-/*****************************/
+<!-- <pre> HIDE
 var popupWin;
 function openPopupWin(addr)
-{ if(popupWin)
+{
+  if(popupWin)
     popupWin.close();
   var chasm = screen.availWidth;
   var mount = screen.availHeight;
   var w = 240;
   var h = 410;
-                                                                                                                                   
   popupWin=window.open(addr,'popupWin','status=no, width=' + w + ',height=' + h + ',left='
                            + ((chasm - w - 10) * .5) + ',top=' + ((mount - h - 30) * .5));
 }
-// -->
+// </pre> HIDE -->
+</script>
+%ENDSECTION{"javascript"}%
+%STARTSECTION{"link"}%
+<a href="javascript:openPopupWin('%PUBURL%/%SYSTEMWEB%/PopUpCalculatorAddOn/popup.html')">calc</a>
+%ENDSECTION{"link"}%
+
+__Notes:__
+   * The ="javascript"= section should be included only once; omit this include in case the calendar has been added to the skin.
+   * The ="link"= section can be included as many times as needed. In case of the ="link"= section include you can build your own link text or link button, make sure the link target (e.g. anchor =href= parameter) points to: =javascript:openPopupWin('%<nop>PUBURL%/%<nop>SYSTEMWEB%/PopUpCalculatorAddOn/popup.html')=
+
+2. Add a <u>calc</u> link to the skin's header so that it is available on all TWiki pages:
+
+Follow the add-on instructions below, or add a <u>calc</u> link in your %SYSTEMWEB%.WebTopBar as described in TWiki:Support.ReplaceJumpWithSearch.
+
+---++ Add-On Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
+
+   * Download the ZIP file from the Add-on Home (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki directory
+   * Edit your templates/twiki.pattern.tmpl, look where it defines SCRIPT, and add:
+<verbatim>
+%TMPL:DEF{"script"}%
+<script type="text/javascript">
+<!-- <pre> HIDE
+var popupWin;
+function openPopupWin(addr)
+{
+  if(popupWin)
+    popupWin.close();
+  var chasm = screen.availWidth;
+  var mount = screen.availHeight;
+  var w = 240;
+  var h = 410;
+  popupWin=window.open(addr,'popupWin','status=no, width=' + w + ',height=' + h + ',left='
+                           + ((chasm - w - 10) * .5) + ',top=' + ((mount - h - 30) * .5));
+}
+// </pre> HIDE -->
 </script>
 </verbatim>
-   * edit your TWiki/WebTopBar and somewhere add the following code:
+   * Edit your <nop>%SYSTEMWEB%.WebTopBar and somewhere add the following code:
 <verbatim>
-<A href="javascript:openPopupWin('/twiki/pub/ScientificCalculator2.1/popup.html')">calc</a>
+<a href="javascript:openPopupWin('%PUBURL%/%SYSTEMWEB%/PopUpCalculatorAddOn/popup.html')">calc</a>
 </verbatim>
    * _Et voila_, you now have a popup calculator on all your pages. Enjoy.
 
@@ -81,20 +125,20 @@ function openPopupWin(addr)
 
    * Set SHORTDESCRIPTION = Add a popup calculator to a TWiki skin
 
-|  Add-on Author: | TWiki:Main/GillesEricDescamps |
-|  Add-on Version: | 17 Nov 2004 (v1.000) |
+|  Add-on Author: | TWiki:Main.GillesEricDescamps |
+|  Copyright: | &copy; 2004 TWiki:Main.GillesEricDescamps <br /> &copy; 2005-2010 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Add-on Version: | 2010-12-13 (v1.1) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  17 Nov 2004: | Initial version |
+|  2010-12-13: | TWikibug:Item6530: Doc improvements, changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2004-11-17: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  License: | GPL (for the single line of html code ;-) ) |
 |  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+__Related Topic:__ %SYSTEMWEB%.TWikiAddOns
 
--- TWiki:Main/GillesEricDescamps - 17 Nov 2004
-
-%META:FILEATTACHMENT{name="Calculator.gif" attr="" autoattached="1" comment="ScreenShot" date="1100676273" path="Calculator.gif" size="15706" user="GillesEricDescamps" version="1.1"}%
+%META:FILEATTACHMENT{name="Calculator.gif" attr="h" comment="Screenshot" date="1100676273" path="Calculator.gif" size="15706" user="TWikiContributor" version="1"}%
