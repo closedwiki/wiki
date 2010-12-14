@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1292312319" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1292312800" format="1.1" version="$Rev$"}%
 ---+!! Pop Up Calculator Add-On
 <!--
    Contributions to this TWiki add-on are appreciated. Please update the add-on page at
@@ -77,9 +77,12 @@ function openPopupWin(addr)
 // </pre> HIDE -->
 </script>
 %ENDSECTION{"javascript"}%
+<!--
 %STARTSECTION{"link"}%
 <a href="javascript:openPopupWin('%PUBURL%/%SYSTEMWEB%/PopUpCalculatorAddOn/popup.html')">calc</a>
 %ENDSECTION{"link"}%
+-->
+<a href="javascript:openPopupWin('%ATTACHURL%/popup.html')">calc</a>
 
 __Notes:__
    * The ="javascript"= section should be included only once; omit this include in case the calendar has been added to the skin.
