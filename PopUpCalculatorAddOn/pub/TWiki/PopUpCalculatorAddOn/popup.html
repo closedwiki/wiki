@@ -1,0 +1,1337 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--
+/****************************************************/
+/*  Title      : JavaScript Calculator V 2.1        */
+/*  Date       : Oct 5, 2002                        */
+/*  Update     : Mar 8, 2004                        */
+/*                                                  */
+/*  Programmer : Inchul Koo                         */
+/*  E-mail     : info@sunflowerwebstudio.com        */
+/*  Web Address: http://www.sunflowerwebstudio.com  */
+/*                                                  */
+/*  License    : Free for Non-Commercial Use        */
+/****************************************************/ 
+-->
+<HTML>
+<HEAD><TITLE>Scientific Calculator Main Window</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+<META content="javascript calculator css" name=keywords>
+<LINK href="calculator.css" type=text/css rel=stylesheet>
+<SCRIPT language=javascript>
+<!--
+/****************************************************/
+/*                                                  */
+/*               calculator functions               */
+/*                                                  */
+/****************************************************/
+var formExecuted;
+var lastResults;
+
+/*****************************/
+/*          init             */
+/*****************************/
+function init(cur)
+{ formExecuted = false;
+  drgValue = 3;
+  lastResults = 0;
+  selectDrg(cur, drgValue)
+  currMode = "";
+  selectMode(cur, "dec");
+  sound_mode = "off";
+  changeSoundMode(cur);
+}
+
+/*****************************/
+/*        clearAll           */
+/*****************************/
+function clearAll(cur)
+{ cur.inputWindow.value = '';
+  formExecuted = false;
+  playSound();
+  cur.inputWindow.focus();
+}
+
+/*****************************/
+/*       inputValue          */
+/*****************************/
+function inputValue(cur, inVal)
+{ if(formExecuted)
+  { cur.inputWindow.value = "";
+    formExecuted = false;
+  }
+  if(inVal == "BS")
+  { var str = cur.inputWindow.value;
+    cur.inputWindow.value = str.substring(0, str.length-1);
+  }
+  else
+  { if(cur.inputWindow.value.length + inVal.length < 72)
+      cur.inputWindow.value += inVal;
+  }
+  playSound();
+  cur.inputWindow.focus();
+}
+
+/*****************************/
+/*       executeForm         */
+/*****************************/
+function executeForm(cur)
+{ playSound();
+  cur.inputWindow.focus();
+
+  if(cur.inputWindow.value && !formExecuted)
+  { var resultsStr = calculateFormula(cur);
+    dispalyResults(cur, resultsStr);
+  }
+}
+
+/*****************************/
+/*     calculateFormula      */
+/*****************************/
+function calculateFormula(cur)
+{ var formulaStr = cur.inputWindow.value;
+  var resultsStr;
+  
+  //validate signs, [--] to [+], [++] to [+]
+  formulaStr = validateSigns(formulaStr, "-");
+  formulaStr = validateSigns(formulaStr, "+");
+
+  //select mode, [dec] or the others
+  if(currMode == "dec")
+    resultsStr = calcurateDecimal(formulaStr);
+  else
+    resultsStr = calcurateNoneDec(formulaStr);
+  return resultsStr;
+}    
+
+/*****************************/
+/*       dispalyResults      */
+/*****************************/
+function dispalyResults(cur, resultsStr)
+{ //dispaly value (align=right)
+  var strLen = resultsStr.length;
+  for(i=strLen; i<24; i++)
+  { var temp = " " + resultsStr;
+    resultsStr = temp;
+  }
+  cur.inputWindow.value += "\n" + resultsStr;
+  formExecuted = true;
+}
+
+/*****************************/
+/*       validateSigns       */
+/*****************************/
+function validateSigns(formulaStr, sign)
+{ // ex. 1--2(3++4)+--5 = 1+2(3+4)+5
+  var str = formulaStr;
+  for(i=0; i<str.length; i++)
+  { if(str.charAt(i) == sign && str.charAt(i+1) == sign)
+    { str = str.substring(0, i)
+          + "+"
+          + str.substring(i+2, str.length);
+      i = -1;
+    }
+  }
+  return str;
+}
+
+/*****************************/
+/*     calcurateNoneDec      */
+/*****************************/
+function calcurateNoneDec(formulaStr)
+{ var resultsStr = "";
+  var pos = 0;
+  var str = formulaStr;
+  var input;
+  var formulaStr ="";
+  var foundNumber = false;
+  var origin = getBaseNumber(currMode);
+
+  // recall Ans (last result)
+  str = insertAstskMth(str, 'Ans');
+  str = convertOperator(str, 'Ans');
+
+  try
+  { var i;
+    for(i=0; i < str.length; i++)
+    { if(!foundNumber)
+      { if((str.charAt(i) >= '0' && str.charAt(i) <= '9' ||
+             str.charAt(i) >= 'A' && str.charAt(i) <= 'F' ))
+        { pos = i;
+          foundNumber = true;
+        }
+        else
+        { formulaStr += str.charAt(i);
+        }
+      }
+      else
+      { if(!(str.charAt(i) >= '0' && str.charAt(i) <= '9' ||
+             str.charAt(i) >= 'A' && str.charAt(i) <= 'F' ))
+        { input = str.substring(pos, i);
+
+          formulaStr += convertNumber(input, origin, 10) + str.charAt(i);
+          foundNumber = false;
+        }    
+      }
+      if(i == str.length-1 && foundNumber)
+      { input = str.substring(pos, str.length);
+        formulaStr += convertNumber(input, origin, 10);
+      }    
+    }
+    // validate division -- ex) 8/2(2)(2) = 1
+    formulaStr = convertOperator(formulaStr, '/');
+    formulaStr = validateDivision(formulaStr);
+    // insert asterisk when needed
+    formulaStr = insertAsterisk(formulaStr);
+
+    input = "" + Math.round(eval(formulaStr));
+    resultsStr = "" + convertNumber(input, 10, origin);
+    lastResults = resultsStr;
+  }
+  catch(exc)
+  { resultsStr = "Syntax Error";
+    lastResults = 0;
+  }
+
+  return resultsStr;
+}
+
+/*****************************/
+/*      getBaseNumber        */
+/*****************************/
+function getBaseNumber(thisMode)
+{ var baseNumber;
+  switch(thisMode)
+  { case 'hex': baseNumber = 16; break;
+    case 'dec': baseNumber = 10; break;
+    case 'oct': baseNumber =  8; break;
+    case 'bin': baseNumber =  2;
+  }
+  return baseNumber;
+}
+
+/*****************************/
+/*      convertNumber        */
+/*****************************/
+function convertNumber(input, origin, dest)
+{ var base="0123456789ABCDEF";
+  var c=0;
+  var result="";
+  var sign = "";
+  
+  if(input.charAt(0) == "-")
+  { sign = "-";
+    input = input.substring(1, input.length);
+  }
+  if(input != "0")
+  { for(i=1; i<=input.length; i++)
+    { var b=base.indexOf(input.substring(i-1,i));
+      var n=b*(Math.pow(origin, input.length-i));
+      c+=n;
+    }
+    a=100;
+    while (c < Math.pow (dest, a))
+    { a--;
+    }
+    while (a>-1)
+    { e=Math.pow (dest, a);
+      a--;
+      d=((c-(c%e))/e)+1;
+      c=c%e;
+      ciffer=base.substring(d-1, d);
+      result = result + ciffer;
+    }
+  }
+  else
+    result = "0";
+  result = sign + result;
+  return result;
+}
+
+/*****************************/
+/*     calcurateDecimal      */
+/*****************************/
+function calcurateDecimal(formulaStr)
+{ var resultsStr = "";
+  // change asin, acos, atan to asi, aco, ata
+  formulaStr = convertOperator(formulaStr, 'asin');
+  formulaStr = convertOperator(formulaStr, 'acos');
+  formulaStr = convertOperator(formulaStr, 'atan');
+
+  // validate division -- ex) 8/-2(2)(2) = -1
+  formulaStr = convertOperator(formulaStr, '/');
+  formulaStr = validateDivision(formulaStr);
+
+  // insert asterisk when needed
+  formulaStr = insertAsterisk(formulaStr);
+  formulaStr = insertAsterisk2(formulaStr);
+  // change char [e] to [Math.E]
+  formulaStr = convertOperator(formulaStr, 'e');
+
+  // change char [log] to [LOG]: The base 10 logarithm
+  formulaStr = convertOperator(formulaStr, 'log');
+  // change char [ln] to  [log]: The base  2 logarithm
+  formulaStr = convertOperator(formulaStr, 'ln');
+
+  // change char [pi] to [Math.PI]
+  formulaStr = convertOperator(formulaStr, 'pi');
+  // recall Ans (last result)
+  formulaStr = convertOperator(formulaStr, 'Ans');
+  // convert & reform [a^b] to [Math.pow(a,b)]
+  formulaStr = convertPower(formulaStr);
+  formulaStr = convertMath2(formulaStr, 'pwr');
+
+  // reform and eval [sin(a)] to [Math.sin(a)] ( cos, tan, asin, log, etc... )
+  formulaStr = evaluateValues(formulaStr);
+
+  // evaluate formula String
+  try
+  { resultsStr = "" + roundDbl( eval(formulaStr) );
+    lastResults = resultsStr;
+  }
+  catch(exc)
+  { resultsStr = "Syntax Error";
+    lastResults = 0;
+  }
+  return resultsStr;
+}
+
+/*****************************/
+/*     validateDivision      */
+/*****************************/
+function validateDivision(formulaStr)
+{ // ex. 8/-2(2)(2) = 8/(-2(2)(2))
+  //     2/(2)pi*cos(30) = 2/(2*pi)*cos(30)
+  //     2/2picos(30)*2 = 2/(2*pi*cos(30))*2
+  var mthName = 'div';
+  while(formulaStr.match(mthName))
+  { var tmpStr_val = "";
+    var tmpStr_end = "";
+    var charNum;
+    var str = formulaStr;
+    var pos = str.indexOf(mthName);
+    formulaStr = str.substring(0, pos) + '/(';
+    var startHere=0;
+    if(str.charAt(pos+mthName.length) == '+' || str.charAt(pos+mthName.length) == '-')
+    { //formulaStr += str.charAt(pos+mthName.length);
+      startHere=1;
+    }
+    var bracket_num = 0;
+    var found = false;
+    for(i=pos+mthName.length+startHere; i < str.length && !found; i++ )
+    { charNum  = (str.charAt(i)).charCodeAt();
+      charNum2 = (str.charAt(i+1)).charCodeAt();
+      if(charNum==40)
+        bracket_num++;
+      else if(charNum==41)
+        bracket_num--;
+    
+      if(i == str.length-1)
+      { if( charNum == 41 && bracket_num != 0 )
+        { tmpStr_val = str.substring(pos+mthName.length, str.length-1);
+          tmpStr_end = str.charAt(str.length-1);
+        }
+        else
+        { tmpStr_val = str.substring(pos+mthName.length, str.length);
+        }
+      }
+      else if( bracket_num < 0 || ( bracket_num == 0 && checkOperator(str.charAt(i+1))))
+      { tmpStr_val = str.substring(pos+mthName.length, i+1);
+        tmpStr_end = str.substring(i+1, str.length);
+        found = true;
+      }
+    }
+    formulaStr = formulaStr + tmpStr_val + ')' + tmpStr_end;
+  }
+  return formulaStr;
+}
+
+/*****************************/
+/*      insertAsterisk       */
+/*****************************/
+function insertAsterisk(str)
+{ var tmpStr = "";
+  // insert '*' in front of '(' when needed
+  for(i=0; i< str.length; i++ )
+  { var charNum = (str.charAt(i)).charCodeAt();
+    var preChar = (str.charAt(i-1)).charCodeAt();
+    if( i>0 && charNum==40 &&
+        ( preChar == 41  || checkNumber(str.charAt(i-1)) ||
+          preChar == 101 || str.substr(i-2,2) == 'pi' ))
+    { tmpStr += '*(';
+    }
+    else
+      tmpStr += str.charAt(i);
+  }
+  return tmpStr;
+}
+
+/*****************************/
+/*     insertAsterisk 2      */
+/*****************************/
+function insertAsterisk2(formulaStr)
+{ var tmpStr = formulaStr;
+  tmpStr = insertAstskMth(tmpStr, 'e');
+  tmpStr = insertAstskMth(tmpStr, 'ln');
+  tmpStr = insertAstskMth(tmpStr, 'log');
+  tmpStr = insertAstskMth(tmpStr, 'sqrt');
+  tmpStr = insertAstskMth(tmpStr, 'sin');
+  tmpStr = insertAstskMth(tmpStr, 'cos');
+  tmpStr = insertAstskMth(tmpStr, 'tan');
+  tmpStr = insertAstskMth(tmpStr, 'asi');
+  tmpStr = insertAstskMth(tmpStr, 'aco');
+  tmpStr = insertAstskMth(tmpStr, 'ata');
+  tmpStr = insertAstskMth(tmpStr, 'pi');
+  tmpStr = insertAstskMth(tmpStr, 'Ans');
+  return tmpStr;
+}
+
+function insertAstskMth(tmpStr, mthName)
+{
+  while(tmpStr.match(mthName))
+  { var str = tmpStr;
+    var pos = str.indexOf(mthName);
+    tmpStr = str.substring(0, pos);
+    var charNum = (str.charAt(pos-1)).charCodeAt();
+    if( pos > 0 && !checkOperator(str.charAt(pos-1)) && charNum != 40 && charNum != 94)
+      tmpStr += '*';
+    tmpStr += 'TEMP' + (str.substring(pos+mthName.length, str.length));
+  }
+
+  while(tmpStr.match('TEMP'))
+  { var str = tmpStr;
+    var pos = str.indexOf('TEMP');
+    tmpStr = str.substring(0, pos);
+    tmpStr += mthName + (str.substring(pos+4, str.length));
+  }
+  return tmpStr;
+}
+
+/*****************************/
+/*      checkOperator        */
+/*****************************/
+function checkOperator(charVal)
+{ switch(charVal)
+  { case '+':
+    case '-':
+    case '*':
+    case '/': return true; break;
+    default : return false;
+  }
+}
+
+/*****************************/
+/*       checkNumber         */
+/*****************************/
+function checkNumber(ch)
+{ if( ( ch >= '0' && ch <= '9' ) || ch == '.' )
+    return true;
+  else
+    return false;
+}
+
+/*****************************/
+/*      convertOperator      */
+/*****************************/
+function convertOperator(formulaStr, charVal)
+{ while(formulaStr.match(charVal))
+  { var str = formulaStr;
+    var pos = str.indexOf(charVal);               
+    var charNum;
+
+    var formulaStr = str.substring(0, str.indexOf(charVal));
+    switch(charVal)
+    { case 'e': charNum = (str.charAt(pos+1)).charCodeAt();
+                if( !checkOperator(str.charAt(pos+1)) && ( pos+1 < str.length) && charNum != 40 && charNum != 41 && charNum != 94)
+                  formulaStr = 'ERR';
+                else
+                  formulaStr += Math.E;
+                break;
+      case 'log': formulaStr += 'LOG';
+                break;
+      case 'ln': formulaStr += 'log';
+                break;
+      case 'pi': charNum = (str.charAt(pos+2)).charCodeAt();
+                if( !checkOperator(str.charAt(pos+2)) && ( pos+2 < str.length) && charNum != 40 && charNum != 41 && charNum != 94)
+                  formulaStr = 'ERR';
+                else
+                  formulaStr += Math.PI;
+                break;
+      case 'Ans': formulaStr += lastResults;
+                break;
+      case 'asin': formulaStr += 'asi';
+                break;
+      case 'acos': formulaStr += 'aco';
+                break;
+      case 'atan': formulaStr += 'ata';
+                break;
+      case '/': formulaStr += 'div';
+                break;
+      default :
+    }
+
+    formulaStr += str.substring(str.indexOf(charVal)+charVal.length, str.length);
+  }
+  return formulaStr;
+}
+
+/*****************************/
+/*      convertPower         */
+/*****************************/
+function convertPower(formulaStr)
+{ // convert [^] to [pwr] temporary
+  var str = formulaStr;
+  var formulaStr = "";
+  for(i=0; i<str.length; i++)
+  { if(str.charAt(i) == '^')
+      formulaStr += 'pwr';
+    else
+      formulaStr += str.charAt(i);
+  }
+  return formulaStr;
+}
+
+/*****************************/
+/*       evaluateValues      */
+/*****************************/
+function evaluateValues(formulaStr)
+{ // evaluate sin(),cos(),tan()
+  formulaStr = convertMath(formulaStr, 'LOG');
+  formulaStr = convertMath(formulaStr, 'log');
+
+  formulaStr = convertMath(formulaStr, 'sqrt');
+  formulaStr = convertMath(formulaStr, 'sin');
+  formulaStr = convertMath(formulaStr, 'cos');
+  formulaStr = convertMath(formulaStr, 'tan');
+  formulaStr = convertMath(formulaStr, 'asi');
+  formulaStr = convertMath(formulaStr, 'aco');
+  formulaStr = convertMath(formulaStr, 'ata');
+  
+  return formulaStr;
+}
+
+/*****************************/
+/*       convertMath        */
+/*****************************/
+function convertMath(formulaStr, mthName)
+{ while(formulaStr.match(mthName) && formulaStr.substr(formulaStr.indexOf(mthName)-5, 5)!='Math.' )
+  { var left_bracketNum = 0;
+
+    var tmpStr_1 = "";
+    var tmpStr_2 = "";
+    var tmpStr_3 = "";
+    var charNum;
+    
+    var str = formulaStr;
+    var pos = str.indexOf(mthName);
+    formulaStr = str.substring(0, pos);
+
+    if(mthName == 'asi' || mthName == 'ata' )
+      tmpStr_1 += 'Math.' + mthName + 'n(';
+    else if(mthName == 'aco')
+      tmpStr_1 += 'Math.' + mthName + 's(';
+    else if(mthName == 'LOG')
+      tmpStr_1 += 'Math.' + 'log' + '(Math.pow(';
+    else
+      tmpStr_1 += 'Math.' + mthName + '(';
+
+    charNum = (str.charAt(pos+mthName.length)).charCodeAt();
+    if(charNum!=40)
+    { formulaStr = 'ERR'; break;
+    }
+    else
+    { left_bracketNum++;
+      tmpStr_2 += str.charAt(pos+mthName.length);
+
+      for(i=pos+mthName.length+1; i< str.length && left_bracketNum > 0; i++ )
+      { charNum = (str.charAt(i)).charCodeAt();
+        if(charNum==40)
+          left_bracketNum++;
+        else if(charNum==41)
+          left_bracketNum--;
+
+        tmpStr_2 += str.charAt(i);
+        pos = i+1;
+      }
+      // select drg
+      if(mthName == 'sin' || mthName == 'cos' || mthName == 'tan' )
+      { switch(drgValue)
+        { case 1: tmpStr_3 += '* Math.PI/180)';
+                  break;
+          case 2: tmpStr_3 += ')';
+                  break;
+          case 3: tmpStr_3 += '* Math.PI/200)';
+                  break;
+          default:
+        }
+      }
+      else if(mthName == 'asi' || mthName == 'aco' || mthName == 'ata' )
+      { switch(drgValue)
+        { case 1: tmpStr_3 += ')* 180/Math.PI';
+                  break;
+          case 2: tmpStr_3 += ')';
+                  break;
+          case 3: tmpStr_3 += ')* 200/Math.PI';
+                  break;
+          default:
+        }
+      }
+      else if(mthName == 'LOG')
+        tmpStr_3 += ',Math.LOG10E))';
+      else
+        tmpStr_3 += ')';
+      try
+      { var tmpStr;
+        tmpStr_2 = evaluateValues(tmpStr_2);
+        tmpStr = eval(tmpStr_1+tmpStr_2+tmpStr_3);
+        formulaStr += tmpStr + str.substring(pos, str.length);
+      }
+      catch(exc)
+      { formulaStr = "ERR";
+      }
+    }
+  }
+  return formulaStr;
+}
+
+/***************************/
+/*      convertMath2       */
+/***************************/
+function convertMath2(formulaStr, mthName)
+{ // ex. tan(2+3)^cos(45+2)sin(45) = tan(Math.pow((2+3),cos(45+2)))*sin(45)
+  while(formulaStr.match(mthName))
+  { var bracket_num  = 0;          
+    var tmpStr_srt = "";
+    var tmpStr_va1 = "";
+    var tmpStr_va2 = "";
+    var tmpStr_end = "";
+    var charNum;                 
+    var str = formulaStr;
+    var pos = str.indexOf(mthName);
+    var found = false;
+    // find left-side values
+    for(i=pos-1; i >= 0 && !found; i--)
+    { charNum = (str.charAt(i)).charCodeAt();
+      if(charNum==41)
+        bracket_num++;
+      else if(charNum==40)
+        bracket_num--;
+
+      if(i == 0)
+      { if(checkNumber(str.charAt(0)) || ( charNum == 40 && bracket_num == 0) )
+        { tmpStr_va1 = str.substring(0, pos);
+        }
+        else
+        { tmpStr_srt = str.charAt(0);
+          tmpStr_va1 = str.substring(1, pos);
+        }
+      }
+      else if( bracket_num == 0 && charNum == 40 )
+      { tmpStr_srt = str.substring(0, i);
+        tmpStr_va1 = str.substring(i, pos);
+        found = true;
+      }
+      else if( bracket_num <= 0 && !checkNumber(str.charAt(i)) )
+      { tmpStr_srt = str.substring(0, i+1);
+        tmpStr_va1 = str.substring(i+1, pos);
+        found = true;
+      }
+    }
+
+    // find any following [math](sin, cos, etc) after [^]
+    bracket_num = 0;
+    found = false;
+    var mathLen=0;
+    if( (str.charAt(pos+mthName.length) >= "a" && str.charAt(pos+mthName.length) <="z") ||
+        (str.charAt(pos+mthName.length) >= "A" && str.charAt(pos+mthName.length) <="Z") )
+    { for(i=pos+mthName.length; i < str.length && !found; i++ )
+      { if( (str.charAt(i)).charCodeAt() == 40 )
+          found = true;
+        else
+          mathLen++;
+      }
+    }
+    // find right-side values
+    found = false;
+    for(i=pos+mthName.length + mathLen; i < str.length && !found; i++ )
+    { charNum = (str.charAt(i)).charCodeAt();
+      
+      if(charNum==40)
+        bracket_num++;
+      else if(charNum==41)
+        bracket_num--;
+
+      if(i == str.length-1)
+      { if(checkNumber(str.charAt(i)) || ( charNum == 41 && bracket_num == 0) )
+        { tmpStr_va2 = str.substring(pos+mthName.length, str.length);
+        }
+        else
+        { tmpStr_va2 = str.substring(pos+mthName.length, str.length-1);
+          tmpStr_end = str.charAt(str.length-1);
+        }
+      }
+      else if( bracket_num == 0 && charNum == 41 )
+      { tmpStr_va2 = str.substring(pos+mthName.length, i+1);
+        tmpStr_end = str.substring(i+1, str.length);
+        found = true;
+      }
+      else if( bracket_num <= 0 && !checkNumber(str.charAt(i)) )
+      { tmpStr_va2 = str.substring(pos+mthName.length, i);
+        tmpStr_end = str.substring(i, str.length);
+        found = true;
+      }
+    }
+    formulaStr = tmpStr_srt + "(Math.pow(" + tmpStr_va1 + "," + tmpStr_va2 + "))" + tmpStr_end;
+  }
+  return formulaStr;
+}
+
+/*****************************/
+/*         roundDbl          */
+/*****************************/
+function roundDbl(anynum)
+{ anynum=eval(anynum);
+  retval=(Math.round(anynum*1000000000000)/1000000000000);
+  return retval;
+}
+
+
+/****************************************************/
+/*                                                  */
+/*             select mode functions                */
+/*                                                  */
+/****************************************************/
+var currMode;
+var drgValue;
+var sound_mode;
+
+/*****************************/
+/*         powerOff          */
+/*****************************/
+function powerOff(cur)
+{ cur.inputWindow.focus();
+  if(window.name == 'popupWin')
+    window.close()
+  else
+    history.back(-1);
+}
+
+/*****************************/
+/*        selectDrg          */
+/*****************************/
+function selectDrg(cur)
+{ drgValue++;
+  if(drgValue > 3)
+    drgValue = 1;
+  switch(drgValue)
+  { case 1: cur.bt_drg.value = "deg";
+            break;
+    case 2: cur.bt_drg.value = "rad";
+            break;
+    case 3: cur.bt_drg.value = "gra";
+            break;
+    default:
+  }
+
+  cur.inputWindow.value = "Num Base: " + currMode
+                      + "\nAngle   : " + cur.bt_drg.value
+                      + "\nSound   : " + sound_mode;
+  formExecuted = true;
+  playSound();
+  cur.inputWindow.focus();
+}
+
+/*****************************/
+/*     changeSoundMode       */
+/*****************************/
+function changeSoundMode(cur)
+{ if(sound_mode == "on")
+  { sound_mode = 'off';
+    cur.bt_sound.style.color = "#666666"; 
+  }
+  else
+  { sound_mode = "on"
+    cur.bt_sound.style.color = "#EECCAA"; 
+  }
+  if(cur.inputWindow.value.match("Num Base:"))
+  { cur.inputWindow.value = "Num Base: " + currMode
+                        + "\nAngle   : " + cur.bt_drg.value
+                        + "\nSound   : " + sound_mode;
+  }
+  playSound();
+  cur.inputWindow.focus();
+}
+
+/*****************************/
+/*       playSound           */
+/*****************************/
+function playSound()
+{ if(sound_mode == 'on')
+    document.obj_sound.Play();
+}
+
+/*****************************/
+/*       selectMode          */
+/*****************************/
+function selectMode(cur, mode)
+{
+  if(currMode != mode)
+  { var i;
+    for(i=1; i<5; i++)
+    { cur[i].style.background = "#5082B3";cur[i].style.color = "#AAAAAA";}
+    disableButton(cur, 5, true)
+    for(i=7; i<13; i++)
+    { disableButton(cur, i, true)}
+    for(i=13; i<17; i++)
+    { disableButton(cur, i, true) }
+    for(i=18; i<26; i++)
+    { disableButton(cur, i, true) }
+    disableButton(cur, 28, true)
+    disableButton(cur, 29, true)
+    disableButton(cur, 30, true)
+    disableButton(cur, 33, true)
+    disableButton(cur, 34, true)
+    disableButton(cur, 35, true)
+    disableButton(cur, 39, true)
+    disableButton(cur, 40, true)
+    disableButton(cur, 44, true)
+    disableButton(cur, 45, true)
+    switch(mode)
+    { case 'hex': cur[1].style.background = "#5082F3";cur[1].style.color = "#DDDDFF";
+                  for(i=7; i<13; i++)
+                  { cur[i].disabled=false;cur[i].style.background="#BB7700";cur[i].style.border="1 outset #555555";cur[i].style.fontWeight="bold";}
+                  disableButton(cur, 28, false)
+                  disableButton(cur, 29, false)
+                  disableButton(cur, 30, false)
+                  disableButton(cur, 33, false)
+                  disableButton(cur, 34, false)
+                  disableButton(cur, 35, false)
+                  disableButton(cur, 39, false)
+                  disableButton(cur, 40, false)
+                  break;
+    
+      case 'dec': cur[2].style.background = "#5082F3";cur[2].style.color = "#DDDDFF";
+                  i=5;
+                  cur[i].disabled=false;cur[i].style.background="#509283";cur[i].style.border="1 outset #555555";cur[i].style.fontWeight="bold";
+                  for(i=13; i<17; i++)
+                  { cur[i].disabled=false;cur[i].style.background="#334455";cur[i].style.border="1 outset #7C7C7C";cur[i].style.fontWeight="bold"; }
+                  for(i=18; i<26; i++)
+                  { cur[i].disabled=false;cur[i].style.background="#334455";cur[i].style.border="1 outset #7C7C7C";cur[i].style.fontWeight="bold"; }
+                  disableButton(cur, 28, false)
+                  disableButton(cur, 29, false)
+                  disableButton(cur, 30, false)
+                  disableButton(cur, 33, false)
+                  disableButton(cur, 34, false)
+                  disableButton(cur, 35, false)
+                  disableButton(cur, 39, false)
+                  disableButton(cur, 40, false)
+                  disableButton(cur, 44, false)
+                  disableButton(cur, 45, false)
+                  break;
+
+      case 'oct': cur[3].style.background = "#5082F3";cur[3].style.color = "#DDDDFF";
+                  disableButton(cur, 28, false)
+                  disableButton(cur, 33, false)
+                  disableButton(cur, 34, false)
+                  disableButton(cur, 35, false)
+                  disableButton(cur, 39, false)
+                  disableButton(cur, 40, false)
+                  break;
+
+      case 'bin': cur[4].style.background = "#5082F3";cur[4].style.color = "#DDDDFF";
+                  break;
+      default :
+    }
+  }
+  // convert a vlaue to selected number base mode
+  if(currMode != mode && !formExecuted && cur.inputWindow.value != "")
+  { var origin = getBaseNumber(currMode);
+    var dest = getBaseNumber(mode);
+    var resultsCurr = calculateFormula(cur);
+    var inputVal;
+    if(currMode == 'dec')
+      inputVal = "" + Math.round(eval(resultsCurr));
+    else
+      inputVal = resultsCurr;
+    var resultsConv = "" + convertNumber(inputVal, origin, dest);
+    var strLen = resultsConv.length;
+    for(i=strLen; i<24; i++)
+    { var temp = " " + resultsConv;
+      resultsConv = temp;
+    }
+    cur.inputWindow.value = currMode + ":" + resultsCurr + "\n" + resultsConv;
+    lastResults = resultsConv;
+  }
+  else
+  { lastResults = 0;
+    cur.inputWindow.value = "Num Base: " + mode
+                        + "\nAngle   : " + cur.bt_drg.value
+                        + "\nSound   : " + sound_mode;
+  }
+  currMode = mode;
+  formExecuted = true;
+  playSound();
+  cur.inputWindow.focus();
+}
+
+/*****************************/
+/*      disableButton       */
+/*****************************/
+function disableButton(cur, num, disable)
+{ var font_Weight;
+  var font_color;
+  if(disable)
+  { font_Weight="normal";
+    font_color="#C0C0C0"
+  }
+  else
+  { font_Weight='bold';
+    font_color="#767293"
+  }
+  cur[num].disabled=disable;cur[num].style.background=font_color;cur[num].style.border="1 outset #555555";cur[num].style.fontWeight=font_Weight;
+}
+
+/****************************************************/
+/*                                                  */
+/*           keyboard input functions               */
+/*                                                  */
+/****************************************************/
+document.onkeypress=inputByKey;
+
+/*****************************/
+/*       inputByKey          */
+/*****************************/
+function inputByKey(e)
+{ var theKey;
+
+  if(window.event)
+    e = window.event;
+
+  if(typeof(e.which) == 'number')
+  { //NS 4, NS 6+, Mozilla 0.9+, Opera
+    theKey = e.which;
+  }
+  else if(typeof(e.keyCode) == 'number')
+  { //IE, NS 6+, Mozilla 0.9+
+    theKey = e.keyCode;
+  }
+  else if(typeof(e.charCode) == 'number')
+  { //also NS 6+, Mozilla 0.9+
+    theKey = e.charCode;
+  }
+  else
+  { //TOTAL FAILURE, WE HAVE NO WAY OF OBTAINING THE KEY CODE
+    return;
+  }
+ 
+  if( theKey >= 40 && theKey <= 57 ) 
+  { switch(theKey)
+    { case  42: inputValue(document.calculatorForm, '*');      // value: '*'
+                break;
+      case  44:                                                // value: ','
+                break;
+      case  47: inputValue(document.calculatorForm, '/');      // value: '/'
+                break;
+      case  50:                                                // value: '2'
+      case  51:                                                // value: '3'
+      case  52:                                                // value: '4'
+      case  53:                                                // value: '5'
+      case  54:                                                // value: '6'
+      case  55: if(currMode!="bin")                            // value: '7'
+                  inputValue(document.calculatorForm, String.fromCharCode(theKey));
+                break;
+      case  56:                                                // value: '8'
+      case  57: if(currMode=="hex" || currMode==="dec")        // value: '9'
+                  inputValue(document.calculatorForm, String.fromCharCode(theKey));
+                break;
+      default : inputValue(document.calculatorForm, String.fromCharCode(theKey));
+    }
+  }
+  else
+  { switch(theKey)
+    { 
+      case  24: powerOff(document.calculatorForm);               // value: '^x'
+                break;                                           
+      case  32: inputValue(document.calculatorForm, 'BS');       // value: 'SP' ->BS
+                break;                                           
+      case  88:                                                  
+      case 120: if(currMode=="dec")
+                  inputValue(document.calculatorForm, '^2');     // value: 'X' ->X^2
+                break;                                           
+      case  94: if(currMode=="dec")
+                  inputValue(document.calculatorForm, '^');      // value: '^'
+                break;                                           
+      case  13:                                                  // value: 'enter'
+      case  61: executeForm(document.calculatorForm);            // value: '='
+                break;                                           
+      case  27: clearAll(document.calculatorForm);               // value: 'ESC'
+                break;                                           
+      case  71:                                                  
+      case 103: if(currMode=="dec")
+                  inputValue(document.calculatorForm, 'log(');   // value: 'g' ->log(
+                break;                                           
+      case  76:                                                  
+      case 108: if(currMode=="dec")
+                  inputValue(document.calculatorForm, 'ln(');    // value: 'l' ->ln(
+                break;                                           
+      case  78:                                                  
+      case 110: inputValue(document.calculatorForm, 'Ans');      // value: 'n' ->Ans
+                break;                                           
+      case  80:                                                  
+      case 112: if(currMode=="dec")                              
+                  inputValue(document.calculatorForm, 'pi');     // value: 'p' ->PI
+                break;
+      case  82:
+      case 114: if(currMode=="dec")
+                  inputValue(document.calculatorForm, 'sqrt(');  // value: 'r' ->sqrt
+                break;
+      case  83: if(currMode=="dec")
+                  inputValue(document.calculatorForm, 'asin(');  // value: 'S' ->asin
+                break;                                           
+      case 115: if(currMode=="dec")
+                  inputValue(document.calculatorForm, 'sin(');   // value: 's' ->sin
+                break;                                           
+      case  67: if(currMode=="dec")
+                  inputValue(document.calculatorForm, 'acos(');  // value: 'C' ->cos
+                break;                                           
+      case  99: if(currMode=="dec")
+                  inputValue(document.calculatorForm, 'cos(');   // value: 'c' ->cos
+                break;                                           
+      case  84: if(currMode=="dec")
+                  inputValue(document.calculatorForm, 'atan(');  // value: 'T' ->atan
+                break;                                           
+      case 116: if(currMode=="dec")
+                  inputValue(document.calculatorForm, 'tan(');   // value: 't' ->tan
+                break;                                           
+      case  33: selectMode(document.calculatorForm, 'hex');      // value: '!' ->select [hex]
+                break;
+      case  64: selectMode(document.calculatorForm, 'dec');      // value: '@' ->select [dec]
+                break;
+      case  35: selectMode(document.calculatorForm, 'oct');      // value: '#' ->select [oct]
+                break;
+      case  36: selectMode(document.calculatorForm, 'bin');      // value: '$' ->select [bin]
+                break;
+      case  37: if(currMode=="dec")                              // value: '%' ->selectDrg
+                  selectDrg(document.calculatorForm);
+                break;                                           
+      case  79:
+      case 111: changeSoundMode(document.calculatorForm);       // value: '0' ->sound_on_off
+                break;
+      default:
+    }
+  }
+  if(currMode=="hex" && ((theKey >= 65 && theKey <= 70) || (theKey >= 97 && theKey <= 102)) )
+    inputValue(document.calculatorForm, String.fromCharCode(theKey).toUpperCase());
+  else if(currMode=="dec" && ( theKey == 69 || theKey == 101 ))
+    inputValue(document.calculatorForm, 'e');
+  else if((typeof(e.which) == 'number' || typeof(e.charCode) == 'number') && theKey == 0)
+    clearAll(document.calculatorForm);  // value: 'ESC'
+
+  if(document.title == "Scientific Calculator Main Window")
+    checkTesting();
+}
+
+/****************************************************/
+/*                                                  */
+/*             sample test functions                */
+/*                                                  */
+/****************************************************/
+var timeID;
+var testNum;
+var stopTest = true;
+
+/*****************************/
+/*      checkTesting         */
+/*****************************/
+function checkTesting()
+{ if(!stopTest)
+  { stopTest=true
+    document.getElementById("testButt").value = "Start Testing";
+    document.getElementById("testButt").style.color = "#FFFFFF";
+    document.getElementById("testButt").style.background = "#999999";
+    document.getElementById("calculatorForm").inputWindow.focus();
+  }
+}
+
+/*****************************/
+/*     startnStopTest        */
+/*****************************/
+function startnStopTest()
+{ if(stopTest)
+  { timeID = 0;
+    testNum = 0;
+    stopTest = false;
+    document.getElementById("testButt").value = "Stop Testing";
+    document.getElementById("testButt").style.color = "#00FFFF";
+    sampleTest();
+  }
+  else
+  { stopTest=true
+    document.getElementById("testButt").value = "Start Testing";
+    document.getElementById("testButt").style.color = "#FFFFFF";
+    document.getElementById("testButt").style.background = "#999999";
+    document.getElementById("calculatorForm").inputWindow.focus();
+  }
+}
+
+/*****************************/
+/*        sampleTest         */
+/*****************************/
+function sampleTest()
+{ timeID = setTimeout("sampleTest()", 400);
+  if(stopTest)
+  { clearTimeout(timeID);
+    init(document.getElementById("calculatorForm"));
+  }
+  else
+  { var cur = document.getElementById("calculatorForm");
+    switch(testNum)
+    { case  0: init(cur); break;
+      case  1: inputValue(cur, "1"); break;
+      case  2: inputValue(cur, "2"); break;
+      case  3: inputValue(cur, "pi"); break;
+      case  4: inputValue(cur, "*"); break;
+      case  5: inputValue(cur, "sin("); break;
+      case  6: inputValue(cur, "5"); break;
+      case  7: inputValue(cur, "+"); break;
+      case  8: inputValue(cur, "3"); break;
+      case  9: inputValue(cur, "^"); break;
+      case 10: inputValue(cur, "4"); break;
+      case 11: inputValue(cur, "*"); break;
+      case 12: inputValue(cur, "tan("); break;
+      case 13: inputValue(cur, "35"); break;
+      case 14: inputValue(cur, "/"); break;
+      case 15: inputValue(cur, "6"); break;
+      case 16: inputValue(cur, ") "); break;
+      case 17: inputValue(cur, "+"); break;
+      case 18: inputValue(cur, "log("); break;
+      case 19: inputValue(cur, "4"); break;
+      case 20: inputValue(cur, "0"); break;
+      case 21: inputValue(cur, ")"); break;
+      case 22: inputValue(cur, ")"); break;
+      case 23: inputValue(cur, "+"); break;
+      case 24: inputValue(cur, "sqrt("); break;
+      case 25: inputValue(cur, "3"); break;
+      case 26: inputValue(cur, "4"); break;
+      case 27: inputValue(cur, "5"); break;
+      case 28: inputValue(cur, "BS"); break;
+      case 29: inputValue(cur, "BS"); break;
+      case 30: inputValue(cur, "6"); break;
+      case 31: inputValue(cur, ")"); break;
+      case 32: inputValue(cur, "+"); break;
+      case 33: inputValue(cur, "e"); break;
+      case 34: inputValue(cur, "^"); break;
+      case 35: inputValue(cur, "3"); break;
+      case 36: inputValue(cur, "-"); break;
+      case 37: inputValue(cur, "2"); break;
+      case 38: inputValue(cur, "4"); break;
+      case 39: executeForm(cur); break;
+      case 40: break;
+      case 41: inputValue(cur, "Ans"); break;
+      case 42: inputValue(cur, "-"); break;
+      case 43: inputValue(cur, "1"); break;
+      case 44: inputValue(cur, "5"); break;
+      case 45: inputValue(cur, "/"); break;
+      case 46: inputValue(cur, "Ans"); break;
+      case 47: inputValue(cur, "*"); break;
+      case 48: inputValue(cur, "2"); break;
+      case 49: inputValue(cur, "3"); break;
+      case 50: executeForm(cur); break;
+      case 51: break;
+
+      case 52: selectMode(cur, "hex"); break;
+      case 53: break;
+      case 54: inputValue(cur, "A"); break;
+      case 55: inputValue(cur, "F"); break;
+      case 56: inputValue(cur, "F"); break;
+      case 57: inputValue(cur, "+"); break;
+      case 58: inputValue(cur, "C"); break;
+      case 59: inputValue(cur, "6"); break;
+      case 60: inputValue(cur, "*"); break;
+      case 61: inputValue(cur, "("); break;
+      case 62: inputValue(cur, "F"); break;
+      case 63: inputValue(cur, "D"); break;
+      case 64: inputValue(cur, "-"); break;
+      case 65: inputValue(cur, "2"); break;
+      case 66: inputValue(cur, "3"); break;
+      case 67: inputValue(cur, ")"); break;
+      case 68: executeForm(cur); break;
+      case 69: break;
+
+      case 70: inputValue(cur, "Ans"); break;
+      case 71: selectMode(cur, "dec"); break;
+      case 72: break;
+
+      case 73: inputValue(cur, "Ans"); break;
+      case 74: selectMode(cur, "oct"); break;
+      case 75: break;
+
+      case 76: inputValue(cur, "6"); break;
+      case 77: inputValue(cur, "4"); break;
+      case 78: inputValue(cur, "2"); break;
+      case 79: selectMode(cur, "bin"); break;
+      case 80: break;
+
+      case 81: inputValue(cur, "1"); break;
+      case 82: inputValue(cur, "0"); break;
+      case 83: inputValue(cur, "1"); break;
+      case 84: inputValue(cur, "1"); break;
+      case 85: inputValue(cur, "+"); break;
+      case 86: inputValue(cur, "1"); break;
+      case 87: inputValue(cur, "0"); break;
+      case 88: inputValue(cur, "0"); break;
+      case 89: inputValue(cur, "1"); break;
+      case 90: selectMode(cur, "dec"); break;
+      case 91: break;
+    }
+    // blink button while demo
+    if(testNum%3 == 0)
+      document.getElementById("testButt").style.background = "#999999";
+    else
+      document.getElementById("testButt").style.background = "#666666";
+   
+    testNum++;
+    if(testNum > 92)
+      startnStopTest();
+  }
+}
+// -->
+</SCRIPT>
+</HEAD>
+
+<BODY onload="document.getElementById('calculatorForm').reset();init(document.getElementById('calculatorForm'));">
+<FORM name=calculatorForm id=calculatorForm>
+
+<TABLE cellSpacing=0 cellPadding=5 width="240" summary="CALC FRAME" border=0>
+  <TBODY>
+  <TR>
+    <TD vAlign=center align=middle background=bg_silver3d.gif>
+
+      <!-- ############################ BACKGROUND TABLE ############################ -->
+      <TABLE class=titleText onclick=checkTesting() cellSpacing=0 cellPadding=4 width="100%" summary=BUTTONS border=0>
+        <TBODY>
+        <TR>
+          <TD class=titleTxt2 vAlign=bottom height=23>
+            <a href="http://www.sunflowerwebstudio.com" target="_blank" onFocus="blur()"><IMG src="sunflower.gif" border=0></a></TD></TR>
+        <TR>
+          <TD vAlign=top align=middle bgColor=#333333 height=30>
+            <TEXTAREA class=inputText name=inputWindow readOnly></TEXTAREA> 
+          </TD></TR>
+        <TR>
+          <TD class=titleTxt2s vAlign=top align=middle height=18>
+            <IMG src="creative.gif"></TD></TR>
+        <TR>
+          <TD class=divSpace2 background=bg_silver3d.gif height=15>&nbsp;</TD></TR>
+        <TR>
+          <TD align=middle>
+<INPUT class=butt_mode onclick="selectMode(this.form, 'hex')" type=button value=hex name=bt_hex> 
+<INPUT class=butt_mode onclick="selectMode(this.form, 'dec')" type=button value=dec name=bt_dec> 
+<INPUT class=butt_mode onclick="selectMode(this.form, 'oct')" type=button value=oct name=bt_oct> 
+<INPUT class=butt_mode onclick="selectMode(this.form, 'bin')" type=button value=bin name=bt_bin> 
+<INPUT class=butt_drg onclick=selectDrg(this.form) type=button value=deg name=bt_drg> 
+<INPUT class=butt_beep onclick=changeSoundMode(this.form) type=button value=beep name=bt_sound> 
+           </TD></TR>
+        <TR>
+          <TD align=middle>
+<INPUT class=butt_hex onclick="inputValue(this.form, 'A')" type=button value=A name=butt_a> 
+<INPUT class=butt_hex onclick="inputValue(this.form, 'B')" type=button value=B name=butt_b> 
+<INPUT class=butt_hex onclick="inputValue(this.form, 'C')" type=button value=C name=butt_c> 
+<INPUT class=butt_hex onclick="inputValue(this.form, 'D')" type=button value=D name=butt_d> 
+<INPUT class=butt_hex onclick="inputValue(this.form, 'E')" type=button value=E name=butt_e> 
+<INPUT class=butt_hex onclick="inputValue(this.form, 'F')" type=button value=F name=butt_f> 
+          </TD></TR>
+        <TR>
+          <TD>
+<INPUT class=inputButt4 onclick="inputValue(this.form, 'asin(')" type=button value=asin name=bt_asin> 
+<INPUT class=inputButt4 onclick="inputValue(this.form, 'acos(')" type=button value=acos name=bt_acos> 
+<INPUT class=inputButt4 onclick="inputValue(this.form, 'atan(')" type=button value=atan name=bt_atan> 
+<INPUT class=inputButt4 onclick="inputValue(this.form, 'e')" type=button value=e name=bt_e> 
+<INPUT class=butt_pwr onclick=window.close() type=button value=PWR name=bt_pwr> 
+          </TD></TR>
+        <TR>
+          <TD>
+<INPUT class=inputButt4 onclick="inputValue(this.form, 'sin(')" type=button value=sin name=bt_sin> 
+<INPUT class=inputButt4 onclick="inputValue(this.form, 'cos(')" type=button value=cos name=bt_cos> 
+<INPUT class=inputButt4 onclick="inputValue(this.form, 'tan(')" type=button value=tan name=bt_tan> 
+<INPUT class=inputButt4 onclick="inputValue(this.form, 'ln(')" type=button value=ln name=bt_ln> 
+<INPUT class=inputButt4 onclick="inputValue(this.form, 'log(')" type=button value=log name=bt_log> 
+          </TD></TR>
+        <TR>
+          <TD>
+<INPUT class=inputButt4 onclick="inputValue(this.form, '^2')" type=button value=x&#178; >   <!-- ^2 -->
+<INPUT class=inputButt4 onclick="inputValue(this.form, 'sqrt(')" type=button value=&#8730;> <!-- sqrt -->
+<INPUT class=inputButt4 onclick="inputValue(this.form, '^')" type=button value=^> 
+<INPUT class=inputButt4s onclick="inputValue(this.form, '(')" type=button value=(>          <!-- ( -->
+<INPUT class=inputButt4s onclick="inputValue(this.form, ')')" type=button value=)> 
+          </TD></TR>
+        <TR>
+          <TD>
+<INPUT class=inputButt onclick="inputValue(this.form, '7')" type=button value=7> 
+<INPUT class=inputButt onclick="inputValue(this.form, '8')" type=button value=8> 
+<INPUT class=inputButt onclick="inputValue(this.form, '9')" type=button value=9> 
+<INPUT class=inputButt2 onclick="inputValue(this.form, 'BS')" type=button value=&#8592;> 
+<INPUT class=inputButt2 onclick=clearAll(this.form) type=button value=AC> 
+          </TD></TR>
+        <TR>
+          <TD>
+<INPUT class=inputButt onclick="inputValue(this.form, '4')" type=button value=4> 
+<INPUT class=inputButt onclick="inputValue(this.form, '5')" type=button value=5> 
+<INPUT class=inputButt onclick="inputValue(this.form, '6')" type=button value=6> 
+<INPUT class=inputButt onclick="inputValue(this.form, '*')" type=button value=&#215; name=bt_multi>  <!--value: * -->
+<INPUT class=inputButt onclick="inputValue(this.form, '/')" type=button value=&#247; >               <!--value: / -->
+          </TD></TR>
+        <TR>
+          <TD>
+<INPUT class=inputButt onclick="inputValue(this.form, '1')" type=button value=1> 
+<INPUT class=inputButt onclick="inputValue(this.form, '2')" type=button value=2> 
+<INPUT class=inputButt onclick="inputValue(this.form, '3')" type=button value=3> 
+<INPUT class=inputButt onclick="inputValue(this.form, '+')" type=button value=+> 
+<INPUT class=inputButt onclick="inputValue(this.form, '-')" type=button value=-> 
+          </TD></TR>
+        <TR>
+          <TD>
+<INPUT class=inputButt onclick="inputValue(this.form, '0')" type=button value=0> 
+<INPUT class=inputButt onclick="inputValue(this.form, '.')" type=button value=.> 
+<INPUT class=inputButt3 onclick="inputValue(this.form, 'pi')" type=button value=&#960;> <!--value: PI -->
+<INPUT class=inputButts onclick="inputValue(this.form, 'Ans')" type=button value=Ans> 
+<INPUT class=inputButtExe onclick=executeForm(this.form) type=button value=&#61;>       <!--value: = -->
+          </TD></TR>
+        <TR>
+          <TD class=divSpace2 background=bg_silver3d.gif height=1>&nbsp;</TD></TR>
+        </TBODY>
+      </TABLE>
+
+
+    </TD>
+  </TR>
+  </TBODY>  
+</TABLE>
+
+
+<OBJECT
+        CLASSID="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+        WIDTH="1"
+        HEIGHT="1"
+        CODEBASE="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab"
+        ID=obj_sound>
+        <PARAM NAME="MOVIE" VALUE="sound.swf">
+        <PARAM NAME="PLAY" VALUE="true">
+        <PARAM NAME="LOOP" VALUE="false">        
+        <PARAM NAME="QUALITY" VALUE="high">
+        <PARAM NAME="SCALE" VALUE="SHOWALL">
+
+        <EMBED
+                NAME="obj_sound"
+                SRC="sound.swf"
+                WIDTH="1"
+                HEIGHT="1"
+                PLAY="true" 
+                LOOP="false"
+                QUALITY="high"
+                SCALE="SHOWALL" 
+                swLiveConnect="true"
+                PLUGINSPAGE="http://www.macromedia.com/go/flashplayer" />
+</OBJECT>
+
+
+</BODY>
+</HTML>
