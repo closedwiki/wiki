@@ -1,0 +1,75 @@
+%META:TOPICINFO{author="guest" date="1130372492" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="InstalledPlugins"}%
+---+!! <nop>%TOPIC%
+
+This plugin looks for tags in the format of ##TypeOfReplace## and replaces it with the result of that particular tag.  Designed to facilitate random features for an RPG TWiki.  Once the topic is saved, the substitution happens, and the tag disapears. Rules and associated data are defined in RandomReplaceRules.
+
+%TOC%
+
+------
+
+---++ Syntax Rules
+
+	* ##RuleName## Replace the tag with an appropriate entry as defined in RandomReplaceRules
+
+---++ Examples
+
+	* ##MonthNameExample##
+	* ##Greetings##
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = replace ##Tags## with text once, the replaced text is saved in the topic and the tag is removed.
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 1
+
+	* To set the rules topic where rule names and actions are defined.  Default to TWiki.RandomReplaceRules
+		* Set REPLACEONCERULESTOPIC = TWiki.RandomReplaceRules
+
+	* To include an HTML comment containing the original rule set REPLACEONCECOMMENT = 1
+		* Set REPLACEONECOMMENT = 0
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==data/TWiki/RandomReplaceRules.txt== | Plugin Rules topic |
+	  | ==data/TWiki/RandomReplaceRules.txt== | Plugin Rules topic repository |
+	  | ==data/TWiki/RandomReplaceGoodByes.txt== | Example topic containing data |
+	  | ==data/TWiki/RandomReplaceGoodByes.txt,v== | Example topic containing data repository |
+	  | ==pub/TWiki/RandomReplaceRules/month.txt== | Example attached text file |
+	  | ==pub/TWiki/RandomReplaceRules/month.txt== | Example attached text file Repository |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	* Test if the installation was successful:
+		* Greetings and solicitations
+		* Febuary
+		* Good Bye
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.ScottParrish |
+|  Plugin Version: | 24 Oct 2005 (V1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  24 Oct 2005: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+%META:TOPICMOVED{by="guest" date="1130371653" from="TWiki.ReplaceOncePlugin" to="TWiki.RandomReplacePlugin"}%

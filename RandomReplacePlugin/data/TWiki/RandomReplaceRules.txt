@@ -1,0 +1,29 @@
+%META:TOPICINFO{author="guest" date="1130372480" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="RandomReplacePlugin"}%
+---++ <nop>RandomReplacePugin rules
+
+This topic lists rules and data used in the RandomReplacePlugin.
+
+Whenever you write ##RuleName## it will be replaced upon save with data from the given rule.
+
+---+++ How to define RandomReplacePlugin rules
+
+	* RandomReplacePlugin rules are defined in the table below.
+	* Each entry must be of format: <br /> ==| Rule Name | Rule Type | Rule Data |==.
+	* Rule Types are defined as:
+		* Data - Replacement text is selected at random from the the colon seperated list entered in the data section.
+		* Topic - Replacement text is selected at random from any list element of the Topic given in the data section.
+		* File - Replacement text is selected at random from the lines of given file name.  File should be attached to this topic
+
+---+++ RandomReplacePlugin rules
+
+<noautolink>
+
+| Howdy | Data | Hi:Hiya:Howdy:Greetings:Greetings and solicitations |
+| GoodBye | Topic | TWiki.GoodBye |
+| MonthName | File | month.txt |
+
+</noautolink>
+
+%META:FILEATTACHMENT{name="month.txt" attr="" comment="Source File for Month Names" date="1130145129" path="month.txt" size="97" user="guest" version="1.1"}%
+%META:TOPICMOVED{by="guest" date="1130371539" from="TWiki.ReplaceOnceRules" to="TWiki.RandomReplaceRules"}%
