@@ -1,10 +1,10 @@
-%META:TOPICINFO{author="guest" date="1130372573" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1292396687" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="RandomReplaceRules"}%
 ---+ Sample Topic list
+
 Used by RandomReplaceRules for the RandomReplacePlugin.
 
-	* Good Bye
-	* So Long
-	* See you later
-	* Adios
-
+   * Good Bye
+   * So Long
+   * See you later
+   * Adios

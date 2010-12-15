@@ -79,4 +79,3 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
-%META:FILEATTACHMENT{name="month.txt" attachment="month.txt" attr="h" comment="" date="1130371653" path="month.txt" size="97" user="TWikiContributor" version="1"}%
