@@ -1,22 +1,23 @@
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# TWiki WikiClone ($wikiversion has version info)
-#
-# @(#)$Id$
-#
-# Copyright (C) 2002 Peter Klausner pklausner(at)bluewin.ch
+# Copyright (C) 2002-2003 Peter Klausner pklausner(at)bluewin.ch
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2005-2010 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
+# GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
+#
+# As per the GPL, removal of this notice is prohibited.
 #
 # =========================
 #
@@ -31,15 +32,8 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $debug
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2010-12-14';
 
 
 # =========================
