@@ -2,6 +2,8 @@
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2005 TWiki:Main.ScottParrish
+# Copyright (C) 2005-2010 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,15 +17,17 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 # =========================
-package TWiki::Plugins::RandomReplacePlugin;    # change the package name and $pluginName!!!
+package TWiki::Plugins::RandomReplacePlugin;
 
 # =========================
 use vars qw(
-$web $topic $user $installWeb $VERSION $pluginName
+$web $topic $user $installWeb $VERSION $RELEASE $pluginName
 $debug $includecomment
 );
 
-$VERSION = '1.021';
+$VERSION = '1.1';
+$RELEASE = '2010-12-14';
+
 $pluginName = 'RandomReplacePlugin';  # Name of this Plugin
 $rulesTopic = 'RandomReplaceRules'; #Name of default topic containing rules
 $rulesTopicPreference = 'RANDOMREPLACERULESTOPIC'; #Name of preference containing alternate topic containing rules
