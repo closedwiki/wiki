@@ -1,0 +1,5 @@
+data/TWiki/GoodBye.txt 0644
+data/TWiki/RandomReplacePlugin.txt 0644
+data/TWiki/RandomReplaceRules.txt 0644
+lib/TWiki/Plugins/RandomReplacePlugin.pm 0644
+pub/TWiki/RandomReplaceRules/month.txt 0644
