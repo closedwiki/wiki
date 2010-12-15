@@ -1,6 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2005 Toni Prug, toni@irational.org
+# Copyright (C)2005-2010 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,22 +18,6 @@
 #
 # This is the NetgrepPlugin used to embed external information.
 # Plugin home: http://TWiki.org/cgi-bin/view/Plugins/NetgrepPlugin
-#
-# Each plugin is a package that contains the subs:
-#
-#   initPlugin           ( $topic, $web, $user, $installWeb )
-#   commonTagsHandler    ( $text, $topic, $web )
-#   startRenderingHandler( $text, $web )
-#   outsidePREHandler    ( $text )
-#   insidePREHandler     ( $text )
-#   endRenderingHandler  ( $text )
-#
-# initPlugin is required, all other are optional.
-# For increased performance, DISABLE handlers you don't need.
-#
-# NOTE: To interact with TWiki use the official TWiki functions
-# in the &TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
 
 # =========================
 package TWiki::Plugins::NetgrepPlugin;
@@ -41,18 +26,11 @@ package TWiki::Plugins::NetgrepPlugin;
 use vars qw(
 	    $web $topic $user $installWeb $VERSION $RELEASE $debug
 	    $defaultRefresh $defaultFormat $defaultSize
-	    $perlDigestMD5Found $defaultFilter $defaultColor
+	    $perlDigestMD5Found $defaultFilter $defaultColor $useLWPUserAgent
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2010-12-14';
 
 $perlDigestMD5Found = 0;
 
@@ -68,11 +46,14 @@ sub initPlugin
     }
 
     # Get plugin preferences
-    $defaultRefresh  = &TWiki::Func::getPreferencesValue( "NETGREPPLUGIN_REFRESH" ) || 15;
-    $defaultFilter   = &TWiki::Func::getPreferencesValue( "NETGREPPLUGIN_FILTER" );
-    $defaultFormat   = &TWiki::Func::getPreferencesValue( "NETGREPPLUGIN_FORMAT" ) || "(+1+)";
-    $defaultSize     = &TWiki::Func::getPreferencesValue( "NETGREPPLUGIN_SIZE" ) || "100%";
-    $defaultColor    = &TWiki::Func::getPreferencesValue( "NETGREPPLUGIN_COLOR" ) || "black";
+    $defaultRefresh  = TWiki::Func::getPreferencesValue( "NETGREPPLUGIN_REFRESH" ) || 15;
+    $defaultFilter   = TWiki::Func::getPreferencesValue( "NETGREPPLUGIN_FILTER" );
+    $defaultFormat   = TWiki::Func::getPreferencesValue( "NETGREPPLUGIN_FORMAT" ) || "(+1+)";
+    $defaultSize     = TWiki::Func::getPreferencesValue( "NETGREPPLUGIN_SIZE" ) || "100%";
+    $defaultColor    = TWiki::Func::getPreferencesValue( "NETGREPPLUGIN_COLOR" ) || "black";
+    $useLWPUserAgent = TWiki::Func::getPreferencesValue( "NETGREPPLUGIN_USELWPUSERAGENT" ) || 'on';
+    $useLWPUserAgent =~ s/^\s*(.*?)\s*$/$1/go;
+    $useLWPUserAgent = ($useLWPUserAgent =~ /on|yes|1/)?1:0;
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "NETGREPPLUGIN_DEBUG" );
@@ -132,27 +113,11 @@ sub _getUrl
     unless( $path ) {
         return "ERROR: invalid format of the href parameter";
     }
-    # figure out how to get to TWiki::Net which is wide open in Cairo and before,
-    # but Dakar uses the session object.  
-    my $text = $TWiki::Plugins::SESSION->{net}
-	? $TWiki::Plugins::SESSION->{net}->getUrl( $host, $port, $path )
-	: TWiki::Net::getUrl( $host, $port, $path );
 
-    if( $text =~ /text\/plain\s*ERROR\: (.*)/s ) {
-        my $msg = $1;
-        $msg =~ s/[\n\r]/ /gos;
-        return "ERROR: Can't read $theUrl ($msg)";
-    }
-    if( $text =~ /HTTP\/[0-9\.]+\s*([0-9]+)\s*([^\n]*)/s ) {
-        unless( $1 == 200 ) {
-           return "ERROR: Can't read $theUrl ($1 $2)";
-        }
-    }
-    $text =~ s/\r\n/\n/gos;
-    $text =~ s/\r/\n/gos;
-    $text =~ s/^.*?\n\n(.*)/$1/os;  # strip header
-    $text =~ s/\n/ /gos;            # new line to space
-    $text =~ s/ +/ /gos;
+    my ($text, $errorMsg) = $useLWPUserAgent ?
+                              _getUrlUsingLWP( $theUrl ) :
+                              _getUrlUsingTWikiNet( $theUrl );
+    return ( "ERROR: $errorMsg" ) if $errorMsg;
 
     if( $theRefresh ) {
         unless( -e $cacheDir ) {
@@ -165,6 +130,92 @@ sub _getUrl
     }
 
     return $text;
+}
+
+# =========================
+# borrowed from HeadlinesPlugin
+sub _getUrlUsingLWP {
+  my $theUrl = shift;
+
+  #writeDebug("called getUrlLWP($theUrl)");
+
+  unless ($userAgent) {
+    eval "use LWP::UserAgent";
+    die $@ if $@;
+
+    my $proxyHost = TWiki::Func::getPreferencesValue('PROXYHOST') || '';
+    my $proxyPort = TWiki::Func::getPreferencesValue('PROXYPORT') || '';
+    $proxyHost ||= $TWiki::cfg{PROXY}{HOST};
+    $proxyPort ||= $TWiki::cfg{PROXY}{PORT};
+    my $proxySkip = $TWiki::cfg{PROXY}{SkipProxyForDomains} || '';
+
+    $userAgent = LWP::UserAgent->new();
+    $userAgent->agent( $userAgentName );
+      # don't leave the LWP default string there as
+      # this is blocked by some sites, e.g. google news
+    $userAgent->timeout( $userAgentTimeout );
+    if( $proxyHost && $proxyPort ) {
+      my $proxyURL = "$proxyHost:$proxyPort/";
+      $proxyURL = 'http://' . $proxyURL unless( $proxyURL =~ /^https?:\/\// );
+      $userAgent->proxy( "http", $proxyURL );
+      my @skipDomains = split( /[\,\s]+/, $proxySkip );
+      $userAgent->no_proxy( @skipDomains );
+    }
+  }
+
+  my $request = HTTP::Request->new('GET', $theUrl);
+  $request->referer(TWiki::Func::getViewUrl($web, $topic));
+  my $response = $userAgent->request($request);
+  if ($response->is_error) {
+    return (undef, $response->status_line);
+  } else {
+    my $text = $response->content;
+    $text =~ s/\r\n?/ /gos;
+    $text =~ s/\n/ /gos;
+    #$text =~ s/ +/ /gos;
+    return ($text, undef);
+  }
+}
+
+# =========================
+# borrowed from HeadlinesPlugin
+sub _getUrlUsingTWikiNet {
+  my $theUrl = shift;
+
+  my $host = '';
+  my $port = 0;
+  my $path = '';
+  if ($theUrl =~ /https?\:\/\/(.*?)\:([0-9]+)(\/.*)/) {
+    $host = $1;
+    $port = $2;
+    $path = $3;
+  } elsif($theUrl =~ /https?\:\/\/(.*?)(\/.*)/) {
+    $host = $1;
+    $path = $2;
+  }
+  return (undef, "Invalid URL") unless $path;
+
+  # figure out how to get to TWiki::Net which is wide open in Cairo and before,
+  # but Dakar uses the session object.  
+  my $text = $TWiki::Plugins::SESSION->{net}
+      ? $TWiki::Plugins::SESSION->{net}->getUrl( $host, $port, $path )
+      : TWiki::Net::getUrl( $host, $port, $path );
+
+  if ($text =~ /text\/plain\s*ERROR\: (.*)/s) {
+    my $msg = $1;
+    $msg =~ s/[\n\r]/ /gos;
+    return (undef, "Can't read $theUrl ($msg)");
+  }
+  if ($text =~ /HTTP\/[0-9\.]+\s*([0-9]+)\s*([^\n]*)/s) {
+    return (undef, "Can't read $theUrl ($1 $2)")
+      unless $1 == 200;
+  }
+  $text =~ s/^.*?\n\n(.*)/$1/os;  # strip header
+  $text =~ s/\r\n?/ /gos;
+  $text =~ s/\n/ /gos;
+  #$text =~ s/ +/ /gos;
+
+  return ($text, undef);
 }
 
 # =========================

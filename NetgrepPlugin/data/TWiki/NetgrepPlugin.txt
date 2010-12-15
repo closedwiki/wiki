@@ -1,30 +1,20 @@
-%META:TOPICINFO{author="ToniPrug" date="1121685960" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1292392132" format="1.1" version="$Rev$"}%
 ---+!! Netgrep Plugin
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/NetgrepPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/NetgrepPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-%TOC%
+---++ Introduction
 
-This plugin searches content from given URL and displays result from given filter, according to given format. It can be used to track changes of documents, which is particulary suitable for growing amount of websites running wikis, blogs or some other tool used to update content. Main reason for writing it was desire to see when links on wiki have been updated, without having to click on the link; it thus acts as sort of latest changes for individual, external, links. Nothing stops one from using it internally to, when linking page on the same wiki.
+This plugin searches content from given URL and displays result from given filter, according to given format. It can be used to track changes of documents, which is particularly suitable for growing amount of websites running wikis, blogs or some other tool used to update content. Main reason for writing it was desire to see when links on wiki have been updated, without having to click on the link; it thus acts as sort of latest changes for individual, external, links. Nothing stops one from using it internally to, when linking page on the same wiki.
 
----++ <nop>%TOPIC% Global Settings
-
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>NETGREP_SHORTDESCRIPTION%==
-
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Embed information from other wesbites (document revision date, for example) by using filters
-
-	* Set DEBUG to 1 to get debug messages in =data/debug.txt=. Default: =0=
-		* Set DEBUG = 0
-
-	* Refresh rate in minutes for cached feeds. Disable caching: =0=, default: =30=
-		* Set REFRESH = 30
-
-	* Font size of displayed result. Default: =smaller=
-		* Set SIZE = smaller
-
-	* Font color of displayed result. Default: =black=
-		* Set COLOR = gray
- 
 ---++ Syntax Rules
 
 The =%<nop>NETGREP{...}%= variable gets expanded to the content pulled from an UR that matches give filters. 
@@ -41,9 +31,9 @@ The =%<nop>NETGREP{...}%= variable gets expanded to the content pulled from an U
 
 *Contribution needed!* Short, yet as clear as possible, introduction to the way this plugin uses regular expressions (regex) in given examples, and they way matching results are displayed is required. Target audience are non-technical users. Below perl regex links are there for the convinience of technical users.
 
-	* http://perldoc.perl.org/perlrequick.html - quick intro to Perl regular expression 
-	* http://perldoc.perl.org/perlretut.html - larger tutorial
-	* http://perldoc.perl.org/perlreref.html - quick reference to Perl's regular expression
+   * http://perldoc.perl.org/perlrequick.html - quick intro to Perl regular expression 
+   * http://perldoc.perl.org/perlretut.html - larger tutorial
+   * http://perldoc.perl.org/perlreref.html - quick reference to Perl's regular expression
 
 ---+++ format
 
@@ -51,84 +41,95 @@ The =%<nop>NETGREP{...}%= variable gets expanded to the content pulled from an U
 
 ---++ Examples
 
----+++ valid
+---+++ Valid examples
 
-| *plugin tag*| =<span style='font-size: smaller'>% NETGREP{ href="http://wiki.gnuarch.org/WhyArch" filter="(last edited) ([0-9]+-[0-9]+-[0-9]+)" format"(+1+)" } %</span>= |
-| *displayed output* | <span style="color: gray; font-size: smaller;">(2005-03-26)</span> | 
-| *real life use* | from http://wiki.gnuarch.org/WhyArch <span style="color: gray; font-size: smaller;">(2005-03-26)</span> list of reasons for using GNU Arch |
+| *plugin tag*| =<span style='font-size: smaller'>%<nop>NETGREP{ href="http://www.w3.org/TR/CSS2/" filter="(W3C Working Draft \d+ \w+ \d+)" format="+0+" }%</span>= |
+| *displayed output* | <span style='color: gray; font-size: smaller;'>W3C Working Draft 07 December 2010</span> | 
+| *real life use* | [[http://www.w3.org/TR/CSS2/][CSS 2.1 Specification]] <span style="color: gray; font-size: smaller;">W3C Working Draft 07 December 2010</span> |
 
-| *plugin tag*| =<span style='font-size: smaller'>% NETGREP{ href="http://www.dwheeler.com/essays/scm-security.html" filter="(Revised \w+ \d+\, \d+)" format="+0+" color="green" size="larger" } %</span>= |
+| *plugin tag*| =<span style='font-size: smaller'>%<nop>NETGREP{ href="http://www.dwheeler.com/essays/scm-security.html" filter="(Revised \w+ \d+\, \d+)" format="+0+" color="green" size="larger" }%</span>= |
 | *displayed output* | <span style="color: green; font-size: larger;">Revised May 6, 2005</span>  |
-| *real life use* | [[http://www.dwheeler.com/essays/scm-security.html][security analysis]] by d wheeler	<span style="color: green; font-size: larger;">Revised May 6, 2005</span>  |
+| *real life use* | [[http://www.dwheeler.com/essays/scm-security.html][security analysis]] by d wheeler   <span style="color: green; font-size: larger;">Revised May 6, 2005</span>  |
 
+---+++ Missing/wrong parameters
 
-| *plugin tag*| =<span style='font-size: smaller'>% NETGREP{ href="http://wiki.gnuarch.org/Archive_20Registry" filter="(last edited) (\d+-\d+-\d+)" format="+0+ +1+" size="90%" color="red" } %</span>= |
-| *displayed output* | <span style="color: red; font-size: 90%;">last edited 2005-04-14</span> |
-| *real life use* | http://wiki.gnuarch.org/Archive_20Registry - <span style="color: red; font-size: 90%;">last edited 2005-04-14</span> list of Gnu Arch archives |
+| *NETGREP Plugin Error* |
+| NetgrepPlugin: href parameter (source) is missing |
 
----+++ missing/wrong parameters
+| *NETGREP Plugin Error* |
+| NetgrepPlugin: filter parameter is missing |
 
-<p>
-	</p><table border="1" cellpadding="0" cellspacing="1">
- <tbody><tr><th class="twikiFirstCol" bgcolor="#99cccc"><a href="http://www.open-organizations.org/view/TWiki/NetgrepPlugin?sortcol=0&amp;table=5&amp;up=0#sorted_table" title="Sort by this column"> NETGREP Plugin Error</a> </th></tr>
- <tr><td class="twikiFirstCol" bgcolor="#ffffff"> <a class="twikiLink" href="http://www.open-organizations.org/view/TWiki/NetgrepPlugin">NetgrepPlugin</a>: href parameter (source) is missing </td></tr>
- </tbody></table>
-<p>
-</p><p>
-	</p><table border="1" cellpadding="0" cellspacing="1">
- <tbody><tr><th class="twikiFirstCol" bgcolor="#99cccc"><a href="http://www.open-organizations.org/view/TWiki/NetgrepPlugin?sortcol=0&amp;table=6&amp;up=0#sorted_table" title="Sort by this column"> NETGREP Plugin Error</a> </th></tr>
- <tr><td class="twikiFirstCol" bgcolor="#ffffff"> <a class="twikiLink" href="http://www.open-organizations.org/view/TWiki/NetgrepPlugin">NetgrepPlugin</a>: filter parameter is missing </td></tr>
- </tbody></table>
-<p>
+---++ <nop>%TOPIC% Global Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>NETGREP_SHORTDESCRIPTION%==
+
+   * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Embed information from other websites, such as document revision date, by applying filters
+
+   * Set DEBUG to 1 to get debug messages in =data/debug.txt=. Default: =0=
+      * Set DEBUG = 0
+
+   * Refresh rate in minutes for cached feeds. Disable caching: =0=, default: =30=
+      * Set REFRESH = 30
+
+   * Font size of displayed result. Default: =smaller=
+      * Set SIZE = smaller
+
+   * Font color of displayed result. Default: =black=
+      * Set COLOR = gray
+
+   * Use LWP::UserAgent, or fallback to TWiki's internal =getUrl()= method. Default: =yes=
+      * Set USELWPUSERAGENT = yes
 
 ---++ Known issues
 
-	* Topic load time depends on time it takes to load the filtered source. Performance can be improved by using parameter REFRESH.
-	* This plugin uses the undocumented =TWiki::Net::getUrl()= function. The plugin might break in a future TWiki release.
-	* URLs on virtual hosts cannot be read. This is a limitation of =TWiki::Net::getUrl()=
+   * Topic load time depends on time it takes to load the filtered source. Performance can be improved by using parameter REFRESH.
+   * This plugin uses the undocumented =TWiki::Net::getUrl()= function. The plugin might break in a future TWiki release.
+   * URLs on virtual hosts cannot be read. This is a limitation of =TWiki::Net::getUrl()=
 
 ---++ Plugin Installation Instructions
 
 *Note:* You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 *Test if the plugin is correctly installed:*
-		
-	* two below tags should show =error handling tables=, like in the [[#missing_wrong_parameters][above examples]] _displayed output row_
+
+   * Two examples should show =error handling tables=, like in the [[#missing_wrong_parameters][above examples]]:
 
 %NETGREP{}%
 
 %NETGREP{ href="http://"}%
 
-	* =last edited= and =a date in green color and smaller font= should be shown instead of plugin's NETGREP tag, like in the [[#valid][above examples]] _displayed output row_
+   * =date rendered in smaller font= should be shown instead of plugin's NETGREP tag, like in [[#valid][above example]]:
 
-%NETGREP{ href="http://wiki.gnuarch.org/Archive_20Registry" filter="(last edited \d+-\d+-\d+)" format="+0+" size="smaller" color="green" }%
+%NETGREP{ href="http://www.w3.org/TR/CSS2/" filter="(W3C Working Draft \d+ \w+ \d+)" format="+0+" }%
 
-	* =date rendered in larger font= should be shown instead of plugin's NETGREP tag, like in the [[#valid][above examples]] _displayed output row_
+   * =last edited= and =a date in green color and smaller font= should be shown instead of plugin's NETGREP tag, like in [[#valid][above example]]:
 
-%NETGREP{ href="http://wiki.gnuarch.org/Archive_20Registry" filter="(last edited) (\d+-\d+-\d+)" format="+1+" size="larger"}%
+%NETGREP{ href="http://www.dwheeler.com/essays/scm-security.html" filter="(Revised \w+ \d+\, \d+)" format="+0+" color="green" size="larger" }%
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ToniPrug |
-|  Plugin Version: | 14 Jul 2005 (V1.000) |
+|  Copyright: | &copy; 2005 TWiki:Main.ToniPrug <br /> &copy; 2005-2010 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2010-12-14 (V1.1) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  14 Jul 2005: | Initial version (V1.000) |
+|  2010-12-14: | TWikibug:Item6530: Fix for TWiki-5.0; add USELWPUSERAGENT setting; doc improvements; changing TWIKIWEB to SYSTEMWEB (V1.1) -- TWiki:Main.PeterThoeny |
+|  2005-07-14: | Initial version (V1.0) |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.008 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 99% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 100%, %SYSTEMWEB%.FormattedSearch 100%, %TOPIC% 99% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main.ToniPrug - 16 Jul 2005
-
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
