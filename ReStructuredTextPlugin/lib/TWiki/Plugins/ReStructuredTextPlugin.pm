@@ -15,39 +15,6 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 # =========================
-# Each plugin is a package that may contain these functions:        VERSION:
-#
-#   earlyInitPlugin         ( )                                     1.020
-#   initPlugin              ( $topic, $web, $user, $installWeb )    1.000
-#   initializeUserHandler   ( $loginName, $url, $pathInfo )         1.010
-#   registrationHandler     ( $web, $wikiName, $loginName )         1.010
-#   beforeCommonTagsHandler ( $text, $topic, $web )                 1.024
-#   commonTagsHandler       ( $text, $topic, $web )                 1.000
-#   afterCommonTagsHandler  ( $text, $topic, $web )                 1.024
-#   startRenderingHandler   ( $text, $web )                         1.000
-#   outsidePREHandler       ( $text )                               1.000
-#   insidePREHandler        ( $text )                               1.000
-#   endRenderingHandler     ( $text )                               1.000
-#   beforeEditHandler       ( $text, $topic, $web )                 1.010
-#   afterEditHandler        ( $text, $topic, $web )                 1.010
-#   beforeSaveHandler       ( $text, $topic, $web )                 1.010
-#   afterSaveHandler        ( $text, $topic, $web, $errors )        1.020
-#   writeHeaderHandler      ( $query )                              1.010  Use only in one Plugin
-#   redirectCgiQueryHandler ( $query, $url )                        1.010  Use only in one Plugin
-#   getSessionValueHandler  ( $key )                                1.010  Use only in one Plugin
-#   setSessionValueHandler  ( $key, $value )                        1.010  Use only in one Plugin
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, all handlers except initPlugin are
-# disabled. To enable a handler remove the leading DISABLE_ from
-# the function name. Remove disabled handlers you do not need.
-#
-# NOTE: To interact with TWiki use the official TWiki functions 
-# in the TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
-
-
-# =========================
 #
 # This is the ReStructuredText TWiki plugin.
 # written by
@@ -66,31 +33,33 @@ use IPC::Open2;
 
 # =========================
 use vars qw(
-	    $web $topic $user $installWeb $VERSION $pluginName $debug $trip
-	    $tripoptions
+	      $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug $trip
+	      $tripoptions
 	    );
 
-$VERSION = '1.000';
+$VERSION = '1.1';
+$RELEASE = '2010-12-15';
+
 $pluginName = 'ReStructuredTextPlugin';  # Name of this Plugin
 
 # =========================
 sub initPlugin
 {
     ( $topic, $web, $user, $installWeb ) = @_;
-    
+
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.021 ) {
         TWiki::Func::writeWarning( "Version mismatch between ReStructuredTextPlugin and Plugins.pm" );
         return 0;
     }
-    
+
     # Get plugin debug flag
     $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
 
     # Get trip override flag
     $trip = TWiki::Func::getPluginPreferencesValue( "TRIP" )
-	|| '/_TOOLS_/dist/fs-trip-twiki-/latest/all/bin/trip';
-    
+	|| '/var/www/twiki/lib/TWiki/Plugins/ReStructuredTextPlugin/trip/bin/trip';
+
     # Get trip override flag
     $tripoptions = TWiki::Func::getPluginPreferencesValue( "TRIPOPTIONS" )
 	|| '-D source_link=0 -D time=0';
