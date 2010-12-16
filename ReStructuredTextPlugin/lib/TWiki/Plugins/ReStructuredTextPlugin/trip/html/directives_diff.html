@@ -1,0 +1,1908 @@
+Key: <S><FONT COLOR=#800000>Deleted text.</FONT></S>
+<U><FONT COLOR=#008000>Inserted text.</FONT></U>
+Use <A HREF='#'><font color=orange>&lt;</font></A> and <A HREF='#__diff1'><font color=orange>&gt;</font></A> to jump to previous/next difference region.
+<hr />
+<A HREF='#__diff1' NAME='__diff0'><font color=orange>&gt;</font></A> <?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.8: http://docutils.sourceforge.net/" />
+<title>reStructuredText Directives</title>
+<meta name="author" content="David Goodger" />
+<meta name="date" content="2005-04-09 23:13:28 +0200 (Sat, 09 Apr 2005)" />
+<meta name="copyright" content="This document has been placed in the public domain." />
+<link rel="stylesheet" href="../../../tools/stylesheets/default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="restructuredtext-directives">
+<h1 class="title">reStructuredText Directives</h1>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr><th class="docinfo-name">Author:</th>
+<td>David Goodger</td></tr>
+<tr><th class="docinfo-name"><A HREF='#__diff0' NAME='__diff1'><font color=orange>&lt;</font></A> <A HREF='#__diff2'><font color=orange>&gt;</font></A> <S><FONT COLOR=#800000>Author:</FONT></S></th>
+<td><S><FONT COLOR=#800000>Mark Nodine (for doctrip-specific implementation)</FONT></S></td></tr>
+<tr><th class="docinfo-name">Contact:</th>
+<td><A HREF='#__diff1' NAME='__diff2'><font color=orange>&lt;</font></A> <A HREF='#__diff3'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>goodger&#64;users.sourceforge.net , mark.nodine&#64;freescale.com</FONT></S> <a class="first last reference" href="mailto:goodger&#64;python.org"><U><FONT COLOR=#008000>goodger&#64;python.org</FONT></U></a></td></tr>
+<tr><th class="docinfo-name">Revision:</th>
+<td><A HREF='#__diff2' NAME='__diff3'><font color=orange>&lt;</font></A> <A HREF='#__diff4'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>1.42</FONT></S> <U><FONT COLOR=#008000>3200</FONT></U></td></tr>
+<tr><th class="docinfo-name">Date:</th>
+<td><A HREF='#__diff3' NAME='__diff4'><font color=orange>&lt;</font></A> <A HREF='#__diff5'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>2005-04-19</FONT></S> <U><FONT COLOR=#008000>2005-04-09 23:13:28 +0200 (Sat, 09 Apr 2005)</FONT></U></td></tr>
+<tr><th class="docinfo-name">Copyright:</th>
+<td>This document has been placed in the public domain.</td></tr>
+</tbody>
+</table>
+<A HREF='#__diff4' NAME='__diff5'><font color=orange>&lt;</font></A> <A HREF='#__diff6'><font color=orange>&gt;</font></A> <div class="contents topic" id="contents">
+<p class="topic-title first"><a name="contents"><U><FONT COLOR=#008000>Contents</FONT></U></a></p>
+<ul class="simple">
+<li><a class="reference" href="#admonitions" id="id9" name="id9">Admonitions</a><A HREF='#__diff5' NAME='__diff6'><font color=orange>&lt;</font></A> <A HREF='#__diff7'><font color=orange>&gt;</font></A> <ul>
+<li><a class="reference" href="#specific-admonitions" id="id10" name="id10"><U><FONT COLOR=#008000>Specific Admonitions</FONT></U></a></li>
+<li><a class="reference" href="#generic-admonition" id="id11" name="id11"><U><FONT COLOR=#008000>Generic Admonition</FONT></U></a></li>
+</ul>
+</li>
+<li><a class="reference" href="#images" id="id12" name="id12">Images</a><ul>
+<li><a class="reference" href="#image" id="id13" name="id13">Image</a></li>
+<li><a class="reference" href="#figure" id="id14" name="id14">Figure</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#body-elements" id="id15" name="id15">Body Elements</a><ul>
+<li><a class="reference" href="#topic" id="id16" name="id16">Topic</a></li>
+<li><a class="reference" href="#sidebar" id="id17" name="id17">Sidebar</a></li>
+<li><a class="reference" href="#line-block" id="id18" name="id18">Line Block</a></li>
+<li><a class="reference" href="#parsed-literal-block" id="id19" name="id19">Parsed Literal Block</a></li>
+<li><a class="reference" href="#rubric" id="id20" name="id20"><A HREF='#__diff6' NAME='__diff7'><font color=orange>&lt;</font></A> <A HREF='#__diff8'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Rubric</FONT></U></a></li>
+<li><a class="reference" href="#epigraph" id="id21" name="id21"><U><FONT COLOR=#008000>Epigraph</FONT></U></a></li>
+<li><a class="reference" href="#highlights" id="id22" name="id22"><U><FONT COLOR=#008000>Highlights</FONT></U></a></li>
+<li><a class="reference" href="#pull-quote" id="id23" name="id23"><U><FONT COLOR=#008000>Pull-Quote</FONT></U></a></li>
+<li><a class="reference" href="#compound-paragraph" id="id24" name="id24"><U><FONT COLOR=#008000>Compound Paragraph</FONT></U></a></li>
+</ul>
+</li>
+<li><A HREF='#__diff7' NAME='__diff8'><font color=orange>&lt;</font></A> <A HREF='#__diff9'><font color=orange>&gt;</font></A> <a class="reference" href="#tables" id="id25" name="id25"><U><FONT COLOR=#008000>Tables</FONT></U></a><ul>
+<li><a class="reference" href="#table" id="id26" name="id26"><U><FONT COLOR=#008000>Table</FONT></U></a></li>
+<li><a class="reference" href="#id3" id="id27" name="id27"><U><FONT COLOR=#008000>CSV Table</FONT></U></a></li>
+<li><a class="reference" href="#list-table" id="id28" name="id28"><U><FONT COLOR=#008000>List Table</FONT></U></a></li>
+</ul>
+</li>
+<li><a class="reference" href="#document-parts" id="id29" name="id29">Document Parts</a><ul>
+<li><a class="reference" href="#table-of-contents" id="id30" name="id30">Table of Contents</a></li>
+<li><a class="reference" href="#automatic-section-numbering" id="id31" name="id31">Automatic Section Numbering</a></li>
+<li><a class="reference" href="#document-header-footer" id="id32" name="id32"><A HREF='#__diff8' NAME='__diff9'><font color=orange>&lt;</font></A> <A HREF='#__diff10'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Document Header &amp; Footer</FONT></U></a></li>
+</ul>
+</li>
+<li><a class="reference" href="#references" id="id33" name="id33">References</a><ul>
+<li><a class="reference" href="#target-footnotes" id="id34" name="id34">Target Footnotes</a></li>
+<li><a class="reference" href="#footnotes" id="id35" name="id35">Footnotes</a></li>
+<li><a class="reference" href="#citations" id="id36" name="id36">Citations</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#html-specific" id="id37" name="id37">HTML-Specific</a><ul>
+<li><a class="reference" href="#meta" id="id38" name="id38">Meta</a></li>
+<li><a class="reference" href="#imagemap" id="id39" name="id39">Imagemap</a></li>
+</ul>
+</li>
+<li><A HREF='#__diff9' NAME='__diff10'><font color=orange>&lt;</font></A> <A HREF='#__diff11'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>Executable Directives If Perl System</FONT></S> <a class="reference" href="#miscellaneous" id="id40" name="id40">Miscellaneous</a><ul>
+<li><a class="reference" href="#including-an-external-document-fragment" id="id41" name="id41">Including an External Document Fragment</a></li>
+<li><a class="reference" href="#raw-data-pass-through" id="id42" name="id42">Raw Data Pass-Through</a></li>
+<li><a class="reference" href="#replacement-text" id="id43" name="id43">Replacement Text</a></li>
+<li><a class="reference" href="#unicode-character-codes" id="id44" name="id44"><A HREF='#__diff10' NAME='__diff11'><font color=orange>&lt;</font></A> <A HREF='#__diff12'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Unicode Character Codes</FONT></U></a></li>
+<li><a class="reference" href="#class" id="id45" name="id45"><U><FONT COLOR=#008000>Class</FONT></U></a></li>
+<li><a class="reference" href="#custom-interpreted-text-roles" id="id46" name="id46"><U><FONT COLOR=#008000>Custom Interpreted Text Roles</FONT></U></a></li>
+<li><a class="reference" href="#restructuredtext-test-directive" id="id47" name="id47">Restructuredtext-Test-Directive</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>This document describes the directives implemented in the reference
+reStructuredText parser.</p>
+<p>Directives have the following syntax:</p>
+<pre class="literal-block">
++-------+-------------------------------+
+| &quot;.. &quot; | directive type &quot;::&quot; directive |
++-------+ block                         |
+        |                               |
+        +-------------------------------+
+</pre>
+<p>Directives begin with an explicit markup start (two periods and a
+space), followed by the directive type and two colons (collectively,
+the &quot;directive marker&quot;).  The directive block begins immediately after
+the directive marker, and includes all subsequent indented lines.  The
+directive block is divided into arguments, options (a field list), and
+content (in that order), any of which may appear.  See the <a class="reference" href="restructuredtext.html#directives">Directives</a>
+section in the <a class="reference" href="restructuredtext.html">reStructuredText Markup Specification</a> for syntax
+details.</p>
+<p>Descriptions below list &quot;doctree elements&quot; (document tree element
+names; XML DTD generic identifiers) corresponding to individual
+directives.  For details on the hierarchy of elements, please see <a class="reference" href="../doctree.html">The
+Docutils Document Tree</a> and the <a class="reference" href="../docutils.dtd">Docutils Generic DTD</a> XML document
+type definition.  For directive implementation details, see <a class="reference" href="../../howto/rst-directives.html">Creating
+reStructuredText Directives</a>.</p>
+<div class="section" id="admonitions">
+<h1><a class="toc-backref" href="#id9" name="admonitions">Admonitions</a></h1>
+<A HREF='#__diff11' NAME='__diff12'><font color=orange>&lt;</font></A> <A HREF='#__diff13'><font color=orange>&gt;</font></A> <span id="warning"></span><span id="tip"></span><span id="note"></span><span id="important"></span><span id="hint"></span><span id="error"></span><span id="danger"></span><span id="caution"></span><span id="attention"></span><div class="section" id="specific-admonitions">
+<h2><a class="toc-backref" href="#id10" name="specific-admonitions"><U><FONT COLOR=#008000>Specific Admonitions</FONT></U></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Types:</th><A HREF='#__diff12' NAME='__diff13'><font color=orange>&lt;</font></A> <A HREF='#__diff14'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">&quot;attention&quot;, &quot;caution&quot;, &quot;danger&quot;, &quot;error&quot;, &quot;hint&quot;,
+&quot;important&quot;, &quot;note&quot;, &quot;tip&quot;,<A HREF='#__diff13' NAME='__diff14'><font color=orange>&lt;</font></A> <A HREF='#__diff15'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&quot;warning&quot;</FONT></S> <U><FONT COLOR=#008000> &quot;warning&quot;, &quot;admonition&quot;</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Elements:</th><A HREF='#__diff14' NAME='__diff15'><font color=orange>&lt;</font></A> <A HREF='#__diff16'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">attention, caution, danger, error, hint, important,
+note, tip,<A HREF='#__diff15' NAME='__diff16'><font color=orange>&lt;</font></A> <A HREF='#__diff17'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>warning</FONT></S> <U><FONT COLOR=#008000> warning, admonition, title</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff16' NAME='__diff17'><font color=orange>&lt;</font></A> <A HREF='#__diff18'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff17' NAME='__diff18'><font color=orange>&lt;</font></A> <A HREF='#__diff19'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff18' NAME='__diff19'><font color=orange>&lt;</font></A> <A HREF='#__diff20'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Interpreted as body elements.</td>
+</tr>
+</tbody>
+</table>
+<p>Admonitions are specially marked &quot;topics&quot; that can appear anywhere an
+ordinary body element can.  They contain arbitrary body elements.
+Typically, an admonition is rendered as an offset block in a document,
+sometimes outlined or shaded, with a title matching the admonition
+type.  For example:</p>
+<pre class="literal-block">
+.. DANGER::
+   Beware killer rabbits!
+</pre>
+<p>This directive might be rendered something like this:</p>
+<pre class="literal-block">
++------------------------+
+|        !DANGER!        |
+|                        |
+| Beware killer rabbits! |
++------------------------+
+</pre>
+<p>The following admonition directives have been implemented:</p>
+<ul class="simple">
+<li>attention</li>
+<li>caution</li>
+<li>danger</li>
+<li>error</li>
+<li>hint</li>
+<li>important</li>
+<li>note</li>
+<li>tip</li>
+<li>warning</li>
+</ul>
+<p>Any text immediately following the directive indicator (on the same
+line and/or indented on following lines) is interpreted as a directive
+block and is parsed for normal body elements.  For example, the
+following &quot;note&quot; admonition directive contains one paragraph and a
+bullet list consisting of two list items:</p>
+<pre class="literal-block">
+.. note:: This is a note admonition.
+   This is the second line of the first paragraph.
+
+   - The note contains all indented body elements
+     following.
+   - It includes this bullet list.
+</pre>
+</div>
+<span id="admonition"></span><div class="section" id="generic-admonition">
+<h2><a class="toc-backref" href="#id11" name="generic-admonition"><A HREF='#__diff19' NAME='__diff20'><font color=orange>&lt;</font></A> <A HREF='#__diff21'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Generic Admonition</FONT></U></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Type:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>&quot;admonition&quot;</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Doctree Elements:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>admonition, title</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Arguments:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>One, required (admonition title)</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Options:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>Possible.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>Interpreted as body elements.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+<p><U><FONT COLOR=#008000>This is a generic, titled admonition.  The title may be anything the
+author desires.</FONT></U></p>
+<p><U><FONT COLOR=#008000>The author-supplied title is also used as a &quot;class&quot; attribute value
+after being converted into a valid identifier form (down-cased;
+non-alphanumeric characters converted to single hyphens; &quot;admonition-&quot;
+prefixed).  For example, this admonition:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+.. admonition:: And, by the way...
+
+   You can make up your own admonition too.
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>becomes the following document tree (pseudo-XML):</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+&lt;document source=&quot;test data&quot;&gt;
+    &lt;admonition class=&quot;admonition-and-by-the-way&quot;&gt;
+        &lt;title&gt;
+            And, by the way...
+        &lt;paragraph&gt;
+            You can make up your own admonition too.
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>The following option is recognized:</FONT></U></p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>class</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>text</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Override the computed &quot;class&quot; attribute value.  See the </FONT></U><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000>
+directive below.</FONT></U></dd>
+</dl>
+</div>
+</div>
+<div class="section" id="images">
+<h1><a class="toc-backref" href="#id12" name="images">Images</a></h1>
+<p>There are two image directives: &quot;image&quot; and &quot;figure&quot;.</p>
+<div class="section" id="image">
+<h2><a class="toc-backref" href="#id13" name="image">Image</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Type:</th><td class="field-body">&quot;image&quot;</td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Element:</th><A HREF='#__diff20' NAME='__diff21'><font color=orange>&lt;</font></A> <A HREF='#__diff22'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">image</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff21' NAME='__diff22'><font color=orange>&lt;</font></A> <A HREF='#__diff23'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">One, required (image URI).</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff22' NAME='__diff23'><font color=orange>&lt;</font></A> <A HREF='#__diff24'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Possible.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff23' NAME='__diff24'><font color=orange>&lt;</font></A> <A HREF='#__diff25'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+</tbody>
+</table>
+<p>An &quot;image&quot; is a simple picture:</p>
+<pre class="literal-block">
+.. image:: picture.png
+</pre>
+<p>The URI for the image source file is specified in the directive
+argument.  As with hyperlink targets, the image URI may begin on the
+same line as the explicit markup start and target name, or it may
+begin in an indented text block immediately following, with no
+intervening blank lines.  If there are multiple lines in the link
+block, they are stripped of leading and trailing whitespace and joined
+together.</p>
+<p>Optionally, the image link block may contain a flat field list, the
+<span class="target" id="image-options">image options</span>.  For example:</p>
+<pre class="literal-block">
+.. image:: picture.jpeg
+   :height: 100
+   :width: 200
+   :scale: 50
+   :alt: alternate text
+   :align: right
+</pre>
+<p>The following options are recognized:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">alt</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">text</span></dt>
+<dd>Alternate text: a short description of the image, displayed by
+applications that cannot display images, or spoken by applications
+for visually impaired users.</dd>
+<dt><tt class="docutils literal"><span class="pre">height</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">integer</span></dt>
+<dd>The<A HREF='#__diff24' NAME='__diff25'><font color=orange>&lt;</font></A> <A HREF='#__diff26'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000> desired</FONT></U> height of the image in pixels, used to reserve space
+or scale the image vertically.<A HREF='#__diff25' NAME='__diff26'><font color=orange>&lt;</font></A> <A HREF='#__diff27'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>  When the &quot;scale&quot; option is also
+specified, they are combined.  For example, a height of 200 and a
+scale of 50 is equivalent to a height of 100 with no scale.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre">width</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">integer</span></dt>
+<dd>The width of the image in pixels, used to reserve space or scale
+the image horizontally.<A HREF='#__diff26' NAME='__diff27'><font color=orange>&lt;</font></A> <A HREF='#__diff28'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>  As with &quot;height&quot; above, when the &quot;scale&quot;
+option is also specified, they are combined.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre">scale</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">integer</span></dt>
+<dd><p class="first">The uniform scaling factor of the image, a percentage (but no &quot;%&quot;
+symbol is required or allowed).  &quot;100&quot; means<A HREF='#__diff27' NAME='__diff28'><font color=orange>&lt;</font></A> <A HREF='#__diff29'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>full-size.</FONT></S> <U><FONT COLOR=#008000> full-size, and is
+equivalent to omitting a &quot;scale&quot; option.</FONT></U></p>
+<p class="last"><U><FONT COLOR=#008000>If no &quot;height&quot; or &quot;width&quot; options are specified, PIL </FONT></U><a class="footnote-reference" href="#pil" id="id1" name="id1"><U><FONT COLOR=#008000>[1]</FONT></U></a><U><FONT COLOR=#008000> may
+be used to determine them, if PIL is installed and the image file
+is available.</FONT></U></p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">align</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">&quot;top&quot;, &quot;middle&quot;, &quot;bottom&quot;, &quot;left&quot;, &quot;center&quot;, or &quot;right&quot;</span></dt>
+<dd>The alignment of the image, equivalent to the HTML <tt class="docutils literal"><span class="pre">&lt;img&gt;</span></tt> tag's
+&quot;align&quot; attribute.  The values &quot;top&quot;, &quot;middle&quot;, and &quot;bottom&quot;
+control an image's vertical alignment (relative to the text
+baseline); they are only useful for inline images (substitutions).
+The values &quot;left&quot;, &quot;center&quot;, and &quot;right&quot; control an image's
+horizontal alignment, allowing the image to float and have the
+text flow around it.  The specific behavior depends upon the
+browser or rendering software used.</dd>
+<dt><tt class="docutils literal"><span class="pre"><A HREF='#__diff28' NAME='__diff29'><font color=orange>&lt;</font></A> <A HREF='#__diff30'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>usemap</FONT></S> <U><FONT COLOR=#008000>target</FONT></U></span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">text<A HREF='#__diff29' NAME='__diff30'><font color=orange>&lt;</font></A> <A HREF='#__diff31'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000> (URI or reference name)</FONT></U></span></dt>
+<dd><A HREF='#__diff30' NAME='__diff31'><font color=orange>&lt;</font></A> <A HREF='#__diff32'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>Specifies</FONT></S> <U><FONT COLOR=#008000>Makes</FONT></U> the<A HREF='#__diff31' NAME='__diff32'><font color=orange>&lt;</font></A> <A HREF='#__diff33'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>name of</FONT></S> <U><FONT COLOR=#008000> image into</FONT></U> a<A HREF='#__diff32' NAME='__diff33'><font color=orange>&lt;</font></A> <A HREF='#__diff34'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>map to</FONT></S> <U><FONT COLOR=#008000> hyperlink reference (&quot;clickable&quot;).  The
+option argument may</FONT></U> be<A HREF='#__diff33' NAME='__diff34'><font color=orange>&lt;</font></A> <A HREF='#__diff35'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>used</FONT></S> <U><FONT COLOR=#008000> a URI (relative or absolute), or a
+reference name</FONT></U> with<A HREF='#__diff34' NAME='__diff35'><font color=orange>&lt;</font></A> <A HREF='#__diff36'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>HTML's</FONT></S> <U><FONT COLOR=#008000> underscore suffix (e.g. </FONT></U><tt class="docutils literal"><span class="pre"><A HREF='#__diff35' NAME='__diff36'><font color=orange>&lt;</font></A> <A HREF='#__diff37'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&lt;usemap&gt;</FONT></S> <U><FONT COLOR=#008000>name_</FONT></U></span></tt><A HREF='#__diff36' NAME='__diff37'><font color=orange>&lt;</font></A> <A HREF='#__diff38'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>tag so that clicking</FONT></S> <U><FONT COLOR=#008000>).</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>class</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>text</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Set a &quot;class&quot; attribute value</FONT></U> on the image<A HREF='#__diff37' NAME='__diff38'><font color=orange>&lt;</font></A> <A HREF='#__diff39'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>can traverse a URI.</FONT></S> <U><FONT COLOR=#008000> element.  See the
+</FONT></U><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000> directive below.</FONT></U></dd>
+</dl>
+</div>
+<div class="section" id="figure">
+<h2><a class="toc-backref" href="#id14" name="figure">Figure</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Type:</th><td class="field-body">&quot;figure&quot;</td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Elements:</th><A HREF='#__diff38' NAME='__diff39'><font color=orange>&lt;</font></A> <A HREF='#__diff40'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">figure, image, caption, legend</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff39' NAME='__diff40'><font color=orange>&lt;</font></A> <A HREF='#__diff41'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">One, required (image URI).</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff40' NAME='__diff41'><font color=orange>&lt;</font></A> <A HREF='#__diff42'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Possible.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff41' NAME='__diff42'><font color=orange>&lt;</font></A> <A HREF='#__diff43'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Interpreted as the figure caption and an optional
+legend.</td>
+</tr>
+</tbody>
+</table>
+<p>A &quot;figure&quot; consists of <a class="reference" href="#image">image</a> data (including <a class="reference" href="#image-options">image options</a>), an
+optional caption (a single paragraph), and an optional legend
+(arbitrary body elements):</p>
+<pre class="literal-block">
+.. figure:: picture.png
+   :scale: 50
+   :alt: map to buried treasure
+
+   This is the caption of the figure (a simple paragraph).
+
+   The legend consists of all elements after the caption.  In this
+   case, the legend consists of this paragraph and the following
+   table:
+
+   +-----------------------+-----------------------+
+   | Symbol                | Meaning               |
+   +=======================+=======================+
+   | .. image:: tent.png   | Campground            |
+   +-----------------------+-----------------------+
+   | .. image:: waves.png  | Lake                  |
+   +-----------------------+-----------------------+
+   | .. image:: peak.png   | Mountain              |
+   +-----------------------+-----------------------+
+</pre>
+<p>There must be blank lines before the caption paragraph and before the
+legend.  To specify a legend without a caption, use an empty comment
+(&quot;..&quot;) in place of the caption.</p>
+<p>The &quot;figure&quot; directive supports all of the options of the &quot;image&quot;
+directive (see <a class="reference" href="#image-options">image options</a> above).<A HREF='#__diff42' NAME='__diff43'><font color=orange>&lt;</font></A> <A HREF='#__diff44'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>  In addition, the following
+options are recognized:</FONT></U></p><A HREF='#__diff43' NAME='__diff44'><font color=orange>&lt;</font></A> <A HREF='#__diff45'><font color=orange>&gt;</font></A> 
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>figwidth</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>integer or &quot;image&quot;</FONT></U></span></dt>
+<dd><p class="first"><U><FONT COLOR=#008000>The width of the figure in pixels, to limit the horizontal space
+used.  A special value of &quot;image&quot; is allowed, in which case the
+included image's actual width is used (requires PIL </FONT></U><a class="footnote-reference" href="#pil" id="id2" name="id2"><U><FONT COLOR=#008000>[1]</FONT></U></a><U><FONT COLOR=#008000>).  If
+the image file is not found or the required software is
+unavailable, this option is ignored.</FONT></U></p>
+<p><U><FONT COLOR=#008000>Sets the &quot;width&quot; attribute of the &quot;figure&quot; doctree element.</FONT></U></p>
+<p><U><FONT COLOR=#008000>This option does not scale the included image; use the &quot;width&quot;
+</FONT></U><a class="reference" href="#image"><U><FONT COLOR=#008000>image</FONT></U></a><U><FONT COLOR=#008000> option for that.</FONT></U></p>
+<pre class="last literal-block"><U><FONT COLOR=#008000>
++---------------------------+
+|        figure             |
+|                           |
+|&lt;------ figwidth ---------&gt;|
+|                           |
+|  +---------------------+  |
+|  |     image           |  |
+|  |                     |  |
+|  |&lt;--- width ---------&gt;|  |
+|  +---------------------+  |
+|                           |
+|The figure's caption should|
+|wrap at this width.        |
++---------------------------+
+</FONT></U></pre>
+</dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>figclass</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>text</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Set a &quot;class&quot; attribute value on the figure element.  See the
+</FONT></U><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000> directive below.</FONT></U></dd>
+</dl>
+<table class="docutils footnote" frame="void" id="pil" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="pil"><U><FONT COLOR=#008000>[1]</FONT></U></a></td><td><em><U><FONT COLOR=#008000>(</FONT></U><a class="fn-backref" href="#id1"><U><FONT COLOR=#008000>1</FONT></U></a><U><FONT COLOR=#008000>, </FONT></U><a class="fn-backref" href="#id2"><U><FONT COLOR=#008000>2</FONT></U></a><U><FONT COLOR=#008000>)</FONT></U></em> <a class="reference" href="http://www.pythonware.com/products/pil/"><U><FONT COLOR=#008000>Python Imaging Library</FONT></U></a><U><FONT COLOR=#008000>.</FONT></U></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="body-elements">
+<h1><a class="toc-backref" href="#id15" name="body-elements">Body Elements</a></h1>
+<div class="section" id="topic">
+<h2><a class="toc-backref" href="#id16" name="topic">Topic</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Type:</th><td class="field-body">&quot;topic&quot;</td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Element:</th><A HREF='#__diff44' NAME='__diff45'><font color=orange>&lt;</font></A> <A HREF='#__diff46'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">topic</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff45' NAME='__diff46'><font color=orange>&lt;</font></A> <A HREF='#__diff47'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">1, required (topic title).</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff46' NAME='__diff47'><font color=orange>&lt;</font></A> <A HREF='#__diff48'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body"><A HREF='#__diff47' NAME='__diff48'><font color=orange>&lt;</font></A> <A HREF='#__diff49'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>None.</FONT></S> <U><FONT COLOR=#008000>Possible.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff48' NAME='__diff49'><font color=orange>&lt;</font></A> <A HREF='#__diff50'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Interpreted as the topic body.</td>
+</tr>
+</tbody>
+</table>
+<p>A topic is like a block quote with a title, or a self-contained
+section with no subsections.  Use the &quot;topic&quot; directive to indicate a
+self-contained idea that is separate from the flow of the document.
+Topics may occur anywhere a section or transition may occur.  Body
+elements<A HREF='#__diff49' NAME='__diff50'><font color=orange>&lt;</font></A> <A HREF='#__diff51'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>(including topics)</FONT></S> <U><FONT COLOR=#008000> and topics</FONT></U> may not contain nested topics.</p>
+<p>The directive's sole argument is interpreted as the topic title; the
+next line must be blank.  All subsequent lines make up the topic body,
+interpreted as body elements.  For example:</p>
+<pre class="literal-block">
+.. topic:: Topic Title
+
+    Subsequent indented lines comprise
+    the body of the topic, and are
+    interpreted as body elements.
+</pre>
+<p><A HREF='#__diff50' NAME='__diff51'><font color=orange>&lt;</font></A> <A HREF='#__diff52'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>The following option is recognized:</FONT></U></p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>class</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>text</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Set a &quot;class&quot; attribute value on the topic element.  See the
+</FONT></U><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000> directive below.</FONT></U></dd>
+</dl>
+</div>
+<div class="section" id="sidebar">
+<h2><a class="toc-backref" href="#id17" name="sidebar">Sidebar</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Type:</th><td class="field-body">&quot;sidebar&quot;</td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Element:</th><A HREF='#__diff51' NAME='__diff52'><font color=orange>&lt;</font></A> <A HREF='#__diff53'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">sidebar</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff52' NAME='__diff53'><font color=orange>&lt;</font></A> <A HREF='#__diff54'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">One, required (sidebar title).</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff53' NAME='__diff54'><font color=orange>&lt;</font></A> <A HREF='#__diff55'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Possible.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff54' NAME='__diff55'><font color=orange>&lt;</font></A> <A HREF='#__diff56'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Interpreted as the sidebar body.</td>
+</tr>
+</tbody>
+</table>
+<p>Sidebars are like miniature, parallel documents that occur inside
+other documents, providing related or reference material.  A sidebar
+is typically offset by a border and &quot;floats&quot; to the side of the page;
+the document's main text may flow around it.  Sidebars can also be
+likened to super-footnotes; their content is outside of the flow of
+the document's main text.</p>
+<p>Sidebars may occur anywhere a section or transition may occur.  Body
+elements (including sidebars) may not contain nested sidebars.</p>
+<p>The directive's sole argument is interpreted as the sidebar title,
+which may be followed by a subtitle option (see below); the next line
+must be blank.  All subsequent lines make up the sidebar body,
+interpreted as body elements.  For example:</p>
+<pre class="literal-block">
+.. sidebar:: Sidebar Title
+   :subtitle: Optional Sidebar Subtitle
+
+   Subsequent indented lines comprise
+   the body of the sidebar, and are
+   interpreted as body elements.
+</pre>
+<p>The following options are recognized:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">subtitle</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">text</span></dt>
+<dd>The sidebar's subtitle.</dd>
+<dt><tt class="docutils literal"><span class="pre"><A HREF='#__diff55' NAME='__diff56'><font color=orange>&lt;</font></A> <A HREF='#__diff57'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>class</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>text</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Set a &quot;class&quot; attribute value on the sidebar element.  See the
+</FONT></U><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000> directive below.</FONT></U></dd>
+</dl>
+</div>
+<div class="section" id="line-block">
+<h2><a class="toc-backref" href="#id18" name="line-block">Line Block</a></h2>
+<A HREF='#__diff56' NAME='__diff57'><font color=orange>&lt;</font></A> <A HREF='#__diff58'><font color=orange>&gt;</font></A> <div class="admonition-deprecated admonition">
+<p class="first admonition-title"><U><FONT COLOR=#008000>Deprecated</FONT></U></p>
+<p><U><FONT COLOR=#008000>The &quot;line-block&quot; directive is deprecated.  Use the </FONT></U><a class="reference" href="restructuredtext.html#line-blocks"><U><FONT COLOR=#008000>line block
+syntax</FONT></U></a><U><FONT COLOR=#008000> instead.</FONT></U></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Type:</th><td class="field-body">&quot;line-block&quot;</td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Element:</th><A HREF='#__diff57' NAME='__diff58'><font color=orange>&lt;</font></A> <A HREF='#__diff59'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">line_block</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff58' NAME='__diff59'><font color=orange>&lt;</font></A> <A HREF='#__diff60'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff59' NAME='__diff60'><font color=orange>&lt;</font></A> <A HREF='#__diff61'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body"><A HREF='#__diff60' NAME='__diff61'><font color=orange>&lt;</font></A> <A HREF='#__diff62'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>None.</FONT></S> <U><FONT COLOR=#008000>Possible.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff61' NAME='__diff62'><font color=orange>&lt;</font></A> <A HREF='#__diff63'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Becomes the body of the line block.</td>
+</tr>
+</tbody>
+</table>
+<p>The &quot;line-block&quot; directive constructs an element where line breaks and
+initial indentation is significant and inline markup is supported.  It
+is equivalent to a <a class="reference" href="#parsed-literal-block">parsed literal block</a> with different rendering:
+typically in an ordinary serif typeface instead of a
+typewriter/monospaced face, and not automatically indented.  (Have the
+line-block directive begin a block quote to get an indented line
+block.)  Line blocks are useful for address blocks and verse (poetry,
+song lyrics), where the structure of lines is significant.  For
+example, here's a classic:</p>
+<pre class="literal-block">
+&quot;To Ma Own Beloved Lassie: A Poem on her 17th Birthday&quot;, by
+Ewan McTeagle (for Lassie O'Shea):
+
+    .. line-block::
+
+        Lend us a couple of bob till Thursday.
+        I'm absolutely skint.
+        But I'm expecting a postal order and I can pay you back
+            as soon as it comes.
+        Love, Ewan.
+</pre>
+<A HREF='#__diff62' NAME='__diff63'><font color=orange>&lt;</font></A> <A HREF='#__diff64'><font color=orange>&gt;</font></A> <p><U><FONT COLOR=#008000>The following option is recognized:</FONT></U></p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>class</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>text</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Set a &quot;class&quot; attribute value on the line_block element.  See the
+</FONT></U><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><A HREF='#__diff63' NAME='__diff64'><font color=orange>&lt;</font></A> <A HREF='#__diff65'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000> directive below.</FONT></U></dd>
+</dl>
+</div>
+<span id="parsed-literal"></span><div class="section" id="parsed-literal-block">
+<h2><a class="toc-backref" href="#id19" name="parsed-literal-block">Parsed Literal Block</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Type:</th><td class="field-body">&quot;parsed-literal&quot;</td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Element:</th><A HREF='#__diff64' NAME='__diff65'><font color=orange>&lt;</font></A> <A HREF='#__diff66'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">literal_block</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff65' NAME='__diff66'><font color=orange>&lt;</font></A> <A HREF='#__diff67'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff66' NAME='__diff67'><font color=orange>&lt;</font></A> <A HREF='#__diff68'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body"><A HREF='#__diff67' NAME='__diff68'><font color=orange>&lt;</font></A> <A HREF='#__diff69'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>None.</FONT></S> <U><FONT COLOR=#008000>Possible.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff68' NAME='__diff69'><font color=orange>&lt;</font></A> <A HREF='#__diff70'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Becomes the body of the literal block.</td>
+</tr>
+</tbody>
+</table>
+<p>Unlike an ordinary literal block, the &quot;parsed-literal&quot; directive
+constructs a literal block where the text is parsed for inline markup.
+It is equivalent to a <a class="reference" href="#line-block">line block</a> with different rendering:
+typically in a typewriter/monospaced typeface, like an ordinary
+literal block.  Parsed literal blocks are useful for adding hyperlinks
+to code examples.</p>
+<p>However, care must be taken with the text, because inline markup is
+recognized and there is no protection from parsing.  Backslash-escapes
+may be necessary to prevent unintended parsing.  And because the
+markup characters are removed by the parser, care must also be taken
+with vertical alignment.  Parsed &quot;ASCII art&quot; is tricky, and extra
+whitespace may be necessary.</p>
+<p>For example, all the element names in this content model are links:</p>
+<pre class="literal-block">
+.. parsed-literal::
+
+<A HREF='#__diff69' NAME='__diff70'><font color=orange>&lt;</font></A> <A HREF='#__diff71'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>((title_,</FONT></S> <U><FONT COLOR=#008000>   ( (title_,</FONT></U> subtitle_?)?,<A HREF='#__diff70' NAME='__diff71'><font color=orange>&lt;</font></A> <A HREF='#__diff72'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>docinfo_?,</FONT></S> 
+     decoration_?,
+<A HREF='#__diff71' NAME='__diff72'><font color=orange>&lt;</font></A> <A HREF='#__diff73'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>`%structure.model;`_)</FONT></S> <U><FONT COLOR=#008000>     (docinfo_, transition_?)?,
+     `%structure.model;`_ )</FONT></U>
+</pre>
+<p><A HREF='#__diff72' NAME='__diff73'><font color=orange>&lt;</font></A> <A HREF='#__diff74'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>The following option is recognized:</FONT></U></p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>class</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>text</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Set a &quot;class&quot; attribute value on the literal_block element.  See
+the </FONT></U><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000> directive below.</FONT></U></dd>
+</dl>
+</div>
+<div class="section" id="rubric">
+<h2><a class="toc-backref" href="#id20" name="rubric"><A HREF='#__diff73' NAME='__diff74'><font color=orange>&lt;</font></A> <A HREF='#__diff75'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Rubric</FONT></U></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Type:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>&quot;rubric&quot;</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Doctree Element:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>rubric</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Arguments:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>1, required (rubric text).</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Options:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>Possible.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+<!--  -->
+<blockquote>
+<p><U><FONT COLOR=#008000>rubric n. 1. a title, heading, or the like, in a manuscript,
+book, statute, etc., written or printed in red or otherwise
+distinguished from the rest of the text. ...</FONT></U></p>
+<p class="attribution"><U><FONT COLOR=#008000>&mdash;Random House Webster's College Dictionary, 1991</FONT></U></p>
+</blockquote>
+<p><U><FONT COLOR=#008000>The &quot;rubric&quot; directive inserts a &quot;rubric&quot; element into the document
+tree.  A rubric is like an informal heading that doesn't correspond to
+the document's structure.</FONT></U></p>
+<p><U><FONT COLOR=#008000>The following option is recognized:</FONT></U></p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>class</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>text</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Set a &quot;class&quot; attribute value on the rubric element.  See the
+</FONT></U><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000> directive below.</FONT></U></dd>
+</dl>
+</div>
+<div class="section" id="epigraph">
+<h2><a class="toc-backref" href="#id21" name="epigraph"><A HREF='#__diff74' NAME='__diff75'><font color=orange>&lt;</font></A> <A HREF='#__diff76'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Epigraph</FONT></U></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Type:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>&quot;epigraph&quot;</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Doctree Element:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>block_quote</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Arguments:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Options:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>Interpreted as the body of the block quote.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+<p><U><FONT COLOR=#008000>An epigraph is an apposite (suitable, apt, or pertinent) short
+inscription, often a quotation or poem, at the beginning of a document
+or section.</FONT></U></p>
+<p><U><FONT COLOR=#008000>The &quot;epigraph&quot; directive produces an &quot;epigraph&quot;-class block quote.
+For example, this input:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+.. epigraph::
+
+   No matter where you go, there you are.
+
+   -- Buckaroo Banzai
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>becomes this document tree fragment:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+&lt;block_quote class=&quot;epigraph&quot;&gt;
+    &lt;paragraph&gt;
+        No matter where you go, there you are.
+    &lt;attribution&gt;
+        Buckaroo Banzai
+</FONT></U></pre>
+</div>
+<div class="section" id="highlights">
+<h2><a class="toc-backref" href="#id22" name="highlights"><U><FONT COLOR=#008000>Highlights</FONT></U></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Type:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>&quot;highlights&quot;</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Doctree Element:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>block_quote</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Arguments:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Options:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>Interpreted as the body of the block quote.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+<p><U><FONT COLOR=#008000>Highlights summarize the main points of a document or section, often
+consisting of a list.</FONT></U></p>
+<p><U><FONT COLOR=#008000>The &quot;highlights&quot; directive produces a &quot;highlights&quot;-class block quote.
+See </FONT></U><a class="reference" href="#epigraph"><U><FONT COLOR=#008000>Epigraph</FONT></U></a><U><FONT COLOR=#008000> above for an analogous example.</FONT></U></p>
+</div>
+<div class="section" id="pull-quote">
+<h2><a class="toc-backref" href="#id23" name="pull-quote"><U><FONT COLOR=#008000>Pull-Quote</FONT></U></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Type:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>&quot;pull-quote&quot;</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Doctree Element:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>block_quote</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Arguments:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Options:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>Interpreted as the body of the block quote.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+<p><U><FONT COLOR=#008000>A pull-quote is a small selection of text &quot;pulled out and quoted&quot;,
+typically in a larger typeface.  Pull-quotes are used to attract
+attention, especially in long articles.</FONT></U></p>
+<p><U><FONT COLOR=#008000>The &quot;pull-quote&quot; directive produces a &quot;pull-quote&quot;-class block quote.
+See </FONT></U><a class="reference" href="#epigraph"><U><FONT COLOR=#008000>Epigraph</FONT></U></a><U><FONT COLOR=#008000> above for an analogous example.</FONT></U></p>
+</div>
+<span id="compound"></span><div class="section" id="compound-paragraph">
+<h2><a class="toc-backref" href="#id24" name="compound-paragraph"><U><FONT COLOR=#008000>Compound Paragraph</FONT></U></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Type:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>&quot;compound&quot;</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Doctree Element:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>compound</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Arguments:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Options:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>Possible.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>Interpreted as body elements.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+<p><U><FONT COLOR=#008000>(New in Docutils 0.3.6)</FONT></U></p>
+<p><U><FONT COLOR=#008000>The &quot;compound&quot; directive is used to create a compound paragraph, which
+is a single logical paragraph containing multiple physical body
+elements such as simple paragraphs, literal blocks, tables, lists,
+etc., instead of directly containing text and inline elements.  For
+example:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+.. compound::
+
+   The 'rm' command is very dangerous.  If you are logged
+   in as root and enter ::
+
+       cd /
+       rm -rf *
+
+   you will erase the entire contents of your file system.
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>In the example above, a literal block is &quot;embedded&quot; within a sentence
+that begins in one physical paragraph and ends in another.</FONT></U></p>
+<p><U><FONT COLOR=#008000>Compound paragraphs are typically rendered as multiple distinct text
+blocks, with the possibility of variations to emphasize their logical
+unity:</FONT></U></p>
+<ul class="simple">
+<li><U><FONT COLOR=#008000>If paragraphs are rendered with a first-line indent, only the first
+physical paragraph of a compound paragraph should have that indent
+-- second and further physical paragraphs should omit the indents;</FONT></U></li>
+<li><U><FONT COLOR=#008000>vertical spacing between physical elements may be reduced;</FONT></U></li>
+<li><U><FONT COLOR=#008000>and so on.</FONT></U></li>
+</ul>
+<p><U><FONT COLOR=#008000>The following option is recognized:</FONT></U></p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>class</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>text</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Set a &quot;class&quot; attribute value on the compound element.  See the
+</FONT></U><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000> directive below.</FONT></U></dd>
+</dl>
+</div>
+</div>
+<div class="section" id="tables">
+<h1><a class="toc-backref" href="#id25" name="tables"><U><FONT COLOR=#008000>Tables</FONT></U></a></h1>
+<p><U><FONT COLOR=#008000>Formal tables need more structure than the reStructuredText syntax
+supplies.  Tables may be given titles with the </FONT></U><a class="reference" href="#table"><U><FONT COLOR=#008000>table</FONT></U></a><U><FONT COLOR=#008000> directive.
+Sometimes reStructuredText tables are inconvenient to write, or table
+data in a standard format is readily available.  The </FONT></U><a class="reference" href="#csv-table"><U><FONT COLOR=#008000>csv-table</FONT></U></a><U><FONT COLOR=#008000>
+directive supports CSV data.</FONT></U></p>
+<div class="section" id="table">
+<h2><a class="toc-backref" href="#id26" name="table"><U><FONT COLOR=#008000>Table</FONT></U></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Type:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>&quot;table&quot;</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Doctree Element:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>table</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Arguments:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>1, optional (table title).</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Options:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>Possible.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>A normal reStructuredText table.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+<p><U><FONT COLOR=#008000>(New in Docutils 0.3.1)</FONT></U></p>
+<p><U><FONT COLOR=#008000>The &quot;table&quot; directive is used to create a titled table, to associate a
+title with a table:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+.. table:: Truth table for &quot;not&quot;
+
+   =====  =====
+     A    not A
+   =====  =====
+   False  True
+   True   False
+   =====  =====
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>The following option is recognized:</FONT></U></p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>class</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>text</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Set a &quot;class&quot; attribute value on the table element.  See the
+</FONT></U><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000> directive below.</FONT></U></dd>
+</dl>
+</div>
+<span id="csv-table"></span><div class="section" id="id3">
+<h2><a class="toc-backref" href="#id27" name="id3"><U><FONT COLOR=#008000>CSV Table</FONT></U></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Type:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>&quot;csv-table&quot;</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Doctree Element:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>table</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Arguments:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>1, optional (table title).</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Options:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>Possible.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>A CSV (comma-separated values) table.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+<div class="warning">
+<p class="first admonition-title"><U><FONT COLOR=#008000>Warning</FONT></U></p>
+<p class="last"><U><FONT COLOR=#008000>The &quot;csv-table&quot; directive's &quot;:file:&quot; and &quot;:url:&quot; options represent
+a potential security holes.  They can be disabled with the
+&quot;</FONT></U><a class="reference" href="../../user/config.html#file-insertion-enabled"><U><FONT COLOR=#008000>file_insertion_enabled</FONT></U></a><U><FONT COLOR=#008000>&quot; runtime setting.</FONT></U></p>
+</div>
+<div class="note">
+<p class="first admonition-title"><U><FONT COLOR=#008000>Note</FONT></U></p>
+<p class="last"><U><FONT COLOR=#008000>The &quot;csv-table&quot; directive requires the </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>csv.py</FONT></U></span></tt><U><FONT COLOR=#008000> module of the
+Python standard library, which was added in Python 2.3.  It will
+not work with earlier versions of Python.  Using the &quot;csv-table&quot;
+directive in a document will make the document </FONT></U><strong><U><FONT COLOR=#008000>incompatible</FONT></U></strong><U><FONT COLOR=#008000>
+with systems using Python 2.1 or 2.2.</FONT></U></p>
+</div>
+<p><U><FONT COLOR=#008000>(New in Docutils 0.3.4)</FONT></U></p>
+<p><U><FONT COLOR=#008000>The &quot;csv-table&quot; directive is used to create a table from CSV
+(comma-separated values) data.  CSV is a common data format generated
+by spreadsheet applications and commercial databases.  The data may be
+internal (an integral part of the document) or external (a separate
+file).</FONT></U></p>
+<p><U><FONT COLOR=#008000>Example:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+.. csv-table:: Frozen Delights!
+   :header: &quot;Treat&quot;, &quot;Quantity&quot;, &quot;Description&quot;
+   :widths: 15, 10, 30
+
+   &quot;Albatross&quot;, 2.99, &quot;On a stick!&quot;
+   &quot;Crunchy Frog&quot;, 1.49, &quot;If we took the bones out, it wouldn't be
+   crunchy, now would it?&quot;
+   &quot;Gannet Ripple&quot;, 1.99, &quot;On a stick!&quot;
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>Block markup and inline markup within cells is supported.  Line ends
+are recognized within cells.</FONT></U></p>
+<p><U><FONT COLOR=#008000>Working limitations:</FONT></U></p>
+<ul class="simple">
+<li><U><FONT COLOR=#008000>Whitespace delimiters are supported only for external CSV files.</FONT></U></li>
+<li><U><FONT COLOR=#008000>There is no support for checking that the number of columns in each
+row is the same.  However, this directive supports CSV generators
+that do not insert &quot;empty&quot; entries at the end of short rows, by
+automatically adding empty entries.</FONT></U><!-- Add "strict" option to verify input? -->
+</li>
+<li><U><FONT COLOR=#008000>Due to limitations of the CSV parser, this directive is not Unicode
+compatible.  It may also have problems with ASCII NUL characters.
+Accordingly, CSV tables should be ASCII-printable safe.</FONT></U><!-- Test with Unicode; see if that's really so.  "encoding" option? -->
+</li>
+</ul>
+<p><U><FONT COLOR=#008000>The following options are recognized:</FONT></U></p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>class</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>text</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Set a &quot;class&quot; attribute value on the table element.  See the
+</FONT></U><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000> directive below.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>widths</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>integer [, integer...]</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>A comma- or space-separated list of relative column widths.  The
+default is equal-width columns (100%/#columns).</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>header-rows</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>integer</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>The number of rows of CSV data to use in the table header.
+Defaults to 0.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>stub-columns</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>integer</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>The number of table columns to use as stubs (row titles, on the
+left).  Defaults to 0.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>header</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>CSV data</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Supplemental data for the table header, added independently of and
+before any </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>header-rows</FONT></U></span></tt><U><FONT COLOR=#008000> from the main CSV data.  Must use the
+same CSV format as the main CSV data.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>file</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>string (newlines removed)</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>The local filesystem path to a CSV data file.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>url</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>string (whitespace removed)</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>An Internet URL reference to a CSV data file.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>encoding</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>name of text encoding</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>The text encoding of the external CSV data (file or URL).
+Defaults to the document's encoding (if specified).</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>delim</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>char | &quot;tab&quot; | &quot;space&quot;</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>A one-character string used to separate fields.  Defaults to </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>,</FONT></U></span></tt><U><FONT COLOR=#008000>
+(comma).  May be specified as a Unicode code point; see the
+</FONT></U><a class="reference" href="#unicode"><U><FONT COLOR=#008000>unicode</FONT></U></a><U><FONT COLOR=#008000> directive for syntax details.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>quote</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>char</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>A one-character string used to quote elements containing the
+delimiter or which start with the quote character.  Defaults to
+</FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>&quot;</FONT></U></span></tt><U><FONT COLOR=#008000> (quote).  May be specified as a Unicode code point; see the
+</FONT></U><a class="reference" href="#unicode"><U><FONT COLOR=#008000>unicode</FONT></U></a><U><FONT COLOR=#008000> directive for syntax details.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>keepspace</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>flag</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Treat whitespace immediately following the delimiter as
+significant.  The default is to ignore such whitespace.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>escape</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>char</FONT></U></span></dt>
+<dd><p class="first"><U><FONT COLOR=#008000>A one-character string used to escape the delimiter or quote
+characters.  May be specified as a Unicode code point; see the
+</FONT></U><a class="reference" href="#unicode"><U><FONT COLOR=#008000>unicode</FONT></U></a><U><FONT COLOR=#008000> directive for syntax details.  Used when the delimiter is
+used in an unquoted field, or when quote characters are used
+within a field.  The default is to double-up the character,
+e.g. &quot;He said, &quot;&quot;Hi!&quot;&quot;&quot;</FONT></U></p>
+<!-- Add another possible value, "double", to explicitly indicate
+the default case? -->
+</dd>
+</dl>
+</div>
+<div class="section" id="list-table">
+<h2><a class="toc-backref" href="#id28" name="list-table"><U><FONT COLOR=#008000>List Table</FONT></U></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Type:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>&quot;list-table&quot;</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Doctree Element:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>table</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Arguments:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>1, optional (table title).</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Options:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>Possible.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>A uniform two-level bullet list.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+<p><U><FONT COLOR=#008000>(New in Docutils 0.3.8.  This is an initial implementation; </FONT></U><a class="reference" href="http://docutils.sf.net/docs/dev/rst/alternatives.html#list-driven-tables"><U><FONT COLOR=#008000>further
+ideas</FONT></U></a><U><FONT COLOR=#008000> may be implemented in the future.)</FONT></U></p>
+<p><U><FONT COLOR=#008000>The &quot;list-table&quot; directive is used to create a table from data in a
+uniform two-level bullet list.  &quot;Uniform&quot; means that each sublist
+(second-level list) must contain the same number of list items.</FONT></U></p>
+<p><U><FONT COLOR=#008000>Example:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+.. list-table:: Frozen Delights!
+   :widths: 15 10 30
+   :header-rows: 1
+
+   * - Treat
+     - Quantity
+     - Description
+   * - Albatross
+     - 2.99
+     - On a stick!
+   * - Crunchy Frog
+     - 1.49
+     - If we took the bones out, it wouldn't be
+       crunchy, now would it?
+   * - Gannet Ripple
+     - 1.99
+     - On a stick!
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>The following options are recognized:</FONT></U></p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>class</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>text</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Set a &quot;class&quot; attribute value on the table element.  See the
+</FONT></U><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000> directive below.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>widths</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>integer [integer...]</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>A comma- or space-separated list of relative column widths.  The
+default is equal-width columns (100%/#columns).</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>header-rows</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>integer</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>The number of rows of list data to use in the table header.
+Defaults to 0.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>stub-columns</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>integer</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>The number of table columns to use as stubs (row titles, on the
+left).  Defaults to 0.</FONT></U></dd>
+</dl>
+</div>
+</div>
+<div class="section" id="document-parts">
+<h1><a class="toc-backref" href="#id29" name="document-parts">Document Parts</a></h1>
+<span id="id5"></span><div class="section" id="table-of-contents">
+<h2><a class="toc-backref" href="#id30" name="table-of-contents">Table of Contents</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Type:</th><td class="field-body">&quot;contents&quot;</td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Elements:</th><A HREF='#__diff75' NAME='__diff76'><font color=orange>&lt;</font></A> <A HREF='#__diff77'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">pending, topic</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff76' NAME='__diff77'><font color=orange>&lt;</font></A> <A HREF='#__diff78'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">One, optional: title.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff77' NAME='__diff78'><font color=orange>&lt;</font></A> <A HREF='#__diff79'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Possible.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff78' NAME='__diff79'><font color=orange>&lt;</font></A> <A HREF='#__diff80'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+</tbody>
+</table>
+<p>The &quot;contents&quot; directive<A HREF='#__diff79' NAME='__diff80'><font color=orange>&lt;</font></A> <A HREF='#__diff81'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>inserts</FONT></S> <U><FONT COLOR=#008000> generates</FONT></U> a table of contents (TOC) in<A HREF='#__diff80' NAME='__diff81'><font color=orange>&lt;</font></A> <A HREF='#__diff82'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>two passes: initial parse and transform. During the initial parse,</FONT></S>  a<A HREF='#__diff81' NAME='__diff82'><font color=orange>&lt;</font></A> <A HREF='#__diff83'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&quot;pending&quot; element is generated which acts as a placeholder, storing the TOC title</FONT></S> 
+<a class="reference" href="#topic"><U><FONT COLOR=#008000>topic</FONT></U></a><U><FONT COLOR=#008000>.  Topics,</FONT></U> and<A HREF='#__diff82' NAME='__diff83'><font color=orange>&lt;</font></A> <A HREF='#__diff84'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>any options internally. At a later stage in the processing, the &quot;pending&quot; element is replaced by a &quot;topic&quot; element, a title</FONT></S> <U><FONT COLOR=#008000> therefore tables of contents, may occur anywhere
+a section or transition may occur.  Body elements</FONT></U> and<A HREF='#__diff83' NAME='__diff84'><font color=orange>&lt;</font></A> <A HREF='#__diff85'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>the table</FONT></S> <U><FONT COLOR=#008000> topics may not
+contain tables</FONT></U> of<A HREF='#__diff84' NAME='__diff85'><font color=orange>&lt;</font></A> <A HREF='#__diff86'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>contents proper.</FONT></S> <U><FONT COLOR=#008000> contents.</FONT></U></p>
+<p><A HREF='#__diff85' NAME='__diff86'><font color=orange>&lt;</font></A> <A HREF='#__diff87'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>The</FONT></S> <U><FONT COLOR=#008000>Here's the</FONT></U> directive in its simplest form:</p>
+<pre class="literal-block">
+.. contents::
+</pre>
+<p>Language-dependent boilerplate text will be used for the title.  The
+English default title text is &quot;Contents&quot;.</p>
+<p>An explicit<A HREF='#__diff86' NAME='__diff87'><font color=orange>&lt;</font></A> <A HREF='#__diff88'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>title,</FONT></S> <U><FONT COLOR=#008000> title</FONT></U> may be specified:</p>
+<pre class="literal-block">
+.. contents:: Table of Contents
+</pre>
+<p>The title may span lines, although it is not recommended:</p>
+<pre class="literal-block">
+.. contents:: Here's a very long Table of
+   Contents title
+</pre>
+<p>Options may be specified for the directive, using a field list:</p>
+<pre class="literal-block">
+.. contents:: Table of Contents
+   :depth: 2
+</pre>
+<p>If the default title is to be used, the options field list may begin
+on the same line as the directive marker:</p>
+<pre class="literal-block">
+.. contents:: :depth: 2
+</pre>
+<p>The following options are recognized:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">depth</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">integer</span></dt>
+<dd>The number of section levels that are collected in the table of
+contents.  The default is unlimited depth.</dd>
+<dt><tt class="docutils literal"><span class="pre">local</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">flag (empty)</span></dt>
+<dd>Generate a local table of contents.  Entries will only include
+subsections of the section in which the directive is given.  If no
+explicit title is given, the table of contents will not be titled.</dd>
+<dt><tt class="docutils literal"><span class="pre">backlinks</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">&quot;entry&quot; or &quot;top&quot; or &quot;none&quot;</span></dt>
+<dd>Generate links from section headers back to the table of contents
+entries, the table of contents itself, or generate no backlinks.</dd>
+<dt><tt class="docutils literal"><span class="pre"><A HREF='#__diff87' NAME='__diff88'><font color=orange>&lt;</font></A> <A HREF='#__diff89'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>class</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>text</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Set a &quot;class&quot; attribute value on the topic element.  See the
+</FONT></U><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000> directive below.</FONT></U></dd>
+</dl>
+</div>
+<span id="section-autonumbering"></span><span id="sectnum"></span><div class="section" id="automatic-section-numbering">
+<h2><a class="toc-backref" href="#id31" name="automatic-section-numbering">Automatic Section Numbering</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Type:</th><td class="field-body">&quot;sectnum&quot; or &quot;section-autonumbering&quot; (synonyms)</td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Elements:</th><A HREF='#__diff88' NAME='__diff89'><font color=orange>&lt;</font></A> <A HREF='#__diff90'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">pending, generated</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff89' NAME='__diff90'><font color=orange>&lt;</font></A> <A HREF='#__diff91'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff90' NAME='__diff91'><font color=orange>&lt;</font></A> <A HREF='#__diff92'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Possible.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff91' NAME='__diff92'><font color=orange>&lt;</font></A> <A HREF='#__diff93'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+</tbody>
+</table>
+<p>The &quot;sectnum&quot; (or &quot;section-autonumbering&quot;) directive automatically
+numbers sections and subsections in a document.  Section numbers are
+of the &quot;multiple enumeration&quot; form, where each level has a number,
+separated by periods.  For example, the title of section 1, subsection
+2, subsubsection 3 would have &quot;1.2.3&quot; prefixed.</p>
+<p>The &quot;sectnum&quot; directive does its work in two passes: the initial parse
+and a transform.  During the initial parse, a &quot;pending&quot; element is
+generated which acts as a placeholder, storing any options internally.
+At a later stage in the processing, the &quot;pending&quot; element triggers a
+transform, which adds section numbers to titles.  Section numbers are
+enclosed in a &quot;generated&quot; element, and titles have their &quot;auto&quot;
+attribute set to &quot;1&quot;.</p>
+<p>The following options are recognized:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">depth</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">integer</span></dt>
+<dd>The number of section levels that are numbered by this directive.
+The default is unlimited depth.</dd>
+<dt><tt class="docutils literal"><span class="pre"><A HREF='#__diff92' NAME='__diff93'><font color=orange>&lt;</font></A> <A HREF='#__diff94'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>prefix</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>string</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>An arbitrary string that is prefixed to the automatically
+generated section numbers.  It may be something like &quot;3.2.&quot;, which
+will produce &quot;3.2.1&quot;, &quot;3.2.2&quot;, &quot;3.2.2.1&quot;, and so on.  Note that
+any separating punctuation (in the example, a period, &quot;.&quot;) must be
+explicitly provided.  The default is no prefix.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>suffix</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>string</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>An arbitrary string that is appended to the automatically
+generated section numbers.  The default is no suffix.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>start</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>integer</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>The value that will be used for the first section number.
+Combined with </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>prefix</FONT></U></span></tt><U><FONT COLOR=#008000>, this may be used to force the right
+numbering for a document split over several source files.  The
+default is 1.</FONT></U></dd>
+</dl>
+</div>
+<span id="footer"></span><span id="header"></span><div class="section" id="document-header-footer">
+<h2><a class="toc-backref" href="#id32" name="document-header-footer"><A HREF='#__diff93' NAME='__diff94'><font color=orange>&lt;</font></A> <A HREF='#__diff95'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Document Header &amp; Footer</FONT></U></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Types:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>&quot;header&quot; and &quot;footer&quot;</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Doctree Elements:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>decoration, header, footer</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Arguments:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Options:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>Interpreted as body elements.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+<p><U><FONT COLOR=#008000>(New in Docutils 0.3.8)</FONT></U></p>
+<p><U><FONT COLOR=#008000>The &quot;header&quot; and &quot;footer&quot; directives create document decorations,
+useful for page navigation, notes, time/datestamp, etc.  For example:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+.. header:: This space for rent.
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>This will add a paragraph to the document header, which will appear at
+the top of the generated web page or at the top of every printed page.</FONT></U></p>
+<p><U><FONT COLOR=#008000>These directives may be used multiple times, cumulatively.  There is
+currently support for only one header and footer.</FONT></U></p>
+<div class="note">
+<p class="first admonition-title"><U><FONT COLOR=#008000>Note</FONT></U></p>
+<p><U><FONT COLOR=#008000>While it is possible to use the &quot;header&quot; and &quot;footer&quot; directives to
+create navigational elements for web pages, you should be aware
+that Docutils is meant to be used for </FONT></U><em><U><FONT COLOR=#008000>document</FONT></U></em><U><FONT COLOR=#008000> processing, and
+that a navigation bar is not typically part of a document.</FONT></U></p>
+<p><U><FONT COLOR=#008000>Thus, you may soon find Docutils' abilities to be insufficient for
+these purposes.  At that time, you should consider using a
+templating system (like </FONT></U><a class="reference" href="http://ht2html.sourceforge.net/"><U><FONT COLOR=#008000>ht2html</FONT></U></a><U><FONT COLOR=#008000>) rather than the &quot;header&quot; and
+&quot;footer&quot; directives.</FONT></U></p>
+</div>
+<p><A HREF='#__diff94' NAME='__diff95'><font color=orange>&lt;</font></A> <A HREF='#__diff96'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>In addition to the use of these directives to populate header and
+footer content, content may also be added automatically by the
+processing system.  For example, if certain runtime settings are
+enabled, the document footer is populated with processing information
+such as a datestamp, a link to </FONT></U><a class="reference" href="http://docutils.sourceforge.net"><U><FONT COLOR=#008000>the Docutils website</FONT></U></a><U><FONT COLOR=#008000>, etc.</FONT></U></p>
+</div>
+</div>
+<div class="section" id="references">
+<h1><a class="toc-backref" href="#id33" name="references">References</a></h1>
+<span id="target-notes"></span><div class="section" id="target-footnotes">
+<h2><a class="toc-backref" href="#id34" name="target-footnotes">Target Footnotes</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Type:</th><td class="field-body">&quot;target-notes&quot;</td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Elements:</th><A HREF='#__diff95' NAME='__diff96'><font color=orange>&lt;</font></A> <A HREF='#__diff97'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">pending, footnote, footnote_reference</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff96' NAME='__diff97'><font color=orange>&lt;</font></A> <A HREF='#__diff98'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff97' NAME='__diff98'><font color=orange>&lt;</font></A> <A HREF='#__diff99'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff98' NAME='__diff99'><font color=orange>&lt;</font></A> <A HREF='#__diff100'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+</tbody>
+</table>
+<p>The &quot;target-notes&quot; directive creates a footnote for each external
+target in the text, and corresponding footnote references after each
+reference.  For every explicit target (of the form, <tt class="docutils literal"><span class="pre">..</span> <span class="pre">_target</span> <span class="pre">name:</span>
+<span class="pre">URL</span></tt>) in the text, a footnote will be generated containing the
+visible URL as content.</p>
+</div>
+<div class="section" id="footnotes">
+<h2><a class="toc-backref" href="#id35" name="footnotes">Footnotes</a></h2>
+<p><strong>NOT IMPLEMENTED YET</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Type:</th><td class="field-body">&quot;footnotes&quot;</td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Elements:</th><A HREF='#__diff99' NAME='__diff100'><font color=orange>&lt;</font></A> <A HREF='#__diff101'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">pending, topic</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff100' NAME='__diff101'><font color=orange>&lt;</font></A> <A HREF='#__diff102'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None?</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff101' NAME='__diff102'><font color=orange>&lt;</font></A> <A HREF='#__diff103'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Possible?</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff102' NAME='__diff103'><font color=orange>&lt;</font></A> <A HREF='#__diff104'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+</tbody>
+</table>
+<p>&#64;&#64;&#64;</p>
+</div>
+<div class="section" id="citations">
+<h2><a class="toc-backref" href="#id36" name="citations">Citations</a></h2>
+<p><strong>NOT IMPLEMENTED YET</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Type:</th><td class="field-body">&quot;citations&quot;</td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Elements:</th><A HREF='#__diff103' NAME='__diff104'><font color=orange>&lt;</font></A> <A HREF='#__diff105'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">pending, topic</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff104' NAME='__diff105'><font color=orange>&lt;</font></A> <A HREF='#__diff106'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None?</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff105' NAME='__diff106'><font color=orange>&lt;</font></A> <A HREF='#__diff107'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Possible?</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff106' NAME='__diff107'><font color=orange>&lt;</font></A> <A HREF='#__diff108'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+</tbody>
+</table>
+<p>&#64;&#64;&#64;</p>
+</div>
+</div>
+<div class="section" id="html-specific">
+<h1><a class="toc-backref" href="#id37" name="html-specific">HTML-Specific</a></h1>
+<div class="section" id="meta">
+<h2><a class="toc-backref" href="#id38" name="meta">Meta</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Type:</th><td class="field-body">&quot;meta&quot;</td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Element:</th><A HREF='#__diff107' NAME='__diff108'><font color=orange>&lt;</font></A> <A HREF='#__diff109'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">meta (non-standard)</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff108' NAME='__diff109'><font color=orange>&lt;</font></A> <A HREF='#__diff110'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff109' NAME='__diff110'><font color=orange>&lt;</font></A> <A HREF='#__diff111'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff110' NAME='__diff111'><font color=orange>&lt;</font></A> <A HREF='#__diff112'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Must contain a flat field list.</td>
+</tr>
+</tbody>
+</table>
+<p>The &quot;meta&quot; directive is used to specify HTML metadata stored in HTML
+META tags.  &quot;Metadata&quot; is data about data, in this case data about web
+pages.  Metadata is used to describe and classify web pages in the
+World Wide Web, in a form that is easy for search engines to extract
+and collate.</p>
+<p>Within the directive block, a flat field list provides the syntax for
+metadata.  The field name becomes the contents of the &quot;name&quot; attribute
+of the META tag, and the field body (interpreted as a single string
+without inline markup) becomes the contents of the &quot;content&quot;
+attribute.  For example:</p>
+<pre class="literal-block">
+.. meta::
+   :description: The reStructuredText plaintext markup language
+   :keywords: plaintext, markup language
+</pre>
+<p>This would be converted to the following HTML:</p>
+<pre class="literal-block">
+&lt;meta name=&quot;description&quot;
+    content=&quot;The reStructuredText plaintext markup language&quot;&gt;
+&lt;meta name=&quot;keywords&quot; content=&quot;plaintext, markup language&quot;&gt;
+</pre>
+<p>Support for other META attributes (&quot;http-equiv&quot;, &quot;scheme&quot;, &quot;lang&quot;,
+&quot;dir&quot;) are provided through field arguments, which must be of the form
+&quot;attr=value&quot;:</p>
+<pre class="literal-block">
+.. meta::
+   :description lang=en: An amusing story
+   :description lang=fr: Un histoire amusant
+</pre>
+<p>And their HTML equivalents:</p>
+<pre class="literal-block">
+&lt;meta name=&quot;description&quot; lang=&quot;en&quot; content=&quot;An amusing story&quot;&gt;
+&lt;meta name=&quot;description&quot; lang=&quot;fr&quot; content=&quot;Un histoire amusant&quot;&gt;
+</pre>
+<p>Some META tags use an &quot;http-equiv&quot; attribute instead of the &quot;name&quot;
+attribute.  To specify &quot;http-equiv&quot; META tags, simply omit the name:</p>
+<pre class="literal-block">
+.. meta::
+   :http-equiv=Content-Type: text/html; charset=ISO-8859-1
+</pre>
+<p>HTML equivalent:</p>
+<pre class="literal-block">
+&lt;meta http-equiv=&quot;Content-Type&quot;
+     content=&quot;text/html; charset=ISO-8859-1&quot;&gt;
+</pre>
+</div>
+<div class="section" id="imagemap">
+<h2><a class="toc-backref" href="#id39" name="imagemap">Imagemap</a></h2>
+<p><strong>NOT IMPLEMENTED YET</strong></p>
+<p>Non-standard element: imagemap.</p>
+</div>
+</div>
+<div class="section" id="executable-directives">
+<h1><a class="toc-backref" href="#id21" name="executable-directives"><A HREF='#__diff111' NAME='__diff112'><font color=orange>&lt;</font></A> <A HREF='#__diff113'><font color=orange>&gt;</font></A> <S><FONT COLOR=#800000>Executable Directives</FONT></S></a></h1>
+<p><S><FONT COLOR=#800000>The directives in this section are specific to the trip implementation
+of the reStructuredText parser.  All of the directives in this section
+involve executing code.  To prevent an unknown document from running
+malicious code, all of these directives will return an error and not
+run the code unless trip is invoked with the define </FONT></S><tt class="literal"><span class="pre"><S><FONT COLOR=#800000>-D</FONT></S></span> <span class="pre"><S><FONT COLOR=#800000>trusted</FONT></S></span></tt><S><FONT COLOR=#800000>.
+All these directives are implemented externally in the </FONT></S><tt class="literal"><span class="pre"><S><FONT COLOR=#800000>Directive</FONT></S></span></tt><S><FONT COLOR=#800000>
+subdirectory of the bin directory where </FONT></S><tt class="literal"><span class="pre"><S><FONT COLOR=#800000>trip</FONT></S></span></tt><S><FONT COLOR=#800000> is installed.  To
+disable them permanently, simply remove or rename the </FONT></S><tt class="literal"><span class="pre"><S><FONT COLOR=#800000>Directive</FONT></S></span></tt><S><FONT COLOR=#800000>
+subdirectory.</FONT></S></p>
+<div class="section" id="if">
+<h2><a class="toc-backref" href="#id22" name="if"><S><FONT COLOR=#800000>If</FONT></S></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><S><FONT COLOR=#800000>Directive Type:</FONT></S></th><td class="field-body"><S><FONT COLOR=#800000>&quot;if&quot;</FONT></S></td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2"><S><FONT COLOR=#800000>Doctree Elements:</FONT></S></th></tr>
+<tr><td><S><FONT COLOR=#800000>&nbsp;</FONT></S></td><td class="field-body"><S><FONT COLOR=#800000>depend on data being included</FONT></S></td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2"><S><FONT COLOR=#800000>Directive Arguments:</FONT></S></th></tr>
+<tr><td><S><FONT COLOR=#800000>&nbsp;</FONT></S></td><td class="field-body"><S><FONT COLOR=#800000>One, required.</FONT></S></td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2"><S><FONT COLOR=#800000>Directive Options:</FONT></S></th></tr>
+<tr><td><S><FONT COLOR=#800000>&nbsp;</FONT></S></td><td class="field-body"><S><FONT COLOR=#800000>None.</FONT></S></td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2"><S><FONT COLOR=#800000>Directive Content:</FONT></S></th></tr>
+<tr><td><S><FONT COLOR=#800000>&nbsp;</FONT></S></td><td class="field-body"><S><FONT COLOR=#800000>Required.</FONT></S></td>
+</tr>
+</tbody>
+</table>
+<p><S><FONT COLOR=#800000>The &quot;if&quot; directive executes its argument as a Perl expression.  If the
+Perl expression evaluates to true, then the directive's content is
+parsed as reStructuredText input and included in the document.  If the
+Perl expression evaluates to false, then the content of the directive
+is omitted.  This behavior can be useful for putting comments in a
+reStructuredText document that should not be propagated to the output
+as comments.</FONT></S></p>
+<p><S><FONT COLOR=#800000>The &quot;if&quot; directive processes the following define:</FONT></S></p>
+<table class="option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td colspan="2">
+<kbd><span class="option"><S><FONT COLOR=#800000>-D</FONT></S></span> <var><S><FONT COLOR=#800000>perl='perl-code'</FONT></S></var></kbd></td>
+</tr>
+<tr><td><S><FONT COLOR=#800000>&nbsp;</FONT></S></td><td><p class="first"><S><FONT COLOR=#800000>Specifies some perl code that is executed prior
+to evaluating the first perl directive.  This
+option can be used to specify variables on the
+command line; for example:</FONT></S></p>
+<pre class="literal-block"><S><FONT COLOR=#800000>
+-D perl='$a=1; $b=2'
+</FONT></S></pre>
+<p class="last"><S><FONT COLOR=#800000>defines constants </FONT></S><tt class="literal"><span class="pre"><S><FONT COLOR=#800000>$a</FONT></S></span></tt><S><FONT COLOR=#800000> and </FONT></S><tt class="literal"><span class="pre"><S><FONT COLOR=#800000>$b</FONT></S></span></tt><S><FONT COLOR=#800000> that can
+be used in the perl expression.</FONT></S></p>
+</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="perl">
+<h2><a class="toc-backref" href="#id23" name="perl"><S><FONT COLOR=#800000>Perl</FONT></S></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><S><FONT COLOR=#800000>Directive Type:</FONT></S></th><td class="field-body"><S><FONT COLOR=#800000>&quot;perl&quot;</FONT></S></td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2"><S><FONT COLOR=#800000>Doctree Elements:</FONT></S></th></tr>
+<tr><td><S><FONT COLOR=#800000>&nbsp;</FONT></S></td><td class="field-body"><S><FONT COLOR=#800000>depend on data being included</FONT></S></td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2"><S><FONT COLOR=#800000>Directive Arguments:</FONT></S></th></tr>
+<tr><td><S><FONT COLOR=#800000>&nbsp;</FONT></S></td><td class="field-body"><S><FONT COLOR=#800000>Possible</FONT></S></td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2"><S><FONT COLOR=#800000>Directive Options:</FONT></S></th></tr>
+<tr><td><S><FONT COLOR=#800000>&nbsp;</FONT></S></td><td class="field-body"><S><FONT COLOR=#800000>Possible.</FONT></S></td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2"><S><FONT COLOR=#800000>Directive Content:</FONT></S></th></tr>
+<tr><td><S><FONT COLOR=#800000>&nbsp;</FONT></S></td><td class="field-body"><S><FONT COLOR=#800000>Possible.</FONT></S></td>
+</tr>
+</tbody>
+</table>
+<p><S><FONT COLOR=#800000>The &quot;perl&quot; directive executes perl code and interpolates whatever is
+returned by the execution.  The perl code can be placed either in
+the arguments or the contents section (or both).</FONT></S></p>
+<p><S><FONT COLOR=#800000>The perl directive defines the following global variables:</FONT></S></p>
+<dl>
+<dt><tt class="literal"><span class="pre"><S><FONT COLOR=#800000>$SOURCE</FONT></S></span></tt></dt>
+<dd><S><FONT COLOR=#800000>The name of the source file containing the perl directive.</FONT></S></dd>
+<dt><tt class="literal"><span class="pre"><S><FONT COLOR=#800000>$LINENO</FONT></S></span></tt></dt>
+<dd><S><FONT COLOR=#800000>The line number of the perl directive within </FONT></S><tt class="literal"><span class="pre"><S><FONT COLOR=#800000>$SOURCE</FONT></S></span></tt><S><FONT COLOR=#800000>.</FONT></S></dd>
+</dl>
+<p><S><FONT COLOR=#800000>The following defines are processed by the perl directive:</FONT></S></p>
+<table class="option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td colspan="2">
+<kbd><span class="option"><S><FONT COLOR=#800000>-D</FONT></S></span> <var><S><FONT COLOR=#800000>perl='perl-code'</FONT></S></var></kbd></td>
+</tr>
+<tr><td><S><FONT COLOR=#800000>&nbsp;</FONT></S></td><td><p class="first"><S><FONT COLOR=#800000>Specifies some perl code that is executed prior
+to evaluating the first perl directive.  This
+option can be used to specify variables on the
+command line; for example:</FONT></S></p>
+<pre class="literal-block"><S><FONT COLOR=#800000>
+-D perl='$a=1; $b=2'
+</FONT></S></pre>
+<p class="last"><S><FONT COLOR=#800000>defines constants </FONT></S><tt class="literal"><span class="pre"><S><FONT COLOR=#800000>$a</FONT></S></span></tt><S><FONT COLOR=#800000> and </FONT></S><tt class="literal"><span class="pre"><S><FONT COLOR=#800000>$b</FONT></S></span></tt><S><FONT COLOR=#800000> that can
+be used in a perl block.</FONT></S></p>
+</td></tr>
+</tbody>
+</table>
+<p><S><FONT COLOR=#800000>The following options are recognized:</FONT></S></p>
+<dl>
+<dt><tt class="literal"><span class="pre"><S><FONT COLOR=#800000>literal</FONT></S></span></tt> <span class="classifier-delimiter"><S><FONT COLOR=#800000>:</FONT></S></span> <span class="classifier"><S><FONT COLOR=#800000>flag (empty)</FONT></S></span></dt>
+<dd><S><FONT COLOR=#800000>The entire returned text is inserted into the document as a single
+literal block (useful for debugging).
+If this option is not present, the return value is interpreted
+based on its type.  If you return a text string, the text is
+interpreted as reStructuredText and is parsed again.  If you
+return an internal DOM object (or list of them), the object is
+included directly into the parsed DOM structure.  (This latter
+option requires knowledge of trip internals, but is the only way
+to create a pending DOM object for execution at transformation
+time rather than parse time.)</FONT></S></dd>
+</dl>
+</div>
+<div class="section" id="system">
+<h2><a class="toc-backref" href="#id24" name="system"><S><FONT COLOR=#800000>System</FONT></S></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><S><FONT COLOR=#800000>Directive Type:</FONT></S></th><td class="field-body"><S><FONT COLOR=#800000>&quot;system&quot;</FONT></S></td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2"><S><FONT COLOR=#800000>Doctree Elements:</FONT></S></th></tr>
+<tr><td><S><FONT COLOR=#800000>&nbsp;</FONT></S></td><td class="field-body"><S><FONT COLOR=#800000>depend on data being included</FONT></S></td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2"><S><FONT COLOR=#800000>Directive Arguments:</FONT></S></th></tr>
+<tr><td><S><FONT COLOR=#800000>&nbsp;</FONT></S></td><td class="field-body"><S><FONT COLOR=#800000>Required</FONT></S></td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2"><S><FONT COLOR=#800000>Directive Options:</FONT></S></th></tr>
+<tr><td><S><FONT COLOR=#800000>&nbsp;</FONT></S></td><td class="field-body"><S><FONT COLOR=#800000>Possible.</FONT></S></td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2"><S><FONT COLOR=#800000>Directive Content:</FONT></S></th></tr>
+<tr><td><S><FONT COLOR=#800000>&nbsp;</FONT></S></td><td class="field-body"><S><FONT COLOR=#800000>None.</FONT></S></td>
+</tr>
+</tbody>
+</table>
+<p><S><FONT COLOR=#800000>The &quot;system&quot; directive executes its arguments as a system (shell)
+command and interpolates whatever is returned by the execution.</FONT></S></p>
+<p><S><FONT COLOR=#800000>The following options are recognized:</FONT></S></p>
+<dl>
+<dt><tt class="literal"><span class="pre"><S><FONT COLOR=#800000>literal</FONT></S></span></tt> <span class="classifier-delimiter"><S><FONT COLOR=#800000>:</FONT></S></span> <span class="classifier"><S><FONT COLOR=#800000>flag (empty)</FONT></S></span></dt>
+<dd><S><FONT COLOR=#800000>The entire returned text is inserted into the document as a single
+literal block (useful for debugging).</FONT></S></dd>
+</dl>
+</div>
+</div>
+<div class="section" id="miscellaneous">
+<h1><a class="toc-backref" href="#id40" name="miscellaneous">Miscellaneous</a></h1>
+<span id="include"></span><div class="section" id="including-an-external-document-fragment">
+<h2><a class="toc-backref" href="#id41" name="including-an-external-document-fragment">Including an External Document Fragment</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Type:</th><td class="field-body">&quot;include&quot;</td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Elements:</th><A HREF='#__diff112' NAME='__diff113'><font color=orange>&lt;</font></A> <A HREF='#__diff114'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">depend on data being included</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff113' NAME='__diff114'><font color=orange>&lt;</font></A> <A HREF='#__diff115'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">One, required.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff114' NAME='__diff115'><font color=orange>&lt;</font></A> <A HREF='#__diff116'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Possible.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff115' NAME='__diff116'><font color=orange>&lt;</font></A> <A HREF='#__diff117'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+</tbody>
+</table>
+<div class="warning">
+<p class="first admonition-title"><A HREF='#__diff116' NAME='__diff117'><font color=orange>&lt;</font></A> <A HREF='#__diff118'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Warning</FONT></U></p>
+<p><U><FONT COLOR=#008000>The &quot;include&quot; directive represents a potential security hole.  It
+can be disabled with the &quot;</FONT></U><a class="reference" href="../../user/config.html#file-insertion-enabled"><U><FONT COLOR=#008000>file_insertion_enabled</FONT></U></a><U><FONT COLOR=#008000>&quot; runtime setting.</FONT></U></p>
+</div>
+<p>The &quot;include&quot; directive reads a reStructuredText-formatted text file
+and parses it in the current document's context at the point of the
+directive.  The directive argument is the path to the file to be
+included, relative to the document containing the directive.  For
+example:</p>
+<pre class="literal-block">
+This first example will be parsed at the document level, and can
+thus contain any construct, including section headers.
+
+.. include:: inclusion.txt
+
+Back in the main document.
+
+    This second example will be parsed in a block quote context.
+    Therefore it may only contain body elements.  It may not
+    contain section headers.
+
+    .. include:: inclusion.txt
+</pre>
+<p>If an included document fragment contains section structure, the title
+adornments must match those of the master document.</p>
+<p><A HREF='#__diff117' NAME='__diff118'><font color=orange>&lt;</font></A> <A HREF='#__diff119'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>The text encoding of the master input source is used for included
+files.</FONT></U></p>
+<p>The following options are recognized:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">literal</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">flag (empty)</span></dt>
+<dd>The entire included text is inserted into the document as a single
+literal block (useful for program listings).</dd>
+<dt><tt class="docutils literal"><span class="pre"><A HREF='#__diff118' NAME='__diff119'><font color=orange>&lt;</font></A> <A HREF='#__diff120'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>encoding</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>name of text encoding</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>The text encoding of the external data file.  Defaults to the
+document's encoding (if specified).</FONT></U></dd>
+</dl>
+</div>
+<span id="raw"></span><div class="section" id="raw-data-pass-through">
+<h2><a class="toc-backref" href="#id42" name="raw-data-pass-through">Raw Data Pass-Through</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Type:</th><td class="field-body">&quot;raw&quot;</td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Element:</th><A HREF='#__diff119' NAME='__diff120'><font color=orange>&lt;</font></A> <A HREF='#__diff121'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body"><A HREF='#__diff120' NAME='__diff121'><font color=orange>&lt;</font></A> <A HREF='#__diff122'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>pending</FONT></S> <U><FONT COLOR=#008000>raw</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff121' NAME='__diff122'><font color=orange>&lt;</font></A> <A HREF='#__diff123'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body"><A HREF='#__diff122' NAME='__diff123'><font color=orange>&lt;</font></A> <A HREF='#__diff124'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>One,</FONT></S> <U><FONT COLOR=#008000>One or more,</FONT></U> required (output format<A HREF='#__diff123' NAME='__diff124'><font color=orange>&lt;</font></A> <A HREF='#__diff125'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>type).</FONT></S> <U><FONT COLOR=#008000> types).</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff124' NAME='__diff125'><font color=orange>&lt;</font></A> <A HREF='#__diff126'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Possible.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff125' NAME='__diff126'><font color=orange>&lt;</font></A> <A HREF='#__diff127'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Stored verbatim, uninterpreted.  None (empty) if a
+&quot;file&quot; or &quot;url&quot; option given.</td>
+</tr>
+</tbody>
+</table>
+<div class="warning">
+<p class="first admonition-title"><A HREF='#__diff126' NAME='__diff127'><font color=orange>&lt;</font></A> <A HREF='#__diff128'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Warning</FONT></U></p>
+<p><U><FONT COLOR=#008000>The &quot;raw&quot; directive represents a potential security hole.  It can
+be disabled with the &quot;</FONT></U><a class="reference" href="../../user/config.html#raw-enabled"><U><FONT COLOR=#008000>raw_enabled</FONT></U></a><U><FONT COLOR=#008000>&quot; or &quot;</FONT></U><a class="reference" href="../../user/config.html#file-insertion-enabled"><U><FONT COLOR=#008000>file_insertion_enabled</FONT></U></a><U><FONT COLOR=#008000>&quot;
+runtime settings.</FONT></U></p>
+</div>
+<div class="caution">
+<p class="first admonition-title"><U><FONT COLOR=#008000>Caution!</FONT></U></p>
+<p><U><FONT COLOR=#008000>The &quot;raw&quot; directive is a stop-gap measure allowing the author to
+bypass reStructuredText's markup.  It is a &quot;power-user&quot; feature
+that should not be overused or abused.  The use of &quot;raw&quot; ties
+documents to specific output formats and makes them less portable.</FONT></U></p>
+<p class="last"><U><FONT COLOR=#008000>If you often need to use the &quot;raw&quot; directive or a &quot;raw&quot;-derived
+interpreted text role, that is a sign either of overuse/abuse or
+that functionality may be missing from reStructuredText.  Please
+describe your situation in email to
+</FONT></U><a class="reference" href="mailto:docutils-users&#64;lists.sourceforge.net"><U><FONT COLOR=#008000>docutils-users&#64;lists.sourceforge.net</FONT></U></a><U><FONT COLOR=#008000>.</FONT></U></p>
+</div>
+<p>The &quot;raw&quot; directive indicates non-reStructuredText data that is to be
+passed untouched to the Writer.  The<A HREF='#__diff127' NAME='__diff128'><font color=orange>&lt;</font></A> <A HREF='#__diff129'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>name</FONT></S> <U><FONT COLOR=#008000> names</FONT></U> of the output<A HREF='#__diff128' NAME='__diff129'><font color=orange>&lt;</font></A> <A HREF='#__diff130'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>format is</FONT></S> <U><FONT COLOR=#008000> formats are</FONT></U>
+given in the<A HREF='#__diff129' NAME='__diff130'><font color=orange>&lt;</font></A> <A HREF='#__diff131'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>first argument. During the initial parse, a &quot;pending&quot; element is generated which acts as a placeholder, storing the format and raw data internally.</FONT></S> <U><FONT COLOR=#008000> directive arguments.</FONT></U>  The interpretation of the raw data
+is up to the Writer.  A Writer may ignore any raw output not matching
+its format.</p>
+<p>For example, the following input would be passed untouched by an HTML
+Writer:</p>
+<pre class="literal-block">
+.. raw:: html
+
+   &lt;hr width=50 size=10&gt;
+</pre>
+<p>A LaTeX Writer could insert the following raw content into its
+output stream:</p>
+<pre class="literal-block">
+.. raw:: latex
+
+   \setlength{\parindent}{0pt}
+</pre>
+<p>Raw data can also be read from an external file, specified in a
+directive option.  In this case, the content block must be empty.  For
+example:</p>
+<pre class="literal-block">
+.. raw:: html
+   :file: inclusion.html
+</pre>
+<p>The following options are recognized:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">file</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">string<A HREF='#__diff130' NAME='__diff131'><font color=orange>&lt;</font></A> <A HREF='#__diff132'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000> (newlines removed)</FONT></U></span></dt>
+<dd>The local filesystem path of a raw data file to be included.</dd>
+<dt><tt class="docutils literal"><span class="pre">url</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">string<A HREF='#__diff131' NAME='__diff132'><font color=orange>&lt;</font></A> <A HREF='#__diff133'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000> (whitespace removed)</FONT></U></span></dt>
+<dd>An Internet URL reference to a raw data file to be included.</dd>
+<dt><tt class="docutils literal"><span class="pre"><A HREF='#__diff132' NAME='__diff133'><font color=orange>&lt;</font></A> <A HREF='#__diff134'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>encoding</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>name of text encoding</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>The text encoding of the external raw data (file or URL).
+Defaults to the document's encoding (if specified).</FONT></U></dd>
+</dl>
+</div>
+<span id="replace"></span><div class="section" id="replacement-text">
+<h2><a class="toc-backref" href="#id43" name="replacement-text">Replacement Text</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Type:</th><td class="field-body">&quot;replace&quot;</td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Element:</th><A HREF='#__diff133' NAME='__diff134'><font color=orange>&lt;</font></A> <A HREF='#__diff135'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Text &amp; inline elements</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff134' NAME='__diff135'><font color=orange>&lt;</font></A> <A HREF='#__diff136'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff135' NAME='__diff136'><font color=orange>&lt;</font></A> <A HREF='#__diff137'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff136' NAME='__diff137'><font color=orange>&lt;</font></A> <A HREF='#__diff138'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">A single paragraph; may contain inline markup.</td>
+</tr>
+</tbody>
+</table>
+<p>The &quot;replace&quot; directive is used to indicate replacement text for a
+substitution reference.  It may be used within substitution
+definitions only.  For example, this directive can be used to expand
+abbreviations:</p>
+<pre class="literal-block">
+.. |reST| replace:: reStructuredText
+
+Yes, |reST| is a long word, so I can't blame anyone for wanting to
+abbreviate it.
+</pre>
+<p>As reStructuredText doesn't support nested inline markup, the only way
+to create a reference with styled text is to use substitutions with
+the &quot;replace&quot; directive:</p>
+<pre class="literal-block">
+I recommend you try |Python|_.
+
+.. |Python| replace:: Python, *the* best language around
+.. _Python: http://www.python.org/
+</pre>
+</div>
+<span id="unicode"></span><div class="section" id="unicode-character-codes">
+<h2><a class="toc-backref" href="#id44" name="unicode-character-codes"><A HREF='#__diff137' NAME='__diff138'><font color=orange>&lt;</font></A> <A HREF='#__diff139'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Unicode Character Codes</FONT></U></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Type:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>&quot;unicode&quot;</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Doctree Element:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>Text</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Arguments:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>One or more, required (Unicode character codes,
+optional text, and comments).</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Options:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>Possible.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+<p><U><FONT COLOR=#008000>The &quot;unicode&quot; directive converts Unicode character codes (numerical
+values) to characters, and may be used in substitution definitions
+only.</FONT></U></p>
+<p><U><FONT COLOR=#008000>The arguments, separated by spaces, can be:</FONT></U></p>
+<ul class="simple">
+<li><strong><U><FONT COLOR=#008000>character codes</FONT></U></strong><U><FONT COLOR=#008000> as</FONT></U><ul>
+<li><U><FONT COLOR=#008000>decimal numbers or</FONT></U></li>
+<li><U><FONT COLOR=#008000>hexadecimal numbers, prefixed by </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>0x</FONT></U></span></tt><U><FONT COLOR=#008000>, </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>x</FONT></U></span></tt><U><FONT COLOR=#008000>, </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>\x</FONT></U></span></tt><U><FONT COLOR=#008000>, </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>U+</FONT></U></span></tt><U><FONT COLOR=#008000>,
+</FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>u</FONT></U></span></tt><U><FONT COLOR=#008000>, or </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>\u</FONT></U></span></tt><U><FONT COLOR=#008000> or as XML-style hexadecimal character entities,
+e.g. </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>&amp;#x1a2b;</FONT></U></span></tt></li>
+</ul>
+</li>
+<li><strong><U><FONT COLOR=#008000>text</FONT></U></strong><U><FONT COLOR=#008000>, which is used as-is.</FONT></U></li>
+</ul>
+<p><U><FONT COLOR=#008000>Text following &quot; .. &quot; is a comment and is ignored.  The spaces between
+the arguments are ignored and thus do not appear in the output.
+Hexadecimal codes are case-insensitive.</FONT></U></p>
+<p><U><FONT COLOR=#008000>For example, the following text:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+Copyright |copy| 2003, |BogusMegaCorp (TM)| |---|
+all rights reserved.
+
+.. |copy| unicode:: 0xA9 .. copyright sign
+.. |BogusMegaCorp (TM)| unicode:: BogusMegaCorp U+2122
+   .. with trademark sign
+.. |---| unicode:: U+02014 .. em dash
+   :trim:
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>results in:</FONT></U></p>
+<blockquote>
+<p><U><FONT COLOR=#008000>Copyright © 2003, BogusMegaCorp™—all rights reserved.</FONT></U></p>
+</blockquote>
+<p><U><FONT COLOR=#008000>The following options are recognized:</FONT></U></p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>ltrim</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>flag</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Whitespace to the left of the substitution reference is removed.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>rtrim</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>flag</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Whitespace to the right of the substitution reference is removed.</FONT></U></dd>
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>trim</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>flag</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Equivalent to </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>ltrim</FONT></U></span></tt><U><FONT COLOR=#008000> plus </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>rtrim</FONT></U></span></tt><U><FONT COLOR=#008000>; whitespace on both sides
+of the substitution reference is removed.</FONT></U></dd>
+</dl>
+</div>
+<div class="section" id="class">
+<h2><a class="toc-backref" href="#id45" name="class"><U><FONT COLOR=#008000>Class</FONT></U></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Type:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>&quot;class&quot;</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Doctree Element:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>pending</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Arguments:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>One or more, required (class names / attribute
+values).</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Options:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+<p><U><FONT COLOR=#008000>The &quot;class&quot; directive sets a &quot;class&quot; attribute value on the first
+immediately following non-comment element </FONT></U><a class="footnote-reference" href="#id8" id="id6" name="id6"><U><FONT COLOR=#008000>[2]</FONT></U></a><U><FONT COLOR=#008000>.  For details of the
+&quot;class&quot; attribute, see </FONT></U><a class="reference" href="../doctree.html#class"><U><FONT COLOR=#008000>its entry</FONT></U></a><U><FONT COLOR=#008000> in </FONT></U><a class="reference" href="../doctree.html"><U><FONT COLOR=#008000>The Docutils Document Tree</FONT></U></a><U><FONT COLOR=#008000>.
+The directive argument consists of one or more space-separated class
+names, which are converted to lowercase and all non-alphanumeric
+characters are converted to hyphens.  (For the rationale, see below.)</FONT></U></p>
+<p><U><FONT COLOR=#008000>Examples:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+.. class:: special
+
+This is a &quot;special&quot; paragraph.
+
+.. class:: exceptional remarkable
+
+An Exceptional Section
+======================
+
+This is an ordinary paragraph.
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>The text above is parsed and transformed into this doctree fragment:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+&lt;paragraph class=&quot;special&quot;&gt;
+    This is a &quot;special&quot; paragraph.
+&lt;section class=&quot;exceptional remarkable&quot;&gt;
+    &lt;title&gt;
+        An Exceptional Section
+    &lt;paragraph&gt;
+        This is an ordinary paragraph.
+</FONT></U></pre>
+<table class="docutils footnote" frame="void" id="id8" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6" name="id8"><U><FONT COLOR=#008000>[2]</FONT></U></a></td><td><p class="first"><U><FONT COLOR=#008000>To set a &quot;class&quot; attribute value on a block quote, the &quot;class&quot;
+directive must be followed by an empty comment:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+.. class:: highlights
+..
+
+    Block quote text.
+</FONT></U></pre>
+<p class="last"><U><FONT COLOR=#008000>The directive doesn't allow content, therefore an empty comment is
+required to terminate the directive.  Without the empty comment,
+the block quote text would be interpreted as the &quot;class&quot;
+directive's content, and the parser would complain.</FONT></U></p>
+</td></tr>
+</tbody>
+</table>
+<div class="topic">
+<p class="topic-title first"><U><FONT COLOR=#008000>Rationale for Class Attribute Value Conversion</FONT></U></p>
+<p><U><FONT COLOR=#008000>Docutils identifiers are converted to conform to the regular
+expression </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>[a-z](-?[a-z0-9]+)*</FONT></U></span></tt><U><FONT COLOR=#008000>.  For CSS compatibility,
+identifiers (the &quot;class&quot; and &quot;id&quot; attributes) should have no
+underscores, colons, or periods.  Hyphens may be used.</FONT></U></p>
+<ul>
+<li><p class="first"><U><FONT COLOR=#008000>The </FONT></U><a class="reference" href="http://www.w3.org/TR/html401"><U><FONT COLOR=#008000>HTML 4.01 spec</FONT></U></a><U><FONT COLOR=#008000> defines identifiers based on SGML tokens:</FONT></U></p>
+<blockquote>
+<p><U><FONT COLOR=#008000>ID and NAME tokens must begin with a letter ([A-Za-z]) and
+may be followed by any number of letters, digits ([0-9]),
+hyphens (&quot;-&quot;), underscores (&quot;_&quot;), colons (&quot;:&quot;), and periods
+(&quot;.&quot;).</FONT></U></p>
+</blockquote>
+</li>
+<li><p class="first"><U><FONT COLOR=#008000>However the </FONT></U><a class="reference" href="http://www.w3.org/TR/REC-CSS1"><U><FONT COLOR=#008000>CSS1 spec</FONT></U></a><U><FONT COLOR=#008000> defines identifiers based on the &quot;name&quot;
+token, a tighter interpretation (&quot;flex&quot; tokenizer notation
+below; &quot;latin1&quot; and &quot;escape&quot; 8-bit characters have been replaced
+with entities):</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+unicode     \\[0-9a-f]{1,4}
+latin1      [&amp;iexcl;-&amp;yuml;]
+escape      {unicode}|\\[ -~&amp;iexcl;-&amp;yuml;]
+nmchar      [-a-z0-9]|{latin1}|{escape}
+name        {nmchar}+
+</FONT></U></pre>
+</li>
+</ul>
+<p><U><FONT COLOR=#008000>The CSS1 &quot;nmchar&quot; rule does not include underscores (&quot;_&quot;), colons
+(&quot;:&quot;), or periods (&quot;.&quot;), therefore &quot;class&quot; and &quot;id&quot; attributes
+should not contain these characters.  They should be replaced with
+hyphens (&quot;-&quot;).  Combined with HTML's requirements (the first
+character must be a letter; no &quot;unicode&quot;, &quot;latin1&quot;, or &quot;escape&quot;
+characters), this results in the </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>[a-z](-?[a-z0-9]+)*</FONT></U></span></tt><U><FONT COLOR=#008000> pattern.</FONT></U></p>
+</div>
+</div>
+<span id="role"></span><div class="section" id="custom-interpreted-text-roles">
+<h2><a class="toc-backref" href="#id46" name="custom-interpreted-text-roles"><U><FONT COLOR=#008000>Custom Interpreted Text Roles</FONT></U></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Type:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>&quot;role&quot;</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Doctree Element:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None; affects subsequent parsing.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Arguments:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>Two; one required (new role name), one optional
+(base role name, in parentheses).</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Options:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>Possible (depends on base role).</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Directive Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>depends on base role.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+<p><U><FONT COLOR=#008000>(New in Docutils 0.3.2)</FONT></U></p>
+<p><U><FONT COLOR=#008000>The &quot;role&quot; directive dynamically creates a custom interpreted text
+role and registers it with the parser.  This means that after
+declaring a role like this:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+.. role:: custom
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>the document may use the new &quot;custom&quot; role:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+An example of using :custom:`interpreted text`
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>This will be parsed into the following document tree fragment:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+&lt;paragraph&gt;
+    An example of using
+    &lt;inline class=&quot;custom&quot;&gt;
+        interpreted text
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>The role must be declared in a document before it can be used.</FONT></U></p>
+<p><U><FONT COLOR=#008000>The new role may be based on an existing role, specified as a second
+argument in parentheses (whitespace optional):</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+.. role:: custom(emphasis)
+
+:custom:`text`
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>The parsed result is as follows:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+&lt;paragraph&gt;
+    &lt;emphasis class=&quot;custom&quot;&gt;
+        text
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>If no base role is explicitly specified, a generic custom role is
+automatically used.  Subsequent interpreted text will produce an
+&quot;inline&quot; element with a &quot;class&quot; attribute, as in the first example
+above.</FONT></U></p>
+<p><U><FONT COLOR=#008000>With most roles, the &quot;:class:&quot; option can be used to set a &quot;class&quot;
+attribute that is different from the role name.  For example:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+.. role:: custom
+   :class: special
+
+:custom:`interpreted text`
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>This is the parsed result:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+&lt;paragraph&gt;
+    &lt;inline class=&quot;special&quot;&gt;
+        interpreted text
+</FONT></U></pre>
+<p id="role-class"><U><FONT COLOR=#008000>The following option is recognized by the &quot;role&quot; directive for most
+base roles:</FONT></U></p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>class</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>text</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>Set a &quot;class&quot; attribute value on the element produced (</FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>inline</FONT></U></span></tt><U><FONT COLOR=#008000>,
+or element associated with a base class) when the custom
+interpreted text role is used.  If no directive options are
+specified, a &quot;class&quot; option with the directive argument (role
+name) as the value is implied.  See the </FONT></U><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000> directive above.</FONT></U></dd>
+</dl>
+<p><U><FONT COLOR=#008000>Specific roles may support other options and/or directive content.
+See the </FONT></U><a class="reference" href="roles.html"><U><FONT COLOR=#008000>reStructuredText Interpreted Text Roles</FONT></U></a><U><FONT COLOR=#008000> document for
+details.</FONT></U></p>
+</div>
+<div class="section" id="restructuredtext-test-directive">
+<h2><a class="toc-backref" href="#id47" name="restructuredtext-test-directive">Restructuredtext-Test-Directive</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Directive Type:</th><td class="field-body">&quot;restructuredtext-test-directive&quot;</td>
+</tr>
+<tr class="field"><th class="field-name">Doctree Element:</th><A HREF='#__diff138' NAME='__diff139'><font color=orange>&lt;</font></A> <A HREF='#__diff140'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">system_warning</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Arguments:</th><A HREF='#__diff139' NAME='__diff140'><font color=orange>&lt;</font></A> <A HREF='#__diff141'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Options:</th><A HREF='#__diff140' NAME='__diff141'><font color=orange>&lt;</font></A> <A HREF='#__diff142'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">None.</td>
+</tr>
+<tr class="field"><th class="field-name">Directive Content:</th><A HREF='#__diff141' NAME='__diff142'><font color=orange>&lt;</font></A> <A HREF='#__diff143'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&nbsp;</FONT></S> <td class="field-body">Interpreted as a literal block.</td>
+</tr>
+</tbody>
+</table>
+<p>This directive is provided for test purposes only.  (Nobody is
+expected to type in a name <em>that</em> long!)  It is converted into a
+level-1 (info) system message showing the directive data, possibly
+followed by a literal block containing the rest of the directive
+block.</p>
+<!-- Local Variables:
+mode: indented-text
+indent-tabs-mode: nil
+sentence-end-double-space: t
+fill-column: 70
+End: -->
+</div>
+</div>
+</div>
+<hr class="footer"/>
+<div class="footer">
+<A HREF='#__diff142' NAME='__diff143'><font color=orange>&lt;</font></A> <A HREF='#__diff144'><font color=orange>&gt;</font></A> <hr class="footer" />
+<a class="reference" href="directives.txt"><U><FONT COLOR=#008000>View document source</FONT></U></a><U><FONT COLOR=#008000>.</FONT></U>
+Generated on:<A HREF='#__diff143' NAME='__diff144'><font color=orange>&lt;</font></A> <A HREF='#__diff145'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>2005/06/14 11:21:50 CDT.</FONT></S> <U><FONT COLOR=#008000> 2005-04-12 02:46 UTC.</FONT></U>
+Generated by<A HREF='#__diff144' NAME='__diff145'><font color=orange>&lt;</font></A> <A HREF='#__diff146'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>trip.prl release 1.4.3</FONT></S>  <a class="reference" href="http://docutils.sourceforge.net/"><U><FONT COLOR=#008000>Docutils</FONT></U></a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
+
+</div>
+</body>
+</html>
+<A HREF='#__diff145' NAME='__diff146'><font color=orange>&lt;</font></A>
+(146 differences)

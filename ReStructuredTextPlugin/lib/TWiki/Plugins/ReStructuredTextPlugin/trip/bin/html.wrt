@@ -1,0 +1,1019 @@
+# -*-perl-*-
+# Writer for html files
+
+# $Id: html.wrt 496 2005-06-14 15:55:54Z r31609 $
+
+=pod
+=begin reST
+=begin Description
+This writer creates HTML output.
+It uses the following output defines:
+
+-W bodyattr=<text>     Specifies attributes to be passed to the <body>
+                       tag (default is '').
+-W footnote_backlinks=<0|1>
+                       Enable backlinks from footnotes and citations
+                       to their references if 1 (default is 1).
+-W html_prolog=<0|1>
+                       Generate file prolog for XHTML if 0 or
+                       HTML if 1 (default is 0).
+-W stylesheet=<URL>    Specify a stylesheet URL, used verbatim
+                       (default is "${TripConfig::DEFAULTCSS}").
+-W link_target=<expr>  An expression that determines what the target
+                       frame will be in link references.  The
+                       link URL is available in ``$_`` so that the
+                       target frame can depend upon the URL
+                       (default is "").
+=end Description
+=end reST
+=cut
+
+sub package = {
+    # My -W flags
+    use vars qw($bodyattr $footnote_backlinks $html_prolog $stylesheet
+		$link_target);
+
+    # Static globals
+    use vars qw(%INTERPRETED_ROLES);
+
+    # Run-time globals
+    use vars qw($HAS_CONTENTS $TARGET_FRAME $FOOTER @HEAD_INFO
+		%USED_DEFAULT);
+}
+
+# This phase fixes all the attribute values to have characters that are
+# safe for HTML files
+phase FIXATTR {
+    sub document = {
+	# Defaults for -W flags
+	# N.B.: Normally these would be in sub package above, but there's
+	# a bug with perl 5.6.1 that causes bus error or seg fault.
+	$bodyattr = '' unless defined $bodyattr;
+	$footnote_backlinks = 1 unless defined $footnote_backlinks;
+	$html_prolog = 0 unless defined $html_prolog;
+	$stylesheet = $TripConfig::DEFAULTCSS unless defined $stylesheet;
+	$link_target = "''" unless defined $link_target;
+	$TARGET_FRAME = sub { ($_) = @_; eval $link_target };
+	die "Cannot parse link target $link_target: $@" if $@;
+	return;
+    }
+
+    sub .* = { # FIXATTR
+	my ($dom, $str) = @_;
+	my $attr;
+	foreach $attr (keys %{$dom->{attr}}) {
+	    $dom->{attr}{$attr} =
+		EncodeHTML($dom->{attr}{$attr});
+	}
+	return;
+	
+	sub EncodeHTML {
+	    # This subroutine encodes HTML-specific characters
+	    my ($s) = @_;
+	    $s =~ s/&/&amp;/g;
+	    $s =~ s/</&lt;/g;
+	    $s =~ s/>/&gt;/g;
+	    $s =~ s/\"/&quot;/g;   ######## FIX
+	    $s =~ s/\@/&\#64;/g;   ######## FIX
+	    return $s;
+	}
+    }
+}
+
+# This phase preprocesses the file.
+phase PREPROCESS {
+
+    sub \#PCDATA = { # PREPROCESS
+	my ($dom, $str, $parent) = @_;
+	my $t = EncodeHTML($_[0]{text});
+        return $t;
+    }
+
+    sub document = { # PREPROCESS
+ 	my ($dom) = @_;
+ 	$" = "";
+ 	my $nesting = 0;
+ 	# Compute the nesting levels for titles
+	$dom->Recurse
+	    (sub {
+		my ($dom, $parent, $when) = @_;
+		if ($dom->{tag} eq 'section') {
+		    $nesting += $when eq 'pre' ? 1 : -1;
+		}
+		elsif ($dom->{tag} eq 'title') {
+		    $dom->{nesting} = $nesting;
+		}
+		return 0;
+	    }, undef, 'both');
+
+	return;
+    }
+
+    sub docinfo = { # PREPROCESS
+	my ($dom, $str, $parent) = @_;
+
+	# Flatten Authors if it exists
+	$dom->Reshape(sub {
+	    my ($dom) = @_;
+	    return @{$dom->{content}} if ($dom->{tag} eq 'authors');
+	    return $dom;
+	});
+	
+	return;
+    }
+
+    sub author|date|organization|copyright = { # PREPROCESS
+	my ($dom, $str, $parent) = @_;
+	chomp $str;
+	my $headstr = $str;
+	$headstr =~ s/\n/ /g;
+	# Remove any HTML tags within it
+	$headstr =~ s/<[^>]*>//g;
+	push (@HEAD_INFO, [$dom->{tag}, $headstr]);
+	return $str;
+    }
+
+    sub meta = { # PREPROCESS
+	my ($dom) = @_;
+	my $attr = join(' ',map(qq($_="$dom->{attr}{$_}"),
+				sort keys %{$dom->{attr}}));
+	push (@HEAD_INFO, "<meta $attr>\n");
+	return;
+    }
+
+    sub reference = { # PREPROCESS
+	my ($dom, $str, $parent) = @_;
+	chomp $str;
+	#### FIX 
+	use vars qw($FIRST_REFERENCE);
+	push (@{$dom->{hattr}{class}},  'first', 'last')
+	    if ! $FIRST_REFERENCE++;
+#	my $kludge = "first last " 
+	return;
+    }
+
+    sub authors = { # PREPROCESS
+	return;
+    }
+
+    sub interpreted = { # PREPROCESS
+	my ($dom, $str, $parent) = @_;
+	BEGIN {
+	    my @roles = qw(emphasis literal strong sub sup
+			   big small b i u s strike tt);
+	    @INTERPRETED_ROLES{@roles,
+			       'subscript', 'superscript',
+			       'bold', 'italic', 'underline',
+			       'color', 'size', 'face', 'class'} =
+		(@roles, 'sub', 'sup', 'b', 'i', 'u',
+		 'font color="%s"', 'font size="%s"', 'font face="%s"',
+		 'span class="%s"');
+	}
+	$dom->{attr}{role} =~ /([^-]+)(?:-(.*))?/;
+	my ($role,$val) = ($1, $2);
+	if ($INTERPRETED_ROLES{$role}) {
+	    $dom->{tag} = sprintf $INTERPRETED_ROLES{$role}, $val;
+	    %{$dom->{attr}} = ();
+	    # Literal has to be handled specially
+	    if ($dom->{tag} eq 'literal') {
+		$str = TraverseLiteral($dom);
+		@{$dom->{content}} = ();
+		$dom->{txt} = $str;
+		return $str;
+	    }
+	    chomp $str;
+	}
+	return Default($dom, $str);
+    }
+
+    sub literal = { # PREPROCESS
+	my ($dom, $str, $parent) = @_;
+#print STDERR "PREPROCESS: $dom->{tag}: $str\n";
+	return $dom->{txt} if defined $dom->{txt};
+	PreprocessLiteral($dom);
+#	my $s = TraverseLiteral($dom);
+#	# Get rid of my children
+#	@{$dom->{content}} = ();
+	$dom->{txt} = $str;
+	return;
+
+	sub PreprocessLiteral {
+	    my ($dom) = @_;
+	    my $child;
+	    foreach $child (@{$dom->{content}}) {
+		if ($child->{tag} eq '#PCDATA') {
+		    my $str = $child->{val};
+		    $str =~ s|(\s+)|</span>$1<span class="pre">|g;
+		    $str =~ s/( +) /("&nbsp;" x length($1)) . " "/ge;
+		    $child->{val} = qq(<span class="pre">$str</span>);
+#print STDERR "PreprocessLiteral: $child->{text}\n";
+		}
+		else {
+		    PreprocessLiteral($child);
+		}
+	    }
+	}
+    }
+
+    sub (?:doctest|literal)_block = { # PREPROCESS
+	my ($dom, $str) = @_;
+	# Go through the children recursively
+	my $s = TraverseLiteral($dom);
+	# Get rid of my children
+	@{$dom->{content}} = ();
+	
+	return $s;
+        sub TraverseLiteral {
+	    my ($dom) = @_;
+	    my $str;
+	    my $child;
+	    foreach $child (@{$dom->{content}}) {
+		if ($child->{tag} eq '#PCDATA') {
+		    $str .= EncodeHTML($child->{text});
+		}
+		else {
+		    my $s = TraverseLiteral($child);
+		    $s =~ s/^/    /mg if defined $s;
+		    $str .= EncodeHTML("$child->{text}") . $s;
+		}
+	    }
+	    return $str;
+	}
+    }
+
+    sub list_item = { # PREPROCESS
+	my ($dom, $str) = @_;
+
+	# Compute whether we're simple or not
+	$dom->{simple} = 1;
+	my $content = $dom->{content};
+	if (@$content > 2 
+	    || (@$content == 2 &&
+		($content->[0]{tag} ne 'paragraph' ||
+		 $content->[1]{tag} !~ /_list/ ||
+		 ! $content->[1]{simple}))
+	    || (@$content == 1 &&
+		$content->[0]{tag} =~ /_list/ &&
+		! $content->[0]{simple})) {
+	    $dom->{simple} = 0;
+	}
+	push(@{$content->[0]{hattr}{class}},'first') if @$content;
+	return Default($dom, $str);
+    }
+
+    sub definition|field_body|description|entry = { # PREPROCESS
+	my ($dom, $str) = @_;
+	my $content = $dom->{content};
+	if (@$content) {
+	    push(@{$content->[0]{hattr}{class}},'first');
+	    push(@{$content->[-1]{hattr}{class}},'last');
+#		unless $#$content == 0;
+	}
+	return Default($dom, $str);
+    }
+
+    sub (?:bullet|enumerated|definition)_list = { # PREPROCESS
+	my ($dom, $str, $parent) = @_;
+	# Figure out if I'm simple: either (1) I contain a single paragraph,
+	# (2) I contain a single nested simple list or (3) I contain a
+	# single paragraph followed by a single nested simple list.
+	$dom->{simple} = 1;
+	my ($d, $li);
+	foreach $li (@{$dom->{content}}) {
+	    if (! $li->{simple}) {
+		$dom->{simple} = 0;
+		last;
+	    }
+	}
+	if (! $dom->{simple}) {
+	    $dom->Recurse(sub {
+		my ($dom, $myparent) = @_;
+		return 1 if $dom->{tag} =~ /_list/ && $parent ne $myparent;
+		$dom->{simple} = 0;
+	    }, $parent, 'pre');
+	    foreach $li (@{$dom->{content}}) {
+		$li->{simple} = 0;
+	    }
+	}
+	return Default($dom, $str);
+    }
+
+    sub footnote|citation = { # PREPROCESS
+	my ($dom, $str) = @_;
+	# Get the label out of our first child's child
+	if ($dom->{content}[0]{tag} eq 'label') {
+	    my $label = $dom->{content}[0]{'.str'};
+	    chomp $label;
+	    $dom->{'.label'} = $label;
+	}
+	#### FIX
+	# Delete the label that is our first child
+	shift(@{$dom->{content}}) if $dom->{content}[0]{tag} eq 'label';
+    }
+
+    sub classifier = { # PREPROCESS
+	my ($dom, $str) = @_;
+	chomp $str;
+	return qq(<span class="classifier-delimiter">:</span> <span class="classifier">$str</span>);
+    }
+
+    sub generated = { # PREPROCESS
+	my ($dom) = @_;
+	my $str = $dom->{content}[0]{text};
+	$str =~ /(\d+(\.\d+)*)/;
+	return "$1 ";
+    }
+
+    sub .* = { # PREPROCESS
+	my ($dom, $str) = @_;
+	$USED_DEFAULT{$dom->{tag}} = 1;
+	return Default($dom, $str);
+        sub Default {
+	    my ($dom, $str) = @_;
+	    my $attr = defined $dom->{attr} ?
+		join('',map(qq( $_="$dom->{attr}{$_}"), keys %{$dom->{attr}}))
+		: '';
+	    if (($dom->{attr}{'xml:space'} || '') eq 'preserve') {
+		$str = qq(<pre class="$dom->{tag}">\n$str</pre>\n\n);
+	    }
+	    my $newstr = "<$dom->{tag}$attr>$str</$dom->{tag}>";
+	    # Annotate the DOM with our content string
+	    $dom->{'.str'} = $str;
+	    return $newstr;
+	}
+    }
+}
+
+# This phase produces the final output
+phase PROCESS {
+
+    sub paragraph = { # PROCESS
+	my ($dom, $str, $parent) = @_;
+	my $p_tag = $parent->{tag};
+	my $index = $parent->index($dom);
+	chomp $str;
+	return "$str"
+	    if ((! defined $dom->{simple} || $dom->{simple} ne 0) &&
+		($#{$parent->{content}} == 0 ||
+		 $index == 1 &&
+		 $parent->{content}[0]{tag} eq 'label') ||
+		$p_tag eq 'list_item' && $parent->{simple});
+#print "[$p_tag][$index/$#{$parent->{content}}][$parent->{simple}][$dom->{content}[0]{text}]\n";
+	my $class = $dom->{hattr}{class};
+	my $attr = defined $class && @$class ?
+	    qq( class=") . join(' ',@$class) . qq(") : '';
+	return  "<p$attr>$str</p>\n";
+    }
+
+    sub (?:doctest|literal)_block = { # PROCESS
+	my ($dom, $str) = @_;
+	my @class = $dom->{hattr}{class} ? @{$dom->{hattr}{class}} : ();
+	my $class = $dom->{tag};
+	$class =~ s/_/-/;
+	push(@class, $class);
+	my $attr = qq( class=") . join(' ',@class) . qq(");
+	return qq(<pre$attr>\n$dom->{val}</pre>\n);
+    }
+
+    sub attention|caution|danger|error|hint|important|note|tip|warning = { # PROCESS
+	use vars qw(%ADM_TITLES);
+	BEGIN {
+	    %ADM_TITLES = ('Danger'=>'!DANGER!', 'Caution'=>'Caution!',
+			   'Attention'=>'Attention!');
+	}
+	my ($dom, $str) = @_;
+	my $tag = $dom->{tag};
+	substr($tag, 0, 1) =~ tr/[a-z]/[A-Z]/;
+	my $label = main::FirstDefined($ADM_TITLES{$tag}, $tag);
+	return << "EOS" ;
+<div class="$dom->{tag}">
+<p class="admonition-title">$label</p>
+$str</div>
+EOS
+    }
+
+    # These just need to return their string
+    sub definition_list_item = { # PROCESS
+	my ($dom, $str) = @_;
+	chomp $str if $dom->{tag} ne 'definition_list_item';
+	return $str;
+    }
+
+    sub title = { # PROCESS
+	my ($dom, $str, $parent) = @_;
+	my $p_tag = $parent->{tag} || '';
+	my $tag;
+	my $tag_attr = '';
+	my %a_attr;
+	# Figure out how deeply I'm nested
+	my $nesting = $dom->{nesting};
+	if ($p_tag eq 'topic') {
+	    $a_attr{name} = $parent->{attr}{id}
+	    if $parent->{attr}{class} eq 'contents';
+	    $tag = "p";
+	    $tag_attr = qq( class="$p_tag-title");
+	}
+	elsif ($parent->{attr}{class} || '' eq 'system-messages') {
+	    $tag = "h$nesting";
+	}
+	else {
+	    $a_attr{class} = "toc-backref" if $HAS_CONTENTS;
+	    $a_attr{href} = "#$dom->{attr}{refid}"
+		if defined $dom->{attr}{refid};
+	    $a_attr{name} = $parent->{attr}{id};
+	    $tag = "h$nesting";
+	}
+	my $a_attr = %a_attr ?
+	    ' ' .join(' ',map(qq($_="$a_attr{$_}"), sort keys %a_attr)) : '';
+	chomp $str;
+	$str = "<a$a_attr>$str</a>" unless $tag eq 'p' && $a_attr eq '';
+	return qq(<$tag$tag_attr>$str</$tag>\n);
+    }
+
+    sub (?:bullet|enumerated|definition)_list = { # PROCESS
+	my ($dom, $str) = @_;
+	# Figure out if I'm the least nested list
+	use vars qw(%LIST_TAGS);
+	BEGIN { %LIST_TAGS = ('bullet_list'=>'ul', 'enumerated_list'=>'ol',
+			      'definition_list'=>'dl'); }
+	my $tag = $LIST_TAGS{$dom->{tag}};
+	my @class;
+	my $attr = $dom->{attr};
+	push @class, $attr->{class} if defined $attr->{class};
+	push @class, @{$dom->{hattr}{class}} if defined $dom->{hattr}{class};
+	push @class, $attr->{enumtype} if $tag eq 'ol';
+	push @class, 'simple' if $dom->{simple};
+	my $class_keys = join(' ',@class);
+	my $class = $class_keys ? qq( class="$class_keys") : '';
+	my $start = defined $attr->{start} ? qq( start="$attr->{start}") : '';
+	return (qq(<$tag$class$start>\n$str</$tag>\n));
+    }
+
+    sub list_item = { # PROCESS
+	my ($dom, $str) = @_;
+	# Insert our ID into any reference tag
+	my $id = $dom->{attr}{id};
+	$str =~ s/(<a [^>]+)/$1 id="$id" name="$id"/ if defined $id;
+	return qq(<li>$str</li>\n);
+    }
+
+    sub section = { # PROCESS
+	my ($dom, $str) = @_;
+	my $attr = $dom->{attr};
+	my @class;
+	@class = $attr->{class} if defined $attr->{class};
+	push @class, 'section';
+	my $class = join(' ',@class);
+	my %attr = ('class'=>$class);
+	$attr{id} = $attr->{id} if defined $attr->{id};
+	$attr = join(' ',map(qq($_="$attr{$_}"), sort keys %attr));
+	return qq(<div $attr>\n$str</div>\n);
+    }
+
+#    sub emphasis|em = {
+#	my ($dom, $str) = @_;
+#	chomp $str;
+#	return qq(<em>$str</em>);
+#    }
+
+    # All of these items need to chomp a preceding #PCDATA
+    sub emphasis|strong|subscript|superscript = { # PROCESS
+	my ($dom, $str, $parent) = @_;
+	use vars qw(%TAG_TRANSLATE);
+	BEGIN {
+	    %TAG_TRANSLATE = qw(emphasis em subscript sub superscript sup);
+	}
+	$dom->{tag} = $TAG_TRANSLATE{$dom->{tag}}
+	if defined $TAG_TRANSLATE{$dom->{tag}};
+	ChompPreceding($dom, $parent);
+	chomp $str;
+	return Default($dom, $str);
+
+	sub ChompPreceding {
+	    my ($dom, $parent) = @_;
+	    my $content = $parent->{content};
+	    my $i = $parent->index($dom);
+	    chomp $content->[$i-1]{val}
+	    if $i > 0 && $content->[$i-1]{tag} eq '#PCDATA' &&
+		substr($content->[$i-1]{val}, -2) =~ /[ \(;]\n/;
+	}
+    }
+
+    sub target = { # PROCESS
+	my ($dom, $str, $parent) = @_;
+	ChompPreceding($dom, $parent);
+	chomp $str;
+	return (! defined $dom->{attr}{refuri} &&
+		! defined $dom->{attr}{refid}) || $str ne '' ?
+	    qq(<a class="target" id="$dom->{attr}{id}" name="$dom->{attr}{id}">$str</a>) :
+	    "";
+    }
+
+    sub problematic = { # PROCESS
+	my ($dom, $str, $parent) = @_;
+	ChompPreceding($dom, $parent);
+	my $attr = $dom->{attr};
+	return qq(<a href="#$attr->{refid}" name="$attr->{id}"><span class="problematic" id="$attr->{id}">$str</span></a>);
+    }
+
+    sub footnote_reference = { # PROCESS
+	my ($dom, $str, $parent) = @_;
+	ChompPreceding($dom, $parent);
+	my %attr;
+	$attr{class} = "footnote-reference";
+	my $ref = $attr{href} = "#$dom->{attr}{refid}";
+	$attr{name} = $attr{id} = $dom->{attr}{id};
+	my $target = &$TARGET_FRAME($ref);
+	$attr{target} = $target if $target ne '';
+	my $attr = join(' ',map(qq($_="$attr{$_}"), sort keys %attr));
+	chomp $str;
+	my $index = $parent->index($dom);
+	my $space = $index > 0 &&
+	    $parent->{content}[$index-1]{val} !~ /[ \(\[\n]$/ ? ' ' : '';
+	return qq($space<a $attr><sup>$str</sup></a>);
+    }
+
+    sub literal = { # PROCESS
+	my ($dom, $str, $parent) = @_;
+#print STDERR "$dom->{tag}: $str\n";
+	ChompPreceding($dom, $parent);
+#	$str = $dom->{txt};
+#	chomp $str;
+#	$str =~ s|(\s+)|</span>$1<span class="pre">|g;
+#	$str =~ s/( +) /("&nbsp;" x length($1)) . " "/ge;
+	return qq(<tt class="literal">$str</tt>);
+    }
+
+    sub term = { # PROCESS
+	my ($dom, $str, $parent) = @_;
+	chomp $str;
+	# May need to include a following classifier
+	my $index = $parent->index($dom);
+	my $class = $parent->{content}[$index+1];
+	my $class_str = $class->{tag} eq 'classifier' ? " $class->{val}" : '';
+	return qq(<dt>$str$class_str</dt>\n);
+    }
+
+    sub definition = { # PROCESS
+	my ($dom, $str) = @_;
+	return qq(<dd>$str</dd>\n);
+    }
+
+    sub reference = { # PROCESS
+	my ($dom, $str, $parent) = @_;
+	chomp $str;
+
+	my $ref = defined $dom->{attr}{refuri} ?
+	    $dom->{attr}{refuri} : defined $dom->{attr}{refid} ?
+	    "#$dom->{attr}{refid}" : undef;
+	my @class = defined $dom->{hattr}{class} ? @{$dom->{hattr}{class}} :
+	    ();
+	push(@class, $dom->{tag});
+	my $class = join(' ',@class);
+	my %attr = ('class'=>"$class");
+	$attr{href} = $ref if defined $ref;
+	$attr{id} = $dom->{attr}{id} if defined $dom->{attr}{id};
+	$attr{name} = $dom->{attr}{id} if defined $dom->{attr}{id};
+	my $target = defined $ref ? &$TARGET_FRAME($ref) : '';
+	$attr{target} = $target if $target ne '';
+	my $s = qq(<a ) .
+	    join(' ',map(qq($_="$attr{$_}"), sort keys %attr)) . qq(>$str</a>);
+	$dom->{'.str'} = $str;
+	return $s;
+    }
+
+    sub footnote|citation = { # PROCESS
+	my ($dom, $str) = @_;
+	my (@list1, @list2);
+	my @class = $dom->{hattr}{class} ? @{$dom->{hattr}{class}} : ();
+	push(@class, $dom->{tag});
+	my $class = qq(class=") . join(' ',@class) . qq(");
+	push(@list1, qq(<table $class frame="void" id="$dom->{attr}{id}" rules="none">\n));
+	unshift(@list2, qq(</table>\n));
+	push(@list1, qq(<colgroup><col class="label" /><col /></colgroup>\n));
+	push(@list1, qq(<tbody valign="top">\n));
+	unshift(@list2, qq(</tbody>\n));
+	my $label = defined $dom->{'.label'} ? $dom->{'.label'} :
+	    $dom->{attr}{name};
+	my $backlinks;
+	my @backrefs = split(' ',($dom->{attr}{backrefs} || ''));
+	if ($footnote_backlinks && @backrefs) {
+	    if (@backrefs > 1) {
+		$backlinks = '<em>(' . join(', ',map(qq(<a class="fn-backref" href="#$backrefs[$_-1]">$_</a>), 1 .. @backrefs)) . ')</em> ';
+		push(@list1, qq(<tr><td class="label"><a name="$dom->{attr}{id}">[$label]</a></td><td>$backlinks$str</td></tr>\n));
+	    }
+	    else {
+		push(@list1, qq(<tr><td class="label"><a class="fn-backref" href="#$dom->{attr}{backrefs}" name="$dom->{attr}{id}">[$label]</a></td><td>$str</td></tr>\n));
+	    }
+	}
+	else {
+	    push(@list1, qq(<tr><td class="label"><a name="$dom->{attr}{id}">[$label]</a></td><td>$str</td></tr>\n));
+	}
+	return "@list1@list2";
+    }
+
+    sub block_quote = { # PROCESS
+	my ($dom, $str) = @_;
+	return qq(<blockquote>\n$str</blockquote>\n);
+    }
+
+    sub comment = { # PROCESS
+	my ($dom, $str) = @_;
+	my $text = join('',map($_->{tag} eq '#PCDATA' ? $_->{text} : "",
+			       @{$dom->{content}}));
+	chomp $text;
+	$text =~ s/--/- -/g;
+	return qq(<!-- $text -->\n);
+    }
+
+    sub topic = { # PROCESS
+	my ($dom, $str) = @_;
+	my $class = $dom->{attr}{class};
+	my $id = '';
+	if ($class eq 'contents') {
+	    $HAS_CONTENTS = 1;
+	    $id = qq( id="$dom->{attr}{id}");
+	}
+	return qq(<div class="$class topic"$id>\n$str</div>\n);
+    }
+
+    sub field_list = { # PROCESS
+	my ($dom, $str) = @_;
+	my (@list1, @list2);
+	push(@list1,
+	     qq(<table class="field-list" frame="void" rules="none">\n),
+	     qq(<col class="field-name" />\n),
+	     qq(<col class="field-body" />\n),
+	     qq(<tbody valign="top">\n)
+	     );
+	
+	unshift(@list2, qq(</table>\n));
+	unshift(@list2, qq(</tbody>\n));
+	return "@list1$str@list2";
+    }
+
+    sub field_(?:name|argument|body) = { # PROCESS
+	my ($dom, $str) = @_;
+	chomp $str;
+	return $str;
+    }
+
+    sub field = { # PROCESS
+	my ($dom, $str) = @_;
+	my %fields = map(($_->{tag}, $_->{val}),
+			 @{$dom->{content}});
+	my @str;
+	my @fieldargs = ($fields{field_name});
+	push(@fieldargs, $fields{field_argument})
+	    if defined $fields{field_argument};
+	my $fieldargs = join(' ',@fieldargs);
+	my $colspan = length($fieldargs) >= 15 ? qq( colspan="2") : '';
+	my $tr = $colspan ? "</tr>\n" : '';
+	my $cr = $fields{field_body} =~ m|</p>$| ? "\n" : '';
+	push(@str,
+	     qq(<tr class="field"><th class="field-name"$colspan>$fieldargs:</th>$tr));
+	push(@str, $colspan ?
+	     qq(<tr><td>&nbsp;</td><td class="field-body">$fields{field_body}$cr</td>\n)
+	     : qq(<td class="field-body">$fields{field_body}$cr</td>\n)
+	     );
+	push(@str, qq(</tr>\n));
+	return "@str";
+    }
+
+    sub transition = { # PROCESS
+	return qq(<hr />\n);
+    }
+
+    sub option_list = { # PROCESS
+	my ($dom, $str) = @_;
+	return << "EOS" ;
+<table class="option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+$str</tbody>
+</table>
+EOS
+    }
+
+    sub option_list_item = { # PROCESS
+	my ($dom, $str) = @_;
+	return qq(<tr>$str</tr>\n);
+    }
+
+    sub option_group = { # PROCESS
+	my ($dom, $str, $parent) = @_;
+	my $val = join(', ',map($_->{val},@{$dom->{content}}));
+	# Figure out what the raw text is
+	my $raw = $val;
+	$raw =~ s/<[^>]*>//g;
+	my $cspan = '';
+	if (length($raw) > 14) {
+	    $cspan = qq( colspan="2");
+	    $parent->{colspan} = 2;
+	}
+	return qq(<td$cspan>\n<kbd>$val</kbd></td>\n);
+    }
+
+    sub option_string = { # PROCESS
+	my ($dom, $str) = @_;
+	return qq(<span class="option">$str</span>);
+    }
+
+    sub option = { # PROCESS
+	my ($dom, $str) = @_;
+	return qq($str);
+    }
+
+    sub option_argument = { # PROCESS
+	my ($dom, $str) = @_;
+	return qq($dom->{attr}{delimiter}<var>$str</var>);
+    }
+
+    sub description = { # PROCESS
+	my ($dom, $str, $parent) = @_;
+	my $append = ($parent->{colspan} || 0) == 2 ?
+	    qq(</tr>\n<tr><td>&nbsp;</td>) : '';
+	return qq($append<td>$str</td>);
+    }
+
+    sub table = { # PROCESS
+	my ($dom, $str) = @_;
+	my $attr = $dom->{tableattr} ne "" ? " $dom->{tableattr}" : "";
+	return qq(<table$attr>\n$str</table>\n);
+    }
+
+    sub tgroup = { # PROCESS
+	my ($dom, $str) = @_;
+	my $cols = $dom->{attr}{cols};
+	my @colwidths = map($dom->{content}[$_]{attr}{colwidth},
+			    0 .. $cols-1);
+	my $total = 0;
+	grep($total += $_, @colwidths);
+	my $colspecs = join('',map(sprintf(qq(<col width="%s%%" />\n),
+					   int(100*$_/$total+.5)),
+				   @colwidths));
+	my $colgroup = "<colgroup>\n$colspecs</colgroup>\n";
+	my $rest = join('', map($dom->{content}[$_]{val},
+				$cols .. $#{$dom->{content}}));
+	return qq($colgroup$rest);
+    }
+
+    sub thead = { # PROCESS
+	my ($dom, $str) = @_;
+	$str =~ s|(</?t)d|${1}h|g;
+	return qq(<thead valign="bottom">\n$str</thead>\n);
+    }
+
+    sub tbody = { # PROCESS
+	my ($dom, $str) = @_;
+	return qq(<tbody valign="top">\n$str</tbody>\n);
+    }
+
+    sub row = { # PROCESS
+	my ($dom, $str) = @_;
+	my $attr = defined $dom->{rowattr} && $dom->{rowattr} ne '' ?
+	    " $dom->{rowattr}" : '';
+	return qq(<tr$attr>$str</tr>\n);
+    }
+
+    sub entry = { # PROCESS
+	my ($dom, $str) = @_;
+	my $attr = $dom->{attr};
+	my %attr = map($_ eq 'morerows' ? ('rowspan'=>$attr->{$_}+1) :
+		       $_ eq 'morecols' ? ('colspan'=>$attr->{$_}+1) :
+		       ($_=>$attr->{$_}), keys %$attr);
+	my @attr = map(qq($_="$attr{$_}"), sort keys %attr);
+	push @attr, $dom->{entryattr} if defined $dom->{entryattr};
+	my $astr =  @attr ? ' ' . join(' ',@attr) : '';
+	$str = '&nbsp;' if $str eq '';
+	return qq(<td$astr>$str</td>\n);
+    }
+
+    sub interpreted = { # PROCESS
+	my ($dom, $str, $parent) = @_;
+	ChompPreceding($dom, $parent);
+	return qq(<span class="interpreted">$str</span>);
+    }
+
+    sub citation_reference = { # PROCESS
+	my ($dom, $str) = @_;
+	my %attr;
+	$attr{class} = "citation-reference";
+	my $ref = $attr{href} = "#$dom->{attr}{refid}";
+	$attr{name} = $attr{id} = $dom->{attr}{id};
+	my $target = &$TARGET_FRAME($ref);
+	$attr{target} = $target if $target ne '';
+	my $attr = join(' ',map(qq($_="$attr{$_}"), sort keys %attr));
+	return qq(<a $attr>[$str]</a>);
+    }
+
+    sub image = { # PROCESS
+	my ($dom, $str, $parent) = @_;
+	my $attr = $dom->{attr};
+	my $alt = main::FirstDefined($attr->{alt}, $attr->{uri});
+	my %attr = ('alt'=>$alt, 'src'=>$attr->{uri});
+	my @attr_out = qw(height width align usemap);
+	foreach (@attr_out) {
+	    $attr{$_} = $attr->{$_} if defined $attr->{$_};
+	}
+	my $attrlist = join(' ',map(qq($_="$attr{$_}"), sort keys %attr));
+	my $img = qq(<img $attrlist />);
+	$img = "<p>$img</p>\n" unless $parent->{tag} eq 'paragraph';
+	return $img;
+    }
+
+    sub figure = { # PROCESS
+	my ($dom, $str) = @_;
+	return qq(<div class="figure">\n$str</div>\n);
+    }
+
+    sub caption = { # PROCESS
+	my ($dom, $str) = @_;
+	chomp $str;
+	return qq(<p class="caption">$str</p>\n);
+    }
+
+    sub legend = { # PROCESS
+	my ($dom, $str) = @_;
+	return qq(<div class="legend">\n$str</div>\n);
+    }
+
+    sub line_block = { # PROCESS
+	my ($dom, $str) = @_;
+	return qq(<div class="line-block">\n$str</div>\n);
+    }
+
+    sub line = { # PROCESS
+	my ($dom, $str) = @_;
+	chomp $str;
+	return qq(<div class="line">$str</div>\n);;
+    }
+
+    sub parsed_literal = { # PROCESS
+	my ($dom, $str) = @_;
+	return qq(<pre class="parsed-literal">\n$str</pre>\n);
+    }
+
+    sub system_message = { # PROCESS
+	my ($dom, $str, $parent) = @_;
+	my $attr = $dom->{attr};
+	my $backlink = $attr->{backrefs} ?
+	    qq(; <em><a href="#$attr->{backrefs}">backlink</a></em>) : '';
+	my $name = defined $attr->{id} ? qq( name="$attr->{id}") : '';
+	my $id = defined $attr->{id} ? qq( id="$attr->{id}") : '';
+	return << "EOS"
+<div class="system-message"$id>
+<p class="system-message-title">System Message: <a$name>$attr->{type}/$attr->{level}</a> (<tt>$attr->{source}</tt>, line $attr->{line})$backlink</p>
+$str</div>
+EOS
+	    if $parent->{attr}{class} eq 'system-messages';
+	return;
+    }
+
+    sub raw = { # PROCESS
+	my ($dom) = @_;
+	return unless $dom->{attr}{format} eq 'html';
+	my $s = $dom->{content}[0]{text};
+	chomp $s;
+	return $s;
+    }
+
+    sub classifier|subtitle|label|decoration|colspec|substitution_(?:definition|reference) = { # PROCESS
+	return;
+    }
+
+    sub document = { # PROCESS
+	my ($dom, $str) = @_;
+	my $doc = [[], []];
+
+	# Handle the prolog
+	my $prolog = $html_prolog ? << "EOPROLOG1" : << "EOPROLOG2" ;
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+EOPROLOG1
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+EOPROLOG2
+	push (@{$doc->[0]}, $prolog);
+	push (@{$doc->[0]}, qq(<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">\n));
+	unshift (@{$doc->[1]}, qq(</html>\n));
+
+	# Handle the header
+	my $head = [["<head>\n"], ["</head>\n"]];
+	push (@{$doc->[0]}, $head);
+	push (@{$head->[0]}, 
+	      qq(<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />\n));
+	push (@{$head->[0]},
+	      qq(<meta name="generator" content="$main::GENERATOR_NAME" />\n))
+	    unless defined $main::opt_D{generator} &&
+	    $main::opt_D{generator} eq 0;
+	my $title = @{$dom->{content}} && $dom->{content}[0]{tag} eq 'title' ?
+	    $dom->{content}[0]{'.str'} : '';
+	chomp $title;
+	my $subtitle = @{$dom->{content}} > 1 &&
+	    $dom->{content}[1]{tag} eq 'subtitle' ?
+	    $dom->{content}[1]{'.str'} : '';
+	chomp $subtitle;
+	push (@{$head->[0]}, "<title>$title</title>\n") if $title ne '';
+	push (@{$head->[0]},
+	      map(ref($_) ? qq(<meta name="$_->[0]" content="$_->[1]" />\n) :
+		  $_, @HEAD_INFO));
+	push (@{$head->[0]}, << "EOLINK") ;
+<link rel="stylesheet" href="$stylesheet" type="text/css" />
+EOLINK
+
+	# Handle the body.
+        my $battr = $bodyattr ? " $bodyattr" : '';
+	my $body = [["<body$battr>\n"], ["</body>\n"]];
+	unshift @{$body->[1]}, $FOOTER if defined $FOOTER;
+	push (@{$doc->[0]}, $body);
+	push (@{$body->[0]},
+	      qq(<div class="document") . (defined $dom->{attr}{id} ?
+					   qq( id="$dom->{attr}{id}") : "")
+	      . qq(>\n));
+	unshift (@{$body->[1]}, qq(</div>\n));
+	push (@{$body->[0]}, qq(<h1 class="title">$title</h1>\n))
+	    if $title ne '' && ! $main::opt_D{keep_title_section};
+	my $id = @{$dom->{content}} > 1 &&
+	    defined $dom->{content}[1]{attr}{id} ?
+	    qq( id="$dom->{content}[1]{attr}{id}") : '';
+	push (@{$body->[0]}, qq(<h2 class="subtitle"$id>$subtitle</h2>\n))
+	    if $subtitle ne '';
+
+	# Next go through all the contents
+	my $content;
+	foreach $content (@{$dom->{content}}) {
+	    next if $content->{tag} =~ /title$/;
+	    push (@{$body->[0]}, $content->{val});
+	}
+
+	my @list = Flatten($doc);
+	return join '',@list;
+
+	# This subroutine takes an array of items which may
+	# contain array references and flattens them into the
+	# a new array.
+	sub Flatten {
+	    my @answer;
+	    foreach (@_) {
+		next unless defined $_;
+		if (/ARRAY/) {
+		    push(@answer, Flatten(@$_));
+		}
+		else {
+		    push(@answer, $_);
+		}
+	    }
+	    return @answer;
+	}
+    }
+
+    sub docinfo = { # PROCESS
+	my ($dom, $str) = @_;
+	$str =~ s/field-name/docinfo-name/g;
+	return << "EOS" ;
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+$str</tbody>
+</table>
+EOS
+    }
+
+    sub address = { # PROCESS
+	my ($dom, $str) = @_;
+	return << "EOS" ;
+<tr><th class="docinfo-name">Address:</th>
+<td><pre class="address">
+$str</pre>
+</td></tr>
+EOS
+    }
+
+    sub author|contact|organization|date|status|revision|version|copyright = { # PROCESS
+	my ($dom, $str) = @_;
+	my $label = $dom->{tag};
+	substr($label,0,1) =~ tr/[a-z]/[A-Z]/;
+	chomp $str;
+	return qq(<tr><th class="docinfo-name">$label:</th>\n<td>$str</td></tr>\n);
+    }
+
+    sub footer = { # PROCESS
+	my ($dom, $str, $parent) = @_;
+
+	$FOOTER = 
+	    qq(<hr class="footer"/>\n<div class="footer">\n$str\n</div>\n);
+	return;
+    }
+
+    sub .* = { # PROCESS
+	my ($dom, $str) = @_;
+	if ($USED_DEFAULT{$dom->{tag}}) {
+	    print STDERR
+		"Warning: Used default handler for type $dom->{tag}\n";
+	    $USED_DEFAULT{$dom->{tag}} = 0;
+	}
+	return $dom->{val};
+    }
+}

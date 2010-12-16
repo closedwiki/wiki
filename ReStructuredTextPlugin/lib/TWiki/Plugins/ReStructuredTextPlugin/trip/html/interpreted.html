@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="trip.prl release 1.4.3" />
+<title>reStructuredText Interpreted Text Roles</title>
+<meta name="author" content="David Goodger" />
+<meta name="author" content="Mark Nodine (for doctrip-specific implementation)" />
+<meta name="date" content="2005-04-19" />
+<meta name="copyright" content="This document has been placed in the public domain." />
+<link rel="stylesheet" href="http://docutils.sourceforge.net/tools/stylesheets/default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="restructuredtext-interpreted-text-roles">
+<h1 class="title">reStructuredText Interpreted Text Roles</h1>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr><th class="docinfo-name">Author:</th>
+<td>David Goodger</td></tr>
+<tr><th class="docinfo-name">Author:</th>
+<td>Mark Nodine (for doctrip-specific implementation)</td></tr>
+<tr><th class="docinfo-name">Contact:</th>
+<td><a class="first last reference" href="mailto:goodger&#64;users.sourceforge.net">goodger&#64;users.sourceforge.net</a> (<a class="reference" href="mailto:mark.nodine&#64;mot.com">mark.nodine&#64;mot.com</a>)</td></tr>
+<tr><th class="docinfo-name">Revision:</th>
+<td>1.11</td></tr>
+<tr><th class="docinfo-name">Date:</th>
+<td>2005-04-19</td></tr>
+<tr><th class="docinfo-name">Copyright:</th>
+<td>This document has been placed in the public domain.</td></tr>
+</tbody>
+</table>
+<p>This document describes the interpreted text roles implemented in the
+reference reStructuredText parser.</p>
+<p>Interpreted text uses backquotes (`) around the text.  An explicit
+role marker may optionally appear before or after the text, delimited
+with colons.  For example:</p>
+<pre class="literal-block">
+This is `interpreted text` using the default role.
+
+This is :title:`interpreted text` using an explicit role.
+</pre>
+<p>A default role may be defined by applications of reStructuredText; it
+is used if no explicit <tt class="literal"><span class="pre">:role:</span></tt> prefix or suffix is given.  The
+&quot;default default role&quot; is <a class="reference" href="#title-reference">:title-reference:</a>.</p>
+<p>See the <a class="reference" href="./reStructuredText.html#interpreted-text">Interpreted Text</a> section in the <a class="reference" href="./reStructuredText.html">reStructuredText Markup
+Specification</a> for syntax details.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#customization" id="id4" name="id4">Customization</a></li>
+<li><a class="reference" href="#standard-roles" id="id5" name="id5">Standard Roles</a><ul class="simple">
+<li><a class="reference" href="#emphasis" id="id6" name="id6"><tt class="literal">:emphasis:</tt></a></li>
+<li><a class="reference" href="#literal" id="id7" name="id7"><tt class="literal">:literal:</tt></a></li>
+<li><a class="reference" href="#bold" id="id8" name="id8"><tt class="literal">:bold:</tt></a></li>
+<li><a class="reference" href="#italic" id="id9" name="id9"><tt class="literal">:italic:</tt></a></li>
+<li><a class="reference" href="#underline" id="id10" name="id10"><tt class="literal">:underline:</tt></a></li>
+<li><a class="reference" href="#strike" id="id11" name="id11"><tt class="literal">:strike:</tt></a></li>
+<li><a class="reference" href="#tt" id="id12" name="id12"><tt class="literal">:tt:</tt></a></li>
+<li><a class="reference" href="#big" id="id13" name="id13"><tt class="literal">:big:</tt></a></li>
+<li><a class="reference" href="#small" id="id14" name="id14"><tt class="literal">:small:</tt></a></li>
+<li><a class="reference" href="#color-val" id="id15" name="id15"><tt class="literal">:color-&lt;val&gt;:</tt></a></li>
+<li><a class="reference" href="#size-val" id="id16" name="id16"><tt class="literal">:size-&lt;val&gt;:</tt></a></li>
+<li><a class="reference" href="#face-val" id="id17" name="id17"><tt class="literal">:face-&lt;val&gt;:</tt></a></li>
+<li><a class="reference" href="#class-val" id="id18" name="id18"><tt class="literal">:class-&lt;val&gt;:</tt></a></li>
+<li><a class="reference" href="#strong" id="id19" name="id19"><tt class="literal">:strong:</tt></a></li>
+<li><a class="reference" href="#subscript" id="id20" name="id20"><tt class="literal">:subscript:</tt></a></li>
+<li><a class="reference" href="#superscript" id="id21" name="id21"><tt class="literal">:superscript:</tt></a></li>
+<li><a class="reference" href="#title-reference" id="id22" name="id22"><tt class="literal">:title-reference:</tt></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="customization">
+<h1><a class="toc-backref" href="#id4" name="customization">Customization</a></h1>
+<p>No customization is currently allowed.</p>
+</div>
+<div class="section" id="standard-roles">
+<h1><a class="toc-backref" href="#id5" name="standard-roles">Standard Roles</a></h1>
+<div class="section" id="emphasis">
+<h2><a class="toc-backref" href="#id6" name="emphasis"><tt class="literal">:emphasis:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">None</td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">emphasis</td>
+</tr>
+</tbody>
+</table>
+<p>Implements emphasis.  These are equivalent:</p>
+<pre class="literal-block">
+*text*
+:emphasis:`text`
+</pre>
+</div>
+<div class="section" id="literal">
+<h2><a class="toc-backref" href="#id7" name="literal"><tt class="literal">:literal:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">None</td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">literal</td>
+</tr>
+</tbody>
+</table>
+<p>Implements inline literal text.  These are equivalent:</p>
+<pre class="literal-block">
+``text``
+:literal:`text`
+</pre>
+<p>Care must be taken with backslash-escapes though.  These are <em>not</em>
+equivalent:</p>
+<pre class="literal-block">
+``text \ and \ backslashes``
+:literal:`text \ and \ backslashes`
+</pre>
+<p>The backslashes in the first line are preserved (and do nothing),
+whereas the backslashes in the second line escape the following
+spaces.</p>
+</div>
+<div class="section" id="bold">
+<h2><a class="toc-backref" href="#id8" name="bold"><tt class="literal">:bold:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body"><tt class="literal"><span class="pre">:b:</span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">interpreted</td>
+</tr>
+<tr class="field"><th class="field-name">Writers:</th><td class="field-body">html</td>
+</tr>
+</tbody>
+</table>
+<p>Implements bold text in html.</p>
+</div>
+<div class="section" id="italic">
+<h2><a class="toc-backref" href="#id9" name="italic"><tt class="literal">:italic:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body"><tt class="literal"><span class="pre">:i:</span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">interpreted</td>
+</tr>
+<tr class="field"><th class="field-name">Writers:</th><td class="field-body">html</td>
+</tr>
+</tbody>
+</table>
+<p>Implements italic text in html.</p>
+</div>
+<div class="section" id="underline">
+<h2><a class="toc-backref" href="#id10" name="underline"><tt class="literal">:underline:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body"><tt class="literal"><span class="pre">:u:</span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">interpreted</td>
+</tr>
+<tr class="field"><th class="field-name">Writers:</th><td class="field-body">html</td>
+</tr>
+</tbody>
+</table>
+<p>Implements underlined text in html.</p>
+</div>
+<div class="section" id="strike">
+<h2><a class="toc-backref" href="#id11" name="strike"><tt class="literal">:strike:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body"><tt class="literal"><span class="pre">:s:</span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">interpreted</td>
+</tr>
+<tr class="field"><th class="field-name">Writers:</th><td class="field-body">html</td>
+</tr>
+</tbody>
+</table>
+<p>Implements strikethrough text in html.</p>
+</div>
+<div class="section" id="tt">
+<h2><a class="toc-backref" href="#id12" name="tt"><tt class="literal">:tt:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">None</td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">interpreted</td>
+</tr>
+<tr class="field"><th class="field-name">Writers:</th><td class="field-body">html</td>
+</tr>
+</tbody>
+</table>
+<p>Implements tt text in html.</p>
+</div>
+<div class="section" id="big">
+<h2><a class="toc-backref" href="#id13" name="big"><tt class="literal">:big:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">None</td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">interpreted</td>
+</tr>
+<tr class="field"><th class="field-name">Writers:</th><td class="field-body">html</td>
+</tr>
+</tbody>
+</table>
+<p>Implements big text in html.</p>
+</div>
+<div class="section" id="small">
+<h2><a class="toc-backref" href="#id14" name="small"><tt class="literal">:small:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">None</td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">interpreted</td>
+</tr>
+<tr class="field"><th class="field-name">Writers:</th><td class="field-body">html</td>
+</tr>
+</tbody>
+</table>
+<p>Implements small text in html.</p>
+</div>
+<div class="section" id="color-val">
+<h2><a class="toc-backref" href="#id15" name="color-val"><tt class="literal">:color-&lt;val&gt;:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">None</td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">interpreted</td>
+</tr>
+<tr class="field"><th class="field-name">Writers:</th><td class="field-body">html</td>
+</tr>
+</tbody>
+</table>
+<p>Implements colored text in html.  The &lt;val&gt; expresses the color that
+will be applied. For example</p>
+<pre class="literal-block">
+This text is :color-red:`red`.
+</pre>
+<p>results in</p>
+<blockquote>
+This text is <font color="red">red</font color="red">.</blockquote>
+</div>
+<div class="section" id="size-val">
+<h2><a class="toc-backref" href="#id16" name="size-val"><tt class="literal">:size-&lt;val&gt;:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">None</td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">interpreted</td>
+</tr>
+<tr class="field"><th class="field-name">Writers:</th><td class="field-body">html</td>
+</tr>
+</tbody>
+</table>
+<p>Implements text of different sizes in html.  The &lt;val&gt; expresses the size that
+will be applied. For example</p>
+<pre class="literal-block">
+This text is :size-18pt:`18 pt`.
+</pre>
+<p>results in</p>
+<blockquote>
+This text is <font size="18pt">18 pt</font size="18pt">.</blockquote>
+</div>
+<div class="section" id="face-val">
+<h2><a class="toc-backref" href="#id17" name="face-val"><tt class="literal">:face-&lt;val&gt;:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">None</td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">interpreted</td>
+</tr>
+<tr class="field"><th class="field-name">Writers:</th><td class="field-body">html</td>
+</tr>
+</tbody>
+</table>
+<p>Implements text of different faces in html.  The &lt;val&gt; expresses the face that
+will be applied. For example</p>
+<pre class="literal-block">
+This text is :face-helvetica:`helvetica`.
+</pre>
+<p>results in</p>
+<blockquote>
+This text is <font face="helvetica">helvetica</font face="helvetica">.</blockquote>
+</div>
+<div class="section" id="class-val">
+<h2><a class="toc-backref" href="#id18" name="class-val"><tt class="literal">:class-&lt;val&gt;:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">None</td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">interpreted</td>
+</tr>
+<tr class="field"><th class="field-name">Writers:</th><td class="field-body">html</td>
+</tr>
+</tbody>
+</table>
+<p>Implements text of different classes in html.  The &lt;val&gt; expresses the
+class that will be applied. For example</p>
+<pre class="literal-block">
+This text is :class-classy:`classy`.
+</pre>
+<p>results in html like:</p>
+<pre class="literal-block">
+This text is &lt;class name=&quot;classy&quot;&gt;classy&lt;/class&gt;.
+</pre>
+<p>You can affect how different classes are rendered using style sheets.</p>
+</div>
+<div class="section" id="strong">
+<h2><a class="toc-backref" href="#id19" name="strong"><tt class="literal">:strong:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">None</td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">strong</td>
+</tr>
+</tbody>
+</table>
+<p>Implements strong emphasis.  These are equivalent:</p>
+<pre class="literal-block">
+**text**
+:strong:`text`
+</pre>
+</div>
+<div class="section" id="subscript">
+<h2><a class="toc-backref" href="#id20" name="subscript"><tt class="literal">:subscript:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body"><tt class="literal"><span class="pre">:sub:</span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">subscript</td>
+</tr>
+</tbody>
+</table>
+<p>Implements subscripts.</p>
+<div class="tip">
+<p class="admonition-title">Tip</p>
+<p>Whitespace or punctuation is required around interpreted text, but
+often not desired with subscripts &amp; superscripts.
+Backslash-escaped whitespace can be used; the whitespace will be
+removed from the processed document:</p>
+<pre class="literal-block">
+H\ :sub:`2`\ O
+E = mc\ :sup:`2`
+</pre>
+<p>In such cases, readability of the plain text can be greatly
+improved with substitutions:</p>
+<pre class="literal-block">
+The chemical formula for pure water is |H2O|.
+
+.. |H2O| replace:: H\ :sub:`2`\ O
+</pre>
+<p>See <a class="reference" href="./reStructuredText.html">the reStructuredText spec</a> for further information on
+<a class="reference" href="./reStructuredText.html#character-level-inline-markup">character-level markup</a> and <a class="reference" href="./reStructuredText.html#substitution-references">the substitution mechanism</a>.</p>
+</div>
+</div>
+<div class="section" id="superscript">
+<h2><a class="toc-backref" href="#id21" name="superscript"><tt class="literal">:superscript:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body"><tt class="literal"><span class="pre">:sup:</span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">superscript</td>
+</tr>
+</tbody>
+</table>
+<p>Implements superscripts.  See the tip in <a class="reference" href="#subscript">:subscript:</a> above.</p>
+</div>
+<div class="section" id="title-reference">
+<h2><a class="toc-backref" href="#id22" name="title-reference"><tt class="literal">:title-reference:</tt></a></h2>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body"><tt class="literal"><span class="pre">:title:</span></tt>, <tt class="literal"><span class="pre">:t:</span></tt>.</td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">interpreted</td>
+</tr>
+</tbody>
+</table>
+<p>The <tt class="literal"><span class="pre">:title-reference:</span></tt> role is used to describe the titles of
+books, periodicals, and other materials.  It is the equivalent of the
+HTML &quot;cite&quot; element, and it is expected that HTML writers will
+typically render &quot;title_reference&quot; elements using &quot;cite&quot;.</p>
+<p>Since title references are typically rendered with italics, they are
+often marked up using <tt class="literal"><span class="pre">*emphasis*</span></tt>, which is misleading and vague. 
+The &quot;title_reference&quot; element provides accurate and unambiguous
+descriptive markup.</p>
+<p>Let's assume <tt class="literal"><span class="pre">:title-reference:</span></tt> is the default interpreted text
+role (see below) for this example:</p>
+<pre class="literal-block">
+`Design Patterns` [GoF95]_ is an excellent read.
+</pre>
+<p>The following document fragment (<a class="reference" href="http://docutils.sourceforge.net/spec/doctree.html#pseudo-xml">pseudo-XML</a>) will result from
+processing:</p>
+<pre class="literal-block">
+&lt;paragraph&gt;
+    &lt;interpreted role=&quot;title-reference&quot;&gt;
+        Design Patterns
+
+    &lt;citation_reference refname=&quot;gof95&quot;&gt;
+        GoF95
+     is an excellent read.
+</pre>
+<p><tt class="literal"><span class="pre">:title-reference:</span></tt> is the default interpreted text role in the
+standard reStructuredText parser.  This means that no explicit role is
+required.  Applications of reStructuredText may designate a different
+default role, in which case the explicit role must be used.</p>
+</div>
+</div>
+</div>
+<hr class="footer"/>
+<div class="footer">
+Generated on: 2005/06/14 11:21:57 CDT.
+Generated by trip.prl release 1.4.3 from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
+</div>
+</body>
+</html>

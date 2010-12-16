@@ -1,0 +1,127 @@
+%META:TOPICINFO{author="PeterThoeny" date="1292481313" format="1.1" version="1.2"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+---+!! <nop>%TOPIC%
+
+This plugin allows processing of reStructuredText input within a TWiki page.
+It accomplishes this task by calling the =trip= reStructuredText parser.
+
+%TOC%
+
+------
+
+---++ Syntax Rules
+
+   * %<nop>RESTSTART{parms}%
+   * %<nop>RESTEND%
+
+The parms that are processed are:
+
+=options="&lt;trip options>"= : A set of options to be passed to the =trip= executable.
+
+=stylesheet="&lt;url>"= : Uses =url= as URL for a stylesheet.
+
+---++ Examples
+
+
+|   *Unrendered, we look like:*   |
+
+<verbatim>
+%RESTSTART%
+A reStructuredText Header
+=========================
+
+This is reStructuredText.  Here I have a **bold block
+with *italics* and ``literal`` nested within it**.
+It has link to `Another Header`_.
+
+Another Header
+==============
+
+This is a second section.
+%RESTEND%
+</verbatim>
+
+|   *With the plugin installed correctly, we look like*   |
+
+%RESTSTART%
+A reStructuredText Header
+=========================
+
+This is reStructuredText.  Here I have a **bold block
+with *italics* and ``literal`` nested within it**.
+It has link to `Another Header`_.
+
+Another Header
+==============
+
+This is a second section.
+%RESTEND%
+
+---++ End of Examples
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>RESTRUCTUREDTEXTPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = This plugin allows processing of reStructuredText input within a TWiki page. It accomplishes this task by calling the =trip= reStructuredText parser.
+
+   * Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
+      * Set DEBUG = 0
+
+   * Set TRIP to give a different path to the =trip= executable.
+      * Set TRIP = /var/www/vhosts/thoeny.org/svn/trunk/ReStructuredTextPlugin/lib/TWiki/Plugins/ReStructuredTextPlugin/trip/bin/trip
+
+   * Set TRIPOPTIONS to specify default options to =trip=.
+      * Set TRIPOPTIONS = -D source_link=0 -D time=0 -D xformoff=DocTitle -D generator=0 -D tabstops=3
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Test if the installation was successful:
+
+%RESTSTART%
+A reStructuredText Header
+=========================
+
+This is reStructuredText.  Here I have a **bold block
+with *italics* and ``literal`` nested within it**.
+It has link to `Another Header`_.
+
+Another Header
+==============
+
+This is a second section.
+%RESTEND%
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.MarkNodine |
+|  Plugin Version: | 19 May 2005 (V1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  19 May 2005: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | trip |
+|  Perl Version: | 5.005 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- TWiki:Main.SteveRJones - 19 May 2005
+
+   * Set ALLOWTOPICCHANGE = Main.MarkNodine
+
+
+%META:TOPICMOVED{by="r4aajl" date="1116362544" from="TWiki.RestructuredTextPlugin" to="TWiki.ReStructuredTextPlugin"}%

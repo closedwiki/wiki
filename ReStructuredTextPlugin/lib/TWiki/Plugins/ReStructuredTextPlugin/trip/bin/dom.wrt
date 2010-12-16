@@ -1,0 +1,69 @@
+# -*-perl-*-
+# Writer for debugging internal structures.
+
+# $Id: dom.wrt 440 2005-05-31 16:14:53Z r31609 $
+
+=pod
+=begin reST
+=begin Description
+This writer dumps out the internal Document Object Model (DOM, also
+known as a doctree) in an indented format known as pseudo-XML.  It
+is useful for checking the results of the parser or transformations.
+It recognizes the following defines:
+
+-W nobackn      Disables placing "\\n\\" at ends of lines that would
+                otherwise end in whitespace.
+=end Description
+=end reST
+=cut
+
+sub package {
+    # My -W flags
+    use vars qw($nobackn);
+
+    # Defaults for -W flags
+    $nobackn = 0 unless defined $nobackn;
+}
+
+phase PROCESS {
+    sub \#PCDATA = {
+	my ($dom, $str) = @_;
+	if (! $nobackn) {
+	    $dom->{text} =~ s/\n\n/\n\\n\\\n/g;
+	    $dom->{text} =~ s/ $/ \\n\\/;
+	}
+	$dom->{text} .= "\n" unless substr($dom->{text},-1) eq "\n";
+	return $dom->{text};
+    }
+
+    sub .* = {
+	my ($dom, $str) = @_;
+	$str =~ s/^/    /mg unless $str eq '';
+	my $attr = defined $dom->{attr} ?
+	    join('',map(qq( $_) . (defined $dom->{attr}{$_} ?
+				   qq(="$dom->{attr}{$_}") : ""),
+			sort keys %{$dom->{attr}})) : '';
+	my $internal = '';
+	if (defined $dom->{internal} && %{$dom->{internal}}) {
+            my $int = $dom->{internal};
+	    $internal = "    .. internal attributes:\n";
+            my $spaces = (" " x 9);
+            $internal .= "$spaces.transform: $int->{'.transform'}\n";
+	    $internal .= "$spaces.details:\n";
+	    my $key;
+	    foreach $key (sort keys %{$int->{'.details'}}) {
+		my $val = $int->{'.details'}{$key};
+		my $string;
+		if (ref($val) eq 'DOM') {
+                    $string = main::ProcessDOM($val);
+		    $string =~ s/^/$spaces    /mg;
+		    $string = "\n$string";
+		} 
+		elsif ($val eq "") { $string = " None\n" }
+		else { $string = " $val\n" }
+		$internal .= "$spaces  $key:$string";
+	    }
+	}
+	return "<$dom->{tag}$attr>\n$str$internal";
+    }
+}

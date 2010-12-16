@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="trip.prl release 1.4.3" />
+<title>Usage of Trip</title>
+<meta name="author" content="Mark Nodine" />
+<meta name="date" content="2005-05-31" />
+<meta name="copyright" content="This document has been placed in the public domain." />
+<link rel="stylesheet" href="http://docutils.sourceforge.net/tools/stylesheets/default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="usage-of-trip">
+<h1 class="title">Usage of Trip</h1>
+<h2 class="subtitle" id="description-of-trip">Description of trip</h2>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr><th class="docinfo-name">Author:</th>
+<td>Mark Nodine</td></tr>
+<tr><th class="docinfo-name">Contact:</th>
+<td><a class="first last reference" href="mailto:mark.nodine&#64;mot.com">mark.nodine&#64;mot.com</a></td></tr>
+<tr><th class="docinfo-name">Revision:</th>
+<td>1.2</td></tr>
+<tr><th class="docinfo-name">Date:</th>
+<td>2005-05-31</td></tr>
+<tr><th class="docinfo-name">Copyright:</th>
+<td>This document has been placed in the public domain.</td></tr>
+</tbody>
+</table>
+<p>/bin</p>
+<div class="contents topic" id="contents">
+<p class="topic-title"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#defines-for-restructuredtext-parser" id="id1" name="id1">Defines for reStructuredText parser</a></li>
+<li><a class="reference" href="#defines-for-restructuredtext-transforms" id="id2" name="id2">Defines for reStructuredText transforms</a></li>
+<li><a class="reference" href="#documentation-for-plug-in-directive-if" id="id3" name="id3">Documentation for plug-in directive 'if'</a></li>
+<li><a class="reference" href="#documentation-for-plug-in-directive-perl" id="id4" name="id4">Documentation for plug-in directive 'perl'</a></li>
+<li><a class="reference" href="#documentation-for-plug-in-directive-system" id="id5" name="id5">Documentation for plug-in directive 'system'</a></li>
+<li><a class="reference" href="#documentation-for-writer-dom" id="id6" name="id6">Documentation for writer 'dom'</a></li>
+<li><a class="reference" href="#documentation-for-writer-html" id="id7" name="id7">Documentation for writer 'html'</a></li>
+<li><a class="reference" href="#documentation-for-writer-index" id="id8" name="id8">Documentation for writer 'index'</a></li>
+<li><a class="reference" href="#documentation-for-writer-latex" id="id9" name="id9">Documentation for writer 'latex'</a></li>
+<li><a class="reference" href="#documentation-for-writer-toc" id="id10" name="id10">Documentation for writer 'toc'</a></li>
+<li><a class="reference" href="#documentation-for-writer-xref" id="id11" name="id11">Documentation for writer 'xref'</a></li>
+</ul>
+</div>
+<p>This document gives the description and usage for the trip parser.  It
+is compiled by running <tt class="literal"><span class="pre">trip</span> <span class="pre">-h</span></tt> using a <tt class="literal"><span class="pre">system::</span></tt> directive.</p>
+<hr />
+<p>This program converts the DocUtils reStructuredText or
+Document Object Model (DOM) (aka pseudo-XML) formats into an output
+format.  The default output format is HTML, but different formats can
+be specified by using different writer schemas.</p>
+<p>Usage: trip [options] file(s)</p>
+<dl>
+<dt>Options:</dt>
+<dd><table class="option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td>
+<kbd><span class="option">-d</span></kbd></td>
+<td>Print debugging info on STDERR.  May be used multiple
+times to get more information.</td></tr>
+<tr><td>
+<kbd><span class="option">-h</span></kbd></td>
+<td>Print full usage help</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-w</span> <var>&lt;writer&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Process the writer schema from &lt;writer&gt;.wrt (default 'html')</td></tr>
+<tr><td>
+<kbd><span class="option">-D</span> <var>var[=val]</var></kbd></td>
+<td>Define a variable that affects parsing (may be multiple)</td></tr>
+<tr><td>
+<kbd><span class="option">-W</span> <var>var[=val]</var></kbd></td>
+<td>Define a variable that affects a writer (may be multiple)</td></tr>
+<tr><td>
+<kbd><span class="option">-V</span></kbd></td>
+<td>Print version info</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p>Available writers: dom, html, index, latex, toc, xref.</p>
+<div class="section" id="defines-for-restructuredtext-parser">
+<h1><a class="toc-backref" href="#id1" name="defines-for-restructuredtext-parser">Defines for reStructuredText parser</a></h1>
+<table class="option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>align=&lt;0|1&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Allow inferring right/center alignment in
+single line simple table cells (default is 1).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>entryattr=&lt;text&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specifies attributes to be passed to table entry
+(default is '').  Note: this option can be
+changed on the fly within a table by using a perl
+directive to set $main::opt_D{entryattr}.</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>includeext=&lt;text&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>A colon-separated list of extensions to check for
+included files.  Default is &quot;:.rst:.txt&quot;.</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>includepath=&lt;text&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>A colon-separated list of directories for the
+include directive to search.  The special token
+&quot;&lt;.&gt;&quot; represents the directory of the file 
+containing the directive (which may not be the
+same as the directory in which trip is invoked, &quot;.&quot;.
+Default is &quot;&lt;.&gt;&quot;.</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>nestinline[=&lt;0|1&gt;]</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify whether to allow nesting of inline markup.
+There are some limitations, like strong cannot be
+nested within emphasis.
+Default is 1 (1 if specified with no value).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>perlpath=&lt;text&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>A colon-separated list of directories to search
+for Perl modules.  The special token &quot;&lt;INC&gt;&quot; 
+represents the default Perl include path.
+Default is &quot;&lt;INC&gt;&quot;.</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>report=&lt;level&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Set verbosity threshold; report system messages
+at or higher than &lt;level&gt; (by name or number:
+&quot;info&quot; or &quot;1&quot;, warning/2, error/3, severe/4; 
+also, &quot;none&quot; or 5).  Default is 2 (warning).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>rowattr=&lt;text&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specifies attributes to be passed to table rows
+(default is '').  Note: this option can be
+changed on the fly within a table by using a perl
+directive to set $main::opt_D{rowattr}.</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>source=&lt;text&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Overrides the file name as the source.</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>tableattr=&lt;text&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specifies attributes to be passed to tables (default
+is 'class=&quot;table&quot; frame=&quot;border&quot; rules=&quot;all&quot;'). 
+Note: this option can be changed on the fly to
+have tables with different characteristics by
+using a perl directive to set
+$main::opt_D{tableattr}.</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>tabstops=&lt;num&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specifies that tab characters are assumed to tab
+out to every &lt;num&gt; characters (default is 8).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>xformoff=&lt;regexp&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Turns off default transforms matching regexp.
+(Used for internal testing.)</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="defines-for-restructuredtext-transforms">
+<h1><a class="toc-backref" href="#id2" name="defines-for-restructuredtext-transforms">Defines for reStructuredText transforms</a></h1>
+<table class="option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>generator=&lt;0|1&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Include a &quot;Generated by&quot; credit at the end of
+the document (default is 1).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>date=&lt;0|1&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Include the date at the end of the document
+(default is 0).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>time=&lt;0|1&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Include the date and time at the end of the
+document (default is 1, overrides date if 1).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>source_link=&lt;0|1&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Include a &quot;View document source&quot; link (default
+is 1).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>source_url=&lt;URL&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Use the supplied &lt;URL&gt; verbatim for a &quot;View
+document source&quot; link; implies -D source_link=1.</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>keep_title_section</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Keeps the section intact from which the document
+title is taken.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="documentation-for-plug-in-directive-if">
+<h1><a class="toc-backref" href="#id3" name="documentation-for-plug-in-directive-if">Documentation for plug-in directive 'if'</a></h1>
+<p>Executes its argument as a perl expression and returns its
+content if the perl expression is true.  The content is
+interpreted as reStructuredText.  It has no options. It processes
+the following defines:</p>
+<table class="option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>perl='perl-code'</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td><p class="first">Specifies some perl code that is executed prior
+to evaluating the first perl directive.  This
+option can be used to specify variables on the
+command line; for example:</p>
+<pre class="literal-block">
+-D perl='$a=1; $b=2'
+</pre>
+<p class="last">defines constants <tt class="literal"><span class="pre">$a</span></tt> and <tt class="literal"><span class="pre">$b</span></tt> that can
+be used in the perl expression.</p>
+</td></tr>
+<tr><td>
+<kbd><span class="option">-D</span> <var>trusted</var></kbd></td>
+<td>Must be specified for if directives to use any
+operators normally masked out in a Safe environment.
+This requirement is to prevent an if directive in a
+file written elsewhere from doing destructive things
+on your computer.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="documentation-for-plug-in-directive-perl">
+<h1><a class="toc-backref" href="#id4" name="documentation-for-plug-in-directive-perl">Documentation for plug-in directive 'perl'</a></h1>
+<p>Executes perl code and interpolates the results.  The code can be
+contained either in the arguments or the contents section (or
+both). It has an option which determines how the returned value
+is interpreted:</p>
+<dl>
+<dt><tt class="literal"><span class="pre">:literal:</span></tt></dt>
+<dd>Interpret the returned value as a literal block.</dd>
+</dl>
+<p>If this option is not present, the return value is interpreted
+based on its type.  If you return a text string, the text is
+interpreted as reStructuredText and is parsed again.  If you
+return an internal DOM object (or list of them), the object is
+included directly into the parsed DOM structure.  (This latter
+option requires knowledge of trip internals, but is the only way
+to create a pending DOM object for execution at transformation
+time rather than parse time.)</p>
+<p>The perl directive defines the following global variables:</p>
+<dl>
+<dt><tt class="literal"><span class="pre">$SOURCE</span></tt></dt>
+<dd>The name of the source file containing the perl directive.</dd>
+<dt><tt class="literal"><span class="pre">$LINENO</span></tt></dt>
+<dd>The line number of the perl directive within $SOURCE.</dd>
+<dt><tt class="literal"><span class="pre">$opt_&lt;x&gt;</span></tt></dt>
+<dd>The <tt class="literal"><span class="pre">&lt;x&gt;</span></tt> option from the command line.</dd>
+<dt><tt class="literal"><span class="pre">$TOP_FILE</span></tt></dt>
+<dd>The name of the top-level file.</dd>
+<dt><tt class="literal"><span class="pre">$VERSION</span></tt></dt>
+<dd>The version of trip.</dd>
+</dl>
+<p>The following defines are processed by the perl directive:</p>
+<table class="option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td colspan="2">
+<kbd><span class="option">-D</span> <var>perl='perl-code'</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td><p class="first">Specifies some perl code that is executed prior
+to evaluating the first perl directive.  This
+option can be used to specify variables on the
+command line; for example:</p>
+<pre class="literal-block">
+-D perl='$a=1; $b=2'
+</pre>
+<p class="last">defines constants <tt class="literal"><span class="pre">$a</span></tt> and <tt class="literal"><span class="pre">$b</span></tt> that can
+be used in a perl block.</p>
+</td></tr>
+<tr><td>
+<kbd><span class="option">-D</span> <var>trusted</var></kbd></td>
+<td>Must be specified for perl directives to use any
+operators normally masked out in a Safe environment.
+This requirement is to prevent a perl directive in a
+file written elsewhere from doing destructive things
+on your computer.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="documentation-for-plug-in-directive-system">
+<h1><a class="toc-backref" href="#id5" name="documentation-for-plug-in-directive-system">Documentation for plug-in directive 'system'</a></h1>
+<p>Executes a system (shell) command and interpolates the results.
+It has an option which determines how the returned value is
+interpreted:</p>
+<dl>
+<dt><tt class="literal"><span class="pre">:literal:</span></tt></dt>
+<dd>Interpret the returned value as a literal block.</dd>
+</dl>
+<p>If this option is not present, the return value is interpreted
+as reStructuredText and is parsed again.</p>
+<p>Any error returned by the shell generates a level 3 error message.  To see
+the output of a command that is expected to generate an error, do:</p>
+<pre class="literal-block">
+.. system:: &lt;your command&gt; 2&gt;&amp;1 | cat
+</pre>
+<p>The following defines are processed by the system directive:</p>
+<table class="option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td>
+<kbd><span class="option">-D</span> <var>trusted</var></kbd></td>
+<td>Must be specified for system directives to be 
+processed.  This requirement is to prevent a system
+directive in a file written elsewhere from doing
+destructive things on your computer.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="documentation-for-writer-dom">
+<h1><a class="toc-backref" href="#id6" name="documentation-for-writer-dom">Documentation for writer 'dom'</a></h1>
+<p>This writer dumps out the internal Document Object Model (DOM, also
+known as a doctree) in an indented format known as pseudo-XML.  It
+is useful for checking the results of the parser or transformations.
+It recognizes the following defines:</p>
+<table class="option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td>
+<kbd><span class="option">-W</span> <var>nobackn</var></kbd></td>
+<td>Disables placing &quot;\n\&quot; at ends of lines that would
+otherwise end in whitespace.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="documentation-for-writer-html">
+<h1><a class="toc-backref" href="#id7" name="documentation-for-writer-html">Documentation for writer 'html'</a></h1>
+<p>This writer creates HTML output.
+It uses the following output defines:</p>
+<table class="option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>bodyattr=&lt;text&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specifies attributes to be passed to the &lt;body&gt;
+tag (default is '').</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>footnote_backlinks=&lt;0|1&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Enable backlinks from footnotes and citations
+to their references if 1 (default is 1).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>html_prolog=&lt;0|1&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Generate file prolog for XHTML if 0 or
+HTML if 1 (default is 0).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>stylesheet=&lt;URL&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify a stylesheet URL, used verbatim
+(default is &quot;<a class="reference" href="http://docutils.sourceforge.net/tools/stylesheets/default.css">http://docutils.sourceforge.net/tools/stylesheets/default.css</a>&quot;).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>link_target=&lt;expr&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>An expression that determines what the target
+frame will be in link references.  The
+link URL is available in <tt class="literal"><span class="pre">$_</span></tt> so that the
+target frame can depend upon the URL
+(default is &quot;&quot;).</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="documentation-for-writer-index">
+<h1><a class="toc-backref" href="#id8" name="documentation-for-writer-index">Documentation for writer 'index'</a></h1>
+<p>This writer dumps index entries from one or more input files out
+in reST format. An index is either an inline internal target or an
+indirect target that points to an inline internal target.  The
+index writer sorts indices from all input files and put them into
+a table. Each row of the table contains an index entry and the
+location of the entry in the html version of the source file. An
+entry is also a reference to the definition in the corresponding
+html file.</p>
+<p>This writer uses the following output defines:</p>
+<table class="option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>file_suffix=&lt;suffix&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify a file suffix to be used for
+the html version of the source files
+(default is &quot;html&quot;).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>filename_ext=&lt;ext&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify an extension to the filename,
+(e.g. &quot;_main&quot;) so the location of
+targets becomes &lt;file&gt;&lt;ext&gt;.&lt;suffix&gt;
+(default is &quot;&quot;).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>short_titles=&lt;0|1&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify that short titles should be used
+in the index (default is 1).</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="documentation-for-writer-latex">
+<h1><a class="toc-backref" href="#id9" name="documentation-for-writer-latex">Documentation for writer 'latex'</a></h1>
+<p>This writer creates an output in LaTeX format.
+It uses the following output defines:</p>
+<table class="option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>caption=&lt;after|before&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify that a figure caption should appear
+after or before the figure (default is &quot;after&quot;).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>documentstyle=&lt;text&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify documentstyle for the output
+(default is &quot;article&quot;).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>documentstyle_opts=&lt;text&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify the options for the documentstyle
+command (default is &quot;&quot;).</td></tr>
+<tr><td>
+<kbd><span class="option">-W</span> <var>footer[=1]</var></kbd></td>
+<td>If 1, specify that the footer decoration 
+generated by the RST transform should be
+included in the document (default is 0).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>footnote_links[=1]</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>If 1, specify that link URIs should be placed
+into footnotes (default is 0).</td></tr>
+<tr><td>
+<kbd><span class="option">-W</span> <var>index[=1]</var></kbd></td>
+<td>If 1, specify that an index should be created
+from inline targets and indirect references
+to them (default is 0).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>inputs=&lt;list&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify comma-separated list of files to \input</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>max_unwrapped_colsize</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>The maximum length of a string in a
+column of a table without forcing the
+width of the column and turning on
+wrapping for the entry.  Setting it to 0 
+ensures that all tables will be exactly
+the width of the text, even if the table's
+natural width may be smaller. Setting it
+too large may result in tables that
+overflow the column boundary (default is 8).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>sidebar=&lt;margin|float&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Whether a sidebar should be processed as
+a paragraph in the margin or as a
+floating box within the text.
+Processing as a margin paragraph
+requires that \marginparwidth have a
+reasonable value and may require a raw
+directive with a \vspace -&lt;dist&gt; at the
+top to keep it from running off the page
+(default is &quot;float&quot;).</td></tr>
+</tbody>
+</table>
+<p>There are a number of commands defined which specify default
+styles for rendering various items.  These default styles can be
+overridden by putting \renewcommand definitions for them into
+some file.tex and then invoking with <tt class="literal"><span class="pre">-W</span> <span class="pre">inputs=file</span></tt>.  These
+commands are</p>
+<dl>
+<dt>\styleadmonitiontitle</dt>
+<dd>Argument: the title (type) of the admonition.  Default is
+centered boldface followed by a colon.</dd>
+<dt>\styleauthor</dt>
+<dd>Argument: an author.  Default is emphasized.</dd>
+<dt>\stylefieldname</dt>
+<dd>Argument: the name of a field.  Default is boldface followed
+by a colon.</dd>
+<dt>\stylelegendtitle</dt>
+<dd>Argument: the word &quot;Legend&quot;.  Default is boldface followed
+by a colon.</dd>
+<dt>\styleoption</dt>
+<dd>Arguments: the option string, the option argument(s) (may be
+null). Default is teletype option string followed by
+non-breaking space and italic option argument(s).</dd>
+<dt>\stylesidebartitles</dt>
+<dd>Arguments: the title for a sidebar, the subtitle for a sidebar
+(may be null).  Default is centered boldface title followed by
+centered italic subtitle.  Is not invoked if sidebar's title
+is null.</dd>
+<dt>\styleterm</dt>
+<dd>Arguments: description term, description classifier (may be null).
+Default is italic term followed by italic &quot;: classifier&quot; if
+the classifier is not null.</dd>
+<dt>\styletitle</dt>
+<dd>Arguments: the document's title, the document's subtitle (may
+be null).  Default is the title followed by &quot;:&quot;, a newline and
+the subtitle in a smaller font, if the subtitle is not null.</dd>
+<dt>\styletopictitle</dt>
+<dd>Arguments: the title of a topic.  Default is bold face.</dd>
+</dl>
+<p>It is probably easiest to define these by first creating a .tex
+file with the writer and then copying the definition you want to
+modify from the top of the generated file into your style file,
+changing the &quot;\newcommand&quot; to &quot;\renewcommand&quot; and supplanting
+the definition.</p>
+</div>
+<div class="section" id="documentation-for-writer-toc">
+<h1><a class="toc-backref" href="#id10" name="documentation-for-writer-toc">Documentation for writer 'toc'</a></h1>
+<p>This writer creates table of content (TOC) for one or more
+reStructuredText documents. The output includes section headers
+from the source files organized into lists, one per top level
+section. The TOC entries are references to the corresponding
+sections in the source documents.</p>
+<p>This writer uses the following output defines:</p>
+<table class="option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>file_suffix=&lt;suffix&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify a file suffix to be used as the 
+targets of TOC entries (default is &quot;html&quot;).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>filename_ext=&lt;ext&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify an extension to the filename,
+(e.g. &quot;_main&quot;) so the file location of
+targets becomes &lt;file&gt;&lt;ext&gt;.&lt;suffix&gt;
+(default is &quot;&quot;).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>depth=&lt;positive_integer&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify the depth of TOC, with 1 corresponding to
+the top level sections (default is 99).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>symbol=&lt;header_marking_character&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>If specified, the writer uses the symbol to create
+additional headers for the document titles.
+(default is &quot;&quot;, no headers created).
+This output define overwrites <tt class="literal"><span class="pre">-W</span> <span class="pre">exclude_top=1</span></tt>. 
+If a document does not have a title, use the
+document source bare name instead.</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>include_noheader=&lt;0|1&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>If set to 1, the writer includes in the TOC 
+the document source bare name for any document 
+that does not have a header
+(default is 0, do not include).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>exclude_top=&lt;0|1&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify whether the top level section headers 
+should be excluded from the TOC (default is 0,
+do not exclude). This has no effect if <tt class="literal"><span class="pre">-W</span> <span class="pre">symbol='&lt;char&gt;'</span></tt> is present.</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>top_in_list=&lt;0|1&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify whether the top level section headers
+should be part of the list with other section 
+headers (default is 0, top level header being 
+outside of the list). This has no effect if 
+the top level headers are excluded.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="documentation-for-writer-xref">
+<h1><a class="toc-backref" href="#id11" name="documentation-for-writer-xref">Documentation for writer 'xref'</a></h1>
+<p>This writer exports cross reference targets defined in the source
+reStructuredText (reST) file. The output is in reST format and
+includes:</p>
+<ol class="arabic">
+<li><p class="first">All non-anonymous internal targets, exported as</p>
+<pre class="literal-block">
+.. &lt;targetName&gt;: &lt;sourceFileName&gt;&lt;ext&gt;.&lt;suffix&gt;#&lt;targetID&gt;
+</pre>
+</li>
+<li><p class="first">All citations, exported as:</p>
+<pre class="literal-block">
+.. &lt;citationName&gt;: &lt;sourceFileName&gt;&lt;ext&gt;.&lt;suffix&gt;#&lt;citationID&gt;
+</pre>
+</li>
+<li><p class="first">Substitution definitions that have the same names as internal
+targets but do not, directly or indirectly through substitution
+references, define internal target or refer to external
+references or footnotes.</p>
+</li>
+<li><p class="first">Definition of substitutions referred to by the substitutions
+exported according to 3. Substitution definitions are exported
+as defined in the source file.</p>
+</li>
+</ol>
+<p>This writer uses the following output definitions:</p>
+<table class="option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>file_suffix=&lt;suffix&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify a file suffix to be used for
+exporting the cross reference targets
+(default is html).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>filename_ext=&lt;ext&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify an extension to the filename,
+(e.g. &quot;_main&quot;) so the file location of
+targets becomes &lt;file&gt;&lt;ext&gt;.&lt;suffix&gt;
+(default is &quot;&quot;).</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>file_path=&lt;dir&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify additional path information for
+the target file (default is &quot;&quot;)</td></tr>
+<tr><td colspan="2">
+<kbd><span class="option">-W</span> <var>sprintf=&lt;string&gt;</var></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Specify an sprintf string for formatting the
+output definitions (default is &quot;%s&quot;).</td></tr>
+</tbody>
+</table>
+<!-- Local Variables:
+mode: indented-text
+indent-tabs-mode: nil
+sentence-end-double-space: t
+fill-column: 70
+End: -->
+</div>
+</div>
+<hr class="footer"/>
+<div class="footer">
+Generated on: 2005/06/14 11:23:04 CDT.
+Generated by trip.prl release 1.4.3 from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
+</div>
+</body>
+</html>

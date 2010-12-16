@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="trip.prl release 1.4.3" />
+<title>How to Extend Trip</title>
+<meta name="author" content="Mark Nodine" />
+<meta name="date" content="2005-05-31" />
+<meta name="copyright" content="This document has been placed in the public domain." />
+<link rel="stylesheet" href="http://docutils.sourceforge.net/tools/stylesheets/default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="how-to-extend-trip">
+<h1 class="title">How to Extend Trip</h1>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr><th class="docinfo-name">Author:</th>
+<td>Mark Nodine</td></tr>
+<tr><th class="docinfo-name">Contact:</th>
+<td><a class="first last reference" href="mailto:mark.nodine&#64;mot.com">mark.nodine&#64;mot.com</a></td></tr>
+<tr><th class="docinfo-name">Revision:</th>
+<td>1.3</td></tr>
+<tr><th class="docinfo-name">Date:</th>
+<td>2005-05-31</td></tr>
+<tr><th class="docinfo-name">Copyright:</th>
+<td>This document has been placed in the public domain.</td></tr>
+</tbody>
+</table>
+<p>/_TOOLS_/plat/perl-5.6.1-twiki/bin:/bin</p>
+<div class="contents topic" id="contents">
+<p class="topic-title"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#adding-new-directives" id="id3" name="id3">Adding New Directives</a></li>
+<li><a class="reference" href="#adding-new-writers" id="id4" name="id4">Adding New Writers</a></li>
+<li><a class="reference" href="#footnotes" id="id5" name="id5">Footnotes</a></li>
+</ul>
+</div>
+<p>This document explains how to write new modules to extend trip.  There
+are two principal mechanisms by which trip can be extended: adding new
+plug-in directives and adding new writers.  For either of these tasks,
+the programmer should be familiar with the <a class="reference" href="tripinternals.html#dom">DOM</a> data structure and the
+<a class="reference" href="tripinternals.html#dom-pm">DOM.pm</a> subroutines.</p>
+<div class="section" id="adding-new-directives">
+<h1><a class="toc-backref" href="#id3" name="adding-new-directives">Adding New Directives</a></h1>
+<p>To add a plug-in directive, the programmer should be familiar with the
+RST::Directive:: routines starting with <a class="reference" href="tripinternals.html#rstdirectivearg-check">RST::Directive::arg_check</a>,
+as well as the RST:: routines <a class="reference" href="tripinternals.html#rstsystem-message">RST::system_message</a> and
+<a class="reference" href="tripinternals.html#rstparagraph">RST::Paragraph</a>.</p>
+<p>A plug-in directive can be added by creating a Perl module with the
+same name as the directive (with a &quot;.pm&quot; extension, of course).  The
+Perl module must have a BEGIN block which registers the routine to
+call to process the directive using
+<a class="reference" href="tripinternals.html#rstdirectivehandle-directive">RST::Directive::handle_directive</a>.</p>
+<p>As an example from the <tt class="literal"><span class="pre">if</span></tt> plug-in directive,</p>
+<pre class="literal-block">
+BEGIN {
+    RST::Directive::handle_directive('if', \&amp;RST::Directive::if::main);
+}
+</pre>
+<p>Whatever routine you designate will get called with the following
+arguments:</p>
+<blockquote>
+<dl>
+<dt><em><tt class="literal"><span class="pre">$name</span></tt></em>:</dt>
+<dd>The directive name.  This argument is useful if you use the same
+routine to process more than one directive with different names.</dd>
+<dt><em><tt class="literal"><span class="pre">$parent</span></tt></em>:</dt>
+<dd>Pointer to the parent DOM object.  It is needed to add new DOM objects
+to the parent's contents.</dd>
+<dt><em><tt class="literal"><span class="pre">$source</span></tt></em>:</dt>
+<dd>A string indicating the source for the directive.  If you call
+<a class="reference" href="tripinternals.html#rstparagraphs">RST::Paragraphs</a> to parse reStructuredText recursively, you
+should supply it a source like &quot;$name directive at $source, line $lineno&quot;.</dd>
+<dt><em><tt class="literal"><span class="pre">$lineno</span></tt></em>:</dt>
+<dd>The line number indicating where in the source this directive
+appears.</dd>
+<dt><em><tt class="literal"><span class="pre">$dtext</span></tt></em>:</dt>
+<dd>The directive text in a format suitable for parsing by
+<a class="reference" href="tripinternals.html#rstdirectiveparse-directive">RST::Directive::parse_directive</a>.  It consists of only the
+arguments, options, and content sections.</dd>
+<dt><em><tt class="literal"><span class="pre">$lit</span></tt></em>:</dt>
+<dd>The complete literal text of the explicit markup containing the
+directive.  Used for generating error messages.</dd>
+</dl>
+</blockquote>
+<p>The directive's routine will return any DOM objects representing system
+messages.  It will also likely produce side-effects by appending new
+DOM objects to the parent object's contents.</p>
+<p>The first thing the directive's routine will usually do is to call
+<a class="reference" href="tripinternals.html#rstdirectiveparse-directive">RST::Directive::parse_directive</a> as follows:</p>
+<pre class="literal-block">
+    my $dhash = RST::Directive::parse_directive($dtext, $lit, $source, $lineno);
+</pre>
+<p>It is recommended that if the directive encounters any parse errors
+(wrong number of arguments, does/does not contain content, etc.), that
+it return a system_message DOM object formatted with
+<a class="reference" href="tripinternals.html#rstdirectivesystem-message">RST::Directive::system_message</a> to label the message as having come
+from the specific directive.</p>
+<p>It is also up to the package to provide the documentation that appears
+when the user runs <tt class="literal"><span class="pre">trip</span> <span class="pre">-h</span></tt>.  Any comment in the perl module within
+a <tt class="literal"><span class="pre">=begin</span> <span class="pre">Description</span></tt> .. <tt class="literal"><span class="pre">=end</span> <span class="pre">Description</span></tt> section of a Perl POD
+section is printed for the module's help.  For example, here is the
+help documentation from the <tt class="literal"><span class="pre">if</span></tt> directive:</p>
+<pre class="literal-block">
+=pod
+=begin reST
+=begin Description
+Executes its argument as a perl expression and returns its
+content if the perl expression is true.  The content is
+interpreted as reStructuredText.  It has no options. It processes
+the following defines:
+
+-D perl='perl-code'
+                Specifies some perl code that is executed prior
+                to evaluating the first perl directive.  This
+                option can be used to specify variables on the
+                command line; for example::
+
+                  -D perl='$a=1; $b=2'
+
+                defines constants ``$a`` and ``$b`` that can
+                be used in the perl expression.
+-D trusted      Must be specified for if directives to use any
+                operators normally masked out in a Safe environment.
+                This requirement is to prevent an if directive in a
+                file written elsewhere from doing destructive things
+                on your computer.
+=end Description
+=end reST
+=cut
+</pre>
+<div class="note">
+<p class="admonition-title">Note</p>
+The help text should parse correctly as reStructuredText, since it
+is passed through trip to create the web documentation.</div>
+</div>
+<div class="section" id="adding-new-writers">
+<h1><a class="toc-backref" href="#id4" name="adding-new-writers">Adding New Writers</a></h1>
+<p>The output from a writer is generated by traversing the <a class="reference" href="tripinternals.html#dom">DOM</a> tree
+recursively.  There can be multiple phases of traversal, and the value
+produced by the top-level DOM object in the final phase is what
+actually gets written to the output.</p>
+<p>Each writer exists in a file that is the writer's name with the
+extension <tt class="literal"><span class="pre">.wrt</span></tt>.  A <tt class="literal"><span class="pre">.wrt</span></tt> file has a special write schema
+format specifically designed to make development of writers easy.
+Here is a BNF for the <a class="target" id="write-schema" name="write-schema">write schema</a> file format:</p>
+<pre class="literal-block">
+parser := phase_list
+phase_list := phase_desc | phase_list phase_desc
+phase_desc := phase id eq '{' NL sub_list NL '}' NL
+phase := 'phase' |
+eq := '=' |
+sub_list := sub_desc | sub_list sub_desc
+sub_desc := sub id eq '{' NL perl_code NL '}' NL
+sub := 'sub' |
+</pre>
+<p>An <tt class="literal"><span class="pre">id</span></tt> is any sequence of non-space characters.  <tt class="literal"><span class="pre">NL</span></tt> is a newline.
+<tt class="literal"><span class="pre">perl_code</span></tt> is the perl code for a subroutine.  Note that the words
+&quot;phase&quot; and &quot;sub&quot; are optional, as is the equal sign (&quot;=&quot;) between the
+<tt class="literal"><span class="pre">id</span></tt> and the open brace.</p>
+<p>The id's associated with phases are arbitrary.  The phases are
+executed in the order they appear in the file. <a class="footnote-reference" href="#id2" id="id1" name="id1"><sup>1</sup></a> The names of the
+subroutines are regular expressions to match the <tt class="literal"><span class="pre">tag</span></tt> field in the
+<a class="reference" href="tripinternals.html#dom">DOM</a> structure.  The first subroutine in the phase whose regular
+expression matches the <tt class="literal"><span class="pre">tag</span></tt> field of the DOM object to be processed
+is the one that is called, and is referred to as the handler for that
+tag.  The handlers are called doing a post-order traversal of the
+tree; in other words, once all of the children (members of the
+<tt class="literal"><span class="pre">content</span></tt> field) of a DOM object have had their handler called,
+the DOM's own handler is called.  The arguments of the subroutine are:</p>
+<blockquote>
+<dl>
+<dt><tt class="literal"><span class="pre">$dom</span></tt>:</dt>
+<dd>A reference to the DOM object being processed.</dd>
+<dt><tt class="literal"><span class="pre">$str</span></tt>:</dt>
+<dd>The concatenation of the strings returned by the handlers of all
+the children of the DOM object being processed.</dd>
+<dt><tt class="literal"><span class="pre">$parent</span></tt>:</dt>
+<dd>A reference to the parent of the DOM object.</dd>
+</dl>
+</blockquote>
+<p>The subroutine needs to return a string that is the combined result of
+processing all the layers from the DOM on down (assisted, of course,
+by the <tt class="literal"><span class="pre">$str</span></tt> argument).  The result returned by the subroutine gets
+cached in the <tt class="literal"><span class="pre">val</span></tt> field of the DOM object for future use, as well
+as being propagated as part of the <tt class="literal"><span class="pre">$str</span></tt> argument of the parent's
+handler routine.</p>
+<p>Options to the writer can be specified using a -W define, which has
+the format</p>
+<pre class="literal-block">
+-W var[=val]
+</pre>
+<p>If no value is supplied, then the value defaults to 1.  Any such
+defines become available to the writer directly in a variable <tt class="literal"><span class="pre">$var</span></tt>.</p>
+<p>As an example, here is the code for the dom writer:</p>
+<pre class="literal-block">
+phase PROCESS {
+    sub \#PCDATA = {
+	my ($dom, $str) = &#64;_;
+	if (! $nobackn) {
+	    $dom-&gt;{text} =~ s/\n\n/\n\\n\\\n/g;
+	    $dom-&gt;{text} =~ s/ $/ \\n\\/;
+	}
+	$dom-&gt;{text} .= &quot;\n&quot; unless substr($dom-&gt;{text},-1) eq &quot;\n&quot;;
+	return $dom-&gt;{text};
+    }
+
+    sub .* = {
+	my ($dom, $str) = &#64;_;
+	$str =~ s/^/    /mg unless $str eq '';
+	my $attr = defined $dom-&gt;{attr} ?
+	    join('',map(qq( $_) . (defined $dom-&gt;{attr}{$_} ?
+				   qq(=&quot;$dom-&gt;{attr}{$_}&quot;) : &quot;&quot;),
+			sort keys %{$dom-&gt;{attr}})) : '';
+	my $internal = '';
+	if (defined $dom-&gt;{internal} &amp;&amp; %{$dom-&gt;{internal}}) {
+            my $int = $dom-&gt;{internal};
+	    $internal = &quot;    .. internal attributes:\n&quot;;
+            my $spaces = (&quot; &quot; x 9);
+            $internal .= &quot;$spaces.transform: $int-&gt;{'.transform'}\n&quot;;
+	    $internal .= &quot;$spaces.details:\n&quot;;
+	    my $key;
+	    foreach $key (sort keys %{$int-&gt;{'.details'}}) {
+		my $val = $int-&gt;{'.details'}{$key};
+		my $string;
+		if (ref($val) eq 'DOM') {
+                    $string = main::ProcessDOM($val);
+		    $string =~ s/^/$spaces    /mg;
+		    $string = &quot;\n$string&quot;;
+		} 
+		elsif ($val eq &quot;&quot;) { $string = &quot; None\n&quot; }
+		else { $string = &quot; $val\n&quot; }
+		$internal .= &quot;$spaces  $key:$string&quot;;
+	    }
+	}
+	return &quot;&lt;$dom-&gt;{tag}$attr&gt;\n$str$internal&quot;;
+    }
+}
+</pre>
+<p>This example is perhaps not typical, since it needs to call the
+internal <a class="reference" href="tripinternals.html#mainprocessdom">main::ProcessDOM</a> routine in order to process the DOM
+objects in the internal <tt class="literal"><span class="pre">.details</span></tt> field of the DOM; most writers
+should have no need to do so.</p>
+<p>It is also up to the writer to provide the documentation that appears
+when the user runs <tt class="literal"><span class="pre">trip</span> <span class="pre">-h</span></tt>.  Any comment in the writer appearing
+in a POD (Perl's Plain-Old-Documentation) Description section is
+printed for the writer's help.  For example, here is the help
+documentation from the <tt class="literal"><span class="pre">dom</span></tt> writer:</p>
+<pre class="literal-block">
+=pod
+=begin reST
+=begin Description
+This writer dumps out the internal Document Object Model (DOM, also
+known as a doctree) in an indented format known as pseudo-XML.  It
+is useful for checking the results of the parser or transformations.
+It recognizes the following defines:
+
+-W nobackn      Disables placing &quot;\\n\\&quot; at ends of lines that would
+                otherwise end in whitespace.
+=end Description
+=end reST
+=cut
+</pre>
+<div class="note">
+<p class="admonition-title">Note</p>
+The help text should parse correctly as reStructuredText, since it
+is passed through trip to create the web documentation.</div>
+</div>
+<div class="section" id="footnotes">
+<h1><a class="toc-backref" href="#id5" name="footnotes">Footnotes</a></h1>
+<table class="footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1" name="id2">[1]</a></td><td>If the same phase name is repeated later in the file, its
+subroutine definitions are appended to those of the phase and
+run at the earlier position.</td></tr>
+</tbody>
+</table>
+<!-- Local Variables:
+mode: indented-text
+indent-tabs-mode: nil
+sentence-end-double-space: t
+fill-column: 70
+End: -->
+</div>
+</div>
+<hr class="footer"/>
+<div class="footer">
+Generated on: 2005/06/14 11:22:29 CDT.
+Generated by trip.prl release 1.4.3 from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
+</div>
+</body>
+</html>

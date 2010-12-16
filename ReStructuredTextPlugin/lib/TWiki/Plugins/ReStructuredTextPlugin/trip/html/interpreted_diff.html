@@ -1,0 +1,489 @@
+Key: <S><FONT COLOR=#800000>Deleted text.</FONT></S>
+<U><FONT COLOR=#008000>Inserted text.</FONT></U>
+Use <A HREF='#'><font color=orange>&lt;</font></A> and <A HREF='#__diff1'><font color=orange>&gt;</font></A> to jump to previous/next difference region.
+<hr />
+<A HREF='#__diff1' NAME='__diff0'><font color=orange>&gt;</font></A> <?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.8: http://docutils.sourceforge.net/" />
+<title>reStructuredText Interpreted Text Roles</title>
+<meta name="author" content="David Goodger" />
+<meta name="date" content="2004-11-06 21:49:55 +0100 (Sat, 06 Nov 2004)" />
+<meta name="copyright" content="This document has been placed in the public domain." />
+<link rel="stylesheet" href="../../../tools/stylesheets/default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="restructuredtext-interpreted-text-roles">
+<h1 class="title">reStructuredText Interpreted Text Roles</h1>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr><th class="docinfo-name">Author:</th>
+<td>David Goodger</td></tr>
+<tr><th class="docinfo-name"><A HREF='#__diff0' NAME='__diff1'><font color=orange>&lt;</font></A> <A HREF='#__diff2'><font color=orange>&gt;</font></A> <S><FONT COLOR=#800000>Author:</FONT></S></th>
+<td><S><FONT COLOR=#800000>Mark Nodine (for doctrip-specific implementation)</FONT></S></td></tr>
+<tr><th class="docinfo-name">Contact:</th>
+<td><a class="first last reference" href="mailto:goodger&#64;users.sourceforge.net">goodger&#64;users.sourceforge.net</a><A HREF='#__diff1' NAME='__diff2'><font color=orange>&lt;</font></A> <A HREF='#__diff3'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>( mark.nodine&#64;mot.com )</FONT></S> </td></tr>
+<tr><th class="docinfo-name">Revision:</th>
+<td><A HREF='#__diff2' NAME='__diff3'><font color=orange>&lt;</font></A> <A HREF='#__diff4'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>1.11</FONT></S> <U><FONT COLOR=#008000>2822</FONT></U></td></tr>
+<tr><th class="docinfo-name">Date:</th>
+<td><A HREF='#__diff3' NAME='__diff4'><font color=orange>&lt;</font></A> <A HREF='#__diff5'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>2005-04-19</FONT></S> <U><FONT COLOR=#008000>2004-11-06 21:49:55 +0100 (Sat, 06 Nov 2004)</FONT></U></td></tr>
+<tr><th class="docinfo-name">Copyright:</th>
+<td>This document has been placed in the public domain.</td></tr>
+</tbody>
+</table>
+<p>This document describes the interpreted text roles implemented in the
+reference reStructuredText parser.</p>
+<p>Interpreted text uses backquotes (`) around the text.  An explicit
+role marker may optionally appear before or after the text, delimited
+with colons.  For example:</p>
+<pre class="literal-block">
+This is `interpreted text` using the default role.
+
+This is :title:`interpreted text` using an explicit role.
+</pre>
+<p>A default role may be defined by applications of reStructuredText; it
+is used if no explicit <tt class="docutils literal"><span class="pre">:role:</span></tt> prefix or suffix is given.  The
+&quot;default default role&quot; is <a class="reference" href="#title-reference">:title-reference:</a>.</p>
+<p>See the <a class="reference" href="restructuredtext.html#interpreted-text">Interpreted Text</a> section in the <a class="reference" href="restructuredtext.html">reStructuredText Markup
+Specification</a> for syntax details.<A HREF='#__diff4' NAME='__diff5'><font color=orange>&lt;</font></A> <A HREF='#__diff6'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>  For details on the hierarchy of
+elements, please see </FONT></U><a class="reference" href="../doctree.html"><U><FONT COLOR=#008000>The Docutils Document Tree</FONT></U></a><U><FONT COLOR=#008000> and the </FONT></U><a class="reference" href="../docutils.dtd"><U><FONT COLOR=#008000>Docutils
+Generic DTD</FONT></U></a><U><FONT COLOR=#008000> XML document type definition.  For interpreted text role
+implementation details, see </FONT></U><a class="reference" href="../../howto/rst-roles.html"><U><FONT COLOR=#008000>Creating reStructuredText Interpreted
+Text Roles</FONT></U></a><U><FONT COLOR=#008000>.</FONT></U></p>
+<div class="contents topic" id="contents">
+<p class="topic-title first"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#customization" id="id5" name="id5">Customization</a></li>
+<li><a class="reference" href="#standard-roles" id="id6" name="id6">Standard Roles</a><ul>
+<li><a class="reference" href="#emphasis" id="id7" name="id7"><tt class="docutils literal"><span class="pre">:emphasis:</span></tt></a></li>
+<li><a class="reference" href="#literal" id="id8" name="id8"><tt class="docutils literal"><span class="pre">:literal:</span></tt></a></li>
+<li><A HREF='#__diff5' NAME='__diff6'><font color=orange>&lt;</font></A> <A HREF='#__diff7'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>:bold:</FONT></S> <a class="reference" href="#pep-reference" id="id9" name="id9"><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>:pep-reference:</FONT></U></span></tt></a></li>
+<li><A HREF='#__diff6' NAME='__diff7'><font color=orange>&lt;</font></A> <A HREF='#__diff8'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>:italic:</FONT></S> <a class="reference" href="#rfc-reference" id="id10" name="id10"><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>:rfc-reference:</FONT></U></span></tt></a></li>
+<li><A HREF='#__diff7' NAME='__diff8'><font color=orange>&lt;</font></A> <A HREF='#__diff9'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>:underline: :strike: :tt: :big: :small: :color-&lt;val&gt;: :size-&lt;val&gt;: :face-&lt;val&gt;: :class-&lt;val&gt;:</FONT></S> <a class="reference" href="#strong" id="id11" name="id11"><tt class="docutils literal"><span class="pre">:strong:</span></tt></a></li>
+<li><a class="reference" href="#subscript" id="id12" name="id12"><tt class="docutils literal"><span class="pre">:subscript:</span></tt></a></li>
+<li><a class="reference" href="#superscript" id="id13" name="id13"><tt class="docutils literal"><span class="pre">:superscript:</span></tt></a></li>
+<li><a class="reference" href="#title-reference" id="id14" name="id14"><tt class="docutils literal"><span class="pre">:title-reference:</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference" href="#specialized-roles" id="id15" name="id15"><A HREF='#__diff8' NAME='__diff9'><font color=orange>&lt;</font></A> <A HREF='#__diff10'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Specialized Roles</FONT></U></a><ul>
+<li><a class="reference" href="#raw" id="id16" name="id16"><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>raw</FONT></U></span></tt></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="customization">
+<h1><a class="toc-backref" href="#id5" name="customization">Customization</a></h1>
+<p><A HREF='#__diff9' NAME='__diff10'><font color=orange>&lt;</font></A> <A HREF='#__diff11'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>No customization</FONT></S> <U><FONT COLOR=#008000>Custom interpreted text roles may be defined in a document with the
+</FONT></U><a class="reference" href="directives.html#role"><U><FONT COLOR=#008000>&quot;role&quot; directive</FONT></U></a><U><FONT COLOR=#008000>.  Customization details are listed with each role.</FONT></U></p>
+<p id="class"><U><FONT COLOR=#008000>A </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>class</FONT></U></span></tt><U><FONT COLOR=#008000> option is recognized by the &quot;role&quot; directive for most
+interpreted text roles.  A </FONT></U><a class="reference" href="directives.html#role-class"><U><FONT COLOR=#008000>description</FONT></U></a> is<A HREF='#__diff10' NAME='__diff11'><font color=orange>&lt;</font></A> <A HREF='#__diff12'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>currently allowed.</FONT></S> <U><FONT COLOR=#008000> provided in the </FONT></U><a class="reference" href="directives.html#role"><U><FONT COLOR=#008000>&quot;role&quot;
+directive</FONT></U></a><U><FONT COLOR=#008000> documentation.</FONT></U></p>
+</div>
+<div class="section" id="standard-roles">
+<h1><a class="toc-backref" href="#id6" name="standard-roles">Standard Roles</a></h1>
+<div class="section" id="emphasis">
+<h2><a class="toc-backref" href="#id7" name="emphasis"><tt class="docutils literal docutils literal"><span class="pre">:emphasis:</span></tt></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">None</td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">emphasis</td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff11' NAME='__diff12'><font color=orange>&lt;</font></A> <A HREF='#__diff13'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Customization:</FONT></U></th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Options:</FONT></U></th><td class="field-body"><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000>.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Implements emphasis.  These are equivalent:</p>
+<pre class="literal-block">
+*text*
+:emphasis:`text`
+</pre>
+</div>
+<div class="section" id="literal">
+<h2><a class="toc-backref" href="#id8" name="literal"><tt class="docutils literal docutils literal"><span class="pre">:literal:</span></tt></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">None</td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">literal</td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff12' NAME='__diff13'><font color=orange>&lt;</font></A> <A HREF='#__diff14'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Customization:</FONT></U></th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Options:</FONT></U></th><td class="field-body"><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000>.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Implements inline literal text.  These are equivalent:</p>
+<pre class="literal-block">
+``text``
+:literal:`text`
+</pre>
+<p>Care must be taken with backslash-escapes though.  These are <em>not</em>
+equivalent:</p>
+<pre class="literal-block">
+``text \ and \ backslashes``
+:literal:`text \ and \ backslashes`
+</pre>
+<p>The backslashes in the first line are preserved (and do nothing),
+whereas the backslashes in the second line escape the following
+spaces.</p>
+</div>
+<div class="section" id="pep-reference">
+<h2><A HREF='#__diff13' NAME='__diff14'><font color=orange>&lt;</font></A> <A HREF='#__diff15'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>:bold:</FONT></S> <a class="toc-backref" href="#id9" name="pep-reference"><tt class="docutils literal docutils literal"><span class="pre"><U><FONT COLOR=#008000>:pep-reference:</FONT></U></span></tt></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body"><tt class="docutils literal"><span class="pre"><A HREF='#__diff14' NAME='__diff15'><font color=orange>&lt;</font></A> <A HREF='#__diff16'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>:b:</FONT></S> <U><FONT COLOR=#008000>:PEP:</FONT></U></span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body"><A HREF='#__diff15' NAME='__diff16'><font color=orange>&lt;</font></A> <A HREF='#__diff17'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>interpreted</FONT></S> <U><FONT COLOR=#008000>reference</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff16' NAME='__diff17'><font color=orange>&lt;</font></A> <A HREF='#__diff18'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>Writers:</FONT></S> <U><FONT COLOR=#008000>Customization:</FONT></U></th><td class="field-body"><A HREF='#__diff17' NAME='__diff18'><font color=orange>&lt;</font></A> <A HREF='#__diff19'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>html Implements bold text in html. :italic:</FONT></S> <table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><A HREF='#__diff18' NAME='__diff19'><font color=orange>&lt;</font></A> <A HREF='#__diff20'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>Aliases:</FONT></S> <U><FONT COLOR=#008000>Options:</FONT></U></th><td class="field-body"><A HREF='#__diff19' NAME='__diff20'><font color=orange>&lt;</font></A> <A HREF='#__diff21'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>:i:</FONT></S> <a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000>.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff20' NAME='__diff21'><font color=orange>&lt;</font></A> <A HREF='#__diff22'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>DTD Element:</FONT></S> <U><FONT COLOR=#008000>Content:</FONT></U></th><td class="field-body"><A HREF='#__diff21' NAME='__diff22'><font color=orange>&lt;</font></A> <A HREF='#__diff23'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>interpreted</FONT></S> <U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff22' NAME='__diff23'><font color=orange>&lt;</font></A> <A HREF='#__diff24'><font color=orange>&gt;</font></A> <S><FONT COLOR=#800000>Writers:</FONT></S></th><td class="field-body"><S><FONT COLOR=#800000>html</FONT></S></td>
+</tr>
+</tbody>
+</table>
+<A HREF='#__diff23' NAME='__diff24'><font color=orange>&lt;</font></A> <A HREF='#__diff25'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>Implements italic text in html. :underline: Aliases: :u:</FONT></S> </td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff24' NAME='__diff25'><font color=orange>&lt;</font></A> <A HREF='#__diff26'><font color=orange>&gt;</font></A> <S><FONT COLOR=#800000>DTD Element:</FONT></S></th><td class="field-body"><S><FONT COLOR=#800000>interpreted</FONT></S></td>
+</tr>
+<tr class="field"><th class="field-name"><S><FONT COLOR=#800000>Writers:</FONT></S></th><td class="field-body"><S><FONT COLOR=#800000>html</FONT></S></td>
+</tr>
+</tbody>
+</table>
+<p><A HREF='#__diff25' NAME='__diff26'><font color=orange>&lt;</font></A> <A HREF='#__diff27'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>Implements underlined text in html.</FONT></S> <U><FONT COLOR=#008000>The </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>:pep-reference:</FONT></U></span></tt><U><FONT COLOR=#008000> role is used to create an HTTP reference to a
+PEP (Python Enhancement Proposal).  The </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>:PEP:</FONT></U></span></tt><U><FONT COLOR=#008000> alias is usually
+used.  For example:</FONT></U></p><A HREF='#__diff26' NAME='__diff27'><font color=orange>&lt;</font></A> <A HREF='#__diff28'><font color=orange>&gt;</font></A> 
+<pre class="literal-block"><U><FONT COLOR=#008000>
+See :PEP:`287` for more information about reStructuredText.
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>This is equivalent to:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+See `PEP 287`__ for more information about reStructuredText.
+
+__ http://www.python.org/peps/pep-0287.html
+</FONT></U></pre>
+</div>
+<div class="section" id="rfc-reference">
+<h2><A HREF='#__diff27' NAME='__diff28'><font color=orange>&lt;</font></A> <A HREF='#__diff29'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>:strike:</FONT></S> <a class="toc-backref" href="#id10" name="rfc-reference"><tt class="docutils literal docutils literal"><span class="pre"><U><FONT COLOR=#008000>:rfc-reference:</FONT></U></span></tt></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body"><tt class="docutils literal"><span class="pre"><A HREF='#__diff28' NAME='__diff29'><font color=orange>&lt;</font></A> <A HREF='#__diff30'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>:s:</FONT></S> <U><FONT COLOR=#008000>:RFC:</FONT></U></span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body"><A HREF='#__diff29' NAME='__diff30'><font color=orange>&lt;</font></A> <A HREF='#__diff31'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>interpreted</FONT></S> <U><FONT COLOR=#008000>reference</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff30' NAME='__diff31'><font color=orange>&lt;</font></A> <A HREF='#__diff32'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>Writers:</FONT></S> <U><FONT COLOR=#008000>Customization:</FONT></U></th><td class="field-body"><A HREF='#__diff31' NAME='__diff32'><font color=orange>&lt;</font></A> <A HREF='#__diff33'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>html Implements strikethrough text in html. :tt:</FONT></S> <table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><A HREF='#__diff32' NAME='__diff33'><font color=orange>&lt;</font></A> <A HREF='#__diff34'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>Aliases:</FONT></S> <U><FONT COLOR=#008000>Options:</FONT></U></th><td class="field-body"><A HREF='#__diff33' NAME='__diff34'><font color=orange>&lt;</font></A> <A HREF='#__diff35'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>None</FONT></S> <a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000>.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff34' NAME='__diff35'><font color=orange>&lt;</font></A> <A HREF='#__diff36'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>DTD Element:</FONT></S> <U><FONT COLOR=#008000>Content:</FONT></U></th><td class="field-body"><A HREF='#__diff35' NAME='__diff36'><font color=orange>&lt;</font></A> <A HREF='#__diff37'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>interpreted</FONT></S> <U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff36' NAME='__diff37'><font color=orange>&lt;</font></A> <A HREF='#__diff38'><font color=orange>&gt;</font></A> <S><FONT COLOR=#800000>Writers:</FONT></S></th><td class="field-body"><S><FONT COLOR=#800000>html</FONT></S></td>
+</tr>
+</tbody>
+</table>
+<A HREF='#__diff37' NAME='__diff38'><font color=orange>&lt;</font></A> <A HREF='#__diff39'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>Implements tt text in html. :big: Aliases: None</FONT></S> </td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff38' NAME='__diff39'><font color=orange>&lt;</font></A> <A HREF='#__diff40'><font color=orange>&gt;</font></A> <S><FONT COLOR=#800000>DTD Element:</FONT></S></th><td class="field-body"><S><FONT COLOR=#800000>interpreted</FONT></S></td>
+</tr>
+<tr class="field"><th class="field-name"><S><FONT COLOR=#800000>Writers:</FONT></S></th><td class="field-body"><S><FONT COLOR=#800000>html</FONT></S></td>
+</tr>
+</tbody>
+</table>
+<p><A HREF='#__diff39' NAME='__diff40'><font color=orange>&lt;</font></A> <A HREF='#__diff41'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>Implements big text in html. :small: Aliases: None DTD Element: interpreted Writers: html Implements small text in html. :color-&lt;val&gt;:</FONT></S> <U><FONT COLOR=#008000>The </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>:rfc-reference:</FONT></U></span></tt><A HREF='#__diff40' NAME='__diff41'><font color=orange>&lt;</font></A> <A HREF='#__diff42'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>Aliases: None DTD Element: interpreted Writers: html Implements colored text in html.</FONT></S> <U><FONT COLOR=#008000> role is used to create an HTTP reference to an
+RFC (Internet Request for Comments).</FONT></U>  The<A HREF='#__diff41' NAME='__diff42'><font color=orange>&lt;</font></A> <A HREF='#__diff43'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&lt;val&gt; expresses the color that will be applied.</FONT></S>  <tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>:RFC:</FONT></U></span></tt><U><FONT COLOR=#008000> alias is usually
+used.</FONT></U>  For<A HREF='#__diff42' NAME='__diff43'><font color=orange>&lt;</font></A> <A HREF='#__diff44'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>example</FONT></S> <U><FONT COLOR=#008000> example:</FONT></U></p>
+<pre class="literal-block">
+<A HREF='#__diff43' NAME='__diff44'><font color=orange>&lt;</font></A> <A HREF='#__diff45'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>This text is :color-red:`red`.</FONT></S> <U><FONT COLOR=#008000>See :RFC:`2822` for information about email headers.</FONT></U>
+</pre>
+<p><A HREF='#__diff44' NAME='__diff45'><font color=orange>&lt;</font></A> <A HREF='#__diff46'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>results in</FONT></S> This<A HREF='#__diff45' NAME='__diff46'><font color=orange>&lt;</font></A> <A HREF='#__diff47'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>text</FONT></S>  is<A HREF='#__diff46' NAME='__diff47'><font color=orange>&lt;</font></A> <A HREF='#__diff48'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>red . :size-&lt;val&gt;: Aliases: None DTD Element: interpreted Writers: html Implements text of different sizes in html. The &lt;val&gt; expresses the size that will be applied. For example</FONT></S> <U><FONT COLOR=#008000> equivalent to:</FONT></U></p>
+<pre class="literal-block">
+<A HREF='#__diff47' NAME='__diff48'><font color=orange>&lt;</font></A> <A HREF='#__diff49'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>This text is :size-18pt:`18 pt`.</FONT></S> <U><FONT COLOR=#008000>See `RFC 2822`__ for information about email headers.
+
+__ http://www.faqs.org/rfcs/rfc2822.html</FONT></U>
+</pre>
+<p><A HREF='#__diff48' NAME='__diff49'><font color=orange>&lt;</font></A> <A HREF='#__diff50'><font color=orange>&gt;</font></A> <S><FONT COLOR=#800000>results in</FONT></S></p>
+<blockquote><S><FONT COLOR=#800000>
+This text is </FONT></S><font size="18pt"><S><FONT COLOR=#800000>18 pt</FONT></S></font size="18pt"><S><FONT COLOR=#800000>.</FONT></S></blockquote>
+</div>
+<div class="section" id="strong">
+<h2><A HREF='#__diff49' NAME='__diff50'><font color=orange>&lt;</font></A> <A HREF='#__diff51'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>:face-&lt;val&gt;:</FONT></S> <a class="toc-backref" href="#id11" name="strong"><tt class="docutils literal docutils literal"><span class="pre"><U><FONT COLOR=#008000>:strong:</FONT></U></span></tt></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">None</td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body"><A HREF='#__diff50' NAME='__diff51'><font color=orange>&lt;</font></A> <A HREF='#__diff52'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>interpreted</FONT></S> <U><FONT COLOR=#008000>strong</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff51' NAME='__diff52'><font color=orange>&lt;</font></A> <A HREF='#__diff53'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>Writers:</FONT></S> <U><FONT COLOR=#008000>Customization:</FONT></U></th><td class="field-body"><A HREF='#__diff52' NAME='__diff53'><font color=orange>&lt;</font></A> <A HREF='#__diff54'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>html Implements text of different faces in html. The &lt;val&gt; expresses the face that will be applied. For example This text is :face-helvetica:`helvetica`. results in This text is helvetica . :class-&lt;val&gt;:</FONT></S> <table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><A HREF='#__diff53' NAME='__diff54'><font color=orange>&lt;</font></A> <A HREF='#__diff55'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>Aliases:</FONT></S> <U><FONT COLOR=#008000>Options:</FONT></U></th><td class="field-body"><A HREF='#__diff54' NAME='__diff55'><font color=orange>&lt;</font></A> <A HREF='#__diff56'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>None</FONT></S> <a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000>.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff55' NAME='__diff56'><font color=orange>&lt;</font></A> <A HREF='#__diff57'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>DTD Element:</FONT></S> <U><FONT COLOR=#008000>Content:</FONT></U></th><td class="field-body"><A HREF='#__diff56' NAME='__diff57'><font color=orange>&lt;</font></A> <A HREF='#__diff58'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>interpreted</FONT></S> <U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff57' NAME='__diff58'><font color=orange>&lt;</font></A> <A HREF='#__diff59'><font color=orange>&gt;</font></A> <S><FONT COLOR=#800000>Writers:</FONT></S></th><td class="field-body"><S><FONT COLOR=#800000>html</FONT></S></td>
+</tr>
+</tbody>
+</table>
+<A HREF='#__diff58' NAME='__diff59'><font color=orange>&lt;</font></A> <A HREF='#__diff60'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>Implements text of different classes in html. The &lt;val&gt; expresses the class that will be applied. For example This text is :class-classy:`classy`. results in html like: This text is &lt;class name=&quot;classy&quot;&gt;classy&lt;/class&gt;. You can affect how different classes are rendered using style sheets. :strong: Aliases: None</FONT></S> </td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff59' NAME='__diff60'><font color=orange>&lt;</font></A> <A HREF='#__diff61'><font color=orange>&gt;</font></A> <S><FONT COLOR=#800000>DTD Element:</FONT></S></th><td class="field-body"><S><FONT COLOR=#800000>strong</FONT></S></td>
+</tr>
+</tbody>
+</table>
+<p>Implements strong emphasis.  These are equivalent:</p>
+<pre class="literal-block">
+**text**
+:strong:`text`
+</pre>
+</div>
+<div class="section" id="subscript">
+<h2><a class="toc-backref" href="#id12" name="subscript"><tt class="docutils literal docutils literal"><span class="pre">:subscript:</span></tt></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body"><tt class="docutils literal"><span class="pre">:sub:</span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">subscript</td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff60' NAME='__diff61'><font color=orange>&lt;</font></A> <A HREF='#__diff62'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Customization:</FONT></U></th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Options:</FONT></U></th><td class="field-body"><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000>.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Implements subscripts.</p>
+<div class="tip">
+<p class="first admonition-title">Tip</p>
+<p>Whitespace or punctuation is required around interpreted text, but
+often not desired with subscripts &amp; superscripts.
+Backslash-escaped whitespace can be used; the whitespace will be
+removed from the processed document:</p>
+<pre class="literal-block">
+H\ :sub:`2`\ O
+E = mc\ :sup:`2`
+</pre>
+<p>In such cases, readability of the plain text can be greatly
+improved with substitutions:</p>
+<pre class="literal-block">
+The chemical formula for pure water is |H2O|.
+
+.. |H2O| replace:: H\ :sub:`2`\ O
+</pre>
+<p>See <a class="reference" href="restructuredtext.html">the reStructuredText spec</a> for further information on
+<a class="reference" href="restructuredtext.html#character-level-inline-markup">character-level markup</a> and <a class="reference" href="restructuredtext.html#substitution-references">the substitution mechanism</a>.</p>
+</div>
+</div>
+<div class="section" id="superscript">
+<h2><a class="toc-backref" href="#id13" name="superscript"><tt class="docutils literal docutils literal"><span class="pre">:superscript:</span></tt></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body"><tt class="docutils literal"><span class="pre">:sup:</span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body">superscript</td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff61' NAME='__diff62'><font color=orange>&lt;</font></A> <A HREF='#__diff63'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Customization:</FONT></U></th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Options:</FONT></U></th><td class="field-body"><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000>.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Implements superscripts.  See the tip in <a class="reference" href="#subscript">:subscript:</a> above.</p>
+</div>
+<div class="section" id="title-reference">
+<h2><a class="toc-backref" href="#id14" name="title-reference"><tt class="docutils literal docutils literal"><span class="pre">:title-reference:</span></tt></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Aliases:</th><td class="field-body"><tt class="docutils literal"><span class="pre">:title:</span></tt>, <tt class="docutils literal"><span class="pre">:t:</span></tt>.</td>
+</tr>
+<tr class="field"><th class="field-name">DTD Element:</th><td class="field-body"><A HREF='#__diff62' NAME='__diff63'><font color=orange>&lt;</font></A> <A HREF='#__diff64'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>interpreted</FONT></S> <U><FONT COLOR=#008000>title_reference</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><A HREF='#__diff63' NAME='__diff64'><font color=orange>&lt;</font></A> <A HREF='#__diff65'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Customization:</FONT></U></th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Options:</FONT></U></th><td class="field-body"><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000>.</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None.</FONT></U></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The <tt class="docutils literal"><span class="pre">:title-reference:</span></tt> role is used to describe the titles of
+books, periodicals, and other materials.  It is the equivalent of the
+HTML &quot;cite&quot; element, and it is expected that HTML writers will
+typically render &quot;title_reference&quot; elements using &quot;cite&quot;.</p>
+<p>Since title references are typically rendered with italics, they are
+often marked up using <tt class="docutils literal"><span class="pre">*emphasis*</span></tt>, which is misleading and vague. 
+The &quot;title_reference&quot; element provides accurate and unambiguous
+descriptive markup.</p>
+<p>Let's assume <tt class="docutils literal"><span class="pre">:title-reference:</span></tt> is the default interpreted text
+role (see below) for this example:</p>
+<pre class="literal-block">
+`Design Patterns` [GoF95]_ is an excellent read.
+</pre>
+<p>The following document fragment (<a class="reference" href="../doctree.html#pseudo-xml">pseudo-XML</a>) will result from
+processing:</p>
+<pre class="literal-block">
+&lt;paragraph&gt;
+<A HREF='#__diff64' NAME='__diff65'><font color=orange>&lt;</font></A> <A HREF='#__diff66'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>&lt;interpreted role=&quot;title-reference&quot;&gt;</FONT></S> <U><FONT COLOR=#008000>    &lt;title_reference&gt;</FONT></U>
+        Design Patterns
+
+    &lt;citation_reference refname=&quot;gof95&quot;&gt;
+        GoF95
+     is an excellent read.
+</pre>
+<p><tt class="docutils literal"><span class="pre">:title-reference:</span></tt> is the default interpreted text role in the
+standard reStructuredText parser.  This means that no explicit role is
+required.  Applications of reStructuredText may designate a different
+default role, in which case the explicit<A HREF='#__diff65' NAME='__diff66'><font color=orange>&lt;</font></A> <A HREF='#__diff67'><font color=orange>&gt;</font></A>  <tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>:title-reference:</FONT></U></span></tt> role
+must be<A HREF='#__diff66' NAME='__diff67'><font color=orange>&lt;</font></A> <A HREF='#__diff68'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>used.</FONT></S> <U><FONT COLOR=#008000> used to obtain a </FONT></U><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>title_reference</FONT></U></span></tt><U><FONT COLOR=#008000> element.</FONT></U></p>
+</div>
+</div>
+<div class="section" id="specialized-roles">
+<h1><a class="toc-backref" href="#id15" name="specialized-roles"><A HREF='#__diff67' NAME='__diff68'><font color=orange>&lt;</font></A> <A HREF='#__diff69'><font color=orange>&gt;</font></A> <U><FONT COLOR=#008000>Specialized Roles</FONT></U></a></h1>
+<div class="section" id="raw">
+<h2><a class="toc-backref" href="#id16" name="raw"><tt class="docutils literal docutils literal"><span class="pre"><U><FONT COLOR=#008000>raw</FONT></U></span></tt></a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Aliases:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>DTD Element:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>raw</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Customization:</FONT></U></th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Options:</FONT></U></th><td class="field-body"><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000>, format</FONT></U></td>
+</tr>
+<tr class="field"><th class="field-name"><U><FONT COLOR=#008000>Content:</FONT></U></th><td class="field-body"><U><FONT COLOR=#008000>None</FONT></U></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="warning">
+<p class="first admonition-title"><U><FONT COLOR=#008000>Warning</FONT></U></p>
+<p><U><FONT COLOR=#008000>The &quot;raw&quot; role is a stop-gap measure allowing the author to bypass
+reStructuredText's markup.  It is a &quot;power-user&quot; feature that
+should not be overused or abused.  The use of &quot;raw&quot; ties documents
+to specific output formats and makes them less portable.</FONT></U></p>
+<p class="last"><U><FONT COLOR=#008000>If you often need to use &quot;raw&quot;-derived interpreted text roles or
+the &quot;raw&quot; directive, that is a sign either of overuse/abuse or that
+functionality may be missing from reStructuredText.  Please
+describe your situation in email to
+</FONT></U><a class="reference" href="mailto:docutils-users&#64;lists.sourceforge.net"><U><FONT COLOR=#008000>docutils-users&#64;lists.sourceforge.net</FONT></U></a><U><FONT COLOR=#008000>.</FONT></U></p>
+</div>
+<A HREF='#__diff68' NAME='__diff69'><font color=orange>&lt;</font></A> <A HREF='#__diff70'><font color=orange>&gt;</font></A> <p><U><FONT COLOR=#008000>The &quot;raw&quot; role indicates non-reStructuredText data that is to be
+passed untouched to the Writer.  It is the inline equivalent of the
+</FONT></U><a class="reference" href="directives.html#raw"><U><FONT COLOR=#008000>&quot;raw&quot; directive</FONT></U></a><U><FONT COLOR=#008000>; see its documentation for details on the
+semantics.</FONT></U></p>
+<p><U><FONT COLOR=#008000>The &quot;raw&quot; role cannot be used directly.  The </FONT></U><a class="reference" href="directives.html#role"><U><FONT COLOR=#008000>&quot;role&quot; directive</FONT></U></a><U><FONT COLOR=#008000> must
+first be used to build custom roles based on the &quot;raw&quot; role.  One or
+more formats (Writer names) must be provided in a &quot;format&quot; option.</FONT></U></p>
+<p><U><FONT COLOR=#008000>For example, the following creates an HTML-specific &quot;raw-html&quot; role:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+.. role:: raw-html(raw)
+   :format: html
+</FONT></U></pre>
+<p><U><FONT COLOR=#008000>This role can now be used directly to pass data untouched to the HTML
+Writer.  For example:</FONT></U></p>
+<pre class="literal-block"><U><FONT COLOR=#008000>
+If there just *has* to be a line break here,
+:raw-html:`&lt;br /&gt;`
+it can be accomplished with a &quot;raw&quot;-derived role.
+But the line block syntax should be considered first.
+</FONT></U></pre>
+<div class="tip">
+<p class="first admonition-title"><U><FONT COLOR=#008000>Tip</FONT></U></p>
+<p class="last"><U><FONT COLOR=#008000>Roles based on &quot;raw&quot; should clearly indicate their origin, so
+they are not mistaken for reStructuredText markup.  Using a &quot;raw-&quot;
+prefix for role names is recommended.</FONT></U></p>
+</div>
+<p><U><FONT COLOR=#008000>In addition to &quot;</FONT></U><a class="reference" href="#class"><U><FONT COLOR=#008000>class</FONT></U></a><U><FONT COLOR=#008000>&quot;, the following option is recognized:</FONT></U></p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre"><U><FONT COLOR=#008000>format</FONT></U></span></tt> <span class="classifier-delimiter"><U><FONT COLOR=#008000>:</FONT></U></span> <span class="classifier"><U><FONT COLOR=#008000>text</FONT></U></span></dt>
+<dd><U><FONT COLOR=#008000>One or more space-separated output format names (Writer names).</FONT></U></dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="footer">
+<A HREF='#__diff69' NAME='__diff70'><font color=orange>&lt;</font></A> <A HREF='#__diff71'><font color=orange>&gt;</font></A> <hr class="footer" />
+<a class="reference" href="roles.txt"><U><FONT COLOR=#008000>View document source</FONT></U></a><U><FONT COLOR=#008000>.</FONT></U>
+Generated on:<A HREF='#__diff70' NAME='__diff71'><font color=orange>&lt;</font></A> <A HREF='#__diff72'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>2005/06/14 11:21:57 CDT.</FONT></S> <U><FONT COLOR=#008000> 2005-04-12 02:46 UTC.</FONT></U>
+Generated by<A HREF='#__diff71' NAME='__diff72'><font color=orange>&lt;</font></A> <A HREF='#__diff73'><font color=orange>&gt;</font></A>  <S><FONT COLOR=#800000>trip.prl release 1.4.3</FONT></S>  <a class="reference" href="http://docutils.sourceforge.net/"><U><FONT COLOR=#008000>Docutils</FONT></U></a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
+
+</div>
+</body>
+</html>
+<A HREF='#__diff72' NAME='__diff73'><font color=orange>&lt;</font></A>
+(73 differences)
