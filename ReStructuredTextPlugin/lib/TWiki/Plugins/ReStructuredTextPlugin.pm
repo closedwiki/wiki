@@ -2,6 +2,9 @@
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2005 TWiki:Main.SteveRJones
+# Copyright (C) 2010 TWiki:Main.PeterThoeny
+# Copyright (C) 2005-2010 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -37,8 +40,8 @@ use vars qw(
 	      $tripoptions
 	    );
 
-$VERSION = '1.1';
-$RELEASE = '2010-12-15';
+$VERSION = '1.2';
+$RELEASE = '2010-12-16';
 
 $pluginName = 'ReStructuredTextPlugin';  # Name of this Plugin
 
@@ -54,15 +57,15 @@ sub initPlugin
     }
 
     # Get plugin debug flag
-    $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
+    $debug = $TWiki::cfg{Plugins}{$pluginName}{Debug} || 0;
 
     # Get trip override flag
-    $trip = TWiki::Func::getPluginPreferencesValue( "TRIP" )
-	|| '/var/www/twiki/lib/TWiki/Plugins/ReStructuredTextPlugin/trip/bin/trip';
+    $trip = $TWiki::cfg{Plugins}{$pluginName}{TripCmd}
+          || '/var/www/twiki/lib/TWiki/Plugins/ReStructuredTextPlugin/trip/bin/trip';
 
     # Get trip override flag
-    $tripoptions = TWiki::Func::getPluginPreferencesValue( "TRIPOPTIONS" )
-	|| '-D source_link=0 -D time=0';
+    $tripoptions = $TWiki::cfg{Plugins}{$pluginName}{TripOptions}
+          || '-D source_link=0 -D time=0 -D xformoff=DocTitle -D generator=0 -D tabstops=3';
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::ReStructuredTextPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -91,6 +94,9 @@ sub pipeThru
 sub reST2html
 {
     my ($text, $opts) = @_;
+
+    # security fix: Filter options to prevent nasty stuff
+    $opts =~ s/[^a-zA-Z0-9_\=\- ]//go;
     my %opts = $opts =~ /(\w+)="(.*?)"/g;
     # Convert each tab to 3 spaces
     $text =~ s/\t/   /g;

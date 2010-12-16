@@ -1,5 +1,6 @@
 data/TWiki/ReStructuredTextPlugin.txt 0644
 lib/TWiki/Plugins/ReStructuredTextPlugin.pm 0444
+lib/TWiki/Plugins/ReStructuredTextPlugin/Config.spec 0444
 lib/TWiki/Plugins/ReStructuredTextPlugin/trip/bin/Directive/if.pm 0444
 lib/TWiki/Plugins/ReStructuredTextPlugin/trip/bin/Directive/perl.pm 0444
 lib/TWiki/Plugins/ReStructuredTextPlugin/trip/bin/Directive/system.pm 0444

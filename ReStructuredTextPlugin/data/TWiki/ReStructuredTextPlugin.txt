@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1292484990" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1292489038" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -75,15 +75,6 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
    * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Render reStructuredText (Python documentation) within a TWiki page 
 
-   * Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
-      * Set DEBUG = 0
-
-   * Set TRIP to give a different path to the =trip= executable.
-      * Set TRIP = /var/www/twiki/lib/TWiki/Plugins/ReStructuredTextPlugin/trip/bin/trip
-
-   * Set TRIPOPTIONS to specify default options to =trip=.
-      * Set TRIPOPTIONS = -D source_link=0 -D time=0 -D xformoff=DocTitle -D generator=0 -D tabstops=3
-
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
@@ -94,18 +85,21 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
      | ==lib/TWiki/Plugins/%TOPIC%/trip/*== | trip utility (Perl script) |
-   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * Test the example above if the installation was successful.
+   * Visit =configure= in your TWiki installation:
+      * Enable the plugin in the {Plugins} section
+      * In Extensions section, set {Plugins}{ReStructuredTextPlugin}{TripCmd} to an absolute path; the trip executable is located below your TWiki directory at =lib/TWiki/Plugins/%TOPIC%/trip/bin/trip=.
+   * Test above example if the installation was successful.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.SteveRJones |
-|  Plugin Copyright: | &copy; 2005 TWiki:Main.SteveRJones <br /> &copy; 2005-2010 TWiki:TWiki.TWikiContributor |
+|  Plugin Author: | TWiki:Main.SteveRJones, TWiki:Main.PeterThoeny |
+|  Plugin Copyright: | &copy; 2005 TWiki:Main.SteveRJones <br /> &copy; 2010 TWiki:Main.PeterThoeny <br /> &copy; 2005-2010 TWiki:TWiki.TWikiContributor |
 |  Trip tool Author: | TWiki:Main.MarkNodine |
 |  Trip tool Copyright: | &copy; 2002-2005 Freescale Semiconductor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-12-15 (V1.1) |
+|  Plugin Version: | 2010-12-16 (V1.2) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-12-16: | TWikibug:Item6530: Move plugin settings to configure (to fix security issue); filter options parameter (to fix security issue) -- TWiki:Main.PeterThoeny |
 |  2010-12-15: | TWikibug:Item6530: Doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  2005-05-19: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
