@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1292489038" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1292489251" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -84,6 +84,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==lib/TWiki/Plugins/%TOPIC%/Config.spec== | Settings for configure script |
      | ==lib/TWiki/Plugins/%TOPIC%/trip/*== | trip utility (Perl script) |
    * Visit =configure= in your TWiki installation:
       * Enable the plugin in the {Plugins} section
