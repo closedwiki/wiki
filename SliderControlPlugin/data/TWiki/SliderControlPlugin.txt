@@ -38,7 +38,8 @@ This plugin provides an implementation of the JQuery slider as created by [[http
 ... if installed.
 %SLIDERCONTROL%
 
----+++!!Simple slider
+---+++!!Simple example slider
+Goes from 0 to 100, in increments of 10, with the slider at an initial position of 60.
 <verbatim>
 {
   from: 0,
@@ -52,7 +53,7 @@ This plugin provides an implementation of the JQuery slider as created by [[http
 
 %SLIDERCONTROL{ name="sliderEx00" from="0" to="100" step="10" initvals="60" }%
 
----+++!!Simple slider
+---+++!!Example slider
 <verbatim>
 {
   from: 5,
@@ -140,7 +141,6 @@ This plugin provides an implementation of the JQuery slider as created by [[http
 
 %SLIDERCONTROL{ name="sliderEx05" from="480" to="1020" step="15" limits="false" initvals="720;960" scale="['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00']" calculate="function( value ){var hours = Math.floor( value / 60 ); var mins = ( value - hours*60 ); return (hours < 10 ? \"0\"+hours : hours) + \":\" + ( mins == 0 ? \"00\" : mins );}" }%
 
-
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
@@ -184,7 +184,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.AaronLWalker |
-|  Plugin Version: | 01 Dec 2010(V1.000) |
+|  Plugin Version: | 17 Dec 2010(V0.500) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  01 Dec 2010: | Initial version |
 |  Dependencies: | <table border="1"><tr><th>Name</th><th>Version</th><th>Description</th></tr><tr><td align="left">TWiki::Plugins::JQueryPlugin</td><td align="left">&gt;=1.0</td><td align="left">Required; download from TWiki:Plugins/JQueryPlugin</td></tr></table> |
