@@ -28,9 +28,10 @@ This plugin provides an implementation of the JQuery slider as created by [[http
 | ==calculate="..."==        | Function to calculate final numbers, for example time |  |
 | ==onstatechange="..."==        | Function fires while slider change state |  |
 | ==callback="..."==        | Function fires on _mouseup_ event |  |
+...also see the attributes used in the examples below
 
 ---++ =SLIDERCONTROL= Examples
----+++!!Base Control
+---+++!! Basic Slider
 <verbatim>
 %SLIDERCONTROL%
 </verbatim>
@@ -57,7 +58,7 @@ Goes from 0 to 100, in increments of 10, with the slider at an initial position 
 
 %SLIDERCONTROL{ name="sliderEx00" from="0" to="100" step="10" initvals="60" }%
 
----+++!!Example slider
+---+++!!Rounding slider
 <verbatim>
 {
   from: 5,
@@ -73,7 +74,8 @@ Goes from 0 to 100, in increments of 10, with the slider at an initial position 
 
 %SLIDERCONTROL{ name="sliderEx01" from="5" to="50" step="2.5" initvals="40" round="1" dimension="&nbsp;" }%
 
----+++!!Simple slider
+---+++!!Range slider
+Adds a dollar sign to the value, sets the width at 600px, and introduces heterogeneity.  Notice how the value =50000= shows up at the 50% point of the line.
 <verbatim>
 {
   from: 5000,
@@ -90,7 +92,8 @@ Goes from 0 to 100, in increments of 10, with the slider at an initial position 
 
 %SLIDERCONTROL{ name="sliderEx02" from="5000" to="150000" step="1000" width="600px" initvals="10000;40000" heterogeneity="['50/50000']" dimension="&nbsp;$"}%
 
----+++!!Simple slider
+---+++!!Example slider
+Adds scale markings.
 <verbatim>
 {
   from: 0,
@@ -108,7 +111,7 @@ Goes from 0 to 100, in increments of 10, with the slider at an initial position 
 
 %SLIDERCONTROL{ name="sliderEx03" from="0" to="500" initvals="100;200" heterogeneity="['50/100', '75/250']" scale="[0, '|', 50, '|' , '100', '|', 250, '|', 500]" limits="false" step="1" dimension="&nbsp;m<small>2</small>" }%
 
----+++!!Simple slider
+---+++!!Example slider
 <verbatim>
 {
   from: 1,
@@ -126,7 +129,8 @@ Goes from 0 to 100, in increments of 10, with the slider at an initial position 
 
 %SLIDERCONTROL{ name="sliderEx04" from="1" to="30" step="1" initvals="1;30" limits="false" width="6in" heterogeneity="['50/5', '75/15']" scale="[1, '|', 3, '|', '5', '|', 15, '|', 30]" }%
 
----+++!!Simple slider
+---+++!!Schedule slider
+Uses the =calculate= attribute to create a nice time range slider.
 <verbatim>
 {
   from: 480,
@@ -184,8 +188,26 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==pub/TWiki/%TOPIC%/jquery.dependClass.js== | Plugin static files |
+     | ==pub/TWiki/%TOPIC%/jquery.slider.js== | ^ |
+     | ==pub/TWiki/%TOPIC%/jquery.slider-min.js== | ^ |
+     | ==pub/TWiki/%TOPIC%/jslider.blue.css== | ^ |
+     | ==pub/TWiki/%TOPIC%/jslider.blue.ie6.css== | ^ |
+     | ==pub/TWiki/%TOPIC%/jslider.blue.png== | ^ |
+     | ==pub/TWiki/%TOPIC%/jslider.css== | ^ |
+     | ==pub/TWiki/%TOPIC%/jslider.ie6.css== | ^ |
+     | ==pub/TWiki/%TOPIC%/jslider.plastic.css== | ^ |
+     | ==pub/TWiki/%TOPIC%/jslider.plastic.ie6.css== | ^ |
+     | ==pub/TWiki/%TOPIC%/jslider.plastic.png== | ^ |
+     | ==pub/TWiki/%TOPIC%/jslider.png== | ^ |
+     | ==pub/TWiki/%TOPIC%/jslider.round.css== | ^ |
+     | ==pub/TWiki/%TOPIC%/jslider.round.ie6.css== | ^ |
+     | ==pub/TWiki/%TOPIC%/jslider.round.plastic.css== | ^ |
+     | ==pub/TWiki/%TOPIC%/jslider.round.plastic.ie6.css== | ^ |
+     | ==pub/TWiki/%TOPIC%/jslider.round.plastic.png== | ^ |
+     | ==pub/TWiki/%TOPIC%/jslider.round.png== | ^ |
+     | ==pub/TWiki/%TOPIC%/slider-samp.png== | ^ |
    * Test if the installation was successful:
       * _enter samples here_
 
