@@ -320,8 +320,15 @@ sub _addHeader {
 <link rel="stylesheet" href="%PUBURL%/%TWIKIWEB%/SliderControlPlugin/jslider.css" type="text/css">
 <link rel="stylesheet" href="%PUBURL%/%TWIKIWEB%/SliderControlPlugin/jslider.blue.css" type="text/css"><!--[if IE 6]>
 <link rel="stylesheet" href="%PUBURL%/%TWIKIWEB%/SliderControlPlugin/jslider.ie6.css" type="text/css" media="screen">
-<link rel="stylesheet" href="%PUBURL%/%TWIKIWEB%/SliderControlPlugin/jslider.blue.ie6.css" type="text/css" media="screen"><![
-endif]-->
+<STYLE TYPE="text/css" MEDIA=screen>
+<!--
+  .jslider .jslider-bg .l i,
+  .jslider .jslider-bg .r i,
+  .jslider .jslider-bg .v i,
+  .jslider .jslider-pointer i { position: absolute; width: 1500px; height: 60px; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='%PUBURL%/%TWIKIWEB%/SliderControlPlugin/jslider.png', sizingMethod='crop'); }
+-->
+</STYLE>
+<link rel="stylesheet" href="%PUBURL%/%TWIKIWEB%/SliderControlPlugin/jslider.blue.ie6.css" type="text/css" media="screen"><![endif]-->
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/SliderControlPlugin/jquery.core-1.3.2.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/SliderControlPlugin/jquery.dependClass.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/SliderControlPlugin/jquery.slider-min.js"></script>
