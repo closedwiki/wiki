@@ -394,6 +394,13 @@ sub handleSlider
                         $params{"step"} = '1';
                 }
         }
+        unless ($params{"width"}) {
+                if (TWiki::Func::getPluginPreferencesValue("WIDTH")) {
+                        $params{"width"} = TWiki::Func::getPluginPreferencesValue("WIDTH");
+                } else {
+                        $params{"width"} = '400px';
+                }
+        }
         unless ($params{"round"}) {
                 if (TWiki::Func::getPluginPreferencesValue("ROUND")) {
                         $params{"round"} = TWiki::Func::getPluginPreferencesValue("ROUND");
@@ -453,7 +460,11 @@ sub handleSlider
     my $ret = "";
 
     # Add slider
-    $ret .= "<div class=\"layout-slider\">";
+    $ret .= "<div class=\"layout-slider\"";
+    if ($params{"width"}) {
+            $ret .= " style=\"width: " . $params{"width"} . "\"";
+    }
+    $ret .= ">";
     $ret .= "\n<input id=\"" . $params{"name"} . "ID\" type=\"slider\" name=\"" . $params{"name"} . "\" value=\"" . $params{"initvals"} . "\" />";
     $ret .= "\n</div>";
     $ret .= "\n<script type=\"text/javascript\" charset=\"utf-8\">";

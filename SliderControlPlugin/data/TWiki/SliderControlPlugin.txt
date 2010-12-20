@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="AaronWalker" date="1292872271" format="1.1" version="1.2"}%
 ---+!! <nop>%TOPIC%
 
 This plugin provides an implementation of the JQuery slider as created by [[http://blog.egorkhmelev.com/2010/03/jquery-slider-update/][Egor Khmelev]].
@@ -18,6 +19,7 @@ This plugin provides an implementation of the JQuery slider as created by [[http
 | ==to="&lt;n&gt;"==        | Right limit (numeric) | =10= |
 | ==initvals="&lt;n[;n...]&gt;"==        | Initial values for pointer(s) | =7= |
 | ==step="&lt;n&gt;"==        | Step/interval of pointer (numeric) | =1= |
+| ==width="&lt;n&gt;"==        | Width of slider | =400px= |
 | ==round="&lt;n&gt;"==        | How many numbers after comma (numeric) |  |
 | ==heterogeneity="&lt;n&gt;"==        | Linearity of scale (percentage of place)/(value of place) (array) |  |
 | ==dimension="&lt;n&gt;"==        | Text to show after number (string) |  |
@@ -32,10 +34,12 @@ This plugin provides an implementation of the JQuery slider as created by [[http
 <verbatim>
 %SLIDERCONTROL%
 </verbatim>
-... gives ...
-   * %RED%Insert un-installed image here%ENDCOLOR%
+... gives (simulated):
 
-... if installed.
+<img src="%ATTACHURLPATH%/slider-samp.png" alt="slider-samp.png" />
+
+... if installed:
+
 %SLIDERCONTROL%
 
 ---+++!!Simple example slider
@@ -77,13 +81,14 @@ Goes from 0 to 100, in increments of 10, with the slider at an initial position 
   initvals: 10000;40000,
   heterogeneity: ['50/50000'],
   step: 1000,
+  width: 600px,
   dimension: '&nbsp;$'
 }
 
-%SLIDERCONTROL{ name="sliderEx02" from="5000" to="150000" step="1000" initvals="10000;40000" heterogeneity="['50/50000']" dimension="&nbsp;$"}%
+%SLIDERCONTROL{ name="sliderEx02" from="5000" to="150000" step="1000" width="600px" initvals="10000;40000" heterogeneity="['50/50000']" dimension="&nbsp;$"}%
 </verbatim>
 
-%SLIDERCONTROL{ name="sliderEx02" from="5000" to="150000" step="1000" initvals="10000;40000" heterogeneity="['50/50000']" dimension="&nbsp;$"}%
+%SLIDERCONTROL{ name="sliderEx02" from="5000" to="150000" step="1000" width="600px" initvals="10000;40000" heterogeneity="['50/50000']" dimension="&nbsp;$"}%
 
 ---+++!!Simple slider
 <verbatim>
@@ -112,13 +117,14 @@ Goes from 0 to 100, in increments of 10, with the slider at an initial position 
   heterogeneity: ['50/5', '75/15'],
   scale: [1, '|', 3, '|', '5', '|', 15, '|', 30],
   limits: false,
+  width: 6in,
   step: 1
 }
 
-%SLIDERCONTROL{ name="sliderEx04" from="1" to="30" step="1" initvals="1;30" limits="false" heterogeneity="['50/5', '75/15']" scale="[1, '|', 3, '|', '5', '|', 15, '|', 30]" }%
+%SLIDERCONTROL{ name="sliderEx04" from="1" to="30" step="1" initvals="1;30" limits="false" width="6in" heterogeneity="['50/5', '75/15']" scale="[1, '|', 3, '|', '5', '|', 15, '|', 30]" }%
 </verbatim>
 
-%SLIDERCONTROL{ name="sliderEx04" from="1" to="30" step="1" initvals="1;30" limits="false" heterogeneity="['50/5', '75/15']" scale="[1, '|', 3, '|', '5', '|', 15, '|', 30]" }%
+%SLIDERCONTROL{ name="sliderEx04" from="1" to="30" step="1" initvals="1;30" limits="false" width="6in" heterogeneity="['50/5', '75/15']" scale="[1, '|', 3, '|', '5', '|', 15, '|', 30]" }%
 
 ---+++!!Simple slider
 <verbatim>
@@ -151,6 +157,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
       * #Set TO = 10
       * #Set INITVALS = 7
       * #Set STEP = 1
+      * #Set WIDTH = 400px
       * #Set ROUND =
       * #Set HETEROGENEITY =
       * #Set DIMENSION =
@@ -194,3 +201,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
+
+%META:FILEATTACHMENT{name="slider-samp.png" attachment="slider-samp.png" attr="" comment="Slider example" date="1292872271" path="slider-samp.png" size="1139" user="AaronWalker" version="1"}%
