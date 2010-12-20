@@ -1254,21 +1254,24 @@ $TWiki::cfg{Operators}{If} = [ 'TWiki::If::OP_allows', 'TWiki::If::OP_defined', 
 # *PLUGINS* Marker used by bin/configure script - do not remove!
 # The plugins listed below were discovered by searching the @INC path for
 # modules that match the TWiki standard e.g. TWiki/Plugins/MyPlugin.pm.
-$TWiki::cfg{Plugins}{PreferencesPlugin}{Enabled} = 1;
-$TWiki::cfg{Plugins}{SmiliesPlugin}{Enabled} = 1;
+$TWiki::cfg{Plugins}{ColorPickerPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{CommentPlugin}{Enabled} = 1;
-$TWiki::cfg{Plugins}{SpreadSheetPlugin}{Enabled} = 1;
-$TWiki::cfg{Plugins}{InterwikiPlugin}{Enabled} = 1;
-$TWiki::cfg{Plugins}{TablePlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{EditTablePlugin}{Enabled} = 1;
-$TWiki::cfg{Plugins}{SlideShowPlugin}{Enabled} = 1;
+$TWiki::cfg{Plugins}{EmptyPlugin}{Enabled} = 0;
 $TWiki::cfg{Plugins}{HeadlinesPlugin}{Enabled} = 1;
+$TWiki::cfg{Plugins}{InterwikiPlugin}{Enabled} = 1;
+$TWiki::cfg{Plugins}{JQueryPlugin}{Enabled} = 1;
+$TWiki::cfg{Plugins}{PreferencesPlugin}{Enabled} = 1;
+$TWiki::cfg{Plugins}{RenderListPlugin}{Enabled} = 0;
+$TWiki::cfg{Plugins}{SlideShowPlugin}{Enabled} = 1;
+$TWiki::cfg{Plugins}{SmiliesPlugin}{Enabled} = 1;
+$TWiki::cfg{Plugins}{SpreadSheetPlugin}{Enabled} = 1;
+$TWiki::cfg{Plugins}{TablePlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{TagMePlugin}{Enabled} = 1;
+$TWiki::cfg{Plugins}{TinyMCEPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{TWikiNetSkinPlugin}{Enabled} = 0;
 $TWiki::cfg{Plugins}{TwistyPlugin}{Enabled} = 1;
-$TWiki::cfg{Plugins}{TinyMCEPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled} = 1;
-$TWiki::cfg{Plugins}{JQueryPlugin}{Enabled} = 1;
 # **STRING 80**
 # Plugins evaluation order. If set to a comma-separated list of plugin names,
 # will change the execution order of plugins so the listed subset of plugins
