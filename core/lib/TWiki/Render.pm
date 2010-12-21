@@ -861,6 +861,8 @@ sub renderFORMFIELD {
     my $default   = $params->{default};
     my $rev       = $params->{rev};
     my $format    = $params->{'format'};
+    my $encode    = $params->{encode} || '';
+    my $newLine   = $params->{newline};
 
     unless ( $format ) {
         # if null format explicitly set, return empty
@@ -931,6 +933,19 @@ sub renderFORMFIELD {
 
     # Item6267: Can't use \$title since "$title" might exist in form field value
     $text =~ s/X-Title-Place-Holder/$title/go;
+
+    if( defined $newLine ) {
+        $newLine =~ s/\$br\b/\0-br-\0/go;
+        $newLine =~ s/\$n\b/\0-n-\0/go;
+        $text =~ s/\r?\n/$newLine/go;
+    }
+    if( $encode ) {
+        $text = $this->{session}->ENCODE( { _DEFAULT => $text, type => $encode } );
+    }
+    if( defined $newLine ) {
+        $text =~ s/\0-br-\0/<br \/>/go;
+        $text =~ s/\0-n-\0/\n/go;
+    }
 
     return $text;
 }
