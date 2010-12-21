@@ -4049,9 +4049,11 @@ sub QUERYSTRING {
 sub QUERYPARAMS {
     my ( $this, $params ) = @_;
     return '' unless $this->{request};
+
     my $format = defined $params->{format} ? $params->{format} : '$name=$value';
     my $separator = defined $params->{separator} ? $params->{separator} : "\n";
-    my $encoding = $params->{encoding} || '';
+    # Item6621: Deprecate encoding="", add encode="". Do NOT remove encoding=""!
+    my $encoding = $params->{encode} || $params->{encoding} || '';
 
     my @list;
     foreach my $name ( $this->{request}->param() ) {
