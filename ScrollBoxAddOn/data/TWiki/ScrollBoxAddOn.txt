@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293079529" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1293080234" format="1.1" version="$Rev$"}%
 ---+!! Scroll Box Add-on
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -266,7 +266,7 @@ __Rendered logo roll:__
   section="scroll_box"
   name="logoExample"
   title="TWiki Users Around the Globe"
-  content="     <img src='%PUBURLPATH%/%WEB%/%TOPIC%/com-cisco.png' alt='com-cisco.png' width='56' height='30' />
+  content="     <img src='%ATTACHURLPATH%/com-cisco.png' alt='com-cisco.png' width='56' height='30' />
      <img src='%ATTACHURLPATH%/com-hp.png' alt='hp' width='43' height='30' />
      <img src='%ATTACHURLPATH%/com-fedex.png' alt='fedex' width='88' height='30' />
      <img src='%ATTACHURLPATH%/com-nasa.png' alt='nasa' width='41' height='30' />
