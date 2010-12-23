@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1293077778" format="1.1" reprev="1.5" version="1.5"}%
+%META:TOPICINFO{author="TWikiContributor" date="1293079529" format="1.1" version="$Rev$"}%
 ---+!! Scroll Box Add-on
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -377,19 +377,19 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 
 __Related Topic:__ %SYSTEMWEB%.TWikiAddOns
 
-%META:FILEATTACHMENT{name="gradient-title.png" attachment="gradient-title.png" attr="h" comment="" date="1293056285" path="gradient-title.png" size="207" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="com-cisco.png" attachment="com-cisco.png" attr="h" comment="" date="1293056897" path="com-cisco.png" size="2873" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="com-fedex.png" attachment="com-fedex.png" attr="h" comment="" date="1293056897" path="com-fedex.png" size="7147" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="com-google.png" attachment="com-google.png" attr="h" comment="" date="1293056897" path="com-google.png" size="7014" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="com-ebay.png" attachment="com-ebay.png" attr="h" comment="" date="1293056897" path="com-ebay.png" size="2407" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="com-nasa.png" attachment="com-nasa.png" attr="h" comment="" date="1293056897" path="com-nasa.png" size="6270" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="com-sony.png" attachment="com-sony.png" attr="h" comment="" date="1293056897" path="com-sony.png" size="1786" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="com-ubs.png" attachment="com-ubs.png" attr="h" comment="" date="1293056897" path="com-ubs.png" size="6919" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="com-intel.png" attachment="com-intel.png" attr="h" comment="" date="1293057389" path="com-intel.png" size="1752" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="com-motorola.png" attachment="com-motorola.png" attr="h" comment="" date="1293057389" path="com-motorola.png" size="2059" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="com-hp.png" attachment="com-hp.png" attr="h" comment="" date="1293057389" path="com-hp.png" size="6157" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="com-cmu.png" attachment="com-cmu.png" attr="h" comment="" date="1293057389" path="com-cmu.png" size="5976" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="Dsc08566.jpg" attachment="Dsc08566.jpg" attr="h" comment="" date="1293062933" path="Dsc08566.jpg" size="27845" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="Dsc08581.jpg" attachment="Dsc08581.jpg" attr="h" comment="" date="1293062933" path="Dsc08581.jpg" size="27620" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="Dsc08580.jpg" attachment="Dsc08580.jpg" attr="h" comment="" date="1293062932" path="Dsc08580.jpg" size="27677" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="Dsc08567.jpg" attachment="Dsc08567.jpg" attr="h" comment="" date="1293062932" path="Dsc08567.jpg" size="27688" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="gradient-title.png" attachment="gradient-title.png" attr="h" comment="" date="1293056285" path="gradient-title.png" size="207" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="com-cisco.png" attachment="com-cisco.png" attr="h" comment="" date="1293056897" path="com-cisco.png" size="2873" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="com-fedex.png" attachment="com-fedex.png" attr="h" comment="" date="1293056897" path="com-fedex.png" size="7147" user="TWikiContributory" version="1"}%
+%META:FILEATTACHMENT{name="com-google.png" attachment="com-google.png" attr="h" comment="" date="1293056897" path="com-google.png" size="7014" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="com-ebay.png" attachment="com-ebay.png" attr="h" comment="" date="1293056897" path="com-ebay.png" size="2407" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="com-nasa.png" attachment="com-nasa.png" attr="h" comment="" date="1293056897" path="com-nasa.png" size="6270" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="com-sony.png" attachment="com-sony.png" attr="h" comment="" date="1293056897" path="com-sony.png" size="1786" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="com-ubs.png" attachment="com-ubs.png" attr="h" comment="" date="1293056897" path="com-ubs.png" size="6919" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="com-intel.png" attachment="com-intel.png" attr="h" comment="" date="1293057389" path="com-intel.png" size="1752" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="com-motorola.png" attachment="com-motorola.png" attr="h" comment="" date="1293057389" path="com-motorola.png" size="2059" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="com-hp.png" attachment="com-hp.png" attr="h" comment="" date="1293057389" path="com-hp.png" size="6157" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="com-cmu.png" attachment="com-cmu.png" attr="h" comment="" date="1293057389" path="com-cmu.png" size="5976" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Dsc08566.jpg" attachment="Dsc08566.jpg" attr="h" comment="" date="1293062933" path="Dsc08566.jpg" size="27845" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Dsc08581.jpg" attachment="Dsc08581.jpg" attr="h" comment="" date="1293062933" path="Dsc08581.jpg" size="27620" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Dsc08580.jpg" attachment="Dsc08580.jpg" attr="h" comment="" date="1293062932" path="Dsc08580.jpg" size="27677" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Dsc08567.jpg" attachment="Dsc08567.jpg" attr="h" comment="" date="1293062932" path="Dsc08567.jpg" size="27688" user="TWikiContributor" version="1"}%
