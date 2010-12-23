@@ -1,0 +1,395 @@
+%META:TOPICINFO{author="PeterThoeny" date="1293077778" format="1.1" reprev="1.5" version="1.5"}%
+---+!! Scroll Box Add-on
+<!--
+   Contributions to this add-on are appreciated. Please update the add-on page at
+   http://twiki.org/cgi-bin/view/Plugins/ScrollBoxAddOn or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/ScrollBoxAddOnDev.
+   If you are a TWiki contributor please update the add-on in the SVN repository.
+-->
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+</sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
+<div style="float:right; margin:0 0 20px 20px; padding: 0">
+%INCLUDE{
+  "%SYSTEMWEB%.ScrollBoxAddOn"
+  section="scroll_box"
+  name="teaser"
+  title="Scroll Box Use Cases"
+  content="<br /><!-- make space on top -->
+   * Scrolling text box
+   * Logo roll
+   * Image rotation
+   * What's new box
+   * RSS feed
+   * Twitter feed
+   * New registrations
+   * Recent changes box"
+  delay="60"
+  vstep="1"
+  width="200"
+  height="100"
+}%
+</div>
+
+Use this add-on to create nice looking text scroll boxes, logo rolls and boxes with images that get replaced in regular intervals. Scrolling stops if you hover the mouse pointer over the scroll area.
+
+This add-on uses CSS and !JavaScript. It falls back to show initial content in case !JavaScript is not available. All code is included, e.g. there are no external dependencies. The Scroll Box Add-on is inspired by the [[http://www.dhtmlgoodies.com/index.html?whichScript=scrolling_content][scrolling content script]] of dhtmlgoodies.com.
+
+The twiki.org redesign of December 2010 added a logo roll to the homepage. This add-on was created based on that work.
+
+---++ Usage
+
+There are two options to create scroll boxes:
+   * Using INCLUDE
+   * Using HTML &amp; CSS
+
+---+++ Using INCLUDE
+
+Create scroll boxes in TWiki pages by including two named sections defined in the !ScrollBoxAddOn topic, called ="scroll_box_engine"= and ="scroll_box"=, respectively. Example:
+<verbatim>
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="scroll_box_engine" }%
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="scroll_box"
+  name="must_be_unique"
+  title="This is a test"
+  content="TWiki keeps getting more and more useful."
+  delay="100"
+  vstep="1"
+  width="400"
+  height="30"
+}%
+</verbatim>
+
+The ="scroll_box_engine"= section defines the CSS and !JavaScript. It must be included once per page.
+
+The ="scroll_box"= section generates a scroll box. It can be included more than once to create multiple scroll boxes. This section expects the following include parameters:
+
+   * =name=: Name of the box. Must be unique per page. Use only alphanumeric characters and underscore!
+   * =title=: Title of the box.
+   * =content=: Content of the box. Can be of any form, such as TML, HTML, images. Make sure to escape double quotes with a backslash, such as =&lt;br clear=\"all\"&gt;=.
+   * =delay=: Delay between scrolls, in milliseconds.
+   * =vstep=: Vertical step taken per scroll, in pixels.
+   * =width=: Box width, in pixels.
+   * =height=: Box height of scrollable area, in pixels.
+
+---+++ Using HTML &amp; CSS
+
+You can define your own style and create your own scroll box. Example:
+
+<verbatim>
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="scroll_box_engine" }% <!-- once per page -->
+<div id="myOwnBoxContainer">
+ <div id="myOwnBoxContent">
+  (put content here)
+ </div><!-- id="myOwnBoxContent" -->
+</div><!-- id="myOwnBoxContainer" -->
+<script type="text/javascript">
+ initScrollContent( 'myOwnBoxContainer', 100, 1, 200, 400 );
+</script>
+</verbatim>
+
+The first parameter of =initScrollContent()= is the ID of the div that contains the scroll box. The numeric parameters are =delay=, =vstep=, =width= and =height=, respectively.
+
+---++ Named sections
+
+This section defines the ="scroll_box_engine"= and the ="scroll_box"= section. View the [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][raw text]] of this topic to look under the hood.
+<!--=====================================
+%STARTSECTION{ "scroll_box" }%
+<div id="%name%Box" class="scrollBoxOuter">
+ <div class="scrollBoxTitle">
+%title%
+ </div>
+ <div id="%name%Container" class="scrollBoxContainer">
+  <div id="%name%Content" class="scrollBoxContent">
+%content%
+  </div>
+ </div>
+</div>
+<script type="text/javascript">
+ initScrollContent( '%name%Container', %delay%, %vstep%, %width%, %height% );
+</script>
+%ENDSECTION{ "scroll_box" }%
+=========================================-->
+<!--=====================================
+%STARTSECTION{ "scroll_box_engine" }%
+%ADDTOHEAD{
+ "scroll_box_engine"
+ text="<script type='text/javascript'>
+ // inspired by www.dhtmlgoodies.com/index.html?whichScript=scrolling_content
+ var scrollData = new Array();
+ function doScrollContent( containerId )
+ {
+  var topPos = scrollData[containerId]['objRef'].style.top.replace(/[^\-0-9]/g,'');
+  if( scrollData[containerId]['doScroll'] ) {
+   topPos = topPos - scrollData[containerId]['verticalStep'];
+   if( topPos/1 + scrollData[containerId]['contentHeight']/1 < 1 ) topPos = 0;
+   scrollData[containerId]['objRef'].style.top = topPos + 'px';
+  }
+  setTimeout('doScrollContent(\"' + containerId + '\")', scrollData[containerId]['delay']);
+}
+ function doStopScroll()
+ {
+  var containerId = this.id;
+  scrollData[containerId]['doScroll'] = false;
+ }
+ function doStartScroll()
+ {
+  var containerId = this.id;
+  scrollData[containerId]['doScroll'] = true;
+ }
+ function initScrollContent( containerId, delay, vstep, width, height )
+ {
+  var scrollContainer = document.getElementById( containerId );
+  var scrollContent = scrollContainer.getElementsByTagName( 'DIV' )[0];
+  if( ! delay ) delay = 1000;
+  if( ! vstep ) vstep = scrollContainer.clientHeight;
+  if( width )   scrollContainer.parentNode.style.width = width + 'px';
+  if( height )  scrollContainer.style.height = height + 'px';
+  scrollContainer.onmouseover = doStopScroll;
+  scrollContainer.onmouseout = doStartScroll;
+  scrollData[containerId] = new Array();
+  scrollData[containerId]['objRef'] = scrollContent;
+  scrollData[containerId]['contentHeight'] = scrollContent.offsetHeight;
+  scrollData[containerId]['verticalStep'] = vstep;
+  scrollData[containerId]['delay'] = delay;
+  scrollData[containerId]['doScroll'] = true;
+  scrollContent.style.top = scrollData[containerId]['verticalStep'] + 'px';
+  doScrollContent( containerId );
+ }
+</script>
+<style type='text/css' media='all'>
+ .scrollBoxOuter {
+  border: solid #dddddd 1px;
+  width: 300px;
+  padding: 10px;
+  background-image: url(%PUBURLPATH%/%WEB%/%TOPIC%/gradient-title.png);
+  background-repeat: repeat-x;
+  background-color: #ffffff;
+ }
+ .scrollBoxTitle {
+  text-align:center;
+  font-size:19px;
+  font-weight:bold;
+  color: #333335;
+  padding:0 0 7px 0;
+  white-space: nowrap;
+  overflow: hidden;
+ }
+ .scrollBoxContainer {
+  overflow: hidden;
+  height: 40px;
+  padding: 0px;
+ }
+ .scrollBoxContent {
+  position: relative;
+  top: 0px;
+  padding: 0px;
+  background-color: #ffffff;
+  text-align: justify;
+ }
+ .scrollBoxContent img {
+  padding: 0px;
+  vertical-align: middle;
+ }
+ </style>"
+}%<nop>
+%ENDSECTION{ "scroll_box_engine" }%
+=========================================-->
+
+---++ Examples
+
+---+++ Text scroll demo
+
+This example shows a box that scrolls text in one pixel increments.
+
+<table><tr><td valign="top">
+__Rendered text scroll:__
+
+%INCLUDE{
+  "%SYSTEMWEB%.ScrollBoxAddOn"
+  section="scroll_box"
+  name="textExample"
+  title="Lorem ipsum"
+  content="<br /><!-- make space on top -->
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+  delay="100"
+  vstep="1"
+  width="300"
+  height="150"
+}%
+
+</td><td>&nbsp;</td><td valign="top">
+__Raw text:__
+<verbatim>
+%INCLUDE{
+  "%SYSTEMWEB%.ScrollBoxAddOn"
+  section="scroll_box"
+  name="textExample"
+  title="Lorem ipsum"
+  content="<br /><!-- make space on top -->
+    Lorem ipsum dolor sit amet, consectetur
+    ...
+    deserunt mollit anim id est laborum."
+  delay="100"
+  vstep="1"
+  width="300"
+  height="150"
+}%
+</verbatim>
+</td></tr></table>
+
+---+++ Logo roll demo
+
+This is a set of logos that all have the same height of 30 pixel. All logos used in this demo:
+
+| <img src="%ATTACHURLPATH%/com-cisco.png" alt="cisco" width='56' height='30' /> \
+<img src="%ATTACHURLPATH%/com-hp.png" alt="hp" width='43' height='30' /> \
+<img src="%ATTACHURLPATH%/com-fedex.png" alt="fedex" width='88' height='30' /> \
+<img src="%ATTACHURLPATH%/com-nasa.png" alt="nasa" width='41' height='30' /> \
+<img src="%ATTACHURLPATH%/com-google.png" alt="google" width='85' height='30' /> \
+<img src="%ATTACHURLPATH%/com-intel.png" alt="intel" width='45' height='30' /> \
+<img src="%ATTACHURLPATH%/com-sony.png" alt="sony" width='77' height='30' /> \
+<img src="%ATTACHURLPATH%/com-motorola.png" alt="motorola" width='48' height='30' /> \
+<img src="%ATTACHURLPATH%/com-ebay.png" alt="ebay" width='63' height='30' /> \
+<img src="%ATTACHURLPATH%/com-ubs.png" alt="ubs" width='77' height='30' /> \
+<img src="%ATTACHURLPATH%/com-cmu.png" alt="cmu" width='117' height='30' /> |
+
+<table><tr><td valign="top">
+__Rendered logo roll:__
+
+%INCLUDE{
+  "%SYSTEMWEB%.ScrollBoxAddOn"
+  section="scroll_box"
+  name="logoExample"
+  title="TWiki Users Around the Globe"
+  content="     <img src='%PUBURLPATH%/%WEB%/%TOPIC%/com-cisco.png' alt='com-cisco.png' width='56' height='30' />
+     <img src='%ATTACHURLPATH%/com-hp.png' alt='hp' width='43' height='30' />
+     <img src='%ATTACHURLPATH%/com-fedex.png' alt='fedex' width='88' height='30' />
+     <img src='%ATTACHURLPATH%/com-nasa.png' alt='nasa' width='41' height='30' />
+     <img src='%ATTACHURLPATH%/com-google.png' alt='google' width='85' height='30' />
+     <img src='%ATTACHURLPATH%/com-intel.png' alt='intel' width='45' height='30' />
+     <img src='%ATTACHURLPATH%/com-sony.png' alt='sony' width='77' height='30' />
+     <img src='%ATTACHURLPATH%/com-motorola.png' alt='motorola' width='48' height='30' />
+     <img src='%ATTACHURLPATH%/com-ebay.png' alt='ebay' width='63' height='30' />
+     <img src='%ATTACHURLPATH%/com-ubs.png' alt='ubs' width='77' height='30' />
+     <img src='%ATTACHURLPATH%/com-cmu.png' alt='cmu' width='117' height='30' />"
+  delay="2000"
+  vstep="30"
+  width="300"
+  height="30"
+}%
+
+</td><td>&nbsp;</td><td valign="top">
+__Raw text:__
+<verbatim>
+%INCLUDE{
+  "%SYSTEMWEB%.ScrollBoxAddOn"
+  section="scroll_box"
+  name="logoExample"
+  title="TWiki Users Around the Globe"
+  content="<img src='%ATTACHURLPATH%/com-cisco.png' alt='cisco' />
+     <img src='%ATTACHURLPATH%/com-hp.png' alt='hp' />
+     ...
+     <img src='%ATTACHURLPATH%/com-cmu.png' alt='cmu' />"
+  delay="2000"
+  vstep="30"
+  width="300"
+  height="30"
+}%
+</verbatim>
+</td></tr></table>
+
+---+++ Image swap demo
+
+This example shows a box containing an image that get replaced every 3 seconds.
+
+<table><tr><td valign="top">
+__Rendered image box:__
+
+%INCLUDE{
+  "%SYSTEMWEB%.ScrollBoxAddOn"
+  section="scroll_box"
+  name="imageExample"
+  title="Beverly Hills"
+  content="     <img src='%ATTACHURLPATH%/Dsc08566.jpg' alt='Beverly Hills park' title='Beverly Hills park' width='300' height='225' />
+     <img src='%ATTACHURLPATH%/Dsc08581.jpg' alt='Beverly Hills Rodeo Drive' title='Beverly Hills Rodeo Drive' width='300' height='225' />
+     <img src='%ATTACHURLPATH%/Dsc08580.jpg' alt='Expensive cars' title='Expensive cars' width='300' height='225' />
+     <img src='%ATTACHURLPATH%/Dsc08567.jpg' alt='Beverly Hills City Hall' title='Beverly Hills City Hall' width='300' height='225' />"
+  delay="3000"
+  vstep="225"
+  width="300"
+  height="225"
+}%
+
+</td><td>&nbsp;</td><td valign="top">
+__Raw text:__
+<verbatim>
+%INCLUDE{
+  "%SYSTEMWEB%.ScrollBoxAddOn"
+  section="scroll_box"
+  name="imageExample"
+  title="Beverly Hills"
+  content="<img src='%ATTACHURLPATH%/Dsc08566.jpg' alt='Beverly Hills' />
+     <img src='%ATTACHURLPATH%/Dsc08581.jpg' alt='Rodeo Drive' />
+     <img src='%ATTACHURLPATH%/Dsc08580.jpg' alt='Expensive cars' />
+     <img src='%ATTACHURLPATH%/Dsc08567.jpg' alt='Beverly Hills City Hall' />"
+  delay="3000"
+  vstep="225"
+  width="300"
+  height="225"
+}%
+</verbatim>
+</td></tr></table>
+
+---++ Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
+
+   * Download the ZIP file from the Add-on Home (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Add-on topic |
+     | ==pub/TWiki/%TOPIC%/*== | Images used by the examples |
+   * Test if the installation was successful:
+      * See if above examples work
+
+---++ Add-On Info
+
+   * Set SHORTDESCRIPTION = Add scroll boxes and image rotation to TWiki pages
+
+|  Add-on Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2010, TWiki:Main.PeterThoeny |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Add-on Version: | 2010-12-22 (V1.0) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-12-22: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 4.0) |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/ScrollBoxAddOn |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/ScrollBoxAddOnDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/ScrollBoxAddOnAppraisal |
+
+__Related Topic:__ %SYSTEMWEB%.TWikiAddOns
+
+%META:FILEATTACHMENT{name="gradient-title.png" attachment="gradient-title.png" attr="h" comment="" date="1293056285" path="gradient-title.png" size="207" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="com-cisco.png" attachment="com-cisco.png" attr="h" comment="" date="1293056897" path="com-cisco.png" size="2873" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="com-fedex.png" attachment="com-fedex.png" attr="h" comment="" date="1293056897" path="com-fedex.png" size="7147" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="com-google.png" attachment="com-google.png" attr="h" comment="" date="1293056897" path="com-google.png" size="7014" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="com-ebay.png" attachment="com-ebay.png" attr="h" comment="" date="1293056897" path="com-ebay.png" size="2407" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="com-nasa.png" attachment="com-nasa.png" attr="h" comment="" date="1293056897" path="com-nasa.png" size="6270" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="com-sony.png" attachment="com-sony.png" attr="h" comment="" date="1293056897" path="com-sony.png" size="1786" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="com-ubs.png" attachment="com-ubs.png" attr="h" comment="" date="1293056897" path="com-ubs.png" size="6919" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="com-intel.png" attachment="com-intel.png" attr="h" comment="" date="1293057389" path="com-intel.png" size="1752" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="com-motorola.png" attachment="com-motorola.png" attr="h" comment="" date="1293057389" path="com-motorola.png" size="2059" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="com-hp.png" attachment="com-hp.png" attr="h" comment="" date="1293057389" path="com-hp.png" size="6157" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="com-cmu.png" attachment="com-cmu.png" attr="h" comment="" date="1293057389" path="com-cmu.png" size="5976" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="Dsc08566.jpg" attachment="Dsc08566.jpg" attr="h" comment="" date="1293062933" path="Dsc08566.jpg" size="27845" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="Dsc08581.jpg" attachment="Dsc08581.jpg" attr="h" comment="" date="1293062933" path="Dsc08581.jpg" size="27620" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="Dsc08580.jpg" attachment="Dsc08580.jpg" attr="h" comment="" date="1293062932" path="Dsc08580.jpg" size="27677" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="Dsc08567.jpg" attachment="Dsc08567.jpg" attr="h" comment="" date="1293062932" path="Dsc08567.jpg" size="27688" user="PeterThoeny" version="1"}%
