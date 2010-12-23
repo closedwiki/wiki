@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293080234" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1293080920" format="1.1" version="$Rev$"}%
 ---+!! Scroll Box Add-on
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -16,7 +16,7 @@
 ---++ Introduction
 <div style="float:right; margin:0 0 20px 20px; padding: 0">
 %INCLUDE{
-  "%SYSTEMWEB%.ScrollBoxAddOn"
+  "ScrollBoxAddOn"
   section="scroll_box"
   name="teaser"
   title="Scroll Box Use Cases"
@@ -210,7 +210,7 @@ This example shows a box that scrolls text in one pixel increments.
 __Rendered text scroll:__
 
 %INCLUDE{
-  "%SYSTEMWEB%.ScrollBoxAddOn"
+  "ScrollBoxAddOn"
   section="scroll_box"
   name="textExample"
   title="Lorem ipsum"
@@ -262,7 +262,7 @@ This is a set of logos that all have the same height of 30 pixel. All logos used
 __Rendered logo roll:__
 
 %INCLUDE{
-  "%SYSTEMWEB%.ScrollBoxAddOn"
+  "ScrollBoxAddOn"
   section="scroll_box"
   name="logoExample"
   title="TWiki Users Around the Globe"
@@ -311,7 +311,7 @@ This example shows a box containing an image that get replaced every 3 seconds.
 __Rendered image box:__
 
 %INCLUDE{
-  "%SYSTEMWEB%.ScrollBoxAddOn"
+  "ScrollBoxAddOn"
   section="scroll_box"
   name="imageExample"
   title="Beverly Hills"
