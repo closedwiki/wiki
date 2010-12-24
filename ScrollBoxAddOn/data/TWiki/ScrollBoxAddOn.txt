@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293080920" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1293163797" format="1.1" version="$Rev$"}%
 ---+!! Scroll Box Add-on
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -88,11 +88,11 @@ You can define your own style and create your own scroll box. Example:
  </div><!-- id="myOwnBoxContent" -->
 </div><!-- id="myOwnBoxContainer" -->
 <script type="text/javascript">
- initScrollContent( 'myOwnBoxContainer', 100, 1, 200, 400 );
+ initScrollBox( 'myOwnBoxContainer', 100, 1, 200, 400 );
 </script>
 </verbatim>
 
-The first parameter of =initScrollContent()= is the ID of the div that contains the scroll box. The numeric parameters are =delay=, =vstep=, =width= and =height=, respectively.
+The first parameter of =initScrollBox()= is the ID of the div that contains the scroll box. The numeric parameters are =delay=, =vstep=, =width= and =height=, respectively.
 
 ---++ Named sections
 
@@ -110,7 +110,7 @@ This section defines the ="scroll_box_engine"= and the ="scroll_box"= section. V
  </div>
 </div>
 <script type="text/javascript">
- initScrollContent( '%name%Container', %delay%, %vstep%, %width%, %height% );
+ initScrollBox( '%name%Container', %delay%, %vstep%, %width%, %height% );
 </script>
 %ENDSECTION{ "scroll_box" }%
 =========================================-->
@@ -121,44 +121,44 @@ This section defines the ="scroll_box_engine"= and the ="scroll_box"= section. V
  text="<script type='text/javascript'>
  // inspired by www.dhtmlgoodies.com/index.html?whichScript=scrolling_content
  var scrollData = new Array();
- function doScrollContent( containerId )
+ function doScrollCanvas( containerID )
  {
-  var topPos = scrollData[containerId]['objRef'].style.top.replace(/[^\-0-9]/g,'');
-  if( scrollData[containerId]['doScroll'] ) {
-   topPos = topPos - scrollData[containerId]['verticalStep'];
-   if( topPos/1 + scrollData[containerId]['contentHeight']/1 < 1 ) topPos = 0;
-   scrollData[containerId]['objRef'].style.top = topPos + 'px';
+  var vPos = scrollData[containerID]['canvasObj'].style.top;
+  if( scrollData[containerID]['doScroll'] ) {
+   vPos = vPos.replace(/[^\-0-9]/g,'') - scrollData[containerID]['verticalStep'];
+   if( vPos/1 + scrollData[containerID]['canvasHeight']/1 < 1 ) { vPos = 0 };
+   scrollData[containerID]['canvasObj'].style.top = vPos + 'px';
   }
-  setTimeout('doScrollContent(\"' + containerId + '\")', scrollData[containerId]['delay']);
+  setTimeout('doScrollCanvas(\"' + containerID + '\")', scrollData[containerID]['delay']);
 }
  function doStopScroll()
  {
-  var containerId = this.id;
-  scrollData[containerId]['doScroll'] = false;
+  var containerID = this.id;
+  scrollData[containerID]['doScroll'] = false;
  }
  function doStartScroll()
  {
-  var containerId = this.id;
-  scrollData[containerId]['doScroll'] = true;
+  var containerID = this.id;
+  scrollData[containerID]['doScroll'] = true;
  }
- function initScrollContent( containerId, delay, vstep, width, height )
+ function initScrollBox( containerID, delay, vstep, width, height )
  {
-  var scrollContainer = document.getElementById( containerId );
-  var scrollContent = scrollContainer.getElementsByTagName( 'DIV' )[0];
-  if( ! delay ) delay = 1000;
-  if( ! vstep ) vstep = scrollContainer.clientHeight;
-  if( width )   scrollContainer.parentNode.style.width = width + 'px';
-  if( height )  scrollContainer.style.height = height + 'px';
+  var scrollContainer = document.getElementById( containerID );
+  var scrollCanvas = scrollContainer.getElementsByTagName( 'DIV' )[0];
+  if( ! delay ) { delay = 1000; }
+  if( ! vstep ) { vstep = scrollContainer.clientHeight; }
+  if( width )   { scrollContainer.parentNode.style.width = width + 'px'; }
+  if( height )  { scrollContainer.style.height = height + 'px'; }
   scrollContainer.onmouseover = doStopScroll;
   scrollContainer.onmouseout = doStartScroll;
-  scrollData[containerId] = new Array();
-  scrollData[containerId]['objRef'] = scrollContent;
-  scrollData[containerId]['contentHeight'] = scrollContent.offsetHeight;
-  scrollData[containerId]['verticalStep'] = vstep;
-  scrollData[containerId]['delay'] = delay;
-  scrollData[containerId]['doScroll'] = true;
-  scrollContent.style.top = scrollData[containerId]['verticalStep'] + 'px';
-  doScrollContent( containerId );
+  scrollData[containerID] = new Array();
+  scrollData[containerID]['canvasObj'] = scrollCanvas;
+  scrollData[containerID]['canvasHeight'] = scrollCanvas.offsetHeight;
+  scrollData[containerID]['verticalStep'] = vstep;
+  scrollData[containerID]['delay'] = delay;
+  scrollData[containerID]['doScroll'] = true;
+  scrollCanvas.style.top = scrollData[containerID]['verticalStep'] + 'px';
+  doScrollCanvas( containerID );
  }
 </script>
 <style type='text/css' media='all'>
@@ -206,6 +206,8 @@ This section defines the ="scroll_box_engine"= and the ="scroll_box"= section. V
 
 This example shows a box that scrolls text in one pixel increments.
 
+How it works: We place the text in a scrollable canvas that is 300 pixels wide. The text is justified left and right as specified in the style sheet of the scroll box content. We tell the scroll box to show a container 300 pixels wide and 150 pixels high. That is, we only see part of the canvas. We move the canvas up 1 pixel at a time and to wait 100 milliseconds between steps, e.g. we get the impression of smoothly scrolling text in the container.
+
 <table><tr><td valign="top">
 __Rendered text scroll:__
 
@@ -244,7 +246,9 @@ __Raw text:__
 
 ---+++ Logo roll demo
 
-This is a set of logos that all have the same height of 30 pixel. All logos used in this demo:
+This example shows a logo roll that changes every 2 seconds.
+
+How it works: We have a set of logos that all have the same height of 30 pixels:
 
 | <img src="%ATTACHURLPATH%/com-cisco.png" alt="cisco" width='56' height='30' /> \
 <img src="%ATTACHURLPATH%/com-hp.png" alt="hp" width='43' height='30' /> \
@@ -257,6 +261,8 @@ This is a set of logos that all have the same height of 30 pixel. All logos used
 <img src="%ATTACHURLPATH%/com-ebay.png" alt="ebay" width='63' height='30' /> \
 <img src="%ATTACHURLPATH%/com-ubs.png" alt="ubs" width='77' height='30' /> \
 <img src="%ATTACHURLPATH%/com-cmu.png" alt="cmu" width='117' height='30' /> |
+
+We place the logos in a scrollable canvas that is 300 pixels wide. The logos wrap around; they are justified left and right as specified in the style sheet of the scroll box content. We tell the scroll box to step by 30 pixels at a time, e.g. we will cycle through the logos row by row because the icons are 30 pixels high.
 
 <table><tr><td valign="top">
 __Rendered logo roll:__
@@ -306,6 +312,8 @@ __Raw text:__
 ---+++ Image swap demo
 
 This example shows a box containing an image that get replaced every 3 seconds.
+
+How it works: The images are 300 pixels wide and 225 pixels high. We place the images in a scrollable canvas that is 300 pixels wide, e.g. one image fits on each "line". In other words, the images are stacked on top of each other. We tell the scroll box to step by 225 pixels at a time, e.g. the same as the image height. This results in cycling through the images one by one.
 
 <table><tr><td valign="top">
 __Rendered image box:__
@@ -364,9 +372,10 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2010, TWiki:Main.PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2010-12-22 (V1.0) |
+|  Add-on Version: | 2010-12-23 (V1.1) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-12-22: | Initial version |
+|  2010-12-23: | TWikibug:Item6623: Doc improvements; changing function initScrollContent to initScrollBox |
+|  2010-12-22: | TWikibug:Item6623: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 4.0) |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
