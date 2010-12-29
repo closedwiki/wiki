@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274073099" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1293581745" format="1.1" version="$Rev$"}%
 ---+!! Slide Show Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -6,9 +6,11 @@
    http://twiki.org/cgi-bin/view/Plugins/SlideShowPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
+<sticky>
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC%
 </div>
+</sticky>
 %SHORTDESCRIPTION%
 
 ---++ Introduction
@@ -18,9 +20,22 @@ There is already a defacto standard for presentations, why this plugin? This plu
 Any topic with headings can be converted into a slideshow. Each slide starts with a ="---++"= heading. There are two modes to view a topic:
 
    * Normal topic view mode: Headings and text is shown in the usual TWiki rendering, representing the outline of the slideshow. This mode is useful to print handouts.
-   * Presentation mode: Each heading with text is shown as a slide; the format is based on a slide template. Navigation buttons are added to go to the "First", "Previous", and "Next" slide. Slide navigation is quick because it is done with anchor jumps to the same page. 
+   * Presentation mode: Each heading with text is shown as a slide; the format is based on a slide template.
 
 You can start the presentation by clicking on the "Start presentation" button.
+
+---++ Navigation
+
+While in presentation mode you can move around slides using navigation buttons and keys:
+
+| *Button* | *Key* | *Action* |
+|  %ATTACHURL%/first.gif  | Home | Go to first slide |
+|  %ATTACHURL%/prev.gif  | Left-arrow, Pagu-up | Go to previous slide |
+|  %ATTACHURL%/next.gif  | Right-arrow, Page-down | Go to next slide |
+|  %ATTACHURL%/last.gif  | End | Go to last slide |
+|  %ATTACHURL%/endpres.gif  | Esc | End presentation |
+
+Slide navigation is quick because it is done using anchor jumps within the same page. Key-based navigation requires !JavaScript enabled.
 
 ---++ Syntax Rules
 
@@ -156,9 +171,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2002-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]%BR% &copy; 2002-2010 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-05-16 |
+|  Plugin Version: | 2010-12-28 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-05-16: | TWikibug:Item6433 - doc improvements |
+|  2010-12-28: | TWikibug:Item6626: New slide navigation using keys: Home, Left-arrow, Page-up, Right-arrow, Page-down, End and Esc |
+|  2010-05-16: | TWikibug:Item6433: Doc improvements |
 |  02 Aug 2008: | Fixed corruption of preview |
 |  29 Sep 2007: | Added %SYSTEMWEB%.VarSLIDESHOWSTART and %SYSTEMWEB%.VarSLIDESHOWEND to have them listed in %SYSTEMWEB%.TWikiVariables |
 |  12 Feb 2007: | fixed construction of view urls (TWiki:Main/MichaelDaum) |
