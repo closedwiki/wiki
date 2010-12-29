@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2002-2010 Peter Thoeny, peter@thoeny.orgi, and
+# Copyright (C) 2002-2010 Peter Thoeny, peter@thoeny.org, and
 # TWiki Contributors.
 #
 # This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-05-16';
+$RELEASE = '2010-12-28';
 
 # =========================
 sub initPlugin

@@ -135,6 +135,50 @@ sub handler
         $text =~ s/%BR%/<br \/>/go;
         $text .= $textPost;
 
+        my $viewUrl = TWiki::Func::getViewUrl( $theWeb, $theTopic );
+        TWiki::Func::addToHEAD( 'SLIDESHOWPLUGIN_JS', <<HERE);
+<script type="text/javascript">
+if( navigator.appName != 'Mozilla' ){ document.onkeypress = captureKey}
+else{ document.addEventListener( 'keyup', captureKey, true ) }
+function captureKey(e)
+{
+  var keyCode = (typeof event != 'undefined' ) ? window.event.keyCode : e.keyCode; 
+  if( keyCode == 33 || keyCode == 37 ) { // Page-Up or Arrow-Left
+    goSlide( 'p' );
+    return false;
+  } else if( keyCode == 34 || keyCode == 39 ) { // Page-Down or Arrow-Right
+    goSlide( 'n' );
+    return false;
+  } else if( keyCode == 36 ) { // Home
+    goSlide( 1 );
+    return false;
+  } else if( keyCode == 35 ) { // End
+    goSlide( $slideMax );
+    return false;
+  } else if( keyCode == 27 ) { // Esc
+    location.href = '$viewUrl';
+    return false;
+  }
+}
+function goSlide( action )
+{
+  var anchor = location.href.replace( /.*#/, '' );
+  var num = anchor.replace( /[^0-9]/g, '' )/1;
+  if( num == '' ) num = 1;
+  if( action == 'n' ) {
+    if( num < $slideMax + 1 ) num = num + 1;
+  } else if( action == 'p' ) {
+    if( num > 1 ) num = num - 1;
+  } else( num = action );
+  if( anchor == '' ) {
+    location.href = location.href + '#GoSlide' + num;
+  } else {
+    location.href = location.href.replace( '#' + anchor, '#GoSlide' + num );
+  }
+}
+</script>
+HERE
+
     } else {
         # in normal topic view mode
         if( $text =~ /[\n\r]\-\-\-+(\++)/s ) {
