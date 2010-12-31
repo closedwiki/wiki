@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293775825" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1293777502" format="1.1" version="$Rev$"}%
 ---+!! !SecurityPlugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -64,7 +64,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2010-12-30 (V1.1) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-12-29: | TWikibug:Item6530: Doc improvements |
+|  2010-12-29: | TWikibug:Item6530: Doc improvements; updated unlocked icon; change TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  2005-07-13: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.022 |
 |  CPAN Dependencies: | none |
@@ -77,4 +77,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.TWikiUserAuthentication
 
-%META:FILEATTACHMENT{name="unlocked.gif" attr="h" comment="picture of unlocked lock" date="1121266359" path="unlocked.gif" size="392" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="unlocked.gif" attr="h" comment="picture of unlocked lock" date="1293777502" path="unlocked.gif" size="923" user="TWikiContributor" version="1"}%
