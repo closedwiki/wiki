@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272183645" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1293784965" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
     Contributions to this plugin are appreciated. Please update the plugin page
@@ -6,8 +6,12 @@
     at http://twiki.org/cgi-bin/view/Plugins/LdapNgPluginDev.
     If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
 %SHORTDESCRIPTION%
-%TOC%
+
+---++ Introduction
 
 This plugin provides an interface to query an LDAP directory and display the results in a TWiki topic.
 It is a complete rewrite of the TWiki:Plugins/LdapPlugin by TWiki:Main/GerardHickey to provide
