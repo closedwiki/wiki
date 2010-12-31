@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272247235" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1293784608" format="1.1" version="$Rev$"}%
 ---+ Subscribe Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -8,6 +8,9 @@
 
    * Set SHORTDESCRIPTION = Companion plugin to the MailerContrib, adding a "Subscribe me" link to topics to easily subscribe to topic changes
 -->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
 %SHORTDESCRIPTION%
 
 Example (only works if plugin is installed, and you are logged in (not %USERSWEB%.TWikiGuest)): %SUBSCRIBE%
