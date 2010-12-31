@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272433591" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1293784117" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -6,10 +6,10 @@
    http://twiki.org/cgi-bin/view/Plugins/MediaWikiTablePluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
 %SHORTDESCRIPTION%
-<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding-left:10px">
-%TOC%
-</div>
 
 ---++ Introduction
 
