@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272689708" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1293783842" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -8,10 +8,10 @@
 
    * Set SHORTDESCRIPTION = An easy section editing facility
 -->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
 %SHORTDESCRIPTION%
-<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
-%TOC%
-</div>
 
 ---++ Description
 
