@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293777502" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1293778034" format="1.1" version="$Rev$"}%
 ---+!! !SecurityPlugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -13,13 +13,13 @@
 
 ---++ Overview
 
-The !SecurityPlugin implements a [[TWikiVariables][TWikiVariable]] which will show weather the page being viewed needs authentication or not. Authorization is another issue. Hopefully this is easier and more intuitive than telling users to check whether the current URL has =view= or =viewauth= in it.
+The !SecurityPlugin implements a [[%SYSTEMWEB%.TWikiVariables][TWikiVariable]] which will show weather the page being viewed needs authentication or not. Authorization is another issue. Hopefully this is easier and more intuitive than telling users to check whether the current URL has =view= or =viewauth= in it.
 
 The Plugin is quite simple, it uses ==TWiki::Func::isGuest== to check if the page is authenticated or not. This relies on the fact that URL linking to other topics use the =view= CGI and authenticated pages are referred from the =view= CGI to the =viewauth= CGI (if installed). Of course one could make a page appear authenticated by adding =auth= to the URL (or linking to a URL with viewauth) but this won't happen on the next page if the user acts normally and clicks on the links.
 
 ---++ Syntax Rules
 
-Place a %<nop>SECURITY% variable in any page (Or WebLeftBar or WebTopBar), it will return the contents of %<nop>SECURITYLOCKED% or %<nop>SECURITYUNLOCKED% depending on whether the page being viewed is authenticated or not.
+Place a %<nop>SECURITY% variable in any page (or %SYSTEMWEB%.WebLeftBar or %SYSTEMWEB%.WebTopBar), it will return the contents of %<nop>SECURITYLOCKED% or %<nop>SECURITYUNLOCKED% depending on whether the page being viewed is authenticated or not.
 
 ---++ Examples
 
