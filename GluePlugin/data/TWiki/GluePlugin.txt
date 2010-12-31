@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272610865" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1293783928" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -6,11 +6,11 @@
    http://twiki.org/cgi-bin/view/Plugins/GluePluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
 %SHORTDESCRIPTION%
 
-<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
-%TOC%
-</div>
 ---++ Description
 
 This plugin will help you to write _readable_ markup (<nop>TWikiMarkup, HMTL, ...) within TWiki by allowing tags and arguments to be formatted on multiple lines. This is done by removing whitespaces surrounding tilde characters at the beginning of a line and recombine consecutive lines again.  Basically, there are two ways of glueing and recombining lines by either removing all whitespaces between two lines using =%*~~= or by removing all whitespaces and separateing lines with a single space using =%~~~=. There's a helper character sequence =%~~= that prevents the TWiki engine to interprete tags before the GluePlugin could reformat the text. In addition there's a glue sequence =#~~= to insert comments within a <nop>TWikiMarkup expression.
