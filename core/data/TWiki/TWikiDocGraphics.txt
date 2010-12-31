@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1289350229" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1293779720" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. Doc graphics are defined at %CALC{$SET(icontopics, $LISTIF($NOT($EXACT($item,)), $LISTMAP($IF($EXISTS($item), [[$item]], ), %ICONTOPIC%)))$GET(icontopics)}%.
@@ -166,6 +166,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{logout}% | =%<nop>ICON{logout}%= | Log out | gif | 16x16 |  |
 | %ICON{key}% | =%<nop>ICON{key}%= | Key | gif | 16x16 |  |
 | %ICON{lock}% | =%<nop>ICON{lock}%= | Lock | gif | 16x16 |  |
+| %ICON{lock-open}% | =%<nop>ICON{lock-open}%= | Lock, unlocked | gif | 16x16 |  |
 | %ICON{locktopic}% | =%<nop>ICON{locktopic}%= | Locked topic | gif | 16x16 |  |
 | %ICON{locktopicgray}% | =%<nop>ICON{locktopicgray}%= | Locked topic, gray | gif | 16x16 |  |
 | %ICON{lockfolder}% | =%<nop>ICON{lockfolder}%= | Locked folder | gif | 16x16 |  |
@@ -496,6 +497,7 @@ __Related Topics:__ VarICON, %CALC{$GET(icontopics)}%, TWikiDocGraphicsTemplate,
 
 __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny. Many of the original icons were recreated by TWiki:Main.ArthurClemens.
 
+
 %META:FILEATTACHMENT{name="addon.gif" attr="h" comment="" date="1169565034" path="addon.gif" size="370" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="air.gif" attr="h" comment="" date="1169565034" path="air.gif" size="356" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="airplane.gif" attr="h" comment="" date="1236468594" path="airplane.gif" size="919" user="TWikiContributor" version=""}%
@@ -643,7 +645,8 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="line_ur_gray.gif" attr="h" comment="" date="1169565034" path="line_ur_gray.gif" size="383" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="line_ur.gif" attr="h" comment="" date="1169565034" path="line_ur.gif" size="111" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="linkedin.gif" attr="h" comment="" date="1260079118" path="linkedin.gif" size="372" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="lock.gif" attr="h" comment="" date="1169565034" path="lock.gif" size="221" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="lock.gif" attr="h" comment="" date="1293778974" path="lock.gif" size="924" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="lock-open.gif" attr="h" comment="" date="1293778974" path="lock-open.gif" size="923" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="lockfolder.gif" attr="h" comment="" date="1169565034" path="lockfolder.gif" size="213" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="lockfoldergray.gif" attr="h" comment="" date="1169565034" path="lockfoldergray.gif" size="156" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="locktopic.gif" attr="h" comment="" date="1169565034" path="locktopic.gif" size="217" user="TWikiContributor" version=""}%
