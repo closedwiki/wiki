@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273211493" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1293781492" format="1.1" version="$Rev$"}%
 ---+!! !TWikiNetSkin Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -6,9 +6,9 @@
    http://twiki.org/cgi-bin/view/Plugins/TWikiNetSkinPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
-<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
-%TOC%
-</div>
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
 Helps TWikiNetSkin to render tables and h2 headers. This plugin is only enabled if the skin is set to =twikinet=.
 
 ---++ Syntax Rules
