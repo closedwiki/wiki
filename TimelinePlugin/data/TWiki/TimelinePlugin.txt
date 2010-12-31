@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272348558" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1293784236" format="1.1" version="$Rev$"}%
 ---+!! Timeline TWiki Plugin
 <img src="%ATTACHURLPATH%/timeline.jpg" alt="timeline.jpg" style="float:right;" />
 <!--
@@ -7,9 +7,10 @@
    http://twiki.org/cgi-bin/view/Plugins/TimelinePluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
 [[http://simile.mit.edu/timeline/][Timeline]] is a DHTML-based AJAXy widget for visualizing time-based events. It can be used to show a <nop>WebChanges timeline with the query below.
-
-%TOC%
 
 ---++ Syntax Rules
 
