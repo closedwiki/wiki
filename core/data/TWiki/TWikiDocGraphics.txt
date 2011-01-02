@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293779720" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1293859754" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. Doc graphics are defined at %CALC{$SET(icontopics, $LISTIF($NOT($EXACT($item,)), $LISTMAP($IF($EXISTS($item), [[$item]], ), %ICONTOPIC%)))$GET(icontopics)}%.
@@ -216,6 +216,8 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{processing-bg}% | =%<nop>ICON{processing-bg}%= | Processing, transparent | gif | 16x16 |  |
 | %ICON{processing-32}% | =%<nop>ICON{processing-32}%= | Processing | gif | 32x32 |  |
 | %ICON{processing-32-bg}% | =%<nop>ICON{processing-32-bg}%= | Processing, transparent | gif | 32x32 |  |
+| %ICON{processing-bar}% | =%<nop>ICON{processing-bar}%= | Processing bar | gif | 92x16 |  |
+| %ICON{processing-bar-wide}% | =%<nop>ICON{processing-bar-wide}%= | Processing bar, wide | gif | 124x12 |  |
 | %ICON{minus}% | =%<nop>ICON{minus}%= | Minus | gif | 16x16 |  |
 | %ICON{plus}% | =%<nop>ICON{plus}%= | Plus | gif | 16x16 |  |
 | %ICON{choice-cancel}% | =%<nop>ICON{choice-cancel}%= | Cancel | gif | 16x16 |  |
@@ -497,7 +499,6 @@ __Related Topics:__ VarICON, %CALC{$GET(icontopics)}%, TWikiDocGraphicsTemplate,
 
 __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny. Many of the original icons were recreated by TWiki:Main.ArthurClemens.
 
-
 %META:FILEATTACHMENT{name="addon.gif" attr="h" comment="" date="1169565034" path="addon.gif" size="370" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="air.gif" attr="h" comment="" date="1169565034" path="air.gif" size="356" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="airplane.gif" attr="h" comment="" date="1236468594" path="airplane.gif" size="919" user="TWikiContributor" version=""}%
@@ -694,6 +695,8 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="process.gif" attr="h" comment="" date="1258790911" path="process.gif" size="891" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="processing-32-bg.gif" attr="h" comment="" date="1237421717" path="processing-32-bg.gif" size="2193" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="processing-32.gif" attr="h" comment="" date="1237421717" path="processing-32.gif" size="1918" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="processing-bar.gif" attr="h" comment="" date="1293859439" path="processing-bar.gif" size="1754" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="processing-bar-wide.gif" attr="h" comment="" date="1293859439" path="processing-bar-wide.gif" size="1656" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="processing-bg.gif" attr="h" comment="" date="1237421717" path="processing-bg.gif" size="1661" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="processing.gif" attr="h" comment="" date="1229216814" path="processing.gif" size="2537" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="profile.gif" attr="h" comment="" date="1258790911" path="profile.gif" size="980" user="TWikiContributor" version=""}%
