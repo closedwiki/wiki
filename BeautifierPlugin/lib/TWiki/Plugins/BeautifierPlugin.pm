@@ -1,8 +1,9 @@
-#
-# TWiki WikiClone ($wikiversion has version info)
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2002-2007 TWiki:Main.LingLo
+# Copyright (C) 2007-2010 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,33 +15,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
-#
-# =========================
-#
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
-#
-# Each plugin is a package that contains the subs:
-#
-#   initPlugin           ( $topic, $web, $user, $installWeb )
-#   commonTagsHandler    ( $text, $topic, $web )
-#   startRenderingHandler( $text, $web )
-#   outsidePREHandler    ( $text )
-#   insidePREHandler     ( $text )
-#   endRenderingHandler  ( $text )
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, all handlers except initPlugin are
-# disabled. To enable a handler remove the leading DISABLE_ from
-# the function name.
-# 
-# NOTE: To interact with TWiki use the official TWiki functions
-# in the &TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
-
 
 # =========================
-package TWiki::Plugins::BeautifierPlugin; 	# change the package name!!!
+package TWiki::Plugins::BeautifierPlugin;
 use Beautifier::Core;
 use Output::HTML;
 
@@ -50,15 +27,8 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $debug %langs
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2010-01-03';
 
 # =========================
 
@@ -89,9 +59,6 @@ sub commonTagsHandler
 
     # &TWiki::Func::writeDebug( "- BeautifierPlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
-    # This is the place to define customized tags and variables
-    # Called by sub handleCommonTags, after %INCLUDE:"..."%
-
     # Find code tag and beautify
     $_[0] =~ s/%CODE{(.*?)}%(.*?)%ENDCODE%/&handleCode($1, $2)/gseo;
 }
@@ -104,7 +71,8 @@ sub handleCode
 
     TWiki::Func::addToHEAD( BEAUTIFIERPLUGIN_CODEFRAGMENT_CSS => '<link rel="stylesheet" href="%PUBURL%/%TWIKIWEB%/BeautifierPlugin/style.css" type="text/css" media="all" />' );
 
-    my $lang = TWiki::Func::extractNameValuePair( $args );	# || default language (eg, TWiki::Func::getPreferencesValue(uc 'BEAUTIFIERPLUGIN_LANGUAGE' ) 
+    my $lang = TWiki::Func::extractNameValuePair( $args );
+       # || default language (eg, TWiki::Func::getPreferencesValue(uc 'BEAUTIFIERPLUGIN_LANGUAGE' ) 
     unless ($langs->{$lang})
     {
         local $SIG{__DIE__};
