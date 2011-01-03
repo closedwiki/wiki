@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1294095562" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294097044" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -105,7 +105,7 @@ void nWorld::StepSim()
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-01-03 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2011-01-03: | TWikibug:Item6530: Doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2011-01-03: | TWikibug:Item6530: Doc improvements; small style improvement; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  2007-05-20: | added <nop>JavaScript language file, removed legacy CODE_<i>lang</i> construct -- TWiki:Main.WillNorris |
 |  2007-04-30: | warnings cleanup; no functional changes -- TWiki:Main.WillNorris |
 |  2007-04-27: | automatically adds CSS for formatting code fragments -- TWiki:Main.WillNorris |
@@ -126,4 +126,4 @@ void nWorld::StepSim()
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
-%META:FILEATTACHMENT{name="style.css" attr="" comment="CSS to format code fragments" date="1177765269" path="style.css" size="182" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="style.css" attr="h" comment="CSS to format code fragments" date="1294097044" path="style.css" size="154" user="TWikiContributor" version="1"}%

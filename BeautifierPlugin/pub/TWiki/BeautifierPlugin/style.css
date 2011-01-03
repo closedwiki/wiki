@@ -1,7 +1,6 @@
 div.BeautifierPlugin div.fragment {
-        background : #FFFFCC;
-        border : 1px solid #CCCCCC;
-        margin-left : 2em;
-        margin-right : 2em;
-        padding : 4px;
+        background: #FFFFF0;
+        border: 1px solid #CCCCCC;
+        margin: 1em 2em;
+        padding : 0 1.2em;
 }
