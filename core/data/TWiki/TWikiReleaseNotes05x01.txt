@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277916647" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294117992" format="1.1" version="$Rev$"}%
 ---+!! Placeholder for Release Notes of TWiki-5.1 (Istanbul), 2010-FIXME
 
 %TOC%
@@ -29,6 +29,14 @@ TWiki-5.1 ships with:
    * *Skins:* ClassicSkin, PatternSkin, TopMenuSkin, TWikiNetSkin,
 
 __Note:__ FIXME are new in TWiki-5.1.
+
+---++ Supported User Interface Languages
+
+The user interface of this TWiki version is localized to 19 languages:
+
+English (default), Bulgarian (=bg=), Chinese simplified (=zh-cn=), Chinese traditional (=zh-tw=), Czechoslovakian (=cs=), Danish (=da=), Dutch (=nl=), German (=de=), Finnish (=fi=), French (=fr=), Italian (=it=), Japanese (=ja=), Korean (=ko=), Polish (=pl=), Portuguese (=pt=), Russian (=ru=), Slovakian (=sv=), Spanish (=es=), Ukrainian (=uk=).
+
+__Note:__ TWiki needs to be configured properly to display user interface languages other than the default English language. Details in TWiki:TWiki.InstallationWithI18N and TWiki:TWiki.InternationalizationSupplement.
 
 ---++ Deprecation Notices
 

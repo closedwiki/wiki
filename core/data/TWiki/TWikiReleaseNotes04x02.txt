@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1286772964" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294118002" format="1.1" version="$Rev$"}%
 ---+!! TWiki Release 4.2.4 (Freetown), 2008-12-06
 
 __Note:__ _This is the release note for the previous major release version 4.2.X. This note, TWikiReleaseNotes04x00 and TWikiReleaseNotes04x01 are included with 4.3.X because they contain valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes04x03 for the 4.3.X release notes_
@@ -22,6 +22,14 @@ TWiki 4.2.4 is shipped with
    * *Plugins:* !CommentPlugin, !EditTablePlugin, !EmptyPlugin, !InterwikiPlugin, !PreferencesPlugin, !RenderListPlugin, !SlideShowPlugin, !SmiliesPlugin, !SpreadSheetPlugin, !TablePlugin, !TinyMCEPlugin, !TwistyPlugin, !WysiwygPlugin
    * *Contribs:* !BehaviourContrib, !JSCalendarContrib, !MailerContrib, !TipsContrib, !TWikiUserMappingContrib, !TwistyContrib
    * *Skins:* !ClassicSkin, !PatternSkin
+
+---++ Supported User Interface Languages
+
+The user interface of this TWiki version is localized to 18 languages:
+
+English (default), Bulgarian (=bg=), Chinese simplified (=zh-cn=), Chinese traditional (=zh-tw=), Czechoslovakian (=cs=), Danish (=da=), Dutch (=nl=), German (=de=), Finnish (=fi=), French (=fr=), Italian (=it=), Japanese (=ja=), Polish (=pl=), Portuguese (=pt=), Russian (=ru=), Slovakian (=sv=), Spanish (=es=), Ukrainian (=uk=).
+
+__Note:__ TWiki needs to be configured properly to display user interface languages other than the default English language. Details in TWiki:TWiki.InstallationWithI18N and TWiki:TWiki.InternationalizationSupplement.
 
 ---++ New Features Highlights
 

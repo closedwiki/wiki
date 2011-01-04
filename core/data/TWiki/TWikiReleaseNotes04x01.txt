@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277915589" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294118002" format="1.1" version="$Rev$"}%
 ---+!! TWiki Release 4.1.2 (Edinburgh), 2007-03-03
 
 __Note:__ _This is the release note for the previous major release version 4.1.X. This note and the TWikiReleaseNotes04x00 are included with 4.2.X because they contain valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes04x02 for the 4.2.X release notes_
@@ -72,6 +72,14 @@ TWiki 4.1.1 addresses a series of bugs found in the first 4 weeks after the rele
       * TablePlugin: New attribute =cellborder=.
       * TablePlugin: Highlight the sorted column with custom colors; includes also a general cosmetic update of default colors.
       * TablePlugin: Support for initsort on more than one table. A table with the initsort option is initsorted UNLESS it is sorted by clicking on a column header. If you click on a header of another table all other tables goes back to the default sort defined by initsort or not sorted if no initsort, and the new table is sorted based on the user clicking on a table header.
+
+---++ Supported User Interface Languages
+
+The user interface of this TWiki version is localized to 14 languages:
+
+English (default), Chinese simplified (=zh-cn=), Chinese traditional (=zh-tw=), Czechoslovakian (=cs=), Danish (=da=), Dutch (=nl=), German (=de=), French (=fr=), Italian (=it=), Polish (=pl=), Portuguese (=pt=), Russian (=ru=), Slovakian (=sv=), Spanish (=es=).
+
+__Note:__ TWiki needs to be configured properly to display user interface languages other than the default English language. Details in TWiki:TWiki.InstallationWithI18N and TWiki:TWiki.InternationalizationSupplement.
 
 ---++ Important Changes since 4.0.5
 

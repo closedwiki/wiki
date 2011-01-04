@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277915590" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294118002" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-4.3.2 (Georgetown), 2009-09-02
 
 __Note:__ _This is the release note for the previous major release version 4.3.X. This note, TWikiReleaseNotes04x00, TWikiReleaseNotes04x01 and TWikiReleaseNotes04x02 are included with 5.0.X because they contain valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes05x00 for the 5.0.X release notes._
@@ -24,6 +24,14 @@ TWiki-4.3.2 ships with:
    * *Skins:* !ClassicSkin, !PatternSkin, !TWikiNetSkin,
 
 __Note:__ !HeadlinesPlugin, !TWikiNetSkin and !TWikiNetSkinPlugin are new in TWiki-4.3.0.
+
+---++ Supported User Interface Languages
+
+The user interface of this TWiki version is localized to 19 languages:
+
+English (default), Bulgarian (=bg=), Chinese simplified (=zh-cn=), Chinese traditional (=zh-tw=), Czechoslovakian (=cs=), Danish (=da=), Dutch (=nl=), German (=de=), Finnish (=fi=), French (=fr=), Italian (=it=), Japanese (=ja=), Korean (=ko=), Polish (=pl=), Portuguese (=pt=), Russian (=ru=), Slovakian (=sv=), Spanish (=es=), Ukrainian (=uk=).
+
+__Note:__ TWiki needs to be configured properly to display user interface languages other than the default English language. Details in TWiki:TWiki.InstallationWithI18N and TWiki:TWiki.InternationalizationSupplement.
 
 ---++ New Features Highlights
 

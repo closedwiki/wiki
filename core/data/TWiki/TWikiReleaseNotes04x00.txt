@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277915589" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294118002" format="1.1" version="$Rev$"}%
 ---+!! TWiki Release 4.0 (Dakar)
 
 __Note:__ This is the release note for the previous major release version 4.0.X. It is included with 4.1.X because it contains valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes04x01 for the 4.1.X release notes.
@@ -21,6 +21,14 @@ __Major New Features__
 __Note:__ In what follows, {This} (words in curly braces) refers to settings in the new 'configure' interface.
 
 %TOC%
+
+---++ Supported User Interface Languages
+
+The user interface of this TWiki version is localized to 12 languages:
+
+English (default), Chinese simplified (=zh-cn=), Chinese traditional (=zh-tw=), Danish (=da=), Dutch (=nl=), German (=de=), French (=fr=), Italian (=it=), Polish (=pl=), Portuguese (=pt=), Slovakian (=sv=), Spanish (=es=).
+
+__Note:__ TWiki needs to be configured properly to display user interface languages other than the default English language. Details in TWiki:TWiki.InstallationWithI18N and TWiki:TWiki.InternationalizationSupplement.
 
 ---++ Notes for end users
 
