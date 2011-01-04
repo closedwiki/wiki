@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1294099294" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294101396" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -13,7 +13,7 @@
 
 ---++ Introduction
 
-This plugin allows you to have code fragments automatically formatted and highlighted. It uses the [[http://www.beautifier.org/][Beautifier library]] (included) written by Mike Jewell.
+This plugin allows you to have code fragments automatically formatted and highlighted. It uses the Beautifier library (included) written by Mike Jewell.
 
 ---++ Syntax Rules
 
@@ -25,6 +25,7 @@ Insert the code between =%<nop>CODE{"<i>language</i>"}%= and =%<nop>ENDCODE%=.  
 | C++ | =%<nop>CODE{"cpp"}%= ... =%<nop>ENDCODE%= |
 | C# | =%<nop>CODE{"csharp"}%= ... =%<nop>ENDCODE%= |
 | Corba | =%<nop>CODE{"corba"}%= ... =%<nop>ENDCODE%= |
+| CSS | =%<nop>CODE{"css"}%= ... =%<nop>ENDCODE%= |
 | HTML | =%<nop>CODE{"html"}%= ... =%<nop>ENDCODE%= |
 | IDL | =%<nop>CODE{"idl"}%= ... =%<nop>ENDCODE%= |
 | Java | =%<nop>CODE{"java"}%= ... =%<nop>ENDCODE%= |
@@ -44,7 +45,7 @@ Insert the code between =%<nop>CODE{"<i>language</i>"}%= and =%<nop>ENDCODE%=.  
 | XML | =%<nop>CODE{"xml"}%= ... =%<nop>ENDCODE%= |
 </blockquote>
 
-Additional languages can be added since the Beautifier library is flexible and can support a wide range of language families.  Other languages can be added with relative ease by downloading the full PHP dist from http://www.beautifier.org/ and converting the relevant language file from PHP to Perl.
+Additional languages can be added since the Beautifier library is flexible and can support a wide range of language families.  Other languages can be added with relative ease by downloading the full PHP dist from http://sourceforge.net/projects/beautifier/ and converting the relevant language file from PHP to Perl. Note: The original http://www.beautifier.org/ website is defunct.
 
 ---+++ Display Customisation
 
@@ -109,7 +110,7 @@ void nWorld::StepSim()
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-01-03 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2011-01-03: | TWikibug:Item6530: Doc improvements; small style improvement; changing TWIKIWEB to SYSTEMWEB; adding CORBA (thanks Will Norris), IDL (thanks Will Norris), Visual Basic (thanks TWiki:Main.ThomasJachmann) -- TWiki:Main.PeterThoeny |
+|  2011-01-03: | TWikibug:Item6530: Doc improvements; small style improvement; changing TWIKIWEB to SYSTEMWEB; adding CORBA (thanks Will Norris), IDL (thanks Will Norris), Visual Basic (thanks TWiki:Main.ThomasJachmann), CSS -- TWiki:Main.PeterThoeny |
 |  2007-05-20: | added <nop>JavaScript language file, removed legacy CODE_<i>lang</i> construct -- TWiki:Main.WillNorris |
 |  2007-04-30: | warnings cleanup; no functional changes -- TWiki:Main.WillNorris |
 |  2007-04-27: | automatically adds CSS for formatting code fragments -- TWiki:Main.WillNorris |
