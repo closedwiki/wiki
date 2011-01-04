@@ -1,4 +1,4 @@
 package TWiki::Contrib::PatternSkin;
 use vars qw( $VERSION );
-$VERSION = '2010-12-20 r$Rev$';
+$VERSION = '2011-01-03 r$Rev$';
 1;

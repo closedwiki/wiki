@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1292912384" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294110909" format="1.1" version="$Rev$"}%
 ---+!! Pattern Skin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -95,8 +95,9 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 |  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.png" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this skin]] |
 |  Base Name: | pattern |
-|  Skin Version: | 2010-12-20 |
+|  Skin Version: | 2011-01-03 |
 |  History: | <!-- specify latest version first -->&nbsp; |
+|  2011-01-03: | TWikibug:Item6628: Minor gradient fix - change main window gradient from pale red to pale gray -- TWiki:Main.PeterThoeny |
 |  2010-12-20: | TWikibug:Item6622 - Don't hide non-hidden attachments by default, e.g. toggle state is "show" on initial view -- TWiki:Main.PeterThoeny |
 |  2010-11-25: | TWikibug:Item6608 - Reduce the size of H1 and H2 fonts -- TWiki:Main.PeterThoeny |
 |  2010-09-24: | TWikibug:Item6544 - fix for Jump box having no help text in IE8 -- TWiki:Main.IanBowles |
