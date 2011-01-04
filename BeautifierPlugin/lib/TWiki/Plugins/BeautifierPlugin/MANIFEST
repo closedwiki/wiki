@@ -9,6 +9,7 @@ lib/HFile/HFile_bash.pm 0644
 lib/HFile/HFile_corba.pm 0644
 lib/HFile/HFile_cpp.pm 0644
 lib/HFile/HFile_csharp.pm 0644
+lib/HFile/HFile_css.pm 0644
 lib/HFile/HFile_html.pm 0644
 lib/HFile/HFile_idl.pm 0644
 lib/HFile/HFile_java.pm 0644
