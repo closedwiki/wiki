@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1294118002" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294118921" format="1.1" version="$Rev$"}%
 ---+!! TWiki Release 4.0 (Dakar)
 
 __Note:__ This is the release note for the previous major release version 4.0.X. It is included with 4.1.X because it contains valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes04x01 for the 4.1.X release notes.
@@ -855,6 +855,7 @@ The following fixes have been addressed in this release:
 | [[%BUGS%/Item2928][Item2928]] | Mailto links in brackets [[ ][ ]] contain visible when text is upper case |
 | [[%BUGS%/Item2884][Item2884]] | EditTablePlugin does not honour ALLOWTOPICCHANGE (bug introduced in 4.0.4 hotfix 3) |
 | [[%BUGS%/Item2980][Item2980]] | TWiki::Func::checkAccessPermission issue with '' vs. undef |
+</noautolink>
 
 ---+++ TWiki 4.0.5 Enhancements
 
