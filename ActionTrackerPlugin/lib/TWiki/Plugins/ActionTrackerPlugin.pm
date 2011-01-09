@@ -25,7 +25,7 @@ use TWiki::Func ();
 use TWiki::Plugins ();
 
 our $VERSION = '$Rev$';
-our $RELEASE = '04 Nov 2010';
+our $RELEASE = '2011-01-09';
 our $SHORTDESCRIPTION =
 'Adds support for action tags in topics, and automatic notification of action statuses';
 our $initialised = 0;

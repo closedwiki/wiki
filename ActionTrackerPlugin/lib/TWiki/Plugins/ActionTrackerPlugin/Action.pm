@@ -811,7 +811,7 @@ sub _formatField_link {
             },
             CGI::img(
                 {
-                    src => '%PUBURL%/%SYSTEMWEB%/DocumentGraphics/target.gif',
+                    src => '%PUBURL%/%SYSTEMWEB%/TWikiDocGraphics/target.gif',
                     alt => '(go to action)'
                 }
             )
