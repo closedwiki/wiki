@@ -52,6 +52,7 @@ sub fixFile
     $text =~ s/DefaultPreferences/TWikiPreferences/go;
     $text =~ s/SitePreferences/TWikiPreferences/go;
     $text =~ s/"ProjectContributor"/"TWikiContributor"/go;
+    $text =~ s/DocumentGraphics/TWikiDocGraphics/go;
 
     saveFile( $file, $text );
     print " done\n";
