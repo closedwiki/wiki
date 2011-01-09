@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1290014620" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294610126" format="1.1" version="$Rev$"}%
 ---+!! Action Tracker Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -479,7 +479,8 @@ Thanks are due to the following sponsors, who have helped make this plugin possi
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-11-12 | TWikibug:Item6530 - doc improvements |
+|  2011-01-09 | TWikibug:Item6629: Fix for wrong URL reference for target icon |
+|  2010-11-12 | TWikibug:Item6530: Doc improvements |
 |  04 Nov 2010 | Improved the fix for unwanted date changes when you create or edit an action. Now it should also work for servers west of Greenwich.  |
 |  03 Nov 2010 | Ensure there's at least one newline at the end of the topic text after an action edit, and always one empty line between topic content and meta; otherwise attachment meta-data may get eaten |
 |  2010-05-26 | TWikibug:Item6433 - doc improvements |
