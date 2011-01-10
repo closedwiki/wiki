@@ -1,0 +1,193 @@
+%META:TOPICINFO{author="TWikiContributors" date="1186585733" format="1.1" reprev="1.10" version="1.10"}%
+---+!! <nop>%TOPIC%
+
+A visual confirmation plugin, known as Captcha, for new user registration. This plugin prevents automated scripts in creating users and spam your wiki with their url's to get a better google ranking.
+
+%TOC%
+
+------
+
+---++ Syntax Rules
+
+   * The tag %<nop>CAPTCHAURL% expands to the url of the image containing the scrambled text;
+   * The tag %<nop>CAPTCHAHASH% expands to the hash matching the image.
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = To prevent automated bots from spamming
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
+Additionally, the following settings can be changed in =lib/LocalSite.cfg=, the list below shows the defaults.
+
+   * $TWiki::cfg{Plugins}{CaptchaPlugin}{Expiry} = 3600;  # Time in seconds after which a Captcha will expire and be removed
+   * $TWiki::cfg{Plugins}{CaptchaPlugin}{EnableSave} = 0;  # Enable Captcha for topic save
+   * $TWiki::cfg{Plugins}{CaptchaPlugin}{SaveForAll} = 0;  # Enable Captcha for all users, not just Main.TWikiGuest
+   * $TWiki::cfg{Plugins}{CaptchaPlugin}{DeleteAfterSave} = 0;  # Delete Captcha after successful topic save
+   * $TWiki::cfg{Plugins}{CaptchaPlugin}{ColourSafe} = 0;  # Enable for black and white shades only
+   * $TWiki::cfg{Plugins}{CaptchaPlugin}{NumberOfCharacters} = 5;  # Number of characters on Captcha
+   * $TWiki::cfg{Plugins}{CaptchaPlugin}{Characters} = '1234567890'; # Captcha characters, numbers are the safest
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/CaptchaPlugin.txt== | Plugin topic |
+     | ==data/TWiki/CaptchaPlugin.txt,v== | Plugin topic repository |
+     | ==Register.pm-4.1.2.patch== | Patch for the register module |
+     | ==edit.pattern.tmpl-4.1.2.patch== | Patch for Pattern |
+     | ==edittoolbar.nat.tmpl-3.0-pre13.patch== | Patch for !NatSkin |
+     | ==templates/oopscaptcha.tmpl== | Error template |
+     | ==templates/editcaptcha.tmpl== | Edit template |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==pub/TWiki/CaptchaPlugin/fonts/*== | A collection of free fonts to get you started |
+     | ==pub/TWiki/CaptchaPlugin/_db== | Hash database directory |
+     | ==pub/TWiki/CaptchaPlugin/img== | Image directory |
+
+   * Apply the patch ==Register.pm-4.1.2.patch== to ==lib/TWiki/UI/Register.pm== (alternatively, patch Register.pm manually, see section below), be sure to make a backup so you can revert the patch if you want to disable the plugin:
+      * cd /path/to/twiki
+      * cp lib/TWiki/UI/Register.pm lib/TWiki/UI/Register.pm.dist
+      * patch < ../register.patch
+   * Restrict access to the files, for example, by including the following in your httpd.conf:
+<pre>
+         &lt;Directory "/path/to/twiki/pub/TWiki/%TOPIC%/_db"&gt;
+           deny from all
+         &lt;/Directory&gt;
+         &lt;Directory "/path/to/twiki/pub/TWiki/CaptchaPlugin/fonts"&gt;
+           deny from all
+         &lt;/Directory&gt;
+</pre>
+   * Enable the plugin via the =bin/configure= script
+   * Install necessary !TrueType fonts in to ==pub/TWiki/%TOPIC%/fonts/==
+      * This allows the plugin to randomly choose the fonts to use
+      * The more you have, the higher the chances of fending off spambots
+   * Test if the installation was successful:
+      * Create a topic containing ==&lt;IMG SRC="%<nop>CAPTCHAURL%"&gt;== and ==%<nop>CAPTCHAHASH%==
+      * When loading this topic you should see an obfuscated character string loaded as a png and a hexadecimal hash.
+      * Check whether the hash database is properly protected by going to the url http://my.twiki.server/my/twiki/path/pub/TWiki/%TOPIC%/db/hashes.pag, you should see a permission denied message.
+   * Now edit your TWiki.TWikiRegistration topic
+      * Display the image !%CAPTCHAURL% somewhere in your form, along with a text instructing new users to copy the obfuscated text into the appropriate text input.
+      * Add the appropriate text input as ==Twk1CaptchaString==
+      * Add a hidden input as ==Twk1CaptchaHash== having as value !%CAPTCHAHASH%
+      * For example, add this to your TWiki.TWikiRegistration:
+<pre>
+            &lt;tr&gt;
+              &lt;td valign="top" align="right"&gt;&lt;IMG SRC="%<nop>CAPTCHAURL%"&gt;: &lt;br /&gt; (..) &nbsp; &lt/td&gt;
+              &lt;td&gt;&lt;input type="hidden" name="Twk1CaptchaHash" value="%<nop>CAPTCHAHASH%"&gt;
+                  &lt;input type="text" name="Twk1CaptchaString" size="5"&gt;&lt;/td&gt;  =&lt;font color="red"&gt;**&lt;/font&gt;=
+            &lt;/tr&gt;
+</pre>
+   * That's it.
+
+---+++ Captcha on topic edit
+
+If you want to protect edits by Main.TWikiGuest with a captcha, add the following line to your =lib/LocalSite.cfg=:
+
+<pre>$TWiki::cfg{Plugins}{CaptchaPlugin}{EnableSave} = 1;</pre>
+
+A =editcaptcha.tmpl= has been prepared for you. All you need to do is TMPL:INCLUDE it into your =edit*.tmpl=. Two patches are available for Pattern (=edit.pattern.tmpl=) and !NatSkin (=edittoolbar.nat.tmpl=).
+
+At the moment, =editcaptcha.tmpl= requires TWiki:Plugins.IfDefinedPlugin to determine whether the user is TWikiGuest or not. If you have enabled =$TWiki::cfg{Plugins}{CaptchaPlugin}{SaveForAll} = 1;=, modify =editcaptcha.tmpl= appropriately.
+
+
+---+++ Manually patching the register binary
+
+Refer to the patch file.
+
+---++++ Guide for TWiki 4.0.5
+Find these lines in ==lib/TWiki/UI/Register.pm==:
+<pre>
+ }
+ 
+ # generate user entry
+</pre>
+
+Insert the code below directly *BEFORE* the line containing the curly bracket '{':
+
+<pre>
+    # verify captcha
+    eval { use TWiki::Plugins::CaptchaPlugin; };
+
+    my %database;
+    my $vcHash = $data->{CaptchaHash};
+    my $vcTxt = $data->{CaptchaString};
+
+    open(LOCKFILE,">".&TWiki::Func::getPubDir()."/TWiki/CaptchaPlugin/_db/hashes.lock");
+    flock(LOCKFILE,2);
+
+    dbmopen(%database, &TWiki::Func::getPubDir()."/TWiki/CaptchaPlugin/_db/hashes",0644);
+
+    my ($time,$txt) = split(',',$database{$vcHash});
+
+    if ( not(lc($txt) eq lc($vcTxt)) || ($txt eq '') ) {
+                dbmclose(%database);
+                close(LOCKFILE);
+                throw TWiki::OopsException( 'captcha',
+                                           web => $data->{webName},
+                                       topic => $topic,
+                                       def => 'invalid_vcstr',
+                                       params => [ "wrong" ] );
+    }
+
+    dbmclose(%database);
+
+    close(LOCKFILE);
+
+        TWiki::Plugins::CaptchaPlugin::expire($vcHash);
+</pre>
+
+Now find:
+
+<pre>
+             # 'WikiName' omitted because they can't
+             # change it, and 'Confirm' is a duplicate
+             push( @{$data->{form}}, $form )
+              unless ($name eq 'WikiName' || $name eq 'Confirm');
+</pre>
+
+and change the last line to:
+
+<pre>
+             # 'WikiName' omitted because they can't
+             # change it, and 'Confirm' is a duplicate
+             push( @{$data->{form}}, $form )
+              unless ($name eq 'WikiName' || $name eq 'Confirm' || $name eq 'CaptchaHash' || $name eq 'CaptchaString');
+</pre>
+---++ Further Development
+
+   * Refactor to comply with TWiki's convention
+   * Adjustable font size range
+   * Adjustable height and width
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.KoenMartens, TWiki:Main.KwangErnLiew |
+|  Plugin Version: | 28 Oct 2007 1.5-pre4 |
+|  Change History: | &nbsp; |
+|  28 Oct 2007: | Fixed bug on TWikiRegistrationAgent |
+|  16 Aug 2007: | Added black and white shades only; Added =editcaptcha.tmpl=; Moved all attributes to =LocalSite.cfg=; Removed DeleteAfterRegistration |
+|  08 Aug 2007: | Added support for captcha on topic save (thanks TWiki:Main.KwangErnLiew), fixed some minor bugs, added some free fonts |
+|  06 Aug 2007: | Colourised fonts; Randomised font type, font size, background colour, and font positioning; Fixed hash display on user pages; Modified oopscaptcha.tmpl |
+|  03 Aug 2006: | Renamed to %TOPIC%, adapted to Dakar (TWiki 4.0.x). |
+|  03 Jan 2006: | Fixed some problems with expiry, also optimised according to TWiki:TWiki.TWikiPlugins#FastPluginHints. |
+|  10 Oct 2005: | Strip hash and text from arguments to register binary, or they will end up in the newly created user topic. |
+|  07 Oct 2005: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | GD, Digest::MD5 |
+|  Optional Dependencies: | TWiki:Plugins.IfDefinedPlugin |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 98%, %TWIKIWEB%.FormattedSearch 98%, TWiki.TWikiRegistration (patched) 85% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins

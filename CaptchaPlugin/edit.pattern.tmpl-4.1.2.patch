@@ -1,0 +1,19 @@
+--- templates/edit.pattern.tmpl.dist	2007-08-16 13:33:40.441198007 +0200
++++ templates/edit.pattern.tmpl     	2007-08-16 10:49:30.000000000 +0200
+@@ -2,7 +2,7 @@
+ %TMPL:INCLUDE{"viewtoolbar"}%
+ %TMPL:INCLUDE{"viewtopicactionbuttons"}%
+ %TMPL:INCLUDE{"viewbottombar"}%
+-
++%TMPL:INCLUDE{"editcaptcha"}%
+ 
+ 
+ %TMPL:DEF{"templatejavascript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_edit.js"></script>
+@@ -146,6 +146,7 @@
+ %TMPL:P{"pagehelp"}%
+ %TMPL:P{"textarea"}%
+ %TMPL:P{"sig_textareabuttons"}%
++%TMPL:P{"editcaptcha"}%
+ %TMPL:P{"formatbottom"}%%TMPL:P{"topicaction"}%
+ %TMPL:P{"formend"}%
+ %TMPL:P{"pagehelp_nojavascript"}%

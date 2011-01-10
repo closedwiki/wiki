@@ -1,0 +1,49 @@
+--- lib/TWiki/UI/Register.pm.dist	2007-08-16 13:33:03.646220200 +0200
++++ lib/TWiki/UI/Register.pm    	2007-08-16 10:49:30.000000000 +0200
+@@ -1125,6 +1125,37 @@
+                                     def => 'missing_fields',
+                                     params => [ join(', ', @missing) ] );
+     }
++
++	# verify captcha
++	eval { use TWiki::Plugins::CaptchaPlugin; };
++
++	my %database;
++	my $vcHash = $data->{CaptchaHash};
++	my $vcTxt = $data->{CaptchaString};
++
++	open(LOCKFILE,">".&TWiki::Func::getPubDir()."/TWiki/CaptchaPlugin/_db/hashes.lock");
++	flock(LOCKFILE,2);
++
++	dbmopen(%database, &TWiki::Func::getPubDir()."/TWiki/CaptchaPlugin/_db/hashes",0644);
++
++	my ($time,$txt) = split(',',$database{$vcHash});
++
++	if ( not(lc($txt) eq lc($vcTxt)) || ($txt eq '') ) {
++				dbmclose(%database);
++				close(LOCKFILE);
++				throw TWiki::OopsException( 'captcha',
++									web => $data->{webName},
++									topic => $topic,
++									def => 'invalid_vcstr',
++									params => [ "wrong" ] );
++	}
++
++	dbmclose(%database);
++
++	close(LOCKFILE);
++
++	# delete Captcha
++		TWiki::Plugins::CaptchaPlugin::expire($vcHash);
+ }
+ 
+ # generate user entry
+@@ -1296,7 +1327,7 @@
+             # 'WikiName' omitted because they can't
+             # change it, and 'Confirm' is a duplicate
+             push( @{$data->{form}}, $form )
+-              unless ($name eq 'WikiName' || $name eq 'Confirm');
++              unless ($name eq 'WikiName' || $name eq 'Confirm' || $name eq 'CaptchaHash' || $name eq 'CaptchaString');
+ 
+             $data->{$name} = $value;
+         }
