@@ -985,6 +985,8 @@ sub install {
         my ($module, $condition, $trigger, $type, $desc) = split(',', $row, 5);
         $module =~ s/[^a-zA-Z0-9\:\_\-]//g;                    # allow limited chars only
         $module = TWiki::Sandbox::untaintUnchecked( $module ); # untaint safe module name
+        $trigger =~ s/[^a-zA-Z0-9\_\-]//g;
+        $trigger = TWiki::Sandbox::untaintUnchecked( $trigger );
 
         push(@deps, {
             name=>$module,
