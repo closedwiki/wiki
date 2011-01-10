@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1292273869" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294618359" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -87,8 +87,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PascalBuchbinder |
 |  Copyright: | &copy; 2004 TWiki:Main.PascalBuchbinder <br /> &copy; 2005-2010 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-12-13 (V1.2) |
+|  Plugin Version: | 2011-01-09 (V1.3) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-01-09: | TWikibug:Item6530: Small code fix to remove warning -- TWiki:Main.PeterThoeny |
 |  2010-12-13: | TWikibug:Item6530: Add topic="..." parameter; add nameless "..." parameter; change plugin to use registerTagHandler for better performance; doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  02 Jul 2004: | bug fix, don't process unknown IFD entries |
 |  30 Jan 2004: | support for 37510 |

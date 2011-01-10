@@ -34,7 +34,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-12-13';
+$RELEASE = '2011-01-09';
 
 # =========================
 # markers are FFXX where XX is one of those below
@@ -169,7 +169,7 @@ sub _handleEXIFMETADATA {
 
     my $exif = "";
 
-    my $topic = $params->{topic} || $topic;
+    $topic = $params->{topic} || $topic;
     ( $web, $topic ) = TWiki::Func::normalizeWebTopicName( $web, $topic );
 
     my ( $meta, $page ) = &TWiki::Func::readTopic( $web, $topic );
