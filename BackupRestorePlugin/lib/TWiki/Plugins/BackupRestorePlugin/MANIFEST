@@ -1,0 +1,3 @@
+data/TWiki/BackupRestorePlugin.txt 0644 Plugin doc page
+data/TWiki/BackupRestoreConsole.txt 0644 Plugin doc page
+lib/TWiki/Plugins/BackupRestorePlugin.pm 0644 Plugin Perl module
