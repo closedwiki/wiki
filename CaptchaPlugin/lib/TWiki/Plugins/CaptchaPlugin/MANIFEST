@@ -1,7 +1,7 @@
 data/TWiki/CaptchaPlugin.txt 0644
 lib/TWiki/Plugins/CaptchaPlugin.pm 0644
-pub/TWiki/CaptchaPlugin/Register.pm-4.1.2.patch 0644
-pub/TWiki/CaptchaPlugin/edit.pattern.tmpl-4.1.2.patch 0644
+lib/TWiki/Plugins/CaptchaPlugin/edit.pattern.tmpl-4.1.2.patch 0644
+lib/TWiki/Plugins/CaptchaPlugin/Register.pm-4.1.2.patch 0644
 pub/TWiki/CaptchaPlugin/fonts/Vera.ttf 0644
 pub/TWiki/CaptchaPlugin/fonts/MacType.ttf 0644
 pub/TWiki/CaptchaPlugin/fonts/FreeMonoBoldOblique.ttf 0644
