@@ -1,3 +1,4 @@
 data/TWiki/FileUploadPlugin.txt 0644
 lib/TWiki/Plugins/FileUploadPlugin.pm 0644
 lib/TWiki/Plugins/FileUploadPlugin/Core.pm 0644
+pub/TWiki/FileUploadPlugin/screenshot-150.png 0644
