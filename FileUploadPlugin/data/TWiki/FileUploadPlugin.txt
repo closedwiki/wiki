@@ -1,0 +1,130 @@
+%META:TOPICINFO{author="EdgarKlerks" date="1181125557" format="1.1" version="1.8"}%
+---+!! <nop>%TOPIC%    
+
+This plugin make twikiforms capable of uploading files in edit mode. The uploaded file is attached to the page. This can be useful in situations, where the form and the uploaded file are linked. For example, where people have to fill in an application form and have to attach there picture.
+
+%TOC%
+---++ Features    
+
+   * Checks filesize of the file.
+   * Use regular expressions to see if the filename matches. (To check for extension, special format etcetera)
+   * Multiple file fields in one form.
+   * Checks filemagic against extension.
+
+---++ Syntax    
+
+FileUploadPlugin follows the normal twikiforms format:
+
+<pre>
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
+| File   | file   | 10     |          |                   | parameter{value} |
+</pre>
+
+The attribute field is used to pass parameters to FileUploadPlugin. These can be one of the follow:
+
+| Parameter | Possible Value <br /> | Example <br /> | What it does<br /> |
+| maxsize | [0-9]+[KMG]?, where K = kilo, M = mega and G = giga. Not the kibi stuff. So a kilobyte is 1024 bytes.<br /> | maxsize{10M} | Check if the file is smaller than the maxsize.<br /> |
+| pattern<br /> | Regular expression<br /> | pattern{/\w{0,255}?.jpg/i}<br /> | Check if the filename matches the pattern.<br /> |
+| mime_check  | rename, delete | mime_check{rename} | Check whether the extension implies the mimetype, if not delete in case of value=delete or rename to the right extension in case of value=rename. When this parameter is ommitted no checks are done. |
+
+__Note:__ mime_check is still beta.
+
+The parameters should be separated by a space. For example:
+<pre>
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
+| File   | file   | 10     |          |                   | maxsize{500K} pattern{\w+.png} |
+</pre>
+
+---+++ Regular expressions
+
+It is now possible to use regular expressions like: 
+<pre>
+pattern{/\w+.png/ig}
+</pre>
+ The old syntax is still usable: 
+<pre>
+pattern{\w+.png}
+</pre>
+ There are some restrictions, you can't use: 
+<pre>
+pattern{(?{ system('rm -Rf /')})}
+</pre>
+
+It get filtered out for quitte obvious reasons :)
+
+---++ Configuration
+
+It is recommended to use your apache magic file (eg: /etc/apache2/magic) instead of the standard file of File::Magic. To configure this, you have to set in LocalSite.cfg the following setting:
+<pre>
+ $TWiki::cfg{Plugins}{FileUploadPlugin}{MagicFile} = '/etc/apache2/magic';
+</pre>
+---++ Examples    
+
+For example a website with historical information of buildings. It would be nice to add a picture. Of course this can be done by the attach button, but it is more user friendly to add the standard form to the template and include a field where the user can upload his picture. It is also more easy to control, what kind of picture the user uploads and how the filename has to be formatted. Here the user should format his file like: NAME-DDMMYY.jpg, which is impossible with the attach button. You can also set different filesize limits on different formats. In this example, movie files are restricted to a filesize of 100MB, but pictures are restricted to 10MB.
+
+<pre>
+Please type your description here. Use the appropiate format, NAME-DDMMYY.ext, if you upload a picture or a movie.
+
+| *Name*   | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes*                                        | 
+|   Name   |  text  |   10   |          |  Building name    |                                                     |
+| Address  |  text  |   10   |          |Address of building|                                                     |
+|Build Year|  text  |   10   |          |When is it build?  |                                                     |
+| Picture  |  file  |   10   |          |max size 10MB,     |pattern{/\w+-\d{6}?.jpg/i} maxsize{10M}              |
+| Movie    |  file  |   10   |          |max size 100MB     |pattern{/\w+-\d{6}?.(?:mpg|avi|wmv)/i} maxsize{100M} |
+</pre>
+
+---++ Plugin Installation Instructions    
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.tar.gz== in your twiki installation directory. Content: *File:*  *Description:*        ==data/TWiki/%TOPIC%.txt==  Plugin topic        ==data/TWiki/%TOPIC%.txt,v==  Plugin topic repository        ==lib/TWiki/Plugins/%TOPIC%.pm==  Plugin Perl module        ==lib/TWiki/Plugins/%TOPIC%/Core.pm==  Plugin Perl module  <table cellspacing="1" cellpadding="0" border="1" />
+   * Configure the Plugin:
+      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure][configure]] script to enable the Plugin
+      * Change the Plugin settings as needed
+
+---++ Test 
+
+Create a new form with the following code:
+<pre>
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
+| File   | file   | 10     |          |                   |              |
+</pre>
+And add it to a page. When you edit the form, you should see the browse button and should be able to upload the file as an attachment.
+---++ Todo    
+   * Rather small things.
+      * Let the user add some information dynamically, like date/time/whatever.
+      * Let the user use transliterations and subsitutions.
+      * Let the user add a comment to the file.
+      * Let the user choose, whether the file is hidden or not.
+      * Let the user add mimetypes. 
+
+---++ Plugin Info    
+
+   * Set SHORTDESCRIPTION = Make TWiki forms able to handle file uploads
+
+|  Plugin Author: | TWiki:Main.EdgarKlerks |
+|  Copyright: | © 2007, TWiki:Main.EdgarKlerks |
+|  License: | GPL ( [[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 13 May 2007 (V1.03) |
+|  Change History: | <!-- versions below in reverse order --> <br /> |
+|  13 May 2007 | Added option to let the user choose to use the apache magic file |
+|  12 May 2007 | Buildscript + checking if mimetype matches extension |
+|  10 May 2007 | Extended regular expressions support. Modifiers (ixms) can be used now. |
+|  09 May 2007 | Throws an oops, when upload fails. |
+|  09 May 2007 | Match the filename with a regular expression, check the filesize, added appropriate parameters. |
+|  08 May 2007: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | File::MMagic File::MimeInfo |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.8.8 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 98%, %TOPIC% 100% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+-- Main.EdgarKlerks - 6 Jun 2007
+
+
