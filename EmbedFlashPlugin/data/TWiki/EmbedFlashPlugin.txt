@@ -1,9 +1,15 @@
-%META:TOPICINFO{author="TWikiContributor" date="1162498499" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294813528" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
-
-*Embeds an Adobe Flash file.*
-
-%TOC%
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/EmbedFlashPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/EmbedFlashPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
 ---++ Example
 
@@ -58,13 +64,13 @@ If allowScriptAccess is =sameDomain= (it is supported in SWFs from Flash Player 
 | =swliveconnect= | Specifies whether the browser should start Java when loading the Flash Player for the first time. | ="true"= or ="false"= | =""= |
 | =flashvars= | Variables to be passed to the Flash movie. Multiple variables are separated by =&amp;=. | =flashvars="x=50&y=100&url=%<nop>ATTACHURL%/picture.jpg"= | =""= |
 
-
 Note that this plugin writes =object= and =embed= tags using Javascript to prevent annoying popup windows. %BR%
 More information on  [[http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_12701&sliceId=1][Flash OBJECT and EMBED tag attributes]] (Adobe !TechNote).
 
 ---++ More examples
 
 ---+++ Image folder
+
 The images are placed in separate folders. The Flash movie is also in its own folder. Adjust the filepath and =base= attribute to the Flash file:
 <verbatim>
 %EMBEDFLASH{
@@ -83,6 +89,7 @@ base="%ATTACHURL%/swf/"
 }%
 
 ---+++ Yahoo Maps in Flash
+
 <verbatim>
 %EMBEDFLASH{
 "http://developer.yahoo.com/maps/flash/V3.5/asGS.01.swf" 
@@ -98,50 +105,36 @@ base="http://developer.yahoo.com/maps/flash/V3.5/"
 width="600px"
 height="400px"
 }%
-
----+++ Digg Labs
-
-<verbatim>
-%EMBEDFLASH{
-"http://labs.digg.com/arc/main.swf" 
-base="http://labs.digg.com/arc/"
-width="600px"
-height="400px"
-}%
-</verbatim>
-
-%EMBEDFLASH{
-"http://labs.digg.com/arc/main.swf" 
-base="http://labs.digg.com/arc/"
-width="600px"
-height="400px"
-}%
-
-
 
 ---++ Settings
 
-	* Set SHORTDESCRIPTION = Embeds an Adobe Flash file
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>EMBEDFLASHPLUGIN_SHORTDESCRIPTION%==
 
-	* Debug plugin: (See output in =data/debug.txt=)
-	   * Set DEBUG = 0
-	
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Embed Adobe Flash files in TWiki topics
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
 ---++ Installation Instructions
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your ($TWIKI_ROOT) directory. Content:
-	| *File:* | *Description:* |
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+   * Run configure for automated install, or do manual install:
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+   | *File:* | *Description:* |
 %$MANIFEST%
-	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
-	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
-	%$DEPENDENCIES%
    * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   
+
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
-|  Plugin Version: | 30 Apr 2008 (v1.2.1) |
-|  Change History: | &nbsp; |
+|  Copyright: | &copy; 2003-2008 TWiki:Main.ArthurClemens <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-01-11 |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-01-11: | TWikibug:Item6530: Fix for IE issue; doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.BenEsacove |
 |  24 Mar 2008: | Version 1.2 - Added =flashvar= attributes. |
 |  25 Feb 2008: | Version 1.1 - Added attributes. Write HTML embed/object tags with Javascript to prevent popup windows. If no javascript is available the =noscript= tag is used. |
 |  02 Nov 2006: | Version 1.01 - Updated Flash sample, small changes to documentation. |
@@ -152,8 +145,7 @@ height="400px"
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
-%META:FILEATTACHMENT{name="sample.fla" attr="" autoattached="1" comment="" date="1162495736" path="sample.fla" size="40448" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="sample.swf" attr="" autoattached="1" comment="" date="1162497279" path="sample.swf" size="1981" user="UnknownUser" version=""}%
- 
+%META:FILEATTACHMENT{name="sample.fla" attr="h" comment="" date="1162495736" path="sample.fla" size="40448" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="sample.swf" attr="h" comment="" date="1162497279" path="sample.swf" size="1981" user="TWikiContributor" version="1"}%
