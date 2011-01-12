@@ -1,9 +1,20 @@
-%META:TOPICINFO{author="EdgarKlerks" date="1181125557" format="1.1" version="1.8"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294819258" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%    
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/FileUploadPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/FileUploadPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-This plugin make twikiforms capable of uploading files in edit mode. The uploaded file is attached to the page. This can be useful in situations, where the form and the uploaded file are linked. For example, where people have to fill in an application form and have to attach there picture.
+---++ Introduction
 
-%TOC%
+This plugin make %SYSTEMWEB%.TWikiForms capable of uploading files in edit mode. The uploaded file is attached to the page. This can be useful in situations, where the form and the uploaded file are linked. For example, where people have to fill in an application form and have to attach there picture.
+
 ---++ Features    
 
    * Checks filesize of the file.
@@ -11,16 +22,16 @@ This plugin make twikiforms capable of uploading files in edit mode. The uploade
    * Multiple file fields in one form.
    * Checks filemagic against extension.
 
----++ Syntax    
+---++ Syntax
 
-FileUploadPlugin follows the normal twikiforms format:
+This plugin adds a =file= type to %SYSTEMWEB%.TWikiForms:
 
 <pre>
 | *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
 | File   | file   | 10     |          |                   | parameter{value} |
 </pre>
 
-The attribute field is used to pass parameters to FileUploadPlugin. These can be one of the follow:
+The attribute field is used to pass parameters to FileUploadPlugin:
 
 | Parameter | Possible Value <br /> | Example <br /> | What it does<br /> |
 | maxsize | [0-9]+[KMG]?, where K = kilo, M = mega and G = giga. Not the kibi stuff. So a kilobyte is 1024 bytes.<br /> | maxsize{10M} | Check if the file is smaller than the maxsize.<br /> |
@@ -50,7 +61,7 @@ pattern{\w+.png}
 pattern{(?{ system('rm -Rf /')})}
 </pre>
 
-It get filtered out for quitte obvious reasons :)
+It get filtered out for obvious reasons :)
 
 ---++ Configuration
 
@@ -58,6 +69,7 @@ It is recommended to use your apache magic file (eg: /etc/apache2/magic) instead
 <pre>
  $TWiki::cfg{Plugins}{FileUploadPlugin}{MagicFile} = '/etc/apache2/magic';
 </pre>
+
 ---++ Examples    
 
 For example a website with historical information of buildings. It would be nice to add a picture. Of course this can be done by the attach button, but it is more user friendly to add the standard form to the template and include a field where the user can upload his picture. It is also more easy to control, what kind of picture the user uploads and how the filename has to be formatted. Here the user should format his file like: NAME-DDMMYY.jpg, which is impossible with the attach button. You can also set different filesize limits on different formats. In this example, movie files are restricted to a filesize of 100MB, but pictures are restricted to 10MB.
@@ -91,7 +103,9 @@ Create a new form with the following code:
 | File   | file   | 10     |          |                   |              |
 </pre>
 And add it to a page. When you edit the form, you should see the browse button and should be able to upload the file as an attachment.
+
 ---++ Todo    
+
    * Rather small things.
       * Let the user add some information dynamically, like date/time/whatever.
       * Let the user use transliterations and subsitutions.
@@ -104,10 +118,11 @@ And add it to a page. When you edit the form, you should see the browse button a
    * Set SHORTDESCRIPTION = Make TWiki forms able to handle file uploads
 
 |  Plugin Author: | TWiki:Main.EdgarKlerks |
-|  Copyright: | © 2007, TWiki:Main.EdgarKlerks |
-|  License: | GPL ( [[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 13 May 2007 (V1.03) |
-|  Change History: | <!-- versions below in reverse order --> <br /> |
+|  Copyright: | &copy; 2007 TWiki:Main.EdgarKlerks <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-01-11 |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-01-11: | TWikibug:Item6530: Doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  13 May 2007 | Added option to let the user choose to use the apache magic file |
 |  12 May 2007 | Buildscript + checking if mimetype matches extension |
 |  10 May 2007 | Extended regular expressions support. Modifiers (ixms) can be used now. |
@@ -123,8 +138,4 @@ And add it to a page. When you edit the form, you should see the browse button a
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
-
--- Main.EdgarKlerks - 6 Jun 2007
-
-
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
