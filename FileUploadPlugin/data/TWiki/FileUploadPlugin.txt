@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1294820150" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294820935" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%    
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -27,7 +27,7 @@ This plugin make %SYSTEMWEB%.TWikiForms capable of uploading files in edit mode.
 This plugin adds a =file= type to %SYSTEMWEB%.TWikiForms:
 
 | *Type* | *Description* | *Size* | *Value* |
-| =file= | %IF{ "'%BASETOPIC%'='TWikiForms'" then="<img src='%PUBURLPATH%/%WEB%/FileUploadPlugin/screenshot-150.png' alt='screenshot' width='150' height='36' align='right' />" }%File upload form field, to upload an attachment to the topic when saving the form. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[FileUploadPlugin][See details]]." }% | Text box width in number of characters | |
+| =file= | <img src='%PUBURLPATH%/%WEB%/FileUploadPlugin/screenshot-150.png' alt='screenshot' width='150' height='36' align='right' /> File upload form field, to upload an attachment to the topic when saving the form. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[FileUploadPlugin][See details]]." }% | Text box width in number of characters | |
 
 Form definition:
 
