@@ -2058,7 +2058,7 @@ sub _fixupIncludedTopic {
 
     unless( $options->{in_noautolink} ) {
         # 'TopicName' to 'Web.TopicName'
-        $text =~ s#(?:^|(?<=[\s(]))($regex{wikiWordRegex})(?=\s|\)|$)#$fromWeb.$1#go;
+        $text =~ s#(?:^|(?<=[\s(]))($regex{wikiWordRegex})#$fromWeb.$1#go;
     }
 
     # Handle explicit [[]] everywhere
