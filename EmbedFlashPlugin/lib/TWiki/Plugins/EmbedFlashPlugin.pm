@@ -1,3 +1,18 @@
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2003-2008 TWiki:Main.ArthurClemens
+# Copyright (C) 2007-2011 TWiki:TWiki.TWikiContributor
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.org/copyleft/gpl.html
 
 package TWiki::Plugins::EmbedFlashPlugin;
 
@@ -6,11 +21,8 @@ use vars qw(
   $debug
 );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-$RELEASE = '1.2.1';
+$RELEASE = '2011-01-11';
 
 $pluginName = 'EmbedFlashPlugin';
 
@@ -87,7 +99,7 @@ sub _handleEmbedFlash {
       . '<param name="allowFullScreen" value="'
       . $flashAllowFullScreen . '" />';
     $objectEmbed .=
-      $itemSeparator . '<param name="movie" value="' . $flashId . '" />';
+      $itemSeparator . '<param name="movie" value="' . $flashFileName . '" />';
     $objectEmbed .=
       $itemSeparator . '<param name="FlashVars" value="' . $flashVars . '" />'
       if defined $flashVars;
