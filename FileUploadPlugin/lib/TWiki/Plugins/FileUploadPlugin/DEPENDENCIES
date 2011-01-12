@@ -1,0 +1,2 @@
+File::MMagic,>=1.0,cpan,Required. Available from the CPAN:File::MMagic archive.
+File::MimeInfo,>=1.0,cpan,Required. Available from the CPAN:File::MimeInfo archive.
