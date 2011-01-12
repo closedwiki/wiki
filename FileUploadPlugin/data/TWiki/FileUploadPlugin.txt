@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1294819258" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294820150" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%    
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -26,17 +26,22 @@ This plugin make %SYSTEMWEB%.TWikiForms capable of uploading files in edit mode.
 
 This plugin adds a =file= type to %SYSTEMWEB%.TWikiForms:
 
+| *Type* | *Description* | *Size* | *Value* |
+| =file= | %IF{ "'%BASETOPIC%'='TWikiForms'" then="<img src='%PUBURLPATH%/%WEB%/FileUploadPlugin/screenshot-150.png' alt='screenshot' width='150' height='36' align='right' />" }%File upload form field, to upload an attachment to the topic when saving the form. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[FileUploadPlugin][See details]]." }% | Text box width in number of characters | |
+
+Form definition:
+
 <pre>
 | *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
-| File   | file   | 10     |          |                   | parameter{value} |
+| File   | file   | 10     |          |                   | (see below) |
 </pre>
 
-The attribute field is used to pass parameters to FileUploadPlugin:
+The attribute field is used to pass parameters to FileUploadPlugin, format =parameter{value}=:
 
-| Parameter | Possible Value <br /> | Example <br /> | What it does<br /> |
-| maxsize | [0-9]+[KMG]?, where K = kilo, M = mega and G = giga. Not the kibi stuff. So a kilobyte is 1024 bytes.<br /> | maxsize{10M} | Check if the file is smaller than the maxsize.<br /> |
-| pattern<br /> | Regular expression<br /> | pattern{/\w{0,255}?.jpg/i}<br /> | Check if the filename matches the pattern.<br /> |
-| mime_check  | rename, delete | mime_check{rename} | Check whether the extension implies the mimetype, if not delete in case of value=delete or rename to the right extension in case of value=rename. When this parameter is ommitted no checks are done. |
+| *Parameter* | *Possible Value* | *Example* | *What it does* |
+| =maxsize= | [0-9]+[KMG]?, where K = kilo, M = mega and G = giga. Not the kibi stuff. So a kilobyte is 1024 bytes. | =maxsize{10M}= | Check if the file is smaller than the maxsize. |
+| =pattern= | Regular expression | =pattern{/\w{0,255}?.jpg/i}= | Check if the filename matches the pattern. |
+| =mime_check=  | rename, delete | =mime_check{rename}= | Check whether the extension implies the mimetype, if not delete in case of value=delete or rename to the right extension in case of value=rename. When this parameter is omitted no checks are done. |
 
 __Note:__ mime_check is still beta.
 
@@ -65,7 +70,7 @@ It get filtered out for obvious reasons :)
 
 ---++ Configuration
 
-It is recommended to use your apache magic file (eg: /etc/apache2/magic) instead of the standard file of File::Magic. To configure this, you have to set in LocalSite.cfg the following setting:
+It is recommended to use your apache magic file (eg: /etc/apache2/magic) instead of the standard file of File::Magic. To configure this, you have to set in !LocalSite.cfg the following setting:
 <pre>
  $TWiki::cfg{Plugins}{FileUploadPlugin}{MagicFile} = '/etc/apache2/magic';
 </pre>
@@ -139,3 +144,5 @@ And add it to a page. When you edit the form, you should see the browse button a
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+
+%META:FILEATTACHMENT{name="screenshot-150.png" attachment="screenshot" attr="h" comment="" date="1294819860" path="screenshot-150.png" size="6072" user="TWikiContributor" version="1"}%
