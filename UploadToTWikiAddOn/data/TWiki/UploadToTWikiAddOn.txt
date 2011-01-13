@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1294902512" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294902969" format="1.1" version="$Rev$"}%
 ---+!! Upload to TWiki Add-On
 <!--
    Contributions to this TWiki add-on are appreciated. Please update the add-on page at
@@ -11,7 +11,7 @@
 </div></sticky>
 %SHORTDESCRIPTION%
 
----++
+---++ Introduction
 
 This is a small Perl script to programmatically attach a file to any TWiki topic. The script can be executed on any computer, it does not have to be on the server where TWiki is installed. This is a useful script to create mashups of TWiki and other applications.
 
