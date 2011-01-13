@@ -1,8 +1,7 @@
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# TWiki WikiClone ($wikiversion has version info)
-#
-# Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2002-2003 TWiki:Main.DaleBrayden
+# Copyright (C) 2007-2011 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,51 +13,19 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
-#
-# =========================
-#
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
-#
-# Each plugin is a package that contains the subs:
-#
-#   initPlugin           ( $topic, $web, $user, $installWeb )
-#   commonTagsHandler    ( $text, $topic, $web )
-#   startRenderingHandler( $text, $web )
-#   outsidePREHandler    ( $text )
-#   insidePREHandler     ( $text )
-#   endRenderingHandler  ( $text )
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, all handlers except initPlugin are
-# disabled. To enable a handler remove the leading DISABLE_ from
-# the function name.
-# 
-# NOTE: To interact with TWiki use the official TWiki functions
-# in the &TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
 
 
 # =========================
-package TWiki::Plugins::StylePlugin; 	# change the package name!!!
+package TWiki::Plugins::StylePlugin;
 
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $debug
-        $exampleCfgVar $skipskin
+        $skipskin $styles $applied
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
-$pstylebegin		= '^\.(\w+)\s*$';
+$RELEASE = '2011-01-12';
 
 # =========================
 sub initPlugin
@@ -71,14 +38,13 @@ sub initPlugin
         return 0;
     }
 
-    # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    # $exampleCfgVar = &TWiki::Func::getPreferencesValue( "STYLEPLUGIN_EXAMPLE" ) || "default";
     $skipskin = &TWiki::Func::getPreferencesValue( "STYLEPLUGIN_SKIPSKIN" ) || "";
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "STYLEPLUGIN_DEBUG" );
-	$styles = &TWiki::Func::getPreferencesValue( "STYLEPLUGIN_SITESTYLES" ) || ".sample {text-decoration:underline}"; # drb 3/9
-	$applied = 0;
+    $styles = &TWiki::Func::getPreferencesValue( "STYLEPLUGIN_SITESTYLES" ) ||
+      ".sample {text-decoration:underline}"; # drb 3/9
+    $applied = 0;
 
     # Plugin correctly initialized
     &TWiki::Func::writeDebug( "- TWiki::Plugins::StylePlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -101,12 +67,10 @@ sub startRenderingHandler
         }
     }
     return if ($skipit);
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/old/new/go;
-	# emit the custom styles ...
-	$_[0] = "<style type=\"text/css\">$styles</style>\n$_[0]" if ! $applied;
-	# ... but only once
-	$applied = 1;
+    # emit the custom styles ...
+    $_[0] = "<style type=\"text/css\">$styles</style>\n$_[0]" if ! $applied;
+    # ... but only once
+    $applied = 1;
 }
 
 # ------------------------=

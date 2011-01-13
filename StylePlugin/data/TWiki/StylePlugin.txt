@@ -1,47 +1,30 @@
-%META:TOPICINFO{author="DaleBrayden" date="1057027680" format="1.0" version="1.17"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294904349" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
----++ Style Plugin
+---+!! Style Plugin
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/StylePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/StylePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-This plugin lets you add CSS style attributes to your pages.
-
-See Main.StylePluginDetails for the detailed description.
-----
-%TOC%
-----
----+++ <nop>%TOPIC% Settings
-
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>STYLEPLUGIN_SHORTDESCRIPTION%==
-	* Security
-		* Set ALLOWTOPICCHANGE = Main.TWikiAdminGroup
-		* Set ALLOWTOPICRENAME = Main.TWikiAdminGroup
-
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = A TWiki notation for adding css style class references with span and div tags
-
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
-
-	* Disable styles for non-rendering skins
-		* Set SKIPSKIN = rss, cdf
-
-	* site styles
-		* Set SITESTYLES = .minilink { font-size:smaller; } .webref  { font-size:larger; font-weight:bold; } .author, .BAuthor  {font-weight:bold; font-style:normal;} .booktitle, .BTitle {font-style:italic; font-weight:normal; text-decoration:underline;} .publisher, .BPublisher { font-style:italic; } .note  {color:green; font-style:italic; } .note:before {display:inline; content: "Note: "; } .new {font-weight:bold; color:red; } .deprecated {text-decoration:line-through; color:gray; } .comment {font-style:italic; background-color: #CCFFCC; } .ebook {width:6in; text-align:justify;} .super {vertical-align:super; font-size:smaller;} .sub {vertical-align:sub; font-size:smaller;} .article {  padding-left:10px;padding-right:10px;  width:6in; text-align:justify; } .pullquote {  border-left:1px;border-right:1px;border-color:black;border-style:solid;  border-top:0px;border-bottom:0px;  padding-left:10px;padding-right:10px;  margin-left:10px;  font-style:italic; } .sidebar {  background-color:#eee;  border-width:2px; border-color:black;border-style:solid;  padding:3px;  padding-right:5px;  position:relative;float:right;  width:230px; font-size:smaller;} .question {font-weight:bold; } .answer {font-style:italic; } abbr, acronym, .help {  border-bottom: 1px dotted #333;  cursor: help;  } DT {font-weight:bold;text-decoration:underline;margin-left:10px; } .intro {font-weight:bold;font-style:italic;margin-left:30px;} TH {text-align: center; font-weight: bold; background-color:#eeeeee; vertical-align: top; } TD {vertical-align: top; } TABLE { border-width: 1; } .hide {position:absolute; width:1px;visibility:hidden; height:1px;}
-
-----
 ---++ Overview
-Why is this useful? Well, there are times when you want a consistent look and feel for certain types of items. For example, if you have a list or table, you might want certain fields to have a certain appearance. At Random.DaleBookList I have a list of books and authors, with some publishers. Here's what a typical entry looks like :
 
-	* ((booktitle)(Programming Ruby)) by ((author)(Andrew Hunt and David Thomas)), ((publisher)(Addison-Wesley)), 2001
+Why is this useful? Well, there are times when you want a consistent look and feel for certain types of items. For example, if you have a list or table, you might want certain fields to have a certain appearance. At !DaleBookList we have a list of books and authors, with some publishers. Here's what a typical entry looks like:
 
+   * ((booktitle)(Programming Ruby)) by ((author)(Andrew Hunt and David Thomas)), ((publisher)(Addison-Wesley)), 2001
 
 If the plugin is installed, and you have defined the style classes for 'booktitle', 'author', and 'publisher', the list item looks good. If you have the plugin installed, but don't have the style classes defined, then the list item looks, well, normal. If you don't have the plugin installed then you see all the parentheses and style names.
 
 More generally, the style plugin lets you get away from the "let's make this bold and that italic" kind of formatting. Instead you can focus on semantic labelling of content and let the css stylesheet take care of the presentation.
 
----+++ Syntax Rules
+---++ Syntax Rules
 
----++++ A style class applied to a div tag
+---+++ A style class applied to a div tag
 
 Use "\n---[.yourstylename ... \n---]"
 
@@ -50,7 +33,7 @@ This will produce
 <div class=yourstylename> ... </div>
 </verbatim>
 
----++++ A style class applied to a span tag
+---+++ A style class applied to a span tag
 
 Use "(<nop>(yourstylename)(a chunk o' text))
 
@@ -59,7 +42,7 @@ This will produce
 <span class=yourstylename> a chunk o' text</span>
 </verbatim>
 
----++++ A style class applied to a paragraph
+---+++ A style class applied to a paragraph
 
 Use ".yourstylename\nyour text"
 
@@ -68,7 +51,7 @@ This will produce
 <p class=yourstylename> your text 
 </verbatim>
 
----++++ A blockquote
+---+++ A blockquote
 
 Use '\n---"( your quoted material \n---")
 
@@ -77,7 +60,7 @@ This will produce
 <blockquote>your quoted material</blockquote>
 </verbatim>
 
----++++ Acronyms
+---+++ Acronyms
 
 For example: 
 <verbatim>
@@ -89,22 +72,53 @@ This will produce
 <acronym title="Cascading Style Sheet">CSS</acronym>
 </verbatim>
 
----+++ Plugin Installation Instructions
+---++ <nop>%TOPIC% Settings
 
-	* Copy <nop>SylePlugin.pm to twiki/lib/TWiki/Plugins
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>STYLEPLUGIN_SHORTDESCRIPTION%==
 
----+++ Plugin Info
+   * Security
+      * Set ALLOWTOPICCHANGE = %USERSWEB%.TWikiAdminGroup
+      * Set ALLOWTOPICRENAME = %USERSWEB%.TWikiAdminGroup
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = A TWiki notation for adding css style class references with span and div tags
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
+   * Disable styles for non-rendering skins
+      * Set SKIPSKIN = rss, cdf
+
+   * site styles
+      * Set SITESTYLES = .minilink { font-size:smaller; } .webref  { font-size:larger; font-weight:bold; } .author, .BAuthor  {font-weight:bold; font-style:normal;} .booktitle, .BTitle {font-style:italic; font-weight:normal; text-decoration:underline;} .publisher, .BPublisher { font-style:italic; } .note  {color:green; font-style:italic; } .note:before {display:inline; content: "Note: "; } .new {font-weight:bold; color:red; } .deprecated {text-decoration:line-through; color:gray; } .comment {font-style:italic; background-color: #CCFFCC; } .ebook {width:6in; text-align:justify;} .super {vertical-align:super; font-size:smaller;} .sub {vertical-align:sub; font-size:smaller;} .article {  padding-left:10px;padding-right:10px;  width:6in; text-align:justify; } .pullquote {  border-left:1px;border-right:1px;border-color:black;border-style:solid;  border-top:0px;border-bottom:0px;  padding-left:10px;padding-right:10px;  margin-left:10px;  font-style:italic; } .sidebar {  background-color:#eee;  border-width:2px; border-color:black;border-style:solid;  padding:3px;  padding-right:5px;  position:relative;float:right;  width:230px; font-size:smaller;} .question {font-weight:bold; } .answer {font-style:italic; } abbr, acronym, .help {  border-bottom: 1px dotted #333;  cursor: help;  } DT {font-weight:bold;text-decoration:underline;margin-left:10px; } .intro {font-weight:bold;font-style:italic;margin-left:30px;} .hide {position:absolute; width:1px;visibility:hidden; height:1px;}
+      * Unused: TH {text-align: center; font-weight: bold; background-color:#eeeeee; vertical-align: top; } TD {vertical-align: top; } TABLE { border-width: 1; }
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+   * Run configure for automated install, or do manual install:
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+   | *File:* | *Description:* |
+%$MANIFEST%
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+
+---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.DaleBrayden |
-|  Plugin Version: | 09 Mar 2003 |
-|  Change History: | 09 Mar 2003: Added SITESTYLES variable |
-|  Change History: | 26 Dec 2002: Initial version |
+|  Copyright: | &copy; 2002-2003 TWiki:Main.DaleBrayden <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-01-12 |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-01-12: | TWikibug:Item6530: Doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2003-03-09: | Added SITESTYLES variable |
+|  2002-12-26: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main.DaleBrayden - 26 Dec 2002
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
