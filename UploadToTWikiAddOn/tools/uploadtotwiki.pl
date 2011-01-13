@@ -4,9 +4,9 @@
 # via http. Add-on home is at
 # http://twiki.org/cgi-bin/view/Plugins/UploadToTWikiAddOn
 #
-# (Utility for TWiki Enterprise Collaboration Platform, http://TWiki.org/)
+# Utility for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2007 Peter Thoeny, peter@structuredwikis.com
+# Copyright (C) 2007-2011 Peter Thoeny, peter[at]thoeny.org
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,12 +20,12 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-my $toolName = 'uploadtotwiki/2007-02-12';
+my $toolName = 'uploadtotwiki/2011-01-12';
 
 use strict;
 
 unless( $ARGV[2] ) {
-    print "Utility to attach files to any TWiki topic. Copyright (C) 2007, Peter\@Thoeny.org\n";
+    print "Utility to attach files to any TWiki topic. Copyright (C) 2007-2011, Peter[at]Thoeny.org\n";
     print "Add-on home: http://twiki.org/cgi-bin/view/Plugins/UploadToTWikiAddOn\n";
     print "Usage:\n";
     print "  ./uploadtotwiki.pl -l <login> -c <comment> -h 1 <file(s)> <TWiki URL>\n";
@@ -35,7 +35,7 @@ unless( $ARGV[2] ) {
     print "  -c 'comment'  - comment of attached file (default: 'Uploaded by " . $toolName . "')\n";
     print "  -h 1          - hide attachment, 0 or 1 (default: 0)\n";
     print "  -i 1          - inline attachment, e.g create link in topic text (default: 0)\n";
-    print "  -d 60         - delay in seconds between uploads of multiple files (default: 30)\n";
+    print "  -d 60         - delay in seconds between uploads of multiple files (default: 15)\n";
     print "  file(s)       - one or more local files to upload (required)\n";
     print "  URL           - view URL of TWiki topic, http or https protocol (required, must be last)\n";
     print "Example:\n";
@@ -61,7 +61,7 @@ my $password = $opts{p} || '';
 my $comment  = $opts{c} || "Uploaded by $toolName";
 my $hide     = $opts{h} || '';
 my $link     = $opts{i} || '';
-my $delay    = $opts{d} || '30';
+my $delay    = $opts{d} || '15';
 my $url      = pop( @files ) || '';
 
 exit uploadFile( $comment, $hide, $link, $delay, $url, @files );
@@ -116,7 +116,7 @@ sub uploadFile
                 'hidefile'    => $theHide,
                 'createlink'  => $theLink
             ],
-            'Content_Type' => 'form-data' );
+            'Content_Type' => 'multipart/form-data' );
 
         if( $response->is_success ) {
             print "... upload finished\n";

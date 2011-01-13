@@ -1,5 +1,17 @@
-%META:TOPICINFO{author="PeterThoeny" date="1171357543" format="1.1" reprev="1.3" version="1.3"}%
----+ Upload to TWiki Add-On
+%META:TOPICINFO{author="TWikiContributor" date="1294902512" format="1.1" version="$Rev$"}%
+---+!! Upload to TWiki Add-On
+<!--
+   Contributions to this TWiki add-on are appreciated. Please update the add-on page at
+   http://twiki.org/cgi-bin/view/Plugins/UploadToTWikiAddOn or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/UploadToTWikiAddOnDev.
+   If you are a TWiki contributor please update the add-on in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++
 
 This is a small Perl script to programmatically attach a file to any TWiki topic. The script can be executed on any computer, it does not have to be on the server where TWiki is installed. This is a useful script to create mashups of TWiki and other applications.
 
@@ -14,10 +26,10 @@ and enter the password when prompted.
 Supported command line parameters:
    * =-l login      -= login name of TWiki account (optional)
    * =-p password   -= password of TWiki account (optional)
-   * =-c 'comment'  -= comment of attached file (default: 'Uploaded by uploadtotwiki/2007-02-12')
+   * =-c 'comment'  -= comment of attached file (default: 'Uploaded by uploadtotwiki/2011-01-12')
    * =-h 1          -= hide attachment, 0 or 1 (default: 0)
    * =-i 1          -= inline attachment, e.g create link in topic text (default: 0)
-   * =-d 60         -= delay in seconds between uploads of multiple files (default: 30)
+   * =-d 60         -= delay in seconds between uploads of multiple files (default: 15)
    * =file(s)       -= one or more local files to upload (required)
    * =URL           -= view URL of TWiki topic, http or https protocol (required, must be last)
 
@@ -40,21 +52,26 @@ __Note:__ This is a command line tool for administrators; regular TWiki user can
      | ==tools/uploadtotwiki.pl== | Add-on script |
    * If inclined, move =uploadtotwiki.pl= to a different location or server
    * Run above example to test if the installation was successful
-   * Install CPAN:LWP if needed (see [[http://twiki.org/cgi-bin/view/TWiki/HowToInstallCpanModules][instructions]])
+   * Install CPAN:LWP if missing (see [[http://twiki.org/cgi-bin/view/TWiki/HowToInstallCpanModules][CPAN instructions]])
 
 ---++ Limitations
 
-   * Upload of files with illegal characters (=$=, =@=, =^=, space, etc.) fail, and no error message is shown.
+   * At this time, support for !ApacheLogin only; !TemplateLogin support is pending.
+   * Upload of files fail silently (without error message) :
+      * if the file name has unsupported characters (=$=, =@=, =^=, space, etc). Workaround: Rename files before upload.
+      * if the CRSF protection flag is set in configure. Workaround: Disable ={CryptToken}{Enable}= configure setting.
+      * if the user has no permission to update the topic.
 
 ---++ Add-On Info
 
    * Set SHORTDESCRIPTION = Script to programmatically attach a file to any TWiki topic
 
 |  Add-on Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2007, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] |
+|  Copyright: | &copy; 2007-2011, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]], <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | uploadtotwiki/2007-02-12 |
+|  Add-on Version: | uploadtotwiki/2011-01-12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-01-12: | TWikibug:Item6530: Doc improvements |
 |  2007-02-12: | Added =-l=, =-p=, =-c=, =-h=, =-i=, =-d= parameters; support for multiple files |
 |  2007-02-11: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 4.0) |
@@ -65,6 +82,4 @@ __Note:__ This is a command line tool for administrators; regular TWiki user can
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topic:__ %TWIKIWEB%.TWikiAddOns
-
--- TWiki:Main/PeterThoeny - 2007-02-12
+__Related Topic:__ %SYSTEMWEB%.TWikiAddOns
