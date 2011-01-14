@@ -1,0 +1,30 @@
+%META:TOPICINFO{author="TWikiGuest" date="1183107549" format="1.1" reprev="1.1" version="1.1"}%
+%IF{"%URLPARAM{remotefileattach}%" then="---+++ Your image:"}%
+
+%IF{"%URLPARAM{remotefileattach}%" then="<IMG src=\"%ATTACHURL%/%URLPARAM{name}%\" />"}%
+
+---+++ Attach an image
+
+%RED% %REMOTEFILEATTACH_MSG% %ENDCOLOR%
+
+%IF{"defined remotefileattach" then="<B><I>%URLPARAM{name}%</I> attached to topic</B><BR />Attach another image using the form:" else="Attach an image using the form:"}%
+---
+
+<form action='%TOPICURL%'> 
+  %MAKETEXT{"URL of the image to attach:"}%
+   <input class="twikiInputField" type="text" name="attachurl" size="32" />
+
+   %MAKETEXT{"Name for the attachment:"}%
+   <input class="twikiInputField" type="text" name="attachname" size="16" />
+
+   <input class="twikiCheckbox" type="checkbox" name="overwrite">
+   %MAKETEXT{"Overwrite image with the same name"}%
+
+   <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Download and attach"}%' /> 
+</form>
+
+%REMOTEFILEATTACH{"%URLPARAM{attachurl}%" name="%URLPARAM{attachname}%" overwrite="%URLPARAM{overwrite}%"}%
+
+
+
+
