@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1294985957" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294987076" format="1.1" version="$Rev$"}%
 ---+!! Quick Calendar Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -212,10 +212,10 @@ The following should display a small calendar of month=12/year=2001
 |  Plugin Version: | 2011-01-13 (V1.4) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  2011-01-13: | TWikibug:Item6530: Doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
-|  10 Oct 2003  | 1.300 add doy, add internal enhancements, fix ww numbering |
-|  08 Sep 2003  | 1.220 cosmetic upgrades & enhancements by TWiki:Main/WillNorris |
-|               | 1.210 bug fixes and specific date selection |
-|  23 Aug 2003  | 1.100 initial |
+|  2003-10-10: | 1.300 add doy, add internal enhancements, fix ww numbering |
+|  2003-09-08: | 1.220 cosmetic upgrades & enhancements by TWiki:Main/WillNorris |
+|              | 1.210 bug fixes and specific date selection |
+|  2003-08-23: | 1.100 initial |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | POSIX package in Perl (should be standard) |
 |  Perl Version: | 5.005 |
