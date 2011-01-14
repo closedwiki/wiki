@@ -1,30 +1,42 @@
-%META:TOPICINFO{author="TWikiContributor" date="1069610959" format="1.0" version="1.1"}%
----+ Quick Calendar Plugin
+%META:TOPICINFO{author="TWikiContributor" date="1294985957" format="1.1" version="$Rev$"}%
+---+!! Quick Calendar Plugin
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/QuickCalendarPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/QuickCalendarPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
 
 Generates a monthly calendar and creates link anchors from each day and week to somewhere else.  A user can then place anchors further down in the page and the calendar date will link to them.  The generated anchors correspond to ISO 8601 standard.
 
 This plugin is one of the building blocks for a time management plugin I've written.  But it might be useful by itself.
 
-This plugin is kind of the "reverse" of the TWiki:Plugins/CalendarPlugin (which may also be of interest) which generates a custom calendar from wiki text.  This TWiki:Plugins/QuickCalendarPlugin generates a fixed calendar which links to wiki text.
+This plugin is kind of the "reverse" of the TWiki:Plugins.CalendarPlugin (which may also be of interest) which generates a custom calendar from wiki text.  This TWiki:Plugins.QuickCalendarPlugin generates a fixed calendar which links to wiki text.
 
-==New version: v1.300.== For recent changes, see TWiki:Plugins/QuickCalendarPluginDev.
+For recent changes, see TWiki:Plugins.QuickCalendarPluginDev.
 
 ---++ Syntax Rules
 
-	* Use the variable %<nop>CAL% or with arguments, %<nop>CAL{settings}% where settings are listed below.
-		* Without settings, a linkified calendar of the current or specified month is displayed.
-	* Additional Settings (all are optional):
-		* =month="sep"= or =month="september"= or =month="9"=
-		* =year="yyyy"= (_must be a four digit year! "01" would be 01 C.E. !_)
-		* URL specification: =href="some url here"=
-			* Dates in calendar will link to =some url hereYYYYMMDD= or =some url hereYYYYWW=
-				* Default URL link in _anchor mode_ will be the current web.topic with #CalDateYYYYMMDD or #CalDateYYYYWW anchors
-				* Default URL link in _non anchor mode_ will be the wiki username with YYYYMMMDD or YYYYWW appended.
-		* =doy="on"= will display dates in day-of-the-year format (see example below).  _Default: off_
-	* Relative Arguments (all are optional):
-		* =month="+4"= or =month="-6"=
-		* =year="+2"= or =year="-1"=
-	* See examples below.  
+   * Use the variable %<nop>CAL% or with arguments, %<nop>CAL{settings}% where settings are listed below.
+      * Without settings, a linkified calendar of the current or specified month is displayed.
+   * Additional Settings (all are optional):
+      * =month="sep"= or =month="september"= or =month="9"=
+      * =year="yyyy"= (_must be a four digit year! "01" would be 01 C.E. !_)
+      * URL specification: =href="some url here"=
+         * Dates in calendar will link to =some url hereYYYYMMDD= or =some url hereYYYYWW=
+            * Default URL link in _anchor mode_ will be the current web.topic with #CalDateYYYYMMDD or #CalDateYYYYWW anchors
+            * Default URL link in _non anchor mode_ will be the wiki username with YYYYMMMDD or YYYYWW appended.
+      * =doy="on"= will display dates in day-of-the-year format (see example below).  _Default: off_
+   * Relative Arguments (all are optional):
+      * =month="+4"= or =month="-6"=
+      * =year="+2"= or =year="-1"=
+   * See examples below.  
 
 ---++ Examples
 
@@ -43,9 +55,9 @@ You Type: %CAL{month="sep" year="2003"}%
 You Get (note "today" is highlighted):
 
 <style>
-	 .week	{ background:#ccc; }
-	 .day	 { background:#eee; }
-	 .today  { background:yellow; }
+    .week   { background:#ccc; }
+    .day    { background:#eee; }
+    .today  { background:yellow; }
 </style>
 <table style="width:auto; border:0px;">
 <tr> <th colspan=8> September 2003 (9/2003) </th> </tr>
@@ -93,9 +105,9 @@ You Get (note "today" is highlighted):
 If you like, you can specify ==doy="on"== as an argument, and get a calendar which uses days of the year.  This is handy for some things, like astronomy.  Type ==%CAL{doy="on"}%== to see:
 
 <!-- Calender rendered by TWiki Plugin: Quick Calendar --><style>
-	 .week	{ background:#ccc; }
-	 .day	 { background:#eee; }
-	 .today  { background:yellow; }
+    .week   { background:#ccc; }
+    .day    { background:#eee; }
+    .today  { background:yellow; }
 </style>
 <table style="width:auto; border:0px;">
 <tr> <th colspan=8> October 2003 (10/2003) </th> </tr>
@@ -141,47 +153,44 @@ If you like, you can specify ==doy="on"== as an argument, and get a calendar whi
 <td class="day"><a TARGET="_blank" href="jcline#CalDate200310304">304</a></td>
 </tr></table>
 
-
-
-
 ---+++ Example 4: Anchoring
 
-	* Each month creates both day and week anchors (for =name="#anchor"=), either (a) within the current topic in _anchor mode_, (b) a topic of the user's wiki name in _non anchor mode_, or (c) the user specified href.
-		* The calendar days will link to the day anchors.  
-			* Click on the Sept 27th above to see the effect (anchor mode).
-		* The week column will link to the week anchors.
-			* Click on "2003.38" above to see the effect (anchor mode).
-	* Specify a custom url with the syntax: =href="link"=
+   * Each month creates both day and week anchors (for =name="#anchor"=), either (a) within the current topic in _anchor mode_, (b) a topic of the user's wiki name in _non anchor mode_, or (c) the user specified href.
+      * The calendar days will link to the day anchors.  
+         * Click on the Sept 27th above to see the effect (anchor mode).
+      * The week column will link to the week anchors.
+         * Click on "2003.38" above to see the effect (anchor mode).
+   * Specify a custom url with the syntax: =href="link"=
 
 
 #CalDate200338 This line contains an anchor to "work week" 38 (in year 2003)
-	* This is a very simple example of text following the week 38 anchor.. 
+   * This is a very simple example of text following the week 38 anchor.. 
 
 #CalDate20030927 This line contains an anchor to the date 09/27/2003
-	* This is a very simple example of text following the date anchor.. 
+   * This is a very simple example of text following the date anchor.. 
 
 ---++ <nop>QuickCalendarPlugin Global Settings
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = An anchor linkified, internally generated, minimal calender.
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = An anchor linkified, internally generated, minimal calender
 
-	* Debug plugin: 
-		* Set DEBUG = 0
-
+   * Debug plugin: 
+      * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-	* Download the .PM file from TWiki:Plugins/QuickCalendarPlugin (see below).
-	* "Edit" this topic and copy & paste the wiki text into your own site.
-	* Verify the created files exist in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* Test if the installation was successful:
-		* Currently active plugins are: %ACTIVATEDPLUGINS%
-		* Calendars should appear below.
+   * Run configure for automated install, or do a manual install:
+   * Download the .PM file from TWiki:Plugins.QuickCalendarPlugin (see below).
+   * "Edit" this topic and copy & paste the wiki text into your own site.
+   * Verify the created files exist in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Test if the installation was successful:
+      * Currently active plugins are: %ACTIVATEDPLUGINS%
+      * Calendars should appear below.
 
 The following should display a calendar of Dec 2006
 %CAL{month="dec" year="2006"}%
@@ -195,12 +204,14 @@ The following should display a small calendar of month-14/year+1 (two months ago
 The following should display a small calendar of month=12/year=2001
 %CAL{month="12" year="2001"}% 
 
-
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.JonathanCline |
-|  Plugin Version: | 10 Oct 2003 (V1.300) |
-|  Change History: |  |
+|  Copyright: | &copy; 2003 TWiki:Main.JonathanCline <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-01-13 (V1.4) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-01-13: | TWikibug:Item6530: Doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  10 Oct 2003  | 1.300 add doy, add internal enhancements, fix ww numbering |
 |  08 Sep 2003  | 1.220 cosmetic upgrades & enhancements by TWiki:Main/WillNorris |
 |               | 1.210 bug fixes and specific date selection |
@@ -211,9 +222,4 @@ The following should display a small calendar of month=12/year=2001
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main/JonathanCline - 23 Aug 2003 <br/>
--- TWiki:Main/JonathanCline - 10 Sep 2003 <br/>
--- TWiki:Main/JonathanCline - 29 Sep 2003 <br/>
--- TWiki:Main/JonathanCline - 11 Oct 2003 <br/>
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins

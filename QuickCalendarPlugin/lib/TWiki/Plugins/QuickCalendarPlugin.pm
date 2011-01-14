@@ -2,6 +2,8 @@
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2000-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2003 TWiki:Main.JonathanCline
+# Copyright (C) 2007-2011 TWiki:TWiki.TWikiContributor
 #
 #   Portions derived from :
 #    Perl Power Tools - cal
@@ -92,15 +94,8 @@ use vars qw(
         %This %Next %Last %Prev
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2011-01-13';
 
 $pluginName = 'QuickCalendarPlugin';
 
