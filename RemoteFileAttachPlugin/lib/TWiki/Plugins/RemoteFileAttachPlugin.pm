@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2002-2006 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2007 TWiki:Main.JosKunnekes
+# Copyright (C) 2007-2011 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,24 +16,15 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 # As per the GPL, removal of this notice is prohibited.
-#
-# This plugin replaces smilies with small smilies bitmaps
 
 package TWiki::Plugins::RemoteFileAttachPlugin;
 
 use strict;
 
-use vars qw( $VERSION $RELEASE);
+use vars qw( $VERSION $RELEASE );
 
-# This should always be $Rev: 8154 $ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev: 8154 $';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2011-01-13';
 
 my $topic;
 my $web;

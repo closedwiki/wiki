@@ -1,9 +1,20 @@
-%META:TOPICINFO{author="TWikiGuest" date="1183107492" format="1.1" reprev="1.12" version="1.12"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294984229" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 
-This plugin allows you to attach a remote file to a topic. Given an URL to a remote file it downloads the file and attaches it to a topic.
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/RemoteFileAttachPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/RemoteFileAttachPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-%TOC%
+---++ Introduction
+
+This plugin allows you to attach a remote file to a topic. Given an URL to a remote file it downloads the file and attaches it to a topic.
 
 ---++ Syntax Rules
 
@@ -14,15 +25,14 @@ This plugin allows you to attach a remote file to a topic. Given an URL to a rem
      | =name="filenamename"= | The name to use for the attachment. | A name based on the filename of the remote file. For example: if you specify "http://site.com/icon.jpg" as URL, the default name for the attachment will be "icon.jpg" |
      | =overwrite="0"= or =overwrite="1"= | When enabled: if an attachment with the same name already exists it will be overwritten (without asking) | =0= |
 
-   * Syntax: =%<nop>REMOTEFILEATTACH_MSG%= <BR />
+   * Syntax: =%<nop>REMOTEFILEATTACH_MSG%= <br />
       The error message returned after executing %<nop>REMOTFILEATTACH{...}% (if an error occured).
-
 
 ---+++ Usage
 
 When the URL is an empty string =%<nop>REMOTEFILEATTACH{...}%= will do nothing. 
 
-When =%<nop>REMOTEFILEATTACH{...}%= is processed and no error occured, the browser is redirected to the viewed topic with two URL parameters: =remotefileattach= and =name=. They can be used to test whether a file was succesfully attached and display the name of the attached file. They also flag the RemoteFileAttachPlugin so it doesn't try to attach the file again.
+When =%<nop>REMOTEFILEATTACH{...}%= is processed and no error occured, the browser is redirected to the viewed topic with two URL parameters: =remotefileattach= and =name=. They can be used to test whether a file was succesfully attached and display the name of the attached file. They also flag the !RemoteFileAttachPlugin so it doesn't try to attach the file again.
 
 If an error occured, or the user tried to attach a file with a name which already exists (when =overwrite=off=) the browser is not redirected and =%REMOTEFILEATTACH_MSG% contains the error message or warning.
 
@@ -30,26 +40,25 @@ If an error occured, or the user tried to attach a file with a name which alread
 
 It is not recommended to hard-code the URL, because =%<nop>REMOTEFILEATTACH%= will try to attach the specified file everytime the topic is viewed. The URL should be specified based on some condition, for example an url-parameter. See the example-form below.
 
-   * *Bad idea:* <BR />
+   * *Bad idea:* <br />
        =%<nop>REMOTEFILLEATTACH{"http://site.com/file.zip" name="attach.zip"}%=
 
-   * *Good idea:* <BR />
+   * *Good idea:* <br />
        =%<nop>REMOTEFILEATTACH{"%<nop>URLPARAM{attachurl}%" name="attach.zip"}%=
 
-
-   Note:
+Note:
    * Instead of using =overwrite="1"=  you can also use =overwrite="on"= . This is easier when using a checkbox in a form.
    
 
 ---++ Examples
 
-   * =%<nop>REMOTEFILEATTACH{"http://www.mozilla.org/images/feature-logos1.png"}%= <BR />
+   * =%<nop>REMOTEFILEATTACH{"http://www.mozilla.org/images/feature-logos1.png"}%= <br />
      Download the picture from the specified URL and attach it as _feature-logos1.png_ 
 
-   * =%<nop>REMOTEFILEATTACH{"%<nop>URLPARAM{myurl}%" name="%URLPARAM{name}%" overwrite="on"}%= <BR />
+   * =%<nop>REMOTEFILEATTACH{"%<nop>URLPARAM{myurl}%" name="%URLPARAM{name}%" overwrite="on"}%= <br />
       If an  URL parameter =myurl= is specified, download it and attach it with the name specified in url parameter =name=. If the url parameter =myurl= isn't specified, do nothing. If the url parameter =name= is empty, yield an error.  When an attachment with the given name already exists, overwrite it. 
 
-   * =%<nop>REMOTEFILEATTACH_MSG%= <BR />
+   * =%<nop>REMOTEFILEATTACH_MSG%= <br />
       Display the output from the last =%<nop>REMOTEFILEATTACH%= directive, if any, or display nothing.
 
    * RemoteFileAttachExample contains a more extended example.
@@ -93,50 +102,44 @@ It is not recommended to hard-code the URL, because =%<nop>REMOTEFILEATTACH%= wi
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Download and attach remote files to topics.
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Download and attach remote files to topics
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
 
+   * Run configure for automated install, or do a manual install:
    * Install the Perl module CPAN:LWP::Simple
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==data/TWiki/RemoteFileAttachExample.txt== | Example topic |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
    * Configure the Plugin:
-      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
-      * Change the Plugin settings as needed
+      * Run the [[%SCRIPTURL{configure}%][configure]] script to enable the plugin
    * Test if the installation was successful:
       * Use the example upload form above.
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.JosKunnekes |
-|  Copyright: | &copy; 2007, TWiki:Main.JosKunnekes |
+|  Copyright: | &copy; 2007, TWiki:Main.JosKunnekes <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 26 Jun 2007 (V0.99) |
+|  Plugin Version: | 2011-01-13 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-01-13: | TWikibug:Item6530: Doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  26 Jun 2007: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | CPAN:LWP::Simple |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: (*) | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 100% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle 100%, %SYSTEMWEB%.FormattedSearch 100%, %TOPIC% 100% (*) |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 (*) When attaching a file the topic is rendered _after_ the file is downloaded and attached. The delay depends on the size of the file and the connection speed of the hosts on both end of the transfer.
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
-
--- TWiki:Main.JosKunnekes - 26 Jun 2007
-
-
-
-
-
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
