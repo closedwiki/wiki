@@ -1,5 +1,17 @@
-%META:TOPICINFO{author="AndreasVoegele" date="1184155870" format="1.1" reprev="1.2" version="1.2"}%
----+ LDAP Plugin
+%META:TOPICINFO{author="TWikiContributor" date="1295065198" format="1.1" version="$Rev$"}%
+---+!! LDAP Plugin
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/LdapPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/LdapPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
 
 This plugin was written by TWiki:Main.GerardHickey to allow data to be pulled out of an LDAP directory and displayed in a TWiki topic.  See TWiki:Plugins.LdapNgPlugin for an alternative plugin.
 
@@ -25,7 +37,7 @@ Write the tag =%<nop>LDAP{= _parameters_ =}%= anywhere in a TWiki topic to defin
 | =jpegdefaultphoto= | URL of a default photo for an LDAP entry without a photo | jpegdefaultphoto="/photos/default.jpg" |
 | =notfounderror= | Error message you want to get in case <nop>LdapPlugin found nothing.  Useful to define Javascript vars (see TWiki:Codev.TWikiLdapRegistration) | notfounderror="No contacts found" |
 
----++++ More examples
+---+++ More examples
 
 Search for a specific entry and return the value of the attribute =telephoneNumber=:
 
@@ -55,55 +67,59 @@ Filter: <input type="text" name="ldapfilter" size="25" />
 Plugin settings are stored as preferences variables.  To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>LDAPPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = This plugin retrieves data from an LDAP directory and displays it on the current topic.
+   * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Retrieve data from an LDAP directory to show in TWiki topics.
 
-	* LDAP host to connect to access the directory:
-		* Set HOST = ldap://ldap.example.org:389
+   * LDAP host to connect to access the directory:
+      * Set HOST = ldap://ldap.example.org:389
 
-	* Perform <nop>StartTLS extended operation:
-		* Set STARTTLS = 0
+   * Perform <nop>StartTLS extended operation:
+      * Set STARTTLS = 0
 
-	* Base DN to use for searching the LDAP directory:
-		* Set BASE = ou=whatever,dc=example,dc=org
+   * Base DN to use for searching the LDAP directory:
+      * Set BASE = ou=whatever,dc=example,dc=org
 
-	* Default filter: (The string =TOPIC= will be replaced in the default filter with the topic of the page on which the LDAP tag is located.  That way you can use the Wiki username extracted from current topic name to automatically display LDAP user information from any Wiki Home page.)
-		* Set DEFAULTFILTER = 
+   * Default filter: (The string =TOPIC= will be replaced in the default filter with the topic of the page on which the LDAP tag is located.  That way you can use the Wiki username extracted from current topic name to automatically display LDAP user information from any Wiki Home page.)
+      * Set DEFAULTFILTER = 
 
-	* Default values:
-		* Set HEADER = 
-		* Set FORMAT = 
-		* Set MVFORMAT = 
-		* Set ORDER = 
-		* Set REVERSE = 
-		* Set SKIP = 
-		* Set LIMIT = 
-		* Set JPEGPHOTO = 
-		* Set JPEGDEFAULTPHOTO = 
+   * Default values:
+      * Set HEADER = 
+      * Set FORMAT = 
+      * Set MVFORMAT = 
+      * Set ORDER = 
+      * Set REVERSE = 
+      * Set SKIP = 
+      * Set LIMIT = 
+      * Set JPEGPHOTO = 
+      * Set JPEGDEFAULTPHOTO = 
 
-	* Message displayed when a search returned no entries:
-		* Set NOTFOUNDERROR = 
+   * Message displayed when a search returned no entries:
+      * Set NOTFOUNDERROR = 
 
-	* Debug plugin: (See output in data/debug.txt)
-		* Set DEBUG = 0
+   * Debug plugin: (See output in data/debug.txt)
+      * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin.  The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
 
-	* Install the Net::LDAP module from CPAN or other source.
-	* Download the ZIP file from the Plugin web (see below).  Contents:
-	| *File:* | *Description:* |
-	| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Run configure for automated install, or do a manual install:
+   * Install the Net::LDAP module from CPAN or other source.
+   * Download the ZIP file from the Plugin web (see below).  Contents:
+   | *File:* | *Description:* |
+   | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+   | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory.
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.GerardHickey |
-|  Plugin Version: | 11 Jul 2007 |
+|  Copyright: | &copy; 2002-2004 TWiki:Main.GerardHickey <br /> &copy; 2006-2007 TWiki:Main.AndreasVoegele <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-01-14 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-01-14: | TWikibug:Item6530: Doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  11 Jul 2007: | Add reverse, skip, and limit settings.  TWiki:Main.AndreasVoegele |
 |  02 Oct 2006: | Bug fix release.  The search filter is converted to UTF-8.  TWiki:Main.AndreasVoegele |
 |  13 May 2006: | Bug fix release.  Requires Perl 5.8.  TWiki:Main.AndreasVoegele |
@@ -125,6 +141,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Home: | TWiki:Plugins.%TOPIC% |
 |  Feedback: | TWiki:Plugins.%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main.AndreasVoegele - 11 Jul 2007
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
