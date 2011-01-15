@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293783217" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1295068305" format="1.1" version="$Rev$"}%
 ---+!! !NewUserPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -36,7 +36,7 @@ TWiki:Plugins/LdapNgPlugin and the TWiki:Plugins/GluePlugin to make use of it.
 
 ---++ Syntax
 
-On creation of the user home topic only =%WIKINAME%=, =%USERNAME%= and =%WIKIUSERNAME%=
+On creation of the user home topic only =%<nop>WIKINAME%=, =%<nop>USERNAME%= and =%<nop>WIKIUSERNAME%=
 get expanded by default. To expand additional VARIABLES, you can use the =%EXPAND{}%= syntax.
 All percent signs have to be escaped by =$percnt=, deeper recursion levels may
 use =$dollar=, too. Multiline EXPANDs are not supported.
@@ -54,12 +54,13 @@ Example:
 
 This work is partly funded by [[http://www.hennerich.de][T+T Hennerich <nop>GmbH]].
 
-|  Plugin Author: | TWiki:Main/MichaelDaum |
+|  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright: | &copy; 2006-2008, Michael Daum http://michaeldaumconsulting.com; <br /> &copy; 2006-2010, TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.1 |
+|  Plugin Version: | 2011-01-14 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-05-02: | TWikibug:Item6433 - doc improvements; changing TWIKIWEB to SYSTEMWEB |
+|  2011-01-14: | TWikibug:Item6530: Doc improvements |
+|  2010-05-02: | TWikibug:Item6433: Doc improvements; changing TWIKIWEB to SYSTEMWEB |
 |  15 Sep 2008 | TWiki:Main.OliverKrueger: added EXPAND feature, removed noise in debug.txt |
 |  12 Feb 2008 | remove leading/trailing whitespaces from NEWUSERTEMPLATE filename |
 |  09 Jan 2008 | fixed spelling error |

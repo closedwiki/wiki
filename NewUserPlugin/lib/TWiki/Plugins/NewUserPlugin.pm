@@ -26,7 +26,7 @@ use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC $done);
 use constant DEBUG => 0; # toggle me
 
 $VERSION = '$Rev$';
-$RELEASE = 'v1.1';
+$RELEASE = '2011-01-14';
 $SHORTDESCRIPTION = 'Create a user topic if it does not exist yet';
 $NO_PREFS_IN_TOPIC = 1;
 
