@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293784965" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1295066917" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
     Contributions to this plugin are appreciated. Please update the plugin page
@@ -13,9 +13,7 @@
 
 ---++ Introduction
 
-This plugin provides an interface to query an LDAP directory and display the results in a TWiki topic.
-It is a complete rewrite of the TWiki:Plugins/LdapPlugin by TWiki:Main/GerardHickey to provide
-greater flexibility and performance based on the TWiki:Plugins/LdapContrib package.
+This plugin provides an interface to query an LDAP directory and display the results in a TWiki topic. It is a complete rewrite of the TWiki:Plugins.LdapPlugin by TWiki:Main.GerardHickey to provide greater flexibility and performance based on the TWiki:Plugins.LdapContrib package.
 
 ---++ Syntax Rules
 ---+++ LDAP
@@ -54,6 +52,7 @@ The =header=, =format= and =footer= format strings may contain the following var
    * $&lt;attr-name>: the value of the record attribute &lt;attr-name>
 
 ---+++ LDAPUSERS
+
 <verbatim>%LDAPUSERS{...}%</verbatim>
 List all LDAP userinformation. Information is drawn from cache and not from the LDAP server. Use =?refreshldap=on= to update.
 
@@ -79,6 +78,7 @@ The =format= string may contain the following variables:
    * $emails: the list of all known email addresses
  
 ---++ Examples
+
 %LDAP{"(objectClass=posixAccount)" 
   base="(ou=people)"
   limit="10" 
@@ -101,10 +101,10 @@ The =format= string may contain the following variables:
 %LDAPUSERS{limit="10"}%
 
 ---++ Plugin Settings
+
 <!-- provided for compatibility only
    * Set SHORTDESCRIPTION = Query and display data from an LDAP directory
 -->
-
 The %TOPIC% will use the default configuration of the LdapContrib in your =LocalSite.cfg= file, that is
    * $TWiki::cfg{Ldap}{Host} (overridable per query)
    * $TWiki::cfg{Ldap}{Port} (overridable per query)
@@ -115,6 +115,8 @@ The %TOPIC% will use the default configuration of the LdapContrib in your =Local
    * $TWiki::cfg{Ldap}{BindPasswd}
 
 ---++ Plugin Installation Instructions
+
+   * Run configure for automated install, or do a manual install:
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
@@ -124,17 +126,21 @@ The %TOPIC% will use the default configuration of the LdapContrib in your =Local
      this step manually.
    * Alternatively, manually make sure the dependencies listed in the table
      below are resolved.
-%$DEPENDENCIES%
++   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Dependencies:
+  %$DEPENDENCIES%
 
 ---++ Plugin Info
+
 This work was partly funded by Spanlink Communications.
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright: | &copy; 2006-2007 Michael Daum http://wikiring.de, &copy; 2006-2010 TWiki:Main/TWikiContributors |
+|  Copyright: | &copy; 2006-2007 Michael Daum http://wikiring.de <br /> &copy; 2006-2010 TWiki:Main.TWikiContributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.1 |
+|  Plugin Version: | 2011-01-14 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-04-25 | TWikibug:Item6433 - doc improvements |
+|  2011-01-14: | TWikibug:Item6530: Doc improvements |
+|  2010-04-25: | TWikibug:Item6433: Doc improvements |
 |  13 Nov 2007: | fixed $nop  |
 |  01 Oct 2007: | added LDAPUSERS, lined up to changes in <nop>LdapContrib-2.0 |
 |  04 June 2007: | don't convert from/to utf8 if the site charset is already utf8 |
@@ -148,3 +154,5 @@ This work was partly funded by Spanlink Communications.
 |  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, LdapContrib

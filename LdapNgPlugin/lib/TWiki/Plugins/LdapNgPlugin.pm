@@ -2,6 +2,7 @@
 #
 # Copyright (C) 2006 Michael Daum http://wikiring.com
 # Portions Copyright (C) 2006 Spanlink Communications
+# Copyright (C) 2007-2011 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,10 +17,12 @@
 package TWiki::Plugins::LdapNgPlugin;
 
 use strict;
-use vars qw($VERSION $RELEASE $isInitialized $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION);
+use vars qw(
+    $VERSION $RELEASE $isInitialized $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
+  );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v2.1';
+$RELEASE = '2011-01-14';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Query and display data from an LDAP directory';
 
