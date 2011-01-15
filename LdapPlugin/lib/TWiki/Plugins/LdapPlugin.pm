@@ -349,6 +349,183 @@ sub _ldap_lookup {
     return _LDAP(undef, \%lcparams, $theTopic, $theWeb);
 }
 
+##### TODO: Merge work done by TWiki:Main.JoanTouzet in 2005
+##
+##sub ldap_lookup () {
+##    my $attr = shift;
+##    my ($ldap,$i,$x,$y,$row,$mesg);
+##    my (@fields, @keyfields);
+##    my (%rows, %sortfield);
+##
+##    &TWiki::Func::writeDebug( "- LdapPlugin::ldap_lookup( $attr )" ) if $debug;
+##
+##    my $mvformat=&TWiki::Func::extractNameValuePair( $attr, "mvformat" ) || $LDAP_MvFormat;
+##
+##    # host from setting or from parameter
+##    my $host=&TWiki::Func::extractNameValuePair( $attr, "host" ) || $LDAP_Host;
+##
+##    # add the defined port
+##    $host .= ":$LDAP_Port";
+##
+##    # Use $host to make connection.  Bail out with error if no connect.
+##    if (! ($ldap = Net::LDAP->new ($host))) {
+##                # Connection failed!
+##                return ("<b> LDAP Connect Failure </b>");
+##    }
+##
+##    # filter from parameter or CgiQuery
+##    my $cgi = &TWiki::Func::getCgiQuery();
+##    my $cgiFilter = "";
+##    if( $cgi->param('ldapfilter') ) 
+##    {
+##        $cgiFilter = $cgi->param('ldapfilter');
+##        $cgiFilter =~ s/^ +//;
+##        $cgiFilter =~ s/^AND\(/&(/;
+##        $cgiFilter =~ s/%(\d\d)/pack("H2",$1)/eg;
+##    }
+##
+##    my $filter=$cgiFilter || &TWiki::Func::extractNameValuePair($attr, "filter")
+##        || $LDAP_Filter;
+##
+##    if (! $filter) {
+##        return("No Filter Specified for Search");
+##    }
+##
+##    # format from setting or parameter.  Field list extracted from format.
+##    my $format=&TWiki::Func::extractNameValuePair( $attr,"format")  || $LDAP_Format;
+##    if (! $format ) { 
+##        return "No Fields Requested";
+##    } else {
+##        # get attributes list from Format
+##        if ($format eq "FIELDLIST") {
+##            @fields=();
+##        } else {
+##            @fields=($format=~ /\$([^\W]+)/g);
+##        }
+##    }
+##
+##    my $order=&TWiki::Func::extractNameValuePair( $attr,"order")  || $LDAP_Order;
+##    @keyfields = ($order =~ /([^\W]+)/g);
+##
+##    # header from setting or parameter
+##    my $header=&TWiki::Func::extractNameValuePair( $attr,"header") || $LDAP_Header;
+##
+##    # base from setting or parameter
+##    my $base=&TWiki::Func::extractNameValuePair( $attr, "base" ) || $LDAP_Base;
+##
+##    # Special attribute : PHOTO --> need to store the content in a file
+##    # if you never want to process jpeg, comment out the next line
+##    # and it won't ever happen.
+##    my $jpegPhoto=&TWiki::Func::extractNameValuePair( $attr, "jpegPhoto" ) || $LDAP_jpegPhoto;
+##    my $jpegDefaultPhoto=&TWiki::Func::extractNameValuePair( $attr, "jpegDefaultPhoto" ) || $LDAP_jpegDefaultPhoto;
+##
+##    # Error message if LDAP request gives no answer
+##    my $NotFoundError=&TWiki::Func::extractNameValuePair( $attr, "notfounderror" ) 
+##            || $LDAP_Notfounderror 
+##            || "LDAP Query Returned Zero Records [Filter: =$filter= ]";
+##
+##    &TWiki::Func::writeDebug( "- LdapPlugin::ldap_lookup(): HOST=\"$host\" BASE=\"$base\" FILTER=\"$filter\"") if $debug;
+##    &TWiki::Func::writeDebug( "- LdapPlugin::ldap_lookup(): attrs=\"@fields\"") if $debug;
+##
+##    # do the actual LDAP lookup
+##    $mesg = $ldap->search(
+##            'host' => $host,
+##            'base' => $base,
+##            'filter' => $filter,
+##            'attrs' => [ @fields ]
+##    );
+##
+##    # If query succeeds, then print header here (if defined)
+##    my $max = $mesg->count;
+##    my $value="";
+##    if ($max) { 
+##        $value="$header \n" if ($header);
+##    } else {
+##        # return message saying no rows were found ....
+##        return "$NotFoundError";
+##    }
+##
+##    # If $format = FIELDLIST then just return the list of fields for the entry found.
+##    if ($format eq "FIELDLIST") {
+##        # Loop over all entries to add all seen attributes on this query
+##  # From Net::LDAP::Examples
+##  my %attrHash;
+##        my $href = $mesg->as_struct;
+##  my @arrayOfDNs = keys %$href;
+##        foreach ( @arrayOfDNs )
+##  {
+##      my $valref = $$href{$_};
+##      my @arrayOfAttrs = sort keys %$valref;
+##      my $attrName;
+##      foreach $attrName (@arrayOfAttrs)
+##      {
+##          $attrHash{$attrName} = '1';
+##      }
+##  }
+##  foreach my $key (keys %attrHash) {
+##            $value .= "$key, ";
+##  }
+##  return $value;
+##    }
+##
+##    %rows=();
+##
+##    # Then print rows of query response       
+##    for ($i=0 ; $i < $max ; $i++) 
+##    {
+##        %sortfield=();
+##        $row=$format;
+##        my $entry = $mesg->entry($i);
+##        foreach $x (sort { length($b) <=> length($a) } @fields) 
+##        {
+##            if (defined($entry->get_value($x))) 
+##            {
+##                $y = join ("$mvformat", $entry->get_value($x) );
+##
+##                if ( defined ($jpegPhoto) && ($x eq "$jpegPhoto" ) )
+##                {
+##                    my $dir= TWiki::Func::getPubDir()."/LdapPhotos";
+##                    if ( ! -e "$dir")
+##                    {
+##                        umask(002);
+##                        mkdir( $dir, 0775 );
+##                        &TWiki::Func::writeDebug( "- LdapPlugin::ldap_lookup() create $dir/\n") if $debug;
+##                    }
+##                    my $jpegPhotoFile =  $entry->get_value('alias');
+##                    if( "$jpegPhotoFile" eq "") { $jpegPhotoFile=$topic; } 
+##                    $jpegPhotoFile=$jpegPhotoFile . ".jpg";
+##                    open (FILE, ">$dir/$jpegPhotoFile");
+##                    binmode(FILE);
+##                    print FILE $y;
+##                    close (FILE);
+##                    $y=TWiki::Func::getPubUrlPath()."/LdapPhotos/$jpegPhotoFile";
+##                    &TWiki::Func::writeDebug( "- LdapPlugin::ldap_lookup() create $dir/$jpegPhotoFile\n") if $debug;
+##                }
+##                $y=~s/\n/ /g;           # remove newlines from data (messes with format)
+##                $row =~ s/\$$x/$y/ge;   # replace $field with $y (the value)
+##            } else {
+##                $row =~ s/\$$jpegPhoto/$jpegDefaultPhoto/ge;
+##                $row =~ s/\$$x/" "/ge;
+##            }
+##            # Capture field value for sort
+##            if (scalar grep (/$x/,@keyfields)) {
+##                $sortfield{$x}=$y;
+##                &TWiki::Func::writeDebug( "- LdapPlugin::ldap_lookup() Field=\"$x\" Sort=\"$y\"" ) if $debug;
+##            }
+##        } 
+##        $row = utf8($row)->latin1;
+##        $rows{join("-",@sortfield{@keyfields})}.="$row\n";
+##    }
+##
+##    # build $value with %rows{sortfield}
+##    foreach my $key (sort keys %rows) {
+##        $value .= "$rows{$key}";
+##    }
+##
+##    &TWiki::Func::writeDebug( "- LdapPlugin::ldap_lookup() returning: $value" ) if $debug;
+##    return ($value);
+##}
+
 sub commonTagsHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $theText, $theTopic, $theWeb ) = @_;
