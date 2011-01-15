@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1295066917" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1295067147" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
     Contributions to this plugin are appreciated. Please update the plugin page
@@ -17,7 +17,10 @@ This plugin provides an interface to query an LDAP directory and display the res
 
 ---++ Syntax Rules
 ---+++ LDAP
-<verbatim>%LDAP{(filter=)"filter" ...}%</verbatim>
+<verbatim>
+%LDAP{ "...filter..." ... }%
+%LDAP{ filter="...filter..." ... }%
+</verbatim>
 Query an LDAP directory.
 
 Parameters:
@@ -53,7 +56,9 @@ The =header=, =format= and =footer= format strings may contain the following var
 
 ---+++ LDAPUSERS
 
-<verbatim>%LDAPUSERS{...}%</verbatim>
+<verbatim>
+%LDAPUSERS{ ... }%
+</verbatim>
 List all LDAP userinformation. Information is drawn from cache and not from the LDAP server. Use =?refreshldap=on= to update.
 
 Parameters:
@@ -126,7 +131,7 @@ The %TOPIC% will use the default configuration of the LdapContrib in your =Local
      this step manually.
    * Alternatively, manually make sure the dependencies listed in the table
      below are resolved.
-+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
    * Dependencies:
   %$DEPENDENCIES%
 
