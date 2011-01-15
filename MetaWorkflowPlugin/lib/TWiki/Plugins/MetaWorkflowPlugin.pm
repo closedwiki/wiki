@@ -1,6 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2007 Andrew Jones, andrewjones86@googlemail.com
+# Copyright (C) 2007-2011 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,7 +25,7 @@ use vars qw(    $VERSION
                 );
 
 $VERSION = '$Rev: 9813$';
-$RELEASE = 'Dakar';
+$RELEASE = '2011-01-14';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Defines a workflow based on updated meta data (such as form fields, or meta data from another plugin)';
 $pluginName = 'MetaWorkflowPlugin';

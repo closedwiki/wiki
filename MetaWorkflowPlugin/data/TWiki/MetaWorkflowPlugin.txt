@@ -1,9 +1,19 @@
-%META:TOPICINFO{author="TWikiContributor" date="1170220558" format="1.1" version="0"}%
+%META:TOPICINFO{author="TWikiContributor" date="1295069644" format="1.1" version="$Rev$"}%
 ---+!! !MetaWorkflowPlugin
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/MetaWorkflowPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/MetaWorkflowPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-This plugin defines a workflow based on updated meta data in a number of topics. It was originally written for use with the [[TWiki:Plugins.WorkflowPlugin][WorkflowPlugin]], but can also be used to create a workflow using TWikiForms or any other changing meta data. To view the meta data of a topic, append ==?raw=debug== to the URL (i.e. %SCRIPTURL{"view"}%/%WEB%/%TOPIC%?raw=debug).
+---++ Introduction
 
-%TOC%
+This plugin defines a workflow based on updated meta data in a number of topics. It was originally written for use with the [[TWiki:Plugins.WorkflowPlugin][WorkflowPlugin]], but can also be used to create a workflow using %SYSTEMWEB%.TWikiForms or any other changing meta data. To view the meta data of a topic, append ==?raw=debug== to the URL (i.e. %SCRIPTURL{"view"}%/%WEB%/%TOPIC%?raw=debug).
 
 ---++ Usage
 
@@ -34,10 +44,13 @@ A working example of using this plugin to create a workflow based on the value o
 
 ---++ Plugin Settings
 
-* To suppress warnings on your topic, use the following (Note: only has effect on the topic it is set on):
+   * To suppress warnings on your topic, use the following (Note: only has effect on the topic it is set on):
 <verbatim>
-   * Set METAWORKFLOWWARNING = off
+      * Set METAWORKFLOWWARNING = off
 </verbatim>
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Define a workflow based on updated meta data (such as form fields, or meta data from another plugin)
 
 ---++ Installation Instructions
 
@@ -50,15 +63,16 @@ A working example of using this plugin to create a workflow based on the value o
 
 ---++ Plugin Info
 
-|  Plugin Author(s): | TWiki:Main.AndrewRJones |
-|  Plugin Version: | %$VERSION% |
-|  Copyright: | &copy; |
-|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Plugin Author: | TWiki:Main.AndrewRJones |
+|  Copyright: | &copy; 2007 TWiki:Main.AndrewRJones <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-01-14 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  13997 | Initial version |
+|  2011-01-14: | TWikibug:Item6530: Doc improvements |
+|  2007-05-31: | Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/MetaWorkflowPlugin |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/MetaWorkflowPluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/MetaWorkflowPluginAppraisal |
 
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+__Related Topics:__ Sandbox.MetaWorkflowExample, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory
