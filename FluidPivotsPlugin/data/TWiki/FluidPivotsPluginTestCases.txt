@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="MariaDelCarmenHuertas" date="1207665078" format="1.1" version="1.11"}%
+%META:TOPICINFO{author="TWikiContributor" date="1295255149" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="FluidPivotsPlugin"}%
----+!! FluidPivotsPlugin  (v.1.7) Test Cases.
+---+!! FluidPivotsPlugin Test Cases
 
 %TOC%
 
@@ -172,4 +172,6 @@ Remember that you have to set the correct order on ={PluginsOrder}= in the confi
 %CHART{type="bar" name="bar59" table="examplePivot59" data="R3:C2..R100:C2" xaxis="R3:C1..R100:C1" legend="R2:C2..R2:C2" width="800" height="200" ymin="0" ylabel="Data2" xlabel="Data1" yaxis="on"}%
 %CHART{type="bar" name="bar60" table="examplePivot60" data="R3:C2..R3:C100" xaxis="R2:C2..R2:C100" legend="R3:C1..R3:C1" width="800" height="200" ymin="0" ylabel="Data1" xlabel="Data2" yaxis="on"}%
 
--- TWiki.MariaDelCarmenHuertas - 04 Apr 2008
+__Related Topics:__ FluidPivotsPlugin, FluidPivotsPluginExtern, FluidPivotsPluginTestCasesOff
+
+-- TWiki:Main.MariaDelCarmenHuertas - 04 Apr 2008

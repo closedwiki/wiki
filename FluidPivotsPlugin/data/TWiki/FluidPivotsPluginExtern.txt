@@ -1,4 +1,7 @@
-%META:TOPICINFO{author="JorgeCardona" date="1194762144" format="1.1" version="1.5"}%
+%META:TOPICINFO{author="TWikiContributor" date="1295255149" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="FluidPivotsPlugin"}%
+---+!! FluidPivotsPlugin External Test Case
+
 %TABLE{name="exampleTable1"}%
 | *ID* | *Client* | *Worker* | *Effort* | *Life Time* | *Date* | *State* |
 | 1 | Client 4 | Worker 3|2|3| 2007/8/4 | State1|
@@ -220,5 +223,6 @@
 | 2 | 3 | 7 |
 | 4 | 18 | 12 |
 
+__Related Topics:__ FluidPivotsPlugin, FluidPivotsPluginTestCasesOff, FluidPivotsPluginTestCases
 
--- TWiki.JorgeCardona - 16 Oct 2007
+-- TWiki:Main.JorgeCardona - 16 Oct 2007

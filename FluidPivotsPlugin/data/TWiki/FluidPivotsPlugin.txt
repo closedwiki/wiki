@@ -1,9 +1,19 @@
-%META:TOPICINFO{author="MariaDelCarmenHuertas" date="1207856560" format="1.1" version="1.100"}%
----+!! <nop>%TOPIC%  (v.1.8)
+%META:TOPICINFO{author="TWikiContributor" date="1295255149" format="1.1" version="$Rev$"}%
+---+!! <nop>%TOPIC%
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/FluidPivotsPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/FluidPivotsPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-_This plugin create a table (pivot, datapilot) that show information in a usefully way. It will generate a new table from an origin table with the correlate data of two of his columns. It's work similar to DataPilot on OpenCalc_ 
+---++ Introduction
 
-%TOC%
+This plugin create a table (pivot, datapilot) that show information in a usefully way. It will generate a new table from an origin table with the correlate data of two of his columns. It's work similar to !DataPilot on !OpenCalc.
 
 ---++ Syntax Rules
 
@@ -24,58 +34,44 @@ _This plugin create a table (pivot, datapilot) that show information in a useful
    |=cachetime=|Set the time in seconds that it will reside the cache.|="0"=|
    |=ignorecache=|Set a maximum time to cache, after this time the table is regenerated even if data is unchanged.|="1209600"=|
 
----++ Test Cases
-
-   * [[FluidPivotsPluginTestCases][Test cases]] used *with* FluidPivotsPlugin in action.
-   * [[FluidPivotsPluginTestCasesOff][Test cases]] used *without* FluidPivotsPlugin in action.
-   * With a coverage [[http://twiki.org/cgi-bin/view/Codev/CodeCoverage][process]] we create this reports (you should note that this is my particular environment):
-      * [[%PUBURL%/TWiki/FluidPivotsPluginTestCases/coverage_first/coverage.html][Initial run]].
-      * [[%PUBURL%/TWiki/FluidPivotsPluginTestCases/coverage_second/coverage.html][Second run]]. (This second report is to show the cache code working.)
-
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>FORMPIVOTSPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Create pivot and datapilot tables from TWiki tables
 
    * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 1
-
-   * To correctly integrate this plugin with tables and charts, you need to change the order of plugins, in configure page, change the order like this =SpreadSheetPlugin,FluidPivotsPlugin,ChartPlugin=.
+      * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
 
-   * Download the ZIP file from the Plugin Home (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * Configure the Plugin:
-      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
-      * Change the Plugin settings as needed
+%$INSTALL_INSTRUCTIONS%
+
+   * To correctly integrate this plugin with tables and charts, you need to change the order of plugins. In configure, change the order like this: =SpreadSheetPlugin,FluidPivotsPlugin,ChartPlugin=.
+
    * Test if the installation was successful:
-      * Check the [[%PUBURL%/TWiki/FluidPivotsPluginTestCases/coverage_first/coverage.html][test cases]], you should see the tables instead of variables.
+      * Check the FluidPivotsPluginTestCases, you should see the tables instead of variables.
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MariaDelCarmenHuertas |
-|  Copyright: | &copy; 2007, [[http://www.fluidsignal.com][Fluidsignal Group S.A.]] |
+|  Copyright: | &copy; 2007, [[http://www.fluidsignal.com][Fluidsignal Group S.A.]] <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 10 Apr 2008 (V1.8) |
+|  Plugin Version: | 2011-01-17 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-01-17: | TWikibug:Item6636: Fixing plugin for TWiki-5.0; fixing warnings; doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  10 Apr 2008: | Fixed reference to Table.pm and Parameters.pm |
 |  16 Oct 2007: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | libstring-crc32-perl library (CPAN:String::CRC32) and CPAN:Math::Round |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ FluidPivotsPluginExtern, FluidPivotsPluginTestCasesOff, FluidPivotsPluginTestCases,  %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
