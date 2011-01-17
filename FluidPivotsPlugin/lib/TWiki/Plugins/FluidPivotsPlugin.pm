@@ -1,15 +1,31 @@
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2007 Fluidsignal Group S.A.
+# Copyright (C) 2007-2011 TWiki:TWiki.TWikiContributor
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# For licensing info read LICENSE file in the TWiki root.
+
 package TWiki::Plugins::FluidPivotsPlugin;
 use strict;
 use Math::Round qw (nearest);
 use String::CRC32;
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC);
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC );
 
-$VERSION = '$Rev: 10613 (11 Mar 2007) $';
-$RELEASE = 'Dakar';
-$SHORTDESCRIPTION = 'FluidPivots';
+$VERSION = '$Rev$';
+$RELEASE = '2011-01-17';
+$SHORTDESCRIPTION = 'Create pivot and datapilot tables from TWiki tables';
 $pluginName = 'FluidPivotsPlugin';
-
 
 sub initPlugin 
 {
@@ -36,24 +52,18 @@ sub commonTagsHandler
     my $topic = $_[1];
     my $web = $_[2];
 
-    if ( $text !~ m/%FLUIDPIVOTS{.*}%/)
-    {
-        return;
-    }
-
+    return unless( $_[0] =~ /%FLUIDPIVOTS{.*}%/ );
 
     require TWiki::Plugins::FluidPivotsPlugin::Parameters;
     require TWiki::Plugins::FluidPivotsPlugin::Table;
 
-    my $pivot = FluidPivotsPlugin($topic, $web, $text);
-    $text =~ s/%FLUIDPIVOTS{(.*?)}%/$pivot->_makePivot($1, $topic, $web)/eog;
+    my $pivot = FluidPivotsPlugin( $_[1], $_[2], $_[0] );
+    $_[0] =~ s/%FLUIDPIVOTS{(.*?)}%/$pivot->_makePivot($1, $_[1], $_[2])/eog;
 
     # This help us to create the offline page of FluidPivotsPlugin.
     #open(TOP,">/tmp/data");
-    #print TOP $text;
+    #print TOP $_[0];
     #close(TOP);
-
-    $_[0] = $text
 }
 
 # Generate the file name in which the table file will be placed.  Also
