@@ -30,6 +30,60 @@ sub initPlugin
     return 1;
 }
 
+sub commonTagsHandler
+{
+    my $text  = $_[0];
+    my $topic = $_[1];
+    my $web = $_[2];
+
+    if ( $text !~ m/%FLUIDPIVOTS{.*}%/)
+    {
+        return;
+    }
+
+
+    require TWiki::Plugins::FluidPivotsPlugin::Parameters;
+    require TWiki::Plugins::FluidPivotsPlugin::Table;
+
+    my $pivot = FluidPivotsPlugin($topic, $web, $text);
+    $text =~ s/%FLUIDPIVOTS{(.*?)}%/$pivot->_makePivot($1, $topic, $web)/eog;
+
+    # This help us to create the offline page of FluidPivotsPlugin.
+    #open(TOP,">/tmp/data");
+    #print TOP $text;
+    #close(TOP);
+
+    $_[0] = $text
+}
+
+# Generate the file name in which the table file will be placed.  Also
+# make sure that the directory in which the table file will be placed
+# exists.  If not, create it.
+sub _make_filename
+{
+    my ( $name, $topic, $web ) = @_;
+    # Generate the file name to be created
+    my $fullname;
+    $fullname = "_FluidPivotsPlugin_${name}.txt";
+
+    # before save, create directories if they don't exist.
+    # If the top level "pub/$web" directory doesn't exist, create it.
+    my $dir = TWiki::Func::getPubDir() . "/$web";
+    if( ! -e "$dir" ) {
+        umask( 002 );
+        mkdir( $dir, 0775 );
+    }
+    # If the top level "pub/$web/$topic" directory doesn't exist, create
+    # it.
+    my $tempPath = "$dir/$topic";
+    if( ! -e "$tempPath" ) {
+        umask( 002 );
+        mkdir( $tempPath, 0775 );
+    }
+    # Return both the directory and the filename
+    return ($tempPath, $fullname);
+}
+
 sub FluidPivotsPlugin
 {
     my ($currentTopic, $currentWeb, $currentTopicContents) = @_;
@@ -213,7 +267,7 @@ sub _makePivot
     
     for my $r ( 0..@sourceColData-1 )
     {
-        for my $c ( 0..@{@sourceColData[$r]}-1)
+        for my $c ( 0..@{$sourceColData[$r]}-1)
         {
             $tableDataString = "$tableDataString;;;$sourceColData[$r][$c]";
         }                
@@ -221,7 +275,7 @@ sub _makePivot
 
     for my $r ( 0..@sourceData-1 )
     {
-        for my $c ( 0..@{@sourceData[$r]}-1)
+        for my $c ( 0..@{$sourceData[$r]}-1)
         {
             $tableDataString = "$tableDataString;;;$sourceData[$r][$c]";
         }                
@@ -271,15 +325,17 @@ sub _makePivot
 
     for my $r ( 0..$rowNumber - 1 )
     {
-        if ($sourceColData[$r][0] eq $columns)
+        next unless( $sourceColData[$r] );
+        my $n = $sourceColData[$r][0];
+        if ($n eq $columns)
         {
             $posColData = $r + 1;
         }
-        if ($sourceColData[$r][0] eq $rows)
+        if ($n eq $rows)
         {
             $posRowData = $r + 1;
         }
-        if ($sourceColData[$r][0] eq $data)
+        if ($n eq $data)
         {
             $posData = $r + 1;
         }
@@ -293,7 +349,7 @@ sub _makePivot
     @uniqRows = sort @uniqRows;
     my %dictRows; for my $r ( 0..@uniqRows-1 ){ $dictRows{$uniqRows[$r]} = $r; }
     
-    undef my %saw;
+    undef %saw;
     my @uniqCols; for my $r ( 1..$rowNumber-1 ) { push( @uniqCols, $sourceData[$posColData-1][$r] ); } 
     @uniqCols = sort grep !$saw{$_}++, @uniqCols;
     @uniqCols = sort @uniqCols;
@@ -367,8 +423,8 @@ sub _makePivot
     if($changeTitleCol eq 1){$pivotTable[1][@uniqCols]=" *Otros* ";}
 
     my @tempPivotTable = ();
-    my @totalRows = ();
-    my @totalCols = ();
+    @totalRows = ();
+    @totalCols = ();
     my @totals = ();
 
 
@@ -402,7 +458,7 @@ sub _makePivot
     $pivotTable[@uniqRows+2][@uniqCols+1] = $this->doOperation( $operation, @totals );
 
     # Build Table.
-    my $maxRow = @pivotTable - 1;
+    $maxRow = @pivotTable - 1;
     my $tableText = "%TABLE{name=\"$name\"}%\n";
     use Switch;
     switch($visible)
@@ -586,63 +642,5 @@ sub cosort
     }
     return @b;
 }
-
-
-sub commonTagsHandler
-{
-    my $text  = $_[0];
-    my $topic = $_[1];
-    my $web = $_[2];
-
-    if ( $text !~ m/%FLUIDPIVOTS{.*}%/)
-    {
-        return;
-    }
-
-
-    require TWiki::Plugins::FluidPivotsPlugin::Parameters;
-    require TWiki::Plugins::FluidPivotsPlugin::Table;
-    
-    my $pivot = FluidPivotsPlugin($topic, $web, $text);
-    $text =~ s/%FLUIDPIVOTS{(.*?)}%/$pivot->_makePivot($1, $topic, $web)/eog;
-
-    # This help us to create the offline page of FluidPivotsPlugin.
-    #open(TOP,">/tmp/data");
-    #print TOP $text;
-    #close(TOP);
-    
-    $_[0] = $text
-}
-
-
-# Generate the file name in which the table file will be placed.  Also
-# make sure that the directory in which the table file will be placed
-# exists.  If not, create it.
-sub _make_filename
-{
-    my ( $name, $topic, $web ) = @_;
-    # Generate the file name to be created
-    my $fullname;
-    $fullname = "_FluidPivotsPlugin_${name}.txt";
-
-    # before save, create directories if they don't exist.
-    # If the top level "pub/$web" directory doesn't exist, create it.
-    my $dir = TWiki::Func::getPubDir() . "/$web";
-    if( ! -e "$dir" ) {
-        umask( 002 );
-        mkdir( $dir, 0775 );
-    }
-    # If the top level "pub/$web/$topic" directory doesn't exist, create
-    # it.
-    my $tempPath = "$dir/$topic";
-    if( ! -e "$tempPath" ) {
-        umask( 002 );
-        mkdir( $tempPath, 0775 );
-    }
-    # Return both the directory and the filename
-    return ($tempPath, $fullname);
-}
-
-
 
 1;
