@@ -66,9 +66,9 @@ A working example of using this plugin to create a workflow based on the value o
 |  Plugin Author: | TWiki:Main.AndrewRJones |
 |  Copyright: | &copy; 2007 TWiki:Main.AndrewRJones <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-01-14 |
+|  Plugin Version: | 2011-01-17 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-01-14: | TWikibug:Item6530: Doc improvements |
+|  2011-01-17: | TWikibug:Item6530: Doc improvements |
 |  2007-05-31: | Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/MetaWorkflowPlugin |

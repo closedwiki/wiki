@@ -25,7 +25,7 @@ use vars qw(    $VERSION
                 );
 
 $VERSION = '$Rev: 9813$';
-$RELEASE = '2011-01-14';
+$RELEASE = '2011-01-17';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Defines a workflow based on updated meta data (such as form fields, or meta data from another plugin)';
 $pluginName = 'MetaWorkflowPlugin';
