@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2011 Peter Thoeny, peter@thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -30,7 +30,7 @@ use vars qw(
   );
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-01-11';
+$RELEASE = '2011-01-16';
 $SHORTDESCRIPTION = 'Administrator utility to backup, restore and upgrade a TWiki site';
 $NO_PREFS_IN_TOPIC = 1;
 
@@ -58,7 +58,15 @@ sub _BACKUPRESTORE {
     # delay loading core module until run-time
     unless( $core ) {
         require TWiki::Plugins::BackupRestorePlugin::Core;
-        $core = new TWiki::Plugins::BackupRestorePlugin::Core( $baseTopic, $baseWeb, $user );
+        my $cfg = {
+          BaseTopic  => $baseTopic,
+          BaseWeb    => $baseWeb,
+          User       => $user,
+          Debug      => $TWiki::cfg{Plugins}{BackupRestorePlugin}{Debug} || 0,
+          BackupDir  => $TWiki::cfg{Plugins}{BackupRestorePlugin}{BackupDir} || '/tmp',
+          KeepNumBUs => $TWiki::cfg{Plugins}{BackupRestorePlugin}{KeepNumberOfBackups} || '5',
+        };
+        $core = new TWiki::Plugins::BackupRestorePlugin::Core( $cfg );
     }
     return $core->BACKUPRESTORE( @_ );
 }
