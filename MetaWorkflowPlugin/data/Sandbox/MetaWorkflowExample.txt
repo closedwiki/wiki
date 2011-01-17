@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1295304535" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1295305561" format="1.1" version="$Rev$"}%
 ---+ !MetaWorkflowPlugin Example
 
-This is an example of how to use the %SYSTEMWEB%.MetaWorkflowPlugin to create a workflow based on the value of a [[%SYSTEMWEB%.TWikiForms][form field]].
+This is an example of how to use the %SYSTEMWEB%.MetaWorkflowPlugin to create a workflow based on the value of a [[%SYSTEMWEB%.TWikiForms][TWiki form field]].
 
 This is what's displayed in the =%<nop>METAWORKFLOWCURRENT%=:%BR%
 | %METAWORKFLOWCURRENT% |
@@ -23,3 +23,5 @@ This table could also have been stored in a separate topic, using the following 
    * #Set METAWORKFLOWDEFINITION = MetaWorkflowDefinitionTable
 
 For more information on the plugin, go to [[%SYSTEMWEB%.MetaWorkflowPlugin]].
+
+__Related Topics:__ MetaWorkflowExampleFormDefinition, MetaWorkflowExamplePhaseOne, MetaWorkflowExamplePhaseTwo, MetaWorkflowExamplePhaseThree, %SYSTEMWEB%.MetaWorkflowPlugin
