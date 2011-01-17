@@ -1,0 +1,2 @@
+Math::Round,>=1.0,cpan,Required. Available from the CPAN:Math::Round archive.
+String::CRC32,>=1.0,cpan,Required. Available from the CPAN:String::CRC32 archive.
