@@ -1,0 +1,81 @@
+%META:TOPICINFO{author="MariaDelCarmenHuertas" date="1207856560" format="1.1" version="1.100"}%
+---+!! <nop>%TOPIC%  (v.1.8)
+
+_This plugin create a table (pivot, datapilot) that show information in a usefully way. It will generate a new table from an origin table with the correlate data of two of his columns. It's work similar to DataPilot on OpenCalc_ 
+
+%TOC%
+
+---++ Syntax Rules
+
+   * The =%<nop>FLUIDPIVOTS{...}%= variable gets expanded to a table.
+   | *%<nop>FLUIDPIVOTS% Parameter* | *Comment* | *Default* |
+   |=name=|The name of the new table created.|="pivot"=|
+   |=table=|Name of the source table.|None; is required for all the tables|
+   |=web=|The web in which to find =topic= (specified below) in which to find the TWiki tables |The current web|
+   |=topic=|The topic in which to find the TWiki tables|The current topic|
+   |=rows=|Name of the column in the source table that it will represents the rows of the new table|None; is required for all the tables|
+   |=columns=|Name of the column in the source table that it will represents the columns of the new table|None; is required for all the tables|
+   |=data=|Name of the column in the source table that it will represents the data of the new table|None; is required for all the tables|
+   |=operation=|Define the operation to process the data. (count,sum,average,max,min,var,dev)|="count"=|
+   |=visible=|Define what portion of the table should be visible.(data,col,row,all)|="all"=| 
+   |=maxcol=|Define the maximum number of columns, grouping the less significant data in an unique column.|="0"=|
+   |=maxrow=|Define the maximum number of rows, grouping the less significant data in an unique row.|="0"=|
+   |=order=|Set how will be ordered the data (max,min,off)|="max"=|
+   |=cachetime=|Set the time in seconds that it will reside the cache.|="0"=|
+   |=ignorecache=|Set a maximum time to cache, after this time the table is regenerated even if data is unchanged.|="1209600"=|
+
+---++ Test Cases
+
+   * [[FluidPivotsPluginTestCases][Test cases]] used *with* FluidPivotsPlugin in action.
+   * [[FluidPivotsPluginTestCasesOff][Test cases]] used *without* FluidPivotsPlugin in action.
+   * With a coverage [[http://twiki.org/cgi-bin/view/Codev/CodeCoverage][process]] we create this reports (you should note that this is my particular environment):
+      * [[%PUBURL%/TWiki/FluidPivotsPluginTestCases/coverage_first/coverage.html][Initial run]].
+      * [[%PUBURL%/TWiki/FluidPivotsPluginTestCases/coverage_second/coverage.html][Second run]]. (This second report is to show the cache code working.)
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Create pivot and datapilot tables from TWiki tables
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 1
+
+   * To correctly integrate this plugin with tables and charts, you need to change the order of plugins, in configure page, change the order like this =SpreadSheetPlugin,FluidPivotsPlugin,ChartPlugin=.
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+
+   * Download the ZIP file from the Plugin Home (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Configure the Plugin:
+      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+      * Change the Plugin settings as needed
+   * Test if the installation was successful:
+      * Check the [[%PUBURL%/TWiki/FluidPivotsPluginTestCases/coverage_first/coverage.html][test cases]], you should see the tables instead of variables.
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.MariaDelCarmenHuertas |
+|  Copyright: | &copy; 2007, [[http://www.fluidsignal.com][Fluidsignal Group S.A.]] |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 10 Apr 2008 (V1.8) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  10 Apr 2008: | Fixed reference to Table.pm and Parameters.pm |
+|  16 Oct 2007: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | libstring-crc32-perl library (CPAN:String::CRC32) and CPAN:Math::Round |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences

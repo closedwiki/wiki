@@ -1,0 +1,175 @@
+%META:TOPICINFO{author="MariaDelCarmenHuertas" date="1207665078" format="1.1" version="1.11"}%
+%META:TOPICPARENT{name="FluidPivotsPlugin"}%
+---+!! FluidPivotsPlugin  (v.1.7) Test Cases.
+
+%TOC%
+
+Assuming the following TWiki tables.
+
+%TABLE{name="exampleTable1"}%
+| *ID* | *Client* | *Worker* | *Effort* | *Life Time* | *Date* | *State* |
+| 1 | Client 3 | Worker 3|3|6| 2007/6/16 | State1|
+| 2 | Client 3 | Worker 3|9|9| 2007/4/3 | State3|
+| 3 | Client 2 | Worker 2|8|7| 2007/8/19 | State3|
+| 4 | Client 4 | Worker 1|9|7| 2007/11/10 | State2|
+| 5 | Client 1 | Worker 2|6|11| 2007/2/17 | State2|
+| 6 | Client 1 | Worker 1|5|6| 2007/12/5 | State2|
+| 7 | Client 4 | Worker 1|7|7| 2007/1/19 | State3|
+| 8 | Client 3 | Worker 2|4|11| 2007/11/16 | State1|
+| 9 | Client 4 | Worker 3|2|7| 2007/2/13 | State3|
+| 10 | Client 2 | Worker 2|2|6| 2007/12/16 | State1|
+| 11 | Client 3 | Worker 2|7|10| 2007/3/28 | State1|
+| 12 | Client 4 | Worker 3|1|10| 2007/12/30 | State2|
+| 13 | Client 4 | Worker 2|2|9| 2007/11/17 | State1|
+| 14 | Client 3 | Worker 2|4|7| 2007/10/2 | State2|
+| 15 | Client 1 | Worker 2|4|2| 2007/10/25 | State2|
+
+---++ Operations.
+---+++ Count
+---++++!! You type: 
+=%<nop>FLUIDPIVOTS{name="examplePivot1" table="exampleTable1" rows="Worker" columns="Client" data="Client" operation="count"}%=
+=%<nop>CHART{type="bar" name="bar1" table="examplePivot1" data="R3:C2..R6:C6" xaxis="R3:C1..R6:C1" legend="R2:C2..R2:C6" width="400" height="200" ymin="0" ylabel="Cases" xlabel="Worker" yaxis="on"}%=
+---++++!! You get: 
+%FLUIDPIVOTS{name="examplePivot1" table="exampleTable1" rows="Worker" columns="Client" data="Client" operation="count"}%
+%CHART{type="bar" name="bar1" table="examplePivot1" data="R3:C2..R6:C6" xaxis="R3:C1..R6:C1" legend="R2:C2..R2:C6" width="400" height="200" ymin="0" ylabel="Cases" xlabel="Worker" yaxis="on"}%
+---+++ Sum
+---++++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot2" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum"}%=
+=%<nop>CHART{type="bar" name="bar2" table="examplePivot2" data="R3:C2..R6:C6" xaxis="R3:C1..R6:C1" legend="R2:C2..R2:C6" width="400" height="200" ymin="0" ylabel="Effort Time - sum" xlabel="Worker" yaxis="on"}%=
+---++++!! You get:
+%FLUIDPIVOTS{name="examplePivot2" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum"}%
+%CHART{type="bar" name="bar2" table="examplePivot2" data="R3:C2..R6:C6" xaxis="R3:C1..R6:C1" legend="R2:C2..R2:C6" width="400" height="200" ymin="0" ylabel="Effort Time - sum" xlabel="Worker" yaxis="on"}%
+---+++ Average
+---++++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot3" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="average"}%=
+=%<nop>CHART{type="bar" name="bar3" table="examplePivot3" data="R3:C2..R6:C6" xaxis="R3:C1..R6:C1" legend="R2:C2..R2:C6" width="400" height="200" ymin="0" ylabel="Effort Time - average" xlabel="Worker" yaxis="on"}%=
+---++++!! You get:
+%FLUIDPIVOTS{name="examplePivot3" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="average"}%
+%CHART{type="bar" name="bar3" table="examplePivot3" data="R3:C2..R6:C6" xaxis="R3:C1..R6:C1" legend="R2:C2..R2:C6" width="400" height="200" ymin="0" ylabel="Effort Time - average" xlabel="Worker" yaxis="on"}%
+---+++ Min
+---++++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot4" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="min"}%=
+=%<nop>CHART{type="bar" name="bar4" table="examplePivot4" data="R3:C2..R6:C6" xaxis="R3:C1..R6:C1" legend="R2:C2..R2:C6" width="400" height="200" ymin="0" ylabel="Effort Time - min" xlabel="Worker" yaxis="on"}%=
+---++++!! You get:
+%FLUIDPIVOTS{name="examplePivot4" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="min"}%
+%CHART{type="bar" name="bar4" table="examplePivot4" data="R3:C2..R6:C6" xaxis="R3:C1..R6:C1" legend="R2:C2..R2:C6" width="400" height="200" ymin="0" ylabel="Effort Time - min" xlabel="Worker" yaxis="on"}%
+---+++ Max
+---++++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot5" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="max"}%=
+=%<nop>CHART{type="bar" name="bar5" table="examplePivot5" data="R3:C2..R6:C6" xaxis="R3:C1..R6:C1" legend="R2:C2..R2:C6" width="400" height="200" ymin="0" ylabel="Effort Time - max" xlabel="Worker" yaxis="on"}%=
+---++++!! You get:
+%FLUIDPIVOTS{name="examplePivot5" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="max"}%
+%CHART{type="bar" name="bar5" table="examplePivot5" data="R3:C2..R6:C6" xaxis="R3:C1..R6:C1" legend="R2:C2..R2:C6" width="400" height="200" ymin="0" ylabel="Effort Time - max" xlabel="Worker" yaxis="on"}%
+---+++ Var
+---++++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot6" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="var"}%=
+=%<nop>CHART{type="bar" name="bar6" table="examplePivot6" data="R3:C2..R6:C6" xaxis="R3:C1..R6:C1" legend="R2:C2..R2:C6" width="400" height="200" ymin="0" ylabel="Effort Time - var" xlabel="Worker" yaxis="on"}%=
+---++++!! You get:
+%FLUIDPIVOTS{name="examplePivot6" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="var"}%
+%CHART{type="bar" name="bar6" table="examplePivot6" data="R3:C2..R6:C6" xaxis="R3:C1..R6:C1" legend="R2:C2..R2:C6" width="400" height="200" ymin="0" ylabel="Effort Time - var" xlabel="Worker" yaxis="on"}%
+---+++ Dev
+---++++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot7" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="dev"}%=
+=%<nop>CHART{type="bar" name="bar7" table="examplePivot7" data="R3:C2..R6:C6" xaxis="R3:C1..R6:C1" legend="R2:C2..R2:C6" width="400" height="200" ymin="0" ylabel="Effort Time - dev" xlabel="Worker" yaxis="on"}%=
+---++++!! You get:
+%FLUIDPIVOTS{name="examplePivot7" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="dev"}%
+%CHART{type="bar" name="bar7" table="examplePivot7" data="R3:C2..R6:C6" xaxis="R3:C1..R6:C1" legend="R2:C2..R2:C6" width="400" height="200" ymin="0" ylabel="Effort Time - dev" xlabel="Worker" yaxis="on"}%
+
+---++ Table Origin
+---+++ Local
+---++++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot8" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum"}%=
+---++++!! You get:
+%FLUIDPIVOTS{name="examplePivot8" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum"}%
+---+++ Extern
+---++++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot9" table="exampleTable1" web="TWiki" topic="FluidPivotsPluginExtern" rows="Worker" columns="Client" data="Effort" operation="sum"}%=
+---++++!! You get:
+%FLUIDPIVOTS{name="examplePivot9" table="exampleTable1" web="TWiki" topic="FluidPivotsPluginExtern" rows="Worker" columns="Client" data="Effort" operation="sum"}%
+
+---++ Integrations
+---+++ With ChartPlugin
+Remember that you have to set the correct order on ={PluginsOrder}= in the configuration page, FluidPivotsPlugin should run before ChartPlugin.
+---++++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot10" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum"}%=
+=%<nop>CHART{type="bar" name="bar1" table="examplePivot10" data="R3:C2..R6:C6" xaxis="R3:C1..R6:C1" legend="R2:C2..R2:C6" width="400" height="200" ymin="0" ylabel="Effort Time" xlabel="Worker" yaxis="on"}%=
+---++++!! You get:
+%FLUIDPIVOTS{name="examplePivot10" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum"}%
+%CHART{type="bar" name="bar1" table="examplePivot10" data="R3:C2..R6:C6" xaxis="R3:C1..R6:C1" legend="R2:C2..R2:C6" width="400" height="200" ymin="0" ylabel="Effort Time" xlabel="Worker" yaxis="on"}%
+
+---++ Properties
+---+++ Visible
+---++++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot11" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" visible="col"}%=
+=%<nop>FLUIDPIVOTS{name="examplePivot12" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" visible="row"}%=
+=%<nop>FLUIDPIVOTS{name="examplePivot13" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" visible="data"}%=
+---++++!! You get:
+%FLUIDPIVOTS{name="examplePivot11" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" visible="col"}%
+%FLUIDPIVOTS{name="examplePivot12" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" visible="row"}%
+%FLUIDPIVOTS{name="examplePivot13" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" visible="data"}%
+---+++ Maxrow
+---++++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot14" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" maxrow="2"}%=
+---++++!! You get:
+%FLUIDPIVOTS{name="examplePivot14" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" maxrow="2"}%
+---+++ Maxcol
+---++++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot15" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" maxcol="3"}%=
+---++++!! You get:
+%FLUIDPIVOTS{name="examplePivot15" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" maxcol="3"}%
+---+++ Order
+---++++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot16" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" order="max"}%=
+=%<nop>FLUIDPIVOTS{name="examplePivot17" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" order="min"}%=
+=%<nop>FLUIDPIVOTS{name="examplePivot18" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" order="off"}%=
+---++++!! You get:
+%FLUIDPIVOTS{name="examplePivot16" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" order="max"}%
+%FLUIDPIVOTS{name="examplePivot17" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" order="min"}%
+%FLUIDPIVOTS{name="examplePivot18" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" order="off"}%
+---+++ Cachetime
+---++++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot19" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" cachetime="100"}%=
+---++++!! You get:
+%FLUIDPIVOTS{name="examplePivot19" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" cachetime="100"}%
+---+++ Ignorecache 
+---++++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot19" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" ignorecache="1"}%=
+---++++!! You get:
+%FLUIDPIVOTS{name="examplePivot19" table="exampleTable1" rows="Worker" columns="Client" data="Effort" operation="sum" ignorecache="1"}%
+
+---++ On Error
+---+++ Wrong table.
+---++++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot20" table="exampleTable1SOMEERROR" rows="Worker" columns="Client" data="Effort" operation="sum" cachetime="1"}%=
+---++++!! You get:
+%FLUIDPIVOTS{name="examplePivot2'0" table="exampleTable1SOMEERROR" rows="Worker" columns="Client" data="Effort" operation="sum" cachetime="1"}%
+
+---++ Big Example
+---+++!! You type:
+=%<nop>FLUIDPIVOTS{name="examplePivot51" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Effort" operation="sum"}%=
+=%<nop>FLUIDPIVOTS{name="examplePivot52" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Effort" operation="sum" maxrow="10"}%=
+=%<nop>FLUIDPIVOTS{name="examplePivot53" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Time" operation="sum" maxcol="10"}%=
+=%<nop>FLUIDPIVOTS{name="examplePivot54" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Time" operation="sum" maxrow="10" maxcol="10"}%=
+=%<nop>FLUIDPIVOTS{name="examplePivot55" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Time" operation="sum" visible="data"}%=
+=%<nop>FLUIDPIVOTS{name="examplePivot56" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Time" operation="sum" visible="row" order="off"}%=
+=%<nop>FLUIDPIVOTS{name="examplePivot57" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Time" operation="sum" visible="row" order="max"}%=
+=%<nop>FLUIDPIVOTS{name="examplePivot58" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Time" operation="sum" visible="row" order="min"}%=
+=%<nop>FLUIDPIVOTS{name="examplePivot59" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Time" operation="sum" visible="col" maxrow="15"}%=
+=%<nop>FLUIDPIVOTS{name="examplePivot60" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Time" operation="sum" visible="row" maxcol="15"}%=
+=%<nop>CHART{type="bar" name="bar59" table="examplePivot59" data="R3:C2..R100:C2" xaxis="R3:C1..R100:C1" legend="R2:C2..R2:C2" width="800" height="200" ymin="0" ylabel="Data2" xlabel="Data1" yaxis="on"}%=
+=%<nop>CHART{type="bar" name="bar60" table="examplePivot60" data="R3:C2..R3:C100" xaxis="R2:C2..R2:C100" legend="R3:C1..R3:C1" width="800" height="200" ymin="0" ylabel="Data1" xlabel="Data2" yaxis="on"}%=
+---+++!! You get:
+%FLUIDPIVOTS{name="examplePivot51" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Effort" operation="sum"}%
+%FLUIDPIVOTS{name="examplePivot52" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Effort" operation="sum" maxrow="10"}%
+%FLUIDPIVOTS{name="examplePivot53" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Time" operation="sum" maxcol="10"}%
+%FLUIDPIVOTS{name="examplePivot54" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Time" operation="sum" maxrow="10" maxcol="10"}%
+%FLUIDPIVOTS{name="examplePivot55" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Time" operation="sum" visible="data"}%
+%FLUIDPIVOTS{name="examplePivot56" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Time" operation="sum" visible="row" order="off"}%
+%FLUIDPIVOTS{name="examplePivot57" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Time" operation="sum" visible="row" order="max"}%
+%FLUIDPIVOTS{name="examplePivot58" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Time" operation="sum" visible="row" order="min"}%
+%FLUIDPIVOTS{name="examplePivot59" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Time" operation="sum" visible="col" maxrow="15"}%
+%FLUIDPIVOTS{name="examplePivot60" table="exampleTable2" web="TWiki" topic="FluidPivotsPluginExtern" rows="Data1" columns="Data2" data="Time" operation="sum" visible="row" maxcol="15"}%
+%CHART{type="bar" name="bar59" table="examplePivot59" data="R3:C2..R100:C2" xaxis="R3:C1..R100:C1" legend="R2:C2..R2:C2" width="800" height="200" ymin="0" ylabel="Data2" xlabel="Data1" yaxis="on"}%
+%CHART{type="bar" name="bar60" table="examplePivot60" data="R3:C2..R3:C100" xaxis="R2:C2..R2:C100" legend="R3:C1..R3:C1" width="800" height="200" ymin="0" ylabel="Data1" xlabel="Data2" yaxis="on"}%
+
+-- TWiki.MariaDelCarmenHuertas - 04 Apr 2008
