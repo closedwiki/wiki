@@ -1,6 +1,7 @@
 # Release manifest for DpSyntaxHighlighterPlugin
 data/TWiki/DpSyntaxHighlighterPlugin.txt 0644 Documentation
 lib/TWiki/Plugins/DpSyntaxHighlighterPlugin.pm 0644 Perl module
+pub/TWiki/DpSyntaxHighlighterPlugin/screenshot.png 0644
 pub/TWiki/DpSyntaxHighlighterPlugin/dp.SyntaxHighlighter/Scripts/clipboard.swf 0644
 pub/TWiki/DpSyntaxHighlighterPlugin/dp.SyntaxHighlighter/Scripts/shBrushCSharp.js 0644
 pub/TWiki/DpSyntaxHighlighterPlugin/dp.SyntaxHighlighter/Scripts/shBrushCpp.js 0644

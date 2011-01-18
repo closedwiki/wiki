@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1295334108" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1295334904" format="1.1" version="$Rev$"}%
 ---+!! !DpSyntaxHighlighterPlugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -86,7 +86,7 @@ function hello () {
 |  Dp Syntax Highlighter License: | [[http://www.gnu.org/licenses/lgpl.html][LGPL (Gnu Lesser General Public License)]] |
 |  Plugin Version: | 2011-01-17 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-01-17: | TWikibug:Item6530: Doc improvements; changing TWIKIWEB to SYSTEMWEB |
+|  2011-01-17: | TWikibug:Item6530: Doc improvements; changing TWIKIWEB to SYSTEMWEB; adding screenshot to package -- TWiki:Main.PeterThoeny |
 |  25 Mar 2008 | 1.5.2 -- Arthur Clemens: Added support for !ActionScript 3. Thanks to [[http://www.digitalflipbook.com/archives/2007/09/as3_syntax_high.php][Mark Walters]] (digitalflipbook.com). |
 |  14646 | Bugs:Item4460: Fixed adding JS into highlighted HTML (#3) |
 |  14642 | Bugs:Item4516: Upgrade highlighter to 1.5.1 |
@@ -98,3 +98,5 @@ function hello () {
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/DpSyntaxHighlighterPluginAppraisal |
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %USERSWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
+
+%META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1295334108" path="screenshot.png" size="25043" user="TWikiContributor" version="1"}%
