@@ -1,6 +1,8 @@
-data/TWiki/FlowchartPlugin.txt NEW
-data/TWiki/FlowchartPluginExample.txt NEW
-lib/TWiki/Plugins/FlowchartPlugin.pm NEW
-pub/TWiki/FlowchartPluginExample/flowchartMapImg_FlowchartPluginExample.txt NEW
-pub/TWiki/FlowchartPluginExample/flowchart_FlowchartPluginExample.png NEW
-pub/TWiki/FlowchartPluginExample/flowchart_FlowchartPluginExample.svg NEW
+data/TWiki/FlowchartPlugin.txt 0664
+data/TWiki/FlowchartPluginExample.txt 0664
+data/TWiki/VarFLOWCHART.txt 0664
+lib/TWiki/Plugins/FlowchartPlugin.pm 0664
+lib/TWiki/Plugins/FlowchartPlugin/Config.spec 0664 Configuration Items
+pub/TWiki/FlowchartPluginExample/flowchartMapImg_FlowchartPluginExample.txt 0664
+pub/TWiki/FlowchartPluginExample/flowchart_FlowchartPluginExample.png 0664
+pub/TWiki/FlowchartPluginExample/flowchart_FlowchartPluginExample.svg 0664
