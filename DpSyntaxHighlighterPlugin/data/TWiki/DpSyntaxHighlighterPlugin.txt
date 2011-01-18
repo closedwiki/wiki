@@ -1,9 +1,19 @@
-%META:TOPICINFO{author="TWikiContributor" date="1179177105" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="PeterThoeny" date="1295334108" format="1.1" version="1.2"}%
 ---+!! !DpSyntaxHighlighterPlugin
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/DpSyntaxHighlighterPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/DpSyntaxHighlighterPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
 
 This plugin provides client side syntax highlighting using the [[http://code.google.com/p/syntaxhighlighter/][dp.SyntaxHighlighter]] by Alex Gorbatchev. !JavaScript needs to be enabled on the clients web browser for this to work.
-
-%TOC%
 
 ---++ Syntax Rules
 
@@ -64,18 +74,19 @@ function hello () {
 #PluginSettings
 ---++ Plugin Settings
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Client side syntax highlighting using the [[http://code.google.com/p/syntaxhighlighter/][dp.SyntaxHighlighter]]
 
 ---++ Plugin Info
 
-|  Plugin Author(s): | TWiki:Main.AndrewRJones |
-|  Plugin Version: | %$VERSION% |
+|  Plugin Author: | TWiki:Main.AndrewRJones |
+|  Copyright: | &copy; 2007 TWiki:Main.AndrewRJones <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dp Syntax Highlighter Version: | 1.5.2 (25 Mar 2008) |
-|  Copyright: | &copy; 2007 TWiki:Main.AndrewRJones |
-|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Dp Syntax Highlighter License: | [[http://www.gnu.org/licenses/lgpl.html][LGPL (Gnu Lesser General Public License)]] |
+|  Plugin Version: | 2011-01-17 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-01-17: | TWikibug:Item6530: Doc improvements; changing TWIKIWEB to SYSTEMWEB |
 |  25 Mar 2008 | 1.5.2 -- Arthur Clemens: Added support for !ActionScript 3. Thanks to [[http://www.digitalflipbook.com/archives/2007/09/as3_syntax_high.php][Mark Walters]] (digitalflipbook.com). |
 |  14646 | Bugs:Item4460: Fixed adding JS into highlighted HTML (#3) |
 |  14642 | Bugs:Item4516: Upgrade highlighter to 1.5.1 |
@@ -86,4 +97,4 @@ function hello () {
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/DpSyntaxHighlighterPluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/DpSyntaxHighlighterPluginAppraisal |
 
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %USERSWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins

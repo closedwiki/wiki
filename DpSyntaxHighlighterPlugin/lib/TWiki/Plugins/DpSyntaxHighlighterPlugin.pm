@@ -1,6 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2007 Andrew Jones, andrewjones86@googlemail.com
+# Copyright (C) 2007-2011 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,7 +21,7 @@ use strict;
 use vars qw( $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION $pluginName $rootDir $doneHead );
 
 $VERSION = '$Rev: 9813$';
-$RELEASE = '1.5.2';
+$RELEASE = '2011-01-17';
 $pluginName = 'DpSyntaxHighlighterPlugin';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Client side syntax highlighting using the [[http://code.google.com/p/syntaxhighlighter/][dp.SyntaxHighlighter]]';
