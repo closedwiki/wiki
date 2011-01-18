@@ -2,7 +2,7 @@
 #
 # Utility for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2010 Peter Thoeny, peter@thoeny.org and
+# Copyright (C) 2010-2011 Peter Thoeny, peter@thoeny.org and
 # TWiki Contributors.
 #
 # This program is free software; you can redistribute it and/or
@@ -53,6 +53,10 @@ sub fixFile
     $text =~ s/SitePreferences/TWikiPreferences/go;
     $text =~ s/"ProjectContributor"/"TWikiContributor"/go;
     $text =~ s/DocumentGraphics/TWikiDocGraphics/go;
+    $text =~ s/TOPICPARENT{name="Macros"}/TOPICPARENT{name="TWikiVariables"}/go;
+    $text =~ s/ Macro(s)?([ \.\:\;])/ Variable$1$2/go;
+    $text =~ s/ macro(s)?([ \.\:\;])/ variable$1$2/go;
+    $text =~ s/\[\[%SYSTEMWEB%.Plugins\]\[Plugins\]\]/%SYSTEMWEB%.TWikiPlugins/go;
 
     saveFile( $file, $text );
     print " done\n";
