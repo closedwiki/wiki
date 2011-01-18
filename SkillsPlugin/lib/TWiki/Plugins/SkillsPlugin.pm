@@ -1,6 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2007 - 2009 Andrew Jones, andrewjones86@googlemail.com
+# Copyright (C) 2007-2011 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -32,8 +33,8 @@ use vars qw(    $VERSION
 );
 
 # Plugin Variables
-$VERSION           = '$Rev: 17772 (07 Jan 2009) $';
-$RELEASE           = 'Dakar';
+$VERSION           = '$Rev$';
+$RELEASE           = '2011-01-17';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION =
   'Allows users to list their skills, which can then be searched';
