@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1295331502" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1295332326" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -121,8 +121,6 @@ To override the default settings, add them to [[%LOCALSITEPREFS%]].
       * Set SHORTDESCRIPTION = Create a flowchart from topic text
 
 ---++ Plugin Installation Instructions
-
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
 
 %$INSTALL_INSTRUCTIONS%
 
