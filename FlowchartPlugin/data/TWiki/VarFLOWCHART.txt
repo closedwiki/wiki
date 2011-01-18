@@ -1,0 +1,6 @@
+%META:TOPICINFO{author="TWikiContributor" date="1295331502" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarFLOWCHART
+---+++ FLOWCHART{ _attributes_ } -- create a flowchart from topic text
+
+   * The =%<nop>FLOWCHART%= variable is handled by the FlowchartPlugin. For more information please see the [[FlowchartPlugin][plugin topic]], or the [[FlowchartPluginExample][example]].
