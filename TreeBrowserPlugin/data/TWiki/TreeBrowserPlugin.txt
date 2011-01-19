@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1280123349" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1295480523" format="1.1" version="$Rev$"}%
 ---+!! Tree Browser Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -15,7 +15,7 @@ Renders a bullet list or numbered list as a collapsible/expandable tree of nodes
 
 ---++ Acknowledgment
 
-This plugin leverages the [[http://www.destroydrop.com/javascripts/tree/][dTree]] !JavaScript tree menu by [[mailto:drop@destroydrop.com][Geir Landr�]] as well as code borrowed from TWiki:Plugins.RenderListPlugin.
+This plugin leverages the [[http://www.destroydrop.com/javascripts/tree/][dTree]] !JavaScript tree menu by [[mailto:drop@destroydrop.com][Geir Landr&ouml;]] as well as code borrowed from TWiki:Plugins.RenderListPlugin.
 
 ---++ Syntax Rules
 
@@ -108,13 +108,18 @@ Those classes are prefixed with the =style= parameter. For clarity of the docume
    * [[WebIndex][Index]]
    * [[WebSearch][Search]]
    * this is a very very very long text
+   * Folder
+      * Leaf1
+      * Subfolder
+         * Leaf3
+      * Leaf2
    * *Webs*
 %WEBLIST{"      * [[$name.%HOMETOPIC%][$name]]"}%
 </verbatim>
 generates
-<table borders="0">
-<tr><th align="left">If installed</th><th align="left">Simulated</th></tr>
-<tr><td>
+<table border="0" cellpadding="5">
+<tr><th align="left">If installed</th><th>&nbsp;</th><th align="left">Simulated</th></tr>
+<tr><td valign="top">
 %TREEBROWSER{"file" title="[[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]" shared="basicdemo"}%
    * [[WebChanges][Changes]] 
    * [[WebIndex][Index]]
@@ -130,7 +135,7 @@ generates
 
 <a href="javascript: basicdemo.openAll();">open all</a> | <a href="javascript: basicdemo.closeAll();">close all</a>
 
-</td><td>
+</td><td></td><td valign="top">
 <script type="text/javascript" src="%ATTACHURL%/dtree.js"></script>
 <div class="treeBrowserPlugin"><style type="text/css" media="all">@import "%ATTACHURL%/dtree.css";</style><script type="text/javascript">
 
@@ -194,9 +199,9 @@ To add _"collapse/expand all nodes"_ functionalities do something like:
       * Peach
 </verbatim>
 
-<table borders="0">
-<tr><th align="left">If installed</th><th align="left">Simulated</th></tr>
-<tr><td style="padding:5px;">
+<table border="0" cellpadding="5">
+<tr><th align="left">If installed</th><th>&nbsp;</th><th align="left">Simulated</th></tr>
+<tr><td valign="top">
 %TREEBROWSER{"thread" noroot="on" shared="realmenu" noindent="on" autotoggle="on" style="dmenu"}%
    * Vegetables
       * Carot
@@ -209,8 +214,8 @@ To add _"collapse/expand all nodes"_ functionalities do something like:
          * Pink
          * Yellow 
       * Peach
-</td>
-<td style="padding:5px;">
+
+</td><td></td><td valign="top">
 <script type="text/javascript" src="%ATTACHURL%/dtree.js"></script>
 <div class="treeBrowserPlugin"><style type="text/css" media="all">@import "%ATTACHURL%/dmenu.css";</style><script type="text/javascript">
 <!--
@@ -474,7 +479,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 ---++ Known issues
 
    * PatternSkin prevents javascript to determine menu position in topic content. Use =firstpopupoffset="-163,0"= as a workaround.
-   * NatSkin CSS =natMainContent= =overflow:hidden= causes =z-index= bug in !FireFox. Workaround by removing or overriding =overflow:hidden= for =natMainContent=.
+   * !NatSkin CSS =natMainContent= =overflow:hidden= causes =z-index= bug in !FireFox. Workaround by removing or overriding =overflow:hidden= for =natMainContent=.
    * =dtreeTranslucentBackground= only works for pop-up and not level 0. Sizing issue... 
    * Pop-up sub-menu won't work on IE for =dmenu= style. Workaround by using =smenu=.
 
@@ -485,11 +490,12 @@ See TWiki:Plugins.TreeBrowserPluginDev.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ThomasWeigert & TWiki:Main.StephaneLenclud |
-|  Copyright: | &copy; 2000-2003 TWiki:Main.AndreaSterbini, %BR% &copy; 2001-2004 TWiki:Main.PeterThoeny, %BR% &copy; 2004 TWiki:Main.ThomasWeigert, %BR% &copy; 2006-2007 TWiki:Main.StephaneLenclud, %BR% &copy; 2000-2010 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2000-2003 TWiki:Main.AndreaSterbini, %BR% &copy; 2001-2004 TWiki:Main.PeterThoeny, %BR% &copy; 2004 TWiki:Main.ThomasWeigert, %BR% &copy; 2006-2007 TWiki:Main.StephaneLenclud, %BR% &copy; 2000-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-07-25: | TWikibug:Item6530 - doc fixes |
+|  2011-01-19: | TWikibug:Item6638: More doc fixes |
+|  2010-07-25: | TWikibug:Item6530: Doc fixes |
 |  29 Mar 2007: | (v1.8) - Improved =smenu= CSS and fixing warning.  By [[TWiki:Main.StephaneLenclud][Stephane Lenclud]]. |
 |  18 Mar 2007: | (v1.7) - Improved =smenu= CSS, resolved _highlighting gap issue_ . Now closing sub-menu when highlighting leaf.  By [[TWiki:Main.StephaneLenclud][Stephane Lenclud]]. |
 |  18 Mar 2007: | (v1.6) - Sub-menus now working in IE with =smenu= style. Closing sub-menu when going back one level with mouse cursor.  By [[TWiki:Main.StephaneLenclud][Stephane Lenclud]]. |

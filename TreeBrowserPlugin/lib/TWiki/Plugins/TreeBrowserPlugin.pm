@@ -3,7 +3,7 @@
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
 # Copyright (C) 2006-2007 Stéphane Lenclud, twiki@lenclud.com
-# Copyright (C) 2000-2010 TWiki Contributors
+# Copyright (C) 2000-2011 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-07-25';
+$RELEASE = '2011-01-19';
 
 $pluginName = 'TreeBrowserPlugin';
 
