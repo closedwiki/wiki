@@ -1,6 +1,6 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2000-2011 Peter Thoeny, peter@thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -2801,6 +2801,55 @@ sub writeDebug {
 
 =pod
 
+---+++ writeLog( $action, $extra, $web, $topic, $user )
+
+Write the log for an event to the logfile.
+   * =$action= - name of the event, such as ='blacklist'=.
+   * =$extra= - arbitrary extra information to add to the event.
+   * =$web= - web name, optional. Base web is taken if empty. Ignored if web is specified in =$topic=.
+   * =$topic= - topic name, optional. Can be =Topic= or =Web.Topic=. Base topic is taken if empty.
+   * =$user= - !WikiName of user, optional. Name of logged-in user is taken if not specified.
+Return: none
+
+*Since:* TWiki::Plugins::VERSION 1.4
+
+__Example:__ Calling =TWiki::Func::writeLog( 'blacklist', 'Magic number is missing' )= 
+will add a log entry like this:
+<verbatim>
+| 2011-01-19 - 01:13 | guest | blacklist | TWiki.TWikiRegistration | Magic number is missing | 1.2.3.4 |
+</verbatim>
+
+__Note:__ Older plugins that use =$TWiki::cfg{LogFileName}= or call the internal TWiki
+function directly should be fixed to use =writeLog=.
+
+To maintain compatibility with older TWiki releases, you can write conditional code as follows:
+<verbatim>
+  if( defined &TWiki::Func::writeLog ) {
+    # use writeLog
+    TWiki::Func::writeLog( $web, $topic, 'myevent', $extra );
+  } else {
+    # deprecated code if plugin is used in older TWiki releases
+    $TWiki::Plugins::SESSION > 1.1
+      ? $TWiki::Plugins::SESSION->writeLog( 'myevent', "$web.$topic", $extra )
+      : TWiki::Store::writeLog( 'myevent', "$web.$topic", $extra );
+  }
+</verbatim>
+
+=cut
+
+sub writeLog {
+    my( $action, $extra, $web, $topic, $user ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
+    $web   ||= $TWiki::Plugins::SESSION->{SESSION_TAGS}{BASEWEB};
+    $topic ||= $TWiki::Plugins::SESSION->{SESSION_TAGS}{BASETOPIC};
+    ( $web, $topic ) = normalizeWebTopicName( $web, $topic );
+
+    return $TWiki::Plugins::SESSION->writeLog( $action, "$web.$topic", $extra, $user );
+}
+
+=pod
+
 #FormatTime
 ---+++ formatTime( $time, $format, $timezone ) -> $text
 
@@ -3391,6 +3440,13 @@ $TWiki::Plugins::VERSION 1.3
 No changes
 ---++++ Func.pm
    * =buildWikiWord( $text ) -> $text=
+
+---+++ TWiki-5.1 (Istanbul Release)
+$TWiki::Plugins::VERSION 1.4
+---++++ EmptyPlugin.pm
+No changes
+---++++ Func.pm
+   * =writeLog( $action, $extra, $web, $topic, $user )=
 
 =cut
 
