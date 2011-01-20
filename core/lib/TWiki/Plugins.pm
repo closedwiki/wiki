@@ -1,7 +1,7 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 1999-2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 1999-2011 Peter Thoeny, peter@thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -98,7 +98,7 @@ as kernel methods may change between TWiki releases.
 
 =cut
 
-$VERSION = '1.3';
+$VERSION = '1.4';
 
 $inited = 0;
 
