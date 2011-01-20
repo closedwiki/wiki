@@ -62,9 +62,6 @@ sub _BACKUPRESTORE {
           BaseTopic  => $baseTopic,
           BaseWeb    => $baseWeb,
           User       => $user,
-          Debug      => $TWiki::cfg{Plugins}{BackupRestorePlugin}{Debug} || 0,
-          BackupDir  => $TWiki::cfg{Plugins}{BackupRestorePlugin}{BackupDir} || '/tmp',
-          KeepNumBUs => $TWiki::cfg{Plugins}{BackupRestorePlugin}{KeepNumberOfBackups} || '5',
         };
         $core = new TWiki::Plugins::BackupRestorePlugin::Core( $cfg );
     }

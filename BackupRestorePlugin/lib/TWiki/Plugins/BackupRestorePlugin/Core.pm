@@ -43,9 +43,13 @@ sub new {
     #   {BaseTopic}  => $baseTopic,
     #   {BaseWeb}    => $baseWeb,
     #   {User}       => $user,
-    #   {Debug}      => $TWiki::cfg{Plugins}{BackupRestorePlugin}{Debug} || 0,
-    #   {BackupDir}  => $TWiki::cfg{Plugins}{BackupRestorePlugin}{BackupDir} || '/tmp',
-    #   {KeepNumBUs} => $TWiki::cfg{Plugins}{BackupRestorePlugin}{KeepNumberOfBackups} || '5',
+
+    $this->{Debug}        = $TWiki::cfg{Plugins}{BackupRestorePlugin}{Debug} || 0;
+    $this->{BackupDir}    = $TWiki::cfg{Plugins}{BackupRestorePlugin}{BackupDir} || '/tmp';
+    $this->{KeepNumBUs}   = $TWiki::cfg{Plugins}{BackupRestorePlugin}{KeepNumberOfBackups} || '5';
+    $this->{createZipCmd} = $TWiki::cfg{Plugins}{BackupRestorePlugin}{createZipCmd} || 'zip -r';
+    $this->{listZipCmd}   = $TWiki::cfg{Plugins}{BackupRestorePlugin}{listZipCmd} || 'unzip -l';
+    $this->{unZipCmd}     = $TWiki::cfg{Plugins}{BackupRestorePlugin}{unZipCmd} || 'unzip -o';
 
     $this->{error} = '';
 
@@ -68,39 +72,41 @@ sub BACKUPRESTORE {
 sub _testZipMethods {
     my( $this ) = @_;
 
-    my $text = "<br />===== Test _listAllBackups()<pre>"
-             . join( "\n", $this->_listAllBackups() )
-             . "</pre>Error return: $this->{error} <p />";
+    my $text = '';
 
-    my $zip = 'twiki-backup-2011-01-16-14-44.zip';
+    $text .= "\n<br />===== Test _listAllBackups()<pre>\n"
+           . join( "\n", $this->_listAllBackups() )
+           . "\n</pre>Error return: $this->{error} <p />\n";
+
+    my $zip = 'twiki-backup-2011-01-18-19-33.zip';
     my @files = ( 'data/', 'pub/Main/', 'pub/Sandbox/', 'working/',
                   '\*.svn\*', 'working\/tmp\*' );
     chdir( '/var/www/twiki' );
     $this->{error} = '';
-    $text .= "<br />===== Test _createZip( $zip, " . join( ", ", @files ) . " )<pre>" 
+    $text .= "<br />===== Test _createZip( $zip, " . join( ", ", @files ) . " )<pre>\n" 
            . $this->_createZip( $zip, @files ) 
-           . "</pre>Error return: $this->{error}";
+           . "\n</pre>Error return: $this->{error}\n";
 
     $this->{error} = '';
-    $text .= "<br />===== Test _listZip( $zip )<pre>"
+    $text .= "<br />===== Test _listZip( $zip )<pre>\n"
            . join( "\n", $this->_listZip( $zip ) )
-           . "</pre>Error return: $this->{error}";
+           . "\n</pre>Error return: $this->{error}\n";
 
     chdir( $this->{BackupDir} );
     $this->{error} = '';
-    $text .= "<br />===== Test _unZip( $zip )<pre>"
+    $text .= "<br />===== Test _unZip( $zip )<pre>\n"
            . $this->_unZip( $zip )
-           . "</pre>Error return: $this->{error}";
+           . "\n</pre>Error return: $this->{error}\n";
 
     $this->{error} = '';
-    $text .= "<br />===== Test _deleteZip( $zip )<pre>"
+    $text .= "<br />===== Test _deleteZip( $zip )<pre>\n"
            . join( "\n", $this->_deleteZip( "$zip" ) )
-           . "</pre>Error return: $this->{error}";
+           . "\n</pre>Error return: $this->{error}\n";
 
     $this->{error} = '';
-    $text .= "<br />===== Test _deleteZip( not-exist-$zip )<pre>"
+    $text .= "<br />===== Test _deleteZip( not-exist-$zip )<pre>\n"
            . join( "\n", $this->_deleteZip( "not-exist-$zip" ) )
-           . "</pre>Error return: $this->{error}";
+           . "\n</pre>Error return: $this->{error}\n";
 
     return $text;
 }
@@ -132,7 +138,8 @@ sub _createZip {
       . join( ", ", @files ) . " )" ) if $this->{Debug};
 
     my $zipFile = "$this->{BackupDir}/$name";
-    my ( $stdOut, $stdErr, $success, $exitCode ) = capture_exec( @createZipCmd, $zipFile, @files );
+    my @cmd = split( /\s+/, $this->{createZipCmd} );
+    my ( $stdOut, $stdErr, $success, $exitCode ) = capture_exec( @cmd, $zipFile, @files );
     if( $exitCode ) {
         $this->{error} = "Error creating $name. $stdErr";
     }
@@ -168,7 +175,8 @@ sub _listZip {
         $this->{error} = "Backup $name does not exist";
         return @files;
     }
-    my ( $stdOut, $stdErr, $success, $exitCode ) = capture_exec( @listZipCmd, $zipFile );
+    my @cmd = split( /\s+/, $this->{listZipCmd} );
+    my ( $stdOut, $stdErr, $success, $exitCode ) = capture_exec( @cmd, $zipFile );
     if( $exitCode ) {
         $this->{error} = "Error listing content of $name. $stdErr";
     }
@@ -189,7 +197,8 @@ sub _unZip {
         $this->{error} = "Backup $name does not exist";
         return;
     }
-    my ( $stdOut, $stdErr, $success, $exitCode ) = capture_exec( @unZipCmd, $zipFile );
+    my @cmd = split( /\s+/, $this->{unZipCmd} );
+    my ( $stdOut, $stdErr, $success, $exitCode ) = capture_exec( @cmd, $zipFile );
     if( $exitCode ) {
         $this->{error} = "Error unzipping $name. $stdErr";
     }
