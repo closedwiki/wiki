@@ -1224,6 +1224,27 @@ sub webExists {
 
 =pod
 
+---+++ isValidWebName( $name, $templateWeb ) -> $boolean
+
+Check for a valid web name.
+   * =$name= - web name
+   * =$templateWeb= - flag, optional. If true, then template web names (starting with _)
+     are considered valid, otherwise only user web names are valid.
+Return: true if web name is valid
+
+If $TWiki::cfg{EnableHierarchicalWebs} is off, it will also return false when a nested 
+web name is passed to it.
+
+*Since:* TWiki::Plugins::VERSION 1.4
+
+=cut
+
+sub isValidWebName {
+    return TWiki::isValidWebName( @_ );
+}
+
+=pod
+
 #CreateWeb
 ---+++ createWeb( $newWeb, $baseWeb, $opts )
 
@@ -1362,7 +1383,7 @@ sub getTopicList {
 #TopicExists
 ---+++ topicExists( $web, $topic ) -> $boolean
 
-Test if topic exists
+Test if topic exists.
    * =$web=   - Web name, optional, e.g. ='Main'=.
    * =$topic= - Topic name, required, e.g. ='TokyoOffice'=, or ="Main.TokyoOffice"=
 
@@ -1378,6 +1399,23 @@ sub topicExists {
     my( $web, $topic ) = $TWiki::Plugins::SESSION->normalizeWebTopicName( @_ );
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{store}->topicExists( $web, $topic );
+}
+
+=pod
+
+---+++ isValidTopicName( $name ) -> $boolean
+
+Check for a valid topic name. Names considerd valid for autolinking are 
+%SYSTEMWEB%.WikiWords (such as 'SanFrancisco') and acronym (such as 'SWMBO').
+   * =$name= - topic name
+Return: true if topic name is valid
+
+*Since:* TWiki::Plugins::VERSION 1.4
+
+=cut
+
+sub isValidTopicName {
+    return TWiki::isValidTopicName( @_ );
 }
 
 =pod
