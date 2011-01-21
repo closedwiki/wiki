@@ -1,17 +1,19 @@
+%META:TOPICINFO{author="TWikiContributor" date="1295588582" format="1.1" version="$Rev$"}%
 ---+!! !GetAWebPlugin
 <!--
-One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = Create a tar-ed copy of a whole Web for backup or offline reading 
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/GetAWebPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/GetAWebPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
 %SHORTDESCRIPTION%
-
-%TOC%
 
 ---++ Usage
 
-This Plugin can be used in a secure way to backup the contents of a web.
-It uses the TWiki rest api, so requires authorisation, and checks the =VIEW= permissions on the latest revision
-of the topic before adding the topic, its =,v= file and the attachments listed in each topic.
+This Plugin can be used in a secure way to backup the contents of a web. It uses the TWiki rest api, so requires authorisation, and checks the =VIEW= permissions on the latest revision of the topic before adding the topic, its =,v= file and the attachments listed in each topic.
 
 | Web | Format | URI |
 | Webname | tar |  =%<nop>SCRIPTURL{rest}%/GetAWebPlugin/getaweb/Webname.tar= |
@@ -27,17 +29,18 @@ of the topic before adding the topic, its =,v= file and the attachments listed i
 
 ---++ Plugin Info
 
+   * Set SHORTDESCRIPTION = Create a tar-ed copy of a whole Web for backup or offline reading
 
-|  Plugin Author(s): | TWiki:Main.SvenDowideit |
-|  Copyright: | &copy; 2008 SvenDowideit@fosiki.com |
+|  Plugin Author: | TWiki:Main.SvenDowideit |
+|  Copyright: | &copy; 2008 SvenDowideit@fosiki.com <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-01-20: | TWikibug:Item6638: Fixing bug in path to attachment (topic name was missing); doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2008-06-25: | Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/GetAWebPlugin |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/GetAWebPluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/GetAWebPluginAppraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
-
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
