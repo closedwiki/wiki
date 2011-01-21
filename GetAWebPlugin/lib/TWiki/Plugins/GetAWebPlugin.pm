@@ -1,5 +1,9 @@
-# Plugin for TWiki Collaboration Platform, http://TWiki.org/
-# Copyright SvenDowideit@fosiki.com
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2008 SvenDowideit@fosiki.com
+# Copyright (C) 2008-2011 TWiki:TWiki.TWikiContributor
+#
+# For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -10,6 +14,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
+#
+# As per the GPL, removal of this notice is prohibited.
 
 package TWiki::Plugins::GetAWebPlugin;
 
@@ -24,11 +30,12 @@ use Archive::Tar;
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC );
 
 $VERSION = '$Rev$';
-$RELEASE = 'TWiki-4.2';
-$SHORTDESCRIPTION = 'Create a zipped copy of a whole Web for backup or offline reading ';
+$RELEASE = '2011-01-20';
+$SHORTDESCRIPTION = 'Create a tar-ed copy of a whole Web for backup or offline reading';
 $NO_PREFS_IN_TOPIC = 1;
 $pluginName = 'GetAWebPlugin';
 
+# =========================
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
@@ -42,7 +49,7 @@ sub initPlugin {
     return 1;
 }
 
-
+# =========================
 sub getaweb {
     my ($session) = @_;
    
@@ -55,23 +62,24 @@ sub getaweb {
     my $outputType = 'application/x-tar';
     my $saveasweb = $query->param('saveasweb' ) || $webName;
     
-    $error .= qq{web "$webName" doesn't exist (or you lack permission to see it)<br/>} unless TWiki::Func::webExists( $webName );
-    
+    $error .= qq{web "$webName" doesn't exist (or you lack permission to see it)<br/>}
+      unless TWiki::Func::webExists( $webName );
+
     # TODO: use oops stuff
     if ( $error ne '' ) 
     {
         print "Content-type: text/html\n\n";
         print $error;
         return;
-    }
-        
+    }        
     
     my $tar = Archive::Tar->new() or die $!;
     foreach my $topicName (TWiki::Func::getTopicList($webName))
     {
         #export topic
         my $rawTopic = TWiki::Func::readTopicText( $webName, $topicName);
-        next if (!TWiki::Func::checkAccessPermission( 'VIEW', TWiki::Func::getWikiName(), $rawTopic, $topicName, $webName));
+        next unless( TWiki::Func::checkAccessPermission( 'VIEW', TWiki::Func::getWikiName(),
+                       $rawTopic, $topicName, $webName) );
         $tar->add_data( "data/$saveasweb/$topicName.txt", $rawTopic );  # or die ???
         #TODO: ,v file (get store obj, then look at its innards :( )
         my $handler = $session->{store}->_getHandler($webName, $topicName);
@@ -88,7 +96,7 @@ sub getaweb {
         foreach my $a ( @attachments ) {
 #            try {
                 my $data = TWiki::Func::readAttachment($webName, $topicName, $a->{name} );
-                $tar->add_data( "pub/$saveasweb/".$a->{name}, $data );  # or die ???
+                $tar->add_data( "pub/$saveasweb/$topicName/".$a->{name}, $data );  # or die ???
 #            } catch TWiki::AccessControlException with {
 #            };
             #TODO: ,v file
@@ -103,14 +111,10 @@ sub getaweb {
         }
     }
 
-    # sets response header
-    print $query->header(-type=>$outputType, -expire=>'now');
-    my $io = IO::Handle->new() or die $!;
-    $io->fdopen(fileno(STDOUT), "w") or die $!;
-    $tar->write( $io ) or die $!;
-    $io->close();
-   
-   return;
+    $session->{response}->header( -type => $outputType, -expire=>'now' );
+    $session->{response}->body($tar->write());
+
+    return;
 }
 
 1;
