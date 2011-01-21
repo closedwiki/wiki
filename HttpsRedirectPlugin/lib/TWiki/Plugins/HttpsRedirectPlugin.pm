@@ -20,7 +20,6 @@
 
 =cut
 
-
 package TWiki::Plugins::HttpsRedirectPlugin;
 
 # Always use strict to enforce variable scoping
@@ -57,56 +56,45 @@ sub initPlugin {
 
     $debug = $TWiki::cfg{Plugins}{HttpsRedirectPlugin}{Debug} || 0;
 
-    if (TWiki::Func::isGuest) 
-    	{
-		#If we are guest, force HTTPS on login
-		if (TWiki::Func::getContext()->{'login'}) #If we are on the login script
-			{							
-			#Build up our URL			
-			my $query=&TWiki::Func::getCgiQuery();	
-			my $url=$query->url() . $query->path_info();
-			if ($query->query_string())
-				{
-				$url.= '?' . $query->query_string();	
-				}
+    if( TWiki::Func::isGuest() ) {
+        #If we are guest, force HTTPS on login
+        if (TWiki::Func::getContext()->{'login'}) { #If we are on the login script
+            #Build up our URL
+            my $query=&TWiki::Func::getCgiQuery();
+            my $url=$query->url() . $query->path_info();
+            if ($query->query_string()) {
+                $url.= '?' . $query->query_string();
+            }
 
-				
-			unless ($url=~/^https/) #Unless we are already using HTTPS
-				{
-				#Redirect to HTTPS URL and quite				
-				$url=~s/^http/https/;				
-				TWiki::Func::writeDebug("HTTPS redirect to: $url" ) if ($debug);
-				TWiki::Func::redirectCgiQuery($query, $url);							
-				#$TWiki::Plugins::SESSION->finish();				
-				#exit(0);
-				}
-			}	    	    
+            unless ($url=~/^https/) { #Unless we are already using HTTPS
+                #Redirect to HTTPS URL and quite
+                $url=~s/^http/https/;
+                TWiki::Func::writeDebug("HTTPS redirect to: $url" ) if ($debug);
+                TWiki::Func::redirectCgiQuery($query, $url);
+                #$TWiki::Plugins::SESSION->finish();
+                #exit(0);
+            }
+        }
+    } else {
+        #If the user is no guest always force HTTPS
 
-    	}
-	else
-		{
-		#If the user is no guest always force HTTPS
-	
-		#Get our URL			
-		my $query=&TWiki::Func::getCgiQuery();	
-		my $url=$query->url() . $query->path_info();
-		if ($query->query_string())
-			{
-			$url.= '?' . $query->query_string();	
-			}
+        #Get our URL
+        my $query=&TWiki::Func::getCgiQuery();
+        my $url=$query->url() . $query->path_info();
+        if ($query->query_string()) {
+            $url.= '?' . $query->query_string();
+        }
 
-				
-		unless ($url=~/^https/) #Unless we are already using HTTPS
-			{
-			#Redirect to HTTPS URL and quite				
-			$url=~s/^http/https/;				
-			TWiki::Func::writeDebug("HTTPS redirect to: $url" ) if ($debug);
-			TWiki::Func::redirectCgiQuery($query, $url);							
-			#$TWiki::Plugins::SESSION->finish();				
-			#exit(0);
-			}	    	    
-		}
-    
+        unless ($url=~/^https/) { #Unless we are already using HTTPS
+            #Redirect to HTTPS URL and quite
+            $url=~s/^http/https/;
+            TWiki::Func::writeDebug("HTTPS redirect to: $url" ) if ($debug);
+            TWiki::Func::redirectCgiQuery($query, $url);
+            #$TWiki::Plugins::SESSION->finish();
+            #exit(0);
+        }
+    }
+
     return 1;
 }
 
