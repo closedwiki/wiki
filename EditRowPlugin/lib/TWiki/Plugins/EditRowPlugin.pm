@@ -1,7 +1,9 @@
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
 # Author: Crawford Currie http://c-dot.co.uk
 #
 # Copyright (C) 2007 WindRiver Inc.
-# Copyright (C) 2008-2010 TWiki Contributor. All Rights Reserved.
+# Copyright (C) 2008-2011 TWiki Contributor. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -32,7 +34,7 @@ use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC $headed );
 use Assert;
 
 $VERSION = '$Rev$';
-$RELEASE = '$Date$';
+$RELEASE = '2011-01-20';
 $SHORTDESCRIPTION = 'Inline edit for tables';
 $NO_PREFS_IN_TOPIC = 1;
 
@@ -117,10 +119,20 @@ STYLE
     require TWiki::Plugins::EditRowPlugin::Table;
     return 0 if $@;
 
-    my $vars = $query->Vars();
     my $urps = {};
-    while (my ($key, $value) = each %{$vars}) {
-        $urps->{$key} = $value if $key =~ /^erp_/;
+
+    if( $TWiki::Plugins::VERSION < 1.3 ) {
+        # TWiki-4.3 and older
+        my $vars = $query->Vars();
+        while (my ($key, $value) = each %{$vars}) {
+            $urps->{$key} = $value if $key =~ /^erp_/;
+        }
+    } else {
+        # TWiki-5.0 and up
+        my @varnames = $query->param();
+        foreach my $key (@varnames) {
+           $urps->{$key} = $query->param($key) if $key =~ /^erp_/;
+        }
     }
 
     my $endsWithNewline = ($text =~ /\n$/) ? 1 : 0;
@@ -270,7 +282,21 @@ sub save {
         $text =~ s/\\\n//gs;
         require TWiki::Plugins::EditRowPlugin::Table;
         die $@ if $@;
-        my $urps = $query->Vars();
+
+        my $urps = {};
+        if( $TWiki::Plugins::VERSION < 1.3 ) {
+            # TWiki-4.3 and older
+            $urps = $query->Vars();
+        } else {
+            # TWiki-5.0 and up
+            my @params = $query->param();
+            foreach my $p ( @params ) {
+                my @vals = $query->param( $p );
+                # Turn checkboxes, select+multi into comma-separated list
+                $urps->{$p} = join(',', @vals);
+            }
+        }
+
         my $content = TWiki::Plugins::EditRowPlugin::Table::parseTables(
             $text, $topic, $web, $meta, $urps);
 
