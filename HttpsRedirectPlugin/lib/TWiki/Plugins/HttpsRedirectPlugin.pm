@@ -163,8 +163,8 @@ sub initPlugin {
 				$url=~s/^http/https/;				
 				TWiki::Func::writeDebug("HTTPS redirect to: $url" ) if ($debug);
 				TWiki::Func::redirectCgiQuery($query, $url);							
-				$TWiki::Plugins::SESSION->finish();				
-				exit(0);
+				#$TWiki::Plugins::SESSION->finish();				
+				#exit(0);
 				}
 			}	    	    
 
@@ -188,8 +188,8 @@ sub initPlugin {
 			$url=~s/^http/https/;				
 			TWiki::Func::writeDebug("HTTPS redirect to: $url" ) if ($debug);
 			TWiki::Func::redirectCgiQuery($query, $url);							
-			$TWiki::Plugins::SESSION->finish();				
-			exit(0);
+			#$TWiki::Plugins::SESSION->finish();				
+			#exit(0);
 			}	    	    
 		}
     
