@@ -1,0 +1,43 @@
+%META:TOPICINFO{author="TWikiAdmin" date="1195655869" format="1.1" reprev="1.2" version="1.2"}%
+---+!! <nop>%TOPIC%
+
+Converts an email address into a WikiWord. If you use email addresses as a login name, there are issues with @ and . characters. This plugin uses simple regular expressions to change an email address into well formatted alphanumerics.
+
+If you want to allow TWikiRegistration so that the long email login can be mapped to a shorter WikiName, change the setting in =configure= to allow login name, and update the TWikiRegistration page to show !%WIKIUSER% as the default value instead of !%REMOTE_USER%.
+
+%TOC%
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+
+   * Download the ZIP file from the Plugin Home (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Configure the Plugin:
+      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+      * Change the Plugin settings as needed
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.ByronIgoe |
+|  Copyright: | &copy; 2007, TWiki:Main.ByronIgoe |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 21 Nov 2007 (V1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  21 Nov 2007: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.TWikiRegistration, %MAINWEB%.TWikiUsers
+
+-- TWiki:Main.ByronIgoe - 21 Nov 2007
