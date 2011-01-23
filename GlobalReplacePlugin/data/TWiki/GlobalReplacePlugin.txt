@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1295740679" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1295741450" format="1.1" version="$Rev$"}%
 ---+!! Global Replace Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -50,7 +50,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 ---+++ Example 2: Inserting a line _below_ another line
    1 Follow the previous example to the point where "Replace search string" is inserted.
    1 Use =(\n)= in the "Replace search string", at the end of the line. This will be stored for use in the "Replace string". You can reference it with =$n=, where =n= is a number =0= to =9=.
-      * Example: We want to replace a line which _ends to_ a string =Shutdown}% |=. "Replace search string": =Shutdown\}\% \|(\n)= and "Replace string": =Shutdown}% |$1Something$foo-bar$1=
+      * Example: We want to replace a line which _ends to_ a string =Shutdown}% |=. <br /> "Replace search string": =Shutdown\}\% \|(\n)= and "Replace string": =Shutdown}% |$1Something$foo-bar$1=
 
 __Note:__ Using this trick you can also insert a line _before_ another line.
    * Example: We want to insert a line before another line, which _begins with_ a string =| <nop>*Keywords:* |=. <br /> "Replace search string": =\| \*Keywords\:\* \|(.*?)(\n)= and "Replace string": =Something $2| *Keywords: |$1$2=
@@ -85,7 +85,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PaulineCheung, TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2004-2006 Wind River <br /> 2007-2008 Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] <br /> &copy; 2007-2011 TWiki:Main.TWikiContributors |
+|  Copyright: | &copy; 2004-2006 Wind River <br /> &copy; 2007-2008 Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] <br /> &copy; 2007-2011 TWiki:Main.TWikiContributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-01-22 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
