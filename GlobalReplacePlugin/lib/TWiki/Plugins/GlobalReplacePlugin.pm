@@ -1,8 +1,11 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004-2006 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2004-2006 Wind River
+# Copyright (C) 2007-2008 Peter Thoeny, TWIKI.NET
+# Copyright (C) 2007-2011 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
-# For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -15,30 +18,6 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 # As per the GPL, removal of this notice is prohibited.
-#
-# =========================
-#
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
-#
-# Each plugin is a package that contains the subs:
-#
-#   initPlugin           ( $topic, $web, $user, $installWeb )
-#   commonTagsHandler    ( $text, $topic, $web )
-#   startRenderingHandler( $text, $web )
-#   outsidePREHandler    ( $text )
-#   insidePREHandler     ( $text )
-#   endRenderingHandler  ( $text )
-#
-# initPlugin is required, all other are optional.
-# For increased performance, all handlers except initPlugin are
-# disabled. To enable a handler remove the leading DISABLE_ from
-# the function name.
-#
-# NOTE: To interact with TWiki use the official TWiki functions
-# in the &TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
-
 
 # =========================
 package TWiki::Plugins::GlobalReplacePlugin;
@@ -48,16 +27,8 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $debug
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
+$RELEASE = '2011-01-22';
 
 # =========================
 sub initPlugin
@@ -85,13 +56,6 @@ sub commonTagsHandler
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
     &TWiki::Func::writeDebug( "- GlobalReplacePlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    # This is the place to define customized tags and variables
-    # Called by sub handleCommonTags, after %INCLUDE:"..."%
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/%XYZ%/&handleXyz()/geo;
-    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/geo;
 
     if( $_[0] =~ /%GLOBALREPLACE{/ ) {
         $_[0] =~ s/%GLOBALREPLACE{(.*?)}%/handleGlobalReplace($1)/geo;
