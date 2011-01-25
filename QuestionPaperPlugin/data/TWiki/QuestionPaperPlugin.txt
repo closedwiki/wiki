@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1295938710" format="1.1" version="$Rev$"}%
----++!! <nop>QuestionPaperPlugin
+%META:TOPICINFO{author="TWikiContributor" date="1295939188" format="1.1" version="$Rev$"}%
+---+!! <nop>QuestionPaperPlugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
    http://twiki.org/cgi-bin/view/Plugins/HttpsRedirectPlugin or provide feedback at
