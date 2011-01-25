@@ -1,8 +1,19 @@
-%META:TOPICINFO{author="TWikiContributor" date="1260333523" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1295938710" format="1.1" version="$Rev$"}%
 ---++!! <nop>QuestionPaperPlugin
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/HttpsRedirectPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/HttpsRedirectPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-This plugin can be useful for school teachers or parents. One can print the question paper/assignments using this plugin. 
-I have developed this plugin while helping my kids with home work/school assignments
+---++ Introduction
+
+This plugin can be useful for school teachers or parents. One can print the question paper/assignments using this plugin. I have developed this plugin while helping my kids with home work/school assignments
 
 ---++ Syntax 
 
@@ -20,44 +31,33 @@ I have developed this plugin while helping my kids with home work/school assignm
 
 %<nop>QUESTIONPAPER{type="short" question="Write about your favourite game" lines="8" questiontag="Problem 4." answertag="Answer. "}%
 
-
-
 ---++ Plugin Settings
 
-Plugin settings are generally stored as preferences variables but the current Plugin do not have any preference variable which affect the functionality.
+Plugin settings are generally stored as preferences variables but the current plugin does not have any preference variable which affect the functionality.
 
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Define and print question paper/assignments, helpful for school teachers and parents
-
-   * Debug plugin
-      * Set DEBUG = 0
-
-
----++ Plugin Installation Instructions
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
 
-   * Download the ZIP file from the Plugin Home (see below)
+   * Download the ZIP file from the plugin Home (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-| *File:* | *Description:* |
-| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-| ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * Configure the Plugin: 
-      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
-      * Change the Plugin settings as needed
-
-
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Configure the plugin:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script to enable the plugin
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.SopanShewale |
-|  Copyright: | © 2009-2010, TWiki:Main.SopanShewale |
+|  Copyright: | &copy; 2009-2010 TWiki:Main.SopanShewale <br /> &copy; 2009-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2009-12-07 (V1.000) |
-|  Change History: | <!-- versions below in reverse order --> |
+|  Plugin Version: | 2011-01-24 (V1.1) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-01-24: | TWikibug:Item6638: Doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  2009-12-07: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
@@ -68,5 +68,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
-
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.TWikiPreferences

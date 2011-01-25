@@ -1,4 +1,24 @@
-#Check the Bottom of this file to see the copyright and author information 
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Author: Sopan Shewale (sopan.shewale@gmail.com)
+#
+# Copyright (C) 2009-2010 TWiki:Main.SopanShewale
+# Copyright (C) 2009-2011 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# For licensing info read LICENSE file in the TWiki root.
+
 package TWiki::Plugins::QuestionPaperPlugin;
 
 use strict;
@@ -9,12 +29,11 @@ require TWiki::Plugins;    # For the API version
 use vars
   qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC );
 
-$VERSION = '$Rev: 15942 (02 Sep 2009) $';
-
-$RELEASE = 'TWiki-4.2';
+$VERSION = '$Rev$';
+$RELEASE = '2011-01-24';
 
 $SHORTDESCRIPTION =
-'QuestionPaperPlugin can be used by school teachers to develop Question Paper in Examinations ';
+  'Define and print question paper/assignments, helpful for school teachers and parents';
 $NO_PREFS_IN_TOPIC = 1;
 
 # Name of this Plugin, only used in this module
@@ -188,21 +207,3 @@ sub _matching {
 }
 
 1;
-
-__DATA__
-
-Contrib for TWiki Collaboration Platform, http://TWiki.org/
-
-Author: Sopan Shewale (sopan.shewale@gmail.com)
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public Licenseg
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details, published at
-http://www.gnu.org/copyleft/gpl.html
-
