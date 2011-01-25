@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="WadeTurland" date="1118713770" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1295933978" format="1.1" version="$Rev$"}%
 %TOC%
 
 ---+ GenPDFAddOnDemo
@@ -26,11 +26,11 @@ TWiki only goes this far :-( HTMLDOC goes to level 15 :-) %BR%
 
 ---++ Features
 Some of the cool features are:
-	* Title topic is a fully rendered TWiki topic, editable from within TWiki's normal edit mechanism.
-	* Headers/Footers are fully rendered TWiki variables embedded in HTMLDOC special comments, but defined in a normal TWiki topic.
-	* Images are included
-	* Margins can be defined
-	* PDF permissions can be restricted (this has 'print,no-copy' so you can't copy and paste the text)
+   * Title topic is a fully rendered TWiki topic, editable from within TWiki's normal edit mechanism.
+   * Headers/Footers are fully rendered TWiki variables embedded in HTMLDOC special comments, but defined in a normal TWiki topic.
+   * Images are included
+   * Margins can be defined
+   * PDF permissions can be restricted (this has 'print,no-copy' so you can't copy and paste the text)
 
 ---++ Limitations
 There are a few limitations, like
@@ -112,26 +112,26 @@ Generated: %DISPLAYTIME%
 
 ---++ Preferences
 <verbatim>
-	* TWiki.GenPDFAddOn Settings
-		* Set GENPDFADDON_BANNER = Our Slogan %ORANGE%Rocks!!!%ENDCOLOR%
-		* Set GENPDFADDON_TITLE = %BASETOPIC%
-		* Set GENPDFADDON_SUBTITLE = %REVINFO{web="%WEB%" topic="%BASETOPIC%"}%
-		* Set GENPDFADDON_TITLETOPIC = TWiki.GenPDFExampleTitleTopic
-		* Set GENPDFADDON_HEADERTOPIC = TWiki.GenPDFExampleHeaderFooterTopic
-		* Set GENPDFADDON_HEADFOOTFONT = helvetica-bold
-		* Set GENPDFADDON_LOGOIMAGE = http://localhost/twiki/pub/TWiki/TWikiLogos/twikiRobot46x50.gif
-		* Set GENPDFADDON_FORMAT = pdf14
-		* Set GENPDFADDON_PERMISSIONS = print,no-copy
-		* Set GENPDFADDON_ORIENTATION = portrait
-		* Set GENPDFADDON_PAGESIZE = a4
-		* Set GENPDFADDON_SKIN = print.pattern
-		* Set GENPDFADDON_TOCHEADER = l..
-		* Set GENPDFADDON_TOCFOOTER = ..i
-		* Set GENPDFADDON_NUMBEREDTOC = True
-		* Set GENPDFADDON_TOCLEVELS = 5
-		* Set GENPDFADDON_HEADERSHIFT = 0
-		* Set GENPDFADDON_MARGINS = top:20mm,left:80pt,right:1in,bottom:5cm
-		* Set GENPDFADDON_WIDTH = 1060
+   * TWiki.GenPDFAddOn Settings
+      * Set GENPDFADDON_BANNER = Our Slogan %ORANGE%Rocks!!!%ENDCOLOR%
+      * Set GENPDFADDON_TITLE = %BASETOPIC%
+      * Set GENPDFADDON_SUBTITLE = %REVINFO{web="%WEB%" topic="%BASETOPIC%"}%
+      * Set GENPDFADDON_TITLETOPIC = TWiki.GenPDFExampleTitleTopic
+      * Set GENPDFADDON_HEADERTOPIC = TWiki.GenPDFExampleHeaderFooterTopic
+      * Set GENPDFADDON_HEADFOOTFONT = helvetica-bold
+      * Set GENPDFADDON_LOGOIMAGE = http://localhost/twiki/pub/TWiki/TWikiLogos/twikiRobot46x50.gif
+      * Set GENPDFADDON_FORMAT = pdf14
+      * Set GENPDFADDON_PERMISSIONS = print,no-copy
+      * Set GENPDFADDON_ORIENTATION = portrait
+      * Set GENPDFADDON_PAGESIZE = a4
+      * Set GENPDFADDON_SKIN = print.pattern
+      * Set GENPDFADDON_TOCHEADER = l..
+      * Set GENPDFADDON_TOCFOOTER = ..i
+      * Set GENPDFADDON_NUMBEREDTOC = True
+      * Set GENPDFADDON_TOCLEVELS = 5
+      * Set GENPDFADDON_HEADERSHIFT = 0
+      * Set GENPDFADDON_MARGINS = top:20mm,left:80pt,right:1in,bottom:5cm
+      * Set GENPDFADDON_WIDTH = 1060
 </verbatim>
 
 ---++ Form fields
@@ -143,10 +143,6 @@ Generated: %DISPLAYTIME%
 % META:FIELD{name="KeyWords" title="KeyWords" value="PDF, plugin, acrobat"}%
 </verbatim>
 
--- Main.WadeTurland - 14 Jun 2005
+__Related:__ GenPDFAddOn, GenPDFExampleHeaderFooterTopic, GenPDFExampleTitleTopic
 
-%META:FORM{name="DocumentClassificationForm"}%
-%META:FIELD{name="DocumentClassification" title="DocumentClassification" value="CompanyConfidential"}%
-%META:FIELD{name="DocumentType" title="DocumentType" value="HowTo"}%
-%META:FIELD{name="TopicHeadline" title="TopicHeadline" value="A look at what the GenPDFAddOn plugin can do"}%
-%META:FIELD{name="KeyWords" title="KeyWords" value="PDF, plugin, acrobat"}%
+-- TWiki:Main.WadeTurland - 14 Jun 2005
