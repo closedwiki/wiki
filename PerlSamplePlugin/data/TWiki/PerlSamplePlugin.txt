@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1295941331" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1295942970" format="1.1" version="$Rev$"}%
 ---+!! !PerlSamplePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -92,12 +92,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.AndreaSterbini and TWiki:Main.FrancoBagnoli |
 |  Copyright: | &copy; 2000-2001 TWiki:Main.FrancoBagnoli <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-01-24 (V1.1) |
+|  Plugin Version: | 2011-01-25 (V1.1) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-01-24: | TWikibug:Item6638: Doc improvements; XHTML fixes -- TWiki:Main.PeterThoeny |
+|  2011-01-25: | TWikibug:Item6638: Doc improvements; XHTML fixes -- TWiki:Main.PeterThoeny |
 |  2001-11-27: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | none |
+|  CPAN Dependencies: | CPAN:Safe |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |

@@ -29,7 +29,7 @@ use Safe;
 use vars qw( $web $topic $user $installWeb $VERSION $RELEASE
 	    $compartment );
 $VERSION = '1.1';
-$RELEASE = '2011-01-24';
+$RELEASE = '2011-01-25';
 $SHORTDESCRIPTION =
  'Execute and format nicely some Perl code embedded in a TWiki page, showing STDOUT and STDERR outputs';
 $NO_PREFS_IN_TOPIC = 1;
