@@ -1,20 +1,13 @@
-#!/usr/local/bin/perl -wI.
+# Add-on for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# GenPDF.pm (converts TWiki page to PDF using HTMLDOC)
-#    (based on PrintUsingPDF pdf script)
+# Copyright (C) 2005-2006 TWiki:Main/BrianSpinar
+# Copyright (C) 2008 SvenDowideit@fosiki.com
+# Copyright (C) 2007-2011 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # This script Copyright (c) 2005 Cygnus Communications
 # and distributed under the GPL (see below)
-#
-# TWiki WikiClone (see wiki.pm for $wikiversion and other info)
-#
-# Based on parts of Ward Cunninghams original Wiki and JosWiki.
-# Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
-# Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
-# Copyright (C) 1999 Peter Thoeny, peter@thoeny.com
-# Additional mess by Patrick Ohl - Biomax Bioinformatics AG
-# January 2003
-# fixes for TWiki 4.2 (c) 2008 SvenDowideit@fosiki.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,12 +19,15 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
+#
+# GenPDFAddOn.pm (converts TWiki page to PDF using HTMLDOC)
+#    (based on PrintUsingPDF pdf script)
 
 =pod
 
-=head1 TWiki::Contrib::GenPDF
+=head1 TWiki::Contrib::GenPDFAddOn
 
-TWiki::Contrib::GenPDF - Displays TWiki page as PDF using HTMLDOC
+TWiki::Contrib::GenPDFAddOn - Displays TWiki page as PDF using HTMLDOC
 
 =head1 DESCRIPTION
 
@@ -44,7 +40,7 @@ outside the package.
 
 =cut
 
-package TWiki::Contrib::GenPDF;
+package TWiki::Contrib::GenPDFAddOn;
 
 use strict;
 
@@ -56,15 +52,8 @@ use Error qw( :try );
 
 use vars qw( $VERSION $RELEASE );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2011-01-24';
 
 $| = 1; # Autoflush buffers
 
@@ -572,28 +561,35 @@ sub _getPrefs {
 
 =pod
 
-=head2 viewPDF
+=head2 genpdf
 
 This is the core method to convert the current page into PDF format.
 
 =cut
 
-sub viewPDF {
-   open(STDERR, ">>$TWiki::cfg{DataDir}/error.log"); # redirect errors to a log file
+sub genpdf {
+
+   my $session = shift;
+
+   $TWiki::Plugins::SESSION = $session;
+
+   $query = $session->{request};
+   my $webName  = $session->{webName};
+   my $topic    = $session->{topicName};
+   my $response = $session->{response};
+   my $rev      = $query->param('rev');
+
+   open( STDERR, ">>$TWiki::cfg{DataDir}/error.log" ); # redirect errors to a log file
 
    # initialize module wide variables
-   $query = new CGI;
-   %tree = ();
+   %tree  = ();
    %prefs = ();
 
    # Initialize TWiki
-   my $thePathInfo = $query->path_info(); 
+   my $thePathInfo   = $query->path_info(); 
    my $theRemoteUser = $query->remote_user();
-   my $theTopic = $query->param('topic');
-   my $theUrl = $query->url;
-
-   my($topic, $webName, $scriptUrlPath, $userName) = 
-      TWiki::initialize($thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query);
+   my $theTopic      = $query->param('topic');
+   my $theUrl        = $query->url;
 
    # Get preferences
    _getPrefs($query);

@@ -1,8 +1,8 @@
-data/TWiki/GenPDFAddOn.txt 	Add-on topic
-data/TWiki/GenPDFExampleTitleTopic.txt 	Example title topic
-data/TWiki/GenPDFExampleHeaderFooterTopic.txt 	Example header and footer topic
-
-bin/genpdf 	Add-on script
-lib/TWiki/Contrib/GenPDF.pm 	Add-on perl package
-lib/TWiki/Contrib/GenPDFAddOn/Config.spec
-templates/view.genpdf.tmpl
+data/TWiki/GenPDFAddOn.txt 0644 Add-on topic
+data/TWiki/GenPDFAddOnDemo.txt 0644 Example topic
+data/TWiki/GenPDFExampleTitleTopic.txt 0644 Example title topic
+data/TWiki/GenPDFExampleHeaderFooterTopic.txt 0644 Example header and footer topic
+bin/genpdf 0755 Add-on script
+lib/TWiki/Contrib/GenPDFAddOn.pm 0644 Add-on perl package
+lib/TWiki/Contrib/GenPDFAddOn/Config.spec 0644
+templates/view.genpdf.tmpl 0644
