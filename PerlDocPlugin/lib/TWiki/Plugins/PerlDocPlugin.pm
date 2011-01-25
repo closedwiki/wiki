@@ -16,7 +16,6 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 # As per the GPL, removal of this notice is prohibited.
-#
 
 =begin twiki
 
@@ -46,9 +45,7 @@ package TWiki::Plugins::PerlDocPlugin;
 use vars qw( $VERSION $RELEASE );
 
 $VERSION = '$Rev$';
-
-$RELEASE = '2010-08-25';
-
+$RELEASE = '2011-01-25';
 
 # =========================
 sub initPlugin {
@@ -62,6 +59,7 @@ sub initPlugin {
     return 1;
 }
 
+# =========================
 sub perlDocHandler {
     my( $session, $params, $topic, $web ) = @_;
 
@@ -229,6 +227,7 @@ sub translatePod2TWiki
     return "<noautolink>\n$text\n</noautolink>\n";
 }
 
+# =========================
 sub renderInteriorSequences
 {
     my( $theText ) = @_;

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1282801382" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1295942362" format="1.1" version="$Rev$"}%
 ---+!! Perl Doc Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -23,16 +23,18 @@ Use the following form to see the documentation of a Perl module: (this Plugin n
 
 <form name="modulequery" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 Perl module name:
-<input type="text" name="qModule" VALUE="%URLPARAM{"qModule"}%" size="32" /> in
+<input type="text" name="qModule" VALUE="%URLPARAM{"qModule"}%" size="32" class="twikiInputField" /> in
 <select name="qFormat">
 <option %CALC{"$IF($EXACT(%URLPARAM{"qFormat"}%,rendered),selected='selected')"}%>rendered</option>
 <option %CALC{"$IF($EXACT(%URLPARAM{"qFormat"}%,twiki),selected='selected')"}%>twiki</option>
 <option %CALC{"$IF($EXACT(%URLPARAM{"qFormat"}%,pod),selected='selected')"}%>pod</option>
 </select> format
-<input type="submit" value="Show doc" />
+<input type="submit" value="Show doc" class="twikiSubmit" />
 </form>
 -----
+<div style="background-color:#dddddd; padding:10px;">
 %PERLDOC{"%URLPARAM{"qModule"}%" format="%URLPARAM{"qFormat"}%"}%
+</div>
 -----
 
 ---++ Perl code with POD (Plain Old Documentation)
@@ -76,7 +78,8 @@ Silly paragraph
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-08-25: | TWikibug:Item6530 - fix for TWiki-5.0; doc improvements; changing TWIKIWEB to SYSTEMWEB |
+|  2011-01-25: | TWikibug:Item6638: Doc improvements |
+|  2010-08-25: | TWikibug:Item6530: Fix for TWiki-5.0; doc improvements; changing TWIKIWEB to SYSTEMWEB |
 |  20 May 2007 | Fixed for TWiki-4, added "=pod", repackaged with !BuildContrib - TWiki:Main.CrawfordCurrie |
 |  07 Dec 2002: | Removed "=pod" from showing up in html or twiki blocks |
 |  01 Dec 2002: | Initial version |
