@@ -1,5 +1,9 @@
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2001 Franco Bagnoli, bagnoli@dma.unifi.it
+# Copyright (C) 2009-2011 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,25 +21,18 @@
 # This is a plugin to show perl code examples
 #
 # =========================
-#
-# Each plugin is a package that contains the subs:
-#
-#	initPluginy      ( $topic, $web, $user, $installWeb )
-#	commonTagsHandler( $text, $topic, $web )
-#	outsidePREHandler( $text, $web )
-#	insidePREHandler ( $text, $web )
-#	beforeSaveHandler( $text, $topic, $web )
-#	afterEditHandler ( $text, $topic, $web )
-#
-# =========================
 package TWiki::Plugins::PerlSamplePlugin;
 
 use Safe;
 
 # =========================
-use vars qw( $web $topic $user $installWeb $VERSION
+use vars qw( $web $topic $user $installWeb $VERSION $RELEASE
 	    $compartment );
-$VERSION = '1.000';
+$VERSION = '1.1';
+$RELEASE = '2011-01-24';
+$SHORTDESCRIPTION =
+ 'Execute and format nicely some Perl code embedded in a TWiki page, showing STDOUT and STDERR outputs';
+$NO_PREFS_IN_TOPIC = 1;
 
 # =========================
 sub initPlugin
@@ -59,18 +56,6 @@ sub commonTagsHandler
 
     $_[0] =~ s/%PERLSAMPLE{(.*?)}%/&handlePerlSample($1,$compartment)/gseo;
 }
-
-# =========================
-#sub outsidePREHandler
-#{
-#    my ( $text, $web ) = @_;    
-#}
-# =========================
-#sub insidePREHandler
-#{
-#    my ( $text, $web ) = @_;    
-#}
-# =========================
 
 #FB perl
 sub maxeol
@@ -114,25 +99,25 @@ sub handlePerlSample
 	$li = join "\n", (1..$n);
 	my $text = <<EOF;
 <!-- STOP RENDERING -->
-<table border=0>
+<table border="0">
 	<tr>
 		<th> </th>
-		<th bgcolor = #aaaaaa>code</th>
-		<th bgcolor = #aaffaa>return</th>
+		<th bgcolor="#aaaaaa">code</th>
+		<th bgcolor="#aaffaa">return</th>
 	</tr>
-	<tr valign="top" bgcolor = #eeeeff>
+	<tr valign="top" bgcolor="#eeeeff">
 		<td bgcolor="#aaaaaa"><font color="#0000ff"><pre>$li</pre></font></td>
 		<td bgcolor="#eeeeee"><font color="#ff0000"><pre>$arg</pre></font></td>
-		<td bgcolor = #eeffee><pre>$ret</pre></td>
+		<td bgcolor="#eeffee"><pre>$ret</pre></td>
 	</tr>
 		<th> </th>
-		<th bgcolor = #ffaaff>stdout</th>
-		<th bgcolor = #ffaaaa>stderr</th>
+		<th bgcolor="#ffaaff">stdout</th>
+		<th bgcolor="#ffaaaa">stderr</th>
 	</tr>
-	<tr valign="top" bgcolor = #eeeeff>
+	<tr valign="top" bgcolor="#eeeeff">
 		<td></td>
-		<td bgcolor = #ffeeff><pre>$stdout</pre></td>
-		<td bgcolor = #ffeeee><pre>$stderr</pre></td>
+		<td bgcolor="#ffeeff"><pre>$stdout</pre></td>
+		<td bgcolor="#ffeeee"><pre>$stderr</pre></td>
 	</tr>
 </table>
 <!-- START RENDERING -->
@@ -141,6 +126,4 @@ EOF
 }
 #/FB
 
-
 1;
-
