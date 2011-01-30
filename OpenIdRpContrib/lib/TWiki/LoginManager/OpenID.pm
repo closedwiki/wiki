@@ -384,9 +384,9 @@ sub _OPENIDPROVIDERS {
 		$result .= '<button class="'.$sb.'OP_entry" type="submit" '
 			.'name="openid.provider" value="'
 			.$op_name.'" title="<nop>'.$op_name.' '
-			.$action.' via <nop>OpenID">'
+			.$action.' via <nop>OpenID"><!--IE_fix:'.$op_name.'-->'
 			.'<img src="%PUBURL%/%SYSTEMWEB%/OpenIdRpContrib/op-icon-'
-			.$op_name_norm.'.ico" alt="" class="'.$sb.'OP_icon">'
+			.$op_name_norm.'.ico" alt="" class="'.$sb.'OP_icon" />'
 			.($sb ? "" : "<nop>".$op_name )
 			.'</button>';
 	}
@@ -449,6 +449,7 @@ sub collect_openid_params
 	    my $p_suffix = $1;
             my $val = $query->param( $p );
             if ( defined $val ) {
+                $val =~ s/^<!--IE_fix:(.*?)-->.*$/$1/o; # work around crappy IE-7 button bug
                 $openid_p{$p_suffix} = $val;
             }
 		}
@@ -850,7 +851,7 @@ sub login {
             if( $openidStr ) {
                 my $title  = $TWiki::cfg{OpenIdRpContrib}{NoHtPasswordLoginTitle}
                           || '!OpenID login required';
-                my $msg1   = $TWiki::cfg{OpenIdRpContrib}{NoHtPasswordLoginMessage1}
+                my $msg1   = $TWiki::cfg{OpenIdRpContrib}{NoHtPasswordLoginMessage}
                           || "We recognized your login !%LOGINNAME%. However, for users who "
                            . "have logged in with !OpenID in the past, only !OpenID should be "
                            . "used to login.";

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1290494840" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1294780526" format="1.1" version="$Rev$"}%
 ---+!! !OpenID Relying Party (RP) Contrib Package
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -156,8 +156,9 @@ __Note:__ You do not need to install anything on the browser to use this contrib
 |  Copyright: | &copy; 2010, [[http://www.twiki.net][TWiki, Inc.]], All Rights Reserved |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
-|  Version: | 2010-11-22 v0.3 |
+|  Version: | 2011-01-30 v0.4 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-01-30: | TWikibug:Item6633: Can't login using IE-7 |
 |  2010-11-22: | TWikibug:Item6607: Fix for can't register user on initial !OpenID login -- TWiki:Main.ChrisLahti &amp; TWiki:Main.PeterThoeny |
 |  2010-10-24: | TWikibug:Item6570: Add a flag to force user to use !OpenID for login if they have in the past -- TWiki:Main.JulianCash |
 |  2010-05-03: | Initial version |
