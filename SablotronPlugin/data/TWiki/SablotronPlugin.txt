@@ -1,57 +1,84 @@
-%META:TOPICINFO{author="reitsmac" date="1016072953" format="1.0" version="1.6"}%
----++ %TOPIC%
+%META:TOPICINFO{author="TWikiContributor" date="1296367822" format="1.1" version="$Rev$"}%
+---+!! !SablotronPlugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/SablotronPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/SablotronPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+</sticky>
+%SHORTDESCRIPTION%
 
-This is the SablotronPlugin. It uses XML::Sablotron to transform an XSL stylesheet and XML data file into HTML. Both the XSL stylesheet and XML document are Wiki Topics.
+---++ Introduction
+
+The !SablotronPlugin uses CPAN:XML::Sablotron to transform an XSL stylesheet and XML data file into HTML. Both the XSL stylesheet and XML document are Wiki Topics.
 
 ---++ Syntax Rules
 
-Place the directive %<nop>XSLTRANSFORM{xsl="SablotronXsl",xml=...}%
-at the top of the XML document where SablotronXsl is the name of the stylesheet and ... is the xml codes.
+Place the directive %<nop>XSLTRANSFORM{xsl="SablotronXsl",xml=...}% at the top of the XML document where SablotronXsl is the name of the stylesheet and ... is the xml codes.
 
----++ %TOPIC% Settings
+---++ Examples
 
-	* One line description (See output in %TWIKIWEB%.TextFormattingRules topic):
-		* Set SHORTDESCRIPTION = SablotronPlugin uses XML::Sablotron to apply a stylesheet to XML.
+   * 
+   * 
 
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
+---++ Plugin Settings
 
----+++ Plugin Installation Instructions
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==data/TWiki/SablotronXsl.txt== | Sample stylesheet |
-	  | ==data/TWiki/SablotronXsl.txt,v== | Sample stylesheet repository |
-	  | ==data/TWiki/SablotronXml.txt== | Sample XML document |
-	  | ==data/TWiki/SablotronXml.txt,v== | Sample XML repository |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* Check SablotronXml if %TOPIC% shows up in the list of activated plugins: %ACTIVATEDPLUGINS%
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Apply a stylesheet to XML using the Sablotron tool
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+
+   * Install the dependencies (see below)
+   * Download the ZIP file from the Plugin Home (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/SablotronXsl.txt== | Sample stylesheet |
+     | ==data/TWiki/SablotronXml.txt== | Sample XML document |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the plugin in the {Plugins} section.
+   * Check SablotronXml if %TOPIC% shows up in the list of activated plugins:
+     %ACTIVATEDPLUGINS%
 
 ---+++ Design History
 
-	* Thanks to Main.MartinCleaver for the XmlXslPlugin. My browser apparently does not have the feature needed to do client-side transformations so I make use of XML::Sablotron to perform the transformation on the server.
-	* I wanted to be able to see the transformation take place during the Preview Changes of an XML document. This way any extraneous characters or parsing problems will show up as an error.
+   * Thanks to TWiki:Main.MartinCleaver for the TWiki:Plugins.XmlXslPlugin. My browser apparently does not have the feature needed to do client-side transformations so I make use of XML::Sablotron to perform the transformation on the server.
+   * I wanted to be able to see the transformation take place during the Preview Changes of an XML document. This way any extraneous characters or parsing problems will show up as an error.
  
 ---+++ Issues Outstanding
 
-	* Double quotes are used in the xml code so cannot follow proper form for TWiki::Func::extractNameValuePair
-	* In most cases of error in the XML the result is an "Internal Server Error" - viewing the web server error log tells you the line number to fix. I really should handle this in the plugin.
+   * Double quotes are used in the xml code so cannot follow proper form for TWiki::Func::extractNameValuePair
+   * In most cases of error in the XML the result is an "Internal Server Error" - viewing the web server error log tells you the line number to fix. I really should handle this in the plugin.
 
----+++ Plugin Info
+---++ Plugin Info
 
-|  Plugin Author: | Main.CharlieReitsma |
-|  Plugin Version: | 13 Mar 2002 |
-|  Change History: | 13 Mar 2002: Bug Fixes<br /> 12 Mar 2002: Initial version |
-|  CPAN Dependencies: | XML::Sablotron |
-|  Other Dependencies: |  |
-|  Perl Version: | 5.0 |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Plugin Author: | TWiki:Main.CharlieReitsma |
+|  Copyright: | &copy; 2002 TWiki:Main.CharlieReitsma <br /> &copy; 2007-2011 TWiki:Main.TWikiContributors |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-02-01 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-02-01: | TWikibug:Item6638: Fix for TWiki-4.0 and later; doc improvements; XHTML fixes; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2002-03-13: | Bug fixes |
+|  2002-03-12: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | CPAN:XML::Sablotron |
+|  Other Dependencies: | Sablotron tool http://sourceforge.net/projects/sablotron/ |
+|  Perl Version: | 5.005 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/SablotronPlugin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/SablotronPluginDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/SablotronPluginAppraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- Main.CharlieReitsma - 13 Mar 2002 <br>
+__Related Topics:__ SablotronXml, SablotronXsl, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
