@@ -1,4 +1,4 @@
-data/TWiki/SablotronPlugin.txt NEW
-data/TWiki/SablotronXml.txt NEW
-data/TWiki/SablotronXsl.txt NEW
-lib/TWiki/Plugins/SablotronPlugin.pm NEW
+data/TWiki/SablotronPlugin.txt 0644
+data/TWiki/SablotronXml.txt 0644
+data/TWiki/SablotronXsl.txt 0644
+lib/TWiki/Plugins/SablotronPlugin.pm 0644
