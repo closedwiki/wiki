@@ -1,7 +1,8 @@
-%META:TOPICINFO{author="WikiGuest" date="994688028" format="1.0beta2" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1296361838" format="1.1" version="$Rev$"}%
 ---++ Topic Peer Review Statistics
 
 %PRSTATS{web="all", limit="100"}% 
 
-...see %TWIKIWEB%.PeerPlugin for more information.
+...see %SYSTEMWEB%.PeerPlugin for more information.
+
 %META:TOPICMOVED{by="StephenRoe" date="993726916" from="Test.ReviewStats1" to="Wiki.ReviewStats"}%

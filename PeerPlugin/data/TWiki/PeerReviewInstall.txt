@@ -1,88 +1,42 @@
-%META:TOPICINFO{version="1.9" date="998493530" author="RoeS01" format="1.0beta"}%
-%META:TOPICMOVED{from="Wikidev.PeerReviewInstallSet" to="Wikidev.PeerReviewInstall" date="994431946" by="StephenRoe"}%
-*Installation*
+%META:TOPICINFO{author="TWikiContributor" date="1296362903" format="1.1" version="$Rev$"}%
+---+ Installation of the !PeerPlugin
 
 Follow these steps to install the PeerPlugin for TWiki:
 
-	1 Do PeerReviewMySQLSetUp
-	1 Do PeerReviewDbiDbdSetUp
-	1 Unzip the <nop>PeerPlugin.zip file in your twiki installation directory
-	1 Add <nop>Plugins.PeerPlugin to the ACTIVEPLUGINS variable of your %TWIKIWEB%.TWikiPreferences or WebPreferences (not strictly necessary as the plugin should now be detected automatically)
-	1 Edit the top of <nop>twiki/lib/TWiki/Plugins/PeerPlugin/Review.pm to reflect the database name and logon that you have chosen
-		* my $dataBase = "dbi:mysql:Peer";
-		* my $dbUsername  = "myusername";
-		* my $dbPassword  = "mypassword";
-	1 Edit the %TWIKIWEB%.<nop>TWikiPreferences, %TWIKIWEB%.<nop>WebPreferences and the WebPreferences topic in each web as shown below. (Or follow the instructions in PeerReviewExamples to modify any skin).
+   1 Do PeerReviewMySQLSetUp
+   1 Do PeerReviewDbiDbdSetUp
+   1 Unzip the <nop>PeerPlugin.zip file in your twiki installation directory
+   1 Edit the top of =twiki/lib/TWiki/Plugins/PeerPlugin/Review.pm= to reflect the database name and logon that you have chosen: %BR%
+     =my $dataBase = "dbi:mysql:Peer";= %BR%
+     =my $dbUsername  = "myusername";= %BR%
+     =my $dbPassword  = "mypassword";=
+   1 Add =%<nop>PRLINK%= and =%<nop>PRRATING%= to the topic action button section of the skin you are using.
+   1 Check any topic in the test web and just click "Review" to see if the installation is successful.
 
-*Change...*
-<VERBATIM>
-		* Set WEBTOPICLIST = %WEB% . {
-				<a href="WebHome">Home</a> 
-			 | <a href="WebChanges">Changes</a>
-			 | <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&amp;regex=on&amp;search=.*">Index</A>
-			 | <a href="WebSearch">Search</a>
-			 | Go <input type="text" name="topic" size="16">
-		  }
-</VERBATIM>
-
-*To...*
-<VERBATIM>
-		* Set WEBTOPICLIST = %WEB% . {
-				<a href="WebHome">Home</a> 
-			 | <a href="WebChanges">Changes</a>
-			 | <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&amp;regex=on&amp;search=.*">Index</A>
-			 | <a href="WebSearch">Search</a>
-			 | Go <input type="text" name="topic" size="16">
-			 | <!--%PRLINK%--><!--%PRRATING%-->
-		  }
-</VERBATIM>
-
-_Check any topic in the test web and just click "Review" to see if the installation is successful._
-
-*Install Set*
+---++ Install Set
 
 List of Items Contained within the Peer Review Plugin install set:
 
-	1 =twiki/lib/Plugins/PeerPlugin.pm=
-	1 =twiki/lib/Plugins/PeerPlugin/Review.pm=
-	1 =twiki/pub/Plugins/PeerPlugin/*.gif=
-	1 =twiki/templates/peerview.tmpl=
-	1 =twiki/tools/dbitest=
-	1 =twiki/data/%WIKIWEB%.PeerPlugin=
-	1 =twiki/data/%WIKIWEB%.PeerPluginView=
-	1 =twiki/data/%WIKIWEB%.PeerPluginForm=
-	1 =twiki/data/%WIKIWEB%.PeerPluginExtView=
-	1 =twiki/data/%WIKIWEB%.PeerPluginExtForm=
-	1 =twiki/data/%WIKIWEB%.PeerReviewStats=
-	1 =twiki/data/%WIKIWEB%.PeerReviewExamples=
-	1 =twiki/data/%WIKIWEB%.PeerReviewInstall=
-	1 =twiki/data/%WIKIWEB%.PeerReviewMySQLSetUp=
-	1 =twiki/data/%WIKIWEB%.PeerReviewDbiDbdSetUp=
+   1 =twiki/lib/Plugins/PeerPlugin.pm=
+   1 =twiki/lib/Plugins/PeerPlugin/Review.pm=
+   1 =twiki/pub/Plugins/PeerPlugin/*.gif=
+   1 =twiki/templates/peerview.tmpl=
+   1 =twiki/tools/dbitest=
+   1 =twiki/data/%SYSTEMWEB%/PeerPlugin.txt=
+   1 =twiki/data/%SYSTEMWEB%/PeerPluginView.txt=
+   1 =twiki/data/%SYSTEMWEB%/PeerPluginForm.txt=
+   1 =twiki/data/%SYSTEMWEB%/PeerPluginExtView.txt=
+   1 =twiki/data/%SYSTEMWEB%/PeerPluginExtForm.txt=
+   1 =twiki/data/%SYSTEMWEB%/PeerReviewStats.txt=
+   1 =twiki/data/%SYSTEMWEB%/PeerReviewExamples.txt=
+   1 =twiki/data/%SYSTEMWEB%/PeerReviewInstall.txt=
+   1 =twiki/data/%SYSTEMWEB%/PeerReviewMySQLSetUp.txt=
+   1 =twiki/data/%SYSTEMWEB%/PeerReviewDbiDbdSetUp.txt=
 
--- People.StephenRoe - 27 Jun 2001 <br>
+---++ To-do
 
+Move configuration settings into configure (=LocalSite.cfg=)
 
+-- TWiki:People.StephenRoe - 27 Jun 2001
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--TWikiCat--> <h4> WikiCategory </h4>
-<table border="1" cellspacing="0" cellpadding="1">
-<tr>
-<td valign="top" align="right"> TopicClassification:  <br></td><td>  FeatureUnderConstruction </td>
-</tr>
-</table><!--TWikiCat-->
+%META:TOPICMOVED{by="StephenRoe" date="994431946" from="Wikidev.PeerReviewInstallSet" to="Wikidev.PeerReviewInstall"}%

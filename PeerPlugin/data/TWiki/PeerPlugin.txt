@@ -1,61 +1,82 @@
-%META:TOPICINFO{version="1.4" date="998494097" author="RoeS01" format="1.0beta"}%
----++ <nop>%TOPIC%
+%META:TOPICINFO{author="TWikiContributor" date="1296362341" format="1.1" version="$Rev$"}%
+---+!! !PeerPlugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/PeerPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/PeerPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+</sticky>
+%SHORTDESCRIPTION%
 
-_[please see Codev.PeerRatingSystem for development chit-chat]_
+---++ Introduction
 
-This plugin enables TWiki users to rate any topic for Quality of content and Relevance of the topic across their TWiki community. Several display methods are provided:
+This plugin enables TWiki users to rate any topic for quality of content and relevance of the topic across their TWiki community. Several display methods are provided:
 
-	* A star rating is inserted in the topic header
-	* A Review link on each topic shows a list of the current reviews
-	* A link on a user page shows a list of reviews made by that person
-	* A ratings statistics topic shows an overall summary of reviews by topic
+   * A star rating is inserted in the topic header
+   * A Review link on each topic shows a list of the current reviews
+   * A link on a user page shows a list of reviews made by that person
+   * A ratings statistics topic shows an overall summary of reviews by topic
 
 This plugin also allows members of the TWiki community to rate any web page - and can be used to focus attention on the best (and worst) pages out there.
 
-Please note that this plugin uses a MySQL database for storage of review data. Installation help is provided in these topics (included in the install set):
+Please note that this plugin uses a !MySQL database for storage of review data. Installation help is provided in these topics (included in the install set):
 
-PeerReviewInstall<br>
-PeerReviewMySQLSetUp<br>
-PeerReviewDbiDbdSetUp<br>
-PeerReviewExamples<br>
+   * PeerReviewInstall
+   * PeerReviewMySQLSetUp
+   * PeerReviewDbiDbdSetUp
+   * PeerReviewExamples
 
----+++ Plugin Installation Instructions
+---++ Plugin Settings
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Follow the instructions in PeerReviewInstall
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>PEERPLUGIN_SHORTDESCRIPTION%==
 
----+++ Plugin Info
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Rate TWiki pages for quality of content and relevance
 
-|  One Line Description: | Peer Review & Rating System |
-|  Plugin Author: | Main.SteveRoe under contract to <nop>DrKW |
-|  Plugin Version: | 1.0 |
-|  Change History: | 22 Aug 2001: Added... <br> ?? ??? 2001: Initial version |
+   * Settings for rating:
+      * Set LINKICON = %PUBURLPATH%/%SYSTEMWEB%/PeerPlugin/peerreview.gif
+      * Set RATINGSUFFIX = 
+      * #Set LISTICONPREFIX = %PUBURLPATH%/%SYSTEMWEB%/PeerPlugin/dot_
+      * #Set LISTICONHEIGHT = 12
+      * #Set LISTICONWIDTH = 64
+      * #Set RATINGICONPREFIX = %PUBURLPATH%/%SYSTEMWEB%/PeerPlugin/rating
+      * #Set RATINGICONHEIGHT = 5
+      * #Set RATINGICONWIDTH = 42
+      * Set LISTICONPREFIX = %PUBURLPATH%/%SYSTEMWEB%/PeerPlugin/star_
+      * Set LISTICONHEIGHT = 13
+      * Set LISTICONWIDTH = 75
+      * Set RATINGICONPREFIX = %PUBURLPATH%/%SYSTEMWEB%/PeerPlugin/star_
+      * Set RATINGICONHEIGHT = 13
+      * Set RATINGICONWIDTH = 75
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+
+   * Download the ZIP file from the Plugins web (see below)
+   * Unzip that file and follow the PeerReviewInstall instructions
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.SteveRoe under contract to <nop>DrKW |
+|  Copyright: | &copy; 2001 <nop>DrKW <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-02-01 (V1.1) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-02-01: | TWikibug:Item6638: Doc improvements; XHTML fixes; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2001-08-22: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | DBI, DBD (<nop>MySQL) |
 |  Other Dependencies: | <nop>MySQL |
-|  Perl Version: | 5.004 |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Perl Version: | 5.005 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/PeerPlugin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/PeerPluginDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/PeerPluginAppraisal |
 
-%TOPIC% variable settings follow:
-
-<verbatim>
-		* Set LINKICON = %PUBURLPATH%/TWiki/PeerPlugin/peerreview.gif
-		* Set RATINGSUFFIX = 
-		* #Set LISTICONPREFIX = %PUBURLPATH%/TWiki/PeerPlugin/dot_
-		* #Set LISTICONHEIGHT = 12
-		* #Set LISTICONWIDTH = 64
-		* #Set RATINGICONPREFIX = %PUBURLPATH%/TWiki/PeerPlugin/rating
-		* #Set RATINGICONHEIGHT = 5
-		* #Set RATINGICONWIDTH = 42
-		* Set LISTICONPREFIX = %PUBURLPATH%/TWiki/PeerPlugin/star_
-		* Set LISTICONHEIGHT = 13
-		* Set LISTICONWIDTH = 75
-		* Set RATINGICONPREFIX = %PUBURLPATH%/TWiki/PeerPlugin/star_
-		* Set RATINGICONHEIGHT = 13
-		* Set RATINGICONWIDTH = 75
-</verbatim>
-
-
-
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
+__Related Topics:__ PeerPluginExtForm, PeerPluginExtView, PeerPluginForm, PeerPluginUser, PeerPluginView, PeerReviewDbiDbdSetUp, PeerReviewExamples, PeerReviewInstall, PeerReviewMySQLSetUp, PeerReviewStats, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
