@@ -1,6 +1,9 @@
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2001 Andrea Sterbini, a.sterbini@flashnet.it
-#
+# Copyright (C) 2007-2011 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -40,10 +43,13 @@
 # =========================
 package TWiki::Plugins::SuggestLinksPlugin;
 # =========================
-use vars qw( $web $topic $user $installWeb
+use vars qw( $VERSION $RELEASE $web $topic $user $installWeb
 	    %allTopicNamePatterns 
 	    $stopWords $format1 $format2
 	    $maxWords $selectedWeb );
+
+$VERSION = '$Rev$';
+$RELEASE = '2011-02-01';
 
 # we filter single characters, articles ...
 # $stopWords = qr /[a-zA-Z0-9]|an|the|and|or|not|to|for/i ;
@@ -87,9 +93,9 @@ sub initPlugin
     $stopWords = qr /$stopWords/i ; 
 
     $format1 = &TWiki::Func::getPreferencesValue('SUGGESTLINKSPLUGIN_FORMAT1')
-			|| "<SPAN STYLE=\"background : yellow;\">";
+			|| "<span style=\"background : yellow;\">";
     $format2 = &TWiki::Func::getPreferencesValue('SUGGESTLINKSPLUGIN_FORMAT2')
-			|| "<\/SPAN><img src=\"%PUBURLPATH%\/$installWeb\/SuggestLinksPlugin\/exclam.gif\" alt=\"\$web.\$topic\">" ;
+			|| "<\/span><img src=\"%PUBURLPATH%\/$installWeb\/SuggestLinksPlugin\/exclam.gif\" alt=\"\$web.\$topic\" />" ;
 
     foreach $name (&TWiki::Func::getTopicList($selectedWeb, $user)) {
 	my $pats = &getAllPatterns($name);
