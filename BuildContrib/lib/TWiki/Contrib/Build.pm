@@ -54,7 +54,7 @@ my $TWIKIORGSUFFIX = '';
 my $TWIKIORGBUGS   = 'http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs';
 my $TWIKIORGEXTENSIONSWEB = "Plugins";
 
-my $GLACIERMELT = 5;     # number of seconds to sleep between uploads,
+my $GLACIERMELT = 2;     # number of seconds to sleep between uploads,
                          # to reduce average load on server
 
 my $collector;           # general purpose handle for collecting stuff
