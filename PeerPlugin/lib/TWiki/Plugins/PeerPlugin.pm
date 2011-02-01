@@ -1,7 +1,11 @@
-# TWiki WikiClone ($wikiversion has version info)
+# TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2001 DrKW
+# Copyright (C) 2007-2011 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -13,27 +17,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
-#
-# =========================
-#
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
-#
-# Each plugin is a package that contains the subs:
-#
-#   initPlugin           ( $topic, $web, $user, $installWeb )
-#   commonTagsHandler    ( $text, $topic, $web )
-#   startRenderingHandler( $text, $web )
-#   outsidePREHandler    ( $text )
-#   insidePREHandler     ( $text )
-#   endRenderingHandler  ( $text )
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, DISABLE (or comment) handlers you don't need.
 
 # =========================
 
-package TWiki::Plugins::PeerPlugin; 	# change the package name!!!
+package TWiki::Plugins::PeerPlugin;
 
 # =========================
 use vars qw( $web $topic $user $installWeb $VERSION $RELEASE
@@ -41,15 +28,9 @@ use vars qw( $web $topic $user $installWeb $VERSION $RELEASE
         $linkIcon $ratingSuffix 
         $listIconPrefix $listIconHeight $listIconWidth
         $ratingIconPrefix $ratingIconHeight $ratingIconWidth);
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev$';
 
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$VERSION = '$Rev$';
+$RELEASE = '2011-02-01';
 
 # =========================
 use TWiki::Plugins::PeerPlugin::Review;
@@ -61,14 +42,14 @@ sub initPlugin
     ( $topic, $web, $user, $installWeb ) = @_;
     
     # Get preferences
-    $linkIcon = &TWiki::Func::getPreferencesValue( "PEERPLUGIN_LINKICON" ) || "";
-    $ratingSuffix = &TWiki::Func::getPreferencesValue( "PEERPLUGIN_RATINGSUFFIX" ) || "";
-    $listIconPrefix = &TWiki::Func::getPreferencesValue( "PEERPLUGIN_LISTICONPREFIX" ) || "";
-    $listIconHeight = &TWiki::Func::getPreferencesValue( "PEERPLUGIN_LISTICONHEIGHT" ) || "13";
-    $listIconWidth = &TWiki::Func::getPreferencesValue( "PEERPLUGIN_LISTICONWIDTH" ) || "75";
+    $linkIcon         = &TWiki::Func::getPreferencesValue( "PEERPLUGIN_LINKICON" )         || "";
+    $ratingSuffix     = &TWiki::Func::getPreferencesValue( "PEERPLUGIN_RATINGSUFFIX" )     || "";
+    $listIconPrefix   = &TWiki::Func::getPreferencesValue( "PEERPLUGIN_LISTICONPREFIX" )   || "";
+    $listIconHeight   = &TWiki::Func::getPreferencesValue( "PEERPLUGIN_LISTICONHEIGHT" )   || "13";
+    $listIconWidth    = &TWiki::Func::getPreferencesValue( "PEERPLUGIN_LISTICONWIDTH" )    || "75";
     $ratingIconPrefix = &TWiki::Func::getPreferencesValue( "PEERPLUGIN_RATINGICONPREFIX" ) || "";
     $ratingIconHeight = &TWiki::Func::getPreferencesValue( "PEERPLUGIN_RATINGICONHEIGHT" ) || "13";
-    $ratingIconWidth = &TWiki::Func::getPreferencesValue( "PEERPLUGIN_RATINGICONWIDTH" ) || "75";    
+    $ratingIconWidth  = &TWiki::Func::getPreferencesValue( "PEERPLUGIN_RATINGICONWIDTH" )  || "75";    
     
     return 1;
 }
@@ -177,14 +158,14 @@ sub prLink
     
     my $linkImg = "";
     if( $linkIcon ) {
-    	$linkImg = qq{<IMG align=absMiddle border=0 height=16 src=$linkIcon width=16 alt="review this topic">};
+    	$linkImg = qq{<img align='absMiddle' border='0' height='16' src='$linkIcon' width='16' alt="review this topic" />};
     }
 
     if( &prTestUserTopic() )
     {
         $link = qq{<span class=greyButton>Review $linkImg </span>};
     } else {    
-        $link = qq{<a class=menuButton href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/PeerPluginView?prurl=%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%&prweb=%WEB%&prtopic=%TOPIC%&prrevinfo=$maxrev">Review $linkImg </a>};
+        $link = qq{<a class=menuButton href="%SCRIPTURLPATH{view}%/%SYSTEMWEB%/PeerPluginView?prurl=%SCRIPTURL{view}%/%WEB%/%TOPIC%&prweb=%WEB%&prtopic=%TOPIC%&prrevinfo=$maxrev">Review $linkImg </a>};
     }
     return( $link );
 }
@@ -197,8 +178,7 @@ sub prObject
         
     my $opText = "";
     
-    if( ! $prTopic )
-    {
+    if( ! $prTopic ) {
         $opText = $prUrl;
     } else {
         my $prWeb = TWiki::Func::getCgiQuery()->param( 'prweb' );
@@ -211,7 +191,7 @@ sub prObject
 # ============================
 sub prFormUrl
 { 
-    return "%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/PeerPluginView";
+    return "%SCRIPTURL{view}%/%SYSTEMWEB%/PeerPluginView";
 }
 
 # =========================
@@ -224,8 +204,7 @@ sub prDoForm
     my $prTopic = TWiki::Func::getCgiQuery()->param( 'prtopic' );    
     
     # add new review (if form filled)
-    if( TWiki::Func::getCgiQuery()->param( 'praction' ) eq "add" )
-    {   
+    if( TWiki::Func::getCgiQuery()->param( 'praction' ) eq "add" ) {
         #grab params from form
         my $fmQuality = TWiki::Func::getCgiQuery()->param( 'quality' );
         my $fmRelevance = TWiki::Func::getCgiQuery()->param( 'relevance' ) || 0;
@@ -237,19 +216,19 @@ sub prDoForm
         my $changeAccessOK = &TWiki::Access::checkAccessPermission( "CHANGE", &TWiki::userToWikiName( $user ), $_[0] , $topic, $web );
         if( ! $changeAccessOK )
         {
-            $opText .= "<P><FONT color=red>You do not have permission to add reviews.</FONT></P>";
+            $opText .= "<p><font color='red'>You do not have permission to add reviews.</font></p>";
         # check param values
         } elsif( &prTestVal( $fmQuality ) ) {
-            $opText .= "<P><FONT color=red>Please select a quality rating in the range 1-5.</FONT></P>";
+            $opText .= "<p><font color='red'>Please select a quality rating in the range 1-5.</font></p>";
         } elsif( &prTestVal( $fmRelevance ) ) {
-            $opText .= "<P><FONT color=red>Please select a relevance rating in the range 1-5.</FONT></P>";
+            $opText .= "<p><font color='red'>Please select a relevance rating in the range 1-5.</font></p>";
         #FIXME - control these fields/values through config vars???
         #} elsif( &prTestVal( $fmCompleteness ) ) {
-        #    $opText .= "<P><FONT color=red>Please select a completeness rating in the range 1-5.</FONT></P>";
+        #    $opText .= "<p><cont color='red'>Please select a completeness rating in the range 1-5.</font></p>";
         #} elsif( &prTestVal( $fmQuality ) ) {
-        #    $opText .= "<P><FONT color=red>Please select a timeliness rating in the range 1-5.</FONT></P>";            
+        #    $opText .= "<p><font color='red'>Please select a timeliness rating in the range 1-5.</font></p>";            
         } elsif( ! $fmComment ) {
-            $opText .= "<P><FONT color=red>Please enter some text in the comment field.</FONT></P>";            
+            $opText .= "<p><font color='red'>Please enter some text in the comment field.</font></p>";
         } else {
             my @rvItems = ();
             
@@ -267,9 +246,9 @@ sub prDoForm
             
             if( ! $error )
             {
-                $opText .= "<P><FONT color=red>Thank you for adding a review. To edit your comments just submit a new review - only the most recent will be displayed.</FONT></P>"; 
+                $opText .= "<p><font color='red'>Thank you for adding a review. To edit your comments just submit a new review - only the most recent will be displayed.</font></p>";
             } else {
-                $opText .= "<P><FONT color=red>$error</FONT></P>"; 
+                $opText .= "<p><font color='red'>$error</font></p>";
             }
             #&TWiki::Func::writeDebug( "PeerPlugin: Add rvItems is @rvItems" );
         }
@@ -419,9 +398,9 @@ sub prDispStatsItem
     {
         $prWeb = $1;
         $prTopic = $2;
-        $opText .= "[[$prWeb.$prTopic][$prWeb.$prTopic]] <br> ";
+        $opText .= "[[$prWeb.$prTopic][$prWeb.$prTopic]] <br /> ";
     } else {    
-        $opText .= "[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/PeerPluginExtView?prurl=$item][Wiki:$item]] <br> ";
+        $opText .= "[[%SCRIPTURL{view}%/%SYSTEMWEB%/PeerPluginExtView?prurl=$item][Wiki:$item]] <br /> ";
     }
     
     return $opText;
@@ -449,7 +428,7 @@ sub prStats
 
     #FIXME - may be better formed by using references - ie making the stats list be an object
     
-    $opText .= "| *Topic <br> Reviews:* | *Best <br> Rated <br> Topics:* | *Most <br> Reviewed <br> Topics:* | *Most <br> Active <br> Reviewers:* |\n";
+    $opText .= "| *Topic <br /> Reviews:* | *Best <br /> Rated <br /> Topics:* | *Most <br /> Reviewed <br /> Topics:* | *Most <br /> Active <br /> Reviewers:* |\n";
     
     my( $rvCount ) = &Review::rvStats( $dbh, 'count' );        
     $opText .= "|  $rvCount |  ";
@@ -478,7 +457,7 @@ sub prStats
         $opText .= "$item ";
         $item = shift( @rvUserTen );
         $item = &TWiki::userToWikiName( $item );
-        $opText .= "$item <br> ";
+        $opText .= "$item <br /> ";
     }
     
     $opText .= "|";
@@ -506,15 +485,15 @@ sub prInclude
         my $opText = &TWiki::handleIncludeFile( "\"$prWeb.$prTopic\"", $topic, $web );
         return $opText;
     } else {    
-        return "<IFRAME NAME=content width=800 height=800 SRC=$item></IFRAME>";
+        return "<iframe name='content' width='800' height='800' src='$item'></iframe>";
     }    
 }
 
 # =========================
 sub prUserView
 {
-    my $text = qq{<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/PeerPluginUser?};
-    $text   .= qq{prurl=%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%&prweb=%WEB%&prtopic=%TOPIC%&prrevinfo=$maxrev">};
+    my $text = qq{<a href="%SCRIPTURLPATH{view}%/%SYSTEMWEB%/PeerPluginUser?};
+    $text   .= qq{prurl=%SCRIPTURL{view}%/%WEB%/%TOPIC%&prweb=%WEB%&prtopic=%TOPIC%&prrevinfo=$maxrev">};
     $text   .= qq{ViewMyReviews</a>};
     return $text;
 }
@@ -553,53 +532,5 @@ sub commonTagsHandler
 }
 
 # =========================
-sub DISABLEstartRenderingHandler
-{
-### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
-
-#    print "PeerreviewPlugin::startRenderingHandler called<br>";
-
-    # This handler is called by getRenderedVersion just before the line loop
-
-}
-
-# =========================
-sub DISABLEoutsidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-#    print "PeerreviewPlugin::outsidePREHandler called<br>";
-
-    # This handler is called by getRenderedVersion, in loop outside of <PRE> tag
-    # This is the place to define customized rendering rules
-
-}
-
-# =========================
-sub DISABLEinsidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-#    print "PeerreviewPlugin::insidePREHandler called<br>";
-
-    # This handler is called by getRenderedVersion, in loop inside of <PRE> tag
-    # This is the place to define customized rendering rules    
-
-}
-
-# =========================
-sub DISABLEendRenderingHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-#    print "PeerreviewPlugin::endRenderingHandler called<br>";
-
-    # This handler is called by getRenderedVersion just after the line loop   
-
-}
-
-# =========================
 
 1;
-
-
