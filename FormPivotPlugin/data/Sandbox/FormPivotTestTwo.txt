@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="TWikiContributor" date="1296456990" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+ Test !FormPivotPlugin, Topic With Test Form, Two 
+
+__Related:__ %SYSTEMWEB%.FormPivotPlugin, FormPivotTest, FormPivotTestForm, FormPivotTestOne, FormPivotTestThree
+
+%META:FORM{name="FormPivotTestForm"}%
+%META:FIELD{name="Color" attributes="" title="Color" value="Red"}%
+%META:FIELD{name="Importance" attributes="" title="Importance" value="Medium"}%
+%META:FIELD{name="Stuff" attributes="" title="Stuff" value="Sushi"}%
+%META:FIELD{name="Who" attributes="" title="Who" value="Five"}%

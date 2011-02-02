@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="TWikiContributor" date="1296456990" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+ Test !FormPivotPlugin, Form Definition
+
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* |
+| Color | select | 1 | Red,Blue,Yellow | |
+| Importance | checkbox | 2 | High,Medium,Low | |
+| Stuff | text | | | |
+| Who   | select+multi | 6 | One, Two, Three, Four, Five, Six | |
+
+__Related:__ %SYSTEMWEB%.FormPivotPlugin, FormPivotTest, FormPivotTestOne, FormPivotTestTwo, FormPivotTestThree

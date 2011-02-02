@@ -1,63 +1,75 @@
-%META:TOPICINFO{author="JohnTalintyre" date="1018985829" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="TWikiContributor" date="1296457833" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiPreferences"}%
 ---+ Form Pivot Plugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/FormPivotPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/FormPivotPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+</sticky>
+%SHORTDESCRIPTION%
 
-Basic analysis of values for a [[%TWIKIWEB%.TWikiForms][form]] used by the topics in a Web.
+---++ Introduction
 
----++ %TOPIC% Global Settings
-
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<plugin>_<setting>%==, for example, ==%INTERWIKIPLUGIN_SHORTDESCRIPTION%==
-
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Statistics of values in a TWikiForm
-
-	* Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
-		* Set DEBUG = 0
+Basic analysis of topics with [[%SYSTEMWEB%.TWikiForms][TWiki Forms]] in a web. The analysis is done on form field values of topics that share a specific TWiki Form.
 
 ---++ Syntax rules
 
-%<nop>FORMPIVOT{form="..." [fields="..."] [type="grid|count"]}%
+=%<nop>FORMPIVOT{ form="..." fields="..." type="grid|count" }%=
 
-If fields not specified, all fields in the form are used.
-
-If type is "count":
-	* For each field, gives a break down of occurance of values in sortable tables.
-
-If type is "grid":
-	* There should be two fields, each square in the grid produced will be the count of those topics containing the two values e.g. Bug and High Priority
+| *Parameter* | *Description* | *Default* |
+| =form= | Name of topic containing the form. Can be a ="TopicName"= or a ="Web.TopicName"=. | (required) |
+| =fields= | Name of fields to use, comma-space delimited. If =fields= is not specified, all fields in the form are used. | (all form fields) |
+| =type="count"= | For each field, gives a break down of occurrence of values in sortable tables. | =type="count"= |
+| =type="grid"= | There should be two fields, each square in the grid produced will be the count of those topics containing the two values e.g. Bug and High Priority. | =type="count"= |
 
 ---++ Known Issues
 
-This is a fairly simple initial implementation and probably doesn't yet deserve the designiation of pivot.
+This is a fairly simple initial implementation and probably doesn't yet deserve the designation of pivot.
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>FORMPIVOTPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Statistics of values in a TWiki Form
+
+   * Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
+      * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* Test if the plugin is correctly installed:
-		* Extract test topics from attachment [[%ATTACHURL%/formpivot-example.zip][formpivot-example.zip]]
-		* See [[Test.TestFormPivot][Test.TestFormPivot]] for the two types of pivot (assuming you extracting to the Test Web).
+   * Download the ZIP file from the Plugins web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/Sandbox/FormPivotTest*.txt== | Form pivot test topics |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Test if the plugin is correctly installed:
+      * See [[Sandbox.FormPivotTest]] for the two types of pivot.
 
 ---++ Plugin Info
 
-|  Plugin Author: | %TWIKIWEB%.JohnTalintyre |
-|  Plugin Version: | 15Apr 2002 |
-|  Change History: | 15 Apr 2002: Initial version |
+|  Plugin Author: | TWiki:Main.JohnTalintyre |
+|  Copyright: | &copy; 2002 TWiki:Main.JohnTalintyre <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-02-01 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-02-01: | TWikibug:Item6638: Fix for TWiki-5.0; many doc improvements; changing TWIKIWEBT to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2002-04-15: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
-|  Perl Version: | 5.0 |
-|  Plugin Home: | TWiki:Plugins/%TOPIC% |
-|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/PerlSamplePlugin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/PerlSamplePluginDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/PerlSamplePluginAppraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- %TWIKIWEB%.JohnTalintyre - 15 Apr 2002
-	* : Simple example of using FormPivotPlugin
-
-%META:FILEATTACHMENT{name="formpivot-example.zip" attr="" comment="Simple example of using FormPivotPlugin" date="1018989276" path="c:\devel\twiki\formpivot-example.zip" size="5306" user="JohnTalintyre" version="1.1"}%
+__Related Topics:__ Sandbox.FormPivotTest, Sandbox.FormPivotTestForm, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
