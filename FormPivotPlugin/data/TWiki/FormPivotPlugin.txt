@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1296457833" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1296627576" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiPreferences"}%
 ---+ Form Pivot Plugin
 <!--
@@ -68,8 +68,8 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/PerlSamplePlugin |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/PerlSamplePluginDev |
-|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/PerlSamplePluginAppraisal |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/FormPivotPlugin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/FormPivotPluginDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/FormPivotPluginAppraisal |
 
 __Related Topics:__ Sandbox.FormPivotTest, Sandbox.FormPivotTestForm, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
