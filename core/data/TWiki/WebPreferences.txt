@@ -1,9 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1278225417" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1296622879" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WEB% Web Preferences
 
-The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in [[%SYSTEMWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, eg: %USERSWEB%.%WIKINAME% in the [[%USERSWEB%.%HOMETOPIC%][%USERSWEB%]] web).
-
-%TOC%
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{ title="Page contents" }%
+</div></sticky>
+The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences override the __site-level preferences__ in [[%SYSTEMWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, such as [[%USERSWEB%.%WIKINAME%][%WIKINAME%]] in the [[%USERSWEB%.%HOMETOPIC%][%USERSWEB%]] web). These web preferences can be overridden by __topic preferences__, e.g. preferences in individual topics.
 
 ---++ Web Preferences Settings
 
@@ -35,11 +36,12 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
       * Set WEBCOPYRIGHT = <span class="twikiRight"> <a href="http://twiki.org/"><img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiLogos/T-badge-88x31.gif" alt="This site is powered by the TWiki collaboration platform" width="88" height="31" title="This site is powered by the TWiki collaboration platform" border="0" /></a></span>%MAKETEXT{"Copyright &&copy; [_1] by the contributing authors. All material on this collaboration platform is the property of the contributing authors." args="1999-%GMTIME{$year}%"}% <br /> %MAKETEXT{"Ideas, requests, problems regarding [_1]? <a href='[_2]'>Send feedback</a>" args="<nop>%WIKITOOLNAME%,mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%%20Feedback%20on%20%BASEWEB%.%BASETOPIC%"}% <br /> __Note:__ Please contribute updates to this topic on TWiki.org at <a href="http://twiki.org/cgi-bin/view/TWiki/%BASETOPIC%" target="twiki.org">TWiki:TWiki.%BASETOPIC%</a>.
 
    * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %SYSTEMWEB%.TWikiAccessControl).
-      * #Set ALLOWWEBCHANGE = %USERSWEB%.TWikiAdminGroup
+      * Set ALLOWWEBCHANGE = %USERSWEB%.TWikiAdminGroup
       * Set ALLOWWEBRENAME = %USERSWEB%.TWikiAdminGroup
 
-   * Users or groups allowed to change or rename this <nop>%TOPIC% topic: (e.g., %USERSWEB%.WebAdministratorsGroup)
+   * Users or groups allowed to change or rename this <nop>%TOPIC% topic:
       * Set ALLOWTOPICCHANGE = %USERSWEB%.TWikiAdminGroup
+      * Set ALLOWTOPICRENAME = %USERSWEB%.NobodyGroup
 
    * Web preferences that are *not* allowed to be overridden by sub-web, user or topic preferences:
       * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, ALLOWWEBRENAME, DENYWEBRENAME

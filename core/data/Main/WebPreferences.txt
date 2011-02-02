@@ -1,9 +1,12 @@
-%META:TOPICINFO{author="TWikiContributor" date="1278225412" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1296622872" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WEB% Web Preferences
 
-The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in [[%SYSTEMWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, eg: %USERSWEB%.%WIKINAME% in the [[%USERSWEB%.%HOMETOPIC%][%USERSWEB%]] web).
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{ title="Page contents" }%
+</div></sticky>
+The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences override the __site-level preferences__ in [[%SYSTEMWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, such as [[%USERSWEB%.%WIKINAME%][%WIKINAME%]] in the [[%USERSWEB%.%HOMETOPIC%][%USERSWEB%]] web). These web preferences can be overridden by __topic preferences__, e.g. preferences in individual topics.
 
-%TOC%
+%EDITPREFERENCES{"%SYSTEMWEB%.TWikiPreferencesForm"}%
 
 ---++ Web Preferences Settings
 
