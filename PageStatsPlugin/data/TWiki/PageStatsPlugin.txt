@@ -1,64 +1,81 @@
-%META:TOPICINFO{author="WillNorris" date="1067069700" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1296545317" format="1.1" version="$Rev$"}%
 ---+ <nop>%TOPIC%
-
-displays page statistics log (viewing and saving the page)
-
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/PageStatsPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/PageStatsPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
 ---++ Syntax Rules
 
----+++ Parameters
-| *Parameter* | *Default* |
-| web		| %<nop>WEB%	|
-| topic	 | %<nop>TOPIC% |
-| max		| all entries  |
+=%<nop>PAGESTATS{ web="%<nop>INCLUDINGWEB%" topic="%<nop>INCLUDINGTOPIC%" max="10" }%=
 
+| *Parameter* | *Description* | *Default* |
+| =web= | Name of web | =%<nop>WEB%= |
+| =topic= | Name of topic | =%<nop>TOPIC%= |
+| =max= | Limit the number of entries shown | (all entries of the current month) |
 
 ---++ Examples
-	* %<nop>PAGESTATS%
-	* %<nop>PAGESTATS{ max="10" }%
-	* %<nop>PAGESTATS{ web="%<nop>INCLUDINGWEB%" topic="%<nop>INCLUDINGTOPIC%" }%
 
----++ Demos
-	* [[Sandbox.TestTopic%TOPIC%]]
+| *Example* | *Description* |
+| =%<nop>PAGESTATS%= | All stats of the current topic for the current month |
+| =%<nop>PAGESTATS{ max="10" }%= | The 10 latest stats of the current topic for the current month |
+| =%<nop>PAGESTATS{ web="%<nop>INCLUDINGWEB%" topic="%<nop>INCLUDINGTOPIC%" }%= | All stats of the included topic; useful to include a generic statistics page |
 
----++ <nop>%TOPIC% Global Settings
+---++ Sample Output
 
-	 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>PAGESTATSPLUGIN_SHORTDESCRIPTION%==
+| *Timestamp* | *User* | *Action* | *Page* | *Extra* | *IP Address* |
+| 2010-10-25 - 16:12 | Main.TWikiGuest | view | %TOPIC% | | 10.10.10.60 |
+| 2010-10-25 - 16:27 | Main.TWikiGuest | view | %TOPIC% | | 10.10.10.60 |
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = simple page stats log
+---++ Demo
 
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
+   * [[Sandbox.TestTopic%TOPIC%]]
 
----++ Plugin Installation Instructions
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>PAGESTATSPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Display page view and save statistics of a specific page
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
+---++ Plugin Installation
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==lib/TWiki/Plugins/OoPlugin.pm== | OoPlugin Perl module base class |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	  | ==data/Sandbox/TestTopic%TOPIC%.txt== | Plugin topic test |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* Test if the installation was successful:
-		* [[Sandbox.TestTopic%TOPIC%]]
+   * Download the ZIP file from the Plugins web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/Sandbox/TestTopic%TOPIC%.txt== | Plugin topic test |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Test if the installation was successful:
+      * [[Sandbox.TestTopic%TOPIC%]]
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/WillNorris |
-|  Plugin Version: | 25 Oct 2003 (V1.000) |
+|  Plugin Author: | TWiki:Main.WillNorris, TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2003 TWiki:Main.WillNorris <br /> &copy; 2011 TWiki:Main.PeterThoeny <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-02-01 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  25 Oct 2003: | Initial version |
+|  2011-02-01: | TWikibug:Item6638: Code rewrite from scratch (same functionality); doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2003-10-25: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main/WillNorris - 25 Oct 2003
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.TWikiPreferences
