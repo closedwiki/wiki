@@ -152,6 +152,12 @@ MESS
     }
 
     if ($installScript && -e $installScript) {
+
+        # clean and untaint installer script
+        $installScript =~ s/[^a-zA-Z0-9\_\-\:\/\\\.]//g;
+        $installScript =~ /^(.*)$/;
+        $installScript = $1;
+
         # invoke the installer script.
         # SMELL: Not sure yet how to handle
         # interaction if the script ignores -a. At the moment it
