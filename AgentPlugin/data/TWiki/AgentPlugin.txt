@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1296372871" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1296625917" format="1.1" version="$Rev$"}%
 ---+!! Agent Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -23,13 +23,13 @@ This plugin allows to identify a browser according to it's the user_agent string
       * Your Browser identifies as: %AGENT{check="TYPE"}%
    * Use =%<nop>AGENT{check="VERSION"}%= to choose predefined version dependent identification.
       * Your Browser identifies as: %AGENT{check="VERSION"}%
-   * Use =%<nop>AGENT{check="msie netscape4 netscape7"}%= to select your own ID set - *note that most specific rule names must be listed first*
-      * Your Browser yields: %AGENT{check="msie netscape4 netscape7"}%
+   * Use =%<nop>AGENT{check="msie firefox3 firefox4 safari"}%= to select your own ID set - *note that most specific rule names must be listed first*
+      * Your Browser yields: %AGENT{check="msie firefox3 firefox4 safari"}%
    * Add =none="idontknow"= to choose a different fallback id from "%AGENTPLUGIN_NONE%"
    * Use =%<nop>AGENT{check="gecko6 gecko7" none="nogecko" expgecko6="Gecko.*6" expgecko7="Gecko.*7"}%= to specify seldomly needed checks
       * Your Browser yields: %AGENT{check="gecko6 gecko7" none="nogecko" expgecko6="Gecko.*6" expgecko7="Gecko.*7"}%
-   * Any non-alphanumeric character will be removed from the listes <nop>IDs for the check whilst the original ID will be returned: =%<nop>AGENT{check=".msie .netscape" none=""}%= 
-      * Your Browser yields "%AGENT{check=".msie .netscape"}%"
+   * Any non-alphanumeric character will be removed from the listes <nop>IDs for the check whilst the original ID will be returned: =%<nop>AGENT{check=".msie .firefox .safari" none=""}%= 
+      * Your Browser yields "%AGENT{check=".msie .firefox .safari"}%"
 
 ---++ <nop>%TOPIC% Global Settings
 
@@ -42,13 +42,31 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
       * Set NONE = unknown
 
    * Predefined ID sets - *note that most specific rule names must be listed first*:
-      * Set CHECKTYPE = msie netscape
-      * Set CHECKVERSION = msie50 msie52 msie5 msie netscape4 netscape6 netscape7 netscape
+      * Set CHECKTYPE = msie safari firefox netscape
+      * Set CHECKVERSION = msie50 msie52 msie5 msie6 msie7 msie8 msie9 msie safari firefox1 firefox2 firefox30 firefox31 firefox32 firefox33 firefox34 firefox35 firefox36 firefox3 firefox40 firefox netscape4 netscape6 netscape7 netscape
+
    * Then, define expressions the user_agent information should be checked against to return the above identifiers:
       * Set EXPMSIE = MSIE
       * Set EXPMSIE5 = MSIE 5
       * Set EXPMSIE50 = MSIE 5.0
       * Set EXPMSIE52 = MSIE 5.2
+      * Set EXPMSIE6 = MSIE 6
+      * Set EXPMSIE7 = MSIE 7
+      * Set EXPMSIE8 = MSIE 8
+      * Set EXPMSIE9 = MSIE 9
+      * Set EXPSAFARI = Safari
+      * Set EXPFIREFOX = Firefox
+      * Set EXPFIREFOX1 = Firefox/1
+      * Set EXPFIREFOX2 = Firefox/2
+      * Set EXPFIREFOX3 = Firefox/3
+      * Set EXPFIREFOX30 = Firefox/3.0
+      * Set EXPFIREFOX31 = Firefox/3.1
+      * Set EXPFIREFOX32 = Firefox/3.2
+      * Set EXPFIREFOX33 = Firefox/3.3
+      * Set EXPFIREFOX34 = Firefox/3.4
+      * Set EXPFIREFOX35 = Firefox/3.5
+      * Set EXPFIREFOX36 = Firefox/3.6
+      * Set EXPFIREFOX40 = Firefox/4.0
       * Set EXPNETSCAPE = Netscape
       * Set EXPNETSCAPE4 = Netscape/4
       * Set EXPNETSCAPE6 = Netscape/6
@@ -77,7 +95,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-02-01 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-02-01: | TWikibug:Item6638: Doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2011-02-01: | TWikibug:Item6638: Adding Firefox and Safari rules; doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  2002-11-01: | Improved capabilities |
 |  2002-10-31: | Initial version |
 |  CPAN Dependencies: | none |
