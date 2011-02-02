@@ -12,7 +12,8 @@ To enable editing of:
    * *One or more sections,* insert a =&lt;sectionbreak/&gt;= tag on the line above each  heading marker (=---+=) or deeper;
    * *Any portion of a topic,* enclose that portion between =&lt;sectionedit&gt;= and =&lt;/sectionedit&gt;= tags;
    * *The entire topic,* insert the =&lt;editsections/&gt;= tag on the first line of the topic; or
-   * *On all topics, by default,* set the preference flag =EDITSECTIONS= to true (in either user or web preferences). With this approach, the preference variable =SECTIONDEPTHMIN= and =SECTIONDEPTH= (again set in either user or web) controls the level of headings down to which SectionalEditPlugin will apply (with all lower headings/sections being included in that section); the former skips lower-level headings from sectioning. If =SECTIONDEPTH= is undefined or =all=, all levels of headings create sections. If =SECTIONDEPTHMIN= is undefined or =0=, a section is created also for the text preceeding the first encountered section.
+   * *On all topics, by default,* set the preference flag =EDITSECTIONS= to true (in either user or web preferences). With this approach, the preference variable =SECTIONDEPTHMIN= and =SECTIONDEPTH= (again set in either user or web) controls the level of headings down to which SectionalEditPlugin will apply (with all lower headings/sections being included in that section); the former skips lower-level headings from sectioning. If =SECTIONDEPTH= is undefined or =all=, all levels of headings create sections. If =SECTIONDEPTHMIN= is undefined or =0=, a section is created also for the text preceeding the first encountered section. In addition, if =EDITSIGNATURE= is defined, then a signature line (a line starting with =--=) will also introduce a section, with the signature being the last line of the section.
+      * EDITSIGNATURE = 1
       * SECTIONDEPTH = all
       * SECTIONDEPTHMIN = 1
       * %X% I do not recommend turning sectional editing on globally, as this will also section topics that might not be desired to be presented in this form, e.g., email reports about web changes, various searches, etc. A much better approach is to put the =&lt;editsections/&gt;= tag into a custom template and apply it to a topic by setting the =VIEW_TEMPLATE= for topic, web, or site.
@@ -20,6 +21,8 @@ To enable editing of:
 *NOTE:* You *cannot* mix these three methods on a single page.
 
 *NOTE:* This breaks the page up at the lowest level, meaning that you can't put section breaks inside tables, lists, etc. as it breaks the whole page up into a table.
+
+*NOTE:* If you want to put the =&lt;editsections/&gt;= tag into the header section of the document, it should be preceeded with the =!%STARTTEXT%= tag, so that that portion of the header will be processed together with the body text (see documentation for the =view= script). The text before the =&lt;editsections/&gt;= tag will not be segmented into sections.
 
 ---+++ <nop>%TOPIC% Settings
 
@@ -30,18 +33,20 @@ To enable editing of:
       * Set DEBUG = 0
 
    * Edit Label (may also be an =&lt;img&gt;= tag):
-      * Set LABEL = Edit
+      * #Set LABEL = Edit
+      * Set LABEL = <div align="right" class="multiEditLabel">%ICON{edittopic}%</div>
 
    * A comma separated list of skins *NOT* to section (you'll probably want the print skin here):
       * Set SKIPSKIN = print, plain
 
    * Style for marking sections. This is either an inline style definition or a class reference. If left blank, a bar of BGCOLOR is placed next to the sections that can be edited. Style definitions may also be placed with the =&lt;sectionedit&gt;= tag to give individual sections a different style.
-      * Set STYLE = style="border: black thin dotted"
-      * #Set STYLE = class="twikiTopicActions"
+      * #Set STYLE = style="border: black thin dotted"
+      * Set STYLE = class="twikiTopicActions"
       * #Set STYLE = 
 
    * Placement of the Edit Label (below or above, only valid together with the STYLE setting)
-      * Set PLACEMENT = below
+      * #Set PLACEMENT = below
+      * Set PLACEMENT = above
 
    * Justification of Edit Label (left or right)
       * Set JUSTIFICATION = right
@@ -60,8 +65,9 @@ To enable editing of:
 
 |  Plugin Author: | TWiki:Main.DanBoitnott |
 |  Plugin Maintainer: | TWiki:Main.JohnKnottenbelt, TWiki:Main.ThomasWeigert (03 Feb 2005 onwards) |
-|  Plugin Version: | 2 Oct 2006 |
+|  Plugin Version: | 31 Jan 2010 |
 |  Change History: |  |
+|  31 Jan 2010: | Support section titles with hash marks. Support editing of sections terminated by signature lines. Support placing =&lt;editsections &gt;= tag into header section. |
 |   2 Oct 2006: | Use sensible default. Improve doco. |
 |  13 Sep 2006: | Bug fix. |
 |  09 Sep 2006: | Added missing variable declaration. |

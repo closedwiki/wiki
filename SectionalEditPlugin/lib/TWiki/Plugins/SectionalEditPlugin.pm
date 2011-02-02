@@ -25,9 +25,11 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $debug $pluginName
         $bgcolor $label $skipskin $leftjustify $alwayssection
 	$sectiondepth $sectiondepthmin $sectioninit $editstyle $placement
+        $sectionregex
     );
 
 use TWiki::Contrib::EditContrib;
+use TWiki::Form;
 
 $VERSION = '17 Aug 2006';
 
@@ -52,10 +54,10 @@ sub initPlugin
     $leftjustify = &TWiki::Func::getPreferencesValue( "SECTIONALEDITPLUGIN_JUSTIFICATION" ) || "left";
     $leftjustify = ($leftjustify =~ /left/i ? 1 : 0);
 
-    $alwayssection = &TWiki::Func::getPreferencesValue( "EDITSECTIONS" ) || 0;
-    $sectiondepth = &TWiki::Func::getPreferencesValue( "SECTIONDEPTH" ) || "all";
+    $alwayssection = &TWiki::Func::getPreferencesValue( "SECTIONALEDITPLUGIN_EDITSECTIONS" ) || 0;
+    $sectiondepth = &TWiki::Func::getPreferencesValue( "SECTIONALEDITPLUGIN_SECTIONDEPTH" ) || "all";
     $sectiondepth =~ s/all/6/gio;
-    $sectiondepthmin = &TWiki::Func::getPreferencesValue( "SECTIONDEPTHMIN" ) || 0;
+    $sectiondepthmin = &TWiki::Func::getPreferencesValue( "SECTIONALEDITPLUGIN_SECTIONDEPTHMIN" ) || 0;
     $sectiondepthmin = $sectiondepth if ($sectiondepthmin > $sectiondepth);
     $sectioninit = ($sectiondepthmin) ? 0 : 1;
     $sectiondepthmin = 1 unless $sectiondepthmin;
@@ -66,6 +68,13 @@ sub initPlugin
       $placement = ($placement =~ /above/i ? 1 : 0);
     } else {
       $placement = $leftjustify;
+    }
+    
+    my $editsig = &TWiki::Func::getPreferencesValue( "SECTIONALEDITPLUGIN_EDITSIGNATURE" ) || 0;
+    if ($editsig) {
+	$sectionregex = qr/^---([+#]{1,$sectiondepth})[^+]|^--([^-].*$)/m;
+    } else {
+	$sectionregex = qr/^---([+#]{1,$sectiondepth})[^+]|^--([^-].*$)/m;
     }
 
     # Get plugin debug flag
@@ -152,6 +161,8 @@ sub preRenderingHandler
     # This handler is called by getRenderedVersion just before the line loop
     # Only bother with this plugin if viewing (i.e. not searching, etc)
     return unless ($0 =~ m/view|viewauth|render/o);
+    my $context = TWiki::Func::getContext();
+    return unless $context->{authenticated};
 
     my $ctmpl = $TWiki::Plugins::SESSION->{cgiQuery}->param('template') || '';
     my $cskin = &TWiki::Func::getSkin() || '';
@@ -180,20 +191,29 @@ sub preRenderingHandler
 	    &TWiki::Func::writeDebug( "- $activate Found" ) if $debug;
 
 	    if ($editsections) {
-		my $pos = 0;
-		my $lastpos = 0;
 		my $lastmark = "";
 		my $text = $_[0];
 		my $sec = "";
+		my $pos = 0;
+		my $lastpos = 0;
+		my $skippos = 0;
+		if ($text =~ m%<editsections\s*/>%gi) {
+		    $skippos = pos $text;
+		}
 		my $foundit = ($sectioninit) ? 1 : 0;
-	        while ( $text =~ m/^---(\+{1,$sectiondepth})[^+]/mg ) {
+	        while ( $text =~ m/$sectionregex/g ) {
 		    # Minor bug in the above regex: A "---+" with no
 		    # title text before either newline or end of topic
 		    # does not render as heading but is treated as 
 		    # editable section
 		    my $curpos = pos $text;
+		    next if $skippos && $curpos < $skippos;
 		    my $curmark = $&;
 		    $sec = substr($text,$lastpos,$curpos - length($&) - $lastpos);
+		    if ($curmark =~ /^--[^-]/) {
+			$sec .= $curmark;
+			$curmark = '';
+		    }
 		    if ( $foundit ) {
 		      $ret .= editRow($eurl,$pos, ($pos > 0 ? "\n". $lastmark : "") . $sec) unless ($sec =~ /^\s*$/o);
 		    } else {
@@ -205,7 +225,7 @@ sub preRenderingHandler
 			$ret .= "</td></tr>";
 		      }
 		    }
-		    if ( length($1) < $sectiondepthmin ) {
+		    if ( defined $1 && length($1) < $sectiondepthmin ) {
 		      $foundit = 0;
 		    } else {
 		      $foundit = 1;
@@ -285,6 +305,7 @@ sub edit
     my $postxt = "";
     my $pos = 0;
     my $editsections = 0;
+    my $foundsig = 0;
 
     # Get rid of CRs (we only want to deal with LFs)
     $text =~ s/\r//g;
@@ -330,23 +351,35 @@ sub edit
         # cannot check for this, as we might have used %TEXTSTART%
 	my $lastmark = "";
 	my $lastpos = 0;
-        while ( $text =~ m/^---\+{1,$sectiondepth}[^+]/mg ) {
+	my $skippos = 0;
+	if ($text =~ m%<editsections\s*/>%gi) {
+	    $skippos = pos $text;
+	}
+        while ( $text =~ m/$sectionregex/g ) {
+	  my $curpos = pos $text;
+	  next if $skippos && $curpos < $skippos;
+	  my $lastfoundsig = $foundsig;
+	  $foundsig = (substr($&,0,3) eq '---')?0:1;
 	  if ( $pos == $theSec ) {
-	    $postxt = $&.$';
-	    $sectxt = $lastmark.substr($text,$lastpos,(pos $text) - length($&) - $lastpos);
+	    $postxt = ($foundsig)?$':$&.$';
+	    $sectxt = ($lastfoundsig)?'':$lastmark;
+	    $sectxt .= substr($text,$lastpos,$curpos - length($&) - $lastpos);
+	    $sectxt .= $& if $foundsig;
 	    $pos++;
 	    last;
 	  } elsif ( $pos == ($theSec - 1) ) {
 	    $lastmark = $&;
-	    $lastpos = pos $text;
+	    $lastpos = $curpos;
 	    $pretxt = $`;
+            $pretxt .= $lastmark if $foundsig;
 	  }
 	  $pos++;
 	}
 	if ( $pos == $theSec ) {
 	  # The target section was the last section
 	  #$postxt = "";
-	  $sectxt = $lastmark.substr($text,$lastpos);
+          $sectxt = $lastmark unless $foundsig;
+	  $sectxt .= substr($text,$lastpos);
 	}
 	if ( $editsections ) {
 	  # move the <editsections/> command into $pretxt
@@ -365,4 +398,26 @@ sub edit
 
 }
 
+## SMELL: Concatenating pre, text, and post seems to be happening twice: 
+## in save and then again here, which is called from save.
+sub DONTafterEditHandler {
+  # This should really be done in EditContrib, but there handlers are 
+  # not being called
+  
+  my $query = TWiki::Func::getCgiQuery();
+  return unless $query;
+
+  TWiki::Contrib::EditContrib::afterEditHandler(@_);
+}
+
+sub afterSaveHandler {
+    # do not uncomment, use $_[0], $_[1]... instead
+    ### my ( $text, $topic, $web, $error, $meta ) = @_;
+
+    # Unlock the topic
+    TWiki::Func::setTopicEditLock( $_[2], $_[1], 0 );  # unlock Topic
+
+}
+
+  
 1;
