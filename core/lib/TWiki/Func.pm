@@ -2867,7 +2867,7 @@ To maintain compatibility with older TWiki releases, you can write conditional c
     TWiki::Func::writeLog( $web, $topic, 'myevent', $extra );
   } else {
     # deprecated code if plugin is used in older TWiki releases
-    $TWiki::Plugins::SESSION > 1.1
+    $TWiki::Plugins::VERSION > 1.1
       ? $TWiki::Plugins::SESSION->writeLog( 'myevent', "$web.$topic", $extra )
       : TWiki::Store::writeLog( 'myevent', "$web.$topic", $extra );
   }
@@ -2921,7 +2921,7 @@ trailing spaces in =$value= are ignored.
 If the value is undef, then =$default= is returned. If =$default= is
 not specified it is taken as 0.
 
-*Since:* $TWiki::Plugins::VERSION 1.2
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
