@@ -1,3 +1,7 @@
-data/TWiki/FormPivotPlugin.txt NEW
-lib/TWiki/Plugins/FormPivotPlugin.pm NEW
-pub/TWiki/FormPivotPlugin/formpivot-example.zip NEW
+data/TWiki/FormPivotPlugin.txt 0644
+data/Sandbox/FormPivotTest.txt 0644
+data/Sandbox/FormPivotTestForm.txt 0644
+data/Sandbox/FormPivotTestOne.txt 0644
+data/Sandbox/FormPivotTestThree.txt 0644
+data/Sandbox/FormPivotTestTwo.txt 0644
+lib/TWiki/Plugins/FormPivotPlugin.pm 0644

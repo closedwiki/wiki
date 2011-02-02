@@ -1,7 +1,7 @@
-#
-# TWiki WikiClone ($wikiversion has version info)
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2001 John talintyre, jet@cheerful.com for Dresdner Kleinwort Wasserstein
+# Copyright (C) 2007-2011 TWiki Contributors. All Rights Reserved.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,22 +15,6 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 # =========================
-#
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
-#
-# Each plugin is a package that contains the subs:
-#
-#   initPlugin           ( $topic, $web, $user, $installWeb )
-#   commonTagsHandler    ( $text, $topic, $web )
-#   startRenderingHandler( $text, $web )
-#   outsidePREHandler    ( $text )
-#   insidePREHandler     ( $text )
-#   endRenderingHandler  ( $text )
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, DISABLE (or comment) handlers you don't need.
-
 # TODO:
 #   1. Only read information once
 #   2. Don't analyse text fields by default
@@ -43,104 +27,104 @@ package TWiki::Plugins::FormPivotPlugin;
 use strict;
 
 # =========================
-use vars qw( $web $topic $user $installWeb $VERSION $RELEASE
-        $myConfigVar );
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev$';
+use vars qw( $web $topic $user $installWeb $VERSION $RELEASE $debug );
 
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$VERSION = '$Rev$';
+$RELEASE = '2011-02-01';
 
 # =========================
 sub initPlugin
 {
     ( $topic, $web, $user, $installWeb ) = @_;
-    
-    #TWiki::Func::writeDebug( "init FormPivot ..." );
-        
+
+    if( $TWiki::Plugins::VERSION < 1.1 ) {
+        TWiki::Func::writeWarning( "Version mismatch between FormPivotPlugin and Plugins.pm" );
+        return 0;
+    }
+
+    # Get plugin debug flag
+    $debug = TWiki::Func::getPreferencesFlag( "FORMPIVOTPLUGIN_DEBUG" ) || 0;
+
     # Plugin correctly initialized
+    TWiki::Func::writeDebug( "- TWiki::Plugins::FormPivotPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
+
     return 1;
 }
 
 # =========================
-sub DISABLEcommonTagsHandler
+sub outsidePREHandler
 {
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-#    print "DefaultPlugin::commonTagsHandler called<br>";
+    # This handler is called by getRenderedVersion, in loop outside of <PRE> tag
+    # This is the place to define customized rendering rules
 
-    # This is the place to define customized tags and variables
-    # Called by sub handleCommonTags, after %INCLUDE:"..."%
-
+    $_[0] =~ s/%FORMPIVOT{([^}]+)}%/&pivot( $1 )/geo;
 }
 
 # =========================
-sub DISABLEstartRenderingHandler
-{
-### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
-
-#    print "DefaultPlugin::startRenderingHandler called<br>";
-
-    # This handler is called by getRenderedVersion just before the line loop
-
-}
-
 sub pivot
 {
    my( $args ) = @_;
-   
-   my $form = TWiki::Func::extractNameValuePair( $args, "form" );
-   my $fieldsp = TWiki::Func::extractNameValuePair( $args, "fields" );
-   my $type    = TWiki::Func::extractNameValuePair( $args, "type" );
-   
-   my @fields = split( /,/, $fieldsp );
-   
-   if( ! @fields ) {
-       my ( $formMeta, $formDef ) = TWiki::Func::readTopic( $web, $form );
-       my @fieldDefs = TWiki::Form::getFormDefinition( $formDef );
-       foreach my $fieldDefP ( @fieldDefs ) {
-           my $name = $fieldDefP->[1];
-           if( $fieldDefP->[2] !~ /^text/ ) {
-               push @fields, $name;
-           }
-       }
 
+   my $form    = TWiki::Func::extractNameValuePair( $args, "form" )   || '';
+   my $fieldsp = TWiki::Func::extractNameValuePair( $args, "fields" ) || '';
+   my $type    = TWiki::Func::extractNameValuePair( $args, "type" )   || '';
+
+   TWiki::Func::writeDebug( "- TWiki::Plugins::FormPivotPlugin FORMPIVOT{ "
+     . "form=\"$form\" fields=\"$fieldsp\" type=\"$type\" }" ) if $debug;
+
+   my @fields = split( /, */, $fieldsp );
+   if( ! @fields ) {
+       @fields = getFormDefinition( $web, $form );
    }
-   
+   TWiki::Func::writeDebug( "- TWiki::Plugins::FormPivotPlugin fields: "
+     . join( ', ', @fields ) ) if $debug;
+
    # Find all topics with this form.
-   
-   my $searchVal = "%META:FORM\{.*name=\\\"$form\\\".*\}%";
-       
-   my $search = &TWiki::Search::searchWeb( "1", $web, $searchVal, "",
-          "", "on", "", "",
-          "", "on", "on",
-          "on", "on", "", "",
-          "", "on", "", "", '$topic$n'
-   );    
-   
+   my $searchRegex = "%META:FORM\{.*name=\\\"$form\\\".*\}%";
+
+   my @topicList = TWiki::Func::getTopicList( $web );
+   my $grep = TWiki::Func::searchInWebContent( $searchRegex, $web, \@topicList,
+        {
+            type                => 'regex',
+            casesensitive       => 1,
+            files_without_match => 1
+        }
+   );
+
+   if( ref( $grep ) eq 'HASH' ) {
+      @topicList = keys %$grep;
+   } else {
+      @topicList = ();
+      while( $grep->hasNext() ) {
+         my $webtopic = $grep->next();
+         my ($foundWeb, $topic) = TWiki::Func::normalizeWebTopicName($web, $webtopic);
+         push( @topicList, $topic );
+      }
+   }
+   TWiki::Func::writeDebug( "- TWiki::Plugins::FormPivotPlugin topic list: "
+     . join( ', ', @topicList ) ) if $debug;
+
    my $pivot = "";
    my @found = ();
    my @foundTopic = ();
-   
-   for( my $i; $i<=$#fields; $i++ ) {
+
+   for( my $i=0; $i<=$#fields; $i++ ) {
        my %hash = ();
        my %hashTopic = ();
        $found[$i] = \%hash;
        $foundTopic[$i] = \%hashTopic;
    }
 
-   
-   foreach my $formTopic ( split( /\s/, $search ) ) {
+   foreach my $formTopic ( @topicList ) {
        my( $meta, $text ) = TWiki::Func::readTopic( $web, $formTopic );
-       for( my $i; $i<=$#fields; $i++ ) {
+       for( my $i=0; $i<=$#fields; $i++ ) {
            my $name = $fields[$i];
            $name =~ s/\s*//go;
-           my %field0 = $meta->findOne( "FIELD", $name );
-           my @values = split( /,/, $field0{"value"} );
+           my $field0 = $meta->get( "FIELD", $name );
+
+           my @values = split( /,/, $field0->{value} );
            foreach my $value ( @values ) {
                $value =~ s/^\s*//go; # Trim left
                $value =~ s/\s*$//go; # Trim right
@@ -157,9 +141,9 @@ sub pivot
            }
        }
    }
-   
+
    if( $type ne "grid" ) {
-       for( my $i; $i<=$#fields; $i++ ) {
+       for( my $i=0; $i<=$#fields; $i++ ) {
            my $field = $fields[$i];
            $pivot .= "---++ $field\n";
 
@@ -171,7 +155,8 @@ sub pivot
                $field =~ s/\s*//go;
                # Problems passing = and " to URL
                my $searchVal = "%META:FIELD\{.*name..$field..*value..$key.*\}%";
-               $title = "<a href=\"" . &TWiki::Func::getScriptUrl( $web, "", "search" ) . "?regex=on&search=$searchVal&nosearch=on\">$title</a>";
+               $title = "<a href=\"" . &TWiki::Func::getScriptUrl( $web, "", "search" )
+                      . "?regex=on&search=$searchVal&nosearch=on\">$title</a>";
                $table .= "| $title | " . $found[$i]->{$key} . " |\n";
            }
            $pivot .= "$table";
@@ -200,7 +185,8 @@ sub pivot
               my $searchVal = "%META:FIELD\{.*name%3D.$fieldRow..*value..$valueRow.*\}%%3B" .
                               "%META:FIELD\{.*name%3D.$fieldCol..*value..$valueCol.*\}%";
               #my $searchVal = "FIELD,$fieldRow,value,$valueRow,FIELD,$fieldCol,value,$valueCol";
-              my $link = "<a href=\"" . &TWiki::Func::getScriptUrl( $web, "", "search" ) . "?regex=on&search=$searchVal&nosearch=on\">$count</a>";
+              my $link = "<a href=\"" . &TWiki::Func::getScriptUrl( $web, "", "search" )
+                       . "?regex=on&search=$searchVal&nosearch=on\">$count</a>";
               $pivot .= " $link |";
            }
            $pivot .= "\n";
@@ -213,43 +199,43 @@ sub pivot
 }
 
 # =========================
-sub outsidePREHandler
+sub getFormDefinition
 {
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
+    my ( $web, $topic ) = @_;
 
-    # This handler is called by getRenderedVersion, in loop outside of <PRE> tag
-    # This is the place to define customized rendering rules
-        
-    $_[0] =~ s/%FORMPIVOT{([^}]+)}%/&pivot( $1 )/geo;
+    my @fields = ();
+    ( $web, $topic ) = TWiki::Func::normalizeWebTopicName( $web, $topic );
+    my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
 
+    # code borrowed from TWiki::Form::_parseFormDefinition
+    my $inBlock = 0;
+    $text =~ s/\r//g;
+    $text =~ s/\\\n//g; # remove trailing '\' and join continuation lines
+
+    # | *Name:* | *Type:* | *Size:* | *Value:* |
+    foreach my $line ( split( /\n/, $text ) ) {
+        if( $line =~ /^\s*\|.*Name[^|]*\|.*Type[^|]*\|.*Size[^|]*\|/ ) {
+            $inBlock = 1;
+            next;
+        }
+        if( $inBlock && $line =~ s/^\s*\|\s*// ) {
+            $line =~ s/\\\|/\007/g; # protect \| from split
+            my( $name, $type, $size, $vals, $tooltip, $attributes ) =
+              map { s/\007/|/g; $_ } split( /\s*\|\s*/, $line );
+            $name ||= '';
+            if( $name =~ /\[\[(.+)\]\[(.+)\]\]/ )  {
+                $name = $2;
+            }
+            $name =~ s/<nop>//g; # support <nop> character in title
+            $name =~ s/[^A-Za-z0-9_\.]//g;
+            push( @fields, $name ) if( $name );
+
+        } else {
+            $inBlock = 0;
+        }
+    }
+    return @fields;
 }
 
 # =========================
-sub DISABLEinsidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-#    print "DefaultPlugin::insidePREHandler called<br>";
-
-    # This handler is called by getRenderedVersion, in loop inside of <PRE> tag
-    # This is the place to define customized rendering rules
-    
-
-}
-
-# =========================
-sub DISABLEendRenderingHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-#    print "DefaultPlugin::endRenderingHandler called<br>";
-
-    # This handler is called by getRenderedVersion just after the line loop
-
-}
-
-# =========================
-
 1;
-
-
