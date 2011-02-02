@@ -1,8 +1,9 @@
-#
-# TWiki WikiClone ($wikiversion has version info)
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2002 TWiki:Main.AndyThaller
+# Copyright (C) 2008-2011 TWiki Contributors. All Rights Reserved.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,33 +15,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
-#
-# =========================
-#
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
-#
-# Each plugin is a package that contains the subs:
-#
-#   initPlugin           ( $topic, $web, $user, $installWeb )
-#   commonTagsHandler    ( $text, $topic, $web )
-#   startRenderingHandler( $text, $web )
-#   outsidePREHandler    ( $text )
-#   insidePREHandler     ( $text )
-#   endRenderingHandler  ( $text )
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, all handlers except initPlugin are
-# disabled. To enable a handler remove the leading DISABLE_ from
-# the function name.
-# 
-# NOTE: To interact with TWiki use the official TWiki functions
-# in the &TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
-
 
 # =========================
-package TWiki::Plugins::AgentPlugin; 	# change the package name!!!
+package TWiki::Plugins::AgentPlugin;
 
 # =========================
 use vars qw(
@@ -49,9 +26,8 @@ use vars qw(
     );
 
 
-$VERSION    = '$Rev$';
-$RELEASE = 'Dakar';
-#$VERSION   = '1.000'; #at# initial release
+$VERSION = '$Rev$';
+$RELEASE = '2011-02-01';
 
 # =========================
 sub initPlugin
