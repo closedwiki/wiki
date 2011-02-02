@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1296545317" format="1.1" version="$Rev$"}%
----+ <nop>%TOPIC%
+%META:TOPICINFO{author="TWikiContributor" date="1296630286" format="1.1" version="$Rev$"}%
+---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
    http://twiki.org/cgi-bin/view/Plugins/PageStatsPlugin or provide feedback at
@@ -75,6 +75,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
