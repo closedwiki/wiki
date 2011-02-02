@@ -1,8 +1,10 @@
-#
-# TWiki WikiClone ($wikiversion has version info)
+# TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2003 Leaf Garland.  All Rights Reserved.
 # Copyright (C) 2003 Will Norris.  All Rights Reserved.  (wbniv@saneasylumstudios.com)
+# Copyright (C) 2007-2011 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,16 +29,8 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $debug
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
+$RELEASE = '2011-02-01';
 
 # =========================
 sub initPlugin
@@ -93,10 +87,10 @@ sub handleDoxygen
 
     my $thisProject = scalar &TWiki::Func::extractNameValuePair( $attributes, "project" ) || $project;
 
-    # allow a trailing slash so that the location is a valid url in the plugin's settings (sometimes you have to include the trailing / on url's)
+    # allow a trailing slash so that the location is a valid url in the plugin's settings
+    # (sometimes you have to include the trailing / on url's)
     ( $doxygen_docs_base = &TWiki::Func::getPreferencesValue( uc "DOXYGENPLUGIN_DOCS_BASE_$thisProject" ) . '/' ) =~ s|//$|/|;
     ( $doxygen_url_base = &TWiki::Func::getPreferencesValue( uc "DOXYGENPLUGIN_URL_BASE_$thisProject" ) . '/' ) =~ s|//$|/|;
-
 
     &TWiki::Func::writeDebug( "project=[$thisProject]\ndocs_base=[$doxygen_docs_base] url_base=[$doxygen_url_base]\nname=[$name] classname=[$classname] alt=[$alt]\nattributes=[$attributes]" ) if $debug;
 

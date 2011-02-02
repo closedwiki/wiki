@@ -1,3 +1,3 @@
-data/TWiki/DoxygenPlugin.txt NEW
-data/TWiki/DoxygenPluginTests.txt NEW
-lib/TWiki/Plugins/DoxygenPlugin.pm NEW
+data/TWiki/DoxygenPlugin.txt 0644
+data/TWiki/DoxygenPluginTests.txt 0644
+lib/TWiki/Plugins/DoxygenPlugin.pm 0644

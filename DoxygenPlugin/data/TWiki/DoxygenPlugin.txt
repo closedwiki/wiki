@@ -1,6 +1,18 @@
-%META:TOPICINFO{author="WillNorris" date="1059780720" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="TWikiContributor" date="1296374274" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="SearchResult"}%
----+ <nop>%TOPIC%
+---+!! <nop>%TOPIC%
+<!--
+   Contributions to this TWiki plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/DoxygenPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/DoxygenPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
 
 This plugin allows you to create links to classes within doxygen-generated documentation.
 
@@ -28,49 +40,49 @@ To have the link display text other than the class name or file path, put the al
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>DOXYGENPLUGIN_SHORTDESCRIPTION%==
 
-   * Set SHORTDESCRIPTION = Creates links to doxygen-generated docs using =%<nop>DOX{classname}%=.
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Create links to doxygen-generated docs using =%<nop>DOX{classname}%=
+
+   * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
 
    * The Nebula Device project codebase
       * Set DOCS_BASE_NEB = /home/groups/n/ne/nebuladevice/nebula/doc/doxydoc/nebulacore/html/class
       * Set URL_BASE_NEB = http://nebuladevice.sourceforge.net/doc/doxydoc/nebulacore/html/
 
-   * default project if repository isn't specified in the plugin parameters (case doesn't matter here because it all gets uppercased anyway)
+   * Default project if repository isn't specified in the plugin parameters (case doesn't matter here because it all gets uppercased anyway)
       * Set PROJECT = neb
-
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-   * Download the ZIP file from the Plugin web (see below)
+   * Download the ZIP file from the Plugins web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
     | *File:* | *Description:* |
     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-    | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
     | ==data/TWiki/%TOPIC%Tests.txt== | Plugin topic tests |
-    | ==data/TWiki/%TOPIC%Tests.txt,v== | Plugin topic tests repository |
     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
    * Test if the installation was successful:
       * %<nop>DOX{ nKernelServer project="neb" }% : %DOX{ nKernelServer project="neb" }%
    * Other examples
       * see DoxygenPluginTests, Nebula:WritingTopics, Nebula:AddANewModule, and Nebula:LinkNode
 
-
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/WillNorris, TWiki:Main/LeafGarland |
-|  Plugin Version: | 11 Jan 2007 (V1.1) |
+|  Plugin Author: | TWiki:Main.WillNorris, TWiki:Main.LeafGarland |
+|  Copyright: | &copy; 2003 TWiki:Main.WillNorris <br /> 2003 TWiki:Main.LeafGarland <br /> &copy; 2007-2011 TWiki:Main.TWikiContributors |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-02-01 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  11 Jan 2007: | Added support for namespaces and nested classes (TWiki:Main/RickMach) |
-|  01 Aug 2003: | Initial version |
+|  2011-02-01: | TWikibug:Item6638: Doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2007-01-11: | Added support for namespaces and nested classes -- TWiki:Main.RickMach |
+|  2003-08-01: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | [[http://www.stack.nl/~dimitri/doxygen/][doxygen]] |
 |  Perl Version: | 5.005+ |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main/WillNorris - 01 Aug 2003
+__Related Topics:__ DoxygenPluginTests, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
