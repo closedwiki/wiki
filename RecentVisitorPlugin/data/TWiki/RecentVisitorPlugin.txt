@@ -1,1 +1,187 @@
-TBD
+%META:TOPICINFO{author="TWikiContributor" date="1296720533" format="1.1" version="$Rev$"}%
+---+!! !RecentVisitorPlugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/RecentVisitorPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/RecentVisitorPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
+
+This plugin shows statistics of recent visitors to a TWiki site. The time of last visit and the IP address used can be shown of individual users. The recent report shows latest visitors in chronological order.
+
+---++ Syntax Rules
+
+---+++ Recent visit of an individual
+
+=%<nop>RECENTVISITOR{ action="user" ... }%=
+
+| *Parameter* | *Description* | *Default* |
+| ="user"= or%BR% =action="user"= | Show statistics of individual user. | (none) |
+| =name="..."= | %SYSTEMWEB%.WikiName of person | (current user) |
+| =format="..."= | Format of report. Supported tokens:%BB% =$date= - date of last visit%BB% =$time= - time of last visit (GMT)%BB% =$ago= - how long ago%BB% =$ip= - IP address (only shown to non-administrators if enabled in configure)%BB% =$n=, =$nop=, =$quot=, =$percnt=, =$dollar= - standard %SYSTEMWEB%.FormatTokens | ="Last seen $ago ago"= |
+| =notfound="..."= | Message shown if user is not found. | ="Never seen"= |
+
+---+++ Report of recent visitors
+
+=%<nop>RECENTVISITOR{ action="recent" ... }%=
+
+| *Parameter* | *Description* | *Default* |
+| ="recent"= or%BR% =action="recent"= | Show statistics of most recent visitors. | (none) |
+| =format="..."= | Format of each line of the report. Supported tokens:%BB% =$username= - login name of user%BB% =$wikiname= - %SYSTEMWEB%.WikiName of user%BB% =$wikusername= - !WikiName prefixed with %USERS% web name%BB% =$date= - date of last visit%BB% =$time= - time of last visit (GMT)%BB% =$ago= - how long ago%BB% =$ip= - IP address (only shown to non-administrators if enabled in configure)%BB% =$n=, =$nop=, =$quot=, =$percnt=, =$dollar= - standard %SYSTEMWEB%.FormatTokens | ="   * $wikiusername%BR%      last seen $ago ago"= |
+| =separator="..."= | Separator between lines. Standard %SYSTEMWEB%.FormatTokens are expanded. | ="$n"= (newline) |
+| =limit="..."= | Limit the number of lines. | ="20"= |
+
+---++ Examples
+
+---+++!! Example: Show most recent visit of %USERSWEB%.TWikiAdminUser
+
+<table border="0" cellpadding="10" cellspacing="0" width="100%">
+<tr bgcolor="#dddddd">
+<th> *You type* </th>
+<th> *You get (if installed)* </th>
+<th> *Simulated example* </th>
+</tr><tr bgcolor="#f4f4f8">
+<td valign="top">
+<verbatim>
+%RECENTVISITOR{
+ action="user"
+ name="TWikiAdminUser"
+ format="Last seen $ago ago ($date 
+$time)"
+}%
+</verbatim>
+</td><td valign="top">
+%RECENTVISITOR{
+ action="user"
+ name="TWikiAdminUser"
+ format="Last seen $ago ago ($date $time)"
+}%
+</td><td valign="top">
+ Last seen 3 weeks ago (2011-02-03 06:22)
+</td></tr></table>
+
+---+++!! Example: Show recent visitors, default bullet list report
+
+<table border="0" cellpadding="10" cellspacing="0" width="100%">
+<tr bgcolor="#dddddd">
+<th> *You type* </th>
+<th> *You get (if installed)* </th>
+<th> *Simulated example* </th>
+</tr><tr bgcolor="#f4f4f8">
+<td valign="top">
+<verbatim>
+%RECENTVISITOR{
+ action="recent"
+ limit="5"
+}%
+</verbatim>
+</td><td valign="top">
+%RECENTVISITOR{
+ action="recent"
+ limit="5"
+}%
+</td><td valign="top">
+</td></tr></table>
+
+---+++!! Example: Show recent visitors, table report
+
+<table border="0" cellpadding="10" cellspacing="0" width="100%">
+<tr bgcolor="#dddddd">
+<th> *You type* </th>
+<th> *You get (if installed)* </th>
+<th> *Simulated example* </th>
+</tr><tr bgcolor="#f4f4f8">
+<td valign="top">
+<verbatim>
+%RECENTVISITOR{
+ action="recent"
+ format="| $wikiusername | $date |"
+ limit="5"
+}%
+</verbatim>
+</td><td valign="top">
+%RECENTVISITOR{
+ action="recent"
+ format="| $wikiusername | $date |"
+ limit="5"
+}%
+</td><td valign="top">
+</td></tr></table>
+
+---+++!! Example: Show recent visitors with geolocation
+
+This example uses the TWiki:Plugins.GeoLookupPlugin to resolve IP addresses to geolocations.
+
+<table border="0" cellpadding="10" cellspacing="0" width="100%">
+<tr bgcolor="#dddddd">
+<th> *You type* </th>
+<th> *You get (if installed)* </th>
+<th> *Simulated example* </th>
+</tr><tr bgcolor="#f4f4f8">
+<td valign="top">
+<verbatim>
+| *Name* | *Last seen* | *Where* |
+%RECENTVISITOR{
+ action="recent"
+ limit="5"
+ format="| $wikiusername | $ago ago
+ | $percntGEOLOOKUP{$ip}$percnt |"
+}%
+</verbatim>
+</td><td valign="top">
+| *Name* | *Last seen* | *Where* |
+%RECENTVISITOR{
+ action="recent"
+ limit="5"
+ format="| $wikiusername | $ago ago | $percntGEOLOOKUP{$ip}$percnt |"
+}%
+</td><td valign="top">
+</td></tr></table>
+
+---++ Plugin Installation &amp; Configuration
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+      * Install the dependencies (if any).
+
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Configure additional plugin settings in the __Extensions__ section if needed.
+      * Test if the installation was successful: See example above.
+
+---++ Plugin Info
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Show statistics of recent visitors to the TWiki site
+
+|  Plugin Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny <br /> &copy; 2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-02-03 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-02-03: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/RecentVisitorPlugin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/RecentVisitorPluginDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/RecentVisitorPluginAppraisal |
+
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
