@@ -26,11 +26,11 @@ require TWiki::Plugins; # For the API version
 
 use vars qw(
       $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC
-      $pluginName $debug $showIP $baseTopic $baseWeb $loginUser $loginIsAdmin
+      $pluginName $debug $showIP $onlyAdmins $baseTopic $baseWeb $loginUser $loginIsAdmin
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-02-05';
+$RELEASE = '2011-02-03';
 
 # One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 $SHORTDESCRIPTION = 'Show recent visitors to a TWiki site';
@@ -50,8 +50,9 @@ sub initPlugin {
     }
 
     # configuration to the =configure= interface.
-    $debug = $TWiki::cfg{Plugins}{RecentVisitorPlugin}{Debug} || 0;
-    $showIP = $TWiki::cfg{Plugins}{RecentVisitorPlugin}{ShowIP} || 0;
+    $debug      = $TWiki::cfg{Plugins}{RecentVisitorPlugin}{Debug} || 0;
+    $showIP     = $TWiki::cfg{Plugins}{RecentVisitorPlugin}{ShowIP} || 0;
+    $onlyAdmins = $TWiki::cfg{Plugins}{RecentVisitorPlugin}{OnlyAdmins} || 0;
     $loginIsAdmin = 0;
 
     TWiki::Func::registerTagHandler( 'RECENTVISITOR', \&_RECENTVISITOR );
@@ -71,6 +72,11 @@ sub _RECENTVISITOR {
     my $now = time();
     $loginIsAdmin = TWiki::Func::isAnAdmin( $loginUser )
        if( defined &TWiki::Func::isAnAdmin );
+
+    if( $onlyAdmins && ! $loginIsAdmin ) {
+        return 'Sorry, only members of the [[%USERSWEB%.TWikiAdminGroup]' .
+               '[TWikiAdminGroup]] can view visitor statistics.'
+    }
 
     if( $action =~ /user/i ) {
         my $wikiName = $params->{name} || $loginUser;

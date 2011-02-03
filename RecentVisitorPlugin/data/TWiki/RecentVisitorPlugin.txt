@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1296720533" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1296756975" format="1.1" version="$Rev$"}%
 ---+!! !RecentVisitorPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -8,6 +8,10 @@
 -->
 <sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
+</div>
+<div style="float:right; background-color:#F0F0F0; margin:0 0 20px 20px; padding: 10px 10px 10px 10px; text-align:center">
+This plugin is%BR% sponsored by:%BR%
+[[http://twiki.net/][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" alt="Twiki, Inc." title="Twiki, Inc." />]]
 </div></sticky>
 %SHORTDESCRIPTION%
 
@@ -169,7 +173,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Show statistics of recent visitors to the TWiki site
 
-|  Plugin Author: | TWiki:Main.PeterThoeny |
+|  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] |
 |  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny <br /> &copy; 2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-02-03 |
@@ -185,3 +189,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/RecentVisitorPluginAppraisal |
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+
+%META:FILEATTACHMENT{name="twiki-logo-80x40-t.gif" attachment="twiki-logo-80x40-t.gif" attr="h" comment="" date="1296756257" path="twiki-logo-80x40-t.gif" size="1999" user="TWikiContributor" version="1"}%
