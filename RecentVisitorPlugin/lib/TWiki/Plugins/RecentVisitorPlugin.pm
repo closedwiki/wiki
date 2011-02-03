@@ -73,7 +73,7 @@ sub _RECENTVISITOR {
        if( defined &TWiki::Func::isAnAdmin );
 
     if( $action =~ /user/i ) {
-        my $wikiName = $params->{wikiname} || $loginUser;
+        my $wikiName = $params->{name} || $loginUser;
         $text = $params->{format} || 'Last seen $ago ago';
         $text = _expandStandardEscapes( $text );
         my ( $time, $addr ) = _readVisitor( $wikiName );
