@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1296756975" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1296792225" format="1.1" reprev="1.5" version="1.5"}%
 ---+!! !RecentVisitorPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -165,7 +165,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
    * Plugin __configuration and testing__:
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
-      * Configure additional plugin settings in the __Extensions__ section if needed.
+      * Configure additional plugin settings in the __Extensions__ section if needed:
+        %BR% =$TWiki::cfg{Plugins}{RecentVisitorPlugin}{Debug} = 0;      # debug flag, 0 or 1=
+        %BR% =$TWiki::cfg{Plugins}{RecentVisitorPlugin}{ShowIP} = 0;     # show IP address, 0 or 1=
+        %BR% =$TWiki::cfg{Plugins}{RecentVisitorPlugin}{OnlyAdmins} = 0; # show reports to administrators only, 0 or 1=
       * Test if the installation was successful: See example above.
 
 ---++ Plugin Info
