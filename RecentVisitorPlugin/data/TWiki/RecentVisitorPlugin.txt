@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1296793720" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1296796373" format="1.1" version="$Rev$"}%
 ---+!! !RecentVisitorPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -37,7 +37,7 @@ This plugin shows statistics of recent visitors to a TWiki site. The time of las
 
 | *Parameter* | *Description* | *Default* |
 | ="recent"= or%BR% =action="recent"= | Show statistics of most recent visitors. | (none) |
-| =format="..."= | Format of each line of the report. Supported tokens:%BB% =$username= - login name of user%BB% =$wikiname= - %SYSTEMWEB%.WikiName of user%BB% =$wikusername= - !WikiName prefixed with %USERS% web name%BB% =$date= - date of last visit%BB% =$time= - time of last visit (GMT)%BB% =$ago= - how long ago%BB% =$ip= - IP address (only shown to non-administrators if enabled in configure)%BB% =$n=, =$nop=, =$quot=, =$percnt=, =$dollar= - standard %SYSTEMWEB%.FormatTokens | ="   * $wikiusername%BR%      last seen $ago ago"= |
+| =format="..."= | Format of each line of the report. Supported tokens:%BB% =$username= - login name of user%BB% =$wikiname= - %SYSTEMWEB%.WikiName of user%BB% =$wikusername= - !WikiName prefixed with %USERSWEB% web name%BB% =$date= - date of last visit%BB% =$time= - time of last visit (GMT)%BB% =$ago= - how long ago%BB% =$ip= - IP address (only shown to non-administrators if enabled in configure)%BB% =$n=, =$nop=, =$quot=, =$percnt=, =$dollar= - standard %SYSTEMWEB%.FormatTokens | ="   * $wikiusername%BR%      last seen $ago ago"= |
 | =separator="..."= | Separator between lines. Standard %SYSTEMWEB%.FormatTokens are expanded. | ="$n"= (newline) |
 | =limit="..."= | Limit the number of lines. | ="20"= |
 
@@ -45,7 +45,7 @@ This plugin shows statistics of recent visitors to a TWiki site. The time of las
 
 ---+++!! Example: Show most recent visit of %USERSWEB%.TWikiAdminUser
 
-<table border="0" cellpadding="10" cellspacing="0" width="100%">
+<table border="0" cellpadding="10" cellspacing="0">
 <tr bgcolor="#dddddd">
 <th> *You type* </th>
 <th> *You get (if installed)* </th>
@@ -72,7 +72,7 @@ $time)"
 
 ---+++!! Example: Show recent visitors, default bullet list report
 
-<table border="0" cellpadding="10" cellspacing="0" width="100%">
+<table border="0" cellpadding="10" cellspacing="0">
 <tr bgcolor="#dddddd">
 <th> *You type* </th>
 <th> *You get (if installed)* </th>
@@ -91,11 +91,16 @@ $time)"
  limit="5"
 }%
 </td><td valign="top">
+   * [[%TOPIC%][NielsBohr]] last seen moments ago
+   * [[%TOPIC%][KlausFuchs]] last seen 3 hours ago
+   * [[%TOPIC%][AlbertEinstein]] last seen 1 day ago
+   * [[%TOPIC%][EnricoFermi]] last seen 15 days ago
+   * [[%TOPIC%][DavidBohm]] last seen 2 month ago
 </td></tr></table>
 
 ---+++!! Example: Show recent visitors, table report
 
-<table border="0" cellpadding="10" cellspacing="0" width="100%">
+<table border="0" cellpadding="10" cellspacing="0">
 <tr bgcolor="#dddddd">
 <th> *You type* </th>
 <th> *You get (if installed)* </th>
@@ -116,13 +121,18 @@ $time)"
  limit="5"
 }%
 </td><td valign="top">
+| [[%TOPIC%][NielsBohr]] | 2011-02-03 |
+| [[%TOPIC%][KlausFuchs]] | 2011-02-03 |
+| [[%TOPIC%][AlbertEinstein]] | 2011-02-02 |
+| [[%TOPIC%][EnricoFermi]] | 2011-01-19 |
+| [[%TOPIC%][DavidBohm]] | 2010-11-27 |
 </td></tr></table>
 
 ---+++!! Example: Show recent visitors with geolocation
 
-This example uses the TWiki:Plugins.GeoLookupPlugin to resolve IP addresses to geolocations.
+This example uses the TWiki:Plugins.GeoLookupPlugin to resolve IP addresses to [[Wikipedia:Geolocation][geolocations]].
 
-<table border="0" cellpadding="10" cellspacing="0" width="100%">
+<table border="0" cellpadding="10" cellspacing="0">
 <tr bgcolor="#dddddd">
 <th> *You type* </th>
 <th> *You get (if installed)* </th>
@@ -139,13 +149,19 @@ This example uses the TWiki:Plugins.GeoLookupPlugin to resolve IP addresses to g
 }%
 </verbatim>
 </td><td valign="top">
-| *Name* | *Last seen* | *Where* |
+| *Name* | *<span style="white-space:nowrap">Last seen</span>* | *Where* |
 %RECENTVISITOR{
  action="recent"
  limit="5"
  format="| $wikiusername | $ago ago | $percntGEOLOOKUP{$ip}$percnt |"
 }%
 </td><td valign="top">
+| *Name* | *<span style="white-space:nowrap">Last seen</span>* | *Where* |
+| [[%TOPIC%][NielsBohr]] | moments ago | Oak Ridge, TN, USA |
+| [[%TOPIC%][KlausFuchs]] | 3 hours ago | Cupertino, CA, USA |
+| [[%TOPIC%][AlbertEinstein]] | 1 day ago | Oak Ridge, TN, USA |
+| [[%TOPIC%][EnricoFermi]] | 15 days ago | Los Alamos, TN, USA |
+| [[%TOPIC%][DavidBohm]] | 2 month ago | Los Alamos, NM, USA |
 </td></tr></table>
 
 ---++ Plugin Installation &amp; Configuration
