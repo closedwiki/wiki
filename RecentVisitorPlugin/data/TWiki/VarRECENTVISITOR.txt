@@ -1,1 +1,19 @@
-TBD
+%META:TOPICINFO{author="TWikiContributor" date="1296798336" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarRECENTVISITOR
+---+++ RECENTVISITOR -- show statistics of recent visitors to the TWiki site
+   * The =%<nop>RECENTVISITOR{}%= variable is handled by the RecentVisitorPlugin
+   * Recent visit of an individual:
+      * Syntax: =%<nop>RECENTVISITOR{"user" name="..." format="..."}%=
+      * Parameter =name="..."= - %SYSTEMWEB%.WikiName of person. Default is current user.
+      * Parameter =format="..."= - format of report. Supported tokens:%BB% =$date= - date of last visit%BB% =$time= - time of last visit (GMT)%BB% =$ago= - how long ago%BB% =$ip= - IP address (only shown to non-administrators if enabled in configure)%BB% =$n=, =$nop=, =$quot=, =$percnt=, =$dollar= - standard %SYSTEMWEB%.FormatTokens.
+      * Parameter =notfound="..."= - message shown if user is not found.
+   * Report of recent visitors:
+      * Syntax: =%<nop>RECENTVISITOR{"recent" format="..."}%=
+      * Parameter =format="..."= - format of each line of the report. Supported tokens:%BB% =$username= - login name of user%BB% =$wikiname= - %SYSTEMWEB%.WikiName of user%BB% =$wikusername= - !WikiName prefixed with %USERSWEB% web name%BB% plus above tokens.
+      * Parameter =separator="..."= - separator between lines. Standard %SYSTEMWEB%.FormatTokens are expanded. Default is newline.
+      * Parameter =limit="..."= - limit the number of lines. Default is 10.
+   * Examples:
+      * =%<nop>RECENTVISITOR{"user" name="TWikiAdminUser"}%= show most recent visit of !TWikiAdminUser.
+      * =%<nop>RECENTVISITOR{"recent" format="| $wikiusername | $ago ago |}%= shows 10 most recent visitors.
+   * Related: RecentVisitorPlugin

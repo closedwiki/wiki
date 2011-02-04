@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1296796373" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1296798336" format="1.1" version="$Rev$"}%
 ---+!! !RecentVisitorPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -39,7 +39,9 @@ This plugin shows statistics of recent visitors to a TWiki site. The time of las
 | ="recent"= or%BR% =action="recent"= | Show statistics of most recent visitors. | (none) |
 | =format="..."= | Format of each line of the report. Supported tokens:%BB% =$username= - login name of user%BB% =$wikiname= - %SYSTEMWEB%.WikiName of user%BB% =$wikusername= - !WikiName prefixed with %USERSWEB% web name%BB% =$date= - date of last visit%BB% =$time= - time of last visit (GMT)%BB% =$ago= - how long ago%BB% =$ip= - IP address (only shown to non-administrators if enabled in configure)%BB% =$n=, =$nop=, =$quot=, =$percnt=, =$dollar= - standard %SYSTEMWEB%.FormatTokens | ="   * $wikiusername%BR%      last seen $ago ago"= |
 | =separator="..."= | Separator between lines. Standard %SYSTEMWEB%.FormatTokens are expanded. | ="$n"= (newline) |
-| =limit="..."= | Limit the number of lines. | ="20"= |
+| =limit="..."= | Limit the number of lines. | ="10"= |
+
+See also VarRECENTVISITOR documentation for %SYSTEMWEB%.TWikiVariables.
 
 ---++ Examples
 
@@ -207,6 +209,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/RecentVisitorPluginDev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/RecentVisitorPluginAppraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ VarRECENTVISITOR, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
 %META:FILEATTACHMENT{name="twiki-logo-80x40-t.gif" attachment="twiki-logo-80x40-t.gif" attr="h" comment="" date="1296756257" path="twiki-logo-80x40-t.gif" size="1999" user="TWikiContributor" version="1"}%

@@ -99,7 +99,7 @@ sub _RECENTVISITOR {
         my $sep    = $params->{separator} || "\n";
         $sep = _expandStandardEscapes( $sep );
         my $limit  = int( $params->{limit} || 0 );
-        $limit = 20 if( $limit < 1 );
+        $limit = 10 if( $limit < 1 );
         my $ref = _readAllVisitors();
         foreach my $key ( sort { $ref->{$b}[0] <=> $ref->{$a}[0] } ( keys( %$ref ) ) ) {
             last unless( $limit-- );
