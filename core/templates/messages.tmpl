@@ -17,10 +17,18 @@
 %MAKETEXT{"And populated with topics from the base web"}%
 
 %MAKETEXT{"Would you like to go to:"}%
-   * %MAKETEXT{"[_1] to start working on the new web" args="[[%HOMETOPIC%]]"}%
-   * %MAKETEXT{"[_1] to customize the web specific preferences" args="[[%WEBPREFSTOPIC%]]"}%
-   * %MAKETEXT{"[_1] to create another web" args="[[%SYSTEMWEB%.ManagingWebs]]"}%
-   * %MAKETEXT{"[_1] home" args="[[%USERSWEB%.%HOMETOPIC%][%WIKITOOLNAME%]]"}%
+
+<span style="margin-left:1.5em; padding:3px 6px; background-color:#faf2b2;">
+<img src="%ICONURLPATH{home}%" width="16" height="16" alt="" /> <b> %MAKETEXT{"[[[_1]][[_2] home]] to start working on the new web" args="%HOMETOPIC%, %WEB%"}% </b>
+</span>
+
+<span style="margin-left:1.5em; padding:3px 6px;">
+<img src="%ICONURLPATH{wrench}%" width="16" height="16" alt="" /> %MAKETEXT{"[_1] to customize the web specific preferences" args="[[%WEBPREFSTOPIC%]]"}%
+</span>
+
+<span style="margin-left:1.5em; padding:3px 6px;">
+<img src="%ICONURLPATH{twiki-gray}%" width="16" height="16" alt="" /> %MAKETEXT{"[[[_1]][[_2] home]]" args="%USERSWEB%.%HOMETOPIC%, %WIKITOOLNAME%"}%
+</span>
 %TMPL:END%
 %TMPL:DEF{"merge_notice"}%
 ---+++ %MAKETEXT{"Topic was merged"}%
