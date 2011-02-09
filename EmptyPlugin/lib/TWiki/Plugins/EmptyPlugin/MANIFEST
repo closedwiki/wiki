@@ -1,3 +1,4 @@
 data/TWiki/EmptyPlugin.txt 0644 Plugin doc page
-lib/TWiki/Plugins/EmptyPlugin.pm 0444 Plugin Perl module
+data/TWiki/VarEXAMPLEVAR.txt 0644 Variable documentation
 data/Sandbox/PluginTestEmptyPlugin.txt 0644 Plugin examples
+lib/TWiki/Plugins/EmptyPlugin.pm 0444 Plugin Perl module
