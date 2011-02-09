@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2011 Peter Thoeny, peter@thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -123,7 +123,7 @@ will be trapped and reported in the browser.
 
 You may also call =TWiki::Func::registerTagHandler= here to register
 a function to handle variables that have standard TWiki syntax - for example,
-=%MYTAG{"my param" myarg="My Arg"}%. You can also override internal
+=%MYVAR{"my param" myarg="My Arg"}%. You can also override internal
 TWiki variable handling functions this way, though this practice is unsupported
 and highly dangerous!
 
@@ -138,7 +138,7 @@ sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.026 ) {
+    if( $TWiki::Plugins::VERSION < 1.1 ) {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
@@ -154,10 +154,10 @@ sub initPlugin {
     my $setting = $TWiki::cfg{Plugins}{EmptyPlugin}{ExampleSetting} || 0;
     $debug = $TWiki::cfg{Plugins}{EmptyPlugin}{Debug} || 0;
 
-    # register the _EXAMPLETAG function to handle %EXAMPLETAG{...}%
-    # This will be called whenever %EXAMPLETAG% or %EXAMPLETAG{...}% is
+    # register the _EXAMPLEVAR function to handle %EXAMPLEVAR{...}%
+    # This will be called whenever %EXAMPLEVAR% or %EXAMPLEVAR{...}% is
     # seen in the topic text.
-    TWiki::Func::registerTagHandler( 'EXAMPLETAG', \&_EXAMPLETAG );
+    TWiki::Func::registerTagHandler( 'EXAMPLEVAR', \&_EXAMPLEVAR );
 
     # Allow a sub to be called from the REST interface 
     # using the provided alias
@@ -167,9 +167,9 @@ sub initPlugin {
     return 1;
 }
 
-# The function used to handle the %EXAMPLETAG{...}% variable
+# The function used to handle the %EXAMPLEVAR{...}% variable
 # You would have one of these for each variable you want to process.
-sub _EXAMPLETAG {
+sub _EXAMPLEVAR {
     my($session, $params, $theTopic, $theWeb) = @_;
     # $session  - a reference to the TWiki session object (if you don't know
     #             what this is, just ignore it)
@@ -181,7 +181,7 @@ sub _EXAMPLETAG {
     # $theWeb   - name of the web in the query
     # Return: the result of processing the variable
 
-    # For example, %EXAMPLETAG{'hamburger' sideorder="onions"}%
+    # For example, %EXAMPLEVAR{'hamburger' sideorder="onions"}%
     # $params->{_DEFAULT} will be 'hamburger'
     # $params->{sideorder} will be 'onions'
 }
@@ -254,7 +254,7 @@ sub DISABLE_registrationHandler {
    * =$web= - the name of the web in the current CGI query
    * =$included= - Boolean flag indicating whether the handler is invoked on an included topic
    * =$meta= - meta-data object for the topic MAY BE =undef=
-This handler is called by the code that expands %<nop>TAGS% syntax in
+This handler is called by the code that expands %<nop>VARIABLES% syntax in
 the topic body and in form fields. It may be called many times while
 a topic is being rendered.
 
@@ -265,7 +265,7 @@ Plugins that have to parse the entire topic content should implement
 this function. Internal TWiki
 variables (and any variables declared using =TWiki::Func::registerTagHandler=)
 are expanded _before_, and then again _after_, this function is called
-to ensure all %<nop>TAGS% are expanded.
+to ensure all %<nop>VARIABLES% are expanded.
 
 __NOTE:__ when this handler is called, &lt;verbatim> blocks have been
 removed from the text (though all other blocks such as &lt;pre> and
@@ -332,7 +332,7 @@ sub DISABLE_beforeCommonTagsHandler {
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
    * =$meta= - meta-data object for the topic MAY BE =undef=
-This handler is after TWiki has completed expansion of %TAGS%.
+This handler is after TWiki has completed expansion of %VARIABLES%.
 It is designed for use by cache plugins. Note that when this handler
 is called, &lt;verbatim> blocks are present in the text.
 

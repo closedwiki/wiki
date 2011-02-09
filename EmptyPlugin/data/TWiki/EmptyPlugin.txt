@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293781387" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297233703" format="1.1" version="$Rev$"}%
 ---+!! Empty TWiki Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -44,12 +44,13 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/AndreaSterbini, TWiki:Main/PeterThoeny, TWiki:Main/CrawfordCurrie |
-|  Copyright: | &copy; 2001-2010, TWiki:TWiki/TWikiContributor |
+|  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie |
+|  Copyright: | &copy; 2001-2011, TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-05-08: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
+|  2011-02-08: | TWikibug:Item6593: Doc improvements |
+|  2010-05-08: | TWikibug:Item6433: Doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  2007-05-20: | Added renderWikiWordHandler |
 |  2006-02-01: | Dakar changes |
 |  2004-03-21: | Added afterSaveHandler |
