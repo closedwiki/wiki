@@ -1,0 +1,3 @@
+gd,>0,c,Required. Available from http://www.libgd.org/
+GD,>=1.41,cpan,Required. Available from the CPAN:GD archive.
+Digest::MD5,>0,cpan,Required. Available from the CPAN:Digest::MD5 archive.
