@@ -1,1 +1,110 @@
-PENDING
+%META:TOPICINFO{author="TWikiContributor" date="1297313616" format="1.1" version="$Rev$"}%
+---+!! !QRCodePlugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/QRCodePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/QRCodePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+<div style="float:right; background-color:#F0F0F0; margin:0 0 20px 20px; padding: 10px 10px 10px 10px; text-align:center">
+This plugin is%BR% sponsored by:%BR%
+[[http://twiki.net/][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" alt="Twiki, Inc." title="Twiki, Inc." />]]
+</div>
+<div style="float:right; margin:0 0 20px 20px;">
+<img src="%ATTACHURLPATH%/qrcode-example-1.png" alt="qrcode-example-1.png" width="99" height="99" />
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
+
+Use this plugin to generate [[Wikipedia:QR_Code][QR Code]] in TWiki pages.
+
+---++ Syntax Rules
+
+=%<nop>QRCODE{ "text" ... }%=
+
+| *Parameter* | *Description* | *Default* |
+| ="text"= | Text to encode as 2D barcode. | (required) |
+| =ecc="M"= | Error-Correcting Code, ="M"=, ="L"=, ="H"=, ="Q"= | ="M"= |
+| =version="..."= | Version of QR Code, ="1"= to ="40"= | ="12"= |
+| =size="..."= | Size of block that makes up the barcode | ="4"= |
+
+See also VarQRCODE documentation for %SYSTEMWEB%.TWikiVariables.
+
+---++ Examples
+
+---+++!! Example: Small QR Code for =http://twiki.org/=
+
+<table border="0" cellpadding="10" cellspacing="2">
+<tr bgcolor="#dddddd">
+<th> *You type* </th>
+<th> *You get (if installed)* </th>
+<th> *Simulated example* </th>
+</tr><tr bgcolor="#f4f4f8">
+<td valign="top">
+<verbatim>
+%QRCODE{
+ "http://twiki.org/"
+ version="2"
+ size="3"
+}%
+</verbatim>
+</td><td valign="top">
+%QRCODE{
+ "http://twiki.org/"
+ version="2"
+ size="3"
+}%
+</td><td valign="top">
+<img src="%ATTACHURLPATH%/qrcode-example-1.png" alt="qrcode-example-1.png" width="99" height="99" />
+</td></tr></table>
+
+---++ Plugin Installation &amp; Configuration
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==data/TWiki/VarQRCODE.txt== | QRCODE variable documentation topic |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+        | ==pub/TWiki/%TOPIC%/twiki-logo-80x40-t.gif== | Logo file |
+        | ==pub/TWiki/%TOPIC%/qrcode-example-*.png== | Example QR Code image files |
+      * Set the ownership of the extracted directories and files to the webserver user.
+      * Install the dependencies.
+
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Test if the installation was successful: See example above.
+
+---++ Plugin Info
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Create QR Code (a 2D barcode) in TWiki pages, useful for mobile applications
+
+|  Plugin Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] <br /> &copy; 2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-02-09 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-02-09: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | CPAN:GD, CPAN:Digest::MD5 |
+|  Other Dependencies: | gd (see http://www.libgd.org/) |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/QRCodePlugin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/QRCodePluginDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/QRCodePluginAppraisal |
+
+__Related Topics:__ VarQRCODE, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+
+%META:FILEATTACHMENT{name="twiki-logo-80x40-t.gif" attachment="twiki-logo-80x40-t.gif" attr="h" comment="" date="1297312514" path="twiki-logo-80x40-t.gif" size="1999" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="qrcode-example-1.png" attachment="qrcode-example-1.png" attr="h" comment="" date="1297312514" path="qrcode-example-1.png" size="305" user="TWikiContributor" version="1"}%
