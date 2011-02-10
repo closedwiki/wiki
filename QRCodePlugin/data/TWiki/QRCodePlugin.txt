@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297313616" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297320404" format="1.1" version="$Rev$"}%
 ---+!! !QRCodePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -20,7 +20,7 @@ This plugin is%BR% sponsored by:%BR%
 
 ---++ Introduction
 
-Use this plugin to generate [[Wikipedia:QR_Code][QR Code]] in TWiki pages.
+This plugin generates [[Wikipedia:QR_Code][QR Code]] in TWiki pages. A QR Code is a specific matrix barcode (or two-dimensional code), readable by dedicated QR barcode readers and camera phones. The code consists of black modules arranged in a square pattern on a white background. The information encoded can be any text, such as phone numbers, URLs, gelocation, vCard, vCal and more.
 
 ---++ Syntax Rules
 
@@ -28,9 +28,70 @@ Use this plugin to generate [[Wikipedia:QR_Code][QR Code]] in TWiki pages.
 
 | *Parameter* | *Description* | *Default* |
 | ="text"= | Text to encode as 2D barcode. | (required) |
-| =ecc="M"= | Error-Correcting Code, ="M"=, ="L"=, ="H"=, ="Q"= | ="M"= |
-| =version="..."= | Version of QR Code, ="1"= to ="40"= | ="12"= |
-| =size="..."= | Size of block that makes up the barcode | ="4"= |
+| =ecc="M"= | Error Correction Capability. Valid values ="L"=, ="M"=, ="Q"=, ="H"=. | ="M"= |
+| =version="..."= | Symbol version of QR Code, or size of matrix. Valid range ="1"= to ="40"=. See details below. | ="8"= |
+| =size="..."= | Module size, e.g. pixel size of a block (bit) that makes up the matrix of the barcode. | ="4"= |
+
+QR Code has error correction capability (ECC) to restore data if the code is dirty or damaged:
+   * level ="L"= - about 7%
+   * level ="M"= - about 15%
+   * level ="Q"= - about 25%
+   * level ="H"= - about 30%
+
+The length of text (number of bytes) and the ECC determine the symbol version (e.g. matrix size) required to encode some text. Overview of [[http://www.denso-wave.com/qrcode/vertable1-e.html][symbol version]] for default ECC level ="M"=:
+
+<table cellpadding="10">
+<tr><td valign="top">
+| *Version* |  *Matrix size*  |  *Max. bytes*  |
+|  1  |  21x21  |  14  |
+|  2  |  25x25  |  26  |
+|  3  |  29x29  |  42  |
+|  4  |  33x33  |  62  |
+|  5  |  37x37  |  84  |
+|  6  |  41x41  |  106  |
+|  7  |  45x45  |  122  |
+|  8  |  49x49  |  152  |
+|  9  |  53x53  |  180  |
+|  10  |  57x57  |  213  |
+</td><td valign="top">
+| *Version* |  *Matrix size*  |  *Max. bytes*  |
+|  11  |  61x61  |  251  |
+|  12  |  65x65  |  287  |
+|  13  |  69x69  |  331  |
+|  14  |  73x73  |  362  |
+|  15  |  77x77  |  412  |
+|  16  |  81x81  |  450  |
+|  17  |  85x85  |  504  |
+|  18  |  89x89  |  560  |
+|  19  |  93x93  |  624  |
+|  20  |  97x97  |  666  |
+</td><td valign="top">
+| *Version* |  *Matrix size*  |  *Max. bytes*  |
+|  21  |  101x101  |  711  |
+|  22  |  105x105  |  779  |
+|  23  |  109x109  |  857  |
+|  24  |  113x113  |  911  |
+|  25  |  117x117  |  997  |
+|  26  |  121x121  |  1059  |
+|  27  |  125x125  |  1125  |
+|  28  |  129x129  |  1190  |
+|  29  |  133x133  |  1264  |
+|  30  |  137x137  |  1370  |
+</td><td valign="top">
+| *Version* |  *Matrix size*  |  *Max. bytes*  |
+|  31  |  141x141  |  1452  |
+|  32  |  145x145  |  1538  |
+|  33  |  149x149  |  1628  |
+|  34  |  153x153  |  1722  |
+|  35  |  157x157  |  1809  |
+|  36  |  161x161  |  1911  |
+|  37  |  165x165  |  1989  |
+|  38  |  169x169  |  2099  |
+|  39  |  173x173  |  2213  |
+|  40  |  177x177  |  2331  |
+</td></tr></table>
+
+The size of the generated image depends on the symbol version and the module size. For example, =version="2"= and =size="3"= results in a 99x99 pixels image. Version 2 has matrix size 25x25. A module size 3 turns that into 3 times 25x25 pixels, or 75x75 pixels. There is some required whitespace, which results in a 99x99 pixels image size.
 
 See also VarQRCODE documentation for %SYSTEMWEB%.TWikiVariables.
 
