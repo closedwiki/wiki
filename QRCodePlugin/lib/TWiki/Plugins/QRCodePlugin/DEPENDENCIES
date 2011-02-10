@@ -1,3 +1,5 @@
 gd,>0,c,Required. Available from http://www.libgd.org/
 GD,>=1.41,cpan,Required. Available from the CPAN:GD archive.
+GD::Barcode,>=1.15,cpan,Required. Available from the CPAN:GD::Barcode archive.
+GD::Barcode::QRcode,>=1.15,cpan,Required. Available from the CPAN:GD::Barcode::QRcode archive.
 Digest::MD5,>0,cpan,Required. Available from the CPAN:Digest::MD5 archive.

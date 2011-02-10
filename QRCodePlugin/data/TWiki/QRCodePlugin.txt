@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297321331" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297324425" format="1.1" version="$Rev$"}%
 ---+!! !QRCodePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -185,7 +185,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  2011-02-09: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | CPAN:GD, CPAN:Digest::MD5 |
+|  CPAN Dependencies: | CPAN:GD, CPAN:GD::Barcode, CPAN:GD::Barcode::QRcode, CPAN:Digest::MD5 |
 |  Other Dependencies: | gd (see http://www.libgd.org/) |
 |  Perl Version: | 5.005 |
 |  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
