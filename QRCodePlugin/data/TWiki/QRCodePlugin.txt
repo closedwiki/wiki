@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297320404" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297321331" format="1.1" version="$Rev$"}%
 ---+!! !QRCodePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -123,6 +123,34 @@ See also VarQRCODE documentation for %SYSTEMWEB%.TWikiVariables.
 <img src="%ATTACHURLPATH%/qrcode-example-1.png" alt="qrcode-example-1.png" width="99" height="99" />
 </td></tr></table>
 
+---+++!! Example: Encode URL of current topic
+
+The QR Code of the current topic can be placed in a TWiki skin so that the URL can easily be read by smart phones. We use symbol version 8, e.g. the URL cannot be longer than 152 characters.
+
+<table border="0" cellpadding="10" cellspacing="2">
+<tr bgcolor="#dddddd">
+<th> *You type* </th>
+<th> *You get (if installed)* </th>
+<th> *Simulated example* </th>
+</tr><tr bgcolor="#f4f4f8">
+<td valign="top">
+<verbatim>
+%QRCODE{
+ "%SCRIPTURL{view}%/%WEB%/%TOPIC%"
+ version="8"
+ size="4"
+}%
+</verbatim>
+</td><td valign="top">
+%QRCODE{
+ "%SCRIPTURL{view}%/%WEB%/%TOPIC%"
+ version="8"
+ size="4"
+}%
+</td><td valign="top">
+<img src="%ATTACHURLPATH%/qrcode-example-2.png" alt="qrcode-example-2.png" width="228" height="228" />
+</td></tr></table>
+
 ---++ Plugin Installation &amp; Configuration
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
@@ -169,3 +197,4 @@ __Related Topics:__ VarQRCODE, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDo
 
 %META:FILEATTACHMENT{name="twiki-logo-80x40-t.gif" attachment="twiki-logo-80x40-t.gif" attr="h" comment="" date="1297312514" path="twiki-logo-80x40-t.gif" size="1999" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="qrcode-example-1.png" attachment="qrcode-example-1.png" attr="h" comment="" date="1297312514" path="qrcode-example-1.png" size="305" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="qrcode-example-2.png" attachment="qrcode-example-2.png" attr="h" comment="" date="1297321158" path="qrcode-example-2.png" size="676" user="TWikiContributor" version="1"}%
