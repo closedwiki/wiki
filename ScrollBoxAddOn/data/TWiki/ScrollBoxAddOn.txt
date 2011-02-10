@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1295982310" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297377834" format="1.1" version="$Rev$"}%
 ---+!! Scroll Box Add-on
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -98,8 +98,7 @@ The first parameter of =initScrollBox()= is the ID of the div that contains the 
 
 This section defines the ="scroll_box_engine"= and the ="scroll_box"= section. View the [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][raw text]] of this topic to look under the hood.
 <!--=====================================
-%STARTSECTION{ "scroll_box" }%
-<div id="%name%Box" class="scrollBoxOuter">
+%STARTSECTION{ "scroll_box" }%<div id="%name%Box" class="scrollBoxOuter">
  <div class="scrollBoxTitle">
 %title%
  </div>
@@ -111,12 +110,10 @@ This section defines the ="scroll_box_engine"= and the ="scroll_box"= section. V
 </div>
 <script type="text/javascript">
  initScrollBox( '%name%Container', %delay%, %vstep%, %width%, %height% );
-</script>
-%ENDSECTION{ "scroll_box" }%
+</script>%ENDSECTION{ "scroll_box" }%
 =========================================-->
 <!--=====================================
-%STARTSECTION{ "scroll_box_engine" }%
-%ADDTOHEAD{
+%STARTSECTION{ "scroll_box_engine" }%%ADDTOHEAD{
  "scroll_box_engine"
  text="<script type='text/javascript'>
  // inspired by www.dhtmlgoodies.com/index.html?whichScript=scrolling_content
@@ -196,8 +193,7 @@ This section defines the ="scroll_box_engine"= and the ="scroll_box"= section. V
   vertical-align: middle;
  }
  </style>"
-}%<nop>
-%ENDSECTION{ "scroll_box_engine" }%
+}%<nop>%ENDSECTION{ "scroll_box_engine" }%
 =========================================-->
 
 ---++ Examples
@@ -372,8 +368,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2010, TWiki:Main.PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2011-01-25 (V1.2) |
+|  Add-on Version: | 2011-02-10 (V1.3) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-02-10: | TWikibug:Item6638: Avoid &lt;p /&gt; tag when including scroll box engine |
 |  2011-01-25: | TWikibug:Item6638: Small style change: More padding below title |
 |  2010-12-23: | TWikibug:Item6623: Doc improvements; changing function initScrollContent to initScrollBox |
 |  2010-12-22: | TWikibug:Item6623: Initial version |
