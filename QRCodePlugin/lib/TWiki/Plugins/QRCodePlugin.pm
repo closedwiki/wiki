@@ -64,8 +64,12 @@ sub _QRCODE {
     return "QRCode Plugin Error: QRCode text is missing." unless( $text );
 
     use GD::Barcode::QRcode;
-    my $image = GD::Barcode::QRcode->new( $text,
-        {ECC => $pEcc, Version => $pVer, ModuleSize => $pSize} )->plot->png;
+    my $image;
+    eval {
+        $image = GD::Barcode::QRcode->new( $text,
+            {ECC => $pEcc, Version => $pVer, ModuleSize => $pSize} )->plot->png;
+    };
+    return "QRCode Plugin Error: $@" if( $@ );
 
     my( $dir, $fileName ) = _makeFilename( $theWeb, $theTopic, "$text-$pEcc-$pVer-$pSize" );
 
