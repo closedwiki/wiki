@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297322635" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297494969" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarQRCODE
 ---+++ QRCODE -- create QR Code (a 2D barcode) in TWiki pages
@@ -6,7 +6,7 @@
    * Syntax: =%<nop>QRCODE{ "..." ... }%=
    * Parameter ="..."= - text to encode as QR Code.
    * Parameter =ecc="..."= - error Correction Capability. Valid values ="L"=, ="M"=, ="Q"=, ="H"=. Default ="M"=.
-   * Parameter =version="..."= - symbol version of QR Code, or size of matrix. Valid range "1" to "40". Default ="8"=.
+   * Parameter =version="..."= - symbol version of QR Code, or size of matrix. Valid values "1" ... "40", and "auto" for automatic versioning. Default ="8"=.
    * Parameter =size="..."= - module size, e.g. pixel size of a block (bit) that makes up the matrix of the barcode. Default ="4"=.
    * Example: =%<nop>QRCODE{ "http://twiki.org/" version="2" size="3" }%= returns:%BR% %PUBURL%/%WEB%/QRCodePlugin/qrcode-example-1.png
    * Related: QRCodePlugin

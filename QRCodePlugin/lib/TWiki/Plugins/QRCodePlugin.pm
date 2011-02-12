@@ -27,7 +27,7 @@ require TWiki::Plugins; # For the API version
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC );
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-02-09';
+$RELEASE = '2011-02-11';
 
 $SHORTDESCRIPTION = 'Create QR Code (a 2D barcode) in TWiki pages, useful for mobile applications';
 $NO_PREFS_IN_TOPIC = 1;
@@ -64,6 +64,7 @@ sub _QRCODE {
     return "QRCode Plugin Error: QRCode text is missing." unless( $text );
 
     use GD::Barcode::QRcode;
+    $pVer = 0 if( $pVer eq 'auto' );
     my $image;
     eval {
         $image = GD::Barcode::QRcode->new( $text,

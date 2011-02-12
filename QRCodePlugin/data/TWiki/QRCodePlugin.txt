@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297324425" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297494969" format="1.1" version="$Rev$"}%
 ---+!! !QRCodePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -29,7 +29,7 @@ This plugin generates [[Wikipedia:QR_Code][QR Code]] in TWiki pages. A QR Code i
 | *Parameter* | *Description* | *Default* |
 | ="text"= | Text to encode as 2D barcode. | (required) |
 | =ecc="M"= | Error Correction Capability. Valid values ="L"=, ="M"=, ="Q"=, ="H"=. | ="M"= |
-| =version="..."= | Symbol version of QR Code, or size of matrix. Valid range ="1"= to ="40"=. See details below. | ="8"= |
+| =version="..."= | Symbol version of QR Code, or size of matrix. Valid values ="1"= ... ="40"=, and ="auto"= for automatic versioning. See details below. | ="8"= |
 | =size="..."= | Module size, e.g. pixel size of a block (bit) that makes up the matrix of the barcode. | ="4"= |
 
 QR Code has error correction capability (ECC) to restore data if the code is dirty or damaged:
@@ -38,7 +38,9 @@ QR Code has error correction capability (ECC) to restore data if the code is dir
    * level ="Q"= - about 25%
    * level ="H"= - about 30%
 
-The length of text (number of bytes) and the ECC determine the symbol version (e.g. matrix size) required to encode some text. Overview of [[http://www.denso-wave.com/qrcode/vertable1-e.html][symbol version]] for default ECC level ="M"=:
+The length of text (number of bytes) and the ECC determine the symbol version (e.g. matrix size) required to encode some text. A =version="auto"= selects the version automatically based on text length and ECC. See "Attention" note in the "Plugin Installation &amp; Configuration" section below before using ="auto"=.
+
+Overview of [[http://www.denso-wave.com/qrcode/vertable1-e.html][symbol version]] for default ECC level ="M"=:
 
 <table cellpadding="10">
 <tr><td valign="top">
@@ -173,6 +175,21 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
       * Test if the installation was successful: See example above.
 
+%X% Attention, CPAN:GD::Barcode::QRcode version 1.15 needs to be patched as follows before you can use =version="auto"=:
+<verbatim>
+--- /usr/lib/perl5/site_perl/5.8.0/GD/Barcode/QRcode.pm.save1	2004-04-23 23:35:34.000000000 -0700
++++ /usr/lib/perl5/site_perl/5.8.0/GD/Barcode/QRcode.pm	2011-02-11 22:37:13.000000000 -0800
+@@ -37,7 +37,7 @@
+     $oSelf->{text} = $sTxt;
+     $oSelf->{Ecc} = $rhPrm->{Ecc} || ' ';
+     $oSelf->{Ecc} =~ tr/LMHQ/M/c;    #Not /LMQH/ => M
+-    $oSelf->{Version} = $rhPrm->{Version} || 1;
++    $oSelf->{Version} = $rhPrm->{Version} || 0;
+     $oSelf->{ModuleSize} = $rhPrm->{ModuleSize} || 1;
+     $oSelf->{ModuleSize} = int($oSelf->{ModuleSize});
+ 
+</verbatim>
+
 ---++ Plugin Info
 
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
@@ -181,9 +198,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] <br /> &copy; 2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-02-09 |
+|  Plugin Version: | 2011-02-11 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-02-09: | Initial version |
+|  2011-02-11: | TWikibug:Item6647: Added version="auto" |
+|  2011-02-09: | TWikibug:Item6647: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | CPAN:GD, CPAN:GD::Barcode, CPAN:GD::Barcode::QRcode, CPAN:Digest::MD5 |
 |  Other Dependencies: | gd (see http://www.libgd.org/) |
