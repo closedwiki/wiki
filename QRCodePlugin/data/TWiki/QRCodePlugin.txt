@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297494969" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297545801" format="1.1" version="$Rev$"}%
 ---+!! !QRCodePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -99,7 +99,7 @@ See also VarQRCODE documentation for %SYSTEMWEB%.TWikiVariables.
 
 ---++ Examples
 
----+++!! Example: Small QR Code for =http://twiki.org/=
+---+++ Small QR Code for URL!! =http://twiki.org/=
 
 <table border="0" cellpadding="10" cellspacing="2">
 <tr bgcolor="#dddddd">
@@ -125,7 +125,7 @@ See also VarQRCODE documentation for %SYSTEMWEB%.TWikiVariables.
 <img src="%ATTACHURLPATH%/qrcode-example-1.png" alt="qrcode-example-1.png" width="99" height="99" />
 </td></tr></table>
 
----+++!! Example: Encode URL of current topic
+---+++ Encode URL of current topic
 
 The QR Code of the current topic can be placed in a TWiki skin so that the URL can easily be read by smart phones. We use symbol version 8, e.g. the URL cannot be longer than 152 characters.
 
@@ -166,6 +166,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
         | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
         | ==data/TWiki/VarQRCODE.txt== | QRCODE variable documentation topic |
         | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+        | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | Plugin core module |
         | ==pub/TWiki/%TOPIC%/twiki-logo-80x40-t.gif== | Logo file |
         | ==pub/TWiki/%TOPIC%/qrcode-example-*.png== | Example QR Code image files |
       * Set the ownership of the extracted directories and files to the webserver user.
@@ -193,13 +194,14 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Create QR Code (a 2D barcode) in TWiki pages, useful for mobile applications
+      * Set SHORTDESCRIPTION = Create QR Code (a matrix barcode) in TWiki pages, useful for mobile applications
 
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] <br /> &copy; 2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-02-11 |
+|  Plugin Version: | 2011-02-12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-02-12: | TWikibug:Item6647: Lazy loading of core and CPAN modules for better performance when QRCODE is not used |
 |  2011-02-11: | TWikibug:Item6647: Added version="auto" |
 |  2011-02-09: | TWikibug:Item6647: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |

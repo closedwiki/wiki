@@ -24,12 +24,12 @@ use strict;
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC );
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC $pluginName $debug );
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-02-11';
+$RELEASE = '2011-02-12';
 
-$SHORTDESCRIPTION = 'Create QR Code (a 2D barcode) in TWiki pages, useful for mobile applications';
+$SHORTDESCRIPTION = 'Create QR Code (a matrix barcode) in TWiki pages, useful for mobile applications';
 $NO_PREFS_IN_TOPIC = 1;
 
 $pluginName = 'QRCodePlugin';
@@ -54,59 +54,10 @@ sub initPlugin {
 
 #==========================
 sub _QRCODE {
-    my( $session, $params, $theTopic, $theWeb ) = @_;
-
-    my $text  = $params->{_DEFAULT};
-    my $pEcc  = $params->{ecc} || 'M';
-    my $pVer  = $params->{version} || '8';
-    my $pSize = $params->{size} || '4';
-
-    return "QRCode Plugin Error: QRCode text is missing." unless( $text );
-
-    use GD::Barcode::QRcode;
-    $pVer = 0 if( $pVer eq 'auto' );
-    my $image;
-    eval {
-        $image = GD::Barcode::QRcode->new( $text,
-            {ECC => $pEcc, Version => $pVer, ModuleSize => $pSize} )->plot->png;
-    };
-    return "QRCode Plugin Error: $@" if( $@ );
-
-    my( $dir, $fileName ) = _makeFilename( $theWeb, $theTopic, "$text-$pEcc-$pVer-$pSize" );
-
-    open( PNG, "> $dir/$fileName" )
-        or return "QRCode Plugin Error: Can't write temporary file $fileName.";
-    binmode( PNG );
-    print PNG $image;
-    close( PNG );
-
-    my $html = '<img src="' . TWiki::Func::getPubUrlPath()
-             . "/$theWeb/$theTopic/$fileName\" />";
-    return $html;
-}
-
-#==========================
-sub _makeFilename
-{
-    my ( $web, $topic, $text ) = @_;
-
-    my $dir = TWiki::Func::getPubDir() . "/$web";
-    unless( -e "$dir" ) {
-        umask( 002 );
-        mkdir( $dir, 0775 );
-    }
-    $dir .= "/$topic";
-    unless( -e "$dir" ) {
-        umask( 002 );
-        mkdir( $dir, 0775 );
-    }
-
-    use Digest::MD5  qw(md5_hex);
-    my $md5 = md5_hex( $text );
-
-    my $name = "_QRCodePlugin_$md5.png";
-
-    return( $dir, $name );
+#   my ( $session, $params, $theTopic, $theWeb ) = @_;
+    # Lazy loading, e.g. compile core module only when required
+    require TWiki::Plugins::QRCodePlugin::Core;
+    return  TWiki::Plugins::QRCodePlugin::Core::handleQRCODE( @_ );
 }
 
 #==========================

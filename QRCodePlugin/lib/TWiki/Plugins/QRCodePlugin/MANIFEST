@@ -1,6 +1,7 @@
 data/TWiki/QRCodePlugin.txt 0644
 data/TWiki/VarQRCODE.txt 0644
 lib/TWiki/Plugins/QRCodePlugin.pm 0644
+lib/TWiki/Plugins/QRCodePlugin/Core.pm 0644
 pub/TWiki/QRCodePlugin/qrcode-example-1.png 0644
 pub/TWiki/QRCodePlugin/qrcode-example-2.png 0644
 pub/TWiki/QRCodePlugin/twiki-logo-80x40-t.gif 0644
