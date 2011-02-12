@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297545801" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297551730" format="1.1" version="$Rev$"}%
 ---+!! !QRCodePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -153,6 +153,49 @@ The QR Code of the current topic can be placed in a TWiki skin so that the URL c
 <img src="%ATTACHURLPATH%/qrcode-example-2.png" alt="qrcode-example-2.png" width="228" height="228" />
 </td></tr></table>
 
+#QrForm
+---+++ Interactive example
+
+You can encode any text with this interactive form. The matrix size is set automatically using =version="auto"=.
+
+<table border="0" cellpadding="10" cellspacing="2">
+<tr bgcolor="#dddddd">
+<th> *You type* </th>
+<th> *You get (if installed)* </th>
+<th> *Simulated example* </th>
+</tr><tr bgcolor="#f4f4f8">
+<td valign="top">
+=&lt;form action="%<nop>SCRIPTURL{view}%/%<nop>WEB%/%<nop>TOPIC%#QrForm"&gt;= %BR%
+=&lt;input type="text" name="qrcode" value="%<nop>URLPARAM{ "qrcode" encode="entity" default="Enter text" }%" size="20" class="twikiInputField" /&gt;&lt;br /&gt;s= %BR%
+=&lt;input type="submit" value="Generate QR Code" class="twikiSubmit" /&gt;= %BR%
+=&lt;/form&gt;= %BR%
+%BR%
+=%<nop>QRCODE{= %BR%
+=<nop> "%<nop>URLPARAM{ "qrcode" encode="quote" default="Enter text" }%"= %BR%
+=<nop> version="auto"= %BR%
+=}%= %BR%
+</td><td valign="top">
+<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%#QrForm">
+<input type="text" name="qrcode" value="%URLPARAM{ "qrcode" encode="entity" default="Enter text" }%" size="20" class="twikiInputField" />%BR%
+<input type="submit" value="Generate QR Code" class="twikiSubmit" />
+</form>
+
+%QRCODE{
+ "%URLPARAM{ "qrcode" encode="quote" default="Enter text" }%"
+ version="auto"
+}%
+</td><td valign="top">
+<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%#QrForm">
+<input type="text" name="qrcode" value="Enter text" size="20" class="twikiInputField" disabled="disabled" />%BR%
+<input type="submit" value="Generate QR Code" class="twikiSubmit" disabled="disabled" />
+</form>
+
+%QRCODE{
+ "%URLPARAM{ "qrcode" encode="quote" default="Enter text" }%"
+ version="auto"
+}%
+</td></tr></table>
+
 ---++ Plugin Installation &amp; Configuration
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
@@ -201,7 +244,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-02-12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-02-12: | TWikibug:Item6647: Lazy loading of core and CPAN modules for better performance when QRCODE is not used |
+|  2011-02-12: | TWikibug:Item6647: Lazy loading of core and CPAN modules for better performance when QRCODE is not used; adding interactive example |
 |  2011-02-11: | TWikibug:Item6647: Added version="auto" |
 |  2011-02-09: | TWikibug:Item6647: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
@@ -218,3 +261,4 @@ __Related Topics:__ VarQRCODE, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDo
 %META:FILEATTACHMENT{name="twiki-logo-80x40-t.gif" attachment="twiki-logo-80x40-t.gif" attr="h" comment="" date="1297312514" path="twiki-logo-80x40-t.gif" size="1999" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="qrcode-example-1.png" attachment="qrcode-example-1.png" attr="h" comment="" date="1297312514" path="qrcode-example-1.png" size="305" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="qrcode-example-2.png" attachment="qrcode-example-2.png" attr="h" comment="" date="1297321158" path="qrcode-example-2.png" size="676" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="qrcode-example-3.png" attachment="qrcode-example-3.png" attr="h" comment="" date="1297546847" path="qrcode-example-3.png" size="230" user="TWikiContributor" version="1"}%
