@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297551730" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297552180" format="1.1" version="$Rev$"}%
 ---+!! !QRCodePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -190,10 +190,7 @@ You can encode any text with this interactive form. The matrix size is set autom
 <input type="submit" value="Generate QR Code" class="twikiSubmit" disabled="disabled" />
 </form>
 
-%QRCODE{
- "%URLPARAM{ "qrcode" encode="quote" default="Enter text" }%"
- version="auto"
-}%
+<img src="%ATTACHURLPATH%/qrcode-example-3.png" alt="qrcode-example-3.png" width="116" height="116" />
 </td></tr></table>
 
 ---++ Plugin Installation &amp; Configuration
