@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297553996" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297561213" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarQRCODE
----+++ QRCODE -- create QR Code (a 2D barcode) in TWiki pages
+---+++ QRCODE -- create QR Code (a matrix barcode) in TWiki pages
    * <img style="float:right" src="%PUBURL%/%WEB%/QRCodePlugin/qrcode-example-1.png" width="99" height="99" alt="QR Code example"></img> The =%<nop>QRCODE{}%= variable is handled by the QRCodePlugin
    * Syntax: =%<nop>QRCODE{ "..." ... }%=
    * Parameter ="..."= - text to encode as QR Code.
