@@ -34,6 +34,7 @@ sub handleQRCODE {
 
     return "QRCode Plugin Error: QRCode text is missing." unless( $text );
 
+    # generate image
     require GD::Barcode::QRcode;
     $pVer = 0 if( $pVer eq 'auto' );
     my $image;
@@ -43,16 +44,17 @@ sub handleQRCODE {
     };
     return "QRCode Plugin Error: $@" if( $@ );
 
+    # save image file
     my( $dir, $fileName ) = _makeFilename( $theWeb, $theTopic, "$text-$pEcc-$pVer-$pSize" );
-
     open( PNG, "> $dir/$fileName" )
         or return "QRCode Plugin Error: Can't write temporary file $fileName.";
     binmode( PNG );
     print PNG $image;
     close( PNG );
 
-    my $html = '<img src="' . TWiki::Func::getPubUrlPath()
-             . "/$theWeb/$theTopic/$fileName\" />";
+    # generate and return HTML image tag
+    my $urlPath = TWiki::Func::getPubUrlPath() . "/$theWeb/$theTopic/$fileName";
+    my $html = "<img src='$urlPath' alt='' />";
     return $html;
 }
 
