@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297658526" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297659096" format="1.1" version="$Rev$"}%
 ---+!! !QRCodePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -14,7 +14,7 @@ This plugin is%BR% sponsored by:%BR%
 [[http://twiki.net/][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" alt="Twiki, Inc." title="Twiki, Inc." />]]
 </div>
 <div style="float:right; margin:0 0 20px 20px;">
-<img src="%ATTACHURLPATH%/qrcode-example-1.png" alt="qrcode-example-1.png" width="99" height="99" />
+<img src="%ATTACHURLPATH%/qrcode-example-1.png" alt="qrcode-example-1.png" width="99" height="99" alt="" />
 </div></sticky>
 %SHORTDESCRIPTION%
 
@@ -123,7 +123,7 @@ See also VarQRCODE documentation for %SYSTEMWEB%.TWikiVariables.
  size="3"
 }%
 </td><td valign="top">
-<img src="%ATTACHURLPATH%/qrcode-example-1.png" alt="qrcode-example-1.png" width="99" height="99" />
+<img src="%ATTACHURLPATH%/qrcode-example-1.png" alt="qrcode-example-1.png" width="99" height="99" alt="" />
 </td></tr></table>
 
 ---+++ Encode URL of current topic
@@ -151,7 +151,7 @@ The QR Code of the current topic can be placed in a TWiki skin so that the URL c
  size="4"
 }%
 </td><td valign="top">
-<img src="%ATTACHURLPATH%/qrcode-example-2.png" alt="qrcode-example-2.png" width="228" height="228" />
+<img src="%ATTACHURLPATH%/qrcode-example-2.png" alt="qrcode-example-2.png" width="228" height="228" alt="" />
 </td></tr></table>
 
 #QrForm
@@ -191,7 +191,7 @@ You can encode any text with this interactive form. The matrix size is set autom
 <input type="submit" value="Generate QR Code" class="twikiSubmit" disabled="disabled" />
 </form>
 
-<img src="%ATTACHURLPATH%/qrcode-example-3.png" alt="qrcode-example-3.png" width="116" height="116" />
+<img src="%ATTACHURLPATH%/qrcode-example-3.png" alt="qrcode-example-3.png" width="116" height="116" alt="" />
 </td></tr></table>
 
 ---++ Plugin Installation &amp; Configuration
