@@ -27,20 +27,23 @@ require TWiki::Func;    # The plugins API
 sub handleQRCODE {
     my( $session, $params, $theTopic, $theWeb ) = @_;
 
-    my $text  = $params->{_DEFAULT};
-    my $pEcc  = $params->{ecc} || 'M';
-    my $pVer  = $params->{version} || '8';
-    my $pSize = $params->{size} || '4';
+    my $text   = $params->{_DEFAULT};
+    my $pEcc   = $params->{ecc} || 'M';
+    my $pVer   = $params->{version} || '8';
+    my $pSize  = $params->{size} || '4';
+    my $format = $params->{format} ||
+                 '<img src="$urlpath" width="$width" height="$height" border="0" alt="" />';
 
     return "QRCode Plugin Error: QRCode text is missing." unless( $text );
 
     # generate image
     require GD::Barcode::QRcode;
     $pVer = 0 if( $pVer eq 'auto' );
+    my $qrcode;
     my $image;
     eval {
-        $image = GD::Barcode::QRcode->new( $text,
-            {ECC => $pEcc, Version => $pVer, ModuleSize => $pSize} )->plot->png;
+        $qrcode = GD::Barcode::QRcode->new( $text, {ECC => $pEcc, Version => $pVer, ModuleSize => $pSize} );
+        $image = $qrcode->plot->png;
     };
     return "QRCode Plugin Error: $@" if( $@ );
 
@@ -53,9 +56,13 @@ sub handleQRCODE {
     close( PNG );
 
     # generate and return HTML image tag
+    my $maxModules = $qrcode->{MaxModules} || 17 + ( $pVer * 4 ); # use undocumented || hard-code
+    my $pixels = ( $maxModules + 8 ) * $pSize;
     my $urlPath = TWiki::Func::getPubUrlPath() . "/$theWeb/$theTopic/$fileName";
-    my $html = "<img src='$urlPath' alt='' />";
-    return $html;
+    $format =~ s/\$urlpath/$urlPath/;
+    $format =~ s/\$width/$pixels/;
+    $format =~ s/\$height/$pixels/;
+    return $format;
 }
 
 #==========================
