@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297561213" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297658527" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarQRCODE
 ---+++ QRCODE -- create QR Code (a matrix barcode) in TWiki pages
@@ -8,5 +8,6 @@
    * Parameter =ecc="..."= - error Correction Capability. Valid values ="L"=, ="M"=, ="Q"=, ="H"=. Default ="M"=.
    * Parameter =version="..."= - symbol version of QR Code, or size of matrix. Valid values ="1"= ... ="40"=, and ="auto"= for automatic versioning. Default ="8"=.
    * Parameter =size="..."= - module size, e.g. pixel size of a block (bit) that makes up the matrix of the barcode. Default ="4"=.
+   * Parameter =format="..."= - format of HTML =img= tag of generated QR Code image. Supported variables: =$urlpath= - URL path of image, =$width= - image width, =$height= - image height. Default: ="&lt;img src='$urlpath' width='$width' height='$height' border='0' alt='' /&gt;"=.
    * Example: =%<nop>QRCODE{ "http://twiki.org/" version="2" size="3" }%= returns above QR Code.
    * Related: QRCodePlugin

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297552180" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297658526" format="1.1" version="$Rev$"}%
 ---+!! !QRCodePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -31,6 +31,7 @@ This plugin generates [[Wikipedia:QR_Code][QR Code]] in TWiki pages. A QR Code i
 | =ecc="M"= | Error Correction Capability. Valid values ="L"=, ="M"=, ="Q"=, ="H"=. | ="M"= |
 | =version="..."= | Symbol version of QR Code, or size of matrix. Valid values ="1"= ... ="40"=, and ="auto"= for automatic versioning. See details below. | ="8"= |
 | =size="..."= | Module size, e.g. pixel size of a block (bit) that makes up the matrix of the barcode. | ="4"= |
+| =format="..."= | Format of HTML =img= tag of generated QR Code image. Supported variables: =$urlpath= - URL path of image, =$width= - image width, =$height= - image height. | ="&lt;img src='$urlpath' width='$width' height='$height' border='0' alt='' /&gt;"= |
 
 QR Code has error correction capability (ECC) to restore data if the code is dirty or damaged:
    * level ="L"= - about 7%
@@ -241,6 +242,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-02-12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-02-13: | TWikibug:Item6647: Added format=..."; XHTML fix for HTML img tag |
 |  2011-02-12: | TWikibug:Item6647: Lazy loading of core and CPAN modules for better performance when QRCODE is not used; adding interactive example |
 |  2011-02-11: | TWikibug:Item6647: Added version="auto" |
 |  2011-02-09: | TWikibug:Item6647: Initial version |
