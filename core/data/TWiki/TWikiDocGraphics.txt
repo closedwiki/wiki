@@ -1,9 +1,15 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293859754" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297805455" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
-
-This is the TWiki icon library. The graphics can be used in topics and by web applications. Doc graphics are defined at %CALC{$SET(icontopics, $LISTIF($NOT($EXACT($item,)), $LISTMAP($IF($EXISTS($item), [[$item]], ), %ICONTOPIC%)))$GET(icontopics)}%.
-
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
+</div>
+This is the TWiki icon library. The graphics can be used in topics and by web applications.
+
+---++ All icons at a glance
+
+List of unique icons defined in %CALC{$SET(icontopics, $LISTIF($NOT($EXACT($item,)), $LISTMAP($IF($EXISTS($item), [[$item]], ), %ICONTOPIC%)))$GET(icontopics)}%. Hover over the icon to get icon information.
+
+%ICON{list:unique-info}%
 
 ---++ Usage
 
@@ -11,12 +17,6 @@ This is the TWiki icon library. The graphics can be used in topics and by web ap
 | =%<nop>ICON{help}%= | %ICON{help}% | =%ICON{ "help" format="&lt;img src=\"$urlpath\" .... /&gt;" }%= |
 | =%<nop>ICON{ "tip" format="$url" }%= | %ICON{ "tip" format="$url" }% | =%ICON{ "tip" format="$url" }%= |
 | [[#ExtendedUsage][See extended usage below]] ||
-
----++ All icons at a glance
-
-List of unique icons defined in %CALC{$GET(icontopics)}%. Hover over the icon to get icon information.
-
-%ICON{list:unique-info}%
 
 ---++ Documentation graphics
 
@@ -55,6 +55,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{hand}% | =%<nop>ICON{hand}%= | Pointing hand | gif | 16x16 |  |
 | %ICON{heart}% | =%<nop>ICON{heart}%= | Heart | gif | 16x16 |  |
 | %ICON{help}% | =%<nop>ICON{help}%=, =%<nop>H%= | Help | gif | 16x16 |  |
+| %ICON{help-video}% | =%<nop>ICON{help-video}%= | Help video | gif | 16x16 |  |
 | %ICON{hourglass}% | =%<nop>ICON{hourglass}%= | Hour glass (clock) | gif | 16x16 |  |
 | %ICON{info}% | =%<nop>ICON{info}%= | Info | gif | 16x16 |  |
 | %ICON{legal}% | =%<nop>ICON{legal}%= | Legal | gif | 16x16 |  |
@@ -78,6 +79,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{process}% | =%<nop>ICON{process}%= | Process | gif | 16x16 |  |
 | %ICON{profile}% | =%<nop>ICON{profile}%= | Profile | gif | 16x16 |  |
 | %ICON{puzzle}% | =%<nop>ICON{puzzle}%= | Puzzle | gif | 16x16 |  |
+| %ICON{qrcode}% | =%<nop>ICON{qrcode}%= | QR Code | gif | 16x16 |  |
 | %ICON{question}% | =%<nop>ICON{question}%= | Question | gif | 16x16 |  |
 | %ICON{quiet}% | =%<nop>ICON{quiet}%= | Quiet | gif | 16x16 |  |
 | %ICON{radioactive}% | =%<nop>ICON{radioactive}%= | Radioactive | gif | 16x16 |  |
@@ -172,7 +174,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{lockfolder}% | =%<nop>ICON{lockfolder}%= | Locked folder | gif | 16x16 |  |
 | %ICON{lockfoldergray}% | =%<nop>ICON{lockfoldergray}%= | Locked folder, gray | gif | 16x16 |  |
 
----+++ %ICON{facebook}% Social networking, %ICON{stumbleupon}% social bookmarks
+---+++ %ICON{facebook}% Social networking, %ICON{stumbleupon}% bookmarks
 
 | %ICON{bitly}% | =%<nop>ICON{bitly}%= | Bit.ly | gif | 16x16 |  |
 | %ICON{blogger}% | =%<nop>ICON{blogger}%= | Blogger | gif | 16x16 |  |
@@ -604,6 +606,7 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="hand.gif" attr="h" comment="" date="1169565034" path="hand.gif" size="344" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="heart.gif" attr="h" comment="" date="1260656213" path="heart.gif" size="1035" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="help.gif" attr="h" comment="" date="1169565034" path="help.gif" size="212" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="help-video.gif" attr="h" comment="" date="1297804845" path="help-video.gif" size="968" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="hlp.gif" attr="h" comment="" date="1169565034" path="hlp.gif" size="370" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="home.gif" attr="h" comment="" date="1169565034" path="home.gif" size="342" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="hourglass.gif" attr="h" comment="" date="1169565034" path="hourglass.gif" size="371" user="TWikiContributor" version=""}%
@@ -705,6 +708,7 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="psd.gif" attr="h" comment="" date="1169565034" path="psd.gif" size="369" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="puzzle.gif" attr="h" comment="" date="1169565034" path="puzzle.gif" size="332" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="py.gif" attr="h" comment="" date="1169565034" path="py.gif" size="382" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="qrcode.gif" attr="h" comment="" date="1297804845" path="qrcode.gif" size="138" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="question.gif" attr="h" comment="" date="1169565034" path="question.gif" size="214" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="quiet.gif" attr="h" comment="" date="1193349525" path="quiet.gif" size="977" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="radioactive.gif" attr="h" comment="" date="1260656213" path="radioactive.gif" size="1043" user="TWikiContributor" version=""}%
