@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297659355" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297803593" format="1.1" version="$Rev$"}%
 ---+!! !QRCodePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -154,6 +154,37 @@ The QR Code of the current topic can be placed in a TWiki skin so that the URL c
 <img src="%ATTACHURLPATH%/qrcode-example-2.png" alt="qrcode-example-2.png" width="228" height="228" />
 </td></tr></table>
 
+---+++ Pulldown menu with QR Code
+
+You can add a QR Code pulldown to the %SYSTEMWEB%.TopMenuSkin so that smartphone users can easily bookmark any TWiki page. Add the following to your %SYSTEMWEB%.TopMenuSkinTopicMenu after the Edit pulldown bullets:
+
+<table border="0" cellpadding="10" cellspacing="2">
+<tr bgcolor="#dddddd">
+<th> *You type* </th>
+<th> *You get (if installed)* </th>
+<th> *Simulated example* </th>
+</tr><tr bgcolor="#f4f4f8">
+<td valign="top">
+<verbatim>
+   * [[%BASEWEB%.%BASETOPIC%][<img 
+src="%PUBURLPATH%/%SYSTEMWEB%/QRCodePlugin/
+qrcode.gif" alt="" width="16" height="16" 
+/> %ICON{menu-down}%]]
+      * [[%SYSTEMWEB%.QRCodePlugin][%QRCODE{ 
+"%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" 
+version="auto" size="4" }%]]
+</verbatim>
+</td><td valign="top">
+%INCLUDE{"%SYSTEMWEB%.TopMenuSkin"}%
+<div class="twTopMenuTab">
+%INCLUDE{"%SYSTEMWEB%.TopMenuSkinTopicMenu"}%
+   * [[%BASEWEB%.%BASETOPIC%][<img src="%PUBURLPATH%/%SYSTEMWEB%/QRCodePlugin/qrcode.gif" alt="" width="16" height="16" /> %ICON{menu-down}%]]
+      * [[%SYSTEMWEB%.QRCodePlugin][%QRCODE{ "%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" version="auto" size="4" }%]]
+</div>
+</td><td valign="top">
+  <img src="%ATTACHURLPATH%/qrcode-example-4.png" alt="qrcode-example-4.png" width="304" height="194" />
+</td></tr></table>
+
 #QrForm
 ---+++ Interactive example
 
@@ -240,8 +271,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] <br /> &copy; 2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-02-12 |
+|  Plugin Version: | 2011-02-15 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-02-15: | TWikibug:Item6647: Added TopMenuSkin example; added qrcode.gif 16x16 pixels icon |
 |  2011-02-13: | TWikibug:Item6647: Added format=..."; XHTML fix for HTML img tag |
 |  2011-02-12: | TWikibug:Item6647: Lazy loading of core and CPAN modules for better performance when QRCODE is not used; adding interactive example |
 |  2011-02-11: | TWikibug:Item6647: Added version="auto" |
@@ -261,3 +293,5 @@ __Related Topics:__ VarQRCODE, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDo
 %META:FILEATTACHMENT{name="qrcode-example-1.png" attachment="qrcode-example-1.png" attr="h" comment="" date="1297312514" path="qrcode-example-1.png" size="305" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="qrcode-example-2.png" attachment="qrcode-example-2.png" attr="h" comment="" date="1297321158" path="qrcode-example-2.png" size="676" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="qrcode-example-3.png" attachment="qrcode-example-3.png" attr="h" comment="" date="1297546847" path="qrcode-example-3.png" size="230" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="qrcode.gif" attachment="qrcode.gif" attr="h" comment="" date="1297723592" path="qrcode.gif" size="138" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="qrcode-example-4.png" attachment="qrcode-example-4.png" attr="h" comment="" date="1297727291" path="qrcode-example-4.png" size="6006" user="PeterThoeny" version="2"}%

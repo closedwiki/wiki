@@ -27,7 +27,7 @@ require TWiki::Plugins; # For the API version
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC $pluginName $debug );
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-02-13';
+$RELEASE = '2011-02-15';
 
 $SHORTDESCRIPTION = 'Create QR Code (a matrix barcode) in TWiki pages, useful for mobile applications';
 $NO_PREFS_IN_TOPIC = 1;
