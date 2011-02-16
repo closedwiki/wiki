@@ -3,7 +3,8 @@
 # Copyright (C) 2001 Andrea Sterbini, a.sterbini@flashnet.it
 # Christian Schultze: debugging, relative month/year, highlight today
 # Akim Demaille <akim@freefriends.org>: handle date intervals.
-# Copyright (C) 2002-2006 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2002-2011 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2002-2010 TWiki Contributors
 #
 # For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -36,7 +37,7 @@ use Time::Local;
 use vars qw( $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
 	    $libsLoaded $libsError $defaultsInitialized %defaults );
 $VERSION   = '$Rev$';
-$RELEASE = 'Dakar';
+$RELEASE = '2011-02-15';
 
 #$VERSION   = '1.020'; #dab# Bug fix from TWiki:Main.MarcLangheinrich for multiday events that were not properly displayed because the first day occurred in the current month, but before the first day included in the list.
 #$VERSION   = '1.019'; #dab# Added support for monthly repeaters specified as "L Fri" (last Friday in all months).
@@ -544,6 +545,7 @@ sub handleCalendar
 	local $date_rx = "($days_rx)\\s+($months_rx)";
 	local $monthly_rx = "([1-6L])\\s+($wdays_rx)";
 	local $full_date_rx = "$date_rx\\s+($years_rx)";
+        local $iso_date_rx = "($years_rx)\-($days_rx)\-($days_rx)";
 	local $anniversary_date_rx = "A\\s+$date_rx\\s+($years_rx)";
 	local $weekly_rx = "E\\s+($wdays_rx)";
 	local $periodic_rx = "E([0-9]+)\\s+$full_date_rx";
@@ -590,6 +592,40 @@ sub handleCalendar
 	    };
 	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
 	}
+
+        # collect all ISO date intervals with year
+        @days = fetchDays( "$iso_date_rx\\s+-\\s+$iso_date_rx", \@bullets );
+        $multidaycounter = 0;
+        foreach $d (@days) {
+            my ($yy1, $mm1, $dd1, $yy2, $mm2, $dd2, $xs, $xcstr, $descr) = split( /\|/, $d);
+            $multidaycounter++; # Identify this event
+            eval {
+                if (length($xcstr) > 9) {
+                    @xmap = &fetchxmap($xcstr, $y, $m);
+                } else {
+                    @xmap = &emptyxmap($y, $m);
+                }
+                my $date1 = Date_to_Days ($yy1, $mm1, $dd1);
+                my $date2 = Date_to_Days ($yy2, $mm2, $dd2);
+
+                # Process events starting at the first day to be included in
+                # the list, or the first day of the month, whichever is
+                # appropriate 
+
+                for my $d ((defined $listStartDay ? $listStartDay : 1) .. Days_in_Month ($y, $m)) {
+                    my $date = Date_to_Days ($y, $m, $d);
+                    if ($date1 <= $date && $date <= $date2 && $xmap[$d]) {
+                        &highlightMultiDay($cal, $d, $descr, $date1, $date2, $date,
+                                           defined($multidayeventswithyear{$multidaycounter}),
+                                           %options);
+                        # Mark this event as having been displayed
+                        $multidayeventswithyear{$multidaycounter}++;
+                    }
+                }
+            };
+            &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+        }
+
 	# then collect all intervals without year
 	@days = fetchDays( "$date_rx\\s+-\\s+$date_rx", \@bullets );
 	$multidaycounter = 0;
@@ -633,6 +669,19 @@ sub handleCalendar
 	    };
 	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
 	}
+
+        # collect all ISO dates
+        @days = fetchDays( "$iso_date_rx", \@bullets );
+        foreach $d (@days) {
+            ($yy, $mm, $dd, $xs, $xcstr, $descr) = split( /\|/, $d);
+            eval {
+                if ($yy == $y && $mm == $m) {
+                    &highlightDay( $cal, $dd, $descr, %options);
+                }
+            };
+            &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+        }
+
 	# collect all anniversary dates
 	@days = fetchDays( "$anniversary_date_rx", \@bullets );
 	foreach $d (@days) {
