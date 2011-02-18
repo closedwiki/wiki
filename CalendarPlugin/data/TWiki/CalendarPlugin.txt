@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297843705" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1297999805" format="1.1" version="$Rev$"}%
 ---+!! Calendar Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -87,10 +87,10 @@ Events are defined by bullets with the following syntax:
 |^| ==&nbsp;&nbsp; * L DDD - description== | L Mon - The last Monday of each month |
 |^| ==&nbsp;&nbsp; * dd - description== | 14 - The 14th of every month |
 | *Weekly*: | ==&nbsp;&nbsp; * E DDD - description== | E Wed - Every Wednesday |
-| ^ | ==&nbsp;&nbsp; * E DDD dd MMM yyyy - description== | E Wed 27 Jan 2005 - Every Wednesday Starting 27 Jan 2005 |
-| ^ | ==&nbsp;&nbsp; * E DDD dd MMM yyyy - dd MMM yyyy - description== | E Wed 1 Jan 2005 - 27 Jan 2005 - Every Wednesday from 1 Jan 2005 through 27 Jan 2005 (inclusive) |
-| *Periodic*: | <nobr> ==&nbsp;&nbsp; * En dd MMM yyyy - description== </nobr> | E3 02 Dec 2002 - Every three days starting 02 Dec 2002 |
-| ^ | <nobr> ==&nbsp;&nbsp; * En dd MMM yyyy - dd MMM yyyy - description== </nobr> | E3 12 Apr 2005 - 31 Dec 2005 - Every three days from 12 Apr 2005 through 31 Dec 2005 (inclusive) |
+| ^ | ==&nbsp;&nbsp; * E DDD yyyy-mm-dd - description<br /> &nbsp;&nbsp; * E DDD dd MMM yyyy - description== | E 2005-01-27 - Every Wednesday Starting 27 Jan 2005 |
+| ^ | ==&nbsp;&nbsp; * E DDD yyyy-mm-dd - yyyy-mm-dd - description<br /> &nbsp;&nbsp; * E DDD dd MMM yyyy - dd MMM yyyy - description== | E Wed 2005-01-01 - 2005-01-27 - Every Wednesday from 1 Jan 2005 through 27 Jan 2005 (inclusive) |
+| *Periodic*: | <nobr> ==&nbsp;&nbsp; * En yyyy-mm-dd - description<br /> &nbsp;&nbsp; * En dd MMM yyyy - description== </nobr> | E3 2002-12-02 - Every three days starting 02 Dec 2002 |
+| ^ | <nobr> ==&nbsp;&nbsp; * En yyyy-mm-dd - yyyy-mm-dd - description<br /> &nbsp;&nbsp; * En dd MMM yyyy - dd MMM yyyy - description== </nobr> | E3 2005-04-12 - 2005-12-31 - Every three days from 12 Apr 2005 through 31 Dec 2005 (inclusive) |
 | *Exception*: | Insert the following between the above syntax and the description:<br /> ==X { yyyy-mm-dd, yyyy-mm-dd - yyyy-mm-dd }<br /> X { dd MMM yyyy, dd MMM yyyy - dd MMM yyyy }== | 1 Fri X { 2002-12-01, 2002-12-06 - 2002-12-14 } - Every first Friday except on the 01 Dec 2002 and between 06 Dec 2002 and 14 Dec 2002 |
 
 #EventFormatting
@@ -381,8 +381,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-02-16 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-02-16: | TWikibug:Item6649: Support exceptions in ISO date format -- TWiki:Main.PeterThoeny |
-|  2011-02-15: | TWikibug:Item6649: Support calendar events in ISO date format, such as 2011-02-15 -- TWiki:Main.PeterThoeny |
+|  2011-02-17: | TWikibug:Item6649: Support weekly events and periodic events with ISO date format -- TWiki:Main.PeterThoeny |
+|  2011-02-16: | TWikibug:Item6649: Support exceptions with ISO date format -- TWiki:Main.PeterThoeny |
+|  2011-02-15: | TWikibug:Item6649: Support calendar events with ISO date format, such as 2011-02-15 -- TWiki:Main.PeterThoeny |
 |  V1.020: | TWiki:Main.DavidBright: Bug fix from TWiki:Main.MarcLangheinrich for multiday events that were not properly displayed because the first day occurred in the current month, but before the first day included in the list. |
 |  V1.019: | TWiki:Main.DavidBright: Added support for monthly repeaters specified as "L Fri" (last Friday in all months). |
 |  V1.018: | TWiki:Main.DavidBright: Added capability to display multiple months in one call, display events in a list, and provided for more extensive formatting of date and description of events. |
