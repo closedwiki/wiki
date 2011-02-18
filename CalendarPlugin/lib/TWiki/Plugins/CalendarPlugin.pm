@@ -37,7 +37,7 @@ use Time::Local;
 use vars qw( $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
 	    $libsLoaded $libsError $defaultsInitialized %defaults );
 $VERSION   = '$Rev$';
-$RELEASE = '2011-02-15';
+$RELEASE = '2011-02-16';
 
 #$VERSION   = '1.020'; #dab# Bug fix from TWiki:Main.MarcLangheinrich for multiday events that were not properly displayed because the first day occurred in the current month, but before the first day included in the list.
 #$VERSION   = '1.019'; #dab# Added support for monthly repeaters specified as "L Fri" (last Friday in all months).
@@ -232,7 +232,21 @@ sub fetchxmap {
 	@ret = &emptyxmap($y, $m);
 	@xcepts = split ',', $xlist;
 	for $xc (@xcepts) {
-		if (@dparts = $xc =~ m/$full_date_rx\s*-\s*$full_date_rx/) {
+                if (@dparts = $xc =~ m/$iso_date_rx\s*-\s*$iso_date_rx/) {
+                        ($y1, $m1, $d1, $y2, $m2, $d2) = @dparts;
+                        if (($m1 <= $m && $y1 <= $y) && ($m2 >= $m && $y2 >= $y)) {
+                                unless ($m1 == $m && $y1 == $y) {
+                                        $m1 = $m;
+                                        $y1 = $y;
+                                        $d1 = 1;
+                                }
+                                do {
+                                        $ret[$d1] = 0;
+                                        ($y1, $m1, $d1) = Add_Delta_Days($y1, $m1, $d1, 1);
+                                } until ($m1 != $m || ($m1 == $m2 && $d1 > $d2));
+                        }
+
+		} elsif (@dparts = $xc =~ m/$full_date_rx\s*-\s*$full_date_rx/) {
 			($d1, $m1, $y1, $d2, $m2, $y2) = @dparts;
 			$m1 = $months{$m1};
 			$m2 = $months{$m2};
@@ -247,6 +261,13 @@ sub fetchxmap {
 					($y1, $m1, $d1) = Add_Delta_Days($y1, $m1, $d1, 1);
 				} until ($m1 != $m || ($m1 == $m2 && $d1 > $d2));
 			}
+                
+                } elsif (@dparts = $xc =~ m/$iso_date_rx/) {
+                        ($y1, $m1, $d1) = @dparts;
+                        if ($m1 == $m && $y1 == $y) {
+                                $ret[$d1] = 0;
+                        }
+
 		} elsif (@dparts = $xc =~ m/$full_date_rx/) {
 			($d1, $m1, $y1) = @dparts;
 			$m1 = $months{$m1};
@@ -545,7 +566,7 @@ sub handleCalendar
 	local $date_rx = "($days_rx)\\s+($months_rx)";
 	local $monthly_rx = "([1-6L])\\s+($wdays_rx)";
 	local $full_date_rx = "$date_rx\\s+($years_rx)";
-        local $iso_date_rx = "($years_rx)\-($days_rx)\-($days_rx)";
+        local $iso_date_rx = "($years_rx)\\-($days_rx)\\-($days_rx)";
 	local $anniversary_date_rx = "A\\s+$date_rx\\s+($years_rx)";
 	local $weekly_rx = "E\\s+($wdays_rx)";
 	local $periodic_rx = "E([0-9]+)\\s+$full_date_rx";
@@ -658,7 +679,8 @@ sub handleCalendar
 	    };
 	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
 	}
-	# first collect all dates with year
+
+	# collect all dates with year
 	@days = fetchDays( "$full_date_rx", \@bullets );
 	foreach $d (@days) {
 	    ($dd, $mm, $yy, $xs, $xcstr, $descr) = split( /\|/, $d);
@@ -706,6 +728,7 @@ sub handleCalendar
 	    };
 	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
 	}
+
 	# then collect all dates without year
 	@days = fetchDays( "$date_rx", \@bullets );
 	foreach $d (@days) {
@@ -916,7 +939,6 @@ sub handleCalendar
 	}
 
 	# Format the calendar as either a list or a table
-
 	if (! $asList ) {
 	    $result .= $cal->as_HTML . "\n";
 	} else {
@@ -962,6 +984,7 @@ sub handleCalendar
     }
     return $result;
 }
+
 sub getTopicText {
     my ($theTopic, $theWeb, $refText, %options) = @_;
     my $topics = $options{topic};
