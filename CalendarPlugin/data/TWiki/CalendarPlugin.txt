@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1298004661" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1298016344" format="1.1" version="$Rev$"}%
 ---+!! Calendar Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -46,7 +46,10 @@ __Note:__ This Plugin does not observe topic permissions.
 | ==cellheight="n"== | Height in pixels of each cell in the calendar | Minimum height needed |
 | ==format="..."== | How to highlight a date | See [[%TOPIC%#EventFormatting][Event Formatting]] below |
 | ==width="n"== or =="n%"== | Width of calendar table in pixels or percent | Minimum width needed |
-| ==border="n"== | Border width of calendar table | "1" |
+| ==sharpborders="n"== | If set to 1, this gives very crisp edges between the table cells. If set to 0 standard HTML cells are used. | "1" |
+| ==border="n"== | Border width of calendar table. (sharpborders="0" required) | "1" |
+| ==cellspacing="n"== | Spacing of calendar cells. (sharpborders="0" required) | "0" |
+| ==cellpadding="n"== | Padding of calendar cells. (sharpborders="0" required) | "3" |
 | ==nowrap="1"== or =="0"== | Prevent cell content from wrapping | "0" |
 | ==bgcolor="#nnnn"== | Default background color of all cells unless redefined by other color settings below (use an HTML color-code like "#000000" as defined in %SYSTEMWEB%.StandardColors) | white |
 | ==contentcolor="#nnnn"== | Default content color of all cells unless redefined | black |
@@ -379,8 +382,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny, TWiki:Main.NathanKerr, TWiki:Main.DavidBright, TWiki:Main.DanielRohde, TWiki:Main. |
 |  Copyright: | &copy; 2001 TWiki:Main.AndreaSterbini <br /> &copy; 2002-2011 TWiki:Main.PeterThoeny <br /> &copy; 2002-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-02-16 |
+|  Plugin Version: | 2011-02-18 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-02-18: | TWikibug:Item6650: Add cellspacing, cellpadding parameters; fix sharpborders="0" issue -- TWiki:Main.PeterThoeny |
 |  2011-02-17: | TWikibug:Item6649: Support anniversary, yearly, weekly and periodic events with ISO date format -- TWiki:Main.PeterThoeny |
 |  2011-02-16: | TWikibug:Item6649: Support exceptions with ISO date format -- TWiki:Main.PeterThoeny |
 |  2011-02-15: | TWikibug:Item6649: Support calendar events with ISO date format, such as 2011-02-15 -- TWiki:Main.PeterThoeny |
