@@ -75,9 +75,9 @@ __Note:__ This Plugin does not observe topic permissions.
 Events are defined by bullets with the following syntax:
 
 | *Event type* | *Syntax* | *Example* |
-| *Single*: | ==&nbsp;&nbsp; * yyyy mm dd - description== | 2002-12-09 - Expo ISO island |
+| *Single*: | ==&nbsp;&nbsp; * yyyy-mm-dd - description== | 2002-12-09 - Expo ISO island |
 |^| ==&nbsp;&nbsp; * dd MMM yyyy - description== | 09 Dec 2002 - Expo |
-| *Interval*: | ==&nbsp;&nbsp; * yyyy mm dd - yyyy mm dd - description== | 2002-02-02 - 2002-02-04 - Vacation ISO land |
+| *Interval*: | ==&nbsp;&nbsp; * yyyy-mm-dd - yyyy-mm-dd - description== | 2002-02-02 - 2002-02-04 - Vacation ISO land |
 |^| ==&nbsp;&nbsp; * dd MMM yyyy - dd MMM yyyy - description== | 02 Feb 2002 - 04 Feb 2002 - Vacation |
 | *Yearly*: | ==&nbsp;&nbsp; * dd MMM - description== | 05 Jun - Every 5th of June |
 |^| ==&nbsp;&nbsp; * w DDD MMM - description== | 2 Tue Mar - Every 2nd Tuesday of March |
@@ -91,7 +91,7 @@ Events are defined by bullets with the following syntax:
 | ^ | ==&nbsp;&nbsp; * E DDD dd MMM yyyy - dd MMM yyyy - description== | E Wed 1 Jan 2005 - 27 Jan 2005 - Every Wednesday from 1 Jan 2005 through 27 Jan 2005 (inclusive) |
 | *Periodic*: | <nobr> ==&nbsp;&nbsp; * En dd MMM yyyy - description== </nobr> | E3 02 Dec 2002 - Every three days starting 02 Dec 2002 |
 | ^ | <nobr> ==&nbsp;&nbsp; * En dd MMM yyyy - dd MMM yyyy - description== </nobr> | E3 12 Apr 2005 - 31 Dec 2005 - Every three days from 12 Apr 2005 through 31 Dec 2005 (inclusive) |
-| *Exception*: | Insert the following between the above syntax and the description:<br /> ==X { dd MMM yyyy, dd MMM yyyy - dd MMM yyyy }== | 1 Fri X { 01 Dec 2002, 06 Dec 2002 - 14 Dec 2002 } - Every first Friday except on the 01 Dec 2002 and between 06 Dec 2002 and 14 Dec 2002 |
+| *Exception*: | Insert the following between the above syntax and the description:<br /> ==X { yyyy-mm-dd, yyyy-mm-dd - yyyy-mm-dd }<br /> X { dd MMM yyyy, dd MMM yyyy - dd MMM yyyy }== | 1 Fri X { 2002-12-01, 2002-12-06 - 2002-12-14 } - Every first Friday except on the 01 Dec 2002 and between 06 Dec 2002 and 14 Dec 2002 |
 
 #EventFormatting
 ---+++ Event formatting
@@ -379,8 +379,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny, TWiki:Main.NathanKerr, TWiki:Main.DavidBright, TWiki:Main.DanielRohde, TWiki:Main. |
 |  Copyright: | &copy; 2001 TWiki:Main.AndreaSterbini <br /> &copy; 2002-2011 TWiki:Main.PeterThoeny <br /> &copy; 2002-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-02-15 |
+|  Plugin Version: | 2011-02-16 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-02-16: | TWikibug:Item6649: Support exceptions in ISO date format -- TWiki:Main.PeterThoeny |
 |  2011-02-15: | TWikibug:Item6649: Support calendar events in ISO date format, such as 2011-02-15 -- TWiki:Main.PeterThoeny |
 |  V1.020: | TWiki:Main.DavidBright: Bug fix from TWiki:Main.MarcLangheinrich for multiday events that were not properly displayed because the first day occurred in the current month, but before the first day included in the list. |
 |  V1.019: | TWiki:Main.DavidBright: Added support for monthly repeaters specified as "L Fri" (last Friday in all months). |
