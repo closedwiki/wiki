@@ -569,6 +569,7 @@ sub handleCalendar
         local $iso_date_rx = "($years_rx)\\-($days_rx)\\-($days_rx)";
 	local $anniversary_date_rx = "A\\s+$date_rx\\s+($years_rx)";
 	local $weekly_rx = "E\\s+($wdays_rx)";
+        local $periodic_iso_rx = "E([0-9]+)\\s+$iso_date_rx";
 	local $periodic_rx = "E([0-9]+)\\s+$full_date_rx";
 	local $numdaymon_rx = "([0-9L])\\s+($wdays_rx)\\s+($months_rx)";
 
@@ -772,6 +773,30 @@ sub handleCalendar
 	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
 	}
 
+        # collect weekly repeaters with ISO start and end dates
+        @days = fetchDays( "$weekly_rx\\s+$iso_date_rx\\s+-\\s+$iso_date_rx", \@bullets );
+        foreach $d (@days) {
+            ($dd, $yy1, $mm1, $dd1, $yy2, $mm2, $dd2, $xs, $xcstr, $descr) = split( /\|/, $d);
+            eval {
+                if (length($xcstr) > 9) {
+                    @xmap = &fetchxmap($xcstr, $y, $m);
+                } else {
+                    @xmap = &emptyxmap($y, $m);
+                }
+                my $date1 = Date_to_Days ($yy1, $mm1, $dd1);
+                my $date2 = Date_to_Days ($yy2, $mm2, $dd2);
+                $hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dd}, 1);
+                do {
+                    my $date = Date_to_Days ($y, $m, $hd);
+                    if ($xmap[$hd] && $date1 <= $date && $date <= $date2) {
+                        &highlightDay( $cal, $hd, $descr, %options );
+                    }
+                    ($ny, $nm, $hd) = Add_Delta_Days($y, $m, $hd, 7);
+                } while ($ny == $y && $nm == $m);
+            };
+            &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+        }
+
 	# collect weekly repeaters with start and end dates
 	@days = fetchDays( "$weekly_rx\\s+$full_date_rx\\s+-\\s+$full_date_rx", \@bullets );
 	foreach $d (@days) {
@@ -795,6 +820,29 @@ sub handleCalendar
 	    };
 	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
 	}
+
+        # collect weekly repeaters with ISO start dates
+        @days = fetchDays( "$weekly_rx\\s+$iso_date_rx", \@bullets );
+        foreach $d (@days) {
+            ($dd, $yy1, $mm1, $dd1, $xs, $xcstr, $descr) = split( /\|/, $d);
+            eval {
+                if (length($xcstr) > 9) {
+                    @xmap = &fetchxmap($xcstr, $y, $m);
+                } else {
+                    @xmap = &emptyxmap($y, $m);
+                }
+                my $date1 = Date_to_Days ($yy1, $mm1, $dd1);
+                $hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dd}, 1);
+                do {
+                    my $date = Date_to_Days ($y, $m, $hd);
+                    if ($xmap[$hd] && $date1 <= $date) {
+                        &highlightDay( $cal, $hd, $descr, %options );
+                    }
+                    ($ny, $nm, $hd) = Add_Delta_Days($y, $m, $hd, 7);
+                } while ($ny == $y && $nm == $m);
+            };
+            &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+        }
 
 	# collect weekly repeaters with start dates
 	@days = fetchDays( "$weekly_rx\\s+$full_date_rx", \@bullets );
@@ -869,6 +917,31 @@ sub handleCalendar
 	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
 	}
 
+        # collect periodic repeaters with ISO start and end dates
+        @days = fetchDays( "$periodic_iso_rx\\s+-\\s+$iso_date_rx", \@bullets );
+        foreach $d (@days) {
+            my ($p, $yy1, $mm1, $dd1, $yy2, $mm2, $dd2, $xs, $xcstr, $descr) = split( /\|/, $d);
+            eval {
+                if (length($xcstr) > 9) {
+                    @xmap = &fetchxmap($xcstr, $y, $m);
+                } else {
+                    @xmap = &emptyxmap($y, $m);
+                }
+                while (  $yy1 < $y  || ( $yy1==$y  &&  $mm1 < $m )) {
+                    ($yy1, $mm1, $dd1) = Add_Delta_Days($yy1, $mm1, $dd1, $p);
+                }
+                my $ldate = Date_to_Days ($yy2, $mm2, $dd2);
+                while ( ($yy1 == $y) && ($mm1 == $m) ) {
+                    my $date = Date_to_Days($yy1, $mm1, $dd1);
+                    if ($xmap[$dd1] && ($date <=$ldate)) {
+                        &highlightDay( $cal, $dd1, $descr, %options );
+                    }
+                    ($yy1, $mm1, $dd1) = Add_Delta_Days($yy1, $mm1, $dd1, $p);
+                }
+            };
+            &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+        }
+
 	# collect periodic repeaters with start and end dates
 	@days = fetchDays( "$periodic_rx\\s+-\\s+$full_date_rx", \@bullets );
 	foreach $d (@days) {
@@ -894,6 +967,31 @@ sub handleCalendar
 	    };	
 	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
 	}
+
+        # collect periodic repeaters with ISO date
+        @days = fetchDays( "$periodic_iso_rx", \@bullets );
+        foreach $d (@days) {
+            ($p, $yy, $mm, $dd, $xs, $xcstr, $descr) = split( /\|/, $d);
+            eval {
+                if (length($xcstr) > 9) {
+                    @xmap = &fetchxmap($xcstr, $y, $m);
+                } else {
+                    @xmap = &emptyxmap($y, $m);
+                }
+                if (($mm <= $m && $yy == $y) || ($yy < $y)) {
+                    while ($yy < $y || ($yy == $y && $mm < $m)) {
+                        ($yy, $mm, $dd) = Add_Delta_Days($yy, $mm, $dd, $p);
+                    }
+                    while ($yy == $y && $mm == $m) {
+                        if ($xmap[$dd]) {
+                            &highlightDay( $cal, $dd, $descr, %options );
+                        }
+                        ($yy, $mm, $dd) = Add_Delta_Days($yy, $mm, $dd, $p);
+                    }
+                }
+            };
+            &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+        }
 
 	# collect periodic repeaters
 	@days = fetchDays( "$periodic_rx", \@bullets );
