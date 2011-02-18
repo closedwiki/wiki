@@ -37,7 +37,7 @@ use Time::Local;
 use vars qw( $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
 	    $libsLoaded $libsError $defaultsInitialized %defaults );
 $VERSION   = '$Rev$';
-$RELEASE = '2011-02-16';
+$RELEASE = '2011-02-18';
 
 #$VERSION   = '1.020'; #dab# Bug fix from TWiki:Main.MarcLangheinrich for multiday events that were not properly displayed because the first day occurred in the current month, but before the first day included in the list.
 #$VERSION   = '1.019'; #dab# Added support for monthly repeaters specified as "L Fri" (last Friday in all months).
@@ -92,6 +92,8 @@ sub initDefaults
 	# normal HTML::CalendarMonthSimple options
 	border				=> 1,
 	width				=> 0,
+	cellspacing                     => 0,
+	cellpadding			=> 3,
 	showdatenumbers			=> 0,
 	showweekdayheaders		=> 0,
 	weekdayheadersbig		=> undef, # the default is ok
@@ -316,8 +318,8 @@ sub handleCalendar
     my $orgtopic = $options{topic};
     my $orgweb = $options{web};
     foreach $option (keys %options) {
-	$v = &TWiki::Func::extractNameValuePair($attributes,$option) || undef;
-	$options{$option} = $v if defined($v);
+	$v = &TWiki::Func::extractNameValuePair($attributes,$option);
+	$options{$option} = $v if( $v || $v eq '0' );
     }
 
     # get GMT offset
