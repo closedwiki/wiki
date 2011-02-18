@@ -566,10 +566,12 @@ sub handleCalendar
 	local $date_rx = "($days_rx)\\s+($months_rx)";
 	local $monthly_rx = "([1-6L])\\s+($wdays_rx)";
 	local $full_date_rx = "$date_rx\\s+($years_rx)";
-        local $iso_date_rx = "($years_rx)\\-($days_rx)\\-($days_rx)";
+	local $iso_month_day_rx = "($days_rx)\\-($days_rx)";
+	local $iso_date_rx = "($years_rx)\\-($days_rx)\\-($days_rx)";
 	local $anniversary_date_rx = "A\\s+$date_rx\\s+($years_rx)";
+	local $anniversary_iso_rx = "A\\s+$iso_date_rx";
 	local $weekly_rx = "E\\s+($wdays_rx)";
-        local $periodic_iso_rx = "E([0-9]+)\\s+$iso_date_rx";
+	local $periodic_iso_rx = "E([0-9]+)\\s+$iso_date_rx";
 	local $periodic_rx = "E([0-9]+)\\s+$full_date_rx";
 	local $numdaymon_rx = "([0-9L])\\s+($wdays_rx)\\s+($months_rx)";
 
@@ -581,39 +583,6 @@ sub handleCalendar
 	# outside the loop.
 
 	my @bullets = grep { /^\s+\*/ } split( /[\n\r]+/, $text );
-
-	# collect all date intervals with year
-	@days = fetchDays( "$full_date_rx\\s+-\\s+$full_date_rx", \@bullets );
-	$multidaycounter = 0;
-	foreach $d (@days) {
-	    my ($dd1, $mm1, $yy1, $dd2, $mm2, $yy2, $xs, $xcstr, $descr) = split( /\|/, $d);
-	    $multidaycounter++; # Identify this event
-	    eval {
-		if (length($xcstr) > 9) {
-		    @xmap = &fetchxmap($xcstr, $y, $m);
-		} else {
-		    @xmap = &emptyxmap($y, $m);
-		}
-		my $date1 = Date_to_Days ($yy1, $months{$mm1}, $dd1);
-		my $date2 = Date_to_Days ($yy2, $months{$mm2}, $dd2);
-
-		# Process events starting at the first day to be included in
-		# the list, or the first day of the month, whichever is
-		# appropriate 
-
-		for my $d ((defined $listStartDay ? $listStartDay : 1) .. Days_in_Month ($y, $m)) {
-		    my $date = Date_to_Days ($y, $m, $d);
-		    if ($date1 <= $date && $date <= $date2 && $xmap[$d]) {
-			&highlightMultiDay($cal, $d, $descr, $date1, $date2, $date,
-					   defined($multidayeventswithyear{$multidaycounter}),
-					   %options);
-			# Mark this event as having been displayed
-			$multidayeventswithyear{$multidaycounter}++;
-		    }
-		}
-	    };
-	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
-	}
 
         # collect all ISO date intervals with year
         @days = fetchDays( "$iso_date_rx\\s+-\\s+$iso_date_rx", \@bullets );
@@ -629,6 +598,39 @@ sub handleCalendar
                 }
                 my $date1 = Date_to_Days ($yy1, $mm1, $dd1);
                 my $date2 = Date_to_Days ($yy2, $mm2, $dd2);
+
+                # Process events starting at the first day to be included in
+                # the list, or the first day of the month, whichever is
+                # appropriate 
+
+                for my $d ((defined $listStartDay ? $listStartDay : 1) .. Days_in_Month ($y, $m)) {
+                    my $date = Date_to_Days ($y, $m, $d);
+                    if ($date1 <= $date && $date <= $date2 && $xmap[$d]) {
+                        &highlightMultiDay($cal, $d, $descr, $date1, $date2, $date,
+                                           defined($multidayeventswithyear{$multidaycounter}),
+                                           %options);
+                        # Mark this event as having been displayed
+                        $multidayeventswithyear{$multidaycounter}++;
+                    }
+                }
+            };
+            &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+        }
+
+        # collect all date intervals with year
+        @days = fetchDays( "$full_date_rx\\s+-\\s+$full_date_rx", \@bullets );
+        $multidaycounter = 0;
+        foreach $d (@days) {
+            my ($dd1, $mm1, $yy1, $dd2, $mm2, $yy2, $xs, $xcstr, $descr) = split( /\|/, $d);
+            $multidaycounter++; # Identify this event
+            eval {
+                if (length($xcstr) > 9) {
+                    @xmap = &fetchxmap($xcstr, $y, $m);
+                } else {
+                    @xmap = &emptyxmap($y, $m);
+                }
+                my $date1 = Date_to_Days ($yy1, $months{$mm1}, $dd1);
+                my $date2 = Date_to_Days ($yy2, $months{$mm2}, $dd2);
 
                 # Process events starting at the first day to be included in
                 # the list, or the first day of the month, whichever is
@@ -681,6 +683,18 @@ sub handleCalendar
 	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
 	}
 
+        # collect all ISO dates
+        @days = fetchDays( "$iso_date_rx", \@bullets );
+        foreach $d (@days) {
+            ($yy, $mm, $dd, $xs, $xcstr, $descr) = split( /\|/, $d);
+            eval {
+                if ($yy == $y && $mm == $m) {
+                    &highlightDay( $cal, $dd, $descr, %options);
+                }
+            };
+            &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+        }
+
 	# collect all dates with year
 	@days = fetchDays( "$full_date_rx", \@bullets );
 	foreach $d (@days) {
@@ -693,13 +707,26 @@ sub handleCalendar
 	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
 	}
 
-        # collect all ISO dates
-        @days = fetchDays( "$iso_date_rx", \@bullets );
+        # collect all anniversary ISO dates
+        @days = fetchDays( "$anniversary_iso_rx", \@bullets );
         foreach $d (@days) {
             ($yy, $mm, $dd, $xs, $xcstr, $descr) = split( /\|/, $d);
             eval {
-                if ($yy == $y && $mm == $m) {
-                    &highlightDay( $cal, $dd, $descr, %options);
+                if ($yy <= $y && $mm == $m) {
+
+                    # Annotate anniversaries with the number of years
+                    # since the original occurence. Do not annotate
+                    # the first occurence (i.e., someone's birth date
+                    # looks like "X's Birthday", not "X's Birthday
+                    # (0)", but for subsequent years it will look like
+                    # "X's Birthday (3)", meaning that they are 3
+                    # years old.
+
+                    my $elapsed = $y - $yy;
+                    my $elapsed_indicator = ($elapsed > 0)
+                        ? " ($elapsed)"
+                        : '';
+                    &highlightDay( $cal, $dd, $descr . $elapsed_indicator, %options);
                 }
             };
             &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
@@ -730,22 +757,39 @@ sub handleCalendar
 	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
 	}
 
-	# then collect all dates without year
-	@days = fetchDays( "$date_rx", \@bullets );
-	foreach $d (@days) {
-	    ($dd, $mm, $xs, $xcstr, $descr) = split( /\|/, $d);
-	    eval {
-		if (length($xcstr) > 9) {
-		    @xmap = &fetchxmap($xcstr, $y, $m);
-		} else {
-		    @xmap = &emptyxmap($y, $m);
-		}
-		if ($months{$mm} == $m && $xmap[$dd]) {
-		    &highlightDay( $cal, $dd, $descr, %options );
-		}
-	    };
-	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
-	}
+        # then collect all ISO dates without year
+        @days = fetchDays( "$iso_month_day_rx", \@bullets );
+        foreach $d (@days) {
+            ($mm, $dd, $xs, $xcstr, $descr) = split( /\|/, $d);
+            eval {
+                if (length($xcstr) > 9) {
+                    @xmap = &fetchxmap($xcstr, $y, $m);
+                } else {
+                    @xmap = &emptyxmap($y, $m);
+                }
+                if ($mm == $m && $xmap[$dd]) {
+                    &highlightDay( $cal, $dd, $descr, %options );
+                }
+            };
+            &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+        }
+
+        # then collect all dates without year
+        @days = fetchDays( "$date_rx", \@bullets );
+        foreach $d (@days) {
+            ($dd, $mm, $xs, $xcstr, $descr) = split( /\|/, $d);
+            eval {
+                if (length($xcstr) > 9) {
+                    @xmap = &fetchxmap($xcstr, $y, $m);
+                } else {
+                    @xmap = &emptyxmap($y, $m);
+                }
+                if ($months{$mm} == $m && $xmap[$dd]) {
+                    &highlightDay( $cal, $dd, $descr, %options );
+                }
+            };
+            &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+        }
 
 	# collect monthly repeaters
 	@days = fetchDays( "$monthly_rx", \@bullets );
