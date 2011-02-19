@@ -1,4 +1,5 @@
-#---+ DatabasePlugin
+# ---+ Extensions
+# ---++ DatabasePlugin
 # Database access information can either be configured here,
 # or it can be recovered from a remote database.
 # <p />

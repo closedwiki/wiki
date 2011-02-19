@@ -1,10 +1,10 @@
-data/TWiki/DatabasePlugin.txt NEW
-lib/TWiki/Plugins/DatabasePlugin/Config.spec
-lib/TWiki/Plugins/DatabasePlugin.pm NEW
-lib/TWiki/Plugins/DatabasePlugin/Connection.pm NEW
-lib/TWiki/Plugins/DatabasePlugin/DATABASE_EDIT.pm NEW
-lib/TWiki/Plugins/DatabasePlugin/DATABASE_REPEAT.pm NEW
-lib/TWiki/Plugins/DatabasePlugin/DATABASE_TABLE.pm NEW
-lib/TWiki/Plugins/DatabasePlugin/DATABASE_SQL_REPEAT.pm NEW
-lib/TWiki/Plugins/DatabasePlugin/DATABASE_SQL.pm NEW
-lib/TWiki/Plugins/DatabasePlugin/DATABASE_SQL_TABLE.pm NEW
+data/TWiki/DatabasePlugin.txt 0644
+lib/TWiki/Plugins/DatabasePlugin/Config.spec 0644
+lib/TWiki/Plugins/DatabasePlugin.pm 0644
+lib/TWiki/Plugins/DatabasePlugin/Connection.pm 0644
+lib/TWiki/Plugins/DatabasePlugin/DATABASE_EDIT.pm 0644
+lib/TWiki/Plugins/DatabasePlugin/DATABASE_REPEAT.pm 0644
+lib/TWiki/Plugins/DatabasePlugin/DATABASE_TABLE.pm 0644
+lib/TWiki/Plugins/DatabasePlugin/DATABASE_SQL_REPEAT.pm 0644
+lib/TWiki/Plugins/DatabasePlugin/DATABASE_SQL.pm 0644
+lib/TWiki/Plugins/DatabasePlugin/DATABASE_SQL_TABLE.pm 0644
