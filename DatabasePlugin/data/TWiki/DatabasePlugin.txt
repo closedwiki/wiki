@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1298103233" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1298103459" format="1.1" version="$Rev$"}%
 ---+!! Database Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -9,7 +9,6 @@
 <sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
 </div></sticky>
-%SHORTDESCRIPTION%
 
 Provide secure access (read and write) to data in an SQL database, with flexible results formatting.
 
