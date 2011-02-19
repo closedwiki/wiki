@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1298102740" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1298103233" format="1.1" version="$Rev$"}%
 ---+!! Database Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -106,7 +106,7 @@ Or let's say you wanted to display the next two upcoming scheduled events in the
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-02-19: | TWikibug:Item6638: Doc improvements; changing TWIKIWEB to SYSTEMWEB -- Main.PeterThoeny |
+|  2011-02-19: | TWikibug:Item6638: Doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  17 Sep 2007 | Bugs:Item4343 Minor corrections to Config.spec - TWiki:Main.CrawfordCurrie |
 |  18 March 2007 | Rewritten for efficiency and clarity, and added DATABASE_SQL - TWiki:Main.CrawfordCurrie |
 |  5 May 2003 (v1.3) | Add support for the primary DB to be in a local file instead of in a DB.  It is acknowledged that this reduces security somewhat<BR>Also added support for Oracle (by adding in the concept of a SID) |
