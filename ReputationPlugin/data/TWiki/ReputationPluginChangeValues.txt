@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="JoonaKannisto" date="1298541952" format="1.1" version="1.6"}%
+%META:TOPICPARENT{name="TWiki.ReputationPluginInfofi"}%
+---+ Update trust values
+This page is for changing the personal level of trust you have to another TWiki user. This trust value is used to determine whether votes and recommendations from other users are taken into account when calculating topic scores. 
+---++Feedback and Instructions: %REPUTATION{rpaction="addtrust" addvalue="%URLPARAM{addvalue}%" user="%URLPARAM{user}%" oldvalue="%URLPARAM{oldvalue}%" slider="%URLPARAM{slider}%"}%
+---++ Current trust values (999 is the maximum (fully trusted) and 1 is the minimum (completely untrusted))
+---++Adjust the values with the slider and press *Save* to apply changes.
+%REPUTATION{rpaction="showtrusted"}%
+
+
+---++Free form
+If you could not find the wikiname you wished to change in the above list, you can use this form to set the trust value. 
+
+ <form name="trustform" action="%TOPIC%">Wikiname: <input type="text" name="user" value="" title="Wikiname"/> <p>Value: <input type="text" id="slider-FreeForm"name="addvalue" title="Range: 1 - 999" class="fd_range_1_999 fd_classname_extraclass" value="500"/><input type="hidden" name="oldvalue" value="500"><input type="hidden" name="slider" value="1" ><input type="submit" class="twikiSubmit" value="Save" /></form>

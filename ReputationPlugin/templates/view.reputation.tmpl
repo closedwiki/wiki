@@ -1,10 +1,5 @@
 %TMPL:INCLUDE{"view"}%
-%TMPL:DEF{"textcontent"}%  
-%REPUTATION{rpaction="%URLPARAM{rpaction}%" vote="%URLPARAM{vote}%"}% 
-<p>
-%TEXT% 
-
-%TMPL:P{"form"}%%TMPL:P{"attachments"}%
-%TMPL:P{"topicinfo"}% %TMPL:END%
-
-
+%TMPL:DEF{"content"}%
+%REPUTATION{rpaction="%URLPARAM{rpaction}%" vote="%URLPARAM{vote}%"}%<p>
+%TEXT%
+%TMPL:END%

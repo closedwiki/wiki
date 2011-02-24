@@ -1,0 +1,69 @@
+.clear{
+clear:both;}
+
+.reputationgraphcont {
+/*padding-top:10px;*/
+color:#000;
+font-weight:700;
+float:left
+}
+
+.reputationgraph {
+float:left;
+/*margin-top:10px;*/
+background-color:#cecece;
+position:relative;
+width:300px;
+padding:0
+}
+
+.reputationgraph .excellentbar {
+display:block;
+position:relative;
+background-image:url(excellent.gif);
+background-position:right center;
+background-repeat:repeat-x;
+/*border-right:#538e02 1px solid;*/
+text-align:center;
+color:#000;
+height:25px;
+font-family:Arial, Helvetica, sans-serif;
+font-size:12px;
+float: left;
+}
+
+.reputationgraph .negativebar {
+display:block;
+position:relative;
+background-image:url(negative.gif);
+background-position:right center;
+background-repeat:repeat-x;
+text-align:center;
+height:25px;
+color:#000;
+font-family:Arial, Helvetica, sans-serif;
+font-size:12px;
+float: left;
+}
+.reputationgraph .positivebar {
+display:block;
+position:relative;
+background-image:url(positive.gif);
+background-repeat:repeat-x;
+height:25px;
+color:#000;
+font-family:Arial, Helvetica, sans-serif;
+font-size:12px;
+float: left;
+}
+.reputationgraph .poorbar {
+display:block;
+position:relative;
+background-image:url(poor.gif);
+font-family:Arial, Helvetica, sans-serif;
+font-size:12px;
+background-repeat:repeat-x;
+height:25px;
+color:#000;
+float: left;
+}

@@ -1,0 +1,18 @@
+%META:TOPICINFO{author="JoonaKannisto" date="1290674687" format="1.1" reprev="1.5" version="1.5"}%
+%META:TOPICPARENT{name="ReputationPlugin"}%
+---++ What are the voting options and ratings?
+
+You can vote topics in this wiki according to their general quality and usefulness. When you encounter a new topic you can use the reviews of other users to make a decision whether to trust the topic's content or to take it with a grain of salt.
+
+You can list every topic you have voted: [[%SYSTEMWEB%.ReputationPluginVoted]], this is a of bookmark feature for topics that made an impact on you. 
+
+If you want to know which are the most popular topics, toplists for webs can be viewed at [[%SYSTEMWEB%.ReputationPluginToplist]].
+
+---++ Reputation and trust
+
+Because you may not view all the users of this wiki as trustworthy and skilled as others you can make the ratings dependent on your interactions with them. You can set this option on your user page %WIKIUSERNAME% by writing the following setting to your personal preferences.
+<verbatim>
+   * Set REPUTATIONPLUGIN_ABSOLUTE = relative
+</verbatim>
+After this setting has been selected all the topic ratings which have not been especially marked as absolute values will be relative. 
+[[TWiki.ReputationPluginChangeValues][Change and observe the value of trust you have to other users on this wiki]]<br /><br /> -- Main.JoonaKannisto - 14 Oct 2010

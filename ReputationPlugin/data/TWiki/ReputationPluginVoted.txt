@@ -1,0 +1,5 @@
+%META:TOPICINFO{author="JoonaKannisto" date="1297252133" format="1.1" reprev="1.3" version="1.3"}%
+%META:TOPICPARENT{name="ReputationPluginInfo"}%
+---+List of topics you have voted
+Below is a list of all the topics you have voted.
+%REPUTATION{rpaction="showtopics"}%

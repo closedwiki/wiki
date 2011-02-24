@@ -1,33 +1,40 @@
-%META:TOPICINFO{author="TWikiContributor" date="1280204852" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="KalleLaitela" date="1298027521" format="1.1" reprev="1.6" version="1.6"}%
 ---+!! <nop>%TOPIC%
+
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
    http://twiki.org/cgi-bin/view/Plugins/ReputationPlugin or provide feedback at
    http://twiki.org/cgi-bin/view/Plugins/ReputationPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
--->
-<sticky>
-<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
-%TOC{title="Page contents"}%
-</div>
-</sticky>
+--> 
 %SHORTDESCRIPTION%
 
----++ Introduction
+%TOC{title="Page contents"}%
 
-Plugin for creating and maintaining user reputation in a TWiki site. Reputation is managed by voting topics which makes topic's authors either more or less trusted, depending on the vote. Plugin calculates a score for every article based on users own past experiences with topic's voters and with past experience of users who are trustworthy from user's perspective. It also counts the number of backlinks which lead to this topic, this is used as a metric for topic's popularity.
+---++ Introduction and Features
 
-Plugin is provided mainly as a prototype and basis for future development. It works, but needs more work to achieve its full potential. Much of the code is taken from TWiki:Plugins.TagMePlugin because I didn't want to start from scratch, as this was my first TWiki Plugin and the first thing I've written in Perl.
+This is a plugin for creating and maintaining user and content reputation in a TWiki site. Reputation is managed by voting topics which makes topic's authors either more or less trusted, depending on the vote. Topics receive score from the votes and this score can be used to evaluate topics trustworthiness.
+
+Because the users in a wiki can be more or less interconnected, the plugin can be used in two different modes. In relative mode it calculates a score for every article based on users own past experiences with topic's voters and with past experience of users who are trustworthy from user's perspective. In absolute vote count mode, the votes are simply added together. The behaviour can be controlled either by the user or the site administration.
+
+In addition to voting the plugin can count the number of backlinks which lead to a topic, this can be used as a metric for topic's popularity. It is somewhat questionable if the amount of interlinking can be used to measure trustworthiness, since interlinking is inherent to wikis and it doesn't necessarily imply that the author of the linking article has even read the topic in question. Amount of backlinks is still a useful value, because it measures the need for a particular topic and doesn't create any additional work for the users. However, this feature can have a performance penalty so it's turned off by default.
+
+In addition to the core functionality, features include:
+   * Toplists for webs
+   * Listing of voted topics for every user
+   * Optional voting quotas for webs
+Much of the code was originally taken from TWiki:Plugins.TagMePlugin because I didn't want to start from scratch, as this was my first TWiki Plugin and the first thing I've written in Perl. In the current version mostly plugin's internal data storage functions have code originating from TWiki:Plugins.TagMePlugin.
 
 ---++ Syntax
 
+The plugin uses basic TWiki syntax, allthough it is primarily intended to be used interactively by the end users. Additional functionality is meant to be used through provided template topics.
 ---+++ Commands for topic voting
 
 | =%<nop>REPUTATION{ rpaction="vote" vote="negative" }%= | Prints voting buttons and adds negative vote for this topic. |
 | =%<nop>REPUTATION{ rpaction="remove" vote="positive" }%= | Prints voting buttons and tries to remove positive vote for this topic. |
 | =%<nop>REPUTATION{ rpaction="%<nop>URLPARAM{rpaction}%" vote="%<nop>URLPARAM{vote}%" }%= | Prints voting buttons and reads the user input from current page view URL. |
 
-Wanted action is given to the plugin with =rpaction= parameter. Additional parameters are needed for: 
+Wanted action is given to the plugin with =rpaction= parameter. Additional parameters are needed for:
 
    * =vote= - Adds vote given with =vote= parameter for the currently viewed topic
    * =remove= - Removes vote given with =vote= parameter from currently viewed topic's votes
@@ -36,116 +43,123 @@ Wanted action is given to the plugin with =rpaction= parameter. Additional param
 
 | =%<nop>REPUTATION{ rpaction="showtopics" }%= | Lists all the topics which current user has voted. List includes authors as they were on the time of the vote. |
 | =%<nop>REPUTATION{ rpaction="showtrusted" }%= | List of users who have been authors of voted topics and their respective scores. |
-
+| =%<nop>REPUTATION{ rpaction="showtoplist" web="Sandbox"}%= | List all the voted topics in given web (the web name is optional) |
 ---+++ Trust value manipulation
 
-| =%<nop>REPUTATION{ rpaction="addtrust" addvalue="30" user="TWikiGuest" }%= | Adds given value to selected user's trust score. |
-| =%<nop>REPUTATION{ rpaction="addtrust" addvalue="%<nop>URLPARAM{addvalue}%" user="%<nop>URLPARAM{wikiname}%" }%= | Can be used with a form to collect the user and a =addvalue= from URL parameters |
+When some user is known 'out of band' (eg. from real life) user might want to trust him more or less than the level of trust derived from their interaction on the wiki. Distribution includes a template topic for this %SYSTEMWEB%.ReputationPluginChangeValues
+| =%<nop>REPUTATION{ rpaction="addtrust" addvalue="30" user="TWikiGuest" }%= | Adds given value to user's trust score. |
+| %REPUTATION{rpaction="addtrust" addvalue="%%NOP%URLPARAM{addvalue}%" user="%%NOP%URLPARAM{user}%" oldvalue="%%NOP%URLPARAM{oldvalue}%" slider="%%NOP%URLPARAM{slider}%"}% |  The included %SYSTEMWEB%.ReputationPluginChangeValues topic has this command, the plugin prints the sliders and this command collects the URL-parameters from the form. |
 
 ---++ Example commands
 
 *Example 1:* =%<nop>REPUTATION{ rpaction="%<nop>URLPARAM{rpaction}%" vote="%<nop>URLPARAM{vote}%" }%=
 
-*Output:*
+*Output with theme 'plain', four options and backlink search enabled*
 
-Popularity: 7/20 Rating 0.00<form name="newnegative" action="ReputationPlugin"> <input type="hidden" name="rpaction" value="vote"/><input type="hidden" name="vote" value="negative"/> <input type="submit" class="twikiSubmit" value="Vote  negative (0)" /></form><form name="newpositive" action="ReputationPlugin"><input type="hidden" name="rpaction" value="vote"/><input type="hidden" name="vote" value="positive"/> <input type="submit" class="twikiSubmit" value="Vote  positive (0)" /></form><form name="newexcellent" action="ReputationPlugin"> <input type="hidden" name="rpaction" value="vote"/><input type="hidden" name="vote" value="excellent"/> <input type="submit" class="twikiSubmit" value="Vote  excellent (0)" /></form>
+Popularity: 7/20 Rating 0.00<form name="newpoor" action="ReputationPlugin"> <input type="hidden" name="rpaction" value="vote"/><input type="hidden" name="vote" value="poor"/> <input type="submit" class="twikiSubmit" value="poor (0)" /><form name="newnegative" action="ReputationPlugin"> <input type="hidden" name="rpaction" value="vote"/><input type="hidden" name="vote" value="negative"/> <input type="submit" class="twikiSubmit" value="negative (0)" /></form><form name="newpositive" action="ReputationPlugin"><input type="hidden" name="rpaction" value="vote"/><input type="hidden" name="vote" value="positive"/> <input type="submit" class="twikiSubmit" value="positive (0)" /></form><form name="newexcellent" action="ReputationPlugin"> <input type="hidden" name="rpaction" value="vote"/><input type="hidden" name="vote" value="excellent"/> <input type="submit" class="twikiSubmit" value="excellent (0)" /></form>
 
------
+*Output with default theme 'smiley', with default settings*
+
+<img width="499" alt="UI.png" src="/twiki/core/pub/TWiki/ReputationPlugin/UI.png" height="34" />
+---
+
 *Example 2:* =%<nop>REPUTATION{ rpaction="showtopics" }%=
 
 *Output:*
+---++ Topics voted as positive
 
-positive, !ReputationPlugin, !TestUser1
+Topic: TestiSivu2 Authors: JoonaKannisto SeppoTaalasmaa<br /> Topic: WebChanges Authors: WikiGuest<br /> Topic: TestTopic2 Authors: JoonaKannisto
+---++ Topics voted as negative
 
-positive, !WebPreferences, !TestUser1, !TestUser2, !TWikiContributor, !TestUser3, !TestUser5, !TestUser4
+Topic: JoonaKannisto Authors: JoonaKannisto TWikiRegistrationAgent?<br /> Topic: TestiSivu Authors: JoonaKannisto SeppoTaalasmaa AdminUser<br /> Topic: WebHome Authors: WikiGuest<br /> Topic: WebPreferences Authors: JoonaKannisto TWikiContributor? ArthurClemens? PeterThoeny? JohnTalintyre?<br /> Topic: TestTopic1 Authors: SeppoTaalasmaa UllaTaalasmaa<br /> Topic: ReputationPlugin Authors: JoonaKannisto
 
-positive, !TestTopic3, !TestUser1
+---
 
-positive, !TestUser1
-
-positive, !SivuTiedot, !TestUser2
-
-negative, !TestiArtikkeli1, !TestUser2
-
-negative, !TestTopic2, !TestUser1, !TestUser1
-
-negative, !TestUser1, !TestUser1, !TWikiRegistrationAgent
-
-excellent, !TestiArtikkeli2, !TestUser2, !OpettajaOlio
-
-excellent, !TestUser6, !TestUser3, !TeppoTesti
-
-excellent, !TestTopic0, !TWikiGuest, !TestUser1, !TestUser3
-
------
 *Example 3:* =%<nop>REPUTATION{ rpaction="showtrusted" }%=
 
-*Output:*
-
-999, !TWikiContributor
-
-999, !TestUser3
-
-999, !TestUser2
-
-999, !TestUser5
-
-503, !TestUser4
-
-502, !TestUser6
-
-502, !TeppoTest
-
-502, !TWikiGuest
-
-502, !OpettajaOlio
-
-499, !TWikiRegistrationAgent
+<img width="774" alt="valuesliders.png" src="http://oskari/twiki/core/pub/TWiki/ReputationPlugin/valuesliders.png" height="152" />
 
 ---++ Plugin Settings
 
-   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+Most of the plugin settings are preferences settings. Cfg variables were not used as much as they should, since the main target for this plugin runs TWiki through mod_perl and TWiki with mod_perl doesn't read LocalSite.cfg until the server process is restarted.
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic: 
       * Set SHORTDESCRIPTION = Create and maintain user reputation in a TWiki site
+   * Optional Plugin settings, can be added to TWiki configure, =twiki/lib/LocalSite.cfg=: 
+      * =$TWiki::cfg{Plugins}{ReputationPlugin}{Voterreputation} =0;= --- If set to 1 other voters also gain or lose reputation depending on their agreement with the user.
+      * =$TWiki::cfg{Plugins}{ReputationPlugin}{Debug} =0;= --- Turn on debug mode (no intended for normal use)
+---+++ Plugin access control settings
+These are standard [[http://twiki.org/cgi-bin/view/TWiki/TWikiAccessControl][TWiki Access Control] rules. In addition to allow rules, it is possible to use deny lists as well.  These variables accept comma separated lists of groups or usernames as value. 
+   * This setting controls the visibility of the votes
+      * Set ALLOWTOPICRPREAD =
+   * Votes can be restricted 
+      * Set ALLOWTOPICRPVOTE = 
+---+++ Plugin settings which only have effect in WebPreferences
+   * This controls the number of voting options shown to user (currently has options 2 and 4) 
+      * Set REPUTATIONPLUGIN_VOTEOPTIONS = 2 
+   * With restricted votes it can be a good idea to hide the toplist for the web as well 
+      * Set REPUTATIONPLUGIN_TOPLISTHIDDEN=0
+   * Different groups can have different weights on different webs 
+      * Set REPUTATIONPLUGIN_WEIGHTGROUPS = AdminGroup,2,TestGroup,3
+   * Possibility to restrict the number of votes user has by assining a quota for every option 
+      * Set REPUTATIONPLUGIN_WEBQUOTA = 1 
+   * Define the quota for each option (default shown here), this can be used to make limited votings in a web. 
+      * #Set REPUTATIONPLUGIN_QUOTATMPL = excellent,2,positive,2,negative,2,poor,2
+---+++ User spesific settings
 
-   * Optional Plugin settings, can be added to TWiki configure, =twiki/lib/LocalSite.cfg=:
-      * =$TWiki::cfg{Plugins}{ReputationPlugin}{Backlinkmax} = 5;= --- changes the maximum back-link count to five. Setting this number to zero disables back-link functionality altogether.
-      * =$TWiki::cfg{Plugins}{ReputationPlugin}{Absolute} = 1;= --- set if raw scores are needed instead of the scores derived from trust values.
+These settings can be used in all preference topics. Allthough changing them in the user topic makes most sense.
+   * Maximum number of backlinks searched, zero disables the functionality 
+      * Set REPUTATIONPLUGIN_BACKLINKMAX = 0  
+   * Theme chooser, options are plain and smiley (default shown here). Plain theme is implemented with standard HTML-submit buttons and in smiley they are styled.
+   * Voting interface is not shown in system topics by default, setting this value to 1 changes the behaviour. 
+      * Set REPUTATIONPLUGIN_INCLUDESYSTEMTOPICS = 0
+   * Changes the behaviour to take account the reputation of voters, all the following options are dependent on this option 
+      * Set REPUTATIONPLUGIN_RATINGTYPE = relative  
+   * Users with a trust value below 500 are considered as noise by default. This option controls whether we ignore these untrusted users or count their votes with negative value. 
+      * Set REPUTATIONPLUGIN_TRUSTTHRESHOLD = 500
+   * This changes the way we handle recommendations, all the recommendations from users with trustvalue below this are not taken into account. The default value is 1000 and the maximum value for trust in the plugin is 999, which means that recommendations are not used unless this parameter is defined. If this value is set below 500, which is the default value for user trust, the recommendations are calculated with negative value. 
+      * Set REPUTATIONPLUGIN_RECOMMENDATIONTHRESHOLD = 1000
+   * This option controls the weight given to trusted users 
+      * Set REPUTATIONPLUGIN_TRUSTEDWEIGHT = 5 
+   * This option controls the weight of the unknown users (the trusted users are actually counted twice) 
+      * Set REPUTATIONPLUGIN_UNKNOWNWEIGHT = 1
+---++ Included template topics
 
+[[%SYSTEMWEB%.ReputationPluginChangeValues]] provides an easy to use interface for making manual adjustments to trust relations. [[%SYSTEMWEB%.ReputationPluginToplist]] see all the ratings in a single web at once.
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
 
    * Download the ZIP file from the Plugin Home (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-     | ==data/TWiki/ReputationPluginChangeValue.txt== | Topic for altering trust values|
-     | ==templates/view.reputation.tmpl==| View template for including plugin as a skin|
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * Configure the Plugin:
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory.
+   * Configure the Plugin: 
       * Run the [[%SCRIPTURL{configure}%][configure]] script to enable the Plugin
       * Change the Plugin settings as needed
    * Test if the installation was successful: <verbatim>%REPUTATION{rpaction="%URLPARAM{rpaction}%" vote="%URLPARAM{vote}%"}%</verbatim>
-%REPUTATION{rpaction="%URLPARAM{rpaction}%" vote="%URLPARAM{vote}%"}% 
+%REPUTATION{rpaction="%URLPARAM{rpaction}%" vote="%URLPARAM{vote}%"}%
 
 ---+++ Make the plugin appear on every page
 
-Inside the zip file is a skin template that makes this plugin to show up just before the topic's text content. Skin can be enabled for a web (For all webs [[%USERSWEB%.TWikiPreferences]] for a single web, for example Sandbox web Sandbox.WebPreferences ) or for a single topic in Topic's preferences <pre>   * Set S<nop>KIN = reputation,pattern </pre> Skin can be excluded from any topic or web by setting its skin without Reputation%NOP%Plugin's skin eg:
+Inside the zip file is a skin template that makes this plugin to show up just before the topic's text content. Skin can be enabled for a web (For all webs [[%LOCALSITEPREFS%]] for a single web, for example Sandbox web Sandbox.WebPreferences ) or for a single topic in Topic's preferences
+<pre>   * Set S<nop>KIN = reputation,pattern </pre>
+
+Skin can be excluded from any topic or web by setting its skin without Reputation%NOP%Plugin's skin eg:
 
 <pre>   * Set S<nop>KIN = pattern </pre>
+
+%X% Note about the template system: This skin defines the content part of the TWiki page, if you have some other plugin or template which defines this part of the page you will have to do some manual editing.
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.JoonaKannisto |
-|  Copyright: | &copy; 2009 TWiki:Main.JoonaKannisto, %BR% &copy; 2009-2010 TWiki:TWiki/TWikiContributor |
+|  Copyright: | © 2009 TWiki:Main.JoonaKannisto, %BR% © 2009-2010 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-07-26 (V1.1) |
+|  Plugin Version: | 2010-10-25 (V1.2) |
 |  Change History: | <!-- versions below in reverse order --> |
+| 2010-12-08 | Many new features and improvements |
 |  2010-07-26 | TWikibug:Item6532 - move to SVN repository; doc fixes; changing TWIKIWEB to SYSTEMWEB |
 |  2009-11-24: | Initial version |
-|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | none |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.2 |
+|  CPAN Dependencies: | Locale::Maketext HTML::Entities |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
@@ -153,4 +167,8 @@ Inside the zip file is a skin template that makes this plugin to show up just be
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ ReputationPluginChangeValue, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ %SYSTEMWEB%.ReputationPluginChangeValues, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+
+%META:FILEATTACHMENT{name="valuesliders.png" attachment="valuesliders.png" attr="h" comment="Inerface which shows the current trust values and offers easy way to change them." date="1290592736" path="valuesliders.png" size="21762" stream="valuesliders.png" tmpFilename="/usr/tmp/CGItemp3026" user="JoonaKannisto" version="1"}%
+%META:FILEATTACHMENT{name="UI.png" attachment="UI.png" attr="h" comment="" date="1291884469" path="UI.png" size="5824" user="SeppoTaalasmaa" version="1"}%
+%META:PREFERENCE{name="SKIN" title="SKIN" type="Set" value="pattern"}%

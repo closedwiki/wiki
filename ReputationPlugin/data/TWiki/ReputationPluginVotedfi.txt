@@ -1,0 +1,5 @@
+%META:TOPICINFO{author="SeppoTaalasmaa" date="1285685873" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TWiki.ReputationPluginInfofi"}%
+%REPUTATION{rpaction="showtopics"}%
+
+-- Main.SeppoTaalasmaa - 28 Sep 2010

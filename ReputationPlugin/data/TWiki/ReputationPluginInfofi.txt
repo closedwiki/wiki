@@ -1,0 +1,8 @@
+%META:TOPICINFO{author="SeppoTaalasmaa" date="1291975900" format="1.1" version="1.3"}%
+%META:TOPICPARENT{name="ReputationPlugin"}%
+---++ Mitä ovat äänestykset ja suosiolaskurit?
+
+Voit äänestää tässä wikistä löytyviä sivuja ja käyttää äänestystuloksia sivujen sisällön laadun arviointiin. Kaikki äänestämäsi aiheet näet topicissa [[%SYSTEMWEB%.ReputationPluginVotedfi]]. 
+
+---++ Maineenhallinta ja luottamus
+Äänestyksistä kerääntyy topicien kirjoittajille pisteitä ja näiden pisteiden perusteella heidän luotettavuuttaan arvioijina arvioidaan. Luotettavuutta mitataan luvulla, jonka voit myös itse määritellä jos esimerkiksi tunnet jonkun käyttäjän henkilökohtaisesti. [[%SYSTEMWEB%.ReputationPluginChangeValues][Muuta luottamusarvoja]]. Oletustilassaan topicien keräämä maine on koko sivuston laajuista, mutta voit muuttaa pisteiden laskutavan suhteelliseksi ja määrätä myös minkälaisella painolla tutut ja tuntemattomat henkilöt huomioidaan pisteitä laskettaessa. 

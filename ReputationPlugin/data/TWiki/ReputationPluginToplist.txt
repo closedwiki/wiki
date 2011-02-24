@@ -1,0 +1,10 @@
+%META:TOPICINFO{author="JoonaKannisto" date="1297085493" format="1.1" reprev="1.4" version="1.4"}%
+%META:TOPICPARENT{name="ReputationPluginInfo"}%
+---++ See the best topics in a chosen web
+
+On this page you can get an overview of all the rated topics in any web that is visible to this functionality. The topics are sorted according to their total score, without taking reputation into account. Select the name of the web you are interested in, and press 'Show Votes'. (Separate subwebs with a dot eg. Myweb.Subweb)
+
+<form name="toplistform" action="%TOPIC%"><select name="web"> %WEBLIST{"<option $marker value=$qname>$name</option>" webs="user,public,allowed" selection="%WEB%" separator=" "}% </select> <input type="submit" class="twikiSubmit" value="Show Votes" /></form>
+---++ Web Topics Overview
+
+%REPUTATION{rpaction="showtoplist" web="%URLPARAM{web}%"}%
