@@ -2,9 +2,9 @@
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2006 Peter Thoeny, peter@thoeny.org
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
+# Copyright (C) 2008-2011 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of 
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,20 +18,17 @@
 #
 # For licensing info read LICENSE file in the TWiki root.
 
-
 package TWiki::Plugins::DblClickEditPlugin;
 
 use strict;
 
 use vars qw( $VERSION $RELEASE $debug $pluginName $web $topic );
 
-$VERSION = '$Rev: 9813$';
-
-$RELEASE = 'Dakar';
+$VERSION = '$Rev$';
+$RELEASE = '2011-02-24';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'DblClickEditPlugin';
-
 
 sub initPlugin {
     my( $atopic, $aweb, $user, $installWeb ) = @_;
@@ -41,7 +38,7 @@ sub initPlugin {
     $web = $aweb;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.026 ) {
+    if( $TWiki::Plugins::VERSION < 1.1 ) {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
@@ -50,20 +47,15 @@ sub initPlugin {
     return 1;
 }
 
-
-
 sub postRenderingHandler {
-   my $url = TWiki::Func::getScriptUrl($web, $topic, "edit") . "?t=". time();
 
-   my $dblclickedit = TWiki::Func::expandCommonVariables( "%DBLCLICKEDIT%" );
+    return unless( TWiki::Func::getContext()->{'view'} );
 
-   if ( $dblclickedit !~ /(no|off|0)/i ) {
-      $_[0] =~ s#<body([^\>]*)>#<body ondblclick="javascript:location.href=\'$url\'" $1>#;
-   }
-
+    my $dblclickedit = TWiki::Func::getPreferencesValue( "DBLCLICKEDIT" );
+    if( $dblclickedit !~ /(no|off|0)/i ) {
+        my $url = TWiki::Func::getScriptUrl($web, $topic, "edit") . "?t=". time();
+        $_[0] =~ s#<body([^\>]*)>#<body ondblclick="javascript:location.href=\'$url\'" $1>#;
+    }
 }
-
-
-
 
 1;
