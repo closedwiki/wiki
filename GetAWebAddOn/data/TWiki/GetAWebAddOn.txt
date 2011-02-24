@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1298523429" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1298533736" format="1.1" version="$Rev$"}%
 ---+!! <nop>GetAWebAddOn
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -47,7 +47,7 @@ The script produces files in the =.tar= format.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Add-on Version: | 2011-02-23 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-02-23: | TWikibug:Item6638: Fix for TWiki-5.0; doc improvements; changing TWIKIWEB to SYSTEMWEB -- Main.PeterThoeny |
+|  2011-02-23: | TWikibug:Item6638: Fix for TWiki-5.0; doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |   25 June 2008: | 0.98 fixed problem running on TWiki 4.2 - TWiki:Main.SvenDowideit |
 |   7 Feb 2005: | 0.97 made compatable with Cairo _or_ DEVELOP |
 |   8 Dec 2004: | 0.96 added more error checking, redirects errors to browser for easier debugging |
