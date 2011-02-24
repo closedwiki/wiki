@@ -1,9 +1,9 @@
-#! perl -w
-# Plugin for TWiki Collaboration Platform, http://TWiki.org/
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2003 Martin@Cleaver.org
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2008-2011 TWiki Contributors. All Rights Reserved.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,9 +18,8 @@
 #
 # =========================
 
-# NB. requires a modified version of Store.pm and Func.pm to provide this:
-#   beforeAttachmentSaveHandler       ( $attachRefHash, $topic, $web ) 1.010?
-# also requires Image::Magick Perl libs and imagemagick installed.
+# requires Image::Magick Perl libs and imagemagick installed.
+
 use strict;
 
 # =========================
@@ -28,11 +27,12 @@ package TWiki::Plugins::MaxImageSizePlugin;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName
+        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
         $debug $geometryString $patternMatch
     );
 
-$VERSION = '1.010';
+$VERSION = '$Rev$';
+$RELEASE = '2011-02-23';
 $pluginName = 'MaxImageSizePlugin';  # Name of this Plugin
 
 # =========================
@@ -48,12 +48,13 @@ sub initPlugin
 
     # Get plugin debug flag
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
+$debug=1;
 
     # Get plugin preferences, the variable defined by: 
     # i.e. http://studio.imagemagick.org/www/Magick++/Geometry.html
-    $geometryString = &TWiki::Prefs::getPreferencesValue( "RESIZE_GEOMETRY" ) || "x480>";
+    $geometryString = TWiki::Func::getPreferencesValue( "\U$pluginName\E_RESIZE_GEOMETRY" ) || "x480>";
 
-    #$patternMatch = &TWiki::Prefs::getPreferencesValue( "PATTERN_MATCH" ) || "jpg";
+    #$patternMatch = &TWiki::Func::getPreferencesValue( "PATTERN_MATCH" ) || "jpg";
 
     # Plugin correctly initialized
     writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK");
@@ -95,9 +96,6 @@ sub beforeAttachmentSaveHandler
 
     # Now, how do I give the user an error?
     $attachmentAttr->{"comment"} .= "Resized by $pluginName";
-
-    # This handler is called by TWiki::Store::saveAttachment just before the save action.
-
 }
 
 sub writeDebug {
