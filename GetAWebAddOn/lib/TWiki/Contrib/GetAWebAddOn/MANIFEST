@@ -1,3 +1,4 @@
-bin/get-a-web
-data/TWiki/GetAWebAddOn.txt
-data/TWiki/getweb-list.txt
+bin/get-a-web 0644
+lib/TWiki/Contrib/GetAWebAddOn.pm 0644
+lib/TWiki/Contrib/GetAWebAddOn/Config.spec 0644 Spec file for =configure=
+data/TWiki/GetAWebAddOn.txt 0644
