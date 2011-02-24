@@ -5,5 +5,5 @@ BEGIN {
   }
 }
 use TWiki::Contrib::Build;
-$build = new TWiki::Contrib::Build("MaxImageSizePluginSkin" );
+$build = new TWiki::Contrib::Build("MaxImageSizePlugin" );
 $build->build($build->{target});
