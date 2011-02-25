@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="RahulMundke" date="1069345797" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="WebHome"}%
+This is a Plugin meant for all those dirty mind people.
+This will maintain the descent apprance of your site by obscuring the abuse words and F language words.
+
+
+Here is the Plugin Settings:
+
+		* Set debug = 1
+
+
+
+
+-- Main.RahulMundke - 20 Nov 2003
