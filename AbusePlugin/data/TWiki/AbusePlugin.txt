@@ -1,14 +1,76 @@
-%META:TOPICINFO{author="RahulMundke" date="1069345797" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1298620957" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
-This is a Plugin meant for all those dirty mind people.
-This will maintain the descent apprance of your site by obscuring the abuse words and F language words.
-
-
-Here is the Plugin Settings:
-
-		* Set debug = 1
-
-
-
-
--- Main.RahulMundke - 20 Nov 2003
+---+!! !AbusePlugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/AbusePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/AbusePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
+
+This plugin obscures a list of abuse words in TWiki pages. Occurrences of these words are replaced in topic view mode by asterisks (*) except for the first character.
+
+---++ Examples
+
+The following bullet contains banned words:
+   * Buy cheap Cialis and Viagra
+
+Expected output:
+   * Buy cheap C***** and V***** 
+
+---++ Plugin Settings
+
+Overload plugin settings in [[%USERSWEB%.TWikiPreferences]] by prefixing the name of the setting with =ABUSEPLUGIN_=, such as =ABUSEPLUGIN_ABUSEWORDS=
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Obscure dirty words in TWiki topics
+
+   * Banned words list:
+      * Set ABUSEWORDS = cialis, fuck, fucked, fucking, viagra
+
+   * Debug flag, see output in =twiki/data/debug.txt=:
+      * Set DEBUG = 0
+
+---++ Plugin Installation &amp; Configuration
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Test if the installation was successful: See example above.
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.RahulMundke, TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2003 TWiki:Main.RahulMundke <br /> &copy; 2011 TWiki:Main.PeterThoeny <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-02-25 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-02-25: | TWikibug:Item6638: Use ABUSEWORD plugin setting instead of hard-coded filename for abuse words; adding docs -- TWiki:Main.PeterThoeny |
+|  2003-11-20: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/AbusePlugin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/AbusePluginDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/AbusePluginAppraisal |
+
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
