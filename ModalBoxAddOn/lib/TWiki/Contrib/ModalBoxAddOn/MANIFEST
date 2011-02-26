@@ -1,5 +1,5 @@
 data/TWiki/ModalBoxAddOn.txt 0644 Documentation
-lib/TWiki/Plugins/ModalBoxAddOn.pm 0644 Perl module
+lib/TWiki/Contrib/ModalBoxAddOn.pm 0644 Perl module
 pub/TWiki/ModalBoxAddOn/gradient-title.png
 pub/TWiki/ModalBoxAddOn/overlay.png 0644 Image
 pub/TWiki/ModalBoxAddOn/screenshot.png 0644 Image
