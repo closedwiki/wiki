@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1298716303" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1298718010" format="1.1" version="$Rev$"}%
 ---+!! !ModalBoxAddOn
 <!--
    Contributions to this add-on are appreciated. Please update the contrib page at
@@ -27,7 +27,7 @@ There are two options to create modal boxes:
 
 ---+++ Using INCLUDE
 
-Create a modal box in a TWiki pages by including two named sections defined in the !ScrollBoxAddOn topic, called ="modal_box_engine"= and ="modal_box"=, respectively. Example:
+Create a modal box in a TWiki pages by including two named sections defined in the !ModalBoxAddOn topic, called ="modal_box_engine"= and ="modal_box"=, respectively. Example:
 <verbatim>
 %INCLUDE{ "%SYSTEMWEB%.ModalBoxAddOn" section="modal_box_engine" }%
 %INCLUDE{ "%SYSTEMWEB%.ModalBoxAddOn" section="modal_box"
@@ -208,8 +208,8 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 
 __Related Topic:__ %SYSTEMWEB%.TWikiAddOns
 
-%META:FILEATTACHMENT{name="overlay.png" attachment="overlay.png" attr="h" comment="" date="1298698062" path="overlay.png" size="232" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="gradient-title.png" attachment="gradient-title.png" attr="h" comment="" date="1298710212" path="gradient-title.png" size="207" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="twiki-logo-80x40-t.gif" attachment="twiki-logo-80x40-t.gif" attr="h" comment="" date="1298714824" path="twiki-logo-80x40-t.gif" size="1999" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1298715765" path="screenshot.png" size="64388" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="screenshot-small.png" attachment="screenshot-small.png" attr="h" comment="" date="1298716188" path="screenshot-small.png" size="37448" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="overlay.png" attachment="overlay.png" attr="h" comment="" date="1298698062" path="overlay.png" size="232" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="gradient-title.png" attachment="gradient-title.png" attr="h" comment="" date="1298710212" path="gradient-title.png" size="207" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="twiki-logo-80x40-t.gif" attachment="twiki-logo-80x40-t.gif" attr="h" comment="" date="1298714824" path="twiki-logo-80x40-t.gif" size="1999" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1298715765" path="screenshot.png" size="64388" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="screenshot-small.png" attachment="screenshot-small.png" attr="h" comment="" date="1298716188" path="screenshot-small.png" size="37448" user="TWikiContributor" version="1"}%
