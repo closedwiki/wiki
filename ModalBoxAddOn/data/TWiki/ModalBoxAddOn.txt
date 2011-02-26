@@ -1,0 +1,215 @@
+%META:TOPICINFO{author="PeterThoeny" date="1298716303" format="1.1" reprev="1.2" version="1.2"}%
+---+!! !ModalBoxAddOn
+<!--
+   Contributions to this add-on are appreciated. Please update the contrib page at
+   http://twiki.org/cgi-bin/view/Plugins/ModalBoxAddOn or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/ModalBoxAddOnDev.
+   If you are a TWiki contributor please update the add-on in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+<div style="float:right; background-color:#F0F0F0; margin:0 0 20px 20px; padding: 10px 10px 10px 10px; text-align:center">
+This plugin is%BR% sponsored by:%BR%
+[[http://twiki.net/][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" alt="Twiki, Inc." title="Twiki, Inc." />]]
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Screenshot
+
+<a href="%ATTACHURLPATH%/screenshot.png"><img src="%ATTACHURLPATH%/screenshot-small.png" alt="screenshot.png" width="300" height="153" alt="Screenshot - click to enlarge" title="Screenshot - click to enlarge" />
+
+---++ Usage
+
+There are two options to create modal boxes:
+   * Using INCLUDE
+   * Using HTML &amp; CSS
+
+---+++ Using INCLUDE
+
+Create a modal box in a TWiki pages by including two named sections defined in the !ScrollBoxAddOn topic, called ="modal_box_engine"= and ="modal_box"=, respectively. Example:
+<verbatim>
+%INCLUDE{ "%SYSTEMWEB%.ModalBoxAddOn" section="modal_box_engine" }%
+%INCLUDE{ "%SYSTEMWEB%.ModalBoxAddOn" section="modal_box"
+  name="must_be_unique"
+  title="This is a test"
+  content="TWiki keeps getting better and better."
+}%
+</verbatim>
+
+The ="modal_box_engine"= section defines the CSS and !JavaScript. It must be included once per page.
+
+The ="modal_box"= section generates a modal box. More than one box can be defined per page. This section expects the following include parameters:
+
+   * =name=: Name of the box. Must be unique per page. Use only alphanumeric characters and underscore!
+   * =title=: Title of the box.
+   * =content=: Content of the box. Can be of any form, such as TML, HTML, images. Make sure to escape double quotes with a backslash, such as =&lt;br clear=\"all\"&gt;=.
+
+---+++ Using HTML &amp; CSS
+
+FIXME
+
+---++ Test Modal Box
+
+---+++ Test with INCLUDE
+
+<button onclick="twModalBoxShow('test_with_include', 270, 150)"class="twikiButton">Modal dialog box test</button>
+
+%INCLUDE{ "%SYSTEMWEB%.ModalBoxAddOn" section="modal_box"
+  name="test_with_include"
+  title="This is a modal dialog box"
+  content="TWiki keeps getting better and better. :-)"
+}%
+
+---+++ Test with HTML &amp; CSS
+
+<button onclick="twModalBoxShow('test_with_html', 600, 200)" class="twikiButton">Modal dialog box test</button>
+
+<div id="test_with_html" class="twModalDialog">
+<div class="twModalBoxTitle">
+Lorem ipsum dolor sit amet.
+</div>
+<div class="twModalBoxContent">
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</div>
+<div class="twModalBoxBottom">
+<button onclick="twModalBoxHide('test_with_html')" class="twikiButton">OK</button>
+</div>
+</div> 
+
+---++ Named sections
+
+This section defines the ="modal_box_engine"= and the ="modal_box"= section. View the [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][raw text]] of this topic to look under the hood.
+<!--=====================================
+%STARTSECTION{ "modal_box" }%<div id="%name%" class="twModalDialog">
+ <div class="twModalBoxTitle">
+  <div style="float:left">
+   %ICON{empty}%
+  </div>
+  <div style="float:right">
+   <span onclick="twModalBoxHide('%name%')"><img src="%ICONURLPATH{choice-no}%" width="16" height="16" border="0" alt="" title="Close dialog box" /></span>
+  </div>
+<span %IF{ "defined 'title'" else="style='display:none'" }%">
+%title%
+</span>
+ </div>
+ <div id="%name%Content" class="twModalBoxContent">
+%content%
+ </div>
+ <div id="%name%Bottom" class="twModalBoxBottom">
+ <button onclick="twModalBoxHide('%name%')" class="twikiSubmit">OK</button>
+ </div>
+</div>
+<script type="text/javascript">
+</script>%ENDSECTION{ "modal_box" }%
+=========================================-->
+<!--=====================================
+%STARTSECTION{ "modal_box_engine" }%%ADDTOHEAD{
+ "modal_box_engine"
+ text="<style type='text/css'>
+#twModalBox{
+ font-family:Tahoma, Arial;
+ background-image: url(%PUBURLPATH%/%SYSTEMWEB%/ModalBoxAddOn/gradient-title.png);
+ background-repeat: repeat-x;
+ background-color: #ffffff;
+ padding:5px;
+ border: solid #dddddd 1px;
+ XXborder:2px outset #999;
+}
+#mbm{font-family:Tahoma, Arial; font-weight:bold;float:right;padding-bottom:5px;}
+#ol{background-image: url(%PUBURLPATH%/%SYSTEMWEB%/ModalBoxAddOn/overlay.png);}
+.twModalDialog {
+ display: none;
+}
+.twModalBoxTitle {
+ text-align:center;
+ font-size:15px;
+ font-weight:bold;
+ color: #333335;
+ padding: 0;
+ white-space: nowrap;
+ overflow: hidden;
+}
+.twModalBoxContent {
+ position: relative;
+ top: 0;
+ padding: 10px 15px 15px 15px;
+ text-align: justify;
+}
+.twModalBoxBottom {
+ position: absolute;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ padding: 15px;
+ text-align: center;
+}
+* html #ol{background-image:none; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='%PUBURLPATH%/%SYSTEMWEB%/ModalBoxAddOn/overlay.png', sizingMethod='scale');}
+</style>
+<script type='text/javascript'>
+// Modal Dialog Box
+// copyright 8th July 2006 by Stephen Chapman
+// http://javascript.about.com/
+// permission to use this Javascript on your web page is granted
+// provided that all of the code in this script (including these
+// comments) is used without any alteration.
+// Modified & copyright 2011 by Peter Thoeny, twiki.org
+function twModalPageWidth() {return window.innerWidth != null? window.innerWidth: document.documentElement && document.documentElement.clientWidth ? document.documentElement.clientWidth:document.body != null? document.body.clientWidth:null;}
+function twModalPageHeight() {return window.innerHeight != null? window.innerHeight: document.documentElement && document.documentElement.clientHeight ? document.documentElement.clientHeight:document.body != null? document.body.clientHeight:null;}
+function twModalPosLeft() {return typeof window.pageXOffset != 'undefined' ? window.pageXOffset:document.documentElement && document.documentElement.scrollLeft? document.documentElement.scrollLeft:document.body.scrollLeft? document.body.scrollLeft:0;}
+function twModalPosTop() {return typeof window.pageYOffset != 'undefined' ? window.pageYOffset:document.documentElement && document.documentElement.scrollTop? document.documentElement.scrollTop: document.body.scrollTop?document.body.scrollTop:0;}
+function gEbID(x){return document.getElementById(x);}
+function twModalScrollFix(){var obol=gEbID('ol');obol.style.top=twModalPosTop()+'px';obol.style.left=twModalPosLeft()+'px'}
+function twModalSizeFix(){var obol=gEbID('ol');obol.style.height=twModalPageHeight()+'px';obol.style.width=twModalPageWidth()+'px';}
+function kp(e){ky=e?e.which:event.keyCode;if(ky==88||ky==120)twModalBoxHide();return false}
+function inf(h){tag=document.getElementsByTagName('select');for(i=tag.length-1;i>=0;i--)tag[i].style.visibility=h;tag=document.getElementsByTagName('iframe');for(i=tag.length-1;i>=0;i--)tag[i].style.visibility=h;tag=document.getElementsByTagName('object');for(i=tag.length-1;i>=0;i--)tag[i].style.visibility=h;}
+function twModalBoxShow(obl, wd, ht){var h='hidden';var b='block';var p='px';var obol=gEbID('ol'); var obbxd = gEbID('mbd');obbxd.innerHTML = gEbID(obl).innerHTML;obol.style.height=twModalPageHeight()+p;obol.style.width=twModalPageWidth()+p;obol.style.top=twModalPosTop()+p;obol.style.left=twModalPosLeft()+p;obol.style.display=b;var tp=twModalPosTop()+((twModalPageHeight()-ht)/2)-12;var lt=twModalPosLeft()+((twModalPageWidth()-wd)/2)-12;var obbx=gEbID('twModalBox');obbx.style.top=(tp<0?0:tp)+p;obbx.style.left=(lt<0?0:lt)+p;obbx.style.width=wd+p;obbx.style.height=ht+p;inf(h);obbx.style.display=b;return false;}
+function twModalBoxHide(){var v='visible';var n='none';gEbID('ol').style.display=n;gEbID('twModalBox').style.display=n;inf(v);document.onkeypress=''}
+function initmb(){var ab='absolute';var n='none';var obody=document.getElementsByTagName('body')[0];var frag=document.createDocumentFragment();var obol=document.createElement('div');obol.setAttribute('id','ol');obol.style.display=n;obol.style.position=ab;obol.style.top=0;obol.style.left=0;obol.style.zIndex=998;obol.style.width='100%';frag.appendChild(obol);var obbx=document.createElement('div');obbx.setAttribute('id','twModalBox');obbx.style.display=n;obbx.style.position=ab;obbx.style.zIndex=999;var obl=document.createElement('span');obbx.appendChild(obl);var obbxd=document.createElement('div');obbxd.setAttribute('id','mbd');obl.appendChild(obbxd);frag.insertBefore(obbx,obol.nextSibling);obody.insertBefore(frag,obody.firstChild);
+window.onscroll = twModalScrollFix; window.onresize = twModalSizeFix;}
+window.onload = initmb;
+</script>"
+}%<nop>%ENDSECTION{ "modal_box_engine" }%
+=========================================-->
+
+---++ Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
+
+   * Download the ZIP file from the Add-on Home (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Add-on topic |
+     | ==pub/TWiki/gradient-title.png== | Gradient background for box title |
+     | ==pub/TWiki/overlay.png== | Overlay image to gray out background |
+     | ==pub/TWiki/screenshot.png== | Screenshot of example |
+     | ==pub/TWiki/screenshot-small.png== | Small screenshot of example |
+     | ==pub/TWiki/twiki-logo-80x40-t.gif== | Twiki Inc logo |
+   * Test if the installation was successful:
+      * See examples above
+
+---++ Add-On Info
+
+   * Set SHORTDESCRIPTION = Show modal boxes with TWiki page content disabled and grayed out
+
+|  Add-on Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] <br /> &copy; 2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Add-on Version: | 2011-02-26 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-02-26: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.3 (TWiki 5.0) |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/ModalBoxAddOn |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/ModalBoxAddOnDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/ModalBoxAddOnAppraisal |
+
+__Related Topic:__ %SYSTEMWEB%.TWikiAddOns
+
+%META:FILEATTACHMENT{name="overlay.png" attachment="overlay.png" attr="h" comment="" date="1298698062" path="overlay.png" size="232" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="gradient-title.png" attachment="gradient-title.png" attr="h" comment="" date="1298710212" path="gradient-title.png" size="207" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="twiki-logo-80x40-t.gif" attachment="twiki-logo-80x40-t.gif" attr="h" comment="" date="1298714824" path="twiki-logo-80x40-t.gif" size="1999" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1298715765" path="screenshot.png" size="64388" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="screenshot-small.png" attachment="screenshot-small.png" attr="h" comment="" date="1298716188" path="screenshot-small.png" size="37448" user="PeterThoeny" version="1"}%
