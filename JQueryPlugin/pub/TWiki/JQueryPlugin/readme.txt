@@ -53,3 +53,9 @@ directory, selected [A]ll to overwrite duplicate names.
    make
    # this will create the targets based on Makefile rule
 
+11. Create gz files
+
+   tar -zcvf jquery-1.5.1.js.gz jquery-1.5.1.min.js
+   tar -zcvf jquery-all.js.gz jquery-all.js
+
+
