@@ -1,8 +1,6 @@
 #!/usr/bin/perl -w
 BEGIN {
     unshift @INC, split(/:/, $ENV{TWIKI_LIBS} || '../lib' );
-    print "@INC\n";
-
 }
 
 use JavaScript::Minifier qw(minify);
