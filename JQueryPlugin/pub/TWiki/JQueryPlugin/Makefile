@@ -1,4 +1,4 @@
-TWIKIROOT=/var/www/vhosts/thoeny.org/svn/trunk/core
+TWIKIROOT=/var/www/twiki/trunk/core
 TARGET= \
   jquery-all.js \
   jquery-all.css \
