@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (c) 2007-2008 Michael Daum, http://michaeldaumconsulting.com
-# Copyright (c) 2007-2010 TWiki Contributors. All Rights Reserved.
+# Copyright (c) 2007-2011 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -23,20 +23,19 @@ use strict;
 use vars qw( 
   $VERSION $RELEASE $SHORTDESCRIPTION 
   $NO_PREFS_IN_TOPIC
-  $doneInit $doneHeader
-  $header
+  $doneInit $doneHeader $doneJQueryUI
+  $jqPubUrlPath $header
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.1 (2010-04-15)';
+$RELEASE = '1.2 (2011-02-28)';
 $SHORTDESCRIPTION = 'jQuery <nop>JavaScript library for TWiki';
 $NO_PREFS_IN_TOPIC = 1;
 
-$header = <<'HERE';
-<link rel="stylesheet" href="%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin/jquery-all.css" type="text/css" media="all" />
-<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin/jquery-all.js"></script>
-HERE
-
+$jqPubUrlPath = '%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin';
+$header = "<script type=\"text/javascript\" src=\"$jqPubUrlPath/jquery.js\"></script>\n"
+        . "<link rel=\"stylesheet\" href=\"$jqPubUrlPath/jquery-all.css\" type=\"text/css\" media=\"all\" />\n"
+        . "<script type=\"text/javascript\" src=\"$jqPubUrlPath/jquery-all.js\"></script>\n";
 
 ###############################################################################
 sub initPlugin {
@@ -44,6 +43,7 @@ sub initPlugin {
 
   $doneInit = 0;
   $doneHeader = 0;
+  $doneJQueryUI = 0;
 
   TWiki::Func::registerTagHandler('JQBUTTON', \&handleButton );
   TWiki::Func::registerTagHandler('JQTOGGLE', \&handleToggle );
@@ -82,6 +82,7 @@ sub initCore {
   $doneInit = 1;
   eval "use TWiki::Plugins::JQueryPlugin::Core;";
   die $@ if $@;
+  TWiki::Plugins::JQueryPlugin::Core::init( $jqPubUrlPath );
 }
 
 ###############################################################################
@@ -124,13 +125,22 @@ sub handleClear {
 }
 
 ###############################################################################
+sub jQueryUI {
+  return if $doneJQueryUI;
+  $doneJQueryUI = 1;
+  return "<script type=\"text/javascript\" src=\"$jqPubUrlPath/jquery-ui.js\"></script>";
+}
+
+###############################################################################
 sub handleJQueryScript	{
   my ($session, $params, $theTopic, $theWeb) = @_;   
 
   my $scriptFileName = $params->{_DEFAULT};
   return '' unless $scriptFileName;
   $scriptFileName .= '.js' unless $scriptFileName =~ /\.js$/;
-  return "<script type=\"text/javascript\" src=\"%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin/$scriptFileName\"></script>";
+  return jQueryUI() if( $scriptFileName eq 'jquery-ui.js' );
+
+  return "<script type=\"text/javascript\" src=\"$jqPubUrlPath/$scriptFileName\"></script>";
 }
 
 ###############################################################################
@@ -139,16 +149,20 @@ sub handleJQueryTheme {
 
   my $themeName = $params->{_DEFAULT};
   return '' unless $themeName;
-
-  return "<style type='text/css'>\@import url(\"%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin/themes/$themeName/$themeName.all.css\");</style>";
+  my $url = "$jqPubUrlPath/themes/$themeName/jquery-ui.$themeName.css";
+  TWiki::Func::addToHEAD(
+    "jquery_theme_$themeName",
+    '<link rel="stylesheet" type="text/css" href="' . $url . '" media="all" />'
+  );
+  return jQueryUI();
 }
 
 ###############################################################################
 sub handleJQueryImagesUrlPath {
   my ($session, $params, $theTopic, $theWeb) = @_;   
   my $image = $params->{_DEFAULT};
-  return "%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin/images/$image" if defined $image;
-  return "%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin/images";
+  return "$jqPubUrlPath/images/$image" if defined $image;
+  return "$jqPubUrlPath/images";
 }
 
 1;
