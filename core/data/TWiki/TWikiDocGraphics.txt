@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297805455" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1298971453" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -222,6 +222,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{processing-bar-wide}% | =%<nop>ICON{processing-bar-wide}%= | Processing bar, wide | gif | 124x12 |  |
 | %ICON{minus}% | =%<nop>ICON{minus}%= | Minus | gif | 16x16 |  |
 | %ICON{plus}% | =%<nop>ICON{plus}%= | Plus | gif | 16x16 |  |
+| %ICON{close}% | =%<nop>ICON{close}%= | Close | gif | 16x16 |  |
 | %ICON{choice-cancel}% | =%<nop>ICON{choice-cancel}%= | Cancel | gif | 16x16 |  |
 | %ICON{choice-no}% | =%<nop>ICON{choice-no}%= | No | gif | 16x16 |  |
 | %ICON{choice-yes}% | =%<nop>ICON{choice-yes}%=, =%<nop>Y%= | Yes / Done | gif | 16x16 |  |
@@ -544,6 +545,7 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="choice-cancel.gif" attr="h" comment="" date="1169565034" path="choice-cancel.gif" size="347" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="choice-no.gif" attr="h" comment="" date="1169565034" path="choice-no.gif" size="166" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="choice-yes.gif" attr="h" comment="" date="1169565034" path="choice-yes.gif" size="159" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="close.gif" attr="h" comment="" date="1298971278" path="close.gif" size="892" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="closed.gif" attr="h" comment="" date="1169565034" path="closed.gif" size="379" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="code.gif" attr="h" comment="" date="1169565035" path="code.gif" size="374" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="color-wheel.gif" attr="h" comment="" date="1288477271" path="code.gif" size="998" user="TWikiContributor" version=""}%
