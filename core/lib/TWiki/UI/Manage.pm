@@ -442,8 +442,9 @@ sub rename {
                                          $newTopic, 'rename');
 
             # does new attachment already exist?
+            # Item5384: Allow duplicate when moving to trash
             if( $store->attachmentExists( $newWeb, $newTopic,
-                                          $attachment )) {
+                                          $attachment ) && $newTopic ne 'TrashAttachment' ) {
                 throw TWiki::OopsException(
                     'attention',
                     def => 'move_err',
@@ -870,7 +871,8 @@ sub move {
         $newWeb, $newTopic, $attachment, $refs ) = @_;
     my $store = $session->{store};
 
-    if( $attachment ) {
+# Item5384: if not trash
+    if( $attachment && ($newTopic ne 'TrashAttachment') ) {
         try {
             $store->moveAttachment( $oldWeb, $oldTopic, $attachment,
                                     $newWeb, $newTopic, $attachment,
@@ -884,6 +886,67 @@ sub move {
                             $attachment,
                             shift->{-text} ] );
         };
+        return;
+    }
+
+# Item5384: if trash 
+    if( $attachment && ($newTopic eq 'TrashAttachment') ) {
+        if( $store->attachmentExists( $newWeb, $newTopic, $attachment ) ) {
+            #split apart
+            my @attachmentSplit = split(/(\.)/, $attachment);
+            #take last
+            my $attachmentSuffix = pop(@attachmentSplit);
+            #put what remains back together
+            my $attachmentBase = '';
+            foreach my $att (@attachmentSplit) {
+                $attachmentBase = $attachmentBase.$att;
+            }
+            #get rid of trailing '.'
+            my $save = $/;
+            $/ = '.';
+            chomp $attachmentBase; chomp $attachmentSuffix;
+            $/ = $save;
+            my $attachmentUnique = '';
+            my $count = 2;
+            do { 
+                if ( $attachmentBase ) {
+                    $attachmentUnique = $attachmentBase.$count.'.'.$attachmentSuffix;
+                }  
+                else {
+                    $attachmentUnique = $attachment.$count;
+                }
+                $count++;
+            } while( $store->attachmentExists( $newWeb, $newTopic, $attachmentUnique ) ); 
+            try {
+                $store->moveAttachment( $oldWeb, $oldTopic, $attachment,
+                                        $newWeb, $newTopic, $attachmentUnique,
+                                        $session->{user} );
+                } catch Error::Simple with {
+                throw TWiki::OopsException(
+                    'attention',
+                    web => $oldWeb, topic => $oldTopic,
+                    def => 'move_err',
+                    params => [ $newWeb, $newTopic,
+                                $attachment,
+                                shift->{-text} ] );
+            };
+        }
+        #first time attachment to trash 
+        else {
+            try {
+                $store->moveAttachment( $oldWeb, $oldTopic, $attachment,
+                                        $newWeb, $newTopic, $attachment,
+                                        $session->{user} );
+                } catch Error::Simple with {
+                throw TWiki::OopsException(
+                    'attention',
+                    web => $oldWeb, topic => $oldTopic,
+                    def => 'move_err',
+                    params => [ $newWeb, $newTopic,
+                                $attachment,
+                                shift->{-text} ] );
+            };
+        } 
         return;
     }
 
