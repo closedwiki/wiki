@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1289003164" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299040931" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Installation Guide
 
@@ -160,7 +160,7 @@ You can generate a listing manually, or on an automated schedule, of visits to i
 
 ---++ Automate removal of expired sessions and lease files
 
-Per default TWiki cleans out expired session and lease files each time any topic is viewed. This however cost performance. It is an advantage to define a negative value in =configure= for {Sessions}{ExpireAfter} and install let cron run the =tools/tick_twiki.pl= script. Read The topic TWikiScripts#tick_twiki_pl for details how to do this.
+Per default TWiki cleans out expired session and lease files each time any topic is viewed. This however comes at a cost of lower performance. It is an advantage to define a negative value in =configure= for ={Sessions}{ExpireAfter}= (turn on expert mode to see it), and install a crjob to run the =tools/tick_twiki.pl= script. Read The topic TWikiScripts#tick_twiki_pl for details how to do this.
 
 ---++ Enable Localisation
 
