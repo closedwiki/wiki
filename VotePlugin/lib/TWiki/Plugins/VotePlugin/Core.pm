@@ -1,7 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
-# Copyright (C) 2005-2010 TWiki Contributors. All Rights Reserved.
+# Copyright (C) 2005-2011 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 #
@@ -267,7 +267,7 @@ sub handleVote {
 
             push(@rows, showSelect(
                 $id, $prompt, $submit, $select, $keyValueFreq{$id}{$key},
-                $totalVotes{$id}{$key}, $params));
+                $totalVotes{$key}, $params));
         }
     }
 

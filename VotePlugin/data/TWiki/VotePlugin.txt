@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1280559612" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299041912" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -181,15 +181,15 @@ in Main.<nop>TWikiPreferences, and add =VOTEPLUGIN_RESETTERS= to =FINALPREFERENC
 
 ---++ Plugin Info
 
-<!--
    * Set SHORTDESCRIPTION = Simple way to count votes
--->
+
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Copyright: | &copy; 2005-2007 Michael Daum http://wikiring.de, %BR% &copy; 2005-2010 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2005-2007 Michael Daum http://wikiring.de, %BR% &copy; 2005-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-07-30: | TWikibug:Item6530 - doc fixes |
+|  2011-03-01: | TWikibug:Item6638: Fix 0% bug -- TWiki:TWiki.UlfJastrow |
+|  2010-07-30: | TWikibug:Item6530: Doc fixes -- TWiki:Main.PeterThoeny |
 |  14 Oct 2008 | TWikibug:Item6070 works for hierarchical webs now.  - TWiki:Main/ColasNahaboo |
 |  10 Aug 2008 | TWikibug:Item5768 suppress submission of individual ratings in a multi-row vote TWikibug:Item5769 correct default handling of transcluded rates TWikibug:Item5766 $large is once again large TWikibug:Item5771 support for resetting votes. |
 |  1 Jul 2007: | TWikibug:Item4310 : abstracted out TWiki:Plugins.RatingContrib, and modified the code to be tolerant of forms within forms - TWiki:Main/CrawfordCurrie |
