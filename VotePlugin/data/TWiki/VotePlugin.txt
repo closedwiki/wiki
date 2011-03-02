@@ -188,7 +188,7 @@ in Main.<nop>TWikiPreferences, and add =VOTEPLUGIN_RESETTERS= to =FINALPREFERENC
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-03-01: | TWikibug:Item6638: Fix 0% bug -- TWiki:TWiki.UlfJastrow |
+|  2011-03-01: | TWikibug:Item6638: Fix 0% bug -- TWiki:Main.UlfJastrow |
 |  2010-07-30: | TWikibug:Item6530: Doc fixes -- TWiki:Main.PeterThoeny |
 |  14 Oct 2008 | TWikibug:Item6070 works for hierarchical webs now.  - TWiki:Main/ColasNahaboo |
 |  10 Aug 2008 | TWikibug:Item5768 suppress submission of individual ratings in a multi-row vote TWikibug:Item5769 correct default handling of transcluded rates TWikibug:Item5766 $large is once again large TWikibug:Item5771 support for resetting votes. |
