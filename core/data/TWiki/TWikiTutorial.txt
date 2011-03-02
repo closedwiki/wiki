@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274247246" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299039971" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ 20-Minute TWiki Tutorial
 
@@ -90,7 +90,7 @@ You can attach _any_ type of file to a topic - documents, images, programs, what
    * If you're using TWiki to collaborate on a project, it's important to know when anyone on your team posts an update. If you're following a specific discussion, it's convenient to know when there's new input.
    * Alerts are e-mailed as links to individual topics that have been changed in a set period: Each day, every hour, whatever is configured for your system.
    * It's strongly recommended that you try out the service by subscribing to each TWiki web that's relevant to you. You can subscribe and unsubscribe instantly, on a per web basis using %NOTIFYTOPIC%. 
-   * If you prefer, you can subscrive to RSS and ATOM feeds. Every web has a WebRss feed and a WebAtom feed, respectively.
+   * If you prefer, you can subscribe to RSS and ATOM feeds. Every web has a WebRss feed and a WebAtom feed, respectively.
 
 That's it! You're now equipped with all the TWiki essentials. You are ready to roll.
 
