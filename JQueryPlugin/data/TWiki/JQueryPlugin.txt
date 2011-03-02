@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1288938911" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299047154" format="1.1" version="$Rev$"}%
 ---+!! JQuery Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -25,34 +25,64 @@ See the Sandbox.JQueryPluginExamples page for a demo of a couple of widgets used
 
 ---++ Included libraries
 
-   1 jquery
-   1 jquery.bgiframe
-   1 jquery.blockUI
-   1 jquery.debug
-   1 jquery.dimensions
-   1 jquery.dom 
-   1 jquery.easing
-   1 jquery.hoverIntent
-   1 jquery.innerfade
-   1 jquery.metadata 
-   1 jquery.nifty
-   1 jquery.shrinkurls
-   1 jquery.spinner
-   1 jquery.superfish
-   1 jquery.tabpane (non-ui version)
-   1 jquery.tooltip
-   1 jquery.treeview
-   1 ui.accordion
-   1 ui.datepicker
-   1 ui.dialog
-   1 ui.draggable
-   1 ui.droppable
-   1 ui.mouse
-   1 ui.resizable
-   1 ui.selectable
-   1 ui.slider
-   1 ui.sortable
-   1 ui.tabs
+   1 jquery - base [[http://jquery.com/][jQuery library]], loaded when !JQueryPlugin is enabled
+   1 jquery-ui - [[http://jqueryui.com/download][jQuery UI library]], load with =%<nop>JQSCRIPT{"jquery-ui.js"}%= or a =%<nop>JQTHEME{"..."}%= - content:
+      * UI Core:
+         * Core - the core of jQuery UI, required for all interactions and widgets
+         * Widget - the widget factory, base for all widgets
+         * Mouse - the mouse widget, a base class for all interactions and widgets with heavy mouse interaction
+         * Position - a utility plugin for positioning elements relative to other elements
+      * Interactions - adding basic behaviors to any element and are used by many components below
+         * Draggable - makes any element on the page draggable
+         * Droppable - generated drop targets for draggable elements
+         * Resizable - makes any element on the page resizable
+         * Selectable - makes a list of elements mouse selectable by dragging a box or clicking on them
+         * Sortable - makes a list of items sortable
+      * Widgets - full-featured UI Controls - each has a range of options and is fully themeable:
+         * Accordion - creates an accordion navigation widget
+         * Autocomplete - creates an autocomplete widget
+         * Button - creates an button widget
+         * Dialog - opens existing markup in a draggable and resizable dialog
+         * Slider - a flexible slider with ranges and accessibility via keyboard
+         * Tabs - transforms a set of container elements into a tab structure
+         * Datepicker - a datepicker than can be toggled from a input or displayed inline
+         * Progressbar - a status indicator that can be used for a loading state and standard percentage indicators
+      * Effects - a rich effect API and ready to use effects:
+         * Effects Core - extends the internal jQuery effects, includes morphing, easing and is required by all other effects
+         * Effect "Blind" - blinds the element
+         * Effect "Bounce" - bounces an element horizontally or vertically n-times
+         * Effect "Clip" - clips the element on and off like an old TV
+         * Effect "Drop" - a Drop out effect by moving the element in one direction and hiding it at the same time
+         * Effect "Explode" - the element explodes in all directions into n pieces. Also supports imploding again
+         * Effect "Fade" - fades the element
+         * Effect "Fold" - folds the element first horizontally and then vertically
+         * Effect "Highlight" - highlights the background of the element in a defined color for a custom duration
+         * Effect "Pulsate" - the element pulsates n times by changing the opacity to zero and back
+         * Effect "Scale" - grow or shrink any element and it's content and restore it again
+         * Effect "Shake" - shakes the element horizontally or vertically n times
+         * Effect "Slide" - the element slides in and out of the viewport
+         * Effect "Transfer" - transfer effect from one element to another
+   1 jquery.bgiframe.js - fix z-index issue in IE 6, loaded when !JQueryPlugin is enabled
+   1 jquery.blockUI.js - simulate synchronous behavior when using AJAX, without locking the browser, loaded when !JQueryPlugin is enabled
+   1 jquery.cookie.js - cookie managers, load with =%<nop>JQSCRIPT{"jquery.cookie.js"}%=
+   1 jquery.debug.js - debug, load with =%<nop>JQSCRIPT{"jquery.debug.js"}%=
+   1 jquery.dom.js - loaded when !JQueryPlugin is enabled
+   1 jquery.easing.js - set custom easing types for standard animations, loaded when !JQueryPlugin is enabled
+   1 jquery.hoverIntent.js - delay onMouseOver, loaded when !JQueryPlugin is enabled
+   1 jquery.innerfade.js - loaded when !JQueryPlugin is enabled
+   1 jquery.metadata.js - extract metadata from classes, random attributes, child elements and HTML5 data-* attributes, load with =%<nop>JQSCRIPT{"jquery.metadata.js"}%=
+   1 jquery.nifty.js - rounded corners, loaded when !JQueryPlugin is enabled
+   1 jquery.shrinkurls.js - shrink URLs, loaded when !JQueryPlugin is enabled
+   1 jquery.spinner.js - spinners, load with =%<nop>JQSCRIPT{"jquery.spinner.js"}%=
+   1 jquery.superfish.css
+   1 jquery.superfish.js - pulldown menues, load with =%<nop>JQSCRIPT{"jquery.superfish.js"}%=
+   1 jquery.tabpane.js - tapped panes, loaded when !JQueryPlugin is enabled
+   1 jquery.tooltip.js - tool tips, loaded when !JQueryPlugin is enabled
+   1 jquery.treeview.async.js - expandable trees, loaded when !JQueryPlugin is enabled
+   1 jquery.treeview.edit.js - expandable trees, load with =%<nop>JQSCRIPT{"jquery.treeview.edit.js"}%=
+   1 jquery.treeview.sortable.js - expandable trees, load with =%<nop>JQSCRIPT{"jquery.treeview.sortable.js"}%=
+   1 jquery.treeview.js - expandable trees, loaded when !JQueryPlugin is enabled
+   1 jquery.twiki.js - TWiki specific code, loaded when !JQueryPlugin is enabled
 
 ---++ JQuery Library Documentation
 
@@ -67,18 +97,35 @@ See the Sandbox.JQueryPluginExamples page for a demo of a couple of widgets used
    * =%<nop>JQSCRIPT{"jquery.js"}%= - include the specified script. Keep in mind that the =jquery.js= script must be loaded before plug-ins scripts.
    * =%<nop>JQTHEME{"mythemename"}%= - include the specified theme. Better load the desired theme before any script.
    * =%<nop>JQIMAGESURLPATH{"myimage.png"}%= - expand to the specified image path.
-   * =%<nop>JQIMAGESURLPATH%/myimage.png= - Same result as the above.
+   * =%<nop>JQIMAGESURLPATH%/myimage.png= - Same result as the above. Available images:
+      * =spinner_arrows.gif=
+      * =spinner_big.png=
+      * =spinner.gif=
+      * =spinner.png=
 
 ---++ Themes
 
-The following themes are provided:
-   * =flora= theme
-   * =ogray= theme
+See [[http://jqueryui.com/themeroller/][jQuery Theme Roller]] for look & feel of available themes. The !JQueryPlugin ships with the following themes:
+
+   * =black-tie=
+   * =cupertino=
+   * =redmond=
+   * =smoothness= - recommended for TWiki
+   * =ui-lightness=
 
 ---++ Examples
 
    * Sandbox.PluginTestJQueryPlugin 	 	
    * Sandbox.JQueryPluginExamples
+
+---++ Known Issues
+
+   * jquery.tooltip does not work in !JQueryPlugin release 1.2 (2011-03-01)
+   * jquery.treeview does not work in !JQueryPlugin release 1.2 (2011-03-01)
+
+---++ Note to Plugin Maintainer
+
+   * See =pub/TWiki/JQueryPlugin/readme.txt=
 
 ---++ Installation Instructions
 
@@ -91,17 +138,17 @@ The following themes are provided:
      | =data/TWiki/VarJQ*.txt= | Variable documentation topics |
      | =lib/CPAN/lib/CSS/Minifier.pm= | Perl module |
      | =lib/CPAN/lib/JavaScript/Minifier.pm= | Perl module |
-     | =lib/TWiki/Plugins/JQueryPlugin/Core.pm= | Perl module |
      | =lib/TWiki/Plugins/JQueryPlugin.pm= | Perl module |
+     | =lib/TWiki/Plugins/JQueryPlugin/Core.pm= | Perl module |
      | =pub/TWiki/JQueryPlugin/Makefile= | Makefile |
      | =pub/TWiki/JQueryPlugin/jquery-all.css= | Main stylesheet file |
      | =pub/TWiki/JQueryPlugin/jquery-all.js= | Main Javascript file |
      | =pub/TWiki/JQueryPlugin/jquery-all.js.gz= | Main Javascript file, compressed |
+     | =pub/TWiki/JQueryPlugin/*.css= | Stylesheet files |
      | =pub/TWiki/JQueryPlugin/*.js= | Javascript files |
-     | =pub/TWiki/JQueryPlugin/*.gif= | Image files |
-     | =pub/TWiki/JQueryPlugin/*.png= | Image files |
+     | =pub/TWiki/JQueryPlugin/*.gif= and =.png= | Image files |
      | =pub/TWiki/JQueryPlugin/i18n/*.js= | Style sheets for internationalization |
-     | =pub/TWiki/JQueryPlugin/images/*.gif= | Image library |
+     | =pub/TWiki/JQueryPlugin/images/*.gif= and =*.png=| Image library |
      | =pub/TWiki/JQueryPlugin/themes/*= | Themes |
      | =tools/minifycss= | Utility |
      | =tools/minifyjs= | Utility |
@@ -113,8 +160,9 @@ The following themes are provided:
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright: | &copy; 2007-2008 Michael Daum http://michaeldaumconsulting.com <br /> &copy; 2008-2010 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 1.1 (2010-04-25) |
+|  Plugin Version: | 1.2 (2011-03-01) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-03-01: | TWikibug:Item6653: Update plugin to jquery-1.5.1 and jquery-ui-1.8.10 -- TWiki:Main.PeterThoeny |
 |  2010-06-08: | TWikibug:Item6486 - upgrade to latest jquery-1.4.2 release -- TWiki:Main/SopanShewale; add variable documentation topics !VarJQTABPANE, !VarJQTAB, !VarJQENDTAB, !VarJQENDTABPANE -- TWiki:Main/PeterThoeny |
 |  2010-04-25: | TWikibug:Item6436 - renamed too generic variable names BUTTON, TOGGLE, CLEAR, TABPANE, ENDTABPANE, TAB, ENDTAB to JQBUTTON, JQTOGGLE, JQCLEAR, JQTABPANE, JQENDTABPANE, JQTAB, JQENDTAB, respectively. Old variables names available if configure setting is set: =$TWiki::cfg{JQueryPlugin}{Legacy2008} = 1;= -- TWiki:Main/PeterThoeny |
 |  2010-04-22: | TWikibug:Item6433 - doc improvements, no code changes |

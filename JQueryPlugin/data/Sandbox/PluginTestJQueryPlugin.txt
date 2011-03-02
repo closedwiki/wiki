@@ -1,19 +1,15 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272260267" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299046600" format="1.1" version="$Rev$"}%
 ---+!! Examples for !JQueryPlugin
 
 %TOC%
 
-<!--
-Include the jQuery javascript we need
--->
-
-%JQTHEME{"flora"}%
+Include the jQuery javascript and theme we need:
+<verbatim>
+%JQTHEME{"smoothness"}%
 %JQSCRIPT{"jquery.spinner"}%
-%JQSCRIPT{"ui.core"}%
-%JQSCRIPT{"ui.mouse"}%
-%JQSCRIPT{"ui.draggable"}%
-%JQSCRIPT{"ui.resizable"}%
-%JQSCRIPT{"ui.dialog"}%  
+</verbatim>
+%JQTHEME{"smoothness"}%
+%JQSCRIPT{"jquery.spinner"}%
 
 ---++ Dialog
 
@@ -30,7 +26,6 @@ Include the jQuery javascript we need
 
 <button onclick="$('#example2').dialog({width: 600, height: 300}).show();">Create Dialog</button>
 <button onclick="$('#example2').dialog('close')">Close</button>
-
 
 ---++ Spinner
 
@@ -49,10 +44,9 @@ Include the jQuery javascript we need
 
 <div id="spinnerfast"></div>
 
-
 <button onclick="$('#spinnerbigfast').spinner({height: 48,width: 48,speed: 25, frames:12, image: '%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin/images/spinner_big.png'}).show();">Start big fast spinner</button>
 <button onclick="$('#spinnerbigfast').spinner('stop').hide();">Stop</button> 
 
 <div id="spinnerbigfast"></div>
 
-__Related topics:__ [[%SYSTEMWEB%.JQueryPlugin]], [[JQueryPluginExamples]]
+__Related:__ [[%SYSTEMWEB%.JQueryPlugin]], [[JQueryPluginExamples]]

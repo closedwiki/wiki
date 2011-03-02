@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272261172" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299046600" format="1.1" version="$Rev$"}%
 ---+!! JQuery Plugin Examples
 
 Demo of the <nop>TWikiWidgets implemented by the [[%SYSTEMWEB%.JQueryPlugin][JQueryPlugin]].
@@ -12,7 +12,6 @@ Demo of the <nop>TWikiWidgets implemented by the [[%SYSTEMWEB%.JQueryPlugin][JQu
 %JQBUTTON{bg="greenish" text="greenish"}%
 %JQBUTTON{style="background-color:orange;color:white;" text="orange"}%
 %JQCLEAR%
-
 
 ---++ Toggles
 
@@ -69,6 +68,8 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla dui turpis, conv
 
 ---++ Treeview
 
+Note: Temporarily broken with plugin upgrade to jQuery 1.5.1
+
 <div class="jqTreeview">
    * list
       * item
@@ -83,6 +84,7 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla dui turpis, conv
       * item
       * item
 </div>
+-----
 <div class="jqTreeview closed red">
    * list
       * item
@@ -135,4 +137,4 @@ Sed non ante non nibh pharetra facilisis. Curabitur ut odio. Suspendisse potenti
 $(".jqRounded").roundedCorners();
 </script>
 
-__Related topics:__ [[%SYSTEMWEB%.JQueryPlugin]], [[PluginTestJQueryPlugin]]
+__Related:__ [[%SYSTEMWEB%.JQueryPlugin]], [[PluginTestJQueryPlugin]]
