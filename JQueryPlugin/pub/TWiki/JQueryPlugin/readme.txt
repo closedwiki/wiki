@@ -19,6 +19,8 @@ into temporary directory $JQUERY_ROOT/tmp/. The downloaded theme package has
 always the same name, regardless of the theme name. Unzip the packages in the tmp
 directory, selected [A]ll to overwrite duplicate names.
 
+Note: The Smootness theme has TWiki specific customization. View and modify this theme at http://jqueryui.com/themeroller/?ffDefault=Verdana,Arial,sans-serif&fwDefault=normal&fsDefault=1.1em&cornerRadius=4px&bgColorHeader=c7c9d1&bgTextureHeader=03_highlight_soft.png&bgImgOpacityHeader=75&borderColorHeader=999dad&fcHeader=222222&iconColorHeader=222222&bgColorContent=ffffff&bgTextureContent=01_flat.png&bgImgOpacityContent=75&borderColorContent=aaaaaa&fcContent=222222&iconColorContent=222222&bgColorDefault=e6e6e6&bgTextureDefault=02_glass.png&bgImgOpacityDefault=75&borderColorDefault=d3d3d3&fcDefault=555555&iconColorDefault=888888&bgColorHover=dadada&bgTextureHover=02_glass.png&bgImgOpacityHover=75&borderColorHover=999999&fcHover=212121&iconColorHover=454545&bgColorActive=ffffff&bgTextureActive=02_glass.png&bgImgOpacityActive=65&borderColorActive=aaaaaa&fcActive=212121&iconColorActive=454545&bgColorHighlight=fbf9ee&bgTextureHighlight=02_glass.png&bgImgOpacityHighlight=55&borderColorHighlight=fcefa1&fcHighlight=363636&iconColorHighlight=2e83ff&bgColorError=fef1ec&bgTextureError=02_glass.png&bgImgOpacityError=95&borderColorError=cd0a0a&fcError=cd0a0a&iconColorError=cd0a0a&bgColorOverlay=666666&bgTextureOverlay=01_flat.png&bgImgOpacityOverlay=0&opacityOverlay=50&bgColorShadow=aaaaaa&bgTextureShadow=01_flat.png&bgImgOpacityShadow=0&opacityShadow=30&thicknessShadow=8px&offsetTopShadow=-8px&offsetLeftShadow=-8px&cornerRadiusShadow=8px
+
 5. Move jquery-ui js library from tmp to jQuery root:
 
    mv tmp/js/jquery-ui-1.8.10.custom.min.js .
