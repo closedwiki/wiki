@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299135170" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299136809" format="1.1" version="$Rev$"}%
 ---+!! !ModalBoxAddOn
 <!--
    Contributions to this add-on are appreciated. Please update the contrib page at
@@ -117,7 +117,7 @@ __Raw text:__
 __Rendered text:__
 
 %JQTHEME{"smoothness"}%
-%INCLUDE{ "%SYSTEMWEB%.ModalBoxAddOn"
+%INCLUDE{ "ModalBoxAddOn"
   id="must_be_unique"
   title="This is modal box"
   content="TWiki <i>keeps</i> getting better and better."
