@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299055837" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299135170" format="1.1" version="$Rev$"}%
 ---+!! !ModalBoxAddOn
 <!--
    Contributions to this add-on are appreciated. Please update the contrib page at
@@ -50,7 +50,7 @@ The =JQTHEME= variable initializes the jQuery-UI stylesheets and !JavaScript. It
 
 The =INCLUDE= defines the modal box. More than one box can be defined per page. This section expects the following include parameters:
 
-   * =name= - name of the box. Must be unique per page. Use only alphanumeric characters and underscore! Required.
+   * =id= - ID of the dialog box. Must be unique per page. Use only alphanumeric characters and underscore! Required.
    * =title= - title of the box. Required.
    * =content= - content of the box. Can be of any form, such as HTML with images, CSS and !JavaScript. Don't use double quotes. Required.
    * =buttons= - buttons defined as !JavaScript objects. Optional.
@@ -63,13 +63,58 @@ The =INCLUDE= defines the modal box. More than one box can be defined per page. 
 
 [[http://jqueryui.com/demos/dialog/#option-buttons][See details of options]] of jQuery Dialog widget.
 
+The dialog box can be opened separately if the =showbutton= text is not specified. Example button that opens the dialog box when clicked:
+<verbatim>
+<button id="...">Open dialog box</buttom>
+</verbatim>
+The =id= must match the ID of the box.
+
 ---+++ Using jQuery !JavaScript
 
-FIXME
+Raw !JavaScript can be used instead of the INCLUDE to create a dialog box. Example:
+<verbatim>
+%JQTHEME{"smoothness"}%
+<script type='text/javascript'>
+$(document).ready(function() {
+ var $dialog = $('<div></div>')
+  .html("Put dialog content here, use HTML if needed.")
+  .dialog({
+   autoOpen: false,
+   title: "Title of the dialog box",
+   // add any additional jQuery Dialog options
+   modal: true
+  });
+ $('#MY_UNIQUE_ID').click(function() {
+  $dialog.dialog('open');
+  return false;
+ });
+});
+</script>
+<button id='MY_UNIQUE_ID' class='twikiButton'>Open dialog box</button>
+</verbatim>
+
+[[http://jqueryui.com/demos/dialog/#option-buttons][See details of options]] of jQuery Dialog widget.
 
 ---++ Test Modal Box
 
 ---+++ Test with INCLUDE
+
+<table><tr><td valign="top">
+__Raw text:__
+
+<verbatim>
+%JQTHEME{"smoothness"}% <!-- once per page only -->
+%INCLUDE{ "%SYSTEMWEB%.ModalBoxAddOn"
+  id="must_be_unique"
+  title="This is modal box"
+  content="TWiki <i>keeps</i> getting better and better."
+  buttons="{ 'OK': function() { $(this).dialog('close'); } }"
+  showbutton="Open modal dialog box"
+}%
+</verbatim>
+
+</td><td>&nbsp;</td><td valign="top">
+__Rendered text:__
 
 %JQTHEME{"smoothness"}%
 %INCLUDE{ "%SYSTEMWEB%.ModalBoxAddOn"
@@ -77,14 +122,56 @@ FIXME
   title="This is modal box"
   content="TWiki <i>keeps</i> getting better and better."
   buttons="{ 'OK': function() { $(this).dialog('close'); } }"
-  showbutton="Show modal dialog box"
+  showbutton="Open modal dialog box"
 }%
-
-<!--button id="must_be_unique">Separate botton, same action</button-->
+</td></tr></table>
 
 ---+++ Test with jQuery !JavaScript
 
-FIXME
+<table><tr><td valign="top">
+__Raw text:__
+
+<verbatim>
+<script type='text/javascript'>
+$(document).ready(function() {
+ var $dialog = $('<div></div>')
+  .html("This is the <i>content</i> of the dialog box.")
+  .dialog({
+   autoOpen: false,
+   title: "Title of the dialog box",
+   // add any additional jQuery Dialog options
+   modal: true
+  });
+ $("#my_unique_id").click(function() {
+  $dialog.dialog('open');
+  return false;
+ });
+});
+</script>
+<button id="my_unique_id" class="twikiButton">Open dialog box</button>
+</verbatim>
+
+</td><td>&nbsp;</td><td valign="top">
+__Rendered text:__
+
+<script type='text/javascript'>
+$(document).ready(function() {
+ var $dialog = $('<div></div>')
+  .html("This is the <i>content</i> of the dialog box.")
+  .dialog({
+   autoOpen: false,
+   title: "Title of the dialog box",
+   // add any additional jQuery Dialog options
+   modal: true
+  });
+ $("#my_unique_id").click(function() {
+  $dialog.dialog('open');
+  return false;
+ });
+});
+</script>
+<button id="my_unique_id" class="twikiButton">Open dialog box</button>
+</td></tr></table>
 
 ---++ Modal Box Engine
 
