@@ -1,0 +1,107 @@
+%META:TOPICINFO{author="VaclavOpekar" date="1163170861" format="1.1" reprev="1.4" version="1.4"}%
+---+!! <nop>%TOPIC%
+
+Svn plugin intends to improve traceability of coding activities and integration with tools for web-browsing code repositories. It map s tickets with tasks, bugs, enhancements  to commit messages and revisions in a subversion repository.
+
+%TOC%
+
+---++ Syntax Rules
+ | <verbatim>%SVNTIMELINE{  parameters here }%</verbatim>  | shows formated and referenced commit messages   |
+| <verbatim>%SVNTICKETREF{  parameters here }% </verbatim> | shows the commit messages related to a specific ticket  |
+---+++ Parameters
+
+   | *Name* | *Description* |
+   | =ticketprefix= | Ticket name without a number, tipicaly there will be severl tickets startin from !MyProjectTicket1 to !MyProjectTicketXXXX  in this cast the ticketprefix will be "MyProjectTicket"|
+   | =svnpath= | Path to a subversion repository  |
+   | =ticketnum= | Specifies the number of a ticket we are searching for (used only in SVNTICKETREF) |
+   | =format= | The usual parameter, $rev is replaced with a revision number %BR% $author with an autor name, and $msg with commit log of a specific revision|
+   | =limit= | Limit the search for n last revisions |
+
+
+---++ Examples
+
+---+++ SVNTIMELINE example
+<verbatim>
+%SVNTIMELINE{ 
+  ticketprefix="MyProject"  
+  svnpath= "svn://projectserver/svn/MyProject/trunk/" 
+  format="|[[http://projectserver/websvn/listing.php?repname=svn&path=MyProject&rev=$rev][rev.$rev]] |$author |$msg  |" 
+}%
+</verbatim>
+Produces a table (this is a fake!) with subversion logs  hyperlinked to websvn repository viever to a specific revision and to a related ticket with described activity. Every "#number" pattern in commit log is replaced with a link to a ticket specified by ticketprefic parameter. %BR%
+eg.  #2 -> !MyProjectTicket2
+
+| [[http://fakelink_to_your_websvn_repository][rev.123]]  | vaclav | fix of [[http://fakelink_to_your_ticket][#3]] bug |
+| [[http://fakelink_to_your_websvn_repository][rev.122]]  | vaclav |implementation of GUI feature, ticket [[http://fakelink_to_your_ticket][#2]]|
+| [[http://fakelink_to_your_websvn_repository][rev.121]]  | vaclav |some other commit which does not reference any ticket|
+| [[http://fakelink_to_your_websvn_repository][rev.120]]  | vaclav |parser enhancement, ticket [[http://fakelink_to_your_ticket][#1]]|
+
+
+
+
+
+---+++ SVNTICKETREF example
+<verbatim>
+%SVNTICKETREF{
+  ticketprefix="MyProjectTicket"
+  ticketnum="%CALC{$EVAL(%TOPIC%)}%"  
+  svnpath= "svn://projectserver/svn/MyProject/"
+  format="|[[http://projectserver/websvn/listing.php?repname=svn&path=MyProject&rev=$rev][rev.$rev]] |$author |$msg  |" 
+}%
+</verbatim>
+
+SVNTICKETREF searches through the message logs of the repository and shows the ones referencing "ticketnum" number in a same table as above example. %BR%
+SVNTICKETREF is intended to be in every !MyProjectTicket. ( ticket is created via some ticket template)
+
+
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Improves tracibility of task and comits with suversion repository
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Configure the Plugin:
+      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+      * Change the Plugin settings as needed
+   * Plugins expects subversion client to be available on the server with TWiki instalation
+
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.VasekOpekar |
+|  Copyright: | &copy; 2006, TWiki:Main.VasekOpekar |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 10 Nov 2006 (V1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  10 Nov 2006: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | Subversion client on the TWiki server must be installed|
+|  Perl Version: | 5.005 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+-- TWiki:Main.VasekOpekar - 10 Nov 2006
+
+ 
