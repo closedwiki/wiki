@@ -91,59 +91,54 @@ sub _SVNTICKETREF {
 sub _SVNTIMELINE_GEN {
     my($session, $params, $theTopic, $theWeb,$TicketRefProcess,$TicketNum) = @_;
 
-my $firsttime = 1;
-my $header = 0;
-my $message ="";
-my $format = $params->{format};
-my $timeline = "";
-my $ticketPrefix = $params->{ticketprefix};
-my $limit ="";
+    my $firsttime = 1;
+    my $header = 0;
+    my $message ="";
+    my $format = $params->{format};
+    my $timeline = "";
+    my $ticketPrefix = $params->{ticketprefix};
+    my $limit ="";
 
-if ($params->{limit} ) {
-  $limit = " --limit " . $params->{limit};
-}
-
-open (FILE, "svn log ". $params->{svnpath}  . $limit . "  |" );
-
-while (my $buffer = <FILE>) {
-  if ($buffer =~ /-----/) 
-  {
-        $header = 1;
-	if ($firsttime) 
-	{
-	    $firsttime = 0;
-        } else {
-	    $format =~ s/\$msg/$message/g;
-	    $format =~ s/#(\d+)/\[\[$ticketPrefix$1\]\[#$1\]\]/g;
-
-	    if (($TicketRefProcess && ($message =~ /#$TicketNum/)) || ($TicketRefProcess == 0)) 
-	    {
-		$timeline = $timeline .  $format ."\n";
-	    } 
-	    $message ="";
-	    $format = $params->{format};
-	}
-  } else 
-  {
-    if ($header) {
-#     $buffer =~ /[r]([0-9]+) \S (\S+?) \| ([0-9]+)-([0-9]+)-([0-9]+) ([0-9]+)-([0-9]+)-([0-9]+)/;
-     $buffer =~ /r(\d+) \| (\S+) \| (\d+)-(\d+)-(\d+)/;
-     my @a = ($1, $2 , $3, $4, $5);
-     
-     $format =~ s/\$rev/$a[0]/g;
-     $format =~ s/\$author/$a[1]/g;
-     
-     $header = 0; 
-    } else {
-
-      chomp($buffer);
-      $message =  $message . trim($buffer) . " ";
+    if ($params->{limit} ) {
+        $limit = " --limit " . $params->{limit};
     }
-  }
-  
-} 
 
-close(FILE);
+    open (FILE, "svn log ". $params->{svnpath}  . $limit . "  |" );
+
+    while (my $buffer = <FILE>) {
+      if ($buffer =~ /-----/) {
+        $header = 1;
+        if ($firsttime) {
+          $firsttime = 0;
+
+        } else {
+          $format =~ s/\$msg/$message/g;
+          $format =~ s/#(\d+)/\[\[$ticketPrefix$1\]\[#$1\]\]/g;
+
+          if (($TicketRefProcess && ($message =~ /#$TicketNum/)) || ($TicketRefProcess == 0)) {
+            $timeline = $timeline .  $format ."\n";
+          } 
+          $message ="";
+          $format = $params->{format};
+        }
+      } else {
+      if ($header) {
+#       $buffer =~ /[r]([0-9]+) \S (\S+?) \| ([0-9]+)-([0-9]+)-([0-9]+) ([0-9]+)-([0-9]+)-([0-9]+)/;
+        $buffer =~ /r(\d+) \| (\S+) \| (\d+)-(\d+)-(\d+)/;
+        my @a = ($1, $2 , $3, $4, $5);
+
+        $format =~ s/\$rev/$a[0]/g;
+        $format =~ s/\$author/$a[1]/g;     
+        $header = 0; 
+
+        } else {
+          chomp($buffer);
+          $message =  $message . trim($buffer) . " ";
+        }
+      }
+    }
+
+    close(FILE);
     return $timeline;
 }
 
