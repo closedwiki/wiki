@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1288940421" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299448407" format="1.1" version="$Rev$"}%
 ---+ Web Permissions Plugin
 <!--
     Contributions to this plugin are appreciated. Please update the plugin page at
-    http://twiki.org/cgi-bin/view/Plugins/WysiwygPlugin or provide feedback at
-    http://twiki.org/cgi-bin/view/Plugins/WysiwygPluginDev.
+    http://twiki.org/cgi-bin/view/Plugins/WebPermissionsPlugin or provide feedback at
+    http://twiki.org/cgi-bin/view/Plugins/WebPermissionsPluginDev.
     If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
 <sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
@@ -45,11 +45,11 @@ VIEW = %V% CHANGE = %C%
 VIEW = %V% CHANGE = %C%
 <table class="twikiTable" border="1">
 <tr><th></th><th>Albums</th><th>Singles</th><th>Reviews</th><th>Statistics</th></tr>
-<tr><th> AnnieLennox </th><td>%V%%Y% %C%%Y%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%N%</td></tr>
-<tr><th> BillyBragg </th><td>%V%%Y%%C%%N%<td>%V%%Y%%C%%N%</td><td>%V%%Y%%C%%N%</td><td>%V%%N%%C%%N%</td></tr>
-<tr><th> ColinTowns </th><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%N%</td></tr>
-<tr><th> DavidSoul </th><td>%V%%N%%C%%N%</td><td>%V%%Y%%C%%Y%</td><td>%V%%N%%C%%N%</td><td>%V%%Y%%C%%N%</td></tr>
-<tr><th> EaglesGroup </th><td>%V%%N%%C%%Y%<td>%V%%N%%C%%N%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%N%</td></tr>
+<tr><th>AnnieLennox </th><td>%V%%Y% %C%%Y%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%N%</td></tr>
+<tr><th>BillyBragg </th><td>%V%%Y%%C%%N%<td>%V%%Y%%C%%N%</td><td>%V%%Y%%C%%N%</td><td>%V%%N%%C%%N%</td></tr>
+<tr><th>ColinTowns </th><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%N%</td></tr>
+<tr><th>DavidSoul </th><td>%V%%N%%C%%N%</td><td>%V%%Y%%C%%Y%</td><td>%V%%N%%C%%N%</td><td>%V%%Y%%C%%N%</td></tr>
+<tr><th>EaglesGroup </th><td>%V%%N%%C%%Y%<td>%V%%N%%C%%N%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%N%</td></tr>
 </table>
 <button>Save</button> <button>Cancel</button>
 </td></tr></table>
@@ -124,9 +124,11 @@ The topic permissions UI can be viewed (and edited) by entering =%<nop>TOPICPERM
 ---+++ =WEBPERMISSIONS=
 
 The =WEBPERMISSIONS= TWiki variable accepts the following parameters:
+
    * =repeatheads= - if set to a number, headings will be repeated every this number of rows. This is very useful when you have a lot of users and groups.
    * =webs= - a comma-separated list of webs to show. Default is to show all webs.
    * =users= - a comma-separated list of users (and groups) to show. Default is to show all users and groups.
+
 Both =webs= and =users= lists can use _wildcards_. A star (*) in a name will match any number of characters - so =Brian*= will match all users and groups whose names start with =Brian=. =*Group= will match all users or groups whose name ends in =Group=. If you put a minus sign (-) before a name in either list, then the next expression will be treated as a _filter_ e.g. =-Secret= will _exclude_ the name =Secret= from the list, and =*Group= will exclude all names ending in =Group= from the list.
 
 Use the following form to select the subset of webs and users you want to display. If you have admin rights, and the plugin is installed, you will see the matrix below the form:
@@ -180,11 +182,12 @@ Many thanks to the following sponsors for supporting this work:
    * Further work supported by [[http://www.spanlink.com/][Spanlink Communications]]
 
 |  Plugin Author: | TWiki:Main.CrawfordCurrie & TWiki:Main.SvenDowideit, http://wikiring.com |
-|  Copyright: | &copy; 2006, Evolved Media, Spanlink Communications and !WikiRing;%BR% &copy; 2006-2010 TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2006, Evolved Media, Spanlink Communications and !WikiRing;%BR% &copy; 2006-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-05-26 | TWikibug:Item6433 - doc improvements |
+|  2011-03-06 | TWikibug:Item6655: Fix for TWiki-5.0 -- TWiki:Main.SzymonSobczyk |
+|  2010-05-26 | TWikibug:Item6433: Doc improvements -- TWiki:Main.PeterThoeny |
 |  4 Dec 2007 | TWikibug:Item4901 fixed templates TWikibug:Item5072 added users parameter to select a subset of users/groups in the web permissions interface |
 |  8 Sep 2007 | Updated for TWiki-4.2.0 |
 |  July 2006 | add Topic ACLs user interface via More topic actions - SvenDowideit@WikiRing.com |
