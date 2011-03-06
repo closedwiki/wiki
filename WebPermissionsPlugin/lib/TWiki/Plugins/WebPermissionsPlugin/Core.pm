@@ -2,8 +2,9 @@
 #
 # Copyright (C) Evolved Media Network 2005
 # Copyright (C) Spanlink Communications 2006
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
+# Copyright (C) 2006-2011 TWiki:TWiki.TWikiContributor
+# All Rights Reserved. TWiki Contributors are listed in the
+# AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
@@ -39,7 +40,7 @@ use strict;
 # resolve permissions issues)
 sub WEBPERMISSIONS {
     my( $session, $params, $topic, $web ) = @_;
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request} || $session->{cgiQuery};
     my $action = $query->param( 'web_permissions_action' );
     my $editing = $action && $action eq 'Edit';
     my $saving =  $action && $action eq 'Save';
