@@ -1,9 +1,9 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2007 Aleksandar Erkalovic, aerkalov@gmail.com
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
+# Copyright (C) 2008-2011 TWiki Contributors
+# All Rights Reserved. TWiki Contributors are listed in the
+# AUTHORS file in the root of this distribution.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,62 +17,27 @@
 #
 # For licensing info read LICENSE file in the TWiki root.
 
-=pod
-
----+ package CopyrightPlugin
-=cut
-
 package TWiki::Plugins::CopyrightPlugin;
 
-# Always use strict to enforce variable scoping
 use strict;
 
 use TWiki::Func;
 use List::Compare::Functional qw( get_unique );
 
-# $VERSION is referred to by TWiki, and is the only global variable that
-# *must* exist in this package.
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC $usersPreferences $topicsPreferences);
+use vars qw(
+  $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName
+  $NO_PREFS_IN_TOPIC $usersPreferences $topicsPreferences
+);
 
-
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
+$RELEASE = '2011-03-05';
 
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
-# Short description of this plugin
-# One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-$SHORTDESCRIPTION = 'Copyright Plugin ... something something';
-
-# You must set $NO_PREFS_IN_TOPIC to 0 if you want your plugin to use preferences
-# stored in the plugin topic. This default is required for compatibility with
-# older plugins, but imposes a significant performance penalty, and
-# is not recommended. Instead, use $TWiki::cfg entries set in LocalSite.cfg, or
-# if you want the users to be able to change settings, then use standard TWik
-# preferences that can be defined in your Main.TWikiPreferences and overridden
-# at the web and topic level.
+$SHORTDESCRIPTION = 'List copyright information based on topic authors';
 $NO_PREFS_IN_TOPIC = 0;
 
-# Name of this Plugin, only used in this module
 $pluginName = 'CopyrightPlugin';
 
-=pod
-
----++ initPlugin($topic, $web, $user, $installWeb) -> $boolean
-   * =$topic= - the name of the topic in the current CGI query
-   * =$web= - the name of the web in the current CGI query
-   * =$user= - the login name of the user
-   * =$installWeb= - the name of the web the plugin is installed in
-
-REQUIRED
-
-=cut
-
+#=======================================================
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
@@ -82,8 +47,8 @@ sub initPlugin {
         return 0;
     }
 
-    $usersPreferences  = TWiki::Func::getPluginPreferencesValue("USERSEXCLUDE") || "";
-    $topicsPreferences = TWiki::Func::getPluginPreferencesValue("TOPICSEXCLUDE") || "";
+    $usersPreferences  = TWiki::Func::getPreferencesValue( "COPYRIGHTPLUGIN_USERSEXCLUDE" ) || '';
+    $topicsPreferences = TWiki::Func::getPreferencesValue( "COPYRIGHTPLUGIN_TOPICSEXCLUDE") || '';
 
     TWiki::Func::registerTagHandler( 'AUTHORS', \&_AUTHORSTAG );
 
@@ -91,6 +56,7 @@ sub initPlugin {
     return 1;
 }
 
+#=======================================================
 sub _getMetaInfo {
   my ($meta, $key) = @_;
 
@@ -105,6 +71,7 @@ sub _getMetaInfo {
   return undef;
 }
 
+#=======================================================
 sub _getAuthorFullName {
   my ($authorName) = @_;
 
@@ -117,6 +84,7 @@ sub _getAuthorFullName {
   return $authorName;
 }
 
+#=======================================================
 sub _getReferencesTo {
  my ($theWeb, $theTopic) = @_;
 
@@ -129,20 +97,12 @@ sub _getReferencesTo {
  return ($theWeb, $theTopic);
 }
 
+#=======================================================
 sub _AUTHORSTAG {
     my($session, $params, $theTopic, $theWeb) = @_;
-    # $session  - a reference to the TWiki session object (if you don't know
-    #             what this is, just ignore it)
-    # $params=  - a reference to a TWiki::Attrs object containing parameters.
-    #             This can be used as a simple hash that maps parameter names
-    #             to values, with _DEFAULT being the name for the default
-    #             parameter.
-    # $theTopic - name of the topic in the query
-    # $theWeb   - name of the web in the query
-    # Return: the result of processing the variable
 
-    my @usersExclude  = split(/,/, $usersPreferences);
-    my @topicsExclude = split(/,/, $topicsPreferences);
+    my @usersExclude  = split( /, */, $usersPreferences );
+    my @topicsExclude = split( /, */, $topicsPreferences );
    
     my @topics;
     my %fullTopics;
@@ -170,7 +130,6 @@ sub _AUTHORSTAG {
     }
 
     my @topicList = get_unique({lists => [\@topics, \@topicsExclude]});
-
 
     foreach  my $topicName (sort { $a cmp $b } @topicList) {
       my %authorsDictionary;
@@ -214,9 +173,9 @@ sub _AUTHORSTAG {
 
       if($showInfo eq "full") {
           if(exists $fullTopics{$topicName}) {
-	     $out .= "<i>".$fullTopics{$topicName}."</i><br/>";
+	     $out .= "<i>".$fullTopics{$topicName}."</i><br />";
 	  } else {
-              $out .= "<i>$topicName</i><br/>";
+              $out .= "<i>$topicName</i><br />";
 	  } 
       } 
 
@@ -235,22 +194,23 @@ sub _AUTHORSTAG {
 	
 	          $outModification .= _getAuthorFullName($a)." ";
 	          $outModification .= join(", ", @sorted);
-	          $outModification .= "<br/>";
+	          $outModification .= "<br />";
 	      }
           }
 
           if($outModification ne "") {
 	      if($showInfo ne "modifiers") {
-                  $out .= "<br/>Modifications:<br/>";
+                  $out .= "<br />Modifications:<br />";
           }
               $out .= $outModification;
           }
       
-          $out .= "<hr/>";
+          $out .= "<hr />";
       }
     }
 
     return $out;
 }
 
+#=======================================================
 1;
