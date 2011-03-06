@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299136809" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299394138" format="1.1" version="$Rev$"}%
 ---+!! !ModalBoxAddOn
 <!--
    Contributions to this add-on are appreciated. Please update the contrib page at
@@ -173,6 +173,77 @@ $(document).ready(function() {
 <button id="my_unique_id" class="twikiButton">Open dialog box</button>
 </td></tr></table>
 
+---+++ Test with jQuery Ajax
+
+This modal dialog box loads %SYSTEMWEB%.FormatTokens once the dialog box opens via an Ajax call. The TML (TWiki Markup Language) is loaded as plain text, then placed into the dialog box for rendering.
+
+<table><tr><td valign="top">
+__Raw text:__
+
+<verbatim>
+<script type='text/javascript'>
+$(document).ready(function() {
+ var $dialog = $('<div></div>')
+  .html(
+   "<div id='ajax_content'><img src='%ICONURLPATH{processing}%'"+
+   " width='16' height='16' border='' alt='' /></div>"
+  )
+  .dialog({
+   autoOpen: false,
+   title: 'Ajax Test',
+   width: "800",
+   height: "600",
+   modal: true
+  });
+ $("#ajax_dialog").click(function() {
+  $.get(
+   '%SCRIPTURL{view}%/%SYSTEMWEB%/FormatTokens?',
+   { skin: 'text', contenttype: 'text/plain' },
+   function(data) {
+    $('div#ajax_content').html(
+      "<div style='text-align:left'>"+data+"</div>");
+   }, 'text' );
+   $dialog.dialog('open');
+   return false;
+ });
+});
+</script>
+<button id="ajax_dialog" class="twikiButton">Open Ajax dialog box</button>
+</verbatim>
+
+</td><td>&nbsp;</td><td valign="top">
+__Rendered text:__
+
+<script type='text/javascript'>
+$(document).ready(function() {
+ var $dialog = $('<div></div>')
+  .html(
+   "<div id='ajax_content'><img src='%ICONURLPATH{processing}%'"+
+   " width='16' height='16' border='' alt='' /></div>"
+  )
+  .dialog({
+   autoOpen: false,
+   title: 'Ajax Test',
+   width: "800",
+   height: "600",
+   modal: true
+  });
+ $("#ajax_dialog").click(function() {
+  $.get(
+   '%SCRIPTURL{view}%/%SYSTEMWEB%/FormatTokens?',
+   { skin: 'text', contenttype: 'text/plain' },
+   function(data) {
+    $('div#ajax_content').html(
+      "<div style='text-align:left'>"+data+"</div>");
+   }, 'text' );
+   $dialog.dialog('open');
+   return false;
+ });
+});
+</script>
+<button id="ajax_dialog" class="twikiButton">Open Ajax dialog box</button>
+</td></tr></table>
+
 ---++ Modal Box Engine
 
 This section defines the modal box so that it can be called with a simple INCLUDE. View the [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][raw text]] of this topic to look under the hood.
@@ -183,14 +254,14 @@ $(document).ready(function() {
   .html("%content%")
   .dialog({
    autoOpen: false,
-   title: "%title%",
-%IF{ "defined 'buttons'"     then="   buttons: %buttons%,"     else="<nop>" }%
-%IF{ "defined 'height'"      then="   height: %height%,"       else="<nop>" }%
-%IF{ "defined 'width'"       then="   width: %width%,"         else="<nop>" }%
-%IF{ "defined 'position'"    then="   position: %position%,"   else="<nop>" }%
-%IF{ "defined 'resizable'"   then="   resizable: %resizable%," else="<nop>" }%
-%IF{ "defined 'options'"     then="   %options%,"              else="<nop>" }%
-   modal: true
+%IF{ "defined 'title'"     then="   title: \"%title%\","     else="<nop>" }%
+%IF{ "defined 'buttons'"   then="   buttons: %buttons%,"     else="<nop>" }%
+%IF{ "defined 'height'"    then="   height: %height%,"       else="<nop>" }%
+%IF{ "defined 'width'"     then="   width: %width%,"         else="<nop>" }%
+%IF{ "defined 'position'"  then="   position: %position%,"   else="<nop>" }%
+%IF{ "defined 'resizable'" then="   resizable: %resizable%," else="<nop>" }%
+%IF{ "defined 'modal'"     then="   modal: %modal%,"         else="modal: true," }%
+%IF{ "defined 'options'"   then="   %options%"               else="<nop>" }%
   });
  $('#%id%').click(function() {
   $dialog.dialog('open');
@@ -222,8 +293,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] <br /> &copy; 2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2011-03-02 |
+|  Add-on Version: | 2011-03-05 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-03-05: | TWikibug:Item6651: Adding Ajax dialog box example |
 |  2011-03-02: | TWikibug:Item6651: Initial version |
 |  TWiki Dependency: | JQueryPlugin version 2011-03-01 |
 |  CPAN Dependencies: | none |
