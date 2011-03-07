@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297235791" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299478818" format="1.1" version="$Rev$"}%
 ---+!! Empty TWiki Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -25,30 +25,21 @@ To create your own plugin:
 
 (none)
 
----++ Plugin Settings
-
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>EMPTYPLUGIN_SHORTDESCRIPTION%==
-
-   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Empty Plugin used as a template for new plugins
-
-   * Your own setting, for example:
-      * Set EXAMPLE = got it!
-
-   * Debug plugin: ( TWiki sets =$debug= in your plugin. See output in =data/debug.txt=.)
-      * Set DEBUG = 0
-
 ---++ Plugin Installation Instructions
 
    * This plugin is pre-installed, you do not need to install it.
 
 ---++ Plugin Info
 
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Empty Plugin used as a template for new plugins
+
 |  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie |
 |  Copyright: | &copy; 2001-2011, TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-03-06: | TWikibug:Item6656: Add meta data to attachment save handlers |
 |  2011-02-08: | TWikibug:Item6593: Doc improvements; adding VarEXAMPLEVAR variable documentation |
 |  2010-05-08: | TWikibug:Item6433: Doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  2007-05-20: | Added renderWikiWordHandler |
