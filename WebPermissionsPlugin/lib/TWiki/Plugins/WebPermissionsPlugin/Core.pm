@@ -131,12 +131,12 @@ sub WEBPERMISSIONS {
                 if( $editing ) {
                     my %attrs = ( type => 'checkbox', name => $user.':'.$web.':'.$op );
                     $attrs{checked} = 'checked' if $table{$web}->{$user}->{$op};
-                    $cell .= CGI::label( ($images{$op} || $op).CGI::input( \%attrs ));
+                    $cell .= CGI::label( CGI::input( \%attrs ) . ($images{$op} || $op) . '&nbsp;');
                 } elsif( $table{$web}->{$user}->{$op} ) {
                     $cell .= $images{$op} || $op;
                 }
             }
-            $row .= CGI::td( $cell );
+            $row .= CGI::td( '<span style="white-space:nowrap">' . $cell . '</span>' );
         }
         $tab .= CGI::Tr( $row );
     }
