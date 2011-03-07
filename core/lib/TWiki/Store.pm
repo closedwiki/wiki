@@ -1029,7 +1029,7 @@ sub saveAttachment {
             if( $plugins->haveHandlerFor( 'afterAttachmentSaveHandler' )) {
                 $plugins->dispatch('afterAttachmentSaveHandler',
                                    $attrs, $topic, $web,
-                                   $error ? $error->{-text} : ''
+                                   $error ? $error->{-text} : '',
                                    $meta );
             }
             throw $error if $error;
