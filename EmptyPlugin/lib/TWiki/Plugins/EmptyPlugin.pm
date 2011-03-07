@@ -46,11 +46,11 @@ plugin.
 __NOTE:__ When developing a plugin it is important to remember that
 TWiki is tolerant of plugins that do not compile. In this case,
 the failure will be silent but the plugin will not be available.
-See %TWIKIWEB%.TWikiPlugins#FAILEDPLUGINS for error messages.
+See %SYSTEMWEB%.TWikiPlugins#FAILEDPLUGINS for error messages.
 
 __NOTE:__ Defining deprecated handlers will cause the handlers to be 
-listed in %TWIKIWEB%.TWikiPlugins#FAILEDPLUGINS. See
-%TWIKIWEB%.TWikiPlugins#Handlig_deprecated_functions
+listed in %SYSTEMWEB%.TWikiPlugins#FAILEDPLUGINS. See
+%SYSTEMWEB%.TWikiPlugins#Handlig_deprecated_functions
 for information on regarding deprecated handlers that are defined for
 compatibility with older TWiki versions.
 
@@ -82,12 +82,12 @@ $VERSION = '$Rev$';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS. Add your own release number
-# such as '1.3' or release date such as '2010-05-08'
-$RELEASE = '0.1';
+# of the version number in PLUGINDESCRIPTIONS. Add a release date in ISO
+# format (preferred) or a release number such as '1.3'.
+$RELEASE = '2011-03-06';
 
 # Short description of this plugin
-# One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+# One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
 $SHORTDESCRIPTION = 'Empty Plugin used as a template for new Plugins';
 
 # You must set $NO_PREFS_IN_TOPIC to 0 if you want your plugin to use preferences
