@@ -1,6 +1,6 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2002-2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2002-2011 Peter Thoeny, peter[at]thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -1013,7 +1013,7 @@ sub saveAttachment {
                seek( $fh, 0, 0 ) or die "can't seek temp: $! \n";
                $opts->{stream} = $fh;   
                $attrs->{tmpFilename} = $tmpFile;
-               $plugins->dispatch('beforeAttachmentSaveHandler', $attrs, $topic, $web );
+               $plugins->dispatch('beforeAttachmentSaveHandler', $attrs, $topic, $web, $meta );
             }
             my $error;
             try {
@@ -1029,8 +1029,8 @@ sub saveAttachment {
             if( $plugins->haveHandlerFor( 'afterAttachmentSaveHandler' )) {
                 $plugins->dispatch('afterAttachmentSaveHandler',
                                    $attrs, $topic, $web,
-                                   $error ? 
-                                     $error->{-text} : '' );
+                                   $error ? $error->{-text} : ''
+                                   $meta );
             }
             throw $error if $error;
 
