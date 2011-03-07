@@ -6,66 +6,66 @@
     <tr>
         <td rowspan="3" width="40%">
 ---++++ All Users and Groups
-            <SELECT SIZE="17"  NAME=disallowedusers MULTIPLE style="width:100%;">
-                <OPTGROUP label="Groups">
+            <select size="17" name="disallowedusers" multiple="multiple" style="width:100%;">
+                <optgroup label="Groups">
 %UNSELECTEDGROUPS%
-                </OPTGROUPS>
-                <OPTGROUP label="Users">
+                </optgroup>
+                <optgroup label="Users">
 %UNSELECTEDUSERS%
-                </OPTGROUPS>
-            </SELECT>
+                </optgroup>
+            </select>
         </td>
         <td align="center" width="100px">
-            <button type="button" style="width:100%;" onclick="TWiki.WebPermissionsPlugin.moveSelectionTo(event, 'topiceditors', 'disallowedusers');" class="twikiSubmit" >
-                <IMG src="%PUBURL%/%TWIKIWEB%/%PLUGINNAME%/leftarrow.png" alt="<-"> Remove
+            <button type="button" style="width:100%;" onclick="TWiki.WebPermissionsPlugin.moveSelectionTo(event, 'topiceditors', 'disallowedusers');" class="twikiButton">
+                <img src="%PUBURL%/%TWIKIWEB%/%PLUGINNAME%/leftarrow.png" alt="&lt;-" /> Remove
             </button>
-            <button type="button"  style="width: 100%;" onclick="TWiki.WebPermissionsPlugin.moveSelectionTo(event, 'disallowedusers', 'topiceditors');" class="twikiSubmit" >
-                Add <IMG src="%PUBURL%/%TWIKIWEB%/%PLUGINNAME%/rightarrow.png" alt="->">
+            <button type="button"  style="width: 100%;" onclick="TWiki.WebPermissionsPlugin.moveSelectionTo(event, 'disallowedusers', 'topiceditors');" class="twikiButton">
+                Add <img src="%PUBURL%/%TWIKIWEB%/%PLUGINNAME%/rightarrow.png" alt="-&gt;" />
             </button>
         </td>
         <td width="40%">
 ---++++ Editors
-            <SELECT SIZE="5" NAME=topiceditors MULTIPLE style="width:100%;">
-                <OPTGROUP label="Groups">
+            <select size="5" name="topiceditors" multiple="multiple" style="width:100%;">
+                <optgroup label="Groups">
 %EDITGROUPS%
-                </OPTGROUPS>
-                <OPTGROUP label="Users">
+                </optgroup>
+                <optgroup label="Users">
 %EDITUSERS%
-                </OPTGROUPS>
-            </SELECT>
+                </optgroup>
+            </select>
         </td>
     </tr>
     <tr>
         <td>
         </td>
         <td align="center" valign="center">
-            <button type="button" style="height: 20px;width:30%;" onclick="TWiki.WebPermissionsPlugin.moveSelectionTo(event, 'topiceditors', 'topicviewers');" class="twikiSubmit" >
-                <IMG src="%PUBURL%/%TWIKIWEB%/%PLUGINNAME%/downarrow.png" alt="V">
+            <button type="button" style="height: 20px;width:30%;" onclick="TWiki.WebPermissionsPlugin.moveSelectionTo(event, 'topiceditors', 'topicviewers');" class="twikiButton">
+                <img src="%PUBURL%/%TWIKIWEB%/%PLUGINNAME%/downarrow.png" alt="V" />
             </button>
-            <button type="button" style="height: 20px;width:30%;" onclick="TWiki.WebPermissionsPlugin.moveSelectionTo(event, 'topicviewers', 'topiceditors');" class="twikiSubmit" >
-                <IMG src="%PUBURL%/%TWIKIWEB%/%PLUGINNAME%/uparrow.png" alt="^">
+            <button type="button" style="height: 20px;width:30%;" onclick="TWiki.WebPermissionsPlugin.moveSelectionTo(event, 'topicviewers', 'topiceditors');" class="twikiButton">
+                <img src="%PUBURL%/%TWIKIWEB%/%PLUGINNAME%/uparrow.png" alt="^" />
             </button>
         </td>
     </tr>
     <tr>
         <td align="center">
-            <button type="button" style="width: 100%;" onclick="TWiki.WebPermissionsPlugin.moveSelectionTo(event, 'topicviewers', 'disallowedusers');" class="twikiSubmit" >
-                <IMG src="%PUBURL%/%TWIKIWEB%/%PLUGINNAME%/leftarrow.png" alt="<-"> Remove
+            <button type="button" style="width: 100%;" onclick="TWiki.WebPermissionsPlugin.moveSelectionTo(event, 'topicviewers', 'disallowedusers');" class="twikiButton">
+                <img src="%PUBURL%/%TWIKIWEB%/%PLUGINNAME%/leftarrow.png" alt="&lt;-" /> Remove
             </button>
-            <button type="button" style="width: 100%;" onclick="TWiki.WebPermissionsPlugin.moveSelectionTo(event, 'disallowedusers', 'topicviewers');" class="twikiSubmit" >
-                Add <IMG src="%PUBURL%/%TWIKIWEB%/%PLUGINNAME%/rightarrow.png" alt="->">
+            <button type="button" style="width: 100%;" onclick="TWiki.WebPermissionsPlugin.moveSelectionTo(event, 'disallowedusers', 'topicviewers');" class="twikiButton">
+                Add <img src="%PUBURL%/%TWIKIWEB%/%PLUGINNAME%/rightarrow.png" alt="-&gt;" />
             </button>
         </td>
         <td>
 ---++++ Viewers
-            <SELECT SIZE="5" NAME=topicviewers MULTIPLE style="width:100%;">
-                <OPTGROUP label="Groups">
+            <select size="5" name="topicviewers" multiple="multiple" style="width:100%;">
+                <optgroup label="Groups">
 %VIEWGROUPS%
-                </OPTGROUPS>
-                <OPTGROUP label="Users">
+                </optgroup>
+                <optgroup label="Users">
 %VIEWUSERS%
-                </OPTGROUPS>
-            </SELECT>
+                </optgroup>
+            </select>
         </td>
     </tr>
     <tr height="10px">
@@ -73,7 +73,7 @@
     <tr>
         <td align="right" colspan="3">
             <input type="submit" %DISABLESAVE% class="twikiSubmit%DISABLESAVE%" name="topic_permissions_action" id="save" value='Save' onclick="return prepareForSave(event);" />
-            <input type="submit" class="twikiSubmit" name="topic_permissions_action" id="cancel" value='Cancel' accesskey='c' /> &nbsp; &nbsp; &nbsp; &nbsp;
+            <input type="submit" class="twikiButton" name="topic_permissions_action" id="cancel" value='Cancel' accesskey='c' /> &nbsp; &nbsp; &nbsp; &nbsp;
          </td>
     </tr>
 </table>

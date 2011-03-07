@@ -144,7 +144,7 @@ sub WEBPERMISSIONS {
 
     if( $editing ) {
         $tab .= CGI::submit( -name => 'web_permissions_action', -value => 'Save',  -class => 'twikiSubmit');
-        $tab .= CGI::submit( -name => 'web_permissions_action', -value => 'Cancel',  -class => 'twikiSubmit' );
+        $tab .= CGI::submit( -name => 'web_permissions_action', -value => 'Cancel',  -class => 'twikiButton' );
     } else {
         $tab .= CGI::submit( -name => 'web_permissions_action', -value => 'Edit',  -class => 'twikiSubmit' );
     }
