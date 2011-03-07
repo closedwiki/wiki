@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2011 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -554,10 +554,11 @@ sub DISABLE_afterRenameHandler {
 
 =pod
 
----++ beforeAttachmentSaveHandler(\%attrHash, $topic, $web )
+---++ beforeAttachmentSaveHandler(\%attrHash, $topic, $web, $meta )
    * =\%attrHash= - reference to hash of attachment attribute values
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
+   * =$meta= - meta-data object for the topic
 This handler is called once when an attachment is uploaded. When this
 handler is called, the attachment has *not* been recorded in the database.
 
@@ -579,11 +580,12 @@ sub DISABLE_beforeAttachmentSaveHandler {
 
 =pod
 
----++ afterAttachmentSaveHandler(\%attrHash, $topic, $web, $error )
+---++ afterAttachmentSaveHandler(\%attrHash, $topic, $web, $error, $meta )
    * =\%attrHash= - reference to hash of attachment attribute values
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
    * =$error= - any error string generated during the save process
+   * =$meta= - meta-data object for the topic
 This handler is called just after the save action. The attributes hash
 will include at least the following attributes:
    * =attachment= => the attachment name
