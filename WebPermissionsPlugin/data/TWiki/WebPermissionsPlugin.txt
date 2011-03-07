@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299448407" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299469938" format="1.1" version="$Rev$"}%
 ---+ Web Permissions Plugin
 <!--
     Contributions to this plugin are appreciated. Please update the plugin page at
@@ -186,6 +186,7 @@ Many thanks to the following sponsors for supporting this work:
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-03-06 | TWikibug:Item6655: Better images for %ATTACHURL%/VIEW.gif VIEW.gif and %ATTACHURL%/CHANGE.gif CHANGE.gif -- TWiki:Main.PeterThoeny |
 |  2011-03-06 | TWikibug:Item6655: Fix for TWiki-5.0 -- TWiki:Main.SzymonSobczyk |
 |  2010-05-26 | TWikibug:Item6433: Doc improvements -- TWiki:Main.PeterThoeny |
 |  4 Dec 2007 | TWikibug:Item4901 fixed templates TWikibug:Item5072 added users parameter to select a subset of users/groups in the web permissions interface |
@@ -195,9 +196,11 @@ Many thanks to the following sponsors for supporting this work:
 |  9048 | TWikibug:Item1766 - corrected problems with passing incorrect parameters to setACLs and not interpreting values from the form correctly. |
 |  8877 | TWikibug:Item1701 - first release |
 |  Dependencies: | %$DEPENDENCIES% |
-|  Demo Url: | http://demo.wikiring.com/twiki/bin/view/Demo/TopicPermissionsDemo |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+
+%META:FILEATTACHMENT{name="CHANGE.gif" attachment="CHANGE.gif" attr="h" comment="" date="1299469848" path="CHANGE.gif" size="327" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="VIEW.gif" attachment="VIEW.gif" attr="h" comment="" date="1299469848" path="VIEW.gif" size="559" user="TWikiContributor" version="1"}%
