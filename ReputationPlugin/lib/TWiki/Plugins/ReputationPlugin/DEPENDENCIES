@@ -1,0 +1,5 @@
+MLDBM,>0,cpan, Module for storing multilevel perl hash structures
+Data::Dumper,>0,cpan, Serializing support needed by MLDBM
+BerkeleyDB,>0,cpan, The plugin uses BerkeleyDB to store the information
+HTML::Entities,>0,cpan, HTML entities module for cleaning the user input
+Locale::Maketext,>1.0,cpan, Maketext perl module for plugin's translation framework

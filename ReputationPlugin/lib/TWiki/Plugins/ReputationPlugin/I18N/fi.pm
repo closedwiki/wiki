@@ -26,9 +26,9 @@ use vars qw(%Lexicon);
 => " ~[~[[_1].ReputationPluginInfofi~]~[Mist‰ on kyse?~]~] ",
 "You haven't voted this, not removed."
  => "Et ole ‰‰nest‰nyt t‰t‰ vaihtoehtoa, joten sit‰ ei poisteta.",
-" removed vote for \"[_1]\" "
- => " poistettiin ‰‰ni \"[_1]\" ",
-" affecting [quant,_1,user] [_3].[_2]"
+"removed vote on [_1] "
+ => "poistettiin ‰‰ni [_1] ",
+" for [quant,_1,user] [_3].[_2]"
  => " [quant,_1,k‰ytt‰j‰lt‰,k‰ytt‰jilt‰] [_3].[_2]",
 "Vote already done, remove to add again"
  => "Olet jo ‰‰nest‰nyt t‰t‰ vaihtoehtoa, poista ‰‰ni jos haluat ‰‰nest‰‰ sit‰ uudelleen",
