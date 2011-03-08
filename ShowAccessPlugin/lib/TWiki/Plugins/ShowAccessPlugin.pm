@@ -1,8 +1,8 @@
 ###############################################################################
-# Plugin for TWiki Collaboration Platform, http://TWiki.org/
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2008 Wolf Marbach http://comcon.co.nz
-#
+# Copyright (C) 2008-2011 TWiki Contributor
 #
 # Additional copyrights apply to some or all of the code in this
 # file as follows:
@@ -17,19 +17,11 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
-#
-# 
-#
 ###############################################################################
 
 package TWiki::Plugins::ShowAccessPlugin;
 
-
 use strict;
-
-
-
-
 
 ###############################################################################
 use vars qw(
@@ -38,10 +30,11 @@ use vars qw(
 	$NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
     );
 
-$VERSION = '$Rev: 17676 (22 Oct 2008) $';
-$RELEASE = 'v1.00';
+$VERSION = '$Rev$';
+$RELEASE = '2011-03-07';
+
 $NO_PREFS_IN_TOPIC = 1;
-$SHORTDESCRIPTION = 'Read and Show accessrights of topics';
+$SHORTDESCRIPTION = 'Read and show access rights of topics';
 $pluginName = 'ShowAccessPlugin';
 
 ###############################################################################
@@ -56,10 +49,8 @@ sub initPlugin {
   my $query = TWiki::Func::getCgiQuery();
   return unless $query;
 
-
   TWiki::Func::registerTagHandler('SHOWACCESS', \&handleShowaccess);
   TWiki::Func::registerTagHandler('READACCESS', \&handleReadaccess);
-
 
   return 1;
 }
@@ -94,8 +85,6 @@ sub handleShowaccess {
    my $styleno = '<p style="color:red;font-weight:bold">';
    my $endstyle = "</p>";
 
-
-
    if ($type eq 'change') {
       if ($hasAccessChange && $hasAccessView) {
          $result = $styleyes."YES".$endstyle;
@@ -110,10 +99,7 @@ sub handleShowaccess {
          $result = $styleno."NO".$endstyle;
       }
    }
- 
- 
    return $result;
-
 }
 
 ###############################################################################
@@ -124,17 +110,12 @@ sub handleReadaccess {
   
    my $topic = $params->{_DEFAULT} || $params->{topic} || $currentTopic;
    my $web = $params->{web} || $currentWeb;
-   my $sep = $params->{sep} || "\n<br>";
-
+   my $sep = $params->{separator} || $params->{sep} || ", ";
 
    my $access;
    my @accesslist;
    my @denylist;
 
-   
-   
-   
-   
    my @denytopiclist = fetchAccesslist('topic', $web, $topic,'DENYTOPICVIEW' );
    my @allowtopiclist = fetchAccesslist('topic', $web, $topic,'ALLOWTOPICVIEW' );
    my @denyweblist = fetchAccesslist('web', $web, $topic,'DENYWEBVIEW' );
@@ -164,11 +145,10 @@ sub handleReadaccess {
    if (!@accesslist && @denylist) {
       $access .= "ALL".$sep."but not: ".$sep." %USERSWEB%.".join($sep." %USERSWEB%.", sort(@denylist)).$sep;
    }
-
- 
-  return $access;
-
+   $access =~ s/$sep$//;
+   return $access;
 }
+
 ###############################################################################
 sub fetchAccesslist {
 
@@ -206,9 +186,7 @@ sub fetchAccesslist {
          }
       }
    }
-
   return @resultlist;
-
 }
 
 ###############################################################################
@@ -230,7 +208,6 @@ sub isValidUser {
    return 1 if ($group > 0);
    
    return 0;
-
 }
 
 ###############################################################################
