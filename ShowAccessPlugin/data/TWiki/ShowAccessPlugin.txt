@@ -1,0 +1,121 @@
+%META:TOPICINFO{author="WolfMarbach" date="1224968963" format="1.1" reprev="1.5" version="1.5"}%
+%META:TOPICPARENT{name="PluginPackageHowTo"}%
+<!--
+
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author(s).
+-->
+---+!! <nop>%TOPIC%
+
+%SHORTDESCRIPTION%
+
+%TOC%
+
+---++ Description
+
+This plugin adds two tags that allow to list the access rights of a known user
+for all topics in a web and to list all users, who are allowed to view the actual
+topic.
+
+
+---++ Related work
+
+There are other methods available to determine the access rights by using the IFACCESS 
+includes in the IfDefinedPlugin of using a complex search string.
+
+The advantage of this plugin is getting a simpler mechanism for checking the access rights
+a certain user has to topics and to check the users allowed to view content.
+
+
+---++ Syntax Rules
+---+++ SHOWACCESS
+*Syntax*: 
+<verbatim>
+%SHOWACCESS{[type=]"view,change" [topic="topicname" web="webname" user="Wikiname"]}%
+</verbatim>
+
+Returns YES or NO depending on the access right of the user for the specified topic.
+If there is no access right to view the topic the value for the access right to change
+will be also NO (in contrary to the IFACCESS tag of the IfDefinedPlugin), since TWiki usually does not allow changes
+in topics, where the user does not have the right to view the topic.
+
+The default values are:
+
+type : view; topic : current topic; web : current web; user : current user 
+
+---+++ READACCESS
+*Syntax*:
+<verbatim>
+%READACCESS{[topic="topicname" web="webname" sep="separator"]}% 
+</verbatim>
+
+This tag lists all users, who are allowed to view the current topic. This is useful
+for administrators to reassure that the access rights for all topics or a certain topic
+have been set properly. It also can be used for debugging, if a new application (like
+an internal mail system), which restrict the right to view of topics, is implemented.
+Hence users can see, who is allowed to read the content they process. This ensures that
+users are informed about view rights and are reassured by knowing, who is allowed to read
+their content. This tool is useful in restricted environments, but not is public webs.
+The default values are:
+
+topic : current topic; web : current web; sep : "\n<br>" 
+
+
+---++ Demo 
+
+   * Is Main.WoodyNoname allowed to change the topic WebPreferences in the Main-web ? %NAVY% *Yes* %ENDCOLOR%
+   * Is Main.TWikiGuest allowed to view the topic WebHome in the TWiki-web ? %RED% *No* %ENDCOLOR%
+   * The following users are allowed to read this topic:
+ 
+<verbatim>%READACCESS%</verbatim> results in e.g.:
+
+Main.WolfMarbach
+Main.PeterThoeny
+Main.MichaelDaum
+   
+
+---++ Plugin Installation Instructions
+
+   * Unzip it in your twiki installation directory. Content: 
+   | *File:* | *Description:* |
+   | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+   | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+
+---++ Plugin Info
+<!-- provided for compatibility only
+   * Set SHORTDESCRIPTION = Read and Showw accessrights of topics
+-->
+|  Plugin Author: | TWiki:Main.WolfMarbach |
+|  Copyright &copy;: | 2008, [[https://www.xing.com/profile/WolfD_Marbach][Wolf Marbach]]  |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | v1.0 |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  22 Oct 2008: | Initial version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.8 |
+
+
+ -- TWiki:Main.WolfMarbach - 25 Oct 2008
+
+
+
+
+
+%META:FORM{name="PackageForm"}%
+%META:FIELD{name="TopicClassification" attributes="" title="TopicClassification" value="PluginPackage"}%
+%META:FIELD{name="TestedOnTWiki" attributes="" title="TestedOnTWiki" value="4.2"}%
+%META:FIELD{name="TestedOnOS" attributes="" title="TestedOnOS" value="OsLinux"}%
+%META:FIELD{name="ShouldRunOnOS" attributes="" title="ShouldRunOnOS" value="OsLinux"}%
+%META:FIELD{name="InstalledOnTWikiOrg" attributes="" title="InstalledOnTWikiOrg" value="No"}%
+%META:FIELD{name="DemoUrl" attributes="" title="DemoUrl" value="http://"}%
+%META:FIELD{name="DevelopedInSVN" attributes="" title="DevelopedInSVN" value="No"}%
+%META:FIELD{name="ModificationPolicy" attributes="" title="ModificationPolicy" value="ContactAuthorFirst"}%
+%META:FIELD{name="RelatedTopics" attributes="" title="RelatedTopics" value=""}%
+%META:FILEATTACHMENT{name="ShowAccessPlugin.zip" attachment="ShowAccessPlugin.zip" attr="" comment="Show access rights of topics" date="1224967853" path="ShowAccessPlugin.zip" size="4806" stream="ShowAccessPlugin.zip" tmpFilename="/tmp/153qZwiUx0" user="WolfMarbach" version="1"}%
+%META:PREFERENCE{name="SHORTDESCRIPTION" title="all" type="Set" value="Read and Showw accessrights of topics"}%
