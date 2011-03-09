@@ -1,6 +1,10 @@
 %TMPL:INCLUDE{"view"}%
 
-%TMPL:DEF{"topbar"}%<div id="twTopBar">%INCLUDE{"%SYSTEMWEB%.TopMenuSkinTopBar"}%</div><!-- /twTopBar-->%TMPL:END%
+%TMPL:DEF{"topbar"}%<div id="twTopBar">%IF{
+ "istopic '%BASEWEB%.TopMenuSkinTopBar'"
+ then="$percntINCLUDE{%BASEWEB%.TopMenuSkinTopBar}$percnt"
+ else="$percntINCLUDE{%SYSTEMWEB%.TopMenuSkinTopBar}$percnt"
+}%</div><!-- /twTopBar-->%TMPL:END%
 
 %TMPL:DEF{"topbardimensions"}%
 #twTopBar
@@ -10,7 +14,7 @@
   top: 0px;
   width: 100%;
   height: 80px; /* top bar height; make room for header columns */
-  background: #DFE2E8;
+  background: #e4e9f0;
 }
 #twTopBar img,
 #twTopBar a,

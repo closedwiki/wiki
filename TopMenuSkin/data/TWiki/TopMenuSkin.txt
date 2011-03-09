@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1294111318" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299701716" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -24,8 +24,7 @@ This skin is%BR% sponsored by:%BR%
 [[http://twiki.net/?ref=twiki.org/topmenuskin.logo][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" alt="Twiki, Inc." title="Twiki, Inc." />]]
 </div>
 
-   * TopMenuSkinTopBar - top bar with menu bar, logo and search boxes (replacing WebTopBar)
-
+   * TopMenuSkinTopBar - top bar with menu bar, logo and search boxes (replacing WebTopBar), can be cloned and customized per web
    * WebTopMenu - bullet list defining menu bar for %WEB% web
    * TopMenuSkinDefaultWebTopMenu - bullet list defining menu bar for webs that do not have a !WebTopMenu topic
       * TopMenuSkinHomeMenu - "Home" pulldown menu with web list, included by !WebTopMenu
@@ -102,7 +101,7 @@ __NOTE:__ The pulldown menus only work if the TWiki:Plugins/JQueryPlugin is inst
 
 ---++ CSS and !JavaScript
 
-This section defines the CSS and !JavaScript. ([[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][View Raw]] to see the source.)
+This section defines the CSS and !JavaScript used by the !TopMenuSkin; [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][View Raw]] to see the source. Some additional CSS is defined in =templates/vewi.topmenu.tmpl=
 
 %STARTINCLUDE%<!--<pre>-->
 <script type="text/javascript">
@@ -215,6 +214,7 @@ document.onclick = twTopMenuClose;
       * See [[#WebSpecific][Web-specific Menu-Bars]] above on how to retrofit and customize menu-bars.
    * *Note* on using this skin on TWiki 4.2 and 4.3:
       * This skin depends on TWiki 5.0 specific feature =%<nop>WEB{format="$current"}%= to show the current web in the Web menu. To use this skin on TWiki 4.2 or 4.3, remove the parameter from the WEB variable (to show only =%<nop>WEB%=), or apply patch TWiki:Item6424 (to add the format parameter feature).
+      * This skin depends on TWiki 5.0 specific feature =%<nop>ADDTOHEAD{}%= to add style sheets to the HTML head section. Apply patch TWiki:Support.SID-01117 to inline style sheets.
       * Apply patch TWikibug:Item6430 so that Edit and Attach buttons point to the current topic instead of !TopMenuSkinTopBar.
       * Attach %ATTACHURL%/menu-down.gif to %SYSTEMWEB%.TWikiDocGraphics.
       * Attach %ATTACHURL%/twiki-gray.gif to %SYSTEMWEB%.TWikiDocGraphics.
@@ -226,19 +226,22 @@ This skin is based on PatternSkin, and the same rules for customization apply.
 
 The !TopMenuSkin disables the sidebar and activates a different top bar in =twiki/templates/view.topmenu.tmpl=. Details in PatternSkinCustomization and PatternSkinCssCookbook.
 
+The top bar TopMenuSkinTopBar (with menu bar, logo and search boxes) can be cloned using same topic name and customized per web.
+
 ---++ Skin Info
 
    * Set SHORTDESCRIPTION = Skin with pulldown menus in top bar
 
 |  Skin Author: | TWiki:Main/PeterThoeny |
-|  Copyright: | &copy; 2010, TWiki:Main/PeterThoeny, [[http://twiki.net][Twiki, Inc.]] |
+|  Copyright: | &copy; 2010-2011, TWiki:Main/PeterThoeny, [[http://twiki.net][Twiki, Inc.]] <br /> &copy; 2010-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Description: | Top-menu skin |
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Screenshot" title="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2011-01-03 (v1.93) |
+|  Skin Version: | 2011-03-09 (v1.94) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-03-09: | TWikibug:Item6659: Customizable web-specific TopMenuSkinTopBar |
 |  2011-01-03: | TWikibug:Item6628: Minor gradient fix - change action buttons area from plain white to pale gray to align with PatternSkin; adding pale shadow |
 |  2010-12-02: | TWikibug:Item6614: Always show Register User link in Account menu, regardless of login status |
 |  2010-10-03: | TWikibug:Item6588: Use gray TWiki icon in top menu bar instead of orange icon |

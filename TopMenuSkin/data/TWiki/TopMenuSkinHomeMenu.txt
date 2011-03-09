@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1286143216" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299701720" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkinDefaultWebTopMenu"}%
 ---+ Home Menu of !TopMenuSkin
 
@@ -12,7 +12,7 @@ This topic defines the Home pulldown menu, used by the TopMenuSkin.
       * <a href="%SCRIPTURLPATH{view}%/%SYSTEMWEB%/SiteMap" title="Site map listing all webs">%ICON{sitetree}% %MAKETEXT{"Site map"}%</a>
 %WEBLIST{
  "      * <span style=\"white-space:nowrap\"><a href=\"%SCRIPTURLPATH{"view"}%/$name/%HOMETOPIC%\"><img src=\"%ICONURL{web-bg}%\" border=\"0\" alt=\"\" width=\"16\" height=\"16\" style=\"background-color:%$markerVAR{\"WEBBGCOLOR\" web=$qname}$marker%\" />&nbsp;<nop>$indentedname %MAKETEXT{web}%</a></span>"
- limit="30"
+ limit="26"
  overlimit="      * [[%SYSTEMWEB%.SiteMap][<img src=\"%ICONURL{dot_ur}%\" border=\"0\" alt=\"\" width=\"16\" height=\"16\" /> %MAKETEXT{"More..."}%]]"
 }%
    * <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-right.png' alt='' width='8' height='22' />
