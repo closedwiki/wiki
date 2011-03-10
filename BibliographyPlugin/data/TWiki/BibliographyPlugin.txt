@@ -1,7 +1,19 @@
-%META:TOPICINFO{author="AntonioTerceiro" date="1125283434" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299737024" format="1.1" version="$Rev$"}%
 ---+ <nop/>%TOPIC%
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/BibliographyPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/BibliographyPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-BibliographyPlugin manages citations inside a TWiki topic, and can generate an References List at the end of the topic. This should be every usefull for writing conference papers, journal articles, ellaborated news, etc.
+---++ Overview
+
+The !BibliographyPlugin manages citations inside a TWiki topic, and can generate a References List at the end of the topic. This should be every useful for writing conference papers, journal articles, elaborated news, etc.
 
 ---++ Syntax Rules
 
@@ -15,13 +27,13 @@ The bibliography list should look like this (from a <nop/>BibTex [[http://shelah
 
 Then, in the topic where you want to reference and get a references list, you can use:
 
-	* =%<nop/>CITE{<em>theKey</em>}%= to reference the entry with key _theKey_.
-	* =%<nop/>CITEINLINE{<em>theKey</em>}%= to reference samething that is not in the references.
+   * =%<nop/>CITE{<em>theKey</em>}%= to reference the entry with key _theKey_.
+   * =%<nop/>CITEINLINE{<em>theKey</em>}%= to reference samething that is not in the references.
      Useful to cite URL's, for example. =theKey= will be used both as key *and* text dislayed in
      references listing. %BR%
      __Warning:__ be sure to not use keys present in bibliography with
      <code>%<nop/>CITEINLINE{}%</code>: this can have unpredicted results.
-	* =%<nop/>BIBLIOGRAPHY{...}%= to get a list of references. =%<nop/>BIBLIOGRAPHY{...}%= accepts the following arguments:
+   * =%<nop/>BIBLIOGRAPHY{...}%= to get a list of references. =%<nop/>BIBLIOGRAPHY{...}%= accepts the following arguments:
      | *Argument* | *Description* | *Default value* |
      | =header= | the header for the references list (like "References", "Refer�ncias" (in portuguese), and so on. | DEFAULTHEADER setting (see below). |
      | =referencesTopic= | indicates the topic bibliography must be taken from. Can be a comma-separated list of topics. | DEFAULTBIBLIOGRAPHYTOPIC setting (see below). |
@@ -74,52 +86,62 @@ that are not in your bibliography
 
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>BIBLIOGRAPHYPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-	* Set SHORTDESCRIPTION = cite bibliography in one topic and get a references list automatically created.
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Cite bibliography in one topic and get an automatically created references list
 
-	* Debug plugin: (See output in =data/debug.txt=)
-	* Set DEBUG = 0
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
 
-	* Default topic to get references from:
-	* Set DEFAULTBIBLIOGRAPHYTOPIC = TWiki.BibliographyPlugin
+   * Default topic to get references from:
+      * Set DEFAULTBIBLIOGRAPHYTOPIC = TWiki.BibliographyPlugin
 
-	* Default sorting for references:
-	* Set DEFAULTSORTING = alpha
+   * Default sorting for references:
+      * Set DEFAULTSORTING = alpha
 
-	* Default header for the references list:
-	* Set DEFAULTHEADER = ---++ References
+   * Default header for the references list:
+      * Set DEFAULTHEADER = ---++ References
 
 ---++ Plugin Installation Instructions
 
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the adminis
+trator who installs the plugin on the TWiki server.
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* Test if the installation was successful: see above at [[#Example]]
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" 
+in the in the __Extensions__ section.
+
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+      * Install the dependencies (if any).
+
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Configure additional plugin settings in the __Extensions__ section if needed.
+      * Test if the installation was successful: see above at [[#Example]]
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/AntonioTerceiro |
-|  Plugin Version: | 23 Aug 2004  |
+|  Copyright: | &copy; 2004-2005 TWiki:Main.AntonioTerceiro <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-03-09  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-03-09: | TWikibug:Item6638: Doc fixes; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  28 Aug 2005: | =1.020=: Adhering to official handlers in TWiki:Codev/DakarRelease. Added <code>%<nop/>CITEINLINE{...}%</code>. |
 |  23 Aug 2004: | Added multiple references sources support |
 |  17 Jun 2004: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 97%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 97% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 97%, %SYSTEMWEB%.FormattedSearch 99%, %TOPIC% 97% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main/AntonioTerceiro - 17 Jun 2004
-
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.AdminDocumentationCategory
