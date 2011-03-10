@@ -1,10 +1,24 @@
-%META:TOPICINFO{author="Main.DuckySherwood" date="1103153162" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299739735" format="1.1" version="$Rev$"}%
 ---+ Contributors Plugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/ContributorsPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/ContributorsPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Overview
+
 This plugin gives a variable (%<nop>CONTRIBUTORS%) that will show information about past edits of a topic, and allows:
-	* showing only up to a give revision
-	* showing only a given number of lines
-	* using a custom format
-	* using a custom header.  
+
+   * showing only up to a give revision
+   * showing only a given number of lines
+   * using a custom format
+   * using a custom header.  
 
 The %<nop>CONTRIBUTORS% variable can be used in templates to automatically display who has edited a page and when.
 
@@ -14,13 +28,13 @@ The WebContributors page is useful when publishing information with a license th
 
 ---++ Syntax Rules
 
-Using the %<nop>CONTRIBUTORS% variable alone will expand to show the author, revision, and date of each edit of the current topic.  Here's what it looks like"
+Using the %<nop>CONTRIBUTORS% variable alone will expand to show the author, revision, and date of each edit of the current topic.  Here's what it looks like:
 
 %CONTRIBUTORS%
 
-The following arguments to %<nop>CONTRIBUTORS% are also allowed:
+The following parameters to %<nop>CONTRIBUTORS% are also allowed:
 
-|*argument*|*default*|*description*|
+|*Parameter*|*Default*|*Description*|
 |web|current web|which web the topic of interest is in|
 |topic|current topic|which topic to give change history for|
 |rev|current revision|latest revision to show information for|
@@ -30,7 +44,7 @@ The following arguments to %<nop>CONTRIBUTORS% are also allowed:
 
 In the format string, the user can use the following variables:
 
-|*variable*|*expands to*|
+|*Variable*|*Expands to*|
 |$author|the person who made that specific change (linked to their TWiki home page)|
 |$date|the date in GMT time|
 |$rev|the revision number (linked to that revision of the page)|
@@ -38,80 +52,82 @@ In the format string, the user can use the following variables:
 
 In the header string, the user can use $n but no other variables (at the moment).
 
-
 To use WebContributors, you pass a URL with the information you want in the query string.  Note, however, that there are some differences:
-	* Instead of using <b>topic</b>, you must use <b>page</b>.  If you use =topic=, then bin/view will display that topic instead of displaying WebContributors for that topic.
-	* Instead of using <b>rev</b>, you must use <b>revision</b>.  If you use =rev=, then bin/view will expand that revision of WebContributors instead of expanding the current version of WebContributors.
 
+   * Instead of using <b>topic</b>, you must use <b>page</b>.  If you use =topic=, then bin/view will display that topic instead of displaying WebContributors for that topic.
+   * Instead of using <b>rev</b>, you must use <b>revision</b>.  If you use =rev=, then bin/view will expand that revision of WebContributors instead of expanding the current version of WebContributors.
 
 ---++ Plugins Settings
 
-	* One line description which is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = This plugin gives a variable %<nop>CONTRIBUTORS% which gives information on all revisions of a given topic.
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>CONTRIBUTORSPLUGIN_SHORTDESCRIPTION%==
 
+   * One line description which is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Show contributors of all revisions of a given topic; useful for licenses that require attribution
 
-
-	* Debug plugin: (See output in =data/debug.txt=) 
-		* Set DEBUG = 0
+   * Debug plugin: (See output in =data/debug.txt=) 
+      * Set DEBUG = 0
 
 ---++ Examples
-Use %<nop>CONTRIBUTORS{web="TWiki" topic="TWikiPreferences" last="7"}% to get
+
+Write %<nop>CONTRIBUTORS{web="TWiki" topic="TWikiPreferences" last="7"}% to get:
 
 %CONTRIBUTORS{web="TWiki" topic="TWikiPreferences" last="7"}%
 
 ---
-Use %<nop>CONTRIBUTORS{web="TWiki" topic="TWikiPreferences" last="7" rev="1.20"}% to get
+Write %<nop>CONTRIBUTORS{web="TWiki" topic="TWikiPreferences" last="7" rev="1.20"}% to get:
 
 %CONTRIBUTORS{web="TWiki" topic="TWikiPreferences" last="7" rev="1.20"}%
 
 ---
-Use %<nop>CONTRIBUTORS{web="TWiki" topic="TWikiPreferences" last="7" rev="1.20" format="	* $author$n"}% to get
+Write %<nop>CONTRIBUTORS{web="TWiki" topic="TWikiPreferences" last="7" rev="1.20" format="   * $author$n"}% to get:
 
-%CONTRIBUTORS{web="TWiki" topic="TWikiPreferences" last="7" rev="1.20" format="	* $author$n"}%
+%CONTRIBUTORS{web="TWiki" topic="TWikiPreferences" last="7" rev="1.20" format="   * $author$n"}%
+
 ---
+Write %<nop>CONTRIBUTORS{web="TWiki" topic="TWikiPreferences" last="7" rev="1.20" format="   * $author$n" nodups="on"}% to get:
 
-Use %<nop>CONTRIBUTORS{web="TWiki" topic="TWikiPreferences" last="7" rev="1.20" format="	* $author$n" nodups="on"}% to get
+%CONTRIBUTORS{web="TWiki" topic="TWikiPreferences" last="7" rev="1.20" format="   * $author$n"  nodups="on"}%
 
-%CONTRIBUTORS{web="TWiki" topic="TWikiPreferences" last="7" rev="1.20" format="	* $author$n"  nodups="on"}%
 ---
-Use  %<nop>CONTRIBUTORS{web="TWiki" topic="TWikiPreferences"  last="7" rev="1.20" format="|$author|$date|$rev|$n" header="|*Author*|*Date*|*Revision*|$n"}% to get:
+Write %<nop>CONTRIBUTORS{web="TWiki" topic="TWikiPreferences"  last="7" rev="1.20" format="|$author|$date|$rev|$n" header="|*Author*|*Date*|*Revision*|$n"}% to get:
 
 %CONTRIBUTORS{web="TWiki" topic="TWikiPreferences"  last="7" rev="1.20" format="|$author|$date|$rev|$n" header="|*Author*|*Date*|*Revision*|$n"}%
 
 ---++ Plugin Installation Instructions
 
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
 
----++ Plugin Installation Instructions
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
 
-*Note:* You do not need to install anything on your Web browser to use this plugin. The installation instructions below are for installing this plugin on the TWiki server, and so only the TWiki system administrator needs to pay attention to them.
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==data/TWiki/WebContributors.txt== | Page to allow getting revision history from a URL |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+      * Install the dependencies (if any).
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	  | ==data/TWiki/WebContributors.txt== | Page to allow getting revision history from a URL |
-	  | ==data/TWiki/WebContributors.txt,v== | Revision history of WebContributors |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* Test if the plugin is correctly installed:
-		* Check the above examples to see if the plugin operates as expected.
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Check the above examples to see if the plugin operates as expected.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny, TWiki:Main:DuckySherwood |
-|  Plugin Version: | 10 Dec 2004 |
+|  Plugin Author: | TWiki:Main:DuckySherwood |
+|  Copyright: | &copy; 2004 TWiki:Main.DuckySherwood <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-03-09  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-03-09: | TWikibug:Item6638: Doc fixes; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2004-12-04: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 100% |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% (TWiki:Plugins.%TOPIC%) |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev (TWiki:Plugins.%TOPIC%Dev) |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 100%, %SYSTEMWEB%.FormattedSearch 100%, %TOPIC% 100% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main.AndreaSterbini - 27 Feb 2001 %BR% 
--- TWiki:Main.PeterThoeny - 21 Mar 2004 %BR%
--- TWiki:Main.DuckySherwood - 10 Dec 2004
-
+__Related Topics:__ WebContributors, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.AdminDocumentationCategory
