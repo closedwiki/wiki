@@ -3,6 +3,7 @@
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
 # Copyright (C) 2004 Kaitlin Duck Sherwood, ducky@osafoundation.org
+# Copyright (C) 20108-2011 TWiki Contributors. All Rights Reserved.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -51,18 +52,11 @@ package TWiki::Plugins::ContributorsPlugin;
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-        $debug $exampleCfgVar
+        $debug
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2011-03-09';
 
 $pluginName = 'ContributorsPlugin';  
 
@@ -79,9 +73,6 @@ sub initPlugin
 
     # Get plugin debug flag
     $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
-
-    # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $exampleCfgVar = TWiki::Func::getPluginPreferencesValue( "EXAMPLE" ) || "default";
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -101,7 +92,6 @@ sub commonTagsHandler
 
     $_[0] =~ s/%CONTRIBUTORS%/&handleContributors($_[1], $_[2])/ge;
     $_[0] =~ s/%CONTRIBUTORS{(.*?)}%/&handleContributors($_[1], $_[2], $1)/ge;
-
 }
 
 # =========================
@@ -109,7 +99,6 @@ sub commonTagsHandler
 sub handleContributors
 {
     my( $theTopic, $theWeb, $args) = @_;
-
 
     my $web = &TWiki::Func::extractNameValuePair( $args, "web" ) || $theWeb;
     my $topic = &TWiki::Func::extractNameValuePair( $args, "topic" ) || $theTopic;
@@ -164,8 +153,7 @@ sub handleContributors
         }
 
     return &TWiki::Func::renderText($header.$contributorString);
-    }
-
+}
 
 # =========================
 # @@@ TBD: If there is a call for it, it would be easy to add $web and $topic as
@@ -187,7 +175,6 @@ sub formatContributorLine {
     $formattedString =~ s/\$rev/$revisionNumber/g;
     $formattedString =~ s/\$n/\n/g;
     return $formattedString;
-    }
-
+} 
 
 1;
