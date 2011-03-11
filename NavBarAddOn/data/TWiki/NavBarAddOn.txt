@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299835824" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299836168" format="1.1" version="$Rev$"}%
 %INCLUDE{NavBarAddOnExample}%
 ---+!! Navigation Bar Add-On
 <!--
@@ -269,7 +269,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 
    * Test if the installation was successful:
       * The navigation bar should look like this screenshot:
-        %BR% <img src="%ATTACHURLPATH%/screenshot.png" alt="screenshot" width="632" height="51" />
+        %BR% <img src="%ATTACHURLPATH%/screenshot.png" alt="screenshot" width="631" height="51" />
       * Click on the navigation bar on top to verify that the navigation is working as expected
 
 ---++ Add-On Info
@@ -297,4 +297,4 @@ __Related:__
    * NavBarAddOnExample - example nav-bar
    * NavBarAddOnTemplate - template used to create new nav-bar topics
 
-%META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1299827239" path="screenshot.png" size="11996" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1299836068" path="screenshot.png" size="10003" user="TWikiContributor" version="1"}%
