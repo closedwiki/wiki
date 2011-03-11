@@ -1,0 +1,6 @@
+data/TWiki/NavBarAddOn.txt 0644 Documentation
+data/TWiki/NavBarAddOnCreateNewNavBar.txt 0644 
+data/TWiki/NavBarAddOnExample.txt 0644 
+data/TWiki/NavBarAddOnTemplate.txt 0644 
+lib/TWiki/Contrib/NavBarAddOn.pm 0644 Perl module
+pub/TWiki/NavBarAddOn/screenshot.png 0644 Image
