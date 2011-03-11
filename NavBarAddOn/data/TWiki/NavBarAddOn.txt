@@ -1,102 +1,300 @@
-%META:TOPICINFO{author="PeterThoeny" date="1159213083" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299830660" format="1.1" version="$Rev$"}%
 %INCLUDE{NavBarAddOnExample}%
----+ Navigation Bar Add-On
+---+!! Navigation Bar Add-On
+<!--
+   Contributions to this add-on are appreciated. Please update the contrib page at
+   http://twiki.org/cgi-bin/view/Plugins/NavBarAddOn or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/NavBarAddOnDev.
+   If you are a TWiki contributor please update the add-on in the SVN repository.
+-->
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+</sticky>
+%SHORTDESCRIPTION%
 
-Add tabbed navigation bars to TWiki topics. A navigation bar can be defined once for a set of topics and then simply included in those topics.
+---++ Overview
+
+Add tabbed navigation bars to TWiki topics. A navigation bar can be defined once for a set of topics and then simply included in those topics. <!--Tabs optionally may have pulldown menus.--> One tab is highlighted, e.g. shown active.
 
 ---++ Usage
 
----+++ 1. Define Navigation Bar
-Create a topic that defines the navigation bar.
-	* Example =MyOwnNavBar= topic content:
-	  %BR% =%<nop>STARTINCLUDE%=
-	  %BR% =%<nop>CALC{$SET( ...optional parameters listed below... )}%=
-	  %BR% =%<nop>INCLUDE{%<nop>TWIKIWEB%.NavBarAddOnStart}%=
-	  %BR% =%<nop>CALC{$SET(topic, <nop>TopicArt) $SET(label, Art) $EXEC($GET(tab))}%=
-	  %BR% =%<nop>CALC{$SET(topic, <nop>TopicBar) $SET(label, Bar) $EXEC($GET(tab))}%=
-	  %BR% =%<nop>CALC{$SET(topic, <nop>TopicCat) $SET(label, Cat) $EXEC($GET(tab))}%=
-	  %BR% =%<nop>INCLUDE{%<nop>TWIKIWEB%.NavBarAddOnEnd}%=
-	  %BR% =%<nop>STOPINCLUDE%=
-	* Optional parameters can be defined by setting spreadsheet variables: (default values are shown)
-	  %BR% =$SET(bga_color, #999999)= %M% Background [[%TWIKIWEB%.StandardColors][color]] of active tab
-	  %BR% =$SET(fga_color, #FFFFFF)= %M% Foreground color of active tab
-	  %BR% =$SET(bgi_color, #DDDDDD)= %M% Background color of inactive tab
-	  %BR% =$SET(fgi_color, #000000)= %M% Foreground color of inactive tab
-	  %BR% =$SET(min_width, 60)= %M% Minimum tab width in pixel
-	* For each tab define the link (web name / topic name) and the label:
-	  %BR% =$SET(web, %<nop>MAINWEB%)= %M% Name of web (optional)
-	  %BR% =$SET(topic, %<nop>HOMETOPIC%)= %M% Name of topic (required)
-	  %BR% =$SET(label, Home)= %M% Label of tab (required) which may contain an [[%TWIKIWEB%.TWikiDocGraphics][icon]]
+There are two steps:
+
+   * Step 1: Create a navigation bar in a web
+   * Step 2: Use the navigation bar in topics of that web
+
+---+++ 1. Create Navigation Bar
+
+A navigation bar is defined by a bullet list in a topic. Each bullet represents a tab. <!--A tab may have a pulldown menu, which is defined by a nested bullet list.--> Bullets must be links of format =[<nop>[...][...]]= or =&lt;a href="..."&gt;...&lt;/a&gt;=, and must not contain any text next to the link. Link labels may contain %SYSTEMWEB%.TWikiDocGraphics icons.
+
+The basic structure of a navigation bar topic is as follows:
+<pre>
+%<nop>STARTINCLUDE%
+%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.NavBarAddOn" section="start" id="demo" }%
+   * [[WebHome][%<nop>ICON{home}% Home]]
+   * [[PageTwo][Tab 2]]
+   * [[PageThree][Tab 3]]
+   * [[PageFour][Tab 4]]
+%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.NavBarAddOn" section="end" }%
+%<nop>STOPINCLUDE%
+</pre>
+<!-- commented out until pulldowns are implemented:
+      * [[PageThreeA][Pulldown 1 of tab 3]]
+      * [[PageThreeB][Pulldown 2 of tab 3]]
+      * [[PageThreeC][Pulldown 3 of tab 3]]
+-->
+
+The bullet list is enclosed in two includes: On top, the ="start"= section is included, at the end, the ="end"= section. Finally, all is enclosed in STARTINCLUDE and STOPINCLUDE so that topics that include the navigation bar only include the relevant part.
+
+Additional parameters may be specified when including the ="start"= section:
+
+| *Parameter* | *Description* | *Default* |
+| =id= | ID of navigation bar. Use only alphanumeric characters and underscore | none, __must__ be specified |
+| =active= | Specify which tab is active. Only needed if other topics than the current one need to be highlighted. [[#ActiveNotes][See note below]]. | (none) |
+| =navbar_style= | Style of navigation bar | NAVBARADDON_NAVBAR_STYLE setting |
+| =tab_inactive_style= | Style of inactive tab | NAVBARADDON_TAB_INACTIVE_STYLE setting |
+| =tab_active_style= | Style of active tab, overloading inactive tab style | NAVBARADDON_TAB_ACTIVE_STYLE setting |
+| =tab_link_style= | Style of tab link | NAVBARADDON_TAB_LINK_STYLE setting |
+| =tab_hover_style= | Style of tab link on hover | NAVBARADDON_TAB_HOVER_STYLE setting |
+<!-- commented out until pulldowns are implemented:
+| =pulldown_style= | Style of pulldown | NAVBARADDON_PULLDOWN_STYLE setting |
+| =pulldown_link_style= | Style of pulldown link | NAVBARADDON_PULLDOWN_LINK_STYLE setting |
+-->
+
+#ActiveNotes
+__Note:__ The active tab can be set in several ways. It is set automatically if a tab link matches the current topic name. Sometimes it is desirable to highlight a tab with other topics as well, such as highlighting a Tasks tab for all task topics. This can be achieved by passing the =active= parameter along from the including topic to the include, such as:%BR%
+=<nop>   %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.NavBarAddOn" section="start" id="sample1" %<nop>IF{ "defined 'active'" then="active=\"%<nop>active%\"" }% }%= %BR%
+Alternatively, you can set it to the =active= parameter with fallback to the parent topic. This will automatically highlight all children, such as all task topics of the !TaskTracker: %BR%
+=<nop>   %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.NavBarAddOn" section="start" id="sample2" %<nop>IF{ "defined 'active'" then="active=\"%<nop>active%\"" else="active=\"%<nop>META{ "parent" dontrecurse="on" format="$topic" }%\"" }% }%= %BR%
+Finally, one could define a preference setting per topic, and pass that along. Example assuming an ACTIVE_TAB setting: %BR%
+=<nop>   %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.NavBarAddOn" section="start" id="sample3" active="%ACTIVE_TAB%" }%=
+
+You can use the [[NavBarAddOnCreateNewNavBar][create new navigation bar wizard]] to generate a navigation bar topic. Navigation bars are based on the NavBarAddOnTemplate.
 
 ---+++ 2. Use Navigation Bar
-In each participating topic, include the navigation bar topic.
-	* Example:
-	  %BR% =%<nop>INCLUDE{MyOwnNavBar}%=
+
+Include the navigation bar topic in each participating topic. Examples:
+
+   * =%<nop>INCLUDE{ "MyOwnNavBar" }%=
+   * =%<nop>INCLUDE{ "MyOwnNavBar" active="MyProject" }%=
+
+A tab is automatically highlighted based on the following rules, in this order:
+
+   * the INCLUDE has an =active="..."= parameter, and it's value is found in the tab link
+   * the current topic name is found in the tab link
 
 See working NavBarAddOnExample
+
+---++ Example Navigation Bar
+
+Write this:
+<pre>
+%<nop>STARTINCLUDE%
+%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.NavBarAddOn" section="start" id="example1" %<nop>IF{ "defined 'active'" then="active=\"%<nop>active%\"" }% }%
+   * [[WebHome][%<nop>ICON{home}% Home]]
+   * [[ProjectGoals][Goals]]
+   * [[ProjectTracker][Projects]]
+   * [[TaskTracker][Tasks]]
+   * [[MeetingMinutes][Meetings]]
+   * [[WebStatistics][Statistics]]
+%<nop>INCLUDE{ "%SYSTEMWEB%.NavBarAddOn" section="end" }%
+%<nop>STOPINCLUDE%
+</pre>
+<!-- actual bullet list, use when pulldowns are implemented:
+   * [[WebHome][%<nop>ICON{home}% Home]]
+   * [[ProjectGoals][Goals]]
+   * [[ProjectTracker][Projects]]
+      * [[ProjectStatistics][Project statistics]]
+      * [[CreateNewProject][Create new project]]
+   * [[TaskTracker][Tasks]]
+      * [[TaskStatistics][Task statistics]]
+      * [[CreateNewTask][Create new task]]
+   * [[MeetingMinutes][Meetings]]
+   * [[WebStatistics][Statistics]]
+-->
+
+To get this navigation bar:
+%INCLUDE{ "NavBarAddOn" section="start" id="example1" %IF{ "defined 'active'" then="active=\"%active%\"" }% }%
+   * [[WebHome][%ICON{home}% Home]]
+   * [[ProjectGoals][Goals]]
+   * [[ProjectTracker][Projects]]
+   * [[TaskTracker][Tasks]]
+   * [[MeetingMinutes][Meetings]]
+   * [[WebStatistics][Statistics]]
+%INCLUDE{ "NavBarAddOn" section="end" }%
+
+Assuming this navigation bar is defined in a "ProjectNavBar" topic you can include it in each task page like this:
+
+=%<nop>INCLUDE{ "ProjectNavBar" active="TaskTracker" }%=
+
+---++ Embed Navigation Bar in Skin
+
+FIXME docs
+
+---++ Add-On Settings
+
+The following settings document the default add-on settings. __Not not change them here__ (they are not defined here). To overload site-wide, copy the settings to [[%USERSWEB%.TWikiPreferences]], to overload on a web level. copy to the web's WebPreferences topic.
+
+   * Style of navigation bar:
+      * Set NAVBARADDON_NAVBAR_STYLE = margin: 0; padding: 10px 10px 0 10px; background-color: #f0f0f4;
+   * Style of inactive tab:
+      * Set NAVBARADDON_TAB_INACTIVE_STYLE = margin: 1px 12px 0 1px; border-width: 1px; border-style: solid solid none solid; padding: 0; vertical-align: middle; min-width: 60px; width: auto; text-align: center; font-size: 12pt; white-space: nowrap; border-color: #c0c0c8; background-color: #dddddf;
+   * Style of active tab, overloading inactive tab:
+      * Set NAVBARADDON_TAB_ACTIVE_STYLE = border-color: #dddddf; background-color: #ffffff;
+   * Style of tab link:
+      * Set NAVBARADDON_TAB_LINK_STYLE = margin: 0; padding: 2px 10px; color: #222255;
+   * Style of tab link on hover:
+      * Set NAVBARADDON_TAB_HOVER_STYLE = margin: 0; padding: 2px 10px; color: #000022; background-color: #f0f0ff;
+<!--
+   * Style of pulldown:
+      * Set NAVBARADDON_PULLDOWN_STYLE = 
+   * Style of pulldown link:
+      * Set NAVBARADDON_PULLDOWN_LINK_STYLE = 
+-->
+
+---++ Add-On Engine
+
+This section defines the logic of the navigation bar so that it can be used by navigation bar topics with simple INCLUDEs. View the [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][raw text]] of this topic to look under the hood.
+<!--=====================================
+<verbatim>
+%STARTSECTION{start}%<style type="text/css" media="all">
+#navBar_%id%
+{
+  margin: 0;
+  padding: 10px 10px 0 10px;
+  background-color: #f0f0f4;
+%IF{ "defined 'NAVBARADDON_NAVBAR_STYLE'" then="  %NAVBARADDON_NAVBAR_STYLE%;" else="<nop>" }%
+%IF{ "defined 'navbar_style'" then="  %navbar_style%" else="<nop>" }%
+}
+#navBar_%id% ul
+{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#navBar_%id% ul li
+{
+  float: left;
+  margin: 1px 12px 0 1px;
+  border-width: 1px;
+  border-style: solid solid none solid;
+  padding: 0;
+  vertical-align: middle;
+  min-width: 60px;
+  width: auto;
+  text-align: center;
+  font-size: 12pt;
+  white-space: nowrap;
+  border-color: #c0c0c8;
+  background-color: #dddddf;
+%IF{ "defined 'NAVBARADDON_TAB_INACTIVE_STYLE'" then="  %NAVBARADDON_TAB_INACTIVE_STYLE%;" else="<nop>" }%
+%IF{ "defined 'tab_inactive_style'" then="  %tab_inactive_style%" else="<nop>" }%
+}
+#navBar_%id% ul li a,
+#navBar_%id% ul li a:link,
+#navBar_%id% ul li a:visited {
+  display: block;
+  margin: 0;
+  padding: 2px 10px;
+  color: #222255;
+  text-decoration: none;
+  border-width: 0px;
+  border-style: none;
+%IF{ "defined 'NAVBARADDON_TAB_LINK_STYLE'" then="  %NAVBARADDON_TAB_LINK_STYLE%;" else="<nop>" }%
+%IF{ "defined 'tab_link_style'" then="  %tab_link_style%" else="<nop>" }%
+}
+#navBar_%id% ul li a:hover,
+#navBar_%id% ul li a:active {
+  display: block;
+  margin: 0;
+  padding: 2px 10px;
+  color: #000022;
+  text-decoration: none;
+  border-width: 0px;
+  border-style: none;
+  background-color: #f0f0ff;
+%IF{ "defined 'NAVBARADDON_TAB_HOVER_STYLE'" then="  %NAVBARADDON_TAB_HOVER_STYLE%;" else="<nop>" }%
+%IF{ "defined 'tab_hover_style'" then="  %tab_hover_style%" else="<nop>" }%
+}
+</style>
+<script type="text/javascript">
+ $(document).ready(function () {
+  $("#navBar_%id%").children( 'ul' ).children( 'li' ).each( function( index ) {
+    var topic = $(this).children('a').attr('href').replace( /.*\//, '' );
+    if( %IF{ "defined 'active'" then="topic=='%active%' || " }% topic=='%BASETOPIC%' ) {
+      var activeStyle = "background-color: #ffffff; border-color: #dddddf;";
+%IF{ "defined 'NAVBARADDON_TAB_ACTIVE_STYLE'" then="    activeStyle=activeStyle+'%NAVBARADDON_TAB_ACTIVE_STYLE%;'" else="<nop>" }%
+%IF{ "defined 'tab_active_style'" then="    activeStyle=activeStyle+';%tab_active_style%'" else="<nop>" }%
+      var styleArr = activeStyle.split( / *; */ );
+      for( i = 0; i < styleArr.length; i++) {
+        var keyVal = styleArr[i].split( / *: */ );
+        if( keyVal[0].length>0) {
+          $(this).css( keyVal[0], keyVal[1] );
+        }
+      }
+    }
+  });
+ });
+</script>
+<div id="navBar_%id%">%ENDSECTION{start}%
+</verbatim>
+=========================================-->
+
+<!--=====================================
+<verbatim>
+%STARTSECTION{end}%<div style="clear: both"></div>
+</div>%ENDSECTION{end}%
+</verbatim>
+=========================================-->
 
 ---++ Add-On Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
 
-	* Download the ZIP file from the Add-on Home (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Add-on topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Repository of above topic |
-	  | ==data/TWiki/%TOPIC%Example.txt== | Example topic |
-	  | ==data/TWiki/%TOPIC%Example.txt,v== | Repository of above topic |
-	  | ==data/TWiki/%TOPIC%Start.txt== | Nav bar start topic |
-	  | ==data/TWiki/%TOPIC%Start.txt,v== | Repository of above topic |
-	  | ==data/TWiki/%TOPIC%End.txt== | Nav bar end topic |
-	  | ==data/TWiki/%TOPIC%End.txt,v== | Repository of above topic |
-	  | ==pub/TWiki/%TOPIC%/blackpixel.gif== | Image file: Black pixel |
-	  | ==pub/TWiki/%TOPIC%/clearpixel.gif== | Image file: Clear pixel |
-	  | ==pub/TWiki/%TOPIC%/screenshot.gif== | Image file: Screenshot |
-	  | ==pub/TWiki/%TOPIC%/tab_l.gif== | Image file: Left side of tab |
-	  | ==pub/TWiki/%TOPIC%/tab_t.gif== | Image file: Top part of tab |
-	  | ==pub/TWiki/%TOPIC%/tab_r.gif== | Image file: Right side of tab |
-	* Test if the installation was successful:
-		* The navigation bar should look like this screenshot:
-		  %BR% <img src="%ATTACHURLPATH%/screenshot.gif" alt="screenshot"  width="549" height="46" />
-		* Click on the navigation bar on top to verify that the navigation is working as expected
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
 
----++ Known Limitations
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==data/TWiki/%TOPIC%CreateNewNavBar.txt== | Create nav-bar wizard topic |
+        | ==data/TWiki/%TOPIC%Example.txt== | Example nav-bar topic |
+        | ==data/TWiki/%TOPIC%Template.txt== | Template topic for new nav-bar topics |
+        | ==lib/TWiki/Contrib/%TOPIC%.pm== | Plugin Perl module (only needed for automated installation) |
+        | ==pub/TWiki/%TOPIC%/screenshot.gif== | Screenshot |
+      * Set the ownership of the extracted directories and files to the webserver user.
 
-This Add-on works properly with different skins on IE, Netspace and Firefox. It works nicely with the !PatternSkin shipped with the TWiki:Codev.TWikiRelease02Sep2004, but not with the latest version of the TWiki:Plugins:PatternSkin due to interference of the Plugin stylesheet with the table layout of the tabs. [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=classic][Test this topic]] with the %TWIKIWEB%.ClassicSkin
+   * Test if the installation was successful:
+      * The navigation bar should look like this screenshot:
+        %BR% <img src="%ATTACHURLPATH%/screenshot.png" alt="screenshot" width="632" height="51" />
+      * Click on the navigation bar on top to verify that the navigation is working as expected
 
 ---++ Add-On Info
 
-
-	* Set SHORTDESCRIPTION = Add tabbed navigation bars to TWiki topics
+   * Set SHORTDESCRIPTION = Add tabbed navigation bars to TWiki topics
 
 |  Add-on Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2005, TWiki:Main.PeterThoeny |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public
-License]]) |
-|  Add-on Version: | 15 Jul 2005 (v1.000) |
+|  Copyright: | &copy; 2005-2011 TWiki:Main.PeterThoeny <br /> &copy; 2011 [[http://www.empowerecosystems.com/][EmpowerEcosystems]] <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Add-on Version: | 2011-03-11 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  15 Jul 2005: | Initial version |
-|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 (TWiki 01-Sep-2004) |
+|  2011-03-11: | Rewritten add-on, adding nav-bar wizard |
+|  2005-07-15: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 4.0) |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | TWiki:Plugins.SpreadSheetPlugin version 17 Jun 2005
-(1.018) |
+|  Other Dependencies: | SpreadSheetPlugin |
 |  Perl Version: | 5.005 |
-|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
-|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/NavBarAddOn |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/NavBarAddOnDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/NavBarAddOnAppraisal |
 
-__Related Topic:__
-	* %TWIKIWEB%.TWikiAddOns
-	* NavBarAddOnExample
-	* NavBarAddOnStart
-	* NavBarAddOnEnd
+__Related:__
+   * %SYSTEMWEB%.TWikiAddOns - other add-ons
+   * NavBarAddOnCreateNewNavBar - wizard to create new nav-bar topic
+   * NavBarAddOnExample - example nav-bar
+   * NavBarAddOnTemplate - template used to create new nav-bar topics
 
--- TWiki:Main/PeterThoeny - 15 Jul 2005
-
-%META:FILEATTACHMENT{name="tab_l.gif" attr="h" comment="" date="1121492685" path="tab_l.gif" size="160" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="tab_t.gif" attr="h" comment="" date="1121492698" path="tab_t.gif" size="88" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="tab_r.gif" attr="h" comment="" date="1121492706" path="tab_r.gif" size="129" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="clearpixel.gif" attr="h" comment="" date="1121492718" path="clearpixel.gif" size="807" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="blackpixel.gif" attr="h" comment="" date="1121492733" path="blackpixel.gif" size="807" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" date="1121492814" path="screenshot.gif" size="2490" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1299827239" path="screenshot.png" size="11996" user="TWikiContributor" version="1"}%
