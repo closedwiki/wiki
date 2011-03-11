@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299834040" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299835824" format="1.1" version="$Rev$"}%
 %INCLUDE{NavBarAddOnExample}%
 ---+!! Navigation Bar Add-On
 <!--
@@ -140,7 +140,7 @@ The following settings document the default add-on settings. __Not not change th
    * Style of navigation bar:
       * Set NAVBARADDON_NAVBAR_STYLE = margin: 0; padding: 10px 10px 0 10px; background-color: #f0f0f4;
    * Style of inactive tab:
-      * Set NAVBARADDON_TAB_INACTIVE_STYLE = margin: 1px 12px 0 1px; border-width: 1px; border-style: solid solid none solid; padding: 0; vertical-align: middle; min-width: 60px; width: auto; text-align: center; font-size: 12pt; white-space: nowrap; border-color: #c0c0c8; background-color: #dddddf;
+      * Set NAVBARADDON_TAB_INACTIVE_STYLE = margin: 1px 12px 0 1px; border-width: 1px; border-style: solid solid none solid; padding: 0; vertical-align: middle; min-width: 60px; width: auto; text-align: center; font-size: 11pt; white-space: nowrap; border-color: #c0c0c8; background-color: #dddddf;
    * Style of active tab, overloading inactive tab:
       * Set NAVBARADDON_TAB_ACTIVE_STYLE = border-color: #dddddf; background-color: #ffffff;
    * Style of tab link:
@@ -185,7 +185,7 @@ This section defines the logic of the navigation bar so that it can be used by n
   min-width: 60px;
   width: auto;
   text-align: center;
-  font-size: 12pt;
+  font-size: 11pt;
   white-space: nowrap;
   border-color: #c0c0c8;
   background-color: #dddddf;
