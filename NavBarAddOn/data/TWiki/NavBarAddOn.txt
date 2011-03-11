@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299830660" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1299834040" format="1.1" version="$Rev$"}%
 %INCLUDE{NavBarAddOnExample}%
 ---+!! Navigation Bar Add-On
 <!--
@@ -222,7 +222,7 @@ This section defines the logic of the navigation bar so that it can be used by n
 <script type="text/javascript">
  $(document).ready(function () {
   $("#navBar_%id%").children( 'ul' ).children( 'li' ).each( function( index ) {
-    var topic = $(this).children('a').attr('href').replace( /.*\//, '' );
+    var topic = $(this).find('a').attr('href').replace( /.*\//, '' );
     if( %IF{ "defined 'active'" then="topic=='%active%' || " }% topic=='%BASETOPIC%' ) {
       var activeStyle = "background-color: #ffffff; border-color: #dddddf;";
 %IF{ "defined 'NAVBARADDON_TAB_ACTIVE_STYLE'" then="    activeStyle=activeStyle+'%NAVBARADDON_TAB_ACTIVE_STYLE%;'" else="<nop>" }%
