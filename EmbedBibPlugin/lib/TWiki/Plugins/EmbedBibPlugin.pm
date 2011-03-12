@@ -74,7 +74,7 @@ sub initPlugin
     ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1 ) {
+    if( $TWiki::Plugins::VERSION < 1.1 ) {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
@@ -116,9 +116,6 @@ sub handleEmbedBib
     my $defaultStyle = TWiki::Func::getPreferencesValue( "EMBEDBIBPLUGIN_DEFAULTSTYLE" );
     my $defaultSort = TWiki::Func::getPreferencesValue( "EMBEDBIBPLUGIN_DEFAULTSORT" );
 
-    my $meta;
-    my $text;
-
     my ( $theAttributes ) = @_;
     my $BibSelect1 = &TWiki::Func::extractNameValuePair($theAttributes, "select1");
     my $BibSelect2 = &TWiki::Func::extractNameValuePair($theAttributes, "select2");
@@ -137,16 +134,9 @@ sub handleEmbedBib
 
     # Check for error
     return "EMBEDBIB Error: missing parameters" if ($BibFile eq '' or $BibSelect1 eq '');
-
-    return "EMBEDBIB Error: $WebName not found" if (!&TWiki::Func::webExists( $WebName ));
-
-    return "EMBEDBIB Error: $Topic not found" if (!&TWiki::Func::topicExists( $WebName, $Topic ));
-
-    ( $meta, $text ) = &TWiki::Func::readTopic( $WebName, $Topic );
-    my %args = $meta->findOne("FILEATTACHMENT", $BibFile);
-
-    return "EMBEDBIB Error: $BibFile not found" if (! %args);
-
+    return "EMBEDBIB Error: Web $WebName not found"  unless( TWiki::Func::webExists( $WebName ));
+    return "EMBEDBIB Error: Topic $Topic not found"  unless( TWiki::Func::topicExists( $WebName, $Topic ));
+    return "EMBEDBIB Error: File $BibFile not found" unless( TWiki::Func::topicExists( $WebName, $Topic, $BibFile ));
 
     # Translate '(' and ')' to ' " '
     # Translate '|' to '\|'
@@ -159,7 +149,7 @@ sub handleEmbedBib
     # BibTool command for BibSelect1
     my $bibtoolPath = '/usr/local/bin/bibtool';
     my $bibtoolargs = "-- select\'{$BibSelect1}\'";
-    my $bibtoolfile = &TWiki::getPubDir() . "/${WebName}/${Topic}/${BibFile}";
+    my $bibtoolfile = TWiki::Func::getPubDir() . "/${WebName}/${Topic}/${BibFile}";
     my $bibtoolcommand = "$bibtoolPath $bibtoolargs $bibtoolfile";
 
     # BibTool command for BibSelect2, BibSelect3, and BibSelect4
