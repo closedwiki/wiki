@@ -1,6 +1,6 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2011 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2000-2011 Peter Thoeny, peter[at]thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -1812,7 +1812,7 @@ sub readTopicText {
 Test if attachment exists
    * =$web=   - Web name, optional, e.g. =Main=.
    * =$topic= - Topic name, required, e.g. =TokyoOffice=, or =Main.TokyoOffice=
-   * =$attachment= - attachment name, e.g.=logo.gif=
+   * =$attachment= - attachment name, e.g. =logo.gif=
 $web and $topic are parsed as described in the documentation for =normalizeWebTopicName=.
 
 *Since:* TWiki::Plugins::VERSION 1.1
