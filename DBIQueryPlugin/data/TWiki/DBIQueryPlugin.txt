@@ -1,13 +1,23 @@
-%META:TOPICINFO{author="VadimBelman" date="1149342955" format="1.1" version="1.9"}%
+%META:TOPICINFO{author="TWikiContributor" date="1300052709" format="1.1" version="$Rev$"}%
 ---+!! DBI Query Plugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/DBIQueryPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/DBIQueryPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-This plugin is intendent to provide TWiki with ability to make complex database requests using DBI Perl module.
+---++ Overview
 
-%TOC%
+This plugin is intended to provide TWiki with ability to make complex database requests using DBI Perl module.
 
 ---++ Syntax Rules
 
-   * Syntax:
+__Syntax:__
 
 <pre>
 %<nop>DBI_QUERY{"db_identifier" ...}%
@@ -45,7 +55,7 @@ Each query consist of two parts: a query statement (=SELECT=) and output formatt
 
 Read below on how this plugin works in order to get more detailed explanation of the meaning of each syntax element.
 
-   * Parameters:
+__Parameters:__
 
 |*Parameter*|*Description*|*Default*|*Required*|
 |"db_identifier"|Database ID as defined in the plugin configuration. See [[#PluginConfig][plugin configuration]] section.|_none_|required|
@@ -64,7 +74,7 @@ As a matter of fact, =%<nop>DBI_DO{...}%= is nothing but a Perl CGI script store
    1. In a separate topic which would be then the script on its own.
    1. Several scripts in a topic using =%<nop>DBI_CODE{...}%=.
 
-   * Parameters
+__Parameters:__
 
 |*Parameter*|*Description*|*Default*|*Required*|
 |"db_identifier"|Database ID as defined in the plugin configuration. See [[#PluginInstallation][Plugin Installation]] section.|_none_|required|
@@ -78,7 +88,7 @@ As a matter of fact, =%<nop>DBI_DO{...}%= is nothing but a Perl CGI script store
 
 =%<nop>DBI_CALL{...}%= directly calls a subquery.
 
-   * Parameters
+__Parameters:__
 
 |*Parameter*|*Description*|*Default*|*Required*|
 |"subquery"|Subquery to call.|_none_|required|
@@ -106,14 +116,14 @@ SELECT
 
 =%<nop>DBI_CODE{...}%= is used for keeping several =%<nop>DBI_DO%= scripts within single topic. A script is kept between starting =%<nop>DBI_CODE{...}%= and ending =%<nop>DBI_CODE%=. Output is formatted as a table representing script's name and code.
 
-   * Parameters
+__Parameters:__
 
 |*Parameter*|*Description*|*Default*|*Required*|
 |"script_name"|Name of the script. Must be unique within topic.|_none_|required|
 
 %T% *Note:* Special support is provided for [[TWiki:Plugins.SourceHighlightPlugin][SourceHighlightPlugin]].
 
----++ How it works.
+---++ How it works
 
 ---+++ DBI_QUERY
 
@@ -181,14 +191,14 @@ we choose only the rows which are somehow related to a row in a parent query. Of
 <div style="padding-left: 4em">
 %X% %RED% __Warning:__ %ENDCOLOR% Column names may overlap with parent queries. In this case parent has influence over child's SQL statement, header and footer definitions; whereas =.body= uses subquery column names. Take care of this! Best of all avoid this situation by using SQL aliasing:
 
-*Parent:*
+__Parent:__
 
 <pre>
 SELECT col1 as parent_col1
 ....
 </pre>
 
-*Subquery:*
+__Subquery:__
 
 <pre>
 SELECT col1 as subquery_col1
@@ -361,8 +371,7 @@ Additional access protection is implemented for =%<nop>DBI_DO%=, relying on the 
 
 In the example above, for database =test=, members of the =TWikiAdminGroup= may perform queries on any topic; users in =SpecialGroup= may execute =%<nop>DBI_DO%= queries on  =Sandbox.SomeUserSandbox=.
 
-
----++ Drawback and problems.
+---++ Drawback and problems
 
 Working with a database isn't a simple task, in common. With this plugin I was trying to make it both as simple as possible and flexible same time. Balancing between these two extremes led to some compromises and side effects.
 
@@ -401,7 +410,7 @@ The last issue was the cause to implement classic plugin handling when it is req
 Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>DBIQUERYPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Make complex database queries using DBI Perl module
 
    * Debug plugin: (See output in =data/debug.txt=)
@@ -410,34 +419,42 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>D
 #PluginInstallation
 ---++ Plugin Installation Instructions
 
-%T% *Note:* You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
 
-   * Install TWiki:Plugins.DatabaseContribx
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+
+   * Or, follow these __manual installation__ steps:
+      * Install TWiki:Plugins.DatabaseContrib
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Test if the installation was successful
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.VadimBelman |
-|  Plugin Version: | 18 Jun 2009 |
+|  Copyright: | &copy; 2005-2006 TWiki:Main.VadimBelman <br /> &copy; 2009 TWiki:Main.ThomasWeigert <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-03-13 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  20 May 2009 | Main.ThomasWeigert: Use TWiki:Plugins.DatabaseContrib to provide connection services to the database. |
-|  18 May 2009 | Main.ThomasWeigert: Updated to work in TWiki 4.2.4. Corrected the Message Board example. |
-|  3 Jun 2006 | 1.2: Added 'dsn' and 'init' parameters of configuration file. Character set support for !PostgreSQL. No default value for 'allow_do' parameter of configuration file. Support for column names with spaces. |
-|  17 Oct 2005: | 1.1 |
-|  13 Oct 2005: | Initial version |
-|  CPAN Dependencies: | DBI, Error |
+|  2011-03-13: | TWikibug:Item6662: Initial import into SVN; doc fixes; change TWIKIWEB to SYSTEMWEB -- TWiki:Main.DipuDeshmukh |
+|  2009-05-20: | Use TWiki:Plugins.DatabaseContrib to provide connection services to the database -- TWiki:Main.ThomasWeigert |
+|  2009-05-18: | Updated to work in TWiki 4.2.4. Corrected the Message Board example -- TWiki:Main.ThomasWeigert |
+|  2006-06-03: | 1.2: Added 'dsn' and 'init' parameters of configuration file. Character set support for !PostgreSQL. No default value for 'allow_do' parameter of configuration file. Support for column names with spaces. |
+|  2005-10-17: | 1.1 |
+|  2005-10-13: | Initial version |
+|  CPAN Dependencies: | CPAN:DBI, CPAN:Error |
 |  Other Dependencies: | TWiki:Plugins.DatabaseContrib |
 |  Perl Version: | 5.8 |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main.VadimBelman - 20 Feb 2006
+__Related Topics:__ DatabaseContrib, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
