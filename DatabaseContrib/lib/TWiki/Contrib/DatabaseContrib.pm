@@ -1,6 +1,8 @@
-# Plugin for TWiki Collaboration Platform, http://TWiki.org/
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2005-2006 Vadim Belman, voland@lflat.org
+# Copyright (C) 2009 TWiki:Main.ThomasWeigert
+# Copyright (C) 2009-2011 TWiki Contributors. All Rights Reserved.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
