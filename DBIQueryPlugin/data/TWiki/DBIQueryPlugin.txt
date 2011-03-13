@@ -1,0 +1,443 @@
+%META:TOPICINFO{author="VadimBelman" date="1149342955" format="1.1" version="1.9"}%
+---+!! DBI Query Plugin
+
+This plugin is intendent to provide TWiki with ability to make complex database requests using DBI Perl module.
+
+%TOC%
+
+---++ Syntax Rules
+
+   * Syntax:
+
+<pre>
+%<nop>DBI_QUERY{"db_identifier" ...}%
+SELECT ...
+.header
+head
+.body
+%column%
+%<nop>DBI_SUBQUERY{"name"}%
+.footer
+footer
+%DBI_QUERY%
+
+%<nop>DBI_DO{"db_identifier" ...}%
+# Some Perl code.
+%DBI_DO%
+
+%<nop>DBI_DO{"db_identifier" topic="SomeTopic" script="some_script"}%
+
+%<nop>DBI_CALL{"subquery"}%
+
+%<nop>DBI_CODE{...}%
+# Some Perl Code
+%DBI_CODE%
+</pre>
+
+---+++ DBI_QUERY
+
+Each query consist of two parts: a query statement (=SELECT=) and output formatting filters. SQL statement starts just after the leading =%<nop>DBI_QUERY{...}%= declaration. The filters are defined by =.header=, =.body=, and =.footer= keywords each starting at the beginning of line.  Their meaning shall be obvious from their name:
+
+|*Declaration*|*Description*|
+|=.header=|It is prepended to the query output once.|
+|=.body=|It is repeated for each row of data being fetched from the database.|
+|=.footer=|It is appended to the query output.|
+
+Read below on how this plugin works in order to get more detailed explanation of the meaning of each syntax element.
+
+   * Parameters:
+
+|*Parameter*|*Description*|*Default*|*Required*|
+|"db_identifier"|Database ID as defined in the plugin configuration. See [[#PluginConfig][plugin configuration]] section.|_none_|required|
+|subquery="name"|Defines a subquery which does not produce immediate result but could be used from inside another query|_none_|optional|
+|unquoted="col1 col2 ..."|List of columns to be left unquoted in the output. Read more in [[#ValueQuoting][Quoting of Values]] section.|_none_|optional|
+|protected="col1 col2 ..."|List of columns to be protected from processing by TWiki engine.|_none_|optional|
+
+A small note on =protected= parameter. Say, one has an arbitrary data in a displayed column which could contain any kind of text strings. What happens if a TWiki variable is found in a string? It gets expanded by TWiki, for sure. Adding this columns to the =protected= list prevents the expansion. Precisely saying, the whole purpose of protection is displaying of data as is, without any modification.
+
+#DbiDoSyntax
+---+++ DBI_DO
+
+As a matter of fact, =%<nop>DBI_DO{...}%= is nothing but a Perl CGI script stored withing TWiki. There are three ways to store it:
+
+   1. In place, just between starting =%<nop>DBI_DO{...}%= and ending =%<nop>DBI_DO%=.
+   1. In a separate topic which would be then the script on its own.
+   1. Several scripts in a topic using =%<nop>DBI_CODE{...}%=.
+
+   * Parameters
+
+|*Parameter*|*Description*|*Default*|*Required*|
+|"db_identifier"|Database ID as defined in the plugin configuration. See [[#PluginInstallation][Plugin Installation]] section.|_none_|required|
+|multivalued="par1 par2 ..."|Defines HTTP parameters expected to contain several values. These could be, for instance, either values from checkboxes or multiselection lists.|_none_|optional|
+|subquery="name"|Defines a subquery which does not produce immediate result but could be used from inside another query|_none_|optional|
+|topic="SomeTopic"|Topic to read script from.|_none_|optional|
+|script="name"|Specific script defined by its name from several stored in a topic.|_none_|optional|
+|name="do_name"|Informational parameter which defines in-place stored script name.|_none_|optional|
+
+---+++ DBI_CALL
+
+=%<nop>DBI_CALL{...}%= directly calls a subquery.
+
+   * Parameters
+
+|*Parameter*|*Description*|*Default*|*Required*|
+|"subquery"|Subquery to call.|_none_|required|
+
+Moreover, named parameters are transfered to a subquery as if they are columns of a database record. Consider the following example:
+
+<pre>
+%<nop>DBI_CALL{"example" uid="12"}%
+
+%<nop>DBI_QUERY{"db_identifier" subquery="example"}%
+SELECT
+    name
+  FROM
+    Users
+  WHERE
+    id = %uid%
+.header
+....
+%DBI_QUERY%
+</pre>
+
+%X% Read more in [[#ValueExpansion][Variable Expansion]] section.
+
+---+++ DBI_CODE
+
+=%<nop>DBI_CODE{...}%= is used for keeping several =%<nop>DBI_DO%= scripts within single topic. A script is kept between starting =%<nop>DBI_CODE{...}%= and ending =%<nop>DBI_CODE%=. Output is formatted as a table representing script's name and code.
+
+   * Parameters
+
+|*Parameter*|*Description*|*Default*|*Required*|
+|"script_name"|Name of the script. Must be unique within topic.|_none_|required|
+
+%T% *Note:* Special support is provided for [[TWiki:Plugins.SourceHighlightPlugin][SourceHighlightPlugin]].
+
+---++ How it works.
+
+---+++ DBI_QUERY
+
+This plugin has been written with the idea in mind that table is not the only way to represent database content. Therefore some more flexibility is required in order to format a query result. Yet, what could provide more control over the output than templates keeping it all as simple as possible?
+
+With this view in mind we come to the following procedure:
+
+   1. Every query definition within topic is parsed and stored for further processing. This is done in two major steps:
+      1. Query statement is exctracted from the definition.
+      1. Every newline within =.header=, =.body=, and =.footer= gets changed with space except for the last ones. They're removed. Whereas newline is needed =\n= escape sequence must be used. Consequently, =\\n= is translated into =\n=.
+   1. All queries are processed except for those declared as subqueries:
+      1. =.header= filter is expanded with [[#ValueExpansion][variable expansion]] mechanizm and put into the output.
+      1. The query statement is expanded using !DBIQueryPlugin and TWiki variable expansion mechanisms in the order they are mentioned here.
+      1. Database is queried and data is fetched row-by-row. Each row data get [[#ValueQuoting][quoted]] and then used for setting !DBIQueryPlugin variables. =.body= filter is expanded using these values.
+      1. =.footer= filter is expanded with !DBIQueryPlugin mechanism and put into the output.
+      1. Afterwards we let TWiki to mangle with the output (expand variables, pass it through other plugins, whatsoever).
+
+#ValueExpansion
+---++++ Variable Expansion
+
+The first step of expansion is done by changing every =%column%= variable found in a text being expanded with corresponding value from the database. Variable names are in fact table column names as they're declared in the SQL statement and returned by [[http://search.cpan.org/~timb/DBI-1.48/DBI.pm#fetchrow_hashref][DBI module]]. =NAME_lc= case conversion performed so that every name is in lowercase. For instance, the following =SELECT=:
+
+<pre>
+SELECT
+    Name,
+    PersonalID,
+    SomeOtherInfo
+  FROM
+    PersonData
+</pre>
+
+would provide us with variables =%name%=, =%personalid%=, =%someotherinfo%=.
+
+There are some special cases like =SHOW CREATE PROCEDURE= query where column names may contain spaces within them. These spaces are changed with undersocre sign making it possible to refer to them as to database columns. I.e. 'Create Procedure' may be referred as =%<nop>create_procedure%=.
+
+The second step is [[#ProcSubqueries][subquery processing]]. =%DBI_SUBQUERY{"subqueryname"}%= statements are replaced with output from corresponding subqueries. All currently defined variables are passed to the subquery making it possible to use them for SQL statement, header and footer expansion.
+
+#ValueQuoting
+---++++ Quoting of Values
+
+Values fetched from database are quoted using =[[http://search.cpan.org/~lds/CGI.pm-3.11/CGI.pm#AUTOESCAPING_HTML][CGI::escapeHTML()]]= unless contrary behaviour dictated by =unquoted= parameter. Then every newline character is changed with TWiki variable =%<nop>BR%=.
+
+#ProcSubqueries
+---++++ Subqueries
+
+Subqueries are processed in same manner as common queries. The only thing which makes them slightly different in behaviour is the fact that they can use column values (variables) from the parent queries. It is also possible to have a chain of subqueries: <code>top_query -&gt; subquery1 -&gt; subquery2 -&gt; ...</code>, in which case all variables from all the calling queries are accessible.
+
+For instance, in the following code:
+
+<pre>
+%<nop>DBI_QUERY{...}%
+SELECT
+    col1, col2
+  FROM
+    someTable
+  WHERE
+    col3 = %parent_query_col1%
+.body
+...
+%DBI_QUERY%
+</pre>
+
+we choose only the rows which are somehow related to a row in a parent query. Of course, relatively similar approach would be to use nested =SELECT= in the parent query SQL statement. Yet, this would be faster. But there are old versions of !MySQL where nested =SELECT= is not supported. And there are situations when some more output formatting is needed. Or one could form header and/or footer using data contained in database.
+
+<div style="padding-left: 4em">
+%X% %RED% __Warning:__ %ENDCOLOR% Column names may overlap with parent queries. In this case parent has influence over child's SQL statement, header and footer definitions; whereas =.body= uses subquery column names. Take care of this! Best of all avoid this situation by using SQL aliasing:
+
+*Parent:*
+
+<pre>
+SELECT col1 as parent_col1
+....
+</pre>
+
+*Subquery:*
+
+<pre>
+SELECT col1 as subquery_col1
+...
+</pre>
+</div>
+
+%T% *Note:* Subqueries could also be called recursively. Although a single query could not be called more than 100 times in a row. This number is presently hardcoded but will become part of plugin settings in future.
+
+#DbiDo
+---+++ DBI_DO
+
+First of all it shall be stated that =%<nop>DBI_DO%= could implement all required functionality. In other words, one could say that =%<nop>DBI_QUERY%= becomes obsolete. This is obvious from [[#DbiDoSyntax][the syntax description]]. But it also implies that =%<nop>DBI_DO%= is:
+
+   * a security risk (see [[#AccessControl][Access Control]]);
+   * too complicated for most queries;
+
+Besides, =%<nop>DBI_QUERY%= hides quite a number of boring implementation details from a user.
+
+So, let's define =%<nop>DBI_DO%= as a last resort method when nothing else could do the job. The most typical use for it would be database editing.
+
+---++++ Implementation
+
+As it was stated in [[#DbiDoSyntax][syntax section]], =%<nop>DBI_DO%= can fetch a script from another topics which would either represent the whole script or contain =%<nop>DBI_CODE%= declarations. In both cases the script is visible on the topic's page. For instance, the following declaration:
+
+<pre>
+%<nop>DBI_CODE{"test"}%
+if ($varParams{test}) {
+    $rc = "This is test.";
+} else {
+    $rc = "This is for real.";
+}
+%<nop>DBI_CODE%
+</pre>
+
+would output table like this:
+
+<table width="100%" border="0" cellspacing="5px">
+  <tr>
+    <td nowrap> *Script name* </td>
+    <td> =test= </td>
+  </tr>
+  <tr valign="top">
+    <td nowrap> *Script code* </td>
+    <td> <pre>
+if ($varParams{test}) {
+    $rc = "This is test.";
+} else {
+    $rc = "This is for real.";
+}
+</pre> </td>
+  </tr>
+</table>
+
+It would look much better with [[TWiki:Plugins.SourceHighlightPlugin][SourceHighlightPlugin]]:
+
+<pre>
+%<nop>DBI_CODE{"test"}%
+%<nop>CODE{"perl"}%
+if ($varParams{test}) {
+    $rc = "This is test.";
+} else {
+    $rc = "This is for real.";
+}
+%<nop>ENDCODE%
+%<nop>DBI_CODE%
+</pre>
+
+<table border="0" cellspacing="5" width="100%">
+  <tbody><tr>
+    <td nowrap="nowrap"> <strong>Script name</strong> </td>
+    <td> <code>test</code> </td>
+  </tr>
+  <tr valign="top">
+    <td nowrap="nowrap"> <strong>Script code</strong> </td>
+    <td> 
+<div class="codefragment">
+<pre><i><b><font color="#000080">if</font></b></i> <font color="#000000">(</font><font color="#993399">$varParams</font><font color="#000000">{</font>test<font color="#000000">}</font><font color="#000000">)</font> <font color="#000000">{</font>
+     <font color="#993399">$rc</font> <font color="#000000">=</font> <font color="#0000ff">"This is test."</font><font color="#000000">;</font>
+<font color="#000000">}</font> <i><b><font color="#000080">else</font></b></i> <font color="#000000">{</font>
+     <font color="#993399">$rc</font> <font color="#000000">=</font> <font color="#0000ff">"This is for real."</font><font color="#000000">;</font>
+<font color="#000000">}</font>
+</pre>
+<p>
+</p></div>
+ </td>
+  </tr>
+</tbody></table>
+
+=%<nop>DBI_DO%= knows about existence of =%<nop>CODE%/%<nop>ENDCODE%= and attempts to strip these tags out just after the script has been fetched from a topic. After that Perl code becomes a part of an anonymous =sub=. Several variables are available to the code:
+
+|*Variable*|*Description*|
+|=$dbh=|Database connection handle.|
+|=$cgiQuery=|A CGI object as returned by =TWiki::Func::getCgiQuery()=.|
+|=$varParams=|Parameters specified in =%<nop>DBI_DO{...}%=. User can put any number of addition parameters there besides those described in [[#DbiDoSyntax][syntax section]].|
+|=$dbRecord=|Last fetched by =%<nop>DBI_QUERY%= database record or =%<nop>DBI_CALL%= parameters.|
+|=%httpParams=|HTTP parameters as returned by =CGI::param()= method. Note the =multivalued= parameter in the [[#DbiDoSyntax][syntax section]].|
+
+Since the =sub= is executed within plugin's module namespace all internal functions and variables are directly accessible. The most useful of them are described below.
+
+There is one special variable =$rc=. A value assigned to it is the value returned by =sub= and put into the output then. In this way one could display a error message or notification or form any kind of TWiki/HTML code.
+
+---++++ Useful functions
+
+The following plugin functions could be useful while creating a script:
+
+   $ db_connect($db_identifier): Useful when connection to another database needed. =$db_identifier= parameter is database ID as specified in the [[#PluginConfig][plugin configuration]].
+   $ subQuery($subquery, $dbRecord): Implements =%<nop>DBI_SUBQUERY%= and =%<nop>DBI_CALL%=. =$subquery= is the name of subquery to be called. =$dbRecord= has the same meaning as corresponding =sub= parameter.
+   $ expandColumns($text, $dbRecord): Expands variables within =$text= as described in [[#ValueExpansion][DBIQueryPlugin Expansion]].
+   $ protectValue($text): Returns =$text= value modified in a way that prevents it from TWiki processing.
+   $ wikiErrMsg(@msg): Use it for presenting error messages in a uniform way.
+
+#PluginConfig
+---+++ Database connection configuration
+
+This plugin relies on the TWiki:Plugins.DatabaseContrib to provide the connection to a DBI database. Please see the contrib for documentation of how to specify the database connection.
+
+Below is an example of the configuration of two database connections, =connection1= and =test=, to be inserted into the =DatabaseContrib= section of the =configure= script.
+
+<blockquote style="background-color:#f5f5f5">
+<pre>
+    connection1 => {
+        usermap => {
+            TWikiAdminGroup => {
+                user => 'dbuser1',
+                password => 'dbpassword1',
+            },
+            SpecialGroup => {
+                user => 'specialdb',
+                password => 'specialpass',
+            },
+        },
+        user => 'guest',
+        password => 'guestpass',
+        driver => 'mysql',
+        database => 'some_db',
+        codepage => 'koi8r',
+        host => 'your.server.name',
+    },
+    test => {
+        usermap => {
+            TWikiAdminGroup => {
+                user => 'dbuser2',
+                password => 'dbpassword2',
+            },
+            SomeUser => {
+                user => 'someuser',
+                password => 'somepassword',
+            },
+        },
+        allow_do => {
+            default => [qw(TWikiAdminGroup)],
+            'Sandbox.SomeUserSandbox' => [qw(TWikiAdminGroup SpecialGroup)],
+        },
+        #user => 'nobody',
+        #password => 'never',
+        driver => 'mysql',
+        database => 'test',
+        # host => 'localhost',
+    }
+</pre>
+</blockquote>
+
+#AccessControl
+---+++ Access Control
+
+This plugin relies on the TWiki:Plugins.DatabaseContrib for access control.
+
+Additional access protection is implemented for =%<nop>DBI_DO%=, relying on the =allow_do= key of the configuration specification.
+
+In the example above, for database =test=, members of the =TWikiAdminGroup= may perform queries on any topic; users in =SpecialGroup= may execute =%<nop>DBI_DO%= queries on  =Sandbox.SomeUserSandbox=.
+
+
+---++ Drawback and problems.
+
+Working with a database isn't a simple task, in common. With this plugin I was trying to make it both as simple as possible and flexible same time. Balancing between these two extremes led to some compromises and side effects.
+
+The biggest compromise was usage of Perl inlines for =%<nop>DBI_DO%=. The first approach was to make it working much like =%<nop>DBI_QUERY%=, using sections of declarations. But the more quiestions like:
+
+   * how to check data consistency?
+   * how to validate data?
+   * how to generate error messages?
+
+and several others of the kind was arising, the more final structure was looking like a new language. So, why developing a new one if Perl is here? But then again, as it was mentioned before, this way is not secure-enough and an administrator must take serious considerations before allowing usage of =%<nop>DBI_DO%= to a user.
+
+The other issue is about plugin execution order. As one can see from !MessageBoard example, attached to this topic, usage of other plugins could significally improve control over !DBIQueryPlugin output. However, it is not guaranteed that another plugin would not be called in first place causing unpredictable results like unwanted changes in a Perl script.
+
+Considering this issue the decision was made that !DBIQueryPlugin must act as a preprocessor. For those who understand, it does all the job in =beforeCommonTagsHandler()= routine. This approach has three major drawbacks:
+
+   * First of all, it doesn't really follow the guidelines.
+   * It breaks common logic of page analysis. Consider the following example:
+
+         <pre>
+         %<nop>CALC{"$SET(var,1)"}%
+         %<nop>DBI_QUERY{"..."}%
+         SELECT ...
+           WHERE
+             field = %<nop>CALC{"$GET(var)"}%
+         %DBI_QUERY%
+         </pre>
+
+      One will not get what would be expected because at the time =%<nop>CALC{"$GET(var)"}%= is executed =%<nop>CALC{"$SET(var,1)"}%= has not been called yet! The only way to have it be done properly is to put the latter just under =%<nop>DBI_QUERY{...}%= line.
+
+   * =%<nop>INCLUDE{}%= would not work because =beforeCommonTagsHandler()= is not called for included topics.
+
+The last issue was the cause to implement classic plugin handling when it is requested during the inclusion procedure. Possible side effects of this hack are not studied yet and may create some headache.
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>DBIQUERYPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Make complex database queries using DBI Perl module
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
+#PluginInstallation
+---++ Plugin Installation Instructions
+
+%T% *Note:* You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+   * Install TWiki:Plugins.DatabaseContribx
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.VadimBelman |
+|  Plugin Version: | 18 Jun 2009 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  20 May 2009 | Main.ThomasWeigert: Use TWiki:Plugins.DatabaseContrib to provide connection services to the database. |
+|  18 May 2009 | Main.ThomasWeigert: Updated to work in TWiki 4.2.4. Corrected the Message Board example. |
+|  3 Jun 2006 | 1.2: Added 'dsn' and 'init' parameters of configuration file. Character set support for !PostgreSQL. No default value for 'allow_do' parameter of configuration file. Support for column names with spaces. |
+|  17 Oct 2005: | 1.1 |
+|  13 Oct 2005: | Initial version |
+|  CPAN Dependencies: | DBI, Error |
+|  Other Dependencies: | TWiki:Plugins.DatabaseContrib |
+|  Perl Version: | 5.8 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- TWiki:Main.VadimBelman - 20 Feb 2006
