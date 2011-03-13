@@ -63,4 +63,4 @@ Note: searches over my paternal family tree (360 persons, 120 unions) are just a
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ [[FamilyTreePlugin.WebHome]], DeveloperDocumentationCategory, AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ [[FamilyTreePlugin.WebHome]], %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
