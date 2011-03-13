@@ -1,5 +1,18 @@
----+ Family Tree Plugin
-%TOC%
+%META:TOPICINFO{author="TWikiContributor" date="1299993617" format="1.1" version="$Rev$"}%
+---+!! Family Tree Plugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/FamilyTreePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/FamilyTreePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Overview
+
 The Family Tree Plugin is a simple database that uses TWiki searches to perform
 queries over genealogical data in a TWiki web and generate family trees (pedigrees). It is a !TWikiApplication combined with a simple plugin that provides some standard searches over the data and generates pedigree pictures. Pedigrees can be generated using either HTML (as in the example) or using the !DirectedGraphPlugin to generate a nice graphical picture of the tree.
 
@@ -33,17 +46,21 @@ Note: searches over my paternal family tree (360 persons, 120 unions) are just a
    * Set SHORTDESCRIPTION = A simple genealogy database
 
 ---++ Plugin Installation Instructions
+
 %$INSTALL_INSTRUCTIONS%
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.CrawfordCurrie http://c-dot.co.uk, TWiki:Main.GeorgeClark |
-|  Plugin Version: | %$VERSION% |
+|  Copyright: | &copy; 2003 TWiki:Main.DonnyKurniawan <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-03-12 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-03-12: | TWikibug:Item6638: Doc fixes; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2008-07-14: | Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ DeveloperDocumentationCategory, AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
+__Related Topics:__ [[FamilyTreePlugin.WebHome]], DeveloperDocumentationCategory, AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
