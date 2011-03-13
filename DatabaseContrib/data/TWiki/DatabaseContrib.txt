@@ -1,0 +1,142 @@
+%META:TOPICINFO{author="BaseUserMapping_333" date="1215118229" format="1.1" version="1.2"}%
+---+!! Database Contrib Package
+
+Provides subroutines useful in writing plugins that access an SQL database.
+
+%TOC%
+
+---++ Summary of Contents
+
+This contrib provides subroutines that come in handy when accessing an SQL database.
+
+   * =db_connect= connects to a SQL database
+   * =db_connected= verifies that a connection exists for a database
+   * =db_disconnect= disconnects from all databases
+   * =db_allowed= tests for additional access permissions
+
+This contrib is used among others, by TWiki:Plugins/DBIQueryPlugin or TWiki:Plugins/TracQueryPlugin. The hope is that we can consolidate the many different database connection schemes currently in use into this single contrib.
+
+---++ Detailed Documentation
+
+This plugin has its origins in Vadim Belman's excellent TWiki:Plugins/DBIQueryPlugin. Additional capabilities have been migrated from other database connection mechanisms deployed in various TWiki plugins.
+
+This plugin uses the database independent access methods in DBI to facilitate access to the SQL database. In the following =$dbh= refers to the database handle abstraction of DBI.
+
+
+---+++ =db_connect ( $dbname ) -> ( $dbh )=
+
+Connects to the database indicated by =$dbname=. The database can then be queried or updated.
+
+---+++ =db_connected ( $dbname ) -> ( 0|1 )=
+
+Finds the database handle for the indicated database.
+
+---+++ =db_disconnect ( )=
+
+Disconnects from all databases that have been connected to in this session.
+
+---+++ =db_allowed ( $dbname, $topic )=
+
+Verifies that the current user is allowed to perform queries that could change the database destructively. (See [[#AccessControl][Access control]] below).
+
+#DatabaseConfig
+---++ Database Definition
+
+The databases that one may connect to are defined through the =configure= script. The connection information is inserted in the =DatabaseContrib= section.
+
+<blockquote style="background-color:#f5f5f5">
+Example:
+<pre>
+	message_board => {
+	    user => 'dbuser',
+	    password => 'dbpasswd',
+	    driver => 'mysql',
+	    database => 'message_board',
+	    codepage => 'utf8',
+	    allow_do => {
+		default => [qw(TWikiAdminGroup)],
+		'Sandbox.CommonDiscussion' => [qw(TWikiGuest)],
+	    },
+	    host => 'localhost',
+	}
+</pre>
+</blockquote>
+
+This example defines a database =message_board= and the necessary information to access this database. Additional databases can be added, as a comma-separated list of perl hash refs. 
+
+The following parameters can be used to specify a database. The first level key are the database names used in the above functions. Each database has its own set of parameters defined in the hash.
+
+|*Key*|*Description*|*Default*|*Required*|
+|=database=|Database name on the server.|_none_|required|
+|=user=|Default database account name.|_none_|optional|
+|=password=|Default database account password.|_none_|optional|
+|=driver=|DBI driver used to access the server, (such as =mysql=, =sqlite=, =oracle=).<sup>[[#DriverNote][1]]</sup>|_none_|required|
+|=dsn=|Complete dsn string to be used when creating the connection. See your DBD driver documentation.%T% _With this key defined both =database= and =driver= keys are ignored._|_none_|optional|
+|=init=|Initialization command to be sent to the database server just after the connection is initiated.|_none_|optional|
+|=host=|DB server hostname.|=localhost=|optional|
+|=codepage=|Client-side codepage of this connection.<sup>[[#CodePageNote][2]]</sup>|_none_|optional|
+|=usermap=|Hash ref mapping TWiki users or groups to database accounts. See [[#AccessControl][Access control]] below.|_none_|optional|
+|=allow_do=|Additional topic-level access control support (see [[#AccessControl][Access control]] below).|default => [qw(!TWikiAdminGroup)]|optional|
+
+
+#DriverNote
+<sup>1</sup> Only !MySQL support has been tested.
+#CodePageNote
+<sup>2</sup> Only !MySQL support provided for this feature. Support for other servers is not implemented yet.
+
+
+#AccessControl
+---++ Access Control
+
+The contrib relies on TWiki for authentication and basic access control, and the database server for enforcing security. 
+
+Database server-side access control works through mapping TWiki users into database server user accounts by means of the =usermap= key in the configuration setting (see [[#DatabaseConfig][Database definition]] above).
+
+   1. Check if TWiki user has an enty in =usermap=.
+   1. Check if TWiki user is a member of a group that has an entry in =usermap=.
+   1. Use =user= and =password= keys of the [[#Config][database definition]].
+   1. If a user was found, connect to the database.
+
+Additional controls are possible at a topic level, if needed.
+The configuration key =allow_do= maps individual topics into lists of users or groups with access permission for a query executed from that topic.
+The key =default= is used, if a matching key cannot be found for the given topic.
+
+In the example above, members of the =TWikiAdminGroup= may perform queries onany topic; =TWikiGuest= is allowed only for topic =Sandbox.CommonDiscussion=.
+
+
+---++ Settings
+
+Settings are stored as preferences variables. To reference a setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g. ==%<nop>DATABASECONTRIB_DEBUG%==
+
+   * One line description:
+      * Set SHORTDESCRIPTION = Provides subroutines useful in writing plugins that access a SQL database.
+
+---++ Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this contrib package. The following instructions are for the administrator who installs the package on the server where TWiki is running.
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Contrib topic |
+     | ==lib/TWiki/Contrib/%TOPIC%.pm== | Contrib Perl module |
+     | ==lib/TWiki/Contrib/%TOPIC%/Config.spec== | Configuration specification |
+     | ==lib/TWiki/Configure/Types/TEXT.pm== | Perl module supporting text areas in =configure= script |
+   * Verify access and ownership settings for the new scripts.
+   * Edit your .htaccess file to require a valid user for the =savesection= script (if needed).
+   * Ensure that this plugin is enabled by running =bin/configure=.
+
+
+---++ Contrib Info
+
+|  Author: | TWiki:Main/ThomasWeigert |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Dependencies: | none  |
+|  Version: | 20 May 2009 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  20 May 2009: | Initial version. |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ TWiki:Plugins/DatabasePlugin, TWiki:Plugins/DBIQueryPlugin, TWiki:Plugins/TracQueryPlugin, TWiki:Plugins/PeerReviewPlugin
+
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
