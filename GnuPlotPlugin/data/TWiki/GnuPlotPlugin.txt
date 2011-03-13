@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1300003842" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1300004217" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC% 
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
-   http://twiki.org/cgi-bin/view/Plugins/EmbedBibPlugin or provide feedback at
-   http://twiki.org/cgi-bin/view/Plugins/EmbedBibPluginDev.
+   http://twiki.org/cgi-bin/view/Plugins/GnuPlotPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/GnuPlotPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
 <sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
