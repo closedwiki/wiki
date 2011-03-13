@@ -1,10 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1300050845" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1300053313" format="1.1" version="$Rev$"}%
 ---+!! Database Contrib Package
 <!--
-   Contributions to this plugin are appreciated. Please update the plugin page at
+   Contributions to this contrinb module are appreciated. Please update the contrib page at
    http://twiki.org/cgi-bin/view/Plugins/DatabaseContrib or provide feedback at
    http://twiki.org/cgi-bin/view/Plugins/DatabaseContribDev.
-   If you are a TWiki contributor please update the plugin in the SVN repository.
+   If you are a TWiki contributor please update the contrib in the SVN repository.
 -->
 <sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
@@ -111,7 +111,7 @@ In the example above, members of the =TWikiAdminGroup= may perform queries onany
 Settings are stored as preferences variables. To reference a setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g. ==%<nop>DATABASECONTRIB_DEBUG%==
 
    * One line description:
-      * Set SHORTDESCRIPTION = Provides subroutines useful in writing plugins that access a SQL database.
+      * Set SHORTDESCRIPTION = Provides subroutines useful in writing plugins that access a SQL database
 
 ---++ Installation Instructions
 
@@ -143,7 +143,7 @@ __Note:__ You do not need to install anything on the browser to use this module.
 |  2011-03-13: | TWikibug:Item6661: Import into SVN; adding build stuff -- TWiki:Main.DipuDeshmukh |
 |  2009-05-20: | Initial version |
 |  CPAN Dependencies: | CPAN:DBI |
-|  Other Dependencies: | ??? |
+|  Other Dependencies: | Libraries CPAN:DBI depends on |
 |  Perl Version: | 5.005 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
