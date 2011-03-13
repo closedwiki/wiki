@@ -35,8 +35,9 @@ use vars qw( $initialized %dbi_connections $dieOnFailure );
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 
-$VERSION = '1.0';
-$RELEASE = 'Edinburgh';
+$VERSION = '$Rev$';
+$RELEASE = '2011-03-13';
+
 $SHORTDESCRIPTION = 'Set up connection to database through DBI.';
 
 use Exporter;
