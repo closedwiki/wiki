@@ -1,0 +1,2 @@
+DBI,>=1.607.cpan,Required. Available from the CPAN:DBI archive
+Error,>0,cpan,Required. Available from the CPAN:Error archive
