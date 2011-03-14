@@ -26,11 +26,13 @@
 #
 
 # =========================
+
 package TWiki::Plugins::XmlQueryPlugin;    # change the package name and $pluginName!!!
 
 use TWiki;
 use TWiki::Func ();
-
+use TWiki::Contrib::DatabaseContrib;
+use DBI;
 # =========================
 use strict;
 use vars qw(
@@ -43,39 +45,18 @@ use vars qw(
   $datadir $pubdir
   $libxslt_debug
   $dbi_connections
-  $allow_user_to_specify_dbi_connection
 );
 
 BEGIN {
 
     $pluginName   = 'XmlQueryPlugin';     # Name of this Plugin
 
-    ###########################################################################
-    # modify the following hash to include your database connection definations
-    ###########################################################################
-    $dbi_connections = {
-        'xxxxx' => {
-            'DBD' =>      'dbi:mysql:database=xxxxxxxxxxxxxx;host=yyyyyyyyyyyyyy.zzzzz',
-            'user'     => 'uuuuuuuuuuuuuuuu',
-            'password' => 'pppppppppp'
-        },
-        'clonethis' => { 'DBD' => '', 'user' => '', 'password' => '' },
-    };
-    ###########################################################################
-    # Modify the following variable to allow TWiki page authors to specify 
-    # their own DBI connections instead of being limited to the above set. This 
-    # is a potential security risk depending on which DBD drivers are installed 
-    # on the instance of perl running TWiki e.g. if a DBD driver allowing access
-    # to local files is available that is a major security hole when this variable
-    # is set to 1.
-    ###########################################################################
-    $allow_user_to_specify_dbi_connection=1;
     ###########################################################################    
     # The following settings control the location of the auto generated XML and
     # cache files, plus size limits. Placed here as they are not suitable Plugin
     # Preferences
     ####################
-    $xmldir = undef ; # undef = use platform specific default for plugin file storage
+    #$xmldir = undef ;                     # undef = use platform specific default for plugin file storage
     $cachelimit   = 1024 * 1024 * 100 ;    # default 100 meg
     $cacheexpires = 'never'; 
 
@@ -83,8 +64,8 @@ BEGIN {
     # do not modify below. Settings suitable for modification can be altered via WebPreferences
     # see Plugin documentation for more info on this
     $initialized = 0;
-    $VERSION = '1.204';
-    $RELEASE = 'Dakar';
+    $VERSION = '$Rev$';
+    $RELEASE = '2011-03-14';
     $debug   = 0;
     $cache   = undef;
 }
@@ -144,18 +125,21 @@ sub initPlugin {
     }
 
     # ensure that the XMLDIR is correctly defined
+    
+	$xmldir = TWiki::Func::getWorkArea($pluginName);
+     TWiki::Func::writeDebug(
+        "- TWiki::Plugins::${pluginName}::initPlugin( xmldir: $xmldir )")
+      if $debug;
+      
     if (not defined $xmldir) {
       if( $TWiki::Plugins::VERSION >= 1.1 ) {
-	# TWiki 4.0+ provides a plugin work area
-	$xmldir = TWiki::Func::getWorkArea($pluginName);
-      } else {
-	$xmldir      = '/var/tmp/twiki_xml';
+	       # TWiki 4.0+ provides a plugin work area
+	       $xmldir = TWiki::Func::getWorkArea($pluginName);
+      } 
+      else {
+	       $xmldir      = '/var/tmp/twiki_xml';
       }
-      # override xmldir if it has a Unix style path on a Windows machine
-      $xmldir  = 'c:/.twiki_xml' if $^O eq 'MSWin32' and $xmldir !~ /^\[a-z]\:/i;
     }
-
-
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug(
@@ -1287,30 +1271,10 @@ sub _dbi_connect {
 
     TWiki::Func::writeDebug("TWiki::Plugins::XmlQueryPlugin::_dbi_connect $dbi_def $user ") if $debug;
 
-    # check if the dbi name actually maps to a predefined DBI connection setting
-    if ( exists $dbi_connections->{$dbi_def} ) {
-
-      # if the predefined DBI connection has a user id setting then override the
-      # supplied user and password
-        if ( exists $dbi_connections->{$dbi_def}->{'user'} ) {
-
-            # update the userid and password
-            $user     = $dbi_connections->{$dbi_def}->{'user'};
-            $password = $dbi_connections->{$dbi_def}->{'password'};
-        }
-        $dbi_def = $dbi_connections->{$dbi_def}->{'DBD'};
-    } elsif ($allow_user_to_specify_dbi_connection == 0) {
-        # unauthorized connection do not allow to proceed
-        return (
-            undef,
-            _import_dbi_data_warning("Error DBI connection not authorized. Only the following connections are available: ". join(',',keys %$dbi_connections))
-            );
-    }
-
-
     # connect to DB
-    my $dbh = DBI->connect( $dbi_def, $user, $password ) or
+    my $dbh = db_connect( $dbi_def ) or
         return (undef,_import_dbi_data_warning('Error connecting to database ' . $DBI::errstr ));
+        
 
     TWiki::Func::writeDebug("TWiki::Plugins::XmlQueryPlugin::_dbi_connect connected") if $debug;
 

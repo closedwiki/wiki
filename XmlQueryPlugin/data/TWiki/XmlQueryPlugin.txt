@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PatrickDiamond" date="1155807559" format="1.0" version="1.70"}%
+%META:TOPICINFO{author="TWikiContributor" date="1300053313" format="1.0" version="$Rev$"}%
 ---+!! <nop>XmlQuery TWiki Plugin
 
 This Plugin allows TWiki to process [[http://www.w3.org/XML/][XML]] Data using the [[http://www.w3.org/TR/xslt][XSLT]] language.
@@ -447,11 +447,8 @@ To learn more about XML and XSLT try the following online resources
 
 This Plugin requires some disk space to store it's cache and the XML versions of each topic.  The XML version of each topic takes around 1k on average. 
 
-The location of this disk space has several different defaults
+The location of this disk space has a default
 	* On TWiki4.0+ systems the plugin work area will be used /twiki_install_dir/pub/_work_area/XmlQueryPlugin 
-	* On a pre TWiki4,0 Unix system /var/tmp/twiki_xml
-	* On a pre TWiki4,0 Windows system c:/.twiki_xml
-The default disk location can be modifed by altering the $xmldir variable within <nop>XmlQueryPlugin.pm. 
 
 The default maximum size for this disk space is 100Mb. This value can be modified by altering the $cachelimit variable within <nop>XmlQueryPlugin.pm. 
 
@@ -460,6 +457,8 @@ See *Plugin Info* for the list of Perl modules that must be installed before thi
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
+
+  * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
 
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
@@ -483,8 +482,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PatrickDiamond |
-|  Plugin Version: | 16th Aug 2006 (V1.204) |
-|  Change History: | |	 
+|  Plugin Version: | 14th Mar 2011 ($REV$) |
+|  Change History: | |
+|  2011-03-14: | TWikibug:Item6663: Remove hardcoded folder reference for Windows, use TWiki:Plugins.DatabaseContrib to provide connection services to the database -- TWiki:Main.DipuDeshmukh |
 |  16th Aug 2006: | removed unsafe plugin preferences | 
 |  28th Feb 2006: | Documentation fixes <br/> Added script to check for required perl modules | 
 |  9th Feb 2006: | Dakar compatibility | 
@@ -493,7 +493,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  9th Sept 2005: | Added DBI access functions<br/>Added output parameter support |
 |  7th Dec 2004: | Small fix, metadata date format problem.<br/> Date fields are now being padded to correct width |
 |  10 Nov 2004: | Initial version |
-|  TWiki Dependency: | TWiki version 01 Feb 2003 or later |
+|  TWiki Dependency: | TWiki:Plugins.DatabaseContrib, TWiki version 01 Feb 2003 or later |
 |  CPAN Dependencies: | CPAN:DBI, CPAN:XML::LibXML, CPAN:XML::LibXSLT, CPAN:XML::Simple, CPAN:Text::ParseWords, CPAN:Cache::Cache, CPAN:String::CRC, CPAN:LWP::UserAgent |
 |  Other Dependencies: | |
 |  Perl Version: | 5.6 |
@@ -501,5 +501,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ DatabaseContrib, DBIQueryPlugin, %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
