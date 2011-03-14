@@ -87,6 +87,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2010-07-25 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-02-14: | TWikibug:Item6664 - Remove any newline characters from redirect URL before redirecting TWiki:Main/DipuDeshmukh |
 |  2010-07-25: | TWikibug:Item6530 - doc fixes |
 |  24 Nov 2008: | TWiki:Main.AndrewRJones: Ability to display Wikipedia like "Redirected from..." |
 |  22 Apr 2007: | Arthur Clemens: url parameters are now passed on. Adapted from TWiki:Main.JohnRouillard. |
