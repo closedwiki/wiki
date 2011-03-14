@@ -24,7 +24,7 @@ use vars qw( $VERSION $RELEASE $debug $pluginName );
 use strict;
 
 $VERSION    = '$Rev$';
-$RELEASE    = '2010-07-25';
+$RELEASE    = '2011-03-14';
 $pluginName = 'RedirectPlugin';
 
 # =========================
@@ -91,7 +91,8 @@ sub REDIRECT {
         return '' if $noredirect eq 'on';
 
         $dest = TWiki::Func::expandCommonVariables( $dest, $topic, $web );
-
+        $dest =~ s/\n//g;
+        
         # redirect to URL
         if ( $dest =~ m/^http/ ) {
 
