@@ -76,7 +76,7 @@ sub initPlugin
     $maxRecursionLevel = 100;
 
     # Get plugin debug flag
-    $debug = TWiki::Func::getPluginPreferencesFlag("DBIQUERYPLUGIN_DEBUG");
+    $debug = TWiki::Func::getPreferencesFlag("DBIQUERYPLUGIN_DEBUG");
     $Error::Debug = $debug;
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
