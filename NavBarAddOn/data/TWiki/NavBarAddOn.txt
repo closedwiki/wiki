@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1300177471" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1300227587" format="1.1" version="$Rev$"}%
 %INCLUDE{NavBarAddOnExample}%
 ---+!! Navigation Bar Add-On
 <!--
@@ -131,7 +131,7 @@ Assuming this navigation bar is defined in a "ProjectNavBar" topic you can inclu
 
 ---++ Embed Navigation Bar in Skin
 
-A navigation bar can be embedded in a skin, for example to the top bar (!TopMenuSkinTopBar) of the TWiki:Plugins.TopMenuSkin as in this screenhot:
+A navigation bar can be embedded in a skin, for example in the top bar (!TopMenuSkinTopBar) of the TWiki:Plugins.TopMenuSkin as in this screenhot:
 
 | <img src="%ATTACHURLPATH%/websearch-tab.png" alt="websearch-tab.png" width="736" height="204" /> |
 
@@ -164,7 +164,7 @@ __Step 4.__ !TopMenuSkinTopBar modifications: Include the !WebNavigationBar as f
  active="%IF{ "defined 'NAVBAR_ACTIVE_TAB'" then="%NAVBAR_ACTIVE_TAB%" else="%BASETOPIC%" }%"
 }%
 </verbatim>
-As for layout, make sure the include is vertically aligned at the bottom of the top bar so that the active white tab can blend nicely into the main topic content.
+As for layout, make sure the include is vertically aligned at the bottom of the top bar so that the active white tab blends nicely into the main topic content.
 
 __Step 5.__ Topics that match the tab link are highlighted automatically. If you want other topics to show a tab as active, add a NAVBAR_ACTIVE_TAB setting to the topic. For example, to highlight the Search tab, add this to !WebSearchAdvanced:
 <verbatim>
@@ -175,8 +175,10 @@ __Step 5.__ Topics that match the tab link are highlighted automatically. If you
 
 ---++ Enhancement Ideas
 
+   * Prevent wrapping of tabs, make tab overflow hidden
    * Optional pulldown menus for tabs, similar to TopMenuSkin pulldowns
-   * Multiple themes for tabs
+   * Rounded corners using CSS/JavaScript that works with colors specified for background, line, active and inactive tabs
+   * Multiple & selectable themes for tabs
 
 ---++ Add-On Settings
 
