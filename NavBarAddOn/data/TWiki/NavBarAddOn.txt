@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299836168" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1300171167" format="1.1" version="$Rev$"}%
 %INCLUDE{NavBarAddOnExample}%
 ---+!! Navigation Bar Add-On
 <!--
@@ -131,7 +131,52 @@ Assuming this navigation bar is defined in a "ProjectNavBar" topic you can inclu
 
 ---++ Embed Navigation Bar in Skin
 
-FIXME docs
+A navigation bar can be embedded in a skin, for example to the top bar (!TopMenuSkinTopBar) of the TWiki:Plugins.TopMenuSkin as in this screenhot:
+
+| <img src="%ATTACHURLPATH%/websearch-tab.png" alt="websearch-tab.png" width="736" height="204" /> |
+
+This can be done as follows:
+
+__Step 1.__ Create a navigation bar topic, such as this !WebNavigationBar:
+
+<verbatim>
+-----
+%STARTINCLUDE%<nop>
+%INCLUDE{ "%SYSTEMWEB%.NavBarAddOn" section="start" id="WebNavBar" 
+ navbar_style="padding: 0; background-color: #e4e9f0"
+}%
+   * [[WebHome][Home]]
+   * [[WebSearch][Search]]
+   * [[WebNotify][Notifications]]
+%INCLUDE{ "%SYSTEMWEB%.NavBarAddOn" section="end" }%
+<nop>%STOPINCLUDE%
+-----
+</verbatim>
+
+__Step 2.__ Install TopMenuSkin version 2011-03-09 or later if you need web-specific navigation bars in the skin.
+
+__Step 3.__ To get web-specific navigation bars in the top bar, clone the %SYSTEMWEB%.TopMenuSkinTopBar to that web, else modify the !TopMenuSkinTopBar in the %SYSTEMWEB% web.
+
+__Step 4.__ !TopMenuSkinTopBar modifications: Include the !WebNavigationBar as follows:
+<verbatim>
+%INCLUDE{
+ "WebNavigationBar"
+ active="%IF{ "defined 'NAVBAR_ACTIVE_TAB'" then="%NAVBAR_ACTIVE_TAB%" else="%BASETOPIC%" }%"
+}%
+</verbatim>
+As for layout, make sure the include is vertically aligned at the bottom of the top bar so that the active white tab can blend nicely into the main topic content.
+
+__Step 5.__ Topics that match the tab link are highlighted automatically. If you want other topics to show a tab as active, add a NAVBAR_ACTIVE_TAB setting to the topic. For example, to highlight the Search tab, add this to !WebSearchAdvanced:
+<verbatim>
+<!--
+   * Set NAVBAR_ACTIVE_TAB = WebSearch
+-->
+</verbatim>
+
+---++ Enhancement Ideas
+
+   * Optional pulldown menus for tabs, similar to TopMenuSkin pulldowns
+   * Multiple themes for tabs
 
 ---++ Add-On Settings
 
@@ -279,13 +324,13 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2005-2011 TWiki:Main.PeterThoeny <br /> &copy; 2011 [[http://www.empowerecosystems.com/][EmpowerEcosystems]] <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2011-03-11 |
+|  Add-on Version: | 2011-03-14 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-03-11: | Rewritten add-on, adding nav-bar wizard |
+|  2011-03-14: | TWikibug:Item6660: Rewritten add-on that uses jQuery, style sheets and sectional includes |
 |  2005-07-15: | Initial version |
-|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 4.0) |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.3 (TWiki 5.0) |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | SpreadSheetPlugin |
+|  Other Dependencies: | JQueryPlugin |
 |  Perl Version: | 5.005 |
 |  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/NavBarAddOn |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/NavBarAddOnDev |
@@ -298,3 +343,4 @@ __Related:__
    * NavBarAddOnTemplate - template used to create new nav-bar topics
 
 %META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1299836068" path="screenshot.png" size="10003" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="websearch-tab.png" attachment="websearch-tab.png" attr="h" comment="" date="1300169986" path="websearch-tab.png" size="35261" user="TWikiContributor" version="1"}%
