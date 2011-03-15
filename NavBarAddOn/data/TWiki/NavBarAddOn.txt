@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1300227587" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1300231823" format="1.1" version="$Rev$"}%
 %INCLUDE{NavBarAddOnExample}%
 ---+!! Navigation Bar Add-On
 <!--
@@ -326,8 +326,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2005-2011 TWiki:Main.PeterThoeny <br /> &copy; 2011 [[http://www.empowerecosystems.com/][EmpowerEcosystems]] <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2011-03-15 |
+|  Add-on Version: | 2011-03-16 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-03-16: | TWikibug:Item6660: Changed template to not depend on format parameter of URLPARAM, which is only available in TWiki-5.1 |
 |  2011-03-15: | TWikibug:Item6660: Rewritten add-on using jQuery, style sheets and sectional includes; adding wizard to create new navigation bars |
 |  2005-07-15: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.3 (TWiki 5.0) |
