@@ -1,3 +1,14 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299830660" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1300177340" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="NavBarAddOn"}%
-(To be documented)
+---+!! <nop>%TOPIC%
+
+This topic defines a navigation bar. [[%SYSTEMWEB%.NavBarAddOn][NavBarAddOn]] explains how to use and modify it.
+
+-----
+%STARTINCLUDE%<nop>
+%INCLUDE{ "%SYSTEMWEB%.NavBarAddOn" section="start" id="%TOPIC%" }%%STARTSECTION{type="expandvariables"}%%IF{ "'%URLPARAM{label1}%'!=''"  then="%URLPARAM{ "label1" encode="off" format="$n   * [[%URLPARAM{ "link1" encode="off" default="$value" }%][$value]]" }%" }%%IF{ "'%URLPARAM{label2}%'!=''" then="%URLPARAM{ "label2" encode="off" format="$n   * [[%URLPARAM{ "link2" encode="off" default="$value" }%][$value]]" }%" }%%IF{ "'%URLPARAM{label3}%'!=''" then="%URLPARAM{ "label3" encode="off" format="$n   * [[%URLPARAM{ "link3" encode="off" default="$value" }%][$value]]" }%" }%%IF{ "'%URLPARAM{label4}%'!=''" then="%URLPARAM{ "label4" encode="off" format="$n   * [[%URLPARAM{ "link4" encode="off" default="$value" }%][$value]]" }%" }%%IF{ "'%URLPARAM{label5}%'!=''" then="%URLPARAM{ "label5" encode="off" format="$n   * [[%URLPARAM{ "link5" encode="off" default="$value" }%][$value]]" }%" }%%IF{ "'%URLPARAM{label6}%'!=''" then="%URLPARAM{ "label6" encode="off" format="$n   * [[%URLPARAM{ "link6" encode="off" default="$value" }%][$value]]" }%" }%%IF{ "'%URLPARAM{label7}%'!=''" then="%URLPARAM{ "label7" encode="off" format="$n   * [[%URLPARAM{ "link7" encode="off" default="$value" }%][$value]]" }%" }%%IF{ "'%URLPARAM{label8}%'!=''" then="%URLPARAM{ "label8" encode="off" format="$n   * [[%URLPARAM{ "link8" encode="off" default="$value" }%][$value]]" }%" }%%IF{ "'%URLPARAM{label9}%'!=''" then="%URLPARAM{ "label9" encode="off" format="$n   * [[%URLPARAM{ "link9" encode="off" default="$value" }%][$value]]" }%" }%%IF{ "'%URLPARAM{label10}%'!=''" then="%URLPARAM{ "label10" encode="off" format="$n   * [[%URLPARAM{ "link10" encode="off" default="$value" }%][$value]]" }%" }%
+%ENDSECTION{type="expandvariables"}%%INCLUDE{ "%SYSTEMWEB%.NavBarAddOn" section="end" }%
+<nop>%STOPINCLUDE%
+-----
+
+__Related:__ [[%SYSTEMWEB%.NavBarAddOn][NavBarAddOn]]

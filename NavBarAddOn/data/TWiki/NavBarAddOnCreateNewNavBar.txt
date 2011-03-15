@@ -1,8 +1,16 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299835829" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1300177345" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="NavBarAddOn"}%
 %INCLUDE{NavBarAddOnExample}%
 ---+!! NavBarAddOn &raquo; Create new Navigation Bar
 
-(To be documented)
+Use this wizard to generate a navigation bar that you can use in your own web. <!--Please note that this wizard does not support pulldown menus. You can define them as nested bullets once you have created the navigation bar.-->
+
+<form action="%SCRIPTURL{save}%" method="post" id="createNavBar" onsubmit="this.topicID.value=this.webID.value+'.'+this.topicID.value; return true;">
+|   Web: | <select name="web" id="webID"> <option></option> %WEBLIST{"<option value=$qname>$name</option>" webs="public" separator=" "}% </select> %GRAY% &nbsp; &nbsp; select web where you need the navigation bar %ENDCOLOR% |
+|  Topic: | <input type="text" name="topic" id="topicID" size="30" class="twikiInputField" /> %GRAY% &nbsp; &nbsp; name of navigation bar, use a %SYSTEMWEB%.WikiWord such as =ProjectNavBar= %ENDCOLOR%  |
+|  <span style="white-space: nowrap">Tab label:</span> | <span style="white-space: nowrap"> <input type="text" name="label1" value="Home" size="6" class="twikiInputField" /> <input type="text" name="label2" size="6" class="twikiInputField" /> <input type="text" name="label3" size="6" class="twikiInputField" /> <input type="text" name="label4" size="6" class="twikiInputField" /> <input type="text" name="label5" size="6" class="twikiInputField" /> <input type="text" name="label6" size="6" class="twikiInputField" /> <input type="text" name="label7" size="6" class="twikiInputField" /> <input type="text" name="label8" size="6" class="twikiInputField" /> <input type="text" name="label9" size="6" class="twikiInputField" /> <input type="text" name="label10" size="6" class="twikiInputField" /> </span> |
+|  Tab link: | <span style="white-space: nowrap"> <input type="text" name="link1" value="WebHome" size="6" class="twikiInputField" /> <input type="text" name="link2" size="6" class="twikiInputField" /> <input type="text" name="link3" size="6" class="twikiInputField" /> <input type="text" name="link4" size="6" class="twikiInputField" /> <input type="text" name="link5" size="6" class="twikiInputField" /> <input type="text" name="link6" size="6" class="twikiInputField" /> <input type="text" name="link7" size="6" class="twikiInputField" /> <input type="text" name="link8" size="6" class="twikiInputField" /> <input type="text" name="link9" size="6" class="twikiInputField" /> <input type="text" name="link10" size="6" class="twikiInputField" /> </span> |
+| <input type="hidden" name="templatetopic" value="%SYSTEMWEB%.NavBarAddOnTemplate" /> <input type="hidden" name="onlywikiname" value="on" /> <input type="hidden" name="onlynewtopic" value="on" /> | <input type="submit" value="Create Navigation Bar Topic" class="twikiSubmit" /> |
+</form>
 
 __Related:__ NavBarAddOn, NavBarAddOnExample, NavBarAddOnTemplate
