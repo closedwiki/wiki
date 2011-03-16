@@ -1,30 +1,73 @@
-%META:TOPICINFO{author="guest" date="1099157317" format="1.0" version="1.1"}%
-*GOOGLE SEARCH PLUGIN*
+%META:TOPICINFO{author="TWikiContributor" date="1300253930" format="1.1" version="$Rev$"}%
+---+!! <nop>%TOPIC%
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/GoogleSearchPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/GoogleSearchPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-This Plugin allows the topic creater to  specify 
-if he/she wants to create link to search in Google
-for the meaning of the topic. It divides the topic
-name into various parts for the search.
+---++ Overview
 
-Following is the debug settings. If debug is 1
-then runtime information is stored in /data/debug.txt
-which is placed in the twiki directory.
-You can change this option to required value (0 or 1).
+This plugin allows the topic creator to specify if he/she wants to create link to search in Google for the meaning of the topic. It divides the topic name into various parts for the search.
 
+---++ Syntax Rules
 
-		* Set DEBUG = 0
+   * =%<nop>GOOGLE_SEARCH%= creates a link to a Google search for the current topic.
+   * =%<nop>GOOGLE_SEARCH{topic="AnyName"}%= creates a link to a Google search on any topic or keyword in Wiki notation.
 
-Demo of this document is present at http://www.it.iitb.ac.in/~naval/twiki/bin/view/Main/GoogleSearchdemo
+---++ Examples
 
+   * =%<nop>GOOGLE_SEARCH%= returns:%BR% %GOOGLE_SEARCH%
+   * =%<nop>GOOGLE_SEARCH{topic="AnyName"}%= returns:%BR% %GOOGLE_SEARCH{topic="AnyName"}%
 
-*Usage of Plugin :-*
+---++ Plugin Settings
 
-Anyone who has installed this plugin can  use it by just writing =%<nop>GOOGLE_SEARCH_PLUGIN%= where the link to Search will appear when page is loaded.
-	* Test: %GOOGLE_SEARCH_PLUGIN%
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Create Google search links in topics
 
+   * Debug plugin: (See output in =data/debug.txt=) set it to (0 or 1) 
+      * Set DEBUG = 0 
+   
+---++ Plugin Installation Instructions
 
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
 
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
 
--- TWiki:Main.NavalBhandari - 30 Oct 2004
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
 
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Test if the installation was successful: See examples above.
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.AshishNaval |
+|  Copyright: | &copy; 2004 TWiki:Main.AshishNaval <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-03-15 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-03-15: | TWikibug:Item6638: Doc fixes; changing TWIKIWEB to SYSTEMWEB; XHTML fixes; change variable name from GOOGLE_SEARCH_PLUGIN to just GOOGLE_SEARCH -- TWiki:Main.PeterThoeny |
+|  2004-10-30: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.6.1 |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
