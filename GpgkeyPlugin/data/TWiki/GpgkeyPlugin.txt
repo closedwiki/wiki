@@ -1,83 +1,86 @@
-%META:TOPICINFO{author="TriBble" date="1068505020" format="1.0" version="1.2"}%
----+ <nop>%TOPIC%
+%META:TOPICINFO{author="TWikiContributor" date="1300251788" format="1.1" version="$Rev$"}%
+---+!! <nop>%TOPIC%
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/GpgkeyPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/GpgkeyPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-This plugin does some features for a GPG/PGP key signing party.
+---++ Overview
 
-It creates a table with username, key id and fingerprint. It is okay for listing only, but
-can be used widely.
+This plugin creates a table with username, key id and fingerprint. It is okay for listing only, but can be used widely.
 
 ---++ Syntax Rules
 
-	* add to your personal page the following user information. Multiple keys/fingerprints are possible by separating with comma:
-		* GPG Key: __your key id, like 0xDEADBEEF__
-		* GPG Fingerprint: __your key fingerprint, like FFFF FFFF FFFF ...__
+   * Add to your personal page the following user information. Multiple keys/fingerprints are possible by separating with comma:
+      * GPG Key: __your key id, like 0xDEADBEEF__
+      * GPG Fingerprint: __your key fingerprint, like FFFF FFFF FFFF ...__
 
-	* add yourself to the GpgkeySigningPartyList list like:
-		 3 spaces,asterix,name (including Main. .., e.g. Main.TriBble), it can also take Groups
+   * add yourself to the GpgkeySigningPartyList list like:
+     3 spaces,asterix,name (including Main. .., e.g. !Main.MartinSteldinger), it can also take Groups
 
----++ <nop>%TOPIC% Settings
-
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = This plugin can be used to gather a list of gpg keys and fingerprints
-
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
-
----++ Plugin Installation Instructions
-
----+++ Shellside
-
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
-
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-
----+++ Wikipage
-
-__Note:___ This can be done by users.
-
-Adds the following tags:
-
-	* %<nop>GPGLISTVIEW% - displays a table list of GPG keys and fingerprints found in user information. Takes a list of users from the GpgkeySigningPartyList topic.
-
-Attributes:
-
-	* topic - specify tree's root topic (if none, will do the entire web)
-
-So you can use %<nop>GPGLISTVIEW{topic="GpgkeySigningPartyList"}% to define a specific topic, from which the (gpg-) user list shall be taken.
-
-The WikiMaster can add a GPG Key/Fingerprint questionarie at the TWiki.TWikiRegistration for automatisation.
+   * To report, add the following variable:
+      * %<nop>GPGLISTVIEW% - displays a table list of GPG keys and fingerprints found in user information. Takes a list of users from the GpgkeySigningPartyList topic.
+      * Attribute =topic= - specify tree's root topic (if none, will do the entire web)
+      * You can use %<nop>GPGLISTVIEW{topic="GpgkeySigningPartyList"}% to define a specific topic, from which the (gpg-) user list shall be taken.
+      * The TWiki administrator can add a GPG Key/Fingerprint questionnaire to the <nop>%SYTEMWEB%.TWikiRegistration to automate.
 
 ---++ Examples
 
-%<nop>GPGLISTVIEW%
+=%<nop>GPGLISTVIEW%= returns:
 
 %GPGLISTVIEW%
 
-%<nop>GPGLISTVIEW{topic="Main.WhoUsesGPG"}%
+=%<nop>GPGLISTVIEW{topic="Main.WhoUsesGPG"}%= returns:
 
 %GPGLISTVIEW{topic="Main.WhoUsesGPG"}%
 
 
+---++ <nop>%TOPIC% Settings
+
+   * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Gather a list of gpg keys and fingerprints
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Test if the installation was successful: See examples above.
+
 ---++ Plugin Info
 
-|  Plugin Author: | Main.TriBble |
-|  Plugin Version: | 10 Nov 2003 (V1.000) |
-|  Change History: | &nbsp; |
-| 10 Nov 2003: | details, attributes |
-| 09 Nov 2003: | Initial version |
+|  Plugin Author: | TWiki:Main.MartinSteldinger |
+|  Copyright: | &copy; 2003 TWiki:Main.MartinSteldinger <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-03-15 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-03-15: | TWikibug:Item6638: Doc fixes; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2003-11-10: | details, attributes |
+|  2003-11-09: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, EmptyPlugin
-
--- TWiki:Main/TriBble - 10 Nov 2003
-
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins

@@ -1,7 +1,7 @@
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# TWiki ($wikiversion has version info)
-#
-# Copyright (C) 2002 Slava Kozlov, 
+# Copyright (C) 2002 Slava Kozlov
+# Copyright (C) 2008-2011 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -13,10 +13,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
-#
-# =========================
-
-
 
 # =========================
 package TWiki::Plugins::GpgkeyPlugin;
@@ -26,15 +22,8 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $debug $CurrUrl
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2011-03-15';
 
 my $pluginName = "GpgkeyPlugin";
 my $KeyserverCheckURL = "http://blackhole.pca.dfn.de:11371/pks/lookup?op=index&search=";
@@ -49,14 +38,10 @@ sub initPlugin
         return 0;
     }
 
-#    &TWiki::Func::writeDebug( "installWeb: $installWeb - $pluginName" );
-    
-    # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "GPGKEYPLUGIN_DEBUG" );
 
-	# mod_perl will have trouble because these three vals are globals
+    # mod_perl will have trouble because these three vals are globals
     # $CurrUrl =~ s/\&/\&amp;/go;
     
     # Plugin correctly initialized
@@ -65,18 +50,15 @@ sub initPlugin
 }
 
 # =========================
-
 sub commonTagsHandler
 {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
     $_[0] =~ s/%GPGLISTVIEW%/&handleGpgKeyView($_[1], $_[2], "")/geo;
-
-# select which topic lists the users
     $_[0] =~ s/%GPGLISTVIEW{(.*?)}%/&handleGpgKeyView($_[1], $_[2], $1)/geo;
-
 }
 
+# =========================
 sub handleGpgKeyView {
 	my ($topic, $web, $attributes) = @_;
 	
@@ -183,17 +165,13 @@ sub handleGpgKeyView {
 	$str .= "$s";
 
 	return $str;
-
-#}
-
-
-
 }
 
+# =========================
 # allow other classes to see the installation web
 sub installWeb {
     return $installWeb;
 }
 
-
+# =========================
 1;
