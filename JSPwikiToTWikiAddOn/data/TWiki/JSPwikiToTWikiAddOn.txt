@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1300256713" format="1.1" version="$Rev$"}%
----+ JSPwiki to TWiki Add-On
+%META:TOPICINFO{author="TWikiContributor" date="1300257399" format="1.1" version="$Rev$"}%
+---+!! JSPwiki to TWiki Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the contrib page at
    http://twiki.org/cgi-bin/view/Plugins/JSPwikiToTWikiAddOn or provide feedback at
