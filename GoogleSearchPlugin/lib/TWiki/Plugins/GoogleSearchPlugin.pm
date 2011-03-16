@@ -1,7 +1,7 @@
-# Plugin for TWiki Collaboration Platform, http://TWiki.org/
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2004 TWiki:Main.AshishNaval
+# Copyright (C) 2008-2011 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -13,66 +13,21 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
-#
-# =========================
-#
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
-#
-# Each plugin is a package that may contain these functions:        VERSION:
-#
-#   initPlugin              ( $topic, $web, $user, $installWeb )    1.000
-#   initializeUserHandler   ( $loginName, $url, $pathInfo )         1.010
-#   registrationHandler     ( $web, $wikiName, $loginName )         1.010
-#   commonTagsHandler       ( $text, $topic, $web )                 1.000
-#   startRenderingHandler   ( $text, $web )                         1.000
-#   outsidePREHandler       ( $text )                               1.000
-#   insidePREHandler        ( $text )                               1.000
-#   endRenderingHandler     ( $text )                               1.000
-#   beforeEditHandler       ( $text, $topic, $web )                 1.010
-#   afterEditHandler        ( $text, $topic, $web )                 1.010
-#   beforeSaveHandler       ( $text, $topic, $web )                 1.010
-#   writeHeaderHandler      ( $query )                              1.010  Use only in one Plugin
-#   redirectCgiQueryHandler ( $query, $url )                        1.010  Use only in one Plugin
-#   getSessionValueHandler  ( $key )                                1.010  Use only in one Plugin
-#   setSessionValueHandler  ( $key, $value )                        1.010  Use only in one Plugin
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, all handlers except initPlugin are
-# disabled. To enable a handler remove the leading DISABLE_ from
-# the function name. Remove disabled handlers you do not need.
-#
-# NOTE: To interact with TWiki use the official TWiki functions 
-# in the TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
-
 
 # =========================
-
 package TWiki::Plugins::GoogleSearchPlugin;    
 
 # =========================
 #This is plugin specific variable
 use vars qw(
               $web $topic $user $installWeb $VERSION $RELEASE $debug $name
-   
              );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
-  $debug = 1;
+$RELEASE = '2011-03-15';
 
 # =========================
-  sub initPlugin
-  {
+sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
@@ -80,66 +35,55 @@ $RELEASE = 'Dakar';
         &TWiki::Func::writeWarning( "Version mismatch between GooglePlugin and Plugins.pm" );
         return 0;
     }
-
  
     #Getting the value of debug variable from the plugin configuration topic.
-     $debug= &TWiki::Func::getPreferencesFlag("GOOGLESEARCHPLUGIN_DEBUG");
+    $debug = TWiki::Func::getPreferencesFlag("GOOGLESEARCHPLUGIN_DEBUG");
 
     #Writing to debug.txt if debug variable is set to 1
-    &TWiki::Func::writeDebug( "- TWiki::Plugins:GoogleSearchPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
+    TWiki::Func::writeDebug( "- TWiki::Plugins:GoogleSearchPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
 
     return 1;
-   }
+}
 
 # =========================
-  sub commonTagsHandler
-  {
-        #regular expressions to replace the plugin call with the output of the corresponding functions.
+sub commonTagsHandler {
+    #regular expressions to replace the plugin call with the output of the corresponding functions.
+    $_[0] =~ s/%GOOGLE_SEARCH%/_handleTopic(  )/geo;
+    $_[0] =~ s/%GOOGLE_SEARCH{(.*?)}%/_handleKeyword( $1) /geo
+}
 
-        $_[0] =~ s/%GOOGLE_SEARCH_PLUGIN%/_handleTopic(  )/geo;
-	$_[0] =~ s/%GOOGLE_SEARCH_PLUGIN{(.*?)}%/_handleKeyword( $1) /geo
-     
-
-  }
-#-------------------------------------------------------------------------------------------------
-sub _handleTopic( )
-  {
-
-        #Following line extract the name of the topic
-	#$topic = $TWiki::topicName;
+# =========================
+sub _handleTopic( ) {
+    #Following line extract the name of the topic
+    #$topic = $TWiki::topicName;
           
-	$query =$topic;
-        #Following code find parts of topic name to give them to google search 
-	$query =~ s/([A-Z])/+$1/g; 
-	$query =~ s/^\+//;
-              
-        $name=$query;
-        $name=~ s/\+/ /g;
-        #Followin line of code displays link on the page to Google Search
-  return "<html><a href=\"http://www.google.co.in/search?q=$query\" target=\"_blank\">Search for $name  </a><br></html>";
-  }
+    $query =$topic;
+    #Following code find parts of topic name to give them to google search 
+    $query =~ s/([A-Z])/+$1/g; 
+    $query =~ s/^\+//;
+    $name=$query;
+    $name=~ s/\+/ /g;
+    #Followin line of code displays link on the page to Google Search
+    return "<a href=\"http://www.google.com/search?q=$query\" target=\"_blank\">Search for $name </a>";
+}
 
-
-sub _handleKeyword( )
-{
-                                                                                                                             
-     my ( $attributes ) = @_;
+# =========================
+sub _handleKeyword( ) {
+    my ( $attributes ) = @_;
     
-     #Extraxct value of topic specified                                                                                                                     
-     $topic = scalar &TWiki::Func::extractNameValuePair( $attributes, "topic" ) ;
+    #Extraxct value of topic specified
+    $topic = scalar &TWiki::Func::extractNameValuePair( $attributes, "topic" ) ;
+    $query =$topic;
 
-        $query =$topic;
+    #Following code find parts of topic name to give them to google search 
+    $query =~ s/([A-Z])/+$1/g; 
+    $query =~ s/^\+//;
+    $name=$query;
+    $name=~ s/\+/ /g;
 
-        #Following code find parts of topic name to give them to google search 
-	$query =~ s/([A-Z])/+$1/g; 
-	$query =~ s/^\+//;
-	$name=$query;
-        $name=~ s/\+/ /g;
-
-        #Followin line of code displays link on the page to Google Search
-return "<html> <a href=\"http://www.google.co.in/search?q=$query\" target=\"_blank\">Search for $name  </a><br></html>";
+    #Followin line of code displays link on the page to Google Search
+    return "<a href=\"http://www.google.com/search?q=$query\" target=\"_blank\">Search for $name </a>";
 }
 	
-	
-1
-;
+# =========================
+1;
