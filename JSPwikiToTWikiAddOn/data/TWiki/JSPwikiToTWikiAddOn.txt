@@ -1,11 +1,21 @@
+%META:TOPICINFO{author="TWikiContributor" date="1300256713" format="1.1" version="$Rev$"}%
 ---+ JSPwiki to TWiki Add-On
+<!--
+   Contributions to this add-on are appreciated. Please update the contrib page at
+   http://twiki.org/cgi-bin/view/Plugins/JSPwikiToTWikiAddOn or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/JSPwikiToTWikiAddOnDev.
+   If you are a TWiki contributor please update the add-on in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-_converts JSPwiki-filestructure to a TWiki capable one._
+---++ Overview
 
-there are some things that do not get converted correctly but it should be a
-good starting point:
+This add-on converts JSPwiki content to TWiki page format. Some content does not get converted correctly but it should be a good starting point:
 
-   * Attachements linked from other topics that contain spaces don't link
+   * Attachments linked from other topics that contain spaces don't link
    * table headers can be messed up
    * the parent topic relation is lost
    * and maybe more
@@ -16,18 +26,26 @@ __Note:__ You do not need to install anything on the browser to use this
 add-on. The following instructions are for the administrator who installs the
 add-on on the server where TWiki is running. 
 
-   * edit marked variables in attached perl-script
-   * run script
+   * Download the ZIP file from the Add-on Home (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Add-on topic |
+     | ==tools/jsp2twiki.pl== | Perl converter script |
+   * Edit marked variables in =jsp2twiki.pl= perl-script
+   * Run script
 
 ---++ Add-On Info
 
-   * Set SHORTDESCRIPTION = Converts JSPwiki filestructure to TWiki file
-   * format
+   * Set SHORTDESCRIPTION = Converts JSPwiki file structure to TWiki file format
 
 |  Add-on Author: | TWiki:Main.NilsBoysen |
-|  Add-on Version: | 22 Aug 2003 (v1.000) |
+|  Copyright: | &copy; 2003 TWiki:Main.NilsBoysen <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Add-on Version: | 2011-03-05 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  22 Aug 2003: | Initial version |
+|  2011-03-15: | TWikibug:Item6638: Doc fixes; package add-on properly -- TWiki:Main.PeterThoeny |
+|  2005-08-16: | Clean things up a bit -- TWiki:Main.AdamSpiers |
+|  2003-08-22: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
@@ -35,6 +53,4 @@ add-on on the server where TWiki is running.
 |  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topic:__ %TWIKIWEB%.TWikiAddOns
-
--- TWiki:Main.NilsBoysen  - 22 Aug 2003
+__Related Topic:__ %SYSTEMWEB%.TWikiAddOns
