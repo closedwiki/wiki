@@ -1,13 +1,13 @@
-%META:TOPICINFO{author="TWikiContributor" date="1287038804" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1300309573" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="ContactTemplate"}%
----+!! Contact Header
+---+!! [[ContactDB][Shared Contacts]] &#187; Contact Header
 
 The part between the horizontal rulers gets included by every contact topic.
 
 -----
 %STARTINCLUDE%
 <noautolink>
----+ Contact: %FORMFIELD{ "Name" topic="%INCLUDINGTOPIC%" }%%IF{ "'%FORMFIELD{ "Company" topic="%INCLUDINGTOPIC%" }%'=''" else=", %FORMFIELD{ "Company" topic="%INCLUDINGTOPIC%" }%" }%
+---+ [[ContactDB][Shared Contacts]] &#187; %FORMFIELD{ "Name" topic="%INCLUDINGTOPIC%" }%%IF{ "'%FORMFIELD{ "Company" topic="%INCLUDINGTOPIC%" }%'=''" else=", %FORMFIELD{ "Company" topic="%INCLUDINGTOPIC%" }%" }%
 | %ICON{phone}% %FORMFIELD{ "Phone" topic="%INCLUDINGTOPIC%" }% | %ICON{fax}% %FORMFIELD{ "Fax" topic="%INCLUDINGTOPIC%" }% |
 | %ICON{mobile}% %FORMFIELD{ "Mobile" topic="%INCLUDINGTOPIC%" }% | %ICON{mail}% %FORMFIELD{ "Email" topic="%INCLUDINGTOPIC%" }% |
 </noautolink>
@@ -16,4 +16,4 @@ The part between the horizontal rulers gets included by every contact topic.
 
 __Related:__ ContactDB, ContactForm, ContactTemplate, NewContact
 
--- TWiki:Main.PeterThoeny - 2010-10-13
+-- TWiki:Main.PeterThoeny - 2011-03-16

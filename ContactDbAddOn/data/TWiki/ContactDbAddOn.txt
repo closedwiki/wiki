@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1287091444" format="1.1" version="$Rev$"}%
----+!! Contact DB Add-On
+%META:TOPICINFO{author="TWikiContributor" date="1300309552" format="1.1" version="$Rev$"}%
+---+!! Shared Contact DB Add-On
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
    http://twiki.org/cgi-bin/view/Plugins/ContactDbAddOn or provide feedback at
@@ -63,11 +63,12 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
    * Set SHORTDESCRIPTION = Simple contact database that can be shared by the team
 
 |  Add-on Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2010, TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2010-2011 TWiki:Main.PeterThoeny <br /> &copy; 2010-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2010-10-14 (V1.000) |
+|  Add-on Version: | 2011-03-16 |
 |  Change History: | <!-- versions below in reverse order --> |
-|  2010-10-14: | Initial version |
+|  2011-03-16: | TWikibug:Item6596: Rebrand "Contact DB" to "Shared Contact DB" |
+|  2010-10-14: | TWikibug:Item6596: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 4.0) |
 |  Other Dependencies: | none |
 |  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
@@ -75,8 +76,6 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topic:__ %SYSTEMWEB%.TWikiAddOns
-
--- TWiki:Main.PeterThoeny - 2010-10-14
 
 %META:FILEATTACHMENT{name="screen-db1.png" attachment="screen-db1.png" attr="h" comment="" date="1287091401" path="screen-db1.png" size="56658" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="screen-db2.png" attachment="screen-db2.png" attr="h" comment="" date="1287030628" path="screen-db2.png" size="56416" user="TWikiContributor" version="1"}%

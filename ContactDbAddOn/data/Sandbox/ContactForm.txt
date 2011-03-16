@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1287038804" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1300309566" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="ContactDB"}%
----+ Contact Form Definition
+---+!! [[ContactDB][Shared Contacts]] &#187; Contact Form Definition
 
 | *Name:*| *Type:* | *Size* | *Values:* | *Tooltip message:* |
 | Salutation | select | 1 | , Mr., Ms., Mrs., Miss, Dr. | Pick salutation |
@@ -15,4 +15,4 @@
 
 __Related:__ ContactDB, ContactTemplate, ContactHeader, NewContact
 
--- TWiki:Main.PeterThoeny - 2010-10-13
+-- TWiki:Main.PeterThoeny - 2011-03-16

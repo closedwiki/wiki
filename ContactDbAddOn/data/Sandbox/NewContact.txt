@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1287038804" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1300309638" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="ContactDB"}%
----+ Add New Contact
+---+ [[ContactDB][Shared Contacts]] &#187; Add New Contact
 
 %STARTINCLUDE%
 <script type="text/javascript">
@@ -12,15 +12,15 @@ var sIn = txt; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.leng
 </script>
 <form name="new" action="%SCRIPTURLPATH{save}%/%WEB%/" method="post">
 | Salutation: | <select name="Salutation"> <option></option> %SEARCH{ "\| Salutation.*select" type="regex" topic="ContactForm" multiple="on" nonoise="on" format=">>$percntCALC{$LISTJOIN($sp, $LISTMAP(<option>$item</option> , $TRIM($pattern(.*?select[^\|]*\|[^\|]*\|[ ,]*([^\|]*).*))))}$percnt<<" }% </select> |
-| Name: | <input type="text" name="Name" value="" size="40" onblur="this.form.topic.value = wikify(this.value);"  /> Firstname Lastname |
-| Topic name: | <input type="text" name="topic" value="" size="40" /> Use a !WikiWord |
-| Job Title: | <input type="text" name="JobTitle" value="" size="40" /> |
-| Company: | <input type="text" name="Company" value="" size="40" /> |
-| Phone: | <input type="text" name="Phone" value="" size="20" /> |
-| Mobile: | <input type="text" name="Mobile" value="" size="20" /> |
-| Fax: | <input type="text" name="Fax" value="" size="20" /> |
-| Email: | <input type="text" name="Email" value="" size="40" /> |
-| URL: | <input type="text" name="URL" value="" size="40" /> Blog or bio |
+| Name: | <input type="text" name="Name" value="" size="40" onblur="this.form.topic.value = wikify(this.value);" class="twikiInputField" /> %GRAY% Firstname Lastname %ENDCOLOR% |
+| Topic name: | <input type="text" name="topic" value="" size="40" class="twikiInputField" /> %GRAY% Use a %SYSTEMWEB%.WikiWord %ENDCOLOR% |
+| Job Title: | <input type="text" name="JobTitle" value="" size="40" class="twikiInputField" /> |
+| Company: | <input type="text" name="Company" value="" size="40" class="twikiInputField" /> |
+| Phone: | <input type="text" name="Phone" value="" size="20" class="twikiInputField" /> |
+| Mobile: | <input type="text" name="Mobile" value="" size="20" class="twikiInputField" /> |
+| Fax: | <input type="text" name="Fax" value="" size="20" class="twikiInputField" /> |
+| Email: | <input type="text" name="Email" value="" size="40" class="twikiInputField" /> |
+| URL: | <input type="text" name="URL" value="" size="40" class="twikiInputField" /> %GRAY% Blog or bio %ENDCOLOR% |
 | | <input type="submit" class="twikiSubmit" value="Create New Contact" /> |
 <input type="hidden" name="topicparent" value="ContactDB" />
 <input type="hidden" name="templatetopic" value="ContactTemplate" />
@@ -31,4 +31,4 @@ var sIn = txt; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.leng
 
 __Related:__ ContactDB, ContactForm, ContactTemplate, ContactHeader
 
--- TWiki:Main.PeterThoeny - 2010-10-13
+-- TWiki:Main.PeterThoeny - 2011-03-16
