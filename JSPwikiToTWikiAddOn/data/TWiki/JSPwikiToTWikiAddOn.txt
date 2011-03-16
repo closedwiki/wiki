@@ -1,0 +1,40 @@
+---+ JSPwiki to TWiki Add-On
+
+_converts JSPwiki-filestructure to a TWiki capable one._
+
+there are some things that do not get converted correctly but it should be a
+good starting point:
+
+   * Attachements linked from other topics that contain spaces don't link
+   * table headers can be messed up
+   * the parent topic relation is lost
+   * and maybe more
+
+---++ Add-On Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this
+add-on. The following instructions are for the administrator who installs the
+add-on on the server where TWiki is running. 
+
+   * edit marked variables in attached perl-script
+   * run script
+
+---++ Add-On Info
+
+   * Set SHORTDESCRIPTION = Converts JSPwiki filestructure to TWiki file
+   * format
+
+|  Add-on Author: | TWiki:Main.NilsBoysen |
+|  Add-on Version: | 22 Aug 2003 (v1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  22 Aug 2003: | Initial version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  License: | GPL |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+
+-- TWiki:Main.NilsBoysen  - 22 Aug 2003
