@@ -1,15 +1,10 @@
-# LaTeXToMathMLPlugin.pm
-#
-# Copyright (C) 2003 Simon Clift, ssclift@math.uwaterloo.ca
-#
-# Very, very heavily derived from MathModePlugin.pm by
-#
-# Graeme Lufkin, gwl@u.washington.edu
-#
-# TWiki WikiClone ($wikiversion has version info)
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2002 Graeme Lufkin, gwl@u.washington.edu
+# Copyright (C) 2003 Simon Clift, ssclift@math.uwaterloo.ca
+# Copyright (C) 2008-2011 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,10 +19,13 @@
 #
 # =========================
 #
-# This is the LaTeX To MathML TWiki plugin.  
+# This is LaTeXToMathMLPlugin.pm, the LaTeX To MathML TWiki plugin.  
+#
+# Very, very heavily derived from MathModePlugin.pm by
+# Graeme Lufkin, gwl@u.washington.edu
 #
 # See TWiki.LaTeXToMathMLPlugin for details on syntax, markup and installation.
-
+#
 # Basically anything inside %$ ... $% or $\[ ... \]% or %MATHMODE{ ... }% is
 # formatted from LaTeX to MathML using the itex2MML program.  We do need to
 # assert the text/xhtml header or Mozilla will ignore the math mode stuff.
@@ -45,17 +43,8 @@ use vars qw(
 		$equationNumber $equationList $hasAnyMarkup
     );
 
-#this is the first release of this plugin
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
+$RELEASE = '2011-03-17';
 
 $pluginName = 'LaTeXToMathMLPlugin';  # Name of this Plugin
 
@@ -89,13 +78,13 @@ sub initPlugin
         return 0;
     }
 
-	$hasAnyMarkup   = 0;
-	$equationList   = [];
-	$equationNumber = 0;
+    $hasAnyMarkup   = 0;
+    $equationList   = [];
+    $equationNumber = 0;
 
-	# Get plugin debug flag
+    # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "LATEXTOMATHMLPLUGIN_DEBUG" );
-		 
+
     # Plugin correctly initialized
     &TWiki::Func::writeDebug( "- TWiki::Plugins::LaTeXToMathMLPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
 
