@@ -1,13 +1,23 @@
-%META:TOPICINFO{author="PeterThoeny" date="1300412783" format="1.1" version="1.2"}%
----+ Kwiki to TWiki Text File Converter
+%META:TOPICINFO{author="TWikiContributor" date="1300413444" format="1.1" version="$Rev$"}%
+---+!! Kwiki to TWiki Text File Converter
+<!--
+   Contributions to this add-on are appreciated. Please update the contrib page at
+   http://twiki.org/cgi-bin/view/Plugins/KwikiToTWikiAddOn or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/KwikiToTWikiAddOnDev.
+   If you are a TWiki contributor please update the add-on in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-This script is a mod of Main.PeterThoeny's DolphinToTWikiAddOn for people who want to import content from Main.BrianIngerson's Kwiki into a TWiki.
+---++ Overview
 
-Converts pretty much everything, although there are idiosyncracies.
+This script is a modification of TWiki:Main.PeterThoeny's TWiki:Plugins.DolphinToTWikiAddOn for people who want to import content from TWiki:Main.BrianIngerson's Kwiki into a TWiki.
+
+Converts pretty much everything, although there are idiosyncrasies.
 
 Metadata is not converted, however suitable default metadata is created.
-
-(Seems like there were some changes to what is in TWiki.cfg, for instance $revCiDateCmd)
 
 ---++ Usage
 
@@ -27,7 +37,8 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
    * Download the ZIP file from the Add-on Home (see below)
    * Unzip ==kwiki2twiki.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
-     | ==kwiki2twiki.pl== | converter script |
+     | ==data/TWiki/%TOPIC%.txt== | Add-on topic |
+     | ==tools/kwiki2twiki.pl== | Perl converter script |
    * Make the ==kwiki2twiki.pl== script executable
    * The script looks for the TWiki libraries in ==.== and ==../lib==. Place it in bin or lib or create another top-level directory (such as =add-ons= ) and put it there.
 
@@ -35,21 +46,21 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 
    * Set SHORTDESCRIPTION = Convert Kwiki wiki content to TWiki file format
 
-|  Add-on Author: | TWiki:Main/FredMorris |
-|  Add-on Version: | 19 Jan 2004 (v1.000) |
+|  Add-on Author: | TWiki:Main.FredMorris |
+|  Copyright: | &copy; 2004 TWiki:Main.FredMorris <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Add-on Version: | 2011-03-17 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  19 Jan 2004: | Initial version |
+|  2011-03-17: | TWikibug:Item6638: Doc fixes; package add-on properly -- TWiki:Main.PeterThoeny |
+|  2004-01-19: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.006 |
-|  License: | GPL |
 |  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
----++ Acknowledgements
+---++ Acknowledgments
 
 Thanks to [[http://www.graysoft.com/][GrayMatter Software]] for giving me permission to post this.
 
-__Related Topic:__ %TWIKIWEB%.TWikiAddOns
-
--- TWiki:Main/FredMorris - 19 Jan 2004
+__Related Topic:__ %SYSTEMWEB%.TWikiAddOns
