@@ -64,7 +64,7 @@ use IO::Handle;
 use IPC::Open2;
 
 #If the program is not on the path then this should be changed.
-my $itex2MML = '/home/Wiki/lib/TWiki/Plugins/itex2MML';
+my $itex2MML = '/usr/local/bin/itex2MML';
 
 # For the first pass we number the equations in outsidePREHandler, inserting an
 # easily found tag.  We then process the list of equations as a batch, split it
@@ -115,9 +115,7 @@ sub startRenderingHandler
 					 or ( $_[0] =~ /%MATHMODE{(.*?)}%/mgs ) );
 
 	$_[0] =~ s/%MATHMODE{(.*?)}%/&replaceMath($1,1)/mgseo;
-
-	$_[0];
-};
+}
 
 
 # =========================
@@ -125,14 +123,12 @@ sub startRenderingHandler
 sub outsidePREHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-	return $_[0] if ( not $hasAnyMarkup );
+	return if ( not $hasAnyMarkup );
 
 	$_[0] =~ s/%\$(.*?)\$%/&replaceMath($1,0)/gseo;
 	$_[0] =~ s/%\\\[(.*?)\\\]%/&replaceMath($1,1)/gseo;
 	$_[0] =~ s/%MATHMODE{(.*?)}%/&replaceMath($1,1)/gseo;
-
-	return $_[0];
-};
+}
 
 sub replaceMath
 {
@@ -149,8 +145,8 @@ sub replaceMath
 
 	$equationNumber++;
 
-	$placeHolder;
-};
+	return $placeHolder;
+}
 
 # =========================
 # After processing the equations into tags, we process the equation set using
@@ -229,8 +225,6 @@ sub endRenderingHandler
 
 		&TWiki::Func::writeDebug( "- TWiki::Plugins::LaTeXToMathMLPlugin::startRenderingHandler( $web.$topic ) has finished." ) if $debug;
 	};
-
-	$_[0];
 }
 
 # =========================
