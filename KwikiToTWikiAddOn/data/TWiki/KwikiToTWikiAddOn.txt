@@ -1,0 +1,55 @@
+%META:TOPICINFO{author="PeterThoeny" date="1300412783" format="1.1" version="1.2"}%
+---+ Kwiki to TWiki Text File Converter
+
+This script is a mod of Main.PeterThoeny's DolphinToTWikiAddOn for people who want to import content from Main.BrianIngerson's Kwiki into a TWiki.
+
+Converts pretty much everything, although there are idiosyncracies.
+
+Metadata is not converted, however suitable default metadata is created.
+
+(Seems like there were some changes to what is in TWiki.cfg, for instance $revCiDateCmd)
+
+---++ Usage
+
+I might as well copy liberally from Thoeny's documentation as well. ;-)
+
+==example% kwiki2twiki.pl fromDir toDir==
+
+| =fromDir:= | Directory containing Kwiki files |
+| =toDir:= | Directory where converted .txt and .txt,v files are stored |
+
+__Attention:__ =toDir= is assumed to be empty. Existing files will be overwritten!
+
+---++ Add-On Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
+
+   * Download the ZIP file from the Add-on Home (see below)
+   * Unzip ==kwiki2twiki.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==kwiki2twiki.pl== | converter script |
+   * Make the ==kwiki2twiki.pl== script executable
+   * The script looks for the TWiki libraries in ==.== and ==../lib==. Place it in bin or lib or create another top-level directory (such as =add-ons= ) and put it there.
+
+---++ Add-On Info
+
+   * Set SHORTDESCRIPTION = Convert Kwiki wiki content to TWiki file format
+
+|  Add-on Author: | TWiki:Main/FredMorris |
+|  Add-on Version: | 19 Jan 2004 (v1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  19 Jan 2004: | Initial version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.006 |
+|  License: | GPL |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+---++ Acknowledgements
+
+Thanks to [[http://www.graysoft.com/][GrayMatter Software]] for giving me permission to post this.
+
+__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+
+-- TWiki:Main/FredMorris - 19 Jan 2004
