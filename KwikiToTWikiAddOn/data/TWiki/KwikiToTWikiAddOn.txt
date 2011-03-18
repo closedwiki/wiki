@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1300413444" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1300413718" format="1.1" version="$Rev$"}%
 ---+!! Kwiki to TWiki Text File Converter
 <!--
    Contributions to this add-on are appreciated. Please update the contrib page at
@@ -13,7 +13,7 @@
 
 ---++ Overview
 
-This script is a modification of TWiki:Main.PeterThoeny's TWiki:Plugins.DolphinToTWikiAddOn for people who want to import content from TWiki:Main.BrianIngerson's Kwiki into a TWiki.
+This script is a modification of TWiki:Main.PeterThoeny 's TWiki:Plugins.DolphinToTWikiAddOn for people who want to import content from TWiki:Main.BrianIngerson 's Kwiki into a TWiki.
 
 Converts pretty much everything, although there are idiosyncrasies.
 
