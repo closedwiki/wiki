@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1300428191" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1300428532" format="1.1" version="$Rev$"}%
 ---+!! <nop>LaTeX to <nop>MathML Mathematical Equation Plug-in
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -19,7 +19,7 @@ See TWiki:Codev.MathMarkup for some Javascript-only client-side alternatives.
 
 ---++ Syntax Rules
 
-The syntax rules for embedding equations are identical to those of the TWiki:Plugins.MathModePlugin and are based on <nop>LaTeX's own markup for equations.  The equations themselves are expressed in a language very, very similar to <nop>LaTeX called [[http://golem.ph.utexas.edu/~distler/blog/itex2MML.html][Itex]]. (Apparently the major differences are in the way equation arrays are handled.)
+The syntax rules for embedding equations are identical to those of the TWiki:Plugins.MathModePlugin and are based on <nop>LaTeX's own markup for equations.  The equations themselves are expressed in a language very, very similar to <nop>LaTeX called [[http://golem.ph.utexas.edu/~distler/blog/itex2MML.html][itex2MML]]. (Apparently the major differences are in the way equation arrays are handled.)
 
 To put an equation in-line with your text, enclose it with percent signs and
 the dollar sign, 
@@ -172,7 +172,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin 
 |  2011-03-15: | TWikibug:Item6638: Doc fixes; code fixes & cleanup (page content was shown twice); changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  2003-04-15: | Initial version |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | none |
+|  Other Dependencies: | [[http://golem.ph.utexas.edu/~distler/blog/itex2MML.html][itex2MML]] |
 |  Perl Version: | 5.005 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
