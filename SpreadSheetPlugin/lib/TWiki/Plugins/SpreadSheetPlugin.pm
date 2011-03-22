@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2011 Peter Thoeny, peter@thoeny.org
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,10 +19,8 @@
 # =========================
 #
 # This is TWiki's Spreadsheet Plugin.
-#
 
 package TWiki::Plugins::SpreadSheetPlugin;
-
 
 # =========================
 use vars qw(
@@ -31,7 +29,7 @@ use vars qw(
 
 # Plugin version
 $VERSION = '$Rev$';
-$RELEASE = '2010-08-27';
+$RELEASE = '2011-03-22';
 
 $doInit = 0;
 

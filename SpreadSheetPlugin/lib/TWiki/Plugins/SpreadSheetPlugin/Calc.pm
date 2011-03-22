@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2011 Peter Thoeny, peter@thoeny.org
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -30,7 +30,6 @@ use strict;
 use Time::Local;
 use Time::Local qw( timegm_nocheck timelocal_nocheck );  # Necessary for DOY
 
-
 # =========================
 use vars qw(
         $web $topic $debug $dontSpaceRE
@@ -46,7 +45,6 @@ $dontSpaceRE = "";
 { my $count = 0;
   %mon2num = map { $_ => $count++ } @monArr;
 }
-
 
 # =========================
 sub init
@@ -833,6 +831,14 @@ sub doFunc
        $result = $varStore{ $name } if( $name );
        $result = "" unless( defined( $result ) );
 
+    } elsif( $theFunc eq "SPLIT" ) {
+        my( $sep, $str ) = _properSplit( $theAttr, 2 );
+        $sep = "  *" if( !defined $sep || $sep eq '' );
+        $sep =~ s/\$comma/,/go;
+        $sep =~ s/\$sp/ /go;
+        $sep =~ s/\$(nop|empty)//go;
+        $result = _listToDelimitedString( split( $sep, $str ) );
+
     } elsif( $theFunc eq "LIST" ) {
         my @arr = getList( $theAttr );
         $result = _listToDelimitedString( @arr );
@@ -856,7 +862,7 @@ sub doFunc
         $sep = ", " if( !defined $sep || $sep eq '' );
         $sep =~ s/\$comma/,/go;
         $sep =~ s/\$sp/ /go;
-        $sep =~ s/\$nop//go;
+        $sep =~ s/\$(nop|empty)//go;
         $sep =~ s/\$n/\n/go;
         $result =~ s/, */$sep/go;
 
