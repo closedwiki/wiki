@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1282934103" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1300833365" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -267,7 +267,7 @@ Conventions for Syntax:
    * Specify the variable name (alphanumeric characters and underscores). An empty string is returned if the variable does not exist. Use =$SET()= to set a variable first. Unlike table ranges, variables live for the time of the page view and persist across tables, i.e. you can use it to summarize results across several tables.
    * Syntax: ==$GET( name )==
    * Example: ==%<nop>CALC{"$GET(my_total)"}%== returns the value of the =my_total= variable
-   * Related: =[[#FuncEXEC][$EXEC()]]=, =[[#FuncNOEXEC][$NOEXEC()]]=, =[[#FuncSET][$SET()]]=, =[[#FuncSETIFEMPTY][$SETIFEMPTY()]]=, =[[#FuncSETM][$SETM()]]=
+   * Related: =[[#FuncEXEC][$EXEC()]]=, =[[#FuncNOEXEC][$NOEXEC()]]=, =[[#FuncSET][$SET()]]=, =[[#FuncSETIFEMPTY][$SETIFEMPTY()]]=, =[[#FuncSETM][$SETM()]]=, TWiki:Plugins.SetGetPlugin
 
 #FuncIF
 ---+++ IF( condition, value if true, value if 0 ) -- return a value based on a condition
@@ -321,7 +321,7 @@ Conventions for Syntax:
    * Convert the content of a range of cells into a flat list, delimited by comma. Cells containing commas are merged into the list
    * Syntax: ==$LIST( range )==
    * Example: ==%<nop>CALC{"$LIST($LEFT())"}%== returns ==Apples, Lemons, Oranges, Kiwis== assuming the cells to the left contain ==| Apples | Lemons, Oranges | Kiwis |==
-   * Related: =[[#FuncAVERAGE][$AVERAGE()]]=, =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncDEF][$DEF()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTJOIN][$LISTJOIN()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTRAND][$LISTRAND()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSHUFFLE][$LISTSHUFFLE()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTTRUNCATE][$LISTTRUNCATE()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncPRODUCT][$PRODUCT()]]=, =[[#FuncSUM][$SUM()]]=, =[[#FuncSUMDAYS][$SUMDAYS()]]=, =[[#FuncSUMPRODUCT][$SUMPRODUCT()]]=
+   * Related: =[[#FuncAVERAGE][$AVERAGE()]]=, =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncDEF][$DEF()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTJOIN][$LISTJOIN()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTRAND][$LISTRAND()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSHUFFLE][$LISTSHUFFLE()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTTRUNCATE][$LISTTRUNCATE()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncPRODUCT][$PRODUCT()]]=, =[[#FuncSPLIT][$SPLIT()]]=, =[[#FuncSUM][$SUM()]]=, =[[#FuncSUMDAYS][$SUMDAYS()]]=, =[[#FuncSUMPRODUCT][$SUMPRODUCT()]]=
 
 #FuncLISTIF
 ---+++ LISTIF( condition, list ) -- remove elements from a list that do not meet a condition
@@ -338,21 +338,22 @@ Conventions for Syntax:
    * Syntax: ==$LISTITEM( index, list )==
    * Example: ==%<nop>CALC{"$LISTITEM(2, Apple, Orange, Apple, Kiwi)"}%== returns ==Orange==
    * Example: ==%<nop>CALC{"$LISTITEM(-1, Apple, Orange, Apple, Kiwi)"}%== returns ==Kiwi==
-   * Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTRAND][$LISTRAND()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSUM][$SUM()]]=
+   * Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTRAND][$LISTRAND()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSPLIT][$SPLIT()]]=, =[[#FuncSUM][$SUM()]]=
 
 #FuncLISTJOIN
 ---+++ LISTJOIN( separator, list ) -- convert a list into a string
-   * By default, list items are separated by a comma and a space. Use this function to indicate a specific =separator= string, which may include =$comma= for comma, =$n= for newline, =$sp= for space, and =$nop= for a no-operation (join list without a separator).
+   * By default, list items are separated by a comma and a space. Use this function to indicate a specific =separator= string, which may include =$comma= for comma, =$n= for newline, =$sp= for space, and =$empty= to join a list without a separator.
    * Syntax: ==$LISTJOIN( separator, list )==
    * Example: ==%<nop>CALC{"$LISTJOIN($n, Apple, Orange, Apple, Kiwi)"}%== returns the four items separated by new lines
-   * Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=
+   * Example: ==%<nop>CALC{"$LISTJOIN($empty, Apple, Orange, Apple, Kiwi)"}%== returns ==AppleOrangeAppleKiwi==
+   * Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncSPLIT][$SPLIT()]]=
 
 #FuncLISTMAP
 ---+++ LISTMAP( formula, list ) -- evaluate and update each element of a list
    * In the formula you can use ==$item== to indicate the element; ==$index== to show the index of the list, starting at 1. If ==$item== is omitted, the item is appended to the formula.
    * Syntax: ==$LISTMAP( formula, list )==
    * Example: ==%<nop>CALC{"$LISTMAP($index: $EVAL(2 * $item), 3, 5, 7, 11)"}%== returns ==1: 6, 2: 10, 3: 14, 4: 22==
-   * Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSUM][$SUM()]]=
+   * Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSPLIT][$SPLIT()]]=, =[[#FuncSUM][$SUM()]]=
 
 #FuncLISTRAND
 ---+++ LISTRAND( list ) -- get one random element of a list
@@ -370,7 +371,7 @@ Conventions for Syntax:
 ---+++ LISTSIZE( list ) -- number of elements in a list
    * Syntax: ==$LISTSIZE( list )==
    * Example: ==%<nop>CALC{"$LISTSIZE(Apple, Orange, Apple, Kiwi)"}%== returns ==4==
-   * Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTJOIN][$LISTJOIN()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTTRUNCATE][$LISTTRUNCATE()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSUM][$SUM()]]=
+   * Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTJOIN][$LISTJOIN()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTTRUNCATE][$LISTTRUNCATE()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSPLIT][$SPLIT()]]=, =[[#FuncSUM][$SUM()]]=
 
 #FuncLISTSHUFFLE
 ---+++ LISTSHUFFLE( list ) -- shuffle element of a list in random order
@@ -570,7 +571,7 @@ Conventions for Syntax:
    * Specify the variable name (alphanumeric characters and underscores) and the value. The value may contain a formula; formulae are evaluated before the variable assignment; see =[[#FuncNOEXEC][$NOEXEC()]]= if you want to prevent that. This function returns no output. Use =$GET()= to retrieve variables. Unlike table ranges, variables live for the time of the page view and persist across tables, i.e. you can use it to summarize results across several tables and also across included topics
    * Syntax: ==$SET( name, value )==
    * Example: ==%<nop>CALC{"$SET(my_total, $SUM($ABOVE()))"}%== sets the =my_total= variable to the sum of all table cells located above the current cell and returns an empty string
-   * Related: =[[#FuncEXEC][$EXEC()]]=, =[[#FuncGET][$GET()]]=, =[[#FuncNOEXEC][$NOEXEC()]]=, =[[#FuncSETIFEMPTY][$SETIFEMPTY()]]=, =[[#FuncSETM][SETM()]]=
+   * Related: =[[#FuncEXEC][$EXEC()]]=, =[[#FuncGET][$GET()]]=, =[[#FuncNOEXEC][$NOEXEC()]]=, =[[#FuncSETIFEMPTY][$SETIFEMPTY()]]=, =[[#FuncSETM][SETM()]]=, TWiki:Plugins.SetGetPlugin
 
 #FuncSETIFEMPTY
 ---+++ SETIFEMPTY( name, value ) -- set a variable only if empty
@@ -592,6 +593,16 @@ Conventions for Syntax:
    * Syntax: ==$SIGN( num )==
    * Example: ==%<nop>CALC{"$SIGN(-12.5)"}%== returns ==-1==
    * Related: =[[#FuncABS][$ABS()]]=, =[[#FuncEVAL][$EVAL()]]=, =[[#FuncEVEN][$EVEN()]]=, =[[#FuncINT][$INT()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncODD][$ODD()]]=
+
+#FuncSPLIT
+---+++ SPLIT( separator, text ) -- split a string into a list
+   * Split =text= into a list using =separator= as a delimiter. The =separator= may be a regular expression and may include =$comma= for comma, =$sp= for space and =$empty= to split at each character. Default separator is one or more spaces (=$sp$sp*=).
+   * Syntax: ==$SPLIT( separator, text )==
+   * Example: ==%<nop>CALC{"$SPLIT(, Apple Orange Kiwi)"}%== returns ==Apple, Orange, Kiwi==
+   * Example: ==%<nop>CALC{"$SPLIT(-, Apple-Orange-Kiwi)"}%== returns ==Apple, Orange, Kiwi==
+   * Example: ==%<nop>CALC{"$SPLIT([-:]$sp*, Apple-Orange: Kiwi)"}%== returns ==Apple, Orange, Kiwi== (the separator means: Dash or colon, followed by optional spaces
+   * Example: ==%<nop>CALC{"$SPLIT($empty, Apple)"}%== returns ==A, p, p, l, e==
+   * Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTJOIN][$LISTJOIN()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=
 
 #FuncSQRT
 ---+++ SQRT( num ) -- square root of a number
@@ -800,18 +811,19 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Copyright: | &copy; 2001-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
+|  Copyright: | &copy; 2001-2011, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2010-08-27: | TWikibug:Item6526 - add ISO 8601 week number to FORMATTIME, contributed by TWiki:Main.PeterPayne |
-|  2010-08-04: | TWikibug:Item6537 - fix for $EVAL(2+08) returning "illegal octal digit" error instead of 10 |
-|  2010-07-17: | TWikibug:Item6525 - add $n token to TRANSLATE for newline |
-|  2010-05-27: | TWikibug:Item6506 - document delayed evaluation of CALC in included topics |
-|  2010-05-26: | TWikibug:Item6504 - add empty ($nop) separator to $LISTJOIN() |
-|  2010-06-25: | TWikibug:Item6493 - fix for $PRODUCT(0,4) returning 4 instead of 0<br /> TWikibug:Item5163 - fix for plugin causing table to misrender an empty "&#124;&#124;" row |
-|  2010-05-22: | TWikibug:Item6472 - adding support for DOY in $TIME(), contributed by TWiki:Main/EmanueleCupido |
-|  2010-05-15: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
+|  2011-03-22: | TWikibug:Item6666: Add $SPLIT(); renamed $nop separator token of $LISTJOIN() to $empty (keeping $nop as undocumented feature) |
+|  2010-08-27: | TWikibug:Item6526: Add ISO 8601 week number to FORMATTIME, contributed by TWiki:Main.PeterPayne |
+|  2010-08-04: | TWikibug:Item6537: Fix for $EVAL(2+08) returning "illegal octal digit" error instead of 10 |
+|  2010-07-17: | TWikibug:Item6525: Add $n token to TRANSLATE for newline |
+|  2010-05-27: | TWikibug:Item6506: Document delayed evaluation of CALC in included topics |
+|  2010-05-26: | TWikibug:Item6504: Add empty ($nop) separator to $LISTJOIN() |
+|  2010-06-25: | TWikibug:Item6493: Fix for $PRODUCT(0,4) returning 4 instead of 0<br /> TWikibug:Item5163 - fix for plugin causing table to misrender an empty "&#124;&#124;" row |
+|  2010-05-22: | TWikibug:Item6472: Adding support for DOY in $TIME(), contributed by TWiki:Main/EmanueleCupido |
+|  2010-05-15: | TWikibug:Item6433: Doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  2010-02-27: | Doc improvements |
 |  2009-11-22: | Enhanced $NOP(): Added $quot replacement for quote character, changed $per replacement with $percnt, contributed by TWiki:Main/HorstEsser |
 |  09 May 2009: | Fixed bug in $WORKINGDAYS(): Incorrect number of days if daylight savings time change happens between start date and end date |
