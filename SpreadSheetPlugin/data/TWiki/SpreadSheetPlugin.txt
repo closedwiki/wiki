@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301029263" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1301030008" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -815,14 +815,14 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2011-03-22: | TWikibug:Item6667: Fix for RIGHT() having wrong result due to incorrect start cell |
+|  2011-03-24: | TWikibug:Item6668: Fix for $LIST() not flattening a list in a cell<br /> TWikibug:Item6667: Fix for $RIGHT() having wrong result due to incorrect start cell |
 |  2011-03-22: | TWikibug:Item6666: Add $SPLIT(); renamed $nop separator token of $LISTJOIN() to $empty (keeping $nop as undocumented feature) |
 |  2010-08-27: | TWikibug:Item6526: Add ISO 8601 week number to FORMATTIME, contributed by TWiki:Main.PeterPayne |
 |  2010-08-04: | TWikibug:Item6537: Fix for $EVAL(2+08) returning "illegal octal digit" error instead of 10 |
 |  2010-07-17: | TWikibug:Item6525: Add $n token to TRANSLATE for newline |
 |  2010-05-27: | TWikibug:Item6506: Document delayed evaluation of CALC in included topics |
 |  2010-05-26: | TWikibug:Item6504: Add empty ($nop) separator to $LISTJOIN() |
-|  2010-06-25: | TWikibug:Item6493: Fix for $PRODUCT(0,4) returning 4 instead of 0<br /> TWikibug:Item5163 - fix for plugin causing table to misrender an empty "&#124;&#124;" row |
+|  2010-06-25: | TWikibug:Item6493: Fix for $PRODUCT(0,4) returning 4 instead of 0<br /> TWikibug:Item5163: Fix for plugin causing table to misrender an empty "&#124;&#124;" row |
 |  2010-05-22: | TWikibug:Item6472: Adding support for DOY in $TIME(), contributed by TWiki:Main/EmanueleCupido |
 |  2010-05-15: | TWikibug:Item6433: Doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  2010-02-27: | Doc improvements |
