@@ -956,6 +956,10 @@ sub doFunc
             } getList( $str );
         $result = _listToDelimitedString( @arr );
 
+    } elsif( $theFunc eq "LISTNONEMPTY" ) {
+        my @arr = grep { /./ } getList( $theAttr );
+        $result = _listToDelimitedString( @arr );
+
     } elsif( $theFunc eq "LISTIF" ) {
         # LISTIF(cmd, item 1, item 2, ...)
         my( $cmd, $str ) = _properSplit( $theAttr, 2 );
