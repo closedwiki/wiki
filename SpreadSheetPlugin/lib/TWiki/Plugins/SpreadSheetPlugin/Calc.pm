@@ -1162,7 +1162,7 @@ sub getList
             push( @list, getTableRange( $_ ) );
         } else {
             # list item
-            $list[$#list+1] = $_;
+            push( @list, split( /\s*,\s*/, $_ ) ); 
         }
     }
     return @list;
