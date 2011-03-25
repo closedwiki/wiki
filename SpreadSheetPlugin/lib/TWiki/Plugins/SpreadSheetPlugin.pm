@@ -29,7 +29,7 @@ use vars qw(
 
 # Plugin version
 $VERSION = '$Rev$';
-$RELEASE = '2011-03-22';
+$RELEASE = '2011-03-24';
 
 $doInit = 0;
 

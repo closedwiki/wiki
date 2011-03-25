@@ -442,7 +442,8 @@ sub doFunc
 
     } elsif( $theFunc eq "RIGHT" ) {
         $i = $rPos + 1;
-        $result = "R$i:C$cPos..R$i:C32000";
+        my $cStart = $cPos + 2;
+        $result = "R$i:C$cStart..R$i:C32000";
 
     } elsif( $theFunc eq "DEF" ) {
         # Format DEF(list) returns first defined cell
