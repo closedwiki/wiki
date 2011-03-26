@@ -1,8 +1,12 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301171026" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1301179001" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarGET
 ---+++ GET{"name"} -- get a variable
-   * Get the value of a named variable, previously set with =%<nop>SET{}%=. An empty string is returned in case the variable is not found. %IF{"'%INCLUDINGTOPIC%'!='SetGetPlugin'" then="The =%<nop>SET{}<nop>%= and =%<nop>GET{}<nop>%= variables are handled by the SetGetPlugin." }%
-   * Syntax: =%<nop>GET{"name"}%=
-   * Example: =%<nop>GET{"lunch"}%= returns =Sushi= if the following has been previously set: =%<nop>SET{"lunch" value="Sushi"}%=%IF{"'%INCLUDINGTOPIC%'!='SetGetPlugin'" then=" - [[SetGetPlugin#SetGetExamples][see more examples]]." }%
+   * Get the value of a named variable, previously set with =%<nop>SET{}%=. %IF{"'%INCLUDINGTOPIC%'!='SetGetPlugin'" then="The =%<nop>SET{}<nop>%= and =%<nop>GET{}<nop>%= variables are handled by the SetGetPlugin." }%
+   * Syntax: =%<nop>GET{ "name" default="..." }%=
+   * Supported attributes:
+     | *Attribute* | *Comment* | *Default* |
+     | ="name"= | Name of variable. | (required) |
+     | =default="..."= | Text shown if variable is not found. | =""= (empty string) |
+   * Example: =%<nop>GET{"lunch"}%= returns =Sushi= if the following has been previously set:%BR% =%<nop>SET{ "lunch" value="Sushi" default="undecided" }%=%IF{"'%INCLUDINGTOPIC%'!='SetGetPlugin'" then=" - [[SetGetPlugin#SetGetExamples][see more examples]]" }%
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables' OR '%INCLUDINGTOPIC%'='SetGetPlugin'" then="#"}%VarSET][SET]], %IF{"'%INCLUDINGTOPIC%'!='SetGetPlugin'" then="SetGetPlugin, "}%SpreadSheetPlugin#FuncGET
