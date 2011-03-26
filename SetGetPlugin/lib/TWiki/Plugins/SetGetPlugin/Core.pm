@@ -40,7 +40,7 @@ sub new {
 sub VarGET
 {
     my ( $this, $session, $params, $topic, $web ) = @_;
-    my $name = $params->{_DEFAULT};
+    my $name  = _sanitizeName( $params->{_DEFAULT} );
     return '' unless( $name );
     if( $params->{topic} ) {
         $topic = $params->{topic};
@@ -56,7 +56,7 @@ sub VarGET
 sub VarSET
 {
     my ( $this, $session, $params, $topic, $web ) = @_;
-    my $name  = $params->{_DEFAULT};
+    my $name  = _sanitizeName( $params->{_DEFAULT} );
     return '' unless( $name );
     my $value = $params->{value};
     if( $params->{topic} ) {
@@ -69,6 +69,15 @@ sub VarSET
     return '';
 }
 
-1;
+# =========================
+sub _sanitizeName
+{
+    my ( $name ) = @_;
+    $name = '' unless( defined $name );
+    $name =~ s/[^a-zA-Z0-9\-]/_/go;
+    $name =~ s/_+/_/go;
+    return $name;
+}
 
-# EOF
+# =========================
+1;
