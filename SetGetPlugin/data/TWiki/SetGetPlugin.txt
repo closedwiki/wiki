@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301174736" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1301177539" format="1.1" version="$Rev$"}%
 ---+!! !SetGetPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -125,6 +125,62 @@ __Rendered text:__
       value="%SERVERTIME{$year-$mo-$day $hou:$min:$sec}%"
      }%
      %GET{ "SetGetPlugin-lastview" }%
+</td></tr></table>
+
+#MyMood
+---+++ Remember my mood
+
+This example shows how you can remember the mood of users. The form shows a picklist to select a mood. The mood is stored persistently per user, and shown.
+
+<table><tr><td valign="top">
+__Raw text:__
+
+<verbatim>
+%IF{
+ "defined 'mood'"
+ then="$percntSET{
+  \"SetGetPlugin-mood-%WIKINAME%\" remember=\"1\" 
+  value=\"%URLPARAM{mood}%\"
+ }$percnt"
+}%
+My current mood:
+&nbsp; %GET{ "SetGetPlugin-mood-%WIKINAME%" }%
+for %WIKIUSERNAME%
+
+<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%#MyMood">
+Change my mood: <select name="mood">
+<option>%URLPARAM{mood}%</option>
+<option>:-D</option> <option>:-)</option>
+<option>:-I</option> <option>:-(</option>
+<option>:mad:</option>
+</select>
+<input type="submit" value="Set" class="twikiSubmit" />
+</form>
+</verbatim>
+
+</td><td>&nbsp;</td><td valign="top">
+__Rendered text:__
+
+%IF{
+ "defined 'mood'"
+ then="$percntSET{
+  \"SetGetPlugin-mood-%WIKINAME%\" remember=\"1\" 
+  value=\"%URLPARAM{mood}%\"
+ }$percnt"
+}%
+My current mood:
+&nbsp; %GET{ "SetGetPlugin-mood-%WIKINAME%" }%
+for %WIKIUSERNAME%
+
+<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%#MyMood">
+Change my mood: <select name="mood">
+<option>%URLPARAM{mood}%</option>
+<option>:-D</option> <option>:-)</option>
+<option>:-I</option> <option>:-(</option>
+<option>:mad:</option>
+</select>
+<input type="submit" value="Set" class="twikiSubmit" />
+</form>
 </td></tr></table>
 
 ---++ Plugin Settings
