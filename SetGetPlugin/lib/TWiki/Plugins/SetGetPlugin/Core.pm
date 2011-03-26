@@ -58,6 +58,9 @@ sub VarGET
     } elsif( defined $this->{PersistentVars}{$name} ) {
         $value = $this->{PersistentVars}{$name};
         TWiki::Func::writeDebug( "-   get persistent -> $value" ) if $this->{Debug};
+
+    } elsif( defined $params->{default} ) {
+        $value = $params->{default};
     } 
     return $value;
 }
