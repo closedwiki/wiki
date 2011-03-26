@@ -27,12 +27,18 @@ package TWiki::Plugins::SetGetPlugin::Core;
 sub new {
     my ( $class, $debug ) = @_;
 
-    my $this;
-    $this->{Debug} = $debug;
-    $this->{Vars} = undef;
-
-    TWiki::Func::writeDebug( "- SetGetPlugin constructor" ) if $this->{Debug};
+    my $this = {
+          Debug          => $debug,
+          VolatileVars   => undef,
+          PersistentVars => undef,
+          StoreFile      => TWiki::Func::getWorkArea( 'SetGetPlugin' ) . "/persistentvars.dat",
+          StoreTimeStamp => 0,
+        };
     bless( $this, $class );
+    TWiki::Func::writeDebug( "- SetGetPlugin Core constructor" ) if $this->{Debug};
+
+    $this->_loadPersistentVars();
+
     return $this;
 }
 
@@ -41,15 +47,19 @@ sub VarGET
 {
     my ( $this, $session, $params, $topic, $web ) = @_;
     my $name  = _sanitizeName( $params->{_DEFAULT} );
+    TWiki::Func::writeDebug( "- SetGetPlugin GET ($name)" ) if $this->{Debug};
     return '' unless( $name );
-    if( $params->{topic} ) {
-        $topic = $params->{topic};
-        ( $web, $topic ) = TWiki::Func::normalizeWebTopicName( $web, $topic );
-    }
-    if( defined $this->{Vars}{$name} ) {
-        return $this->{Vars}{$name};
-    }
-    return '';
+
+    my $value = '';
+    if( defined $this->{VolatileVars}{$name} ) {
+        $value = $this->{VolatileVars}{$name};
+        TWiki::Func::writeDebug( "-   set volatile -> $value" ) if $this->{Debug};
+
+    } elsif( defined $this->{PersistentVars}{$name} ) {
+        $value = $this->{PersistentVars}{$name};
+        TWiki::Func::writeDebug( "-   get persistent -> $value" ) if $this->{Debug};
+    } 
+    return $value;
 }
 
 # =========================
@@ -57,16 +67,49 @@ sub VarSET
 {
     my ( $this, $session, $params, $topic, $web ) = @_;
     my $name  = _sanitizeName( $params->{_DEFAULT} );
+    TWiki::Func::writeDebug( "- SetGetPlugin SET ($name)" ) if $this->{Debug};
     return '' unless( $name );
     my $value = $params->{value};
-    if( $params->{topic} ) {
-        $topic = $params->{topic};
-        ( $web, $topic ) = TWiki::Func::normalizeWebTopicName( $web, $topic );
-    }
-    if( defined $value ) {
-        $this->{Vars}{$name} = $value;
+    return '' unless( defined $value );
+
+    my $remember = $params->{remember} || 0;
+    if( $remember && ! ( $remember =~ /^off$/i ) ) {
+        TWiki::Func::writeDebug( "-   set persistent -> $value" ) if $this->{Debug};
+        $this->_savePersistentVar( $name, $value );
+    } else {
+        TWiki::Func::writeDebug( "-   set volatile -> $value" ) if $this->{Debug};
+        $this->{VolatileVars}{$name} = $value;
     }
     return '';
+}
+
+# =========================
+sub _loadPersistentVars
+{
+    my ( $this ) = @_;
+
+    # check if store is newer, load persistent vars if needed
+    my $timeStamp = ( stat( $this->{StoreFile} ) )[9];
+    if( $timeStamp != $this->{StoreTimeStamp} ) {
+        $this->{StoreTimeStamp} = $timeStamp;
+        my $text = TWiki::Func::readFile( $this->{StoreFile} );
+        $text =~ /^(.*)$/gs; # untaint, it's safe
+        $text = $1;
+        $this->{PersistentVars} = eval $text;
+    }
+}
+
+# =========================
+sub _savePersistentVar
+{
+    my ( $this, $name, $value ) = @_;
+
+    # FIXME: Do atomic transaction to avoid race condition
+    $this->_loadPersistentVars();            # re-load latest from disk in case updated
+    $this->{PersistentVars}{$name} = $value; # set variable
+    my $text = Data::Dumper->Dump([$this->{PersistentVars}], [qw(PersistentVars)]);
+    TWiki::Func::saveFile( $this->{StoreFile}, $text ) ;
+    $this->{StoreTimeStamp} = ( stat( $this->{StoreFile} ) )[9];
 }
 
 # =========================
