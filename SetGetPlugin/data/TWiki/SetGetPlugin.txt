@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301171026" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1301174736" format="1.1" version="$Rev$"}%
 ---+!! !SetGetPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -36,7 +36,96 @@ Alternatives to this plugin are:
 #SetGetExamples
 ---++ Examples
 
-FIXME
+---+++ Set several times
+
+A variable can be set and used several times.
+
+<table><tr><td valign="top">
+__Raw text:__
+
+<verbatim>
+   * Set "demo" to "uno": %SET{ "demo" value="uno" }%
+   * Get "demo": %GET{ "demo" }%
+   * Set "demo" to "due": %SET{ "demo" value="due" }%
+   * Get "demo": %GET{ "demo" }%
+   * Set "demo" to "tre": %SET{ "demo" value="tre" }%
+   * Get "demo": %GET{ "demo" }%
+</verbatim>
+
+</td><td>&nbsp;</td><td valign="top">
+__Rendered text:__
+
+   * Set "demo" to "uno": %SET{ "demo" value="uno" }%
+   * Get "demo": %GET{ "demo" }%
+   * Set "demo" to "due": %SET{ "demo" value="due" }%
+   * Get "demo": %GET{ "demo" }%
+   * Set "demo" to "tre": %SET{ "demo" value="tre" }%
+   * Get "demo": %GET{ "demo" }%
+</td></tr></table>
+
+---+++ Search and save result
+
+A SEARCH result can be assigned to a variable for later use. This can be useful for performance reasons if you need the result multiple times. The result can also be post-processed, such as with a =[[SpreadSheetPlugin#FuncLISTMAP][$LISTMAP()]]= of the SpreadSheetPlugin.
+
+<table><tr><td valign="top">
+__Raw text:__
+
+<verbatim>
+%SET{
+ "result"
+ value="%SEARCH{
+  "."
+  topic="*Skin"
+  nonoise="on"
+  format="$topic"
+  separator=", "
+ }%"
+}%
+   * Result: %GET{result}%
+   * Again: %GET{result}%
+</verbatim>
+
+</td><td>&nbsp;</td><td valign="top">
+__Rendered text:__
+
+%SET{
+ "result"
+ value="%SEARCH{
+  "."
+  topic="*Skin"
+  nonoise="on"
+  format="$topic"
+  separator=", "
+ }%"
+}%
+   * Result: %GET{result}%
+   * Again: %GET{result}%
+</td></tr></table>
+
+---+++ Last topic view
+
+In a topic, set a variable with the remember flag set that stores the current time. Add also a GET before the SET, it will show the time the topic has last been viewed.
+
+<table><tr><td valign="top">
+__Raw text:__
+
+<verbatim>
+   * Last view: %GET{ "SetGetPlugin-lastview" }%
+   * Now: %SET{ "SetGetPlugin-lastview" remember="1" 
+      value="%SERVERTIME{$year-$mo-$day $hou:$min:$sec}%"
+     }%
+     %GET{ "SetGetPlugin-lastview" }%
+</verbatim>
+
+</td><td>&nbsp;</td><td valign="top">
+__Rendered text:__
+
+   * Last view: %GET{ "SetGetPlugin-lastview" }%
+   * Now: %SET{ "SetGetPlugin-lastview" remember="1" 
+      value="%SERVERTIME{$year-$mo-$day $hou:$min:$sec}%"
+     }%
+     %GET{ "SetGetPlugin-lastview" }%
+</td></tr></table>
 
 ---++ Plugin Settings
 
