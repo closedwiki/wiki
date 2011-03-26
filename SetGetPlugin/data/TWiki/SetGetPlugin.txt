@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1287352254" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1301171026" format="1.1" version="$Rev$"}%
 ---+!! !SetGetPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -15,53 +15,70 @@
 
 ---++ Introduction
 
-Use =%<nop>SET{}%= to store arbitrary text in a named variable, and reuse it with =%<nop>GET{}%= later on within the topic or an included topics. These variables live only during topic rendering time, e.g. they do not persist between topic views. This is an alternative to:
+Use =%<nop>SET{}%= to store arbitrary text in a named variable, and reuse it with =%<nop>GET{}%= later on within the topic or an included topics. By default, variables live only during topic rendering time, e.g. they do not persist between topic views. It is also possible to remember the variables between topic views, however they are not version controlled like other content in TWiki.
+
+=%<nop>SET{}%= and =%<nop>GET{}%= can be nested inside other TWiki variables and get handled as expected, e.g. inside out, and left to right.
+
+Alternatives to this plugin are:
 
    * TWiki preferences settings: Can be defined on a site level (%USERSWEB%.TWikiPreferences), web level (WebPreferences) and topic level. Preferences settings persist until changed.
    * %SYSTEMWEB%.SpreadSheetPlugin variables: Variables can be set with =%<nop>CALC{$SET(some_name, anything)}%= and retrieved with =$GET()=. These variables persist during page rendering time. A limitation of =%<nop>CALC{}= is that it does not follow the standard TWiki variable evaluation order (nesting inside out, left to right).
-
-=%<nop>SET{}%= and =%<nop>GET{}%= can be nested inside other TWiki variables and get handled as expected, e.g. inside out, and left to right.
 
 ---++ Syntax Rules
 
 %INCLUDE{"VarSET"}%
 
+#RememberNotes
+%X% __NOTE:__ Keep in mind that the remember option sets a variable with TWiki-global scope, e.g. for all pages and all users. To avoid name clashes, use a descriptive variable name which might include web.topic name and user or group name. For example, instead of variable name ="campaign"=, use a more descriptive ="Marketing-Europe-%SERVERTIME{$year}%-Campaign"=.
+
 %INCLUDE{"VarGET"}%
+
+#SetGetExamples
+---++ Examples
+
+FIXME
 
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Set and get variables
+      * Set SHORTDESCRIPTION = Set and get variables in topics, optionally persistently across topic views
 
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
 
-   * Download the ZIP file from the Plugin Home (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-     | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | Core Perl module |
-   * Configure the Plugin:
-      * Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the plugin
-   * Test if the installation was successful:
-      * The next bullet should show: =Result: Yes, it works!= %SET{ "test" value="Yes, it works!" }%
-      * Result: %GET{ "test" }%
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==data/TWiki/VarGET.txt== | GET documentation |
+        | ==data/TWiki/VarSET.txt== | SET documentation |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+        | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | Core Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Test if the installation was successful: The next bullet should show: =Result: Yes, it works!= %SET{ "test" value="Yes, it works!" }%
+         * Result: %GET{ "test" }%
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Copyright: | &copy; 2010, TWiki:Main/PeterThoeny |
+|  Plugin Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2010-2011 TWiki:Main.PeterThoeny <br /> &copy; 2010-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-10-17 (V1.0) |
+|  Plugin Version: | 2011-03-26 (V1.1) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-10-17: | Initial version |
+|  2011-03-26: | TWikibug:Item6670: Make variables persistent across topic invocations |
+|  2010-10-17: | TWikibug:Item6597: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
@@ -71,4 +88,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/SetGetPluginDev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/SetGetPluginAppraisal |
 
-__Related Topics:__ VarSET, VarGET, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ VarSET, VarGET, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences, SpreadSheetPlugin
