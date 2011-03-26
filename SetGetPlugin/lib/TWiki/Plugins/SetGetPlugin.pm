@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2010 Peter Thoeny, peter@thoeny.org and TWiki
-# Contributors.
+# Copyright (C) 2010-2011 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2010-2011 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,12 +26,12 @@ package TWiki::Plugins::SetGetPlugin;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $debug
+        $web $topic $user $installWeb $VERSION $RELEASE $debug $core
     );
 
 # Plugin version
-$VERSION = 'V1.0 - $Rev$';
-$RELEASE = '2010-10-17';
+$VERSION = '$Rev$';
+$RELEASE = '2011-11-25';
 
 $moduleLoaded = 0;
 
@@ -54,7 +54,7 @@ sub initPlugin
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::SetGetPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
-    $doInit = 1;
+
     return 1;
 }
 
@@ -62,19 +62,27 @@ sub initPlugin
 sub _GET
 {
 #   my ( $session, $params, $theTopic, $theWeb ) = @_;
+
     # Lazy loading, e.g. compile core module only when required
-    require TWiki::Plugins::SetGetPlugin::Core;
-    return  TWiki::Plugins::SetGetPlugin::Core::VarGET( @_ );
+    unless( $core ) {
+        require TWiki::Plugins::SetGetPlugin::Core;
+        $core = new TWiki::Plugins::SetGetPlugin::Core( $debug );
+    }
+    return $core->VarGET( @_ );
 }
 
 # =========================
 sub _SET
 {
 #   my ( $session, $params, $theTopic, $theWeb ) = @_;
-    require TWiki::Plugins::SetGetPlugin::Core;
-    return  TWiki::Plugins::SetGetPlugin::Core::VarSET( @_ );
+
+    # Lazy loading, e.g. compile core module only when required
+    unless( $core ) {
+        require TWiki::Plugins::SetGetPlugin::Core;
+        $core = new TWiki::Plugins::SetGetPlugin::Core( $debug );
+    }
+    return $core->VarSET( @_ );
 }
 
+# =========================
 1;
-
-# EOF

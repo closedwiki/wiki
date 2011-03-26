@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2010 Peter Thoeny, peter@thoeny.org and TWiki
-# Contributors.
+# Copyright (C) 2010-2011 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2010-2011 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,24 +24,30 @@
 package TWiki::Plugins::SetGetPlugin::Core;
 
 # =========================
-use vars qw(
-        $vars
-    );
+sub new {
+    my ( $class, $debug ) = @_;
 
-undef $vars;
+    my $this;
+    $this->{Debug} = $debug;
+    $this->{Vars} = undef;
+
+    TWiki::Func::writeDebug( "- SetGetPlugin constructor" ) if $this->{Debug};
+    bless( $this, $class );
+    return $this;
+}
 
 # =========================
 sub VarGET
 {
-    my ( $session, $params, $topic, $web ) = @_;
-    my $rawParam = $params->{_RAW};
+    my ( $this, $session, $params, $topic, $web ) = @_;
     my $name = $params->{_DEFAULT};
+    return '' unless( $name );
     if( $params->{topic} ) {
         $topic = $params->{topic};
         ( $web, $topic ) = TWiki::Func::normalizeWebTopicName( $web, $topic );
     }
-    if( $name && defined $vars->{"$web.$topic"}{$name} ) {
-        return $vars->{"$web.$topic"}{$name};
+    if( defined $this->{Vars}{"$web.$topic"}{$name} ) {
+        return $this->{Vars}{"$web.$topic"}{$name};
     }
     return '';
 }
@@ -49,16 +55,16 @@ sub VarGET
 # =========================
 sub VarSET
 {
-    my ( $session, $params, $topic, $web ) = @_;
-    my $rawParam = $params->{_RAW};
+    my ( $this, $session, $params, $topic, $web ) = @_;
     my $name  = $params->{_DEFAULT};
+    return '' unless( $name );
     my $value = $params->{value};
     if( $params->{topic} ) {
         $topic = $params->{topic};
         ( $web, $topic ) = TWiki::Func::normalizeWebTopicName( $web, $topic );
     }
-    if( $name && defined $value ) {
-        $vars->{"$web.$topic"}{$name} = $value;
+    if( defined $value ) {
+        $this->{Vars}{"$web.$topic"}{$name} = $value;
     }
     return '';
 }
