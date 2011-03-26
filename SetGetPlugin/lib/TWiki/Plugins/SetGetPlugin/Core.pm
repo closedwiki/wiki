@@ -46,8 +46,8 @@ sub VarGET
         $topic = $params->{topic};
         ( $web, $topic ) = TWiki::Func::normalizeWebTopicName( $web, $topic );
     }
-    if( defined $this->{Vars}{"$web.$topic"}{$name} ) {
-        return $this->{Vars}{"$web.$topic"}{$name};
+    if( defined $this->{Vars}{$name} ) {
+        return $this->{Vars}{$name};
     }
     return '';
 }
@@ -64,7 +64,7 @@ sub VarSET
         ( $web, $topic ) = TWiki::Func::normalizeWebTopicName( $web, $topic );
     }
     if( defined $value ) {
-        $this->{Vars}{"$web.$topic"}{$name} = $value;
+        $this->{Vars}{$name} = $value;
     }
     return '';
 }
