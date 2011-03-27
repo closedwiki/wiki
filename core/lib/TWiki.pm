@@ -2966,9 +2966,12 @@ sub _expandTagOnTopicRendering {
                 $attrs->{DEFAULT} = $attrs->{_DEFAULT};
             }
             while( my ( $key, $value ) = each( %$attrs ) ) {
-                $e =~ s/%${key}%/$value/g;
+                $e =~ s/%${key}({.*?default="(.*?[^\\])".*?})?%/_unescapeBS( $value )/ge;
             }
         }
+        # FIXME: Quick hack; do proper variable parsing
+        $e =~ s/%[A-Za-z0-9_]+{.*?default="(.*?[^\\])".*?}%/_unescapeBS( $1 )/ge;
+
     } else {
         $e = $this->{SESSION_TAGS}{$tag} unless( $args );
         if( !defined( $e ) && defined( $functionTags{$tag} )) {
@@ -2978,6 +2981,12 @@ sub _expandTagOnTopicRendering {
         }
     }
     return $e;
+}
+
+sub _unescapeBS {
+    my $text = shift;
+    $text =~ s/\\(["'])/$1/g;
+    return $text;
 }
 
 # Handle expansion of a tag during new topic creation. When creating a
