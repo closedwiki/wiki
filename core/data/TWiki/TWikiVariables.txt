@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274763999" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1301188380" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %STARTSECTION{type="include"}%
 ---+ TWiki Variables
@@ -25,6 +25,7 @@ __Note:__
    * Type =%<nop>ALLVARIABLES%= to get a full listing of all variables defined for a particular topic
 
 ---++ Variable Names
+
 Variable names must start with a letter. The following characters can be letters, numbers and the underscore '_'. You can use both upper-case and lower-case letters and you can mix the characteres. E.g. =%<nop>MYVAR%=, =%<nop>MyVar%=, =%<nop>My2ndVar%=, and =%<nop>My_Var%= are all valid variable names. Variables are case sensitive. =%<nop>MyVAR%= and =%<nop>MYVAR%= are not the same variable.
 
 By convention all settings, predefined variables and variables used by plugins are always UPPER-CASE.
@@ -36,7 +37,9 @@ By convention all settings, predefined variables and variables used by plugins a
 Unlike predefined variables, preferences variables can be defined by the user in various places.
 
 ---+++ Setting Preferences Variables
+
 You can set variables in all the following places:
+
    1 system level in [[%SYSTEMWEB%.TWikiPreferences][%SYSTEMWEB%.TWikiPreferences]]
    1 plugin topics (see TWikiPlugins)
    1 local site level in [[%LOCALSITEPREFS%][%LOCALSITEPREFS%]]
@@ -74,6 +77,57 @@ Whatever you include in your variable will be expanded on display, exactly as if
 </pre>
 
 You can also set preferences variables on a topic by clicking the link =Edit topic preference settings= under =More topic actions=. Use the same =* Set VARIABLENAME = value= syntax. Preferences set in this manner are not visible in the topic text, but take effect nevertheless.
+
+---+++ Parameterized Variables (Macros)
+
+It is possible to pass parameters to TWiki variables. This is called a macro in a programming language.
+
+To define a parameterized variable, set a variable that contains other variables, such as:
+<verbatim>
+   * Set EXAMPLE = Variable using %DEFAULT%, %PARAM1% and %PARAM2%
+</verbatim>
+
+Any variable can be used in the setting. A special =%<nop>DEFAULT%= variable denotes the default (nameless) parameter.
+
+To use a parameterized variable (or call a macro), add parameters in curly brackets, such as:
+<verbatim>
+%EXAMPLE{ "foo" PARAM1="bar" PARAM2="baz" }%
+</verbatim>
+which gets resolved to: =%EXAMPLE{ "foo" PARAM1="bar" PARAM2="baz" }%=
+
+Parameters in the variable definition are expanded using the following sequence:
+
+   1. Parameter from variable call. In above example, =%<nop>PARAM1%= gets expanded to =bar=.
+   2. Session variable and preferences settings
+
+---++++ Example
+
+*Define variables:*
+<verbatim>
+   * Set DEFAULT = favorite
+   * Set DISH = steak
+   * Set DRINK = red wine
+   * Set FAVORITE = My %DEFAULT% dish is %DISH%, my %DEFAULT% drink is %DRINK%.
+</verbatim>
+
+*Use Variable:*
+<verbatim>
+%FAVORITE{ DISH="Sushi" DRINK="Sake" }%
+</verbatim>
+Returns: 
+=%FAVORITE{ DISH="Sushi" DRINK="Sake" }%=
+
+<verbatim>
+%FAVORITE{}%
+</verbatim>
+Returns:
+=%FAVORITE{}%=
+
+<verbatim>
+%FAVORITE{ "preferred" }%
+</verbatim>
+Returns:
+=%FAVORITE{ "preferred" }%=
 
 ---+++ Access Control Variables
 
