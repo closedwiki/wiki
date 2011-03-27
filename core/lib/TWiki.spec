@@ -1,6 +1,6 @@
 # Configuration file of TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 1999-2011 Peter Thoeny, peter@thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
