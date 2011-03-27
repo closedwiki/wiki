@@ -12,6 +12,7 @@
 !include ../PatternSkin/lib/TWiki/Contrib/PatternSkin
 !include ../PreferencesPlugin/lib/TWiki/Plugins/PreferencesPlugin
 !include ../RenderListPlugin/lib/TWiki/Plugins/RenderListPlugin
+!include ../SetGetPlugin/lib/TWiki/Plugins/SetGetPlugin
 !include ../SlideShowPlugin/lib/TWiki/Plugins/SlideShowPlugin
 !include ../SmiliesPlugin/lib/TWiki/Plugins/SmiliesPlugin
 !include ../SpreadSheetPlugin/lib/TWiki/Plugins/SpreadSheetPlugin

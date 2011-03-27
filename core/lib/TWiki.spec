@@ -1263,6 +1263,7 @@ $TWiki::cfg{Plugins}{InterwikiPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{JQueryPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{PreferencesPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{RenderListPlugin}{Enabled} = 0;
+$TWiki::cfg{Plugins}{SetGetPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{SlideShowPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{SmiliesPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{SpreadSheetPlugin}{Enabled} = 1;
