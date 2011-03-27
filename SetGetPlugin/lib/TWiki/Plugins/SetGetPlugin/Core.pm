@@ -93,7 +93,7 @@ sub _loadPersistentVars
 
     # check if store is newer, load persistent vars if needed
     my $timeStamp = ( stat( $this->{StoreFile} ) )[9];
-    if( $timeStamp != $this->{StoreTimeStamp} ) {
+    if( defined $timeStamp && $timeStamp != $this->{StoreTimeStamp} ) {
         $this->{StoreTimeStamp} = $timeStamp;
         my $text = TWiki::Func::readFile( $this->{StoreFile} );
         $text =~ /^(.*)$/gs; # untaint, it's safe
