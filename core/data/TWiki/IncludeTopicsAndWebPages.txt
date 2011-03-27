@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1278463962" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1301209236" format="1.1" version="$Rev$"}%
 ---+!! Include Topics and Web Pages Using =%<nop>INCLUDE{...}%= Variable
 
-Use the =%<nop>INCLUDE{...}%= variable to embed the content of another topic or web page inside a TWiki topic. The whole content or only parts of a page can be included. If needed, set a proxy server in %WIKIPREFSTOPIC%.
+Use the =%<nop>INCLUDE{...}%= variable to embed the content of another topic or web page inside a TWiki topic. The whole content or only parts of a page can be included.
 
 %TOC%
 
@@ -11,7 +11,7 @@ Use the =%<nop>INCLUDE{...}%= variable to embed the content of another topic or 
 
 The =pattern= parameter is optional and allows you to extract some parts of a web page. Specify a %SYSTEMWEB%.RegularExpression that scans from start (='^'=) to end and contains the text you want to keep in parenthesis, e.g., =pattern="^.*?(from here.*?to here).*"=. You need to make sure that the integrity of a web page is not compromised; for example, if you include an HTML table, make sure to include everything including the table end tag.
 
-The example parameters PARAMETER1 and PARAMETER2 will be defined as a variable within the scope of the included topic. The example parameters shown will result in %PARAMETER1% and %PARAMETER2% being defined within the included topic.
+The example parameters PARAMETER1 and PARAMETER2 will be defined as a variable within the scope of the included topic. The example parameters shown will result in %PARAMETER1% and %PARAMETER2% being defined within the included topic. Parametrized includes can be used to define and use macros, which is an alternative to [[ParameterizedVariables][parameterized variables]].
 
 VarINCLUDE explains the other parameters.
 
@@ -72,6 +72,8 @@ The result would be
 
    * I like apples better than oranges.
 
+%T% __Tip:__ [[ParameterizedVariables][Parameterized variables]] are a somewhat easier to use alternative to parametrized includes.
+
 ---+++ 6. Alert Box using Parameterized Include
 
 Create a topic called !AlertBox with the following content:
@@ -105,12 +107,12 @@ The =TITLE=""= and =MESSAGE=""= parameters are passed into the include. Using th
 
 You can create a library of [[http://en.wikipedia.org/wiki/GUI_widget][GUI widgets]] using a topic with named sections:
 
-   1. Create a !Main.WidgetLibrary topic
+   1. Create a <nop>%USERSWEB%.WidgetLibrary topic
    2. Create widgets in that topic, such as alert boxes, submit forms, queries, etc. Widgets are defined as named sections and may process parameters. For example, above alert box can be a widget enclosed in =%<nop>STARTSECTION{AlertBox}%= ... =%<nop>ENDSECTION{AlertBox}%= (instead of the =%<nop>STOPINCLUDE%= ... =%<nop>STOPINCLUDE%=)
-   3. Place a widget in any topic. For example, to use the alert box widget write:%BR% =%<nop>INCLUDE{ "Main.WidgetLibrary" section="AlertBox" TITLE="Alert" MESSAGE="The sky is the limit!" }%=
+   3. Place a widget in any topic. For example, to use the alert box widget write:%BR% =%<nop>INCLUDE{ "%USERSWEB%.WidgetLibrary" section="AlertBox" TITLE="Alert" MESSAGE="The sky is the limit!" }%=
 
 In essence, you are building a library of functions with parameters that people can use. Use your imagination, the sky is the limit!
 
-__Related Topics:__ VarINCLUDE, VarSTARTSECTION, VarENDSECTION, UserDocumentationCategory
+__Related Topics:__ VarINCLUDE, VarSTARTSECTION, VarENDSECTION, UserDocumentationCategory, ParameterizedVariables
 
--- __Contributors:__ TWiki:Main/PeterThoeny, TWiki:Main/KennethLavrsen
+-- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.KennethLavrsen
