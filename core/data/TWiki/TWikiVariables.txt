@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301188380" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1301205924" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %STARTSECTION{type="include"}%
 ---+ TWiki Variables
@@ -78,22 +78,28 @@ Whatever you include in your variable will be expanded on display, exactly as if
 
 You can also set preferences variables on a topic by clicking the link =Edit topic preference settings= under =More topic actions=. Use the same =* Set VARIABLENAME = value= syntax. Preferences set in this manner are not visible in the topic text, but take effect nevertheless.
 
+#ParameterizedVariables
 ---+++ Parameterized Variables (Macros)
 
 It is possible to pass parameters to TWiki variables. This is called a macro in a programming language.
 
 To define a parameterized variable, set a variable that contains other variables, such as:
 <verbatim>
-   * Set EXAMPLE = Variable using %DEFAULT%, %PARAM1% and %PARAM2%
+   * Set EXAMPLE = Example variable using %DEFAULT%, %PARAM1% and %PARAM2%
+   * Set DEMO = Demo using %DEFAULT{default="(undefined)"}%,
+                %PARAM1{default="(undefined)"}% and %PARAM2{default="(undefined)"}%
 </verbatim>
 
-Any variable can be used in the setting. A special =%<nop>DEFAULT%= variable denotes the default (nameless) parameter.
+Any variable can be used in the setting. A special =%<nop>DEFAULT%= variable denotes the default (nameless) parameter. Variables optionally may list a =default="..."= parameter that gets used in case the calling variable does not specify the parameter.
 
 To use a parameterized variable (or call a macro), add parameters in curly brackets, such as:
 <verbatim>
-%EXAMPLE{ "foo" PARAM1="bar" PARAM2="baz" }%
+   * %EXAMPLE{ "foo" PARAM1="bar" PARAM2="baz" }%
+   * %DEMO{ "demo" PARAM2="parameter 2" }% -- note that PARAM1 is missing
 </verbatim>
-which gets resolved to: =%EXAMPLE{ "foo" PARAM1="bar" PARAM2="baz" }%=
+which resolves to:
+   * %EXAMPLE{ "foo" PARAM1="bar" PARAM2="baz" }%
+   * %DEMO{ "demo" PARAM2="parameter 2" }% -- note that PARAM1 is missing
 
 Parameters in the variable definition are expanded using the following sequence:
 
@@ -104,30 +110,30 @@ Parameters in the variable definition are expanded using the following sequence:
 
 *Define variables:*
 <verbatim>
-   * Set DEFAULT = favorite
-   * Set DISH = steak
    * Set DRINK = red wine
-   * Set FAVORITE = My %DEFAULT% dish is %DISH%, my %DEFAULT% drink is %DRINK%.
+   * Set FAVORITE = My %DEFAULT{default="favorite"}% dish is %DISH{default="steak"}%,
+                    my %DEFAULT{default="favorite"}% drink is %DRINK%.
 </verbatim>
+%T% The default can be defined with a default parameter (=%<nop>DISH{default="steak"}%=), or as a preferences setting (=Set DRINK = ...=).
 
-*Use Variable:*
+*Use Variables:*
 <verbatim>
 %FAVORITE{ DISH="Sushi" DRINK="Sake" }%
 </verbatim>
-Returns: 
-=%FAVORITE{ DISH="Sushi" DRINK="Sake" }%=
+Returns: %BR%
+%FAVORITE{ DISH="Sushi" DRINK="Sake" }%
 
 <verbatim>
 %FAVORITE{}%
 </verbatim>
-Returns:
-=%FAVORITE{}%=
+Returns: %BR%
+%FAVORITE{}%
 
 <verbatim>
 %FAVORITE{ "preferred" }%
 </verbatim>
-Returns:
-=%FAVORITE{ "preferred" }%=
+Returns: %BR%
+%FAVORITE{ "preferred" }%
 
 ---+++ Access Control Variables
 
