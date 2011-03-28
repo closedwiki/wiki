@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293781022" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1301343379" format="1.1" version="$Rev$"}%
 ---+!! Comment Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -266,11 +266,12 @@ Note that if you want to use the =action= template then you must also:
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk inspired by the work of TWiki:Main/DavidWeller and TWiki:Main/PeterMasiar |
-|  Copyright: | &copy; 2004, TWiki:Main/CrawfordCurrie; %BR% &copy; 2009 TWiki:Main/SopanShewale; %BR% &copy; 2004-2010 TWiki:TWiki/TWikiContributor |
+|  Plugin Author: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk inspired by the work of TWiki:Main.DavidWeller and TWiki:Main.PeterMasiar |
+|  Copyright: | &copy; 2004, TWiki:Main.CrawfordCurrie; %BR% &copy; 2009 TWiki:Main.SopanShewale; %BR% &copy; 2004-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-03-28: | TWikibug:Item6672 - doc improvements: Adding link to HIDE |
 |  2010-12-11: | TWikibug:Item6530 - doc improvements -- TWiki:Main.ScottGutman |
 |  2010-05-16: | TWikibug:Item6433 - doc improvements |
 |  2010-03-19 | TWikibug:Item6404 Use $br in newline parameter for break tag instead of turning off encoding -- TWiki:Main/PeterThoeny |

@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004 Crawford Currie
-# Copyright (C) 2001-2010 TWiki Contributors. All Rights Reserved.
+# Copyright (C) 2001-2011 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -30,7 +30,7 @@ require TWiki::Plugins;
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-12-11';
+$RELEASE = '2011-03-28';
 
 $SHORTDESCRIPTION = 'Allows users to quickly post comments to a page without an edit/preview/save cycle';
 
