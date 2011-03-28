@@ -216,6 +216,7 @@ BEGIN {
         FORMFIELD         => \&FORMFIELD,
         GMTIME            => \&GMTIME,
         GROUPS            => \&GROUPS,
+        HIDE              => \&HIDE,
         HTTP_HOST         => \&HTTP_HOST_deprecated,
         HTTP              => \&HTTP,
         HTTPS             => \&HTTPS,
@@ -3573,6 +3574,11 @@ sub IF {
         delete $this->{evaluating_if}->{$texpr};
     };
     return $result;
+}
+
+sub HIDE {
+    # return empty string
+    return '';
 }
 
 sub _fixHeadingOffset
