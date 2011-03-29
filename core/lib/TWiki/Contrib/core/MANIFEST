@@ -750,8 +750,11 @@ pub/TWiki/TWikiDocGraphics/checked-square.gif 0644
 pub/TWiki/TWikiDocGraphics/choice-cancel.gif 0644
 pub/TWiki/TWikiDocGraphics/choice-no.gif 0644
 pub/TWiki/TWikiDocGraphics/choice-yes.gif 0644
+pub/TWiki/TWikiDocGraphics/close.gif 0644
 pub/TWiki/TWikiDocGraphics/closed.gif 0644
 pub/TWiki/TWikiDocGraphics/code.gif 0644
+pub/TWiki/TWikiDocGraphics/color-wheel.gif 0644
+pub/TWiki/TWikiDocGraphics/color-wheel-bg.gif 0644
 pub/TWiki/TWikiDocGraphics/comments.gif 0644
 pub/TWiki/TWikiDocGraphics/connections.gif 0644
 pub/TWiki/TWikiDocGraphics/css.gif 0644
@@ -810,6 +813,7 @@ pub/TWiki/TWikiDocGraphics/h.gif 0644
 pub/TWiki/TWikiDocGraphics/hand.gif 0644
 pub/TWiki/TWikiDocGraphics/heart.gif 0644
 pub/TWiki/TWikiDocGraphics/help.gif 0644
+pub/TWiki/TWikiDocGraphics/help-video.gif 0644
 pub/TWiki/TWikiDocGraphics/hlp.gif 0644
 pub/TWiki/TWikiDocGraphics/home.gif 0644
 pub/TWiki/TWikiDocGraphics/hourglass.gif 0644
@@ -857,6 +861,7 @@ pub/TWiki/TWikiDocGraphics/lockfolder.gif 0644
 pub/TWiki/TWikiDocGraphics/lockfoldergray.gif 0644
 pub/TWiki/TWikiDocGraphics/locktopic.gif 0644
 pub/TWiki/TWikiDocGraphics/locktopicgray.gif 0644
+pub/TWiki/TWikiDocGraphics/lock-open.gif 0644
 pub/TWiki/TWikiDocGraphics/logout.gif 0644
 pub/TWiki/TWikiDocGraphics/luggage.gif 0644
 pub/TWiki/TWikiDocGraphics/mail.gif 0644
@@ -899,6 +904,8 @@ pub/TWiki/TWikiDocGraphics/presentation.gif 0644
 pub/TWiki/TWikiDocGraphics/printtopic.gif 0644
 pub/TWiki/TWikiDocGraphics/process.gif 0644
 pub/TWiki/TWikiDocGraphics/processing.gif 0644
+pub/TWiki/TWikiDocGraphics/processing-bar.gif 0644
+pub/TWiki/TWikiDocGraphics/processing-bar-wide.gif 0644
 pub/TWiki/TWikiDocGraphics/processing-bg.gif 0644
 pub/TWiki/TWikiDocGraphics/processing-32.gif 0644
 pub/TWiki/TWikiDocGraphics/processing-32-bg.gif 0644
@@ -908,6 +915,7 @@ pub/TWiki/TWikiDocGraphics/ps.gif 0644
 pub/TWiki/TWikiDocGraphics/psd.gif 0644
 pub/TWiki/TWikiDocGraphics/puzzle.gif 0644
 pub/TWiki/TWikiDocGraphics/py.gif 0644
+pub/TWiki/TWikiDocGraphics/qrcode.gif 0644
 pub/TWiki/TWikiDocGraphics/question.gif 0644
 pub/TWiki/TWikiDocGraphics/quiet.gif 0644
 pub/TWiki/TWikiDocGraphics/radioactive.gif 0644
