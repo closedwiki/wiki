@@ -139,6 +139,9 @@ sub login {
     my $loginPass = $query->param( 'password' );
     my $remember  = $query->param( 'remember' );
 
+    # cleanup origurl parameters
+    $origurl   =~ s/[^a-zA-Z0-9_\-\.\:\/\?\;\&]//g;
+
     # Eat these so there's no risk of accidental passthrough
     $query->delete( 'origurl', 'username', 'password' );
 
