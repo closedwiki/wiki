@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301378188" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1301415531" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.0.2 (Helsinki), 2011-03-29
 
 %TOC%
@@ -256,6 +256,7 @@ Total: 15
 ---+++ Fixes
 
 <noautolink>
+| TWikibug:Item5384 | Allow Delete of Duplicate Attachments |
 | TWikibug:Item6491 | Missing template change in TWiki-5.0.0 for EDITMETHOD setting |
 | TWikibug:Item6604 | Documentation missing for EDITMETHOD setting |
 | TWikibug:Item6625 | Documentation for time format not available to normal users |
