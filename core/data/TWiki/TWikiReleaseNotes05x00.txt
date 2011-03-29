@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1294117992" format="1.1" version="$Rev$"}%
----+!! Release Notes of TWiki-5.0.1 (Helsinki), 2010-10-10
+%META:TOPICINFO{author="TWikiContributor" date="1301378188" format="1.1" version="$Rev$"}%
+---+!! Release Notes of TWiki-5.0.2 (Helsinki), 2011-03-29
 
 %TOC%
 
@@ -9,7 +9,9 @@ TWiki-5.0.0 released on 2010-05-29 is a major release introducing usability enha
 
 TWiki-5.0.1 released on 2010-10-10 is a patch release that adds some minor new features and fixes a number of bugs.
 
-It is highly recommended to upgrade to TWiki-5.0.1. Users will find this release much more stable and secure in daily use.
+TWiki-5.0.2 released on 2011-03-29 is a patch release that adds some minor new features and fixes a number of bugs.
+
+It is highly recommended to upgrade to TWiki-5.0.2. Users will find this release much more stable and secure in daily use.
 
 ---++ New Features Highlights
 
@@ -26,16 +28,21 @@ It is highly recommended to upgrade to TWiki-5.0.1. Users will find this release
    * *TWiki Application Platform Enhancements*
       * Pre-installed JQueryPlugin, adding a lightweight cross-browser !JavaScript library designed to simplify the client-side scripting of HTML.
       * Improvements to ENCODE, IF, URLPARAM, WEB and WEBLIST variables.
+      * The SlideShowPlugin now supports keystrokes to navigate the slides - added in TWiki-5.0.2
+      * The JQueryPlugin has now jquery-1.5.1 and jquery-ui-1.8.10 - updated in TWiki-5.0.2
    * *Search Enhancements*
       * Query syntax with array size, useful to query TWiki forms and attachments.
       * Query syntax can be used in format parameter of search, giving more control over formatting.
    * *Miscellaneous Feature Enhancements*
       * Adding 51 new TWikiDocGraphics icons, and 11 updated icons.
+      * Adding 3 new TWikiDocGraphics icons, and 1 updated icon - added in TWiki-5.0.1
+      * Adding 8 new TWikiDocGraphics icons, and 2 updated icons - added in TWiki-5.0.2
       * The TWiki doc graphics library is now aware of image size and is cached for speed.
       * Support authenticated proxy - added in TWiki-5.0.1
    * *Plugin Enhancements*
       * SpreadSheetPlugin: Improvements to $TIME() and $NOP() functions.
       * SpreadSheetPlugin: Add ISO 8601 week number to FORMATTIME - added in TWiki-5.0.1
+      * SpreadSheetPlugin: New $SPLIT() and $LISTNONEMPTY() functions - added in TWiki-5.0.2
       * HeadlinesPlugin: New touch parameter in HEADLINES variable to alert users via e-mail notification of news updates
       * API: New TWiki::Func::buildWikiWord function
 
@@ -43,7 +50,7 @@ See the full list of new features and bug fixes further below.
 
 ---++ Pre-installed Extensions
 
-TWiki-5.0.1 ships with:
+TWiki-5.0.2 ships with:
 
    * *Plugins:* CommentPlugin, EditTablePlugin, EmptyPlugin, HeadlinesPlugin, InterwikiPlugin, JQueryPlugin, PreferencesPlugin, RenderListPlugin, SlideShowPlugin, SmiliesPlugin, SpreadSheetPlugin, TablePlugin, TinyMCEPlugin, TagMePlugin, TWikiNetSkinPlugin, TwistyPlugin, WysiwygPlugin
    * *Contribs:* BehaviourContrib, JSCalendarContrib, MailerContrib, TipsContrib, TWikiUserMappingContrib, TwistyContrib
@@ -173,9 +180,9 @@ TWiki-5.0.1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRele
 
 <noautolink>
 | TWikibug:Item6475 | TopMenuSkin v1.5 work: Better indication of breadcrumb in top menu |
-| TWikibug:Item6479 | Documentation enhancements for TWiki 5.0.1  |
+| TWikibug:Item6479 | Documentation enhancements for TWiki 5.0.1 |
 | TWikibug:Item6482 | TopMenuSkin v1.6: XHTML validation fixes; moving CSS to HTML head using ADDTOHEAD variable |
-| TWikibug:Item6483 | Add angle brackets (< and >) to format tokens |
+| TWikibug:Item6483 | Add angle brackets (&lt; and &gt;) to format tokens |
 | TWikibug:Item6488 | Better display of topic diffs in debug mode (rdiff) |
 | TWikibug:Item6497 | New TWiki Doc Graphics images topmenu, twiki-gray, uweb-o14 |
 | TWikibug:Item6499 | PatternSkin: Less screeming submit and cancel buttons, aligning with color palette of TopMenuSkin |
@@ -220,5 +227,43 @@ Total: 14
 | TWikibug:Item6583 | mod_perl error: %ENV is aliased to another variable while running with -T switch |
 </noautolink>
 Total: 25
+
+---++ TWiki-5.0.2 Patch Release - Details
+
+TWiki-5.0.2 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x00 revision 20827 (2011-03-29)
+
+---+++ Enhancements
+
+<noautolink>
+| TWikibug:Item2385 | Add IP address to registration e-mail confirming e-mail address |
+| TWikibug:Item6589 | New TWiki Doc Graphics icons for TWiki 5.0.2 |
+| TWikibug:Item6593 | Documentation enhancements for TWiki 5.0.2 |
+| TWikibug:Item6603 | JSCalendarContrib: Add transparent image for nicer date button in TWiki Forms |
+| TWikibug:Item6608 | PatternSkin: Reduce font size of H1 and H2 headings |
+| TWikibug:Item6609 | In TWikiForms type table, automatically list form field types that are defined in contribs |
+| TWikibug:Item6614 | TopMenuSkin: Always show register link in Account menu, regardless of login status |
+| TWikibug:Item6618 | User definable topic parent for new user homepages |
+| TWikibug:Item6621 | In QUERYPARAMS, deprecate encoding="" parameter, and add encode="" |
+| TWikibug:Item6622 | PatternSkin: Don't hide non-hidden attachments |
+| TWikibug:Item6626 | SlideShowPlugin: New slide navigation using keys: Home, Left-arrow, Page-up, Right-arrow, Page-down, End and Esc |
+| TWikibug:Item6653 | JQueryPlugin: Update plugin to jquery-1.5.1 and jquery-ui-1.8.10 |
+| TWikibug:Item6659 | TopMenuSkin: Customizable web-specific top bar |
+| TWikibug:Item6666 | SpreadSheetPlugin: New SPLIT() function |
+| TWikibug:Item6669 | SpreadSheetPlugin: Add LISTNONEMPTY() function that removes empty elements from a list |
+</noautolink>
+Total: 15
+
+---+++ Fixes
+
+<noautolink>
+| TWikibug:Item6491 | Missing template change in TWiki-5.0.0 for EDITMETHOD setting |
+| TWikibug:Item6604 | Documentation missing for EDITMETHOD setting |
+| TWikibug:Item6625 | Documentation for time format not available to normal users |
+| TWikibug:Item6634 | Topic links in included topics not web-prefixed if WikiWord ends with punctuation |
+| TWikibug:Item6667 | SpreadSheetPlugin: RIGHT() has wrong result due to incorrect start cell |
+| TWikibug:Item6668 | SpreadSheetPlugin: LIST() does not flatten a list in a cell |
+| TWikibug:Item6673 | Make login more robust |
+</noautolink>
+Total: 7
 
 __Related Topics:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide, %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%

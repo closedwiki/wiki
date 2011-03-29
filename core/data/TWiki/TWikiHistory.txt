@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1286773363" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1301378180" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
 %TOC%
 
 #HelsinkiRelease
----++ TWiki Release 5.0 (Helsinki) released on 2010-05-29 &amp; 2010-10-10
+---++ TWiki Release 5.0 (Helsinki) released on 2010-05-29 &amp; 2011-03-29
 
 __New Features and Enhancements of TWiki Release 5.0__
 
@@ -17,21 +17,30 @@ __New Features and Enhancements of TWiki Release 5.0__
       * Attach multiple files at once, useful when attaching many files.
       * Pre-installed TagMePlugin, useful to tag topics to quickly access content in a large TWiki.
       * Upgraded TinyMCEPlugin to latest !TinyMCE 3.2.4.1 for better WYSIWYG editing experience.
+      * Better indication of breadcrumb in top menu of !TopMenuSkin - added in TWiki-5.0.1
+      * Better display of topic diffs in debug mode - added in TWiki-5.0.1
    * *TWiki Application Platform Enhancements*
       * Pre-installed JQueryPlugin, adding a lightweight cross-browser !JavaScript library designed to simplify the client-side scripting of HTML.
       * Improvements to ENCODE, IF, URLPARAM, WEB and WEBLIST variables.
+      * The SlideShowPlugin now supports keystrokes to navigate the slides - added in TWiki-5.0.2
+      * The JQueryPlugin has now jquery-1.5.1 and jquery-ui-1.8.10 - updated in TWiki-5.0.2
    * *Search Enhancements*
       * Query syntax with array size, useful to query TWiki forms and attachments.
       * Query syntax can be used in format parameter of search, giving more control over formatting.
    * *Miscellaneous Feature Enhancements*
       * Adding 51 new TWikiDocGraphics icons, and 11 updated icons.
+      * Adding 3 new TWikiDocGraphics icons, and 1 updated icon - added in TWiki-5.0.1
+      * Adding 8 new TWikiDocGraphics icons, and 2 updated icons - added in TWiki-5.0.2
       * The TWiki doc graphics library is now aware of image size and is cached for speed.
+      * Support authenticated proxy - added in TWiki-5.0.1
    * *Plugin Enhancements*
       * SpreadSheetPlugin: Improvements to $TIME() and $NOP() functions.
+      * SpreadSheetPlugin: Add ISO 8601 week number to FORMATTIME - added in TWiki-5.0.1
+      * SpreadSheetPlugin: New $SPLIT() and $LISTNONEMPTY() functions - added in TWiki-5.0.2
       * HeadlinesPlugin: New touch parameter in HEADLINES variable to alert users via e-mail notification of news updates
       * API: New TWiki::Func::buildWikiWord function
    * *Bug Fixes*
-      * 38 bug fixes since TWiki-4.3.2
+      * 70 bug fixes since TWiki-4.3.2
 
 #HelsinkiHallOfFame
 __Hall of Fame of TWiki Release 5.0__
