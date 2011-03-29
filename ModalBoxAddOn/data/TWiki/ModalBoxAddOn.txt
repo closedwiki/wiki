@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299394138" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1301368331" format="1.1" version="$Rev$"}%
 ---+!! !ModalBoxAddOn
 <!--
    Contributions to this add-on are appreciated. Please update the contrib page at
@@ -197,7 +197,7 @@ $(document).ready(function() {
   });
  $("#ajax_dialog").click(function() {
   $.get(
-   '%SCRIPTURL{view}%/%SYSTEMWEB%/FormatTokens?',
+   '%SCRIPTURL{view}%/%SYSTEMWEB%/FormatTokens',
    { skin: 'text', contenttype: 'text/plain' },
    function(data) {
     $('div#ajax_content').html(
@@ -230,7 +230,7 @@ $(document).ready(function() {
   });
  $("#ajax_dialog").click(function() {
   $.get(
-   '%SCRIPTURL{view}%/%SYSTEMWEB%/FormatTokens?',
+   '%SCRIPTURL{view}%/%SYSTEMWEB%/FormatTokens',
    { skin: 'text', contenttype: 'text/plain' },
    function(data) {
     $('div#ajax_content').html(
@@ -293,8 +293,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] <br /> &copy; 2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2011-03-05 |
+|  Add-on Version: | 2011-03-28 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-03-28: | TWikibug:Item6651: Small fix in Ajax dialog box example |
 |  2011-03-05: | TWikibug:Item6651: Adding Ajax dialog box example |
 |  2011-03-02: | TWikibug:Item6651: Initial version |
 |  TWiki Dependency: | JQueryPlugin version 2011-03-01 |
@@ -305,7 +306,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/ModalBoxAddOnDev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/ModalBoxAddOnAppraisal |
 
-__Related Topic:__ %SYSTEMWEB%.TWikiAddOns
+__Related Topic:__ %SYSTEMWEB%.TWikiAddOns, JQueryPlugin
 
 %META:FILEATTACHMENT{name="twiki-logo-80x40-t.gif" attachment="twiki-logo-80x40-t.gif" attr="h" comment="" date="1298714824" path="twiki-logo-80x40-t.gif" size="1999" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1299055098" path="screenshot.png" size="67287" user="TWikiContributor" version="1"}%

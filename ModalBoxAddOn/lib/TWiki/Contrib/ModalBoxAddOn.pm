@@ -17,6 +17,6 @@ package TWiki::Contrib::ModalBoxAddOn;
 
 use vars qw( $VERSION $RELEASE );
 $VERSION = '$Rev$';
-$RELEASE = '2011-03-05';
+$RELEASE = '2011-03-28';
 
 1;
