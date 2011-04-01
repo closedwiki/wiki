@@ -126,7 +126,7 @@ sub handleClear {
 
 ###############################################################################
 sub jQueryUI {
-  return if $doneJQueryUI;
+  return '' if $doneJQueryUI;
   $doneJQueryUI = 1;
   return "<script type=\"text/javascript\" src=\"$jqPubUrlPath/jquery-ui.js\"></script>";
 }
