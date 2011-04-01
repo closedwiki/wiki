@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299047154" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1301680698" format="1.1" version="$Rev$"}%
 ---+!! JQuery Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -105,7 +105,7 @@ See the Sandbox.JQueryPluginExamples page for a demo of a couple of widgets used
 
 ---++ Themes
 
-See [[http://jqueryui.com/themeroller/][jQuery Theme Roller]] for look & feel of available themes. The !JQueryPlugin ships with the following themes:
+See [[http://jqueryui.com/themeroller/][jQuery Theme Roller]] for look & feel of available themes. The !JQueryPlugin ships with the following themes that can be activated using =%<nop>JQTHEME{...}%=:
 
    * =black-tie=
    * =cupertino=
@@ -157,11 +157,12 @@ See [[http://jqueryui.com/themeroller/][jQuery Theme Roller]] for look & feel of
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Copyright: | &copy; 2007-2008 Michael Daum http://michaeldaumconsulting.com <br /> &copy; 2008-2010 TWiki:TWiki/TWikiContributor |
+|  Plugin Author: | TWiki:Main.MichaelDaum, TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2007-2008 Michael Daum http://michaeldaumconsulting.com <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 1.2 (2011-03-01) |
+|  Plugin Version: | 1.3 (2011-04-01) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-03-01: | TWikibug:Item6675: Possible to specify JQTHEME more than once per page, but only first one takes effect -- TWiki:Main.PeterThoeny |
 |  2011-03-01: | TWikibug:Item6653: Update plugin to jquery-1.5.1 and jquery-ui-1.8.10 -- TWiki:Main.PeterThoeny |
 |  2010-06-08: | TWikibug:Item6486 - upgrade to latest jquery-1.4.2 release -- TWiki:Main/SopanShewale; add variable documentation topics !VarJQTABPANE, !VarJQTAB, !VarJQENDTAB, !VarJQENDTABPANE -- TWiki:Main/PeterThoeny |
 |  2010-04-25: | TWikibug:Item6436 - renamed too generic variable names BUTTON, TOGGLE, CLEAR, TABPANE, ENDTABPANE, TAB, ENDTAB to JQBUTTON, JQTOGGLE, JQCLEAR, JQTABPANE, JQENDTABPANE, JQTAB, JQENDTAB, respectively. Old variables names available if configure setting is set: =$TWiki::cfg{JQueryPlugin}{Legacy2008} = 1;= -- TWiki:Main/PeterThoeny |
