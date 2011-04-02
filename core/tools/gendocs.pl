@@ -1,5 +1,11 @@
 #!/usr/bin/perl -w
+# TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
 # Copyright (C) 2005 Crawford Currie - all rights reserved
+# Copyright (C) 2005-2011 TWiki Contributors. All Rights Reserved. 
+# TWiki Contributors are listed in the AUTHORS file in the root
+# of this distribution.
+#
 # Generate TWiki code documentation topics in the current
 # checkout area
 # This script must be run from the 'tools' directory.

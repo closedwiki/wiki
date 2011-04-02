@@ -2,7 +2,7 @@
 
 # addpod.pl - tool to add TWiki-style POD function doc headers
 #
-# Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 1999-2011 Peter Thoeny, peter[at]thoeny.org
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or

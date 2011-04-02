@@ -2,7 +2,7 @@
 #
 # Build for TWiki
 # Crawford Currie & Sven Dowideit
-# Copyright (C) TWikiContributors, 2005
+# Copyright (C) 2005-2011 TWikiContributors
 
 use strict;
 
