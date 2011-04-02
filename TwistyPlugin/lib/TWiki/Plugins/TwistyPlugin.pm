@@ -1,7 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2005 Rafael Alvarez, soronthar@sourceforge.net
-# Copyright (C) 2005-2010 Peter Thoeny, peter@thoeny.org and
+# Copyright (C) 2005-2011 Peter Thoeny, peter[at]thoeny.org and
 # TWiki Contributors.
 #
 # This program is free software; you can redistribute it and/or
