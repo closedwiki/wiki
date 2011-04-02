@@ -7,8 +7,7 @@
 #
 # Additional copyrights apply to some or all of the code in this
 # file as follows:
-# Copyright (c) 1999-2004 Peter Thoeny, peter@thoeny.com
-#           (c) 2001 Kevin Atkinson, kevin twiki at atkinson dhs org
+# Copyright (c) 2001 Kevin Atkinson, kevin twiki at atkinson dhs org
 #           (c) 2003-2008 SvenDowideit, SvenDowideit@home.org.au
 #           (c) 2003 Graeme Pyle graeme@raspberry dot co dot za
 #           (c) 2004 Martin Cleaver, Martin.Cleaver@BCS.org.uk
