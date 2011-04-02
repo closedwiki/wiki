@@ -1,6 +1,6 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005-2010 TWiki Contributors. All Rights Reserved.
+# Copyright (C) 2005-2011 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution. NOTE: Please extend that file, not this notice.
 #
@@ -139,7 +139,7 @@ sub login {
     my $loginPass = $query->param( 'password' );
     my $remember  = $query->param( 'remember' );
 
-    # cleanup origurl parameters
+    # Item6673: Cleanup origurl parameter
     $origurl   =~ s/[^a-zA-Z0-9_\-\.\:\/\?\;\&]//g;
 
     # Eat these so there's no risk of accidental passthrough
