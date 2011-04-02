@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2002-2010 Peter Thoeny, peter@thoeny.org, and
+# Copyright (C) 2002-2011 Peter Thoeny, peter[at]thoeny.org, and
 # TWiki Contributors.
 #
 # This program is free software; you can redistribute it and/or
