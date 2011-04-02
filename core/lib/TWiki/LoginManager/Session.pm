@@ -1,6 +1,6 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 1999-2011 Peter Thoeny, peter[at]thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -41,7 +41,7 @@ use base 'CGI::Session';
 
 sub load {
     my $this = shift;
-#    local %ENV; # TWikibug:Item6583 - commented out
+    # local %ENV; # TWikibug:Item6583 - commented out
     $ENV{REMOTE_ADDR} = @_ == 1 ? $_[0]->remoteAddress : $_[1]->remoteAddress;
     $this->SUPER::load(@_);
 }
