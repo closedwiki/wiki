@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2007-2010 TWiki Contributors. All Rights Reserved.
+# Copyright (C) 2007-2011 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 #
