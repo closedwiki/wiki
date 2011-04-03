@@ -24,8 +24,8 @@ package TWiki::Plugins::SendEmailPlugin;
 use strict;
 use TWiki::Func;
 
-our $VERSION    = '$Rev: 6581 (2010-02-28) $';
-our $RELEASE    = '1.5.1';
+our $VERSION    = '$Rev$';
+our $RELEASE    = '2011-04-02';
 our $pluginName = 'SendEmailPlugin';
 our $SHORTDESCRIPTION = "Allows to send e-mails through an e-mail form.";
 our $NO_PREFS_IN_TOPIC = 1;
