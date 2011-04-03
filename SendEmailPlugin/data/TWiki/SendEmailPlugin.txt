@@ -1,58 +1,140 @@
-%META:TOPICINFO{author="TWikiContributor" date="1214322287" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1301804244" format="1.1" version="$Rev$"}%
 ---+!! Send Email Plugin
 
-*Allows to send e-mail through an e-mail form.*
+Allows to send e-mails through an e-mail form.
+
+<img src="%PUBURLPATH%/%WEB%/%TOPIC%/screenshot.png" alt="Screenshot" width='797' height='378' />
 
 %TOC%
 
 ---++ Usage
+   1 Create a form on the page that invokes the =sendemail= script
+   1 Add a "to" field and a submit button
+   1 Make sure to fill in allowed 'to' addresses in setting ={Permissions}{Allow}{MailTo}= in [[%SCRIPTURLPATH{configure}%#SendEmailPlugin$Extensions][configure]]
 
-   * Create a form on the page.
-      * Call =action= script =sendemail=
-         * =action="%<nop>SCRIPTURL{sendemail}%/%<nop>WEB%/%<nop>TOPIC%"=
-      * Required is a field with =name="to"=
-      * Optional are the fields =cc=, =subject=, =body=, =template=,  =redirectto=, =successsection= and =errorsection=
-      * The =from= field may be used but defaults to the address of the current user.
-   * To show feedback write =%<nop>SENDEMAIL%= anywhere on the page where the feedback should appear.
-      * Optionally pass parameters =feedbackSuccess= and =feedbackError=. 
-        Default feedback messages are set below in [[#PluginSettings][Plugin Settings]].
-   * The =redirectto= is an url to redirect to a different landing page after the mail has been sent.
-   * The =successsection= parameter optionally sets the named section to be extracted.
-   * The =errorsection= parameter specifies the named section to be extracted when an error occured.
-   * To customize the email, including its header, create a new template file (or topic) and set the
-     =template= parameter to it. The default template is stored in the =sendemail.tmpl= file:
-     <verbatim>
+%TWISTY{showlink=" Show code" hidelink=" Hide code" showimgleft="%ICONURLPATH{toggleopen}%" hideimgleft="%ICONURLPATH{toggleclose}%" mode="div"}%
+<verbatim>
+<form enctype="application/x-www-form-urlencoded" name="mailform" action="%SCRIPTURL{sendemail}%/%WEB%/%TOPIC%" method="POST">
+<input type="hidden" name="subject" value="hello!" />
+<input type="text" class="twikiInputField" name="to" size="30" />&nbsp;
+<input type="submit" class="twikiSubmit" value="Send" />
+</form>
+</verbatim>
+%ENDTWISTY%
+
+<form enctype="application/x-www-form-urlencoded" name="mailform" action="%SCRIPTURL{sendemail}%/%WEB%/%TOPIC%" method="POST">
+<input type="hidden" name="subject" value="hello!" />
+<input class="twikiInputField" name="to" size="30" type="text" />&nbsp;
+<input type="submit" class="twikiSubmit" value="Send" />
+
+---++ Usage details
+
+Sending emails through a form may contain these elements:
+   1 An HTML form
+   1 Allow/restrict settings in configure
+   1 Optionally a feedback message variable =SENDEMAIL=
+   1 Optionally a custom email template
+
+---+++ HTML form elements
+
+The HTML form encapsulates the data to be sent, each part passed as a form field, either an input field or hidden field.
+<verbatim>
+<form enctype="application/x-www-form-urlencoded" name="mailform" action="%SCRIPTURL{sendemail}%/%WEB%/%TOPIC%" method="POST">
+... fields ...
+<input type="submit" class="twikiSubmit" value="Send" />
+</form>
+</verbatim>
+
+Note, that the =from=, =to= and =cc= parameters can be either an email address or a wiki user name, in which case the email address of that wiki user is used instead.
+
+%TABLE{tablewidth="100%" columnwidths="15%,5%,25%,55%" sort="off" headerbg="#f5f5f5" databg="#ffffff" headercolor="#333333"}%
+| *Element* | *Required* | *Description* | *Example* |
+| =name,method=   | Required | A form must have a name; send method is POST. | |
+| =action=  | Required | Must call =sendemail= script | =action="%<nop>SCRIPTURL{sendemail}%/%<nop>WEB%/%<nop>TOPIC%"= |
+| =to= field | Required | Text input field or hidden field | =&lt;input class="twikiInputField" name="to" size="30" type="text" /&gt;= |
+| =from= field | Optional | Text input field or hidden field. May be used to specify a different sender, otherwise defaults to the mail address of the current user. | =&lt;input class="twikiInputField" name="from" size="30" type="text" /&gt;= |
+| =cc= field | Optional | Text input field or hidden field | =&lt;input class="twikiInputField" name="cc" size="30" type="text" /&gt;= |
+| =subject= field | Optional | Text input field or hidden field | =&lt;input class="twikiInputField" name="subject" size="30" type="text" /&gt;= |
+| =body= field | Optional | Textarea or hidden field | =&lt;textarea class="twikiInputField" cols="70" name="body" rows="6" style="width:100%"&gt;&lt;/textarea&gt;= |
+| =mailtemplate= field | Optional | (Presumably) hidden field. See [[%TOPIC%#EmailTemplate][Email template]] | =&lt;input type="hidden" name="mailtemplate" value="Main.MailTemplate" /&gt;= | 
+| =redirectto= field | Optional | (Presumably) hidden field. If passed, after a sent success or error, the page gets redirected to this url. | =&lt;input type="hidden" name="redirectto" value="%<nop>SCRIPTURL{view}%/%<nop>WEB%/MailFeedback" /&gt;= |
+| =successsection= field | Optional | (Presumably) hidden field. Will display a named section (that you define using =STARTSECTION= and =ENDSECTION= after a successful sent. | =&lt;input type="hidden" name="successsection" value="feedbackYes" /&gt;= |
+| =errorsection= field | Optional | (Presumably) hidden field. Will display a named section (that you define using =STARTSECTION= and =ENDSECTION= after an unsuccessful sent. | =&lt;input type="hidden" name="errorsection" value="feedbackNo" /&gt;= |
+
+
+---+++ Allow/restrict settings
+To prevent this plugin to be used as open email relay, by default sending emails is prohibited. To send out mails, first set the mail addresses you want to allow to send to in [[%SCRIPTURLPATH{configure}%#SendEmailPlugin$Extensions][configure]]. Each can be a list of comma separated regular expressions that emails are checked against before allowing the mail to be sent.
+   * ={Plugins}{SendEmailPlugin}{Permissions}{Allow}{MailTo}= - enter =.*= to allow to send to anyone
+   * ={Plugins}{SendEmailPlugin}{Permissions}{Deny}{MailTo}=
+
+Other preferences can be set depending on your needs:
+   * ={Plugins}{SendEmailPlugin}{Permissions}{Allow}{MailFrom}=
+   * ={Plugins}{SendEmailPlugin}{Permissions}{Deny}{MailFrom}=
+   * ={Plugins}{SendEmailPlugin}{Permissions}{Allow}{MailCc}=
+   * ={Plugins}{SendEmailPlugin}{Permissions}{Deny}{MailCc}=
+
+Each =Deny= is evaluated after each =Allow=, so Deny settings overrule Allow settings.
+
+---++++ Examples of allow/restrict settings
+   * Allow to send to:
+      * Set ={SendEmailPlugin}{Permissions}{Allow}{MailTo}= to:
+         * =john@tar.com= to only allow to send mails to John
+         * =john@tar.com|mary@look.ca= to allow to send mails to John and Mary
+         * =.*@tar.com= to send mails to any address at @tar.com
+         * =.*@tar.com,mary@.*= to send mails to any address at @tar.com and to all Marys in the world
+   * Deny to send to:
+      * Set ={SendEmailPlugin}{Permissions}{Deny}{MailTo}= to:
+         * =.*@tar.com= to deny to any address at @tar.com
+         * =.*= to deny any address (no emails will be sent)
+
+The same rules apply for ={MailFrom}= and ={MailCc}=.
+
+---+++ Feedback notifications
+Use the variable =SENDEMAIL= to write a feedback message on the page, on the position of the variable.
+
+Simply:
+<verbatim>
+%SENDEMAIL%
+</verbatim>
+will write a feedback message (if any), using the default message strings set in [[%SCRIPTURLPATH{configure}%#SendEmailPlugin$Extensions][configure]].
+
+The message can be tailored using SENDEMAIL parameters:
+
+%TABLE{tablewidth="100%" columnwidths="15%,35%,55%" sort="off" headerbg="#f5f5f5" databg="#ffffff" headercolor="#333333"}%
+| *Parameter* | *Description* | *Example* |
+| =feedbackSuccess= | Message string in case of successful send. | =feedbackSuccess="Request sent, we'll contact you shortly."= | 
+| =feedbackError= | Message string in case of unsuccessful send. | =feedbackError="Could not send your message, please contact us."= | 
+| =format= | A format string. Use =$message= as placeholder for the actual feedback message. | =format="&lt;div class=\"twikiNotification\"&gt;$message&lt;/div&gt;"= | 
+
+---++++ Feedback notification example
+<verbatim>
+%SENDEMAIL{
+feedbackSuccess="Request sent, we'll contact you shortly."
+feedbackError="Could not send your message, please contact us."
+format="<div class=\"twikiNotification\">$message</div>"
+}%
+</verbatim>
+
+#EmailTemplate
+---+++ Email template
+To customize the email, including its header, create a new template topic and pass the topic name in a =mailtemplate= form field. The default template is SendEmailPluginTemplate:
+
+<verbatim>
 From: %FROM%
 To: %TO%
 CC: %CC%
 Subject: %SUBJECT%
 
-%BODY%</verbatim>
-      The tags =%<nop>FROM%=, =%<nop>TO%=, =%<nop>CC%=, =%<nop>SUBJECT%= and =%<nop>BODY%= are replaced
-      with the respective url parameter when the email is created.
-   * The value of the recipient's and sender's email address can be restricted using the
-     preference variables: 
-     =ALLOWMAILTO=,
-     =DENYMAILTO=,
-     =ALLOWMAILFROM=,
-     =DENYMAILFROM=,
-     =ALLOWMAILCC= and 
-     =DENYMAILCC=. 
-     Each can be a list of comma separated regular expressions that emails are checked against before
-     allowing the mail to be send. This is needed to prevent this plugin from being used as an open email relay
-     and potentially being missused to create spam emails. By default, this plugin will prohibit any email to be send.
-     You will have to change the settings [[#PluginSettings][below]] to match your needs. Preferably,
-     keep the settings as they are as a security measure and enable sending emails on a per-form basis
-     by setting the respective topic preferences in the topic holding the send-email form. For example, to
-     allow the email form on the current topic to be send to the <nop>support, use the following settings
-     <verbatim>
-* Set ALLOWMAILTO = support
-* Set DENYMAILTO =
-* Set DENYMAILFROM = </verbatim>
-   * Note, that the =From=, =To= and =CC= parameters can be either an email address or a wiki user name,
-     in which case the email address of that wiki user is used instead.
+%BODY%
+</verbatim>
+The tags =%<nop>FROM%=, =%<nop>TO%=, =%<nop>CC%=, =%<nop>SUBJECT%= and =%<nop>BODY%= are replaced with the respective form values when the email is created.
 
----++ Example
+For a template topic named =<nop>MailTemplate= you can either pass the name =Mail= or =MailTemplate=.
+
+The search path for templates always starts in the current web.
+
+---++ Examples
+---+++ Example with a handcrafted HTML form
 %TWISTY{showlink=" Show code" hidelink=" Hide code" showimgleft="%ICONURLPATH{toggleopen}%" hideimgleft="%ICONURLPATH{toggleclose}%" mode="div"}%
 <verbatim>
 <form enctype="application/x-www-form-urlencoded" name="mailform" action="%SCRIPTURL{sendemail}%/%WEB%/%TOPIC%" method="POST">
@@ -85,7 +167,7 @@ Subject: %SUBJECT%
 %SENDEMAIL%
 <!--
 %STARTSECTION{"thanks"}%
----+ Notification
+---+!! Notification
 %SENDEMAIL%
 <input type="button" value="Ok" class="twikiButton" onclick="window.location.href='%URLPARAM{"origurl" default="%SCRIPTURLPATH{view}%/%BASEWEB%/%BASETOPIC%"}%'" />
 %ENDSECTION{"thanks"}%
@@ -94,10 +176,9 @@ Subject: %SUBJECT%
 </verbatim>
 %ENDTWISTY%
 
-
 <form enctype="application/x-www-form-urlencoded" name="mailform" action="%SCRIPTURL{sendemail}%/%WEB%/%TOPIC%" method="POST">
 <input type="hidden" name="successsection" value="thanks" />
-<fieldset style="border:1px solid #ddd; padding:1em">
+<fieldset>
 <legend><b>Send Email</b></legend>
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
@@ -124,9 +205,17 @@ Subject: %SUBJECT%
 </form>
 %SENDEMAIL%
 
+%ADDTOHEAD{text="<style type=\"text/css\">
+#patternPage fieldset {
+  border:1px solid #ddd;
+  padding:1em
+}
+</style>
+"}%
+
 <!--
 %STARTSECTION{"thanks"}%
----+ Notification
+---+!! Notification
 %SENDEMAIL%
 <input type="button" value="Ok" class="twikiButton" onclick="window.location.href='%URLPARAM{"origurl" default="%SCRIPTURLPATH{view}%/%BASEWEB%/%BASETOPIC%"}%'" />
 %ENDSECTION{"thanks"}%
@@ -296,8 +385,8 @@ function checkPasswords(inForm) {
 </script>
 
 ---++ FAQ
----+++ How do I send form fields?
-If you have a form with the fields =Title= and =Summary= and want to post the values of these fields in the body of the e-mail, eiter:
+---+++ How do I send data form fields?
+If you have a [[%SYSTEMWEB%.DataForms][data form]] with the fields =Title= and =Summary= and want to post the values of these fields in the body of the e-mail, eiter:
    * put them in a hidden field:
    <verbatim>
 <input type="hidden" name="body" value="Title: %FORMFIELD{"Title"}%, Summary: %FORMFIELD{"Summary"}%" />
@@ -310,67 +399,51 @@ Summary: %FORMFIELD{"Summary"}%
 </textarea>
 </verbatim>
 
-#PluginTest
----++ Plugin Tests
-   * !SendEmailPlugin is %IF{"context SendEmailPluginEnabled" then='%GREEN%enabled%ENDCOLOR%' else='%RED%not enabled%ENDCOLOR%'}%.
 
+#PluginTest
+---++ Plugin test
+   * !SendEmailPlugin is %IF{"context SendEmailPluginEnabled" then='%GREEN%enabled%ENDCOLOR%' else='%RED%not enabled%ENDCOLOR%'}%.
 
 #PluginSettings
 ---++ Plugin Settings
-
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Allows to send e-mail through an e-mail form
-
-   * Default feedback messages:
-      * Set EMAIL_SENT_SUCCESS_MESSAGE = Email sent!
-      * Set EMAIL_SENT_ERROR_MESSAGE = Could not send email.
-
-   * Default mail permissions, (note: by default any emailing is prohibited)
-      * Set ALLOWMAILTO = 
-      * Set DENYMAILTO = .*
-      * Set ALLOWMAILFROM = 
-      * Set DENYMAILFROM = .*
-      * Set ALLOWMAILCC = 
-      * Set DENYMAILCC = .*
-
-   * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 0
-
+<!--
+   * Set SHORTDESCRIPTION = Allows to send e-mails through an e-mail form.
+-->
+   * Plugin settings are set in [[%SCRIPTURLPATH{configure}%#SendEmailPlugin$Extensions][configure]].
+   * Note: by default any emailing is prohibited. Change the settings in configure to set to which addresses you allow mails to be sent from and to.
 
 ---++ CSS classes
-
+HTML elements with these style names are written to the default feedback. 
 | *Class name* | *Note* |
 | =sendEmailPluginNotification=  | Used for feedback after sending a mail  |
 | =sendEmailPluginError=         | Styles =sendEmailPluginNotification= in case of an error   |
 
 
-
 ---++ Plugin Installation Instructions
+You do not need to install anything in the browser to use this extension. The following instructions are for the administrator who installs the extension on the server.
 
-__Note:__ You do not need to install anything on the browser to use this
-plugin. The following instructions are for the administrator who installs the
-plugin on the server where TWiki is running. 
+Open configure, and open the "Extensions" section. Use "Find More Extensions" to get a list of available extensions. Select "Install".
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-%$MANIFEST%
+If you have any problems, or if the extension isn't available in =configure=, then you can still install manually from the command-line. See http://twiki.org/Support/ManuallyInstallingExtensions for more help.
 
-   * If you install this plugin on a TWiki-5 engine you will need to add the following lines
-     to your =LocalSite.cfg=:
-     <verbatim>$TWiki::cfg{SwitchBoard}{sendemail} = ['TWiki::Plugins::SendEmailPlugin::Core', 'sendEmail', {sendemail => 1}];</verbatim>
-     and redirect all calls to =sendemail= to =sendemail-5= in your apache configuration.
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
-|  Copyright: | &copy; 2007 Arthur Clemens; 2008 Michael Daum |
+|  Copyright: | &copy; 2007-2010 Arthur Clemens; 2008 Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 1.2.2, 17 Oct 2008  |
+|  Version: | 6581 (2010-02-28) |
+|  Release: | 1.5.1 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  17 Oct 2008 | 1.2.1 TWiki:Main/MichaelDaum: added support for TWiki-5; fixed sending emails to login names |
-|  26 Jun 2008 | 1.2.0 TWiki:Main/MichaelDaum: \
-                 added ALLOW/DENY preference settings to prevent this plugin from being used as an open spam relay; \
+|  28 Feb 2010 | 1.5.1 Added forgotten =Config.spec= file. |
+|  08 Jan 2010 | 1.5 Arthur Clemens: Improved error feedback; added =format= parameter; moved the mail template to a topic; changed param =template= to =mailtemplate=. |
+|  03 Jan 2010 | 1.4.2 Arthur Clemens: Added configure settings to download. |
+|  29 Mar 2009 | 1.4.1 Arthur Clemens: Removed default restrictions in =Deny= settings so that only the =Allow= setting needs to be set to send emails. |
+|  21 Mar 2009 | 1.4 Arthur Clemens: Moved topic and hardcoded settings to configure. |
+|  06 Nov 2008 | 1.2.3 Michael Daum: Fixed CC emails; fixed css in docu |
+|  17 Oct 2008 | 1.2.1 Michael Daum: Added support for TWiki-5; fixed sending emails to login names |
+|  26 Jun 2008 | 1.2.0 Michael Daum: \
+                 Added ALLOW/DENY preference settings to prevent this plugin from being used as an open spam relay; \
                  added =template= option allowing more control over email header etc; \
                  fixed mod_perl/perperl coding errors;\
                  sender address is the current user, it will default to the wikimaster's only as a last resort; \
@@ -378,17 +451,15 @@ plugin on the server where TWiki is running.
                  allow multiple users in To and Cc; \
                  added a =redirectto=, =successsection= and =errorsection= options to land on a different feedback page; \
                  reorganized code for lazy compilation |
-|  16 may 2007 | 1.1.3 TWiki:Main/ArthurClemens: fixed bug in bin script that caused form query data to get emptied. |
-|  15 may 2007 | 1.1.2 TWiki:Main/ArthurClemens: improved error notifications. |
-|  13 May 2007 | 1.1.1 TWiki:Main/ArthurClemens: changed sendmail script invocation to be called through bin script =sendemail=; added CSS styles for feedback notification; fixed typo 'feedbackSucces'. |
+|  16 may 2007 | 1.1.3 Arthur Clemens: Fixed bug in bin script that caused form query data to get emptied. |
+|  15 may 2007 | 1.1.2 Arthur Clemens: Improved error notifications. |
+|  13 May 2007 | 1.1.1 Arthur Clemens: Changed sendmail script invocation to be called through bin script =sendemail=; added CSS styles for feedback notification; fixed typo 'feedbackSucces'. |
 |  05 May 2007 | 1.0 First release. |
-|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  TWiki Dependency: | None |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
-|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC% |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+%META:FILEATTACHMENT{name="screenshot.png" attr="" autoattached="1" comment="" date="1262991210" path="screenshot.png" size="16751" version=""}%
+%META:FILEATTACHMENT{name="sendemailplugin.css" attr="" autoattached="1" comment="" date="1237669972" path="sendemailplugin.css" size="350" version=""}%
