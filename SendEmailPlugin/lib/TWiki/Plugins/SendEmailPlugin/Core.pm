@@ -1,10 +1,14 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (c) 2006 by Meredith Lesly, Kenneth Lavrsen
-#
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
+# Copyright (c) 2007-2010 by Arthur Clemens, Michael Daum
+# Copyright (C) 2007-2011 TWiki Contributors 
+# All Rights Reserved. TWiki Contributors are listed in the 
+# AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
+#
+# Additional copyrights apply to some or all of the code in this
+# file as follows:
+#   Copyright (c) Foswiki Contributors.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,30 +26,30 @@ package TWiki::Plugins::SendEmailPlugin::Core;
 
 # Always use strict to enforce variable scoping
 use strict;
+use TWiki;
 use TWiki::Func;
 use TWiki::Plugins;
+use CGI qw( :all );
 
 use vars qw( $debug $emailRE );
 
-my $RETRY_COUNT                  = 5;
 my $ERROR_STATUS_TAG             = 'SendEmailErrorStatus';
 my $ERROR_MESSAGE_TAG            = 'SendEmailErrorMessage';
 my $NOTIFICATION_CSS_CLASS       = 'sendEmailPluginNotification';
 my $NOTIFICATION_ERROR_CSS_CLASS = 'sendEmailPluginError';
-my $NOTIFICATION_ANCHOR_NAME     = 'FormPluginNotification';
+my $NOTIFICATION_ANCHOR_NAME     = 'SendEmailNotification';
 my %ERROR_STATUS                 = (
     'noerror' => 1,
     'error'   => 2,
 );
-my $ERROR_TITLE               = ' <nop>%TWIKIWEB%.SendEmailPlugin send error ';
-my $ERROR_BUTTON_LABEL        = 'Show error message';
-my $ERROR_NOT_VALID_EMAIL     = '\'$EMAIL\' is not a valid e-mail address or account';
-my $ERROR_EMPTY_TO_EMAIL      = 'You must pass a \'to\' e-mail address';
-my $ERROR_EMPTY_FROM_EMAIL    = 'You must pass a \'from\' e-mail address';
-my $ERROR_NO_FROM_PERMISSION  = 'No permission to send an e-mail from \'$EMAIL\'';
-my $ERROR_NO_TO_PERMISSION    = 'No permission to send an e-mail to \'$EMAIL\'';
-my $ERROR_NO_CC_PERMISSION    = 'No permission to cc an e-mail to \'$EMAIL\'';
-
+my $EMAIL_SENT_SUCCESS_MESSAGE;
+my $EMAIL_SENT_ERROR_MESSAGE;
+my $ERROR_INVALID_ADDRESS;
+my $ERROR_EMPTY_TO_EMAIL;
+my $ERROR_EMPTY_FROM_EMAIL;
+my $ERROR_NO_PERMISSION_FROM;
+my $ERROR_NO_PERMISSION_TO;
+my $ERROR_NO_PERMISSION_CC;
 
 =pod
 
@@ -53,9 +57,9 @@ writes a debug message if the $debug flag is set
 
 =cut
 
-sub writeDebug {
-  TWiki::Func::writeDebug("SendEmailPlugin -- $_[0]") 
-    if $debug;
+sub _debug {
+    TWiki::Func::writeDebug("SendEmailPlugin -- $_[0]")
+      if $debug;
 }
 
 =pod
@@ -65,12 +69,38 @@ some init steps
 =cut
 
 sub init {
-  my $session = shift;
-  $TWiki::Plugins::SESSION ||= $session;
-  $debug = TWiki::Func::getPreferencesFlag("SENDEMAILPLUGIN_DEBUG");
-  $emailRE = TWiki::Func::getRegularExpression('emailAddrRegex');
+    my $session = shift;
+    $TWiki::Plugins::SESSION ||= $session;
+    my $pluginName = $TWiki::Plugins::SendEmailPlugin::pluginName;
+    $debug = $TWiki::cfg{Plugins}{$pluginName}{Debug} || 0;
+    $emailRE = TWiki::Func::getRegularExpression('emailAddrRegex');
+    initMessageStrings();
 }
 
+sub initMessageStrings {
+    my $session = shift;
+
+    my $language = TWiki::Func::getPreferencesValue("LANGUAGE") || 'en';
+    my $pluginName = $TWiki::Plugins::SendEmailPlugin::pluginName;
+
+    $EMAIL_SENT_SUCCESS_MESSAGE =
+      $TWiki::cfg{Plugins}{$pluginName}{Messages}{SentSuccess}{en};
+    $EMAIL_SENT_ERROR_MESSAGE =
+      $TWiki::cfg{Plugins}{$pluginName}{Messages}{SentError}{$language};
+    $ERROR_INVALID_ADDRESS =
+      $TWiki::cfg{Plugins}{$pluginName}{Messages}{InvalidAddress}{$language};
+    $ERROR_EMPTY_TO_EMAIL =
+      $TWiki::cfg{Plugins}{$pluginName}{Messages}{EmptyTo}{$language};
+    $ERROR_EMPTY_FROM_EMAIL =
+      $TWiki::cfg{Plugins}{$pluginName}{Messages}{EmptyFrom}{$language};
+    $ERROR_NO_PERMISSION_FROM =
+      $TWiki::cfg{Plugins}{$pluginName}{Messages}{NoPermissionFrom}
+      {$language};
+    $ERROR_NO_PERMISSION_TO =
+      $TWiki::cfg{Plugins}{$pluginName}{Messages}{NoPermissionTo}{$language};
+    $ERROR_NO_PERMISSION_CC =
+      $TWiki::cfg{Plugins}{$pluginName}{Messages}{NoPermissionCc}{$language};
+}
 
 =pod
 
@@ -81,154 +111,175 @@ Invoked by bin/sendemail
 sub sendEmail {
     my $session = shift;
 
-    writeDebug("called sendEmail()");
+    _debug("sendEmail");
+
     init($session);
 
-    my $query = TWiki::Func::getCgiQuery();
+    my $query        = TWiki::Func::getCgiQuery();
     my $errorMessage = '';
+    my $redirectUrl  = $query->param('redirectto');
 
-    return finishSendEmail( $session, $ERROR_STATUS{'error'} ) 
+    return _finishSendEmail( $session, $ERROR_STATUS{'error'}, undef,
+        $redirectUrl )
       unless $query;
 
     # get TO
     my $to = $query->param('to') || $query->param('To');
 
-    return finishSendEmail( $session, $ERROR_STATUS{'error'},
-        $ERROR_EMPTY_TO_EMAIL ) unless $to;
+    return _finishSendEmail( $session, $ERROR_STATUS{'error'},
+        $ERROR_EMPTY_TO_EMAIL, $redirectUrl )
+      unless $to;
 
     my @toEmails = ();
-    foreach my $thisTo (split(/\s*,\s*/, $to)) {
-      my $addrs;
+    foreach my $thisTo ( split( /\s*,\s*/, $to ) ) {
+        my $addrs;
 
-      if ($thisTo =~ /$emailRE/) {
-        # regular address
-        $addrs = $thisTo;
-      } else {
-        # get from user info
-        my $wikiName = TWiki::Func::getWikiName($thisTo);
-        my @addrs = TWiki::Func::wikinameToEmails($wikiName);
-        $addrs = $addrs[0] if @addrs;
+        if ( $thisTo =~ /$emailRE/ ) {
 
-        unless ($addrs) { 
-          # no regular address and no address found in user info
-         
-          $errorMessage = $ERROR_NOT_VALID_EMAIL;
-          $errorMessage =~ s/\$EMAIL/$thisTo/go;
-          return finishSendEmail( $session, $ERROR_STATUS{'error'},
-              $errorMessage);
+            # regular address
+            $addrs = $thisTo;
         }
-      }
+        else {
 
-      # validate TO
-      if (!matchesPreference('ALLOW', 'MAILTO', $thisTo) || 
-          matchesPreference('DENY', 'MAILTO', $thisTo)) {
-        $errorMessage = $ERROR_NO_TO_PERMISSION;
-        $errorMessage =~ s/\$EMAIL/$thisTo/go;
-        TWiki::Func::writeWarning($errorMessage);
-        return finishSendEmail( $session, $ERROR_STATUS{'error'},
-          $errorMessage);
-      }
+            # get TO user info
+            my $wikiName = TWiki::Func::getWikiName($thisTo);
+            my @addrs    = TWiki::Func::wikinameToEmails($wikiName);
+            $addrs = $addrs[0] if @addrs;
 
-      push @toEmails, $addrs;
+            unless ($addrs) {
+
+                # no regular address and no address found in user info
+
+                $errorMessage = $ERROR_INVALID_ADDRESS;
+                $errorMessage =~ s/\$EMAIL/$thisTo/go;
+                return _finishSendEmail( $session, $ERROR_STATUS{'error'},
+                    $errorMessage, $redirectUrl );
+            }
+        }
+
+        # validate TO
+        if (  !_matchesSetting( 'Allow', 'MailTo', $thisTo )
+            || _matchesSetting( 'Deny', 'MailTo', $thisTo ) )
+        {
+            $errorMessage = $ERROR_NO_PERMISSION_TO;
+            $errorMessage =~ s/\$EMAIL/$thisTo/go;
+            TWiki::Func::writeWarning($errorMessage);
+            return _finishSendEmail( $session, $ERROR_STATUS{'error'},
+                $errorMessage, $redirectUrl );
+        }
+
+        push @toEmails, $addrs;
     }
-    $to = join(', ', @toEmails);
-    writeDebug("to=$to");
-
+    $to = join( ', ', @toEmails );
+    _debug("to=$to");
 
     # get FROM
     my $from = $query->param('from') || $query->param('From');
 
     unless ($from) {
-      # get from user settings
-      my $emails = TWiki::Func::wikiToEmail();
-      my @emails = split(/\s*,*\s/, $emails);
-      $from = shift @emails if @emails;
+
+        # get from user settings
+        my $emails = TWiki::Func::wikiToEmail();
+        my @emails = split( /\s*,*\s/, $emails );
+        $from = shift @emails if @emails;
     }
 
     unless ($from) {
-      # fallback to webmaster
-      $from = $TWiki::cfg{WebMasterEmail} || 
-        TWiki::Func::getPreferencesValue('WIKIWEBMASTER')
+
+        # fallback to webmaster
+        $from = $TWiki::cfg{WebMasterEmail}
+          || TWiki::Func::getPreferencesValue('WIKIWEBMASTER');
     }
 
     # validate FROM
-    return finishSendEmail( $session, $ERROR_STATUS{'error'},
-        $ERROR_EMPTY_FROM_EMAIL ) unless $from;
+    return _finishSendEmail( $session, $ERROR_STATUS{'error'},
+        $ERROR_EMPTY_FROM_EMAIL, $redirectUrl )
+      unless $from;
 
-    if (!matchesPreference('ALLOW', 'MAILFROM', $from) || 
-        matchesPreference('DENY', 'MAILFROM', $from)) {
-      $errorMessage = $ERROR_NO_FROM_PERMISSION;
-      $errorMessage =~ s/\$EMAIL/$from/go;
-      TWiki::Func::writeWarning($errorMessage);
-      return finishSendEmail( $session, $ERROR_STATUS{'error'}, 
-        $errorMessage);
+    if (  !_matchesSetting( 'Allow', 'MailFrom', $from )
+        || _matchesSetting( 'Deny', 'MailFrom', $from ) )
+    {
+        $errorMessage = $ERROR_NO_PERMISSION_FROM;
+        $errorMessage =~ s/\$EMAIL/$from/go;
+        TWiki::Func::writeWarning($errorMessage);
+        return _finishSendEmail( $session, $ERROR_STATUS{'error'},
+            $errorMessage, $redirectUrl );
     }
 
-    unless ($from =~ m/$emailRE/) {
-      $errorMessage = $ERROR_NOT_VALID_EMAIL;
-      $errorMessage =~ s/\$EMAIL/$from/go;
-      return finishSendEmail( $session, $ERROR_STATUS{'error'}, 
-        $errorMessage );
+    unless ( $from =~ m/$emailRE/ ) {
+        $errorMessage = $ERROR_INVALID_ADDRESS;
+        $errorMessage =~ s/\$EMAIL/$from/go;
+        return _finishSendEmail( $session, $ERROR_STATUS{'error'},
+            $errorMessage, $redirectUrl );
     }
-    writeDebug("from=$from");
+    _debug("from=$from");
 
     # get CC
     my $cc = $query->param('cc') || $query->param('CC') || '';
 
     if ($cc) {
-      my @ccEmails = ();
-      foreach my $thisCC (split(/\s*,\s*/, $cc)) {
-        my $addrs;
+        my @ccEmails = ();
+        foreach my $thisCC ( split( /\s*,\s*/, $cc ) ) {
+            my $addrs;
 
-        if ($thisCC =~ /$emailRE/) {
-          # normal email address
-          $addrs = $thisCC;
-        
-        } else {
+            if ( $thisCC =~ /$emailRE/ ) {
 
-          # get from user info
-          my @addrs = TWiki::Func::wikinameToEmails($thisCC);
-          $addrs = $addrs[0] if @addrs;
+                # normal email address
+                $addrs = $thisCC;
 
-          unless ($addrs) {
-            # no regular address and no address found in user info
-         
-            $errorMessage = $ERROR_NOT_VALID_EMAIL;
-            $errorMessage =~ s/\$EMAIL/$thisCC/go;
-            return finishSendEmail( $session, $ERROR_STATUS{'error'},
-                $errorMessage);
-          }
+            }
+            else {
+
+                # get from user info
+                my $wikiName = TWiki::Func::getWikiName($thisCC);
+                my @addrs    = TWiki::Func::wikinameToEmails($wikiName);
+                $addrs = $addrs[0] if @addrs;
+
+                unless ($addrs) {
+
+                    # no regular address and no address found in user info
+
+                    $errorMessage = $ERROR_INVALID_ADDRESS;
+                    $errorMessage =~ s/\$EMAIL/$thisCC/go;
+                    return _finishSendEmail( $session, $ERROR_STATUS{'error'},
+                        $errorMessage, $redirectUrl );
+                }
+            }
+
+            # validate CC
+            if (  !_matchesSetting( 'Allow', 'MailCc', $thisCC )
+                || _matchesSetting( 'Deny', 'MailCc', $thisCC ) )
+            {
+                $errorMessage = $ERROR_NO_PERMISSION_CC;
+                $errorMessage =~ s/\$EMAIL/$thisCC/go;
+                TWiki::Func::writeWarning($errorMessage);
+                return _finishSendEmail( $session, $ERROR_STATUS{'error'},
+                    $errorMessage, $redirectUrl );
+            }
+
+            push @ccEmails, $addrs;
         }
-
-        # validate CC
-        if (!matchesPreference('ALLOW', 'MAILCC', $thisCC) || 
-             matchesPreference('DENY', 'MAILCC', $thisCC)) {
-          $errorMessage = $ERROR_NO_CC_PERMISSION;
-          $errorMessage =~ s/\$EMAIL/$thisCC/go;
-          TWiki::Func::writeWarning($errorMessage);
-          return finishSendEmail( $session, $ERROR_STATUS{'error'},
-            $errorMessage);
-        }
-
-        push @ccEmails, $addrs;
-      }
-      $cc = join(', ', @ccEmails);
-      writeDebug("cc=$cc");
+        $cc = join( ', ', @ccEmails );
+        _debug("cc=$cc");
     }
 
     # get SUBJECT
     my $subject = $query->param('subject') || $query->param('Subject') || '';
-    writeDebug("subject=$subject") if $subject;
+    _debug("subject=$subject") if $subject;
 
     # get BODY
     my $body = $query->param('body') || $query->param('Body') || '';
-    writeDebug("body=$body") if $body;
+    _debug("body=$body") if $body;
 
     # get template
-    my $templateName = $query->param('template') || 'sendemail';
+    my $templateName = $query->param('mailtemplate') || 'SendEmailPluginTemplate';
+    # remove 'Template' at end - stupid TWiki solution from the old days
+    $templateName =~ s/^(.*?)Template$/$1/;
+    
     my $template = TWiki::Func::readTemplate($templateName);
+    _debug("templateName=$templateName");
     unless ($template) {
-      $template = <<'HERE';
+        $template = <<'HERE';
 From: %FROM%
 To: %TO%
 CC: %CC%
@@ -237,6 +288,7 @@ Subject: %SUBJECT%
 %BODY%
 HERE
     }
+    _debug("template=$template");
 
     # format email
     my $mail = $template;
@@ -246,18 +298,19 @@ HERE
     $mail =~ s/%SUBJECT%/$subject/go;
     $mail =~ s/%BODY%/$body/go;
 
-    writeDebug("mail=\n$mail");
+    _debug("mail=\n$mail");
 
     # send email
-    $errorMessage = TWiki::Func::sendEmail( $mail, $RETRY_COUNT );
-
+    $errorMessage = TWiki::Func::sendEmail( $mail, 1 );
+    
     # finally
     my $errorStatus =
       $errorMessage ? $ERROR_STATUS{'error'} : $ERROR_STATUS{'noerror'};
 
-    writeDebug("errorStatus=$errorStatus");
-    my $redirectUrl = $query->param('redirectto');
-    finishSendEmail( $session, $errorStatus, $errorMessage, $redirectUrl);
+    return _finishSendEmail( $session, $errorStatus, $errorMessage,
+        $redirectUrl );
+
+    return 0;
 }
 
 =pod
@@ -268,25 +321,33 @@ at least one of the patterns in the list matches.
 
 =cut
 
-sub matchesPreference {
-  my ($mode, $key, $value) = @_;
+sub _matchesSetting {
+    my ( $mode, $key, $value ) = @_;
 
-  writeDebug("called matchesPreference($mode, $key, $value)");
-  my $pattern;
+    my $pluginName = $TWiki::Plugins::SendEmailPlugin::pluginName;
+    my $pattern = $TWiki::cfg{Plugins}{$pluginName}{Permissions}{$mode}{$key};
 
-  $pattern = TWiki::Func::getPreferencesValue(uc($mode.$key));
-  $pattern = TWiki::Func::getPreferencesValue(uc('SendEmailPlugin_'.$mode.$key))
-    unless defined $pattern;
+    _debug("called _matchesSetting($mode, $key, $value)");
+    _debug("matching pattern=$pattern");
+    _debug( "mode=" . ( $mode =~ /Allow/i ? 1 : 0 ) );
 
-  return ($mode =~ /ALLOW/i?1:0) unless $pattern;
+    if ( $mode =~ /Deny/i && !$pattern ) {
 
-  $pattern =~ s/^\s//o;
-  $pattern =~ s/\s$//o;
-  $pattern = '('.join(')|(', split(/\s*,\s*/, $pattern)).')';
+        # no pattern, so noone is denied
+        return 0;
+    }
 
-  writeDebug("pattern=$pattern");
+    $pattern =~ s/^\s//o;
+    $pattern =~ s/\s$//o;
+    $pattern = '(' . join( ')|(', split( /\s*,\s*/, $pattern ) ) . ')';
 
-  return ($value =~ /$pattern/)?1:0;
+    _debug("final matching pattern=$pattern");
+
+    my $result = ( $value =~ /$pattern/ ) ? 1 : 0;
+
+    _debug("result=$result");
+
+    return $result;
 }
 
 =pod
@@ -297,97 +358,107 @@ sub handleSendEmailTag {
     my ( $session, $params, $topic, $web ) = @_;
 
     init();
-    addHeader();
+    _addHeader();
 
     my $query = TWiki::Func::getCgiQuery();
     return '' if !$query;
 
     my $errorStatus = $query->param($ERROR_STATUS_TAG);
+    my $errorMessage = $query->param($ERROR_MESSAGE_TAG) || '';
 
-    writeDebug("handleSendEmailTag; errorStatus=$errorStatus")
+    my $feedbackSuccess = $params->{'feedbackSuccess'};
+    my $feedbackError   = $params->{'feedbackError'};
+    my $format          = $params->{'format'};
+
+    _debug("handleSendEmailTag; errorStatus=$errorStatus")
       if $errorStatus;
 
     return '' if !defined $errorStatus;
 
-    my $feedbackSuccess = $params->{'feedbackSuccess'};
-
-    unless (defined $feedbackSuccess) {
-      $feedbackSuccess =
-        TWiki::Func::getPreferencesValue(
-          "SENDEMAILPLUGIN_EMAIL_SENT_SUCCESS_MESSAGE")
-        || '';
+    unless ( defined $feedbackSuccess ) {
+        $feedbackSuccess = $EMAIL_SENT_SUCCESS_MESSAGE
+          || '';
     }
     $feedbackSuccess =~ s/^\s*(.*?)\s*$/$1/go;    # remove surrounding spaces
 
-    my $feedbackError = $params->{'feedbackError'};
-    unless (defined $feedbackError) {
-      $feedbackError =
-        TWiki::Func::getPreferencesValue(
-          "SENDEMAILPLUGIN_EMAIL_SENT_ERROR_MESSAGE")
-        || '';
+    unless ( defined $feedbackError ) {
+        $feedbackError = $EMAIL_SENT_ERROR_MESSAGE || '';
     }
 
     my $userMessage =
       ( $errorStatus == $ERROR_STATUS{'error'} )
       ? $feedbackError
       : $feedbackSuccess;
-    $userMessage =~ s/^\s*(.*?)\s*$/$1/go;        # remove surrounding spaces
-    my $errorMessage = $query->param($ERROR_MESSAGE_TAG) || '';
 
-    return wrapHtmlNotificationContainer( $userMessage, $errorStatus,
-        $errorMessage, $topic, $web );
+    $userMessage =~ s/^[[:space:]]+//s;           # trim at start
+    $userMessage =~ s/[[:space:]]+$//s;           # trim at end
+
+    my $notificationMessage =
+      _createNotificationMessage( $userMessage, $errorStatus, $errorMessage,
+        defined $format );
+
+    if ($format) {
+        $format =~ s/\$message/$notificationMessage/;
+        $notificationMessage = $format;
+    }
+    return _wrapHtmlNotificationContainer($notificationMessage);
 }
 
 =pod
 
 =cut
 
-sub finishSendEmail {
+sub _finishSendEmail {
     my ( $session, $errorStatus, $errorMessage, $redirectUrl ) = @_;
 
     my $query = TWiki::Func::getCgiQuery();
 
-    writeDebug("_finishSendEmail errorStatus=$errorStatus;")
+    _debug("_finishSendEmail errorStatus=$errorStatus;")
       if $errorStatus;
+    _debug("_finishSendEmail redirectUrl=$redirectUrl;")
+      if $redirectUrl;
 
     $query->param( -name => $ERROR_STATUS_TAG, -value => $errorStatus )
       if $query;
 
     $errorMessage ||= '';
-    writeDebug("_finishSendEmail errorMessage=$errorMessage;")
+    _debug("_finishSendEmail errorMessage=$errorMessage;")
       if $errorMessage;
 
     $query->param( -name => $ERROR_MESSAGE_TAG, -value => $errorMessage )
       if $query;
 
-    my $web   = $session->{webName};
-    my $topic = $session->{topicName};
-    my $origUrl = TWiki::Func::getScriptUrl($web, $topic, 'view');
+    my $web     = $session->{webName};
+    my $topic   = $session->{topicName};
+    my $origUrl = TWiki::Func::getScriptUrl( $web, $topic, 'view' );
 
-    $query->param( -name => 'origurl', -value => $origUrl);
+    $query->param( -name => 'origurl', -value => $origUrl );
 
     my $section = $query->param(
-      ($errorStatus == $ERROR_STATUS{'error'})?'errorsection':'successsection');
+        ( $errorStatus == $ERROR_STATUS{'error'} )
+        ? 'errorsection'
+        : 'successsection'
+    );
 
-    $query->param( -name => 'section', -value => $section) 
+    $query->param( -name => 'section', -value => $section )
       if $section;
-      
-    $redirectUrl ||= $origUrl;
-    TWiki::Func::redirectCgiQuery( undef, $redirectUrl, 1 );
 
-    # would pass '#'=>$NOTIFICATION_ANCHOR_NAME but the anchor removes
-    # the ERROR_STATUS_TAG param
+    $redirectUrl ||= $origUrl;
+    $redirectUrl = "$redirectUrl#$NOTIFICATION_ANCHOR_NAME";
+
+    TWiki::Func::redirectCgiQuery( undef, $redirectUrl, 1 );
+    return 0;
 }
 
 =pod
 
 =cut
 
-sub addHeader {
+sub _addHeader {
 
     my $header = <<'EOF';
 <style type="text/css" media="all">
-@import url("%PUBURL%/%TWIKIWEB%/SendEmailPlugin/sendemailplugin.css");
+@import url("%PUBURL%/%SYSTEMWEB%/SendEmailPlugin/sendemailplugin.css");
 </style>
 EOF
     TWiki::Func::addToHEAD( 'SENDEMAILPLUGIN', $header );
@@ -397,45 +468,29 @@ EOF
 
 =cut
 
-sub wrapHtmlNotificationContainer {
-    my ( $text, $errorStatus, $errorMessage, $topic, $web ) = @_;
+sub _createNotificationMessage {
+    my ( $text, $errorStatus, $errorMessage, $customFormat ) = @_;
+
+    if ($customFormat) {
+        return "$text $errorMessage";
+    }
 
     my $cssClass = $NOTIFICATION_CSS_CLASS;
     $cssClass .= ' ' . $NOTIFICATION_ERROR_CSS_CLASS
       if ( $errorStatus == $ERROR_STATUS{'error'} );
 
-    my $message = $text;
-
-    if ( $errorMessage ) {
-      if ( length $errorMessage < 256 ) {
-          $message .= ' '.$errorMessage;
-      } else {
-          my $oopsUrl = TWiki::Func::getOopsUrl( $web, $topic, 'oopsgeneric' );
-          $errorMessage = '<verbatim>' . $errorMessage . '</verbatim>';
-          my $errorForm = <<'HERE';
-<form enctype="application/x-www-form-urlencoded" name="mailerrorfeedbackform" action="%OOPSURL%" method="POST">
-<input type="hidden" name="template" value="oopsgeneric" />
-<input type="hidden" name="param1" value="%ERRORTITLE%" />
-<input type="hidden" name="param2" value="%ERRORMESSAGE%" />
-<input type="hidden" name="param3" value="" />
-<input type="hidden" name="param4" value="" />
-<input type="submit" class="twikiButton" value="%ERRORBUTTON%"  />
-</form>
-HERE
-          $errorForm =~ s/%OOPSURL%/$oopsUrl/go;
-          $errorForm =~ s/%ERRORTITLE%/$ERROR_TITLE/go;
-          $errorForm =~ s/%ERRORMESSAGE%/$errorMessage/go;
-          $errorForm =~ s/%ERRORBUTTON%/$ERROR_BUTTON_LABEL/go;
-          $message .= ' ' . $errorForm;
-      }
-    }
-
-    return "#$NOTIFICATION_ANCHOR_NAME\n"
-      . '<div class="'
-      . $cssClass . '">'
-      . $message
-      . '</div>';
+    return CGI::div( { class => $cssClass }, "$text $errorMessage" );
 }
 
+=pod
+
+=cut
+
+sub _wrapHtmlNotificationContainer {
+    my ($notificationMessage) = @_;
+
+    return CGI::a( { name => $NOTIFICATION_ANCHOR_NAME }, '<!--#-->' ) . "\n"
+      . $notificationMessage;
+}
 
 1;

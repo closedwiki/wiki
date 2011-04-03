@@ -1,9 +1,10 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (c) 2006 by Meredith Lesly, Kenneth Lavrsen
+# Copyright (C) 2007-2010 Arthur Clemens (arthur@visiblearea.com), Michael Daum and Foswiki contributors
+# Copyright (C) 2007-2011 TWiki Contributors
 #
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
+# All Rights Reserved. TWiki Contributors are listed in the AUTHORS
+# file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
@@ -16,37 +17,40 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
-# For licensing info read LICENSE file in the TWiki root.
+# As per the GPL, removal of this notice is prohibited.
 
 package TWiki::Plugins::SendEmailPlugin;
 
 use strict;
 use TWiki::Func;
 
-use vars qw( $VERSION $RELEASE );
-
-$VERSION = '$Rev: 11069$';
-$RELEASE = '1.2.2';
+our $VERSION    = '$Rev: 6581 (2010-02-28) $';
+our $RELEASE    = '1.5.1';
+our $pluginName = 'SendEmailPlugin';
+our $SHORTDESCRIPTION = "Allows to send e-mails through an e-mail form.";
+our $NO_PREFS_IN_TOPIC = 1;
+our $topic;
+our $web;
 
 sub initPlugin {
+    ( $topic, $web ) = @_;
 
-  # check for Plugins.pm versions
-  if ( $TWiki::Plugins::VERSION < 1.026 ) {
-    TWiki::Func::writeWarning(
-      "Version mismatch between SendEmailPlugin and Plugins.pm");
-      return 0;
-  }
+    # check for Plugins.pm versions
+    if ( $TWiki::Plugins::VERSION < 1.026 ) {
+        TWiki::Func::writeWarning(
+            "Version mismatch between SendEmailPlugin and Plugins.pm");
+        return 0;
+    }
 
-  TWiki::Func::registerTagHandler( 'SENDEMAIL', \&handleSendEmailTag );
-
-  # Plugin correctly initialized
-  return 1;
+    TWiki::Func::registerTagHandler( 'SENDEMAIL', \&handleSendEmailTag );
+    
+    # Plugin correctly initialized
+    return 1;
 }
 
 sub handleSendEmailTag {
-  require TWiki::Plugins::SendEmailPlugin::Core;
-  TWiki::Plugins::SendEmailPlugin::Core::handleSendEmailTag(@_);
+    require TWiki::Plugins::SendEmailPlugin::Core;
+    TWiki::Plugins::SendEmailPlugin::Core::handleSendEmailTag(@_);
 }
-
 
 1;
