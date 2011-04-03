@@ -17,7 +17,7 @@
 # As per the GPL, removal of this notice is prohibited.
 
 BEGIN {
-    if ( defined $ENV{GATEWAY_INTERFACE} ) {
+    if ( defined $ENV{GATEWAY_INTERFACE} or defined $ENV{MOD_PERL} ) {
         $TWiki::cfg{Engine} = 'TWiki::Engine::CGI';
         use CGI::Carp qw(fatalsToBrowser);
         $SIG{__DIE__} = \&CGI::Carp::confess;
