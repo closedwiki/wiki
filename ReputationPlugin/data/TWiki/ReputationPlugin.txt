@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="KalleLaitela" date="1298027521" format="1.1" reprev="1.6" version="1.6"}%
+%META:TOPICINFO{author="JoonaKannisto" date="1301388662" format="1.1" reprev="1.7" version="1.7"}%
 ---+!! <nop>%TOPIC%
 
 <!--
@@ -139,10 +139,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---+++ Make the plugin appear on every page
 
-Inside the zip file is a skin template that makes this plugin to show up just before the topic's text content. Skin can be enabled for a web (For all webs [[%LOCALSITEPREFS%]] for a single web, for example Sandbox web Sandbox.WebPreferences ) or for a single topic in Topic's preferences
+Inside the zip file is a skin template that makes this plugin to show up just before the topic's text content. Skin can be enabled for a web (For all webs [[%LOCALSITEPREFS%]] for a single web, for example Sandbox web Sandbox.WebPreferences ) or for a single topic in Topic's preferences.
 <pre>   * Set S<nop>KIN = reputation,pattern </pre>
+It is possible to put the SKIN setting to a user topic as well (%USERNAME%). However, this means that only the users who have the SKIN enabled can see the submitted reviews in topics and webs which do not have this setting. 
 
-Skin can be excluded from any topic or web by setting its skin without Reputation%NOP%Plugin's skin eg:
+Skin can be excluded from any topic, user or web by setting the skin preference without Reputation%NOP%Plugin's skin eg:
 
 <pre>   * Set S<nop>KIN = pattern </pre>
 
