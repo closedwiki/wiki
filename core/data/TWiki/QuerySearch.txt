@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1276711839" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1301947230" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %STARTINCLUDE%
 ---+ Query Search
@@ -160,4 +160,4 @@ Find all topics that have a field 'Threat' set to 'Amber' and 'cold virus' somew
 %SEARCH{"Threat='Amber' AND text ~ '*cold virus*'"}%
 </verbatim>
 
-__Related Topics:__ IfStatements, SearchHelp, VarSEARCH, FormattedSearch, TWiki:TWiki/QuerySearchPatternCookbook
+__Related Topics:__ IfStatements, SearchHelp, VarIF, VarGET, VarSET, VarSEARCH, FormattedSearch, TWiki:TWiki.QuerySearchPatternCookbook
