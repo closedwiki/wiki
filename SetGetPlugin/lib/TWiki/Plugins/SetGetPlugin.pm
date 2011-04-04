@@ -31,7 +31,7 @@ use vars qw(
 
 # Plugin version
 $VERSION = '$Rev$';
-$RELEASE = '2011-11-26';
+$RELEASE = '2011-04-04';
 
 $moduleLoaded = 0;
 
