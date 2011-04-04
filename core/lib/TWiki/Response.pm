@@ -128,6 +128,117 @@ sub header {
         ],
         @p
       );
+    # Item6602
+    my $trash;
+    #throw away passed parameter pairs to find out what's left)
+    if ($type) {
+        $trash = shift @p; $trash = shift @p;
+    }
+    if ($status) {
+        $trash = shift @p; $trash = shift @p;
+    }
+    if ($cookie) {
+        $trash = shift @p; $trash = shift @p;
+    }
+    if ($charset) {
+        $trash = shift @p; $trash = shift @p;
+    }
+    if ($expires) {
+        $trash = shift @p; $trash = shift @p;
+    }
+    if ($attachment) {
+        $trash = shift @p; $trash = shift @p;
+    }
+    #reset @other to what is was prior to unwanted lc and s/-/_/ changes by rearrange
+    @other = @p;
+
+    if ( defined $charset ) {
+        $this->charset($charset);
+    }
+    else {
+        $charset = $this->charset;
+    }
+
+    foreach (@other) {
+
+        # Don't use \s because of perl bug 21951
+        next unless my ( $header, $value ) = /([^ \r\n\t=]+)=\"?(.+?)\"?$/;
+        $header = lc $header;
+        $header =~ s/\b(\w)/\u$1/g;
+        if ( exists $this->{headers}->{$header} ) {
+            if ( ref $this->{headers}->{$header} ) {
+                push @{ $this->{headers}->{$header} }, $value;
+            }
+            else {
+                $this->{headers}->{$header} =
+                  [ $this->{headers}->{$header}, $value ];
+            }
+        }
+        else {
+            $this->{headers}->{$header} = $value;
+        }
+    }
+
+    $type ||= 'text/html' unless defined($type);
+    $type .= "; charset=$charset"
+      if $type ne ''
+          and $type =~ m!^text/!
+          and $type !~ /\bcharset\b/
+          and $charset ne '';
+
+    if ($status) {
+        $this->{headers}->{Status} = $status;
+        $this->status($status);
+    }
+
+    # push all the cookies -- there may be several
+    if ($cookie) {
+        my @cookie =
+          ref($cookie) && ref($cookie) eq 'ARRAY' ? @$cookie : ($cookie);
+        $this->cookies( \@cookie );
+    }
+    $this->{headers}->{Expires} = expires( $expires, 'http' )
+      if ( defined $expires );
+    $this->{headers}->{Date} = expires( 0, 'http' )
+      if defined $expires || $cookie;
+    $this->{headers}->{'Content-Disposition'} =
+      "attachment; filename=\"$attachment\""
+      if $attachment;
+
+    $this->{headers}->{'Content-Type'} = $type if $type ne '';
+}
+
+=begin twiki
+
+---++ ObjectMethod _header(-type      => $type,
+                          -status     => $status,
+                          -cookie     => $cookie || \@cookies,
+                          -attachment => $attachName,
+                          -charset    => $charset,
+                          -expires    => $expires,
+                          -HeaderN    => ValueN )
+
+Private method to set response header like above 
+that doesn't include fix for Item6602. Resonably compatible with CGI. 
+Doesn't support -nph, -target and -p3p. 
+
+=cut
+
+sub _header {
+    my ( $this, @p ) = @_;
+    my (@header);
+
+    # Ugly hack to avoid html escape in CGI::Util::rearrange
+    local $CGI::Q = { escape => 0 };
+    my ( $type, $status, $cookie, $charset, $expires, $attachment, @other ) =
+      rearrange(
+        [
+            [ 'TYPE',   'CONTENT_TYPE', 'CONTENT-TYPE' ], 'STATUS',
+            [ 'COOKIE', 'COOKIES' ],    'CHARSET',
+            'EXPIRES', 'ATTACHMENT',
+        ],
+        @p
+      );
 
     if ( defined $charset ) {
         $this->charset($charset);
@@ -342,7 +453,7 @@ sub redirect {
     my @headers = ( -Location => $url );
     push @headers, '-Status' => ( $status || '302 Found' );
     push @headers, '-Cookie' => $cookies if $cookies;
-    $this->header(@headers);
+    $this->_header(@headers);
 }
 
 =begin twiki
