@@ -161,7 +161,7 @@ sub test_redirect {
     my $res = new TWiki::Response('');
     my ( $uri, $status ) = ();
     $uri = 'http://foo.bar';
-    $res->redirect($uri);
+    $res->redirect( -Location => $uri );
     $this->assert_str_equals(
         $uri,
         $res->getHeader('Location'),
@@ -203,7 +203,7 @@ sub test_redirect {
 sub test_header {
     my $this = shift;
     my $res  = new TWiki::Response('');
-
+    require CGI::Cookie;
     my $cookie = CGI::Cookie->new(
         -name    => 'Foo',
         -value   => 'bar',
@@ -214,7 +214,7 @@ sub test_header {
         -status     => '200 OK',
         -cookie     => $cookie,
         -expires    => '+2h',
-        -Connection => 'close',
+        -attachment => 'testtest.txt',
         -charset    => 'utf8',
     );
     $this->assert_str_equals(
@@ -223,7 +223,7 @@ sub test_header {
         'Wrong content-type'
     );
     $this->assert_str_equals('200 OK', $res->getHeader('Status'), 'Wrong status');
-    $this->assert_str_equals('close', $res->getHeader('Connection'), 'Wrong custom header value');
+    $this->assert_str_equals('attachment; filename="testtest.txt"', $res->getHeader('Content-Disposition'), 'Wrong file');
     $this->assert_not_null($res->getHeader('expires'), 'Expires header not defined');
     $this->assert_not_null($res->getHeader('date'), 'Date header not defined');
     $this->assert_str_equals('utf8', $res->charset, 'charset object field not defined');
