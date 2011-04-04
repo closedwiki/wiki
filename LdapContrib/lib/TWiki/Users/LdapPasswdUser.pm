@@ -1,6 +1,6 @@
-# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
+# Module of TWiki - The Free and Open Source Wiki, http://twiki.org/
 #
-# Copyright (C) 2006-2008 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2006-2010 Michael Daum http://michaeldaumconsulting.com
 # Portions Copyright (C) 2006 Spanlink Communications
 #
 # This program is free software; you can redistribute it and/or
@@ -15,17 +15,19 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-package TWiki::Users::LdapUser;
+package TWiki::Users::LdapPasswdUser;
+use TWiki::Users::Password;
+our @ISA = qw( TWiki::Users::Password );
 
 use strict;
-use TWiki::Users::Password;
-use TWiki::Contrib::LdapContrib;
 
-@TWiki::Users::LdapUser::ISA = qw( TWiki::Users::Password );
+use TWiki::Contrib::LdapContrib ();
+use TWiki::Plugins ();
+use TWiki::ListIterator ();
 
 =pod
 
----+++ TWiki::Users::LdapUser
+---+++ TWiki::Users::LdapPassdUser
 
 Password manager that uses Net::LDAP to manage users and passwords.
 
@@ -46,7 +48,7 @@ Configuration: add the following variables to your <nop>LocalSite.cfg
 ---++++ new($session) -> $ldapUser
 
 Takes a session object, creates an LdapContrib object used to
-delegate LDAP calls and returns a new TWiki::User::LdapUser object
+delegate LDAP calls and returns a new TWiki::User::LdapPasswd object
 
 =cut
 
@@ -80,31 +82,93 @@ sub error {
   return return $this->{error};
 }
 
+=pod
+
+---++++ writeDebug($msg) 
+
+Static method to write a debug messages. 
+
+=cut
+
+sub writeDebug {
+  print STDERR "- LdapPasswdUser - $_[0]\n" if $TWiki::cfg{Ldap}{Debug};
+}
+
+
 =pod 
 
 ---++++ fetchPass($login) -> $passwd
 
-SMELL: this method is used most of the time to detect if a given
+this method is used most of the time to detect if a given
 login user is known to the database. the concrete (encrypted) password 
-is of no interest: so better would be to implement an interface like
-existsUser() or the like
+is of no interest: so better use userExists() for that
 
 =cut
 
 sub fetchPass {
   my ($this, $login) = @_;
 
-  $this->{ldap}->writeDebug("called fetchPass($login)");
+  #writeDebug("called fetchPass($login)");
 
-  my $entry = $this->{ldap}->getAccount($login);
-  return $entry->get_value('userPassword') 
-    if $entry;
+  # try to find out if twiki calls this functio as part
+  # of an existence check. fetching the actual password of
+  # a user is more expensive than just checking the existence
+  # the _user_exists context is set in LdapUserMapping::userExists()
+  # when backing off to native groups anyway
+  return $this->userExists($login) 
+    if $this->{session}->inContext("_user_exists");
 
-  return $this->{secondaryPasswordManager}->fetchPass($login)
-    if $this->{secondaryPasswordManager};
+  # twiki tends to feed all sorts of strings to fetchPass,
+  # let's try to filter out some of the siliest cases
+  if ($this->{session}->{users}->isGroup($login)) {
+    return undef;
+  }
+
+  my $passwd = $this->{passwords}{$login};
+
+  unless (defined $passwd) {
+    my $entry = $this->{ldap}->getAccount($login); # expensive
+
+    $passwd = $entry->get_value('userPassword') if $entry;
+    $passwd = $this->{secondaryPasswordManager}->fetchPass($login)
+      if !defined($passwd) && $this->{secondaryPasswordManager};
+
+    $passwd = 0 unless defined $passwd;
+    $this->{passwords}{$login} = $passwd;
+  }
+
+  return $passwd;
+}
+
+=pod 
+
+---++++ userExists($name) -> $boolean
+
+returns true if the login or wikiname exists in the database;
+that's performing better than fetching the password and then
+see what comes out of this
+
+=cut
+
+sub userExists {
+  my ($this, $name) = @_;
+
+  #writeDebug("called userExists($name)");
+
+  return 1 if 
+    $this->{ldap}->getWikiNameOfLogin($name) || 
+    $this->{ldap}->getLoginOfWikiName($name);
+
+  if ($this->{secondaryPasswordManager}) {
+    #writeDebug("asking secondary password manager");
+    my $passwd = $this->{secondaryPasswordManager}->fetchPass($name);
+    return 1 if defined $passwd;
+  }
+  #writeDebug("$name is unknown");
 
   return 0;
 }
+
 
 =pod 
 
@@ -117,14 +181,14 @@ check passwd by binding to the ldap server
 sub checkPassword {
   my ($this, $login, $passU) = @_;
 
-  $this->{ldap}->writeDebug("called checkPassword($login, passU)");
+  #writeDebug("called checkPassword($login, passU)");
 
   # guest has no password
   return 1 if $login eq $TWiki::cfg{DefaultUserWikiName};
 
   # get user record
   my $dn = $this->{ldap}->getDnOfLogin($login);
-  $this->{ldap}->writeDebug("dn not found") unless $dn;
+  #writeDebug("dn not found") unless $dn;
 
   return $this->{ldap}->connect($dn, $passU)
     if $dn;
@@ -135,11 +199,26 @@ sub checkPassword {
   return 0;
 }
 
+=pod 
+
+---++++ readOnly() -> $boolean
+
+we can change passwords, so return false
+
+=cut
+
+sub readOnly {
+  my $this = shift;
+
+  return $this->{secondaryPasswordManager}->readOnly()
+    if $this->{secondaryPasswordManager};
+}
+
 =pod
 
----++ isManagingEmails() -> $boolean
+---++++ isManagingEmails() -> $boolean
 
-we aare managing emails, but don't allow setting emails. alas the
+we are managing emails, but don't allow setting emails. alas the
 core does not distinguish this case, e.g. by using readOnly()
 
 =cut
@@ -147,7 +226,6 @@ core does not distinguish this case, e.g. by using readOnly()
 sub isManagingEmails {
   return 1;
 }
-
 
 =pod 
 
@@ -189,16 +267,17 @@ sub finish {
   my $this = shift;
 
   $this->{ldap}->finish() if $this->{ldap};
-  $this->{ldap} = undef;
+  undef $this->{ldap};
+  undef $this->{passwords};
   $this->{secondaryPasswordManager}->finish(@_)
     if $this->{secondaryPasswordManager};
 }
 
 =pod
 
----++++ deleteUser( $user ) -> $boolean
+---++++ removeUser( $user ) -> $boolean
 
-LDAP users can't be deleted by TWiki.
+LDAP users can't be removed from within the engine.
 So this will call the deleteUser interface of the secondary
 password manager only
 
@@ -206,19 +285,21 @@ Returns 1 on success, undef on failure.
 
 =cut
 
-sub deleteUser {
+sub removeUser {
   my $this = shift;
 
-  return $this->{secondaryPasswordManager}->deleteUser(@_)
+  return $this->{secondaryPasswordManager}->removeUser(@_)
     if $this->{secondaryPasswordManager};
 
-  $this->{error} = 'System does not support deleting users';
+  $this->{error} = 'System does not support removing users';
   return undef;
 }
 
 =pod
 
 ---++++ passwd( $user, $newPassword, $newPassword ) -> $boolean
+
+TODO: API missmatch
 
 This method can only change the LDAP password. It can not
 add the user to the LDAP directory. To change the password the
@@ -296,10 +377,13 @@ sub setPassword {
   if ($isOk) {
     $this->{error} = undef;
     return 1;
-  } else {
-    $this->error();
-    return undef;
-  }
+  } 
+
+  return $this->{secondaryPasswordManager}->setPassword($login, $newUserPassword, $oldUserPassword)
+    if $this->{secondaryPasswordManager};
+
+  $this->error();
+  return undef;
 }
 
 =pod
@@ -307,7 +391,7 @@ sub setPassword {
 ---++++ setEmails($user, @emails)
 
 Set the email address(es) for the given username.
-TWiki can't set the email stored in LDAP. But may be the secondary
+The engine can't set the email stored in LDAP. But may be the secondary
 password manager can.
 
 =cut
@@ -333,18 +417,52 @@ LDAP manager with the secondary password manager
 =cut
 
 sub findUserByEmail {
-  my $this = shift;
+  my ($this, $email) = @_;
 
-  return undef unless $this->{secondaryPasswordManager};
+  my $users = $this->{ldap}->getLoginOfEmail($email);
+  return $users unless $this->{secondaryPasswordManager};
 
   # add those from the secondary
-  my @users;
-  push @users, $this->{secondaryPasswordManager}->findUserByEmail(@_);
+  my $moreUsers = $this->{secondaryPasswordManager}->findUserByEmail($email);
+
+  push @$users, @{$moreUsers} if $moreUsers;
+
+  # nothing found
+  return undef unless $users;
 
   # remove duplicates
-  my %users = map {$_ => 1} @users;
-  @users = keys %users;
+  my %users = map {$_ => $_} @$users;
+  my @users = values %users;
   return \@users;
 }
+
+=pod 
+
+---++++ canFetchUsers() -> boolean
+
+returns true, as we can fetch users
+
+=cut
+
+sub canFetchUsers {
+  return 1;
+}
+
+=pod 
+
+---++++ fetchUsers() -> new TWiki::ListIterator(\@users)
+
+returns a TWikiIterator of loginnames 
+
+=cut
+
+sub fetchUsers {
+  my $this = shift;
+
+  my $users = $this->{ldap}->getAllLoginNames();
+  print STDERR "fetchUsers=".join(',', @$users)."\n";
+  return new TWiki::ListIterator($users);
+}
+
 
 1;

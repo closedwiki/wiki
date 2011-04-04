@@ -1,6 +1,6 @@
-# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
+# Module of TWiki - The Free and Open Source Wiki, http://twiki.org/
 #
-# Copyright (C) 2007 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2007-2010 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -12,14 +12,13 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
-# For licensing info read LICENSE file in the TWiki root.
-
 package TWiki::LoginManager::LdapApacheLogin;
 
 use strict;
-use Assert;
-use TWiki::LoginManager::ApacheLogin;
-use TWiki::Contrib::LdapContrib;
+use Assert ();
+use TWiki::LoginManager::ApacheLogin ();
+use TWiki::Contrib::LdapContrib ();
+use TWiki::Sandbox ();
 
 @TWiki::LoginManager::LdapApacheLogin::ISA = qw( TWiki::LoginManager::ApacheLogin );
 
@@ -27,6 +26,7 @@ sub new {
   my ($class, $session) = @_;
 
   my $this = bless( $class->SUPER::new($session), $class );
+
   $this->{ldap} = TWiki::Contrib::LdapContrib::getLdapContrib($session);
   return $this;
 }
@@ -36,7 +36,27 @@ sub loadSession {
 
   my $authUser = $this->SUPER::loadSession(@_);
 
-  $this->{ldap}->checkCacheForLoginName($authUser) if defined $authUser;
+  # explicitly untaint it as this string comes from LDAP, and all strings
+  # from LDAP are tainted, even if they come via mod_ldap
+  $authUser = TWiki::Sandbox::untaintUnchecked($authUser);
+
+  # process authUser login name
+  if (defined $authUser) {
+
+    #print STDERR "before authUser=$authUser\n";
+
+    $authUser =~ s/^\s+//o;
+    $authUser =~ s/\s+$//o;
+    $authUser = $this->{ldap}->fromUtf8($authUser);
+
+    $authUser = $this->{ldap}->normalizeLoginName($authUser) if $this->{ldap}{normalizeLoginName};
+
+    #print STDERR "after authUser=$authUser\n";
+
+    unless ($this->{ldap}{excludeMap}{$authUser}) {
+      $this->{ldap}->checkCacheForLoginName($authUser);
+    }
+  }
 
   return $authUser;
 }
