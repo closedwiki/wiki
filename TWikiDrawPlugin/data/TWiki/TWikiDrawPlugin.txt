@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1302061576" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1302066394" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -127,7 +127,7 @@ If you add a map to a drawing by setting a URL on any of the figures a map file 
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-04-05 | TWikibug:Item6638: Doc improvements |
+|  2011-04-05 | TWikibug:Item6638: Doc improvements; fixing broken button images -- TWiki:Main.PeterThoeny |
 |  2009-10-29 | TWikibug:Item6333: !TWikiDrawPlugin does not work in TWiki-4.3.2 if {CryptToken}{Enable} is set -- Sopan Shewale |
 |  8570 | TWikibug:Item1528: Minor pattern skin template update for TWikiDrawPlugin |
 |  8569 | TWikibug:Item1528: Adding pattern skin template to TWikiDrawPlugin |
