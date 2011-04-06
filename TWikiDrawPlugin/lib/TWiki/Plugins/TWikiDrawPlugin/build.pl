@@ -2,6 +2,9 @@
 #
 # Build file for TWiki Draw Plugin
 #
+# This builds the packages using the existing source.zip.
+# (Use build-from-java-source.pl to build from Java source)
+
 # Standard preamble
 BEGIN {
   foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
@@ -21,21 +24,8 @@ sub new {
     return bless( $class->SUPER::new( "TWikiDrawPlugin" ), $class );
 }
 
-# Override the build target to build the java code
-sub target_build {
-  my $this = shift;
-
-  $this->SUPER::target_build();
-
-  $this->pushd($this->{basedir}."/lib/TWiki/Plugins/TWikiDrawPlugin");
-  $this->sys_action("ant -f build.xml build");
-  $this->popd();
-}
-
 # Create the build object
 $build = new TWikiDrawPluginBuild();
 
 # Build the target on the command line, or the default target
-
 $build->build($build->{target});
-
