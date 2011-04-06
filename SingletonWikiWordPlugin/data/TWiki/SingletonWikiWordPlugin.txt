@@ -1,49 +1,75 @@
----++ SingletonWikiWordPlugin
+%META:TOPICINFO{author="TWikiContributor" date="1302071656" format="1.1" version="$Rev$"}%
+---+!! !SingletonWikiWordPlugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/SingletonWikiWordPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/SingletonWikiWordPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
 
 This designates that a single word is a reference to a single word. To show TWiki that it should be linked to, write a dot before it.
 
 Hence if you have the WikiWord Ontology you can link to it as <nop>.Ontology
 
 In fact, you can already force a single word link to a WikiWord by enclosing it in double square brackets, like this:
-<nop>[<nop>[.Ontology]] 
+=[<nop>[.Ontology]]=
 
 This plugin allows you to write it without the square brackets. 
 
-The syntax was chosen to be an extension of the Web.Topic syntax
+The syntax was chosen to be an extension of the Web.Topic syntax.
 
-Test:
-| *Written as* | *Test* | *If it is installed properly you see* | *If it isn't, you will see* |
-| .Singleword | .Singleword  | [[Singleword]] | <nop>.Singleword |
+---++ Examples
 
- 
+| *Write* | *Renders as* | *If it is installed properly you see* | *If it isn't, you will see* |
+| =.Singleword= | .Singleword  | [[Singleword]] | <nop>.Singleword |
 
----+++ Syntax Rules(none)
----+++ %TOPIC% 
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-	* Set SHORTDESCRIPTION = This plugin holds a function to implement the features listed on http://twiki.org/cgi-bin/view/Codev/?topic=SingletonWikiWord.
+---++ Plugin Installation &amp; Configuration
 
-	* Set DEBUG to 1 to get debug messages in =data/debug.txt=. Default: =0=
-	* Set DEBUG = 0
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
 
-	* There are no customisable settings  
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
 
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+      * Install the dependencies (if any).
 
----+++ Plugin Installation Instructions	
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Configure additional plugin settings in the __Extensions__ section if needed.
+      * Test if the installation was successful: See example above.
 
-	* To install this plug-in you must install this topic and the .pm file.
+---++ Plugin Info
 
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Automatically link singleton words that are prefixed by a dot
+   * Debug flag:
+      * Set DEBUG = 0
 
----+++ Plugin Info
 |  Plugin Author: | TWiki:Main.MartinCleaver |
-|  Plugin Version: | 15 Apr 2003 |
-|  Change History: | none |
+|  Copyright: | &copy; 2003 TWiki:Main.MartinCleaver <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-04-05 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-04-05: | TWikibug:Item6638: Doc improvements -- TWiki:Main.PeterThoeny |
+|  2003-04-15: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
-|  Perl Version: | 5.0 |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/SingletonWikiWordPlugin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/SingletonWikiWordPluginDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/SingletonWikiWordPluginAppraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main.MartinCleaver - 28 Nov 2001 <br> 
-
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.UserDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
