@@ -1,8 +1,9 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2006 Peter Thoeny, Peter@Thoeny.org
+# Copyright (C) 2001-2011 Peter Thoeny, Peter[at]Thoeny.org
 # Copyright (C) 2002-2006 Crawford Currie, cc@c-dot.co.uk
+# Copyright (C) 2008-2011 TWiki Contributors
 #
 # For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -24,15 +25,8 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $editButton
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2011-04-05';
 
 my $editmess;
 
