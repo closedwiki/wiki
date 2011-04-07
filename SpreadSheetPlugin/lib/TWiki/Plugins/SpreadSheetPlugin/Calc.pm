@@ -902,11 +902,9 @@ sub doFunc
     } elsif( $theFunc eq "LISTRAND" ) {
         my @arr = getList( $theAttr );
         my $size = scalar @arr;
-        if( $size > 1 ) {
-            $i = int( rand( $size - 1 ) + 0.5 );
+        if( $size > 0 ) {
+            $i = int( rand( $size ) );
             $result = $arr[$i];
-        } elsif( $size == 1 ) {
-            $result = $arr[0];
         }
 
     } elsif( $theFunc eq "LISTREVERSE" ) {
