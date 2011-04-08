@@ -1,3 +1,19 @@
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2002 TWiki:Main.ChrisHuebsch
+# Copyright (C) 2005-2006 TWiki:Main.SteffenPoulsen
+# Copyright (C) 2008-2011 TWiki Contributors
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.org/copyleft/gpl.html
 #
 #      TWiki UpdateInfo Plugin
 #
@@ -33,18 +49,10 @@ use vars qw(
   $version
 );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2011-04-07';
 
 BEGIN {
-
     # 'Use locale' for internationalisation of Perl sorting and searching
     if ( $TWiki::cfg{UseLocale} ) {
         require locale;
@@ -195,10 +203,10 @@ sub update_info {
 sub commonTagsHandler {
     my ( $text, $topic, $web ) = @_;
 
-# Match WikiWordAsWebName.WikiWord, WikiWords, [[WikiWord][link text]], [[WebName.WikiWord][link text]], [[link text]], [[linktext]] or WIK IWO RDS (all followed by %ISNEW..% syntax)
+# Match WikiWordAsWebName.WikiWord, WikiWords, [[WikiWord][link text]], [[WebName.WikiWord][link text]],
+# [[link text]], [[linktext]] or WIK IWO RDS (all followed by %ISNEW..% syntax)
     $_[0] =~
 s/($wnre\.$wwre|$wwre|\[\[$wwre\]\[.*?\]\]|\[\[$wnre}\.$wwre\]\[.*?\]\]|\[\[.*?\]\]|$abbre) %ISNEW({.*?})?%/"$1".update_info($web, $1, $2)/geo;
-
 }
 
 1;
