@@ -512,6 +512,7 @@ sub userLoggedIn {
                   undef, $twiki->{request},
                   { Directory => "$TWiki::cfg{WorkingDir}/tmp" } );
             die TWiki::LoginManager::Session->errstr() unless $this->{_cgisession};
+            $this->{_cgisession}->param( 'SESSION_REQUEST_NUMBER', 0 );
         }
     }
     if( $authUser && $authUser ne $TWiki::cfg{DefaultUserLogin} ) {
@@ -527,13 +528,17 @@ sub userLoggedIn {
             # TODO: these are bare login's, so if and when there are multiple usermappings, 
             # this would need to include cUID..     
             $this->{_cgisession}->param( 'AUTHUSER', $authUser );
+            my $num = ( $this->{_cgisession}->param( 'SESSION_REQUEST_NUMBER' ) || 0 ) + 1;
+            $this->{_cgisession}->param( 'SESSION_REQUEST_NUMBER', $num );
         }
         $twiki->enterContext( 'authenticated' );
     } else {
         _trace( $this, "Session is NOT authenticated" );
         # if we are not authenticated, expire any existing session
-        $this->{_cgisession}->clear( [ 'AUTHUSER' ] )
-          if( $TWiki::cfg{UseClientSessions} );
+        if( $TWiki::cfg{UseClientSessions} ) {
+            $this->{_cgisession}->clear( [ 'AUTHUSER' ] );
+            $this->{_cgisession}->param( 'SESSION_REQUEST_NUMBER', 0 );
+        }
         $twiki->leaveContext( 'authenticated' );
     }
     if( $TWiki::cfg{UseClientSessions} ) {
