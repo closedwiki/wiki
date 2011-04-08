@@ -39,7 +39,6 @@ sub initPlugin
 
     # Get preferences settings
     $debug = TWiki::Func::getPreferencesValue( "ABUSEPLUGIN_DEBUG" ) || 0;
-$debug=1;
     $abuseWordsRE = TWiki::Func::getPreferencesValue( "ABUSEPLUGIN_ABUSEWORDS" ) || 'fuck, fucking';
     $abuseWordsRE =~ s/, */|/go;
     $abuseWordsRE = "\\b($abuseWordsRE)\\b";
