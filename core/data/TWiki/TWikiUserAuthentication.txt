@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1176971123" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1302335712" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki User Authentication
 
@@ -127,7 +127,7 @@ The ==bin/logon== script enables this. If you are using Apache Login, the ==bin/
 
 TWiki uses the CPAN:CGI::Session and CPAN:CGI::Cookie modules to track sessions. These modules are de facto standards for session management among Perl programmers. If you can't use Cookies for any reason, CPAN:CGI::Session also supports session tracking using the client IP address.
 
-You don't _have_ to enable sessions to support logins in TWiki. However it is *strongly* recommended. TWiki needs some way to remember the fact that you logged in from a particular browser, and it uses sessions to do this. If you don;t enable sessions, TWiki will try hard to remember you, but due to limitations in the browsers it may also forget you (and then suddenly remember you again later!). So for the best user experience, you should enable sessions.
+You don't _have_ to enable sessions to support logins in TWiki. However it is *strongly* recommended. TWiki needs some way to remember the fact that you logged in from a particular browser, and it uses sessions to do this. If you don't enable sessions, TWiki will try hard to remember you, but due to limitations in the browsers it may also forget you (and then suddenly remember you again later!). So for the best user experience, you should enable sessions.
 
 There are a number of TWikiVariables available that you can use to interrogate your current session. You can even add your own session variables to the TWiki cookie. Session variables are referred to as "sticky" variables.
 
@@ -135,15 +135,19 @@ There are a number of TWikiVariables available that you can use to interrogate y
 
 You can get, set, and clear session variables from within TWiki web pages or by using script parameters. This allows you to use the session as a personal "persistent memory space" that is not lost until the web browser is closed. Also note that if a session variable has the same name as a TWiki preference, the session variables value takes precedence over the TWiki preference. *This allows for per-session preferences.*
 
-To make use of these features, use the tags:
+To make use of these features, use the variables:
 
-<verbatim>
-%SESSION_VARIABLE{ "varName" }%
-%SESSION_VARIABLE{ "varName" set="varValue" }%
-%SESSION_VARIABLE{ "varName" clear="" }%
-</verbatim>
+| =%<nop>SESSION_VARIABLE{ "varName" }%= | Read a session variable |
+| =%<nop>SESSION_VARIABLE{ "varName" set="varValue" }%= | Set a session variable |
+| =%<nop>SESSION_VARIABLE{ "varName" clear="" }%= | Clear a session variable |
 
-Note that you *cannot* override access controls preferences this way.
+Special read-only session variables:
+   * =%<nop>SESSION_VARIABLE{"AUTHUSER"}%= - user ID, current value: <tt>%SESSION_VARIABLE{"AUTHUSER"}%</tt>
+   * =%<nop>SESSION_VARIABLE{"SESSION_REQUEST_NUMBER"}%= - number of pages accessed by current user since login, current value: <tt>%SESSION_VARIABLE{"SESSION_REQUEST_NUMBER"}%</tt>
+
+__Notes:__
+   * You *cannot* override access controls preferences this way.
+   * You can use the SetGetPlugin to [[VarSET][set]] and [[VarGET][get]] variables that are not user specific. This plugin can store variables persistently if needed.
 
 ---+++ Cookies and Transparent Session IDs
 
@@ -223,6 +227,6 @@ Finally, it would be really neat if someone was to work out how to use certifica
 See TWiki:TWiki.SecuringTWikiSite for more information.
 
 %STOPINCLUDE%
-__Related Topics:__ AdminDocumentationCategory, TWikiAccessControl, TWiki:TWiki.TWikiUserAuthenticationSupplement, TWiki:TWiki.SecuringTWikiSite
+__Related Topics:__ AdminDocumentationCategory, TWikiAccessControl, VarAUTHREALM, VarGET, VarLOGIN, VarLOGOUT, VarSESSIONID, VarSESSIONVAR, VarSESSIONVARIABLE, VarSET, TWiki:TWiki.TWikiUserAuthenticationSupplement, TWiki:TWiki.SecuringTWikiSite
 
 -- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.MikeMannix, TWiki:Main.CrawfordCurrie, TWiki:Main.SvenDowideit
