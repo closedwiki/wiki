@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1302146740" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1302288772" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -78,7 +78,7 @@ Conventions for Syntax:
 ---+++ AND( list ) -- logical AND of a list
    * Syntax: ==$AND( list )==
    * Example: ==%<nop>CALC{"$AND(1, 0, 1)"}%== returns ==0==
-   * Related: =[[#FuncNOT][$NOT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncOR][$OR()]]=
+   * Related: =[[#FuncNOT][$NOT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncOR][$OR()]]=, =[[#FuncWHILE][$WHILE()]]=
 
 #FuncAVERAGE
 ---+++ AVERAGE( list ) -- average of a list or a range of cells
@@ -110,7 +110,7 @@ Conventions for Syntax:
 ---+++ COUNTITEMS( list ) -- count individual items in a list
    * Syntax: ==$COUNTITEMS( list )==
    * Example: ==%<nop>CALC{"$COUNTITEMS($ABOVE())"}%== returns ==Closed: 1, Open: 2== assuming one cell above the current cell contains ==Closed== and two cells contain ==Open==
-   * Related: =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=
+   * Related: =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncWHILE][$WHILE()]]=
 
 #FuncCOUNTSTR
 ---+++ COUNTSTR( list, str ) -- count the number of cells in a list equal to a given string
@@ -118,7 +118,7 @@ Conventions for Syntax:
    * Syntax: ==$COUNTSTR( list, _str_ )==
    * Example: ==%<nop>CALC{"$COUNTSTR($ABOVE())"}%== counts the number of non empty cells above the current cell
    * Example: ==%<nop>CALC{"$COUNTSTR($ABOVE(), DONE)"}%== counts the number of cells equal to ==DONE==
-   * Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncLIST][$LIST()]]=
+   * Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncWHILE][$WHILE()]]=
 
 #FuncDEF
 ---+++ DEF( list ) -- find first non-empty list item or cell
@@ -134,7 +134,7 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$EMPTY(foo)"}%== returns ==0==
    * Example: ==%<nop>CALC{"$EMPTY()"}%== returns ==1==
    * Example: ==%<nop>CALC{"$EMPTY($TRIM( ))"}%== returns ==1==
-   * Related: =[[#FuncEXACT][$EXACT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncTRIM][$TRIM()]]=
+   * Related: =[[#FuncEXACT][$EXACT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncTRIM][$TRIM()]]=, =[[#FuncWHILE][$WHILE()]]=
 
 #FuncEVAL
 ---+++ EVAL( formula ) -- evaluate a simple mathematical formula
@@ -267,7 +267,7 @@ Conventions for Syntax:
    * Specify the variable name (alphanumeric characters and underscores). An empty string is returned if the variable does not exist. Use =$SET()= to set a variable first. Unlike table ranges, variables live for the time of the page view and persist across tables, i.e. you can use it to summarize results across several tables.
    * Syntax: ==$GET( name )==
    * Example: ==%<nop>CALC{"$GET(my_total)"}%== returns the value of the =my_total= variable
-   * Related: =[[#FuncEXEC][$EXEC()]]=, =[[#FuncNOEXEC][$NOEXEC()]]=, =[[#FuncSET][$SET()]]=, =[[#FuncSETIFEMPTY][$SETIFEMPTY()]]=, =[[#FuncSETM][$SETM()]]=, TWiki:Plugins.SetGetPlugin
+   * Related: =[[#FuncEXEC][$EXEC()]]=, =[[#FuncNOEXEC][$NOEXEC()]]=, =[[#FuncSET][$SET()]]=, =[[#FuncSETIFEMPTY][$SETIFEMPTY()]]=, =[[#FuncSETM][$SETM()]]=, =[[#FuncWHILE][$WHILE()]]=, TWiki:Plugins.SetGetPlugin
 
 #FuncIF
 ---+++ IF( condition, value if true, value if 0 ) -- return a value based on a condition
@@ -276,7 +276,7 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$IF($T(R1:C5) > 1000, Over Budget, OK)"}%== returns ==Over Budget== if value in R1:C5 is over 1000, ==OK== if not
    * Example: ==%<nop>CALC{"$IF($EXACT($T(R1:C2),), empty, $T(R1:C2))"}%== returns the content of R1:C2 or ==empty== if empty
    * Example: ==%<nop>CALC{"$SET(val, $IF($T(R1:C2) == 0, zero, $T(R1:C2)))"}%== sets a variable conditionally
-   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncOR][$OR()]]=
+   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncOR][$OR()]]=, =[[#FuncWHILE][$WHILE()]]=
 
 #FuncINSERTSTRING
 ---+++ INSERTSTRING( text, start, new ) -- insert a string into a text string
@@ -330,7 +330,7 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$LISTIF($item > 12, 14, 7, 25)"}%== returns ==14, 25==
    * Example: ==%<nop>CALC{"$LISTIF($NOT($EXACT($item,)), A, B, , E)"}%== returns non-empty elements ==A, B, E==
    * Example: ==%<nop>CALC{"$LISTIF($index > 2, A, B, C, D)"}%== returns ==C, D==
-   * Related: =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTNONEMPTY][$LISTNONEMPTY()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSUM][$SUM()]]=
+   * Related: =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTNONEMPTY][$LISTNONEMPTY()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSUM][$SUM()]]=, =[[#FuncWHILE][$WHILE()]]=
 
 #FuncLISTITEM
 ---+++ LISTITEM( index, list ) -- get one element of a list
@@ -353,7 +353,7 @@ Conventions for Syntax:
    * In the formula you can use ==$item== to indicate the element; ==$index== to show the index of the list, starting at 1. If ==$item== is omitted, the item is appended to the formula.
    * Syntax: ==$LISTMAP( formula, list )==
    * Example: ==%<nop>CALC{"$LISTMAP($index: $EVAL(2 * $item), 3, 5, 7, 11)"}%== returns ==1: 6, 2: 10, 3: 14, 4: 22==
-   * Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTNONEMPTY][$LISTNONEMPTY()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSPLIT][$SPLIT()]]=, =[[#FuncSUM][$SUM()]]=
+   * Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTNONEMPTY][$LISTNONEMPTY()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSPLIT][$SPLIT()]]=, =[[#FuncSUM][$SUM()]]=, =[[#FuncWHILE][$WHILE()]]=
 
 #FuncLISTNONEMPTY
 ---+++ LISTNONEMPTY( list ) -- remove all empty elements from a list
@@ -467,7 +467,7 @@ Conventions for Syntax:
    * Returns 0 if ==num== is not zero, 1 if zero
    * Syntax: ==$NOT( num )==
    * Example: ==%<nop>CALC{"$NOT(0)"}%== returns ==1==
-   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncOR][$OR()]]=
+   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncOR][$OR()]]=, =[[#FuncWHILE][$WHILE()]]=
 
 #FuncODD
 ---+++ ODD( num ) -- test for odd number
@@ -479,7 +479,7 @@ Conventions for Syntax:
 ---+++ OR( list ) -- logical OR of a list
    * Syntax: ==$OR( list )==
    * Example: ==%<nop>CALC{"$OR(1, 0, 1)"}%== returns ==1==
-   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncNOT][$NOT()]]=
+   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncWHILE][$WHILE()]]=
 
 #FuncPERCENTILE
 ---+++ PERCENTILE( num, list ) -- percentile of a list or range of cells
@@ -524,6 +524,7 @@ Conventions for Syntax:
 ---+++ REPEAT( text, num ) -- repeat text a number of times
    * Syntax: ==$REPEAT( text, num )==
    * Example: ==%<nop>CALC{"$REPEAT(/\, 5)"}%== returns ==/\/\/\/\/\==
+   * Related: =[[#FuncWHILE][$WHILE()]]=
 
 #FuncREPLACE
 ---+++ REPLACE( text, start, num, new ) -- replace part of a text string
@@ -577,7 +578,7 @@ Conventions for Syntax:
    * Specify the variable name (alphanumeric characters and underscores) and the value. The value may contain a formula; formulae are evaluated before the variable assignment; see =[[#FuncNOEXEC][$NOEXEC()]]= if you want to prevent that. This function returns no output. Use =$GET()= to retrieve variables. Unlike table ranges, variables live for the time of the page view and persist across tables, i.e. you can use it to summarize results across several tables and also across included topics
    * Syntax: ==$SET( name, value )==
    * Example: ==%<nop>CALC{"$SET(my_total, $SUM($ABOVE()))"}%== sets the =my_total= variable to the sum of all table cells located above the current cell and returns an empty string
-   * Related: =[[#FuncEXEC][$EXEC()]]=, =[[#FuncGET][$GET()]]=, =[[#FuncNOEXEC][$NOEXEC()]]=, =[[#FuncSETIFEMPTY][$SETIFEMPTY()]]=, =[[#FuncSETM][SETM()]]=, TWiki:Plugins.SetGetPlugin
+   * Related: =[[#FuncEXEC][$EXEC()]]=, =[[#FuncGET][$GET()]]=, =[[#FuncNOEXEC][$NOEXEC()]]=, =[[#FuncSETIFEMPTY][$SETIFEMPTY()]]=, =[[#FuncSETM][SETM()]]=, =[[#FuncWHILE][$WHILE()]]=, TWiki:Plugins.SetGetPlugin
 
 #FuncSETIFEMPTY
 ---+++ SETIFEMPTY( name, value ) -- set a variable only if empty
@@ -591,7 +592,7 @@ Conventions for Syntax:
    * Specify the variable name (alphanumeric characters and underscores) and the formula. The formula must start with an operator to ==+== (add), ==-== (subtract), ==*== (multiply), or ==/== (divide) something to the variable. This function returns no output. Use =$GET()= to retrieve variables
    * Syntax: ==$SETM( name, formula )==
    * Example: ==%<nop>CALC{"$SETM(total, + $SUM($LEFT()))"}%== adds the sum of all table cells on the left to the =total= variable, and returns an empty string
-   * Related: =[[#FuncGET][$GET()]]=, =[[#FuncSET][$SET()]]=, =[[#FuncSETIFEMPTY][$SETIFEMPTY()]]=
+   * Related: =[[#FuncGET][$GET()]]=, =[[#FuncSET][$SET()]]=, =[[#FuncSETIFEMPTY][$SETIFEMPTY()]]=, =[[#FuncWHILE][$WHILE()]]=
 
 #FuncSIGN
 ---+++ SIGN( num ) -- sign of a number
@@ -717,6 +718,15 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$VALUE(Total: -12.5)"}%== returns ==-12.5==
    * Related: =[[#FuncEVAL][$EVAL()]]=, =[[#FuncINT][$INT()]]=
 
+#FuncWHILE
+---+++ WHILE( condition, do ) -- do something while a condition is true
+   * The =condition= can be a number (where ==0== means condition not met), or two numbers with a comparison operator ==&lt;== (less than), ==&lt;=<nop>== (less than or equal), ==<nop>==<nop>== (equal), ==<nop>!=<nop>== (not equal), ==&gt;=<nop>== (greater than or equal), ==&gt;== (greater than).
+   * The =condition= and =do= are evaluated in each cycle; a =$counter= starting at 1 can be used in =condition= and =do=.
+   * Syntax: ==$WHILE( condition, do something )==
+   * Example: ==%<nop>CALC{"$WHILE($counter<=10, $counter )"}%== returns ==1 2 3 4 5 6 7 8 9 10==
+   * Example: ==%<nop>CALC{"$SET(i, 0) $WHILE($GET(i)<10, $SETM(i, +1) $EVAL($GET(i) * $GET(i)), )"}%== returns ==1, 4, 9, 16, 25, 36, 49, 64, 81, 100,==
+   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncGET][$GET()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncOR][$OR()]]=, =[[#FuncSET][$SET()]]=, =[[#FuncSETM][$SETM()]]=, =[[#FuncREPEAT][$REPEAT()]]=
+
 #FuncWORKINGDAYS
 ---+++ WORKINGDAYS( serial_1, serial_2 ) -- working days between two serialized dates
    * Working days are Monday through Friday (sorry, Israel!)
@@ -821,6 +831,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-04-06: | TWikibug:Item6681: Added WHILE() |
 |  2011-04-06: | TWikibug:Item6679: Fixed small issue with LISTRAND, where last item only got 50% of fair share to get picked |
 |  2011-03-25: | TWikibug:Item6669: Added $LISTNONEMPTY() |
 |  2011-03-24: | TWikibug:Item6668: Fixed $LIST() not flattening a list in a cell<br /> TWikibug:Item6667: Fixed $RIGHT() having wrong result due to incorrect start cell |
