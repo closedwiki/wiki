@@ -173,7 +173,7 @@ sub doFunc
     $theAttr = "" unless( defined $theAttr );
     TWiki::Func::writeDebug( "- SpreadSheetPlugin::Calc::doFunc: $theFunc( $theAttr ) start" ) if $debug;
 
-    unless( $theFunc =~ /^(IF|LISTIF|LISTMAP|NOEXEC)$/ ) {
+    unless( $theFunc =~ /^(IF|LISTIF|LISTMAP|NOEXEC|WHILE)$/ ) {
         # Handle functions recursively
         $theAttr =~ s/\$([A-Z]+)$escToken([0-9]+)\((.*?)$escToken\2\)/&doFunc($1,$3)/geo;
         # Clean up unbalanced mess
@@ -388,6 +388,36 @@ sub doFunc
             $result =~ s/$escToken\-*[0-9]+([\(\)])/$1/go;
 
         } # else return error message
+
+    } elsif( $theFunc eq "WHILE" ) {
+        # WHILE(condition, do something)
+        my( $condition, $str ) = _properSplit( $theAttr, 2 );
+        my $i = 0;
+        while( 1 ) {
+            if( $i++ >= 32767 ) {
+                $result .= 'ERROR: Infinite loop (32767 cycles)';
+                last; # prevent infinite loop
+            }
+            # with delay, handle functions in condition recursively and clean up unbalanced parenthesis
+            my $cond = $condition;
+            $cond =~ s/\$counter/$i/go;
+            $cond =~ s/\$([A-Z]+)$escToken([0-9]+)\((.*?)$escToken\2\)/&doFunc($1,$3)/geo;
+            $cond =~ s/$escToken\-*[0-9]+([\(\)])/$1/go;
+            $cond =~ s/^\s*(.*?)\s*$/$1/o;
+            my $res = safeEvalPerl( $cond );
+            if( $res =~ /^ERROR/ ) {
+                $result .= $res;
+                last; # exit loop and return error
+            }
+            last unless( $res ); # proper loop exit
+            my $res = $str;
+            $res = "" unless( defined( $res ) );
+            # with delay, handle functions in result recursively and clean up unbalanced parenthesis
+            $res =~ s/\$counter/$i/go;
+            $res =~ s/\$([A-Z]+)$escToken([0-9]+)\((.*?)$escToken\2\)/&doFunc($1,$3)/geo;
+            $res =~ s/$escToken\-*[0-9]+([\(\)])/$1/go;
+            $result .= $res;
+        }
 
     } elsif( $theFunc eq "UPPER" ) {
         $result = uc( $theAttr );
