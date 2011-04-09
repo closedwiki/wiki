@@ -410,7 +410,7 @@ sub doFunc
                 last; # exit loop and return error
             }
             last unless( $res ); # proper loop exit
-            my $res = $str;
+            $res = $str;
             $res = "" unless( defined( $res ) );
             # with delay, handle functions in result recursively and clean up unbalanced parenthesis
             $res =~ s/\$counter/$i/go;
