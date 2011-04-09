@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1302288772" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1302327949" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -831,7 +831,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2011-04-06: | TWikibug:Item6681: Added WHILE() |
+|  2011-04-08: | TWikibug:Item6681: Added WHILE() |
 |  2011-04-06: | TWikibug:Item6679: Fixed small issue with LISTRAND, where last item only got 50% of fair share to get picked |
 |  2011-03-25: | TWikibug:Item6669: Added $LISTNONEMPTY() |
 |  2011-03-24: | TWikibug:Item6668: Fixed $LIST() not flattening a list in a cell<br /> TWikibug:Item6667: Fixed $RIGHT() having wrong result due to incorrect start cell |
