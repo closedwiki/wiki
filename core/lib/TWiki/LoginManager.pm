@@ -837,16 +837,16 @@ sub getSessionValue {
 ---++ ObjectMethod setSessionValue( $name, $value )
 
 Set the value of a session variable.
-We do not allow setting of AUTHUSER.
+We do not allow setting of AUTHUSER and SESSION_REQUEST_NUMBER.
 
 =cut
 
 sub setSessionValue {
     my( $this, $key, $value ) = @_;
 
-    # We do not allow setting of AUTHUSER.
+    # We do not allow setting of AUTHUSER and SESSION_REQUEST_NUMBER.
     if( $this->{_cgisession} &&
-        $key ne 'AUTHUSER' &&
+        $key !~ /^(AUTHUSER|SESSION_REQUEST_NUMBER)$/ &&
         defined( $this->{_cgisession}->param( $key, $value ) ) ) {
 
         return 1;
