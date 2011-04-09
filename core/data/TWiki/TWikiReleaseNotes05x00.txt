@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301415531" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1302383208" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.0.2 (Helsinki), 2011-03-29
 
 %TOC%
@@ -236,7 +236,7 @@ TWiki-5.0.2 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRele
 
 <noautolink>
 | TWikibug:Item2385 | Add IP address to registration e-mail confirming e-mail address |
-| TWikibug:Item6589 | New TWiki Doc Graphics icons for TWiki 5.0.2 |
+| TWikibug:Item6589 | 8 new TWikiDocGraphics icons, 2 updated icons for TWiki 5.0.2 |
 | TWikibug:Item6593 | Documentation enhancements for TWiki 5.0.2 |
 | TWikibug:Item6603 | JSCalendarContrib: Add transparent image for nicer date button in TWiki Forms |
 | TWikibug:Item6608 | PatternSkin: Reduce font size of H1 and H2 headings |
@@ -248,23 +248,27 @@ TWiki-5.0.2 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRele
 | TWikibug:Item6626 | SlideShowPlugin: New slide navigation using keys: Home, Left-arrow, Page-up, Right-arrow, Page-down, End and Esc |
 | TWikibug:Item6653 | JQueryPlugin: Update plugin to jquery-1.5.1 and jquery-ui-1.8.10 |
 | TWikibug:Item6659 | TopMenuSkin: Customizable web-specific top bar |
-| TWikibug:Item6666 | SpreadSheetPlugin: New SPLIT() function |
+| TWikibug:Item6666 | SpreadSheetPlugin: New SPLIT() function to split a string into a list |
 | TWikibug:Item6669 | SpreadSheetPlugin: Add LISTNONEMPTY() function that removes empty elements from a list |
+| TWikibug:Item6681 | SpreadSheetPlugin: New WHILE() function to do something in a loop while a condition is met |
 </noautolink>
-Total: 15
+Total: 16
 
 ---+++ Fixes
 
 <noautolink>
 | TWikibug:Item5384 | Allow Delete of Duplicate Attachments |
 | TWikibug:Item6491 | Missing template change in TWiki-5.0.0 for EDITMETHOD setting |
+| TWikibug:Item6602 | The viewfile script delivers attachments with lower-cased names |
 | TWikibug:Item6604 | Documentation missing for EDITMETHOD setting |
 | TWikibug:Item6625 | Documentation for time format not available to normal users |
 | TWikibug:Item6634 | Topic links in included topics not web-prefixed if WikiWord ends with punctuation |
 | TWikibug:Item6667 | SpreadSheetPlugin: RIGHT() has wrong result due to incorrect start cell |
 | TWikibug:Item6668 | SpreadSheetPlugin: LIST() does not flatten a list in a cell |
 | TWikibug:Item6673 | Make login more robust |
+| TWikibug:Item6675 | JQueryPlugin: Possible to specify JQTHEME more than once per page, but only first one takes effect |
+| TWikibug:Item6679 | SpreadSheetPlugin: Small issue with LISTRAND, where last item only got 50% of fair share to get picked |
 </noautolink>
-Total: 7
+Total: 11
 
 __Related Topics:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide, %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%
