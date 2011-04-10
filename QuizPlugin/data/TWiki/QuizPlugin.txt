@@ -1,13 +1,20 @@
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
-
+%META:TOPICINFO{author="TWikiContributor" date="1302479003" format="1.1" version="$Rev$"}%
 ---+!! !QuizPlugin
 <!--
-One line description, required for extensions repository catalog.
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/QuizPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/QuizPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+
+One line description, required for extensions repository catalog:
    * Set SHORTDESCRIPTION = Small Quiz generator
 -->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
 %SHORTDESCRIPTION%
 
-%TOC%
+---++ Introduction
 
 One of the things that training design people tell us is that "it's good to checkpoint" during a training course with quiz questions. This is a little quiz formatter that lets us embed a quiz into the training in the wiki, as we develop it. Of course, you can use it for other things as well....
 
@@ -61,14 +68,16 @@ If the plugin is installed, you will see a question here:
 
 ---++ Plugin Info
 
-|  Plugin Author(s): | TWiki:Main.CrawfordCurrie|
-|  Plugin Version: | %$VERSION% |
-|  Copyright: | &copy; 2001 Motorola Ltd. and &copy; 2007 C-Dot Consultants http://c-dot.co.uk |
+|  Plugin Author: | TWiki:Main.CrawfordCurrie |
+|  Copyright: | &copy; 2001 Motorola Ltd. and &copy; 2007 C-Dot Consultants http://c-dot.co.uk <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Plugin Version: | 2011-04-10 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-04-10: | TWikibug:Item6638: Doc improvements -- TWiki:Main.PeterThoeny |
+|  2007-02-22: | Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/QuizPlugin |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/QuizPluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/QuizPluginAppraisal |
 
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.UserDocumentationCategory, %SYSTEMWEB%.TWikiPreferences

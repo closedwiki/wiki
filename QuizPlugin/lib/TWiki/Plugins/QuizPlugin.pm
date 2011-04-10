@@ -2,10 +2,25 @@
 #
 # Copyright (C) 2007 Motorola Ltd. 2001
 # Copyright (C) 2007 Crawford Currie http://c-dot.co.uk
+# Copyright (C) 2008-2011 TWiki Contributors
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at
+# http://www.gnu.org/copyleft/gpl.html
+#
+# As per the GPL, removal of this notice is prohibited.
 
 use strict;
 
-package TWiki::Plugins::QuizPlugin; 	# change the package name!!!
+package TWiki::Plugins::QuizPlugin;
 
 use vars qw(
             $web $topic $user $installWeb $VERSION $RELEASE
@@ -13,7 +28,7 @@ use vars qw(
            );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.000';
+$RELEASE = '2011-04-10';
 
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
