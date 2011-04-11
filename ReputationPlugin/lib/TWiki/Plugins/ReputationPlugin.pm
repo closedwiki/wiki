@@ -92,7 +92,7 @@ our $smileybuttons=0;
 # Weights assigned to each voting option
 # Names shouldn't be changed if the plugin has been in use, if you want to change
 # the labels on buttons change buttonstrings
-our %votevalues = ("poor", -1, "negative", -0.5, "positive", 0.5, "excellent", 1);
+our %votevalues = ("poor", -2, "negative", -1, "positive", 1, "excellent", 2);
 our $votenames=join("|",keys %votevalues);
 our $voteRegex = "^[$votenames]";
 our %buttonStrings=("poor",$LH->maketext("poor"),"negative",$LH->maketext("negative"),"positive", $LH->maketext("positive"),"excellent",$LH->maketext("excellent"));
@@ -114,6 +114,7 @@ our $defaulttrustvalue=500;
 our $threshold=$defaulttrustvalue;
 our $recommendationthreshold=$maxtrustvalue+1;
 our $defaultcredibilityweight=5;
+use constant DEFAULT_RECOMMENDATION=>800;
 use constant TINY_FLOAT => 1e-200;
 
 # Use html entities to escape everything returned back to the user in order to prevent XSS
@@ -164,7 +165,7 @@ sub initPlugin {
     		$threshold=$defaulttrustvalue;
     	}
 	}
-    $recommendationthreshold=TWiki::Func::getPreferencesValue('REPUTATIONPLUGIN_RECOMMENDATIONTHRESHOLD')||$maxtrustvalue+1;
+    $recommendationthreshold=TWiki::Func::getPreferencesValue('REPUTATIONPLUGIN_RECOMMENDATIONTHRESHOLD')|| DEFAULT_RECOMMENDATION;
     if ($recommendationthreshold =~ /(\d+)/) {
     	$recommendationthreshold = $1;
     }
@@ -178,12 +179,12 @@ sub initPlugin {
 	# this setting.
     my $numberofoptions=TWiki::Func::getPreferencesValue('REPUTATIONPLUGIN_VOTEOPTIONS')||2;
 	if ($numberofoptions==2) {
-	    %votevalues =("negative", -0.5, "positive", 0.5);
+	    %votevalues =("negative", -1, "positive", 1);
     }
 	# mod_perl makes it mandatory to reassign this value, if different voteoptions are
 	# used in some other web or topic
 	else {
-		%votevalues = ("poor", -1, "negative", -0.5, "positive", 0.5, "excellent", 1);
+		%votevalues = ("poor", -2, "negative", -1, "positive", 1, "excellent", 2);
 	}
     # Plugin correctly initialized
     return 1;
@@ -359,7 +360,7 @@ sub _showtoplist {
  	}
  	return $text;
 }
-# One option would be to save average values
+# One option would be to save average values, or actually save the mean, count, and sum
 sub _addtotoplist {
 	my ($value)=@_;
 	my %topdb ;
@@ -482,11 +483,15 @@ sub _showDefault {
 	}
 	my %graphdata=();
 	my $forget= TWiki::Func::getPreferencesFlag("REPUTATIONPLUGIN_FORGET")||0;
-	my $percent = TWiki::Func::getPreferencesFlag("REPUTATIONPLUGIN_PERCENT")||0; 
-	my $bayes = TWiki::Func::getPreferencesValue("REPUTATIONPLUGIN_BAYES")|| "off"; 
+	my $percent = TWiki::Func::getPreferencesFlag("REPUTATIONPLUGIN_PERCENT") || "default";
+	if ($percent eq "default") {
+	$percent=1;
+	} 
+	my $bayes = TWiki::Func::getPreferencesValue("REPUTATIONPLUGIN_BAYES")|| "0.5"; 
 	if ((defined $bayes && !$bayes =~ /^[-+]?[0-9]*\.?[0-9]+$/) || $bayes<0){
     	$bayes=0;
     }
+	my $credaccumulator=0;
 	my ( $date, $author, $currentrevision, $comment ) = TWiki::Func::getRevisionInfo($web, $topic)  if ($forget);
     foreach my $vote (keys %$voteinfo) {
 	my $userfound=0;
@@ -522,7 +527,13 @@ sub _showDefault {
             	my $unknowns=$votevalues{$vote}*$num;
             	my $value=$votevalues{$vote};
             	my $cred=_credibility($users);
-            	$sum=$sum+$cred*$value*$credibilityweight+$unknowns*$unknownweight;
+				if ($percent) {
+				$credaccumulator+=$cred;
+				$sum+=$cred*$value;
+				}
+				else {
+            	$sum=$sum+$cred*$value;
+				}
             }
 			if ($graphdata{$vote}){
 				$graphdata{$vote}=$graphdata{$vote}+$num;
@@ -531,15 +542,7 @@ sub _showDefault {
 				$graphdata{$vote}=$num;
 			}
 		}
-		if ($absolute && $percent) {
-			my $max=(sort {$a <=> $b} values %votevalues)[-1];
-			my $min=(sort {$a <=> $b} values %votevalues)[0];
-			my $votecount=0;
-			($votecount+=$_) for values %graphdata;
-			# Tiny float added to prevent div/0
-			$percent = sprintf("%.2f",($sum/$max)/($votecount+$bayes+TINY_FLOAT)*100);
-			
-		}
+		
         # User has voted so a remove button is made
         if ( $userfound && $readaccess) {
         	$line = _votebutton('remove', $vote, $graphdata{$vote});
@@ -558,13 +561,30 @@ sub _showDefault {
     }
     $text.='<div>' if ($voteaccess);
     # print the score for the article
+	if ( $percent) {
+			my $max=(sort {$a <=> $b} values %votevalues)[-1];
+			my $min=(sort {$a <=> $b} values %votevalues)[0];
+			my $avg=($max-$min)/2;
+			if ($absolute) {
+				my $votecount=0;
+				($votecount+=$_) for values %graphdata;
+				# Tiny float added to prevent div/0
+				$percent = sprintf("%.0f",($sum+$votecount*$max+$bayes*$avg)/$max/2/($votecount+$bayes+TINY_FLOAT)*100*$votecount/($votecount+TINY_FLOAT));
+			}
+			else {
+			$percent=sprintf("%.0f",($sum+$credaccumulator*$max+$bayes*$avg)/$max/2/($credaccumulator+$bayes+TINY_FLOAT)*100*$credaccumulator/($credaccumulator+TINY_FLOAT));
+			}
+	}
     if($readaccess){
-		if ($percent && $absolute) {
+		if ($percent && $sum) {
     	$text.=$LH->maketext("Rating: [_1] %", $percent);
 		}
-		else {
+		elsif ($sum) {
 		$sum=sprintf("%.2f", $sum) if(!$absolute|| $forget);
     	$text.=$LH->maketext("Rating: [_1] ", $sum);
+		}
+		else {
+		$text.=$LH->maketext("No Ratings");
 		}
 		# Show link to graph, if there has been a vote
 		my $graph.=_makePrettyBars(%graphdata) if ($num);
@@ -1102,7 +1122,7 @@ sub _addTrust {
      'Lockfile'  =>  '/tmp/Tie-MLDBM-user.lock'
 
          or die "Cannot open database '$userfile: $!\n";
-	my  $voteinfo= $usersdb{$user};# if ();	
+	my  $voteinfo= $usersdb{$user};	
 	# Vote is an update
 	if (defined $usersdb{$user} && $voteinfo->{$Targetwebtopic}) {
 		$lastvote=$voteinfo->{$Targetwebtopic}->{'vote'};
@@ -1122,7 +1142,7 @@ sub _addTrust {
 		$voteinfo->{$Targetwebtopic}->{'vote'}=$vote;
 		$voteinfo->{$Targetwebtopic}->{'rev'}=$currentrev;
 		@{$voteinfo->{$Targetwebtopic}->{'authors'}}=@authors;
-		$num=$votevalues{$lastvote};
+		$num=$votevalues{$vote};
 		$text.=_updateusers($num, @authors);
     	_trustvoters($Targetwebtopic, $vote) if ($voterreputation);
 	}
@@ -1213,9 +1233,10 @@ or die "Cannot open database '$trustfile: $!\n";
         }
 		# He is new to us if he exists and isn't the user
         elsif ($line && (TWiki::Func::wikiToUserName($line) ne $user || $line ne $user) && TWiki::Func::wikiToUserName($line)) {
-	       $text.="new" if ($debug);
-           $value=sprintf( '%03d',$defaulttrustvalue+$num);
-           $trusted->{$line}=$value;
+			$value=sprintf( '%03d',$defaulttrustvalue+$num);
+			$trusted->{$line}=$value;
+			$text.="new $value $line $trusted->{$line} $num" if ($debug);
+           
     	}
     }
 	$trustdb{$user}=$trusted;

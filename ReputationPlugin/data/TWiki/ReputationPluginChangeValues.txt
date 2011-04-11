@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="JoonaKannisto" date="1300102690" format="1.1" version="1.8"}%
+%META:TOPICINFO{author="JoonaKannisto" date="1301925422" format="1.1" version="1.10"}%
 %META:TOPICPARENT{name="TWiki.ReputationPluginInfofi"}%
 ---+ Update trust values
 This page is for changing the personal level of trust you have to another TWiki user. This trust value is used to determine whether votes and recommendations from other users are taken into account when calculating topic scores. 
