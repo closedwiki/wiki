@@ -920,6 +920,7 @@ sub _REMOVEVOTE {
 sub _removetrust {
     my ($Targetwebtopic )=@_;
     my $text='';
+	$Targetwebtopic="$web.$topic" if (!$Targetwebtopic);
 	my %usersdb ;
 	tie %usersdb, 'MLDBM', -Filename => $userfile,
     	-Flags    => DB_CREATE
@@ -934,13 +935,13 @@ sub _removetrust {
     my $num=0;
 	if ($voteinfo->{$Targetwebtopic}) {
     	$num=$votevalues{$voteinfo->{$Targetwebtopic}{'vote'}}*-1;
-    	my @changedusers=$voteinfo->{$Targetwebtopic}->{'authors'};
+    	my @changedusers=@{$voteinfo->{$Targetwebtopic}->{'authors'}};
     	if (!scalar @changedusers) {
-		my ($currentrev, %lastauthors)=_searchAuthors($votevalues{$voteinfo->{$Targetwebtopic}{'rev'}});
+		my ($currentrev, %lastauthors)=_searchAuthors($voteinfo->{$Targetwebtopic}{'rev'});
         	@changedusers=keys %lastauthors;
-        }
+    	}
         my $wikipages=join(" $TWiki::cfg{UsersWebName}",@changedusers) if ($debug);
-        $text=_updateusers($num, @changedusers);
+        $text.=_updateusers($num, @changedusers);
         $text.=$LH->maketext(" affecting [quant,_1,user] [_3].[_2]", scalar(@changedusers), $wikipages, $TWiki::cfg{UsersWebName}) if ($debug);
     delete $voteinfo->{$Targetwebtopic}; 
 	}
@@ -1132,7 +1133,7 @@ sub _addTrust {
 			$text=_updateusers($num, keys %lastauthors);
 		}
 		else {
-			$text=_updateusers($num,$voteinfo->{$Targetwebtopic}->{'authors'});
+			$text=_updateusers($num,@{$voteinfo->{$Targetwebtopic}->{'authors'}});
 		}
 		_trustvoters($Targetwebtopic, $lastvote,1,$voteinfo->{$Targetwebtopic}->{'rev'}) if ($voterreputation);      
 	}
