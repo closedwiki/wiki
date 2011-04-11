@@ -1,9 +1,12 @@
-%META:TOPICINFO{author="PatrickDiamond" date="1141122005" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="TWikiContributor" date="1302480031" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="XmlQueryPlugin"}%
----+ Recipe showing how to place all table fields in one set. This simplifies some types of query.
+---+!! !XmlQueryPlugin Recipe 7: List All Attachments
+
+XmlQueryPlugin Recipe 7 shows how to place all table fields in one set. This simplifies some types of query.
+
 %TOC%
 
-		  * For further details on this technique go to  [[http://www-106.ibm.com/developerworks/xml/library/x-tipxsltmp.html]]
+   * For further details on this technique go to [[http://www-106.ibm.com/developerworks/xml/library/x-tipxsltmp.html]]
 
 ---++Sample Tables
 
@@ -42,48 +45,48 @@
 <!-- The field title is taken as the value in the first row of this column -->
 
 <xsl:variable name="fields_by_column">
-			<!-- http://www-106.ibm.com/developerworks/xml/library/x-tipxsltmp.html -->
-			<xsl:call-template name="find_fields_by_column"/>
+         <!-- http://www-106.ibm.com/developerworks/xml/library/x-tipxsltmp.html -->
+         <xsl:call-template name="find_fields_by_column"/>
 </xsl:variable>
 
 <!-- This template processes each field and tranforms it into a node /fields/field -->
 <xsl:template name="find_fields_by_column">
-			<xsl:param name="find_table"/>
-			<fields>
-			<!-- process each table -->
-			<xsl:for-each select="/twiki/web/topic/data/tables/table">
-						<!-- extract the table name and topic name -->
-						<xsl:variable name="table" select="@name"/>
-						<xsl:variable name="topic" select="../../@topic"/>
+         <xsl:param name="find_table"/>
+         <fields>
+         <!-- process each table -->
+         <xsl:for-each select="/twiki/web/topic/data/tables/table">
+                  <!-- extract the table name and topic name -->
+                  <xsl:variable name="table" select="@name"/>
+                  <xsl:variable name="topic" select="../../@topic"/>
 
-			<!-- process each row after the first header row -->
-			<xsl:for-each select="row[position()>1]">
-						<xsl:variable name="row" select="position()"/>
-						<xsl:for-each select="field">
-										  <xsl:variable name="col" select="position()"/>
-										  <field>
-													  <xsl:attribute name="title">
-																<!-- extract the title from the field in the same column 1st row -->
-																<xsl:value-of select="../../row[1]/field[position() = $col]"/>
-													  </xsl:attribute>
-													  <xsl:attribute name="column">
-																  <xsl:value-of select="$col"/>
-													  </xsl:attribute>
-													  <xsl:attribute name="row">
-																  <xsl:value-of select="$row"/>
-													  </xsl:attribute>
-													  <xsl:attribute name="table">
-																  <xsl:value-of select="$table"/>
-													  </xsl:attribute>
-													  <xsl:attribute name="topic">
-																  <xsl:value-of select="$topic"/>
-													  </xsl:attribute>
-													  <xsl:value-of select="text()"/>
-										  </field>
-						</xsl:for-each>
-						</xsl:for-each>
-			</xsl:for-each>
-			</fields>
+         <!-- process each row after the first header row -->
+         <xsl:for-each select="row[position()>1]">
+                  <xsl:variable name="row" select="position()"/>
+                  <xsl:for-each select="field">
+                                <xsl:variable name="col" select="position()"/>
+                                <field>
+                                         <xsl:attribute name="title">
+                                                <!-- extract the title from the field in the same column 1st row -->
+                                                <xsl:value-of select="../../row[1]/field[position() = $col]"/>
+                                         </xsl:attribute>
+                                         <xsl:attribute name="column">
+                                                  <xsl:value-of select="$col"/>
+                                         </xsl:attribute>
+                                         <xsl:attribute name="row">
+                                                  <xsl:value-of select="$row"/>
+                                         </xsl:attribute>
+                                         <xsl:attribute name="table">
+                                                  <xsl:value-of select="$table"/>
+                                         </xsl:attribute>
+                                         <xsl:attribute name="topic">
+                                                  <xsl:value-of select="$topic"/>
+                                         </xsl:attribute>
+                                         <xsl:value-of select="text()"/>
+                                </field>
+                  </xsl:for-each>
+                  </xsl:for-each>
+         </xsl:for-each>
+         </fields>
 </xsl:template>
 
 
@@ -95,15 +98,15 @@
 
 <!-- use exslt:node-set to allow the parsing of the variable as a set of nodes -->
 <xsl:for-each select="exslt:node-set($fields_by_column)//field">
-			 <tr>
-								 <td> <xsl:value-of select="name(.)"/> </td>
-								 <td> <xsl:value-of select="."/> </td>
-								 <td> <xsl:value-of select="@table"/> </td>
-								 <td> <xsl:value-of select="@title"/> </td>
-								 <td> <xsl:value-of select="@topic"/> </td>
-								 <td> <xsl:value-of select="@column"/> </td>
-								 <td> <xsl:value-of select="@row"/> </td>
-			 </tr>
+          <tr>
+                         <td> <xsl:value-of select="name(.)"/> </td>
+                         <td> <xsl:value-of select="."/> </td>
+                         <td> <xsl:value-of select="@table"/> </td>
+                         <td> <xsl:value-of select="@title"/> </td>
+                         <td> <xsl:value-of select="@topic"/> </td>
+                         <td> <xsl:value-of select="@column"/> </td>
+                         <td> <xsl:value-of select="@row"/> </td>
+          </tr>
 </xsl:for-each>
 </table>
 
@@ -113,8 +116,7 @@
 </verbatim>
 
 ---++ XSLT Demo Transformed Table
-*XmlQuery must be Installed for this demo to work. If %<nop>XSLTSTART{}% tag appears <nop>XmlQueryPugin is not installed*
-
+*XmlQuery must be Installed for this demo to work. The <nop>XmlQueryPugin is not installed properly if the %<nop>XSLTSTART{}% variable appears below*
 
 %XSLTSTART{id="%WEB%" benchmark="off" debug="off" }% 
 <xsl:stylesheet version="1.0" 
@@ -127,47 +129,47 @@
 <!-- The field title is taken as the value in the first row of this column -->
 
 <xsl:variable name="fields_by_column">
-			<!-- http://www-106.ibm.com/developerworks/xml/library/x-tipxsltmp.html -->
-			<xsl:call-template name="find_fields_by_column"/>
+         <!-- http://www-106.ibm.com/developerworks/xml/library/x-tipxsltmp.html -->
+         <xsl:call-template name="find_fields_by_column"/>
 </xsl:variable>
 
 <!-- This template processes each field and tranforms it into a node /fields/field -->
 <xsl:template name="find_fields_by_column">
-			<xsl:param name="find_table"/>
-			<fields>
-			<!-- process each table -->
-			<xsl:for-each select="/twiki/web/topic/data/tables/table">
-						<xsl:variable name="table" select="@name"/>
-						<xsl:variable name="topic" select="../../@topic"/>
+         <xsl:param name="find_table"/>
+         <fields>
+         <!-- process each table -->
+         <xsl:for-each select="/twiki/web/topic/data/tables/table">
+                  <xsl:variable name="table" select="@name"/>
+                  <xsl:variable name="topic" select="../../@topic"/>
  
-		  <!-- process each row after the first header row -->
-			<xsl:for-each select="row[position()>1]">
-						<xsl:variable name="row" select="position()"/>
-						<xsl:for-each select="field">
-										  <xsl:variable name="col" select="position()"/>
-										  <field>
-													  <xsl:attribute name="title">
-																<!-- extract the title from the field in the same column 1st row -->
-																<xsl:value-of select="../../row[1]/field[position() = $col]"/>
-													  </xsl:attribute>
-													  <xsl:attribute name="column">
-																  <xsl:value-of select="$col"/>
-													  </xsl:attribute>
-													  <xsl:attribute name="row">
-																  <xsl:value-of select="$row"/>
-													  </xsl:attribute>
-													  <xsl:attribute name="table">
-																  <xsl:value-of select="$table"/>
-													  </xsl:attribute>
-													  <xsl:attribute name="topic">
-																  <xsl:value-of select="$topic"/>
-													  </xsl:attribute>
-													  <xsl:value-of select="text()"/>
-										  </field>
-						</xsl:for-each>
-						</xsl:for-each>
-			 </xsl:for-each>
-			</fields>
+        <!-- process each row after the first header row -->
+         <xsl:for-each select="row[position()>1]">
+                  <xsl:variable name="row" select="position()"/>
+                  <xsl:for-each select="field">
+                                <xsl:variable name="col" select="position()"/>
+                                <field>
+                                         <xsl:attribute name="title">
+                                                <!-- extract the title from the field in the same column 1st row -->
+                                                <xsl:value-of select="../../row[1]/field[position() = $col]"/>
+                                         </xsl:attribute>
+                                         <xsl:attribute name="column">
+                                                  <xsl:value-of select="$col"/>
+                                         </xsl:attribute>
+                                         <xsl:attribute name="row">
+                                                  <xsl:value-of select="$row"/>
+                                         </xsl:attribute>
+                                         <xsl:attribute name="table">
+                                                  <xsl:value-of select="$table"/>
+                                         </xsl:attribute>
+                                         <xsl:attribute name="topic">
+                                                  <xsl:value-of select="$topic"/>
+                                         </xsl:attribute>
+                                         <xsl:value-of select="text()"/>
+                                </field>
+                  </xsl:for-each>
+                  </xsl:for-each>
+          </xsl:for-each>
+         </fields>
 </xsl:template>
 
 
@@ -179,15 +181,15 @@
 
 <!-- use exslt:node-set to allow the parsing of the variable as a set of nodes -->
 <xsl:for-each select="exslt:node-set($fields_by_column)//field">
-			 <tr>
-								 <td> <xsl:value-of select="name(.)"/> </td>
-								 <td> <xsl:value-of select="."/> </td>
-								 <td> <xsl:value-of select="@table"/> </td>
-								 <td> <xsl:value-of select="@title"/> </td>
-								 <td> <xsl:value-of select="@topic"/> </td>
-								 <td> <xsl:value-of select="@column"/> </td>
-								 <td> <xsl:value-of select="@row"/> </td>
-			 </tr>
+          <tr>
+                         <td> <xsl:value-of select="name(.)"/> </td>
+                         <td> <xsl:value-of select="."/> </td>
+                         <td> <xsl:value-of select="@table"/> </td>
+                         <td> <xsl:value-of select="@title"/> </td>
+                         <td> <xsl:value-of select="@topic"/> </td>
+                         <td> <xsl:value-of select="@column"/> </td>
+                         <td> <xsl:value-of select="@row"/> </td>
+          </tr>
 </xsl:for-each>
 </table>
 
@@ -195,3 +197,5 @@
 </xsl:stylesheet>
 %XSLTEND%
 
+-----
+__Related:__ %SEARCH{ "XmlQueryPlugin" scope="topic" topic="XmlQueryPlugin*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%

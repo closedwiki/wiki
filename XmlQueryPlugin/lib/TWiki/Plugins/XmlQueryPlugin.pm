@@ -1,7 +1,8 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004-2005 Patrick Diamond, patrick_diamond@mailc.net
-# Copyright (C) 2001-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2004-2006 Patrick Diamond, patrick_diamond@mailc.net
+# Copyright (C) 2001-2003 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2008-2011 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,12 +23,10 @@
 #     Text::ParseWords
 #     Cache::Cache
 #     String::CRC
-#
-#
 
 # =========================
 
-package TWiki::Plugins::XmlQueryPlugin;    # change the package name and $pluginName!!!
+package TWiki::Plugins::XmlQueryPlugin;
 
 use TWiki;
 use TWiki::Func ();

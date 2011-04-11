@@ -1,11 +1,13 @@
-%META:TOPICINFO{author="PatrickDiamond" date="1141121992" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="TWikiContributor" date="1302480031" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="XmlQueryPlugin"}%
----+ Recipe showing how to output TWiki syntax from XSLT
+---+!! !XmlQueryPlugin Recipe 6: TWiki Syntax from XSLT
+
+XmlQueryPlugin Recipe 6 shows how to output TWiki syntax from XSLT.
 
 %TOC%
 
-		  * This is the same Recipe as XmlQueryPluginRecipe3  except that the output table is in TWiki syntax. This allows the TablePlugin to process the output enabling sortable columns etc
-		  * A cavate with this techinique is that if the TWiki tag being output by the XSLT is available via a Plugin then <nop>XmlQueryPlugin must be called before that plugin. In practise this means setting <nop>XmlQueryPlugin near the start of the plugin list described by the __INSTALLEDPLUGINS__ setting in Main.WebPreferences . 
+   * This is the same Recipe as XmlQueryPluginRecipe3  except that the output table is in TWiki syntax. This allows the TablePlugin to process the output enabling sortable columns etc
+   * A cavate with this techinique is that if the TWiki tag being output by the XSLT is available via a Plugin then <nop>XmlQueryPlugin must be called before that plugin. In practise this means setting <nop>XmlQueryPlugin near the start of the plugin list described by the __INSTALLEDPLUGINS__ setting in Main.WebPreferences . 
 
 ---++Sample Tables
 
@@ -44,8 +46,8 @@
 
 <!-- Loop Over each Row > 1 in tables which match field at row 1 col 1 type is title-->
  <xsl:apply-templates select="/twiki/web/topic/data/tables/table/row[position()=1]/field[@type='title' and position()=1 and text()='Author']/../../row">
-			 <!-- Sort by the contents of the second field -->
-			 <xsl:sort select="field[2]"/>
+          <!-- Sort by the contents of the second field -->
+          <xsl:sort select="field[2]"/>
  </xsl:apply-templates>
 
 <!-- Add a newline at the end -->
@@ -55,16 +57,16 @@
 
 
 <xsl:template match="row">
-			<!-- Process each line where at least the first field is of type data -->
-			<xsl:if test="./field[1][@type='data']">
-					  <xsl:text>| </xsl:text>								
-					  <xsl:value-of select="./field[2]"/>
-					  <xsl:text> | </xsl:text>
-					  <xsl:value-of select="./field[1]"/>
-					  <!-- add a new line at the end -->
-					  <xsl:text> |
+         <!-- Process each line where at least the first field is of type data -->
+         <xsl:if test="./field[1][@type='data']">
+                 <xsl:text>| </xsl:text>                        
+                 <xsl:value-of select="./field[2]"/>
+                 <xsl:text> | </xsl:text>
+                 <xsl:value-of select="./field[1]"/>
+                 <!-- add a new line at the end -->
+                 <xsl:text> |
 </xsl:text>
-			</xsl:if>
+         </xsl:if>
 
   </xsl:template>
   </xsl:stylesheet>
@@ -72,12 +74,12 @@
 </verbatim>
 
 ---++ XSLT Demo Transformed Table
-*XmlQuery must be Installed for this demo to work. If %<nop>XSLTSTART{}% tag appears <nop>XmlQueryPugin is not installed*
+*XmlQuery must be Installed for this demo to work. The <nop>XmlQueryPugin is not installed properly if the %<nop>XSLTSTART{}% variable appears below*
 
 The above tables has been transformed in 3 ways
-		  1 They have been combined
-		  1 The __Author__ and __Title__ columns have been swapped
-		  1 The entries have been sorted by __Title__
+        1 They have been combined
+        1 The __Author__ and __Title__ columns have been swapped
+        1 The entries have been sorted by __Title__
 
 
 %XSLTSTART{id="%WEB%" benchmark="off" debug="off" }% 
@@ -93,8 +95,8 @@ The above tables has been transformed in 3 ways
 
 <!-- Loop Over each Row > 1 in tables which match field at row 1 col 1 type is title-->
  <xsl:apply-templates select="/twiki/web/topic/data/tables/table/row[position()=1]/field[@type='title' and position()=1 and text()='Author']/../../row">
-			 <!-- Sort by the contents of the second field -->
-			 <xsl:sort select="field[2]"/>
+          <!-- Sort by the contents of the second field -->
+          <xsl:sort select="field[2]"/>
  </xsl:apply-templates>
 
 <!-- Add a newline at the end -->
@@ -104,18 +106,20 @@ The above tables has been transformed in 3 ways
 
 
 <xsl:template match="row">
-			<!-- Process each line where at least the first field is of type data -->
-			<xsl:if test="./field[1][@type='data']">
-					  <xsl:text>| </xsl:text>								
-					  <xsl:value-of select="./field[2]"/>
-					  <xsl:text> | </xsl:text>
-					  <xsl:value-of select="./field[1]"/>
-					  <!-- add a new line at the end -->
-					  <xsl:text> |
+         <!-- Process each line where at least the first field is of type data -->
+         <xsl:if test="./field[1][@type='data']">
+                 <xsl:text>| </xsl:text>                        
+                 <xsl:value-of select="./field[2]"/>
+                 <xsl:text> | </xsl:text>
+                 <xsl:value-of select="./field[1]"/>
+                 <!-- add a new line at the end -->
+                 <xsl:text> |
 </xsl:text>
-			</xsl:if>
+         </xsl:if>
 
   </xsl:template>
   </xsl:stylesheet>
 %XSLTEND%
 
+-----
+__Related:__ %SEARCH{ "XmlQueryPlugin" scope="topic" topic="XmlQueryPlugin*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%

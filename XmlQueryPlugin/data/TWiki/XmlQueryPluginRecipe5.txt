@@ -1,6 +1,9 @@
-%META:TOPICINFO{author="PatrickDiamond" date="1141121979" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1302480031" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="XMLQueryPlugin"}%
----+ Recipe showing how to extract the values from a Table Column, sort them and produce a unique list
+---+!! !XmlQueryPlugin Recipe 5: Extract Table Column
+
+XmlQueryPlugin Recipe 5 shows how to extract the values from a Table Column, sort them and produce a unique list.
+
 %TOC%
 
 ---++Sample Table 
@@ -22,8 +25,6 @@
 | The Parish Clerk (1907) | Ditchfield, P. H. (Peter Hampson) |
 | Parish Papers | Macleod, Norman |
 | The Parish Register | Crabbe, George |
-
-
 
 ---++Annotated XSLT
 
@@ -47,13 +48,13 @@
  __Extract the first column from all rows but the first and procduce a distinct list of the items__
 <verbatim>
 
-			 <xsl:sort select="."/>
+          <xsl:sort select="."/>
 
 </verbatim>
  __sort this list of items__
 <verbatim>
 
-			 <li><xsl:value-of select="."/></li>
+          <li><xsl:value-of select="."/></li>
  </xsl:for-each>
  </ol>
 
@@ -62,9 +63,8 @@
 %XSLTEND%
 </verbatim>
 
-
 ---++ XSLT Demo: Ordered List
-*XmlQuery must be Installed for this demo to work. If %<nop>XSLTSTART{}% tag appears <nop>XmlQueryPugin is not installed*
+*XmlQuery must be Installed for this demo to work. The <nop>XmlQueryPugin is not installed properly if the %<nop>XSLTSTART{}% variable appears below*
 
 %XSLTSTART{id="%WEB%" benchmark="off" debug="off" }% 
  <xsl:stylesheet version="1.0" 
@@ -76,8 +76,8 @@
 
  <ol>
  <xsl:for-each select="set:distinct(/twiki/web/topic/data/tables/table/row[position()>1]/field[1])">
-			 <xsl:sort select="."/>
-			 <li><xsl:value-of select="."/></li>
+          <xsl:sort select="."/>
+          <li><xsl:value-of select="."/></li>
  </xsl:for-each>
  </ol>
 
@@ -85,3 +85,5 @@
   </xsl:stylesheet>
 %XSLTEND%
 
+-----
+__Related:__ %SEARCH{ "XmlQueryPlugin" scope="topic" topic="XmlQueryPlugin*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%

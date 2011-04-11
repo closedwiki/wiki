@@ -1,6 +1,8 @@
-%META:TOPICINFO{author="PatrickDiamond" date="1141121943" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="TWikiContributor" date="1302480031" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="XMLQueryPlugin"}%
----+ Recipe showing how to Transform a table or set of tables
+---+!! !XmlQueryPlugin Recipe 3: Transform Tables
+
+XmlQueryPlugin Recipe 3 shows how to Transform a table or set of tables.
 
 %TOC%
 
@@ -39,7 +41,7 @@
 </verbatim>
 __Select each row from all tables that have the first field in the first row equal to 'Title' and of type 'title'. Then apply the template that matchs "row"__
 <verbatim>
-			 <xsl:sort select="field[2]"/>
+          <xsl:sort select="field[2]"/>
 </verbatim>
 __Sort each row according to the contents of the second child tag named field__
 <verbatim>
@@ -53,16 +55,16 @@ __Sort each row according to the contents of the second child tag named field__
 __Executed from the apply-templates tag against each node in the select= list__
 <verbatim>
 
-			<xsl:if test="./field[1][@type='data']">
+         <xsl:if test="./field[1][@type='data']">
 </verbatim>
 __If this is a data field then output it__
 <verbatim>
 
-			<tr>						 
-					  <td><xsl:value-of select="./field[2]"/></td>
-						<td><xsl:value-of select="./field[1]"/></td>
-			</tr>
-			</xsl:if>
+         <tr>                   
+                 <td><xsl:value-of select="./field[2]"/></td>
+                  <td><xsl:value-of select="./field[1]"/></td>
+         </tr>
+         </xsl:if>
 
   </xsl:template>
   </xsl:stylesheet>
@@ -70,12 +72,12 @@ __If this is a data field then output it__
 </verbatim>
 
 ---++ XSLT Demo Transformed Table
-*XmlQuery must be Installed for this demo to work. If %<nop>XSLTSTART{}% tag appears <nop>XmlQueryPugin is not installed*
+*XmlQuery must be Installed for this demo to work. The <nop>XmlQueryPugin is not installed properly if the %<nop>XSLTSTART{}% variable appears below*
 
 The above tables has been transformed in 3 ways
-		  1 They have been combined
-		  1 The __Author__ and __Title__ columns have been swapped
-		  1 The entries have been sorted by __Title__
+        1 They have been combined
+        1 The __Author__ and __Title__ columns have been swapped
+        1 The entries have been sorted by __Title__
 
 %XSLTSTART{id="%WEB%" benchmark="off" debug="off" }% 
  <xsl:stylesheet version="1.0" 
@@ -85,21 +87,23 @@ The above tables has been transformed in 3 ways
  <table border="1">
  <tr><th>Title</th><th>Author</th></tr>
  <xsl:apply-templates select="/twiki/web/topic/data/tables/table/row[position()=1]/field[@type='title' and position()=1 and text()='Author']/../../row">
-			 <xsl:sort select="field[2]"/>
+          <xsl:sort select="field[2]"/>
  </xsl:apply-templates>
  </table>
 </xsl:template>
 
 
 <xsl:template match="row">
-			<xsl:if test="./field[1][@type='data']">
-			<tr>						 
-					  <td><xsl:value-of select="./field[2]"/></td>
-						<td><xsl:value-of select="./field[1]"/></td>
-			</tr>
-			</xsl:if>
+         <xsl:if test="./field[1][@type='data']">
+         <tr>                   
+                 <td><xsl:value-of select="./field[2]"/></td>
+                  <td><xsl:value-of select="./field[1]"/></td>
+         </tr>
+         </xsl:if>
 
   </xsl:template>
   </xsl:stylesheet>
 %XSLTEND%
 
+-----
+__Related:__ %SEARCH{ "XmlQueryPlugin" scope="topic" topic="XmlQueryPlugin*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%

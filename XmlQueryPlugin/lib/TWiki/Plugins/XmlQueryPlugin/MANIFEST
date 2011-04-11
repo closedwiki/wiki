@@ -1,7 +1,9 @@
-data/TWiki/XmlQueryPlugin.txt NEW
-data/TWiki/XmlQueryPluginRecipe1.txt NEW
-data/TWiki/XmlQueryPluginRecipe2.txt NEW
-data/TWiki/XmlQueryPluginRecipe3.txt NEW
-data/TWiki/XmlQueryPluginRecipe4.txt NEW
-data/TWiki/XmlQueryPluginRecipe5.txt NEW
-lib/TWiki/Plugins/XmlQueryPlugin.pm NEW
+data/TWiki/XmlQueryPlugin.txt 0644
+data/TWiki/XmlQueryPluginRecipe1.txt 0644
+data/TWiki/XmlQueryPluginRecipe2.txt 0644
+data/TWiki/XmlQueryPluginRecipe3.txt 0644
+data/TWiki/XmlQueryPluginRecipe4.txt 0644
+data/TWiki/XmlQueryPluginRecipe5.txt 0644
+data/TWiki/XmlQueryPluginRecipe6.txt 0644
+data/TWiki/XmlQueryPluginRecipe7.txt 0644
+lib/TWiki/Plugins/XmlQueryPlugin.pm 0644

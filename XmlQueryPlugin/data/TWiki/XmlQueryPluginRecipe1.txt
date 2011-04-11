@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="PatrickDiamond" date="1141121877" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="TWikiContributor" date="1302480031" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="XMLQueryPlugin"}%
----+!!<nop>%TOPIC%  
+---+!! !XmlQueryPlugin Recipe 1: List All Attachments
 
----+List all Attachments in the current Web
+XmlQueryPlugin Recipe 1 lists all attachments in the current web.
 
 ---++ Annotated XSLT
 
@@ -32,22 +32,22 @@ __Output a table tag and the contents of the first row__
 __Loop over each fileattachment__
 <verbatim>
 
-		  <tr>
-		  <td>[[<xsl:value-of select="../../@web"/>.<xsl:value-of select="../../@topic"/>]]</td>
+        <tr>
+        <td>[[<xsl:value-of select="../../@web"/>.<xsl:value-of select="../../@topic"/>]]</td>
 </verbatim>
 __Extract from the XML element "data" the web and topic attributes__
 <verbatim>
 
-		  <td><xsl:value-of select="@name"/></td>
-		  <td><xsl:value-of select="@user"/></td>
-		  <td><xsl:value-of select="@comment"/></td>
+        <td><xsl:value-of select="@name"/></td>
+        <td><xsl:value-of select="@user"/></td>
+        <td><xsl:value-of select="@comment"/></td>
 
 </verbatim>
 __Output the file attachment attributes of name, user and comment__
 <verbatim>
 
 
-		  <p/>
+        <p/>
   </tr>
   </xsl:for-each>
   </table>
@@ -57,7 +57,7 @@ __Output the file attachment attributes of name, user and comment__
 </verbatim>
 
 ---++ XSLT Demo
-*XmlQuery must be Installed for this demo to work. If %<nop>XSLTSTART{}% tag appears <nop>XmlQueryPugin is not installed*
+*XmlQuery must be Installed for this demo to work. The <nop>XmlQueryPugin is not installed properly if the %<nop>XSLTSTART{}% variable appears below*
 
 %XSLTSTART{topic=".*" benchmark="off" cache="on" debug="off"}%
  <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -65,12 +65,12 @@ __Output the file attachment attributes of name, user and comment__
  <table border="1">
  <tr><th>Topic</th><th>Attachment</th><th>User</th><th>Comment</th></tr>
  <xsl:for-each select="/twiki/web/topic/data/metadata/fileattachment">
-		  <tr>
-		  <td>[[<xsl:value-of select="../../@web"/>.<xsl:value-of select="../../@topic"/>]]</td>
-		  <td><xsl:value-of select="@name"/></td>
-		  <td><xsl:value-of select="@user"/></td>
-		  <td><xsl:value-of select="@comment"/></td>
-		  <p/>
+        <tr>
+        <td>[[<xsl:value-of select="../../@web"/>.<xsl:value-of select="../../@topic"/>]]</td>
+        <td><xsl:value-of select="@name"/></td>
+        <td><xsl:value-of select="@user"/></td>
+        <td><xsl:value-of select="@comment"/></td>
+        <p/>
   </tr>
   </xsl:for-each>
   </table>
@@ -78,3 +78,5 @@ __Output the file attachment attributes of name, user and comment__
   </xsl:stylesheet>
 %XSLTEND%
 
+-----
+__Related:__ %SEARCH{ "XmlQueryPlugin" scope="topic" topic="XmlQueryPlugin*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%

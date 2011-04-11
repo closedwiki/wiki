@@ -1,6 +1,9 @@
-%META:TOPICINFO{author="PatrickDiamond" date="1141121961" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="TWikiContributor" date="1302480031" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="XMLQueryPlugin"}%
----+ Recipe showing how to restructure a table or set of tables
+---+!! !XmlQueryPlugin Recipe 4: Restructure Tables
+
+XmlQueryPlugin Recipe 4 shows how to restructure a table or set of tables.
+
 %TOC%
 
 ---++Sample Table 
@@ -36,30 +39,30 @@
 </verbatim>
 __Foreach table with the first field in the first row being a header with the text 'Title'__
 <verbatim>
-	  <xsl:for-each select="../following-sibling::*">
+     <xsl:for-each select="../following-sibling::*">
 </verbatim>
 __Foreach row following the first one__
 <verbatim>
-			<table border="1">
-			<tr><th>Key</th><th>Value</th></tr>
-			<xsl:for-each select="field">
+         <table border="1">
+         <tr><th>Key</th><th>Value</th></tr>
+         <xsl:for-each select="field">
 </verbatim>
 __Foreach field tag within this row__
 <verbatim>
-				 <xsl:variable name="current-position" select="position()"/>	
+             <xsl:variable name="current-position" select="position()"/>   
 </verbatim>
 __Note the position of the current field__
 <verbatim>
-				 <tr>
-					 <td><xsl:value-of select="../../row[position()=1]/field[position()=$current-position]"/></td>
+             <tr>
+                <td><xsl:value-of select="../../row[position()=1]/field[position()=$current-position]"/></td>
 </verbatim>
 __Extract the title of this field going to the first row then the field with the same position as the current field__
 <verbatim>
-					 <td><xsl:value-of select="."/></td>
-				 </tr>
-			</xsl:for-each>
-	  </table>
-	  </xsl:for-each>
+                <td><xsl:value-of select="."/></td>
+             </tr>
+         </xsl:for-each>
+     </table>
+     </xsl:for-each>
   </xsl:for-each>
 
   </xsl:template>
@@ -70,28 +73,31 @@ __Extract the title of this field going to the first row then the field with the
 
 
 ---++ XSLT Demo: Table Restructured using XSLT
-*XmlQuery must be Installed for this demo to work. If %<nop>XSLTSTART{}% tag appears <nop>XmlQueryPugin is not installed*
+*XmlQuery must be Installed for this demo to work. The <nop>XmlQueryPugin is not installed properly if the %<nop>XSLTSTART{}% variable appears below*
+
 %XSLTSTART{id="%WEB%" benchmark="off" debug="off" }% 
  <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
  <xsl:template match="/twiki">
  <xsl:for-each select="/twiki/web/topic/data/tables/table/row[position()=1]/field[@type='title' and position()=1 and text()='Title']">
-	  <xsl:for-each select="../following-sibling::*">
-			<table border="1">
-			<tr><th>Key</th><th>Value</th></tr>
-			<xsl:for-each select="field">
-				 <xsl:variable name="current-position" select="position()"/>	
-				 <tr>
-					 <td><xsl:value-of select="../../row[position()=1]/field[position()=$current-position]"/></td>
-					 <td><xsl:value-of select="."/></td>
-				 </tr>
-			</xsl:for-each>
-	  </table>
-	  </xsl:for-each>
+     <xsl:for-each select="../following-sibling::*">
+         <table border="1">
+         <tr><th>Key</th><th>Value</th></tr>
+         <xsl:for-each select="field">
+             <xsl:variable name="current-position" select="position()"/>   
+             <tr>
+                <td><xsl:value-of select="../../row[position()=1]/field[position()=$current-position]"/></td>
+                <td><xsl:value-of select="."/></td>
+             </tr>
+         </xsl:for-each>
+     </table>
+     </xsl:for-each>
   </xsl:for-each>
 
   </xsl:template>
   </xsl:stylesheet>
 %XSLTEND%
 
+-----
+__Related:__ %SEARCH{ "XmlQueryPlugin" scope="topic" topic="XmlQueryPlugin*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%
