@@ -2,6 +2,8 @@
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2004 TWiki:Main.AndreBonhote
+# Copyright (C) 2008-2011 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,8 +21,6 @@
 # This WeatherPlugin (C) 2004 Andre Bonhote, COLT Telecom <andre@colt.net>
 #
 
-
-
 # =========================
 package TWiki::Plugins::WeatherPlugin;
 
@@ -30,18 +30,10 @@ use vars qw(
         $debug $partnerId $license
     );
 
-
 use Weather::Com;
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2011-04-11';
 
 $pluginName = 'WeatherPlugin';
 
@@ -76,43 +68,37 @@ sub commonTagsHandler
 
     TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
-    # This is the place to define customized tags and variables
-    # Called by TWiki::handleCommonTags, after %INCLUDE:"..."%
-
-
-		$_[0] =~ s:%WEATHER{(.*?)}%:&_handleWeatherTag($1,$2):geo;
+    $_[0] =~ s:%WEATHER{(.*?)}%:&_handleWeatherTag($1,$2):geo;
 }
 
 
 sub _handleWeatherTag {
-	my ($city) = @_;
-	my $return = "";
+    my ($city) = @_;
+    my $return = "";
 
-	my %params = (
-		'current'			=> 1,
-		'partner_id'	=> $partnerId,
-		'license'			=> $license,
-	);
+    my %params = (
+        'current'            => 1,
+        'partner_id'    => $partnerId,
+        'license'            => $license,
+    );
 
-  TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName} - $city" ) if $debug;
+    TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName} - $city" ) if $debug;
 
-	BLOCK: {
-		unless($city) {
-      TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName} - No city given" ) if $debug;
-			last BLOCK;
-		}
-		my $request = new Weather::Com(%params);
+    BLOCK: {
+        unless($city) {
+            TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName} - No city given" ) if $debug;
+            last BLOCK;
+        }
+        my $request = new Weather::Com(%params);
 
+        if ($city =~ /^[A-Z]{4}[0-9]{4}$/) {
+            my $weather = $request->get_weather($city);
+            my $temp = $weather->{cc}->{tmp} . " " . $weather->{head}->{ut};
+            my $humi = $weather->{cc}->{hmid};
+            my $icon = $weather->{cc}->{icon};
+            my $ccity = $weather->{loc}->{dnam};
 
-
-		if ($city =~ /^[A-Z]{4}[0-9]{4}$/) {
-			my $weather = $request->get_weather($city);
-      my $temp = $weather->{cc}->{tmp} . " " . $weather->{head}->{ut};
-      my $humi = $weather->{cc}->{hmid};
-      my $icon = $weather->{cc}->{icon};
-      my $ccity = $weather->{loc}->{dnam};
-   
-      $return .=qq(
+            $return .=qq(
 <div><table bgcolor="#eeeeee">
   <tr><td align='center'><em>$ccity</em></td></tr>
   <tr><td align='center'><img src="/images/weather/32/$icon.png" alt="icon"></td></tr>
@@ -120,33 +106,28 @@ sub _handleWeatherTag {
 </table></div>
 );
 
+        } else {
+            my $location = $request->search($city);
 
-		} else {
-  		my $location = $request->search($city);
+            foreach (keys %{$location}) {
+                my $weather = $request->get_weather($_);
+                my $temp = $weather->{cc}->{tmp} . " " . $weather->{head}->{ut};
+                my $humi = $weather->{cc}->{hmid};
+                my $icon = $weather->{cc}->{icon};
+                my $ccity = $weather->{loc}->{dnam};
 
-  		foreach (keys %{$location}) {
-  			my $weather = $request->get_weather($_);
-  		  my $temp = $weather->{cc}->{tmp} . " " . $weather->{head}->{ut};
-    		my $humi = $weather->{cc}->{hmid};
-    		my $icon = $weather->{cc}->{icon};
-  			my $ccity = $weather->{loc}->{dnam};
-			
-			$return .=qq(
+                $return .=qq(
 <div><table bgcolor="#eeeeee">
   <tr><td align='center'><em>$ccity</em></td></tr>
   <tr><td align='center'><img src="/images/weather/32/$icon.png" alt="icon"></td></tr>
   <tr><td align='center'>$temp / $humi%</td></tr>
 </table></div>
 );
+            }
+        }
+    }
 
-  		}
-		}
-	}
-
-	return $return;
-		
-
+    return $return;
 }
- 
 
 1;

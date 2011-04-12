@@ -1,57 +1,78 @@
-%META:TOPICINFO{author="andre@colt.net" date="1099299413" format="1.0" version="1.12"}%
----+ <nop>%TOPIC%
+%META:TOPICINFO{author="TWikiContributor" date="1302582601" format="1.1" version="$Rev$"}%
+---+!! <nop>%TOPIC%
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/WeatherPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/WeatherPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-Simple plugin to display weather information for a specific location. It uses [[http://search.cpan.org/~schnueck/Weather-Com-0.1/lib/Weather/Com.pm][Weather::Com]] and requires a free Weather.com subscription (see the Weather::Com manpage).
+---++ Introduction
+
+This plugin displays weather information for a specific location. It uses CPAN:Weather::Com and requires a free Weather.com subscription (see the Weather::Com manpage).
 
 ---++ Syntax Rules
 
-	* %<nop>WEATHER{City, Country}%
-	* %<nop>WEATHER{Citycode}%
+   * %<nop>WEATHER{City, Country}%
+   * %<nop>WEATHER{Citycode}%
 
 ---++ Examples
 
-	* %<nop>WEATHER{Zurich, Switzerland}%
-	* %<nop>WEATHER{GMXX0040}%
+   * %<nop>WEATHER{Zurich, Switzerland}%
+   * %<nop>WEATHER{GMXX0040}%
 
 ---++ Bugs
-	* Yes!
-	* The citycode is only necessary in case you have some non-alphabetic chars in your string, e.g =Frankfurt/Main=. I didn't manage to get =Weather::Com= parse that. So if you have more than one cities with the same name in the country, you'd rather take the city code. Feel free to fix that :-)	
+   * Yes!
+   * The citycode is only necessary in case you have some non-alphabetic chars in your string, e.g =Frankfurt/Main=. I didn't manage to get =Weather::Com= parse that. So if you have more than one cities with the same name in the country, you'd rather take the city code. Feel free to fix that :-)   
 
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>WEATHERPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Displays nice weather graphics for a specific location
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Displays nice weather graphics for a specific location
 
-	* Partner ID and License Key (Get them from Weather.com, see Weather::Com manpage (Free of charge))
-		* Set PARTNERID = 0000000000
-		* Set LICENSE = fdfdfdfdfdfdfdfd
+   * Partner ID and License Key (Get them from Weather.com, see Weather::Com manpage (Free of charge))
+      * Set PARTNERID = 0000000000
+      * Set LICENSE = fdfdfdfdfdfdfdfd
 
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
-
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* Test if the installation was successful:
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
 
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+      * Install the dependencies (if any).
+
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Configure additional plugin settings in the __Extensions__ section if needed.
+      * Test if the installation was successful:
 %WEATHER{Zurich, Switzerland}%
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/AndreBonhote |
-|  Plugin Version: | 01 Nov 2004 (0.002) |
+|  Plugin Author: | TWiki:Main.AndreBonhote |
+|  Copyright: | &copy; 2004 TWiki:Main.AndreBonhote <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-04-11 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  01 Nov 2004: | Initial version |
+|  2011-04-11: | TWikibug:Item6638: Doc improvements -- TWiki:Main.PeterThoeny |
+|  2004-11-01: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | Weather::Com |
 |  Other Dependencies: | none |
@@ -59,7 +80,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main/AndreBonhote - 01 Nov 2004
-
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.UserDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
