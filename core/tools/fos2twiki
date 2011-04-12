@@ -53,6 +53,8 @@ sub fixFile
     $text =~ s/SitePreferences/TWikiPreferences/go;
     $text =~ s/"ProjectContributor"/"TWikiContributor"/go;
     $text =~ s/DocumentGraphics/TWikiDocGraphics/go;
+    $text =~ s/DataForms/TWikiForms/go;
+    $text =~ s/SkinTemplates/TWikiTemplates/go;
     $text =~ s/TOPICPARENT{name="Macros"}/TOPICPARENT{name="TWikiVariables"}/go;
     $text =~ s/ Macro(s)?([ \.\:\;])/ Variable$1$2/go;
     $text =~ s/ macro(s)?([ \.\:\;])/ variable$1$2/go;
