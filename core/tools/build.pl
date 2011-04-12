@@ -5,6 +5,7 @@
 # Copyright (C) 2005-2011 TWikiContributors
 
 use strict;
+use TWiki::Time;
 
 BEGIN {
     use File::Spec;
@@ -164,6 +165,7 @@ sub _checkInFile {
     my $perms = $s[2];
 
     if ( -e $old.'/'.$file.',v' ) {
+        # ,v files exists in previous release, create new rev on top of it
         $this->cp($old.'/'.$file.',v', $new.'/'.$file.',v');
         #force unlock
         `rcs -u -M $new/$file,v 2>&1`;
@@ -175,32 +177,44 @@ sub _checkInFile {
         if ( $rcsInfo =~ /revision \d+\.(\d+)/ ) {     #revision 1.2
             $currentRevision = $1;
         } else {
-            #it seems that you can have a ,v file with no commit, if you get here, you have an invalid ,v file. remove that file.
+            # it seems that you can have a ,v file with no commit, if you get here, you
+            # have an invalid ,v file. remove that file.
             die 'failed to get revision (make sure the ,v file is valid): '.$file."\n";
         }
+
     } else {
-        #set revision number #TODO: what about topics with no META DATA?
+        # ,v files does not exist in previous release, create new one with rev 1
+
+        # set revision number #TODO: what about topics with no META DATA?
         my $cmd = 'perl -pi -e \'s/^(%META:TOPICINFO{.*version=)\"[^\"]*\"(.*)$/$1\"'.($currentRevision+1).'\"$2/\' '.$new.'/'.$file;
         `$cmd`;
         # create rcs file
         `ci -u -mbuildrelease -wTWikiContributor -t-buildrelease $new/$file 2>&1`;
     }
 
-    #only do a checkin, if the files are different (fake the rev number to be the same)
+    # only do a checkin, if the files are different (fake the rev number to be the same)
     my $cmd = 'perl -pi -e \'s/^(%META:TOPICINFO{.*version=)\"[^\"]*\"(.*)$/$1\"'.($currentRevision).'\"$2/\' '.$new.'/'.$file;
     `$cmd`;
     my $different = `rcsdiff -q $new/$file`;
     chomp($different);
  
     if (defined($different) && ($different ne '')) {
-	    #set revision number #TODO: what about topics with no META DATA?
-	    my $cmd = 'perl -pi -e \'s/^(%META:TOPICINFO{.*version=)\"[^\"]*\"(.*)$/$1\"'.($currentRevision+1).'\"$2/\' '.$new.'/'.$file;
-	    `$cmd`;
-	    #check in
-    	`ci -mbuildrelease -wTWikiContributor -t-new-topic $new/$file 2>&1`;
-    	#get a copy of the latest revsion, no lock
-    	`co -u -M $new/$file 2>&1`;
+        # get timestamp
+        $cmd = 'perl -ne \'s/^.*?%META:TOPICINFO{.*?date=\"([^\"]*).*$/$1/ && print\' '.$new.'/'.$file;
+        my $date = `$cmd`;
+        chomp( $date );
+        $date = time() unless( $date );
+        $date = TWiki::Time::formatTime( $date , '$rcs', 'gmtime');
+        # set revision number #TODO: what about topics with no META DATA?
+        $cmd = 'perl -pi -e \'s/^(%META:TOPICINFO{.*version=)\"[^\"]*\"(.*)$/$1\"'.($currentRevision+1).'\"$2/\' '.$new.'/'.$file;
+        `$cmd`;
+        # check in
+        `ci -mbuildrelease -wTWikiContributor -d'$date' -t-new-topic $new/$file 2>&1`;
+        sleep( 0.01 );
+    	# get a copy of the latest revsion, no lock
+        `co -f -q -u -M $new/$file 2>&1`;
     	print "\n";
+
     } else {
         #force unlock
         `rcs -u -M $new/$file,v 2>&1`;
@@ -247,13 +261,13 @@ sub stage_gendocs {
     }
 
     #SMELL: these should probably abort the build if they return errors / oopies
-#replaced by the simpler INSTALL.html
-#    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiDocumentation skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/TWikiDocumentation.html`;
-    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiHistory skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/TWikiHistory.html`;
-    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiReleaseNotes05x00 skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/TWikiReleaseNotes05x00.html`;
-    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiUpgradeGuide skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/TWikiUpgradeGuide.html`;
-    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiInstallationGuide skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/INSTALL.html`;
-    $this->filter_txt("$this->{tmpDir}/TWikiReleaseNotes05x00.html", "$this->{tmpDir}/TWikiReleaseNotes05x00.html");
+## these files are no longer distributed, so commenting out:
+##    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiDocumentation skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/TWikiDocumentation.html`;
+##    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiHistory skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/TWikiHistory.html`;
+##    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiReleaseNotes05x00 skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/TWikiReleaseNotes05x00.html`;
+##    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiUpgradeGuide skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/TWikiUpgradeGuide.html`;
+##    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiInstallationGuide skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/INSTALL.html`;
+##    $this->filter_txt("$this->{tmpDir}/TWikiReleaseNotes05x00.html", "$this->{tmpDir}/TWikiReleaseNotes05x00.html");
     print "Automatic documentation built\n";
 }
 
@@ -275,10 +289,10 @@ sub stage_rcsfiles() {
     `svn co http://svn.twiki.org/svn/twiki/tags/$this->{lastName}/ .`;
     $this->popd();
     print "Creating ,v files.\n";
-    $this->_checkInDir( $lastReleaseDir, $this->{tmpDir}, 'data',
+    $this->_checkInDir( $lastReleaseDir.'/core', $this->{tmpDir}, 'data',
                        sub { return shift =~ /\.txt$/ } );
 
-    $this->_checkInDir( $lastReleaseDir, $this->{tmpDir}, 'pub',
+    $this->_checkInDir( $lastReleaseDir.'/core', $this->{tmpDir}, 'pub',
                        sub { return -f shift; } );
 
     # Fix perms mangled by RCS
