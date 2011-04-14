@@ -2961,17 +2961,19 @@ sub _expandTagOnTopicRendering {
     my $e = $this->{prefs}->getPreferencesValue( $tag );
     if( defined( $e ) ) {
         if( $args ) {
+            # Codev.ParameterizedVariables feature
             my $attrs = new TWiki::Attrs( $args, $contextFreeSyntax{$tag} );
             # Not possible to define a _DEFAULT setting, so use DEFAULT:
             if( ! defined $attrs->{DEFAULT} && defined $attrs->{_DEFAULT} ) {
                 $attrs->{DEFAULT} = $attrs->{_DEFAULT};
             }
             while( my ( $key, $value ) = each( %$attrs ) ) {
-                $e =~ s/%${key}({.*?default="(.*?[^\\])".*?})?%/_unescapeBS( $value )/ge;
+                $e =~ s/%${key}({ *default="(.*?[^\\]?)" *})?%/_unescapeQuotes( $value )/ge;
             }
         }
+        # In parameterized variables, expand %ALL_UNUSED_TAGS{ default="..." }% to defaults
         # FIXME: Quick hack; do proper variable parsing
-        $e =~ s/%[A-Za-z0-9_]+{.*?default="(.*?[^\\])".*?}%/_unescapeBS( $1 )/ge;
+        $e =~ s/%[A-Za-z0-9_]+{ *default="(.*?[^\\]?)" *}%/_unescapeQuotes( $1 )/ge;
 
     } else {
         $e = $this->{SESSION_TAGS}{$tag} unless( $args );
@@ -2984,7 +2986,7 @@ sub _expandTagOnTopicRendering {
     return $e;
 }
 
-sub _unescapeBS {
+sub _unescapeQuotes {
     my $text = shift;
     $text =~ s/\\(["'])/$1/g;
     return $text;
@@ -3674,11 +3676,6 @@ sub INCLUDE {
     $this->{SESSION_TAGS}{INCLUDINGWEB} = $includingWeb;
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $includingTopic;
 
-    # copy params into session tags
-    foreach my $k ( keys %$params ) {
-        $this->{SESSION_TAGS}{$k} = $params->{$k};
-    }
-
     ( $meta, $text ) =
       $this->{store}->readTopic( undef, $includedWeb, $includedTopic, $rev );
 
@@ -3731,6 +3728,26 @@ sub INCLUDE {
     # TOC_HIDE_IF_INCLUDED preference setting has been set
     if( $hidetoc ) {
         $text =~ s/%TOC(?:{(.*?)})?%//g;
+    }
+
+    # Codev.IncludeParametersWithDefault feature:
+    # Change %ALLTAGS{ default="..." }% to %ALLTAGS% and capture tags with defaults
+    # FIXME: Quick hack; do proper variable parsing
+    my $tagsWithDefault = undef;
+    $text =~ s/(%)([A-Za-z0-9_]+)({ *default=")(.*?[^\\]?)(" *})(%)/
+               $tagsWithDefault->{$2} = _unescapeQuotes( $4 );
+               "$1$2$6"/ge;
+
+    foreach my $k ( keys %$params ) {
+        next if( $k eq '_RAW' );
+        # copy params into session tags
+        $this->{SESSION_TAGS}{$k} = $params->{$k};
+        # remove captured tag with default
+        delete $tagsWithDefault->{$k};
+    }
+    foreach my $k ( keys %$tagsWithDefault ) {
+        # copy left over captured tags with default into session tags
+        $this->{SESSION_TAGS}{$k} = $tagsWithDefault->{$k}; 
     }
 
     expandAllTags( $this, \$text, $includedTopic, $includedWeb, $meta );
