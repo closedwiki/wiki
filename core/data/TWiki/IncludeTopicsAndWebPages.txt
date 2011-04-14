@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301209236" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1302769282" format="1.1" version="$Rev$"}%
 ---+!! Include Topics and Web Pages Using =%<nop>INCLUDE{...}%= Variable
 
 Use the =%<nop>INCLUDE{...}%= variable to embed the content of another topic or web page inside a TWiki topic. The whole content or only parts of a page can be included.
@@ -11,7 +11,7 @@ Use the =%<nop>INCLUDE{...}%= variable to embed the content of another topic or 
 
 The =pattern= parameter is optional and allows you to extract some parts of a web page. Specify a %SYSTEMWEB%.RegularExpression that scans from start (='^'=) to end and contains the text you want to keep in parenthesis, e.g., =pattern="^.*?(from here.*?to here).*"=. You need to make sure that the integrity of a web page is not compromised; for example, if you include an HTML table, make sure to include everything including the table end tag.
 
-The example parameters PARAMETER1 and PARAMETER2 will be defined as a variable within the scope of the included topic. The example parameters shown will result in %PARAMETER1% and %PARAMETER2% being defined within the included topic. Parametrized includes can be used to define and use macros, which is an alternative to [[ParameterizedVariables][parameterized variables]].
+The example parameters PARAMETER1 and PARAMETER2 will be defined as a variable within the scope of the included topic. The example parameters shown will result in %<nop>PARAMETER1% and %<nop>PARAMETER2% being defined within the included topic. A default value can be specified such as %<nop>PARAMETER1{ default="..." }% in case the INCLUDE does not specify the parameter. Parametrized includes can be used to define and use macros, which is an alternative to [[ParameterizedVariables][parameterized variables]].
 
 VarINCLUDE explains the other parameters.
 
@@ -85,11 +85,11 @@ Create a topic called !AlertBox with the following content:
 <table cellpadding="5" width="100%" cellspacing="0" cellpadding="12" border="0">
 <tr bgcolor="#FFBB55">
 <td valign="top" width="16"><img src="%ICONURL{warning}%" width="16" height="16" align="absmiddle" alt="" border="0"></td>
-<td><b> %TITLE% </b></td>
+<td><b> %TITLE{ default="Alert!" }% </b></td>
 </tr>
 <tr bgcolor="#FFCC66">
 <td>&nbsp;</td>
-<td> %MESSAGE% </td>
+<td> %MESSAGE{ default="Please specify a MESSAGE parameter." }% </td>
 </tr>
 </table>
 </div>

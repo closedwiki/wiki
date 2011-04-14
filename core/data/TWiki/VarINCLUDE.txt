@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301209038" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1302769282" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarINCLUDE
 ---+++ INCLUDE{"page"} -- include other topic or web page
@@ -22,7 +22,7 @@
      | =disablerewriteurls="on"= | Bypass rewriting relative URLs into absolute ones | disabled |
      | =warn="off"= | Warn if topic include fails: Fail silently (if =off=); output default warning (if set to =on=); else, output specific text (use =$topic= for topic name) | =%<nop>INCLUDEWARNING%= [[TWikiPreferences][preferences]] setting |
      | =section="name"= | Includes only the specified named section, as defined in the included topic by the [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSTARTSECTION][STARTSECTION]] and [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENDSECTION][ENDSECTION]] variables. Nothing is shown if the named section does not exists. =section=""= is equivalent to not specifying a section | |
-     | =PARAMONE="val 1"<br />PARAMTWO="val 2"= | Any other parameter will be defined as a variable within the scope of the included topic. The example parameters on the left will result in =%<nop>PARAMONE%= and =%<nop>PARAMTWO%= being defined within the included topic. | |
+     | =PARAMONE="val 1"<br />PARAMTWO="val 2"= | Any other parameter will be defined as a variable within the scope of the included topic. The example parameters on the left will result in =%<nop>PARAMONE%= and =%<nop>PARAMTWO%= being defined within the included topic. A default value for a variable can be specified in the included topic in case the corresponding parameter is not specified, such as =%<nop>PARAMONE{ default="..." }%= | |
    * Security Considerations:
       * The ability to INCLUDE arbitrary URLs, such as =%<nop>INCLUDE{"http://www.google.com/"}%= is turned *off* by default. To turn this on, ask your TWiki administrator to enable the ={INCLUDE}{AllowURLs}= flag in the _Security setup_ section of configure.
       * !JavaScript in included web pages is filtered out as a security precaution per default. Disable filtering with =raw= or =disableremovescript= parameter.
