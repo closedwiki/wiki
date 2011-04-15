@@ -2973,7 +2973,7 @@ sub _expandTagOnTopicRendering {
         }
         # In parameterized variables, expand %ALL_UNUSED_TAGS{ default="..." }% to defaults
         # FIXME: Quick hack; do proper variable parsing
-        $e =~ s/%[A-Za-z0-9_]+{ *default="(.*?[^\\]?)" *}%/_unescapeQuotes( $1 )/ge;
+        $e =~ s/%($regex{tagNameRegex}){ *default="(.*?[^\\]?)" *}%/_unescapeQuotes( $2 )/ge;
 
     } else {
         $e = $this->{SESSION_TAGS}{$tag} unless( $args );
@@ -3734,7 +3734,7 @@ sub INCLUDE {
     # Change %ALLTAGS{ default="..." }% to %ALLTAGS% and capture tags with defaults
     # FIXME: Quick hack; do proper variable parsing
     my $tagsWithDefault = undef;
-    $text =~ s/(%)([A-Za-z0-9_]+)({ *default=")(.*?[^\\]?)(" *})(%)/
+    $text =~ s/(%)($regex{tagNameRegex})({ *default=")(.*?[^\\]?)(" *})(%)/
                $tagsWithDefault->{$2} = _unescapeQuotes( $4 );
                "$1$2$6"/ge;
 
