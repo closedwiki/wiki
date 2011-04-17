@@ -64,6 +64,7 @@ topic update for that web. Otherwise do it for all webs
 
 =cut
 
+#===========================================================
 sub statistics {
     my $session = shift;
 
@@ -93,18 +94,22 @@ sub statistics {
           TWiki::Time::formatTime( time(), '$year$mo', 'servertime' );
     }
 
-    my $logMonth;
+    my $logMon;
+    my $logMo;
     my $logYear;
     if ( $logDate =~ /^(\d\d\d\d)(\d\d)$/ ) {
         $logYear = $1;
-        $logMonth = $TWiki::Time::ISOMONTH[ ( $2 % 12 ) - 1 ];
+        $logMo = $2;
+        $logMon = $TWiki::Time::ISOMONTH[ ( $logMo % 12 ) - 1 ];
     } else {
-        _printMsg( $session, "!Error in date $logDate - must be YYYYMM" );
+        _printMsg( $session, "!Error in date $logDate - must be YYYY-MM or YYYYMM" );
         return;
     }
 
-    my $logMonthYear = "$logMonth $logYear";
-    _printMsg( $session, "* Statistics for $logMonthYear" );
+    my $logMonYear = "$logMon $logYear";
+    my $logYearMo = "$logYear-$logMo";
+    _printMsg( $session, "* Statistics for $logYearMo" );
+    _printMsg( $session, '* Executed by ' . $session->{user} );
 
     my $logFile = $TWiki::cfg{LogFileName};
     $logFile =~ s/%DATE%/$logDate/g;
@@ -139,7 +144,7 @@ sub statistics {
     # Do a single data collection pass on the temporary copy of logfile,
     # then process each web once.
     my ($viewRef, $contribRef, $statViewsRef, $statSavesRef, $statUploadsRef) =
-      _collectLogData( $session, $TMPFILE, $logMonthYear );
+      _collectLogData( $session, $TMPFILE );
 
     my @weblist;
     my $webSet = TWiki::Sandbox::untaintUnchecked($session->{request}->param( 'webs' )) || $session->{requestedWebName};
@@ -150,22 +155,14 @@ sub statistics {
         # otherwise do all user webs:
         @weblist = $session->{store}->getListOfWebs( 'user' );
     }
-    my $firstTime = 1;
     foreach my $web ( @weblist ) {
         try {
-            $destWeb = _processWeb( $session,
-                                $web,
-                                $logMonthYear,
-                                $viewRef,
-                                $contribRef,
-                                $statViewsRef,
-                                $statSavesRef,
-                                $statUploadsRef,
-                                $firstTime );
+            $destWeb = _processWeb( $session, $web, $logYearMo, $logMonYear,
+                                    $viewRef, $contribRef,
+                                    $statViewsRef, $statSavesRef, $statUploadsRef );
         } catch TWiki::AccessControlException with  {
             _printMsg( $session, '  - ERROR: no permission to CHANGE statistics topic in '.$web);
         }
-        $firstTime = 0;
     }
 
     close $TMPFILE;		# Shouldn't be necessary with 'my'
@@ -184,8 +181,10 @@ sub statistics {
         unless ( $session->inContext('command_line') );
 }
 
+#===========================================================
 # Debug only
 # Print all entries in a view or contrib hash, sorted by web and item name
+#===========================================================
 sub _debugPrintHash {
     my ($statsRef) = @_;
     # print "Main.WebHome views = " . ${$statsRef}{'Main'}{'WebHome'}."\n";
@@ -205,7 +204,7 @@ sub _debugPrintHash {
     }
 }
 
-
+#===========================================================
 # Process the whole log file and collect information in hash tables.
 # Must build stats for all webs, to handle case of renames into web
 # requested for a single-web statistics run.
@@ -214,20 +213,20 @@ sub _debugPrintHash {
 #
 #   $view{$web}{$TopicName} == number of views, by topic
 #   $contrib{$web}{"Main.".$WikiName} == number of saves/uploads, by user
-
+#===========================================================
 sub _collectLogData {
-    my( $session, $TMPFILE, $theLogMonthYear ) = @_;
+    my( $session, $TMPFILE ) = @_;
 
     # Log file format:
-    # | date | user | op | web.topic | notes | ip |
-    # date = e.g. 03 Feb 2000 - 02:43
-    # user = e.g. Main.PeterThoeny
-    # user = e.g. PeterThoeny
-    # user = e.g. peter (intranet login)
-    # web.topic = e.g MyWeb.MyTopic
-    # notes = e.g. minor
-    # notes = e.g. not on thursdays
-    # ip = e.g. 127.0.0.5
+    # | date | user | operation | web.topic | notes | ip address |
+    # date, such as "2011-04-17 - 02:43" (or "03 Feb 2000 - 02:43" up to TWiki-4.2)
+    # user, such as "Main.PeterThoeny" (legacy)
+    # user, such as "PeterThoeny" (TWiki internal authentication)
+    # user, such as "peter" (intranet login)
+    # operation, such as "view", "edit", "save"
+    # web.topic, such as "MyWeb.MyTopic"
+    # notes, such as "minor", "not on thursdays"
+    # ip address, such as "127.0.0.5"
 
     my %view;		# Hash of hashes, counts topic views by (web, topic)
     my %contrib;	# Hash of hashes, counts uploads/saves by (web, user)
@@ -313,15 +312,10 @@ sub _collectLogData {
     return \%view, \%contrib, \%statViews, \%statSaves, \%statUploads;
 }
 
+#===========================================================
 sub _processWeb {
-    my( $session, $web, $theLogMonthYear, $viewRef, $contribRef,
-        $statViewsRef, $statSavesRef, $statUploadsRef, $isFirstTime ) = @_;
-
-    my( $topic, $user ) = ( $session->{topicName}, $session->{user} );
-
-    if( $isFirstTime ) {
-        _printMsg( $session, '* Executed by '.$user );
-    }
+    my( $session, $web, $logYearMo, $logMonYear, $viewRef, $contribRef,
+        $statViewsRef, $statSavesRef, $statUploadsRef ) = @_;
 
     _printMsg( $session, "* Reporting on $web web" );
 
@@ -333,7 +327,6 @@ sub _processWeb {
     $statSaves ||= 0;
     $statUploads ||= 0;
     _printMsg( $session, "  - view: $statViews, save: $statSaves, upload: $statUploads" );
-
     
     # Get the top N views and contribs in this web
     my (@topViews) = _getTopList( $TWiki::cfg{Stats}{TopViews}, $web, $viewRef );
@@ -367,8 +360,8 @@ sub _processWeb {
         my $idxTmpl = -1;
         for( my $x = 0; $x < @lines; $x++ ) {
             $tmp = $lines[$x];
-            # Check for existing line for this month+year
-            if( $tmp =~ /$theLogMonthYear/ ) {
+            # Check for existing line for this month+year in new and legacy format
+            if( $tmp =~ /^\| ($logYearMo|$logMonYear) / ) {
                 $idxStat = $x;
             } elsif( $tmp =~ /<\!\-\-statDate\-\->/ ) {
                 $statLine = $tmp;
@@ -376,9 +369,10 @@ sub _processWeb {
             }
         }
         if( ! $statLine ) {
-            $statLine = '| <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> | <!--statTopViews--> | <!--statTopContributors--> |';
+            $statLine = '| <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> '
+                      . '| <!--statTopViews--> | <!--statTopContributors--> |';
         }
-        $statLine =~ s/<\!\-\-statDate\-\->/$theLogMonthYear/;
+        $statLine =~ s/<\!\-\-statDate\-\->/$logYearMo/;
         $statLine =~ s/<\!\-\-statViews\-\->/ $statViews/;
         $statLine =~ s/<\!\-\-statSaves\-\->/ $statSaves/;
         $statLine =~ s/<\!\-\-statUploads\-\->/ $statUploads/;
@@ -399,7 +393,7 @@ sub _processWeb {
         }
         $text = join( "\n", @lines );
         $text .= "\n";
-        $session->{store}->saveTopic( $user, $web, $statsTopic,
+        $session->{store}->saveTopic( $session->{user}, $web, $statsTopic,
                                       $text, $meta,
                                       { minor => 1,
                                         dontlog => 1 } );
@@ -413,27 +407,39 @@ sub _processWeb {
     return $web;
 }
 
+#===========================================================
 # Get the items with top N frequency counts
 # Items can be topics (for view hash) or users (for contrib hash)
+#===========================================================
 sub _getTopList
 {
     my( $theMaxNum, $webName, $statsRef ) = @_;
 
-    # Get reference to the sub-hash for this web
-    my $webhashref = $statsRef->{$webName};
-
-    # print "Main.WebHome views = " . $statsRef->{$webName}{'WebHome'}."\n";
-    # print "Main web, TWikiGuest contribs = " . ${$statsRef}{$webName}{'Main.TWikiGuest'}."\n";
+    my @webs = ( $webName );
+    @webs = sort keys %$statsRef unless( $webName );
 
     my @list = ();
     my $topicName;
     my $statValue;
+    my $topicsRef;
+
+    foreach my $web ( @webs ) {
+        # Get reference to the sub-hash for this web
+        my $webhashref = $statsRef->{$web};
+
+        # print "Main.WebHome views = " . $statsRef->{$web}{'WebHome'}."\n";
+        # print "Main web, TWikiGuest contribs = " . ${$statsRef}{$web}{'Main.TWikiGuest'}."\n";
+
+        while( ( $topicName, $statValue ) = each( %$webhashref ) ) {
+            $topicsRef->{$topicName} += $statValue;
+        }
+    }
 
     # Convert sub hash of item=>statsvalue pairs into an array, @list, 
     # of '$statValue $topicName', ready for sorting.
-    while( ( $topicName, $statValue ) = each( %$webhashref ) ) {
+    while( ( $topicName, $statValue ) = each( %$topicsRef ) ) {
         # Right-align statistic value for sorting
-        $statValue = sprintf '%7d', $statValue;	
+        $statValue = sprintf '%7d', $statValue;
         # Add new array item at end of array
         if( $topicName =~ /\./ ) {
             $list[@list] = "$statValue $topicName";
@@ -441,10 +447,6 @@ sub _getTopList
             $list[@list] = "$statValue [[$topicName]]";
         }
     }
-
-    # DEBUG
-    # print " top N list for $webName\n";
-    # print join "\n", @list;
 
     # Sort @list by frequency and pick the top N entries
     if( @list ) {
@@ -465,6 +467,7 @@ sub _getTopList
     return @list;
 }
 
+#===========================================================
 sub _printMsg {
     my( $session, $msg ) = @_;
 
@@ -487,4 +490,5 @@ sub _printMsg {
     $session->{response}->body( ($session->{response}->body || '') . $msg . "\n" );
 }
 
+#===========================================================
 1;
