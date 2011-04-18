@@ -398,7 +398,7 @@ sub _processWeb {
         _printMsg( $session, "  - Topic $statsTopic updated" );
 
     } else {
-        _printMsg( $session, "! Warning: No updates done, topic $web.$statsTopic does not exist" );
+        _printMsg( $session, "  - WARNING: No updates done, topic $web.$statsTopic does not exist" );
     }
 }
 
