@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1283491526" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1303099569" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---++ Statistics for <nop>%WEB% Web
 
@@ -6,5 +6,5 @@
 | <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> | <!--statTopViews--> | <!--statTopContributors--> |
 
 __Notes:__
-   * Do not edit this topic, it is updated automatically. (You can also [[%SCRIPTURL{"statistics"}%/%WEB%][force]] an update)
+   * Do not edit this topic, it is updated automatically. (You can also [[%SCRIPTURL{"statistics"}%/%WEB%/%TOPIC%][force]] an update)
    * [[%SYSTEMWEB%.TWikiSiteTools#WebStatistics_site_statistics][TWikiSiteTools]] tells you how to enable the automatic updates of the statistics.
