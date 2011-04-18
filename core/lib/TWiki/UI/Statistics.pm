@@ -147,14 +147,17 @@ sub statistics {
       _collectLogData( $session, $TMPFILE );
 
     my @weblist;
-    my $webSet = TWiki::Sandbox::untaintUnchecked($session->{request}->param( 'webs' )) || $session->{requestedWebName};
+    my $webSet = TWiki::Sandbox::untaintUnchecked($session->{request}->param( 'webs' ))
+               || $session->{requestedWebName};
     if( $webSet) {
         # do specific webs
         push( @weblist, split( /,\s*/, $webSet ));
+
     } else {
         # otherwise do all user webs:
         @weblist = $session->{store}->getListOfWebs( 'user' );
     }
+
     foreach my $web ( @weblist ) {
         try {
             $destWeb = _processWeb( $session, $web, $logYearMo, $logMonYear,
@@ -255,14 +258,8 @@ sub _collectLogData {
         # ignore minor changes - not statistically helpful
         next if( $notes && $notes =~ /(minor|dontNotify)/ );
 
-        # ignore searches for now - idea: make a "top search phrase list" 
-        next if( $opName && $opName =~ /(search)/ );
-
-        # ignore "renamed web" log lines
-        next if( $opName && $opName =~ /(renameweb)/ );
-
-        # ignore "change password" log lines
-        next if( $opName && $opName =~ /(changepasswd)/ );
+        # ignore op names we don't need
+        next unless( $opName && $opName =~ /^(view|save|upload|rename)$/ );
 
         # .+ is used because topics name can contain stuff like !, (, ), =, -, _ and they should have stats anyway
         if( $opName && $webTopic =~ /(^$TWiki::regex{webNameRegex})\.(.+)/ ) {
