@@ -70,9 +70,7 @@ sub statistics {
 
     my $webName = $session->{webName};
 
-    my $tmp = '';
     # web to redirect to after finishing
-    my $destWeb = $TWiki::cfg{UsersWebName};
     my $logDate = $session->{request}->param( 'logdate' ) || '';
     $logDate =~ s/[^0-9]//g;  # remove all non numerals
     $debug = $session->{request}->param( 'debug' );
@@ -160,9 +158,9 @@ sub statistics {
 
     foreach my $web ( @weblist ) {
         try {
-            $destWeb = _processWeb( $session, $web, $logYearMo, $logMonYear,
-                                    $viewRef, $contribRef,
-                                    $statViewsRef, $statSavesRef, $statUploadsRef );
+            _processWeb( $session, $web, $logYearMo, $logMonYear,
+                        $viewRef, $contribRef,
+                        $statViewsRef, $statSavesRef, $statUploadsRef );
         } catch TWiki::AccessControlException with  {
             _printMsg( $session, '  - ERROR: no permission to CHANGE statistics topic in '.$web);
         }
@@ -173,11 +171,13 @@ sub statistics {
     # usage to ensure deleted on crash?
 
     if( !$session->inContext( 'command_line' ) ) {
-        $tmp = $TWiki::cfg{Stats}{TopicName};
-        my $url = $session->getScriptUrl( 0, 'view', $destWeb, $tmp );
+        my $web   = $session->{webName};
+        my $topic = $session->{topicName};
+        $topic = $TWiki::cfg{Stats}{TopicName} if( $topic = $TWiki::cfg{HomeTopicName} ); 
+        my $url = $session->getScriptUrl( 0, 'view', $web, $topic );
         _printMsg( $session, '* Go to '
                    . CGI::a( { href => $url,
-                               rel => 'nofollow' }, "$webName.$tmp") );
+                               rel => 'nofollow' }, "$web.$topic") );
     }
     _printMsg( $session, 'End creating usage statistics' );
     $session->{response}->body( $session->{response}->body . CGI::end_html() )
@@ -197,7 +197,7 @@ sub _debugPrintHash {
         print $web,' web:',"\n";
         # Get reference to the sub-hash for this web
         my $webhashref = ${$statsRef}{$web};
-		# print 'webhashref is ' . ref ($webhashref) ."\n";
+        # print 'webhashref is ' . ref ($webhashref) ."\n";
         # Items can be topics (for view hash) or users (for contrib hash)
         foreach my $item ( sort keys %$webhashref ) {
             print "  $item = ",( ${$webhashref}{$item} || 0 ),"\n";
@@ -344,7 +344,7 @@ sub _processWeb {
 
     # Update the WebStatistics topic
 
-    my $tmp;
+    my $line;
     my $statsTopic = $TWiki::cfg{Stats}{TopicName};
     # DEBUG
     # $statsTopic = 'TestStatistics';		# Create this by hand
@@ -356,12 +356,12 @@ sub _processWeb {
         my $idxStat = -1;
         my $idxTmpl = -1;
         for( my $x = 0; $x < @lines; $x++ ) {
-            $tmp = $lines[$x];
+            $line = $lines[$x];
             # Check for existing line for this month+year in new and legacy format
-            if( $tmp =~ /^\| ($logYearMo|$logMonYear) / ) {
+            if( $line =~ /^\| ($logYearMo|$logMonYear) / ) {
                 $idxStat = $x;
-            } elsif( $tmp =~ /<\!\-\-statDate\-\->/ ) {
-                $statLine = $tmp;
+            } elsif( $line =~ /<\!\-\-statDate\-\->/ ) {
+                $statLine = $line;
                 $idxTmpl = $x;
             }
         }
@@ -400,8 +400,6 @@ sub _processWeb {
     } else {
         _printMsg( $session, "! Warning: No updates done, topic $web.$statsTopic does not exist" );
     }
-
-    return $web;
 }
 
 #===========================================================
