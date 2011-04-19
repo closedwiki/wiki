@@ -157,7 +157,8 @@ sub statistics {
     }
 
     # do site statistics (only if no specific webs selected, or if force update from SiteStatistics)
-    if( !$webSet ||  $session->{topicName} eq ( $TWiki::cfg{Stats}{SiteTopicName} || 'SiteStatistics' ) ) {
+    my $siteStatsTopic = $TWiki::cfg{Stats}{SiteStatsTopicName} || 'SiteStatistics';
+    if( !$webSet || $session->{topicName} eq $siteStatsTopic ) {
         try {
             my $siteStats = _collectSiteStats( $session, $logYearMo, $contribRef,
                                                $statViewsRef, $statSavesRef, $statUploadsRef );
@@ -184,7 +185,10 @@ sub statistics {
     if( !$session->inContext( 'command_line' ) ) {
         my $web   = $session->{webName};
         my $topic = $session->{topicName};
-        $topic = $TWiki::cfg{Stats}{TopicName} if( $topic = $TWiki::cfg{HomeTopicName} ); 
+        if( $topic = $TWiki::cfg{HomeTopicName} ) {
+            $web   = $TWiki::cfg{UsersWebName};
+            $topic = $siteStatsTopic;
+        }
         my $url = $session->getScriptUrl( 0, 'view', $web, $topic );
         _printMsg( $session, '* Go to '
                    . CGI::a( { href => $url,
@@ -452,6 +456,7 @@ sub _processSiteStats {
     } else {
         ( $meta, $text ) = $session->{store}->readTopic(
             undef, $TWiki::cfg{SystemWebName}, 'SiteStatisticsTemplate' );
+        $text = $session->expandVariablesOnTopicCreation( $text, $session->{user} );
     }
 
     my $line;
