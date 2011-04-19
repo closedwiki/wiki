@@ -156,6 +156,16 @@ sub statistics {
         @weblist = $session->{store}->getListOfWebs( 'user' );
     }
 
+    # do site statistics (only if no specific webs selected, or if force update from SiteStatistics)
+    if( !$webSet ||  $session->{topicName} eq ( $TWiki::cfg{Stats}{SiteTopicName} || 'SiteStatistics' ) ) {
+        try {
+            _processSiteStats( $session, $logYearMo, $logMonYear,
+                               $contribRef, $statViewsRef, $statSavesRef, $statUploadsRef );
+        } catch TWiki::AccessControlException with  {
+            _printMsg( $session, '  - ERROR: no permission to CHANGE site statistics topic');
+        }
+    }
+
     foreach my $web ( @weblist ) {
         try {
             _processWeb( $session, $web, $logYearMo, $logMonYear,
@@ -307,6 +317,154 @@ sub _collectLogData {
     }
 
     return \%view, \%contrib, \%statViews, \%statSaves, \%statUploads;
+}
+
+#===========================================================
+sub _getDiskUse {
+    my( $dir ) = @_;
+    my $used = 0;
+    my $stdOut = `df $dir`;
+    if( $stdOut =~ /^.*[ \t]([0-9\.]+)\%.*?$/s ) {
+        $used = $1;
+    }
+    return $used;
+}
+
+#===========================================================
+sub _getDirSize {
+    my( $dir ) = @_;
+    my $size = 0;
+
+    opendir( DIR, $dir ) || return $size;
+    my @files = map { $dir . '/' . $_ } # create full path
+                grep { !/^\.\.?$/ }     # omit . and .. files
+                readdir( DIR );
+    closedir( DIR );
+    foreach my $f ( @files ) {
+        if( -d $f ) {
+            $size += _getDirSize( $f );
+        } else {
+            $size += ( -s $f || 0 );
+        }
+    }
+    return $size;
+}
+
+#===========================================================
+sub _processSiteStats {
+    my( $session, $logYearMo, $logMonYear, $contribRef,
+        $statViewsRef, $statSavesRef, $statUploadsRef ) = @_;
+
+    _printMsg( $session, '* Reporting overall statistics' );
+
+    # Collect data
+    my @weblist = $session->{store}->getListOfWebs( 'user' );
+    my $nWebs = scalar @weblist;
+    my $nTopics = 0;
+    foreach my $w ( @weblist ) {
+        $nTopics += scalar $session->{store}->getTopicNames( $w );
+    }
+    _printMsg( $session, "  - webs: $nWebs, topics: $nTopics" );
+    my $statViews = 0;
+    foreach my $w ( sort keys %$statViewsRef) {
+        $statViews += ( $statViewsRef->{$w} || 0 );
+    }
+    my $statSaves = 0;
+    foreach my $w ( sort keys %$statSavesRef) {
+        $statSaves += ( $statSavesRef->{$w} || 0 );
+    }
+    my $statUploads = 0;
+    foreach my $w ( sort keys %$statUploadsRef) {
+        $statUploads += ( $statUploadsRef->{$w} || 0 );
+    }
+    _printMsg( $session, "  - view: $statViews, save: $statSaves, upload: $statUploads" );
+    my $statUsers = 0;
+    my $it = $session->{users}->eachUser();
+    $it->{process} = sub { return 1; };
+    while( $it->hasNext() ) {
+        $statUsers += $it->next();
+    }
+    _printMsg( $session, "  - users: $statUsers" );
+    my $statDataSize = sprintf("%0.1f", _getDirSize( $TWiki::cfg{DataDir} ) / ( 1024 * 1024 ) );
+    my $statPubSize  = sprintf("%0.1f", _getDirSize( $TWiki::cfg{PubDir} ) / ( 1024 * 1024 ) );
+    _printMsg( $session, "  - data size: $statDataSize MB, pub size: $statPubSize MB" );
+    my $statDiskUse = _getDiskUse( $TWiki::cfg{DataDir} );
+    my $statPubUse  = _getDiskUse( $TWiki::cfg{PubDir} );
+    if( $statPubUse > $statDiskUse ) {
+        # pub is mounted on different disk, report this one as the more critical one
+        $statDiskUse = $statPubUse;
+    }
+    $statDiskUse = $statDiskUse . '%';
+    _printMsg( $session, "  - disk use: $statDiskUse" );
+    my $statTopContributors = '';
+    my ( @topContribs ) = _getTopList( $TWiki::cfg{Stats}{TopContrib}, undef, $contribRef );
+    if( @topContribs ) {
+        $statTopContributors = join( CGI::br(), @topContribs );
+        _printMsg( $session, '  - top contributor: '.$topContribs[0] );
+    }
+
+    # Update the SiteStatistics topic
+    my $line;
+    my $web = $TWiki::cfg{SystemWebName}; 
+    my $statsTopic = $TWiki::cfg{Stats}{SiteTopicName} || 'SiteStatistics';
+    if( $session->{store}->topicExists( $web, $statsTopic ) ) {
+        my( $meta, $text ) =
+          $session->{store}->readTopic( undef, $web, $statsTopic, undef );
+        my @lines = split( /\r?\n/, $text );
+        my $statLine;
+        my $idxStat = -1;
+        my $idxTmpl = -1;
+        for( my $x = 0; $x < @lines; $x++ ) {
+            $line = $lines[$x];
+            # Check for existing line for this month+year in new and legacy format
+            if( $line =~ /^\| ($logYearMo|$logMonYear) / ) {
+                $idxStat = $x;
+            } elsif( $line =~ /<\!\-\-statDate\-\->/ ) {
+                $statLine = $line;
+                $idxTmpl = $x;
+            }
+        }
+        if( ! $statLine ) {
+            $statLine = '| <!--statDate--> | <!--statWebs--> | <!--statTopics--> | <!--statViews--> '
+                      . '| <!--statSaves--> | <!--statUploads--> | <!--statUsers--> | <!--statDataSize--> '
+                      . '| <!--statPubSize--> | <!--statDiskUse--> | <!--statTopContributors--> |';
+        }
+        $statLine =~ s/<\!\-\-statDate\-\->/$logYearMo/;
+        $statLine =~ s/<\!\-\-statWebs\-\->/ $nWebs/;
+        $statLine =~ s/<\!\-\-statTopics\-\->/ $nTopics/;
+        $statLine =~ s/<\!\-\-statViews\-\->/ $statViews/;
+        $statLine =~ s/<\!\-\-statSaves\-\->/ $statSaves/;
+        $statLine =~ s/<\!\-\-statUploads\-\->/ $statUploads/;
+        $statLine =~ s/<\!\-\-statUsers\-\->/ $statUsers/;
+        $statLine =~ s/<\!\-\-statDataSize\-\->/ $statDataSize/;
+        $statLine =~ s/<\!\-\-statPubSize\-\->/ $statPubSize/;
+        $statLine =~ s/<\!\-\-statDiskUse\-\->/ $statDiskUse/;
+        $statLine =~ s/<\!\-\-statTopContributors\-\->/$statTopContributors/;
+
+        if( $idxStat >= 0 ) {
+            # entry already exists, need to update
+            $lines[$idxStat] = $statLine;
+
+        } elsif( $idxTmpl >= 0 ) {
+            # entry does not exist, add after <!--statDate--> line
+            $lines[$idxTmpl] = "$lines[$idxTmpl]\n$statLine";
+
+        } else {
+            # entry does not exist, add at the end
+            $lines[@lines] = $statLine;
+        }
+        $text = join( "\n", @lines );
+        $text .= "\n";
+        $session->{store}->saveTopic( $session->{user}, $web, $statsTopic,
+                                      $text, $meta,
+                                      { minor => 1,
+                                        dontlog => 1 } );
+
+        _printMsg( $session, "  - Topic $web.$statsTopic updated" );
+
+    } else {
+        _printMsg( $session, "  - WARNING: No updates done, topic $web.$statsTopic does not exist" );
+    }
 }
 
 #===========================================================
