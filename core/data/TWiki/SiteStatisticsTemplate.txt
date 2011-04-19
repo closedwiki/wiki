@@ -1,14 +1,16 @@
-%META:TOPICINFO{author="TWikiContributor" date="1303187744" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1303198163" format="1.1" version="$Rev$"}%
 ---+ TWiki Site Statistics
-
+%STARTSECTION{type="templateonly"}%
+ __NOTE:__ This is a template topic, do not change. [[%SCRIPTURL{"statistics"}%/%USERSWEB%/SiteStatistics][Update the site statistics]].
+%ENDSECTION{type="templateonly"}%
 %TABLE{ name="stats" sort="off" }%
-| *Month* | *Webs* | *Topics* | *Topic Views* | *Topic Updates* | *Files Uploads* | *Users* | *Data Size MB* | *Pub Size MB* | *% Disk Use* | *Top Contributors: Topic Updates* |
-| <!--statDate--> |  <!--statWebs--> |  <!--statTopics--> |  <!--statViews--> |  <!--statSaves--> |  <!--statUploads--> |  <!--statUsers--> |  <!--statDataSize--> |  <!--statPubSize--> |  <!--statDiskUse--> | <!--statTopContributors--> |
+| *Month* | *Webs* | *Topics* | *Topic Views* | *Topic Updates* | *Files Uploads* | *Users* | *Data Size MB* | *Pub Size MB* | *Disk Use* | *Plugins* | *Top Contributors: Topic Updates* |
+| <!--statDate--> |  <!--statWebs--> |  <!--statTopics--> |  <!--statViews--> |  <!--statSaves--> |  <!--statUploads--> |  <!--statUsers--> |  <!--statDataSize--> |  <!--statPubSize--> |  <!--statDiskUse--> |  <!--statPlugins--> | <!--statTopContributors--> |
 
 __Notes:__
-   * Do not edit this topic, it is updated automatically. (You can also [[%SCRIPTURL{"statistics"}%/%WEB%/%TOPIC%][force]] an update)
-   * [[%SYSTEMWEB%.TWikiSiteTools#WebStatistics_site_statistics][TWikiSiteTools]] tells you how to enable the automatic updates of the statistics.
+   * Do not edit this topic, it is updated automatically. (You can also [[%SCRIPTURL{"statistics"}%/%USERSWEB%/SiteStatistics][force]] an update)
+   * [[%SYSTEMWEB%.TWikiSiteTools#WebStatistics][TWikiSiteTools]] explains how to enable automatic updates of the statistics pages.
 
-__Web Statistics Topics:__ %SEARCH{ "WebStatistics" scope="topic" web="all" topic="WebStatistics" nonoise="on" format="[[$web.$topic][$web]]" separator=", " }%
+__Web Statistics Topics:__ %SEARCH{ "WebStatistics" scope="topic" web="all" topic="WebStatistics" nonoise="on" format="[[$web.$topic][$web]]" separator=", " limit="100" }%
 
-__Related:__ %SYSTEMWEB%.AdminToolsCategory
+__Related:__ [[%SYSTEMWEB%.AdminToolsCategory][AdminToolsCategory]]
