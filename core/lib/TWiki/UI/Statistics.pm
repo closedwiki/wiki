@@ -107,7 +107,7 @@ sub statistics {
     my $logMonYear = "$logMon $logYear";
     my $logYearMo = "$logYear-$logMo";
     _printMsg( $session, "* Statistics for $logYearMo" );
-    _printMsg( $session, '* Executed by ' . $session->{user} );
+    _printMsg( $session, '* Executed by ' . $session->{users}->getWikiName( $session->{user} ) );
 
     my $logFile = $TWiki::cfg{LogFileName};
     $logFile =~ s/%DATE%/$logDate/g;
