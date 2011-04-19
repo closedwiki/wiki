@@ -326,13 +326,25 @@ sub _collectLogData {
 
 #===========================================================
 sub _getDiskUse {
-    my( $dir ) = @_;
-    my $used = 0;
-    my $stdOut = `df $dir`;
-    if( $stdOut =~ /^.*[ \t]([0-9\.]+)\%.*?$/s ) {
-        $used = $1;
+    my( $session, $dir ) = @_;
+    my $diskUse = 0;
+    my $cmd = $TWiki::cfg{Stats}{dfCmd} || 'df %DIRECTORY|F%';
+    my( $output, $exit );
+    try {
+        ( $output, $exit ) = $TWiki::sandbox->sysCommand( $cmd, DIRECTORY => $dir );
+        if( $exit ) {
+            _printMsg( $session, "  - ERROR: $cmd of $dir failed: $exit $output" );
+            return 0;
+        } elsif( $output =~ /^.*[ \t]([0-9\.]+)\%.*?$/s ) {
+            return $1;
+        }
+        return 0;
+
+    } catch Error::Simple with {
+        my $message =  shift->{-text};
+        _printMsg( $session, "  - ERROR: $cmd of $dir failed: $message" );
+        return 0;
     }
-    return $used;
 }
 
 #===========================================================
@@ -418,8 +430,8 @@ sub _collectSiteStats {
     _printMsg( $session, "  - data size: " . $siteStats->{statDataSize} .
                          " MB, pub size: " . $siteStats->{statPubSize} . " MB" );
 
-    my $dataUse = _getDiskUse( $TWiki::cfg{DataDir} );
-    my $pubUse  = _getDiskUse( $TWiki::cfg{PubDir} );
+    my $dataUse = _getDiskUse( $session, $TWiki::cfg{DataDir} );
+    my $pubUse  = _getDiskUse( $session, $TWiki::cfg{PubDir} );
     if( $pubUse > $dataUse ) {
         # pub is mounted on different disk, report this one as the more critical one
         $dataUse = $pubUse;
