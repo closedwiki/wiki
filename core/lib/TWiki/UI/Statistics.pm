@@ -87,9 +87,9 @@ sub statistics {
     _printMsg( $session, '(Please wait until page download has finished)' );
 
     require TWiki::Time;
+    my $currentMonth = TWiki::Time::formatTime( time(), '$year$mo', 'servertime' );
     unless( $logDate ) {
-        $logDate =
-          TWiki::Time::formatTime( time(), '$year$mo', 'servertime' );
+        $logDate = $currentMonth;
     }
 
     my $logMon;
@@ -99,6 +99,7 @@ sub statistics {
         $logYear = $1;
         $logMo = $2;
         $logMon = $TWiki::Time::ISOMONTH[ ( $logMo % 12 ) - 1 ];
+        $currentMonth = ( $logDate eq $currentMonth ) ? 1 : 0;
     } else {
         _printMsg( $session, "!Error in date $logDate - must be YYYY-MM or YYYYMM" );
         return;
@@ -160,7 +161,7 @@ sub statistics {
     my $siteStatsTopic = $TWiki::cfg{Stats}{SiteStatsTopicName} || 'SiteStatistics';
     if( !$webSet || $session->{topicName} eq $siteStatsTopic ) {
         try {
-            my $siteStats = _collectSiteStats( $session, $logYearMo, $contribRef,
+            my $siteStats = _collectSiteStats( $session, $currentMonth, $logYearMo, $contribRef,
                                                $statViewsRef, $statSavesRef, $statUploadsRef );
             _processSiteStats( $session, $logYearMo, $logMonYear, $siteStats );
         } catch TWiki::AccessControlException with  {
@@ -369,7 +370,7 @@ sub _getDirSize {
 
 #===========================================================
 sub _collectSiteStats {
-    my( $session, $logYearMo, $contribRef,
+    my( $session, $currentMonth, $logYearMo, $contribRef,
         $statViewsRef, $statSavesRef, $statUploadsRef ) = @_;
 
     _printMsg( $session, '* Reporting overall statistics' );
@@ -383,18 +384,22 @@ sub _collectSiteStats {
 
     $siteStats->{statVersion} = $TWiki::VERSION;
     $siteStats->{statVersion} =~ s/[, ].*//;
+    $siteStats->{statVersion} = '' unless( $currentMonth );
 
     $siteStats->{statDate} = $logYearMo;
 
     my @weblist = $session->{store}->getListOfWebs( 'user' );
     $siteStats->{statWebs} = scalar @weblist;
+    $siteStats->{statWebs} = 0 unless( $currentMonth );
 
     $siteStats->{statTopics} = 0;
-    foreach my $w ( @weblist ) {
-        $siteStats->{statTopics} += scalar $session->{store}->getTopicNames( $w );
+    if( $currentMonth ) {
+        foreach my $w ( @weblist ) {
+            $siteStats->{statTopics} += scalar $session->{store}->getTopicNames( $w );
+        }
+        _printMsg( $session, "  - webs: " . $siteStats->{statWebs} . 
+                             ", topics: " . $siteStats->{statTopics} );
     }
-    _printMsg( $session, "  - webs: " . $siteStats->{statWebs} . 
-                         ", topics: " . $siteStats->{statTopics} );
 
     $siteStats->{statViews} = 0;
     foreach my $w ( sort keys %$statViewsRef) {
@@ -415,32 +420,43 @@ sub _collectSiteStats {
                          ", upload: " . $siteStats->{statUploads} );
 
     $siteStats->{statUsers} = 0;
-    my $it = $session->{users}->eachUser();
-    $it->{process} = sub { return 1; };
-    while( $it->hasNext() ) {
-        $siteStats->{statUsers} += $it->next();
+    if( $currentMonth ) {
+        my $it = $session->{users}->eachUser();
+        $it->{process} = sub { return 1; };
+        while( $it->hasNext() ) {
+            $siteStats->{statUsers} += $it->next();
+        }
+        _printMsg( $session, "  - users: " . $siteStats->{statUsers} );
     }
-    _printMsg( $session, "  - users: " . $siteStats->{statUsers} );
 
-    my $size = _getDirSize( $TWiki::cfg{DataDir} ) / ( 1024 * 1024 );
-    $siteStats->{statDataSize} = sprintf("%0.1f", $size );
-
-    $size = _getDirSize( $TWiki::cfg{PubDir} ) / ( 1024 * 1024 );
-    $siteStats->{statPubSize}  = sprintf("%0.1f", $size );
-    _printMsg( $session, "  - data size: " . $siteStats->{statDataSize} .
-                         " MB, pub size: " . $siteStats->{statPubSize} . " MB" );
-
-    my $dataUse = _getDiskUse( $session, $TWiki::cfg{DataDir} );
-    my $pubUse  = _getDiskUse( $session, $TWiki::cfg{PubDir} );
-    if( $pubUse > $dataUse ) {
-        # pub is mounted on different disk, report this one as the more critical one
-        $dataUse = $pubUse;
+    $siteStats->{statDataSize} = 0;
+    $siteStats->{statPubSize} = 0;
+    if( $currentMonth ) {
+        my $size = _getDirSize( $TWiki::cfg{DataDir} ) / ( 1024 * 1024 );
+        $siteStats->{statDataSize} = sprintf("%0.1f", $size );
+        $size    = _getDirSize( $TWiki::cfg{PubDir} ) / ( 1024 * 1024 );
+        $siteStats->{statPubSize}  = sprintf("%0.1f", $size );
+        _printMsg( $session, "  - data size: " . $siteStats->{statDataSize} .
+                             " MB, pub size: " . $siteStats->{statPubSize} . " MB" );
     }
-    $siteStats->{statDiskUse} = $dataUse . '%';
-    _printMsg( $session, "  - disk use: " . $siteStats->{statDiskUse} );
 
-    $siteStats->{statPlugins} = scalar @{$session->{plugins}{plugins}};
-    _printMsg( $session, "  - plugins: " . $siteStats->{statPlugins} );
+    $siteStats->{statDiskUse} = 0;
+    if( $currentMonth ) {
+        my $dataUse = _getDiskUse( $session, $TWiki::cfg{DataDir} );
+        my $pubUse  = _getDiskUse( $session, $TWiki::cfg{PubDir} );
+        if( $pubUse > $dataUse ) {
+            # pub is mounted on different disk, report this one as the more critical one
+            $dataUse = $pubUse;
+        }
+        $siteStats->{statDiskUse} = $dataUse . '%';
+        _printMsg( $session, "  - disk use: " . $siteStats->{statDiskUse} );
+    }
+
+    $siteStats->{statPlugins} = 0;
+    if( $currentMonth ) {
+        $siteStats->{statPlugins} = scalar @{$session->{plugins}{plugins}};
+        _printMsg( $session, "  - plugins: " . $siteStats->{statPlugins} );
+    }
 
     $siteStats->{statTopContributors} = '';
     my ( @topContribs ) = _getTopList( $TWiki::cfg{Stats}{TopContrib}, undef, $contribRef );
@@ -476,10 +492,21 @@ sub _processSiteStats {
     my $statLine;
     my $idxStat = -1;
     my $idxTmpl = -1;
+    my $oldStats;
     for( my $x = 0; $x < @lines; $x++ ) {
         $line = $lines[$x];
         # Check for existing line for this month+year in new and legacy format
         if( $line =~ /^\| ($logYearMo|$logMonYear) / ) {
+            my @items = split( / *\| */, $line );
+            if( scalar @items >= 12 ) {
+                $oldStats->{statWebs}     = $items[2];
+                $oldStats->{statTopics}   = $items[3];
+                $oldStats->{statUsers}    = $items[7];
+                $oldStats->{statDataSize} = $items[8];
+                $oldStats->{statPubSize}  = $items[9];
+                $oldStats->{statDiskUse}  = $items[10];
+                $oldStats->{statPlugins}  = $items[11];
+            }
             $idxStat = $x;
         } elsif( $line =~ /<\!\-\-statDate\-\->/ ) {
             $statLine = $line;
@@ -494,7 +521,7 @@ sub _processSiteStats {
     }
 
     # update statistics line with collected values
-    $statLine =~ s/<\!\-\-([^\-]+)\-\->/$siteStats->{$1}/g;
+    $statLine =~ s/<\!\-\-([^\-]+)\-\->/$siteStats->{$1} || $oldStats->{$1} || 0/ge;
 
     if( $idxStat >= 0 ) {
         # entry already exists, need to update
