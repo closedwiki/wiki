@@ -159,8 +159,9 @@ sub statistics {
     # do site statistics (only if no specific webs selected, or if force update from SiteStatistics)
     if( !$webSet ||  $session->{topicName} eq ( $TWiki::cfg{Stats}{SiteTopicName} || 'SiteStatistics' ) ) {
         try {
-            _processSiteStats( $session, $logYearMo, $logMonYear,
-                               $contribRef, $statViewsRef, $statSavesRef, $statUploadsRef );
+            my $siteStats = _collectSiteStats( $session, $logYearMo, $contribRef,
+                                               $statViewsRef, $statSavesRef, $statUploadsRef );
+            _processSiteStats( $session, $logYearMo, $logMonYear, $siteStats );
         } catch TWiki::AccessControlException with  {
             _printMsg( $session, '  - ERROR: no permission to CHANGE site statistics topic');
         }
@@ -351,57 +352,96 @@ sub _getDirSize {
 }
 
 #===========================================================
-sub _processSiteStats {
-    my( $session, $logYearMo, $logMonYear, $contribRef,
+sub _collectSiteStats {
+    my( $session, $logYearMo, $contribRef,
         $statViewsRef, $statSavesRef, $statUploadsRef ) = @_;
 
     _printMsg( $session, '* Reporting overall statistics' );
 
-    # Collect data
+    my $siteStats;
+
+    my $site = $TWiki::cfg{DefaultUrlHost} . $TWiki::cfg{ScriptUrlPath};
+    my $ff = chr(255) x length( $site );
+    $site = $site ^ $ff; # obfuscate site name
+    $siteStats->{statSite} = uc( unpack( "H*", $site ) ); # hex encode
+
+    $siteStats->{statVersion} = $TWiki::VERSION;
+    $siteStats->{statVersion} =~ s/[, ].*//;
+
+    $siteStats->{statDate} = $logYearMo;
+
     my @weblist = $session->{store}->getListOfWebs( 'user' );
-    my $nWebs = scalar @weblist;
-    my $nTopics = 0;
+    $siteStats->{statWebs} = scalar @weblist;
+
+    $siteStats->{statTopics} = 0;
     foreach my $w ( @weblist ) {
-        $nTopics += scalar $session->{store}->getTopicNames( $w );
+        $siteStats->{statTopics} += scalar $session->{store}->getTopicNames( $w );
     }
-    _printMsg( $session, "  - webs: $nWebs, topics: $nTopics" );
-    my $statViews = 0;
+    _printMsg( $session, "  - webs: " . $siteStats->{statWebs} . 
+                         ", topics: " . $siteStats->{statTopics} );
+
+    $siteStats->{statViews} = 0;
     foreach my $w ( sort keys %$statViewsRef) {
-        $statViews += ( $statViewsRef->{$w} || 0 );
+        $siteStats->{statViews} += ( $statViewsRef->{$w} || 0 );
     }
-    my $statSaves = 0;
+
+    $siteStats->{statSaves} = 0;
     foreach my $w ( sort keys %$statSavesRef) {
-        $statSaves += ( $statSavesRef->{$w} || 0 );
+        $siteStats->{statSaves} += ( $statSavesRef->{$w} || 0 );
     }
-    my $statUploads = 0;
+
+    $siteStats->{statUploads} = 0;
     foreach my $w ( sort keys %$statUploadsRef) {
-        $statUploads += ( $statUploadsRef->{$w} || 0 );
+        $siteStats->{statUploads} += ( $statUploadsRef->{$w} || 0 );
     }
-    _printMsg( $session, "  - view: $statViews, save: $statSaves, upload: $statUploads" );
-    my $statUsers = 0;
+    _printMsg( $session, "  - view: " . $siteStats->{statViews} .
+                         ", save: "   . $siteStats->{statSaves} .
+                         ", upload: " . $siteStats->{statUploads} );
+
+    $siteStats->{statUsers} = 0;
     my $it = $session->{users}->eachUser();
     $it->{process} = sub { return 1; };
     while( $it->hasNext() ) {
-        $statUsers += $it->next();
+        $siteStats->{statUsers} += $it->next();
     }
-    _printMsg( $session, "  - users: $statUsers" );
-    my $statDataSize = sprintf("%0.1f", _getDirSize( $TWiki::cfg{DataDir} ) / ( 1024 * 1024 ) );
-    my $statPubSize  = sprintf("%0.1f", _getDirSize( $TWiki::cfg{PubDir} ) / ( 1024 * 1024 ) );
-    _printMsg( $session, "  - data size: $statDataSize MB, pub size: $statPubSize MB" );
-    my $statDiskUse = _getDiskUse( $TWiki::cfg{DataDir} );
-    my $statPubUse  = _getDiskUse( $TWiki::cfg{PubDir} );
-    if( $statPubUse > $statDiskUse ) {
+    _printMsg( $session, "  - users: " . $siteStats->{statUsers} );
+
+    my $size = _getDirSize( $TWiki::cfg{DataDir} ) / ( 1024 * 1024 );
+    $siteStats->{statDataSize} = sprintf("%0.1f", $size );
+
+    $size = _getDirSize( $TWiki::cfg{PubDir} ) / ( 1024 * 1024 );
+    $siteStats->{statPubSize}  = sprintf("%0.1f", $size );
+    _printMsg( $session, "  - data size: " . $siteStats->{statDataSize} .
+                         " MB, pub size: " . $siteStats->{statPubSize} . " MB" );
+
+    my $dataUse = _getDiskUse( $TWiki::cfg{DataDir} );
+    my $pubUse  = _getDiskUse( $TWiki::cfg{PubDir} );
+    if( $pubUse > $dataUse ) {
         # pub is mounted on different disk, report this one as the more critical one
-        $statDiskUse = $statPubUse;
+        $dataUse = $pubUse;
     }
-    $statDiskUse = $statDiskUse . '%';
-    _printMsg( $session, "  - disk use: $statDiskUse" );
-    my $statTopContributors = '';
+    $siteStats->{statDiskUse} = $dataUse . '%';
+    _printMsg( $session, "  - disk use: " . $siteStats->{statDiskUse} );
+
+    $siteStats->{statPlugins} = scalar @{$session->{plugins}{plugins}};
+    _printMsg( $session, "  - plugins: " . $siteStats->{statPlugins} );
+
+    $siteStats->{statTopContributors} = '';
     my ( @topContribs ) = _getTopList( $TWiki::cfg{Stats}{TopContrib}, undef, $contribRef );
     if( @topContribs ) {
-        $statTopContributors = join( CGI::br(), @topContribs );
+        $siteStats->{statTopContributors} = join( CGI::br(), @topContribs );
         _printMsg( $session, '  - top contributor: '.$topContribs[0] );
     }
+
+    # use Data::Dumper;
+    # print STDERR "=====\n" . Dumper($siteStats) . "=====\n";
+
+    return $siteStats;
+}
+
+#===========================================================
+sub _processSiteStats {
+    my( $session, $logYearMo, $logMonYear, $siteStats ) = @_;
 
     # Update the SiteStatistics topic
     my $line;
@@ -425,21 +465,14 @@ sub _processSiteStats {
             }
         }
         if( ! $statLine ) {
-            $statLine = '| <!--statDate--> | <!--statWebs--> | <!--statTopics--> | <!--statViews--> '
-                      . '| <!--statSaves--> | <!--statUploads--> | <!--statUsers--> | <!--statDataSize--> '
-                      . '| <!--statPubSize--> | <!--statDiskUse--> | <!--statTopContributors--> |';
+            $statLine = '| <!--statDate--> |  <!--statWebs--> |  <!--statTopics--> '
+                      . '|  <!--statViews--> |  <!--statSaves--> |  <!--statUploads--> '
+                      . '|  <!--statUsers--> |  <!--statDataSize--> |  <!--statPubSize--> '
+                      . '|  <!--statDiskUse--> | <!--statTopContributors--> |';
         }
-        $statLine =~ s/<\!\-\-statDate\-\->/$logYearMo/;
-        $statLine =~ s/<\!\-\-statWebs\-\->/ $nWebs/;
-        $statLine =~ s/<\!\-\-statTopics\-\->/ $nTopics/;
-        $statLine =~ s/<\!\-\-statViews\-\->/ $statViews/;
-        $statLine =~ s/<\!\-\-statSaves\-\->/ $statSaves/;
-        $statLine =~ s/<\!\-\-statUploads\-\->/ $statUploads/;
-        $statLine =~ s/<\!\-\-statUsers\-\->/ $statUsers/;
-        $statLine =~ s/<\!\-\-statDataSize\-\->/ $statDataSize/;
-        $statLine =~ s/<\!\-\-statPubSize\-\->/ $statPubSize/;
-        $statLine =~ s/<\!\-\-statDiskUse\-\->/ $statDiskUse/;
-        $statLine =~ s/<\!\-\-statTopContributors\-\->/$statTopContributors/;
+
+        # update statistics line with collected values
+        $statLine =~ s/<\!\-\-([^\-]+)\-\->/$siteStats->{$1}/g;
 
         if( $idxStat >= 0 ) {
             # entry already exists, need to update
