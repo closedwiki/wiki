@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1303260402" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1303333506" format="1.1" version="$Rev$"}%
 ---+!! !UsageStatisticsPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -45,7 +45,7 @@ __Supported parameters for =action="user"= to generate statistics by user:__
 
 Statistics of the current month are shown by default. If no user is specified, this message is shown: "Please specify a user." If a selected month has no statistics, this message is shown: "No statistics are available for this month."
 
-__Supported parameters for =action="monthlist"= to get list of months with statistics:__
+__Supported parameters for =action="monthlist"= to get list of months where statistics are available:__
 
 | *Parameter* | *Description* | *Default* |
 | =action="monthlist"= | Get list of months that have statistics logs | none |
