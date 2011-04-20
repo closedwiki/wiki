@@ -1,0 +1,93 @@
+---+!! !UsageStatisticsPlugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/UsageStatisticsPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/UsageStatisticsPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Overview
+
+This plugins shows detailed usage statistics of TWiki.
+
+   * *[[UsageStatisticsOverview]]* - overview statistics
+   * *[[UsageStatisticsByUser]]* - statistics by user (access might be restricted)
+
+%X% Usage statistics are based on the TWiki logs.
+
+---++ Syntax Rules
+
+The UsageStatisticsOverview and UsageStatisticsByUser pages embed the following variable to show usage statistics:
+
+=%<nop>USAGESTATISTICS{ action="..." ... }%=
+
+The =action= can be ="overview"=, ="user"=, ="monthlist"=
+
+__Supported parameters for =action="overview"= to generate overview statistics:__
+
+| *Parameter* | *Description* | *Default* |
+| =action="overview"= | Generate overview statistics | none |
+| =month="2011-04"= | Month, format =YYYY-MM= | current month |
+
+Statistics of the current month are shown by default. If a selected month has no statistics, this message is shown: "No statistics are available for this month."
+
+__Supported parameters for =action="user"= to generate statistics by user:__
+
+| *Parameter* | *Description* | *Default* |
+| =action="user"= | Generate statistics by user | none |
+| =user="..."= | %SYSTEMWEB%.WikiName of user | none |
+| =month="2011-04"= | Month, format =YYYY-MM= | current month |
+
+Statistics of the current month are shown by default. If no user is specified, this message is shown: "Please specify a user." If a selected month has no statistics, this message is shown: "No statistics are available for this month."
+
+__Supported parameters for =action="monthlist"= to get list of months with statistics:__
+
+| *Parameter* | *Description* | *Default* |
+| =action="monthlist"= | Get list of months that have statistics logs | none |
+| =format="..."= | Format for each month. =$month= expands to the month, format =YYYY-MM= | ="$month"= |
+| =separator="..."= | Separator between months. | ="$n"= (newline) |
+
+---++ Plugin Installation &amp; Configuration
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Configure additional plugin settings in the __Extensions__ section.
+      * Test if the installation was successful: See UsageStatisticsOverview, UsageStatisticsByUser
+
+---++ Plugin Info
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Show detailed monthly usage statistics of TWiki
+
+|  Plugin Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2011 e-Ecosystems Inc <br /> &copy; 2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-04-26 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-04-26: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/UsageStatisticsPlugin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/UsageStatisticsPluginDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/UsageStatisticsPluginAppraisal |
+
+__Related Topics:__ UsageStatisticsOverview, UsageStatisticsByUser, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.UserDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory
