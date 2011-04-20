@@ -455,6 +455,24 @@ sub _collectSiteStats {
     $siteStats->{statPlugins} = 0;
     if( $currentMonth ) {
         $siteStats->{statPlugins} = scalar @{$session->{plugins}{plugins}};
+        unless( $TWiki::cfg{Stats}{DisableSendStats} ) {
+            my $url = 'http://twiki.org/cgi-bin/pluginstats?';
+            while ( my( $key, $val ) = each( %$siteStats ) ) {
+                $val = TWiki::urlEncode( $val );
+                $url .= "$key=" . $val . ";";
+            }
+            my $response = TWiki::Func::getExternalResource( $url );
+            if( $response->is_error() ) {
+                my $msg = "Code " . $response->code() . ": " . $response->message();
+                $msg =~ s/[\n\r]/ /gos;
+                _printMsg( $session, "! ERROR: $msg" );
+            } else {
+                my $text = $response->content();
+                if( $text =~ /plugins: ?([0-9]+)/ ) {
+                    $siteStats->{statPlugins} .= " of $1";
+                }
+            }
+        }
         _printMsg( $session, "  - plugins: " . $siteStats->{statPlugins} );
     }
 
