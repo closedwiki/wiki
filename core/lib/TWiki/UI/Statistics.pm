@@ -186,7 +186,7 @@ sub statistics {
     if( !$session->inContext( 'command_line' ) ) {
         my $web   = $session->{webName};
         my $topic = $session->{topicName};
-        if( $topic = $TWiki::cfg{HomeTopicName} ) {
+        if( $topic eq $TWiki::cfg{HomeTopicName} ) {
             $web   = $TWiki::cfg{UsersWebName};
             $topic = $siteStatsTopic;
         }
@@ -480,6 +480,7 @@ sub _collectSiteStats {
     my ( @topContribs ) = _getTopList( $TWiki::cfg{Stats}{TopContrib}, undef, $contribRef );
     if( @topContribs ) {
         $siteStats->{statTopContributors} = join( CGI::br(), @topContribs );
+        $topContribs[0] =~ s/^.*\]\[([^\]]*).*$/$1/;
         _printMsg( $session, '  - top contributor: '.$topContribs[0] );
     }
 
@@ -593,6 +594,7 @@ sub _processWeb {
     }
     if( @topContribs ) {
         $statTopContributors = join( CGI::br(), @topContribs );
+        $topContribs[0] =~ s/^.*\]\[([^\]]*).*$/$1/;
         _printMsg( $session, '  - top contributor: '.$topContribs[0] );
     }
 
