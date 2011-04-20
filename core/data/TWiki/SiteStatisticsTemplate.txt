@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1303284122" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1303318887" format="1.1" reprev="1.1" version="1.1"}%
 ---+ TWiki Site Statistics
 %STARTSECTION{type="templateonly"}%
  __NOTE:__ This is a template topic, do not change. [[%SCRIPTURL{"statistics"}%/%USERSWEB%/SiteStatistics][Update the site statistics]].
@@ -25,7 +25,7 @@
 </tr>
 </table>
 <!--
-   * Set COMMON_CHART_PARAMS = type="line" table="stats" xaxis="R3:C1..R122:C1" xreversed="on" ymin="0" yaxis="on" xaxisangle="90" xgrid="off" colors="#f2563a, #eff462" bgcolor="#E7E7E7" width="450" height="200"
+   * Set COMMON_CHART_PARAMS = type="area" table="stats" xaxis="R3:C1..R122:C1" xreversed="on" ymin="0" yaxis="on" xaxisangle="90" xgrid="off" colors="#f2563a, #eff462" bgcolor="#E7E7E7" width="450" height="200"
 -->
 </div>
 
@@ -52,7 +52,7 @@ __Legend:__
 __Notes:__
    * Do not edit this topic, it is updated automatically. [[%SCRIPTURL{"statistics"}%/%USERSWEB%/SiteStatistics][Update now]].
    * When updating statistics of previous months, the following items cannot be measured and will be set to 0: Webs, Topics, Users, Data Size, Pub Size, Disk Use, Plugins.
-   * Charts are automatically shown on top if the TWiki:Plugins.ChartPlugin is installed and enabled (%IF{ "context ChartPluginEnabled" then="it is" else="it is not" }%) and if there are at least two month of statistics data.
+   * Charts are automatically shown on top if the %IF{ "context ChartPluginEnabled" then="%SYSTEMWEB%.ChartPlugin" else="TWiki:Plugins.ChartPlugin" }% is installed and enabled (%IF{ "context ChartPluginEnabled" then="it is" else="it is not" }%) and if there are at least two month of statistics data.
    * [[%SYSTEMWEB%.TWikiSiteTools#WebStatistics][TWikiSiteTools]] explains how to enable automatic updates of the statistics pages.
 
 __Web Statistics Topics:__ %SEARCH{ "WebStatistics" scope="topic" web="all" topic="WebStatistics" nonoise="on" format="[[$web.$topic][$web]]" separator=", " limit="100" }%
