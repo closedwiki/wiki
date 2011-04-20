@@ -1,5 +1,5 @@
 data/TWiki/UsageStatisticsPlugin.txt 0644 Plugin documentation
 data/TWiki/UsageStatisticsOverview.txt 0644 Overview statistics
 data/TWiki/UsageStatisticsByUser.txt 0644 Statistics by user
-lib/TWiki/Plugins/MetaWorkflowPlugin.pm 0644 Perl module
-lib/TWiki/Plugins/MetaWorkflowPlugin/Core.pm 0644 Perl module
+lib/TWiki/Plugins/UsageStatisticsPlugin.pm 0644 Perl module
+lib/TWiki/Plugins/UsageStatisticsPlugin/Core.pm 0644 Perl module
