@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="TWikiContributor" date="1303260402" format="1.1" version="$Rev$"}%
 ---+!! !UsageStatisticsPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -17,7 +18,7 @@ This plugins shows detailed usage statistics of TWiki.
    * *[[UsageStatisticsOverview]]* - overview statistics
    * *[[UsageStatisticsByUser]]* - statistics by user (access might be restricted)
 
-%X% Usage statistics are based on the TWiki logs.
+%T% Usage statistics are based on the TWiki logs.
 
 ---++ Syntax Rules
 

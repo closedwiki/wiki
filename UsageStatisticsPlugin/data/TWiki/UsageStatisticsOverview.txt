@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="TWikiContributor" date="1303260402" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="UsageStatisticsPlugin"}%
+---+ Usage Statistics: Overview
+
+<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">
+| Month: <select name="month"> <option>%URLPARAM{ "month" default="%SERVERTIME{$year-$mo}%" }%</option> <option></option> %USAGESTATISTICS{ action="monthlist" format="<option>$month</option>" separator=" " }% </select> | &nbsp; | <input type="submit" value="Show statistics" class="twikiSubmit" > |
+</form>
+
+%USAGESTATISTICS{ action="overview" month="%URLPARAM{ "month" default="%SERVERTIME{$year-$mo}%" }%" }%
+
+__Related:__ UsageStatisticsPlugin, UsageStatisticsByUser
