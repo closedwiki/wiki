@@ -46,9 +46,9 @@ sub VarUSAGESTATISTICS
     } elsif( $action eq 'monthlist' ) {
         return $this->_monthList( $session, $params );
     } elsif( $action ) {
-        return "%<nop>USAGESTATISTICS{}% ERROR: Parameter =action=\"$action\"= is not supported"; 
+        return "%<nop>USAGESTATISTICS{}% ERROR: Parameter =action=\"$action\"= is not supported."; 
     } else {
-        return "%<nop>USAGESTATISTICS{}% ERROR: Parameter =action= is required";
+        return "%<nop>USAGESTATISTICS{}% ERROR: Parameter =action= is required.";
     }
 }
 
@@ -76,9 +76,33 @@ sub _userStats
 sub _monthList
 {
     my ( $this, $session, $params ) = @_;
-    
-    my $text = "FIXME: Month List";
-    
+
+    my $format    = $params->{format} || '$month';
+    my $separator = $params->{separator} || '$n';
+
+    my $dir = $TWiki::cfg{LogFileName} || "$TWiki::cfg{DataDir}/log%DATE%.txt";
+    $dir =~ s/\/[^\/]*$//; # remove file to get just the path
+    opendir( DIR, $dir ) || return "%<nop>USAGESTATISTICS{}% ERROR: Can't read log directory $dir.";
+    my @logMonths =
+         map {
+           # reformat to 'YYYY-MM'
+           s/^log([0-9]{4})([0-9]{2})\.txt$/$1-$2/;
+           # apply format
+           my $month = $_;
+           $_ = $format;
+           s/\$month/$month/go;
+           s/\$n/\n/go;
+           $_;
+         }
+         sort
+         grep { /^log[0-9]{6}\.txt$/ } # get all log files
+         readdir( DIR );
+    closedir( DIR );
+
+    $separator =~ s/\$n/\n/go;
+    my $text = '';
+    $text = join( $separator, @logMonths ) if( @logMonths );
+
     return $text;
 }
 
