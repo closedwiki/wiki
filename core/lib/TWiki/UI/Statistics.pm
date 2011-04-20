@@ -689,12 +689,12 @@ sub _getTopList
     while( ( $topicName, $statValue ) = each( %$topicsRef ) ) {
         # Right-align statistic value for sorting
         $statValue = sprintf '%7d', $statValue;
-        # Add new array item at end of array
-        if( $topicName =~ /\./ ) {
-            $list[@list] = "$statValue $topicName";
-        } else {
-            $list[@list] = "$statValue [[$topicName]]";
+        # Fix Web.TopicName to [[Web.TopicName][TopicName]]
+        if( $topicName =~ /^(.*)\.(.*)$/ ) {
+            $topicName = "$1.$2][$2";
         }
+        # Add new array item at end of array
+        push( @list, "$statValue [[$topicName]]");
     }
 
     # Sort @list by frequency and pick the top N entries
