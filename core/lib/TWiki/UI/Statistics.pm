@@ -699,19 +699,17 @@ sub _getTopList
 
     # Sort @list by frequency and pick the top N entries
     if( @list ) {
-        # Strip initial spaces
-        @list = map{ s/^\s*//; $_ } @list;
-
-        @list = # Prepend spaces depending on no. of digits
+        my $i = 0;
+        @list =
+          # Limit the array size
+          grep{ $i++ < $theMaxNum}
+          # Prepend spaces depending on number of digits
           map{ s/^([0-9][0-9][^0-9])/\&nbsp\;$1/; $_ }
-            map{ s/^([0-9][^0-9])/\&nbsp\;\&nbsp\;$1/; $_ }
-              # Sort numerically, descending order
-              sort { (split / /, $b)[0] <=> (split / /, $a)[0] }  @list;
-
-        if( $theMaxNum >= @list ) {
-            $theMaxNum = @list - 1;
-        }
-        return @list[0..$theMaxNum];
+          map{ s/^([0-9][^0-9])/\&nbsp\;\&nbsp\;$1/; $_ }
+          # Sort numerically, descending order
+          sort { (split / /, $b)[0] <=> (split / /, $a)[0] }
+          # Strip initial spaces
+          map{ s/^\s*//; $_ } @list;
     }
     return @list;
 }
