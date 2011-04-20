@@ -197,7 +197,7 @@ BEGIN {
     # DO NOT CHANGE THE FORMAT OF $VERSION
     # The $VERSION is automatically expanded on checkin of this module
     $VERSION = '$Date$ $Rev$ ';
-    $RELEASE = 'TWiki-5.0.1';
+    $RELEASE = 'TWiki-5.1.0-trunk';
     $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$RELEASE, $1, build $2/;
 
     # Default handlers for different %TAGS%
