@@ -33,6 +33,7 @@ package TWiki::UI::Statistics;
 
 use strict;
 use Assert;
+use File::Temp;
 use File::Copy qw(copy);
 use IO::File;
 use Error qw( :try );
@@ -112,38 +113,15 @@ sub statistics {
 
     my $logFile = $TWiki::cfg{LogFileName};
     $logFile =~ s/%DATE%/$logDate/g;
-
     unless( -e $logFile ) {
         _printMsg( $session, "!Log file $logFile does not exist; aborting" );
         return;
     }
 
-    # Copy the log file to temp file, since analysis could take some time
-
-    # FIXME move the temp dir stuff to TWiki.cfg
-    my $tmpDir;
-    if ( $TWiki::cfg{OS} eq 'UNIX' ) { 
-        $tmpDir = $ENV{'TEMP'} || "/tmp"; 
-    } elsif ( $TWiki::cfg{OS} eq 'WINDOWS' ) {
-        $tmpDir = $ENV{'TEMP'} || "c:/"; 
-    } else {
-        # FIXME handle other OSs properly - assume Unix for now.
-        $tmpDir = "/tmp";
-    }
-    my $randNo = int ( rand 1000);	# For mod_perl with threading...
-    my $tmpFilename = TWiki::Sandbox::untaintUnchecked( "$tmpDir/twiki-stats.$$.$randNo" );
-
-    File::Copy::copy ($logFile, $tmpFilename)
-        or throw Error::Simple( 'Cannot backup log file: '.$! );
-
-    my $TMPFILE = new IO::File;
-    open $TMPFILE, $tmpFilename
-      or throw Error::Simple( 'Cannot open backup file: '.$! );
-
     # Do a single data collection pass on the temporary copy of logfile,
     # then process each web once.
     my ($viewRef, $contribRef, $statViewsRef, $statSavesRef, $statUploadsRef) =
-      _collectLogData( $session, $TMPFILE );
+      _collectLogData( $session, $logFile );
 
     my @weblist;
     my $webSet = TWiki::Sandbox::untaintUnchecked($session->{request}->param( 'webs' ))
@@ -178,10 +156,6 @@ sub statistics {
             _printMsg( $session, '  - ERROR: no permission to CHANGE statistics topic in '.$web);
         }
     }
-
-    close $TMPFILE;		# Shouldn't be necessary with 'my'
-    unlink $tmpFilename;# FIXME: works on Windows???  Unlink before
-    # usage to ensure deleted on crash?
 
     if( !$session->inContext( 'command_line' ) ) {
         my $web   = $session->{webName};
@@ -234,7 +208,7 @@ sub _debugPrintHash {
 #   $contrib{$web}{"Main.".$WikiName} == number of saves/uploads, by user
 #===========================================================
 sub _collectLogData {
-    my( $session, $TMPFILE ) = @_;
+    my( $session, $logFile ) = @_;
 
     # Log file format:
     # | date | user | operation | web.topic | notes | ip address |
@@ -256,8 +230,19 @@ sub _collectLogData {
     my %statUploads;
     my $users = $session->{users};
 
-    binmode $TMPFILE;
-    while ( my $line = <$TMPFILE> ) {
+    # Copy the log file to temp file, since analysis could take some time
+    my $tmpFileHandle = new File::Temp(
+        DIR      => $session->{store}->getWorkArea( 'CoreStatistics' ),
+        TEMPLATE => 'twiki-stats-XXXXXXXXXX',
+        SUFFIX   => '.txt'
+      );
+    File::Copy::copy( $logFile, $tmpFileHandle )
+        or throw Error::Simple( 'Cannot backup log file: '.$! );
+    # See to start of temp file
+    $tmpFileHandle->seek( 0, SEEK_SET );
+
+    # main log file loop, line by line
+    while ( my $line = <$tmpFileHandle> ) {
         my @fields = split( /\s*\|\s*/, $line );
 
         my( $date, $logFileUserName );
@@ -321,6 +306,8 @@ sub _collectLogData {
             $session->writeDebug('WebStatistics: Bad logfile line '.$line);
         }
     }
+
+    # Note: No need to close $tmpFileHandle, temp file is removed by destructor
 
     return \%view, \%contrib, \%statViews, \%statSaves, \%statUploads;
 }
