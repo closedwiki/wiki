@@ -455,7 +455,7 @@ sub _collectSiteStats {
     $siteStats->{statPlugins} = 0;
     if( $currentMonth ) {
         $siteStats->{statPlugins} = scalar @{$session->{plugins}{plugins}};
-        unless( $TWiki::cfg{Stats}{DisableSendStats} ) {
+        unless( $TWiki::cfg{Stats}{DontContactTWikiOrg} ) {
             my $url = 'http://twiki.org/cgi-bin/pluginstats?';
             while ( my( $key, $val ) = each( %$siteStats ) ) {
                 $val = TWiki::urlEncode( $val );

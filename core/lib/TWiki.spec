@@ -1131,8 +1131,29 @@ $TWiki::cfg{Stats}{TopViews} = 10;
 $TWiki::cfg{Stats}{TopContrib} = 10;
 
 # **STRING 20 EXPERT**
-# Name of statistics topic
+# Name of site statistics topic in the Main web
+$TWiki::cfg{Stats}{SiteStatsTopicName} = 'SiteStatistics';
+
+# **STRING 20 EXPERT**
+# Name of statistics topic in each web
 $TWiki::cfg{Stats}{TopicName} = 'WebStatistics';
+
+# **COMMAND EXPERT**
+# Path to df command that reports file system disk space usage. 
+# The df command is pre-installed on Linux and OS-X. On Windows install the
+# <a href="http://gnuwin32.sourceforge.net/packages/coreutils.htm">CoreUtils 
+# for Windows</a>. % DIRECTORY|F% will be expanded to the directory.
+$TWiki::cfg{Stats}{dfCmd} = '/bin/df %DIRECTORY|F%';
+
+# **BOOLEAN EXPERT**
+# The statistics script contacts twiki.org to query the number of plugins 
+# available for the currently installed TWiki version via an http GET. It 
+# also sends anonymized site usage statistics to twiki.org via query string. 
+# Example query string:
+# <br /><tt>statSite=978B8B8FC5D0D0888888D18B97909A9186D1908D98;statDate=2011-04;statWebs=20;
+# <br />statTopics=1501;statViews=578;statSaves=223;statUploads=19;statUsers=31;statDataSize=46.4;
+# <br />statPubSize=238.4;statDiskUse=93%statPlugins=22;statVersion=TWiki-5.1.0;</tt>
+$TWiki::cfg{Stats}{DontContactTWikiOrg} = $FALSE;
 
 # **STRING 120 EXPERT**
 # Template path. A comma-separated list of generic file names, containing
