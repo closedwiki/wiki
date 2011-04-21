@@ -602,60 +602,58 @@ sub _processWeb {
 
     my $line;
     my $statsTopic = $TWiki::cfg{Stats}{TopicName};
-    # DEBUG
-    # $statsTopic = 'TestStatistics';		# Create this by hand
+    my( $meta, $text );
     if( $session->{store}->topicExists( $web, $statsTopic ) ) {
-        my( $meta, $text ) =
-          $session->{store}->readTopic( undef, $web, $statsTopic, undef );
-        my @lines = split( /\r?\n/, $text );
-        my $statLine;
-        my $idxStat = -1;
-        my $idxTmpl = -1;
-        for( my $x = 0; $x < @lines; $x++ ) {
-            $line = $lines[$x];
-            # Check for existing line for this month+year in new and legacy format
-            if( $line =~ /^\| ($logYearMo|$logMonYear) / ) {
-                $idxStat = $x;
-            } elsif( $line =~ /<\!\-\-statDate\-\->/ ) {
-                $statLine = $line;
-                $idxTmpl = $x;
-            }
+        ( $meta, $text ) = $session->{store}->readTopic( undef, $web, $statsTopic );
+    } else {
+        ( $meta, $text ) = $session->{store}->readTopic( undef, '_default', $statsTopic );
+    }
+
+    my @lines = split( /\r?\n/, $text );
+    my $statLine;
+    my $idxStat = -1;
+    my $idxTmpl = -1;
+    for( my $x = 0; $x < @lines; $x++ ) {
+        $line = $lines[$x];
+        # Check for existing line for this month+year in new and legacy format
+        if( $line =~ /^\| ($logYearMo|$logMonYear) / ) {
+            $idxStat = $x;
+        } elsif( $line =~ /<\!\-\-statDate\-\->/ ) {
+             $statLine = $line;
+             $idxTmpl = $x;
         }
-        if( ! $statLine ) {
-            $statLine = '| <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> '
-                      . '| <!--statTopViews--> | <!--statTopContributors--> |';
-        }
-        $statLine =~ s/<\!\-\-statDate\-\->/$logYearMo/;
-        $statLine =~ s/<\!\-\-statViews\-\->/ $statViews/;
-        $statLine =~ s/<\!\-\-statSaves\-\->/ $statSaves/;
-        $statLine =~ s/<\!\-\-statUploads\-\->/ $statUploads/;
-        $statLine =~ s/<\!\-\-statTopViews\-\->/$statTopViews/;
-        $statLine =~ s/<\!\-\-statTopContributors\-\->/$statTopContributors/;
+    }
+    if( ! $statLine ) {
+        $statLine = '| <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> '
+                  . '| <!--statTopViews--> | <!--statTopContributors--> |';
+    }
+    $statLine =~ s/<\!\-\-statDate\-\->/$logYearMo/;
+    $statLine =~ s/<\!\-\-statViews\-\->/ $statViews/;
+    $statLine =~ s/<\!\-\-statSaves\-\->/ $statSaves/;
+    $statLine =~ s/<\!\-\-statUploads\-\->/ $statUploads/;
+    $statLine =~ s/<\!\-\-statTopViews\-\->/$statTopViews/;
+    $statLine =~ s/<\!\-\-statTopContributors\-\->/$statTopContributors/;
 
-        if( $idxStat >= 0 ) {
-            # entry already exists, need to update
-            $lines[$idxStat] = $statLine;
+    if( $idxStat >= 0 ) {
+        # entry already exists, need to update
+        $lines[$idxStat] = $statLine;
 
-        } elsif( $idxTmpl >= 0 ) {
-            # entry does not exist, add after <!--statDate--> line
-            $lines[$idxTmpl] = "$lines[$idxTmpl]\n$statLine";
-
-        } else {
-            # entry does not exist, add at the end
-            $lines[@lines] = $statLine;
-        }
-        $text = join( "\n", @lines );
-        $text .= "\n";
-        $session->{store}->saveTopic( $session->{user}, $web, $statsTopic,
-                                      $text, $meta,
-                                      { minor => 1,
-                                        dontlog => 1 } );
-
-        _printMsg( $session, "  - Topic $statsTopic updated" );
+    } elsif( $idxTmpl >= 0 ) {
+        # entry does not exist, add after <!--statDate--> line
+        $lines[$idxTmpl] = "$lines[$idxTmpl]\n$statLine";
 
     } else {
-        _printMsg( $session, "  - WARNING: No updates done, topic $web.$statsTopic does not exist" );
+        # entry does not exist, add at the end
+        $lines[@lines] = $statLine;
     }
+    $text = join( "\n", @lines );
+    $text .= "\n";
+    $session->{store}->saveTopic( $session->{user}, $web, $statsTopic,
+                                  $text, $meta,
+                                  { minor => 1,
+                                    dontlog => 1 } );
+
+    _printMsg( $session, "  - Topic $statsTopic updated" );
 }
 
 #===========================================================
