@@ -608,6 +608,11 @@ sub _processWeb {
     } else {
         ( $meta, $text ) = $session->{store}->readTopic( undef, '_default', $statsTopic );
     }
+    unless( $text ) {
+        _printMsg( $session, "  - WARNING: No updates done, topic $web.$statsTopic and"
+                           . " _default.$statsTopic do not exist." );
+        return;
+    }
 
     my @lines = split( /\r?\n/, $text );
     my $statLine;
