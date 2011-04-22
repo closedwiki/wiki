@@ -57,6 +57,11 @@ sub _overviewStats
 {
     my ( $this, $session, $params ) = @_;
 
+    my $logFile = $this->_getLogFilename( $params->{month} );
+    unless( $logFile ) {
+        return 'ERROR: No statistics are available for this month.';
+    }
+
     my $text = "FIXME: Overview Stats";
 
     return $text;
@@ -66,7 +71,18 @@ sub _overviewStats
 sub _userStats
 {
     my ( $this, $session, $params ) = @_;
-    
+
+    my $user = $params->{user};
+    $user =~ s/[^A-Za-z0-9_]//go;
+    unless( $user ) {
+        return 'ERROR: Please specify a user';
+    }
+
+    my $logFile = $this->_getLogFilename( $params->{month} );
+    unless( $logFile ) {
+        return 'ERROR: No statistics are available for this month.';
+    }
+
     my $text = "FIXME: User Stats";
     
     return $text;
@@ -104,6 +120,20 @@ sub _monthList
     $text = join( $separator, @logMonths ) if( @logMonths );
 
     return $text;
+}
+
+# =========================
+sub _getLogFilename
+{
+    my ( $this, $logDate ) = @_;
+
+    $logDate = TWiki::Func::formatTime( time(), '$year$mo', 'servertime' ) unless( $logDate );
+    $logDate =~ s/[^0-9]//go;
+
+    my $logFile = $TWiki::cfg{LogFileName};
+    $logFile =~ s/%DATE%/$logDate/g;
+    return '' unless( -e $logFile );
+    return $logFile;
 }
 
 # =========================
