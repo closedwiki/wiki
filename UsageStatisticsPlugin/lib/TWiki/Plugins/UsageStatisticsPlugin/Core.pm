@@ -20,15 +20,19 @@
 
 package TWiki::Plugins::UsageStatisticsPlugin::Core;
 
+require TWiki::Sandbox;
+use Error qw( :try );
+
 # =========================
 sub new {
     my ( $class, $debug ) = @_;
 
     my $this = {
-          Debug          => $debug,
+          Debug     => $debug,
+          Sandbox   => $TWiki::sandbox || $TWiki::sharedSandbox,
         };
     bless( $this, $class );
-    #$this->{Debug} = 1;
+$this->{Debug} = 1;
 
     TWiki::Func::writeDebug( "- UsageStatisticsPlugin Core constructor" ) if $this->{Debug};
 
@@ -65,14 +69,19 @@ sub _overviewStats
         return 'ERROR: No statistics are available for this month.';
     }
 
-    my $logData = $this->_collectLogData( $logFile );
+    my $text = "FIXME: Overview Stats";
+
+    my $systemData = $this->_collectSystemData( );
+    my $logData    = $this->_collectLogData( $logFile );
     if( $this->{Debug} ) {
         require Data::Dumper;
         $Data::Dumper::Indent = 1;
-        return 'Debug log data: <br /><pre>' . Data::Dumper->Dump([$logData], [qw(logData)]) . '</pre>';
+        $text = '<br />Debug system data: <br /><pre>'
+                . Data::Dumper->Dump([$systemData], [qw(systemData)]) . '</pre>';
+        $text .= '<br />Debug log data: <br /><pre>'
+               . Data::Dumper->Dump([$logData], [qw(logData)]) . '</pre>';
+        return $text;
     }
-
-    my $text = "FIXME: Overview Stats";
 
     return $text;
 }
@@ -147,6 +156,62 @@ sub _getLogFilename
 }
 
 # =========================
+sub _collectSystemData {
+    my( $this ) = @_;
+
+    my $systemData;
+    # Format:
+    # $systemData->{webs} - number of web
+    # $systemData->{topics} - number of topics
+    # $systemData->{attachments} - number of attachments
+    # $systemData->{users} - array of users
+
+    my @weblist = TWiki::Func::getListOfWebs( 'user' );
+    $systemData->{webs} = scalar @weblist;
+    $systemData->{topics} = 0; # handled in foreach web loop
+
+    # For performance, use egrep to get the number of attachments instead of a TWiki 
+    # internal search. This assumes and takes code from
+    # $TWiki::cfg{RCS}{SearchAlgorithm} = 'TWiki::Store::SearchAlgorithms::Forking';
+    $systemData->{attachments} = 0;
+
+    my $cmd = $TWiki::cfg{RCS}{EgrepCmd}
+            || '/bin/egrep %CS{|-i}% %DET{|-l}% -H -- %TOKEN|U% %FILES|F%';
+    $cmd =~ s/%CS{.*?}%//;
+    $cmd =~ s/%DET{.*?}%//;
+    my $searchString = '[%]META:FILEATTACHMENT{';
+    my $maxTopicsInSet = 512; # max number of topics for a grep call
+    $maxTopicsInSet = 128 if( $TWiki::cfg{DetailedOS} eq 'MSWin32' );
+    foreach my $w ( @weblist ) {
+        my @topics = TWiki::Func::getTopicList( $w );
+        $systemData->{topics} += scalar @topics;
+        my @set = splice( @topics, 0, $maxTopicsInSet );
+        while( @set ) {
+            @set = map { $TWiki::cfg{DataDir} . "/$w/$_.txt" } @set;
+            try {
+                my( $output, $exit ) =
+                  $this->{Sandbox}->sysCommand( $cmd, TOKEN => $searchString, FILES => \@set );
+                unless( $exit ) {
+                    $systemData->{attachments} += scalar split( /[\n\r?]/, $output );
+                }
+            } catch Error::Simple with {
+                # ignore errors
+            };
+            @set = splice( @topics, 0, $maxTopicsInSet );
+        }
+    }
+
+    # Array of users
+    $systemData->{users} = ();
+    my $iterator = TWiki::Func::eachUser();
+    while( $iterator->hasNext() ) {
+        push( @{$systemData->{users}}, $iterator->next() );
+    }
+
+    return $systemData;
+}
+
+# =========================
 sub _collectLogData {
     my( $this, $logFile ) = @_;
 
@@ -196,7 +261,7 @@ sub _collectLogData {
         }
         while( !$logUser && scalar( @fields )) {
             $logUser = shift @fields;
-#            $logUser = TWiki::Func::getCanonicalUserID( $logUser );
+            $logUser = TWiki::Func::getWikiName( $logUser );
         }
 
         my( $opName, $webTopic, $notes, $ip ) = @fields;
