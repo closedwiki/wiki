@@ -101,7 +101,7 @@ sub _overviewStats
 
 ---++ Web Statistics in %S_DATE%
 
-| *Web* | *Topic<br />views* | *Topic<br />saves* | *File<br />uploads* | *Most popular topic views* | *Least popular topic views* |
+| *Web* | *Topic<br />views* | *Topic<br />saves* | *File<br />uploads* | *Most popular and, ..., least popular topic views* |
 %S_WEBSTATS%
 
 ---++ User Statistics in %S_DATE%
@@ -118,27 +118,52 @@ END_TML
     $text =~ s/%S_SAVES%/$this->_getTotalFromHashRef( $logData->{webs}{saves} )/e;
     $text =~ s/%S_UPLOADS%/$this->_getTotalFromHashRef( $logData->{webs}{uploads} )/e;
 
+    # Web statistics
     my $rows = '';
     foreach( @{$systemData->{weblist}} ) {
-        my $row = "| [[$_.WebHome][$_]]"
-                . ' |  ' . ( $logData->{webs}{views}{$_} || 0 )
-                . ' |  ' . ( $logData->{webs}{saves}{$_} || 0 )
-                . ' |  ' . ( $logData->{webs}{uploads}{$_} || 0 )
-                . ' |  |  |';
-        $rows .= $row . "\n";
+        my $web = $_;
+        $rows .= '| <span style="white-space: nowrap">%ICON{folder}% '
+               . "[[$web.WebHome][$web]]</span>"
+               . ' |  ' . ( $logData->{webs}{views}{$web} || 0 )
+               . ' |  ' . ( $logData->{webs}{saves}{$web} || 0 )
+               . ' |  ' . ( $logData->{webs}{uploads}{$web} || 0 )
+               . ' | ';
+        my $topicsRef = $logData->{webs}{topicviews}{$web};
+        my @topics = ();
+        foreach my $topic ( sort { $topicsRef->{$b} <=> $topicsRef->{$a} } keys %{$topicsRef} ) {
+            push( @topics, "[[$web.$topic][$topic]]: " . $topicsRef->{$topic} );
+        }
+        if( scalar @topics > 20 ) {
+            # remove elements in the middle of the array, keeping 10 at start and 10 at end
+            splice( @topics, 10, scalar @topics - 20, '...' );
+        }
+        $rows .= join( ', ', @topics ) if( @topics );
+        $rows .= " |\n";
     }
     $text =~ s/%S_WEBSTATS%/$rows/g;
 
+    # User statistics
     $rows = '';
     foreach( @{$systemData->{users}} ) {
-        my $row = '| [[' . $TWiki::cfg{UsersWebName} . ".$_][$_]]"
-                . ' |  <a href="%SCRIPTURL{view}%/%WEB%/UsageStatisticsByUser?user='
-                . $_ . '">%ICON{statistics}%</a> '
-                . ' |  ' . ( $logData->{users}{views}{$_} || 0 )
-                . ' |  ' . ( $logData->{users}{saves}{$_} || 0 )
-                . ' |  ' . ( $logData->{users}{uploads}{$_} || 0 )
-                . ' |  |';
-        $rows .= $row . "\n";
+        $user = $_;
+        $rows .= '| <span style="white-space: nowrap">%ICON{person}% [['
+               . $TWiki::cfg{UsersWebName} . ".$user][$user]]</span>"
+               . ' |  <a href="%SCRIPTURL{view}%/%WEB%/UsageStatisticsByUser?user='
+               . $user . '">%ICON{statistics}%</a> '
+               . ' |  ' . ( $logData->{users}{views}{$user} || 0 )
+               . ' |  ' . ( $logData->{users}{saves}{$user} || 0 )
+               . ' |  ' . ( $logData->{users}{uploads}{$user} || 0 )
+               . ' | ';
+        my @saves = ();
+        my $i = 0;
+        for my $w ( sort keys( %{$logData->{users}{topicsaves}{$user}} ) ) {
+            for my $t ( sort keys( %{$logData->{users}{topicsaves}{$user}{$w}} ) ) {
+                push( @saves, "[[$w.$t][$t]]" ) if( $i++ < 10 );
+            }
+        }
+        push( @saves, '...' ) if( scalar @saves == 10 );
+        $rows .= join( ', ', @saves ) if( @saves );
+        $rows .= " |\n";
     }
     $text =~ s/%S_USERSTATS%/$rows/g;
 
