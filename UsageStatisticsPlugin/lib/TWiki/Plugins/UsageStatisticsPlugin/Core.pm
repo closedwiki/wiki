@@ -227,6 +227,7 @@ sub _monthList
 
     my $format    = $params->{format} || '$month';
     my $separator = $params->{separator} || '$n';
+    my $reverse   = $params->{'reverse'} || '0';
 
     my $dir = $TWiki::cfg{LogFileName} || "$TWiki::cfg{DataDir}/log%DATE%.txt";
     $dir =~ s/\/[^\/]*$//; # remove file to get just the path
@@ -246,6 +247,8 @@ sub _monthList
          grep { /^log[0-9]{6}\.txt$/ } # get all log files
          readdir( DIR );
     closedir( DIR );
+
+    @logMonths = reverse( @logMonths ) if( $reverse && $reverse !~ /^off$/i );
 
     $separator =~ s/\$n/\n/go;
     my $text = '';

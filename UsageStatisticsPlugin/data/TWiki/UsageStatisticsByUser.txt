@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1303545237" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1303551266" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UsageStatisticsPlugin"}%
 ---+ Usage Statistics: By User
 
 <form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">
-| User: <select name="user"> <option>%URLPARAM{user}%</option> <option></option> %SEARCH{ "META:FORM.*[U]serForm;!META:FIELD.name=\"AccountStatus.*value.*Inactive" type="regex" nonoise="on" excludetopic="NewUserTemplate" web="%USERSWEB%" format="<option>$topic</option>" separator=" " }% </select> | &nbsp; | for month: <select name="month"> <option>%URLPARAM{ "month" default="%SERVERTIME{$year-$mo}%" }%</option> <option></option> %USAGESTATISTICS{ action="monthlist" format="<option>$month</option>" separator=" " }% </select> | &nbsp; <input type="submit" value="Show statistics" class="twikiSubmit" > | [[UsageStatisticsOverview][Overview]] |
+| User: <select name="user"> <option>%URLPARAM{user}%</option> <option></option> %SEARCH{ "META:FORM.*[U]serForm;!META:FIELD.name=\"AccountStatus.*value.*Inactive" type="regex" nonoise="on" excludetopic="NewUserTemplate" web="%USERSWEB%" format="<option>$topic</option>" separator=" " }% </select> | &nbsp; | for month: <select name="month"> <option>%URLPARAM{ "month" default="%SERVERTIME{$year-$mo}%" }%</option> <option></option> %USAGESTATISTICS{ action="monthlist" reverse="on" format="<option>$month</option>" separator=" " }% </select> | &nbsp; <input type="submit" value="Show statistics" class="twikiSubmit" > | [[UsageStatisticsOverview][Overview]] |
 </form>
 %USAGESTATISTICS{ action="user" month="%URLPARAM{ "month" default="%SERVERTIME{$year-$mo}%" }%" user="%URLPARAM{user}%" }%
 
