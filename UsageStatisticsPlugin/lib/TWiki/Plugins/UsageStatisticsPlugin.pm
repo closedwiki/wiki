@@ -27,7 +27,7 @@ use vars qw(
 
 # Plugin version
 $VERSION = '$Rev$';
-$RELEASE = '2011-04-26';
+$RELEASE = '2011-04-23';
 
 $moduleLoaded = 0;
 
