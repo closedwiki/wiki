@@ -32,7 +32,8 @@ sub new {
           Sandbox   => $TWiki::sandbox || $TWiki::sharedSandbox,
         };
     bless( $this, $class );
-$this->{Debug} = 1;
+
+    #$this->{Debug} = 1; # Uncomment to enable debugging just in this file
 
     TWiki::Func::writeDebug( "- UsageStatisticsPlugin Core constructor" ) if $this->{Debug};
 
@@ -64,24 +65,80 @@ sub _overviewStats
 {
     my ( $this, $session, $params ) = @_;
 
-    my $logFile = $this->_getLogFilename( $params->{month} );
+    my ( $logFile, $logDate ) = $this->_getLogFilename( $params->{month} );
     unless( $logFile ) {
         return 'ERROR: No statistics are available for this month.';
     }
-
-    my $text = "FIXME: Overview Stats";
 
     my $systemData = $this->_collectSystemData( );
     my $logData    = $this->_collectLogData( $logFile );
     if( $this->{Debug} ) {
         require Data::Dumper;
         $Data::Dumper::Indent = 1;
-        $text = '<br />Debug system data: <br /><pre>'
-                . Data::Dumper->Dump([$systemData], [qw(systemData)]) . '</pre>';
-        $text .= '<br />Debug log data: <br /><pre>'
-               . Data::Dumper->Dump([$logData], [qw(logData)]) . '</pre>';
+        my $text = '<br />Debug system data: <br /><pre>'
+                 . Data::Dumper->Dump([$systemData], [qw(systemData)]) . '</pre>';
+        $text   .= '<br />Debug log data: <br /><pre>'
+                 . Data::Dumper->Dump([$logData], [qw(logData)]) . '</pre>';
         return $text;
     }
+
+    my $text = <<'END_TML';
+<table><tr><td valign="top">
+---++ Statistics Summary
+
+| Number of webs: |  %S_WEBS% |
+| Number of topics: |  %S_TOPICS% |
+| Number of attachments: |  %S_ATTACHMENTS% |
+| Number of users: |  %S_USERS% |
+</td><td>&nbsp;&nbsp;&nbsp;</td><td valign="top">
+---++ Activity in %S_DATE%
+
+| Number of topic views: |  %S_VIEWS% |
+| Number of topic updates: |  %S_SAVES% |
+| Number of file uploads: |  %S_UPLOADS% |
+</td></tr></table>
+---++ Web Statistics in %S_DATE%
+
+| *Web* | *Topic<br />views* | *Topic<br />saves* | *File<br />uploads* | *Most popular topic views* | *Least popular topic views* |
+%S_WEBSTATS%
+
+---++ User Statistics in %S_DATE%
+
+| *User* | *Details* | *Topic<br />views* | *Topic<br />saves* | *File<br />uploads* | *Topic contributions* |
+%S_USERSTATS%
+END_TML
+    $text =~ s/%S_WEBS%/$systemData->{webs}/;
+    $text =~ s/%S_TOPICS%/$systemData->{topics}/;
+    $text =~ s/%S_ATTACHMENTS%/$systemData->{attachments}/;
+    $text =~ s/%S_USERS%/scalar @{$systemData->{users}}/e;
+    $text =~ s/%S_DATE%/$logDate/g;
+    $text =~ s/%S_VIEWS%/$this->_getTotalFromHashRef( $logData->{webs}{views} )/e;
+    $text =~ s/%S_SAVES%/$this->_getTotalFromHashRef( $logData->{webs}{saves} )/e;
+    $text =~ s/%S_UPLOADS%/$this->_getTotalFromHashRef( $logData->{webs}{uploads} )/e;
+
+    my $rows = '';
+    foreach( @{$systemData->{weblist}} ) {
+        my $row = "| [[$_.WebHome][$_]]"
+                . ' |  ' . ( $logData->{webs}{views}{$_} || 0 )
+                . ' |  ' . ( $logData->{webs}{saves}{$_} || 0 )
+                . ' |  ' . ( $logData->{webs}{uploads}{$_} || 0 )
+                . ' |  |  |';
+        $rows .= $row . "\n";
+    }
+    $text =~ s/%S_WEBSTATS%/$rows/g;
+
+    $rows = '';
+    foreach( @{$systemData->{users}} ) {
+        my $row = '| [[' . $TWiki::cfg{UsersWebName} . ".$_][$_]]"
+                . ' |  <a href="%SCRIPTURL{view}%/%WEB%/UsageStatisticsByUser?user='
+                . $_ . '">%ICON{statistics}%</a> '
+                . ' |  ' . ( $logData->{users}{views}{$_} || 0 )
+                . ' |  ' . ( $logData->{users}{saves}{$_} || 0 )
+                . ' |  ' . ( $logData->{users}{uploads}{$_} || 0 )
+                . ' |  |';
+        $rows .= $row . "\n";
+    }
+    $text =~ s/%S_USERSTATS%/$rows/g;
 
     return $text;
 }
@@ -97,7 +154,7 @@ sub _userStats
         return 'ERROR: Please specify a user';
     }
 
-    my $logFile = $this->_getLogFilename( $params->{month} );
+    my ( $logFile, $logDate ) = $this->_getLogFilename( $params->{month} );
     unless( $logFile ) {
         return 'ERROR: No statistics are available for this month.';
     }
@@ -142,6 +199,17 @@ sub _monthList
 }
 
 # =========================
+sub _getTotalFromHashRef
+{
+    my ( $this, $hashRef ) = @_;
+    my $n = 0;
+    while ( my( $key, $val ) = each( %$hashRef ) ) {
+        $n += $val;
+    }
+    return $n;
+}
+
+# =========================
 sub _getLogFilename
 {
     my ( $this, $logDate ) = @_;
@@ -152,7 +220,8 @@ sub _getLogFilename
     my $logFile = $TWiki::cfg{LogFileName};
     $logFile =~ s/%DATE%/$logDate/g;
     return '' unless( -e $logFile );
-    return $logFile;
+    $logDate =~ s/([0-9]{4})/$1-/o;
+    return ( $logFile, $logDate );
 }
 
 # =========================
@@ -161,12 +230,15 @@ sub _collectSystemData {
 
     my $systemData;
     # Format:
+    # $systemData->{weblist} - array of webs
     # $systemData->{webs} - number of web
     # $systemData->{topics} - number of topics
     # $systemData->{attachments} - number of attachments
     # $systemData->{users} - array of users
 
     my @weblist = TWiki::Func::getListOfWebs( 'user' );
+    @weblist = sort( @weblist );
+    $systemData->{weblist} = \@weblist;
     $systemData->{webs} = scalar @weblist;
     $systemData->{topics} = 0; # handled in foreach web loop
 
@@ -202,11 +274,13 @@ sub _collectSystemData {
     }
 
     # Array of users
-    $systemData->{users} = ();
+    my @users = ();
     my $iterator = TWiki::Func::eachUser();
     while( $iterator->hasNext() ) {
-        push( @{$systemData->{users}}, $iterator->next() );
+        push( @users, $iterator->next() );
     }
+    @users = sort( @users ); 
+    $systemData->{users} = \@users;
 
     return $systemData;
 }
@@ -288,7 +362,7 @@ sub _collectLogData {
 
         } elsif( $opName eq 'save' ) {
             $logData->{webs}{saves}{$webName}++;
-            $logData->{users}{views}{$logUser}++;
+            $logData->{users}{saves}{$logUser}++;
             $logData->{users}{topicsaves}{$logUser}{$webName}{$topicName}++;
 
         } elsif( $opName eq 'upload' ) {
