@@ -3,3 +3,7 @@ data/TWiki/UsageStatisticsOverview.txt 0644 Overview statistics
 data/TWiki/UsageStatisticsByUser.txt 0644 Statistics by user
 lib/TWiki/Plugins/UsageStatisticsPlugin.pm 0644 Perl module
 lib/TWiki/Plugins/UsageStatisticsPlugin/Core.pm 0644 Perl module
+pub/TWiki/UsageStatisticsPlugin/stats-overview-screen.png 0644 Screenshot
+pub/TWiki/UsageStatisticsPlugin/stats-overview-thumb.png 0644 Screenshot
+pub/TWiki/UsageStatisticsPlugin/stats-users-screen.png 0644 Screenshot
+pub/TWiki/UsageStatisticsPlugin/stats-users-thumb.png 0644 Screenshot
