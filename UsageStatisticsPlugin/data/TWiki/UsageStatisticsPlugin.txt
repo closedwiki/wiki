@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1303553503" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1303596510" format="1.1" version="$Rev$"}%
 ---+!! !UsageStatisticsPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -11,18 +11,27 @@
 </div></sticky>
 %SHORTDESCRIPTION%
 
----++ Overview
+---++ Statistics Reports
 
-This plugins shows detailed usage statistics of TWiki content and users. Visit the following pages:
+This plugins shows detailed usage statistics reports of TWiki content and users. Visit the following pages:
 
-   * *[[UsageStatisticsOverview]]* - overview statistics
-   * *[[UsageStatisticsByUser]]* - statistics by user
+   * *[[UsageStatisticsOverview][Usage Statistics Overview]]* - overview statistics by month
+   * *[[UsageStatisticsByUser][Usage Statistics by User]]* - statistics by user and month
 
 %T% __Notes:__
    * Access to user statistice is restricted to administrators for privacy reasons.
    * Statistics are derived from the TWiki logs.
 
+---++ Screenshots of Reports
+
+%TABLE{ sort="off" }%
+| *Usage Statistics Overview* | *&nbsp;* | *Usage Statistics by User* |
+| [[%ATTACHURLPATH%/stats-overview-screen.png][<img src="%ATTACHURLPATH%/stats-overview-thumb.png" alt="stats-overview-thumb.png" width="300" height="233" />]] | | [[%ATTACHURLPATH%/stats-users-screen.png][<img src="%ATTACHURLPATH%/stats-users-thumb.png" alt="stats-users-thumb.png" width="235" height="233" />]] |
+| click on image to enlarge | | click on image to enlarge |
+
 ---++ Syntax Rules
+
+%T% You can safely ignore this section unless you want to build your own reports.
 
 The UsageStatisticsOverview and UsageStatisticsByUser pages embed the following variable to show usage statistics:
 
@@ -70,6 +79,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
         | ==data/TWiki/UsageStatisticsByUser.txt== | User statistics topic |
         | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
         | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | Plugin Perl class |
+        | ==pub/TWiki/Plugins/%TOPIC%/*.png== | Screenshots |
       * Set the ownership of the extracted directories and files to the webserver user.
 
    * Plugin __configuration and testing__:
@@ -81,12 +91,14 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Show detailed monthly usage statistics of TWiki content and users
 
+   * This plugin is sponsored by [[http://www.e-ecosystems.com/][e-Ecosystems, Inc]].
+
 |  Plugin Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2011 e-Ecosystems Inc <br /> &copy; 2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2011 e-Ecosystems Inc <br /> &copy; 1999-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-04-26 |
+|  Plugin Version: | 2011-04-23 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-04-26: | Initial version |
+|  2011-04-23: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.2 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
@@ -97,3 +109,8 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/UsageStatisticsPluginAppraisal |
 
 __Related Topics:__ UsageStatisticsOverview, UsageStatisticsByUser, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.UserDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory
+
+%META:FILEATTACHMENT{name="stats-users-thumb.png" attachment="stats-users-thumb.png" attr="h" comment="" date="1303595119" path="stats-users-thumb.png" size="35593" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="stats-users-screen.png" attachment="stats-users-screen.png" attr="h" comment="" date="1303595119" path="stats-users-screen.png" size="112925" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="stats-overview-thumb.png" attachment="stats-overview-thumb.png" attr="h" comment="" date="1303595118" path="stats-overview-thumb.png" size="50389" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="stats-overview-screen.png" attachment="stats-overview-screen.png" attr="h" comment="" date="1303595117" path="stats-overview-screen.png" size="134515" user="TWikiContributor" version="1"}%
