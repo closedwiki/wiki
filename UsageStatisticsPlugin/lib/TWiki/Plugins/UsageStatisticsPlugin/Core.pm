@@ -86,17 +86,19 @@ sub _overviewStats
 <table><tr><td valign="top">
 ---++ Statistics Summary
 
-| Number of webs: |  %S_WEBS% |
-| Number of topics: |  %S_TOPICS% |
-| Number of attachments: |  %S_ATTACHMENTS% |
-| Number of users: |  %S_USERS% |
-</td><td>&nbsp;&nbsp;&nbsp;</td><td valign="top">
+| %ICON{folder}% Number of webs: |  %S_WEBS% |
+| %ICON{viewtopic}% Number of topics: |  %S_TOPICS% |
+| %ICON{attachfile}% Number of attachments: |  %S_ATTACHMENTS% |
+| %ICON{persons}% Number of users: |  %S_USERS% |
+</td><td>&nbsp; &nbsp; &nbsp;</td><td valign="top">
 ---++ Activity in %S_DATE%
 
-| Number of topic views: |  %S_VIEWS% |
-| Number of topic updates: |  %S_SAVES% |
-| Number of file uploads: |  %S_UPLOADS% |
+| %ICON{viewtopic}% Number of topic views: |  %S_VIEWS% |
+| %ICON{save}% Number of topic updates: |  %S_SAVES% |
+| %ICON{attachfile}% Number of file uploads: |  %S_UPLOADS% |
 </td></tr></table>
+%T% The summary shows statistics of today, not of the selected month.
+
 ---++ Web Statistics in %S_DATE%
 
 | *Web* | *Topic<br />views* | *Topic<br />saves* | *File<br />uploads* | *Most popular topic views* | *Least popular topic views* |
@@ -159,8 +161,37 @@ sub _userStats
         return 'ERROR: No statistics are available for this month.';
     }
 
-    my $text = "FIXME: User Stats";
-    
+    my $logData = $this->_collectLogData( $logFile );
+
+    my $text = <<'END_TML';
+---++ Activity by [[%USERSWEB%.%S_USER%][%S_USER%]] in %S_DATE%
+
+| %ICON{viewtopic}% Number of topic views: |  %S_VIEWS% |
+| %ICON{save}% Number of topic updates: |  %S_SAVES% |
+| %ICON{attachfile}% Number of file uploads: |  %S_UPLOADS% |
+
+---++ Contributions by !%S_USER% in %S_DATE%
+
+| *Web.Topic* | *Updates* |
+%S_CONTRIBS%
+END_TML
+    $text =~ s/%S_USER%/$user/g;
+    $text =~ s/%S_DATE%/$logDate/g;
+    $text =~ s/%S_VIEWS%/$logData->{users}{views}{$user} || 0/e;
+    $text =~ s/%S_SAVES%/$logData->{users}{saves}{$user} || 0/e;
+    $text =~ s/%S_UPLOADS%/$logData->{users}{uploads}{$user} || 0/e;
+
+    my $rows = '';
+    for my $w ( sort keys( %{$logData->{users}{topicsaves}{$user}} ) ) {
+        $rows .= "| \%ICON{folder}\% <b>[[$w.WebHome][$w web]]:</b> ||\n";
+        for my $t ( sort keys( %{$logData->{users}{topicsaves}{$user}{$w}} ) ) {
+            $rows .= "| \%ICON{empty}\%\%ICON{viewtopic}\% [[$w.$t][$t]] |  "
+                   . $logData->{users}{topicsaves}{$user}{$w}{$t} . " |\n";
+        }
+    }
+    $rows = "| No updates this month ||" unless( $rows );
+    $text =~ s/%S_CONTRIBS%/$rows/g;
+
     return $text;
 }
 
@@ -311,7 +342,7 @@ sub _collectLogData {
     # $logData->{users}{views}{$user} - number of topic views for each user
     # $logData->{users}{saves}{$user} - number of topic saves for each user
     # $logData->{users}{uploads}{$user} - number of file uploads for each user
-    # $logData->{users}{topicsaves}{$user}{$web}{$topic} - number of topic saves for each topic for each user
+    # $logData->{users}{topicsaves}{$user}{$web}{$topic} - number of topic saves for each topic in each web for each user
 
     # Copy the log file to temp file, since analysis could take some time
     my $tmpFileHandle = new File::Temp(
