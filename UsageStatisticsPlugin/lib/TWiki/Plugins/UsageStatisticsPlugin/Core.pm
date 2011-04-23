@@ -144,26 +144,31 @@ END_TML
 
     # User statistics
     $rows = '';
-    foreach( @{$systemData->{users}} ) {
-        $user = $_;
-        $rows .= '| <span style="white-space: nowrap">%ICON{person}% [['
-               . $TWiki::cfg{UsersWebName} . ".$user][$user]]</span>"
-               . ' |  <a href="%SCRIPTURL{view}%/%WEB%/UsageStatisticsByUser?user='
-               . $user . '">%ICON{statistics}%</a> '
-               . ' |  ' . ( $logData->{users}{views}{$user} || 0 )
-               . ' |  ' . ( $logData->{users}{saves}{$user} || 0 )
-               . ' |  ' . ( $logData->{users}{uploads}{$user} || 0 )
-               . ' | ';
-        my @saves = ();
-        my $i = 0;
-        for my $w ( sort keys( %{$logData->{users}{topicsaves}{$user}} ) ) {
-            for my $t ( sort keys( %{$logData->{users}{topicsaves}{$user}{$w}} ) ) {
-                push( @saves, "[[$w.$t][$t]]" ) if( $i++ < 10 );
+    if( TWiki::Func::isAnAdmin() ) {
+        foreach( @{$systemData->{users}} ) {
+            $user = $_;
+            $rows .= '| <span style="white-space: nowrap">%ICON{person}% [['
+                   . $TWiki::cfg{UsersWebName} . ".$user][$user]]</span>"
+                   . ' |  <a href="%SCRIPTURL{view}%/%WEB%/UsageStatisticsByUser?user='
+                   . $user . '">%ICON{statistics}%</a> '
+                   . ' |  ' . ( $logData->{users}{views}{$user} || 0 )
+                   . ' |  ' . ( $logData->{users}{saves}{$user} || 0 )
+                   . ' |  ' . ( $logData->{users}{uploads}{$user} || 0 )
+                   . ' | ';
+            my @saves = ();
+            my $i = 0;
+            for my $w ( sort keys( %{$logData->{users}{topicsaves}{$user}} ) ) {
+                for my $t ( sort keys( %{$logData->{users}{topicsaves}{$user}{$w}} ) ) {
+                    push( @saves, "[[$w.$t][$t]]" ) if( $i++ < 10 );
+                }
             }
+            push( @saves, '...' ) if( scalar @saves == 10 );
+            $rows .= join( ', ', @saves ) if( @saves );
+            $rows .= " |\n";
         }
-        push( @saves, '...' ) if( scalar @saves == 10 );
-        $rows .= join( ', ', @saves ) if( @saves );
-        $rows .= " |\n";
+    } else {
+        # user is not in the TWikiAdminGroup
+        $rows = '| Sorry, only administrators can view the user statistics. ||||||';
     }
     $text =~ s/%S_USERSTATS%/$rows/g;
 
@@ -174,6 +179,11 @@ END_TML
 sub _userStats
 {
     my ( $this, $session, $params ) = @_;
+
+    unless( TWiki::Func::isAnAdmin() ) {
+        # user is not in the TWikiAdminGroup
+        return 'ERROR: Sorry, only administrators can view the user statistics.';
+    }
 
     my $user = $params->{user};
     $user =~ s/[^A-Za-z0-9_]//go;

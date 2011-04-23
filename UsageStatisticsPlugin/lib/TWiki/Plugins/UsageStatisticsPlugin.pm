@@ -37,7 +37,7 @@ sub initPlugin
     ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.1 ) {
+    if( $TWiki::Plugins::VERSION < 1.2 ) {
         TWiki::Func::writeWarning( "Version mismatch between UsageStatisticsPlugin and Plugins.pm" );
         return 0;
     }
