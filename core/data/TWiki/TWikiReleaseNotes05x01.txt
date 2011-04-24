@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1303618164" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1303624841" format="1.1" version="$Rev$"}%
 ---+!! Placeholder for Release Notes of TWiki-5.1 (Istanbul), 2010-FIXME
 
 %TOC%
@@ -58,12 +58,13 @@ FIXME
 
 TWiki used to generate just web statistics in each web. TWiki now generates also overall site usage statistics shown in [[%USERSWEB%.SiteStatistics]] (do not create that page, it is created automatically based on SiteStatisticsTemplate). TWikiSiteTools#WebStatistics explains how to enable automatic updates of the statistics pages. 
 
-For each month, the following items are recorded using system data and TWiki log data across all webs: Number of webs, number of topics, number of topic views, number of topic updates, number of files uploads, number of users, data size, pub size, disk use, number of plugins installed compared to number of plugins available, and 10 top contributors.
+For each month, the following items are recorded using system data and TWiki log data across all webs: Number of webs, number of topics, number of attachments, number of topic views, number of topic updates, number of files uploads, data size, pub size, disk use, number of users, number of groups, number of plugins installed compared to number of plugins available, and 10 top contributors.
 
 The statistics script contacts twiki.org to query the number of plugins available for the currently installed TWiki version via an http GET. It also sends anonymized site usage statistics to twiki.org via query string. Example http request:
 =<br />  /cgi-bin/pluginstats?statSite=978B8B8FC5D0D0888888D18B97909A9186D1908D98;statDate=2011-04;=
-=<br />  statWebs=20;statTopics=1501;statViews=578;statSaves=223;statUploads=19;statUsers=31;=
-=<br />  statDataSize=46.4;statPubSize=238.4;statDiskUse=93%statPlugins=22;statVersion=TWiki-5.1.0;=
+=<br />  statWebs=20;statTopics=1501;statAttachments=724;statViews=578;statSaves=223;statUploads=19;=
+=<br />  statDataSize=46.4;statPubSize=238.4;statDiskUse=93%25;statUsers=31;statGroups=7;statPlugins=22;=
+=<br />  statVersion=TWiki-5.1.0;=
 <br />Example response:
 =<br />  plugins: 196=
 <br />The statistics script will not contact twiki.org if a ={Stats}{DontContactTWikiOrg}= configure setting is set.
