@@ -234,11 +234,12 @@ sub _collectLogData {
     my $tmpFileHandle = new File::Temp(
         DIR      => $session->{store}->getWorkArea( 'CoreStatistics' ),
         TEMPLATE => 'twiki-stats-XXXXXXXXXX',
-        SUFFIX   => '.txt'
+        SUFFIX   => '.txt',
+        # UNLINK => 0         # To debug, uncomment this to keep the temp file
       );
     File::Copy::copy( $logFile, $tmpFileHandle )
         or throw Error::Simple( 'Cannot backup log file: '.$! );
-    # See to start of temp file
+    # Seek to start of temp file
     $tmpFileHandle->seek( 0, SEEK_SET );
 
     # main log file loop, line by line
@@ -380,12 +381,24 @@ sub _collectSiteStats {
     $siteStats->{statWebs} = 0 unless( $currentMonth );
 
     $siteStats->{statTopics} = 0;
+    $siteStats->{statAttachments} = 0;
     if( $currentMonth ) {
         foreach my $w ( @weblist ) {
-            $siteStats->{statTopics} += scalar $session->{store}->getTopicNames( $w );
+            my @topics = $session->{store}->getTopicNames( $w );
+            # add number of topics in web
+            $siteStats->{statTopics} += scalar @topics;
+            # add number of attachments in web using a search
+            my $result = $session->{store}->searchInWebContent(
+                           '[%]META:FILEATTACHMENT{', $w, \@topics,
+                           { type => 'regex' }
+                         );
+            foreach my $topic ( keys %$result ) {
+                $siteStats->{statAttachments} += scalar @{$result->{$topic}};
+            }
         }
         _printMsg( $session, "  - webs: " . $siteStats->{statWebs} . 
-                             ", topics: " . $siteStats->{statTopics} );
+                             ", topics: " . $siteStats->{statTopics} .
+                             ", attachments: " . $siteStats->{statAttachments} );
     }
 
     $siteStats->{statViews} = 0;
@@ -405,16 +418,6 @@ sub _collectSiteStats {
     _printMsg( $session, "  - view: " . $siteStats->{statViews} .
                          ", save: "   . $siteStats->{statSaves} .
                          ", upload: " . $siteStats->{statUploads} );
-
-    $siteStats->{statUsers} = 0;
-    if( $currentMonth ) {
-        my $it = $session->{users}->eachUser();
-        $it->{process} = sub { return 1; };
-        while( $it->hasNext() ) {
-            $siteStats->{statUsers} += $it->next();
-        }
-        _printMsg( $session, "  - users: " . $siteStats->{statUsers} );
-    }
 
     $siteStats->{statDataSize} = 0;
     $siteStats->{statPubSize} = 0;
@@ -437,6 +440,23 @@ sub _collectSiteStats {
         }
         $siteStats->{statDiskUse} = $dataUse . '%';
         _printMsg( $session, "  - disk use: " . $siteStats->{statDiskUse} );
+    }
+
+    $siteStats->{statUsers} = 0;
+    $siteStats->{statGroups} = 0;
+    if( $currentMonth ) {
+        my $it = $session->{users}->eachUser();
+        $it->{process} = sub { return 1; };
+        while( $it->hasNext() ) {
+            $siteStats->{statUsers} += $it->next();
+        }
+        $it = $session->{users}->eachGroup();
+        $it->{process} = sub { return 1; };
+        while( $it->hasNext() ) {
+            $siteStats->{statGroups} += $it->next();
+        }
+        _printMsg( $session, "  - users: " . $siteStats->{statUsers} .
+                             ", groups: " . $siteStats->{statGroups} );
     }
 
     $siteStats->{statPlugins} = 0;
@@ -505,13 +525,15 @@ sub _processSiteStats {
         if( $line =~ /^\| ($logYearMo|$logMonYear) / ) {
             my @items = split( / *\| */, $line );
             if( scalar @items >= 12 ) {
-                $oldStats->{statWebs}     = $items[2];
-                $oldStats->{statTopics}   = $items[3];
-                $oldStats->{statUsers}    = $items[7];
-                $oldStats->{statDataSize} = $items[8];
-                $oldStats->{statPubSize}  = $items[9];
-                $oldStats->{statDiskUse}  = $items[10];
-                $oldStats->{statPlugins}  = $items[11];
+                $oldStats->{statWebs}        = $items[2];
+                $oldStats->{statTopics}      = $items[3];
+                $oldStats->{statAttachments} = $items[4];
+                $oldStats->{statDataSize}    = $items[8];
+                $oldStats->{statPubSize}     = $items[9];
+                $oldStats->{statDiskUse}     = $items[10];
+                $oldStats->{statUsers}       = $items[11];
+                $oldStats->{statGroups}      = $items[12];
+                $oldStats->{statPlugins}     = $items[13];
             }
             $idxStat = $x;
         } elsif( $line =~ /<\!\-\-statDate\-\->/ ) {
@@ -521,9 +543,10 @@ sub _processSiteStats {
     }
     if( ! $statLine ) {
         $statLine = '| <!--statDate--> |  <!--statWebs--> |  <!--statTopics--> '
-                  . '|  <!--statViews--> |  <!--statSaves--> |  <!--statUploads--> '
-                  . '|  <!--statUsers--> |  <!--statDataSize--> |  <!--statPubSize--> '
-                  . '|  <!--statDiskUse--> |  <!--statPlugins--> | <!--statTopContributors--> |';
+                  . '|  <!--statAttachments--> |  <!--statViews--> |  <!--statSaves--> '
+                  . '|  <!--statUploads--> |  <!--statDataSize--> |  <!--statPubSize--> '
+                  . '|  <!--statDiskUse--> |  <!--statUsers--> |  <!--statGroups--> '
+                  . '|  <!--statPlugins--> | <!--statTopContributors--> |';
     }
 
     # update statistics line with collected values
