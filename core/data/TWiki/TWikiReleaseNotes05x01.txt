@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1294117992" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1303618164" format="1.1" version="$Rev$"}%
 ---+!! Placeholder for Release Notes of TWiki-5.1 (Istanbul), 2010-FIXME
 
 %TOC%
@@ -14,7 +14,7 @@ FIXME
    * *TWiki Application Platform Enhancements*
       * 
    * *Miscellaneous Feature Enhancements*
-      * 
+      * Improved statistics showing overall site usage over time, such as total number of webs, topics, users, etc.
    * *Plugin Enhancements*
       * 
 
@@ -49,6 +49,24 @@ __Note:__ TWiki needs to be configured properly to display user interface langua
    * From TWiki 4.0 on, the syntax "* Set DENYTOPICVIEW = " (nothing) in a topic means deny noone. Even if ALLOWTOPICVIEW is set to people or group setting DENYTOPICCHANGE to nothing means allow anyone. You have to remove the DENYTOPICVIEW or comment it out to have the ALLOWTOPICVIEW working. The reason for this behavior is that it enables limiting access to an entire web by setting a blank DENYTOPICVIEW setting. Same rule applies for DENYTOPICCHANGE and DENYTOPICRENAME. The rule does not apply for access rights defined for webs. Ie. "*Set DENYWEBCHANGE = " does not allow anyone to edit topics in the web. There has been strong oppinions against the syntax "* Set DENYTOPICXXXX = " meaning giving all access. So please be warned that we will change the syntax to a more transparent and logical syntax in future but we will ensure that it is still possible to secure a web and open up individual topics in future also. 
 
 ---++ Notes for TWiki Administrators and Wiki Champions
+
+---+++ Improved User Data Management API and GUI
+
+FIXME
+
+---+++ Improved Statistics Showing Overall Site Usage
+
+TWiki used to generate just web statistics in each web. TWiki now generates also overall site usage statistics shown in [[%USERSWEB%.SiteStatistics]] (do not create that page, it is created automatically based on SiteStatisticsTemplate). TWikiSiteTools#WebStatistics explains how to enable automatic updates of the statistics pages. 
+
+For each month, the following items are recorded using system data and TWiki log data across all webs: Number of webs, number of topics, number of topic views, number of topic updates, number of files uploads, number of users, data size, pub size, disk use, number of plugins installed compared to number of plugins available, and 10 top contributors.
+
+The statistics script contacts twiki.org to query the number of plugins available for the currently installed TWiki version via an http GET. It also sends anonymized site usage statistics to twiki.org via query string. Example http request:
+=<br />  /cgi-bin/pluginstats?statSite=978B8B8FC5D0D0888888D18B97909A9186D1908D98;statDate=2011-04;=
+=<br />  statWebs=20;statTopics=1501;statViews=578;statSaves=223;statUploads=19;statUsers=31;=
+=<br />  statDataSize=46.4;statPubSize=238.4;statDiskUse=93%statPlugins=22;statVersion=TWiki-5.1.0;=
+<br />Example response:
+=<br />  plugins: 196=
+<br />The statistics script will not contact twiki.org if a ={Stats}{DontContactTWikiOrg}= configure setting is set.
 
 ---+++ Upgrade From Earlier Releases
 

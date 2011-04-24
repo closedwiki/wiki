@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1303099910" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1303618143" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Site Tools
 
@@ -64,30 +64,31 @@ WebIndex lists all web topics in alphabetical order, with the first couple of li
 
 You can generate a listing manually, or on an automated schedule, of visits to individual pages, on a per web basis. Compiled as a running total on a monthly basis. Includes totals for Topic Views, Topic Saves, Attachment Uploads, Most Popular Topics with number of views, and Top Contributors showing total of saves and attachment uploads. Previous months are saved.
 
-   * You can create a WebStatistics link using TWikiVariables with ==%<nop>STATISTICSTOPIC%==
+%T% You can create a WebStatistics link using TWikiVariables with ==%<nop>STATISTICSTOPIC%==
+
+TWiki also generates overall site usage statistics in [[%USERSWEB%.SiteStatistics]] (do not create that page, it is created automatically based on SiteStatisticsTemplate). On a monthly basis, the following items are recorded using system data and TWiki log data across all webs: Number of webs, number of topics, number of topic views, number of topic updates, number of files uploads, number of users, data size, pub size, disk use, number of plugins installed compared to total number of plugins available, and the 10 top contributors.
 
 ---+++ Configuring for automatic operation
 
-   * You can automatically generate usage statistics for all webs. To enable this:
+   * You can automatically generate usage statistics for the whole site and all webs. To enable this:
       * Make sure variable ={Log}{view}=, ={Log}{save}= and ={Log}{upload}= are set in [[%SCRIPTURLPATH{"configure"}%][configure]]. This will generate log file entries (see below).
-      * The WebStatistics topic must be present in all webs where you want to have statistics. You can use the topic in the Main web as a template.
-      * Call the =twiki/bin/statistics= script from a cron job, once a day is recommended. This will update the WebStatistics topics in all webs.
-      * __Attention:__ The script must run as the same user as the CGI scripts are running, which is user =nobody= on many systems. Example crontab entry: %BR% =0 0 * * * (cd /path/to/twiki/bin; ./statistics &gt;/dev/null 2&gt;&amp;1)=
+      * Call the =twiki/bin/statistics= script from a cron job - once a day is recommended. This will update the %USERSWEB%.SiteStatistics and the WebStatistics topics in all webs.
+      * __Attention:__ The script must run as the same user as the CGI scripts are running, such as user =nobody= or =www-data=. Example crontab entry: %BR% =0 0 * * * (cd /path/to/twiki/bin; ./statistics &gt;/dev/null 2&gt;&amp;1)=
       * There is a workaround in case you can't run the script as user =nobody= : Run the utility =twiki/tools/geturl.pl= in your cron job and specify the URL of the =twiki/bin/statistics= script as a parameter. Example: %BR% =0 0 * * * (cd /path/to/twiki/tools; ./geturl.pl mydomain.com /urlpath/to/twiki/bin/statistics &gt;/dev/null 2&gt;&amp;1)= 
       * __NOTE:__ =geturl.pl= will do a TWiki CGI request as the <nop>TWikiGuest user, so if you use this workaround, the !WebStatistics topics you are updating will have to be writable by <nop>TWikiGuest.
 
 When running from the command line or a cron job, you can pass parameters to the script like this:
 <verbatim>
-./statistics -logdate 200605 -webs TWiki,Sandbox
+cd twiki/bin; ./statistics -logdate 2011-05 -webs TWiki,Sandbox
 </verbatim>
 
 ---+++ Generating statistics manually by URL
 
-   * The =twiki/bin/statistics= script can also be executed as a CGI script, just enter the URL in your browser. Examples:
+   * The =twiki/bin/statistics= script can also be executed as a CGI script - just enter the URL in your browser. Examples:
       * Update current month for all webs you have access to: %BR% =%SCRIPTURLPATH{statistics}%=
       * Update current month for %USERSWEB% web only: %BR% =%SCRIPTURLPATH{statistics}%/%USERSWEB%=
-      * Update %SERVERTIME{$month $year}% for %USERSWEB% web: %BR% =%SCRIPTURLPATH{statistics}%/%USERSWEB%?logdate=%SERVERTIME{$year$mo}%=
-      * Update %SERVERTIME{$month $year}% for the !ProjectX, !ProjectY and !ProjectZ webs: %BR% =%SCRIPTURLPATH{statistics}%?logdate=%SERVERTIME{$year$mo}%;webs=Project<nop>X,Project<nop>Y,Project<nop>Z=
+      * Update %SERVERTIME{$month $year}% for %USERSWEB% web: %BR% =%SCRIPTURLPATH{statistics}%/%USERSWEB%?logdate=%SERVERTIME{$year-$mo}%=
+      * Update %SERVERTIME{$month $year}% for the !ProjectX, !ProjectY and !ProjectZ webs: %BR% =%SCRIPTURLPATH{statistics}%?logdate=%SERVERTIME{$year-$mo}%;webs=ProjectX,ProjectY,ProjectZ=
 
 #LogFiles
 ---++ Log Files
