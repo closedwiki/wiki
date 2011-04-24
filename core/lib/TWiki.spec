@@ -1150,9 +1150,10 @@ $TWiki::cfg{Stats}{dfCmd} = '/bin/df %DIRECTORY|F%';
 # available for the currently installed TWiki version via an http GET. It 
 # also sends anonymized site usage statistics to twiki.org via query string. 
 # Example query string:
-# <br /><tt>statSite=978B8B8FC5D0D0888888D18B97909A9186D1908D98;statDate=2011-04;statWebs=20;
-# <br />statTopics=1501;statViews=578;statSaves=223;statUploads=19;statUsers=31;statDataSize=46.4;
-# <br />statPubSize=238.4;statDiskUse=93%statPlugins=22;statVersion=TWiki-5.1.0;</tt>
+# <br /><tt>statSite=978B8B8FC5D0D0888888D18B97909A9186D1908D98;statDate=2011-04;
+# <br />statWebs=20;statTopics=1501;statAttachments=724;statViews=578;statSaves=223;statUploads=19;
+# <br />statDataSize=46.4;statPubSize=238.4;statDiskUse=93%25;statUsers=31;statGroups=7;statPlugins=22;
+# <br />statVersion=TWiki-5.1.0;</tt>
 $TWiki::cfg{Stats}{DontContactTWikiOrg} = $FALSE;
 
 # **STRING 120 EXPERT**
