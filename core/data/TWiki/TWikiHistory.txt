@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1303604993" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1303605517" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
@@ -53,7 +53,7 @@ Many people have been involved in creating TWiki 5.0. Special thanks go to the m
    * *Testing and bug fixing:* TWiki:Main.SopanShewale, TWiki:Main.PeterThoeny, TWiki:Main.TimotheLitt, TWiki:Main.BarryLake, TWiki:Main.BryanKitts, TWiki:Main.JoenioCosta
    * *Spec and code:* TWiki:Main.PeterThoeny, TWiki:Main.SopanShewale, TWiki:Main.PeterJones, TWiki:Main.TimotheLitt
    * *Documentation:* TWiki:Main.PeterThoeny, TWiki:Main.SopanShewale, TWiki:Main.EaCohen
-   * *Release package builds:* TWiki:Main.SopanShewale
+   * *Release package builds:* TWiki:Main.SopanShewale, TWiki:Main.GeorgeTrubisky
    * *Usability:* TWiki:Main.PeterThoeny
    * *Translations:* Coordinated by TWiki:Main.PeterThoeny
       * Bulgarian: TWiki:Main.KrassimirBerov
