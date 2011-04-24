@@ -2535,7 +2535,7 @@ Search for a string in the content of a web. The search is over all content, inc
    * =\%option= - reference to an options hash
 The =\%options= hash may contain the following options:
    * =type= - if =regex= will perform a egrep-syntax RE search (default '')
-   * =casesensitive= - false to ignore case (defaulkt true)
+   * =casesensitive= - false to ignore case (default true)
    * =files_without_match= - true to return files only (default false). If =files_without_match= is specified, it will return on the first match in each topic (i.e. it will return only one match per topic, and will not return matching lines).
 
 The return value is a reference to a hash which maps each matching topic
@@ -2745,7 +2745,7 @@ sub normalizeWebTopicName {
 =pod
 
 #SanitizeAttachmentName
----+++ StaticMethod sanitizeAttachmentName($fname) -> ($fileName, $origName)
+---+++ sanitizeAttachmentName($fname) -> ($fileName, $origName)
 
 Given a file namer, sanitise it according to the rules for transforming
 attachment names. Returns
