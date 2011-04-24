@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1302383208" format="1.1" version="$Rev$"}%
----+!! Release Notes of TWiki-5.0.2 (Helsinki), 2011-03-29
+%META:TOPICINFO{author="TWikiContributor" date="1303605009" format="1.1" version="$Rev$"}%
+---+!! Release Notes of TWiki-5.0.2-rc1 (Helsinki), 2011-04-21
 
 %TOC%
 
@@ -9,7 +9,7 @@ TWiki-5.0.0 released on 2010-05-29 is a major release introducing usability enha
 
 TWiki-5.0.1 released on 2010-10-10 is a patch release that adds some minor new features and fixes a number of bugs.
 
-TWiki-5.0.2 released on 2011-03-29 is a patch release that adds some minor new features and fixes a number of bugs.
+TWiki-5.0.2-rc1 released on 2011-04-21 is a patch release that adds some minor new features and fixes a number of bugs.
 
 It is highly recommended to upgrade to TWiki-5.0.2. Users will find this release much more stable and secure in daily use.
 
@@ -25,10 +25,10 @@ It is highly recommended to upgrade to TWiki-5.0.2. Users will find this release
       * Upgraded TinyMCEPlugin to latest !TinyMCE 3.2.4.1 for better WYSIWYG editing experience.
       * Better indication of breadcrumb in top menu of !TopMenuSkin - added in TWiki-5.0.1
       * Better display of topic diffs in debug mode - added in TWiki-5.0.1
+      * The SlideShowPlugin now supports keystrokes to navigate the slides - added in TWiki-5.0.2
    * *TWiki Application Platform Enhancements*
       * Pre-installed JQueryPlugin, adding a lightweight cross-browser !JavaScript library designed to simplify the client-side scripting of HTML.
       * Improvements to ENCODE, IF, URLPARAM, WEB and WEBLIST variables.
-      * The SlideShowPlugin now supports keystrokes to navigate the slides - added in TWiki-5.0.2
       * The JQueryPlugin has now jquery-1.5.1 and jquery-ui-1.8.10 - updated in TWiki-5.0.2
    * *Search Enhancements*
       * Query syntax with array size, useful to query TWiki forms and attachments.
@@ -39,12 +39,14 @@ It is highly recommended to upgrade to TWiki-5.0.2. Users will find this release
       * Adding 8 new TWikiDocGraphics icons, and 2 updated icons - added in TWiki-5.0.2
       * The TWiki doc graphics library is now aware of image size and is cached for speed.
       * Support authenticated proxy - added in TWiki-5.0.1
+      * TopMenuSkin: Customizable web-specific top bar - added in TWiki-5.0.2
+      * In TWikiForms' type table, automatically list form field types that are defined in plugins and contribs
    * *Plugin Enhancements*
+      * API: New TWiki::Func::buildWikiWord function
+      * HeadlinesPlugin: New touch parameter in HEADLINES variable to alert users via e-mail notification of news updates
       * SpreadSheetPlugin: Improvements to $TIME() and $NOP() functions.
       * SpreadSheetPlugin: Add ISO 8601 week number to FORMATTIME - added in TWiki-5.0.1
-      * SpreadSheetPlugin: New $SPLIT() and $LISTNONEMPTY() functions - added in TWiki-5.0.2
-      * HeadlinesPlugin: New touch parameter in HEADLINES variable to alert users via e-mail notification of news updates
-      * API: New TWiki::Func::buildWikiWord function
+      * SpreadSheetPlugin: New $LISTNONEMPTY(), $SPLIT() and $WHILE() functions - added in TWiki-5.0.2
 
 See the full list of new features and bug fixes further below.
 
@@ -54,7 +56,7 @@ TWiki-5.0.2 ships with:
 
    * *Plugins:* CommentPlugin, EditTablePlugin, EmptyPlugin, HeadlinesPlugin, InterwikiPlugin, JQueryPlugin, PreferencesPlugin, RenderListPlugin, SlideShowPlugin, SmiliesPlugin, SpreadSheetPlugin, TablePlugin, TinyMCEPlugin, TagMePlugin, TWikiNetSkinPlugin, TwistyPlugin, WysiwygPlugin
    * *Contribs:* BehaviourContrib, JSCalendarContrib, MailerContrib, TipsContrib, TWikiUserMappingContrib, TwistyContrib
-   * *Skins:* ClassicSkin, PatternSkin, TopMenuSkin, TWikiNetSkin,
+   * *Skins:* ClassicSkin, PatternSkin, TopMenuSkin, TWikiNetSkin
 
 __Note:__ JQueryPlugin, TagMePlugin and TopMenuSkin are new in TWiki-5.0.0.
 
@@ -230,7 +232,7 @@ Total: 25
 
 ---++ TWiki-5.0.2 Patch Release - Details
 
-TWiki-5.0.2 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x00 revision 20827 (2011-03-29)
+TWiki-5.0.2-rc1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x00 revision 21061 (2011-04-21)
 
 ---+++ Enhancements
 
@@ -265,10 +267,11 @@ Total: 16
 | TWikibug:Item6634 | Topic links in included topics not web-prefixed if WikiWord ends with punctuation |
 | TWikibug:Item6667 | SpreadSheetPlugin: RIGHT() has wrong result due to incorrect start cell |
 | TWikibug:Item6668 | SpreadSheetPlugin: LIST() does not flatten a list in a cell |
-| TWikibug:Item6673 | Make login more robust |
+| TWikibug:Item6673 | Sanitize URL parameters on login |
 | TWikibug:Item6675 | JQueryPlugin: Possible to specify JQTHEME more than once per page, but only first one takes effect |
 | TWikibug:Item6679 | SpreadSheetPlugin: Small issue with LISTRAND, where last item only got 50% of fair share to get picked |
+| TWikibug:Item6687 | Statistics script leaves temp files behind |
 </noautolink>
-Total: 11
+Total: 12
 
 __Related Topics:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide, %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%
