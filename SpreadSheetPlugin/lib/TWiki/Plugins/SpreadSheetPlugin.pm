@@ -30,7 +30,7 @@ use vars qw(
 
 # Plugin version
 $VERSION = '$Rev$';
-$RELEASE = '2011-04-06';
+$RELEASE = '2011-04-25';
 
 $doInit = 0;
 
@@ -82,6 +82,5 @@ sub commonTagsHandler
     TWiki::Plugins::SpreadSheetPlugin::Calc::CALC( @_ );
 }
 
+# =========================
 1;
-
-# EOF

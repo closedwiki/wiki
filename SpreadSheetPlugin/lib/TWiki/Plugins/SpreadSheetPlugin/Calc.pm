@@ -341,6 +341,22 @@ sub _doFunc
             }
         }
 
+    } elsif( $theFunc eq "XOR" ) {
+        my @arr = _getListAsInteger( $theAttr );
+        $result = shift( @arr );
+        if( scalar( @arr ) > 0 ) {
+            foreach $i ( @arr ) {
+                $result = ( $result xor $i );
+            }
+        } else {
+            $result = 0;
+        }
+        $result = $result ? 1 : 0;
+
+    } elsif( $theFunc eq "BITXOR" ) {
+        my $ff = chr(255) x length( $theAttr );
+        $result = $theAttr ^ $ff;
+
     } elsif( $theFunc eq "NOT" ) {
         $result = 1;
         $result = 0 if( _getNumber( $theAttr ) );
@@ -1029,6 +1045,14 @@ sub _doFunc
     } elsif ( $theFunc eq "EXISTS" ) {
         $result = TWiki::Func::topicExists( $web, $theAttr );
         $result = 0 unless( $result );
+
+    } elsif ( $theFunc eq "HEXENCODE" ) {
+        $result = uc( unpack( "H*", $theAttr ) );
+
+    } elsif ( $theFunc eq "HEXDECODE" ) {
+        $theAttr =~ s/[^0-9A-Fa-f]//g; # only hex numbers
+        $theAttr =~ s/.$// if( length( $theAttr ) % 2 ); # must be set of two
+        $result = pack( "H*", $theAttr ); 
     }
 
     TWiki::Func::writeDebug( "- SpreadSheetPlugin::Calc::_doFunc: $theFunc( $theAttr ) returns: $result" ) if $debug;
