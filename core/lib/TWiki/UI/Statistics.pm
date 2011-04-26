@@ -34,8 +34,6 @@ package TWiki::UI::Statistics;
 use strict;
 use Assert;
 use File::Temp;
-use File::Copy qw(copy);
-use IO::File;
 use Error qw( :try );
 
 require TWiki;
@@ -237,8 +235,9 @@ sub _collectLogData {
         SUFFIX   => '.txt',
         # UNLINK => 0         # To debug, uncomment this to keep the temp file
       );
-    File::Copy::copy( $logFile, $tmpFileHandle )
-        or throw Error::Simple( 'Cannot backup log file: '.$! );
+
+    # Don't use File::Copy, it does not work with File::Temp older than 0.22
+    _copy( $logFile, $tmpFileHandle ) or throw Error::Simple( 'Cannot backup log file: '.$! );
     # Seek to start of temp file
     $tmpFileHandle->seek( 0, SEEK_SET );
 
@@ -311,6 +310,20 @@ sub _collectLogData {
     # Note: No need to close $tmpFileHandle, temp file is removed by destructor
 
     return \%view, \%contrib, \%statViews, \%statSaves, \%statUploads;
+}
+
+#===========================================================
+sub _copy {
+    my( $fromFile, $toHandle ) = @_;
+
+    open( FROM, '<', $fromFile ) or return;
+    binmode( FROM ); # $toHandle is already binmode
+    my $buff;
+    while( read( FROM, $buff, 8 * 2**10 ) ) {
+        print $toHandle $buff;
+    }
+    close( FROM ) or return; # do not close $toHandle
+    return 1;
 }
 
 #===========================================================
