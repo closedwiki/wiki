@@ -174,25 +174,25 @@ Assuming the following three TWiki tables. The first shows the data oriented in 
     contain the sample charts.
 -->
 %SET{"area1" value=
-    "name='area1' table='exampleTable2' type='area' data='R2:C2..R99:C6' xaxis='R1:C2..R1:C99' legend='R2:C1..R99:C1' ymax='30' width='225' height='200'"
+    "name=\"area1\" table=\"exampleTable2\" type=\"area\" data=\"R2:C2..R99:C6\" xaxis=\"R1:C2..R1:C99\" legend=\"R2:C1..R99:C1\" ymax=\"30\" width=\"225\" height=\"200\" numygrid=\"4\""
     }% 
 %SET{"bar1" value=
-    "name='bar1' table='exampleTable2' type='bar' data='R3:C2..R99:C4' xaxis='R1:C2..R1:C4' legend='R3:C1..R99:C1' ymin='0' ymax='19' numygrids='9' width='225' height='200'"
+    "name=\"bar1\" table=\"exampleTable2\" type=\"bar\" data=\"R3:C2..R99:C4\" xaxis=\"R1:C2..R1:C4\" legend=\"R3:C1..R99:C1\" ymin=\"0\" ymax=\"19\" numygrids=\"9\" width=\"225\" height=\"200\""
     }% 
 %SET{"line1" value=
-    "name='line1' table='exampleTable1' type='line' data='R2:C2..R6:C2' xaxis='R2:C1..R6:C1' legend='R1:C2..R1:C2' ymin='5' ymax='40' numygrids='6' width='225' height='200'"
+    "name=\"line1\" table=\"exampleTable1\" type=\"line\" data=\"R2:C2..R6:C2\" xaxis=\"R2:C1..R6:C1\" legend=\"R1:C2..R1:C2\" ymin=\"5\" ymax=\"40\" numygrids=\"6\" width=\"225\" height=\"200\""
     }% 
 %SET{"line2" value=
-    "name='line2' table='exampleTable2' type='line' data='R2:C2..R5:C6' xaxis='R1:C2..R1:C6' legend='R2:C1..R5:C1' ymin='5' ymax='30' numygrids='4' width='225' height='200'"
+    "name=\"line2\" table=\"exampleTable2\" type=\"line\" data=\"R2:C2..R5:C6\" xaxis=\"R1:C2..R1:C6\" legend=\"R2:C1..R5:C1\" ymin=\"5\" ymax=\"30\" numygrids=\"4\" width=\"225\" height=\"200\""
     }% 
 %SET{"scatter1" value=
-    "name='scatter1' table='exampleTable3' type='scatter' subtype='pline' data='R2:C2..R6:C4' xaxis='R2:C1..R6:C1' legend='R1:C2..R1:C4' ymin='1' ymax='10' xmax='12' numygrids='4' numxgrids='4' linewidth='1' width='225' height='200'"
+    "name=\"scatter1\" table=\"exampleTable3\" type=\"scatter\" subtype=\"pline\" data=\"R2:C2..R6:C4\" xaxis=\"R2:C1..R6:C1\" legend=\"R1:C2..R1:C4\" ymin=\"1\" ymax=\"10\" xmax=\"12\" numygrids=\"8\" numxgrids=\"8\" linewidth=\"1\" width=\"225\" height=\"200\""
     }% 
 %SET{"combo1" value=
-    "name='combo1' table='exampleTable2' type='combo' subtype='area, pline, point, line' data='R2:C2..R5:C6' xaxis='R1:C2..R1:C6' legend='R2:C1..R5:C1' ymin='5' ymax='30' numygrids='4' numxgrids='4' width='225' height='200'"
+    "name=\"combo1\" table=\"exampleTable2\" type=\"combo\" subtype=\"area, pline, point, line\" data=\"R2:C2..R5:C6\" xaxis=\"R1:C2..R1:C6\" legend=\"R2:C1..R5:C1\" ymin=\"5\" ymax=\"30\" numygrids=\"4\" numxgrids=\"4\" width=\"225\" height=\"200\""
     }% 
 %SET{"combo2" value=
-    "name='combo2' table='exampleTable2' type='combo' subtype='bar, pline, point, line' data='R2:C2..R5:C6' xaxis='R1:C2..R1:C6' legend='R2:C1..R5:C1' ymin='5' ymax='30' numygrids='4' numxgrids='4' width='225' height='200'"
+    "name=\"combo2\" table=\"exampleTable2\" type=\"combo\" subtype=\"bar, pline, point, line\" data=\"R2:C2..R5:C6\" xaxis=\"R1:C2..R1:C6\" legend=\"R2:C1..R5:C1\" ymin=\"5\" ymax=\"30\" numygrids=\"4\" numxgrids=\"4\" width=\"225\" height=\"200\""
     }% 
 
 | *Type of chart* | *You type* | *You should get...* | *...if installed* |
