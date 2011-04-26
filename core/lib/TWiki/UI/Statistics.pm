@@ -33,7 +33,7 @@ package TWiki::UI::Statistics;
 
 use strict;
 use Assert;
-use File::Temp;
+use File::Temp qw/ :seekable /;
 use Error qw( :try );
 
 require TWiki;
