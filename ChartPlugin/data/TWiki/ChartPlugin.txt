@@ -1,5 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1288931466" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TaitCyrus" date="1302821457" format="1.1" version="1.2"}%
 ---+!! Chart Plugin
+
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
    at http://twiki.org/cgi-bin/view/Plugins/ChartPlugin or provide feedback
@@ -9,6 +10,7 @@
 <sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
 </div></sticky>
+
 This plugin helps you visualize data in TWiki tables as charts, using a default linear scale or an optional semilogarithmic scale.
 
 ---++ Introduction
@@ -16,11 +18,11 @@ This plugin helps you visualize data in TWiki tables as charts, using a default 
 Five types of charts, _line_, _area_, _bar_, _scatter_ and _combo_, are currently available:
 
 | *Type of Chart* | *Name* | *What it Does* | *Example* |
-| Area | =area= | Shows a chart using areas under a line to represent the data | <img src="%ATTACHURLPATH%/areaexample.png" /> |
-| Bar | =bar= | Shows a chart using bars to represent the data | <img src="%ATTACHURLPATH%/barexample.png" /> |
-| Line | =line= | Shows a chart using simple lines, points only, or lines with points to represent the data. <br /> __Note:__ Any areas that fall behind already drawn areas are drawn as lines to make them visible | <img src="%ATTACHURLPATH%/lineexample.png" /> |
-| Scatter | =scatter= | Shows a scatter chart (XY data points) and allows mixing =area= or =bar= with =line=, =point=, and =pline= | <img src="%ATTACHURLPATH%/scatterexample.png" /> |
-| Combo | =combo= | Shows a chart combining the features from =area= or =bar= with =line=, =point=, and =pline= <br /> __Note:__ Formally known as =arealine= which is still supported | <img src="%ATTACHURLPATH%/comboexample.png" /> |
+| Area | =area= | Shows a chart using areas under a line to represent the data | <img alt="" src="%ATTACHURLPATH%/areaexample.png" /> |
+| Bar | =bar= | Shows a chart using bars to represent the data | <img alt="" src="%ATTACHURLPATH%/barexample.png" /> |
+| Line | =line= | Shows a chart using simple lines, points only, or lines with points to represent the data. %BR% __Note:__ Any areas that fall behind already drawn areas are drawn as lines to make them visible | <img alt="" src="%ATTACHURLPATH%/lineexample.png" /> |
+| Scatter | =scatter= | Shows a scatter chart (XY data points) and allows mixing =area= or =bar= with =line=, =point=, and =pline= | <img alt="" src="%ATTACHURLPATH%/scatterexample.png" /> |
+| Combo | =combo= | Shows a chart combining the features from =area= or =bar= with =line=, =point=, and =pline= %BR% __Note:__ Formally known as =arealine= which is still supported | <img alt="" src="%ATTACHURLPATH%/comboexample.png" /> |
 
 The =%<nop>CHART{...}%= variable gets expanded to an image representing the chart. Parameters and global settings determine the type of chart, dimensions, and values.
 
@@ -30,66 +32,66 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 __NOTE:__ Do not change the settings here, overload them in the [[%LOCALSITEPREFS%]]. Prefix a setting with ==CHARTPLUGIN_==, e.g. to overload ==AREA_COLORS== define a ==CHARTPLUGIN_AREA_COLORS== setting in the <nop>%LOCALSITEPREFS%.
 
-   * Short description:
+   * Short description: 
       * Set SHORTDESCRIPTION = Create area, bar, line and scatter  charts to visualize TWiki tables
 
-   * Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
+   * Set DEBUG to 1 to get debug messages in =data/debug.txt=. Default: =0= 
       * Set DEBUG = 0
 
-   * Default chart used: =area=, =line=, =bar=, =scatter= or =combo=. Default: =line=
+   * Default chart used: =area=, =line=, =bar=, =scatter= or =combo=. Default: =line= 
       * Set TYPE = line
 
-   * Default dimensions, scale and colors for a chart. See details in the syntax rules.
+   * Default dimensions, scale and colors for a chart. See details in the syntax rules. 
       * Set WIDTH = 400
       * Set HEIGHT = 250
       * Set AREA_COLORS = #FF3333, #FFFF33, #33FF33, #CC66FF, #99FFFF, #FFCC00, #008000, #FF8080, #3366CC, #800080
       * Set LINE_COLORS = #FF0000, #FFCC00, #00CC00, #FF00FF, #33CCCC, #FF8000, #009900, #FF6666, #3333FF, #800080
       * Set BGCOLOR = #FFFFFF, #FFFFFF
 
-   * Define the number of grids and grid color.  When xgrid/ygrid = "on", then just use the first color when drawing grid lines.  When their value is "dot", then use the full specification for drawing the grid lines ("transparent" can be used to introduce holes in the line).
+   * Define the number of grids and grid color. When xgrid/ygrid = "on", then just use the first color when drawing grid lines. When their value is "dot", then use the full specification for drawing the grid lines ("transparent" can be used to introduce holes in the line). 
       * Set GRIDCOLOR = #808080, #808080, #808080, transparent, transparent, transparent
       * Set NUMYGRIDS = 9
 
-   * Define what to do when an empty table cell is found.  "none" means assume no default value.  A value of "10" would mean empty cells would be assumed to have a value of 10
+   * Define what to do when an empty table cell is found. "none" means assume no default value. A value of "10" would mean empty cells would be assumed to have a value of 10 
       * Set DEFAULTDATA = none
 
-   * Define the default scale: linear or semilog
+   * Define the default scale: linear or semilog 
       * Set SCALE = linear
 
-   * Define the number of pixels wide lines are drawn with
+   * Define the number of pixels wide lines are drawn with 
       * Set LINEWIDTH = 3
 
-   * Define the number of pixels (in both the X and Y directions) to use when drawing a point
+   * Define the number of pixels (in both the X and Y directions) to use when drawing a point 
       * Set POINTSIZE = 5
 
-   * Define bar chart specific parameters.  BARSPACE defines the space (in pixels) between bars.  BARLEADINGSPACE defines the leading space (in pixels) before the first bar.  BARTRAILINGSPACE defines the trailing space (in pixels) after the last bar
+   * Define bar chart specific parameters. BARSPACE defines the space (in pixels) between bars. BARLEADINGSPACE defines the leading space (in pixels) before the first bar. BARTRAILINGSPACE defines the trailing space (in pixels) after the last bar 
       * Set BARLEADINGSPACE = 6
       * Set BARTRAILINGSPACE = 6
       * Set BARSPACE = 5
 
 ---++ Syntax Rules
 
-The =%<nop>CHART{...}%= variable gets expanded to an image representing the chart. 
+The =%<nop>CHART{...}%= variable gets expanded to an image representing the chart.
 
-   * Some parameters expect a range of table cells, using *extended* SpreadSheetPlugin syntax:
+   * Some parameters expect a range of table cells, using *extended* SpreadSheetPlugin syntax: 
       * A single table cell can be addressed as ==R1:C1==. Cell addresses:
-        | ==R1:C1== | ==R1:C2== | ==R1:C3== | ==R1:C4== |
-        | ==R2:C1== | ==R2:C2== | ==R2:C3== | ==R2:C4== |
+         | ==R1:C1== | ==R1:C2== | ==R1:C3== | ==R1:C4== |
+         | ==R2:C1== | ==R2:C2== | ==R2:C3== | ==R2:C4== |
    * A range of table cells is defined by two cell addresses separated by ==".."==. For example, "row 1-20, column 3" is: ==R1:C3..R20:C3== and "row 15-5, column 2" is: ==R15:C2..R5:C2==
    * Ranges can be discontinuous. Discontinous ranges are joined using =="+"==. For example: ==R4:C1..R5:C2+R9:C1..R15:C2==.
    * When you are specifying datasets, you specify the range so that you have one data set per row (column). You can also specify multiple data sets using discontinuous blocks of cells; for example, ==R4:C1..R5:C2,R9:C1..R10:C2== specifies *4* data sets: R4:C1..R4:C2, R5:C1..R5:C2, R9:C1..R9:C15 and R10:C1..R10:C2
    * ==+== has higher precedence than ==,==
 
 | *%<nop>CHART% Parameter* | *Comment* | *Default* |
-| =type= | The type of chart to create. One of ="area"=, ="bar"=, ="line"=, ="scatter"=, ="combo"= | Global =TYPE= setting |
+| =type= | The type of chart to create. One of ="area"=, ="bar"=, ="line"=, ="scatter"=, ="combo"= | Global =TYPE setting |
 | =subtype= | Sub type of chart. Supported values depend on chart type: | |
-|^| - for =type="area"= =&nbsp;&nbsp;&nbsp;subtype="area" | ="area"= |
-|^| - for =type="bar"= =&nbsp;&nbsp;&nbsp;&nbsp;subtype="bar" | ="bar"= |
-|^| - for =type="line"= =&nbsp;&nbsp;&nbsp;subtype="line, point, pline" (point line) | ="line"= |
-|^| - for =type="scatter"= subtype="area, bar, line, point, pline"<br />Note: you cannot mix =area= and =bar= on the same chart.<br />Note: It is not recommended using showing a =bar= on a =scatter= chart as the X axis placement is skewed with =bar= and will not exactly line up with drawn X axis values which will defeat the purpose of using =scatter= in the first place.| ="point"= |
-|^| - for =type="combo"= &nbsp;&nbsp;subtype="area, bar, line, point, pline" (note: you can not mix =area= and =bar= on the same chart)| All but the last data set are drawn as ="area"= and the last is drawn as ="line"= |
-|^| You can use a comma delimited list of values to set a specific subtype for each data set. For example ="area, area, point, line"= would say that the first two data sets are areas, the third is point and the last one is a line | |
-| =scale= | The scale to use when creating the chart.  ="linear"= or ="semilog"= | Global =SCALE= setting |
+| ^ | - for =type="area"= =&nbsp;&nbsp;&nbsp;subtype="area" | ="area"= |
+| ^ | - for =type="bar"= =&nbsp;&nbsp;&nbsp;&nbsp;subtype="bar" | ="bar"= |
+| ^ | - for =type="line"= =&nbsp;&nbsp;&nbsp;subtype="line, point, pline" (point line) | ="line"= |
+| ^ | - for =type="scatter"= subtype="area, bar, line, point, pline"%BR%Note: you cannot mix =area= and =bar= on the same chart.%BR%Note: It is not recommended using showing a =bar= on a =scatter= chart as the X axis placement is skewed with =bar= and will not exactly line up with drawn X axis values which will defeat the purpose of using =scatter= in the first place. | ="point"= |
+| ^ | - for =type="combo"=&nbps;&nbps;subtype="area, bar, line, point, pline" (note: you can not mix =area= and =bar= on the same chart) | All but the last data set are drawn as ="area"= and the last is drawn as ="line"= |
+| ^ | You can use a comma delimited list of values to set a specific subtype for each data set. For example ="area, area, point, line"= would say that the first two data sets are areas, the third is point and the last one is a line | |
+| =scale= | The scale to use when creating the chart. ="linear"= or ="semilog"= | Global =SCALE setting |
 | =name= | Name to uniquely identify the chart file that is auto-created. | None; is required for all charts |
 | =web= | The web in which to find =topic= (specified below) in which to find the TWiki tables | The current web |
 | =topic= | The topic in which to find the TWiki tables | The current topic |
@@ -97,26 +99,28 @@ The =%<nop>CHART{...}%= variable gets expanded to an image representing the char
 | =title= | The title placed at the top of the chart | None |
 | =xlabel= | The label placed under the X axis describing the X values | None |
 | =ylabel= | The label placed to the left of the Y axis describing the Y values | None |
-| =data= | The source data to build the chart, defined as a range of table cells. For example for =type="line"=, a =data="R2:C3..R999:C6"= would say that four lines were to be drawn with first line being rows 2-999 column 3 and last line being rows 2-999 column 6. In the case of a scatter graph, data represents the actual Y values. | None; is required for all charts |
-| =defaultdata= | If there is sparse data, then use the value specified by =defaultdata= to fill in the missing data.  A value of ="none"= means only draw actual data points. | Global =DEFAULTDATA= setting |
-| =xaxis= | X-Axis labels: The values are defined as a range of table cells.  In case of scatter graph, =xaxis= represents the actual X values.  The range also defines the orientation -- row or column oriented (if specified). For example ="R2:C2..R999:C2"= would take all of column 2 starting at row 2 and going through row 999.  It would also denote that all remaining data is oriented columnar. | None.  Is required for =type="scatter"=.  If not specified, then no X axis labels shown and data assumed to be in columnar format. |
-| =xaxisangle= | Angle the X-Axis labels are drawn.  Only two angles are supported at this time, ="0"= draws horizontal labels, other numbers draw vertical labels | ="0"= |
+| =data= | The source data to build the chart, defined as a range of table cells. For example for =type="line"=, a =data="R2:C3..R999:C6"= would say that four lines were to be drawn with first line being rows 2-999 column 3 and last line being rows 2-999 column 6. In the case of a scatter graph, data represents the actual Y values. Note: Reversed data is allowed so =data="R999:C6..R2:C3"= is a legal data specification. | None; is required for all charts |
+| =defaultdata= | If there is sparse data, then use the value specified by =defaultdata= to fill in the missing data. A value of ="none"= means only draw actual data points. | Global =DEFAULTDATA= setting |
+| =xaxis= | X-Axis labels: The values are defined as a range of table cells. In case of scatter graph, =xaxis= represents the actual X values. The range also defines the orientation -- row or column oriented (if specified). For example ="R2:C2..R999:C2"= would take all of column 2 starting at row 2 and going through row 999. It would also denote that all remaining data is oriented columnar. | None. Is required for =type="scatter"=. If not specified, then no X axis labels shown and data assumed to be in columnar format. |
+| =xaxisangle= | Angle the X-Axis labels are drawn. Only two angles are supported at this time, ="0"= draws horizontal labels, other numbers draw vertical labels | ="0"= |
 | =yaxis= | Y-Axis labels: ="on"= to show the labels, ="off"= for no labels. | ="off"= |
+| =xmin= | Minimum value drawn on the X axis. Note: this is *only* applicable for =scatter= charts. | The minimum value specified by =xaxis= |
+| =xmax= | Maximum value drawn on the X axis. Note: this is *only* applicable for =scatter= charts. | The maximum value specified by =xaxis= |
 | =ymin= | Minimum value drawn on the Y axis | The minimum value specified by =data= |
 | =ymax= | Maximum value drawn on the Y axis | The maximum value specified by =data= |
 | =xgrid= | Grid shown for X axis: ="on"= for solid grid lines, ="dot"= for dotted grid lines, ="off"= for none. | ="dot"= |
 | =ygrid= | Grid shown for Y axis: ="on"= for solid grid lines, ="dot"= for dotted grid lines, ="off"= for none. | ="dot"= |
 | =numygrids= | Number of Y axis grids drawn | Global =NUMYGRIDS= setting |
 | =ytics= | Number of tic marks to draw between Y axis grid lines.  | If =scale="semilog"=, then =ytics="10"=, else defaults to ="0"= |
-| =numxgrids= | Number of X axis grids drawn.  This can be used if there are a large number of X axis data points such that the X axis labels overlap. | Draw all X-Axis labels |
+| =numxgrids= | Number of X axis grids drawn. This can be used if there are a large number of X axis data points such that the X axis labels overlap. | Draw all X-Axis labels |
 | =datalabel= | Show data labels: ="on"= for labels, ="box"= for label in a box, ="off"= for none. It can also be a list like ="off, off, off, box"= to show values in a box for the fourth set of data points only. | ="off"= |
-| =legend= | Legend shown to the right of the chart.  For example ="R1:C3..R1:C6"= would take all of row 1 starting at column 3 and going through column 6 as the name/legend of each set of data points | None; no legend if not specified |
+| =legend= | Legend shown to the right of the chart. For example ="R1:C3..R1:C6"= would take all of row 1 starting at column 3 and going through column 6 as the name/legend of each set of data points | None; no legend if not specified |
 | =width= | Defines the overall width of the chart in pixels. | Global =WIDTH= setting |
 | =height= | Defines the overall height of the chart in pixels. | Global =HEIGHT= setting |
 | =alt= | Alternate text for chart image | Empty alt tag |
 | =colors= | A list of colors defining the color of each set of data points. | Global =LINE_COLORS= setting for lines; global =AREA_COLORS= setting for area |
 | =bgcolor= | Background color of the area surrounding the chart. For example, ="#E7E7E7"= sets a light gray background. Optionally specify a second values for the chart background itself. For example, ="#E7E7E7, #FFFFC0"= defines a chart with a light yellow background on a light gray surrounding. | Global =BGCOLOR= setting |
-| =gridcolor= | Colors/style of the grid (if any).  If =xgrid= or =ygrid= = "on" then use the first =gridcolor= for drawing solid grid lines.  If =xgrid= or =ygrid= = "dot", then use the full set of colors to define the line style for drawing the grid lines ("transparent" can be used to introduce holes in the line)" | Global =GRIDCOLOR= setting |
+| =gridcolor= | Colors/style of the grid (if any). If =xgrid= or =ygrid= = "on" then use the first =gridcolor= for drawing solid grid lines. If =xgrid= or =ygrid= = "dot", then use the full set of colors to define the line style for drawing the grid lines ("transparent" can be used to introduce holes in the line)" | Global =GRIDCOLOR= setting |
 | =linewidth= | Width of data lines in pixel | Global =LINEWIDTH= setting |
 | =pointsize= | Size of data points in pixel | Global =POINTSIZE= setting |
 | (other parameters) | Other parameters are passed on to the =img= tag. Useful to add additional image parameters like =align="right"= | None |
@@ -125,29 +129,36 @@ __Note:__ To support legacy syntax, =datatype= maps to =subtype=, =arealine= map
 
 ---++ Examples
 
-Assuming the following three TWiki tables.  The first shows the data oriented in columns while the seconds shows the data oriented in rows
-
-<table><tr><td valign="top">
-*Table 1:*
+Assuming the following three TWiki tables. The first shows the data oriented in columns while the seconds shows the data oriented in rows
+<table>
+<tr>
+<td valign="top">
+*Table 1*
 %TABLE{name="exampleTable1"}%
 | *Year* | *Actual* |
-| 1998 | 9 |
-| 1999 | 14 |
-| 2000 | 19 | 
-| 2001 | 25 |
-| 2002 | 39 |
-
-</td><td>&nbsp;</td><td valign="top">
-*Table 2:*
+| 1998   | 9 |
+| 1999   | 14 |
+| 2000   | 19 |
+| 2001   | 25 |
+| 2002   | 39 |
+</td>
+<td>
+&nbsp;
+</td>
+<td valign="top">
+*Table 2:* 
 %TABLE{name="exampleTable2"}%
 | *Year* | *1998* | *1999* | *2000* | *2001* | *2002* |
 | *Low* | 8 | 10 | 13 | 17 | 22 |
 | *Target* | 10 | 12 | 17 | 20 | 25 |
 | *High* | 12 | 15 | 19 | 24 | 29 |
 | *Actual* | 9 | 14 | 15 | 19 | 27 |
-
-</td><td>&nbsp;</td><td valign="top">
-*Table 3:*
+</td>
+<td>
+&nbsp;
+</td>
+<td valign="top">
+*Table 3:* 
 %TABLE{name="exampleTable3"}%
 | *X* | *Y1* | *Y2* | *Y3* |
 | 3 | 1 | 3 | 7 |
@@ -155,17 +166,43 @@ Assuming the following three TWiki tables.  The first shows the data oriented in
 | 11 | 3 | 5 | 9 |
 | 10 | 1 | 3 | 7 |
 | 8 | 2 | 3 | 8 |
+</td>
+</tr>
+</table>
 
-</td></tr></table>
+<!-- To make things a bit easier to read, we define TWiki variables to
+    contain the sample charts.
+-->
+%SET{"area1" value=
+    "name='area1' table='exampleTable2' type='area' data='R2:C2..R99:C6' xaxis='R1:C2..R1:C99' legend='R2:C1..R99:C1' ymax='30' width='225' height='200'"
+    }% 
+%SET{"bar1" value=
+    "name='bar1' table='exampleTable2' type='bar' data='R3:C2..R99:C4' xaxis='R1:C2..R1:C4' legend='R3:C1..R99:C1' ymin='0' ymax='19' numygrids='9' width='225' height='200'"
+    }% 
+%SET{"line1" value=
+    "name='line1' table='exampleTable1' type='line' data='R2:C2..R6:C2' xaxis='R2:C1..R6:C1' legend='R1:C2..R1:C2' ymin='5' ymax='40' numygrids='6' width='225' height='200'"
+    }% 
+%SET{"line2" value=
+    "name='line2' table='exampleTable2' type='line' data='R2:C2..R5:C6' xaxis='R1:C2..R1:C6' legend='R2:C1..R5:C1' ymin='5' ymax='30' numygrids='4' width='225' height='200'"
+    }% 
+%SET{"scatter1" value=
+    "name='scatter1' table='exampleTable3' type='scatter' subtype='pline' data='R2:C2..R6:C4' xaxis='R2:C1..R6:C1' legend='R1:C2..R1:C4' ymin='1' ymax='10' xmax='12' numygrids='4' numxgrids='4' linewidth='1' width='225' height='200'"
+    }% 
+%SET{"combo1" value=
+    "name='combo1' table='exampleTable2' type='combo' subtype='area, pline, point, line' data='R2:C2..R5:C6' xaxis='R1:C2..R1:C6' legend='R2:C1..R5:C1' ymin='5' ymax='30' numygrids='4' numxgrids='4' width='225' height='200'"
+    }% 
+%SET{"combo2" value=
+    "name='combo2' table='exampleTable2' type='combo' subtype='bar, pline, point, line' data='R2:C2..R5:C6' xaxis='R1:C2..R1:C6' legend='R2:C1..R5:C1' ymin='5' ymax='30' numygrids='4' numxgrids='4' width='225' height='200'"
+    }% 
 
 | *Type of chart* | *You type* | *You should get...* | *...if installed* |
-| area | Multiple area<br /><br /> =%<nop>CHART{ type="area" name="area1" table="exampleTable2" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" width="225" height="200" }%= | <img src="%ATTACHURLPATH%/area1.png" /> | %CHART{ type="area" name="area1" table="exampleTable2" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" width="225" height="200" }% |
-| bar | Multiple bars<br /><br /> =%<nop>CHART{ type="bar" name="bar1" table="exampleTable2" data="R3:C2..R5:C4" xaxis="R1:C2..R1:C4" legend="R3:C1..R5:C1" ymin="0" width="225" height="200" }%= | <img src="%ATTACHURLPATH%/bar1.png" /> | %CHART{ type="bar" name="bar1" table="exampleTable2" data="R3:C2..R5:C4" xaxis="R1:C2..R1:C4" legend="R3:C1..R5:C1" ymin="0" width="225" height="200" }% |
-| line | Simple line<br /><br /> =%<nop>CHART{ type="line" name="line1" table="exampleTable1" data="R2:C2..R6:C2" xaxis="R2:C1..R6:C1" legend="R1:C2..R1:C2" width="225" height="200" }%= | <img src="%ATTACHURLPATH%/line1.png" /> | %CHART{ type="line" name="line1" table="exampleTable1" data="R2:C2..R6:C2" xaxis="R2:C1..R6:C1" legend="R1:C2..R1:C2" width="225" height="200" }% |
-| line | Multiple lines<br /><br /> =%<nop>CHART{ type="line" name="line2" table="exampleTable2" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" width="225" height="200" }%= | <img src="%ATTACHURLPATH%/line2.png" /> | %CHART{ type="line" name="line2" table="exampleTable2" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" width="225" height="200" }% |
-| scatter | Multiple scatter<br /><br /> =%<nop>CHART{ type="scatter" subtype="pline" name="scatter1" table="exampleTable3" data="R2:C2..R6:C4" xaxis="R2:C1..R6:C1" legend="R1:C2..R1:C4" numxgrids="4" linewidth="1" width="225" height="200" }%= | <img src="%ATTACHURLPATH%/scatter1.png" /> | %CHART{ type="scatter" subtype="pline" name="scatter1" table="exampleTable3" data="R2:C2..R6:C4" xaxis="R2:C1..R6:C1" legend="R1:C2..R1:C4" numxgrids="4" linewidth="1" width="225" height="200" }% |
-| combo | Combo with area, pline, point, & line<br /><br /> =%<nop>CHART{ type="combo" subtype="area, pline, point, line" name="combo1" table="exampleTable2" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" width="225" height="200" }%= | <img src="%ATTACHURLPATH%/combo1.png" /> | %CHART{ type="combo" subtype="area, pline, point, line" name="combo1" table="exampleTable2" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" width="225" height="200" }% |
-| combo | Combo with bar, pline, point, & line<br /><br /> =%<nop>CHART{ type="combo" subtype="bar, pline, point, line" name="combo2" table="exampleTable2" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" width="225" height="200" }%= | <img src="%ATTACHURLPATH%/combo2.png" /> | %CHART{ type="combo" subtype="bar, pline, point, line" name="combo2" table="exampleTable2" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" width="225" height="200" }% |
+| area | Multiple areas %BR%%BR% =%<nop>CHART{%GET{"area1"}%}%= | <img alt="" src="%ATTACHURLPATH%/area1.png" /> | %CHART{%GET{"area1"}%}% |
+| bar | Multiple bars %BR%%BR% =%<nop>CHART{%GET{"bar1"}%}%= | <img alt="" src="%ATTACHURLPATH%/bar1.png" /> | %CHART{%GET{"bar1"}%}% |
+| line | Simple line %BR%%BR% =%<nop>CHART{%GET{"line1"}%}%= | <img alt="" src="%ATTACHURLPATH%/line1.png" /> | %CHART{%GET{"line1"}%}% |
+| line | Multiple lines %BR%%BR% =%<nop>CHART{%GET{"line2"}%}%= | <img alt="" src="%ATTACHURLPATH%/line2.png" /> | %CHART{%GET{"line2"}%}% |
+| scatter | Multiple scatter %BR%%BR% =%<nop>CHART{%GET{"scatter1"}%}%= | <img alt="" src="%ATTACHURLPATH%/scatter1.png" /> | %CHART{%GET{"scatter1"}%}% |
+| combo | Combo with area, pline, point, & line %BR%%BR% =%<nop>CHART{%GET{"combo1"}%}%= | <img alt="" src="%ATTACHURLPATH%/combo1.png" /> | %CHART{%GET{"combo1"}%}% |
+| combo | Combo with bar, pline, point, & line %BR%%BR% =%<nop>CHART{%GET{"combo2"}%}%= | <img alt="" src="%ATTACHURLPATH%/combo2.png" /> | %CHART{%GET{"combo2"}%}% |
 
 The "if installed" column shows images instead of variables in case the plugin is installed correctly.
 
@@ -176,37 +213,40 @@ Charts can be created dynamically based on TWiki tables with SEARCH and CALC.
 [[%SYSTEMWEB%.VarSEARCH][SEARCH]]: Create a table dynamically with a [[%SYSTEMWEB%.FormattedSearch][formatted search]], then visualize it with a CHART. If the number of rows in a table is not known, specify a big row number in the CHART, such as =data="R2:C2..R999:C7"=. The !ChartPlugin is smart enough to use the actual number of rows.
 
 [[%SYSTEMWEB%.VarCALC][CALC]]: Table cells can be created dynamically with SpreadSheetPlugin formulas. Here is an example table that sums up the total in the right hand column:
-
-<table><tr><td valign="top">
-*Raw text of table:*
-<verbatim>
+<table>
+<tr>
+<td valign="top">
+*Raw text of table:* <verbatim>
 %TABLE{name="exampleTableWithCALC"}%
 |   | A | B | Total |
 | 1 | 7 | 9 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
 | 2 | 5 | 2 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
 | 3 | 5 | 7 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
 </verbatim>
-</td><td>&nbsp;</td><td valign="top">
-*Table:*
+</td>
+<td valign="top">
+*Table:* 
 %TABLE{name="exampleTableWithCALC"}%
 |   | A | B | Total |
 | 1 | 7 | 9 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
 | 2 | 5 | 2 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
 | 3 | 5 | 7 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
-</td><td>&nbsp;</td><td valign="top">
-*Resulting chart:* %BR%
+</td>
+<td valign="top">
+*Resulting chart:* %BR% 
 %CHART{ type="line" table="exampleTableWithCALC" name="line3" data="R2:C2..R4:C7" legend="R1:C2..R1:C7" xaxis="R2:C1..R4:C1" yaxis="on" datalabel="on" ymin="0" ymax="20" width="250" height="140" }%
-</td></tr></table>
+</td>
+</tr>
+</table>
 
 __%X% Attention:__ You can get unexpected results if you [[%SYSTEMWEB%.VarINCLUDE][INCLUDE]] a topic that has a CHART pointing to a table with CALCs. By default, the SpreadSheetPlugin delays CALCs in included topics and evaluates them once all INCLUDEs are processed. With that, the CHART in an included topic sees unprocessed CALCs, resulting in a chart with incorrect values. To get he desired result you need to set the following preference setting in the topic that _includes_ the topic containing the CHART:
 
    * Set SPREADSHEETPLUGIN_SKIPINCLUDE = 0
-
 This setting tells the !SpreadSheetPlugin to process the CALCs in the included page, e.g. it will not delay the evaluation of the formulas.
 
 ---++ Output
 
-   * A graphics file in PNG or GIF format is created containing the chart results.  The file is placed in =%<nop>PUBURLPATH%/%<nop>WEB%/%<nop>TOPIC%/_ChartPlugin_&lt;type&gt;_&lt;name&gt;.png= or =.gif= (GIF for GD version 1.19 or older)
+   * A graphics file in PNG or GIF format is created containing the chart results. The file is placed in =%<nop>PUBURLPATH%/%<nop>WEB%/%<nop>TOPIC%/_ChartPlugin_&lt;type&gt;_&lt;name&gt;.png= or =.gif= (GIF for GD version 1.19 or older)
    * =%<nop>CHART{...}%= gets expanded to an =&lt;img ... /&gt;= image tag.
 
 ---++ Error Handling
@@ -222,25 +262,27 @@ If the required parameters are not defined, then an error message is returned or
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.TaitCyrus |
-|  Copyright: | &copy; 2002-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
+|  Copyright: | &copy 2002-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-11-04 (v%$VERSION%) |
-|  Change History: | <!-- specify latest version first -->&nbsp; |
-|   2010-11-04: | TWikibug:Item6600: Better doc of data parameter in the case of a scatter graph -- TWiki:Main.VickiBrown |
-|   2010-06-26: | TWikibug:Item6003: Document CHARTs with SEARCHes and CALC in an INCLUDEd topic |
-|   2010-04-07: | TWikibug:Item6160: Fixed taint issue with certain combination of Perl/GD; TWikibug:Item6329 - input validation for chart width and height; added VarCHART variable documentation page -- TWiki:Main.PeterThoeny |
-|   2009-10-23: | TWikibug:Item6355: Fixed bug where chart not drawn if table at end of topic; Item6329: Added input validation for all parameters expected to be integers or real numbers - TWiki:Main.PeterThoeny |
-|   18 May 2007: | Added discontinuous ranges - TWiki:Main.CrawfordCurrie |
-|   16 Nov 2004: | V1.401 - Added benchmarks (no code changes) |
-|   30 Aug 2004: | V1.400 - Added support for =subtype="bar"= (includes various global bar settings), updated =gridcolor= to not only define the grid color but allowing the user to define the line style (for drawing user defined dotted lines), add a global for how wide lines are drawn instead of a hard coded value, change the order of how things are drawn so now the order is: areas, grid lines and X/Y axis labels, bars, lines/points/plines, rectangle around chart, data point labels, chart title/X/Y labels, and finally the legends. |
-|   13 May 2004: | V1.300 - Added support for =type="scatter"=; renamed =type="arealine"= to ="combo"= (arealine is undocumented); renamed =datatype= to =subtype= (datatype is undocumented); added =subtype= options ="point"= and ="pline"=, added new settings =GRIDCOLOR=, =DEFAULTDATA=, =POINTSIZE=; fixed bug with how the number of grids were drawn |
-|   17 Oct 2003: | V1.201 - Fix boundary cases with =semilog= scale |
-|   16 Oct 2003: | V1.200 - Add new options of _scale_ and _ytics_. |
-|   16 Jun 2003: | V1.100 - Add support for reversed tables (R999..R1), add new options of _xaxisangle_, _numxgrids_, and _defaultdata_, and allow sparse data. |
-|   7 Oct 2002: | V1.003 - Improved performance, fixed bugs with color allocation, auto-legend placement and parsing of numbers in tables.  Also bumped the upper value when numbers switch from decimal format to engineering format |
+|  Plugin Version: | 2011-04-25 (v%$VERSION%) |
+|  Change History: | <!-- specify latest version first --> |
+|  2011-04-26: | Fixed bugs:<ul><li>TWikibug:Item6691: Fixed =semilog= bug where data values didn't match yaxis values.</li><li>TWikibug:Item6692: Fixed bug where data containing HTML or TWiki links was not parsed correctly</li><li>TWikibug:Item6693: Fixed bug where if all data was identical, an error was generated about there being no height to the chart.  Now in this case, the =ymax= will be forced to the next higher value so the data will be drawn.</li><li>TWikibug:Item6694: Fixed bug with handling of =numxgrids= parameter.</li><li>TWikibug:Item6695: Fix reversed data charting</ul>Enhancements:<ul><li>TWikibug:Item6695: Added improved support for reversed data ranges so bottom/up or right/left data can now be specified.</li><li>TWikibug:Item6696: Improved default values for X/Y axis min/max to be moved up (for max) or down (for min) nearest 1*, 2*, 5* range</li><li>TWikibug:Item6697: Added =xmin= and =xmax= for greater =scatter= chart specificaion.</li><li>TWikibug:Item6698: Allow single quote ='= in parameters in addition to ="=.</li><li>TWikibug:Item6699: Added caching of table processing in a topic so multiple charts on the same topic page will only parse the topic page once instead of each time a chart was created.</li><li>Updated the tests topic to be more human readable in raw mode by using %<NOP>SET{}% and %<NOP>GET{}%.</li><li>Added new tests to ChartPluginTests.</li></ul> -- TWiki:Main.TaitCyrus |
+|  2010-11-04: | TWikibug:Item6600: Better doc of data parameter in the case of a scatter graph -- TWiki:Main.VickiBrown |
+|  2010-06-26: | TWikibug:Item6003: Document CHARTs with SEARCHes and CALC in an INCLUDEd topic |
+|  2010-04-07: | TWikibug:Item6160: Fixed taint issue with certain combination of Perl/GD; TWikibug:Item6329 - input validation for chart width and height; added VarCHART variable documentation page -- TWiki:Main.PeterThoeny |
+|  2009-10-23: | TWikibug:Item6355: Fixed bug where chart not drawn if table at end of topic; Item6329: Added input validation for all parameters expected to be integers or real numbers - TWiki:Main.PeterThoeny |
+|  18 May 2007: | Added discontinuous ranges - TWiki:Main.CrawfordCurrie |
+|  16 Nov 2004: | V1.401 - Added benchmarks (no code changes) |
+|  30 Aug 2004: | V1.400 - Added support for =subtype="bar"= (includes various global bar settings), updated =gridcolor= to not only define the grid color but allowing the user to define the line style (for drawing user defined dotted lines), add a global for how wide lines are drawn instead of a hard coded value, change the order of how things are drawn so now the order is: areas, grid lines and X/Y axis labels, bars, lines/points/plines, rectangle around chart, data point labels, chart title/X/Y labels, and finally the legends. |
+|  13 May 2004: | V1.300 - Added support for =type="scatter"=; renamed =type="arealine"= to ="combo"= (arealine is undocumented); renamed =datatype= to =subtype= (datatype is undocumented); added =subtype= options ="point"= and ="pline"=, added new settings =GRIDCOLOR=, =DEFAULTDATA=, =POINTSIZE=; fixed bug with how the number of grids were drawn |
+|  17 Oct 2003: | V1.201 - Fix boundary cases with =semilog= scale |
+|  16 Oct 2003: | V1.200 - Add new options of _scale_ and _ytics_. |
+|  16 Jun 2003: | V1.100 - Add support for reversed tables (R999..R1), add new options of _xaxisangle_, _numxgrids_, and _defaultdata_, and allow sparse data. |
+|  7 Oct 2002: | V1.003 - Improved performance, fixed bugs with color allocation, auto-legend placement and parsing of numbers in tables. Also bumped the upper value when numbers switch from decimal format to engineering format |
 |  13 Sept 2002: | V1.002 - Add support for better placement of legends so they don't overlap, add auto ymin/ymax determination if not specified, add =bgcolor= and =numygrids= options |
 |  27 Jun 2002: | V1.001 - Data range specified is clipped to actual table size; more forgiving data parsing by extracting first numeral from a table cell, e.g. extract =25= from =&lt;u&gt;25%&lt;/u&gt;= |
 |  20 Jun 2002: | Initial version (V1.000) |
+|  TWiki dependencies: | $TWiki::Plugins::VERSION 1.1, TWiki:Plugins.SetGetPlugin |
 |  Dependencies: | gd (see http://www.libgd.org/) |
 |  CPAN Dependencies | CPAN:GD, CPAN:POSIX |
 |  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 96%, %SYSTEMWEB%.FormattedSearch 97%, ChartPlugin 69% |

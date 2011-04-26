@@ -53,33 +53,33 @@ sub new {
     return $this;
 }
 
-sub getNumberOfTables { my ($this) = @_; return $$this{NUM_TABLES}; }
+sub getNumberOfTables {my ($this) = @_; return $$this{NUM_TABLES};}
 
 # Check to make sure that the specified table (either by name or number)
 # exists.
 sub checkTableExists {
     my ($this, $tableName) = @_;
-    return 1 if defined( $$this{"TABLE_$tableName"} );
+    return 1 if defined($$this{"TABLE_$tableName"});
     return 0;
 }
 
 sub getTable {
     my ($this, $tableName) = @_;
     my $table = $$this{"TABLE_$tableName"};
-    return @$table if defined( $table );
+    return @$table if defined($table);
     return ();
 }
 
 sub getNumRowsInTable {
-    my( $this, $tableName ) = @_;
+    my ($this, $tableName) = @_;
     my $table = $$this{"TABLE_$tableName"};
     my $nRows = 0;
-    $nRows = @$table if defined( $table );
+    $nRows = @$table if defined($table);
     return $nRows;
 }
 
 sub getNumColsInTable {
-    my( $this, $tableName ) = @_;
+    my ($this, $tableName) = @_;
     my $nCols = $$this{"NCOLS_$tableName"} || 0;
     return $nCols;
 }
@@ -87,7 +87,7 @@ sub getNumColsInTable {
 # Parse a spreadsheet-style range specification to get an array
 # of normalised data ranges
 sub getTableRanges {
-    my( $this, $tableName, $str ) = @_;
+    my ($this, $tableName, $str) = @_;
 
     my @sets = ();
     foreach my $dataSet (split(/\s*,\s*/, $str)) {
@@ -99,32 +99,38 @@ sub getTableRanges {
                 my $r2 = $4 ? ($4 - 1) : $r1;
                 my $c2 = $5 ? ($5 - 1) : $c1;
                 # trim range to actual table size
-                my $maxRow = $this->getNumRowsInTable( $tableName ) - 1;
-                my $maxCol = $this->getNumColsInTable( $tableName ) - 1;
-                $r1 = $maxRow if( $r1 > $maxRow );
-                $c1 = $maxCol if( $c1 > $maxCol );
-                $r2 = $maxRow if( $r2 > $maxRow );
-                $c2 = $maxCol if( $c2 > $maxCol );
-                push(@set,
-                     { top => $r1, left => $c1, bottom => $r2, right => $c2 });
+                my $maxRow = $this->getNumRowsInTable($tableName) - 1;
+                my $maxCol = $this->getNumColsInTable($tableName) - 1;
+                $r1 = $maxRow if ($r1 > $maxRow);
+                $c1 = $maxCol if ($c1 > $maxCol);
+                $r2 = $maxRow if ($r2 > $maxRow);
+                $c2 = $maxCol if ($c2 > $maxCol);
+		#<<<
+                push(@set, {
+		    startRow	=> $r1,
+		    startCol	=> $c1,
+		    endRow	=> $r2,
+		    endCol	=> $c2}
+		);
+		#>>>
             }
-        }
+        } ## end foreach my $range (split(/\s*\+\s*/...))
         push(@sets, \@set) if scalar(@set);
-    }
+    } ## end foreach my $dataSet (split(...))
     return @sets;
-}
+} ## end sub getTableRanges
 
 # This routine is only intended for debug purposes.  All it does is to
 # output the contents of the table object to the TWiki debug.txt file.
 sub getTableInfo {
     my ($this) = @_;
 
-    foreach my $table (1..$this->getNumberOfTables()) {
+    foreach my $table (1 .. $this->getNumberOfTables()) {
         my @t = $this->getTable($table);
-        &TWiki::Func::writeDebug( "- TWiki::Plugins::ChartPlugin::TABLE[$table][@t]");
+        &TWiki::Func::writeDebug("- TWiki::Plugins::ChartPlugin::TABLE[$table][@t]");
         foreach my $row (@t) {
             my @col = @$row;
-            &TWiki::Func::writeDebug( "- TWiki::Plugins::ChartPlugin::ROW[$row][@col]");
+            &TWiki::Func::writeDebug("- TWiki::Plugins::ChartPlugin::ROW[$row][@col]");
         }
     }
 }
@@ -141,46 +147,46 @@ sub getTableInfo {
 # in the array represents the second table found on the topic page, etc.
 sub _parseOutTables {
     my ($this, $topic) = @_;
-    my $tableNum = 1;		# Index in the same way users will ref tables
-    my $tableName = "";		# If a named table.
-    my @tableMatrix;            # Currently parsed table.
-    my $nCols = 0;              # Number of columns in current table
+    my $tableNum  = 1;     # Index in the same way users will ref tables
+    my $tableName = "";    # If a named table.
+    my @tableMatrix;       # Currently parsed table.
+    my $nCols = 0;         # Number of columns in current table
 
-    my $result = "";
-    my $insidePRE = 0;
+    my $result      = "";
+    my $insidePRE   = 0;
     my $insideTABLE = 0;
-    my $line = "";
-    my @row = ();
+    my $line        = "";
+    my @row         = ();
 
     $topic =~ s/\r//go;
-    $topic =~ s/\\\n//go;  # Join lines ending in "\"
-    $topic .= "\n-\n";     # Item6355: Add newline at end to support table at very end of topic
-    foreach( split( /\n/, $topic ) ) {
+    $topic =~ s/\\\n//go;    # Join lines ending in "\"
+    $topic .= "\n-\n";       # Item6355: Add newline at end to support table at very end of topic
+    foreach (split(/\n/, $topic)) {
 
         # change state:
-        m|<pre>|i       && ( $insidePRE = 1 );
-        m|<verbatim>|i  && ( $insidePRE = 1 );
-        m|</pre>|i      && ( $insidePRE = 0 );
-        m|</verbatim>|i && ( $insidePRE = 0 );
+        m|<pre>|i       && ($insidePRE = 1);
+        m|<verbatim>|i  && ($insidePRE = 1);
+        m|</pre>|i      && ($insidePRE = 0);
+        m|</verbatim>|i && ($insidePRE = 0);
 
-        if( ! ( $insidePRE ) ) {
+        if (! ($insidePRE)) {
 
-            if( /%TABLE{.*name="(.*?)".*}%/) {
+            if (/%TABLE{.*name="(.*?)".*}%/) {
                 $tableName = $1;
             }
-            if( /^\s*\|.*\|\s*$/ ) {
+            if (/^\s*\|.*\|\s*$/) {
                 # inside | table |
                 $insideTABLE = 1;
-                $line = $_;
-                $line =~ s/^(\s*\|)(.*)\|\s*$/$2/o;	# Remove starting '|'
-                @row  = split( /\|/o, $line, -1 );
+                $line        = $_;
+                $line =~ s/^(\s*\|)(.*)\|\s*$/$2/o;    # Remove starting '|'
+                @row = split(/\|/o, $line, -1);
                 _trim(\@row);
-                push (@tableMatrix, [ @row ]);
-                $nCols = @row if( @row > $nCols );
+                push(@tableMatrix, [@row]);
+                $nCols = @row if (@row > $nCols);
 
             } else {
                 # outside | table |
-                if( $insideTABLE ) {
+                if ($insideTABLE) {
                     # We were inside a table and are now outside of it so
                     # save the table info into the Table object.
                     $insideTABLE = 0;
@@ -189,29 +195,32 @@ sub _parseOutTables {
                         $$this{"TABLE_$tableNum"} = [@tableMatrix];
                         $$this{"NCOLS_$tableNum"} = $nCols;
                         # Deal with a 'named' table also.
-                        if( $tableName ) {
+                        if ($tableName) {
                             $$this{"TABLE_$tableName"} = [@tableMatrix];
                             $$this{"NCOLS_$tableName"} = $nCols;
                         }
                         $tableNum++;
                         $tableName = "";
                     }
-                    undef @tableMatrix;  # reset table matrix
+                    undef @tableMatrix;    # reset table matrix
                     $nCols = 0;
-                }
-            }
-        }
+                } ## end if ($insideTABLE)
+            } ## end else [ if (/^\s*\|.*\|\s*$/) ]
+        } ## end if (! ($insidePRE))
         $result .= "$_\n";
-    }
+    } ## end foreach (split(/\n/, $topic...))
     $$this{NUM_TABLES} = $tableNum;
-}
+} ## end sub _parseOutTables
 
-# Trim any leading and trailing white space and/or '*'.
+# Trim any leading and trailing white space, any '*' header markers, 
+# HTML tags, and TWiki links.
 sub _trim {
     my ($totrim) = @_;
     for my $element (@$totrim) {
-        $element =~ s/^[\s\*]+//;	# Strip of leading white/*
-        $element =~ s/[\s\*]+$//;	# Strip of trailing white/*
+        $element =~ s/\[\[.*?\]\[(.*?)\]\]/$1/g;      # Strip out TWiki links
+        $element =~ s/^[\s\*]+//;    # Strip of leading white/*
+        $element =~ s/[\s\*]+$//;    # Strip of trailing white/*
+        $element =~ s/<.*?>//g;      # Strip out all HTML tags
     }
 }
 
@@ -231,43 +240,57 @@ sub getData {
     my @selectedTable = $this->getTable($tableName);
     my @ranges = $this->getTableRanges($tableName, $spreadSheetSyntax);
 
-    my @rows = ();
+    my @rows    = ();
     my $rowbase = 0;
     # For each dataset
     foreach my $set (@ranges) {
-        my $rh = 0; # Height of this dataset, in rows
+        my $rh = 0;    # Height of this dataset, in rows
 
         # For each range within the dataset
         foreach my $range (@$set) {
             if ($transpose) {
-                my $rs = abs($range->{right} - $range->{left}) + 1;
+                my $rs = abs($range->{endCol} - $range->{startCol}) + 1;
                 $rh = $rs if ($rs > $rh);
-                for my $c ($range->{left}..$range->{right}) {
-                    for my $r ($range->{top}..$range->{bottom}) {
+		my $startCol   = $range->{startCol};
+		my $endCol     = $range->{endCol};
+		my $nextColInc = ($startCol <= $endCol) ? 1 : -1;
+		my $newColIndex = 0;
+		for (my $c = $startCol; $c != $endCol + $nextColInc; $c = $c + $nextColInc) {
+		    my $startRow   = $range->{startRow};
+		    my $endRow     = $range->{endRow};
+		    my $nextRowInc = ($startRow <= $endRow) ? 1 : -1;
+		    for (my $r = $startRow; $r != $endRow + $nextRowInc; $r = $r + $nextRowInc) {
                         my $value = $selectedTable[$r][$c];
                         if (defined $value) {
-                            push ( @{$rows[$rowbase + $c - $range->{left}]},
-                                   $selectedTable[$r][$c] );
+                            push(@{$rows[$rowbase + $newColIndex]}, $value);
                         }
                     }
+		    $newColIndex++;
                 }
             } else {
-                my $rs = abs($range->{bottom} - $range->{top}) + 1;
+                my $rs = abs($range->{endRow} - $range->{startRow}) + 1;
                 $rh = $rs if ($rs > $rh);
-                for my $r ($range->{top}..$range->{bottom}) {
-                    for my $c ($range->{left}..$range->{right}) {
+		my $startRow   = $range->{startRow};
+		my $endRow     = $range->{endRow};
+		my $nextRowInc = ($startRow <= $endRow) ? 1 : -1;
+		my $newRowIndex = 0;
+		for (my $r = $startRow; $r != $endRow + $nextRowInc; $r = $r + $nextRowInc) {
+		    my $startCol   = $range->{startCol};
+		    my $endCol     = $range->{endCol};
+		    my $nextColInc = ($startCol <= $endCol) ? 1 : -1;
+		    for (my $c = $startCol; $c != $endCol + $nextColInc; $c = $c + $nextColInc) {
                         my $value = $selectedTable[$r][$c];
                         if (defined $value) {
-                            push ( @{$rows[$rowbase + $r - $range->{top}]},
-                                   $selectedTable[$r][$c] );
+                            push(@{$rows[$rowbase + $newRowIndex]}, $value);
                         }
                     }
+		$newRowIndex++;
                 }
             }
-        }
-        # Start the next dataset on a new row
+        } ## end foreach my $range (@$set)
+            # Start the next dataset on a new row
         $rowbase += $rh;
-    }
+    } ## end foreach my $set (@ranges)
 
     # Remove empty rows
     my @result;
@@ -276,7 +299,7 @@ sub getData {
     }
 
     return @result;
-}
+} ## end sub getData
 
 # Transpose an array
 sub transpose {
@@ -291,26 +314,26 @@ sub transpose {
     return @b;
 }
 
-sub max { $_[0] > $_[1] ? $_[0] : $_[1] }
+sub max {$_[0] > $_[1] ? $_[0] : $_[1]}
 
 # Given a range of TWiki table data (in SpreadSheetPlugin format), return
 # an array containing the number of rows/columns specified by the range.
 sub getRowColumnCount {
     my ($this, $tableName, $spreadSheetSyntax) = @_;
     my @ranges = $this->getTableRanges($tableName, $spreadSheetSyntax);
-    my $rows = 0;
-    my $cols = 0;
+    my $rows   = 0;
+    my $cols   = 0;
     foreach my $set (@ranges) {
         my $r = 0;
         my $c = 0;
         foreach my $range (@$set) {
-            $r = max($r, abs($range->{bottom} - $range->{top}) + 1);
-            $c += abs($range->{right} - $range->{left}) + 1;
+            $r = max($r, abs($range->{endRow} - $range->{startRow}) + 1);
+            $c += abs($range->{endCol} - $range->{startCol}) + 1;
         }
         $rows += $r;
         $cols = $c if $c > $cols;
     }
     return ($rows, $cols);
-}
+} ## end sub getRowColumnCount
 
 1;

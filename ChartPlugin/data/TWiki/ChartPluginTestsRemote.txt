@@ -4,6 +4,7 @@
 
 This topic just contains two tables which are referenced from the ChartPluginTests topic.  To distinguish the data on this page from other data, the *actual* values have been increased by 0.51 and 0.52 to denote table 1 and table 2 respectively. 
 
+%TABLE{name="tableRemote1"}%
 | *Record Number* | *Time Period* | *Minimum Value* | *Acceptable Value* | *Target Value* | *Exceptional Value* | *Actual Value* | *Comment* |
 | 1 | Start | 0 | 50 | 70 | 90 | 39.51 | initial measure |
 | 2 | FY03-Q1 | 0 | 35 | 75 | 95 | 55.51 |  |
@@ -12,6 +13,7 @@ This topic just contains two tables which are referenced from the ChartPluginTes
 | 5 | FY03-Q4 | 0 | 40 | 80 | 100 | 72.51 |  |
 | 6 | FY04-Q1 | 0 | 40 | 80 | 100 | 68.51 |  |
 
+%TABLE{name="tableRemote2"}%
 | *Remote:Record Number* |1|2|3|5|5|6|
 | *Remote:Time Period* | Start | FY03-Q1 | FY03-Q2 | FY03-Q3 | FY03-Q4 | FY04-Q1 |
 | *Remote:Minimum Value* | 0 | 0 | 0 | 0 | 0 | 0 |

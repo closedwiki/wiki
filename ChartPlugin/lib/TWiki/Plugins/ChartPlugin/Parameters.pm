@@ -36,17 +36,17 @@
 package TWiki::Plugins::ChartPlugin::Parameters;
 
 use Exporter;
-@ISA = ();
+use Data::Dumper;
+@ISA    = ();
 @EXPORT = qw(
     getParameter
     getAllParameters
     printParameters
-);
+    );
 
 use strict;
 
-sub new
-{
+sub new {
     my ($class, $parameters) = @_;
     my $this = {};
     bless $this, $class;
@@ -54,59 +54,63 @@ sub new
     return $this;
 }
 
-sub _parseParameters
-{
-    my ( $this, $parameterList ) = @_;
+sub _parseParameters {
+    my ($this, $parameterList) = @_;
     my %parameters;
-    my $length = length ($parameterList);
-    my ( $char, @field );
+    my $length = length($parameterList);
+    my ($char, @field);
 
     # First break the parameterList into individual parameters
-    my $in_quote = 0;
-    my $field = "";
-    my $index = 0;
+    my $in_quote = "";
+    my $field    = "";
+    my $index    = 0;
+    my $escape   = 0;
     for (my $i = 0; $i < $length; $i++) {
-	# Get character
-	$char = substr( $parameterList, $i, 1 );
-	if( $char eq '"' ) {
-	    if( $in_quote ) {	# If a " and already in a quote, then the end
-		$in_quote = 0;
-	    } else {		# Beginning of quoted field
-		$in_quote = 1;
-	    }
+        # Get character
+        $char = substr($parameterList, $i, 1);
+	if ($char eq "\\") {
+	    $escape = 1;
 	} else {
-	    if( $char =~ /[,\s]+/ ) {	# A field separator only if not in quote
-		if( $in_quote ) {
-		    $field .= $char;
-		} else {
-		    $field[$index++] = $field if( $field ne "" );
-		    $field = "";
-		}
+	    # If the beginning of a quote
+	    if (($char eq "'" || $char eq '"') && $in_quote eq "") {
+		$in_quote = $char;
+	    } elsif ($char eq "'" && $in_quote eq "'" && ! $escape) {
+		$in_quote = "";
+	    } elsif ($char eq '"' && $in_quote eq '"' && ! $escape) {
+		$in_quote = "";
 	    } else {
-		$field .= $char;
+		if ($char =~ /[,\s]+/) {    # A field separator only if not in quote
+		    if ($in_quote ne "") {
+			$field .= $char;
+		    } else {
+			$field[$index++] = $field if ($field ne "");
+			$field = "";
+		    }
+		} else {
+		    $field .= $char;
+		}
 	    }
+	    $escape = 0;
 	}
-    }
+    } ## end for (my $i = 0; $i < $length...)
     # Deal with last field
-    $field[$index++] = $field if( $field ne "" );
+    $field[$index++] = $field if ($field ne "");
 
     # Now break each parameter into a key=value pair.
     for (my $i = 0; $i < $index; $i++) {
-	my ( $key, $value ) = split(/=/, $field[$i]);
-	#print "field[$i] = [$field[$i]]\n";
-	$parameters{$key} = $value;
+        my ($key, $value) = split(/=/, $field[$i], 2);
+        #print "field[$i] = [$field[$i]]\n";
+        $parameters{$key} = $value;
     }
     $this->_setParameters(\%parameters);
-}
+} ## end sub _parseParameters
 
-sub _setParameters
-{
+sub _setParameters {
     my ($this, $parameters) = @_;
     $$this{"PARAMETERS"} = $parameters;
 }
 
-sub getAllParameters
-{
+sub getAllParameters {
     my ($this) = @_;
     return %{$$this{"PARAMETERS"}};
 }
@@ -115,23 +119,23 @@ sub getAllParameters
 # parameter does not exist, then return the specified default value.  The
 # parameter is deleted from the list of specified parameters allowing the
 # code to determine what parameters remain and were not requested.
-sub getParameter
-{
-    my ( $this, $var_name, $default ) = @_;
+sub getParameter {
+    my ($this, $var_name, $default) = @_;
     my $parametersRef = $$this{"PARAMETERS"};
-    my $value = delete $$parametersRef{$var_name};		# Delete since already parsed.
-    if( defined $value && $value ne "" ) {
-	return $value;
+    my $value         = delete $$parametersRef{$var_name};    # Delete since already parsed.
+    if (defined $value && $value ne "") {
+        return $value;
     } else {
-	return $default;
+        return $default;
     }
 }
+
 sub printParameters {
     my ($this) = @_;
     my %parameters = $this->getAllParameters();
     for my $key (keys %parameters) {
-	my $val = $parameters{$key};
-	&TWiki::Func::writeDebug( "- TWiki::Plugins::ChartPlugin::Parameters::[$key]=[$val]");
+        my $val = $parameters{$key};
+        &TWiki::Func::writeDebug("- TWiki::Plugins::ChartPlugin::Parameters::[$key]=[$val]");
     }
 }
 
