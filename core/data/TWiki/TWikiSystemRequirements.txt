@@ -35,7 +35,7 @@ The following Perl modules are used by TWiki:
 | File::Copy | &gt;=2.06 |
 | File::Find | &gt;=1.05 |
 | File::Spec | &gt;=3.05 |
-| File::Temp | (included with perl 5.6 and later) |
+| File::Temp | &gt;=0.18 (included with perl 5.6 and later) |
 | !FileHandle | &gt;=2.01 |
 | IO::File | &gt;=1.10 |
 | Text::Diff (included in TWiki distribution) | |
