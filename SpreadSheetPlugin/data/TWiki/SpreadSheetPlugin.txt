@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1302327949" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1303800036" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -78,13 +78,21 @@ Conventions for Syntax:
 ---+++ AND( list ) -- logical AND of a list
    * Syntax: ==$AND( list )==
    * Example: ==%<nop>CALC{"$AND(1, 0, 1)"}%== returns ==0==
-   * Related: =[[#FuncNOT][$NOT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncOR][$OR()]]=, =[[#FuncWHILE][$WHILE()]]=
+   * Related: =[[#FuncNOT][$NOT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncOR][$OR()]]=, =[[#FuncWHILE][$WHILE()]]=, =[[#FuncXOR][$XOR()]]=
 
 #FuncAVERAGE
 ---+++ AVERAGE( list ) -- average of a list or a range of cells
    * Syntax: ==$AVERAGE( list )==
    * Example: ==%<nop>CALC{"$AVERAGE(R2:C5..R$ROW(-1):C5)"}%== returns the average of column 5, excluding the title row
    * Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=
+
+#FuncBITXOR
+---+++ BITXOR( text ) -- bit-wise XOR of text
+   * Each bit of each character of =text= is flipped, useful to obfuscate text. Bit-XORing text twice will restore the original text.
+   * Syntax: ==$BITXOR( text )==
+   * Example: ==%<nop>CALC{"$BITXOR(A123)"}%== returns ==&Yuml;&Icirc;&Iacute;&Igrave;==
+   * Example: ==%<nop>CALC{"$BITXOR($BITXOR(anything))"}%== returns ==anything==
+   * Related: =[[#FuncHEXDECODE][$HEXDECODE()]]=, =[[#FuncHEXENCODE][$HEXENCODE()]]=, =[[#FuncLEFTTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=, =[[#FuncXOR][$XOR()]]=
 
 #FuncCHAR
 ---+++ CHAR( number ) -- ASCII character represented by number
@@ -269,6 +277,20 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$GET(my_total)"}%== returns the value of the =my_total= variable
    * Related: =[[#FuncEXEC][$EXEC()]]=, =[[#FuncNOEXEC][$NOEXEC()]]=, =[[#FuncSET][$SET()]]=, =[[#FuncSETIFEMPTY][$SETIFEMPTY()]]=, =[[#FuncSETM][$SETM()]]=, =[[#FuncWHILE][$WHILE()]]=, TWiki:Plugins.SetGetPlugin
 
+#FuncHEXDECODE
+---+++ HEXDECODE( hexcode ) -- convert hexadecimal code to string
+   * Decode a hexadecimal string, typically encoded with $HEXENCODE().
+   * Syntax: ==$HEXDECODE( hexcode )==
+   * Example: ==%<nop>CALC{"$HEXDECODE(687474703A2F2F7477696B692E6F72672F)"}%== returns ==http://twiki.org/==
+   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncHEXENCODE][$HEXENCODE()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+
+#FuncHEXENCODE
+---+++ HEXENCODE( text ) -- encode text into hexadecimal code
+   * Each character of =text= is encoded into two hexadecimal numbers.
+   * Syntax: ==$HEXENCODE( text )==
+   * Example: ==%<nop>CALC{"$HEXENCODE(<nop>http://twiki.org/)"}%== returns ==687474703A2F2F7477696B692E6F72672F==
+   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncHEXDECODE][$HEXDECODE()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+
 #FuncIF
 ---+++ IF( condition, value if true, value if 0 ) -- return a value based on a condition
    * The condition can be a number (where ==0== means condition not met), or two numbers with a comparison operator ==&lt;== (less than), ==&lt;=<nop>== (less than or equal), ==<nop>==<nop>== (equal), ==<nop>!=<nop>== (not equal), ==&gt;=<nop>== (greater than or equal), ==&gt;== (greater than).
@@ -308,7 +330,7 @@ Conventions for Syntax:
    * Syntax: ==$LEFTSTRING( text, _num_ )==
    * Example: ==%<nop>CALC{"$LEFTSTRING(abcdefg)"}%== returns ==a==
    * Example: ==%<nop>CALC{"$LEFTSTRING(abcdefg, 5)"}%== returns ==abcde==
-   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncLENGTH
 ---+++ LENGTH( text ) -- length of text in bytes
@@ -467,7 +489,7 @@ Conventions for Syntax:
    * Returns 0 if ==num== is not zero, 1 if zero
    * Syntax: ==$NOT( num )==
    * Example: ==%<nop>CALC{"$NOT(0)"}%== returns ==1==
-   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncOR][$OR()]]=, =[[#FuncWHILE][$WHILE()]]=
+   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncOR][$OR()]]=, =[[#FuncWHILE][$WHILE()]]=, =[[#FuncXOR][$XOR()]]=
 
 #FuncODD
 ---+++ ODD( num ) -- test for odd number
@@ -479,7 +501,7 @@ Conventions for Syntax:
 ---+++ OR( list ) -- logical OR of a list
    * Syntax: ==$OR( list )==
    * Example: ==%<nop>CALC{"$OR(1, 0, 1)"}%== returns ==1==
-   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncWHILE][$WHILE()]]=
+   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncWHILE][$WHILE()]]=, =[[#FuncXOR][$XOR()]]=
 
 #FuncPERCENTILE
 ---+++ PERCENTILE( num, list ) -- percentile of a list or range of cells
@@ -531,7 +553,7 @@ Conventions for Syntax:
    * Replace =num= number of characters of text string =text=, starting at =start=, with new text =new=. Starting position is 1; use a negative =start= to count from the end of the text
    * Syntax: ==$REPLACE( text, start, num, new )==
    * Example: ==%<nop>CALC{"$REPLACE(abcdefghijk, 6, 5, *)"}%== returns ==abcde*k==
-   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncRIGHT
 ---+++ RIGHT( ) -- address range of cells to the right of the current cell
@@ -545,7 +567,7 @@ Conventions for Syntax:
    * Syntax: ==$RIGHTSTRING( text, _num_ )==
    * Example: ==%<nop>CALC{"$RIGHTSTRING(abcdefg)"}%== returns ==g==
    * Example: ==%<nop>CALC{"$RIGHTSTRING(abcdefg, 5)"}%== returns ==cdefg==
-   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncROUND
 ---+++ ROUND( formula, digits ) -- round a number
@@ -624,7 +646,7 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$SUBSTITUTE(Q2-2002, 2, 3)"}%== returns ==Q3-3003==
    * Example: ==%<nop>CALC{"$SUBSTITUTE(Q2-2002,2, 3, 3)"}%== returns ==Q2-2003==
    * Example: ==%<nop>CALC{"$SUBSTITUTE(abc123def, [0-9], 9, , r)"}%== returns ==abc999def==
-   * Related: =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncHEXDECODE][$HEXDECODE()]]=, =[[#FuncHEXENCODE][$HEXENCODE()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncSUBSTRING
 ---+++ SUBSTRING( text, start, num ) -- extract a substring out of a text string
@@ -664,7 +686,7 @@ Conventions for Syntax:
    * Syntax: ==$TRANSLATE( text, from, to )==
    * Example: ==%<nop>CALC{"$TRANSLATE(boom,bm,cl)"}%== returns ==cool==
    * Example: ==%<nop>CALC{"$TRANSLATE(one, two,$comma,;)"}%== returns ==one; two==
-   * Related: =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=
+   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncHEXDECODE][$HEXDECODE()]]=, =[[#FuncHEXENCODE][$HEXENCODE()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=
 
 #FuncTIME
 ---+++ TIME( text ) -- convert a date string into a serialized date number
@@ -733,6 +755,16 @@ Conventions for Syntax:
    * Syntax: ==$WORKINGDAYS( serial_1, serial_2 )==
    * Example: ==%<nop>CALC{"$WORKINGDAYS($TIME(2004/07/15), $TIME(2004/08/03))"}%== returns ==13==
    * Related: =[[#FuncSUMDAYS][$SUMDAYS()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=
+
+#FuncXOR
+---+++ XOR( list ) -- logical XOR of a list
+   * Syntax: ==$XOR( list )==
+   * Example: ==%<nop>CALC{"$XOR(0, 0)"}%== returns ==0==
+   * Example: ==%<nop>CALC{"$XOR(0, 1)"}%== returns ==1==
+   * Example: ==%<nop>CALC{"$XOR(1, 0)"}%== returns ==1==
+   * Example: ==%<nop>CALC{"$XOR(1, 1)"}%== returns ==0==
+   * Example: ==%<nop>CALC{"$XOR(1, 0, 1)"}%== returns ==0==
+   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncOR][$OR()]]=, =[[#FuncWHILE][$WHILE()]]=
 
 ---++ FAQ
 
@@ -827,16 +859,17 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Copyright: | &copy; 2001-2011, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
+|  Copyright: | &copy; 2001-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]<br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | %$VERSION% |
+|  Plugin Version: | 2011-04-25 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2011-04-08: | TWikibug:Item6681: Added WHILE() |
-|  2011-04-06: | TWikibug:Item6679: Fixed small issue with LISTRAND, where last item only got 50% of fair share to get picked |
+|  2011-04-25: | TWikibug:Item6681: Added $BITXOR(), $HEXDECODE(), $HEXENCODE(), $XOR() |
+|  2011-04-08: | TWikibug:Item6681: Added $WHILE() |
+|  2011-04-06: | TWikibug:Item6679: Fixed small issue with $LISTRAND(), where last item only got 50% of fair share to get picked |
 |  2011-03-25: | TWikibug:Item6669: Added $LISTNONEMPTY() |
 |  2011-03-24: | TWikibug:Item6668: Fixed $LIST() not flattening a list in a cell<br /> TWikibug:Item6667: Fixed $RIGHT() having wrong result due to incorrect start cell |
 |  2011-03-22: | TWikibug:Item6666: Added $SPLIT(); renamed $nop separator token of $LISTJOIN() to $empty (keeping $nop as undocumented feature) |
-|  2010-08-27: | TWikibug:Item6526: Added ISO 8601 week number to FORMATTIME, contributed by TWiki:Main.PeterPayne |
+|  2010-08-27: | TWikibug:Item6526: Added ISO 8601 week number to $FORMATTIME(), contributed by TWiki:Main.PeterPayne |
 |  2010-08-04: | TWikibug:Item6537: Fixed for $EVAL(2+08) returning "illegal octal digit" error instead of 10 |
 |  2010-07-17: | TWikibug:Item6525: Added $n token to TRANSLATE for newline |
 |  2010-05-27: | TWikibug:Item6506: Document delayed evaluation of CALC in included topics |
