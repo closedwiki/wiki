@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1303624164" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1303860917" format="1.1" version="$Rev$"}%
 ---+ TWiki Site Statistics
 %STARTSECTION{type="templateonly"}%
  __NOTE:__ This is a template topic, do not change. [[%SCRIPTURL{"statistics"}%/%USERSWEB%/SiteStatistics][Update the site statistics]].
@@ -6,35 +6,35 @@
 <div style="%IF{ "context ChartPluginEnabled AND (%SEARCH{ "^\| 2[0-9]" type="regex" topic="%TOPIC%" nonoise="on" multiple="on" reverse="on" format="1" separator="0" }%0 >= 10100)" then="display: block" else="display: none" }%">
 <table border="0" cellpadding="5"><tr>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch2" data="R3:C2..R122:C2" title="Number of Webs" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch2" data="R122:C2..R3:C2" title="Number of Webs" }%</td>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch3" data="R3:C3..R122:C3" title="Number of Topics" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch3" data="R122:C3..R3:C3" title="Number of Topics" }%</td>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch4" data="R3:C4..R122:C4" title="Number of Attachments" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch4" data="R122:C4..R3:C4" title="Number of Attachments" }%</td>
 </tr><tr>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch5" data="R3:C5..R122:C5" title="Topic Views" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch5" data="R122:C5..R3:C5" title="Topic Views" }%</td>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch6" data="R3:C6..R122:C6" title="Topic Updates" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch6" data="R122:C6..R3:C6" title="Topic Updates" }%</td>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch7" data="R3:C7..R122:C7" title="File Uploads" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch7" data="R122:C7..R3:C7" title="File Uploads" }%</td>
 </tr><tr>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch8" data="R3:C8..R122:C8" title="Data Size in MB" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch8" data="R122:C8..R3:C8" title="Data Size in MB" }%</td>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch9" data="R3:C9..R122:C9" title="Pub Size in MB" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch9" data="R122:C9..R3:C9" title="Pub Size in MB" }%</td>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch10" data="R3:C10..R122:C10" ymax="100" title="% Disk Use" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch10" data="R122:C10..R3:C10" ymax="100" title="% Disk Use" }%</td>
 </tr><tr>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch11" data="R3:C11..R122:C11" title="Registered Users" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch11" data="R122:C11..R3:C11" title="Registered Users" }%</td>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch12" data="R3:C12..R122:C12" title="TWiki Groups" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch12" data="R122:C12..R3:C12" title="TWiki Groups" }%</td>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch13" data="R3:C13..R122:C13" title="Installed Plugins" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch13" data="R122:C13..R3:C13" title="Installed Plugins" }%</td>
 </tr></table>
 <!--
-   * Set COMMON_CHART_PARAMS = type="area" table="stats" xaxis="R3:C1..R122:C1" xreversed="on" ymin="0" yaxis="on" xaxisangle="90" xgrid="off" colors="#f2563a, #eff462" bgcolor="#E7E7E7" width="330" height="170"
+   * Set COMMON_CHART_PARAMS = type="area" table="stats" xaxis="R3:C1..R122:C1" ymin="0" yaxis="on" xaxisangle="90" xgrid="off" colors="#f2563a, #eff462" bgcolor="#E7E7E7" width="330" height="170"
 -->
 </div>
 
@@ -63,7 +63,7 @@ __Legend:__
 __Notes:__
    * Do not edit this topic, it is updated automatically. [[%SCRIPTURL{"statistics"}%/%USERSWEB%/SiteStatistics][Update now]].
    * When updating statistics of previous months, the following items cannot be measured and will be set to 0: Webs, Topics, Users, Data Size, Pub Size, Disk Use, Plugins.
-   * Charts are automatically shown on top if the %IF{ "context ChartPluginEnabled" then="%SYSTEMWEB%.ChartPlugin" else="TWiki:Plugins.ChartPlugin" }% is installed and enabled (%IF{ "context ChartPluginEnabled" then="it is" else="it is not" }%) and if there are at least two month of statistics data.
+   * Charts are automatically shown on top if the %IF{ "context ChartPluginEnabled" then="%SYSTEMWEB%.ChartPlugin" else="TWiki:Plugins.ChartPlugin" }% is installed and enabled (%IF{ "context ChartPluginEnabled" then="it is" else="it is not" }%) and if there are at least two month of statistics data. !ChartPlugin version 2011-04-26 or later is required.
    * [[%SYSTEMWEB%.TWikiSiteTools#WebStatistics][TWikiSiteTools]] explains how to enable automatic updates of the statistics pages.
 
 __Web Statistics Topics:__ %SEARCH{ "WebStatistics" scope="topic" web="all" topic="WebStatistics" nonoise="on" format="[[$web.$topic][$web]]" separator=", " limit="100" }%
