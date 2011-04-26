@@ -239,7 +239,7 @@ sub _collectLogData {
     # Don't use File::Copy, it does not work with File::Temp older than 0.22
     _copy( $logFile, $tmpFileHandle ) or throw Error::Simple( 'Cannot backup log file: '.$! );
     # Seek to start of temp file
-    $tmpFileHandle->seek( 0, SEEK_SET );
+    $tmpFileHandle->seek( 0, 0 );
 
     # main log file loop, line by line
     while ( my $line = <$tmpFileHandle> ) {
