@@ -1188,7 +1188,11 @@ sub makeChart {
                 my $len             = length($label);
                 my $halfLabelHeight = $this->getFontHeight("xaxis") / 2;
                 my $yLabelLoc       = $yLL + $len * $xAxisFontWidth;
-                $im->stringUp($this->getFont("xaxis"), $xLoc - $halfLabelHeight, $yLabelLoc + 3, $label, $black);
+                my $xPos            = $xLoc - $halfLabelHeight;
+                if ($numBarDataSets) {
+                    $xPos += $chartWidthInPixels / $numDataPoints / 2;
+		}
+                $im->stringUp($this->getFont("xaxis"), $xPos, $yLabelLoc + 3, $label, $black);
             }
             if (($xAxisIndex != 0) && ($xAxisIndex <= $xIndexMax) && $xGrid eq "on") {
                 $im->line($xLoc, $yLL + 2, $xLoc, $yUR - 2, $gridColor);
