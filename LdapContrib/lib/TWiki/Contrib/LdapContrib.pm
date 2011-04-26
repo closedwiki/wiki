@@ -1,4 +1,4 @@
-# Module of TWiki - The Free and Open Source Wiki, http://TWiki.org/
+# Module of TWiki Enterprisez Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2006-2010 Michael Daum http://michaeldaumconsulting.com
 # Portions Copyright (C) 2006 Spanlink Communications
@@ -35,10 +35,10 @@ $RELEASE = '4.30';
 
 ---+++ TWiki::Contrib::LdapContrib
 
-General LDAP services module. This class encapsulates the platform-specific
-means to integrate an LDAP directory service.  Used by TWiki::Users::LdapPasswdUser
+General LDAP services for TWiki. This class encapsulates the TWiki-specific
+means to integrate an LDAP directory service.  Used by TWiki::Users::LdapUser
 for authentication, TWiki::Users::LdapUserMapping for group definitions and
-TWiki:Plugins/LdapNgPlugin to interface general query services.
+TWiki::Plugins::LdapNgPlugin to interface general query services.
 
 ---++++ Typical usage
 <verbatim>

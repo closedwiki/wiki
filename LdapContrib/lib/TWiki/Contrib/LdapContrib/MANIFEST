@@ -1,0 +1,7 @@
+data/TWiki/LdapContrib.txt 0644
+lib/TWiki/Client/LdapApacheLogin.pm 0644
+lib/TWiki/Contrib/LdapContrib/Config.spec 0644
+lib/TWiki/Contrib/LdapContrib.pm 0644
+lib/TWiki/LoginManager/LdapApacheLogin.pm 0644
+lib/TWiki/Users/LdapUserMapping.pm 0644
+lib/TWiki/Users/LdapUser.pm 0644
