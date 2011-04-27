@@ -703,7 +703,7 @@ and that all zero values is charted correctly.
 | Add Y axis lables to above %BR% =%<nop>CHART{%GET{lineTest04}%}%= | %CHART{%GET{lineTest04}%}% |
 | Add =ymin= = 0 to above %BR% =%<nop>CHART{%GET{lineTest05}%}%= | %CHART{%GET{lineTest05}%}% |
 | Add =ymax= = 150 to above %BR% =%<nop>CHART{%GET{lineTest06}%}%= | %CHART{%GET{lineTest06}%}% |
-| Add =ylabel= = "Hello there" to above %BR% =%<nop>CHART{%GET{lineTest07}%}%= | %CHART{%GET{lineTest07}%}% |
+| Add =ylabel= = "Hello there" to above and change =ymax= = 100. %BR% =%<nop>CHART{%GET{lineTest07}%}%= | %CHART{%GET{lineTest07}%}% |
 | Add =numygrids= = "5" to above %BR% =%<nop>CHART{%GET{lineTest08}%}%= | %CHART{%GET{lineTest08}%}% |
 | Change =numygrids= = "2" to above %BR% =%<nop>CHART{%GET{lineTest09}%}%= | %CHART{%GET{lineTest09}%}% |
 | Remove =numygrids= from above and add =xlabel= "Yep, an X label" to above %BR% =%<nop>CHART{%GET{lineTest10}%}%= | %CHART{%GET{lineTest10}%}% |
@@ -888,7 +888,7 @@ and that all zero values is charted correctly.
 | Invalid table number. %BR% =%<nop>CHART{%GET{"errorTest06"}%}%= | <nop>ChartPlugin error: parameter table is not valid table; the specified *table* '999' does not exist | %CHART{%GET{"errorTest06"}%}% |
 | invalid =xaxis= value. %BR% =%<nop>CHART{%GET{"errorTest07"}%}%= | <nop>ChartPlugin error: parameter *xaxis* specifies multiple (6x4) rows and columns | %CHART{%GET{"errorTest07"}%}% |
 | =ymin= == =ymax= such that there is no chart height. %BR% =%<nop>CHART{%GET{"errorTest09"}%}%= | <nop>ChartPlugin error: chart error: name=errorTest09: No Chart height with ymin(10) == ymax(10) | %CHART{%GET{"errorTest09"}%}% |
-| =ymin= > =ymax=. %BR% =%<nop>CHART{%GET{"errorTest10"}%}%= | <nop>ChartPlugin error: chart error: name=errorTest10: Y max (-10) < Y Min (10) |  %CHART{%GET{"errorTest10"}%}% |
+| =ymin= > =ymax=. %BR% =%<nop>CHART{%GET{"errorTest10"}%}%= | <nop>ChartPlugin error: chart error: name=errorTest10: Y max (-10) < Y Min (10) | %CHART{%GET{"errorTest10"}%}% |
 | Only 1 point of data. %BR% =%<nop>CHART{%GET{"errorTest11"}%}%= | <nop>ChartPlugin error: chart error: name=errorTest11: Error: Number of data points needs to be > 1 | %CHART{%GET{"errorTest11"}%}% |
 | Invalid =legend=. %BR% =%<nop>CHART{%GET{"errorTest12"}%}%= | <nop>ChartPlugin error: parameter *legend* contains an invalid value 'R1:C4' since it specifies 1 legends and there are 4 data sets. | %CHART{%GET{"errorTest12"}%}% |
 | =scale=semilog= and data &lt;= 0. %BR% =%<nop>CHART{%GET{"errorTest13"}%}%= | <nop>ChartPlugin error: data (0) &lt;= 0 not valid when scale=semilog | %CHART{%GET{"errorTest13"}%}% |

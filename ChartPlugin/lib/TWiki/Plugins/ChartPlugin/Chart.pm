@@ -1112,6 +1112,7 @@ sub makeChart {
     # Draw the X axis labels and grid lines (if asked for).  To do this we
     # calculate the interval between X axis values to draw based on the
     # user specified number of X axis values to draw.
+    my @xGridIndexes;
     my $barNum = 0;
     if (@xAxis) {
         my $xIndexInc;
@@ -1137,6 +1138,9 @@ sub makeChart {
         my $xaxis              = $xAxisMin;
         my $xAxisDecimalDigits = $this->getNumXDigits;
         for (my $xAxisIndex = 0; $xAxisIndex <= $xIndexMax; $xAxisIndex += $xIndexInc) {
+	    # Keep track of the xAxis indexes that are drawn so if
+	    # datalabel="auto*" then we know where to drawn data labels.
+	    $xGridIndexes[$xAxisIndex] = $xAxisIndex;
             # Calculate what the X axis label will be.  If scatter then
             # compute the value, if not scatter then use the user specified
             # value.
@@ -1201,6 +1205,9 @@ sub makeChart {
                 $im->line($xLoc, $yLL + 2, $xLoc, $yUR - 2, gdStyled);
             }
         } ## end for (my $xAxisIndex = 0...)
+	# Make sure that the max xaxis value is included in the list of
+	# drawn xAxises.
+	$xGridIndexes[$xIndexMax] = $xIndexMax;
     } ## end if (@xAxis)
 
     # 3333333333333333333333333333333333333333333333333333333333333333333333
@@ -1361,9 +1368,19 @@ sub makeChart {
             my $dataLabel = $dataLabels[$dataSet % $numDataLabels];
             my $row       = $data[$dataSet];
             my @row       = @{$data[$dataSet]};
+	    my $auto      = 0;
+	    if ($dataLabel =~ m/^auto(.*)/) {
+		$auto = 1;
+		$dataLabel = "box" if ($1 eq "box");
+	    }
 
             my $color = $allocatedColors[$dataSet];
             for my $xIndex (0 .. ($numDataPoints - 1)) {
+		# If the user specified "auto" or "autobox" for datalabel
+		# for this dataset, then only draw a label if the current
+		# xIndex is one where an xAxis was drawn.
+		next if ($auto && ! defined($xGridIndexes[$xIndex]));
+
                 my $currentYValue = $row[$xIndex];
                 my $drawText      = $currentYValue;
                 if ($scatterChart) {
