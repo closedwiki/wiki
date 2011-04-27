@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1303860917" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1303864929" format="1.1" version="$Rev$"}%
 ---+ TWiki Site Statistics
 %STARTSECTION{type="templateonly"}%
  __NOTE:__ This is a template topic, do not change. [[%SCRIPTURL{"statistics"}%/%USERSWEB%/SiteStatistics][Update the site statistics]].
@@ -34,7 +34,7 @@
 %CHART{ %COMMON_CHART_PARAMS% name="ch13" data="R122:C13..R3:C13" title="Installed Plugins" }%</td>
 </tr></table>
 <!--
-   * Set COMMON_CHART_PARAMS = type="area" table="stats" xaxis="R3:C1..R122:C1" ymin="0" yaxis="on" xaxisangle="90" xgrid="off" colors="#f2563a, #eff462" bgcolor="#E7E7E7" width="330" height="170"
+   * Set COMMON_CHART_PARAMS = type="area" table="stats" xaxis="R122:C1..R3:C1" ymin="0" yaxis="on" xaxisangle="90" xgrid="off" colors="#f2563a, #eff462" bgcolor="#E7E7E7" width="330" height="170"
 -->
 </div>
 
