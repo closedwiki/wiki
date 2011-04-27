@@ -124,7 +124,7 @@ sub eachfile {
             $inPod = 0;
         } elsif ($inPod) {
             return if (!$Config->{smells} && $line =~ /^---\+\s+UNPUBLISHED/);
-            if( $line =~ /---\++\s*(?:UNPUBLISHED\s*)?package\s*(.*)$/) {
+            if( $line =~ /---\++\s*(?:UNPUBLISHED\s*)?[Pp]ackage\s*(.*)$/) {
                 $packageName = $1;
                 $packageName =~ s/\s+//g;
                 $packageSpec = "";
