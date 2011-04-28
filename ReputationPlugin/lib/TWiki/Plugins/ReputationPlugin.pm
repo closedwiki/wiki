@@ -32,16 +32,16 @@ use warnings;
 # something needs to be developed
 use TWiki::Plugins::ReputationPlugin::I18N;
 use TWiki::Func;
-
-# Updated version with DB access
-use BerkeleyDB ;
+use TWiki::Contrib::RatingContrib;
+# Updated version with BerkeleyDB access
+use BerkeleyDB;
 use MLDBM qw(BerkeleyDB::Btree) ;
 
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package.
 # Global variables used in this plugin
 use vars qw($web $topic $user $sanitizedtopic $installWeb $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName  $NO_PREFS_IN_TOPIC $absolute $backlinkmax $LH $workAreaDir
-			$attachUrl $voterreputation $recommendations $topfile $trustfile $topicfile $userfile);
+			$attachUrl $voterreputation $recommendations $topfile $trustfile $topicfile $userfile $commentfile);
 
 # This should always be $Rev: 12445$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -93,11 +93,12 @@ our $smileybuttons=0;
 # Names shouldn't be changed if the plugin has been in use, if you want to change
 # the labels on buttons change buttonstrings
 our %votevalues = ("poor", -2, "negative", -1, "positive", 1, "excellent", 2);
+our %commentvotevalues= ("poor", -2, "negative", -1, "positive", 1);
 our $votenames=join("|",keys %votevalues);
 our $voteRegex = "^[$votenames]";
 our %buttonStrings=("poor",$LH->maketext("poor"),"negative",$LH->maketext("negative"),"positive", $LH->maketext("positive"),"excellent",$LH->maketext("excellent"));
 # "Vote" clutters the interface, should remove from where it's called
-our %actionStrings=("vote",$LH->maketext(""),"remove",$LH->maketext("Remove"));
+our %actionStrings=("vote",$LH->maketext(""),"remove",$LH->maketext("Remove"), "commentvote",$LH->maketext(""), "commentremove",$LH->maketext("Remove"));
 # Weight given to user's own votes
 our $myweight=1;
 our %quotatemplate=("excellent",2,"positive",2,"negative",2, "poor",2);
@@ -129,11 +130,14 @@ sub initPlugin {
         return 0;
     }
 	TWiki::Func::registerTagHandler( 'REPUTATION', \&_REPUTATION, 'context-free' );
+	TWiki::Func::registerTagHandler( 'REPCOMMENT', \&_REPCOMMENT, 'context-free' );
+	TWiki::Func::registerTagHandler( 'REPCOMMENTVOTE', \&_REPCOMMENTVOTE, 'context-free' );
     $workAreaDir = TWiki::Func::getWorkArea($pluginName);
    	$userfile = "$workAreaDir/_users.mldbm";
    	$topfile = "$workAreaDir/_top.mldbm";
    	$topicfile = "$workAreaDir/_topics.mldbm";
    	$trustfile = "$workAreaDir/_trust.mldbm";
+	$commentfile = "$workAreaDir/_comment.mldbm";
     # Set plugin preferences in LocalSite.cfg
     $debug = $TWiki::cfg{Plugins}{ReputationPlugin}{Debug} || 0;
 
@@ -189,7 +193,46 @@ sub initPlugin {
     # Plugin correctly initialized
     return 1;
 }
+sub _REPCOMMENT {
+	my ($session, $params, $thetopic, $theweb) =@_;
+	my $text='';
+	my $twisty=$session->{twisty} || '';
+	my $threshold=$session->{threshold} || 0;
+	my $abusethreshold =$session->{abusethreshold};
+	if (!defined $abusethreshold) {
+	$abusethreshold = -1;
+	}
+	if (!$twisty eq 'on') {
+		$twisty=0;
+	}
+	if (!defined $threshold && !$threshold =~ /^[-+]?[0-9]*\.?[0-9]+$/){
+    	$threshold=0;
+    }
+	$text.=_commentInterface($twisty,$threshold,$abusethreshold);
+	return $text;
+}
+sub _REPCOMMENTVOTE {
+   	my ($session, $params, $thetopic, $theweb) = @_;
+    my $action = $params->{rpaction} || '';
+    my $vote = $params->{vote} || '';
+	my $targetcomment=$params->{target};
+	my $targetuser=$params->{targetuser};
+	my $targetcomment=$params->{target};
+	my $targetuser=$params->{targetuser};
+    my $text = '';
+	if ($action eq 'commentvote') {
 
+		$text = _commentVote($vote,$targetcomment,$targetuser);
+	}
+	elsif ($action eq 'commentremove') {
+		
+		$text = _commentRemove($vote,$targetcomment,$targetuser);
+	}
+    elsif ($action) {
+        $text = "Unrecognized action";
+    }
+	return $text;
+}
 sub _REPUTATION {
    	my ($session, $params, $thetopic, $theweb) = @_;
     my $action = $params->{rpaction} || '';
@@ -203,7 +246,6 @@ sub _REPUTATION {
     elsif ( $action eq "remove" && $access) {
         $text = _REMOVEVOTE($vote);
     }
-    #
     elsif ($action eq "showtopics"){
     	$text = _SHOWTOPICS();
     }
@@ -222,9 +264,19 @@ sub _REPUTATION {
     	$text = _groupview();
     }
     elsif ($action eq "showtoplist") {
-	my $currentweb= $params->{web};
-    $text= _showtoplist($currentweb);
+		my $currentweb= $params->{web};
+    	$text= _showtoplist($currentweb);
     }
+	elsif ($action eq 'commentvote') {
+		my $targetcomment=$params->{target};
+		my $targetuser=$params->{targetuser};
+		$text = _showDefault()._commentVote($vote,$targetcomment,$targetuser);
+	}
+	elsif ($action eq 'commentremove') {
+		my $targetcomment=$params->{target};
+		my $targetuser=$params->{targetuser};
+		$text = _showDefault()._commentRemove($vote,$targetcomment,$targetuser);
+	}
     elsif ($action) {
         $text = "Unrecognized action";
     }
@@ -235,7 +287,75 @@ sub _REPUTATION {
     }
     return $text;
 }
+sub _commentVote {
+	my ($addVote,$targetcomment, $targetuser) =@_;
+	my $text="";
+	return "Please log in or register to vote." if (TWiki::Func::isGuest);
+	if ($targetcomment && $commentvotevalues{$addVote}) {
+		my %commentdb ;
+		tie %commentdb, 'MLDBM', -Filename => $commentfile,
+    		-Flags    => DB_CREATE
+       	  or die "Cannot open database '$commentfile: $!\n";
+		my $votes = $commentdb{$targetcomment};
+		$votes->{$addVote}->{$user}=1 unless ($votes->{$addVote});
+		foreach my $vote (keys %$votes) {
+			if ($vote eq $addVote) {
+				$votes->{$addVote}->{$user}=1;
+				$text.="Vote $buttonStrings{$addVote} added. <br>"; 
+				if ($commentvotevalues{$vote}) {
+					my $num=$commentvotevalues{$vote};
+					$text.=_updateusers($num, $targetuser);#$text.=_removetrust($commentid);
+				}
+			}
+			elsif ($votes->{$vote}->{$user}) {
+				delete $votes->{$vote}->{$user};
+				$text.="Existing vote $buttonStrings{$vote} removed. <br>";
+				if ($commentvotevalues{$vote}) {
+					my $num=$commentvotevalues{$vote}*-1;
+					$text.=_updateusers($num, $targetuser );
+				}
+			}
+		}
+		$commentdb{$targetcomment}=$votes;
+		untie %commentdb;
+	}
+	else {
+		$text="Vote not valid, or missing target <br>";
+	}
 
+	return $text;
+}
+sub _commentRemove {
+	my ($rmVote,$targetcomment,$targetuser) =@_;
+	my $text="";
+	if ($targetcomment && $rmVote) {
+		my %commentdb ;
+		tie %commentdb, 'MLDBM', -Filename => $commentfile,
+    		-Flags    => DB_CREATE
+         	or die "Cannot open database '$commentfile: $!\n";
+
+		my $votes = $commentdb{$targetcomment};
+		
+		if ($votes->{$rmVote}->{$user}) {
+			delete $votes->{$rmVote}->{$user};
+			$text.="Vote $buttonStrings{$rmVote} removed. <br>";
+			$commentdb{$targetcomment}=$votes;
+			if ($commentvotevalues{$rmVote}) {
+			my $num=$commentvotevalues{$rmVote}*-1;
+				$text.=_updateusers($num, $targetuser);#$text.=_removetrust($commentid);
+			}
+		}
+		else {
+			$text.="Vote not found.<br>";
+		}
+	untie %commentdb;
+	}
+	else {
+		$text="Missing target<br>";
+	}
+	
+	return $text;
+}
 # Show the topics which the user has voted. 
 sub _SHOWTOPICS {
 	my $html='';
@@ -284,7 +404,7 @@ sub _trustValueChange {
 	$text=~/(\d*)/;
 	if ($1 && $exists) {
 		my $previous=0;
-		$text,$previous=_writeToTRDB($wikiname, $text);
+		($text,$previous)=_writeToTRDB($wikiname, $text);
 		$text=$LH->maketext("Trustvalue updated from [_1] to [_2] points for user \"[_3]\"",$previous, $text, $wikiname);
 	}
 	# We didn't get a valid wikiname
@@ -354,15 +474,34 @@ sub _showtoplist {
 	elsif (TWiki::Func::checkAccessPermission( "VIEW", $user, 'empty', 'WebHome', $currentweb, '')&& _accessRead($currentweb)){
 		my %toplist = _readTopfile($currentweb);
 		$text.=$LH->maketext("No entries") if (!scalar keys %toplist);
- 		foreach my $key (sort { $toplist{$b} <=> $toplist{$a} } keys %toplist ) {
- 			$text.="$toplist{$key} [[$currentweb.$key]]<br>\n";
+		my $star = TWiki::Func::getPreferencesFlag("REPUTATIONPLUGIN_STAR") || 0;
+		# show only best 10
+		my $loop=11;
+		# Sorted by a bayesian rating scheme, perhaps a bit messy implementation
+ 		foreach my $key (sort { 
+		($toplist{$b}{'sum'}+$toplist{'_MeanRatings'}{'meansum'})/($toplist{$b}{'count'} +$toplist{'_MeanRatings'}{'mean'})
+		<=> ($toplist{$a}{'sum'}+$toplist{'_MeanRatings'}{'meansum'})/($toplist{$a}{'count'} +$toplist{'_MeanRatings'}{'mean'}) } keys %toplist ) {
+			if ($key ne "_MeanRatings") {
+			my $percent = sprintf("%.0f", ($toplist{$key}{'sum'}+$toplist{'_MeanRatings'}{'meansum'})/($toplist{$key}{'count'} + $toplist{'_MeanRatings'}{'mean'})*100/(sort {$a <=> $b} values %votevalues)[-1]);
+			if ($star) {
+				$percent=TWiki::Contrib::RatingContrib::renderRating("RPrating", "5", 0, $percent/20);
+			}
+			else {
+			$percent = $percent."%";
+			} 
+ 			$text.="$percent [[$currentweb.$key]]<br>\n";
+			}
+			--$loop;
+			if(!$loop) {
+			last;
+			}
  		}
  	}
  	return $text;
 }
 # One option would be to save average values, or actually save the mean, count, and sum
 sub _addtotoplist {
-	my ($value)=@_;
+	my ($value,$remove)=@_;
 	my %topdb ;
     tie %topdb, 'MLDBM', -Filename => $topfile,
     	-Flags    => DB_CREATE
@@ -370,11 +509,32 @@ sub _addtotoplist {
 	'Lockfile'  =>  '/tmp/Tie-MLDBM-toplist.lock'
          or die "Cannot open database '$topfile: $!\n";
 	my  $webtop= $topdb{$web};
-	if ($webtop->{$topic}){
-		$webtop->{$topic}=$webtop->{$topic}+$value;
+	if ($remove) {
+		$remove=-1;
 	}
 	else {
-		$webtop->{$topic}=$value;
+		$remove=1;
+	}
+
+	if ($webtop->{$topic}){
+		$webtop->{$topic}->{'sum'}=$webtop->{$topic}->{'sum'}+$value;
+		$webtop->{$topic}->{'count'}=$webtop->{$topic}->{'count'}+1*$remove;
+	}
+	elsif ($remove == 1) {
+		$webtop->{$topic}->{'sum'}=$value;
+		$webtop->{$topic}->{'count'}=1;
+	}
+	# Reserving a word here, it would be better to do this out of band	
+	if ($webtop->{'_MeanRatings'}) {
+		$webtop->{'_MeanRatings'}->{'count'}=$webtop->{'_MeanRatings'}->{'count'}+1*$remove;
+		$webtop->{'_MeanRatings'}->{'sum'}=$webtop->{'_MeanRatings'}->{'sum'}+$value;
+		$webtop->{'_MeanRatings'}->{'meansum'}=($webtop->{'_MeanRatings'}->{'sum'})/(TINY_FLOAT+ (scalar keys %$webtop) -1);
+		$webtop->{'_MeanRatings'}->{'mean'}=$webtop->{'_MeanRatings'}->{'count'}/(TINY_FLOAT+ (scalar keys %$webtop) -1);
+	}
+	else {
+		$webtop->{'_MeanRatings'}->{'count'}=1;
+		$webtop->{'_MeanRatings'}->{'sum'}=$value;
+		$webtop->{'_MeanRatings'}->{'mean'}=$value;
 	}
 	$topdb{$web}=$webtop;
 	untie %topdb;	
@@ -446,7 +606,7 @@ else{
 	return 0;
 }
 }
-# The main interface
+# The main interface, the code needs to be split up 
 sub _showDefault {
     return '' unless ( TWiki::Func::topicExists( $web, $topic ) );
     return '' if (grep ($_ eq $topic, @systemTopics) && !TWiki::Func::getPreferencesFlag('REPUTATIONPLUGIN_INCLUDESYSTEMTOPICS'));
@@ -483,10 +643,11 @@ sub _showDefault {
 	}
 	my %graphdata=();
 	my $forget= TWiki::Func::getPreferencesFlag("REPUTATIONPLUGIN_FORGET")||0;
-	my $percent = TWiki::Func::getPreferencesFlag("REPUTATIONPLUGIN_PERCENT") || "default";
-	if ($percent eq "default") {
-	$percent=1;
-	} 
+	# Don't know how to set default value to 1 in prefFlags
+	my $percent = TWiki::Func::getPreferencesFlag("REPUTATIONPLUGIN_NOPERCENT") || 0;
+	$percent=!$percent;
+	# Use only if ratingcontrib installed 
+	my $star = TWiki::Func::getPreferencesFlag("REPUTATIONPLUGIN_STAR") || 0;
 	my $bayes = TWiki::Func::getPreferencesValue("REPUTATIONPLUGIN_BAYES")|| "0.5"; 
 	if ((defined $bayes && !$bayes =~ /^[-+]?[0-9]*\.?[0-9]+$/) || $bayes<0){
     	$bayes=0;
@@ -501,11 +662,10 @@ sub _showDefault {
 	    	$users=\@userarr;
  		   	$userfound =1 if ($voteinfo->{$vote}->{$revision}->{$user});
 			if($absolute && $forget) {
-			$sum=$sum+$votevalues{$vote}*$num*$revision/$currentrevision;
+				$sum=$sum+$votevalues{$vote}*$num*$revision/$currentrevision;
 			}
 			elsif ($absolute) {
         		$sum=$sum+$votevalues{$vote}*$num;
-			
         	}
         	else {
             	my $credibilityweight = TWiki::Func::getPreferencesValue('REPUTATIONPLUGIN_TRUSTEDWEIGHT')|| $defaultcredibilityweight;
@@ -561,7 +721,7 @@ sub _showDefault {
     }
     $text.='<div>' if ($voteaccess);
     # print the score for the article
-	if ( $percent) {
+	if ( $percent || $star) {
 			my $max=(sort {$a <=> $b} values %votevalues)[-1];
 			my $min=(sort {$a <=> $b} values %votevalues)[0];
 			my $avg=($max-$min)/2;
@@ -576,7 +736,10 @@ sub _showDefault {
 			}
 	}
     if($readaccess){
-		if ($percent && $sum) {
+		if ($star) {
+		$text.=TWiki::Contrib::RatingContrib::renderRating("RPrating", "5", 0, $percent/20);
+		}
+		elsif ($percent && $sum) {
     	$text.=$LH->maketext("Rating: [_1] %", $percent);
 		}
 		elsif ($sum) {
@@ -604,30 +767,22 @@ sub _showDefault {
     	join( ' ', map { $seen{$_} } sort _voteoptionsort keys(%seen) );
 		$text.='</span>';
     }
-	my $nocomment=TWiki::Func::getPreferencesFlag("REPUTATIONPLUGIN_NOCOMMENT") || 0;
-	if (!$nocomment) {
-		my $comment="<h3>Give Feedback for $topic</h3>Feedback will include your name. %COMMENT{type=return,target=$web.$topic".'_RPFeedback,button="Submit Feedback"}%';
-		$text.=_hideDiv($comment,'Give Feedback','RPCommentDiv');
-		if(TWiki::Func::topicExists( $web, "$topic"."_RPFeedback")) {
-			my $feedback="<h3>Feedback for $topic:</h3>%INCLUDE{$web.$topic"."_RPFeedback}% <p>";
-			$text.=_hideDiv($feedback,'Show Feedback','RPFBDiv');
-		}
-	}
+	
     $text.=$LH->maketext(" ~[~[[_1].ReputationPluginInfo~]~[Tell Me More~]~]",$TWiki::cfg{SystemWebName}) if ($readaccess || $voteaccess);
 	#$text.=_hideDiv('%COMMENT{type="bottom"}%', "Comment" ,"RPcommentDiv");
     $text.=$LH->maketext(" Votes are hidden from others ") if ($voteaccess && !$readaccess);
 	$text.='</div>' if ($voteaccess);
 	my $reviewchanges= TWiki::Func::getPreferencesFlag("REPUTATIONPLUGIN_REVIEWAUTHORS") ||0;
 	if ($reviewchanges) {
-	my ($currentrev,%authors)=_searchAuthors();
-	my (%trust)=_readTrusted($user);
-	my ($trustedcount,$untrustedcount,$unknowncount);
-	$trustedcount=$untrustedcount=$unknowncount=0;
-	foreach my $author (keys %authors) {
+		my ($currentrev,%authors)=_searchAuthors();
+		my (%trust)=_readTrusted($user);
+		my ($trustedcount,$untrustedcount,$unknowncount);
+		$trustedcount=$untrustedcount=$unknowncount=0;
+		foreach my $author (keys %authors) {
 		if ($author eq TWiki::Func::userToWikiName($user,1)){
-			$trustedcount++;
+				$trustedcount++;
 		}
-		elsif ($trust{$author}>$threshold) {
+	elsif ($trust{$author}>$threshold) {
 			$trustedcount++;
 		}
 		elsif ($trust{$author}){
@@ -684,6 +839,132 @@ sub _showDefault {
     return "<verbatim> $text </verbatim>" if ($debug);
     return $text;
 }
+
+
+sub _commentInterface {
+	my ($twisty, $threshold,$abusethreshold)=@_;
+	my $nocomment=TWiki::Func::getPreferencesFlag("REPUTATIONPLUGIN_NOCOMMENT") || 0;
+	my $comment="";
+	if (!$nocomment) {
+		my $commentweb=TWiki::Func::getPreferencesValue("REPUTATIONPLUGIN_COMMENTWEB") || "Comment";
+		my $commentthreshold=$threshold;
+		my $commenttopic="$web"."_"."$topic"."_RPFeedback";
+		# This should prevent TWikiGuest from commenting at least in the newer TWiki installations
+		# 
+		if (!TWiki::Func::isGuest()) {
+		# These should be in the comments
+		$comment="<h3>Feedback for $topic</h3>Feedback will include your name. %COMMENT{type=return,target=";
+		$comment.=$commentweb.".".$commenttopic.',button="Submit Feedback" signed="on"}%';
+		}
+		if(TWiki::Func::topicExists( $commentweb, $commenttopic)) {
+			$comment.="<h4>Previous comments:</h4>" unless (TWiki::Func::isGuest());
+			$comment.="<h4>Comments:</h4>" unless (!TWiki::Func::isGuest());
+			$comment.=_includeComments($commentweb,$commenttopic,$commentthreshold,$abusethreshold);
+			#%INCLUDE{$web.$topic"."_RPFeedback}% <p>";
+		}
+		if ($twisty) {
+		$comment=_hideDiv($comment,'Text Feedback','RPCommentDiv');
+		}
+	}
+	return $comment;
+}
+sub _includeComments { 
+	my ($commentweb, $commenttopic, $commentthreshold, $abusethreshold)=@_;
+	my $commentid=1;
+	my $n=0;
+	my $text="";
+	use Digest::SHA;
+	while ($commentid) {
+		$commentid=TWiki::Func::expandCommonVariables('%INCLUDE{"'.$commentweb.'.'.$commenttopic.'"  section="_SECTION'.$n.'"}%',$commentweb, $commenttopic,'');
+		$commentid =~ s/\s//g;
+		++$n;
+		if ($commentid) {
+			# A bit unefficient method
+			my $commenttext=TWiki::Func::expandCommonVariables('%INCLUDE{"'.$commentweb.'.'.$commenttopic.'"  section="'.$commentid.'comment-text"}%',"", "",'');
+			my $commenthash=TWiki::Func::expandCommonVariables('%INCLUDE{"'.$commentweb.'.'.$commenttopic.'"  section="'.$commentid.'hash"}%',"", "",'');
+			my $commentauthor=TWiki::Func::expandCommonVariables('%INCLUDE{"'.$commentweb.'.'.$commenttopic.'"  section="'.$commentid.'WikiName"}%',"", "",'');
+			# Make a persistent shared secret if one does not exist
+			my $mackey=$TWiki::cfg{SharedSecret};
+			if (!$mackey) {
+				my $filename=$TWiki::cfg{WorkingDir}."/tmp/_SharedSecret.txt";
+				$mackey=TWiki::Func::readFile( $filename );
+				if (!$mackey) {
+					$mackey=join "", map { unpack "H*", chr(rand(256)) } 1..16;
+					TWiki::Func::saveFile( $filename, $mackey ); 
+				}
+			}
+			# $TWiki::cfg{SharedSecret} || $TWiki::cfg{Password} || 'securitybyobscurity';
+			# make a MAC code for the message
+			my $hash=Digest::SHA::hmac_sha224_hex("$commentweb.$commenttopic".$commentauthor.$commentid.$commenttext,$mackey);
+			# If the integrity is OK
+			if ($commenthash eq $hash){
+				# I know better than perl that this value is untainted, filter anyway.
+				$commentid =~ /([a-z0-9]*)/;
+				my $secureid=$1;
+				my ($commentscore,$ratingwidget) =_commentReputation($secureid,$commentauthor);
+				$commenttext=$ratingwidget . $commenttext; 
+				if ($commentscore > $commentthreshold) {
+					$text.='<div style="background-color:#fcfaf7; display: inline-block">'."Score: ".sprintf("%.2f",$commentscore)." ".$commenttext.'</div><p>';
+				}
+				# Hide abuse completely
+				elsif ($commentscore > $abusethreshold) {
+					$text.=_hideDiv('<div style="background-color:#fcfaf7; display: inline-block; max-width: 2000px">'.$commenttext.'</div>','Comment by '.$commentauthor." below threshold (".sprintf("%.2f",$commentscore).")<br>",'RPCommentDiv'.$commentid);
+				}
+			}
+			else {
+				$text.="$commentid Hash: \"$hash\" Original: \"$commenthash\"";
+			}
+		}
+	}
+	$text="No comments above abuse threshold ($abusethreshold)" if (!$text);
+	return $text;
+}
+sub _commentReputation {
+	my ($commentid, $commentauthor) = @_;
+	my $commentscore=0;
+	my %commentdb;
+	my $text="";
+    tie %commentdb, 'MLDBM', -Filename => $commentfile,
+    	-Flags    => DB_CREATE
+         or die "Cannot open database '$topicfile: $!\n";
+	my $voteinfo= $commentdb{$commentid};
+	my %seen ;
+	# Comment author reputation
+	my @userarr=$commentauthor;
+	my $cred=0;
+	# default number of up votes for commment author is 3
+	# he can vote his own comment up though
+	# if the votes are counted without reputation this
+	# needs to be higher, use 1 as the reputation threshold
+	# so this value can be negative
+	$cred=_credibility(\@userarr,1)*3 unless (TWiki::Func::isGuest());
+	$commentscore=$cred;
+	foreach my $vote (keys %$voteinfo) {
+		my $action='commentvote';
+		@userarr=(keys %{$voteinfo->{$vote}});
+ 		$action = 'commentremove' if ($voteinfo->{$vote}->{$user});
+		$cred=scalar @userarr;
+		$cred=_credibility(\@userarr) unless (TWiki::Func::isGuest());
+	    my $value=$commentvotevalues{$vote};
+		$commentscore+=$cred*$value;
+		$seen{$vote}=_commentThumbs($action,$vote,(scalar @userarr), $commentid, $commentauthor) if($commentvotevalues{$vote});
+	}
+	$text.="Commentscore: $commentscore for $commentid" if ($debug);
+	$text.='<span id="buttons">';
+    my @allVotes = keys %commentvotevalues;
+    foreach (@allVotes) {
+    	unless ( $seen{$_} ) {
+       		$seen{$_}=_commentThumbs('commentvote', $_, "0", $commentid, $commentauthor);
+       	}
+    }
+	if (!TWiki::Func::isGuest()){
+		$text.=
+    	join( ' ', map { $seen{$_} } sort _commentvoteoptionsort keys(%seen) );
+		$text.='</span><br>';
+	}
+	untie %commentdb;	
+	return $commentscore,$text;	
+}
 # Check the trustvalue of latest editor
 sub _checkLastEdit {
 	my ($trustref)=@_;
@@ -702,6 +983,10 @@ sub _checkLastEdit {
 # Sort voteoptions by value instead of the key
 sub _voteoptionsort {
 	$votevalues{$b} <=> $votevalues{$a}
+}
+
+sub _commentvoteoptionsort {
+	$commentvotevalues{$b} <=> $commentvotevalues{$a}
 }
 #Basically this is what backlinktemplate does, but using | and # as separators for the results
 #in order to filter out the codeparts from the search output.
@@ -749,7 +1034,8 @@ sub _backlinkcount {
 }
 #This function counts voter's reputation
 sub _credibility {
-    my ($users)=@_;
+    my ($users,$minrep)=@_;
+	$minrep=$threshold if (!$minrep);
     # This could be something lower and perhaps user configurable
     my $recommendationweight=1;
     my $result=0;
@@ -770,7 +1056,7 @@ sub _credibility {
             # We do not take into account users who aren't trustworthy enough
             # if threshold is set below 500, votes from users below the 500 are counted with negative value
             # If we consider them as noise, it's better just to ignore these people by keeping the threshold at 500
-            if ($score>$threshold){
+            if ($score>$minrep){
                 $value=_numberfromscore($score);
                 $result=$result+$value;
             }
@@ -785,9 +1071,8 @@ sub _credibility {
 
     return $result;
 }
-#This searches all the trustworthy persons in users trust file for recommendations
-# heavily nested,
-# <500 recommendationthreshold can be used to negate untrusted user's vote    
+# This searches all the trustworthy persons in users trust file for recommendations
+# <500 recommendationthresholds are not advisable  
 sub _recommendationSearch {
 	my ($userlistref, %trust) = @_;
 	# can't pass two arrays to function, first eats the second.
@@ -877,6 +1162,7 @@ sub _checkWeight {
 # Removes vote from topic and calls remove from user dbs
 sub _REMOVEVOTE {
     my ($rmVote) = @_;
+	return _wrapHtmlFeedbackErrorInline($LH->maketext("Please log in to vote.")) if (TWiki::Func::isGuest());
     my $webTopic = "$web.$topic";
 	my %topicdb ;
 	tie %topicdb, 'MLDBM', -Filename => $topicfile,
@@ -895,7 +1181,7 @@ sub _REMOVEVOTE {
 		foreach my $rev (keys %{$voteinfo->{$rmVote}}) {
 			#delete value  and unused tree, should I delete the DB also?
 			if ($voteinfo->{$rmVote}->{$rev}->{$user}) {
-				_addtotoplist($voteinfo->{$rmVote}->{$rev}->{$user}*$votevalues{$rmVote}*-1);
+				_addtotoplist($voteinfo->{$rmVote}->{$rev}->{$user}*$votevalues{$rmVote}*-1,1);
 				delete $voteinfo->{$rmVote}->{$rev}->{$user};
 				# Perl deletes the tree if it is unused
 				_addQuota($rmVote) if (TWiki::Func::getPreferencesFlag('REPUTATIONPLUGIN_WEBQUOTA'));
@@ -1001,6 +1287,7 @@ sub _addQuota {
 }
 sub _ADDVOTE {
     my ($addVote, $revision) =@_;
+	return _wrapHtmlFeedbackErrorInline($LH->maketext("Please log in to vote.")) if (TWiki::Func::isGuest());
 	if (!$revision) {
 	my ($date, $author,$comment);
 	( $date, $author, $revision, $comment ) = TWiki::Func::getRevisionInfo($web, $topic);
@@ -1033,7 +1320,7 @@ sub _ADDVOTE {
 					last;
                 }
 				elsif ($voteinfo->{$vote}->{$rev}->{$user} ) {
-					_addtotoplist($voteinfo->{$vote}->{$rev}->{$user}*$votevalues{$addVote}*-1);
+					_addtotoplist($voteinfo->{$vote}->{$rev}->{$user}*$votevalues{$addVote}*-1, 1);
 					delete $voteinfo->{$vote}->{$rev}->{$user};
 					# Perl deletes the tree if it is unused
 					_addQuota($vote) if ($quotainuse);
@@ -1255,6 +1542,33 @@ sub _percentescape {
 	$link=~ s/$forbidden/'%'. unpack("H*", $1)/ge;
 	return $link;
 }
+# make voting buttons for comments, currently almost the same as
+# the normal votebuttons. Should change to a leaner and smaller interface
+sub _commentButtons {
+	my ($action, $vote, $count, $targetid) =@_;
+ 	my $text = '';
+	my $htmlcode='';
+	my $topiclink=_percentescape($topic);
+	if ($vote && $action && $targetid) {
+	   	$text="$actionStrings{$action} $buttonStrings{$vote}";
+	    $htmlcode="<a class=\"reputationbutton\" href=\"$topiclink\?rpaction=$action&vote=$vote&target=$targetid\"><span><img src=\"$attachUrl/smiley/$vote.gif\" ondblclick=\"return false;\"></img> $text ($count) </span></a>\n";
+	}
+	return $htmlcode;
+}
+# the leaner and smaller interface is this
+sub _commentThumbs {
+	my ($action, $vote, $count, $targetid,$targetuser) =@_;
+ 	my $text = '';
+	my $htmlcode='';
+	my %flagtext=("poor", " Flag ");
+	my %thumbimages= ("positive","thumbup.png", "negative","thumbdown.png", "poor" ,"poor.gif");
+	my $topiclink=_percentescape($topic);
+	if ($vote && $action && $targetid) {
+	   	$text="$actionStrings{$action}";
+	    $htmlcode='<a href="'.$topiclink.'?rpaction='.$action.'&vote='.$vote.'&target='.$targetid.'&targetuser='.$targetuser.'"><span>'.$flagtext{$vote}.'<img src="'."$attachUrl/smiley/".$thumbimages{$vote}.'"  ondblclick="return false;"></img> '."$text ($count)</span></a>\n";
+	}
+	return $htmlcode;
+}
 
 sub _smileybuttons {
 	my ( $action, $vote, $count ) = @_;
@@ -1315,6 +1629,7 @@ sub _readTopfile {
 	if (defined $topdb{$currentweb}) {
 		%topics = %{$topdb{$currentweb}};
 	}
+	
 	untie %topdb;
 	return %topics;
 }
@@ -1468,6 +1783,20 @@ sub _memberCount {
     }
     return $count;
 }
+# Twisty seems to have some serious problems hiding my content
+# Will use the old implementation for the time being
+#sub _hideDiv {
+#	my ($text,$message,$divname,$hide)=@_;
+#	$message="Show more" if (!$message);
+#	$hide="Hide" if (!$hide);
+#	$divname='toHide' if (!$divname);
+#	$text='%TWISTY{id="'.$divname.'
+#mode="div"
+#showlink="'.$message.'
+#hidelink="'.$hide.'" remember="on"}%'.$text.' %ENDTWISTY%';
+#	return $text;
+#}
+
 # subfunction for making hidden user interface elements, which appear from a link, message is the link text
 # divname can be useful if there are multiple user elements. Future improvements could include option to
 # have an element shown by default and maybe changing link text

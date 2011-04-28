@@ -24,6 +24,9 @@ pub/TWiki/ReputationPlugin/smiley/negative.gif 0444
 pub/TWiki/ReputationPlugin/smiley/bg_button_span.gif 0444
 pub/TWiki/ReputationPlugin/smiley/bg_button_a.gif 0444
 pub/TWiki/ReputationPlugin/smiley/buttons.css 0444
+pub/TWiki/ReputationPlugin/smiley/thumbup.png 0444
+pub/TWiki/ReputationPlugin/smiley/thumbdown.png 0444
+pub/TWiki/ReputationPlugin/smiley/README 0444
 pub/TWiki/ReputationPlugin/js/slider.js 0444
 pub/TWiki/ReputationPlugin/js/hide.js 0444
 pub/TWiki/ReputationPlugin/bar/positive.gif 0444
@@ -33,4 +36,7 @@ pub/TWiki/ReputationPlugin/bar/excellent.gif 0444
 pub/TWiki/ReputationPlugin/bar/graph2.css 0444
 pub/TWiki/ReputationPlugin/bar/negative.gif 0444
 templates/view.reputation.tmpl 0444
+templates/view.reputationnocomments.tmpl 0444
+templates/view.reputationcomments.tmpl 0444
 templates/view.reputation4.tmpl 0444
+commentpatch 0444

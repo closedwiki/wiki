@@ -1,0 +1,73 @@
+Index: Comment.pm
+===================================================================
+--- Comment.pm	(revision 21042)
++++ Comment.pm	(working copy)
+@@ -1,7 +1,7 @@
+ # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+ #
+ # Copyright (C) 2004 Crawford Currie
+-# Copyright (C) 2001-2011 TWiki Contributors.
++# Copyright (C) 2001-2010 TWiki Contributors.
+ # All Rights Reserved. TWiki Contributors
+ # are listed in the AUTHORS file in the root of this distribution.
+ # NOTE: Please extend that file, not this notice.
+@@ -139,7 +139,7 @@
+             $topic = $target;
+         }
+     }
+-
++	my $signed = $attrs->remove( 'signed' );
+     my $url = '';
+     if ( $disable eq '' ) {
+         $url = TWiki::Func::getScriptUrl( $web, $topic, 'save' );
+@@ -183,6 +183,10 @@
+                 $hiddenFields .= "\n".CGI::hidden(
+                     -name=>'comment_remove', -value=>$$pidx );
+             }
++			if( $signed) {
++				$hiddenFields .= "\n".CGI::hidden(
++                    -name=>'signed', -value=>"on" );
++			}
+             $input .= $hiddenFields;
+         }
+         if ( $noform ) {
+@@ -255,7 +259,7 @@
+     my $remove = $query->param( 'comment_remove' );
+     my $nopost = $query->param( 'comment_nopost' );
+     my $templatetopic = $query->param( 'comment_templatetopic' ) || '';
+-
++	my $signed = $query->param('signed') || '';
+     my $output = _getTemplate( "OUTPUT:$type", $topic, $web, $templatetopic );
+     if ( $output =~ m/^%RED%/ ) {
+         die $output;
+@@ -299,6 +303,30 @@
+         }
+     }
+ 
++	if ($signed) {
++		# 128 bit comment id should be enough for everyone
++		my $commentid= join "", map { unpack "H*", chr(rand(256)) } 1..16;
++		use Digest::SHA;
++		# Make a persistent shared secret if one does not exist
++		my $mackey=$TWiki::cfg{SharedSecret};
++		if (!$mackey) {
++			my $filename=$TWiki::cfg{WorkingDir}."/tmp/_SharedSecret.txt";
++			$mackey=TWiki::Func::readFile( $filename );
++			if (!$mackey) {
++				$mackey=join "", map { unpack "H*", chr(rand(256)) } 1..16;
++				TWiki::Func::saveFile( $filename, $mackey ); 
++			}
++		}
++		# make a MAC code for the message, authenticated by the shared secret 
++		my $hash=Digest::SHA::hmac_sha224_hex("$web.$topic"."Main.".TWiki::Func::getWikiName().$commentid.$output,$mackey);
++		# Wrap the whole thing into sections, (use _SECTION0 - _SECTIONX to fetch the id later)
++		$output= '<br>%STARTSECTION{}%'.$commentid.'%ENDSECTION{}%'
++		.'%STARTSECTION{"'.$commentid.'hash"}%'. $hash .'%ENDSECTION{"'.$commentid.'hash"}%'
++		.'%STARTSECTION{"'.$commentid.'WikiName"}%'. "Main." .TWiki::Func::getWikiName() .'%ENDSECTION{"'.$commentid.'WikiName"}%'
++		.'%STARTSECTION{"'.$commentid.'comment-text"}%'
++				.$output.
++			'%ENDSECTION{"'.$commentid.'comment-text"}%';
++	}
+     unless( $nopost ) {
+         if( $position eq 'TOP' ) {
+             $text = $output.$text;
