@@ -118,7 +118,7 @@ sub statistics {
 
     # Do a single data collection pass on the temporary copy of logfile,
     # then process each web once.
-    my ($viewRef, $contribRef, $statViewsRef, $statSavesRef, $statUploadsRef) =
+    my ($viewRef, $saveRef, $contribRef, $statViewsRef, $statSavesRef, $statUploadsRef) =
       _collectLogData( $session, $logFile );
 
     my @weblist;
@@ -137,7 +137,8 @@ sub statistics {
     my $siteStatsTopic = $TWiki::cfg{Stats}{SiteStatsTopicName} || 'SiteStatistics';
     if( !$webSet || $session->{topicName} eq $siteStatsTopic ) {
         try {
-            my $siteStats = _collectSiteStats( $session, $currentMonth, $logYearMo, $contribRef,
+            my $siteStats = _collectSiteStats( $session, $currentMonth, $logYearMo,
+                                               $viewRef, $saveRef, $contribRef,
                                                $statViewsRef, $statSavesRef, $statUploadsRef );
             _processSiteStats( $session, $logYearMo, $logMonYear, $siteStats );
         } catch TWiki::AccessControlException with  {
@@ -220,6 +221,7 @@ sub _collectLogData {
     # ip address, such as "127.0.0.5"
 
     my %view;		# Hash of hashes, counts topic views by (web, topic)
+    my %save;           # Hash of hashes, counts topic saves by (web, topic)
     my %contrib;	# Hash of hashes, counts uploads/saves by (web, user)
 
     # Hashes for each type of statistic, one hash entry per web
@@ -268,15 +270,15 @@ sub _collectLogData {
             my $topicName = $2;
 
             if( $opName eq 'view' ) {
-	    	next if ($topicName eq 'WebRss');
-	    	next if ($topicName eq 'WebAtom');
+                next if( $topicName =~ /^(WebAtom|WebRss|WebStatistics)$/ );
+                next if( $notes && $notes =~ /\(not exist\)/ );
                 $statViews{$webName}++;
-                unless( $notes && $notes =~ /\(not exist\)/ ) {
-                    $view{$webName}{$topicName}++;
-                }
+                $view{$webName}{$topicName}++;
 
             } elsif( $opName eq 'save' ) {
+                next if( $topicName =~ /^(SiteStatistics|WebStatistics)$/ );
                 $statSaves{$webName}++;
+                $save{$webName}{$topicName}++;
                 $contrib{$webName}{$users->webDotWikiName($logFileUserName)}++;
 
             } elsif( $opName eq 'upload' ) {
@@ -309,7 +311,7 @@ sub _collectLogData {
 
     # Note: No need to close $tmpFileHandle, temp file is removed by destructor
 
-    return \%view, \%contrib, \%statViews, \%statSaves, \%statUploads;
+    return \%view, \%save, \%contrib, \%statViews, \%statSaves, \%statUploads;
 }
 
 #===========================================================
@@ -371,7 +373,7 @@ sub _getDirSize {
 
 #===========================================================
 sub _collectSiteStats {
-    my( $session, $currentMonth, $logYearMo, $contribRef,
+    my( $session, $currentMonth, $logYearMo, $viewRef, $saveRef, $contribRef,
         $statViewsRef, $statSavesRef, $statUploadsRef ) = @_;
 
     _printMsg( $session, '* Reporting overall statistics' );
@@ -419,9 +421,21 @@ sub _collectSiteStats {
         $siteStats->{statViews} += ( $statViewsRef->{$w} || 0 );
     }
 
+    $siteStats->{statWebsViewed} = scalar keys %$viewRef || 0;
+    $siteStats->{statTopicsViewed} = 0;
+    foreach my $w ( sort keys %$viewRef ) {
+        $siteStats->{statTopicsViewed} += ( scalar keys %{$viewRef->{$w}} || 0 );
+    }
+
     $siteStats->{statSaves} = 0;
     foreach my $w ( sort keys %$statSavesRef) {
         $siteStats->{statSaves} += ( $statSavesRef->{$w} || 0 );
+    }
+
+    $siteStats->{statWebsUpdated} = scalar keys %$saveRef || 0;
+    $siteStats->{statTopicsUpdated} = 0;
+    foreach my $w ( sort keys %$saveRef ) {
+        $siteStats->{statTopicsUpdated} += ( scalar keys %{$saveRef->{$w}} || 0 );
     }
 
     $siteStats->{statUploads} = 0;
@@ -539,14 +553,14 @@ sub _processSiteStats {
             my @items = split( / *\| */, $line );
             if( scalar @items >= 12 ) {
                 $oldStats->{statWebs}        = $items[2];
-                $oldStats->{statTopics}      = $items[3];
-                $oldStats->{statAttachments} = $items[4];
-                $oldStats->{statDataSize}    = $items[8];
-                $oldStats->{statPubSize}     = $items[9];
-                $oldStats->{statDiskUse}     = $items[10];
-                $oldStats->{statUsers}       = $items[11];
-                $oldStats->{statGroups}      = $items[12];
-                $oldStats->{statPlugins}     = $items[13];
+                $oldStats->{statTopics}      = $items[5];
+                $oldStats->{statAttachments} = $items[8];
+                $oldStats->{statDataSize}    = $items[12];
+                $oldStats->{statPubSize}     = $items[13];
+                $oldStats->{statDiskUse}     = $items[14];
+                $oldStats->{statUsers}       = $items[15];
+                $oldStats->{statGroups}      = $items[16];
+                $oldStats->{statPlugins}     = $items[17];
             }
             $idxStat = $x;
         } elsif( $line =~ /<\!\-\-statDate\-\->/ ) {
@@ -555,7 +569,9 @@ sub _processSiteStats {
         }
     }
     if( ! $statLine ) {
-        $statLine = '| <!--statDate--> |  <!--statWebs--> |  <!--statTopics--> '
+        $statLine = '| <!--statDate--> |  <!--statWebs--> |  <!--statWebsViewed--> '
+                  . '|  <!--statWebsUpdated--> |  <!--statTopics--> '
+                  . '|  <!--statTopicsViewed--> |  <!--statTopicsUpdated--> '
                   . '|  <!--statAttachments--> |  <!--statViews--> |  <!--statSaves--> '
                   . '|  <!--statUploads--> |  <!--statDataSize--> |  <!--statPubSize--> '
                   . '|  <!--statDiskUse--> |  <!--statUsers--> |  <!--statGroups--> '
