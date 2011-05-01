@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1304211750" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1304236166" format="1.1" version="$Rev$"}%
 ---+ TWiki Site Statistics
 %STARTSECTION{type="templateonly"}%
  __NOTE:__ This is a template topic, do not change. [[%SCRIPTURL{"statistics"}%/%USERSWEB%/SiteStatistics][Update the site statistics]].
@@ -8,30 +8,30 @@
 <td>
 %CHART{ %COMMON_CHART_PARAMS% name="ch2" data="R122:C2..R3:C2" title="Number of Webs" }%</td>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch3" data="R122:C3..R3:C3" title="Number of Topics" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch5" data="R122:C5..R3:C5" title="Number of Topics" }%</td>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch4" data="R122:C4..R3:C4" title="Number of Attachments" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch8" data="R122:C8..R3:C8" title="Number of Attachments" }%</td>
 </tr><tr>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch5" data="R122:C5..R3:C5" title="Topic Views" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch9" data="R122:C9..R3:C9" title="Topic Views" }%</td>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch6" data="R122:C6..R3:C6" title="Topic Updates" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch10" data="R122:C10..R3:C10" title="Topic Updates" }%</td>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch7" data="R122:C7..R3:C7" title="File Uploads" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch11" data="R122:C11..R3:C11" title="File Uploads" }%</td>
 </tr><tr>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch8" data="R122:C8..R3:C8" title="Data Size in MB" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch12" data="R122:C12..R3:C12" title="Data Size in MB" }%</td>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch9" data="R122:C9..R3:C9" title="Pub Size in MB" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch13" data="R122:C13..R3:C13" title="Pub Size in MB" }%</td>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch10" data="R122:C10..R3:C10" ymax="100" title="% Disk Use" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch14" data="R122:C14..R3:C14" ymax="100" title="% Disk Use" }%</td>
 </tr><tr>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch11" data="R122:C11..R3:C11" title="Registered Users" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch15" data="R122:C15..R3:C15" title="Registered Users" }%</td>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch12" data="R122:C12..R3:C12" title="TWiki Groups" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch16" data="R122:C16..R3:C16" title="TWiki Groups" }%</td>
 <td>
-%CHART{ %COMMON_CHART_PARAMS% name="ch13" data="R122:C13..R3:C13" title="Installed Plugins" }%</td>
+%CHART{ %COMMON_CHART_PARAMS% name="ch17" data="R122:C17..R3:C17" title="Installed Plugins" }%</td>
 </tr></table>
 <!--
    * Set COMMON_CHART_PARAMS = type="area" table="stats" xaxis="R122:C1..R3:C1" ymin="0" yaxis="on" numygrids="9" numxgrids="11" xaxisangle="90" xgrid="off" colors="#f2563a, #eff462" bgcolor="#E7E7E7" width="330" height="170"
@@ -39,18 +39,22 @@
 </div>
 
 %TABLE{ name="stats" sort="off" }%
-| *Month* | *Webs* | *Topics* | *Attachments* | *Topic Views* | *Topic Updates* | *Files Uploads* | *Data Size MB* | *Pub Size MB* | *Disk Use* | *Users* | *Groups* | *Plugins* | *Top Contributors* |
-| <!--statDate--> |  <!--statWebs--> |  <!--statTopics--> |  <!--statAttachments--> |  <!--statViews--> |  <!--statSaves--> |  <!--statUploads--> |  <!--statDataSize--> |  <!--statPubSize--> |  <!--statDiskUse--> |  <!--statUsers--> |  <!--statGroups--> |  <!--statPlugins--> | <!--statTopContributors--> |
+| *Month* | *Webs%BR%Total* | *Webs%BR%Viewed* | *Webs%BR%updated* | *Topics%BR%Total* | *Topics%BR%Viewed* | *Topics%BR%Updated* | *Attach-%BR%ments* | *Topic%BR%Views* | *Topic%BR%Updates* | *Files%BR%Uploads* | *Data%BR%Size MB* | *Pub%BR%Size MB* | *Disk%BR%Use* | *Users* | *Groups* | *Plugins* | *Top Contributors* |
+| <!--statDate--> |  <!--statWebs--> |  <!--statWebsViewed--> |  <!--statWebsUpdated--> |  <!--statTopics--> |  <!--statTopicsViewed--> |  <!--statTopicsUpdated--> |  <!--statAttachments--> |  <!--statViews--> |  <!--statSaves--> |  <!--statUploads--> |  <!--statDataSize--> |  <!--statPubSize--> |  <!--statDiskUse--> |  <!--statUsers--> |  <!--statGroups--> |  <!--statPlugins--> | <!--statTopContributors--> |
 
 __Legend:__
 <table><tr><td valign="top">
-   * *Webs*: Number of webs, excluding template webs
-   * *Topics*: Number of topics across all webs
+   * *Webs*: Total number of webs, excluding template webs
+   * *Webs Viewed*: Number of webs viewed
+   * *Webs Updated*: Number of webs updated
+   * *Topics*: Total number of topics across all webs
+   * *Topics Viewed*: Number of topics viewed across all webs
+   * *Topics Updated*: Number of topics updated across all webs
    * *Attachments*: Number of attachments in all topics
    * *Topic Views*: Number of topic views
+</td><td valign="top">
    * *Topic Updates*: Number of topic updates
    * *Files Uploads*: Number of file uploads
-</td><td valign="top">
    * *Data Size MB*: Size of all files in data directory (topics and log files)
    * *Pub Size MB*: Size of all files in pub directory (attachments)
    * *Disk Use*: Disk use in percent
