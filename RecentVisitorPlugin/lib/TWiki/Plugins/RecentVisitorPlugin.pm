@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2011 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org
 # Copyright (C) 2011 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution. NOTE: Please extend that file, not this notice.
@@ -30,7 +30,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-02-03';
+$RELEASE = '2011-05-01';
 
 # One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 $SHORTDESCRIPTION = 'Show recent visitors to a TWiki site';
@@ -57,7 +57,7 @@ sub initPlugin {
 
     TWiki::Func::registerTagHandler( 'RECENTVISITOR', \&_RECENTVISITOR );
 
-    _recordVisitor( $loginUser ) unless( $loginUser =~ /(TWikiGuest|guest)/ );
+    _recordVisitor( $loginUser ) if( $loginUser && $loginUser !~ /^(TWikiGuest|guest)/ );
 
     # Plugin correctly initialized
     return 1;
