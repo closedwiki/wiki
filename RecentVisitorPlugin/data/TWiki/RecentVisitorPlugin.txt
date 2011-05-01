@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1296798336" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1303847534" format="1.1" version="$Rev$"}%
 ---+!! !RecentVisitorPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -197,9 +197,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] |
 |  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny <br /> &copy; 2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-02-03 |
+|  Plugin Version: | 2011-05-01 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-02-03: | Initial version |
+|  2011-05-01: | TWikibug:Item6701: Fix small warning issue if plugin is run by a shell script |
+|  2011-02-03: | TWikibug:Item6646: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
