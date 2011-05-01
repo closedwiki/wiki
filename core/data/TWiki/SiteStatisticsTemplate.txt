@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1304288686" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1304289712" format="1.1" version="$Rev$"}%
 ---+ TWiki Site Statistics
 %STARTSECTION{type="templateonly"}%
  __NOTE:__ This is a template topic, do not change. [[%SCRIPTURL{"statistics"}%/%USERSWEB%/SiteStatistics][Update the site statistics]].
 %ENDSECTION{type="templateonly"}%
-<div style="%IF{ "context ChartPluginEnabled AND (%SEARCH{ "^\| 2[0-9]" type="regex" topic="%TOPIC%" nonoise="on" multiple="on" reverse="on" format="1" separator="0" }%0 >= 10100)" then="display: block" else="display: none" }%">
+<div style="%IF{ "context ChartPluginEnabled AND (%CALC{$INT(%SEARCH{ "^\| 2[0-9]" type="regex" topic="%TOPIC%" nonoise="on" multiple="on" reverse="on" format="1" separator="+" }%+0)}% >= 2)" then="display: block" else="display: none" }%">
 <table border="0" cellpadding="5"><tr>
 <td>
 %CHART{ %COMMON_CHART_PARAMS% name="ch2" data="R122:C2..R3:C2" title="Total Number of Webs" }%</td>
