@@ -1,14 +1,20 @@
-%META:TOPICINFO{author="TWikiContributor" date="1265866462" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1304144016" format="1.1" version="$Rev$"}%
 ---+!! Geo Lookup Plugin
-
-Lookup geolocation such as latitude/longitude, city, phone area code by IP address or domain name.
-
-<table width="100%"><tr><td>
-%TOC%
-</td><td align="center" valign="top">
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/GeoLookupPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/GeoLookupPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+<div style="float:right; margin:0 0 20px 20px; padding: 0 10px 0 10px; text-align: center">
 This plugin is%BR% sponsored by:%BR%
 [[http://twiki.net/][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" alt="Twiki, Inc." title="Twiki, Inc." />]]
-</td></tr></table>
+</div>
+</sticky>
+%SHORTDESCRIPTION%
 
 ---++ Syntax Rules
 
@@ -37,7 +43,7 @@ Examples:
 ---++ Usage Examples
 
 #WhereIs
----+++ Form to get location information based on IP address or domain name
+---+++ Form to query geo-location by IP address
 
 Example: (works properly if plugin is installed and enabled)
 
@@ -63,8 +69,6 @@ to get this link: (renders properly if plugin is installed and enabled)%BR%
 http://maps.google.com/maps?z=12&ll=%ENCODE{%GEOLOOKUP{"%REMOTE_ADDR%" format="$latitude,$longitude"}%}%
 
 Alternatively, in a similar way, show a map embedded in a TWiki page.
-
-
 
 ---++ Plugin Settings
 
@@ -98,11 +102,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] |
-|  Copyright: | &copy; 2010, TWiki:Main/PeterThoeny |
+|  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] |
+|  Copyright: | &copy; 2010-2011 TWiki:Main.PeterThoeny <br /> &copy; 2010-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-02-10 (18329) |
+|  Plugin Version: | 2011-05-01 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-05-01: | TWikibug:Item6701: Doc improvements |
 |  2010-02-10: | Change country name "United States" to "USA" |
 |  2010-01-23: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
@@ -117,7 +122,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 This plugin refers to !GeoLite data created by !MaxMind, available from http://www.maxmind.com/.
 
 __Related Topics:__ VarGEOLOOKUP, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
-
--- TWiki:Main/PeterThoeny - 2010-02-10
 
 %META:FILEATTACHMENT{name="twiki-logo-80x40-t.gif" attachment="twiki-logo-80x40-t.gif" attr="h" comment="" date="1264233115" path="twiki-logo-80x40-t.gif" size="1999" user="TWikiContributor" version="1"}%
