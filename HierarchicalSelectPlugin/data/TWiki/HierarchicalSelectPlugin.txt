@@ -1,10 +1,16 @@
-%META:TOPICINFO{author="OpenIDMapping_IanKluft" date="1267001118" format="1.1" reprev="1.5" version="1.5"}%
+%META:TOPICINFO{author="TWikiContributor" date="1304139219" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiPreferences"}%
 ---+!! <nop>%TOPIC%
-
-Display a hierarchical multi-level JavaScript drop-down menus from the contents of a TWiki topic.
-
-%TOC%
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/HierarchicalSelectPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/HierarchicalSelectPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
 ---++ Syntax Rules
 
@@ -20,13 +26,16 @@ Write =%<nop>HIERARCHICALSELECT{topic="<i>TopicName</i>" <i>[other optional attr
 |level|if specified, select a menu level (integer starting from 0) to display|all levels|
 |parse_keywords|flag: nonzero sets parsing mode where first word of menu line is return-value keyword, remainder is text to display|entire line used as both return value and display text|
 
----++ Usage example
+#UsageExample
+---++ Usage Example
 
 This is a multi-level dropdown menu using data from HierarchicalSelectPluginExample.  It includes English-speaking countries and state/provincial and regional subdivisions (generally not including levels where municipalities are, though including independent cities), where applicable.  Not all have the same levels of depth, even within the same country. The varying depth is really the point of the demo.
 
-HierarchicalSelectPlugin %IF{"context HierarchicalSelectPluginEnabled" then="is" else="is not"}% enabled on this TWiki system%BR%
-<form>
-<table cellpadding=5>
+<div style="padding: 10px; background-color: #f0f0f4">
+The HierarchicalSelectPlugin %IF{"context HierarchicalSelectPluginEnabled" then="is" else="is not"}% enabled on this TWiki system
+
+<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%#UsageExample">
+<table cellpadding="5">
 <tr><th>
 Field:
 </th><th>
@@ -64,15 +73,17 @@ Values by menu name:
 %URLPARAM{"%URLPARAM{"%URLPARAM{"root"}%"}%"}%
 </td></tr>
 </table>
-<input type="submit">
+<input type="submit" class="twikiSubmit">
 </form>
+</div>
 
 It is from the following HTML and TML markup:
 
 <verbatim>
-HierarchicalSelectPlugin %IF{"context HierarchicalSelectPluginEnabled" then="is" else="is not"}% enabled on this TWiki system%BR%
-<form>
-<table cellpadding=5>
+The HierarchicalSelectPlugin %IF{"context HierarchicalSelectPluginEnabled" then="is" else="is not"}% enabled on this TWiki system
+
+<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%#UsageExample">
+<table cellpadding="5">
 <tr><th>
 Field:
 </th><th>
@@ -110,43 +121,50 @@ Values by menu name:
 %URLPARAM{"%URLPARAM{"%URLPARAM{"root"}%"}%"}%
 </td></tr>
 </table>
-<input type="submit">
+<input type="submit" class="twikiSubmit">
 </form>
 </verbatim>
 
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>HIERARCHICALSELECTPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = display hierarchical multi-level JavaScript drop-down menus from contents of a TWiki topic
+      * Set SHORTDESCRIPTION = Display hierarchical multi-level !JavaScript drop-down menus from contents of a TWiki topic
 
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
 
-   * Download the ZIP file from the Plugin Home (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * Configure the Plugin:
-      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
-      * Change the Plugin settings as needed
-   * Test if the installation was successful:
-      * _enter samples here_
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==data/TWiki/%TOPIC%Example.txt== | Example topic |
+        | ==data/TWiki/VarHIERARCHICALSELECT.txt== | Variable documentation topic |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+        | ==pub/TWiki/Plugins/%TOPIC%/twiki-hierarchicalselect.js== | !JavaScript code |
+      * Set the ownership of the extracted directories and files to the webserver user.
+
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Test if the installation was successful: See Usage Example above
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/IanKluft |
-|  Copyright: | &copy; 2010, TWiki:Main/IanKluft |
+   * This plugin is sponsored by [[http://www.twiki.net/][Twiki Inc]]
+|  Plugin Author: | TWiki:Main.IanKluft |
+|  Copyright: | &copy; 2010 Twiki Inc <br /> &copy; 2010 TWiki:Main.IanKluft <br /> &copy; 2010-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-02-20 (V1.000) |
+|  Plugin Version: | 2011-05-01 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-05-01: | TWikibug:Item6701: Doc improvements -- TWiki:Main.PeterThoeny |
 |  2010-02-20: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
@@ -157,4 +175,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ %TOPIC%Example, VarHIERARCHICALSELECT, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences

@@ -1,10 +1,7 @@
-# Drop-Down Menu Plugin for TWiki
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Written by Ian Kluft for TWiki Inc.
-# Copyright (C) 2010 by TWiki, Inc and TWiki Contributors.
-# All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
+# Copyright (C) 2010 Twiki Inc
+# Copyright (C) 2010-2011 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,7 +13,8 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
-# For licensing info read LICENSE file in the TWiki root.
+# Drop-Down Menu Plugin for TWiki
+# Written by Ian Kluft for TWiki Inc.
 
 =pod
 
@@ -26,10 +24,8 @@ This is the drop-down menu TWiki plugin.
 
 =cut
 
-# change the package name and $pluginName!!!
 package TWiki::Plugins::HierarchicalSelectPlugin;
 
-# Always use strict to enforce variable scoping
 use strict;
 
 require TWiki::Func;    # The plugins API
@@ -40,27 +36,10 @@ require TWiki::Plugins; # For the API version
 our ( $VERSION, $RELEASE, $SHORTDESCRIPTION, $debug, $pluginName,
 	$NO_PREFS_IN_TOPIC, %menu_trees );
 
-# This should always be $Rev: 15942 (02 Sep 2009) $ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev: 15942 (02 Sep 2009) $';
+$RELEASE = '2011-05-01';
 
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'TWiki-4.2';
-
-# Short description of this plugin
-# One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 $SHORTDESCRIPTION = 'Drop-Down Menu Plugin for JavaScript multi-level drop-down menus';
-
-# You must set $NO_PREFS_IN_TOPIC to 0 if you want your plugin to use preferences
-# stored in the plugin topic. This default is required for compatibility with
-# older plugins, but imposes a significant performance penalty, and
-# is not recommended. Instead, use $TWiki::cfg entries set in LocalSite.cfg, or
-# if you want the users to be able to change settings, then use standard TWiki
-# preferences that can be defined in your Main.TWikiPreferences and overridden
-# at the web and topic level.
 $NO_PREFS_IN_TOPIC = 1;
 
 # Name of this Plugin, only used in this module
@@ -94,7 +73,6 @@ and highly dangerous!
 __Note:__ Please align variables names with the Plugin name, e.g. if 
 your Plugin is called FooBarPlugin, name variables FOOBAR and/or 
 FOOBARSOMETHING. This avoids namespace issues.
-
 
 =cut
 
