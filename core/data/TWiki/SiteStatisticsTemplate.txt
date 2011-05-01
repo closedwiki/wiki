@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1304286600" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1304288686" format="1.1" version="$Rev$"}%
 ---+ TWiki Site Statistics
 %STARTSECTION{type="templateonly"}%
  __NOTE:__ This is a template topic, do not change. [[%SCRIPTURL{"statistics"}%/%USERSWEB%/SiteStatistics][Update the site statistics]].
@@ -76,7 +76,7 @@ __Legend:__
 __Notes:__
    * Do not edit this topic, it is updated automatically. [[%SCRIPTURL{"statistics"}%/%USERSWEB%/SiteStatistics][Update now]].
    * When updating statistics of previous months, the following items cannot be measured and will be set to 0: Webs, Topics, Users, Data Size, Pub Size, Disk Use, Plugins.
-   * Charts are automatically shown on top if the %IF{ "context ChartPluginEnabled" then="%SYSTEMWEB%.ChartPlugin" else="TWiki:Plugins.ChartPlugin" }% is installed and enabled (%IF{ "context ChartPluginEnabled" then="it is" else="it is not" }%) and if there are at least two month of statistics data. !ChartPlugin version 2011-04-26 or later is required.
+   * Charts are automatically shown at the top if the %IF{ "context ChartPluginEnabled" then="%SYSTEMWEB%.ChartPlugin" else="TWiki:Plugins.ChartPlugin" }% is installed and enabled (%IF{ "context ChartPluginEnabled" then="it is" else="it is not" }%) and if there are at least two months of statistics data. !ChartPlugin version 2011-04-27 or later is required.
    * [[%SYSTEMWEB%.TWikiSiteTools#WebStatistics][TWikiSiteTools]] explains how to enable automatic updates of the statistics pages.
 
 __Web Statistics Topics:__ %SEARCH{ "WebStatistics" scope="topic" web="all" topic="WebStatistics" nonoise="on" format="[[$web.$topic][$web]]" separator=", " limit="100" }%
