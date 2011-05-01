@@ -1,6 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004-2010 Peter Thoeny, peter@thoeny.org, Twiki Inc.
+# Copyright (C) 2004-2011 Peter Thoeny, peter[at]thoeny.org, Twiki Inc.
+# Copyright (C) 2008-2011 TWiki Contributors
 #
 # For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -26,7 +27,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-04-25';
+$RELEASE = '2010-05-01';
 
 $pluginName = 'VarCachePlugin';  # Name of this Plugin
 

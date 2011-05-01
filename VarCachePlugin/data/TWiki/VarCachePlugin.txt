@@ -1,5 +1,17 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272178101" format="1.1" version="$Rev$"}%
----+ Variable Cache Plugin 
+%META:TOPICINFO{author="TWikiContributor" date="1304136485" format="1.1" version="$Rev$"}%
+---+!! Variable Cache Plugin 
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/VarCachePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/VarCachePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Overview
 
 This Plugin caches TWiki variables in selected topics for faster page rendering.
 
@@ -71,13 +83,14 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Copyright: | &copy; 2004-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
+|  Plugin Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2004-2011, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-04-25 |
+|  Plugin Version: | 2011-05-01 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-04-25: | TWikibug:Item6433 - doc fix: Changing TWIKIWEB to SYSTEMWEB |
-|  2010-04-06: | TWikibug:Item5414 - support for plugins that dynamically add !JavaScript and CSS using TWiki::Func::addToHEAD(); added !VarVARCACHE variable documentation topic; support nameless parameter for refresh time; fixed typo in UPDATEMSG plugin setting name |
+|  2011-05-01: | TWikibug:Item6701: Doc improvements |
+|  2010-04-25: | TWikibug:Item6433: Doc fix: Changing TWIKIWEB to SYSTEMWEB |
+|  2010-04-06: | TWikibug:Item5414: Support for plugins that dynamically add !JavaScript and CSS using TWiki::Func::addToHEAD(); added !VarVARCACHE variable documentation topic; support nameless parameter for refresh time; fixed typo in UPDATEMSG plugin setting name |
 |  2006-01-06: | Small fix for TWiki 4.0 |
 |  2004-07-16: | Doc improvements (no code change) |
 |  2004-07-15: | Initial version |
@@ -92,6 +105,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ VarVARCACHE, VarCachePluginTest, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
--- TWiki:Main/PeterThoeny - 2010-04-06
-
-%META:FILEATTACHMENT{name="cachetopic.gif" attr="h" comment="Cache icon 16x16 pixel" date="1089949592" path="cachetopic.gif" size="935" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="cachetopic.gif" attr="h" comment="Cache icon 16x16 pixel" date="1089949592" path="cachetopic.gif" size="935" user="TWikiContributor" version="1"}%
