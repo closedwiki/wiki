@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1304404996" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1304406592" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -33,16 +33,6 @@ Parameters:
    * =%<nop>ACCESSSTATS{web="MyWeb" topic="MyTopic" attachment="MyAttachment"}%= - count the numer of successful GET request for specified attachment on specified web and topic.
    * =%<nop>ACCESSSTATS{attachment="MyAttachment"}%= - count the number of successful GET request for specified attachment in current topic.
 
----++ Plugin Settings
-
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>ACCESSSTATSPLUGIN_SHORTDESCRIPTION%==
-
-   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Show hit count for topics and attachments by parsing Apache access log files
-
-   * Debug plugin: (See output in =data/debug.txt=)
-      * Set #DEBUG = 0
-
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
@@ -58,11 +48,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Set the ownership of the extracted directories and files to the webserver user.
 
    * Plugin __configuration and testing__:
-      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
-      * Add the following settings to =twiki/lib/LocalSite.cfg= and tweak as needed: %BR%
-        =$TWiki::cfg{Plugins}{AccessStatsPlugin}{LogFileName} = 'access_log';= %BR%
-        =$TWiki::cfg{Plugins}{AccessStatsPlugin}{LogDirectory} = '/var/logs/httpd';= %BR%
-        =$TWiki::cfg{Plugins}{AccessStatsPlugin}{EnableRegexSearch} = 0;=
+      * Run the [[%SCRIPTURL{configure}%][configure]] script, enable the plugin in the __Plugins__ section, and customize the following settings of !AccessStatsPlugin in the __Extensions__ section:%BR%
+        ={Plugins}{AccessStatsPlugin}{Debug}= - default =0= %BR%
+        ={Plugins}{AccessStatsPlugin}{LogFileName}= - default ='access_log'= %BR%
+        ={Plugins}{AccessStatsPlugin}{LogDirectory}= - default ='/var/logs/httpd'= %BR%
+        ={Plugins}{AccessStatsPlugin}{EnableRegexSearch}= - default =0=
       * Make sure the CGI user (www-data) has read permission to the log file.
       * Test if the installation was successful: See Usage Example above
    * Test if the installation was successful:
@@ -70,12 +60,15 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Show hit count for topics and attachments by parsing Apache access log files
+
 |  Plugin Author: | TWiki:Main.StephaneLenclud |
 |  Copyright: | &copy; 2006-2007, TWiki:Main.StephaneLenclud <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-05-02 |
+|  Plugin Version: | 2011-05-03 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-05-02: | TWikibug:Item6701: Move settings to configure; doc improvements -- TWiki:Main.PeterThoeny |
+|  2011-05-03: | TWikibug:Item6701: Move settings to configure; doc improvements -- TWiki:Main.PeterThoeny |
 |  9 Apr 2007 | Fixing issue with unzipped files like =access.log.n= not being parsed. |
 |  21 Feb 2006: | Supports gz archived apache log file |
 |  20 Feb 2006: | Now supports web, topic and attachment parameter |
