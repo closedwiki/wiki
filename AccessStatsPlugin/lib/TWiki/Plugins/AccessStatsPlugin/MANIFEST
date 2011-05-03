@@ -1,2 +1,2 @@
-data/TWiki/AccessStatsPlugin.txt NEW
-lib/TWiki/Plugins/AccessStatsPlugin.pm NEW
+data/TWiki/AccessStatsPlugin.txt 0664
+lib/TWiki/Plugins/AccessStatsPlugin.pm 0664

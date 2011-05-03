@@ -1,8 +1,7 @@
- 
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2006 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2011 Peter Thoeny, peter@thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -36,58 +35,29 @@ use Compress::Zlib ;
 use strict;
 use warnings;
 
-# $VERSION is referred to by TWiki, and is the only global variable that
-# *must* exist in this package
-use vars qw( $VERSION $RELEASE $debug $pluginName $accessLogFileName $accessLogDirectory $disableDefaultParam);
+use vars qw(
+    $VERSION $RELEASE $debug $pluginName $accessLogFileName
+    $accessLogDirectory $enableRegexSearch
+  );
 
-# This should always be $Rev: 8713$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev: 8713$';
-#$VERSION = 'v1.002';
-
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '9 Apr 2007';
+$RELEASE = '2011-05-02';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'AccessStatsPlugin';
 
-# The Apache access log file name 
-$accessLogFileName="access.log";
-# The Apache access log directory 
-$accessLogDirectory="/var/log/apache2/"; 
+# The Apache access log file name
+$accessLogFileName = $TWiki::cfg{Plugins}{AccessStatsPlugin}{LogFileName} || "access_log";
+# The Apache access log directory
+$accessLogDirectory = $TWiki::cfg{Plugins}{AccessStatsPlugin}{LogDirectory} || "/var/log/httpd";
 # Set to 1 to disable the _DEFAULT parameter and thus restrict the scope...
 # ... of the search to the TWiki installation directory
 #Comment out if you want to enable _DEFAULT parameter
-#$disableDefaultParam=1;
+$enableRegexSearch = $TWiki::cfg{Plugins}{AccessStatsPlugin}{EnableRegexSearch} || 0;
 
 =pod
 
 ---++ initPlugin($topic, $web, $user, $installWeb) -> $boolean
-   * =$topic= - the name of the topic in the current CGI query
-   * =$web= - the name of the web in the current CGI query
-   * =$user= - the login name of the user
-   * =$installWeb= - the name of the web the plugin is installed in
-
-REQUIRED
-
-Called to initialise the plugin. If everything is OK, should return
-a non-zero value. On non-fatal failure, should write a message
-using TWiki::Func::writeWarning and return 0. In this case
-%FAILEDPLUGINS% will indicate which plugins failed.
-
-In the case of a catastrophic failure that will prevent the whole
-installation from working safely, this handler may use 'die', which
-will be trapped and reported in the browser.
-
-You may also call =TWiki::Func::registerTagHandler= here to register
-a function to handle tags that have standard TWiki syntax - for example,
-=%MYTAG{"my param" myarg="My Arg"}%. You can also override internal
-TWiki tag handling functions this way, though this practice is unsupported
-and highly dangerous!
 
 =cut
 
@@ -106,10 +76,6 @@ sub initPlugin {
 
     # register ACCESSSTATS tag
     TWiki::Func::registerTagHandler( 'ACCESSSTATS', \&_ACCESSSTATS );
-
-    # Allow a sub to be called from the REST interface 
-    # using the provided alias
-    #TWiki::Func::registerRESTHandler('example', \&restExample);
 
     # Plugin correctly initialized
     return 1;
@@ -138,69 +104,51 @@ sub _ACCESSSTATS {
     my @lines=();
     getAccessLogLines(\@lines);
     TWiki::Func::writeDebug("$pluginName: Line count : $#lines") if ($debug);
-    
+
     #Check if we have default param    
     my $default="";
-    if ($params->{_DEFAULT})
-        {
+    if ($params->{_DEFAULT}) {
         #Check if default parameter is allowed
-        if ($disableDefaultParam)
-            {
-            return "*\%RED%$pluginName ERROR*: Default parameter is disabled! Only server admin can enable that feature for you!\%ENDCOLOR%";    
-            }
+        unless( $enableRegexSearch ) {
+            return "*\%RED%$pluginName ERROR*: Default parameter is disabled! Only server "
+                 . "admin can enable that feature for you!\%ENDCOLOR%";    
+        }
 
         #Default param must be a regexp
         $default=$params->{_DEFAULT};
         #None of the web, topic and attachment parameter should be specified along with default parameter 
-        if ($params->{web} || $params->{topic} || $params->{attachment})
-            {
+        if ($params->{web} || $params->{topic} || $params->{attachment}) {
             return "*\%RED%$pluginName ERROR*: Inconsistent parameter list!\%ENDCOLOR%";    
-            }
         }
-    elsif ($params->{attachment})
-        {
+    } elsif ($params->{attachment}) {
         #Access statistics for attachment
-        if ($params->{web} && $params->{topic})
-            {
+        if ($params->{web} && $params->{topic}) {
             $default=getRegExpForAttachment($params->{web},$params->{topic},$params->{attachment});
-            }
-        elsif ($params->{topic})
-            {
+        } elsif ($params->{topic}) {
             #Verbose Debug
             TWiki::Func::writeDebug("$pluginName: Web: $theWeb") if($debug);
             TWiki::Func::writeDebug("$pluginName: Topic: $params->{topic}") if($debug);
             TWiki::Func::writeDebug("$pluginName: Attachment: $params->{attachment}") if($debug);        
             $default=getRegExpForAttachment($theWeb,$params->{topic},$params->{attachment});
-            }
-        elsif ($params->{web})
-            {
+        } elsif ($params->{web}) {
             #specifying attachment and web parameter only does not make sense! Or does it?
             return "*\%RED%$pluginName ERROR*: Inconsistent parameter list!\%ENDCOLOR%";    
-            }
-        else
-            {
+        } else {
             $default=getRegExpForAttachment($theWeb,$theTopic,$params->{attachment});
-            }
         }
-    elsif ($params->{web} && $params->{topic})
-        {
+    } elsif ($params->{web} && $params->{topic}) {
         #No regexp provided just build one based on provided web and topic
         $default=getRegExp($params->{web},$params->{topic});     
-        }
-    elsif ($params->{topic})
-        {
+    } elsif ($params->{topic}) {
         #No regexp and no web provided just build a regexp based on current web provided topic
         $default=getRegExp($theWeb,$params->{topic});     
-        }
-    elsif ($params->{web})
-        {
+    } elsif ($params->{web}) {
         #specifying web parameter only does not make sense! Or does it?
         return "*\%RED%$pluginName ERROR*: Inconsistent parameter list!\%ENDCOLOR%";    
         #No regexp and no topic provided just build a regexp based on current web
         #$default=getRegExp($params->{web},$params->{topic});    
-        }
-    else
-        {
+
+    } else {
         #No default parameter specified, set it to the current page
        $default=getRegExp($theWeb,$theTopic);     
         
@@ -208,7 +156,7 @@ sub _ACCESSSTATS {
         #TWiki::Func::writeDebug("$pluginName: Host: $host") if($debug);
         #TWiki::Func::writeDebug("$pluginName: Query: $query") if($debug);
         #TWiki::Func::writeDebug("$pluginName: NoHostQuery: $queryWithoutHost") if($debug);        
-        }
+    }
     
     #Output some debug info
     TWiki::Func::writeDebug("$pluginName: RegExp: $default") if($debug);
@@ -218,20 +166,15 @@ sub _ACCESSSTATS {
 
     my $matchCount=0;
     my $line;
-    foreach $line(@lines)
-        {
-        if ($line =~ /$regexp/)
-            {
-            #unless ($line =~ /$exclude/)
-            #    {
+    foreach $line(@lines) {
+        if ($line =~ /$regexp/) {
+            #unless ($line =~ /$exclude/) {
                 $matchCount++;      
                 #$body.="$line<br />";
-            #    }
-            }               
+            #}
         }
+    }
     $_[0]= "$matchCount"; #"$params->{regex}"."$params->{_DEFAULT}"; 
-    
-
 }
 
 
@@ -243,15 +186,14 @@ Returns the default regexp to search the Apache access log file with.
 
 =cut
 
-sub getRegExp
-    {
+sub getRegExp {
     my($theWeb,$theTopic) = @_;
     my $host=TWiki::Func::getUrlHost();
     my $query=TWiki::Func::getViewUrl($theWeb,$theTopic);            
     $query=~ /$host(.*)/;
     my $queryWithoutHost=$1;        
     $_[0]='GET\s'.$queryWithoutHost.'.+HTTP/1.1.+\s200\s';
-    }
+}
 
 =pod
 
@@ -261,15 +203,14 @@ Returns the default regexp to search the Apache access log file with.
 
 =cut
 
-sub getRegExpForAttachment 
-    {
+sub getRegExpForAttachment {
     #Get preferences from the plugin page
     #my $debug = TWiki::Func::getPreferencesValue( "\U$pluginName\E_DEBUG" );
     
     my($theWeb,$theTopic,$theAttachment) = @_;
     my $query=TWiki::Func::getPubUrlPath()."/$theWeb/$theTopic/$theAttachment";
     $_[0]='GET\s'.$query.'.+HTTP/1.1.+\s200\s';
-    }
+}
 
 =pod
 
@@ -280,8 +221,7 @@ Access log lines are a concatenation of multiple access log gz files and the cur
 
 =cut
 
-sub getAccessLogLines 
-    {
+sub getAccessLogLines {
     my $linesRef=$_[0];
     my @lines=();
 
@@ -289,40 +229,34 @@ sub getAccessLogLines
     my @accessLogGz;
     @accessLogGz = grep { /^$accessLogFileName.+\.gz/ && -f "$accessLogDirectory/$_" } readdir(DIR);
     #for each gz file in the directory matching our patern
-    foreach (@accessLogGz)
-        {
+    foreach (@accessLogGz) {
         TWiki::Func::writeDebug("GZ log file :$_") if $debug;               
         my $gz = gzopen("$accessLogDirectory/$_", "rb") or die "Cannot open $accessLogDirectory/$_: $gzerrno\n";
-        while ($gz->gzreadline($_) > 0) 
-            {
+        while ($gz->gzreadline($_) > 0)  {
             push(@$linesRef,$_);
-            }
-        $gz->gzclose();
         }
+        $gz->gzclose();
+    }
     closedir DIR;
 
     opendir(DIR, $accessLogDirectory) || die "Can't opendir $accessLogDirectory: $!";
     my @accessLogN;
     @accessLogN = grep { /^$accessLogFileName\.\d+$/ && -f "$accessLogDirectory/$_" } readdir(DIR);
     #for each access.log.n file in the directory 
-    foreach (@accessLogN)
-        {
+    foreach (@accessLogN) {
         TWiki::Func::writeDebug("n log file: $_") if $debug;               
         open ACCESSLOG, "< $accessLogDirectory$_" or die "Cannot open $accessLogDirectory/$_\n";
         push(@$linesRef,<ACCESSLOG>);
         close ACCESSLOG;    
-        }
+    }
 
     closedir DIR;
 
-    open ACCESSLOG, "< $accessLogDirectory$accessLogFileName" or die "Can't open $accessLogFileName: $!";
+    open ACCESSLOG, "< $accessLogDirectory/$accessLogFileName" or die "Can't open $accessLogFileName: $!";
     push(@$linesRef,<ACCESSLOG>);
     close ACCESSLOG;    
     #TWiki::Func::writeDebug("Count: $#lines");
     #TWiki::Func::writeDebug("Count in param: $#$linesRef");
-    }
+}
 
-
-
-
-
+1;
