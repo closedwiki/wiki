@@ -47,7 +47,7 @@ use vars qw(
     $defaultLineWidth $defaultNumYGrids
     $defaultYMin $defaultYMax
     $defaultBarLeadingSpace $defaultBarTrailingSpace $defaultBarSpace
-    %cachedTables
+    %cachedTables $showParameters
     );
 
 $VERSION = '$Rev$';
@@ -69,6 +69,9 @@ sub initPlugin {
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag("CHARTPLUGIN_DEBUG") || 0;
 
+    # Allow for debug output.  By default, we always just output an <img> tag.
+    $showParameters = '%IMG%';
+
     &TWiki::Func::writeDebug("- TWiki::Plugins::ChartPlugin::initPlugin($web.$topic) is OK") if $debug;
 
     # Mark that we are not fully initialized yet.  Only get the default
@@ -84,10 +87,13 @@ sub _init_defaults {
     return if $pluginInitialized;
     $pluginInitialized = 1;
     require Exporter;
-    foreach my $module qw( GD POSIX
+    foreach my $module qw(
+	GD
+	POSIX
         TWiki::Plugins::ChartPlugin::Chart
         TWiki::Plugins::ChartPlugin::Parameters
-        TWiki::Plugins::ChartPlugin::Table) {
+        TWiki::Plugins::ChartPlugin::Table
+	) {
         eval "require $module";
 	if ($@) {
 	    $initError = "Required Perl module '$module' not found: $@";
@@ -109,7 +115,7 @@ sub _init_defaults {
     # Get default chart bgcolor
     $defaultBGcolor = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_BGCOLOR") || '#FFFFFF #FFFFFF';
     # Get default number of Y axis grids
-    $defaultNumYGrids = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_NUMYGRIDS") || 9;
+    $defaultNumYGrids = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_NUMYGRIDS");
     # Get default value to use if there is no data seen in the table
     $defaultDataValue = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_DEFAULTDATA");
     # Get default value for the scale (linear/semilog)
@@ -276,8 +282,13 @@ sub _makeChart {
     # See if the parameter 'subtype' (old name 'datatype') is available.
     my $dataType = $this->_Parameters->getParameter("datatype", undef);
     my $subType  = $this->_Parameters->getParameter("subtype",  undef);
+    my $subType2  = $this->_Parameters->getParameter("subtype2",  undef);
     return _make_error("paramters *datatype* and *subtype* can't both be specified") if (defined $dataType && defined $subType);
+
     $subType = $dataType if (defined $dataType);
+    if ($subType2 ne "") {
+	$subType = "$subType,$subType2";
+    }
     if (defined $subType) {
         my @subTypes = split(/[\s,]+/, $subType);
         # Check for valid subtypes
@@ -352,24 +363,33 @@ sub _makeChart {
     # See if the parameter 'xlabel' is available.
     $chart->setXlabel($this->_Parameters->getParameter("xlabel", undef));
 
-    # See if the parameter 'ylabel' is available.
-    $chart->setYlabel($this->_Parameters->getParameter("ylabel", undef));
+    # See if the parameter 'ylabel' or 'ylabel2' is available.
+    my $ylabel = $this->_Parameters->getParameter("ylabel", undef);
+    $chart->setYlabel1($ylabel) if (defined($ylabel));
+    $chart->setYlabel2($this->_Parameters->getParameter("ylabel2", undef));
 
     # See if the parameter 'data' is available.  This is a required
     # parameter.  If it is missing, then generate an error message.
     my $data = $this->_Parameters->getParameter("data", undef);
-    return _make_error("parameter *data* must be specified") if (! defined $data);
+    my $data2 = $this->_Parameters->getParameter("data2", undef);
+    if (! defined($data)) {
+	return _make_error("parameter *data* must be specified");
+    }
 
     # See if the parameter 'xaxis' is available.
     my $xAxis = $this->_Parameters->getParameter("xaxis", undef);
 
-    # See if the parameter 'yaxis' is available.
-    my $yAxis = $this->_Parameters->getParameter("yaxis", "off");
-    $chart->setYaxis($yAxis);
+    # See if the parameter 'yaxis' or 'yaxis2' is available.
+    my $yAxis = $this->_Parameters->getParameter("yaxis", undef);
+    my $yAxis2 = $this->_Parameters->getParameter("yaxis2", "off");
+    $chart->setYaxis1($yAxis);
+    $chart->setYaxis2($yAxis2);
 
-    # See if the parameter 'ytic' is available.
-    my $yTic = int($this->_Parameters->getParameter("ytics", -1));
-    $chart->setNumYTics($yTic);
+    # See if the parameter 'ytics' is available.
+    my $yTics = $this->_Parameters->getParameter("ytics", undef);
+    my $yTics2 = $this->_Parameters->getParameter("ytics2", undef);
+    $chart->setNumYTics1(int($yTics)) if (defined($yTics));
+    $chart->setNumYTics2(int($yTics2)) if (defined($yTics2));
 
     # See if the parameter 'xaxisangle' is available.
     my $xaxisangle = _getNum($this->_Parameters->getParameter("xaxisangle", 0));
@@ -395,25 +415,41 @@ sub _makeChart {
     }
     $chart->setXmax($xmax);
 
-    # See if the parameter 'ymin' is available.
-    my $ymin = $this->_Parameters->getParameter("ymin", $defaultYMin);
+    # See if the parameter 'ymin*' is available.
+    my $ymin  = $this->_Parameters->getParameter("ymin",  $defaultYMin);
+    my $ymin2 = $this->_Parameters->getParameter("ymin2", $defaultYMin);
     if (defined($ymin)) {
 	$ymin = _getNum($ymin);
 	if ($scale eq "semilog" && $ymin <= 0) {
 	    return _make_error("user set ymin=$ymin is &lt;= 0 which is not valid when scale=semilog");
 	}
     }
-    $chart->setYmin($ymin);
+    $chart->setYmin1($ymin);
+    if (defined($ymin2)) {
+	$ymin2 = _getNum($ymin2);
+	if ($scale eq "semilog" && $ymin2 <= 0) {
+	    return _make_error("user set ymin2=$ymin2 is &lt;= 0 which is not valid when scale=semilog");
+	}
+	$chart->setYmin2($ymin2);
+    }
 
     # See if the parameter 'ymax' is available.
-    my $ymax = $this->_Parameters->getParameter("ymax", $defaultYMax);
+    my $ymax  = $this->_Parameters->getParameter("ymax", $defaultYMax);
+    my $ymax2 = $this->_Parameters->getParameter("ymax2", $defaultYMax);
     if (defined($ymax)) {
 	$ymax = _getNum($ymax);
 	if ($scale eq "semilog" && $ymax <= 0) {
 	    return _make_error("user set ymax=$ymax is &lt;= 0 which is not valid when scale=semilog");
 	}
     }
-    $chart->setYmax($ymax);
+    $chart->setYmax1($ymax);
+    if (defined($ymax2)) {
+	$ymax2 = _getNum($ymax2);
+	if ($scale eq "semilog" && $ymax2 <= 0) {
+	    return _make_error("user set ymax2=$ymax2 is &lt;= 0 which is not valid when scale=semilog");
+	}
+	$chart->setYmax2($ymax2);
+    }
 
     # Set the default number of ygrids
     $chart->setDefNumYGrids($defaultNumYGrids);
@@ -437,8 +473,10 @@ sub _makeChart {
     $chart->setYgrid($yGrid);
 
     # See if the parameter 'datalabel' is available.
-    my $dataLabels = $this->_Parameters->getParameter("datalabel", "off");
-    $chart->setDataLabels(split(/[\s,]+/, $dataLabels)) if (defined $dataLabels);
+    my $dataLabel = $this->_Parameters->getParameter("datalabel", "off");
+    my $dataLabel2 = $this->_Parameters->getParameter("datalabel2", "");
+    $dataLabel = "$dataLabel,$dataLabel2" if ($dataLabel2 ne "");
+    $chart->setDataLabels(split(/,\s*/, $dataLabel)) if (defined $dataLabel);
 
     # Get the chart width and height
     $chart->setImageWidth(_max(10, int($this->_Parameters->getParameter("width", $defaultWidth))));
@@ -448,8 +486,13 @@ sub _makeChart {
     my $alt = $this->_Parameters->getParameter("alt", "");
 
     # Get the chart 'bgcolor' color.
-    my $bgcolor = $this->_Parameters->getParameter("bgcolor", $defaultBGcolor);
-    $chart->setBGcolor(split(/[\s,]+/, $bgcolor));
+    my @defaultBGcolors = split(/[\s,]+/, $defaultBGcolor);
+    my $bgcolor = $this->_Parameters->getParameter("bgcolor", undef);
+    my @userBGColors = split(/[\s,]+/, $bgcolor);
+    foreach my $i (0 .. $#userBGColors) {
+	$defaultBGcolors[$i] = $userBGColors[$i];
+    }
+    $chart->setBGcolor(@defaultBGcolors);
 
     # Set line/area colors.  If the parameter 'colors' is defined, then the
     # chart will be made with the user specified colors.  Otherwise the
@@ -460,6 +503,8 @@ sub _makeChart {
     $chart->setAreaColors(@defaultAreaColors);
     # See if the parameter 'colors' is available.
     my $colors = $this->_Parameters->getParameter("colors", undef);
+    my $colors2 = $this->_Parameters->getParameter("colors2", undef);
+    $colors = "$colors,$colors2" if ($colors2 ne "");
     $chart->setColors(split(/[\s,]+/, $colors)) if (defined $colors);
 
     # Get the chart grid  color.
@@ -483,7 +528,12 @@ sub _makeChart {
     # Validate the legend data
     my @legend;
     if ($legend) {
-	my @d = $this->_tables->getData($tableName, $legend);
+        my ($legendRows, $legendColumns) = $this->_tables->getRowColumnCount($tableName, $legend);
+	my $columnOrdered = 0;
+        if (abs($legendRows) > 1) {
+	    $columnOrdered = 1;
+	}
+	my @d = $this->_tables->getData($tableName, $legend, $columnOrdered);
 	# Since users can do things like specifying R1:C5..R1:C99,R1:C4
 	# which gets returned as multiply arrays of arrays, we combine all
 	# arrays into a single array where we will later validate whether
@@ -503,7 +553,6 @@ sub _makeChart {
     # data is row ordered or column ordered.  If there is no X axis
     # information specified, then assume that the data is in column order.
     my $columnOrdered = 0;
-    my $rowOrdered    = 0;
     if (defined($xAxis)) {
         my ($xAxisRows, $xAxisColumns) = $this->_tables->getRowColumnCount($tableName, $xAxis);
         return _make_error("parameter *xaxis* value of '$xAxis' is not valid")
@@ -513,8 +562,6 @@ sub _makeChart {
                 return _make_error("parameter *xaxis* specifies multiple (${xAxisRows}X$xAxisColumns) rows and columns.");
             }
             $columnOrdered = 1;
-        } else {
-            $rowOrdered = 1;
         }
         my @d = $this->_tables->getData($tableName, $xAxis, $columnOrdered);
         return _make_error("no X axis data found in specified area of table [$xAxis]") if (! @d);
@@ -523,21 +570,29 @@ sub _makeChart {
         $columnOrdered = 1;
     }
 
-    # Validate the data range as valid
-    #my ($dataRows, $dataColumns) =
-    #  $this->_tables->getRowColumnCount($tableName, $data);
-    #return _make_error("parameter *data* value of '$data' is not valid") if (! defined($dataRows));
-
-    # Get the actual area data.
-    my @data = ();
-    @data = $this->_tables->getData($tableName, $data, $columnOrdered);
+    # Get the actual data for dataSet=1.
+    my @data = $this->_tables->getData($tableName, $data, $columnOrdered);
     # Validate that there is real data returned.
-    return _make_error("no data found in specified area of table [$data]") if (! @data);
-    #my @ranges = $this->_tables->getTableRanges($tableName, $data);
-    $ymin = $chart->setData(@data);
+    return _make_error("data ($data) points to no data") if (! @data);
+    my $yminData1 = $chart->setData(@data);
+
     # If scale=semilog and any data is <= 0, then error
-    if ($scale eq "semilog" && $ymin <= 0) {
-        return _make_error("data ($ymin) &lt;= 0 not valid when scale=semilog");
+    if ($scale eq "semilog" && $yminData1 <= 0) {
+        return _make_error("minimum data ($yminData1) &lt;= 0 not valid when scale=semilog");
+    }
+
+    my @data2;
+    if (defined($data2)) {
+	# Get the actual data for dataSet=2.
+	@data2 = $this->_tables->getData($tableName, $data2, $columnOrdered);
+	# Validate that there is real data returned.
+	return _make_error("data2 ($data2) points to no data") if (! @data2);
+	my $yminData2 = $chart->setData2(@data2);
+
+	# If scale=semilog and any data is <= 0, then error
+	if ($scale eq "semilog" && $yminData2 <= 0) {
+	    return _make_error("minimum data2 ($yminData2) &lt;= 0 not valid when scale=semilog");
+	}
     }
 
     # Make sure that there are enough legends to go with all specified
@@ -545,6 +600,7 @@ sub _makeChart {
     if ($legend) {
         my $numLegends  = @legend;
         my $numDataSets = @data;
+        $numDataSets += @data2;
         if ($numDataSets != $numLegends) {
             return _make_error(
                 "parameter *legend* contains an invalid value '$legend' since it specifies $numLegends legends and there are $numDataSets data sets."
@@ -581,7 +637,15 @@ sub _makeChart {
     # should be used such that the user's browser CAN cache the image iff
     # none of the values/parameters used in creating the chart have changed.
     my $timestamp = time();
-    return "<img src=\"%ATTACHURL%/$filename?t=$timestamp\" alt=\"$alt\" $options />";
+    my $img = "<img src=\"%ATTACHURL%/$filename?t=$timestamp\" alt=\"$alt\" $options />";
+    if ($showParameters ne "") {
+	my $ret = $showParameters;
+	$ret =~ s/%IMG%/$img/;
+	$ret =~ s/%PARAMS%/$args/;
+	return $ret;
+    } else {
+	return $img;
+    }
 } ## end sub _makeChart
 
 # The following is really for debugging and timing purposes and is not an
@@ -610,6 +674,18 @@ sub _timeit {
     }
     return "To make $loops charts it (roughly) took $diff seconds.<BR>";
 } ## end sub _timeit
+
+# For somewhat debugging/diag purposes, allow users the ability to specify
+# an output format used by %CHART%.  This is called from:
+#     %CHART_PARAMOUTPUT{<outputFormat>}%
+# where outputFormat can contain anything users want, but %IMG% is replaced
+# with the generated CHART tag and %PARAMS% is replaced with the CHART
+# parameters.
+sub _parameterOutput {
+    my ($this, $params, $topic, $web) = @_;
+    $showParameters = $params;
+    return "";
+}
 
 # =========================
 sub _getNum {
@@ -644,6 +720,7 @@ sub commonTagsHandler {
     }
     _init_defaults();
     my $chart = ChartPlugin($topic, $web, $_[0]);
+    $_[0] =~ s/%CHART_PARAMOUTPUT{(.*)}%/$chart->_parameterOutput($1, $topic, $web)/eog;
     $_[0] =~ s/%CHART{(.*?)}%/$chart->_makeChart($1, $topic, $web)/eog;
     $_[0] =~ s/%CHART_TIMER{(\d+) (.*)}%/$chart->_timeit($1, $2, $topic, $web)/eog;
 } ## end sub commonTagsHandler

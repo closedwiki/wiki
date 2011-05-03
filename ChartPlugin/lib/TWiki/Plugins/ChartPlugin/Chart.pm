@@ -35,21 +35,53 @@
 #    setXlabel(@labels)	- Set the label under the X axis - default is none
 #    getXlabel		- Get the X label
 #
-#    setYlabel($flag)	- Set the label under the Y axis - default is none
-#    getYlabel		- Get the Y label
+#    setYlabel($flag)	- Set the label for Y axis #1- default is none
+#    getYlabel		- Get Y label #1
 #
-#    setData(@data)	- Set the the data (array) to chart
-#    getData		- Get the data (array)
-#    getNumDataSets	- Get the number of data sets found in the data.
-#    getNumDataPoints	- Get the number of data points in a data set
+#    setYlabel1($flag)	- Set the label for Y axis #1 - default is none
+#    getYlabel1		- Get the Y label #1
 #
-#    setYmin($min)	- Set the minimum Y value to display on the chart
-#    getYmin		- Get the minimum Y value.  If no user specified
+#    setYlabel2($flag)	- Set the label for Y axis #2 - default is none
+#    getYlabel2		- Get the Y label #2
+#
+#    setData(@data)	- Set the the data (array) for $LEFT yaxis
+#    setData1(@data)	- Set the the data (array) for $LEFT yaxis
+#    setData2(@data)	- Set the the data (array) for $RIGHT yaxis
+#    getData		- Get the data (array) for $LEFT yaxis
+#    getData1		- Get the data (array) for $LEFT yaxis
+#    getData2		- Get the data (array) for $RIGHT yaxis
+#
+#    getNumDataSets	- Get the number of data sets found in data for $LEFT yaxis
+#    getNumDataSets1	- Get the number of data sets found in data for $LEFT yaxis
+#    getNumDataSets2	- Get the number of data sets found in data for $RIGHT yaxis
+#
+#    getNumDataPoints	- Get the number of data points in data set=1.
+#    getNumDataPoints1	- Get the number of data points in data set=1.
+#    getNumDataPoints2	- Get the number of data points in data set=2.
+#
+#    setYmin($min)	- Set the minimum Y value to use for $LEFT yaxis
+#    setYmin1($min)	- Set the minimum Y value to use for $LEFT yaxis
+#    setYmin2($min)	- Set the minimum Y value to use for $RIGHT yaxis
+#    getYmin		- Get the minimum Y value for $LEFT yaxis.  If no user specified
+#    			  value via setYmin(), then return the minimum
+#    			  value actually seen in the data sets
+#    getYmin1		- Get the minimum Y value for $LEFT yaxis.  If no user specified
+#    			  value via setYmin(), then return the minimum
+#    			  value actually seen in the data sets
+#    getYmin2		- Get the minimum Y value for $RIGHT yaxis.  If no user specified
 #    			  value via setYmin(), then return the minimum
 #    			  value actually seen in the data sets
 #
-#    setYmax($max)	- Set the maximum Y value to display on the chart
-#    getYmax		- Get the maximum Y value.  If no user specified
+#    setYmax($max)	- Set the maximum Y value to use for $LEFT yaxis
+#    setYmax1($max)	- Set the maximum Y value to use for $LEFT yaxis
+#    setYmax2($max)	- Set the maximum Y value to use for $RIGHT yaxis
+#    getYmax		- Get the maximum Y value for $LEFT yaxis.  If no user specified
+#    			  value via setYmax(), then return the maximum
+#    			  value actually seen in the data sets
+#    getYmax1		- Get the maximum Y value for $LEFT yaxis.  If no user specified
+#    			  value via setYmax(), then return the maximum
+#    			  value actually seen in the data sets
+#    getYmax2		- Get the maximum Y value for $RIGHT yaxis.  If no user specified
 #    			  value via setYmax(), then return the maximum
 #    			  value actually seen in the data sets
 #
@@ -77,17 +109,31 @@
 #                       - Set the angle of the X axis labels
 #    getXaxisAngle 	- Get the angle of the X axis labels
 #
-#    setYaxis(@yaxis)	- Set Y axis draw flag ("on" or "off")
-#    getYaxis		- Get the value of the Y axis draw flag
+#    setYaxis(@yaxis)	- Set Y axis draw flag ("on" or "off") for $LEFT yaxis
+#    getYaxis		- Get the value of the Y axis draw flag for $LEFT yaxis
+#
+#    setYaxis1(@yaxis)	- Set Y axis draw flag ("on" or "off") for $LEFT yaxis
+#    getYaxis1		- Get the value of the Y axis draw flag for $LEFT yaxis
+#
+#    setYaxis2(@yaxis)	- Set Y axis draw flag ("on" or "off") for $RIGHT yaxis
+#    getYaxis2		- Get the value of the Y axis draw flag for $RIGHT yaxis
 #
 #    setDefNumYGrids($num)- Set the defaultnumber of Y axes to draw
 #    getDefNumYGrids	- Get the defaultnumber of Y axes to draw
 #
-#    setNumYGrids($num)	- Set the number of Y axes to draw
-#    getNumYGrids	- Get the number of Y axes to draw
+#    setNumYGrids($num)	- Set the number of Y axes to draw for $LEFT yaxis
+#    setNumYGrids1($num)- Set the number of Y axes to draw for $LEFT yaxis
+#    setNumYGrids2($num)- Set the number of Y axes to draw for $RIGHT yaxis
+#    getNumYGrids	- Get the number of Y axes to draw for $LEFT yaxis
+#    getNumYGrids1	- Get the number of Y axes to draw for $LEFT yaxis
+#    getNumYGrids2	- Get the number of Y axes to draw for $RIGHT yaxis
 #
-#    setNumYTics($num)	- Set the number of tic marks to draw between Y grids
-#    getNumYTics	- Get the number of tic marks to draw between Y grids
+#    setNumYTics($num)	- Set the number of tic marks to draw between Y grids for $LEFT yaxis
+#    setNumYTics1($num)	- Set the number of tic marks to draw between Y grids for $LEFT yaxis
+#    setNumYTics2($num)	- Set the number of tic marks to draw between Y grids for $RIGHT yaxis
+#    getNumYTics	- Get the number of tic marks to draw between Y grids for $LEFT yaxis
+#    getNumYTics1	- Get the number of tic marks to draw between Y grids for $LEFT yaxis
+#    getNumYTics2	- Get the number of tic marks to draw between Y grids for $RIGHT yaxis
 #
 #    setNumXGrids($num) - Set the number of X axis to draw
 #    getNumXGrids	- Get the number of X axis to draw
@@ -202,9 +248,20 @@ use POSIX;
     setTitle getTitle
     setXlabel getXlabel
     setYlabel getYlabel
-    setData getData getNumDataSets
+    setYlabel1 getYlabel1
+    setYlabel2 getYlabel2
+    setData getData
+    setData1 getData1
+    setData2 getData2
+    getNumDataSets
+    getNumDataSets1
+    getNumDataSets2
     setYmin getYmin
+    setYmin1 getYmin1
+    setYmin2 getYmin2
     setYmax getYmax
+    setYmax1 getYmax1
+    setYmax2 getYmax2
     setXmin getXmin
     setXmax getXmax
     setSubTypes getSubTypes
@@ -212,9 +269,15 @@ use POSIX;
     setXaxisAngle getXaxisAngle
     setNumXGrids getNumXGrids
     setYaxis getYaxis
+    setYaxis1 getYaxis1
+    setYaxis2 getYaxis2
     setNumYGrids getNumYGrids
+    setNumYGrids1 getNumYGrids1
+    setNumYGrids2 getNumYGrids2
     setDefNumYGrids getDefNumYGrids
     setNumYTics getNumYTics
+    setNumYTics1 getNumYTics1
+    setNumYTics2 getNumYTics2
     setXgrid getXgrid
     setYgrid getYgrid
     setScale getScale
@@ -238,6 +301,12 @@ use POSIX;
 
 use strict;
 
+# Define values for left and right Y axises.  Ideally we would use
+# 'use constant', but this requires a newer version of Perl which all
+# people might not have.
+my $LEFT  = 1;
+my $RIGHT = 2;
+
 sub new {
     my ($class) = @_;
     my $this = {};
@@ -258,36 +327,46 @@ sub new {
     $this->setFont("ylabel", GD::gdSmallFont());    # Set Y label font
     $this->setFont("legend", GD::gdSmallFont());    # Set legend font
     $this->setFont("data",   GD::gdSmallFont());    # Set data values font
-    $this->setNumYTics(-1);
     $this->setScale("linear");
+    $this->_setData($LEFT, ([]));
+    $this->_setData($RIGHT, ([]));
+    $this->setNumDataSets($LEFT, 0);
+    $this->setNumDataSets($RIGHT, 0);
     $this->setNumYDigits(0);
     $this->setNumXDigits(0);
     return $this;
 } ## end sub new
 
-sub setType {my ($this, $type) = @_; $$this{TYPE} = $type;}
-sub getType {my ($this) = @_; return $$this{TYPE};}
+sub setType {my ($this, $type) = @_; $$this{TYPE} = $type}
+sub getType {my ($this) = @_; return $$this{TYPE}}
 
-sub setTitle {my ($this, $title) = @_; $$this{TITLE} = $title;}
-sub getTitle {my ($this) = @_; return $$this{TITLE};}
+sub setTitle {my ($this, $title) = @_; $$this{TITLE} = $title}
+sub getTitle {my ($this) = @_; return $$this{TITLE}}
 
-sub setXlabel {my ($this, $Xlabel) = @_; $$this{X_LABEL} = $Xlabel;}
-sub getXlabel {my ($this) = @_; return $$this{X_LABEL};}
+sub setXlabel {my ($this, $Xlabel) = @_; $$this{X_LABEL} = $Xlabel}
+sub getXlabel {my ($this) = @_; return $$this{X_LABEL}}
 
-sub setYlabel {my ($this, $Ylabel) = @_; $$this{Y_LABEL} = $Ylabel;}
-sub getYlabel {my ($this) = @_; return $$this{Y_LABEL};}
+sub _setYlabel {my ($this, $yAxisLoc, $Ylabel) = @_; $$this{"Y_LABEL$yAxisLoc"} = $Ylabel}
+sub setYlabel  {my ($this, $Ylabel) = @_; _setYlabel($this, $LEFT, $Ylabel)}
+sub setYlabel1 {my ($this, $Ylabel) = @_; _setYlabel($this, $LEFT, $Ylabel)}
+sub setYlabel2 {my ($this, $Ylabel) = @_; _setYlabel($this, $RIGHT, $Ylabel)}
 
-sub setDefaultDataValue {my ($this, $defaultValue) = @_; $$this{DEFAULT_VALUE} = $defaultValue;}
-sub getDefaultDataValue {my ($this) = @_; return $$this{DEFAULT_VALUE};}
+sub _getYlabel {my ($this, $yAxisLoc) = @_; return $$this{"Y_LABEL$yAxisLoc"}}
+sub getYlabel  {my ($this) = @_; return _getYlabel($this, $LEFT)}
+sub getYlabel1 {my ($this) = @_; return _getYlabel($this, $LEFT)}
+sub getYlabel2 {my ($this) = @_; return _getYlabel($this, $RIGHT)}
+
+sub setDefaultDataValue {my ($this, $defaultValue) = @_; $$this{DEFAULT_VALUE} = $defaultValue}
+sub getDefaultDataValue {my ($this) = @_; return $$this{DEFAULT_VALUE}}
 
 # Return the minimum data value seen so the caller can decide if special
 # action is needed (as would be the case if scale=semilog and yMin <= 0
-sub setData {
-    my ($this, @data) = @_;
+sub _setData {
+    my ($this, $yAxisLoc, @data) = @_;
 
     # Create clean data values and calculate the min/max values to be charted.
-    my $yMinData             = 9e+40;                          # Initialize with some very large value.
-    my $yMaxData             = -9e+40;                         # Initialize with some very small value.
+    my $yMinData         = 9e+40;                          # Initialize with some very large value.
+    my $yMaxData         = -9e+40;                         # Initialize with some very small value.
     my $value            = 0;
     my $maxRow           = @data - 1;
     my $maxCol           = 0;
@@ -322,93 +401,169 @@ sub setData {
     } ## end for my $r (0 .. $maxRow)
 
     # Save the min/max data set values.
-    $this->setYminOfData($yMinData);
-    $this->setYmaxOfData($yMaxData);
+    $this->_setYminOfData($yAxisLoc, $yMinData);
+    $this->_setYmaxOfData($yAxisLoc, $yMaxData);
 
-    $$this{DATA}            = \@data;
-    $$this{NUM_DATA_SETS}   = @data;
-    $$this{NUM_DATA_POINTS} = @{$data[0]};
+    $$this{"DATA$yAxisLoc"} = \@data;
+    $this->setNumDataSets($yAxisLoc, scalar @data);
+    $this->setNumDataPoints($yAxisLoc, scalar @{$data[0]});
     return $yMinData;
-} ## end sub setData
-sub getData          {my ($this) = @_; return @{$$this{DATA}};}
-sub getNumDataSets   {my ($this) = @_; return $$this{NUM_DATA_SETS};}
-sub getNumDataPoints {my ($this) = @_; return $$this{NUM_DATA_POINTS};}
+} ## end sub _setData
 
-sub setXmin {my ($this, $xMin) = @_; $$this{X_MIN} = $xMin;}
-sub getXmin {my ($this) = @_; return $$this{X_MIN};}
+sub setData  {my ($this, @data) = @_; return _setData($this, $LEFT, @data)}
+sub setData1 {my ($this, @data) = @_; return _setData($this, $LEFT, @data)}
+sub setData2 {my ($this, @data) = @_; return _setData($this, $RIGHT, @data)}
 
-sub getXminOfData {my ($this) = @_; return $$this{X_DATA_MIN};}
-sub setXminOfData {my ($this, $xmin) = @_; $$this{X_DATA_MIN} = $xmin;}
+sub _getData {
+    my ($this, $yAxisLoc) = @_; 
+    if (defined($$this{"DATA$yAxisLoc"})) {
+	return @{$$this{"DATA$yAxisLoc"}};
+    } else {
+	return ();
+    }
+}
+sub getData  {my ($this) = @_; return _getData($this, $LEFT)}
+sub getData1 {my ($this) = @_; return _getData($this, $LEFT)}
+sub getData2 {my ($this) = @_; return _getData($this, $RIGHT)}
 
-sub setXmax {my ($this, $xMax) = @_; $$this{X_MAX} = $xMax;}
-sub getXmax {my ($this) = @_; return $$this{X_MAX};}
+sub setNumDataSets  {my ($this, $yAxisLoc, $num) = @_; $$this{"NUM_DATA_SETS$yAxisLoc"}   = $num};
 
-sub setXmaxOfData {my ($this, $xmax) = @_; $$this{X_DATA_MAX} = $xmax;}
-sub getXmaxOfData {my ($this) = @_; return $$this{X_DATA_MAX};}
+sub _getNumDataSets {my ($this, $yAxisLoc) = @_; return $$this{"NUM_DATA_SETS$yAxisLoc"}}
+sub getNumDataSets  {my ($this) = @_; return _getNumDataSets($this, $LEFT)}
+sub getNumDataSets1 {my ($this) = @_; return _getNumDataSets($this, $LEFT)}
+sub getNumDataSets2 {my ($this) = @_; return _getNumDataSets($this, $RIGHT)}
 
-sub setYmin {my ($this, $yMin) = @_; $$this{Y_MIN} = $yMin;}
-sub getYmin {my ($this) = @_; return $$this{Y_MIN};}
+sub setNumDataPoints  {my ($this, $yAxisLoc, $num) = @_; $$this{"NUM_DATA_POINTS$yAxisLoc"}   = $num};
 
-sub getYminOfData {my ($this) = @_; return $$this{Y_DATA_MIN};}
-sub setYminOfData {my ($this, $ymin) = @_; $$this{Y_DATA_MIN} = $ymin;}
+sub _getNumDataPoints {my ($this, $yAxisLoc) = @_; return $$this{"NUM_DATA_POINTS$yAxisLoc"}}
+sub getNumDataPoints  {my ($this) = @_; return _getNumDataPoints($this, $LEFT)}
+sub getNumDataPoints1 {my ($this) = @_; return _getNumDataPoints($this, $LEFT)}
+sub getNumDataPoints2 {my ($this) = @_; return _getNumDataPoints($this, $RIGHT)}
 
-sub setYmax {my ($this, $yMax) = @_; $$this{Y_MAX} = $yMax;}
-sub getYmax {my ($this) = @_; return $$this{Y_MAX};}
+sub setXmin {my ($this, $xMin) = @_; $$this{X_MIN} = $xMin}
+sub getXmin {my ($this) = @_; return $$this{X_MIN}}
 
-sub setYmaxOfData {my ($this, $ymax) = @_; $$this{Y_DATA_MAX} = $ymax;}
-sub getYmaxOfData {my ($this) = @_; return $$this{Y_DATA_MAX};}
+sub getXminOfData {my ($this) = @_; return $$this{X_DATA_MIN}}
+sub setXminOfData {my ($this, $xmin) = @_; $$this{X_DATA_MIN} = $xmin}
 
-sub setSubTypes {my ($this, @subTypes) = @_; $$this{SUB_TYPES} = \@subTypes;}
-sub getSubTypes {my ($this) = @_; return @{$$this{SUB_TYPES}};}
+sub setXmax {my ($this, $xMax) = @_; $$this{X_MAX} = $xMax}
+sub getXmax {my ($this) = @_; return $$this{X_MAX}}
 
-sub setXaxis {my ($this, @xAxis) = @_; $$this{X_AXIS} = \@xAxis;}
-sub getXaxis {my ($this) = @_; return @{$$this{X_AXIS}};}
+sub setXmaxOfData {my ($this, $xmax) = @_; $$this{X_DATA_MAX} = $xmax}
+sub getXmaxOfData {my ($this) = @_; return $$this{X_DATA_MAX}}
 
-sub setXaxisAngle {my ($this, $angle) = @_; $$this{X_AXIS_ANGLE} = $angle;}
-sub getXaxisAngle {my ($this) = @_; return $$this{X_AXIS_ANGLE};}
+sub _setYmin {my ($this, $yAxisLoc, $yMin) = @_; $$this{"Y_MIN$yAxisLoc"} = $yMin}
+sub setYmin  {my ($this, $yMin) = @_; _setYmin($this, $LEFT, $yMin)}
+sub setYmin1 {my ($this, $yMin) = @_; _setYmin($this, $LEFT, $yMin)}
+sub setYmin2 {my ($this, $yMin) = @_; _setYmin($this, $RIGHT, $yMin)}
 
-sub setYaxis {my ($this, $yAxis) = @_; $$this{Y_AXIS} = $yAxis;}
-sub getYaxis {my ($this) = @_; return $$this{Y_AXIS};}
+sub _getYmin {my ($this, $yAxisLoc) = @_; return $$this{"Y_MIN$yAxisLoc"}}
+sub getYmin  {my ($this) = @_; return _getYmin($this, $LEFT)}
+sub getYmin1 {my ($this) = @_; return _getYmin($this, $LEFT)}
+sub getYmin2 {my ($this) = @_; return _getYmin($this, $RIGHT)}
 
-sub setDefNumYGrids {my ($this, $numYGrids) = @_; $$this{DEFAULT_NUM_Y_GRIDS} = $numYGrids;}
-sub getDefNumYGrids {my ($this) = @_; return $$this{DEFAULT_NUM_Y_GRIDS};}
+sub _setYminOfData {my ($this, $yAxisLoc, $ymin) = @_; $$this{"Y_DATA_MIN$yAxisLoc"} = $ymin}
+sub setYminOfData  {my ($this, $ymin) = @_; _setYminOfData($this, $LEFT, $ymin)}
+sub setYminOfData1 {my ($this, $ymin) = @_; _setYminOfData($this, $LEFT, $ymin)}
+sub setYminOfData2 {my ($this, $ymin) = @_; _setYminOfData($this, $RIGHT, $ymin)}
 
-sub setNumYGrids {my ($this, $numYGrids) = @_; $$this{NUM_Y_GRIDS} = $numYGrids;}
-sub getNumYGrids {my ($this) = @_; return $$this{NUM_Y_GRIDS};}
+sub _getYminOfData {my ($this, $yAxisLoc) = @_; return $$this{"Y_DATA_MIN$yAxisLoc"}}
+sub getYminOfData  {my ($this) = @_; return _getYminOfData($this, $LEFT)}
+sub getYminOfData1 {my ($this) = @_; return _getYminOfData($this, $LEFT)}
+sub getYminOfData2 {my ($this) = @_; return _getYminOfData($this, $RIGHT)}
 
-sub setNumYTics {my ($this, $numYTics) = @_; $$this{NUM_Y_TICS} = $numYTics;}
-sub getNumYTics {my ($this) = @_; return $$this{NUM_Y_TICS};}
+sub _setYmax {my ($this, $yAxisLoc, $yMax) = @_; $$this{"Y_MAX$yAxisLoc"} = $yMax}
+sub setYmax  {my ($this, $yMax) = @_; _setYmax($this, $LEFT, $yMax)}
+sub setYmax1 {my ($this, $yMax) = @_; _setYmax($this, $LEFT, $yMax)}
+sub setYmax2 {my ($this, $yMax) = @_; _setYmax($this, $RIGHT, $yMax)}
 
-sub setNumXGrids {my ($this, $numXGrids) = @_; $$this{NUM_X_GRIDS} = $numXGrids;}
-sub getNumXGrids {my ($this) = @_; return $$this{NUM_X_GRIDS};}
+sub _getYmax {my ($this, $yAxisLoc) = @_; return $$this{"Y_MAX$yAxisLoc"}}
+sub getYmax  {my ($this) = @_; return _getYmax($this, $LEFT)}
+sub getYmax1 {my ($this) = @_; return _getYmax($this, $LEFT)}
+sub getYmax2 {my ($this) = @_; return _getYmax($this, $RIGHT)}
 
-sub setXgrid {my ($this, $xGrid) = @_; $$this{X_GRID} = $xGrid;}
-sub getXgrid {my ($this) = @_; return $$this{X_GRID};}
+sub _setYmaxOfData {my ($this, $yAxisLoc, $ymax) = @_; $$this{"Y_DATA_MAX$yAxisLoc"} = $ymax}
+sub setYmaxOfData  {my ($this, $ymax) = @_; _setYmaxOfData($this, $LEFT, $ymax)}
+sub setYmaxOfData1 {my ($this, $ymax) = @_; _setYmaxOfData($this, $LEFT, $ymax)}
+sub setYmaxOfData2 {my ($this, $ymax) = @_; _setYmaxOfData($this, $RIGHT, $ymax)}
 
-sub setYgrid {my ($this, $yGrid) = @_; $$this{Y_GRID} = $yGrid;}
-sub getYgrid {my ($this) = @_; return $$this{Y_GRID};}
+sub _getYmaxOfData {my ($this, $yAxisLoc) = @_; return $$this{"Y_DATA_MAX$yAxisLoc"}}
+sub getYmaxOfData  {my ($this) = @_; return _getYmaxOfData($this, $LEFT)}
+sub getYmaxOfData1 {my ($this) = @_; return _getYmaxOfData($this, $LEFT)}
+sub getYmaxOfData2 {my ($this) = @_; return _getYmaxOfData($this, $RIGHT)}
 
-sub setScale {my ($this, $scale) = @_; $$this{SCALE} = $scale;}
-sub getScale {my ($this) = @_; return $$this{SCALE};}
+sub setSubTypes {my ($this, @subTypes) = @_; $$this{SUB_TYPES} = \@subTypes}
+sub getSubTypes {my ($this) = @_; return @{$$this{SUB_TYPES}}}
 
-sub setDataLabels {my ($this, @dataLabels) = @_; $$this{DATA_LABELS} = \@dataLabels;}
-sub getDataLabels {my ($this) = @_; return @{$$this{DATA_LABELS}};}
+sub setXaxis {my ($this, @xAxis) = @_; $$this{X_AXIS} = \@xAxis}
+sub getXaxis {my ($this) = @_; return @{$$this{X_AXIS}}}
 
-sub setLegend {my ($this, @legend) = @_; $$this{LEGEND} = \@legend;}
-sub getLegend {my ($this) = @_; return @{$$this{LEGEND}};}
+sub setXaxisAngle {my ($this, $angle) = @_; $$this{X_AXIS_ANGLE} = $angle}
+sub getXaxisAngle {my ($this) = @_; return $$this{X_AXIS_ANGLE}}
 
-sub setImageWidth {my ($this, $imageWidth) = @_; $$this{IMAGE_WIDTH} = _getInt($imageWidth);}
-sub getImageWidth {my ($this) = @_; return $$this{IMAGE_WIDTH};}
+sub _setYaxis {my ($this, $yAxisLoc, $yAxis) = @_; $$this{"Y_AXIS$yAxisLoc"} = $yAxis}
+sub setYaxis  {my ($this, $yAxis)   = @_; _setYaxis($this, $LEFT, $yAxis)}
+sub setYaxis1 {my ($this, $yAxis)   = @_; _setYaxis($this, $LEFT, $yAxis)}
+sub setYaxis2 {my ($this, $yAxis)   = @_; _setYaxis($this, $RIGHT, $yAxis)}
 
-sub setImageHeight {my ($this, $imageHeight) = @_; $$this{IMAGE_HEIGHT} = _getInt($imageHeight);}
-sub getImageHeight {my ($this) = @_; return $$this{IMAGE_HEIGHT};}
+sub _getYaxis {my ($this, $yAxisLoc) = @_; return $$this{"Y_AXIS$yAxisLoc"}}
+sub getYaxis  {my ($this) = @_; return _getYaxis($this, $LEFT)}
+sub getYaxis1 {my ($this) = @_; return _getYaxis($this, $LEFT)}
+sub getYaxis2 {my ($this) = @_; return _getYaxis($this, $RIGHT)}
+
+sub setDefNumYGrids {my ($this, $numYGrids) = @_; $$this{DEFAULT_NUM_Y_GRIDS} = $numYGrids}
+sub getDefNumYGrids {my ($this) = @_; return $$this{DEFAULT_NUM_Y_GRIDS}}
+
+sub _setNumYGrids {my ($this, $yAxisLoc, $numYGrids) = @_; $$this{"NUM_Y_GRIDS$yAxisLoc"} = $numYGrids}
+sub setNumYGrids  {my ($this, $numYGrids) = @_; _setNumYGrids($this, $LEFT, $numYGrids)}
+sub setNumYGrids1 {my ($this, $numYGrids) = @_; _setNumYGrids($this, $LEFT, $numYGrids)}
+sub setNumYGrids2 {my ($this, $numYGrids) = @_; _setNumYGrids($this, $RIGHT, $numYGrids)}
+
+sub _getNumYGrids {my ($this, $yAxisLoc) = @_; return $$this{"NUM_Y_GRIDS$yAxisLoc"}}
+sub getNumYGrids  {my ($this) = @_; return _getNumYGrids($this, $LEFT)}
+sub getNumYGrids1 {my ($this) = @_; return _getNumYGrids($this, $LEFT)}
+sub getNumYGrids2 {my ($this) = @_; return _getNumYGrids($this, $RIGHT)}
+
+sub _setNumYTics {my ($this, $yAxisLoc, $numYTics) = @_; $$this{"NUM_Y_TICS$yAxisLoc"} = $numYTics}
+sub setNumYTics  {my ($this, $numYTics) = @_; _setNumYTics($this, $LEFT, $numYTics)}
+sub setNumYTics1 {my ($this, $numYTics) = @_; _setNumYTics($this, $LEFT, $numYTics)}
+sub setNumYTics2 {my ($this, $numYTics) = @_; _setNumYTics($this, $RIGHT, $numYTics)}
+
+sub _getNumYTics {my ($this, $yAxisLoc)  = @_; return $$this{"NUM_Y_TICS$yAxisLoc"}}
+sub getNumYTics  {my ($this) = @_; return _getNumYTics($this, $LEFT)}
+sub getNumYTics1 {my ($this) = @_; return _getNumYTics($this, $LEFT)}
+sub getNumYTics2 {my ($this) = @_; return _getNumYTics($this, $RIGHT)}
+
+sub setNumXGrids {my ($this, $numXGrids) = @_; $$this{NUM_X_GRIDS} = $numXGrids}
+sub getNumXGrids {my ($this) = @_; return $$this{NUM_X_GRIDS}}
+
+sub setXgrid {my ($this, $xGrid) = @_; $$this{X_GRID} = $xGrid}
+sub getXgrid {my ($this) = @_; return $$this{X_GRID}}
+
+sub setYgrid {my ($this, $yGrid) = @_; $$this{Y_GRID} = $yGrid}
+sub getYgrid {my ($this) = @_; return $$this{Y_GRID}}
+
+sub setScale {my ($this, $scale) = @_; $$this{SCALE} = $scale}
+sub getScale {my ($this) = @_; return $$this{SCALE}}
+
+sub setDataLabels {my ($this, @dataLabels) = @_; $$this{DATA_LABELS} = \@dataLabels}
+sub getDataLabels {my ($this) = @_; return @{$$this{DATA_LABELS}}}
+
+sub setLegend {my ($this, @legend) = @_; $$this{LEGEND} = \@legend}
+sub getLegend {my ($this) = @_; return @{$$this{LEGEND}}}
+
+sub setImageWidth {my ($this, $imageWidth) = @_; $$this{IMAGE_WIDTH} = _getInt($imageWidth)}
+sub getImageWidth {my ($this) = @_; return $$this{IMAGE_WIDTH}}
+
+sub setImageHeight {my ($this, $imageHeight) = @_; $$this{IMAGE_HEIGHT} = _getInt($imageHeight)}
+sub getImageHeight {my ($this) = @_; return $$this{IMAGE_HEIGHT}}
 
 sub setAreaColors {
     my ($this, @AreaColors) = @_;
     $$this{AREA_COLORS}     = \@AreaColors;
     $$this{NEXT_AREA_COLOR} = 0;
 }
-sub getAreaColors {my ($this) = @_; return @{$$this{AREA_COLORS}};}
+sub getAreaColors {my ($this) = @_; return @{$$this{AREA_COLORS}}}
 
 sub getAreaColorByIndex {
     my ($this, $index) = @_;
@@ -422,7 +577,7 @@ sub setLineColors {
     $$this{LINE_COLORS}     = \@LineColors;
     $$this{NEXT_LINE_COLOR} = 0;
 }
-sub getLineColors {my ($this) = @_; return @{$$this{LINE_COLORS}};}
+sub getLineColors {my ($this) = @_; return @{$$this{LINE_COLORS}}}
 
 sub getLineColorByIndex {
     my ($this, $index) = @_;
@@ -431,23 +586,23 @@ sub getLineColorByIndex {
     return $nextColor;
 }
 
-sub setColors {my ($this, @Colors) = @_; $$this{COLORS} = \@Colors;}
-sub getColors {my ($this) = @_; return @{$$this{COLORS}};}
+sub setColors {my ($this, @Colors) = @_; $$this{COLORS} = \@Colors}
+sub getColors {my ($this) = @_; return @{$$this{COLORS}}}
 
-sub setGridColor {my ($this, @gridColor) = @_; $$this{GRID_COLOR} = \@gridColor;}
-sub getGridColor {my ($this) = @_; return @{$$this{GRID_COLOR}};}
+sub setGridColor {my ($this, @gridColor) = @_; $$this{GRID_COLOR} = \@gridColor}
+sub getGridColor {my ($this) = @_; return @{$$this{GRID_COLOR}}}
 
-sub setFileDir {my ($this, $dir) = @_; $$this{FILE_DIR} = $dir;}
-sub getFileDir {my ($this) = @_; return $$this{FILE_DIR};}
+sub setFileDir {my ($this, $dir) = @_; $$this{FILE_DIR} = $dir}
+sub getFileDir {my ($this) = @_; return $$this{FILE_DIR}}
 
-sub setFileName {my ($this, $name) = @_; $$this{FILE_NAME} = $name;}
-sub getFileName {my ($this) = @_; return $$this{FILE_NAME};}
+sub setFileName {my ($this, $name) = @_; $$this{FILE_NAME} = $name}
+sub getFileName {my ($this) = @_; return $$this{FILE_NAME}}
 
-sub setMargin {my ($this, $margin) = @_; $$this{MARGIN} = $margin;}
-sub getMargin {my ($this) = @_; return $$this{MARGIN};}
+sub setMargin {my ($this, $margin) = @_; $$this{MARGIN} = $margin}
+sub getMargin {my ($this) = @_; return $$this{MARGIN}}
 
-sub setImage {my ($this, $image) = @_; $$this{IMAGE} = $image;}
-sub getImage {my ($this) = @_; return $$this{IMAGE};}
+sub setImage {my ($this, $image) = @_; $$this{IMAGE} = $image}
+sub getImage {my ($this) = @_; return $$this{IMAGE}}
 
 sub setFont {
     my ($this, $type, $font) = @_;
@@ -455,33 +610,44 @@ sub setFont {
     $$this{"FONT_WIDTH_$type"}  = $font->width;
     $$this{"FONT_HEIGHT_$type"} = $font->height;
 }
-sub getFont       {my ($this, $type) = @_; return $$this{"FONT_$type"};}
-sub getFontWidth  {my ($this, $type) = @_; return $$this{"FONT_WIDTH_$type"};}
-sub getFontHeight {my ($this, $type) = @_; return $$this{"FONT_HEIGHT_$type"};}
+sub getFont       {my ($this, $type) = @_; return $$this{"FONT_$type"}}
+sub getFontWidth  {my ($this, $type) = @_; return $$this{"FONT_WIDTH_$type"}}
+sub getFontHeight {my ($this, $type) = @_; return $$this{"FONT_HEIGHT_$type"}}
 
-sub setBGcolor {my ($this, @bgcolor) = @_; $$this{BGCOLOR} = \@bgcolor;}
-sub getBGcolor {my ($this) = @_; return @{$$this{BGCOLOR}};}
+sub setBGcolor {my ($this, @bgcolor) = @_; $$this{BGCOLOR} = \@bgcolor}
+sub getBGcolor {my ($this) = @_; return @{$$this{BGCOLOR}}}
 
-sub setNumYDigits {my ($this, $numDigits) = @_; $$this{NUM_Y_DIGITS} = $numDigits;}
-sub getNumYDigits {my ($this) = @_; return $$this{NUM_Y_DIGITS};}
-sub setNumXDigits {my ($this, $numDigits) = @_; $$this{NUM_X_DIGITS} = $numDigits;}
-sub getNumXDigits {my ($this) = @_; return $$this{NUM_X_DIGITS};}
+sub _setNumYDigits {my ($this, $yAxisLoc, $numDigits) = @_; $$this{"NUM_Y_DIGITS$yAxisLoc"} = $numDigits}
+sub setNumYDigits  {my ($this, $numDigits) = @_; _setNumYDigits($this, $LEFT, $numDigits)}
+sub setNumYDigits1 {my ($this, $numDigits) = @_; _setNumYDigits($this, $LEFT, $numDigits)}
+sub setNumYDigits2 {my ($this, $numDigits) = @_; _setNumYDigits($this, $RIGHT, $numDigits)}
 
-sub setPointSize {my ($this, $pixels) = @_; $$this{POINT_SIZE} = $pixels;}
-sub getPointSize {my ($this) = @_; return $$this{POINT_SIZE};}
-sub setLineWidth {my ($this, $pixels) = @_; $$this{LINE_WIDTH} = $pixels;}
-sub getLineWidth {my ($this) = @_; return $$this{LINE_WIDTH};}
+sub _getNumYDigits {my ($this, $yAxisLoc) = @_; return $$this{"NUM_Y_DIGITS$yAxisLoc"}}
+sub getNumYDigits  {my ($this) = @_; return _getNumYDigits($this, $LEFT)}
+sub getNumYDigits1 {my ($this) = @_; return _getNumYDigits($this, $LEFT)}
+sub getNumYDigits2 {my ($this) = @_; return _getNumYDigits($this, $RIGHT)}
 
-sub setBarLeadingSpace {my ($this, $pixels) = @_; $$this{BAR_LEADING_SPACE} = $pixels;}
-sub getBarLeadingSpace {my ($this) = @_; return $$this{BAR_LEADING_SPACE};}
-sub setBarTrailingSpace {my ($this, $pixels) = @_; $$this{BAR_TRAILING_SPACE} = $pixels;}
-sub getBarTrailingSpace {my ($this) = @_; return $$this{BAR_TRAILING_SPACE};}
-sub setBarSpace {my ($this, $pixels) = @_; $$this{BAR_SPACE} = $pixels;}
-sub getBarSpace {my ($this) = @_; return $$this{BAR_SPACE};}
+sub setNumXDigits {my ($this, $numDigits) = @_; $$this{NUM_X_DIGITS} = $numDigits}
+sub getNumXDigits {my ($this) = @_; return $$this{NUM_X_DIGITS}}
 
+sub setPointSize {my ($this, $pixels) = @_; $$this{POINT_SIZE} = $pixels}
+sub getPointSize {my ($this) = @_; return $$this{POINT_SIZE}}
+sub setLineWidth {my ($this, $pixels) = @_; $$this{LINE_WIDTH} = $pixels}
+sub getLineWidth {my ($this) = @_; return $$this{LINE_WIDTH}}
+
+sub setBarLeadingSpace {my ($this, $pixels) = @_; $$this{BAR_LEADING_SPACE} = $pixels}
+sub getBarLeadingSpace {my ($this) = @_; return $$this{BAR_LEADING_SPACE}}
+sub setBarTrailingSpace {my ($this, $pixels) = @_; $$this{BAR_TRAILING_SPACE} = $pixels}
+sub getBarTrailingSpace {my ($this) = @_; return $$this{BAR_TRAILING_SPACE}}
+sub setBarSpace {my ($this, $pixels) = @_; $$this{BAR_SPACE} = $pixels}
+sub getBarSpace {my ($this) = @_; return $$this{BAR_SPACE}}
+
+# Make sure colors are defined for each data set on each Y axis
 sub computeFinalColors {
     my ($this)      = @_;
-    my $numDataSets = $this->getNumDataSets();
+
+    my $numDataSets = $this->getNumDataSets1();
+    $numDataSets += $this->getNumDataSets2();
     my @subTypes    = $this->getSubTypes();
     my $im          = $this->getImage();
 
@@ -520,7 +686,8 @@ sub computeFinalColors {
             $index++;
         }
     } ## end else [ if (@colors) ]
-        # Walk through each color and allocate it in the GD.
+
+    # Walk through each color and allocate it in the GD.
     my @allocatedColors;
     for my $color (@chartColors) {
         push(@allocatedColors, $im->colorAllocate(_convert_color($color)));
@@ -528,16 +695,17 @@ sub computeFinalColors {
     return @allocatedColors;
 } ## end sub computeFinalColors
 
-# Calculate the 'types' for each of the data sets.  If getType() is 'area',
-# then artificially fill in subTypes for each data set to match that type.
-# If type is 'combo', then subTypes should have been specified by the user.
-# If not, then assume that all but the last data set are 'area' and the
-# last is 'line'.
+# Calculate the 'types' for each of the data sets on each Y axis.  If
+# getType() is 'area', then artificially fill in subTypes for each data set
+# to match that type.  If type is 'combo', then subTypes should have been
+# specified by the user.  If not, then assume that all but the last data
+# set are 'area' and the last is 'line'.
 sub computeSubTypes {
     my ($this)      = @_;
-    my $numDataSets = $this->getNumDataSets();
+    my $numDataSets = $this->getNumDataSets1();
+    $numDataSets += $this->getNumDataSets2();
     my $type        = $this->getType();
-    my @subTypes    = ();
+    my @subTypes;
     # Deal with types that don't allow subtypes.  In this case force all
     # subtypes to be the same as the type.
     if (($type eq "area") || ($type eq "bar")) {
@@ -594,16 +762,17 @@ sub makeChart {
     my $im = new GD::Image($imageWidth, $imageHeight);
     $this->setImage($im);
 
-    # Define some commonly used colors
-    my $defaultBGcolorText = "ffffff";
-    my $defaultBGcolor     = $im->colorAllocate(_convert_color($defaultBGcolorText));
-    my $black              = $im->colorAllocate(0, 0, 0);                               # black
-
     # Create the background color.  If not defined, default to white, else
     # use the user specified value.
-    my @bgcolor = $this->getBGcolor();
+
+    # Define some commonly used colors
+    my ($outsideBGColor, $insideBGColor, $boxBGColor) = $this->getBGcolor();
+    my $initialBGcolorText = "#FFFFFF"; # White
+    my $initialBGcolor     = $im->colorAllocate(_convert_color($initialBGcolorText));
+    my $black              = $im->colorAllocate(0, 0, 0);
+
     # Start with a totally white background
-    $im->filledRectangle(0, 0, $imageWidth - 1, $imageHeight - 1, $defaultBGcolor);
+    $im->filledRectangle(0, 0, $imageWidth - 1, $imageHeight - 1, $initialBGcolor);
 
     # Calculate the 'types' for each of the data sets.
     my @subTypes = $this->computeSubTypes();
@@ -627,10 +796,16 @@ sub makeChart {
     my $scale = $this->getScale();
 
     # Get the data and info about the data.
-    my @data          = $this->getData();
-    my $numDataSets   = $this->getNumDataSets();
-    my $numDataPoints = $this->getNumDataPoints();
-    return "Error: Number of data points needs to be > 1" if ($numDataPoints <= 1);
+    my @data1 = $this->getData1();
+    my @data2 = $this->getData2();
+    my $numDataSets1   = $this->getNumDataSets1();
+    my $numDataSets2   = $this->getNumDataSets2();
+    my $isData2Data = $numDataSets2;
+    my @numDataPoints;
+    $numDataPoints[$LEFT] = $this->getNumDataPoints1();
+    $numDataPoints[$RIGHT] = $this->getNumDataPoints2();
+    return "Error: Number of data points needs to be > 1" if ($numDataPoints[$LEFT] <= 1);
+    return "Error: Number of data points for data2 needs to be > 1" if ($isData2Data && $numDataPoints[$RIGHT] <= 1);
 
     # Calculate the colors that will be needed for the various lines and
     # areas figuring out which color is needed when and also dealing with
@@ -675,87 +850,118 @@ sub makeChart {
     my $xUR    = $imageWidth - 1 - $margin;
     my $yUR    = $margin;
 
-    # Calculate how much space will be needed for the Y label (if specified).
-    my $yLabel = $this->getYlabel();
-    if (defined $yLabel) {
-        # Add space for the label as well as some space between the label
+    # Calculate how much space will be needed for the Y label1 (if specified).
+    my $yLabel1 = $this->getYlabel1();
+    if (defined $yLabel1) {
+        # Allocate space for label1 as well as some space between the label
         # and the Y Axis labels or the left side of the chart.
         $xLL += $this->getFontHeight("ylabel") + 10;
     }
-
-    # Get the users specified ymin, ymax, and numygrids
-    my $yAxisMin = $this->getYmin();
-    my $yAxisMax = $this->getYmax();
-    my $numYGrids = $this->getNumYGrids();
-
-    # If ymin not set, either as a CHART default or a per CHART value,
-    # compute a good default.
-    if ($yAxisMin eq "") {
-	my $yMinData = $this->getYminOfData();
-        if ($scale eq "semilog") {
-	    my $yMinLog10 = log10($yMinData);
-	    $yAxisMin = pow(10.0, floor($yMinLog10))
-	} else {
-	    $yAxisMin = computeFloor($yMinData);
-	}
+    # Calculate how much space will be needed for the Y label2 (if specified).
+    my $yLabel2 = $this->getYlabel2();
+    if (defined $yLabel2) {
+        # Allocate space for label2 as well as some space between the label
+        # and the Y Axis labels or the side of the chart.
+        $xUR -= $this->getFontHeight("ylabel");
     }
-    # If ymax not set, either as a CHART default or a per CHART value,
-    # compute a good default.
-    if ($yAxisMax eq "") {
-	my $yMaxData = $this->getYmaxOfData();
-        if ($scale eq "semilog") {
-	    my $yMaxLog10 = log10($yMaxData);
-	    $yAxisMax = pow(10.0, ceil($yMaxLog10))
-	} else {
-	    $yAxisMax = computeCeil($yMaxData);
+
+    my @yAxisMin;
+    my @yAxisMax;
+    my @numYGrids;
+    # Foreach data set, see if we need to compute ymin and ymax.
+    foreach my $yAxisLoc ($LEFT, $RIGHT) {
+	next if ($this->_getNumDataSets($yAxisLoc) == 0);
+	# Get the users specified ymin, ymax, and numygrids
+	$yAxisMin[$yAxisLoc]  = $this->_getYmin($yAxisLoc);
+	$yAxisMax[$yAxisLoc]  = $this->_getYmax($yAxisLoc);
+	$numYGrids[$yAxisLoc] = $this->_getNumYGrids($yAxisLoc);
+	# If ymin not set, either as a CHART default or a per CHART value,
+	# compute a good default.
+	if (! defined($yAxisMin[$yAxisLoc])) {
+	    my $yMinData = $this->_getYminOfData($yAxisLoc);
+	    if ($scale eq "semilog") {
+		my $yMinLog10 = log10($yMinData);
+		$yAxisMin[$yAxisLoc] = pow(10.0, floor($yMinLog10));
+	    } else {
+		$yAxisMin[$yAxisLoc] = computeFloor($yMinData);
+	    }
 	}
-    }
-    # If indications are that there is no chart height and the user hasn't
-    # set ymin or ymax, then adjust things to make the chart height
-    # non-zero.
-    if ($yAxisMin == $yAxisMax) {
-	# First see if we can tweak ymax
-	if (! defined($this->getYmax())) {
-	    $yAxisMax = computeCeil($yAxisMax + 0.1);
-	} elsif (! defined($this->getYmin())) {
-	    $yAxisMin = computeFloor($yAxisMin - 0.1);
+	# If ymax not set, either as a CHART default or a per CHART value,
+	# compute a good default.
+	if (! defined($yAxisMax[$yAxisLoc])) {
+	    my $yMaxData = $this->_getYmaxOfData($yAxisLoc);
+	    if ($scale eq "semilog") {
+		my $yMaxLog10 = log10($yMaxData);
+		$yAxisMax[$yAxisLoc] = pow(10.0, ceil($yMaxLog10));
+	    } else {
+		$yAxisMax[$yAxisLoc] = computeCeil($yMaxData);
+	    }
+	}
+	# If indications are that there is no chart height and the user hasn't
+	# set ymin or ymax, then adjust things to make the chart height
+	# non-zero.
+	if ($yAxisMin[$yAxisLoc] == $yAxisMax[$yAxisLoc]) {
+	    # First see if we can tweak ymax
+	    if (! defined($this->_getYmax($yAxisLoc))) {
+		$yAxisMax[$yAxisLoc] = computeCeil($yAxisMax[$yAxisLoc] + 0.1);
+	    } elsif (! defined($this->_getYmin($yAxisLoc))) {
+		$yAxisMin[$yAxisLoc] = computeFloor($yAxisMin[$yAxisLoc] - 0.1);
+	    }
+	}
+	$this->_setYminOfData($yAxisLoc, $yAxisMin[$yAxisLoc]);
+	$this->_setYmaxOfData($yAxisLoc, $yAxisMax[$yAxisLoc]);
+	# Check for valid user specified min/max
+	if (defined($this->_getYmin($yAxisLoc)) && defined($this->_getYmax($yAxisLoc)) && $yAxisMin[$yAxisLoc] == $yAxisMax[$yAxisLoc]) {
+	    return "No Chart height with ymin$yAxisLoc($yAxisMin[$yAxisLoc]) == ymax($yAxisMax[$yAxisLoc])";
 	}
     }
     # If numygrids not defined, then no user specified value so attempt to
-    # compute a reasonable value
-    if (! defined($numYGrids) || $numYGrids eq "") {
+    # compute a reasonable value from data1 data.
+    if (! defined($numYGrids[$LEFT]) || $numYGrids[$LEFT] eq "") {
         if ($scale eq "semilog") {
-	    $numYGrids = log10($yAxisMax) - log10($yAxisMin) - 1;
+            $numYGrids[$LEFT] = log10($yAxisMax[$LEFT]) - log10($yAxisMin[$LEFT]) - 1;
+        } else {
+	    if ($this->getDefNumYGrids() eq "") {
+		# So no user defined numxgrids and no system default, so
+		# calculate one using at most 9 grid lines.
+		$numYGrids[$LEFT] = $this->computeLinearNumGrids($yAxisMin[$LEFT], $yAxisMax[$LEFT], 9);
+	    } else {
+		$numYGrids[$LEFT] = $this->getDefNumYGrids();
+	    }
+        }
+        $this->setNumYGrids1($numYGrids[$LEFT]);
+    }
+    # If there is data2, then we force the numYGrids for data set=RIGHT to be
+    # the same as numYGrids on data1.
+    if ($isData2Data) {
+        $this->setNumYGrids2($numYGrids[$RIGHT] = $numYGrids[$LEFT]);
+    }
+
+    foreach my $yAxisLoc ($LEFT, $RIGHT) {
+	next if ($this->_getNumDataSets($yAxisLoc) == 0);
+	if ($scale eq "semilog") {
+	    $this->_setNumYDigits($yAxisLoc, 0);
+	    my $tics = $this->_getNumYTics($yAxisLoc);
+	    $this->_setNumYTics($yAxisLoc, 8) if (! defined($tics) || $tics > 8);
 	} else {
-	    $numYGrids = $this->computeLinearNumGrids($yAxisMin, $yAxisMax, $this->getDefNumYGrids());
+	    # Calculate how many digits we need to display on the yaxis
+	    my $maxYDigits = $this->computeNumDigits($yAxisMin[$yAxisLoc], $yAxisMax[$yAxisLoc], $numYGrids[$yAxisLoc]);
+	    $this->_setNumYDigits($yAxisLoc, $maxYDigits);
 	}
-	$this->setNumYGrids($numYGrids);
-    }
-    $this->setYminOfData($yAxisMin);
-    $this->setYmaxOfData($yAxisMax);
-
-    if ($scale eq "semilog") {
-	$this->setNumYDigits(0);
-	my $tics = $this->getNumYTics();
-	$this->setNumYTics(8) if ($tics == -1 || $tics > 8);
-    } else {
-	# Calculate how many digits we need to display on the yaxis
-	my $maxYDigits = $this->computeNumDigits($yAxisMin, $yAxisMax, $numYGrids);
-	$this->setNumYDigits($maxYDigits);
     }
 
-    # Check for valid user specified min/max
-    if (defined($this->getYmin()) && defined($this->getYmax()) && $yAxisMin == $yAxisMax) {
-        return "No Chart height with ymin($yAxisMin) == ymax($yAxisMax)";
+    my @scaledYAxisMin;
+    my @scaledYAxisMax;
+    my @chartHeight;
+    foreach my $yAxisLoc ($LEFT, $RIGHT) {
+	next if ($this->_getNumDataSets($yAxisLoc) == 0);
+	$scaledYAxisMin[$yAxisLoc] = $this->_scale($yAxisMin[$yAxisLoc]);
+	$scaledYAxisMax[$yAxisLoc] = $this->_scale($yAxisMax[$yAxisLoc]);
+	$chartHeight[$yAxisLoc]    = $scaledYAxisMax[$yAxisLoc] - $scaledYAxisMin[$yAxisLoc];
+	# Check to see if either the user specified ymin/ymax values, or the
+	# data itself was such that ymin > ymax.
+	return "Y max$yAxisLoc ($yAxisMax[$yAxisLoc]) < Y Min$yAxisLoc ($yAxisMin[$yAxisLoc])" if ($chartHeight[$yAxisLoc] < 0);
     }
-
-    my $scaledYAxisMin = $this->_scale($yAxisMin);
-    my $scaledYAxisMax = $this->_scale($yAxisMax);
-    my $chartHeight    = $scaledYAxisMax - $scaledYAxisMin;
-
-    # Check to see if either the user specified ymin/ymax values, or the
-    # data itself was such that ymin > ymax.
-    return "Y max ($yAxisMax) < Y Min ($yAxisMin)" if ($chartHeight < 0);
 
     # To support scatter graphs (where the X data is probably not sorted)
     # we get the X axis labels and sort them (numerically) producing an
@@ -781,7 +987,7 @@ sub makeChart {
         if ($scatterChart) {    # No xaxis specified and scatter graph
             return "xaxis needs to be specified for a scatter graph";
         } else {
-            foreach my $index (0 .. $numDataPoints) {
+            foreach my $index (0 .. $numDataPoints[$LEFT]) {
                 $xAxisIndex{$index} = $index;
             }
         }
@@ -800,39 +1006,39 @@ sub makeChart {
     if ($scatterChart) {
         $xAxisMin = 9e+40;     # Initialize with some very large value.
         $xAxisMax = -9e+40;    # Initialize with some very small value.
-        foreach my $i (0 .. $#xAxis) {
-            my $value = $xAxisIndex{$i};
+        foreach my $yAxisLoc (0 .. $#xAxis) {
+            my $value = $xAxisIndex{$yAxisLoc};
             if ($value =~ m/([\-]?[0-9.]+[eE]?[+-]?\d*)/) {
                 $xAxisMin = $1 if ($1 < $xAxisMin);
                 $xAxisMax = $1 if ($1 > $xAxisMax);
             }
         }
         my ($newXmin, $newXmax, $newNumXGrids, $newNumXDecimalDigits);
-	$newXmin = $this->getXmin();
-	$newXmax = $this->getXmax();
-	$newXmin = computeFloor($xAxisMin) if (! defined($newXmin));
-	$newXmax = computeCeil($xAxisMax) if (! defined($newXmax));
-	$newNumXGrids = $this->computeLinearNumGrids($newXmin, $newXmax, $numDataPoints);
+        $newXmin      = $this->getXmin();
+        $newXmax      = $this->getXmax();
+        $newXmin      = computeFloor($xAxisMin) if (! defined($newXmin));
+        $newXmax      = computeCeil($xAxisMax) if (! defined($newXmax));
+        $newNumXGrids = $this->computeLinearNumGrids($newXmin, $newXmax, $numDataPoints[$LEFT]);
         $this->setXminOfData($xAxisMin = $newXmin);
         $this->setXmaxOfData($xAxisMax = $newXmax);
         $this->setNumXGrids($numXGrids = $newNumXGrids);
         $this->setNumXDigits($newNumXDecimalDigits);
     } else {
-	# Set the minimum xIndex which is 0
+        # Set the minimum xIndex which is 0
         $this->setXminOfData($xAxisMin = 0);
         # Since not a scatter graph, then assume that the X axis labels are
         # simple text and are drawn in the exact order that they occur in
         # the table.  As an exception, if no X axis is specified, then
         # there are no X labels to draw so just compute the number of grid
         # lines.
-	@xAxisLabels = @xAxis;
+        @xAxisLabels = @xAxis;
         if (@xAxis) {
             $this->setXmaxOfData($xAxisMax = $#xAxis);
             # Set the number of X grids be the smaller of: number of data
             # points to draw or the number of X grids the user specifies
-            $this->setNumXGrids($numXGrids = ($numDataPoints - 2)) if (($numDataPoints - 2) < $numXGrids);
+            $this->setNumXGrids($numXGrids = ($numDataPoints[$LEFT] - 2)) if (($numDataPoints[$LEFT] - 2) < $numXGrids);
         } else {
-            $this->setXmaxOfData($xAxisMax = $numDataPoints);
+            $this->setXmaxOfData($xAxisMax = $numDataPoints[$LEFT]);
         }
     } ## end else [ if ($scatterChart) ]
 
@@ -850,29 +1056,44 @@ sub makeChart {
     # Although tedious, we need to walk through each number that will be
     # drawn and calculate it's width since the widths can vary from number
     # to number.
-    my @yLabels;
-    if ($this->getYaxis() eq "on") {
-        # Calculate the string width of both the min/max Y axis labels so
-        # we know how much room to allocate for them.  Save the values for
-        # later use.
-        my $labelInc  = ($yAxisMax - $yAxisMin) / ($numYGrids + 1);
-        my $yaxis     = $yAxisMin;
-        my $maxLength = 0;
-        my $len;
-	my $yAxisDecimalDigits = $this->getNumYDigits();
-        for my $yAxisIndex (0 .. ($numYGrids + 1)) {
-            my $text = _printNumber($yaxis, $yAxisDecimalDigits);
-            $yLabels[$yAxisIndex] = $text;
-            $len = length($text);
-            $maxLength = $len if ($len > $maxLength);
-            if ($scale eq "semilog") {
-                $yaxis *= 10.0;
-            } else {
-                $yaxis += $labelInc;
-            }
-        }
-        $xLL += $this->getFontWidth("yaxis") * $maxLength;
-    } ## end if ($this->getYaxis() ...)
+    my %yGridLabels;
+    my $yAxis2LabelWidth = 0;
+    my $isYaxis2Text   = 0;
+    if (defined($yLabel2) || $this->getYaxis2() eq "on") {
+	$isYaxis2Text = 1;
+    }
+    foreach my $yAxisLoc ($LEFT, $RIGHT) {
+	next if ($this->_getNumDataSets($yAxisLoc) == 0);
+	if ($this->_getYaxis($yAxisLoc) eq "on") {
+	    # Calculate the string width of both the min/max Y axis labels so
+	    # we know how much room to allocate for them.  Save the values for
+	    # later use.
+	    my $labelInc  = ($yAxisMax[$yAxisLoc] - $yAxisMin[$yAxisLoc]) / ($numYGrids[$yAxisLoc] + 1);
+	    my $yaxis     = $yAxisMin[$yAxisLoc];
+	    my $maxLength = 0;
+	    my $len;
+	    my $yAxisDecimalDigits = $this->_getNumYDigits($yAxisLoc);
+	    for my $yAxisIndex (0 .. ($numYGrids[$yAxisLoc] + 1)) {
+		my $text = _printNumber($yaxis, $yAxisDecimalDigits);
+		$yGridLabels{$yAxisLoc}[$yAxisIndex] = $text;
+		$len = length($text);
+		$maxLength = $len if ($len > $maxLength);
+		if ($scale eq "semilog") {
+		    $yaxis *= 10.0;
+		} else {
+		    $yaxis += $labelInc;
+		}
+	    }
+	    if ($yAxisLoc == $LEFT) {
+		$xLL += $this->getFontWidth("yaxis") * $maxLength;
+	    }
+	    if ($yAxisLoc == $RIGHT && $isYaxis2Text) {
+		$xUR -= $this->getFontWidth("yaxis") * $maxLength;
+		$yAxis2LabelWidth = $maxLength;
+	    }
+	} ## end if ($this->getYaxis() ...)
+    }
+    $xUR -= 10 if ($isYaxis2Text);
 
     # Calculate how much space will be needed for the X label (if specified).
     my $xLabel = $this->getXlabel();
@@ -927,7 +1148,7 @@ sub makeChart {
         } ## end else [ if ($xAxisAngle == 0) ]
     } ## end if (@xAxis)
 
-    # Calculate how much space will be needed for the legend.
+    # Calculate how much space needed for the legend.
     my @legends = $this->getLegend();
     if (@legends) {
         my $legendWidth;
@@ -965,7 +1186,7 @@ sub makeChart {
         $xBarSpace         = $this->getBarSpace;
         $xBarLeadingSpace  = $this->getBarLeadingSpace;
         $xBarTrailingSpace = $this->getBarTrailingSpace - $xBarSpace;
-        $xBarWidth         = ((($chartWidthInPixels / $numDataPoints) - $xBarLeadingSpace - $xBarTrailingSpace) / $numBarDataSets) - ($xBarSpace + 1);
+        $xBarWidth         = ((($chartWidthInPixels / $numDataPoints[$LEFT]) - $xBarLeadingSpace - $xBarTrailingSpace) / $numBarDataSets) - ($xBarSpace + 1);
         $barHalfWidth      = $xBarWidth / 2;
     }
 
@@ -982,27 +1203,31 @@ sub makeChart {
         if ($numBarDataSets) {
             # If bars are drawn, then we need to artificially make more room
             # for the bars by assuming 1 extra (undrawn) data set.
-            $xDrawInc = $chartWidthInPixels / $numDataPoints;
+            $xDrawInc = $chartWidthInPixels / $numDataPoints[$LEFT];
         } else {
-            $xDrawInc = $chartWidthInPixels / ($numDataPoints - 1);
+            $xDrawInc = $chartWidthInPixels / ($numDataPoints[$LEFT] - 1);
         }
     }
-    my $yPixelsPerValue = $chartHeightInPixels / $chartHeight;
+    my @yPixelsPerValue;
+    $yPixelsPerValue[$LEFT] = $chartHeightInPixels / $chartHeight[$LEFT];
+    if ($numDataSets2) {
+	$yPixelsPerValue[$RIGHT] = $chartHeightInPixels / $chartHeight[$RIGHT];
+    }
 
     # Draw box around entire chart so area filling won't get outside of the
     # box
     $im->rectangle($xLL, $yLL, $xUR, $yUR, $black);
     # If a user specified bgcolor (and it isn't the same as the default
     # background color), then set this color to surround the chart.
-    if (defined $bgcolor[0] && $bgcolor[0] !~ /$defaultBGcolorText/i) {
-        my $bgcolorOutside = $im->colorAllocate(_convert_color($bgcolor[0]));
+    if (defined $outsideBGColor && $outsideBGColor !~ /$initialBGcolorText/i) {
+        my $bgcolorOutside = $im->colorAllocate(_convert_color($outsideBGColor));
         $im->fill(1, 1, $bgcolorOutside);
     }
     # If a user also specified bgcolor with a 2nd value (and it isn't the
     # same as the default background color), then set this color to fill
     # the inside of the chart.
-    if (defined $bgcolor[1] && $bgcolor[1] !~ /$defaultBGcolorText/i) {
-        my $bgcolorInside = $im->colorAllocate(_convert_color($bgcolor[1]));
+    if (defined $insideBGColor && $insideBGColor !~ /$initialBGcolorText/i) {
+        my $bgcolorInside = $im->colorAllocate(_convert_color($insideBGColor));
         $im->fill($xLL + 1, $yUR + 1, $bgcolorInside);
     }
 
@@ -1019,100 +1244,121 @@ sub makeChart {
     #     8) draw legends
 
     # 1111111111111111111111111111111111111111111111111111111111111111111111
-    my @dataSetlastValue;
     # Start drawing each data set.  The only exception is if there is no
     # data, then don't draw anything.
     # Note: the data sets are drawn back to front so that areas are drawn
     # correctly.
     # Note: all areas are drawn first so they appear behind the lines and
     # won't hide other data sets.
-    foreach (my $dataSet = $numDataSets - 1; $dataSet >= 0; $dataSet--) {
-        my $row = $data[$dataSet];
-        my @row = @{$data[$dataSet]};
+    my $lineNum = $this->getNumDataSets1() + $this->getNumDataSets2() - 1;
+    foreach my $yAxisLoc ($RIGHT, $LEFT) {
+	my $numDataSets = $this->_getNumDataSets($yAxisLoc);
+	next if ($numDataSets == 0);
+	my @data = $this->_getData($yAxisLoc);
+	foreach (my $dataSet = $numDataSets - 1; $dataSet >= 0; $dataSet--) {
+	    my $row = $data[$dataSet];
+	    my @row = @{$data[$dataSet]};
 
-        my $color = $allocatedColors[$dataSet];
-        if ($subTypes[$dataSet] eq "area") {
-            # Data set is an area.  Create a polygon representing the area
-            # and then fill in that polygon.  Note: As a special case, if
-            # the area to be drawn is lower on the chart than a previously
-            # drawn area then just draw a line.
-            my $poly = new GD::Polygon;
-            my $xIndex;
-            my $x;
-            # Create the top of the polygon
-            for $xIndex (0 .. ($numDataPoints - 1)) {
-                my $topYValue = $this->_scale($row[$xIndex]);
-                # If there is no current value, then there is no default
-                # value so assume a value the same as the minimum of the
-                # chart.
-                if ($topYValue eq "") {
-                    $topYValue = $scaledYAxisMin;
-                }
-                my $y = $yLL - ($topYValue - $scaledYAxisMin) * $yPixelsPerValue;
-                if ($scatterChart) {
-                    $x = $xLL + (($xAxisIndex{$xIndex} - $xAxisMin) * $xPixelsPerValue);
-                } else {
-                    $x = $xLL + ($xDrawInc * $xIndex);
-                }
-                $poly->addPt($x, $y);
-                $dataSetlastValue[$dataSet] = $topYValue;
-            } ## end for $xIndex (0 .. ($numDataPoints...))
+	    my $color = $allocatedColors[$lineNum];
+	    if ($subTypes[$dataSet] eq "area") {
+		# Data set is an area.  Create a polygon representing the area
+		# and then fill in that polygon.  Note: As a special case, if
+		# the area to be drawn is lower on the chart than a previously
+		# drawn area then just draw a line.
+		my $poly = new GD::Polygon;
+		my $xIndex;
+		my $x;
+		# Create the top of the polygon
+		for $xIndex (0 .. ($numDataPoints[$yAxisLoc] - 1)) {
+		    my $topYValue = $this->_scale($row[$xIndex]);
+		    # If there is no current value, then there is no default
+		    # value so assume a value the same as the minimum of the
+		    # chart.
+		    if ($topYValue eq "") {
+			$topYValue = $scaledYAxisMin[$yAxisLoc];
+		    }
+		    my $y = $yLL - ($topYValue - $scaledYAxisMin[$yAxisLoc]) * $yPixelsPerValue[$yAxisLoc];
+		    if ($scatterChart) {
+			$x = $xLL + (($xAxisIndex{$xIndex} - $xAxisMin) * $xPixelsPerValue);
+		    } else {
+			$x = $xLL + ($xDrawInc * $xIndex);
+		    }
+		    $poly->addPt($x, $y);
+		} ## end for $xIndex (0 .. ($numDataPoints[$LEFT]...))
 
-	    # Complete the polygon by adding a point at the bottom right of
-	    # the graph and then one at the bottom left of the graph.
-            $poly->addPt($x,   $yLL);
-            $poly->addPt($xLL, $yLL);
-            $im->filledPolygon($poly, $color);
-        } ## end if ($subTypes[$dataSet...])
-    } ## end foreach (my $dataSet = $numDataSets...)
+		# Complete the polygon by adding a point at the bottom right of
+		# the graph and then one at the bottom left of the graph.
+		$poly->addPt($x,   $yLL);
+		$poly->addPt($xLL, $yLL);
+		$im->filledPolygon($poly, $color);
+	    } ## end if ($subTypes[$dataSet...])
+	    $lineNum--
+	} ## end foreach (my $dataSet = $numDataSets...)
+    }
 
     # 2222222222222222222222222222222222222222222222222222222222222222222222
-    # Draw the Y axis labels grid lines (if asked for) so the grid lines
+    # Draw the Y axis labels and optional grid lines so the grid lines
     # fall behind the areas/lines.
-    my $yAxis = $this->getYaxis();
-    my $yGrid = $this->getYgrid();
-    if (($yAxis eq "on") || ($yGrid ne "off")) {
-        my $yDrawInc = $chartHeightInPixels / ($numYGrids + 1);
-        for my $yAxisIndex (0 .. ($numYGrids + 1)) {
-            my $text = $yLabels[$yAxisIndex];
-            if ($yAxis eq "on") {
-                $im->string(
-                    $this->getFont("yaxis"),
-                    $xLL - (length($text) + 1) * $this->getFontWidth("yaxis"),
-                    $yLL - ($yDrawInc * $yAxisIndex) - ($this->getFontHeight("yaxis") / 2),
-                    $text, $black
-                );
-            }
-            my $Y = $yLL - ($yDrawInc * $yAxisIndex);
-            if (($yAxisIndex != 0) && ($yAxisIndex <= $numYGrids)) {
-		if ($yGrid eq "on") {
-		    $im->line($xLL - 2, $Y, $xUR + 2, $Y, $gridColor);
-		} elsif ($yGrid eq "dot") {
-		    $im->line($xLL - 2, $Y, $xUR + 2, $Y, gdStyled);
+    foreach my $yAxisLoc ($LEFT, $RIGHT) {
+	next if ($this->_getNumDataSets($yAxisLoc) == 0);
+	my $yAxis = $this->_getYaxis($yAxisLoc);
+	my $yGrid = $this->getYgrid();
+	my $numYGrids = $this->_getNumYGrids($yAxisLoc);
+	my $xBase = $xLL;
+	$xBase = $xUR if ($yAxisLoc == $RIGHT);
+	if (($yAxis eq "on") || ($yGrid ne "off")) {
+	    my $yDrawInc = $chartHeightInPixels / ($numYGrids + 1);
+	    for my $yAxisIndex (0 .. ($numYGrids + 1)) {
+		my $Y = $yLL - ($yDrawInc * $yAxisIndex);
+		if ($yAxis eq "on") {
+		    my $text = $yGridLabels{$yAxisLoc}[$yAxisIndex];
+		    my $X = $xBase - (length($text) + 1) * $this->getFontWidth("yaxis");
+		    if ($yAxisLoc == $RIGHT) {
+			$X = $xBase + 1 * $this->getFontWidth("yaxis");
+		    }
+		    $im->string(
+			$this->getFont("yaxis"),
+			$X,
+			$Y - ($this->getFontHeight("yaxis") / 2),
+			$text,
+			$black
+		    );
 		}
-            }
-            # Draw tic marks between Y grid lines (if requested -- might be
-            # the case if the style of graph is 'semilog')
-            my $numYTics = $this->getNumYTics() + 1;
-            # Draw tics skipping the tics above last value
-            if ($yAxisIndex < ($numYGrids + 1)) {
-                for (my $tic = 1; $tic <= $numYTics; $tic++) {
-                    my $ticY;
-                    if ($scale eq "semilog") {
-                        $ticY = $Y - $this->_scale($tic) * $yDrawInc;
-                    } else {
-                        $ticY = $Y - $tic * $yDrawInc / $numYTics;
-                    }
-                    $im->line($xLL - 2, $ticY, $xLL + 2, $ticY, $gridColor);
-                }
-            }
-        } ## end for my $yAxisIndex (0 .....)
-    } ## end if (($yAxis eq "on") ||...)
+		# Draw the ygrid lines for the left yaxis only. The right
+		# yaxis will reuse these grid lines
+		if ($yAxisLoc == $LEFT) {
+		    if (($yAxisIndex != 0) && ($yAxisIndex <= $numYGrids)) {
+			if ($yGrid eq "on") {
+			    $im->line($xLL - 2, $Y, $xUR + 2, $Y, $gridColor);
+			} elsif ($yGrid eq "dot") {
+			    $im->line($xLL - 2, $Y, $xUR + 2, $Y, gdStyled);
+			}
+		    }
+		}
+		# Draw tic marks between Y grid lines (if requested -- might be
+		# the case if the style of graph is 'semilog')
+		my $numYTics = $this->_getNumYTics($yAxisLoc) + 1;
+		# Draw tics skipping the tics above last value
+		if ($yAxisIndex < ($numYGrids + 1)) {
+		    for (my $tic = 1; $tic <= $numYTics; $tic++) {
+			my $ticY;
+			if ($scale eq "semilog") {
+			    $ticY = $Y - $this->_scale($tic) * $yDrawInc;
+			} else {
+			    $ticY = $Y - $tic * $yDrawInc / $numYTics;
+			}
+			$im->line($xBase - 2, $ticY, $xBase + 2, $ticY, $gridColor);
+		    }
+		}
+	    } ## end for my $yAxisIndex (0 .....)
+	} ## end if (($yAxis eq "on") ||...)
+    }
 
     # Draw the X axis labels and grid lines (if asked for).  To do this we
     # calculate the interval between X axis values to draw based on the
     # user specified number of X axis values to draw.
     my @xGridIndexes;
+    $xGridIndexes[0] = 0;
     my $barNum = 0;
     if (@xAxis) {
         my $xIndexInc;
@@ -1130,9 +1376,9 @@ sub makeChart {
             if ($numXGrids == 0) {
                 $xIndexInc = 1;
             } else {
-                $xIndexInc = int($numDataPoints / ($numXGrids + 1));
+                $xIndexInc = int($numDataPoints[$LEFT] / ($numXGrids + 1));
             }
-            $xIndexMax = $numDataPoints - 1;
+            $xIndexMax = $numDataPoints[$LEFT] - 1;
         }
         my $xAxisFontWidth     = $this->getFontWidth("xaxis");
         my $xaxis              = $xAxisMin;
@@ -1174,7 +1420,7 @@ sub makeChart {
                 # area
                 my $xPos;
                 if ($numBarDataSets) {
-                    $xPos = $xLabelLoc + $chartWidthInPixels / $numDataPoints / 2;
+                    $xPos = $xLabelLoc + $chartWidthInPixels / $numDataPoints[$LEFT] / 2;
                 } elsif ($xLabelLoc > 0) {
                     if (($xLabelLoc + $halfLabelWidth * 2) >= $imageWidth) {
                         $xPos = $xUR - $len * $xAxisFontWidth;
@@ -1194,8 +1440,8 @@ sub makeChart {
                 my $yLabelLoc       = $yLL + $len * $xAxisFontWidth;
                 my $xPos            = $xLoc - $halfLabelHeight;
                 if ($numBarDataSets) {
-                    $xPos += $chartWidthInPixels / $numDataPoints / 2;
-		}
+                    $xPos += $chartWidthInPixels / $numDataPoints[$LEFT] / 2;
+                }
                 $im->stringUp($this->getFont("xaxis"), $xPos, $yLabelLoc + 3, $label, $black);
             }
             if (($xAxisIndex != 0) && ($xAxisIndex <= $xIndexMax) && $xGrid eq "on") {
@@ -1205,147 +1451,160 @@ sub makeChart {
                 $im->line($xLoc, $yLL + 2, $xLoc, $yUR - 2, gdStyled);
             }
         } ## end for (my $xAxisIndex = 0...)
-	# Make sure that the max xaxis value is included in the list of
-	# drawn xAxises.
-	$xGridIndexes[$xIndexMax] = $xIndexMax;
     } ## end if (@xAxis)
+    # Make sure that the max xaxis value is included in the list of
+    # drawn xAxises.
+    $xGridIndexes[$numDataPoints[$LEFT]] = $numDataPoints[$LEFT];
 
     # 3333333333333333333333333333333333333333333333333333333333333333333333
     # Now draw any bars.
     $barNum = 0;
-    for my $dataSet (0 .. $numDataSets - 1) {
-        my $row = $data[$dataSet];
-        my @row = @{$data[$dataSet]};
+    $lineNum = 0;
+    foreach my $yAxisLoc ($LEFT, $RIGHT) {
+	my $numDataSets = $this->_getNumDataSets($yAxisLoc);
+	next if ($numDataSets == 0);
+	my @data = $this->_getData($yAxisLoc);
+	for my $dataSet (0 .. $numDataSets - 1) {
+	    my $row = $data[$dataSet];
+	    my @row = @{$data[$dataSet]};
 
-        my $color = $allocatedColors[$dataSet];
-        if ($subTypes[$dataSet] eq "bar") {
-            for my $xIndex (0 .. ($numDataPoints - 1)) {
-                my $currentYValue = $row[$xIndex];
-                # If there is no current value, then there is no default
-                # value so assume a value the same as the minimum of the
-                # chart.
-                if ($currentYValue eq "") {
-                    $currentYValue = $scaledYAxisMin;
-                }
-		my $y;
-		if ($scale eq "semilog") {
-		    $y = $yLL - ($this->_scale($currentYValue) - $scaledYAxisMin) * $yPixelsPerValue;
-		} else {
-		    $y = $yLL - ($currentYValue - $scaledYAxisMin) * $yPixelsPerValue;
-		}
-                my $x;
-                if ($scatterChart) {
-                    $x = $xLL + (($xAxisIndex{$xIndex} - $xAxisMin) * $xPixelsPerValue);
-                } else {
-                    $x = $xLL + ($xDrawInc * $xIndex);
-                }
-                $x += $xBarLeadingSpace + (($xBarWidth + ($xBarSpace + 1)) * $barNum) + $barHalfWidth;
-                $im->filledRectangle($x - $barHalfWidth, $y, $x + $barHalfWidth, $yLL, $color);
-                $im->rectangle($x - $barHalfWidth, $y, $x + $barHalfWidth, $yLL, $black);
-            } ## end for my $xIndex (0 .. ($numDataPoints...))
-            $barNum++;
-        } ## end if ($subTypes[$dataSet...])
-    } ## end for my $dataSet (0 .. $numDataSets...)
+	    my $color = $allocatedColors[$lineNum];
+	    if ($subTypes[$lineNum] eq "bar") {
+		for my $xIndex (0 .. ($numDataPoints[$yAxisLoc] - 1)) {
+		    my $currentYValue = $row[$xIndex];
+		    # If there is no current value, then there is no default
+		    # value so assume a value the same as the minimum of the
+		    # chart.
+		    if ($currentYValue eq "") {
+			$currentYValue = $scaledYAxisMin[$yAxisLoc];
+		    }
+		    my $y;
+		    if ($scale eq "semilog") {
+			$y = $yLL - ($this->_scale($currentYValue) - $scaledYAxisMin[$yAxisLoc]) * $yPixelsPerValue[$yAxisLoc];
+		    } else {
+			$y = $yLL - ($currentYValue - $scaledYAxisMin[$yAxisLoc]) * $yPixelsPerValue[$yAxisLoc];
+		    }
+		    my $x;
+		    if ($scatterChart) {
+			$x = $xLL + (($xAxisIndex{$xIndex} - $xAxisMin) * $xPixelsPerValue);
+		    } else {
+			$x = $xLL + ($xDrawInc * $xIndex);
+		    }
+		    $x += $xBarLeadingSpace + (($xBarWidth + ($xBarSpace + 1)) * $barNum) + $barHalfWidth;
+		    $im->filledRectangle($x - $barHalfWidth, $y, $x + $barHalfWidth, $yLL, $color);
+		    $im->rectangle($x - $barHalfWidth, $y, $x + $barHalfWidth, $yLL, $black);
+		} ## end for my $xIndex (0 .. ($numDataPoints[$yAxisLoc]...))
+		$barNum++;
+	    } ## end if ($subTypes[$dataSet...])
+	    $lineNum++;
+	} ## end for my $dataSet (0 .. $numDataSets1...)
+    }
 
     # 4444444444444444444444444444444444444444444444444444444444444444444444
     # Now that the areas and bars are drawn, draw the lines and even redraw
     # lines outlining the already drawn areas (since some areas might have
     # been overwritten).
-    for my $dataSet (0 .. $numDataSets - 1) {
-        my $row = $data[$dataSet];
-        my @row = @{$data[$dataSet]};
+    $lineNum = 0;
+    foreach my $yAxisLoc ($LEFT, $RIGHT) {
+	my $numDataSets = $this->_getNumDataSets($yAxisLoc);
+	next if ($numDataSets == 0);
+	my $numDataPoints = $this->_getNumDataPoints($yAxisLoc);
+	my @data = $this->_getData($yAxisLoc);
+	for my $dataSet (0 .. $numDataSets - 1) {
+	    my $row = $data[$dataSet];
+	    my @row = @{$data[$dataSet]};
 
-        my $color = $allocatedColors[$dataSet];
-        my ($x1, $x2);
-        # Draw the data set (if an area, it gets filled in by code below).
-        for my $xIndex (0 .. ($numDataPoints - 2)) {
-            my $currentYValue = $row[$xIndex];
-            my $nextYValue    = $row[$xIndex + 1];
-            $currentYValue = $this->_scale($currentYValue) if ($currentYValue ne "");
-            $nextYValue    = $this->_scale($nextYValue)    if ($nextYValue    ne "");
+	    my $color = $allocatedColors[$lineNum];
+	    my ($x1, $x2);
+	    # Draw the data set (if an area, it gets filled in by code below).
+	    for my $xIndex (0 .. ($numDataPoints - 2)) {
+		my $currentYValue = $row[$xIndex];
+		my $nextYValue    = $row[$xIndex + 1];
+		$currentYValue = $this->_scale($currentYValue) if ($currentYValue ne "");
+		$nextYValue    = $this->_scale($nextYValue)    if ($nextYValue    ne "");
 
-            # Deal with sparse data.  If there is:
-            #    - current but no next value, draw a point at current
-            #    - no current but a next value, draw a point at next
-            #    - if both, draw a line between them if asked to
-            if ($currentYValue ne "" && $nextYValue eq "") {
-                if ($scatterChart) {
-                    $x1 = $xLL + (($xAxisIndex{$xIndex} - $xAxisMin) * $xPixelsPerValue);
-                } else {
-                    $x1 = $xLL + ($xDrawInc * $xIndex);
-                }
-                # If any bars were drawn, then place all lines, plines,
-                # points in the middle of the area in which the bars were
-                # drawn.
-                if ($numBarDataSets) {
-                    $x1 += $xDrawInc / 2;
-                }
-                my $y1 = $yLL - ($currentYValue - $scaledYAxisMin) * $yPixelsPerValue;
-                if ($subTypes[$dataSet] ne "bar") {
-                    $im->filledRectangle($x1 - $pointSizeHalf, $y1 - $pointSizeHalf, $x1 + $pointSizeHalf, $y1 + $pointSizeHalf, $color);
-                }
-                $dataSetlastValue[$dataSet] = $currentYValue;
-            } elsif ($currentYValue eq "" && $nextYValue ne "") {
-                if ($scatterChart) {
-                    $x2 = $xLL + (($xAxisIndex{($xIndex + 1)} - $xAxisMin) * $xPixelsPerValue);
-                } else {
-                    $x2 = $xLL + ($xDrawInc * ($xIndex + 1));
-                }
-                # If any bars were drawn, then place all lines, plines,
-                # points in the middle of the area in which the bars were
-                # drawn.
-                if ($numBarDataSets) {
-                    $x2 += $xDrawInc / 2;
-                }
-                my $y2 = $yLL - ($nextYValue - $scaledYAxisMin) * $yPixelsPerValue;
-                if ($subTypes[$dataSet] ne "bar") {
-                    $im->filledRectangle($x2 - $pointSizeHalf, $y2 - $pointSizeHalf, $x2 + $pointSizeHalf, $y2 + $pointSizeHalf, $color);
-                }
-            } elsif ($currentYValue ne "" && $nextYValue ne "") {
-                if ($scatterChart) {
-                    $x1 = $xLL + (($xAxisIndex{$xIndex} - $xAxisMin) * $xPixelsPerValue);
-                    $x2 = $xLL + (($xAxisIndex{($xIndex + 1)} - $xAxisMin) * $xPixelsPerValue);
-                } else {
-                    $x1 = $xLL + ($xDrawInc * $xIndex);
-                    $x2 = $xLL + ($xDrawInc * ($xIndex + 1));
-                }
-                # If any bars were drawn, then place all lines, plines,
-                # points in the middle of the area in which the bars were
-                # drawn.
-                if ($numBarDataSets) {
-                    $x1 += $xDrawInc / 2;
-                    $x2 += $xDrawInc / 2;
-                }
-                my $y1 = $yLL - ($currentYValue - $scaledYAxisMin) * $yPixelsPerValue;
-                my $y2 = $yLL - ($nextYValue - $scaledYAxisMin) * $yPixelsPerValue;
-                # If just a line, then draw a second and 3rd line slightly
-                # below the line to make it appear thicker.
-                if ($subTypes[$dataSet] eq "line" || $subTypes[$dataSet] eq "pline" || $subTypes[$dataSet] eq "area") {
-                    if ($GD::VERSION >= 2.15) {
-                        $im->setThickness($lineWidth);
-                        $im->line($x1, $y1, $x2, $y2, $color);
-                        $im->setThickness(1);
-                    } elsif ($lineWidth > 1) {
-                        $im->line($x1, $y1, $x2, $y2, $color);
-                        for my $yDiff (1 .. (($lineWidth - 1) / 2)) {
-                            $im->line($x1, $y1 + $yDiff, $x2, $y2 + $yDiff, $color);
-                        }
-                        for my $yDiff (1 .. (($lineWidth) / 2)) {
-                            $im->line($x1, $y1 - $yDiff, $x2, $y2 - $yDiff, $color);
-                        }
-                    } else {
-                        $im->line($x1, $y1, $x2, $y2, $color);
-                    }
-                } ## end if ($subTypes[$dataSet...])
-                    # Draw points.
-                if ($subTypes[$dataSet] eq "point" || $subTypes[$dataSet] eq "pline") {
-                    $im->filledRectangle($x1 - $pointSizeHalf, $y1 - $pointSizeHalf, $x1 + $pointSizeHalf, $y1 + $pointSizeHalf, $color);
-                    $im->filledRectangle($x2 - $pointSizeHalf, $y2 - $pointSizeHalf, $x2 + $pointSizeHalf, $y2 + $pointSizeHalf, $color);
-                }
-                $dataSetlastValue[$dataSet] = $nextYValue;
-            } ## end elsif ($currentYValue ne ...)
-        } ## end for my $xIndex (0 .. ($numDataPoints...))
-    } ## end for my $dataSet (0 .. $numDataSets...)
+		# Deal with sparse data.  If there is:
+		#    - current but no next value, draw a point at current
+		#    - no current but a next value, draw a point at next
+		#    - if both, draw a line between them if asked to
+		if ($currentYValue ne "" && $nextYValue eq "") {
+		    if ($scatterChart) {
+			$x1 = $xLL + (($xAxisIndex{$xIndex} - $xAxisMin) * $xPixelsPerValue);
+		    } else {
+			$x1 = $xLL + ($xDrawInc * $xIndex);
+		    }
+		    # If any bars were drawn, then place all lines, plines,
+		    # points in the middle of the area in which the bars were
+		    # drawn.
+		    if ($numBarDataSets) {
+			$x1 += $xDrawInc / 2;
+		    }
+		    my $y1 = $yLL - ($currentYValue - $scaledYAxisMin[$yAxisLoc]) * $yPixelsPerValue[$yAxisLoc];
+		    if ($subTypes[$lineNum] ne "bar") {
+			$im->filledRectangle($x1 - $pointSizeHalf, $y1 - $pointSizeHalf, $x1 + $pointSizeHalf, $y1 + $pointSizeHalf, $color);
+		    }
+		} elsif ($currentYValue eq "" && $nextYValue ne "") {
+		    if ($scatterChart) {
+			$x2 = $xLL + (($xAxisIndex{($xIndex + 1)} - $xAxisMin) * $xPixelsPerValue);
+		    } else {
+			$x2 = $xLL + ($xDrawInc * ($xIndex + 1));
+		    }
+		    # If any bars were drawn, then place all lines, plines,
+		    # points in the middle of the area in which the bars were
+		    # drawn.
+		    if ($numBarDataSets) {
+			$x2 += $xDrawInc / 2;
+		    }
+		    my $y2 = $yLL - ($nextYValue - $scaledYAxisMin[$yAxisLoc]) * $yPixelsPerValue[$yAxisLoc];
+		    if ($subTypes[$lineNum] ne "bar") {
+			$im->filledRectangle($x2 - $pointSizeHalf, $y2 - $pointSizeHalf, $x2 + $pointSizeHalf, $y2 + $pointSizeHalf, $color);
+		    }
+		} elsif ($currentYValue ne "" && $nextYValue ne "") {
+		    if ($scatterChart) {
+			$x1 = $xLL + (($xAxisIndex{$xIndex} - $xAxisMin) * $xPixelsPerValue);
+			$x2 = $xLL + (($xAxisIndex{($xIndex + 1)} - $xAxisMin) * $xPixelsPerValue);
+		    } else {
+			$x1 = $xLL + ($xDrawInc * $xIndex);
+			$x2 = $xLL + ($xDrawInc * ($xIndex + 1));
+		    }
+		    # If any bars were drawn, then place all lines, plines,
+		    # points in the middle of the area in which the bars were
+		    # drawn.
+		    if ($numBarDataSets) {
+			$x1 += $xDrawInc / 2;
+			$x2 += $xDrawInc / 2;
+		    }
+		    my $y1 = $yLL - ($currentYValue - $scaledYAxisMin[$yAxisLoc]) * $yPixelsPerValue[$yAxisLoc];
+		    my $y2 = $yLL - ($nextYValue - $scaledYAxisMin[$yAxisLoc]) * $yPixelsPerValue[$yAxisLoc];
+		    # If just a line, then draw a second and 3rd line slightly
+		    # below the line to make it appear thicker.
+		    if ($subTypes[$lineNum] eq "line" || $subTypes[$lineNum] eq "pline" || $subTypes[$lineNum] eq "area") {
+			if ($GD::VERSION >= 2.15) {
+			    $im->setThickness($lineWidth);
+			    $im->line($x1, $y1, $x2, $y2, $color);
+			    $im->setThickness(1);
+			} elsif ($lineWidth > 1) {
+			    $im->line($x1, $y1, $x2, $y2, $color);
+			    for my $yDiff (1 .. (($lineWidth - 1) / 2)) {
+				$im->line($x1, $y1 + $yDiff, $x2, $y2 + $yDiff, $color);
+			    }
+			    for my $yDiff (1 .. (($lineWidth) / 2)) {
+				$im->line($x1, $y1 - $yDiff, $x2, $y2 - $yDiff, $color);
+			    }
+			} else {
+			    $im->line($x1, $y1, $x2, $y2, $color);
+			}
+		    } ## end if ($subTypes[$lineNum...])
+			# Draw points.
+		    if ($subTypes[$lineNum] eq "point" || $subTypes[$lineNum] eq "pline") {
+			$im->filledRectangle($x1 - $pointSizeHalf, $y1 - $pointSizeHalf, $x1 + $pointSizeHalf, $y1 + $pointSizeHalf, $color);
+			$im->filledRectangle($x2 - $pointSizeHalf, $y2 - $pointSizeHalf, $x2 + $pointSizeHalf, $y2 + $pointSizeHalf, $color);
+		    }
+		} ## end elsif ($currentYValue ne ...)
+	    } ## end for my $xIndex (0 .. ($numDataPoints...))
+	    $lineNum++;
+	} ## end for my $dataSet (0 .. $numDataSets...)
+    }
 
     # 5555555555555555555555555555555555555555555555555555555555555555555555
     # Redraw box around entire chart in case it got overwritten by
@@ -1363,72 +1622,92 @@ sub makeChart {
         my $font       = $this->getFont("data");
         my $fontWidth  = $this->getFontWidth("data");
         my $fontHeight = $this->getFontHeight("data");
-        $barNum = 0;
-        for my $dataSet (0 .. $numDataSets - 1) {
-            my $dataLabel = $dataLabels[$dataSet % $numDataLabels];
-            my $row       = $data[$dataSet];
-            my @row       = @{$data[$dataSet]};
-	    my $auto      = 0;
-	    if ($dataLabel =~ m/^auto(.*)/) {
-		$auto = 1;
-		$dataLabel = "box" if ($1 eq "box");
-	    }
+	my $boxBG = $im->colorAllocate(_convert_color($boxBGColor));
+	$barNum = 0;
+	$lineNum = 0;
+	foreach my $yAxisLoc ($LEFT, $RIGHT) {
+	    my $numDataSets = $this->_getNumDataSets($yAxisLoc);
+	    next if ($numDataSets == 0);
+	    my @data = $this->_getData($yAxisLoc);
+	    for my $dataSet (0 .. $numDataSets - 1) {
+		my $dataLabel = $dataLabels[$dataSet % $numDataLabels];
+		$dataLabel =~ s/\s//g;
+		my $row       = $data[$dataSet];
+		my @row       = @{$data[$dataSet]};
+		my $auto      = 0;
+		my $mod       = 0;
+		if ($dataLabel =~ m/auto/) {
+		    $auto = 1;
+		    $dataLabel = "box" if ($dataLabel =~ m/box/);
+		} elsif ($dataLabel =~ m/(\d+)/) {
+		    my $num = $1;
+		    $num = 2 if ($num < 2);
+		    if ($num < $numDataPoints[$yAxisLoc]) {
+			$mod = int($numDataPoints[$yAxisLoc] / ($num - 1));
+		    }
+		    $dataLabel = "box" if ($dataLabel =~ m/box/);
+		}
 
-            my $color = $allocatedColors[$dataSet];
-            for my $xIndex (0 .. ($numDataPoints - 1)) {
-		# If the user specified "auto" or "autobox" for datalabel
-		# for this dataset, then only draw a label if the current
-		# xIndex is one where an xAxis was drawn.
-		next if ($auto && ! defined($xGridIndexes[$xIndex]));
+		my $color = $allocatedColors[$lineNum];
+		for my $xIndex (0 .. ($numDataPoints[$yAxisLoc] - 1)) {
+		    # If the user specified "auto" or "autobox" for datalabel
+		    # for this dataset, then only draw a label if the current
+		    # xIndex is one where an xAxis was drawn.
+		    next if ($auto && ! defined($xGridIndexes[$xIndex]));
+		    # If a datalabel="#" or datalabel="#box" then only show
+		    # the specified number of data labels.
+		    next if ($mod && (($xIndex % $mod) != 0 && $xIndex != ($numDataPoints[$yAxisLoc] - 1)));
 
-                my $currentYValue = $row[$xIndex];
-                my $drawText      = $currentYValue;
-                if ($scatterChart) {
-                    $drawText = $xAxisIndex{$xIndex} . "/" . $currentYValue;
-                }
-                my $len = length $drawText;
+		    my $currentYValue = $row[$xIndex];
+		    my $drawText      = $currentYValue;
+		    if ($scatterChart) {
+			$drawText = $xAxisIndex{$xIndex} . "/" . $currentYValue;
+		    }
+		    my $len = length $drawText;
 
-                # If the drawText is non empty, place string/box such
-                # that the lower right corner is located at the data value.
-                # The only exception is if the box would fall off of the
-                # chart either to the left or at the top.
-                if ($currentYValue ne "") {
-                    my $currentValueY = $this->_scale($currentYValue);
-                    my $x1;
-                    if ($scatterChart) {
-                        $x1 = $xLL + (($xAxisIndex{$xIndex} - $xAxisMin) * $xPixelsPerValue) - ($len * $fontWidth) - 4;
-                    } else {
-                        $x1 = $xLL + ($xDrawInc * $xIndex) - ($len * $fontWidth) - 4;
-                    }
-                    # If any bars were drawn, then all lines, plines,
-                    # points were drawn in the middle of the area in which
-                    # the bars were drawn so we need to adjust the data
-                    # labels accordingly.  If the data label is for a bar
-                    # itself, then perform a slightly different adjustment.
-                    if ($numBarDataSets) {
-                        if ($subTypes[$dataSet] eq "bar") {
-                            $x1 += $xBarLeadingSpace + (($xBarWidth + ($xBarSpace + 1)) * $barNum) + $barHalfWidth;
-                        } else {
-                            $x1 += $xDrawInc / 2;
-                        }
-                    }
-                    my $y1 = $yLL - ($currentValueY - $scaledYAxisMin) * $yPixelsPerValue - $fontHeight - 4;
-                    $x1 += $len * $fontWidth + 4 if ($x1 < 0);    # Push back onto left side
-                    $y1 += $fontHeight if ($y1 < 0);              # Push down into chart
-                    if ($dataLabel eq "box") {
-                        # In order to put the value into a box, we draw a box,
-                        # fill it with white, then draw a black line around the
-                        # white box and then draw the value inside the box.
-                        $im->filledRectangle($x1, $y1, $x1 + $len * $fontWidth + 4, $y1 + $fontHeight + 4, $defaultBGcolor);
-                        $im->rectangle($x1, $y1, $x1 + $len * $fontWidth + 4, $y1 + $fontHeight + 4, $black);
-                    }
-                    if ($dataLabel ne "off") {
-                        $im->string($font, $x1 + 3, $y1 + 2, $drawText, $color);
-                    }
-                } ## end if ($currentYValue ne ...)
-            } ## end for my $xIndex (0 .. ($numDataPoints...))
-            $barNum++ if ($subTypes[$dataSet] eq "bar");
-        } ## end for my $dataSet (0 .. $numDataSets...)
+		    # If the drawText is non empty, place string/box such
+		    # that the lower right corner is located at the data value.
+		    # The only exception is if the box would fall off of the
+		    # chart either to the left or at the top.
+		    if ($currentYValue ne "") {
+			my $currentValueY = $this->_scale($currentYValue);
+			my $x1;
+			if ($scatterChart) {
+			    $x1 = $xLL + (($xAxisIndex{$xIndex} - $xAxisMin) * $xPixelsPerValue) - ($len * $fontWidth) - 4;
+			} else {
+			    $x1 = $xLL + ($xDrawInc * $xIndex) - ($len * $fontWidth) - 4;
+			}
+			# If any bars were drawn, then all lines, plines,
+			# points were drawn in the middle of the area in which
+			# the bars were drawn so we need to adjust the data
+			# labels accordingly.  If the data label is for a bar
+			# itself, then perform a slightly different adjustment.
+			if ($numBarDataSets) {
+			    if ($subTypes[$dataSet] eq "bar") {
+				$x1 += $xBarLeadingSpace + (($xBarWidth + ($xBarSpace + 1)) * $barNum) + $barHalfWidth;
+			    } else {
+				$x1 += $xDrawInc / 2;
+			    }
+			}
+			my $y1 = $yLL - ($currentValueY - $scaledYAxisMin[$yAxisLoc]) * $yPixelsPerValue[$yAxisLoc] - $fontHeight - 4;
+			$x1 += $len * $fontWidth + 4 if ($x1 < 0);    # Push back onto left side
+			$y1 += $fontHeight if ($y1 < 0);              # Push down into chart
+			if ($dataLabel eq "box") {
+			    # In order to put the value into a box, we draw a box,
+			    # fill it with white, then draw a black line around the
+			    # white box and then draw the value inside the box.
+			    $im->filledRectangle($x1, $y1, $x1 + $len * $fontWidth + 4, $y1 + $fontHeight + 4, $boxBG);
+			    $im->rectangle($x1, $y1, $x1 + $len * $fontWidth + 4, $y1 + $fontHeight + 4, $black);
+			}
+			if ($dataLabel ne "off") {
+			    $im->string($font, $x1 + 3, $y1 + 2, $drawText, $color);
+			}
+		    } ## end if ($currentYValue ne ...)
+		} ## end for my $xIndex (0 .. ($numDataPoints[$yAxisLoc]...))
+		$barNum++ if ($subTypes[$dataSet] eq "bar");
+		$lineNum++;
+	    } ## end for my $dataSet (0 .. $numDataSets1...)
+	}
     } ## end if (@dataLabels)
 
     # 7777777777777777777777777777777777777777777777777777777777777777777777
@@ -1441,11 +1720,28 @@ sub makeChart {
     }
 
     # Draw the Y label (if specified)
-    if (defined $yLabel) {
+    if (defined $yLabel1) {
         $im->stringUp(
             $this->getFont("ylabel"),
-            $margin, $yUR + ($chartHeightInPixels / 2) + (length($yLabel) * $this->getFontWidth("ylabel") / 2),
-            $yLabel, $black
+            $margin,
+	    $yUR + ($chartHeightInPixels / 2) + (length($yLabel1) * $this->getFontWidth("ylabel") / 2),
+            $yLabel1,
+	    $black
+        );
+    }
+    # Draw the Y label (if specified)
+    if (defined $yLabel2) {
+	my $yOffsetMax = $margin;
+	foreach my $yGridLabel (@{$yGridLabels{$RIGHT}}) {
+	    my $size = (length($yGridLabel) + 1) * $this->getFontWidth("yaxis");
+	    $yOffsetMax = $size if ($size > $yOffsetMax);
+	}
+        $im->stringUp(
+            $this->getFont("ylabel"),
+            $xUR + $yOffsetMax,
+	    $yUR + ($chartHeightInPixels / 2) + (length($yLabel2) * $this->getFontWidth("ylabel") / 2),
+            $yLabel2,
+	    $black
         );
     }
     # Draw the X label (if specified)
@@ -1477,18 +1773,41 @@ sub makeChart {
         my $halfFontHeight = $fontHeight / 2;
         my $fontWidth      = $this->getFontWidth("legend");
         my $x1             = $xUR + 5;
+	if (defined $yLabel2) {
+	    $x1 += $this->getFontHeight("ylabel");
+	}
+	if ($this->getYaxis2() eq "on") {
+	    $x1 += $this->getFontWidth("ylabel") * $yAxis2LabelWidth;
+	}
+	$x1 += 10 if ($isYaxis2Text);
         # 1. determine the ideal Y location of each label
-        my @lastValues;
-        for my $dataSet (0 .. $numDataSets - 1) {
-            # Use the last point drawn for each line so we know where to
-            # draw the legend at the end of the lines.
-            my $lastValue = $dataSetlastValue[$dataSet];
-            my $y = $yLL - (($lastValue - $scaledYAxisMin) * $yPixelsPerValue) - $halfFontHeight;
-            # If the y location falls off of the bottom of the chart, then
-            # pull up to the bottom of the chart.
-            $y = $yLL - $halfFontHeight if ($y > $yLL);
-            $lastValues[$dataSet] = $y;
-        }
+	my @lastValues;
+	my $lastValuesIndex = 0;
+	foreach my $yAxisLoc ($LEFT, $RIGHT) {
+	    my $numDataSets = $this->_getNumDataSets($yAxisLoc);
+	    next if ($numDataSets == 0);
+	    my $numDataPoints = $this->_getNumDataPoints($yAxisLoc);
+	    my @data = $this->_getData($yAxisLoc);
+	    for my $dataSet (0 .. $numDataSets - 1) {
+		my $row = $data[$dataSet];
+		my @row = @{$data[$dataSet]};
+		# Since this @row might contain sparse data, we walk
+		# backwards through the data looking for the 1st non-empty
+		# value.
+                my $lastValue = undef;
+		for (my $xIndex = $numDataPoints - 1; $xIndex >= 0; $xIndex--) {
+		    if ($row[$xIndex] ne "") {
+			$lastValue = $row[$xIndex];
+			last;
+		    }
+		}
+		my $y = $yLL - (($lastValue - $scaledYAxisMin[$yAxisLoc]) * $yPixelsPerValue[$yAxisLoc]) - $halfFontHeight;
+		# If the y location falls off of the bottom of the chart, then
+		# pull up to the bottom of the chart.
+		$y = $yLL - $halfFontHeight if ($y > $yLL);
+		$lastValues[$lastValuesIndex++] = $y;
+	    }
+	}
         # 2. Now adjust the Y locations so no labels overlap.  If any two
         # labels have the same Y location, then the first data set gets that
         # location and all subsequent data sets labels get moved.
@@ -1496,7 +1815,7 @@ sub makeChart {
 
         # 3. Now draw the legends at the (possibly) newly computed Y
         # locations.
-        for my $dataSet (0 .. $numDataSets - 1) {
+        for my $dataSet (0 .. $#lastValues) {
             my $y1 = $lastValues[$dataSet];
             $im->string($legendFont, $x1, $y1, $legends[$dataSet], $black);
             $im->line($x1, $y1 + $fontHeight,     $x1 + length($legends[$dataSet]) * $fontWidth, $y1 + $fontHeight,     $allocatedColors[$dataSet]);
@@ -1663,7 +1982,7 @@ sub computeLinearNumGrids {
     # So $baseDiff will always be in the range of 1-9
     my $decimalDigits = log10($diff);
     if ($decimalDigits) {
-	$decimalDigits = int(floor($decimalDigits));
+        $decimalDigits = int(floor($decimalDigits));
     }
     my $baseDiff = $diff / pow(10.0, $decimalDigits);
     # Deail with some odd math issues with rounding.
@@ -1673,18 +1992,18 @@ sub computeLinearNumGrids {
     # between grids that is human readable.  We do this by computing all
     # ranges and taking the first shortest.  This gives preference to a
     # larger number of grid lines.
-    my $minLen = 99999;
+    my $minLen         = 99999;
     my $minLenNumGrids = 0;
     for (my $g = $numGrids; $g > 1; $g--) {
-	my $range = $baseDiff / $g * 1;
-	my $len = length($range);
-	if ($len < $minLen) {
-	    $minLen = $len;
-	    $minLenNumGrids = $g;
-	}
+        my $range = $baseDiff / $g * 1;
+        my $len   = length($range);
+        if ($len < $minLen) {
+            $minLen         = $len;
+            $minLenNumGrids = $g;
+        }
     }
     return $minLenNumGrids - 1;
-} 
+} ## end sub computeLinearNumGrids
 
 # This routine takes a number and returns the "floor" for that number
 # adjusting to the nearest 1*, 2*, or 5*
@@ -1693,30 +2012,30 @@ sub computeFloor {
     return 0 if ($num == 0);
     my $decimalDigits = log10($num < 0 ? -$num : $num);
     if ($decimalDigits) {
-	$decimalDigits = int(floor($decimalDigits));
+        $decimalDigits = int(floor($decimalDigits));
     }
     my $base = $num / pow(10.0, $decimalDigits);
     my $newBase;
     if ($base < -5) {
-	$newBase = -10;
+        $newBase = -10;
     } elsif ($base < -2) {
-	$newBase = -5;
+        $newBase = -5;
     } elsif ($base < -1) {
-	$newBase = -2;
+        $newBase = -2;
     } elsif ($base < 0) {
-	$newBase = -1;
+        $newBase = -1;
     } elsif ($base < 1) {
-	$newBase = 0;
+        $newBase = 0;
     } elsif ($base < 2) {
-	$newBase = 1;
+        $newBase = 1;
     } elsif ($base < 5) {
-	$newBase = 2;
+        $newBase = 2;
     } else {
-	$newBase = 5;
+        $newBase = 5;
     }
     my $newNum = $newBase * pow(10.0, $decimalDigits);
     return $newBase * pow(10.0, $decimalDigits);
-}
+} ## end sub computeFloor
 
 # This routine takes a number and returns the "ceil" for that number
 # adjusting to the nearest 1*, 2*, or 5*
@@ -1725,29 +2044,29 @@ sub computeCeil {
     return 1 if ($num == 0);
     my $decimalDigits = log10($num < 0 ? -$num : $num);
     if ($decimalDigits) {
-	$decimalDigits = int(floor($decimalDigits));
+        $decimalDigits = int(floor($decimalDigits));
     }
     my $base = $num / pow(10.0, $decimalDigits);
     my $newBase;
     if ($base <= -5) {
-	$newBase = -5;
+        $newBase = -5;
     } elsif ($base <= -2) {
-	$newBase = -2;
+        $newBase = -2;
     } elsif ($base <= -1) {
-	$newBase = -1;
+        $newBase = -1;
     } elsif ($base <= 0) {
-	$newBase = 0;
+        $newBase = 0;
     } elsif ($base <= 1) {
-	$newBase = 1;
+        $newBase = 1;
     } elsif ($base <= 2) {
-	$newBase = 2;
+        $newBase = 2;
     } elsif ($base <= 5) {
-	$newBase = 5;
+        $newBase = 5;
     } else {
-	$newBase = 10;
+        $newBase = 10;
     }
     return $newBase * pow(10.0, $decimalDigits);
-}
+} ## end sub computeCeil
 
 # Attempt to compute the number of significant digits in the numbers
 # generated based on the user specified min, max and number of grids.
@@ -1760,26 +2079,27 @@ sub computeNumDigits {
     # If the increment is >= 1000, then it doesn't make any sense to show
     # any decimal digits.
     return 0 if ($inc >= 1000);
-    $inc =~ s/0*$//;	# Strip off all trailing 0's
+    $inc =~ s/0*$//;    # Strip off all trailing 0's
 
     # Get the integer part and fractional part from $inc
-    my $integerDigits = undef;
+    my $integerDigits    = undef;
     my $fractionalDigits = undef;
     if ($inc =~ m/(\d+)\.(\d+)/) {
-	$integerDigits = $1;
-	$fractionalDigits = $2;
+        $integerDigits    = $1;
+        $fractionalDigits = $2;
     } else {
-	$inc =~ m/(\d+)/;
-	$integerDigits = $1;
+        $inc =~ m/(\d+)/;
+        $integerDigits    = $1;
+        $fractionalDigits = "";
     }
-    my $numIntegerDigits = length($integerDigits);
+    my $numIntegerDigits    = length($integerDigits);
     my $numFractionalDigits = length($fractionalDigits);
 
     if (6 - $numIntegerDigits >= 0) {
-	return $numFractionalDigits if ($numFractionalDigits < 6 - $numIntegerDigits);
-	return 6 - $numIntegerDigits;
+        return $numFractionalDigits if ($numFractionalDigits < 6 - $numIntegerDigits);
+        return 6 - $numIntegerDigits;
     } else {
-	return 0;
+        return 0;
     }
 } ## end sub computeNumDigits
 

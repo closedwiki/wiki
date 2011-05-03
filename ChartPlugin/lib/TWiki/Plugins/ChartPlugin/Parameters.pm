@@ -36,7 +36,7 @@
 package TWiki::Plugins::ChartPlugin::Parameters;
 
 use Exporter;
-use Data::Dumper;
+use TWiki::Attrs;
 @ISA    = ();
 @EXPORT = qw(
     getParameter
@@ -50,60 +50,9 @@ sub new {
     my ($class, $parameters) = @_;
     my $this = {};
     bless $this, $class;
-    $this->_parseParameters($parameters);
+    $this->_setParameters(new TWiki::Attrs($parameters, 1));
     return $this;
 }
-
-sub _parseParameters {
-    my ($this, $parameterList) = @_;
-    my %parameters;
-    my $length = length($parameterList);
-    my ($char, @field);
-
-    # First break the parameterList into individual parameters
-    my $in_quote = "";
-    my $field    = "";
-    my $index    = 0;
-    my $escape   = 0;
-    for (my $i = 0; $i < $length; $i++) {
-        # Get character
-        $char = substr($parameterList, $i, 1);
-	if ($char eq "\\") {
-	    $escape = 1;
-	} else {
-	    # If the beginning of a quote
-	    if (($char eq "'" || $char eq '"') && $in_quote eq "") {
-		$in_quote = $char;
-	    } elsif ($char eq "'" && $in_quote eq "'" && ! $escape) {
-		$in_quote = "";
-	    } elsif ($char eq '"' && $in_quote eq '"' && ! $escape) {
-		$in_quote = "";
-	    } else {
-		if ($char =~ /[,\s]+/) {    # A field separator only if not in quote
-		    if ($in_quote ne "") {
-			$field .= $char;
-		    } else {
-			$field[$index++] = $field if ($field ne "");
-			$field = "";
-		    }
-		} else {
-		    $field .= $char;
-		}
-	    }
-	    $escape = 0;
-	}
-    } ## end for (my $i = 0; $i < $length...)
-    # Deal with last field
-    $field[$index++] = $field if ($field ne "");
-
-    # Now break each parameter into a key=value pair.
-    for (my $i = 0; $i < $index; $i++) {
-        my ($key, $value) = split(/=/, $field[$i], 2);
-        #print "field[$i] = [$field[$i]]\n";
-        $parameters{$key} = $value;
-    }
-    $this->_setParameters(\%parameters);
-} ## end sub _parseParameters
 
 sub _setParameters {
     my ($this, $parameters) = @_;
@@ -123,7 +72,7 @@ sub getParameter {
     my ($this, $var_name, $default) = @_;
     my $parametersRef = $$this{"PARAMETERS"};
     my $value         = delete $$parametersRef{$var_name};    # Delete since already parsed.
-    if (defined $value && $value ne "") {
+    if (defined($value) && $value ne "") {
         return $value;
     } else {
         return $default;

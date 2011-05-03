@@ -32,11 +32,12 @@
 #    				  of tables in table object
 #    getRow($row,$c1,$c2)	- Return the data at the specified row
 #    				  starting at column 1 and ending at column 2
-#    getData($tblnum,$range)	- Return the data at the specified range.
+#    getData($tblnum,$range,$transpose)	- Return the data at the specified range.
 #    				  If a single row or single column, then
 #    				  return the data.  If multiple
 #    				  rows/columns, then return the data in row
-#    				  format.
+#    				  format.  $transpose indicates whether to
+#    				  get data by column or data by row.
 #    getRowColumnCount($range)	- Return the number of rows/columns
 #    				  specified in the range
 
