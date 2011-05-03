@@ -46,11 +46,12 @@ __NOTE:__ Do not change the settings here, overload them in the [[%LOCALSITEPREF
       * Set HEIGHT = 250
       * Set AREA_COLORS = #FF3333, #FFFF33, #33FF33, #CC66FF, #99FFFF, #FFCC00, #008000, #FF8080, #3366CC, #800080
       * Set LINE_COLORS = #FF0000, #FFCC00, #00CC00, #FF00FF, #33CCCC, #FF8000, #009900, #FF6666, #3333FF, #800080
-      * Set BGCOLOR = #FFFFFF, #FFFFFF
+   * Define the default background colors.  The first color is the area outside of the chart, the second color is the area inside the chart, and the third color is the color inside of data label boxes.
+      * Set BGCOLOR = #FFFFFF, #FFFFFF, #FFFFFF
 
-   * Define the number of grids and grid color. When xgrid/ygrid = "on", then just use the first color when drawing grid lines. When their value is "dot", then use the full specification for drawing the grid lines ("transparent" can be used to introduce holes in the line). 
+   * Define the number of grids and grid color. When xgrid/ygrid = "on", then just use the first color when drawing grid lines. When their value is "dot", then use the full specification for drawing the grid lines ("transparent" can be used to introduce holes in the line).  By default, the system will auto calculate the number of Y grids to draw (up to a max of 9).  Specify a value for =NUMYGRIDS= for a system wide absolute defautl setting.
       * Set GRIDCOLOR = #808080, #808080, #808080, transparent, transparent, transparent
-      * Set NUMYGRIDS = 9
+      * Set NUMYGRIDS = 
 
    * Define what to do when an empty table cell is found. "none" means assume no default value. A value of "10" would mean empty cells would be assumed to have a value of 10 
       * Set DEFAULTDATA = none
@@ -74,22 +75,23 @@ __NOTE:__ Do not change the settings here, overload them in the [[%LOCALSITEPREF
 The =%<nop>CHART{...}%= variable gets expanded to an image representing the chart.
 
    * Some parameters expect a range of table cells, using *extended* SpreadSheetPlugin syntax: 
-      * A single table cell can be addressed as ==R1:C1==. Cell addresses:
+      * A single table cell can be addressed as ==R1:C1== where cell addresses are:
          | ==R1:C1== | ==R1:C2== | ==R1:C3== | ==R1:C4== |
          | ==R2:C1== | ==R2:C2== | ==R2:C3== | ==R2:C4== |
    * A range of table cells is defined by two cell addresses separated by ==".."==. For example, "row 1-20, column 3" is: ==R1:C3..R20:C3== and "row 15-5, column 2" is: ==R15:C2..R5:C2==
-   * Ranges can be discontinuous. Discontinous ranges are joined using =="+"==. For example: ==R4:C1..R5:C2+R9:C1..R15:C2==.
+   * Ranges can be discontinuous. Discontinous ranges are joined using =="+"== or ==","==. For example: ==R4:C1..R5:C2+R9:C1..R15:C2==.
    * When you are specifying datasets, you specify the range so that you have one data set per row (column). You can also specify multiple data sets using discontinuous blocks of cells; for example, ==R4:C1..R5:C2,R9:C1..R10:C2== specifies *4* data sets: R4:C1..R4:C2, R5:C1..R5:C2, R9:C1..R9:C15 and R10:C1..R10:C2
    * ==+== has higher precedence than ==,==
+   * All parameters ending with =2= (like: =data2= and =ylabel2=) are relative to the right Y axis.  The default is relative to the left Y axis.
 
 | *%<nop>CHART% Parameter* | *Comment* | *Default* |
 | =type= | The type of chart to create. One of ="area"=, ="bar"=, ="line"=, ="scatter"=, ="combo"= | Global =TYPE setting |
-| =subtype= | Sub type of chart. Supported values depend on chart type: | |
+| =subtype= and =subtype2= | Sub type of selected data. =subtype= applies to =data= while =subtype2= applies to =data2=.  Supported values depend on chart type: | |
 | ^ | - for =type="area"= =&nbsp;&nbsp;&nbsp;subtype="area" | ="area"= |
 | ^ | - for =type="bar"= =&nbsp;&nbsp;&nbsp;&nbsp;subtype="bar" | ="bar"= |
 | ^ | - for =type="line"= =&nbsp;&nbsp;&nbsp;subtype="line, point, pline" (point line) | ="line"= |
 | ^ | - for =type="scatter"= subtype="area, bar, line, point, pline"%BR%Note: you cannot mix =area= and =bar= on the same chart.%BR%Note: It is not recommended using showing a =bar= on a =scatter= chart as the X axis placement is skewed with =bar= and will not exactly line up with drawn X axis values which will defeat the purpose of using =scatter= in the first place. | ="point"= |
-| ^ | - for =type="combo"=&nbps;&nbps;subtype="area, bar, line, point, pline" (note: you can not mix =area= and =bar= on the same chart) | All but the last data set are drawn as ="area"= and the last is drawn as ="line"= |
+| ^ | - for =type="combo"=&nbsp;&nbsp;subtype="area, bar, line, point, pline" (note: you can not mix =area= and =bar= on the same chart) | All but the last data set are drawn as ="area"= and the last is drawn as ="line"= |
 | ^ | You can use a comma delimited list of values to set a specific subtype for each data set. For example ="area, area, point, line"= would say that the first two data sets are areas, the third is point and the last one is a line | |
 | =scale= | The scale to use when creating the chart. ="linear"= or ="semilog"= | Global =SCALE setting |
 | =name= | Name to uniquely identify the chart file that is auto-created. | None; is required for all charts |
@@ -98,28 +100,28 @@ The =%<nop>CHART{...}%= variable gets expanded to an image representing the char
 | =table= | TWiki table used to build the chart. A numerical value refers to the table number, where "1" is the first table seen in a topic. Any other non-numeric string refers to a named table defined by the =TABLE= variable with a =name= parameter. For example, table="trends" refers to the table that is preceded by =%<nop>TABLE{ name="trends" }%=. | ="1"= |
 | =title= | The title placed at the top of the chart | None |
 | =xlabel= | The label placed under the X axis describing the X values | None |
-| =ylabel= | The label placed to the left of the Y axis describing the Y values | None |
-| =data= | The source data to build the chart, defined as a range of table cells. For example for =type="line"=, a =data="R2:C3..R999:C6"= would say that four lines were to be drawn with first line being rows 2-999 column 3 and last line being rows 2-999 column 6. In the case of a scatter graph, data represents the actual Y values. Note: Reversed data is allowed so =data="R999:C6..R2:C3"= is a legal data specification. | None; is required for all charts |
+| =ylabel= and =ylabel2= | The label placed to the left of the left Y axis (=ylabel=) or right of the right Y axis (=ylabel2=) describing the Y values | None |
+| =data= and =data2= | The source data displayed on the chart. Values specified with =data= are displayed relative to the left Y axis while values specified with =data2= are displayed relative to the right Y axis. In both cases, they define a range of table cells. For example for =type="line"=, a =data="R2:C3..R999:C6"= would say that four lines were to be drawn with the first line being rows 2-999 column 3 and last line being rows 2-999 column 6. In the case of a scatter graph, data represents the actual Y values. Note: Reversed data is allowed so =data="R999:C6..R2:C3"= is a legal data specification. | None; is required for all charts |
 | =defaultdata= | If there is sparse data, then use the value specified by =defaultdata= to fill in the missing data. A value of ="none"= means only draw actual data points. | Global =DEFAULTDATA= setting |
 | =xaxis= | X-Axis labels: The values are defined as a range of table cells. In case of scatter graph, =xaxis= represents the actual X values. The range also defines the orientation -- row or column oriented (if specified). For example ="R2:C2..R999:C2"= would take all of column 2 starting at row 2 and going through row 999. It would also denote that all remaining data is oriented columnar. | None. Is required for =type="scatter"=. If not specified, then no X axis labels shown and data assumed to be in columnar format. |
 | =xaxisangle= | Angle the X-Axis labels are drawn. Only two angles are supported at this time, ="0"= draws horizontal labels, other numbers draw vertical labels | ="0"= |
-| =yaxis= | Y-Axis labels: ="on"= to show the labels, ="off"= for no labels. | ="off"= |
+| =yaxis= and =yaxis2= | Y-Axis labels for the left Y axis and the right Y axis: ="on"= to show the labels, ="off"= for no labels. | ="off"= |
 | =xmin= | Minimum value drawn on the X axis. Note: this is *only* applicable for =scatter= charts. | The minimum value specified by =xaxis= |
 | =xmax= | Maximum value drawn on the X axis. Note: this is *only* applicable for =scatter= charts. | The maximum value specified by =xaxis= |
-| =ymin= | Minimum value drawn on the Y axis | The minimum value specified by =data= |
-| =ymax= | Maximum value drawn on the Y axis | The maximum value specified by =data= |
+| =ymin= and =ymin2= | Minimum value drawn on the left (=ymin=) and right (=ymin2=) Y axis | The minimum value specified by =data= and =data2= |
+| =ymax= and =ymax2= | Maximum value drawn on the left (=ymax=) and right (=ymax2=) Y axis | The maximum value specified by =data= and =data2= |
 | =xgrid= | Grid shown for X axis: ="on"= for solid grid lines, ="dot"= for dotted grid lines, ="off"= for none. | ="dot"= |
 | =ygrid= | Grid shown for Y axis: ="on"= for solid grid lines, ="dot"= for dotted grid lines, ="off"= for none. | ="dot"= |
 | =numygrids= | Number of Y axis grids drawn | Global =NUMYGRIDS= setting |
-| =ytics= | Number of tic marks to draw between Y axis grid lines.  | If =scale="semilog"=, then =ytics="10"=, else defaults to ="0"= |
+| =ytics= and =ytics2= | Number of tic marks to draw between Y axis grid lines for the left (=ytics=) and right (=ytics2=) Y axis.  | If =scale="semilog"=, then =ytics="10"=, else defaults to ="0"= |
 | =numxgrids= | Number of X axis grids drawn. This can be used if there are a large number of X axis data points such that the X axis labels overlap. | Draw all X-Axis labels |
-| =datalabel= | Show data labels: ="on"= for labels, ="box"= for label in a box, ="off"= for none, ="auto"= for labels only on xaxis grid lines, ="autobox"= for a label in a box only on xaxis grid lines. It can also be a list like ="off, off, off, box"= to show values in a box for the fourth set of data points only. | ="off"= |
+| =datalabel= and =datalabel2= | Shows data value labels above drawn data points for =data= and =data2= data.  Possible values are: <table border=1> <tr> <td> ="off"= </td> <td>Do not show any data value labels</td> </tr> <tr> <td> ="on"= </td> <td>Show the data value labels for all data points</td> </tr> <tr> <td> ="box"= </td> <td>Show the data value labels inside of a box for all data points</td> </tr> <tr> <td> ="auto"= </td> <td>Show the data value labels for only data points falling on an X-axis grid line.  This option should be used when there are a lot of data points and the data values start to be drawn on top of each other making them impossible to read.</td> </tr> <tr> <td> ="autobox"= or ="auto box"= or ="boxauto"= or ="box auto"= </td> <td>Show the data value labels inside of a box for only data points falling on an X-axis grid line.  This option should be used when there are a lot of data points and the data values start to be drawn on top of each other making them impossible to read.</td> </tr> <tr> <td> ="##"= </td> <td>Show the first and last data value labels along with trying to show (## - 2) additional data value labels in between. An even distribution of data value labels will be shown so it is possible that fewer data value labels than requested will be displayed.  For example with 16 data values charted, requesting ="7"=, ="8"=, or ="9"= data value labels would only show a total of 8.</td> </tr> <tr> <td> ="##box"= or ="## box"= or ="box##"= or ="box ##"= </td> <td>Show the first and last data value labels inside of a box along with trying to show (## - 2) additional data value labels (in boxes) in between. An even distribution of data value labels will be shown so it is possible that fewer data value labels than requested will be displayed.  For example with 16 data values charted, requesting ="7"=, ="8"=, or ="9"= data value labels would only show a total of 8.</td> </tr> </table> | ="off"= |
 | =legend= | Legend shown to the right of the chart. For example ="R1:C3..R1:C6"= would take all of row 1 starting at column 3 and going through column 6 as the name/legend of each set of data points | None; no legend if not specified |
 | =width= | Defines the overall width of the chart in pixels. | Global =WIDTH= setting |
 | =height= | Defines the overall height of the chart in pixels. | Global =HEIGHT= setting |
 | =alt= | Alternate text for chart image | Empty alt tag |
-| =colors= | A list of colors defining the color of each set of data points. | Global =LINE_COLORS= setting for lines; global =AREA_COLORS= setting for area |
-| =bgcolor= | Background color of the area surrounding the chart. For example, ="#E7E7E7"= sets a light gray background. Optionally specify a second values for the chart background itself. For example, ="#E7E7E7, #FFFFC0"= defines a chart with a light yellow background on a light gray surrounding. | Global =BGCOLOR= setting |
+| =colors= and =colors2= | A list of colors defining the color of each set of data points for =data= and =data2=. | Global =LINE_COLORS= setting for lines; global =AREA_COLORS= setting for area |
+| =bgcolor= | Background color of the area surrounding/outside the chart. For example, ="#E7E7E7"= sets a light gray background (outside the chart) color.  Optionally specify a second values for the chart background itself (the inside color) and an optional third value which is the value of the color to fill data label boxes with. For example, ="#E7E7E7, #FFFFC0"= defines a chart with a light yellow inside background on a light gray outside, with default data label box background color. | Global =BGCOLOR= setting |
 | =gridcolor= | Colors/style of the grid (if any). If =xgrid= or =ygrid= = "on" then use the first =gridcolor= for drawing solid grid lines. If =xgrid= or =ygrid= = "dot", then use the full set of colors to define the line style for drawing the grid lines ("transparent" can be used to introduce holes in the line)" | Global =GRIDCOLOR= setting |
 | =linewidth= | Width of data lines in pixel | Global =LINEWIDTH= setting |
 | =pointsize= | Size of data points in pixel | Global =POINTSIZE= setting |
@@ -172,37 +174,23 @@ Assuming the following three TWiki tables. The first shows the data oriented in 
 
 <!-- To make things a bit easier to read, we define TWiki variables to
     contain the sample charts.
+   * Set area1 = name="area1" table="exampleTable2" type="area" data="R2:C2..R99:C6" xaxis="R1:C2..R1:C99" legend="R2:C1..R99:C1" ymax="30" width="225" height="200" numygrid="4"
+   * Set bar1 = name="bar1" table="exampleTable2" type="bar" data="R3:C2..R99:C4" xaxis="R1:C2..R1:C4" legend="R3:C1..R99:C1" ymin="0" ymax="19" numygrids="9" width="225" height="200"
+   * Set line1 = name="line1" table="exampleTable1" type="line" data="R2:C2..R6:C2" xaxis="R2:C1..R6:C1" legend="R1:C2..R1:C2" ymin="5" ymax="40" numygrids="6" width="225" height="200"
+   * Set line2 = name="line2" table="exampleTable2" type="line" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" ymin="5" ymax="30" numygrids="4" width="225" height="200"
+   * Set scatter1 = name="scatter1" table="exampleTable3" type="scatter" subtype="pline" data="R2:C2..R6:C4" xaxis="R2:C1..R6:C1" legend="R1:C2..R1:C4" ymin="1" ymax="10" xmax="12" numygrids="8" numxgrids="8" linewidth="1" width="225" height="200"
+   * Set combo1 = name="combo1" table="exampleTable2" type="combo" subtype="area, pline, point, line" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" ymin="5" ymax="30" numygrids="4" numxgrids="4" width="225" height="200"
+   * Set combo2 = name="combo2" table="exampleTable2" type="combo" subtype="bar, pline, point, line" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" ymin="5" ymax="30" numygrids="4" numxgrids="4" width="225" height="200"
 -->
-%SET{"area1" value=
-    "name=\"area1\" table=\"exampleTable2\" type=\"area\" data=\"R2:C2..R99:C6\" xaxis=\"R1:C2..R1:C99\" legend=\"R2:C1..R99:C1\" ymax=\"30\" width=\"225\" height=\"200\" numygrid=\"4\""
-    }% 
-%SET{"bar1" value=
-    "name=\"bar1\" table=\"exampleTable2\" type=\"bar\" data=\"R3:C2..R99:C4\" xaxis=\"R1:C2..R1:C4\" legend=\"R3:C1..R99:C1\" ymin=\"0\" ymax=\"19\" numygrids=\"9\" width=\"225\" height=\"200\""
-    }% 
-%SET{"line1" value=
-    "name=\"line1\" table=\"exampleTable1\" type=\"line\" data=\"R2:C2..R6:C2\" xaxis=\"R2:C1..R6:C1\" legend=\"R1:C2..R1:C2\" ymin=\"5\" ymax=\"40\" numygrids=\"6\" width=\"225\" height=\"200\""
-    }% 
-%SET{"line2" value=
-    "name=\"line2\" table=\"exampleTable2\" type=\"line\" data=\"R2:C2..R5:C6\" xaxis=\"R1:C2..R1:C6\" legend=\"R2:C1..R5:C1\" ymin=\"5\" ymax=\"30\" numygrids=\"4\" width=\"225\" height=\"200\""
-    }% 
-%SET{"scatter1" value=
-    "name=\"scatter1\" table=\"exampleTable3\" type=\"scatter\" subtype=\"pline\" data=\"R2:C2..R6:C4\" xaxis=\"R2:C1..R6:C1\" legend=\"R1:C2..R1:C4\" ymin=\"1\" ymax=\"10\" xmax=\"12\" numygrids=\"8\" numxgrids=\"8\" linewidth=\"1\" width=\"225\" height=\"200\""
-    }% 
-%SET{"combo1" value=
-    "name=\"combo1\" table=\"exampleTable2\" type=\"combo\" subtype=\"area, pline, point, line\" data=\"R2:C2..R5:C6\" xaxis=\"R1:C2..R1:C6\" legend=\"R2:C1..R5:C1\" ymin=\"5\" ymax=\"30\" numygrids=\"4\" numxgrids=\"4\" width=\"225\" height=\"200\""
-    }% 
-%SET{"combo2" value=
-    "name=\"combo2\" table=\"exampleTable2\" type=\"combo\" subtype=\"bar, pline, point, line\" data=\"R2:C2..R5:C6\" xaxis=\"R1:C2..R1:C6\" legend=\"R2:C1..R5:C1\" ymin=\"5\" ymax=\"30\" numygrids=\"4\" numxgrids=\"4\" width=\"225\" height=\"200\""
-    }% 
 
 | *Type of chart* | *You type* | *You should get...* | *...if installed* |
-| area | Multiple areas %BR%%BR% =%<nop>CHART{%GET{"area1"}%}%= | <img alt="" src="%ATTACHURLPATH%/area1.png" /> | %CHART{%GET{"area1"}%}% |
-| bar | Multiple bars %BR%%BR% =%<nop>CHART{%GET{"bar1"}%}%= | <img alt="" src="%ATTACHURLPATH%/bar1.png" /> | %CHART{%GET{"bar1"}%}% |
-| line | Simple line %BR%%BR% =%<nop>CHART{%GET{"line1"}%}%= | <img alt="" src="%ATTACHURLPATH%/line1.png" /> | %CHART{%GET{"line1"}%}% |
-| line | Multiple lines %BR%%BR% =%<nop>CHART{%GET{"line2"}%}%= | <img alt="" src="%ATTACHURLPATH%/line2.png" /> | %CHART{%GET{"line2"}%}% |
-| scatter | Multiple scatter %BR%%BR% =%<nop>CHART{%GET{"scatter1"}%}%= | <img alt="" src="%ATTACHURLPATH%/scatter1.png" /> | %CHART{%GET{"scatter1"}%}% |
-| combo | Combo with area, pline, point, & line %BR%%BR% =%<nop>CHART{%GET{"combo1"}%}%= | <img alt="" src="%ATTACHURLPATH%/combo1.png" /> | %CHART{%GET{"combo1"}%}% |
-| combo | Combo with bar, pline, point, & line %BR%%BR% =%<nop>CHART{%GET{"combo2"}%}%= | <img alt="" src="%ATTACHURLPATH%/combo2.png" /> | %CHART{%GET{"combo2"}%}% |
+| area | Multiple areas %BR%%BR% =%<nop>CHART{%area1%}%= | <img alt="" src="%ATTACHURLPATH%/area1.png" /> | %CHART{%area1%}% |
+| bar | Multiple bars %BR%%BR% =%<nop>CHART{%bar1%}%= | <img alt="" src="%ATTACHURLPATH%/bar1.png" /> | %CHART{%bar1%}% |
+| line | Simple line %BR%%BR% =%<nop>CHART{%line1%}%= | <img alt="" src="%ATTACHURLPATH%/line1.png" /> | %CHART{%line1%}% |
+| line | Multiple lines %BR%%BR% =%<nop>CHART{%line2%}%= | <img alt="" src="%ATTACHURLPATH%/line2.png" /> | %CHART{%line2%}% |
+| scatter | Multiple scatter %BR%%BR% =%<nop>CHART{%scatter1%}%= | <img alt="" src="%ATTACHURLPATH%/scatter1.png" /> | %CHART{%scatter1%}% |
+| combo | Combo with area, pline, point, & line %BR%%BR% =%<nop>CHART{%combo1%}%= | <img alt="" src="%ATTACHURLPATH%/combo1.png" /> | %CHART{%combo1%}% |
+| combo | Combo with bar, pline, point, & line %BR%%BR% =%<nop>CHART{%combo2%}%= | <img alt="" src="%ATTACHURLPATH%/combo2.png" /> | %CHART{%combo2%}% |
 
 The "if installed" column shows images instead of variables in case the plugin is installed correctly.
 
@@ -262,12 +250,13 @@ If the required parameters are not defined, then an error message is returned or
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.TaitCyrus |
-|  Copyright: | &copy 2002-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
+|  Copyright: | &copy; 2002-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-04-25 (v%$VERSION%) |
 |  Change History: | <!-- specify latest version first --> |
-|  2011-04-27: | <ul><li>TWikibug:Item6702: Fix positioning of x-axis labels when bar graph and xaxisangle=90</li><li>TWikibug:Item6703: Enhanced =datalabel= to allow =auto= and =autobox= values/li></ul> -- TWiki:Main.TaitCyrus |
-|  2011-04-26: | Fixed bugs:<ul><li>TWikibug:Item6691: Fixed missing reverse tables</li><li>TWikibug:Item6691: Fixed =semilog= bug where data values didn't match yaxis values.</li><li>TWikibug:Item6692: Fixed bug where data containing HTML or TWiki links was not parsed correctly</li><li>TWikibug:Item6693: Fixed bug where if all data was identical, an error was generated about there being no height to the chart.  Now in this case, the =ymax= will be forced to the next higher value so the data will be drawn.</li><li>TWikibug:Item6694: Fixed bug with handling of =numxgrids= parameter.</li></ul>Enhancements:<ul><li>TWikibug:Item6695: improved reversed data charting</li><li>TWikibug:Item6695: Added improved support for reversed data ranges so bottom/up or right/left data can now be specified.</li><li>TWikibug:Item6696: Improved default values for X/Y axis min/max to be moved up (for max) or down (for min) nearest 1*, 2*, 5* range</li><li>TWikibug:Item6697: Added =xmin= and =xmax= for greater =scatter= chart specificaion.</li><li>TWikibug:Item6698: Allow single quote ='= in parameters in addition to ="=.</li><li>TWikibug:Item6699: Added caching of table processing in a topic so multiple charts on the same topic page will only parse the topic page once instead of each time a chart was created.</li><li>Updated the tests topic to be more human readable in raw mode by using %<NOP>SET{}% and %<NOP>GET{}%.</li><li>Added new tests to ChartPluginTests.</li></ul> -- TWiki:Main.TaitCyrus |
+|  2011-05-03: | <ul><li>TWikibug:Item6709: Fix runtime warnings.</li><li> TWikibug:Item6705: Remove dependency on TWiki:Plugins.SetGetPlugin</li><li> TWikibug:Item6706: Add support for both a left and right Y-axis (plus new tests).</li><li> TWikibug:Item6707: Add ability to change the =datalabel= background color (plus new tests).</li><li> TWikibug:Item6703: Added greater control over number of =datalabels= drawn (plus new tests).</li><li> TWikibug:Item6708: Remove custom plugin parameter parser instead using TWiki::Attrs.</li></ul> -- TWiki:Main.TaitCyrus |
+|  2011-04-27: | <ul><li> TWikibug:Item6702: Fix positioning of x-axis labels when bar graph and xaxisangle=90</li><li> TWikibug:Item6703: Enhanced =datalabel= to allow =auto= and =autobox= values/li></ul> -- TWiki:Main.TaitCyrus |
+|  2011-04-26: | Fixed bugs:<ul><li> TWikibug:Item6691: Fixed missing reverse tables</li><li> TWikibug:Item6691: Fixed =semilog= bug where data values didn't match yaxis values.</li><li> TWikibug:Item6692: Fixed bug where data containing HTML or TWiki links was not parsed correctly</li><li> TWikibug:Item6693: Fixed bug where if all data was identical, an error was generated about there being no height to the chart.  Now in this case, the =ymax= will be forced to the next higher value so the data will be drawn.</li><li> TWikibug:Item6694: Fixed bug with handling of =numxgrids= parameter.</li></ul>Enhancements:<ul><li> TWikibug:Item6695: improved reversed data charting</li><li> TWikibug:Item6695: Added improved support for reversed data ranges so bottom/up or right/left data can now be specified.</li><li> TWikibug:Item6696: Improved default values for X/Y axis min/max to be moved up (for max) or down (for min) nearest 1*, 2*, 5* range</li><li> TWikibug:Item6697: Added =xmin= and =xmax= for greater =scatter= chart specificaion.</li><li> TWikibug:Item6698: Allow single quote ='= in parameters in addition to ="=.</li><li> TWikibug:Item6699: Added caching of table processing in a topic so multiple charts on the same topic page will only parse the topic page once instead of each time a chart was created.</li><li>Updated the tests topic to be more human readable in raw mode by using %<NOP>SET{}% and %<NOP>GET{}%.</li><li>Added new tests to ChartPluginTests.</li></ul> -- TWiki:Main.TaitCyrus |
 |  2010-11-04: | TWikibug:Item6600: Better doc of data parameter in the case of a scatter graph -- TWiki:Main.VickiBrown |
 |  2010-06-26: | TWikibug:Item6003: Document CHARTs with SEARCHes and CALC in an INCLUDEd topic |
 |  2010-04-07: | TWikibug:Item6160: Fixed taint issue with certain combination of Perl/GD; TWikibug:Item6329 - input validation for chart width and height; added VarCHART variable documentation page -- TWiki:Main.PeterThoeny |
@@ -283,7 +272,7 @@ If the required parameters are not defined, then an error message is returned or
 |  13 Sept 2002: | V1.002 - Add support for better placement of legends so they don't overlap, add auto ymin/ymax determination if not specified, add =bgcolor= and =numygrids= options |
 |  27 Jun 2002: | V1.001 - Data range specified is clipped to actual table size; more forgiving data parsing by extracting first numeral from a table cell, e.g. extract =25= from =&lt;u&gt;25%&lt;/u&gt;= |
 |  20 Jun 2002: | Initial version (V1.000) |
-|  TWiki dependencies: | $TWiki::Plugins::VERSION 1.1, TWiki:Plugins.SetGetPlugin |
+|  TWiki dependencies: | $TWiki::Plugins::VERSION 1.1 |
 |  Dependencies: | gd (see http://www.libgd.org/) |
 |  CPAN Dependencies | CPAN:GD, CPAN:POSIX |
 |  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 96%, %SYSTEMWEB%.FormattedSearch 97%, ChartPlugin 69% |

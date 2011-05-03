@@ -286,10 +286,10 @@ sub _makeChart {
     return _make_error("paramters *datatype* and *subtype* can't both be specified") if (defined $dataType && defined $subType);
 
     $subType = $dataType if (defined $dataType);
-    if ($subType2 ne "") {
+    if (defined($subType2)) {
 	$subType = "$subType,$subType2";
     }
-    if (defined $subType) {
+    if (defined($subType)) {
         my @subTypes = split(/[\s,]+/, $subType);
         # Check for valid subtypes
         my @unknownSubTypes = grep(! /area|line|point|pline|scatter|bar/, @subTypes);
@@ -382,7 +382,7 @@ sub _makeChart {
     # See if the parameter 'yaxis' or 'yaxis2' is available.
     my $yAxis = $this->_Parameters->getParameter("yaxis", undef);
     my $yAxis2 = $this->_Parameters->getParameter("yaxis2", "off");
-    $chart->setYaxis1($yAxis);
+    $chart->setYaxis1($yAxis) if (defined($yAxis));
     $chart->setYaxis2($yAxis2);
 
     # See if the parameter 'ytics' is available.
@@ -488,9 +488,11 @@ sub _makeChart {
     # Get the chart 'bgcolor' color.
     my @defaultBGcolors = split(/[\s,]+/, $defaultBGcolor);
     my $bgcolor = $this->_Parameters->getParameter("bgcolor", undef);
-    my @userBGColors = split(/[\s,]+/, $bgcolor);
-    foreach my $i (0 .. $#userBGColors) {
-	$defaultBGcolors[$i] = $userBGColors[$i];
+    if (defined($bgcolor)) {
+	my @userBGColors = split(/[\s,]+/, $bgcolor);
+	foreach my $i (0 .. $#userBGColors) {
+	    $defaultBGcolors[$i] = $userBGColors[$i];
+	}
     }
     $chart->setBGcolor(@defaultBGcolors);
 
@@ -504,8 +506,8 @@ sub _makeChart {
     # See if the parameter 'colors' is available.
     my $colors = $this->_Parameters->getParameter("colors", undef);
     my $colors2 = $this->_Parameters->getParameter("colors2", undef);
-    $colors = "$colors,$colors2" if ($colors2 ne "");
-    $chart->setColors(split(/[\s,]+/, $colors)) if (defined $colors);
+    $colors = "$colors,$colors2" if (defined($colors2));
+    $chart->setColors(split(/[\s,]+/, $colors)) if (defined($colors));
 
     # Get the chart grid  color.
     my $gridColor = $this->_Parameters->getParameter("gridcolor", $defaultGridColor);

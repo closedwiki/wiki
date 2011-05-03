@@ -316,6 +316,9 @@ sub new {
     $this->setGridColor("#FFFFFF");
     $this->setLegend();
     $this->setYaxis("off");
+    $this->setYaxis2("off");
+    $this->setNumYTics1(0);
+    $this->setNumYTics2(0);
     $this->setXaxis();
     $this->setXaxisAngle(0);
     $this->setNumXGrids(10);
@@ -795,12 +798,14 @@ sub makeChart {
     # Get the Y axis scale to use
     my $scale = $this->getScale();
 
+    my @yAxisLocs = ($LEFT);
     # Get the data and info about the data.
     my @data1 = $this->getData1();
     my @data2 = $this->getData2();
     my $numDataSets1   = $this->getNumDataSets1();
     my $numDataSets2   = $this->getNumDataSets2();
     my $isData2Data = $numDataSets2;
+    push (@yAxisLocs, $RIGHT) if ($isData2Data);
     my @numDataPoints;
     $numDataPoints[$LEFT] = $this->getNumDataPoints1();
     $numDataPoints[$RIGHT] = $this->getNumDataPoints2();
@@ -869,8 +874,7 @@ sub makeChart {
     my @yAxisMax;
     my @numYGrids;
     # Foreach data set, see if we need to compute ymin and ymax.
-    foreach my $yAxisLoc ($LEFT, $RIGHT) {
-	next if ($this->_getNumDataSets($yAxisLoc) == 0);
+    foreach my $yAxisLoc (@yAxisLocs) {
 	# Get the users specified ymin, ymax, and numygrids
 	$yAxisMin[$yAxisLoc]  = $this->_getYmin($yAxisLoc);
 	$yAxisMax[$yAxisLoc]  = $this->_getYmax($yAxisLoc);
@@ -937,8 +941,7 @@ sub makeChart {
         $this->setNumYGrids2($numYGrids[$RIGHT] = $numYGrids[$LEFT]);
     }
 
-    foreach my $yAxisLoc ($LEFT, $RIGHT) {
-	next if ($this->_getNumDataSets($yAxisLoc) == 0);
+    foreach my $yAxisLoc (@yAxisLocs) {
 	if ($scale eq "semilog") {
 	    $this->_setNumYDigits($yAxisLoc, 0);
 	    my $tics = $this->_getNumYTics($yAxisLoc);
@@ -953,8 +956,7 @@ sub makeChart {
     my @scaledYAxisMin;
     my @scaledYAxisMax;
     my @chartHeight;
-    foreach my $yAxisLoc ($LEFT, $RIGHT) {
-	next if ($this->_getNumDataSets($yAxisLoc) == 0);
+    foreach my $yAxisLoc (@yAxisLocs) {
 	$scaledYAxisMin[$yAxisLoc] = $this->_scale($yAxisMin[$yAxisLoc]);
 	$scaledYAxisMax[$yAxisLoc] = $this->_scale($yAxisMax[$yAxisLoc]);
 	$chartHeight[$yAxisLoc]    = $scaledYAxisMax[$yAxisLoc] - $scaledYAxisMin[$yAxisLoc];
@@ -1062,8 +1064,7 @@ sub makeChart {
     if (defined($yLabel2) || $this->getYaxis2() eq "on") {
 	$isYaxis2Text = 1;
     }
-    foreach my $yAxisLoc ($LEFT, $RIGHT) {
-	next if ($this->_getNumDataSets($yAxisLoc) == 0);
+    foreach my $yAxisLoc (@yAxisLocs) {
 	if ($this->_getYaxis($yAxisLoc) eq "on") {
 	    # Calculate the string width of both the min/max Y axis labels so
 	    # we know how much room to allocate for them.  Save the values for
@@ -1251,9 +1252,8 @@ sub makeChart {
     # Note: all areas are drawn first so they appear behind the lines and
     # won't hide other data sets.
     my $lineNum = $this->getNumDataSets1() + $this->getNumDataSets2() - 1;
-    foreach my $yAxisLoc ($RIGHT, $LEFT) {
+    foreach my $yAxisLoc (@yAxisLocs) {
 	my $numDataSets = $this->_getNumDataSets($yAxisLoc);
-	next if ($numDataSets == 0);
 	my @data = $this->_getData($yAxisLoc);
 	foreach (my $dataSet = $numDataSets - 1; $dataSet >= 0; $dataSet--) {
 	    my $row = $data[$dataSet];
@@ -1299,8 +1299,7 @@ sub makeChart {
     # 2222222222222222222222222222222222222222222222222222222222222222222222
     # Draw the Y axis labels and optional grid lines so the grid lines
     # fall behind the areas/lines.
-    foreach my $yAxisLoc ($LEFT, $RIGHT) {
-	next if ($this->_getNumDataSets($yAxisLoc) == 0);
+    foreach my $yAxisLoc (@yAxisLocs) {
 	my $yAxis = $this->_getYaxis($yAxisLoc);
 	my $yGrid = $this->getYgrid();
 	my $numYGrids = $this->_getNumYGrids($yAxisLoc);
@@ -1460,9 +1459,8 @@ sub makeChart {
     # Now draw any bars.
     $barNum = 0;
     $lineNum = 0;
-    foreach my $yAxisLoc ($LEFT, $RIGHT) {
+    foreach my $yAxisLoc (@yAxisLocs) {
 	my $numDataSets = $this->_getNumDataSets($yAxisLoc);
-	next if ($numDataSets == 0);
 	my @data = $this->_getData($yAxisLoc);
 	for my $dataSet (0 .. $numDataSets - 1) {
 	    my $row = $data[$dataSet];
@@ -1505,9 +1503,8 @@ sub makeChart {
     # lines outlining the already drawn areas (since some areas might have
     # been overwritten).
     $lineNum = 0;
-    foreach my $yAxisLoc ($LEFT, $RIGHT) {
+    foreach my $yAxisLoc (@yAxisLocs) {
 	my $numDataSets = $this->_getNumDataSets($yAxisLoc);
-	next if ($numDataSets == 0);
 	my $numDataPoints = $this->_getNumDataPoints($yAxisLoc);
 	my @data = $this->_getData($yAxisLoc);
 	for my $dataSet (0 .. $numDataSets - 1) {
@@ -1625,9 +1622,8 @@ sub makeChart {
 	my $boxBG = $im->colorAllocate(_convert_color($boxBGColor));
 	$barNum = 0;
 	$lineNum = 0;
-	foreach my $yAxisLoc ($LEFT, $RIGHT) {
+	foreach my $yAxisLoc (@yAxisLocs) {
 	    my $numDataSets = $this->_getNumDataSets($yAxisLoc);
-	    next if ($numDataSets == 0);
 	    my @data = $this->_getData($yAxisLoc);
 	    for my $dataSet (0 .. $numDataSets - 1) {
 		my $dataLabel = $dataLabels[$dataSet % $numDataLabels];
@@ -1783,9 +1779,8 @@ sub makeChart {
         # 1. determine the ideal Y location of each label
 	my @lastValues;
 	my $lastValuesIndex = 0;
-	foreach my $yAxisLoc ($LEFT, $RIGHT) {
+	foreach my $yAxisLoc (@yAxisLocs) {
 	    my $numDataSets = $this->_getNumDataSets($yAxisLoc);
-	    next if ($numDataSets == 0);
 	    my $numDataPoints = $this->_getNumDataPoints($yAxisLoc);
 	    my @data = $this->_getData($yAxisLoc);
 	    for my $dataSet (0 .. $numDataSets - 1) {

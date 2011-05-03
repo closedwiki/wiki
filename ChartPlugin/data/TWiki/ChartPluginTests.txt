@@ -2,7 +2,7 @@
 %META:TOPICPARENT{name="ChartPlugin"}%
 ---+ Chart Plugin Tests
 
-This page attempts to demonstrate/test many of the possible combinations of various parameters of the ChartPlugin.  There are too many combinations of parameters to test all possible combinations, so only a few are shown here.
+This page attempts to demonstrate/test many of the possible combinations of various parameters of the ChartPlugin.  There are too many combinations of parameters to test all possible combinations that only a limited number are shown here.
 
 %TOC%
 ---
@@ -80,818 +80,536 @@ and that all zero values is charted correctly.
 | 2011-01-07 | 10 | tag33 | 4.0e10 |
 | 2011-01-08 | 10 | $ltsomething$gt41 | 4e10 |
 
-<!-- ----------------------------------------------------------- -->
-<!-- Define the line tests                                       -->
-<!-- ----------------------------------------------------------- -->
-%SET{"lineTest01" value=
-    "name='lineTest01' table='table1' type='line' data='R2:C7..R7:C7' ygrid='off'"
-    }%
-%SET{"lineTest02" value=
-    "name='lineTest02' table='table1' type='line' data='R2:C7..R7:C7' title='line test #2'"
-    }%
-%SET{"lineTest03" value=
-    "name='lineTest03' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #3'"
-    }%
-%SET{"lineTest04" value=
-    "name='lineTest04' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #4' yaxis='on'"
-    }%
-%SET{"lineTest05" value=
-    "name='lineTest05' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #5' yaxis='on' ymin='0'"
-    }%
-%SET{"lineTest06" value=
-    "name='lineTest06' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #6' yaxis='on' ymin='0' ymax='150'"
-    }%
-%SET{"lineTest07" value=
-    "name='lineTest07' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #7' yaxis='on' ymin='0' ymax='100' ylabel='Hello there'"
-    }%
-%SET{"lineTest08" value=
-    "name='lineTest08' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #8' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' numygrids='5'"
-    }%
-%SET{"lineTest09" value=
-    "name='lineTest09' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #9' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' numygrids='2'"
-    }%
-%SET{"lineTest10" value=
-    "name='lineTest10' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #10' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label'"
-    }%
-%SET{"lineTest11" value=
-    "name='lineTest11' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #11' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='on'"
-    }%
-%SET{"lineTest12" value=
-    "name='lineTest12' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #12' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box'"
-    }%
-%SET{"lineTest13" value=
-    "name='lineTest13' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #13' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C7..R1:C7'"
-    }%
-%SET{"lineTest14" value=
-    "name='lineTest14' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #14' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7'"
-    }%
-%SET{"lineTest15" value=
-    "name='lineTest15' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #15' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7' colors='#ffAAAA,#AAffAA,#AAAAff,#AAAAAA'"
-    }%
-%SET{"lineTest16" value=
-    "name='lineTest16' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #16' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7'"
-    }%
-%SET{"lineTest17" value=
-    "name='lineTest17' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #17' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#EEEEFF'"
-    }%
-%SET{"lineTest18" value=
-    "name='lineTest18' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #18' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#FFFFFF #EEEEFF'"
-    }%
-%SET{"lineTest19" value=
-    "name='lineTest19' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #19' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#EEEEEE #EEFFEE'"
-    }%
-%SET{"lineTest20" value=
-    "name='lineTest20' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #20' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='on'"
-    }%
-%SET{"lineTest21" value=
-    "name='lineTest21' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #21' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off'"
-    }%
-%SET{"lineTest22" value=
-    "name='lineTest22' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #22' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='on'"
-    }%
-%SET{"lineTest23" value=
-    "name='lineTest23' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #23' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off'"
-    }%
-%SET{"lineTest24" value=
-    "name='lineTest24' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #24' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off' width='450'"
-    }%
-%SET{"lineTest25" value=
-    "name='lineTest25' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #25' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off' width='450' height='150'"
-    }%
-%SET{"lineTest26" value=
-    "name='lineTest26' topic='ChartPluginTestsRemote' table='tableRemote2' type='line' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' title='line test #26' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R4:C1..R7:C1' ygrid='off' xgrid='off'"
-    }%
-%SET{"lineTest27" value=
-    "name='lineTest27' topic='ChartPluginTestsRemote' table='tableRemote2' type='line' data='R4:C2..R8:C7' xaxis='R2:C2..R2:C7' title='line test #27' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R4:C1..R8:C1' ygrid='off' xgrid='off'"
-    }%
-%SET{"lineTest28" value=
-    "name='lineTest28' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #28' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off' alt='This is the alt tag for test28'"
-    }%
-%SET{"lineTest29" value=
-    "name='lineTest29' table='table5' xaxis='R2:C1..R999:C1' data='R2:C3..R999:C3' xaxisangle='1' title='line test #29' datalabel='box' ygrid='on' yaxis='on'"
-    }%
-%SET{"lineTest30" value=
-    "name='lineTest30' table='table5' xaxis='R2:C1..R999:C1' data='R2:C4..R999:C4' xaxisangle='1' title='line test #30' datalabel='box' ygrid='on' yaxis='on'"
-    }%
-%SET{"lineTest31" value=
-    "name='lineTest31' table='table5' xaxis='R2:C1..R999:C1' data='R2:C2..R999:C2' xaxisangle='1' title='line test #31' datalabel='box' ygrid='on' yaxis='on'"
-    }%
-%SET{"lineTest32" value=
-    "name='lineTest32' table='table5' xaxis='R2:C1..R999:C1' data='R2:C2..R999:C2' xaxisangle='1' title='line test #32' datalabel='box' ygrid='on' yaxis='on' ymin='10'"
-    }%
-%SET{"lineTest33" value=
-    "name='lineTest33' table='table5' xaxis='R2:C1..R999:C1' data='R2:C2..R999:C2' xaxisangle='1' title='line test #33' datalabel='box' ygrid='on' yaxis='on' ymax='10'"
-    }%
-%SET{"lineTest34" value=
-    "name='lineTest34' table='table5' xaxis='R2:C1..R999:C1' data='R2:C3..R999:C3' xaxisangle='1' title='line test #34' datalabel='box' ygrid='on' yaxis='on' ymin='0' ymax='123'"
-    }%
-%SET{"lineTest35" value=
-    "name='lineTest35' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #35' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' ytics='2'"
-    }%
-%SET{"lineTest36" value=
-    "name='lineTest36' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #36' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' ytics='5'"
-    }%
+---++ Table #6
+This table is used for testing when both =data= and =data2= are used
+(displaying data on both the left Y-axis and right Y-axis).
+%TABLE{name="table6"}%
+|*Col1*|*Col2*|*Value3*|*Value4*|*Value5*|*Value6*|*Value7*|
+| 1 | A | 3 | 4 | 5 | 6 | 7 |
+| 2 | B | 3 | 4 | 5 | 6 | 7 |
+| 3 | C | 3 | 4 | 5 | 6 | 7 |
+| 4 | D | 3 | 4 | 5 | 6 | 7 |
+| 5 | E | 3 | 4 | 5 | 6 | 7 |
+| 6 | F | 3 | 4 | 5 | 6 | 7 |
+| 7 | G | 30 | 40 | 50 | 60 | 70 |
+| 8 | H | 300 | 400 | 500 | 600 | 700 |
 
-<!-- ----------------------------------------------------------- -->
-<!-- Define the area tests                                       -->
-<!-- ----------------------------------------------------------- -->
-%SET{"areaTest01" value=
-    "name='areaTest01' type='area' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off'"
-    }%
-%SET{"areaTest02" value=
-    "name='areaTest02' type='area' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='area test #02'"
-    }%
-%SET{"areaTest03" value=
-    "name='areaTest03' type='area' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='area test #03' xaxis='R2:C2..R7:C2'"
-    }%
-%SET{"areaTest04" value=
-    "name='areaTest04' type='area' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='area test #04' xaxis='R2:C2..R7:C2' yaxis='on'"
-    }%
-%SET{"areaTest05" value=
-    "name='areaTest05' type='area' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='area test #05' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0'"
-    }%
-%SET{"areaTest06" value=
-    "name='areaTest06' type='area' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='area test #06' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150'"
-    }%
-%SET{"areaTest07" value=
-    "name='areaTest07' type='area' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='area test #07' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there'"
-    }%
-%SET{"areaTest08" value=
-    "name='areaTest08' type='area' data='R2:C7..R999:C7' xaxisangle='1' title='area test #08' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' numygrids='5'"
-    }%
-%SET{"areaTest09" value=
-    "name='areaTest09' type='area' data='R2:C7..R999:C7' xaxisangle='1' title='area test #09' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' numygrids='2'"
-    }%
-%SET{"areaTest10" value=
-    "name='areaTest10' type='area' data='R2:C7..R999:C7' xaxisangle='1' title='area test #10' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label'"
-    }%
-%SET{"areaTest11" value=
-    "name='areaTest11' type='area' data='R2:C7..R999:C7' xaxisangle='1' title='area test #11' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='on'"
-    }%
-%SET{"areaTest12" value=
-    "name='areaTest12' type='area' data='R2:C7..R999:C7' xaxisangle='1' title='area test #12' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box'"
-    }%
-%SET{"areaTest13" value=
-    "name='areaTest13' type='area' data='R2:C7..R999:C7' xaxisangle='1' title='area test #13' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C7..R1:C7'"
-    }%
-%SET{"areaTest14" value=
-    "name='areaTest14' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #14' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7'"
-    }%
-%SET{"areaTest15" value=
-    "name='areaTest15' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #15' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7' colors='#ffAAAA,#AAffAA,#AAAAff,#AAAAAA'"
-    }%
-%SET{"areaTest16" value=
-    "name='areaTest16' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #16' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7'"
-    }%
-%SET{"areaTest17" value=
-    "name='areaTest17' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #17' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#AAAAAA'"
-    }%
-%SET{"areaTest18" value=
-    "name='areaTest18' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #18' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#FFFFFF #EEEEEE'"
-    }%
-%SET{"areaTest19" value=
-    "name='areaTest19' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #19' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#EEEEEE #EEFFEE'"
-    }%
-%SET{"areaTest20" value=
-    "name='areaTest20' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #20' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='on'"
-    }%
-%SET{"areaTest21" value=
-    "name='areaTest21' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #21' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off'"
-    }%
-%SET{"areaTest22" value=
-    "name='areaTest22' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #22' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='on'"
-    }%
-%SET{"areaTest23" value=
-    "name='areaTest23' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #23' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off'"
-    }%
-%SET{"areaTest24" value=
-    "name='areaTest24' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #24' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off' width='450'"
-    }%
-%SET{"areaTest25" value=
-    "name='areaTest25' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #25' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off' width='450' height='150'"
-    }%
-%SET{"areaTest26" value=
-    "name='areaTest26' type='area' topic='ChartPluginTestsRemote' table='2' data='R4:C2..R7:C7' xaxisangle='1' title='area test #26' xaxis='R2:C2..R2:C7' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R4:C1..R7:C1' ygrid='off' xgrid='off'"
-    }%
-%SET{"areaTest27" value=
-    "name='areaTest27' type='area' topic='ChartPluginTestsRemote' table='2' data='R4:C2..R8:C7' xaxisangle='1' title='area test #27' xaxis='R2:C2..R2:C7' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R4:C1..R8:C1' ygrid='off' xgrid='off'"
-    }%
-%SET{"areaTest28" value=
-    "name='areaTest28' type='area' topic='ChartPluginTestsRemote' table='2' data='R4:C2..R8:C7' xaxisangle='1' title='New Title: area test #28' xaxis='R2:C2..R2:C7' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R4:C1..R8:C1' ygrid='off' xgrid='off' alt='This is the alt tag'"
-    }%
+<!--
+  -- The following line is an undocumented API that is only designed to make
+  -- this topic page easier to read.
+%CHART_PARAMOUTPUT{%BR%%BR% =%<nop>CHART{%PARAMS%}%= | %IMG%}%
 
-<!-- ----------------------------------------------------------- -->
-<!-- Define the bar tests                                        -->
-<!-- ----------------------------------------------------------- -->
-%SET{"barTest01" value=
-    "name='barTest01' type='bar' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off'"
-    }%
-%SET{"barTest02" value=
-    "name='barTest02' type='bar' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='bar test #02'"
-    }%
-%SET{"barTest03" value=
-    "name='barTest03' type='bar' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='bar test #03' xaxis='R2:C2..R7:C2'"
-    }%
-%SET{"barTest04" value=
-    "name='barTest04' type='bar' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='bar test #04' xaxis='R2:C2..R7:C2' yaxis='on'"
-    }%
-%SET{"barTest05" value=
-    "name='barTest05' type='bar' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='bar test #05' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0'"
-    }%
-%SET{"barTest06" value=
-    "name='barTest06' type='bar' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='bar test #06' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150'"
-    }%
-%SET{"barTest07" value=
-    "name='barTest07' type='bar' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='bar test #07' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there'"
-    }%
-%SET{"barTest08" value=
-    "name='barTest08' type='bar' data='R2:C7..R999:C7' xaxisangle='1' title='bar test #08' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' numygrids='5'"
-    }%
-%SET{"barTest09" value=
-    "name='barTest09' type='bar' data='R2:C7..R999:C7' xaxisangle='1' title='bar test #09' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' numygrids='2'"
-    }%
-%SET{"barTest10" value=
-    "name='barTest10' type='bar' data='R2:C7..R999:C7' xaxisangle='1' title='bar test #10' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label'"
-    }%
-%SET{"barTest11" value=
-    "name='barTest11' type='bar' data='R2:C7..R999:C7' xaxisangle='1' title='bar test #11' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='on'"
-    }%
-%SET{"barTest12" value=
-    "name='barTest12' type='bar' data='R2:C7..R999:C7' xaxisangle='1' title='bar test #12' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box'"
-    }%
-%SET{"barTest13" value=
-    "name='barTest13' type='bar' data='R2:C7..R999:C7' xaxisangle='1' title='bar test #13' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C7..R1:C7'"
-    }%
-%SET{"barTest14" value=
-    "name='barTest14' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #14' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7'"
-    }%
-%SET{"barTest15" value=
-    "name='barTest15' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #15' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7' colors='#ffAAAA,#AAffAA,#AAAAff,#AAAAAA'"
-    }%
-%SET{"barTest16" value=
-    "name='barTest16' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #16' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7'"
-    }%
-%SET{"barTest17" value=
-    "name='barTest17' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #17' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#AAAAAA'"
-    }%
-%SET{"barTest18" value=
-    "name='barTest18' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #18' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#FFFFFF #EEEEEE'"
-    }%
-%SET{"barTest19" value=
-    "name='barTest19' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #19' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#EEEEEE #EEFFEE'"
-    }%
-%SET{"barTest20" value=
-    "name='barTest20' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #20' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='on'"
-    }%
-%SET{"barTest21" value=
-    "name='barTest21' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #21' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off'"
-    }%
-%SET{"barTest22" value=
-    "name='barTest22' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #22' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='on'"
-    }%
-%SET{"barTest23" value=
-    "name='barTest23' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #23' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off'"
-    }%
-%SET{"barTest24" value=
-    "name='barTest24' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #24' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off' width='450'"
-    }%
-%SET{"barTest25" value=
-    "name='barTest25' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #25' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off' width='450' height='150'"
-    }%
-%SET{"barTest26" value=
-    "name='barTest26' type='bar' topic='ChartPluginTestsRemote' table='2' data='R4:C2..R7:C7' xaxisangle='1' title='bar test #26' xaxis='R2:C2..R2:C7' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R4:C1..R7:C1' ygrid='off' xgrid='off'"
-    }%
-%SET{"barTest27" value=
-    "name='barTest27' type='bar' topic='ChartPluginTestsRemote' table='2' data='R4:C2..R8:C7' xaxisangle='1' title='bar test #27' xaxis='R2:C2..R2:C7' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R4:C1..R8:C1' ygrid='off' xgrid='off'"
-    }%
-%SET{"barTest28" value=
-    "name='barTest28' type='bar' topic='ChartPluginTestsRemote' table='2' data='R4:C2..R8:C7' xaxisangle='1' title='New Title: bar test #28' xaxis='R2:C2..R2:C7' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R4:C1..R8:C1' ygrid='off' xgrid='off' alt='This is the alt tag'"
-    }%
+-----------------------------------------------------------
+-- Define the line tests
+-----------------------------------------------------------
+   * Set lineTest01 = name='lineTest01' table='table1' type='line' data='R2:C7..R7:C7' ygrid='off'
+   * Set lineTest02 = name='lineTest02' table='table1' type='line' data='R2:C7..R7:C7' title='line test #2'
+   * Set lineTest03 = name='lineTest03' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #3'
+   * Set lineTest04 = name='lineTest04' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #4' yaxis='on'
+   * Set lineTest05 = name='lineTest05' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #5' yaxis='on' ymin='0'
+   * Set lineTest06 = name='lineTest06' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #6' yaxis='on' ymin='0' ymax='150'
+   * Set lineTest07 = name='lineTest07' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #7' yaxis='on' ymin='0' ymax='100' ylabel='Hello there'
+   * Set lineTest08 = name='lineTest08' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #8' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' numygrids='5'
+   * Set lineTest09 = name='lineTest09' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #9' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' numygrids='2'
+   * Set lineTest10 = name='lineTest10' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #10' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label'
+   * Set lineTest11 = name='lineTest11' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #11' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='on'
+   * Set lineTest12 = name='lineTest12' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #12' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box'
+   * Set lineTest13 = name='lineTest13' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #13' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C7..R1:C7'
+   * Set lineTest14 = name='lineTest14' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #14' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7'
+   * Set lineTest15 = name='lineTest15' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #15' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7' colors='#ffAAAA,#AAffAA,#AAAAff,#AAAAAA'
+   * Set lineTest16 = name='lineTest16' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #16' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7'
+   * Set lineTest17 = name='lineTest17' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #17' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#EEEEFF'
+   * Set lineTest18 = name='lineTest18' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #18' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#FFFFFF #EEEEFF'
+   * Set lineTest19 = name='lineTest19' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #19' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#EEEEEE #EEFFEE'
+   * Set lineTest20 = name='lineTest20' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #20' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='on'
+   * Set lineTest21 = name='lineTest21' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #21' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off'
+   * Set lineTest22 = name='lineTest22' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #22' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='on'
+   * Set lineTest23 = name='lineTest23' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #23' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off'
+   * Set lineTest24 = name='lineTest24' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #24' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off' width='450'
+   * Set lineTest25 = name='lineTest25' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #25' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off' width='450' height='150'
+   * Set lineTest26 = name='lineTest26' topic='ChartPluginTestsRemote' table='tableRemote2' type='line' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' title='line test #26' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R4:C1..R7:C1' ygrid='off' xgrid='off'
+   * Set lineTest27 = name='lineTest27' topic='ChartPluginTestsRemote' table='tableRemote2' type='line' data='R4:C2..R8:C7' xaxis='R2:C2..R2:C7' title='line test #27' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R4:C1..R8:C1' ygrid='off' xgrid='off'
+   * Set lineTest28 = name='lineTest28' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #28' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off' alt='This is the alt tag for test28'
+   * Set lineTest29 = name='lineTest29' table='table5' xaxis='R2:C1..R999:C1' data='R2:C3..R999:C3' xaxisangle='1' title='line test #29' datalabel='box' ygrid='on' yaxis='on'
+   * Set lineTest30 = name='lineTest30' table='table5' xaxis='R2:C1..R999:C1' data='R2:C4..R999:C4' xaxisangle='1' title='line test #30' datalabel='box' ygrid='on' yaxis='on'
+   * Set lineTest31 = name='lineTest31' table='table5' xaxis='R2:C1..R999:C1' data='R2:C2..R999:C2' xaxisangle='1' title='line test #31' datalabel='box' ygrid='on' yaxis='on'
+   * Set lineTest32 = name='lineTest32' table='table5' xaxis='R2:C1..R999:C1' data='R2:C2..R999:C2' xaxisangle='1' title='line test #32' datalabel='box' ygrid='on' yaxis='on' ymin='10'
+   * Set lineTest33 = name='lineTest33' table='table5' xaxis='R2:C1..R999:C1' data='R2:C2..R999:C2' xaxisangle='1' title='line test #33' datalabel='box' ygrid='on' yaxis='on' ymax='10'
+   * Set lineTest34 = name='lineTest34' table='table5' xaxis='R2:C1..R999:C1' data='R2:C3..R999:C3' xaxisangle='1' title='line test #34' datalabel='box' ygrid='on' yaxis='on' ymin='0' ymax='123'
+   * Set lineTest35 = name='lineTest35' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #35' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' ytics='2'
+   * Set lineTest36 = name='lineTest36' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #36' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' ytics='5'
 
-<!-- ----------------------------------------------------------- -->
-<!-- Define the combo tests                                      -->
-<!-- ----------------------------------------------------------- -->
-%SET{"comboTest01" value=
-    "name='comboTest01' type='combo' table='2' data='R7:C2..R7:C7' xaxis='R2:C2..R2:C7' ygrid='off' xgrid='off' width='500'"
-    }%
-%SET{"comboTest02" value=
-    "name='comboTest02' type='combo' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' ygrid='off' xgrid='off' title='combo test #02' width='500'"
-    }%
-%SET{"comboTest03" value=
-    "name='comboTest03' type='combo' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #03' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'"
-    }%
-%SET{"comboTest04" value=
-    "name='comboTest04' type='combo' subtype='area' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #04' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'"
-    }%
-%SET{"comboTest05" value=
-    "name='comboTest05' type='combo' subtype='line' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #05' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'"
-    }%
-%SET{"comboTest06" value=
-    "name='comboTest06' type='combo' subtype='bar' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #06' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'"
-    }%
-%SET{"comboTest07" value=
-    "name='comboTest07' type='combo' subtype='pline' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #07' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'"
-    }%
-%SET{"comboTest08" value=
-    "name='comboTest08' type='combo' subtype='point' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #08' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'"
-    }%
-%SET{"comboTest09" value=
-    "name='comboTest09' type='combo' subtype='area line pline point' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #09' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'"
-    }%
-%SET{"comboTest10" value=
-    "name='comboTest10' type='combo' subtype='line pline point area' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #10' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'"
-    }%
-%SET{"comboTest11" value=
-    "name='comboTest11' type='combo' subtype='pline pline point bar' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #11' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'"
-    }%
+-----------------------------------------------------------
+-- Define the area tests
+-----------------------------------------------------------
+   * Set areaTest01 = name='areaTest01' type='area' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off'
+   * Set areaTest02 = name='areaTest02' type='area' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='area test #02'
+   * Set areaTest03 = name='areaTest03' type='area' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='area test #03' xaxis='R2:C2..R7:C2'
+   * Set areaTest04 = name='areaTest04' type='area' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='area test #04' xaxis='R2:C2..R7:C2' yaxis='on'
+   * Set areaTest05 = name='areaTest05' type='area' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='area test #05' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0'
+   * Set areaTest06 = name='areaTest06' type='area' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='area test #06' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150'
+   * Set areaTest07 = name='areaTest07' type='area' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='area test #07' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there'
+   * Set areaTest08 = name='areaTest08' type='area' data='R2:C7..R999:C7' xaxisangle='1' title='area test #08' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' numygrids='5'
+   * Set areaTest09 = name='areaTest09' type='area' data='R2:C7..R999:C7' xaxisangle='1' title='area test #09' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' numygrids='2'
+   * Set areaTest10 = name='areaTest10' type='area' data='R2:C7..R999:C7' xaxisangle='1' title='area test #10' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label'
+   * Set areaTest11 = name='areaTest11' type='area' data='R2:C7..R999:C7' xaxisangle='1' title='area test #11' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='on'
+   * Set areaTest12 = name='areaTest12' type='area' data='R2:C7..R999:C7' xaxisangle='1' title='area test #12' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box'
+   * Set areaTest13 = name='areaTest13' type='area' data='R2:C7..R999:C7' xaxisangle='1' title='area test #13' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C7..R1:C7'
+   * Set areaTest14 = name='areaTest14' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #14' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7'
+   * Set areaTest15 = name='areaTest15' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #15' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7' colors='#ffAAAA,#AAffAA,#AAAAff,#AAAAAA'
+   * Set areaTest16 = name='areaTest16' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #16' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7'
+   * Set areaTest17 = name='areaTest17' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #17' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#AAAAAA'
+   * Set areaTest18 = name='areaTest18' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #18' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#FFFFFF #EEEEEE'
+   * Set areaTest19 = name='areaTest19' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #19' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#EEEEEE #EEFFEE'
+   * Set areaTest20 = name='areaTest20' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #20' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='on'
+   * Set areaTest21 = name='areaTest21' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #21' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off'
+   * Set areaTest22 = name='areaTest22' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #22' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='on'
+   * Set areaTest23 = name='areaTest23' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #23' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off'
+   * Set areaTest24 = name='areaTest24' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #24' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off' width='450'
+   * Set areaTest25 = name='areaTest25' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #25' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off' width='450' height='150'
+   * Set areaTest26 = name='areaTest26' type='area' topic='ChartPluginTestsRemote' table='2' data='R4:C2..R7:C7' xaxisangle='1' title='area test #26' xaxis='R2:C2..R2:C7' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R4:C1..R7:C1' ygrid='off' xgrid='off'
+   * Set areaTest27 = name='areaTest27' type='area' topic='ChartPluginTestsRemote' table='2' data='R4:C2..R8:C7' xaxisangle='1' title='area test #27' xaxis='R2:C2..R2:C7' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R4:C1..R8:C1' ygrid='off' xgrid='off'
+   * Set areaTest28 = name='areaTest28' type='area' topic='ChartPluginTestsRemote' table='2' data='R4:C2..R8:C7' xaxisangle='1' title='New Title: area test #28' xaxis='R2:C2..R2:C7' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R4:C1..R8:C1' ygrid='off' xgrid='off' alt='This is the alt tag'
 
-<!-- ----------------------------------------------------------- -->
-<!-- Define the scatter tests                                    -->
-<!-- ----------------------------------------------------------- -->
-%SET{"scatterTest01" value=
-    "name='scatterTest01' type='scatter' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' xgrid='off' width='500'"
-    }%
-%SET{"scatterTest02" value=
-    "name='scatterTest02' type='scatter' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #02' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'"
-    }%
-%SET{"scatterTest03" value=
-    "name='scatterTest03' type='scatter' subtype='line' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #03' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'"
-    }%
-%SET{"scatterTest04" value=
-    "name='scatterTest04' type='scatter' subtype='pline' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #04' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500' datalabel='on'"
-    }%
-%SET{"scatterTest05" value=
-    "name='scatterTest05' type='scatter' subtype='point' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #05' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'"
-    }%
-%SET{"scatterTest06" value=
-    "name='scatterTest06' type='scatter' subtype='bar' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #06' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'"
-    }%
-%SET{"scatterTest07" value=
-    "name='scatterTest07' type='scatter' subtype='point bar line pline' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #07' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'"
-    }%
-%SET{"scatterTest08" value=
-    "name='scatterTest08' type='scatter' subtype='bar line pline point' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #08' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'"
-    }%
-%SET{"scatterTest09" value=
-    "name='scatterTest09' type='scatter' subtype='line pline point bar' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #09' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'"
-    }%
-%SET{"scatterTest10" value=
-    "name='scatterTest10' type='scatter' subtype='pline point bar line' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #10' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'"
-    }%
-%SET{"scatterTest11" value=
-    "name='scatterTest11' type='scatter' subtype='bar bar bar pline' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #11' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'"
-    }%
-%SET{"scatterTest12" value=
-    "name='scatterTest12' type='scatter' subtype='bar bar bar pline' table='3' data='R5:C2..R99:C99' xaxis='R5:C1..R99:C1' title='scatter test #12' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'"
-    }%
-%SET{"scatterTest13" value=
-    "name='scatterTest13' type='scatter' subtype='bar bar bar pline' table='3' data='R8:C2..R99:C99' xaxis='R8:C1..R99:C1' title='scatter test #13' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'"
-    }%
+-----------------------------------------------------------
+-- Define the bar tests
+-----------------------------------------------------------
+   * Set barTest01 = name='barTest01' type='bar' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off'
+   * Set barTest02 = name='barTest02' type='bar' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='bar test #02'
+   * Set barTest03 = name='barTest03' type='bar' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='bar test #03' xaxis='R2:C2..R7:C2'
+   * Set barTest04 = name='barTest04' type='bar' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='bar test #04' xaxis='R2:C2..R7:C2' yaxis='on'
+   * Set barTest05 = name='barTest05' type='bar' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='bar test #05' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0'
+   * Set barTest06 = name='barTest06' type='bar' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='bar test #06' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150'
+   * Set barTest07 = name='barTest07' type='bar' data='R2:C7..R999:C7' xaxisangle='1' ygrid='off' title='bar test #07' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there'
+   * Set barTest08 = name='barTest08' type='bar' data='R2:C7..R999:C7' xaxisangle='1' title='bar test #08' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' numygrids='5'
+   * Set barTest09 = name='barTest09' type='bar' data='R2:C7..R999:C7' xaxisangle='1' title='bar test #09' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ymax='150' ylabel='Hello there' numygrids='2'
+   * Set barTest10 = name='barTest10' type='bar' data='R2:C7..R999:C7' xaxisangle='1' title='bar test #10' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label'
+   * Set barTest11 = name='barTest11' type='bar' data='R2:C7..R999:C7' xaxisangle='1' title='bar test #11' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='on'
+   * Set barTest12 = name='barTest12' type='bar' data='R2:C7..R999:C7' xaxisangle='1' title='bar test #12' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box'
+   * Set barTest13 = name='barTest13' type='bar' data='R2:C7..R999:C7' xaxisangle='1' title='bar test #13' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C7..R1:C7'
+   * Set barTest14 = name='barTest14' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #14' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7'
+   * Set barTest15 = name='barTest15' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #15' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7' colors='#ffAAAA,#AAffAA,#AAAAff,#AAAAAA'
+   * Set barTest16 = name='barTest16' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #16' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7'
+   * Set barTest17 = name='barTest17' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #17' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#AAAAAA'
+   * Set barTest18 = name='barTest18' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #18' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#FFFFFF #EEEEEE'
+   * Set barTest19 = name='barTest19' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #19' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#EEEEEE #EEFFEE'
+   * Set barTest20 = name='barTest20' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #20' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='on'
+   * Set barTest21 = name='barTest21' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #21' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off'
+   * Set barTest22 = name='barTest22' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #22' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='on'
+   * Set barTest23 = name='barTest23' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #23' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off'
+   * Set barTest24 = name='barTest24' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #24' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off' width='450'
+   * Set barTest25 = name='barTest25' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #25' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='off' width='450' height='150'
+   * Set barTest26 = name='barTest26' type='bar' topic='ChartPluginTestsRemote' table='2' data='R4:C2..R7:C7' xaxisangle='1' title='bar test #26' xaxis='R2:C2..R2:C7' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R4:C1..R7:C1' ygrid='off' xgrid='off'
+   * Set barTest27 = name='barTest27' type='bar' topic='ChartPluginTestsRemote' table='2' data='R4:C2..R8:C7' xaxisangle='1' title='bar test #27' xaxis='R2:C2..R2:C7' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R4:C1..R8:C1' ygrid='off' xgrid='off'
+   * Set barTest28 = name='barTest28' type='bar' topic='ChartPluginTestsRemote' table='2' data='R4:C2..R8:C7' xaxisangle='1' title='New Title: bar test #28' xaxis='R2:C2..R2:C7' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R4:C1..R8:C1' ygrid='off' xgrid='off' alt='This is the alt tag'
 
-<!-- ----------------------------------------------------------- -->
-<!-- Define the legend placement tests                           -->
-<!-- ----------------------------------------------------------- -->
-%SET{"legendTest01" value=
-    "name='legendTest01' table='4' data='R2:C2..R3:C5' xaxis='R2:C1..R9:C1' title='legend test #01' legend='R1:C2..R1:C5' yaxis='on' ygrid='off'"
-    }%
-%SET{"legendTest02" value=
-    "name='legendTest02' table='4' data='R2:C2..R5:C5' xaxis='R2:C1..R9:C1' title='legend test #02' legend='R1:C2..R1:C5' yaxis='on' ygrid='off'"
-    }%
-%SET{"legendTest03" value=
-    "name='legendTest03' table='4' data='R2:C2..R6:C5' xaxis='R2:C1..R9:C1' title='legend test #03' legend='R1:C2..R1:C5' yaxis='on' ygrid='off'"
-    }%
-%SET{"legendTest04" value=
-    "name='legendTest04' table='4' data='R2:C2..R7:C5' xaxis='R2:C1..R9:C1' title='legend test #04' legend='R1:C2..R1:C5' yaxis='on' ygrid='off' ymax='40'"
-    }%
-%SET{"legendTest05" value=
-    "name='legendTest05' table='4' data='R2:C2..R8:C5' xaxis='R2:C1..R9:C1' title='legend test #05' legend='R1:C2..R1:C5' yaxis='on' ygrid='off' ymax='40'"
-    }%
-%SET{"legendTest06" value=
-    "name='legendTest06' table='4' data='R2:C2..R9:C5' xaxis='R2:C1..R9:C1' title='legend test #06' legend='R1:C2..R1:C5' yaxis='on' ygrid='off' ymax='40'"
-    }%
-%SET{"legendTest07" value=
-    "name='legendTest07' table='4' data='R2:C2..R4:C5' xaxis='R2:C1..R9:C1' title='legend test #07' legend='R1:C2..R1:C5' yaxis='on' ygrid='off' ymax='20'"
-    }%
-%SET{"legendTest08" value=
-    "name='legendTest08' table='4' data='R2:C2..R4:C5' xaxis='R2:C1..R9:C1' title='legend test #08' legend='R1:C2..R1:C5' yaxis='on' ygrid='off' ymin='21'"
-    }%
-%SET{"legendTest09" value=
-    "name='legendTest09' table='4' data='R2:C2..R4:C5' xaxis='R2:C1..R9:C1' title='legend test #09' legend='R1:C2..R1:C5' yaxis='on' ygrid='off' ymin='50' ymax='60'"
-    }%
-%SET{"legendTest10" value=
-    "name='legendTest10' table='4' data='R2:C2..R4:C5' xaxis='R2:C1..R9:C1' title='legend test #10' legend='R1:C2..R1:C5' yaxis='on' ygrid='off' ymin='-50' ymax='-10'"
-    }%
+-----------------------------------------------------------
+-- Define the combo tests
+-----------------------------------------------------------
+   * Set comboTest01 = name='comboTest01' type='combo' table='2' data='R7:C2..R7:C7' xaxis='R2:C2..R2:C7' ygrid='off' xgrid='off' width='500'
+   * Set comboTest02 = name='comboTest02' type='combo' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' ygrid='off' xgrid='off' title='combo test #02' width='500'
+   * Set comboTest03 = name='comboTest03' type='combo' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #03' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'
+   * Set comboTest04 = name='comboTest04' type='combo' subtype='area' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #04' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'
+   * Set comboTest05 = name='comboTest05' type='combo' subtype='line' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #05' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'
+   * Set comboTest06 = name='comboTest06' type='combo' subtype='bar' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #06' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'
+   * Set comboTest07 = name='comboTest07' type='combo' subtype='pline' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #07' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'
+   * Set comboTest08 = name='comboTest08' type='combo' subtype='point' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #08' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'
+   * Set comboTest09 = name='comboTest09' type='combo' subtype='area line pline point' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #09' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'
+   * Set comboTest10 = name='comboTest10' type='combo' subtype='line pline point area' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #10' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'
+   * Set comboTest11 = name='comboTest11' type='combo' subtype='pline pline point bar' table='2' data='R4:C2..R7:C7' xaxis='R2:C2..R2:C7' yaxis='on' title='combo test #11' width='500' xlabel='Yep, an X label' ylabel='Hello there' legend='R4:C1..R7:C1'
 
-<!-- ----------------------------------------------------------- -->
-<!-- Define the grid tests                                       -->
-<!-- ----------------------------------------------------------- -->
-%SET{"gridTest01" value=
-    "name='gridTest01' table='4' data='R2:C2..R99:C5' xaxis='R2:C1..R99:C1' title='grid test #01' legend='R1:C2..R1:C5' width='200' yaxis='on'"
-    }%
-%SET{"gridTest02" value=
-    "name='gridTest02' table='4' data='R2:C2..R99:C5' xaxis='R2:C1..R99:C1' title='grid test #02' legend='R1:C2..R1:C5' width='200' yaxis='on' numxgrids='3'"
-    }%
-%SET{"gridTest03" value=
-    "name='gridTest03' table='4' data='R2:C2..R99:C5' xaxis='R2:C1..R99:C1' title='grid test #03' legend='R1:C2..R1:C5' width='200' yaxis='on' xaxisangle='90'"
-    }%
+-----------------------------------------------------------
+-- Define the scatter tests
+-----------------------------------------------------------
+   * Set scatterTest01 = name='scatterTest01' type='scatter' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' xgrid='off' width='500'
+   * Set scatterTest02 = name='scatterTest02' type='scatter' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #02' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'
+   * Set scatterTest03 = name='scatterTest03' type='scatter' subtype='line' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #03' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'
+   * Set scatterTest04 = name='scatterTest04' type='scatter' subtype='pline' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #04' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500' datalabel='on'
+   * Set scatterTest05 = name='scatterTest05' type='scatter' subtype='point' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #05' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'
+   * Set scatterTest06 = name='scatterTest06' type='scatter' subtype='bar' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #06' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'
+   * Set scatterTest07 = name='scatterTest07' type='scatter' subtype='point bar line pline' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #07' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'
+   * Set scatterTest08 = name='scatterTest08' type='scatter' subtype='bar line pline point' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #08' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'
+   * Set scatterTest09 = name='scatterTest09' type='scatter' subtype='line pline point bar' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #09' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'
+   * Set scatterTest10 = name='scatterTest10' type='scatter' subtype='pline point bar line' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #10' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'
+   * Set scatterTest11 = name='scatterTest11' type='scatter' subtype='bar bar bar pline' table='3' data='R2:C2..R99:C99' xaxis='R2:C1..R99:C1' title='scatter test #11' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'
+   * Set scatterTest12 = name='scatterTest12' type='scatter' subtype='bar bar bar pline' table='3' data='R5:C2..R99:C99' xaxis='R5:C1..R99:C1' title='scatter test #12' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'
+   * Set scatterTest13 = name='scatterTest13' type='scatter' subtype='bar bar bar pline' table='3' data='R8:C2..R99:C99' xaxis='R8:C1..R99:C1' title='scatter test #13' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'
 
-<!-- ----------------------------------------------------------- -->
-<!-- Define the semilog tests                                    -->
-<!-- ----------------------------------------------------------- -->
-%SET{"semilogTest01" value=
-    "name='semilogTest01' scale='semilog' table='4' data='R2:C8..R99:C8' xaxis='R2:C1..R99:C1' title='semilog test #01' legend='R1:C8..R1:C8' yaxis='on' datalabel='on'"
-    }%
-%SET{"semilogTest02" value=
-    "name='semilogTest02' scale='semilog' table='4' data='R2:C8..R99:C8' xaxis='R2:C1..R99:C1' title='semilog test #02' legend='R1:C8..R1:C8' yaxis='on' ytics='4' datalabel='on'"
-    }%
-%SET{"semilogTest03" value=
-    "name='semilogTest03' scale='semilog' table='4' data='R4:C8..R6:C8' xaxis='R4:C1..R99:C1' title='semilog test #03' legend='R1:C8..R1:C8' yaxis='on' datalabel='on'"
-    }%
-%SET{"semilogTest04" value=
-    "name='semilogTest04' table='4' data='R2:C8..R99:C8' xaxis='R2:C1..R99:C1' title='semilog test #04' legend='R1:C8..R1:C8' yaxis='on' ytics='1' datalabel='on'"
-    }%
+-----------------------------------------------------------
+-- Define the legend placement tests
+-----------------------------------------------------------
+   * Set legendTest01 = name='legendTest01' table='4' data='R2:C2..R3:C5' xaxis='R2:C1..R9:C1' title='legend test #01' legend='R1:C2..R1:C5' yaxis='on' ygrid='off'
+   * Set legendTest02 = name='legendTest02' table='4' data='R2:C2..R5:C5' xaxis='R2:C1..R9:C1' title='legend test #02' legend='R1:C2..R1:C5' yaxis='on' ygrid='off'
+   * Set legendTest03 = name='legendTest03' table='4' data='R2:C2..R6:C5' xaxis='R2:C1..R9:C1' title='legend test #03' legend='R1:C2..R1:C5' yaxis='on' ygrid='off'
+   * Set legendTest04 = name='legendTest04' table='4' data='R2:C2..R7:C5' xaxis='R2:C1..R9:C1' title='legend test #04' legend='R1:C2..R1:C5' yaxis='on' ygrid='off' ymax='40'
+   * Set legendTest05 = name='legendTest05' table='4' data='R2:C2..R8:C5' xaxis='R2:C1..R9:C1' title='legend test #05' legend='R1:C2..R1:C5' yaxis='on' ygrid='off' ymax='40'
+   * Set legendTest06 = name='legendTest06' table='4' data='R2:C2..R9:C5' xaxis='R2:C1..R9:C1' title='legend test #06' legend='R1:C2..R1:C5' yaxis='on' ygrid='off' ymax='40'
+   * Set legendTest07 = name='legendTest07' table='4' data='R2:C2..R4:C5' xaxis='R2:C1..R9:C1' title='legend test #07' legend='R1:C2..R1:C5' yaxis='on' ygrid='off' ymax='20'
+   * Set legendTest08 = name='legendTest08' table='4' data='R2:C2..R4:C5' xaxis='R2:C1..R9:C1' title='legend test #08' legend='R1:C2..R1:C5' yaxis='on' ygrid='off' ymin='21'
+   * Set legendTest09 = name='legendTest09' table='4' data='R2:C2..R4:C5' xaxis='R2:C1..R9:C1' title='legend test #09' legend='R1:C2..R1:C5' yaxis='on' ygrid='off' ymin='50' ymax='60'
+   * Set legendTest10 = name='legendTest10' table='4' data='R2:C2..R4:C5' xaxis='R2:C1..R9:C1' title='legend test #10' legend='R1:C2..R1:C5' yaxis='on' ygrid='off' ymin='-50' ymax='-10'
 
-<!-- ----------------------------------------------------------- -->
-<!-- Define the default data tests                               -->
-<!-- ----------------------------------------------------------- -->
-%SET{"defaultsTest01" value=
-    "name='defaultsTest01' table='4' data='R2:C6..R99:C7' xaxis='R2:C1..R99:C1' title='defaults test #01' legend='R1:C6..R1:C7' yaxis='on'"
-    }%
-%SET{"defaultsTest02" value=
-    "name='defaultsTest02' table='4' data='R2:C6..R99:C7' xaxis='R2:C1..R99:C1' title='defaults test #02' legend='R1:C6..R1:C7' yaxis='on' defaultdata='0'"
-    }%
-%SET{"defaultsTest03" value=
-    "name='defaultsTest03' table='4' data='R2:C6..R99:C7' xaxis='R2:C1..R99:C1' title='defaults test #03' legend='R1:C6..R1:C7' yaxis='on' defaultdata='10'"
-    }%
+-----------------------------------------------------------
+-- Define the grid tests
+-----------------------------------------------------------
+   * Set gridTest01 = name='gridTest01' table='4' data='R2:C2..R99:C5' xaxis='R2:C1..R99:C1' title='grid test #01' legend='R1:C2..R1:C5' width='200' yaxis='on'
+   * Set gridTest02 = name='gridTest02' table='4' data='R2:C2..R99:C5' xaxis='R2:C1..R99:C1' title='grid test #02' legend='R1:C2..R1:C5' width='200' yaxis='on' numxgrids='3'
+   * Set gridTest03 = name='gridTest03' table='4' data='R2:C2..R99:C5' xaxis='R2:C1..R99:C1' title='grid test #03' legend='R1:C2..R1:C5' width='200' yaxis='on' xaxisangle='90'
 
-<!-- ----------------------------------------------------------- -->
-<!-- Define the grid color tests                                 -->
-<!-- ----------------------------------------------------------- -->
-%SET{"colorTest01" value=
-    "name='colorTest01' table='table1' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='grid color test #01' xgrid='on' ygrid='on'"
-    }%
-%SET{"colorTest02" value=
-    "name='colorTest02' table='table1' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='grid color test #02' xgrid='on' ygrid='on' gridcolor='#0000FF'"
-    }%
-%SET{"colorTest03" value=
-    "name='colorTest03' table='table1' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='grid color test #03' xgrid='on' ygrid='dot' xgrid='dot'"
-    }%
-%SET{"colorTest04" value=
-    "name='colorTest04' table='table1' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='grid color test #04' xgrid='on' ygrid='on' gridcolor='#000000, #000000, #000000, #000000, #000000, transparent, transparent, transparent, transparent, transparent' ygrid='dot' xgrid='dot'"
-    }%
-%SET{"colorTest05" value=
-    "name='colorTest05' table='table1' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='grid color test #05' xgrid='on' ygrid='on' gridcolor='#FF0000, #FF0000, #FF0000, #FF0000, #00FF00, #00FF00, #00FF00, #00FF00, #0000FF, #0000FF, #0000FF, #0000FF, transparent, transparent, transparent, transparent' ygrid='dot' xgrid='dot'"
-    }%
-%SET{"colorTest06" value=
-    "name='colorTest06' table='table1' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='grid color test #06' xgrid='on' ygrid='on' gridcolor='#000000' ygrid='dot' xgrid='dot'"
-    }%
+-----------------------------------------------------------
+-- Define the semilog tests
+-----------------------------------------------------------
+   * Set semilogTest01 = name='semilogTest01' scale='semilog' table='4' data='R2:C8..R99:C8' xaxis='R2:C1..R99:C1' title='semilog test #01' legend='R1:C8..R1:C8' yaxis='on' datalabel='on'
+   * Set semilogTest02 = name='semilogTest02' scale='semilog' table='4' data='R2:C8..R99:C8' xaxis='R2:C1..R99:C1' title='semilog test #02' legend='R1:C8..R1:C8' yaxis='on' ytics='4' datalabel='on'
+   * Set semilogTest03 = name='semilogTest03' scale='semilog' table='4' data='R4:C8..R6:C8' xaxis='R4:C1..R99:C1' title='semilog test #03' legend='R1:C8..R1:C8' yaxis='on' datalabel='on'
+   * Set semilogTest04 = name='semilogTest04' table='4' data='R2:C8..R99:C8' xaxis='R2:C1..R99:C1' title='semilog test #04' legend='R1:C8..R1:C8' yaxis='on' ytics='1' datalabel='on'
 
-<!-- -----------------------------------------------------------
-     Define some reversed data ranges along with multiple data
-     data ranges.
----------------------------------------------------------------- -->
+-----------------------------------------------------------
+-- Define the default data tests
+-----------------------------------------------------------
+   * Set defaultsTest01 = name='defaultsTest01' table='4' data='R2:C6..R99:C7' xaxis='R2:C1..R99:C1' title='defaults test #01' legend='R1:C6..R1:C7' yaxis='on'
+   * Set defaultsTest02 = name='defaultsTest02' table='4' data='R2:C6..R99:C7' xaxis='R2:C1..R99:C1' title='defaults test #02' legend='R1:C6..R1:C7' yaxis='on' defaultdata='0'
+   * Set defaultsTest03 = name='defaultsTest03' table='4' data='R2:C6..R99:C7' xaxis='R2:C1..R99:C1' title='defaults test #03' legend='R1:C6..R1:C7' yaxis='on' defaultdata='10'
 
-%SET{"multiLineTest01f" value=
-    "name='multiLineTest01f' topic='WebStatistics' type='line' data='R2:C2..R99:C2' xaxis='R2:C1..R99:C1' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data multiLineTest01f'"
-    }% 
-%SET{"multiLineTest01b" value=
-    "name='multiLineTest01b' topic='WebStatistics' type='line' data='R99:C2..R2:C2' xaxis='R99:C1..R2:C1' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data multiLineTest01b'"
-    }%
+-----------------------------------------------------------
+-- Define the grid color tests
+-----------------------------------------------------------
+   * Set colorTest01 = name='colorTest01' table='table1' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='grid color test #01' xgrid='on' ygrid='on'
+   * Set colorTest02 = name='colorTest02' table='table1' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='grid color test #02' xgrid='on' ygrid='on' gridcolor='#0000FF'
+   * Set colorTest03 = name='colorTest03' table='table1' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='grid color test #03' xgrid='on' ygrid='dot' xgrid='dot'
+   * Set colorTest04 = name='colorTest04' table='table1' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='grid color test #04' xgrid='on' ygrid='on' gridcolor='#000000, #000000, #000000, #000000, #000000, transparent, transparent, transparent, transparent, transparent' ygrid='dot' xgrid='dot'
+   * Set colorTest05 = name='colorTest05' table='table1' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='grid color test #05' xgrid='on' ygrid='on' gridcolor='#FF0000, #FF0000, #FF0000, #FF0000, #00FF00, #00FF00, #00FF00, #00FF00, #0000FF, #0000FF, #0000FF, #0000FF, transparent, transparent, transparent, transparent' ygrid='dot' xgrid='dot'
+   * Set colorTest06 = name='colorTest06' table='table1' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='grid color test #06' xgrid='on' ygrid='on' gridcolor='#000000' ygrid='dot' xgrid='dot'
 
-%SET{"multiLineTest02f" value=
-    "name='multiLineTest02f' table='table1' type='line' data='R2:C4..R99:C4' xaxis='R2:C2..R99:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data multiLineTest02f' legend='R1:C4..R1:C4'"
-    }% 
-%SET{"multiLineTest02b" value=
-    "name='multiLineTest02b' table='table1' type='line' data='R99:C4..R2:C4' xaxis='R99:C2..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data multiLineTest02b' legend='R1:C4..R1:C4'"
-    }%
+-----------------------------------------------------------
+-- Define some reversed data ranges along with multiple data ranges.
+-----------------------------------------------------------
+   * Set multiLineTest01f = name='multiLineTest01f' topic='WebStatistics' type='line' data='R3:C2..R99:C2' xaxis='R3:C1..R99:C1' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data multiLineTest01f'
+   * Set multiLineTest01b = name='multiLineTest01b' topic='WebStatistics' type='line' data='R99:C2..R3:C2' xaxis='R99:C1..R3:C1' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data multiLineTest01b'
 
-%SET{"multiLineTest03f" value=
-    "name='multiLineTest03f' table='table1' type='line' data='R2:C4..R99:C7' xaxis='R2:C2..R99:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data multiLineTest03f' legend='R1:C4..R1:C7'"
-    }% 
-%SET{"multiLineTest03b" value=
-    "name='multiLineTest03b' table='table1' type='line' data='R99:C4..R2:C7' xaxis='R99:C2..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data multiLineTest03b' legend='R1:C4..R1:C7'"
-    }%
+   * Set multiLineTest02f = name='multiLineTest02f' table='table1' type='line' data='R2:C4..R99:C4' xaxis='R2:C2..R99:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data multiLineTest02f' legend='R1:C4..R1:C4'
+   * Set multiLineTest02b = name='multiLineTest02b' table='table1' type='line' data='R99:C4..R2:C4' xaxis='R99:C2..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data multiLineTest02b' legend='R1:C4..R1:C4'
 
-%SET{"multiLineTest04f" value=
-    "name='multiLineTest04f' table='table1' type='line' data='R2:C7..R99:C4' xaxis='R2:C2..R99:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data multiLineTest04f' legend='R1:C7..R1:C4'"
-    }% 
-%SET{"multiLineTest04b" value=
-    "name='multiLineTest04b' table='table1' type='line' data='R99:C7..R2:C4' xaxis='R99:C2..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data multiLineTest04b' legend='R1:C7..R1:C4'"
-    }%
+   * Set multiLineTest03f = name='multiLineTest03f' table='table1' type='line' data='R2:C4..R99:C7' xaxis='R2:C2..R99:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data multiLineTest03f' legend='R1:C4..R1:C7'
+   * Set multiLineTest03b = name='multiLineTest03b' table='table1' type='line' data='R99:C4..R2:C7' xaxis='R99:C2..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data multiLineTest03b' legend='R1:C4..R1:C7'
 
-%SET{"multiLineTest05f" value=
-    "name='multiLineTest05f' table='table1' type='line' data='R2:C4..R99:C4,R2:C5..R99:C5,R2:C6..R99:C6,R2:C7..R99:C7' xaxis='R2:C2..R99:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data multiLineTest05f' legend='R1:C4..R1:C4,R1:C5..R1:C5,R1:C6..R1:C6,R1:C7..R1:C7'"
-    }% 
-%SET{"multiLineTest05b" value=
-    "name='multiLineTest05b' table='table1' type='line' data='R99:C4..R2:C4,R99:C5..R2:C5,R99:C6..R2:C6,R99:C7..R2:C7' xaxis='R99:C2..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data multiLineTest05b' legend='R1:C4..R1:C4,R1:C5..R1:C5,R1:C6..R1:C6,R1:C7..R1:C7'"
-    }%
+   * Set multiLineTest04f = name='multiLineTest04f' table='table1' type='line' data='R2:C7..R99:C4' xaxis='R2:C2..R99:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data multiLineTest04f' legend='R1:C7..R1:C4'
+   * Set multiLineTest04b = name='multiLineTest04b' table='table1' type='line' data='R99:C7..R2:C4' xaxis='R99:C2..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data multiLineTest04b' legend='R1:C7..R1:C4'
 
-%SET{"multiLineTest06f" value=
-    "name='multiLineTest06f' table='table1' type='line' data='R2:C5..R99:C5,R2:C4..R99:C4,R2:C6..R99:C6,R2:C7..R99:C7' xaxis='R2:C2..R99:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data multiLineTest06f' legend='R1:C5,R1:C4,R1:C6,R1:C7'"
-    }% 
-%SET{"multiLineTest06b" value=
-    "name='multiLineTest06b' table='table1' type='line' data='R99:C5..R2:C5,R99:C4..R2:C4,R99:C6..R2:C6,R99:C7..R2:C7' xaxis='R99:C2..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data multiLineTest06b' legend='R1:C5,R1:C4,R1:C6,R1:C7'"
-    }%
+   * Set multiLineTest05f = name='multiLineTest05f' table='table1' type='line' data='R2:C4..R99:C4,R2:C5..R99:C5,R2:C6..R99:C6,R2:C7..R99:C7' xaxis='R2:C2..R99:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data multiLineTest05f' legend='R1:C4..R1:C4,R1:C5..R1:C5,R1:C6..R1:C6,R1:C7..R1:C7'
+   * Set multiLineTest05b = name='multiLineTest05b' table='table1' type='line' data='R99:C4..R2:C4,R99:C5..R2:C5,R99:C6..R2:C6,R99:C7..R2:C7' xaxis='R99:C2..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data multiLineTest05b' legend='R1:C4..R1:C4,R1:C5..R1:C5,R1:C6..R1:C6,R1:C7..R1:C7'
 
-%SET{"multiLineTest07f" value=
-    "name='multiLineTest07f' table='table1' type='line' data='R2:C5..R99:C7,R2:C4..R99:C4' xaxis='R2:C2..R99:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data multiLineTest07f' legend='R1:C5..R1:C7,R1:C4'"
-    }% 
-%SET{"multiLineTest07b" value=
-    "name='multiLineTest07b' table='table1' type='line' data='R99:C5..R2:C7,R99:C4..R2:C4' xaxis='R99:C2..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data multiLineTest07b' legend='R1:C5..R1:C7,R1:C4'"
-    }%
+   * Set multiLineTest06f = name='multiLineTest06f' table='table1' type='line' data='R2:C5..R99:C5,R2:C4..R99:C4,R2:C6..R99:C6,R2:C7..R99:C7' xaxis='R2:C2..R99:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data multiLineTest06f' legend='R1:C5,R1:C4,R1:C6,R1:C7'
+   * Set multiLineTest06b = name='multiLineTest06b' table='table1' type='line' data='R99:C5..R2:C5,R99:C4..R2:C4,R99:C6..R2:C6,R99:C7..R2:C7' xaxis='R99:C2..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data multiLineTest06b' legend='R1:C5,R1:C4,R1:C6,R1:C7'
 
-%SET{"multiAreaTest01f" value=
-    "name='multiAreaTest01f' table='table1' type='area' data='R2:C4..R99:C7' xaxis='R2:C2..R99:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data multiAreaTest01f' legend='R1:C4..R1:C7'"
-    }% 
-%SET{"multiLineTest08b" value=
-    "name='multiLineTest08b' table='table1' type='area' data='R99:C7..R2:C4' xaxis='R99:C2..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data multiLineTest08b' legend='R1:C7..R1:C4'"
-    }%
+   * Set multiLineTest07f = name='multiLineTest07f' table='table1' type='line' data='R2:C5..R99:C7,R2:C4..R99:C4' xaxis='R2:C2..R99:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data multiLineTest07f' legend='R1:C5..R1:C7,R1:C4'
+   * Set multiLineTest07b = name='multiLineTest07b' table='table1' type='line' data='R99:C5..R2:C7,R99:C4..R2:C4' xaxis='R99:C2..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data multiLineTest07b' legend='R1:C5..R1:C7,R1:C4'
 
-<!-- -----------------------------------------------------------
-     Define some reversed data ranges along with multiple data
-     data ranges.  These tests use data from table2 where the data
-     is flipped along the diagonal.
----------------------------------------------------------------- -->
+   * Set multiAreaTest01f = name='multiAreaTest01f' table='table1' type='area' data='R2:C4..R99:C7' xaxis='R2:C2..R99:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data multiAreaTest01f' legend='R1:C4..R1:C7'
+   * Set multiLineTest08b = name='multiLineTest08b' table='table1' type='area' data='R99:C7..R2:C4' xaxis='R99:C2..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data multiLineTest08b' legend='R1:C7..R1:C4'
 
-%SET{"flippedMultiLineTest01f" value=
-    "name='flippedMultiLineTest01f' table='table2' type='line' data='R4:C2..R4:C99' xaxis='R2:C2..R2:C99' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data flippedMultiLineTest01f' legend='R4:C1'"
-    }% 
-%SET{"flippedMultiLineTest01b" value=
-    "name='flippedMultiLineTest01b' table='table2' type='line' data='R4:C99..R4:C2' xaxis='R2:C99..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data flippedMultiLineTest01b' legend='R4:C1'"
-    }%
+-----------------------------------------------------------
+-- Define some reversed data ranges along with multiple data data ranges.  These
+-- tests use data from table2 where the data is flipped along the diagonal.
+-----------------------------------------------------------
+   * Set flippedMultiLineTest01f = name='flippedMultiLineTest01f' table='table2' type='line' data='R4:C2..R4:C99' xaxis='R2:C2..R2:C99' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data flippedMultiLineTest01f' legend='R4:C1'
+   * Set flippedMultiLineTest01b = name='flippedMultiLineTest01b' table='table2' type='line' data='R4:C99..R4:C2' xaxis='R2:C99..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data flippedMultiLineTest01b' legend='R4:C1'
 
-%SET{"flippedMultiLineTest03f" value=
-    "name='flippedMultiLineTest03f' table='table2' type='line' data='R4:C2..R7:C99' xaxis='R2:C2..R2:C99' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data flippedMultiLineTest03f' legend='R4:C1..R7:C1'"
-    }% 
-%SET{"flippedMultiLineTest03b" value=
-    "name='flippedMultiLineTest03b' table='table2' type='line' data='R4:C99..R7:C2' xaxis='R2:C99..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data flippedMultiLineTest03b' legend='R4:C1..R7:C1'"
-    }%
+   * Set flippedMultiLineTest03f = name='flippedMultiLineTest03f' table='table2' type='line' data='R4:C2..R7:C99' xaxis='R2:C2..R2:C99' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data flippedMultiLineTest03f' legend='R4:C1..R7:C1'
+   * Set flippedMultiLineTest03b = name='flippedMultiLineTest03b' table='table2' type='line' data='R4:C99..R7:C2' xaxis='R2:C99..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data flippedMultiLineTest03b' legend='R4:C1..R7:C1'
 
-%SET{"flippedMultiLineTest04f" value=
-    "name='flippedMultiLineTest04f' table='table2' type='line' data='R4:C2..R4:C99,R5:C2..R5:C99,R6:C2..R6:C99,R7:C2..R7:C99' xaxis='R2:C2..R2:C99' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data flippedMultiLineTest04f' legend='R4:C1,R5:C1,R6:C1,R7:C1'"
-    }% 
-%SET{"flippedMultiLineTest04b" value=
-    "name='flippedMultiLineTest04b' table='table2' type='line' data='R7:C99..R7:C2,R6:C99..R6:C2,R5:C99..R5:C2,R4:C99..R4:C2' xaxis='R2:C99..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data flippedMultiLineTest04b' legend='R7:C1,R6:C1,R5:C1,R4:C1'"
-    }%
+   * Set flippedMultiLineTest04f = name='flippedMultiLineTest04f' table='table2' type='line' data='R4:C2..R4:C99,R5:C2..R5:C99,R6:C2..R6:C99,R7:C2..R7:C99' xaxis='R2:C2..R2:C99' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data flippedMultiLineTest04f' legend='R4:C1,R5:C1,R6:C1,R7:C1'
+   * Set flippedMultiLineTest04b = name='flippedMultiLineTest04b' table='table2' type='line' data='R7:C99..R7:C2,R6:C99..R6:C2,R5:C99..R5:C2,R4:C99..R4:C2' xaxis='R2:C99..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data flippedMultiLineTest04b' legend='R7:C1,R6:C1,R5:C1,R4:C1'
 
-%SET{"flippedMultiLineTest05f" value=
-    "name='flippedMultiLineTest05f' table='table2' type='line' data='R5:C2..R5:C99,R4:C2..R4:C99,R6:C2..R6:C99,R7:C2..R7:C99' xaxis='R2:C2..R2:C99' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data flippedMultiLineTest05f' legend='R5:C1,R4:C1,R6:C1,R7:C1'"
-    }% 
-%SET{"flippedMultiLineTest05b" value=
-    "name='flippedMultiLineTest05b' table='table2' type='line' data='R5:C99..R5:C2,R4:C99..R4:C2,R6:C99..R6:C2,R7:C99..R7:C2' xaxis='R2:C99..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data flippedMultiLineTest05b' legend='R5:C1,R4:C1,R6:C1,R7:C1'"
-    }%
+   * Set flippedMultiLineTest05f = name='flippedMultiLineTest05f' table='table2' type='line' data='R5:C2..R5:C99,R4:C2..R4:C99,R6:C2..R6:C99,R7:C2..R7:C99' xaxis='R2:C2..R2:C99' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data flippedMultiLineTest05f' legend='R5:C1,R4:C1,R6:C1,R7:C1'
+   * Set flippedMultiLineTest05b = name='flippedMultiLineTest05b' table='table2' type='line' data='R5:C99..R5:C2,R4:C99..R4:C2,R6:C99..R6:C2,R7:C99..R7:C2' xaxis='R2:C99..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data flippedMultiLineTest05b' legend='R5:C1,R4:C1,R6:C1,R7:C1'
 
-%SET{"flippedMultiLineTest06f" value=
-    "name='flippedMultiLineTest06f' table='table2' type='line' data='R5:C2..R7:C99,R4:C2..R4:C99' xaxis='R2:C2..R2:C99' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data flippedMultiLineTest06f' legend='R5:C1..R7:C1,R4:C1'"
-    }% 
-%SET{"flippedMultiLineTest06b" value=
-    "name='flippedMultiLineTest06b' table='table2' type='line' data='R5:C99..R7:C2,R4:C99..R4:C2' xaxis='R2:C99..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data flippedMultiLineTest06b' legend='R5:C1..R7:C1,R4:C1'"
-    }%
+   * Set flippedMultiLineTest06f = name='flippedMultiLineTest06f' table='table2' type='line' data='R5:C2..R7:C99,R4:C2..R4:C99' xaxis='R2:C2..R2:C99' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data flippedMultiLineTest06f' legend='R5:C1..R7:C1,R4:C1'
+   * Set flippedMultiLineTest06b = name='flippedMultiLineTest06b' table='table2' type='line' data='R5:C99..R7:C2,R4:C99..R4:C2' xaxis='R2:C99..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data flippedMultiLineTest06b' legend='R5:C1..R7:C1,R4:C1'
 
-%SET{"flippedMultiAreaTest01f" value=
-    "name='flippedMultiAreaTest01f' table='table2' type='area' data='R4:C2..R7:C99' xaxis='R2:C2..R2:C99' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data flippedMultiAreaTest01f' legend='R4:C1..R7:C1'"
-    }% 
-%SET{"flippedMultiAreaTest01b" value=
-    "name='flippedMultiAreaTest01b' table='table2' type='area' data='R7:C99..R4:C2' xaxis='R2:C99..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data flippedMultiAreaTest01b' legend='R7:C1..R4:C1'"
-    }%
+   * Set flippedMultiAreaTest01f = name='flippedMultiAreaTest01f' table='table2' type='area' data='R4:C2..R7:C99' xaxis='R2:C2..R2:C99' yaxis='on' xaxisangle='90' datalabel='on' title='Forward data flippedMultiAreaTest01f' legend='R4:C1..R7:C1'
+   * Set flippedMultiAreaTest01b = name='flippedMultiAreaTest01b' table='table2' type='area' data='R7:C99..R4:C2' xaxis='R2:C99..R2:C2' yaxis='on' xaxisangle='90' datalabel='on' title='Backward data flippedMultiAreaTest01b' legend='R7:C1..R4:C1'
 
-<!-- ----------------------------------------------------------- -->
-<!-- Define the error tests                                      -->
-<!-- ----------------------------------------------------------- -->
-%SET{"errorTest01" value=
-    ""
-    }%
-%SET{"errorTest02" value=
-    "name='errorTest02'"
-    }%
-%SET{"errorTest03" value=
-    "name='errorTest03' type='badtype' data='R2:C7..R7:C7'"
-    }%
-%SET{"errorTest04" value=
-    "name='errorTest04' topic='TopicDoesNotExist' data='R2:C7..R7:C7'"
-    }%
-%SET{"errorTest05" value=
-    "name='errorTest05' web='WebDoesNotExist' data='R2:C7..R7:C7'"
-    }%
-%SET{"errorTest06" value=
-    "name='errorTest06' table='999' data='R2:C7..R7:C7'"
-    }%
-%SET{"errorTest07" value=
-    "name='errorTest07' data='R2:C4..R7:C7' xaxis='R2:C4..R7:C7'"
-    }%
-%SET{"errorTest09" value=
-    "name='errorTest09' data='R2:C4..R7:C7' ymin='10' ymax='10'"
-    }%
-%SET{"errorTest10" value=
-    "name='errorTest10' data='R2:C4..R7:C7' ymin='10' ymax='-10'"
-    }%
-%SET{"errorTest11" value=
-    "name='errorTest11' data='R2:C4..R2:C7'"
-    }%
-%SET{"errorTest12" value=
-    "name='errorTest12' data='R2:C4..R7:C7' legend='R1:C4'"
-    }%
-%SET{"errorTest13" value=
-    "name='errorTest13' data='R2:C3..R7:C7' scale='semilog'"
-    }%
+-----------------------------------------------------------
+-- Define the multi axis data tests.
+-----------------------------------------------------------
+   * Set multiDataTest01 = name="multiDataTest01" type='line' table='table6' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='Single data MultiTest01: Only left axis' yaxis='on' ylabel='Left Y-axis label' legend='R1:C4..R1:C7' ymin='0' ymax='10'
+   * Set multiDataTest02 = name="multiDataTest02" type='line' table='table6' data='R2:C4..R7:C6' data2='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='Multidata Test02: Left and right axis' yaxis='on' yaxis2='on' ylabel='Left Y-axis label' ylabel2='Right Y-axis label' legend='R1:C4..R1:C7' ymin='0' ymin2='0' ymax='10' ymax2='10'
+   * Set multiDataTest03 = name="multiDataTest03" type='line' table='table6' data='R2:C4..R7:C4' data2='R2:C5..R7:C7' xaxis='R2:C2..R7:C2' title='Multidata Test03: Left and right axis' yaxis='on' yaxis2='on' ylabel='Left Y-axis label' ylabel2='Right Y-axis label' legend='R1:C4..R1:C7' ymin='0' ymax='10' ymin2='0' ymax2='10'
+   * Set multiDataTest04 = name="multiDataTest04" type='line' table='table6' data='R2:C4..R7:C5' data2='R2:C6..R7:C7' xaxis='R2:C2..R7:C2' title='Multidata Test04: Left and right axis' yaxis='on' yaxis2='on' ylabel='Left Y-axis label' ylabel2='Right Y-axis label' legend='R1:C4..R1:C7' ymin='0' ymax='10' ymin2='0' ymax2='30'
+   * Set multiDataTest05 = name="multiDataTest05" type='line' table='table6' data='R2:C4..R7:C5' data2='R2:C6..R7:C7' xaxis='R2:C2..R7:C2' title='Multidata Test05: Left and right axis' yaxis='on' ylabel='Left Y-axis label' ylabel2='Right Y-axis label' legend='R1:C4..R1:C7' ymin='0' ymax='10' ymin2='0' ymax2='30'
+   * Set multiDataTest06 = name="multiDataTest06" type='line' table='table6' data='R2:C4..R7:C5' data2='R2:C6..R7:C7' xaxis='R2:C2..R7:C2' title='Multidata Test06: Left and right axis' yaxis='on' yaxis2='on' ylabel='Left Y-axis label' legend='R1:C4..R1:C7' ymin='0' ymax='10' ymin2='0' ymax2='30'
+   * Set multiDataTest07 = name="multiDataTest07" type='line' table='table6' data='R2:C4..R7:C5' data2='R2:C6..R7:C7' xaxis='R2:C2..R7:C2' title='Multidata Test07: Left and right axis' yaxis='on' yaxis2='on' ylabel='Left Y-axis label' legend='R1:C4..R1:C7' ymin='0' ymax='10' ymin2='0' ymax2='30' ytics='1' ytics2='3'
+   * Set multiDataTest08 = name="multiDataTest08" type='area' table='table6' data='R2:C4..R7:C5' data2='R2:C6..R7:C7' xaxis='R2:C2..R7:C2' title='Multidata Test08: Left and right axis' yaxis='on' yaxis2='on' ylabel='Left Y-axis label' legend='R1:C4..R1:C7' ymin='0' ymax='10' ymin2='0' ymax2='30' ytics='1' ytics2='3'
+   * Set multiDataTest09 = name="multiDataTest09" type='combo' subtype='area, area' table='table6' data='R2:C4..R7:C5' data2='R2:C6..R7:C7' xaxis='R2:C2..R7:C2' title='Multidata Test09: Left and right axis' yaxis='on' yaxis2='on' ylabel='Left Y-axis label' legend='R1:C4..R1:C7' ymin='0' ymax='10' ymin2='0' ymax2='30' ytics='1' ytics2='3'
+   * Set multiDataTest10 = name="multiDataTest10" type='combo' subtype='area, area' subtype2='area, area' table='table6' data='R2:C4..R7:C5' data2='R2:C6..R7:C7' xaxis='R2:C2..R7:C2' title='Multidata Test10: Left and right axis' yaxis='on' yaxis2='on' ylabel='Left Y-axis label' legend='R1:C4..R1:C7' ymin='0' ymax='10' ymin2='-5' ymax2='10' ytics='1' ytics2='3'
+   * Set multiDataTest11 = name="multiDataTest11" type='combo' subtype='bar, bar' subtype2='bar, bar' table='table6' data='R2:C4..R7:C5' data2='R2:C6..R7:C7' xaxis='R2:C2..R7:C2' title='Multidata Test11: Left and right axis' yaxis='on' yaxis2='on' ylabel='Left Y-axis label' legend='R1:C4..R1:C7' ymin='0' ymax='10' ymin2='-5' ymax2='10' ytics='1' ytics2='3'
+   * Set multiDataTest12 = name="multiDataTest12" type='combo' subtype='pline, pline' subtype2='pline, pline' table='table6' data='R2:C4..R7:C5' data2='R2:C6..R7:C7' xaxis='R2:C2..R7:C2' title='Multidata Test12: Left and right axis' yaxis='on' yaxis2='on' ylabel='Left Y-axis label' legend='R1:C4..R1:C7' ymin='0' ymax='10' ymin2='-5' ymax2='10' ytics='1' ytics2='3'
+   * Set multiDataTest13 = name="multiDataTest13" type='combo' subtype='line, point' subtype2='pline, bar' table='table6' data='R2:C4..R7:C5' data2='R2:C6..R7:C7' xaxis='R2:C2..R7:C2' title='Multidata Test13: Left and right axis' yaxis='on' yaxis2='on' ylabel='Left Y-axis label' legend='R1:C4..R1:C7' ymin='0' ymax='10' ymin2='-5' ymax2='10' ytics='1' ytics2='3'
+   * Set multiDataTest14 = name="multiDataTest14" type='combo' subtype='line, bar' subtype2='pline, bar' table='table6' data='R2:C4..R7:C5' data2='R2:C6..R7:C7' xaxis='R2:C2..R7:C2' title='Multidata Test14: Left and right axis' yaxis='on' yaxis2='on' ylabel='Left Y-axis label' legend='R1:C4..R1:C7' ymin='0' ymax='10' ymin2='-5' ymax2='10' ytics='1' ytics2='3'
+   * Set multiDataTest15 = name="multiDataTest15" type='scatter' subtype='line, bar' subtype2='pline, bar' table='table6' data='R2:C4..R7:C5' data2='R2:C6..R7:C7' xaxis='R2:C1..R7:C1' title='Multidata Test15: Left and right axis' yaxis='on' yaxis2='on' ylabel='Left Y-axis label' legend='R1:C4..R1:C7' ymin='0' ymax='10' ymin2='-5' ymax2='10' ytics='1' ytics2='3'
+   * Set multiDataTest16 = name="multiDataTest16" scale='semilog' type='combo' subtype='line, bar' subtype2='pline, bar' table='table6' data='R2:C4..R9:C5' data2='R2:C6..R9:C7' xaxis='R2:C1..R9:C1' title='Multidata Test16: Left and right axis' yaxis='on' yaxis2='on' ylabel='Left Y-axis label' legend='R1:C4..R1:C7' ymin='1' ymin2='1'
+
+-----------------------------------------------------------
+-- Define some datalabel tests.
+-----------------------------------------------------------
+   * Set datalabel01 = name='datalabel01' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='data legend test #01' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box'
+   * Set datalabel02 = name='datalabel02' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='data legend test #02' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='on, box, off, 2 box'
+   * Set datalabel03 = name='datalabel03' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='data legend test #03' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='auto box, 2box, box 3, 4 box'
+   * Set datalabel04 = name='datalabel04' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='data legend test #04' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='auto box, 2box, box 3, 4 box' bgcolor='#FFFFFF, #FFFFFF, #E0E0E0'
+
+-----------------------------------------------------------
+-- Define the error tests
+-----------------------------------------------------------
+   * Set errorTest01 = ""
+   * Set errorTest02 = name='errorTest02'
+   * Set errorTest03 = name='errorTest03' type='badtype' data='R2:C7..R7:C7'
+   * Set errorTest04 = name='errorTest04' topic='TopicDoesNotExist' data='R2:C7..R7:C7'
+   * Set errorTest05 = name='errorTest05' web='WebDoesNotExist' data='R2:C7..R7:C7'
+   * Set errorTest06 = name='errorTest06' table='999' data='R2:C7..R7:C7'
+   * Set errorTest07 = name='errorTest07' data='R2:C4..R7:C7' xaxis='R2:C4..R7:C7'
+   * Set errorTest09 = name='errorTest09' data='R2:C4..R7:C7' ymin='10' ymax='10'
+   * Set errorTest10 = name='errorTest10' data='R2:C4..R7:C7' ymin='10' ymax='-10'
+   * Set errorTest11 = name='errorTest11' data='R2:C4..R2:C7'
+   * Set errorTest12 = name='errorTest12' data='R2:C4..R7:C7' legend='R1:C4'
+   * Set errorTest13 = name='errorTest13' data='R2:C3..R7:C7' scale='semilog'
+
+-->
 
 ---+ General tests
 ---++ line tests
-| Simple single line.  No other markings at all %BR% =%<nop>CHART{%GET{lineTest01}%}%= | %CHART{%GET{lineTest01}%}% |
-| Add =title= = "line test #2" and enable =ygrids= to above %BR% =%<nop>CHART{%GET{lineTest02}%}%= | %CHART{%GET{lineTest02}%}% |
-| Add X axis lables to above %BR% =%<nop>CHART{%GET{lineTest03}%}%= | %CHART{%GET{lineTest03}%}% |
-| Add Y axis lables to above %BR% =%<nop>CHART{%GET{lineTest04}%}%= | %CHART{%GET{lineTest04}%}% |
-| Add =ymin= = 0 to above %BR% =%<nop>CHART{%GET{lineTest05}%}%= | %CHART{%GET{lineTest05}%}% |
-| Add =ymax= = 150 to above %BR% =%<nop>CHART{%GET{lineTest06}%}%= | %CHART{%GET{lineTest06}%}% |
-| Add =ylabel= = "Hello there" to above and change =ymax= = 100. %BR% =%<nop>CHART{%GET{lineTest07}%}%= | %CHART{%GET{lineTest07}%}% |
-| Add =numygrids= = "5" to above %BR% =%<nop>CHART{%GET{lineTest08}%}%= | %CHART{%GET{lineTest08}%}% |
-| Change =numygrids= = "2" to above %BR% =%<nop>CHART{%GET{lineTest09}%}%= | %CHART{%GET{lineTest09}%}% |
-| Remove =numygrids= from above and add =xlabel= "Yep, an X label" to above %BR% =%<nop>CHART{%GET{lineTest10}%}%= | %CHART{%GET{lineTest10}%}% |
-| Add =datalabel= = =on= to above %BR% =%<nop>CHART{%GET{lineTest11}%}%= | %CHART{%GET{lineTest11}%}% |
-| Change =datalabel= = =box= to above %BR% =%<nop>CHART{%GET{lineTest12}%}%= | %CHART{%GET{lineTest12}%}% |
-| Add =legend= to above %BR% =%<nop>CHART{%GET{lineTest13}%}%= | %CHART{%GET{lineTest13}%}% |
-| Add additional data lines to above and update =legend= to above %BR% =%<nop>CHART{%GET{lineTest14}%}%= | %CHART{%GET{lineTest14}%}% |
-| Specify different line colors to above %BR% =%<nop>CHART{%GET{lineTest15}%}%= | %CHART{%GET{lineTest15}%}% |
-| Restore default colors and change =datalabel= such that only the last line has values in boxes and the 2nd to last has values (no box) to above %BR% =%<nop>CHART{%GET{lineTest16}%}%= | %CHART{%GET{lineTest16}%}% |
-| Add =bgcolor="#EEEEEE" to above %BR% =%<nop>CHART{%GET{lineTest17}%}%= | %CHART{%GET{lineTest17}%}% |
-| Change =bgcolor="#FFFFFF #EEEEEE"= to above %BR% =%<nop>CHART{%GET{lineTest18}%}%= | %CHART{%GET{lineTest18}%}% |
-| Change =bgcolor="#EEEEEE #EEFFEE"= to above %BR% =%<nop>CHART{%GET{lineTest19}%}%= | %CHART{%GET{lineTest19}%}% |
-| Restore =bgcolor= and add =ygrid= = =on= (changing from dotted ygrid to solid ygrid) to above %BR% =%<nop>CHART{%GET{lineTest20}%}%= | %CHART{%GET{lineTest20}%}% |
-| Change =ygrid= = =off= to above %BR% =%<nop>CHART{%GET{lineTest21}%}%= | %CHART{%GET{lineTest21}%}% |
-| Add =xgrid= = =on= (changing from dotted xgrid to solid xgrid) to above %BR% =%<nop>CHART{%GET{lineTest22}%}%= | %CHART{%GET{lineTest22}%}% |
-| Change =xgrid= = =off= to above %BR% =%<nop>CHART{%GET{lineTest23}%}%= | %CHART{%GET{lineTest23}%}% |
-| Change =width= = =450= to above %BR% =%<nop>CHART{%GET{lineTest24}%}%= | %CHART{%GET{lineTest24}%}% |
-| Change =height= = =150= to above %BR% =%<nop>CHART{%GET{lineTest25}%}%= | %CHART{%GET{lineTest25}%}% |
-| Default width/height.  Get data from %WEB%.ChartPluginTestsRemote.  Specify =table="2"= on new =topic= = =ChartPluginTestsRemote=.  Actual values should show up incremented by 0.52 since data is from a different topic page and the 0.02 denotes the data is from the 2nd table.  Legend should show up with =Remote= since the data on the remote page was set up to include =Remote= in the legends to above %BR% =%<nop>CHART{%GET{lineTest26}%}%= | %CHART{%GET{lineTest26}%}% |
-| Same as above except add an additional data set (*averages*) that is calculated by %<nop>CALC%. %BR% =%<nop>CHART{%GET{lineTest27}%}%= | %CHART{%GET{lineTest27}%}% |
-| Back to local data and add the =alt= tag = =This is the alt tag for test28= %<nop>CALC%. %BR% =%<nop>CHART{%GET{lineTest28}%}%= | %CHART{%GET{lineTest28}%}% |
-| Show a chart from table5 where the table contains numbers surrounded by HTML tags %BR% =%<nop>CHART{%GET{"lineTest29"}%}%= | %CHART{%GET{"lineTest29"}%}% |
-| Show a chart from table5 where the table contains exponential formated numbers %BR% =%<nop>CHART{%GET{"lineTest30"}%}%= | %CHART{%GET{"lineTest30"}%}% |
-| Show a chart from table5 where the table contains the same numbers.  %BR% =%<nop>CHART{%GET{"lineTest31"}%}%= | %CHART{%GET{"lineTest31"}%}% |
-| Show a chart from table5 where the table contains the same numbers and setting ymin = the same #  %BR% =%<nop>CHART{%GET{"lineTest32"}%}%= | %CHART{%GET{"lineTest32"}%}% |
-| Show a chart from table5 where the table contains the same numbers and setting ymax = the same #  %BR% =%<nop>CHART{%GET{"lineTest33"}%}%= | %CHART{%GET{"lineTest33"}%}% |
-| Show a chart from table5 setting =ymin= = =0= and =ymax= = =123= %BR% =%<nop>CHART{%GET{"lineTest34"}%}%= | %CHART{%GET{"lineTest34"}%}% |
-| Show a chart with =ytics= = =2=. %BR% =%<nop>CHART{%GET{"lineTest35"}%}%= | %CHART{%GET{"lineTest35"}%}% |
-| Show a chart with =ytics= = =5=. %BR% =%<nop>CHART{%GET{"lineTest36"}%}%= | %CHART{%GET{"lineTest36"}%}% |
+| Simple single line.  No other markings at all. %CHART{%lineTest01%}% |
+| Add =title= = "line test #2" and enable =ygrids= to above. %CHART{%lineTest02%}% |
+| Add X axis lables to above. %CHART{%lineTest03%}% |
+| Add Y axis lables to above. %CHART{%lineTest04%}% |
+| Add =ymin= = 0 to above. %CHART{%lineTest05%}% |
+| Add =ymax= = 150 to above. %CHART{%lineTest06%}% |
+| Add =ylabel= = "Hello there" to above and change =ymax= = 100. %CHART{%lineTest07%}% |
+| Add =numygrids= = "5" to above. %CHART{%lineTest08%}% |
+| Change =numygrids= = "2" to above. %CHART{%lineTest09%}% |
+| Remove =numygrids= from above and add =xlabel= "Yep, an X label" to above. %CHART{%lineTest10%}% |
+| Add =datalabel= = =on= to above. %CHART{%lineTest11%}% |
+| Change =datalabel= = =box= to above. %CHART{%lineTest12%}% |
+| Add =legend= to above. %CHART{%lineTest13%}% |
+| Add additional data lines to above and update =legend= to above. %CHART{%lineTest14%}% |
+| Specify different line colors to above. %CHART{%lineTest15%}% |
+| Restore default colors and change =datalabel= such that only the last line has values in boxes and the 2nd to last has values (no box) to above. %CHART{%lineTest16%}% |
+| Add =bgcolor="#EEEEEE" to above. %CHART{%lineTest17%}% |
+| Change =bgcolor="#FFFFFF #EEEEEE"= to above. %CHART{%lineTest18%}% |
+| Change =bgcolor="#EEEEEE #EEFFEE"= to above. %CHART{%lineTest19%}% |
+| Restore =bgcolor= and add =ygrid= = =on= (changing from dotted ygrid to solid ygrid) to above. %CHART{%lineTest20%}% |
+| Change =ygrid= = =off= to above. %CHART{%lineTest21%}% |
+| Add =xgrid= = =on= (changing from dotted xgrid to solid xgrid) to above. %CHART{%lineTest22%}% |
+| Change =xgrid= = =off= to above. %CHART{%lineTest23%}% |
+| Change =width= = =450= to above. %CHART{%lineTest24%}% |
+| Change =height= = =150= to above. %CHART{%lineTest25%}% |
+| Default width/height.  Get data from %WEB%.ChartPluginTestsRemote.  Specify =table="2"= on new =topic= = =ChartPluginTestsRemote=.  Actual values should show up incremented by 0.52 since data is from a different topic page and the 0.02 denotes the data is from the 2nd table.  Legend should show up with =Remote= since the data on the remote page was set up to include =Remote= in the legends to above. %CHART{%lineTest26%}% |
+| Same as above except add an additional data set (*averages*) that is calculated by %<nop>CALC%. %CHART{%lineTest27%}% |
+| Back to local data and add the =alt= tag = =This is the alt tag for test28=. %CHART{%lineTest28%}% |
+| Show a chart from table5 where the table contains numbers surrounded by HTML tags. %CHAR{%lineTest29%}% |
+| Show a chart from table5 where the table contains exponential formated numbers. %CHART{%lineTest30%}% |
+| Show a chart from table5 where the table contains the same numbers. %CHART{%lineTest31%}% |
+| Show a chart from table5 where the table contains the same numbers and setting ymin = the same #. %CHART{%lineTest32%}% |
+| Show a chart from table5 where the table contains the same numbers and setting ymax = the same #. %CHART{%lineTest33%}% |
+| Show a chart from table5 setting =ymin= = =0= and =ymax= = =123=. %CHART{%lineTest34%}% |
+| Show a chart with =ytics= = =2=. %CHART{%lineTest35%}% |
+| Show a chart with =ytics= = =5=. %CHART{%lineTest36%}% |
 
 ---++ area tests
-| Simple single area.  No other markings at all %BR% =%<nop>CHART{%GET{"areaTest01"}%}%= | %CHART{%GET{"areaTest01"}%}% |
-| Add Title to above. %BR% =%<nop>CHART{%GET{"areaTest02"}%}%= | %CHART{%GET{"areaTest02"}%}% |
-| Add X axis to above. %BR% =%<nop>CHART{%GET{"areaTest03"}%}%= | %CHART{%GET{"areaTest03"}%}% |
-| Add Y axis to above. %BR% =%<nop>CHART{%GET{"areaTest04"}%}%= | %CHART{%GET{"areaTest04"}%}% |
-| Add =ymin= = 0 to above. %BR% =%<nop>CHART{%GET{"areaTest05"}%}%= | %CHART{%GET{"areaTest05"}%}% |
-| Add =ymax= = 150 to above. %BR% =%<nop>CHART{%GET{"areaTest06"}%}%= | %CHART{%GET{"areaTest06"}%}% |
-| Add =ylabel= "Hello there" to above. %BR% =%<nop>CHART{%GET{"areaTest07"}%}%= | %CHART{%GET{"areaTest07"}%}% |
-| Add =numygrids="5"= to above. %BR% =%<nop>CHART{%GET{"areaTest08"}%}%= | %CHART{%GET{"areaTest08"}%}% |
-| Change =numygrids="2"= to above. %BR% =%<nop>CHART{%GET{"areaTest09"}%}%= | %CHART{%GET{"areaTest09"}%}% |
-| Remove =numygrids= from above and add =xlabel= "Yep, an X label" to above. %BR% =%<nop>CHART{%GET{"areaTest10"}%}%= | %CHART{%GET{"areaTest10"}%}% |
-| Add =datalabel= = =on= to above. %BR% =%<nop>CHART{%GET{"areaTest11"}%}%= | %CHART{%GET{"areaTest11"}%}% |
-| Add =datalabel= = =box= to above. %BR% =%<nop>CHART{%GET{"areaTest12"}%}%= | %CHART{%GET{"areaTest12"}%}% |
-| Add =legend= = to above. %BR% =%<nop>CHART{%GET{"areaTest13"}%}%= | %CHART{%GET{"areaTest13"}%}% |
-| Add additional data areas and update =legend= to above. %BR% =%<nop>CHART{%GET{"areaTest14"}%}%= | %CHART{%GET{"areaTest14"}%}% |
-| Specify different colors to above.  Now are lite red, lite green, lite blue, gray instead of defaults %BR% =%<nop>CHART{%GET{"areaTest15"}%}%= | %CHART{%GET{"areaTest15"}%}% |
-| Restore default colors and change =datalabel= such that only the last area has values in boxes and the 2nd to last has values (no box) to above %BR% =%<nop>CHART{%GET{"areaTest16"}%}%= | %CHART{%GET{"areaTest16"}%}% |
-| Add =bgcolor="#AAAAAA"= to above %BR% =%<nop>CHART{%GET{"areaTest17"}%}%= | %CHART{%GET{"areaTest17"}%}% |
-| Change =bgcolor="#FFFFFF #EEEEEE"= to above %BR% =%<nop>CHART{%GET{"areaTest18"}%}%= | %CHART{%GET{"areaTest18"}%}% |
-| Change =bgcolor="#EEEEEE #EEFFEE"= to above %BR% =%<nop>CHART{%GET{"areaTest19"}%}%= | %CHART{%GET{"areaTest19"}%}% |
-| Restore =bgcolor= and change =ygrid= = =on= to above %BR% =%<nop>CHART{%GET{"areaTest20"}%}%= | %CHART{%GET{"areaTest20"}%}% |
-| Change =ygrid= = =off= to above %BR% =%<nop>CHART{%GET{"areaTest21"}%}%= | %CHART{%GET{"areaTest21"}%}% |
-| Change =xgrid= = =on= to above %BR% =%<nop>CHART{%GET{"areaTest22"}%}%= | %CHART{%GET{"areaTest22"}%}% |
-| Change =xgrid= = =off= to above %BR% =%<nop>CHART{%GET{"areaTest23"}%}%= | %CHART{%GET{"areaTest23"}%}% |
-| Add =width= = =450= to above %BR% =%<nop>CHART{%GET{"areaTest24"}%}%= | %CHART{%GET{"areaTest24"}%}% |
-| Add =height= = =150= to above %BR% =%<nop>CHART{%GET{"areaTest25"}%}%= | %CHART{%GET{"areaTest25"}%}% |
-| Default width/height.  Get data from %WEB%.ChartPluginTestsRemote.  Specify =table="2"= on new =topic= = =ChartPluginTestsRemote=.  Actual values should show up incremented by 0.52 since data is from a different topic page and the 0.02 denotes the data is from the 2nd table.  Legend should show up with =Remote= since the data on the remote page was set up to include =Remote= in the legends %BR% =%<nop>CHART{%GET{"areaTest26"}%}%= | %CHART{%GET{"areaTest26"}%}% |
-| Same as above except add an additional data set (*averages*) that is calculated by %<nop>CALC%.  Also shows that since only 4 default area colors are specified, the 5th area reuses the 1st default area color. %BR% =%<nop>CHART{%GET{"areaTest27"}%}%= | %CHART{%GET{"areaTest27"}%}% |
-| Chage =title= to above and add the =alt= tag = =This is the alt tag= %BR% =%<nop>CHART{%GET{"areaTest28"}%}%= | %CHART{%GET{"areaTest28"}%}% |
+| Simple single area.  No other markings at all. %CHART{%areaTest01%}% |
+| Add Title to above. %CHART{%areaTest02%}% |
+| Add X axis to above. %CHART{%areaTest03%}% |
+| Add Y axis to above. %CHART{%areaTest04%}% |
+| Add =ymin= = 0 to above. %CHART{%areaTest05%}% |
+| Add =ymax= = 150 to above. %CHART{%areaTest06%}% |
+| Add =ylabel= "Hello there" to above. %CHART{%areaTest07%}% |
+| Add =numygrids="5"= to above. %CHART{%areaTest08%}% |
+| Change =numygrids="2"= to above. %CHART{%areaTest09%}% |
+| Remove =numygrids= and =ymax= from above and add =xlabel= "Yep, an X label" to above. %CHART{%areaTest10%}% |
+| Add =datalabel= = =on= to above. %CHART{%areaTest11%}% |
+| Add =datalabel= = =box= to above. %CHART{%areaTest12%}% |
+| Add =legend= = to above. %CHART{%areaTest13%}% |
+| Add additional data areas and update =legend= to above. %CHART{%areaTest14%}% |
+| Specify different colors to above.  Now are lite red, lite green, lite blue, gray instead of defaults. %CHART{%areaTest15%}% |
+| Restore default colors and change =datalabel= such that only the last area has values in boxes and the 2nd to last has values (no box) to above. %CHART{%areaTest16%}% |
+| Add =bgcolor="#AAAAAA"= to above. %CHART{%areaTest17%}% |
+| Change =bgcolor="#FFFFFF #EEEEEE"= to above. %CHART{%areaTest18%}% |
+| Change =bgcolor="#EEEEEE #EEFFEE"= to above. %CHART{%areaTest19%}% |
+| Restore =bgcolor= and change =ygrid= = =on= to above. %CHART{%areaTest20%}% |
+| Change =ygrid= = =off= to above. %CHART{%areaTest21%}% |
+| Change =xgrid= = =on= to above. %CHART{%areaTest22%}% |
+| Change =xgrid= = =off= to above. %CHART{%areaTest23%}% |
+| Add =width= = =450= to above. %CHART{%areaTest24%}% |
+| Add =height= = =150= to above. %CHART{%areaTest25%}% |
+| Default width/height.  Get data from %WEB%.ChartPluginTestsRemote.  Specify =table="2"= on new =topic= = =ChartPluginTestsRemote=.  Actual values should show up incremented by 0.52 since data is from a different topic page and the 0.02 denotes the data is from the 2nd table.  Legend should show up with =Remote= since the data on the remote page was set up to include =Remote= in the legends. %CHART{%areaTest26%}% |
+| Same as above except add an additional data set (*averages*) that is calculated by %<nop>CALC%.  Also shows that since only 4 default area colors are specified, the 5th area reuses the 1st default area color. %CHART{%areaTest27%}% |
+| Chage =title= to above and add the =alt= tag = =This is the alt tag=. %CHART{%areaTest28%}% |
 
 ---++ bar tests
-| Simple single bar.  No other markings at all %BR% =%<nop>CHART{%GET{"barTest01"}%}%= | %CHART{%GET{"barTest01"}%}% |
-| Add Title to above. %BR% =%<nop>CHART{%GET{"barTest02"}%}%= | %CHART{%GET{"barTest02"}%}% |
-| Add X axis to above. %BR% =%<nop>CHART{%GET{"barTest03"}%}%= | %CHART{%GET{"barTest03"}%}% |
-| Add Y axis to above. %BR% =%<nop>CHART{%GET{"barTest04"}%}%= | %CHART{%GET{"barTest04"}%}% |
-| Add =ymin= = 0 to above. %BR% =%<nop>CHART{%GET{"barTest05"}%}%= | %CHART{%GET{"barTest05"}%}% |
-| Add =ymax= = 150 to above. %BR% =%<nop>CHART{%GET{"barTest06"}%}%= | %CHART{%GET{"barTest06"}%}% |
-| Add =ylabel= "Hello there" to above. %BR% =%<nop>CHART{%GET{"barTest07"}%}%= | %CHART{%GET{"barTest07"}%}% |
-| Add =numygrids="5"= to above. %BR% =%<nop>CHART{%GET{"barTest08"}%}%= | %CHART{%GET{"barTest08"}%}% |
-| Change =numygrids="2"= to above. %BR% =%<nop>CHART{%GET{"barTest09"}%}%= | %CHART{%GET{"barTest09"}%}% |
-| Remove =numygrids= from above and add =xlabel= "Yep, an X label" to above. %BR% =%<nop>CHART{%GET{"barTest10"}%}%= | %CHART{%GET{"barTest10"}%}% |
-| Add =datalabel= = =on= to above. %BR% =%<nop>CHART{%GET{"barTest11"}%}%= | %CHART{%GET{"barTest11"}%}% |
-| Add =datalabel= = =box= to above. %BR% =%<nop>CHART{%GET{"barTest12"}%}%= | %CHART{%GET{"barTest12"}%}% |
-| Add =legend= = to above. %BR% =%<nop>CHART{%GET{"barTest13"}%}%= | %CHART{%GET{"barTest13"}%}% |
-| Add additional data bars and update =legend= to above. %BR% =%<nop>CHART{%GET{"barTest14"}%}%= | %CHART{%GET{"barTest14"}%}% |
-| Specify different colors to above.  Now are lite red, lite green, lite blue, gray instead of defaults %BR% =%<nop>CHART{%GET{"barTest15"}%}%= | %CHART{%GET{"barTest15"}%}% |
-| Restore default colors and change =datalabel= such that only the last bar has values in boxes and the 2nd to last has values (no box) to above %BR% =%<nop>CHART{%GET{"barTest16"}%}%= | %CHART{%GET{"barTest16"}%}% |
-| Add =bgcolor="#AAAAAA"= to above %BR% =%<nop>CHART{%GET{"barTest17"}%}%= | %CHART{%GET{"barTest17"}%}% |
-| Change =bgcolor="#FFFFFF #EEEEEE"= to above %BR% =%<nop>CHART{%GET{"barTest18"}%}%= | %CHART{%GET{"barTest18"}%}% |
-| Change =bgcolor="#EEEEEE #EEFFEE"= to above %BR% =%<nop>CHART{%GET{"barTest19"}%}%= | %CHART{%GET{"barTest19"}%}% |
-| Restore =bgcolor= and change =ygrid= = =on= to above %BR% =%<nop>CHART{%GET{"barTest20"}%}%= | %CHART{%GET{"barTest20"}%}% |
-| Change =ygrid= = =off= to above %BR% =%<nop>CHART{%GET{"barTest21"}%}%= | %CHART{%GET{"barTest21"}%}% |
-| Change =xgrid= = =on= to above %BR% =%<nop>CHART{%GET{"barTest22"}%}%= | %CHART{%GET{"barTest22"}%}% |
-| Change =xgrid= = =off= to above %BR% =%<nop>CHART{%GET{"barTest23"}%}%= | %CHART{%GET{"barTest23"}%}% |
-| Add =width= = =450= to above %BR% =%<nop>CHART{%GET{"barTest24"}%}%= | %CHART{%GET{"barTest24"}%}% |
-| Add =height= = =150= to above %BR% =%<nop>CHART{%GET{"barTest25"}%}%= | %CHART{%GET{"barTest25"}%}% |
-| Default width/height.  Get data from %WEB%.ChartPluginTestsRemote.  Specify =table="2"= on new =topic= = =ChartPluginTestsRemote=.  Actual values should show up incremented by 0.52 since data is from a different topic page and the 0.02 denotes the data is from the 2nd table.  Legend should show up with =Remote= since the data on the remote page was set up to include =Remote= in the legends %BR% =%<nop>CHART{%GET{"barTest26"}%}%= | %CHART{%GET{"barTest26"}%}% |
-| Same as above except add an additional data set (*averages*) that is calculated by %<nop>CALC%.  Also shows that since only 4 default bar colors are specified, the 5th bar reuses the 1st default bar color. %BR% =%<nop>CHART{%GET{"barTest27"}%}%= | %CHART{%GET{"barTest27"}%}% |
-| Chage =title= to above and add the =alt= tag = =This is the alt tag= %BR% =%<nop>CHART{%GET{"barTest28"}%}%= | %CHART{%GET{"barTest28"}%}% |
+| Simple single bar.  No other markings at all. %CHART{%barTest01%}% |
+| Add Title to above. %CHART{%barTest02%}% |
+| Add X axis to above. %CHART{%barTest03%}% |
+| Add Y axis to above. %CHART{%barTest04%}% |
+| Add =ymin= = 0 to above. %CHART{%barTest05%}% |
+| Add =ymax= = 150 to above. %CHART{%barTest06%}% |
+| Add =ylabel= "Hello there" to above. %CHART{%barTest07%}% |
+| Add =numygrids="5"= to above. %CHART{%barTest08%}% |
+| Change =numygrids="2"= to above. %CHART{%barTest09%}% |
+| Remove =numygrids= and =ymax= from above and add =xlabel= "Yep, an X label" to above. %CHART{%barTest10%}% |
+| Add =datalabel= = =on= to above. %CHART{%barTest11%}% |
+| Add =datalabel= = =box= to above. %CHART{%barTest12%}% |
+| Add =legend= = to above. %CHART{%barTest13%}% |
+| Add additional data bars and update =legend= to above. %CHART{%barTest14%}% |
+| Specify different colors to above.  Now are lite red, lite green, lite blue, gray instead of defaults. %CHART{%barTest15%}% |
+| Restore default colors and change =datalabel= such that only the last bar has values in boxes and the 2nd to last has values (no box) to above. %CHART{%barTest16%}% |
+| Add =bgcolor="#AAAAAA"= to above. %CHART{%barTest17%}% |
+| Change =bgcolor="#FFFFFF #EEEEEE"= to above. %CHART{%barTest18%}% |
+| Change =bgcolor="#EEEEEE #EEFFEE"= to above. %CHART{%barTest19%}% |
+| Restore =bgcolor= and change =ygrid= = =on= to above. %CHART{%barTest20%}% |
+| Change =ygrid= = =off= to above. %CHART{%barTest21%}% |
+| Change =xgrid= = =on= to above. %CHART{%barTest22%}% |
+| Change =xgrid= = =off= to above. %CHART{%barTest23%}% |
+| Add =width= = =450= to above. %CHART{%barTest24%}% |
+| Add =height= = =150= to above. %CHART{%barTest25%}% |
+| Default width/height.  Get data from %WEB%.ChartPluginTestsRemote.  Specify =table="2"= on new =topic= = =ChartPluginTestsRemote=.  Actual values should show up incremented by 0.52 since data is from a different topic page and the 0.02 denotes the data is from the 2nd table.  Legend should show up with =Remote= since the data on the remote page was set up to include =Remote= in the legends. %CHART{%barTest26%}% |
+| Same as above except add an additional data set (*averages*) that is calculated by %<nop>CALC%.  Also shows that since only 4 default bar colors are specified, the 5th bar reuses the 1st default bar color. %CHART{%barTest27%}% |
+| Chage =title= to above and add the =alt= tag = =This is the alt tag=. %CHART{%barTest28%}% |
 
 ---++ combo tests
-| Simple combo graph using table #2.  Since no =datatype= is defined and only a single data set, =combo= defaults to a single =line=. %BR% =%<nop>CHART{%GET{"comboTest01"}%}%= | %CHART{%GET{"comboTest01"}%}% |
-| Change so 3 data sets are drawn as areas and the last drawn as a line. %BR% =%<nop>CHART{%GET{"comboTest02"}%}%= | %CHART{%GET{"comboTest02"}%}% |
-| Same as above, adding grid lines and Y axis labels and X/Y titles. %BR% =%<nop>CHART{%GET{"comboTest03"}%}%= | %CHART{%GET{"comboTest03"}%}% |
-| Same as above adding =subtype="area"= which should force all data sets to be drawn as =area=.  Since the last data set would fall behind the previously drawn areas, it is drawn as a line. %BR% =%<nop>CHART{%GET{"comboTest04"}%}%= | %CHART{%GET{"comboTest04"}%}% |
-| Same as above adding =subtype="line"= which should force all data sets to be drawn as =line=.  %BR% =%<nop>CHART{%GET{"comboTest05"}%}%= | %CHART{%GET{"comboTest05"}%}% |
-| Same as above adding =subtype="bar"= which should force all data sets to be drawn as =bar=.  %BR% =%<nop>CHART{%GET{"comboTest06"}%}%= | %CHART{%GET{"comboTest06"}%}% |
-| Same as above adding =subtype="pline"= which should force all data sets to be drawn as =pline=.  %BR% =%<nop>CHART{%GET{"comboTest07"}%}%= | %CHART{%GET{"comboTest07"}%}% |
-| Same as above adding =subtype="point"= which should force all data sets to be drawn as =point=.  %BR% =%<nop>CHART{%GET{"comboTest08"}%}%= | %CHART{%GET{"comboTest08"}%}% |
-| Same as above changing =subtype="area line pline point"=.  %BR% =%<nop>CHART{%GET{"comboTest09"}%}%= | %CHART{%GET{"comboTest09"}%}% |
-| Same as above changing =subtype="line pline point area"=.  %BR% =%<nop>CHART{%GET{"comboTest10"}%}%= | %CHART{%GET{"comboTest10"}%}% |
-| Same as above changing =subtype="pline pline point bar"=.  %BR% =%<nop>CHART{%GET{"comboTest11"}%}%= | %CHART{%GET{"comboTest11"}%}% |
+| Simple combo graph using table #2.  Since no =datatype= is defined and only a single data set, =combo= defaults to a single =line=. %CHART{%comboTest01%}% |
+| Change so 3 data sets are drawn as areas and the last drawn as a line. %CHART{%comboTest02%}% |
+| Same as above, adding grid lines and Y axis labels and X/Y titles. %CHART{%comboTest03%}% |
+| Same as above adding =subtype="area"= which should force all data sets to be drawn as =area=.  Since the last data set would fall behind the previously drawn areas, it is drawn as a line. %CHART{%comboTest04%}% |
+| Same as above adding =subtype="line"= which should force all data sets to be drawn as =line=. %CHART{%comboTest05%}% |
+| Same as above adding =subtype="bar"= which should force all data sets to be drawn as =bar=. %CHART{%comboTest06%}% |
+| Same as above adding =subtype="pline"= which should force all data sets to be drawn as =pline=. %CHART{%comboTest07%}% |
+| Same as above adding =subtype="point"= which should force all data sets to be drawn as =point=. %CHART{%comboTest08%}% |
+| Same as above changing =subtype="area line pline point"=. %CHART{%comboTest09%}% |
+| Same as above changing =subtype="line pline point area"=. %CHART{%comboTest10%}% |
+| Same as above changing =subtype="pline pline point bar"=. %CHART{%comboTest11%}% |
 
 ---++ scatter tests
-| Simple scatter graph using table #3.  Defaults to all data sets drawn as =point=.   %BR% =%<nop>CHART{%GET{"scatterTest01"}%}%= | %CHART{%GET{"scatterTest01"}%}% |
-| Add title, grid lines and both X and Y axis labels and title to above. %BR% =%<nop>CHART{%GET{"scatterTest02"}%}%= | %CHART{%GET{"scatterTest02"}%}% |
-| Add =subtype="line"= to above. %BR% =%<nop>CHART{%GET{"scatterTest03"}%}%= | %CHART{%GET{"scatterTest03"}%}% |
-| Change =subtype="pline"= to above. %BR% =%<nop>CHART{%GET{"scatterTest04"}%}%= | %CHART{%GET{"scatterTest04"}%}% |
-| Change =subtype="point"= to above. %BR% =%<nop>CHART{%GET{"scatterTest05"}%}%= | %CHART{%GET{"scatterTest05"}%}% |
-| Change =subtype="bar"= to above. %BR% =%<nop>CHART{%GET{"scatterTest06"}%}%= | %CHART{%GET{"scatterTest06"}%}% |
-| Change =subtype="point bar line pline"= to above. %BR% =%<nop>CHART{%GET{"scatterTest07"}%}%= | %CHART{%GET{"scatterTest07"}%}% |
-| Change =subtype="bar line pline point"= to above. %BR% =%<nop>CHART{%GET{"scatterTest08"}%}%= | %CHART{%GET{"scatterTest08"}%}% |
-| Change =subtype="line pline point bar"= to above. %BR% =%<nop>CHART{%GET{"scatterTest09"}%}%= | %CHART{%GET{"scatterTest09"}%}% |
-| Change =subtype="pline point bar line"= to above. %BR% =%<nop>CHART{%GET{"scatterTest10"}%}%= | %CHART{%GET{"scatterTest10"}%}% |
-| Change =subtype="bar bar bar pline"= to above. %BR% =%<nop>CHART{%GET{"scatterTest11"}%}%= | %CHART{%GET{"scatterTest11"}%}% |
-| Adjust data range to see how the X labeling is affected.  %BR% =%<nop>CHART{%GET{"scatterTest12"}%}%= | %CHART{%GET{"scatterTest12"}%}% |
-| Adjust data range to see how the X labeling is affected.  %BR% =%<nop>CHART{%GET{"scatterTest13"}%}%= | %CHART{%GET{"scatterTest13"}%}% |
+| Simple scatter graph using table #3.  Defaults to all data sets drawn as =point=. %CHART{%scatterTest01%}% |
+| Add title, grid lines and both X and Y axis labels and title to above. %CHART{%scatterTest02%}% |
+| Add =subtype="line"= to above. %CHART{%scatterTest03%}% |
+| Change =subtype="pline"= to above. %CHART{%scatterTest04%}% |
+| Change =subtype="point"= to above. %CHART{%scatterTest05%}% |
+| Change =subtype="bar"= to above. %CHART{%scatterTest06%}% |
+| Change =subtype="point bar line pline"= to above. %CHART{%scatterTest07%}% |
+| Change =subtype="bar line pline point"= to above. %CHART{%scatterTest08%}% |
+| Change =subtype="line pline point bar"= to above. %CHART{%scatterTest09%}% |
+| Change =subtype="pline point bar line"= to above. %CHART{%scatterTest10%}% |
+| Change =subtype="bar bar bar pline"= to above. %CHART{%scatterTest11%}% |
+| Adjust data range to see how the X labeling is affected. %CHART{%scatterTest12%}% |
+| Adjust data range to see how the X labeling is affected. %CHART{%scatterTest13%}% |
 
----+ New functionality tests
 ---++ Test various legend placement situations
-| Test that when all lines overlap on the very bottom of the chart, the legends all show up non-overlapped. %BR% =%<nop>CHART{%GET{"legendTest01"}%}%= | %CHART{%GET{"legendTest01"}%}% |
-| Test that when two lines overlap in the middle of the chart, the legends get correctly placed. %BR% =%<nop>CHART{%GET{"legendTest02"}%}%= | %CHART{%GET{"legendTest02"}%}% |
-| Similar to the test above, except the data is changed such that the placement of the legends for the two middle lines should be reversed. %BR% =%<nop>CHART{%GET{"legendTest03"}%}%= | %CHART{%GET{"legendTest03"}%}% |
-| Test that when 4 lines are close to overlapping and are all located at the top of the chart, the legends get correctly placed. %BR% =%<nop>CHART{%GET{"legendTest04"}%}%= | %CHART{%GET{"legendTest04"}%}% |
-| Test that when 4 lines do exactly overlap at the top of the chart, the legends get correctly placed. %BR% =%<nop>CHART{%GET{"legendTest05"}%}%= | %CHART{%GET{"legendTest05"}%}% |
-| Test that the arrangement of legends of 4 lines located at the top of a chart is correct. %BR% =%<nop>CHART{%GET{"legendTest06"}%}%= | %CHART{%GET{"legendTest06"}%}% |
-| Test that even with a =ymax= set too low such that the lines go off the top of the chart, the legends still stay on the chart. %BR% =%<nop>CHART{%GET{"legendTest07"}%}%= | %CHART{%GET{"legendTest07"}%}% |
-| Test that even with a =ymin= set too high such that some lines do not even show up on the chart because they fall below the chart, the legends still stay on the chart. %BR% =%<nop>CHART{%GET{"legendTest08"}%}%= | %CHART{%GET{"legendTest08"}%}% |
-| Test extremes that even when =ymin= is set higher than all data, that the legends still get drawn on the chart. %BR% =%<nop>CHART{%GET{"legendTest09"}%}%= | %CHART{%GET{"legendTest09"}%}% |
-| Test extremes that even when =ymax= is set lower than all data, that the legends still get drawn on the chart. %BR% =%<nop>CHART{%GET{"legendTest10"}%}%= | %CHART{%GET{"legendTest10"}%}% |
+| Test that when all lines overlap on the very bottom of the chart, the legends all show up non-overlapped. %CHART{%legendTest01%}% |
+| Test that when two lines overlap in the middle of the chart, the legends get correctly placed. %CHART{%legendTest02%}% |
+| Similar to the test above, except the data is changed such that the placement of the legends for the two middle lines should be reversed. %CHART{%legendTest03%}% |
+| Test that when 4 lines are close to overlapping and are all located at the top of the chart, the legends get correctly placed. %CHART{%legendTest04%}% |
+| Test that when 4 lines do exactly overlap at the top of the chart, the legends get correctly placed. %CHART{%legendTest05%}% |
+| Test that the arrangement of legends of 4 lines located at the top of a chart is correct. %CHART{%legendTest06%}% |
+| Test that even with a =ymax= set too low such that the lines go off the top of the chart, the legends still stay on the chart. %CHART{%legendTest07%}% |
+| Test that even with a =ymin= set too high such that some lines do not even show up on the chart because they fall below the chart, the legends still stay on the chart. %CHART{%legendTest08%}% |
+| Test extremes that even when =ymin= is set higher than all data, that the legends still get drawn on the chart. %CHART{%legendTest09%}% |
+| Test extremes that even when =ymax= is set lower than all data, that the legends still get drawn on the chart. %CHART{%legendTest10%}% |
 
 ---++ Test _numxgrids_ and _xaxisangle_ options
-| Show what happens when there is so much data that the X axis labels overlap. %BR% =%<nop>CHART{%GET{"gridTest01"}%}%= | %CHART{%GET{"gridTest01"}%}% |
-| Take the above graph and specify =numxgrids= = "3" making the X axis labels more readable. %BR% =%<nop>CHART{%GET{"gridTest02"}%}%= | %CHART{%GET{"gridTest02"}%}% |
-| Take the first graph and specify =xaxisangle= = 90, changing the X axis label angle = 90 degrees. %BR% =%<nop>CHART{%GET{"gridTest03"}%}%= | %CHART{%GET{"gridTest03"}%}% |
+| Show what happens when there is so much data that the X axis labels overlap. %CHART{%gridTest01%}% |
+| Take the above graph and specify =numxgrids= = "3" making the X axis labels more readable. %CHART{%gridTest02%}% |
+| Take the first graph and specify =xaxisangle= = 90, changing the X axis label angle = 90 degrees. %CHART{%gridTest03%}% |
 
 ---++ Test _scale_ and _ytics_ options
-| Show how =scale=semilog= makes the chart easier to read. Since =ytics= is NOT specified, it defaults to 8. %BR% =%<nop>CHART{%GET{"semilogTest01"}%}%= | %CHART{%GET{"semilogTest01"}%}% |
-| Add =ytics=4= to above. %BR% =%<nop>CHART{%GET{"semilogTest02"}%}%= | %CHART{%GET{"semilogTest02"}%}% |
-| Change the amount of data displayed which should change the ymin/ymax. %BR% =%<nop>CHART{%GET{"semilogTest03"}%}%= | %CHART{%GET{"semilogTest03"}%}% |
-| Show the above plotted data on a =linear= scale with =ytics=1=. %BR% =%<nop>CHART{%GET{"semilogTest04"}%}%= | %CHART{%GET{"semilogTest04"}%}% |
+| Show how =scale=semilog= makes the chart easier to read. Since =ytics= is NOT specified, it defaults to 8. %CHART{%semilogTest01%}% |
+| Add =ytics=4= to above. %CHART{%semilogTest02%}% |
+| Change the amount of data displayed which should change the ymin/ymax. %CHART{%semilogTest03%}% |
+| Show the above plotted data on a =linear= scale with =ytics=1=. %CHART{%semilogTest04%}% |
 
 ---++ Test _defaultdata_ option
-| Show a chart with sparse data. %BR% =%<nop>CHART{%GET{"defaultsTest01"}%}%= | %CHART{%GET{"defaultsTest01"}%}% |
-| Same as above, but setting =defalutdata=0=. %BR% =%<nop>CHART{%GET{"defaultsTest02"}%}%= | %CHART{%GET{"defaultsTest02"}%}% |
-| Same as above, but setting =defalutdata=10=. %BR% =%<nop>CHART{%GET{"defaultsTest03"}%}%= | %CHART{%GET{"defaultsTest03"}%}% |
+| Show a chart with sparse data. %CHART{%defaultsTest01%}% |
+| Same as above, but setting =defalutdata=0=. %CHART{%defaultsTest02%}% |
+| Same as above, but setting =defalutdata=10=. %CHART{%defaultsTest03%}% |
 
 ---++ Test _gridcolor_ option
-| Show default grid color with solid grid lines. %BR% =%<nop>CHART{%GET{"colorTest01"}%}%= | %CHART{%GET{"colorTest01"}%}% |
-| Change the grid color to blue. %BR% =%<nop>CHART{%GET{"colorTest02"}%}%= | %CHART{%GET{"colorTest02"}%}% |
-| Change the grid color back to the default but make them dotted. %BR% =%<nop>CHART{%GET{"colorTest03"}%}%= | %CHART{%GET{"colorTest03"}%}% |
-| Change the grid style to be 5 black dots and 5 transparent dots. %BR% =%<nop>CHART{%GET{"colorTest04"}%}%= | %CHART{%GET{"colorTest04"}%}% |
-| Change the grid style to be 4 red dots, 4 green dots, 4 blue dots and 4 transparent dots. %BR% =%<nop>CHART{%GET{"colorTest05"}%}%= | %CHART{%GET{"colorTest05"}%}% |
-| Change the grid style to be 1 black dot which basically makes a solid line. %BR% =%<nop>CHART{%GET{"colorTest06"}%}%= | %CHART{%GET{"colorTest06"}%}% |
+| Show default grid color with solid grid lines. %CHART{%colorTest01%}% |
+| Change the grid color to blue. %CHART{%colorTest02%}% |
+| Change the grid color back to the default but make them dotted. %CHART{%colorTest03%}% |
+| Change the grid style to be 5 black dots and 5 transparent dots. %CHART{%colorTest04%}% |
+| Change the grid style to be 4 red dots, 4 green dots, 4 blue dots and 4 transparent dots. %CHART{%colorTest05%}% |
+| Change the grid style to be 1 black dot which basically makes a solid line. %CHART{%colorTest06%}% |
+
+---++ Test _datalegend_ option
+| Show a simple chart with =datalabel="box"=. %CHART{%datalabel01%}% |
+| Same chart, but =datalabel="on, box, off, 2 box"=. %CHART{%datalabel02%}% |
+| Same chart, but =datalabel="auto box, 2box, box 3, 4 box"=. %CHART{%datalabel03%}% |
+| Same chart as above, but set the background color in the =datalabel= boxes to #E0E0E0. %CHART{%datalabel04%}% |
 
 ---++ Tests showing both single column data ranges as well as multi-column data ranges both top to bottom as well as bottom to top and left to right and right to left.
 
-| %CHART{%GET{multiLineTest01f}%}% %BR% This chart is <nop>WebStatistics data in its original order. %BR% =%<nop>CHART{%GET{multiLineTest01f}%}%= |  %CHART{%GET{multiLineTest01b}%}% %BR% This chart is <nop>WebStatistics data in a more human readable format of old -&gt; new. %BR% =%<nop>CHART{%GET{multiLineTest02b}%}%= |
-| %CHART{%GET{multiLineTest02f}%}% %BR% This is a single line top/down chart %BR% =%<nop>CHART{%GET{multiLineTest02f}%}%= |  %CHART{%GET{multiLineTest02b}%}% %BR% This is a single line bottom/up chart and should be flipped left-to-right from the chart to the left. %BR% =%<nop>CHART{%GET{multiLineTest02b}%}%= |
-| %CHART{%GET{multiLineTest03f}%}% %BR% This is a top/down, left/right chart with 4 lines in a single range. %BR% =%<nop>CHART{%GET{multiLineTest03f}%}%= |  %CHART{%GET{multiLineTest03b}%}% %BR% This is a bottom/up left/right chart and should be flipped left-to-right from the chart to the left. Because the data is read in reverse order, the line colors will be different. %BR% =%<nop>CHART{%GET{multiLineTest03b}%}%= |
-| %CHART{%GET{multiLineTest04f}%}% %BR% This is a top/down right/left chart with 4 lines in a single range. %BR% =%<nop>CHART{%GET{multiLineTest04f}%}%= |  %CHART{%GET{multiLineTest04b}%}% %BR% This is a bottom/up right/left chart and should be flipped left-to-right from the chart to the left. Because the data is read in reverse order, the line colors will be different. %BR% =%<nop>CHART{%GET{multiLineTest04b}%}%= |
-| %CHART{%GET{multiLineTest05f}%}% %BR% This should be identical to the above except instead of specifying multi-column data range, this specifies 4 single column data ranges. The results should be identical to above. %BR% =%<nop>CHART{%GET{multiLineTest05f}%}%= |  %CHART{%GET{multiLineTest05b}%}% %BR% This should be identical to the chart to the left. %BR% =%<nop>CHART{%GET{multiLineTest05b}%}%= |
-| %CHART{%GET{multiLineTest06f}%}% %BR% This is identical to the above except the 4 single column data ranges are specified in a random order. The results should be identical to above with the exception that the line colors will be different. %BR% =%<nop>CHART{%GET{multiLineTest06f}%}%= |  %CHART{%GET{multiLineTest06b}%}% %BR% Flipped of chart to the left. %BR% =%<nop>CHART{%GET{multiLineTest06b}%}%= |
-| %CHART{%GET{multiLineTest07f}%}% %BR% This is identical to the above except a multi-column range followed by a single column range. The results should be identical to above with the exception that the line colors will be different. %BR% =%<nop>CHART{%GET{multiLineTest07f}%}%= |  %CHART{%GET{multiLineTest07b}%}% %BR% Flipped of chart to the left. %BR% =%<nop>CHART{%GET{multiLineTest07b}%}%= |
-| %CHART{%GET{multiAreaTest01f}%}% %BR% This is the same as above, but using areas. Still top/down chart with 4 lines. %BR% =%<nop>CHART{%GET{multiAreaTest01f}%}%= |  %CHART{%GET{multiLineTest08b}%}% %BR% This is the same as above, but using areas. Still bottom/up chart and should be flipped left-to-right from the chart to the left. Because the data is read in reverse order, the area colors will be different. %BR% =%<nop>CHART{%GET{multiLineTest08b}%}%= |
+| This chart is <nop>WebStatistics data in its original order. %CHART{%multiLineTest01f%}% |
+| This chart is the same as above but with the <nop>WebStatistics data in a more human readable format of old -&gt; new. %CHART{%multiLineTest01b%}% |
+| This is a single line top/down chart. %CHART{%multiLineTest02f%}% |
+| This is a single line bottom/up chart and should be flipped left-to-right from the chart above. %CHART{%multiLineTest02b%}% |
+| This is a top/down, left/right chart with 4 lines in a single range. %CHART{%multiLineTest03f%}% |
+| This is a bottom/up left/right chart and should be flipped left-to-right from the chart above. Because the data is read in reverse order, the line colors will be different. %CHART{%multiLineTest03b%}% |
+| This is a top/down right/left chart with 4 lines in a single range. %CHART{%multiLineTest04f%}% |
+| This is a bottom/up right/left chart and should be flipped left-to-right from the chart above. Because the data is read in reverse order, the line colors will be different. %CHART{%multiLineTest04b%}% |
+| This should be identical to test 04b above except instead of specifying multi-column data range, this specifies 4 single column data ranges. The results should be identical to above. %CHART{%multiLineTest05f%}% |
+| This should be identical to the chart above except reversed. %CHART{%multiLineTest05b%}% |
+| This is identical to test 04b above except the 4 single column data ranges are specified in a random order. The results should be identical with the exception that the line colors will be different. %CHART{%multiLineTest06f%}% |
+| Flipped version of the above chart. %CHART{%multiLineTest06b%}% |
+| This is identical to test 06f above except a multi-column range followed by a single column range. The results should be identical with the exception that the line colors will be different. %CHART{%multiLineTest07f%}% |
+| Flipped of the above chart. %CHART{%multiLineTest07b%}% |
+| Same as test 07f, but using areas. Still top/down chart with 4 lines. %CHART{%multiAreaTest01f%}% |
+| Flipped version of the above chart. Still bottom/up chart. Because the data is read in reverse order, the area colors will be different. %CHART{%multiLineTest08b%}% |
 
 ---++ Same tests as above, but the data is flipped on the diagonal
-| %CHART{%GET{flippedMultiLineTest01f}%}% %BR% This is a left/right chart %BR% =%<nop>CHART{%GET{flippedMultiLineTest01f}%}%= |  %CHART{%GET{flippedMultiLineTest01b}%}% %BR% This is a right/left /up chart and should be flipped left-to-right from the chart to the left. %BR% =%<nop>CHART{%GET{flippedMultiLineTest01b}%}%= |
-| %CHART{%GET{flippedMultiLineTest03f}%}% %BR% This is a left/right chart with 4 lines. %BR% =%<nop>CHART{%GET{flippedMultiLineTest03f}%}%= |  %CHART{%GET{flippedMultiLineTest03b}%}% %BR% This is a right/left chart and should be flipped left-to-right from the chart to the left. Because the data is read in reverse order, the line colors will be different. %BR% =%<nop>CHART{%GET{flippedMultiLineTest03b}%}%= |
-| %CHART{%GET{flippedMultiLineTest04f}%}% %BR% This should be identical to the above except instead of specifying multi-column data range, this specifies 4 single column data ranges. The results should be identical to above. %BR% =%<nop>CHART{%GET{flippedMultiLineTest04f}%}%= |  %CHART{%GET{flippedMultiLineTest04b}%}% %BR% This should be identical to the above except instead of specifying a flippedMulti-column data range, this specifies 4 single column data ranges in reverse order. Because the data is read in reverse order, the line colors will be different. %BR% =%<nop>CHART{%GET{multiLineTest04b}%}%= |
-| %CHART{%GET{flippedMultiLineTest05f}%}% %BR% This is identical to the above except the 4 single column data ranges are specified in a random order. The results should be identical to above with the exception that the line colors will be different. %BR% =%<nop>CHART{%GET{flippedMultiLineTest05f}%}%= |  %CHART{%GET{flippedMultiLineTest05b}%}% %BR% Flipped of chart to the left. %BR% =%<nop>CHART{%GET{flippedMultiLineTest05b}%}%= |
-| %CHART{%GET{flippedMultiLineTest06f}%}% %BR% This is identical to the above except a flippedMulti-column range followed by a single column range. The results should be identical to above with the exception that the line colors will be different. %BR% =%<nop>CHART{%GET{flippedMultiLineTest06f}%}%= |  %CHART{%GET{flippedMultiLineTest06b}%}% %BR% Flipped of chart to the left. %BR% =%<nop>CHART{%GET{flippedMultiLineTest06b}%}%= |
-| %CHART{%GET{flippedMultiAreaTest01f}%}% %BR% This is the same as above, but using areas. Still left/right chart with 4 lines. %BR% =%<nop>CHART{%GET{flippedMultiAreaTest01f}%}%= |  %CHART{%GET{flippedMultiAreaTest01b}%}% %BR% This is the same as above, but using areas. Still right/left chart and should be flipped left-to-right from the chart to the left. Because the data is read in reverse order, the area colors will be different. %BR% =%<nop>CHART{%GET{flippedMultiAreaTest01b}%}%= |
+| This is a left/right chart. %CHART{%flippedMultiLineTest01f%}% |
+| This is a right/left bottom/up chart and should be flipped left-to-right from the above chart. %CHART{%flippedMultiLineTest01b%}% |
+| This is a left/right chart with 4 lines. %CHART{%flippedMultiLineTest03f%}% |
+| This is a right/left chart and should be flipped left-to-right from the above chart. Because the data is read in reverse order, the line colors will be different. %CHART{%flippedMultiLineTest03b%}% |
+| This should be identical to test 02f above except instead of specifying multi-column data range, this specifies 4 single column data ranges. The results should be identical to 02f above. %CHART{%flippedMultiLineTest04f%}% |
+| This should be identical to the above except instead of specifying a Multi-column data range, this specifies 4 single column data ranges in reverse order. Because the data is read in reverse order, the line colors will be different. %CHART{%multiLineTest04b%}% |
+| This is identical to test 04f above except the 4 single column data ranges are specified in a random order. The results should be identical to above with the exception that the line colors will be different. %CHART{%flippedMultiLineTest05f%}% |
+| Flipped of chart above. %CHART{%flippedMultiLineTest05b%}% |
+| This is identical to test 05f above except a multi-column range followed by a single column range. The results should be identical to above with the exception that the line colors will be different. %CHART{%flippedMultiLineTest06f%}% |
+| Flipped of chart to the left. %CHART{%flippedMultiLineTest06b%}% |
+| This is the same as test 06f above, but using areas. Still left/right chart with 4 lines. %CHART{%flippedMultiAreaTest01f%}% |
+| This is the same as above, but using areas. Still right/left chart and should be flipped left-to-right from the chart to the left. Because the data is read in reverse order, the area colors will be different. %CHART{%flippedMultiAreaTest01b%}% |
+
+---++ Tests showing data displayed on both the left Y-axis and right Y-axis
+| Simple chart with =data= only so all data is in reference to the left Y-axis. %CHART{%multiDataTest01%}% |
+| Same chart as above with 3 lines referenced to the left Y-axis and 1 line referenced to the right Y-axis. %CHART{%multiDataTest02%}% |
+| Same chart as above with 1 line referenced to the left Y-axis and 3 lines referenced to the right Y-axis. %CHART{%multiDataTest03%}% |
+| Same chart as above with 2 lines referenced to the left Y-axis and 2 lines referenced to the right Y-axis, but the right axis has different =ymin2= and =ymax2= from the left axis values. %CHART{%multiDataTest04%}% |
+| Same as above with no =yaxis2=. %CHART{%multiDataTest05%}% |
+| Same as above with =yaxis2= turned back on and =ylabel2= disabled. %CHART{%multiDataTest06%}% |
+| Same as above with =ytics="1"= and =ytics2="3"=. %CHART{%multiDataTest07%}% |
+| Same as above, but =type="area"=. =area= should only apply to =data= data so =data2= data should still default to =line=. %CHART{%multiDataTest08%}% |
+| Same as above, but changing =type="combo"= and adding =subtype="area, area"=. So this should look identical to the above since =data2= is still defaulting to =line=. %CHART{%multiDataTest09%}% |
+| Same as above, but setting =subtype2="area, area"= and changing =ymin2='-5' and =ymax2='10'= so =data2= data is shown above =data= data so you can see the =area=.  %CHART{%multiDataTest10%}% |
+| Same as above except change =data= and =data2= from =area= to =bar=. %CHART{%multiDataTest11%}% |
+| Same as above except change =data= and =data2= from =bar= to =pline=. %CHART{%multiDataTest12%}% |
+| Same as above except change =data= to ="line, pline" and change =data2= ="pline, bar". %CHART{%multiDataTest13%}% |
+| Same as above except change =data= to ="line, bar". %CHART{%multiDataTest14%}% |
+| Same as above except change =type="scatter"=. %CHART{%multiDataTest15%}% |
+| Same as above except change =type="semilog"=, =ymin="1", =ymin2="1"=, and removing definition for =ytics=, =ytics=, =ymax=, and =ymax2=. %CHART{%multiDataTest16%}% |
 
 ---++ Error handling tests
 | *Description* | *Expected Output* | *Output* |
-| No parameters passed to CHART %BR% =%<nop>CHART{%GET{"errorTest01"}%}%= | <nop>ChartPlugin error: parameter *name* must be specified | %CHART{%GET{"errorTest01"}%}% |
-| =name= defined, but no data specified. %BR% =%<nop>CHART{%GET{"errorTest02"}%}%= | <nop>ChartPlugin error: parameter *data* must be specified | %CHART{%GET{"errorTest02"}%}% |
-| Invalid =type= of =badtype=. %BR% =%<nop>CHART{%GET{"errorTest03"}%}%= | <nop>ChartPlugin error: ChartPlugin error: Invalid value of *badtype* for parameter *type* | %CHART{%GET{"errorTest03"}%}% |
-| Specified =topic= page does not exist. %BR% =%<nop>CHART{%GET{"errorTest04"}%}%= | <nop>ChartPlugin error: Error retrieving TWiki topic <nop>TWiki.TopicDoesNotExist | %CHART{%GET{"errorTest04"}%}% |
-| Specified =web= page does not exist. %BR% =%<nop>CHART{%GET{"errorTest05"}%}%= | <nop>ChartPlugin error: Error retrieving TWiki topic <nop>webDoesNotExist.ChartPluginTests | %CHART{%GET{"errorTest05"}%}% |
-| Invalid table number. %BR% =%<nop>CHART{%GET{"errorTest06"}%}%= | <nop>ChartPlugin error: parameter table is not valid table; the specified *table* '999' does not exist | %CHART{%GET{"errorTest06"}%}% |
-| invalid =xaxis= value. %BR% =%<nop>CHART{%GET{"errorTest07"}%}%= | <nop>ChartPlugin error: parameter *xaxis* specifies multiple (6x4) rows and columns | %CHART{%GET{"errorTest07"}%}% |
-| =ymin= == =ymax= such that there is no chart height. %BR% =%<nop>CHART{%GET{"errorTest09"}%}%= | <nop>ChartPlugin error: chart error: name=errorTest09: No Chart height with ymin(10) == ymax(10) | %CHART{%GET{"errorTest09"}%}% |
-| =ymin= > =ymax=. %BR% =%<nop>CHART{%GET{"errorTest10"}%}%= | <nop>ChartPlugin error: chart error: name=errorTest10: Y max (-10) < Y Min (10) | %CHART{%GET{"errorTest10"}%}% |
-| Only 1 point of data. %BR% =%<nop>CHART{%GET{"errorTest11"}%}%= | <nop>ChartPlugin error: chart error: name=errorTest11: Error: Number of data points needs to be > 1 | %CHART{%GET{"errorTest11"}%}% |
-| Invalid =legend=. %BR% =%<nop>CHART{%GET{"errorTest12"}%}%= | <nop>ChartPlugin error: parameter *legend* contains an invalid value 'R1:C4' since it specifies 1 legends and there are 4 data sets. | %CHART{%GET{"errorTest12"}%}% |
-| =scale=semilog= and data &lt;= 0. %BR% =%<nop>CHART{%GET{"errorTest13"}%}%= | <nop>ChartPlugin error: data (0) &lt;= 0 not valid when scale=semilog | %CHART{%GET{"errorTest13"}%}% |
+| No parameters passed to CHART %BR% =%<nop>CHART{%errorTest01%}%= | <nop>ChartPlugin error: parameter *name* must be specified | %CHART{%errorTest01%}% |
+| =name= defined, but no data specified. %BR% =%<nop>CHART{%errorTest02%}%= | <nop>ChartPlugin error: parameter *data* must be specified | %CHART{%errorTest02%}% |
+| Invalid =type= of =badtype=. %BR% =%<nop>CHART{%errorTest03%}%= | <nop>ChartPlugin error: ChartPlugin error: Invalid value of *badtype* for parameter *type* | %CHART{%errorTest03%}% |
+| Specified =topic= page does not exist. %BR% =%<nop>CHART{%errorTest04%}%= | <nop>ChartPlugin error: Error retrieving TWiki topic <nop>TWiki.TopicDoesNotExist | %CHART{%errorTest04%}% |
+| Specified =web= page does not exist. %BR% =%<nop>CHART{%errorTest05%}%= | <nop>ChartPlugin error: Error retrieving TWiki topic <nop>webDoesNotExist.ChartPluginTests | %CHART{%errorTest05%}% |
+| Invalid table number. %BR% =%<nop>CHART{%errorTest06%}%= | <nop>ChartPlugin error: parameter table is not valid table; the specified *table* '999' does not exist | %CHART{%errorTest06%}% |
+| invalid =xaxis= value. %BR% =%<nop>CHART{%errorTest07%}%= | <nop>ChartPlugin error: parameter *xaxis* specifies multiple (6x4) rows and columns | %CHART{%errorTest07%}% |
+| =ymin= == =ymax= such that there is no chart height. %BR% =%<nop>CHART{%errorTest09%}%= | <nop>ChartPlugin error: chart error: name=errorTest09: No Chart height with ymin(10) == ymax(10) | %CHART{%errorTest09%}% |
+| =ymin= > =ymax=. %BR% =%<nop>CHART{%errorTest10%}%= | <nop>ChartPlugin error: chart error: name=errorTest10: Y max (-10) < Y Min (10) | %CHART{%errorTest10%}% |
+| Only 1 point of data. %BR% =%<nop>CHART{%errorTest11%}%= | <nop>ChartPlugin error: chart error: name=errorTest11: Error: Number of data points needs to be > 1 | %CHART{%errorTest11%}% |
+| Invalid =legend=. %BR% =%<nop>CHART{%errorTest12%}%= | <nop>ChartPlugin error: parameter *legend* contains an invalid value 'R1:C4' since it specifies 1 legends and there are 4 data sets. | %CHART{%errorTest12%}% |
+| =scale=semilog= and data &lt;= 0. %BR% =%<nop>CHART{%errorTest13%}%= | <nop>ChartPlugin error: data (0) &lt;= 0 not valid when scale=semilog | %CHART{%errorTest13%}% |
 
 -- __Contributors:__ TWiki:Main/TaitCyrus, TWiki:Main/PeterThoeny - 2010-04-07
 -- Updated: TWiki:Main/TaitCyrus - 2011-04-25
