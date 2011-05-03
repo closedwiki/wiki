@@ -1,2 +1,3 @@
-data/TWiki/AccessStatsPlugin.txt 0664
-lib/TWiki/Plugins/AccessStatsPlugin.pm 0664
+data/TWiki/AccessStatsPlugin.txt 0644
+lib/TWiki/Plugins/AccessStatsPlugin.pm 0644
+lib/TWiki/Plugins/AccessStatsPlugin/Config.spec 0644

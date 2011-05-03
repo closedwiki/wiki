@@ -1,5 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
+# Copyright (C) 2006-2007 TWiki:Main.StephaneLenclud
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2011 Peter Thoeny, peter@thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
@@ -41,11 +42,13 @@ use vars qw(
   );
 
 $VERSION = '$Rev: 8713$';
-$RELEASE = '2011-05-02';
+$RELEASE = '2011-05-03';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'AccessStatsPlugin';
 
+# Debug the plugin
+$debug = $TWiki::cfg{Plugins}{AccessStatsPlugin}{Debug} || 0;
 # The Apache access log file name
 $accessLogFileName = $TWiki::cfg{Plugins}{AccessStatsPlugin}{LogFileName} || "access_log";
 # The Apache access log directory
@@ -69,10 +72,6 @@ sub initPlugin {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
-
-    # Get plugin preferences, variables defined by:
-    $debug = TWiki::Func::getPreferencesValue( "\U$pluginName\E_DEBUG" );
-    $debug ||= 0; # make sure it has a value
 
     # register ACCESSSTATS tag
     TWiki::Func::registerTagHandler( 'ACCESSSTATS', \&_ACCESSSTATS );
