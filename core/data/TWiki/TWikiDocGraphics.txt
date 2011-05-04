@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1298971453" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1304531073" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
 </div>
-This is the TWiki icon library. The graphics can be used in topics and by web applications.
+This is the TWiki Documentation Graphics library. The graphics can be used in topics and by web applications.
 
 ---++ All icons at a glance
 
@@ -498,9 +498,21 @@ TWiki caches icons for performance. The cache gets updated automatically when yo
 
 Interactive example: %IF{ "$'URLPARAM{icon-cache}'='refresh'" then="$percntICON{\"action:refresh-cache\" format=\"ICON cache is refreshed. [[%SCRIPTURL{view}%/%WEB%/%TOPIC%#RefreshIconCache][OK]].\"}$percnt" else="[[%SCRIPTURL{view}%/%WEB%/%TOPIC%?icon-cache=refresh#RefreshIconCache][Refresh ICON cache]]." }%
 
+---++ License, Copyright and Work
+
+This TWiki Documentation Graphics library is Copyright &copy; 2007-%SERVERTIME{$year}% TWiki Contributors. Most icons on this page are designed by TWiki:Main.PeterThoeny. Many of the original icons were recreated by TWiki:Main.ArthurClemens.
+
+The TWiki Documentation Graphics library by [[http://twiki.org/][TWiki.org]] is licensed under the [[http://www.gnu.org/licenses/gpl-2.0.html][GPL 2.0]] (GNU General Public License).
+
+<div style="align:left; float:left; margin: 3px 15px 0 0"><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>
+</div>
+The <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">TWiki Documentation Graphics library</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://twiki.org/" property="cc:attributionName" rel="cc:attributionURL">TWiki.org</a> is also licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>. Based on a <a xmlns:dct="http://purl.org/dc/terms/" href="http://twiki.org/cgi-bin/view/TWiki/TWikiDocGraphics" rel="dct:source">work at twiki.org</a>.
+
+Distribution and use of this TWiki Documentation Graphics library is permitted with proper attribution pointing to the work at http://twiki.org/cgi-bin/view/TWiki/TWikiDocGraphics using one of the two aforementioned licenses.
+
 __Related Topics:__ VarICON, %CALC{$GET(icontopics)}%, TWikiDocGraphicsTemplate, TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
 
-__Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny. Many of the original icons were recreated by TWiki:Main.ArthurClemens.
+__Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 
 %META:FILEATTACHMENT{name="addon.gif" attr="h" comment="" date="1169565034" path="addon.gif" size="370" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="air.gif" attr="h" comment="" date="1169565034" path="air.gif" size="356" user="TWikiContributor" version=""}%
