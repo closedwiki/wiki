@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299040931" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1304528612" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Installation Guide
 
@@ -182,7 +182,7 @@ If you added or removed fields from the user form you may also need to tailor TW
 
 TWiki:Plugins.WebHome is an extensive library of plugins for TWiki, that enhance functionality in a huge number of ways. A few plugins are pre-installed in the TWiki distribution. For more information on these, see InstalledPlugins.
 
-You activate installed plugin in the _Plugins_ section of =configure=. In this section you also find a _Find More Extensions_ button which opens an application which can install additional plugins from the TWiki.org website. If you are behind a firewall or your server has no access to the Internet it is also possible to install plugins manually. Manual installation instructions for the plugins can be found in the plugin topics on TWiki.org. Additional documenation on TWiki plugins can be found at TWiki:TWiki.TWikiPluginsSupplement.
+You activate installed plugin in the _Plugins_ section of =configure=. In this section you also find a _Find More Extensions_ button which opens an application which can install additional plugins from the TWiki.org website. If you are behind a firewall or your server has no access to the Internet it is also possible to install plugins manually. Manual installation instructions for the plugins can be found in the plugin topics on TWiki.org. Additional documentation on TWiki plugins can be found at TWiki:TWiki.TWikiPluginsSupplement.
 
 Some plugins require that you define their settings in =configure=. You fill find these under the _Extensions_ section of configure.
 
