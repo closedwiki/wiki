@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="TWikiContributor" date="1304478664" format="1.1" version="$Rev$"}%
+---+ Controls Plugin Example: Brasil Cities
+
+This is part of the ControlsPluginExampleCitiesMenu example.
+
+  | *Name* | *Type* | *Tooltip message* |
+  | [[CitySections][Rio de Janeiro]] | option | blah blah... |
+  | [[CitySections][Sao Paulo]] | option | blah blah... |
+  | [[CitySections][Brasilia]] | option | blah blah... |
+  | [[CitySections][Curtitiba]] | option | blah blah... |
+  | [[CitySections][Salvador do Bahia]] | option | blah blah... |
+  | [[CitySections][Porto Alegre]] | option | blah blah... |
+
+__Related:__ %SYSTEMWEB%.ControlsPlugin, ControlsPluginExampleArgentinaCities, ControlsPluginExampleCitiesMenu, ControlsPluginExampleUruquayCities

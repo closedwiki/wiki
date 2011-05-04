@@ -1,0 +1,16 @@
+%META:TOPICINFO{author="TWikiContributor" date="1304478664" format="1.1" version="$Rev$"}%
+---+ Controls Plugin Example: Argentina Cities
+
+This is part of the ControlsPluginExampleCitiesMenu example.
+
+  | *Name* | *Type* | *Tooltip message* |
+  | [[CitySections][Cordoba]] | option | blah blah... |
+  | [[CitySections][Buenos Aires]] | option | blah blah... |
+  | [[CitySections][Rosario]] | option | blah blah... |
+  | [[CitySections][Santa Fe]] | option | blah blah... |
+  | [[CitySections][Mendoza]] | option | blah blah... |
+  | [[CitySections][Rio Cuarto]] | option | blah blah... |
+  | [[CitySections][Alto Gracia]] | option | blah blah... |
+  | [[CitySections][Corral de Bustos]] | option | blah blah... |
+
+__Related:__ %SYSTEMWEB%.ControlsPlugin, ControlsPluginExampleCitiesMenu, ControlsPluginExampleBrasilCities, ControlsPluginExampleUruquayCities

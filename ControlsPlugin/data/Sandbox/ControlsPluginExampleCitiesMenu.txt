@@ -1,0 +1,22 @@
+%META:TOPICINFO{author="TWikiContributor" date="1304478664" format="1.1" version="$Rev$"}%
+---+ Controls Plugin Example: Cities Menu
+
+Below is the definition of the hierarchical menu using %SYSTEMWEB%.TWikiForms:
+  | *Name* | *Type* | *Tooltip message* |
+  | ControlsPluginExampleUruquayCities | option | blah blah... |
+  | [[ControlsPluginExampleBrasilCities][Brasil]] | option | blah blah... |
+  | [[%WEB%.ControlsPluginExampleArgentinaCities][Argentina]] | option | blah blah... |
+
+<form name="test" action="%SCRIPTURLPATH{view}%/%WEB%/%TOPIC%">
+%CONTROL{"line" form="test" type="select" size="1"}%
+<input type="submit" value="Submit" class="twikiSubmit" />
+</form>
+
+<form name="test1" action="%SCRIPTURLPATH{view}%/%WEB%/%TOPIC%">
+%CONTROL{"line" topic="UruquayCities" selection="Montevideo" form="test1" type="select" size="1" urlparam="on"}%
+<input type="submit" value="Submit" class="twikiSubmit" />
+</form>
+
+Previously selected values were line=%URLPARAM{"line"}%, line0=%URLPARAM{"line0"}%, line1=%URLPARAM{"line1"}%, and line2=%URLPARAM{"line2"}%. 
+
+__Related:__ %SYSTEMWEB%.ControlsPlugin, ControlsPluginExampleArgentinaCities, ControlsPluginExampleBrasilCities, ControlsPluginExampleUruquayCities

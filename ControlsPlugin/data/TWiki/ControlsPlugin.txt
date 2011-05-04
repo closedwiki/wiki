@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1304475336" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1304478649" format="1.1" version="$Rev$"}%
 ---+!! Controls Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -110,16 +110,19 @@ n the in the __Extensions__ section.
       * Download the ZIP file from the Plugins home (see below).
       * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
         | *File:* | *Description:* |
-        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==data/TWiki/ControlsPlugin.txt== | Plugin topic |
+        | ==data/Sandbox/ControlsPluginExampleArgentinaCities.txt== | Example topic |
+        | ==data/Sandbox/ControlsPluginExampleCitiesMenu.txt== | Example topic |
+        | ==data/Sandbox/ControlsPluginExampleBrasilCities.txt== | Example topic |
+        | ==data/Sandbox/ControlsPluginExampleUruquayCities.txt== | Example topic |
         | ==lib/TWiki/Plugins/ControlsPlugin.pm== | Plugin Perl module |
-        | ==lib/TWiki/Plugins/ControlsPlugin/menuexample.zip== | Demo example |
         | ==pub/TWiki/%TOPIC%/cascade_select.js== | Java script supporting hierarchical menus |
       * Set the ownership of the extracted directories and files to the webserver user.
 
    * Plugin __configuration and testing__:
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
       * Test if the installation was successful: See Usage Example above
-      * Unzip =lib/TWiki/Plugins/ControlsPlugin/menuexample.zip= in a web and view topic =CitiesMenu=.
+      * View [[Sandbox.ControlsPluginExampleCitiesMenu]]
 
 ---++ Plugin Info
 
@@ -128,7 +131,7 @@ n the in the __Extensions__ section.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-05-03 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-05-03: | TWikibug:Item6701: Fix plugin to use only published API so that it runs on TWiki-4.0 through TWiki-5.0; doc improvements -- TWiki:Main.PeterThoeny |
+|  2011-05-03: | TWikibug:Item6701: Fix plugin to use only published API so that it runs on TWiki-4.0 through TWiki-5.0; doc improvements; moving menuexample.zip to Sandbox web for easy access -- TWiki:Main.PeterThoeny |
 |  04 Aug 2006: | Fixed erroneous hierarchy presentation when selections were links. |
 |  19 Jul 2006: | Added dependent select and example. |
 |  17 Jul 2006: | Added hierarchical menu support |
@@ -143,4 +146,4 @@ n the in the __Extensions__ section.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ Sandbox.ControlsPluginExampleArgentinaCities, Sandbox.ControlsPluginExampleCitiesMenu, Sandbox.ControlsPluginExampleBrasilCities, Sandbox.ControlsPluginExampleUruquayCities, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences

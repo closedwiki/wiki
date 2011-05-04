@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="TWikiContributor" date="1304478664" format="1.1" version="$Rev$"}%
+---+ Controls Plugin Example: Uruquay Cities
+
+This is part of the ControlsPluginExampleCitiesMenu example.
+
+  | *Name* | *Type* | *Tooltip message* |
+  | [[CitySections][Montevideo]] | option | blah blah... |
+  | [[CitySections][Colonia del Sacramento]] | option | blah blah... |
+  | [[CitySections][Punta del Este]] | option | blah blah... |
+  | [[CitySections][Salto]] | option | blah blah... |
+  | [[CitySections][Fray Bentos]] | option | blah blah... |
+  | [[CitySections][Maldonado]] | option | blah blah... |
+
+__Related:__ %SYSTEMWEB%.ControlsPlugin, ControlsPluginExampleArgentinaCities, ControlsPluginExampleCitiesMenu, ControlsPluginExampleBrasilCities

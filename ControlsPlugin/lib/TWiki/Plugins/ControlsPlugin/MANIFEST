@@ -1,5 +1,8 @@
-data/TWiki/ControlsPlugin.txt
-pub/TWiki/ControlsPlugin/cascade_select.js
-lib/TWiki/Plugins/ControlsPlugin.pm
-lib/TWiki/Plugins/ControlsPlugin/build.pl
-lib/TWiki/Plugins/ControlsPlugin/menuexample.zip
+data/TWiki/ControlsPlugin.txt 0644
+data/Sandbox/ControlsPluginExampleArgentinaCities.txt 0644
+data/Sandbox/ControlsPluginExampleCitiesMenu.txt 0644
+data/Sandbox/ControlsPluginExampleBrasilCities.txt 0644
+data/Sandbox/ControlsPluginExampleUruquayCities.txt 0644
+pub/TWiki/ControlsPlugin/cascade_select.js 0644
+lib/TWiki/Plugins/ControlsPlugin.pm 0644
+lib/TWiki/Plugins/ControlsPlugin/build.pl 0644
