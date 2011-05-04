@@ -1,7 +1,9 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2005-2006 TWiki:Main/ThomasWeigert
+# Copyright (C) 2008-2011 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -37,7 +39,8 @@ use vars qw(
     );
 
 $VERSION = '$Rev: 9598$';
-$RELEASE = 'Dakar';
+$RELEASE = '2011-05-03';
+
 $pluginName = 'ControlsPlugin';  # Name of this Plugin
 
 # =========================
@@ -151,9 +154,10 @@ sub getListOfFieldValues
 
     if( &TWiki::Func::topicExists( $webName, $topic ) ) {
       my( $meta, $text ) = &TWiki::Func::readTopic( $webName, $topic );
-      # Processing of SEARCHES for Lists
-      $text =~ s/%SEARCH{(.*?)}%/&TWiki::_SEARCH($session, $1, $webName, $topic)/geo;
-      @posValues = &TWiki::Form::_getPossibleFieldValues( $text );
+      # Processing of SEARCHES for Lists, but disable %CONTROL{}% first
+      $text =~ s/%CONTROL{.*?}%//go;
+      $text = TWiki::Func::expandCommonVariables( $text, $topic, $webName, $meta );
+      @posValues = _getPossibleFieldValues( $text );
     } else {
       # Need to deal with error case.
     }
@@ -228,7 +232,7 @@ sub getListOfFieldValues
       my $val ="<table  cellspacing=\"0\" cellpadding=\"0\"><tr>";
       my $lines = 0;
       foreach my $item ( @posValues ) {
-	my $expandedItem = $session->handleCommonTags( $item, $webName, $topic );
+	my $expandedItem = TWiki::Func::expandCommonVariables( $item, $topic, $webName );
 	$val .= "\n<td><input class=\"twikiEditFormCheckboxField\" type=\"checkbox\" name=\"$name$item\" />$expandedItem &nbsp;&nbsp;</td>";
 	if( $size > 0 && ($lines % $size == $size - 1 ) ) {
 	  $val .= "\n</tr><tr>";
@@ -241,7 +245,7 @@ sub getListOfFieldValues
       my $val = "<table  cellspacing=\"0\" cellpadding=\"0\"><tr>";
       my $lines = 0;
       foreach my $item ( @posValues ) {
-	my $expandedItem = $session->handleCommonTags( $item, $webName, $topic );
+        my $expandedItem = TWiki::Func::expandCommonVariables( $item, $topic, $webName );
 	$val .= "\n<td><input class=\"twikiEditFormRadioField twikiRadioButton\" type=\"radio\" name=\"$name\" value=\"$item\" />$expandedItem &nbsp;&nbsp;</td>";
 	if( $size > 0 && ($lines % $size == $size - 1 ) ) {
 	  $val .= "\n</tr><tr>";
@@ -285,9 +289,10 @@ sub getHierarchicalMenu
 
     if( &TWiki::Func::topicExists( $webName, $topic ) ) {
       my( $meta, $text ) = &TWiki::Func::readTopic( $webName, $topic );
-      # Processing of SEARCHES for Lists
-      $text =~ s/%SEARCH{(.*?)}%/&TWiki::_SEARCH($session, $1, $webName, $topic)/geo;
-      @posValues = &TWiki::Form::_getPossibleFieldValues( $text );
+      # Processing of SEARCHES for Lists, but disable %CONTROL{}% first
+      $text =~ s/%CONTROL{.*?}%//go;
+      $text = TWiki::Func::expandCommonVariables( $text, $topic, $webName, $meta );
+      @posValues = _getPossibleFieldValues( $text );
     } else {
       # Need to deal with error case.
     }
@@ -355,6 +360,30 @@ sub generateHierarchicalMenu {
     $menu .= "</select>";
   }
   return $menu;
-
 }
+
+# Possible field values for select, checkbox, radio from supplied topic text
+sub _getPossibleFieldValues {
+    my( $text ) = @_;
+    my @defn = ();
+    my $inBlock = 0;
+    foreach( split( /\r?\n/, $text ) ) {
+        if( /^\s*\|\s*\*Name\*\s*\|/ ) {
+            $inBlock = 1;
+        } else {
+            if( /^\s*\|\s*([^|]*)\s*\|/ ) {
+                my $item = $1;
+                $item =~ s/\s+$//go;
+                $item =~ s/^\s+//go;
+                if( $inBlock ) {
+                    push @defn, $item;
+                }
+            } else {
+                $inBlock = 0;
+            }
+        }
+    }
+    return @defn;
+}
+
 1;
