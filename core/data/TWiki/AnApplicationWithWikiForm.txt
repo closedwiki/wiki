@@ -1,43 +1,26 @@
-%META:TOPICINFO{author="TWikiContributor" date="1276662669" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1304624480" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiFAQ"}%
 ---++ FAQ:
 
-How can I create a simple [[TWikiForms][TWiki Form]] based application?
+How can I create a simple [[TWikiForms][TWiki Forms]] based application?
 
 ---++ Answer:
 
-   1 Create a TWiki Form and define fields (see TWikiForms for details)
-   1 Add the form in the list of Web Forms. Set the WEBFORMS setting in WebPreferences
-   1 Create a Template Topic
-   1 In edit mode add the [[TWikiForms][TWiki Form]] you defined to the Template Topic using the "Add Form" button
-   1 Create a HTML Form with necessary fields
-   1 Define =SEARCH= function for listing items (see VarSEARCH and FormattedSearch for details)
+TWiki applications help automate workflows you have at the workplace. TWiki has a built-in database that can be used to write custom web applications. These are wiki applications that run in TWiki.
 
-For more information follow the links...
+A typical TWiki forms based application consists of the following pages:
 
-The following is the code source of TWikiFAQ:
+   * Application home page, typically containing links to other application pages. It may contain also a report showing data records.
+   * Form definition page, defining the fields of a record. Details in TWikiForms.
+   * Template page, used as a template for new data records. It is essentially a TWiki page with a form attached to it. Details in TWikiTemplates.
+   * Header page: Optional page included in each record page to summarize the record.
+   * Page with an HTML form to create new records.
+   * Report page(s). Details in VarSEARCH and FormattedSearch.
 
-<verbatim>
-<form action="%SCRIPTURLPATH{edit}%/%WEB%/">
-New FAQ topic: &nbsp; (Use a name in %SYSTEMWEB%.WikiNotation) <br />
-<input type="text" name="topic" size="32" class="twikiInputField" />
-<input type="submit" value="Create Topic" class="twikiSubmit" />
-<input type="hidden" name="onlywikiname" value="on" />
-<input type="hidden" name="templatetopic" value="TWikiFaqTemplate" />
-<input type="hidden" name="topicparent" value="%TOPIC%" />
-<br />
-</form>
-</verbatim>
-
-----
-
-And the =SEARCH= function:
-<verbatim>
-%SEARCH{ "Back to\:__ TWikiFAQ" casesensitive="on" type="regex" nosearch="on" nototal="on"}%
-</verbatim>
+TWiki.org has a blog post on [[TWiki:Blog.BlogEntry201009x1][How to Create a TWiki Application]] where you can learn the details.
 
 __Back to:__ TWikiFAQ
 
 __Related Topics:__ UserDocumentationCategory
 
--- __Contributors:__ TWiki:Main.MiyokoTakushima - 2004-10-18
+-- __Contributors:__ TWiki:Main.MiyokoTakushima, TWiki:Main.PeterThoeny
