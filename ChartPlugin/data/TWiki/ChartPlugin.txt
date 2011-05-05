@@ -69,6 +69,8 @@ __NOTE:__ Do not change the settings here, overload them in the [[%LOCALSITEPREF
       * Set BARLEADINGSPACE = 6
       * Set BARTRAILINGSPACE = 6
       * Set BARSPACE = 5
+   * Define the default show error type.  Possible values are: 'text', 'image', or 'none'
+      * Set SHOWERROR = text
 
 ---++ Syntax Rules
 
@@ -125,6 +127,7 @@ The =%<nop>CHART{...}%= variable gets expanded to an image representing the char
 | =gridcolor= | Colors/style of the grid (if any). If =xgrid= or =ygrid= = "on" then use the first =gridcolor= for drawing solid grid lines. If =xgrid= or =ygrid= = "dot", then use the full set of colors to define the line style for drawing the grid lines ("transparent" can be used to introduce holes in the line)" | Global =GRIDCOLOR= setting |
 | =linewidth= | Width of data lines in pixel | Global =LINEWIDTH= setting |
 | =pointsize= | Size of data points in pixel | Global =POINTSIZE= setting |
+| =showerror= | Specify how any error messages are handled.  Possible values are:%BR%<ul><li> ="text"= -- all error messages are produced as regular (red) text</li><li> ="image"= -- all error message are placed inside of an image sized according to the size of the chart if there were no error.</li><li> ="none"= or ="no"= -- no error messages are produced.  HTML text of =&<nop>nbsp;= is returned</li></ul> | Global =SHOWERROR= setting |
 | (other parameters) | Other parameters are passed on to the =img= tag. Useful to add additional image parameters like =align="right"= | None |
 
 __Note:__ To support legacy syntax, =datatype= maps to =subtype=, =arealine= maps to =combo=.
@@ -254,6 +257,7 @@ If the required parameters are not defined, then an error message is returned or
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-04-25 (v%$VERSION%) |
 |  Change History: | <!-- specify latest version first --> |
+|  2011-05-05: | TWikibug:Item6714: Enhance error processing by adding =showerror= option.%BR%-- TWiki:Main.TaitCyrus |
 |  2011-05-03: | <ul><li>TWikibug:Item6709: Fix runtime warnings.</li><li> TWikibug:Item6705: Remove dependency on TWiki:Plugins.SetGetPlugin</li><li> TWikibug:Item6706: Add support for both a left and right Y-axis (plus new tests).</li><li> TWikibug:Item6707: Add ability to change the =datalabel= background color (plus new tests).</li><li> TWikibug:Item6703: Added greater control over number of =datalabels= drawn (plus new tests).</li><li> TWikibug:Item6708: Remove custom plugin parameter parser instead using TWiki::Attrs.</li></ul> -- TWiki:Main.TaitCyrus |
 |  2011-04-27: | <ul><li> TWikibug:Item6702: Fix positioning of x-axis labels when bar graph and xaxisangle=90</li><li> TWikibug:Item6703: Enhanced =datalabel= to allow =auto= and =autobox= values/li></ul> -- TWiki:Main.TaitCyrus |
 |  2011-04-26: | Fixed bugs:<ul><li> TWikibug:Item6691: Fixed missing reverse tables</li><li> TWikibug:Item6691: Fixed =semilog= bug where data values didn't match yaxis values.</li><li> TWikibug:Item6692: Fixed bug where data containing HTML or TWiki links was not parsed correctly</li><li> TWikibug:Item6693: Fixed bug where if all data was identical, an error was generated about there being no height to the chart.  Now in this case, the =ymax= will be forced to the next higher value so the data will be drawn.</li><li> TWikibug:Item6694: Fixed bug with handling of =numxgrids= parameter.</li></ul>Enhancements:<ul><li> TWikibug:Item6695: improved reversed data charting</li><li> TWikibug:Item6695: Added improved support for reversed data ranges so bottom/up or right/left data can now be specified.</li><li> TWikibug:Item6696: Improved default values for X/Y axis min/max to be moved up (for max) or down (for min) nearest 1*, 2*, 5* range</li><li> TWikibug:Item6697: Added =xmin= and =xmax= for greater =scatter= chart specificaion.</li><li> TWikibug:Item6698: Allow single quote ='= in parameters in addition to ="=.</li><li> TWikibug:Item6699: Added caching of table processing in a topic so multiple charts on the same topic page will only parse the topic page once instead of each time a chart was created.</li><li>Updated the tests topic to be more human readable in raw mode by using %<NOP>SET{}% and %<NOP>GET{}%.</li><li>Added new tests to ChartPluginTests.</li></ul> -- TWiki:Main.TaitCyrus |
@@ -274,7 +278,7 @@ If the required parameters are not defined, then an error message is returned or
 |  20 Jun 2002: | Initial version (V1.000) |
 |  TWiki dependencies: | $TWiki::Plugins::VERSION 1.1 |
 |  Dependencies: | gd (see http://www.libgd.org/) |
-|  CPAN Dependencies | CPAN:GD, CPAN:POSIX |
+|  CPAN Dependencies | CPAN:GD, CPAN:POSIX, Text::Wrap |
 |  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 96%, %SYSTEMWEB%.FormattedSearch 97%, ChartPlugin 69% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |

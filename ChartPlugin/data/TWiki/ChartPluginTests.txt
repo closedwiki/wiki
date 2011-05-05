@@ -373,6 +373,10 @@ This table is used for testing when both =data= and =data2= are used
    * Set errorTest11 = name='errorTest11' data='R2:C4..R2:C7'
    * Set errorTest12 = name='errorTest12' data='R2:C4..R7:C7' legend='R1:C4'
    * Set errorTest13 = name='errorTest13' data='R2:C3..R7:C7' scale='semilog'
+   * Set errorTest14 = name='errorTest14' data='R2:C4..R7:C7' legend='R1:C4' showerror='image'
+   * Set errorTest15 = name='errorTest15' data='R2:C4..R7:C7' legend='R1:C4' showerror='none'
+   * Set errorTest16 = name='errorTest16' data='R2:C4..R7:C7' legend='R1:C4' showerror='text'
+   * Set errorTest17 = name='errorTest17' data='R2:C4..R7:C7' legend='R1:C4' width='200' height='200' showerror='image'
 
 -->
 
@@ -610,6 +614,10 @@ This table is used for testing when both =data= and =data2= are used
 | Only 1 point of data. %BR% =%<nop>CHART{%errorTest11%}%= | <nop>ChartPlugin error: chart error: name=errorTest11: Error: Number of data points needs to be > 1 | %CHART{%errorTest11%}% |
 | Invalid =legend=. %BR% =%<nop>CHART{%errorTest12%}%= | <nop>ChartPlugin error: parameter *legend* contains an invalid value 'R1:C4' since it specifies 1 legends and there are 4 data sets. | %CHART{%errorTest12%}% |
 | =scale=semilog= and data &lt;= 0. %BR% =%<nop>CHART{%errorTest13%}%= | <nop>ChartPlugin error: data (0) &lt;= 0 not valid when scale=semilog | %CHART{%errorTest13%}% |
+| Same =legend= error as above, but show the error inside of an image by setting =showerror='image'=. %BR% =%<nop>CHART{%errorTest14%}%= | <nop>ChartPlugin error: parameter *legend* contains an invalid value 'R1:C4' since it specifies 1 legends and there are 4 data sets. | %CHART{%errorTest14%}% |
+| Same =legend= error as above, but now no error should appear since setting =showerror='none'=. %BR% =%<nop>CHART{%errorTest15%}%= | &lt;nothing should be seen&gt; | %CHART{%errorTest15%}% |
+| Same =legend= error as above, but show the error in text form since setting =showerror='text'=. %BR% =%<nop>CHART{%errorTest16%}%= | <nop>ChartPlugin error: parameter *legend* contains an invalid value 'R1:C4' since it specifies 1 legends and there are 4 data sets. | %CHART{%errorTest16%}% |
+| Same =legend= error as above, but show the error inside of an image by setting =showerror='image'=. Also, the image size will be different since =width= and =height= have been specified.  %BR% =%<nop>CHART{%errorTest17%}%= | <nop>ChartPlugin error: parameter *legend* contains an invalid value 'R1:C4' since it specifies 1 legends and there are 4 data sets. | %CHART{%errorTest17%}% |
 
 -- __Contributors:__ TWiki:Main/TaitCyrus, TWiki:Main/PeterThoeny - 2010-04-07
 -- Updated: TWiki:Main/TaitCyrus - 2011-04-25

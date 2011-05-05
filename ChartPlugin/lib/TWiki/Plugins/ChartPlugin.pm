@@ -46,7 +46,7 @@ use vars qw(
     $defaultDataValue $defaultScale $defaultGridColor $defaultPointSize
     $defaultLineWidth $defaultNumYGrids
     $defaultYMin $defaultYMax
-    $defaultBarLeadingSpace $defaultBarTrailingSpace $defaultBarSpace
+    $defaultBarLeadingSpace $defaultBarTrailingSpace $defaultBarSpace $defaultShowError
     %cachedTables $showParameters
     );
 
@@ -90,6 +90,7 @@ sub _init_defaults {
     foreach my $module qw(
 	GD
 	POSIX
+	Text::Wrap
         TWiki::Plugins::ChartPlugin::Chart
         TWiki::Plugins::ChartPlugin::Parameters
         TWiki::Plugins::ChartPlugin::Table
@@ -132,6 +133,8 @@ sub _init_defaults {
     $defaultBarTrailingSpace = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_BARTRAILINGSPACE") || 0;
     # Get default value for the space between bars.
     $defaultBarSpace = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_BARSPACE") || 0;
+    # Get default value for showerror
+    $defaultShowError = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_SHOWERROR") || "text";
 } ## end sub _init_defaults
 
 # Object constructor for creating a ChartPlugin Perl object.  The object is
@@ -247,8 +250,46 @@ sub _make_filename {
 
 # This routine returns an red colored error message.
 sub _make_error {
-    my ($msg) = @_;
-    return "<font color=red>ChartPlugin error: $msg</font>";
+    my ($this, $msg) = @_;
+
+    my $showError = $this->{showerror};
+    if ($showError eq "image") {
+	# Strip out any HTML or TWiki modifiers from the error msg;
+	$msg =~ s/<.*?>//g;
+	$msg =~ s/\*(\W+)/$1/g;
+	$msg =~ s/(\W+)\*/$1/g;
+	$msg =~ s/&lt;/</g;
+	$msg =~ s/&gt;/>/g;
+
+	my $chart = TWiki::Plugins::ChartPlugin::Chart->new();
+	my $width = $this->{width};
+	my $height = $this->{height};
+	$chart->setImageWidth($width);
+	$chart->setImageHeight($height);
+
+	my $name = $this->{name};
+	my ($dir, $filename) = _make_filename("error", $name, $this->{topic}, $this->{web});
+	$chart->setFileDir($dir);
+	$chart->setFileName($filename);
+	$chart->setTitle($msg);
+	$chart->makeError("ChartPlugin error: $msg");
+
+	my $timestamp = time();
+	my $img = "<img src=\"%ATTACHURL%/$filename?t=$timestamp\" alt=\"Error seen\" />";
+	return $img;
+    } elsif ($showError =~ /no/i) {
+	return "&nbsp;";
+    } else {
+	$Text::Wrap::columns = 40;
+	my $numLines = my @lines = split(/\n/, Text::Wrap::wrap("", "", $msg));
+	my $ret = "<span width='300' style='color:red; white-space:nowrap;'>ChartPlugin error:<br/>";
+	foreach my $line (@lines) {
+	    $ret .= "$line<br/>";
+	}
+	$ret .= "</span>";
+	return $ret;
+	return "<font color=red>ChartPlugin error: $msg</font>";
+    }
 }
 
 # Actually construct the chart by parsing out each of the %CHART%
@@ -257,33 +298,55 @@ sub _make_error {
 sub _makeChart {
     my ($this, $args, $topic, $web) = @_;
 
+    $this->{topic} = $topic;
+    $this->{web} = $web;
+    $this->{width} = $defaultWidth;
+    $this->{height} = $defaultHeight;
+    $this->{name} = "undefined";
+
     # Check to see if the GD module was found.  If not, then create an
     # error message to display back to the user.
     if ($initError) {
         # It appears that a library wasn't found so we return a
         # different type of error that is just plain text.
-        return _make_error($initError);
+        return $this->_make_error($initError);
     }
     # Set/parse the %CHART% parameters putting into the ChartPlugin object
     $this->_setParameters($args);
 
+    # Before we do anything, get the type of error msg to create if an
+    # error is seen.
+    $this->{showerror} = $this->_Parameters->getParameter("showerror", $defaultShowError);
+
     # Make a chart object in which we will place user specified parameters
     my $chart = TWiki::Plugins::ChartPlugin::Chart->new();
+
+    # See if the parameter 'name' is available.  This is a required
+    # parameter.  If it is missing, then generate an error message.
+    my $name = $this->_Parameters->getParameter("name", undef);
+    return $this->_make_error("parameter *name* must be specified") if (! defined $name);
+    $this->{name} = $name;
+
+    # Get the chart width and height
+    $this->{width} = int($this->_Parameters->getParameter("width", $defaultWidth));
+    $this->{height} = int($this->_Parameters->getParameter("height", $defaultHeight));
+    $chart->setImageWidth($this->{width});
+    $chart->setImageHeight($this->{height});
 
     # See if the parameter 'type' is available.  This is a required
     # parameter.  If it is missing, then generate an error message.
     my $type = $this->_Parameters->getParameter("type", $defaultType);
-    return _make_error("parameter *type* must be specified") if (! defined $type);
+    return $this->_make_error("parameter *type* must be specified") if (! defined $type);
     my @unknownTypes = grep(! /area|line|bar|arealine|combo|scatter/, ($type));
     # Check for a valid type
-    return _make_error("Invalid value of *$type* for parameter *type* ") if (@unknownTypes);
+    return $this->_make_error("Invalid value of *$type* for parameter *type* ") if (@unknownTypes);
     $chart->setType($type);
 
     # See if the parameter 'subtype' (old name 'datatype') is available.
     my $dataType = $this->_Parameters->getParameter("datatype", undef);
     my $subType  = $this->_Parameters->getParameter("subtype",  undef);
     my $subType2  = $this->_Parameters->getParameter("subtype2",  undef);
-    return _make_error("paramters *datatype* and *subtype* can't both be specified") if (defined $dataType && defined $subType);
+    return $this->_make_error("paramters *datatype* and *subtype* can't both be specified") if (defined $dataType && defined $subType);
 
     $subType = $dataType if (defined $dataType);
     if (defined($subType2)) {
@@ -293,31 +356,31 @@ sub _makeChart {
         my @subTypes = split(/[\s,]+/, $subType);
         # Check for valid subtypes
         my @unknownSubTypes = grep(! /area|line|point|pline|scatter|bar/, @subTypes);
-        return _make_error("unknown subtypes: " . join(", ", @unknownSubTypes)) if (@unknownSubTypes);
+        return $this->_make_error("unknown subtypes: " . join(", ", @unknownSubTypes)) if (@unknownSubTypes);
         # Now check to make sure that the subtypes specified are valid for the
         # specified type.
         ### Check 'line' type
         if ($type eq "line") {
             @unknownSubTypes = grep(! /line|point|pline/, @subTypes);
-            return _make_error("unsupported subtypes: " . join(", ", @unknownSubTypes) . " for type line") if (@unknownSubTypes);
+            return $this->_make_error("unsupported subtypes: " . join(", ", @unknownSubTypes) . " for type line") if (@unknownSubTypes);
         }
 
         ### Check 'area' type
         if ($type eq "area") {
             @unknownSubTypes = grep(! /area/, @subTypes);
-            return _make_error("unsupported subtypes: " . join(", ", @unknownSubTypes) . " for type area") if (@unknownSubTypes);
+            return $this->_make_error("unsupported subtypes: " . join(", ", @unknownSubTypes) . " for type area") if (@unknownSubTypes);
         }
 
         ### Check 'scatter' type
         if ($type eq "scatter") {
             @unknownSubTypes = grep(! /area|line|point|pline|bar/, @subTypes);
-            return _make_error("unsupported subtypes: " . join(", ", @unknownSubTypes) . " for type scatter") if (@unknownSubTypes);
+            return $this->_make_error("unsupported subtypes: " . join(", ", @unknownSubTypes) . " for type scatter") if (@unknownSubTypes);
         }
 
         ### Check 'combo' type
         if ($type eq "combo") {
             @unknownSubTypes = grep(! /area|line|point|pline|bar/, @subTypes);
-            return _make_error("unsupported subtypes: " . join(", ", @unknownSubTypes) . " for type combo") if (@unknownSubTypes);
+            return $this->_make_error("unsupported subtypes: " . join(", ", @unknownSubTypes) . " for type combo") if (@unknownSubTypes);
         }
 
         # All OK so set the subtype.
@@ -327,14 +390,9 @@ sub _makeChart {
     # See if the parameter 'scale' is available.
     my $scale = $this->_Parameters->getParameter("scale", $defaultScale);
     if ($scale ne "base10" and $scale ne "linear" and $scale ne "semilog") {
-        return _make_error("Invalid value of *$scale* for parameter *scale* ");
+        return $this->_make_error("Invalid value of *$scale* for parameter *scale* ");
     }
     $chart->setScale($scale);
-
-    # See if the parameter 'name' is available.  This is a required
-    # parameter.  If it is missing, then generate an error message.
-    my $name = $this->_Parameters->getParameter("name", undef);
-    return _make_error("parameter *name* must be specified") if (! defined $name);
 
     # See if the parameter 'web' is available.  If not, then default to
     # looking for tables in the current web.
@@ -347,14 +405,14 @@ sub _makeChart {
     # Before we parse any further parameters, lets get the contents of the
     # specified web/topic.
     if (! $this->_setTopicContents($inWeb, $inTopic)) {
-        return _make_error("Error retrieving TWiki topic $inWeb<nop>.$inTopic");
+        return $this->_make_error("Error retrieving TWiki topic $inWeb<nop>.$inTopic");
     }
 
     # Determine which table the user wants to chart
     my $tableName = $this->_Parameters->getParameter("table", 1);
     # Verify that the table name is valid.
     if (! $this->_tables->checkTableExists($tableName)) {
-        return _make_error("parameter *table* is not valid table; the specified table '$tableName' does not exist.");
+        return $this->_make_error("parameter *table* is not valid table; the specified table '$tableName' does not exist.");
     }
 
     # See if the parameter 'title' is available.
@@ -373,7 +431,7 @@ sub _makeChart {
     my $data = $this->_Parameters->getParameter("data", undef);
     my $data2 = $this->_Parameters->getParameter("data2", undef);
     if (! defined($data)) {
-	return _make_error("parameter *data* must be specified");
+	return $this->_make_error("parameter *data* must be specified");
     }
 
     # See if the parameter 'xaxis' is available.
@@ -399,7 +457,7 @@ sub _makeChart {
     my $xmin = $this->_Parameters->getParameter("xmin", undef);
     if (defined($xmin)) {
 	if ($type ne "scatter") {
-	    return _make_error("user set xmin=$xmin is not valid when type not = scatter");
+	    return $this->_make_error("user set xmin=$xmin is not valid when type not = scatter");
 	}
 	$xmin = _getNum($xmin);
     }
@@ -409,7 +467,7 @@ sub _makeChart {
     my $xmax = $this->_Parameters->getParameter("xmax", undef);
     if (defined($xmax)) {
 	if ($type ne "scatter") {
-	    return _make_error("user set xmax=$xmax is not valid when type not = scatter");
+	    return $this->_make_error("user set xmax=$xmax is not valid when type not = scatter");
 	}
 	$xmax = _getNum($xmax);
     }
@@ -421,14 +479,14 @@ sub _makeChart {
     if (defined($ymin)) {
 	$ymin = _getNum($ymin);
 	if ($scale eq "semilog" && $ymin <= 0) {
-	    return _make_error("user set ymin=$ymin is &lt;= 0 which is not valid when scale=semilog");
+	    return $this->_make_error("user set ymin=$ymin is &lt;= 0 which is not valid when scale=semilog");
 	}
     }
     $chart->setYmin1($ymin);
     if (defined($ymin2)) {
 	$ymin2 = _getNum($ymin2);
 	if ($scale eq "semilog" && $ymin2 <= 0) {
-	    return _make_error("user set ymin2=$ymin2 is &lt;= 0 which is not valid when scale=semilog");
+	    return $this->_make_error("user set ymin2=$ymin2 is &lt;= 0 which is not valid when scale=semilog");
 	}
 	$chart->setYmin2($ymin2);
     }
@@ -439,14 +497,14 @@ sub _makeChart {
     if (defined($ymax)) {
 	$ymax = _getNum($ymax);
 	if ($scale eq "semilog" && $ymax <= 0) {
-	    return _make_error("user set ymax=$ymax is &lt;= 0 which is not valid when scale=semilog");
+	    return $this->_make_error("user set ymax=$ymax is &lt;= 0 which is not valid when scale=semilog");
 	}
     }
     $chart->setYmax1($ymax);
     if (defined($ymax2)) {
 	$ymax2 = _getNum($ymax2);
 	if ($scale eq "semilog" && $ymax2 <= 0) {
-	    return _make_error("user set ymax2=$ymax2 is &lt;= 0 which is not valid when scale=semilog");
+	    return $this->_make_error("user set ymax2=$ymax2 is &lt;= 0 which is not valid when scale=semilog");
 	}
 	$chart->setYmax2($ymax2);
     }
@@ -477,10 +535,6 @@ sub _makeChart {
     my $dataLabel2 = $this->_Parameters->getParameter("datalabel2", "");
     $dataLabel = "$dataLabel,$dataLabel2" if ($dataLabel2 ne "");
     $chart->setDataLabels(split(/,\s*/, $dataLabel)) if (defined $dataLabel);
-
-    # Get the chart width and height
-    $chart->setImageWidth(_max(10, int($this->_Parameters->getParameter("width", $defaultWidth))));
-    $chart->setImageHeight(_max(10, int($this->_Parameters->getParameter("height", $defaultHeight))));
 
     # Get the chart IMG 'alt' text.
     my $alt = $this->_Parameters->getParameter("alt", "");
@@ -545,7 +599,7 @@ sub _makeChart {
 	}
         my $cnt = @legend;
         if ($cnt == 0) {
-            return _make_error("parameter *legend* contains an invalid value '$legend'.");
+            return $this->_make_error("parameter *legend* contains an invalid value '$legend'.");
         }
         $chart->setLegend(@legend);
     } ## end if ($legend)
@@ -557,16 +611,16 @@ sub _makeChart {
     my $columnOrdered = 0;
     if (defined($xAxis)) {
         my ($xAxisRows, $xAxisColumns) = $this->_tables->getRowColumnCount($tableName, $xAxis);
-        return _make_error("parameter *xaxis* value of '$xAxis' is not valid")
+        return $this->_make_error("parameter *xaxis* value of '$xAxis' is not valid")
             if (! defined($xAxisRows));
         if (abs($xAxisRows) > 1) {
             if ($xAxisColumns > 1) {
-                return _make_error("parameter *xaxis* specifies multiple (${xAxisRows}X$xAxisColumns) rows and columns.");
+                return $this->_make_error("parameter *xaxis* specifies multiple (${xAxisRows}X$xAxisColumns) rows and columns.");
             }
             $columnOrdered = 1;
         }
         my @d = $this->_tables->getData($tableName, $xAxis, $columnOrdered);
-        return _make_error("no X axis data found in specified area of table [$xAxis]") if (! @d);
+        return $this->_make_error("no X axis data found in specified area of table [$xAxis]") if (! @d);
         $chart->setXaxis(@{$d[0]});
     } else {
         $columnOrdered = 1;
@@ -575,12 +629,12 @@ sub _makeChart {
     # Get the actual data for dataSet=1.
     my @data = $this->_tables->getData($tableName, $data, $columnOrdered);
     # Validate that there is real data returned.
-    return _make_error("data ($data) points to no data") if (! @data);
+    return $this->_make_error("data ($data) points to no data") if (! @data);
     my $yminData1 = $chart->setData(@data);
 
     # If scale=semilog and any data is <= 0, then error
     if ($scale eq "semilog" && $yminData1 <= 0) {
-        return _make_error("minimum data ($yminData1) &lt;= 0 not valid when scale=semilog");
+        return $this->_make_error("minimum data ($yminData1) &lt;= 0 not valid when scale=semilog");
     }
 
     my @data2;
@@ -588,12 +642,12 @@ sub _makeChart {
 	# Get the actual data for dataSet=2.
 	@data2 = $this->_tables->getData($tableName, $data2, $columnOrdered);
 	# Validate that there is real data returned.
-	return _make_error("data2 ($data2) points to no data") if (! @data2);
+	return $this->_make_error("data2 ($data2) points to no data") if (! @data2);
 	my $yminData2 = $chart->setData2(@data2);
 
 	# If scale=semilog and any data is <= 0, then error
 	if ($scale eq "semilog" && $yminData2 <= 0) {
-	    return _make_error("minimum data2 ($yminData2) &lt;= 0 not valid when scale=semilog");
+	    return $this->_make_error("minimum data2 ($yminData2) &lt;= 0 not valid when scale=semilog");
 	}
     }
 
@@ -604,7 +658,7 @@ sub _makeChart {
         my $numDataSets = @data;
         $numDataSets += @data2;
         if ($numDataSets != $numLegends) {
-            return _make_error(
+            return $this->_make_error(
                 "parameter *legend* contains an invalid value '$legend' since it specifies $numLegends legends and there are $numDataSets data sets."
             );
         }
@@ -623,7 +677,7 @@ sub _makeChart {
 
     # Create the actual chart.
     my $err = $chart->makeChart();
-    return _make_error("chart error: name=$name: $err") if ($err);
+    return $this->_make_error("chart error: name=$name: $err") if ($err);
 
     # Get remaining parameters and pass to <img ... />
     my $options    = "";

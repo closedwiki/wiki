@@ -753,6 +753,49 @@ sub computeSubTypes {
     return @subTypes;
 } ## end sub computeSubTypes
 
+# This places and error inside of an image.
+sub makeError {
+    my ($this, $msg)      = @_;
+    my $imageWidth  = $this->getImageWidth();
+    my $imageHeight = $this->getImageHeight();
+    my $im = new GD::Image($imageWidth, $imageHeight);
+    $this->setImage($im);
+
+    my $initialBGcolorText = "#FFFFFF"; # White
+    my $initialBGcolor     = $im->colorAllocate(_convert_color($initialBGcolorText));
+    my $red                = $im->colorAllocate(_convert_color("#FF0000"));
+    my $font		   = $this->getFont("title");
+    my $lineSpacing	   = 2;
+
+    # Start with a totally white background
+    $im->filledRectangle(0, 0, $imageWidth - 1, $imageHeight - 1, $initialBGcolor);
+    $im->rectangle(0, 0, $imageWidth - 1, $imageHeight - 1, $red);
+    my $maxChars = int($imageWidth / $this->getFontWidth("title")) - 1;
+    $Text::Wrap::columns = $maxChars;
+    my $numLines = my @lines = split(/\n/, Text::Wrap::wrap("", "", $msg));
+
+    my $maxLines = $imageHeight / ($this->getFontHeight("title") + $lineSpacing);
+    my $y = int(($imageHeight / 2) - ($numLines / 2 * ($this->getFontHeight("title") + $lineSpacing)));
+    foreach my $line (@lines) {
+	$im->string($font, 10, $y, $line, $red);
+	$y += $this->getFontHeight("title") + $lineSpacing;
+    }
+    #$xLL += $this->getFontHeight("ylabel") + 10;
+    #$xUR -= $this->getFontWidth("yaxis") * $maxLength;
+    my $dir      = $this->getFileDir();
+    my $filename = $this->getFileName();
+    umask(002);
+    open(IMAGE, ">$dir/$filename") or return "Can't create file '$dir/$filename: $!";
+    binmode IMAGE;
+    if ($GD::VERSION > 1.19) {
+        print IMAGE $im->png;
+    } else {
+        print IMAGE $im->gif;
+    }
+    close IMAGE;
+    return undef;
+}
+
 # The main guts of this file.  This routine takes all the information
 # specified in the Chart object and constructs a chart based on all of the
 # information contained in the object.
