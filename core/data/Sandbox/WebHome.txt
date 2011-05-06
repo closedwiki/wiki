@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273185215" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1304669133" format="1.1" version="$Rev$"}%
 %INCLUDE{%SYSTEMWEB%.WebChangesRightBox}%
 ---+!! %MAKETEXT{"Welcome to the [_1] web" args="<nop>%WEB%"}%
 
-%MAKETEXT{"The [_1] web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the [_2] to get a jumpstart on the [_3] tool. A good rule of thumb is to add at the end of the page and sign and date it with your [_4]." args="<b><nop>%WEB%</b>,%SYSTEMWEB%.TWikiTutorial,<nop>%WIKITOOLNAME%,%SYSTEMWEB%.WikiName"}%
+%MAKETEXT{"Use this web to try out TWiki. Everybody is invited to add or delete some stuff. It is recommended to walk through the [_1] to learn the basics of TWiki. It is good practice to sign your contributions with your [_2] and date." args="[[%SYSTEMWEB%.TWikiTutorial][TWiki Tutorial]], %SYSTEMWEB%.WikiName"}%
 
 ---++ %MAKETEXT{"Test Topics"}%
 
