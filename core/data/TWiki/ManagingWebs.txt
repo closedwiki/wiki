@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1292879106" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1304670871" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Managing Webs
 
@@ -44,17 +44,17 @@ __Notes:__
 
 You can only create hierarchical webs (webs within webs) if the ={EnableHierarchicalWebs}= setting in [[%SCRIPTURLPATH{"configure"}%][configure]] is enabled. Hierarchical webs are currently %IF{"{EnableHierarchicalWebs}" then="enabled." else="disabled. Without this setting, TWiki will only allow a single level of hierarchy. With it, you can use multiple levels, like a directory tree, i.e. webs within webs."}%
 
-__%T% Note:__ You might not need hierarchical webs. TWiki topics already have a parent/child relationship within a web, which is shown in the breadcrumb. Try to keep the number of webs to a minimum in order to keep search and cross-referencing simple.
+__%T% Note:__ You might not need hierarchical webs. TWiki topics already have a parent/child relationship within a web, which is shown in the breadcrumb. Try to keep the number of webs to a minimum in order to keep search and cross-referencing simple. TWiki runs faster if hierarchical webs are disabled.
 
 You can create hierarchical webs via the _Adding a New Web_ form above, by using a slash- or dot-separated path name which is based on an existing web name in the _Name of new web:_ field.
 
 *Example:*
 
-To create a subweb named =Bar= inside a web named =Foo=, use =Foo/Bar= or =Foo.Bar= as the new web name in the form above.
+To create a sub-web named =Bar= inside a web named =Foo=, use =Foo/Bar= or =Foo.Bar= as the new web name in the form above.
 
----+++ Subweb Preferences are Inherited
+---+++ Sub-web Preferences are Inherited
 
-The preferences of a subweb are inherited from the parent web and overridden locally.  Preferences are ultimately inherited from the [[%SYSTEMWEB%.TWikiPreferences]] topic.
+The preferences of a sub-web are inherited from the parent web and overridden locally.  Preferences are ultimately inherited from the [[%SYSTEMWEB%.TWikiPreferences]] topic.
 
 *Example Preference Inheritance for =Sandbox/TestWeb/SubWeb.SubWebTopic= topic:*
 
@@ -66,7 +66,7 @@ The preferences of a subweb are inherited from the parent web and overridden loc
 
 ---+++ Navigation
 
-The Pattern skin (default) indicates Subwebs by indenting them in the sidebar relative to their level in the hierarchy.
+The PatternSkin indicates sub-webs by indenting them in the sidebar relative to their level in the hierarchy. The SiteMap shows a list of webs; sub-webs are separated by dots, such as =Web.SubWeb.SubSubWeb=.
 
 #RenameWeb
 ---++ Renaming or Deleting a Web
