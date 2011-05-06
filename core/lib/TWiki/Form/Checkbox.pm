@@ -69,6 +69,7 @@ sub renderForEdit {
           {
               class => $this->cssClasses('twikiEditFormCheckboxField'),
               label => $session->handleCommonTags( $item, $web, $topic ),
+              style => 'margin-right: 0.3em',
           };
 
         if( $isSelected{$item} ) {
@@ -80,7 +81,8 @@ sub renderForEdit {
                                   -values => $this->getOptions(),
                                   -defaults => \@defaults,
                                   -columns => $this->{size},
-                                  -attributes => \%attrs );
+                                  -attributes => \%attrs,
+                                  -labelattributes => { style => 'white-space: nowrap' } );
     # Item2410: We need a dummy control to detect the case where
     #           all checkboxes have been deliberately unchecked
     # Item3061:
