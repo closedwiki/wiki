@@ -145,8 +145,8 @@ sub beforeSaveHandler
 #we get back three units for each URL, not yet sure how to turn this off (if indeed you can)
 	if ($res[0]){ 
 		for ($i = 0; $i < @res; $i++){
-			if(length($res[$i]) > 10){
-			push(@links, $res[$i]);
+			if( $res[$i] =~ /^(.{10}.*)$/ ){
+				push( @links, $1 );
 			}
 		}
 	}
@@ -155,11 +155,14 @@ sub beforeSaveHandler
 	(@res) = $_[0] =~ m/(^|\s)($createtopic_urls : [$any] +? )(?=[$punc]*[^$any]|$)/igx;
 	if ($res[0]){ 
 		for ($i = 0; $i < @res; $i++){
-			if(length($res[$i]) > 10){
-			push(@createtopic_links, substr($res[$i], 1));
+			if( $res[$i] =~ /^.(.{10}.*)$/ ) {
+				push( @createtopic_links, $1 );
 			}
 		}
 	}
+
+        # use Data:Dumper;
+        # print STDERR Dumper( @createtopic_links );
 
 #if none we exit at this point
 	if (@links == 0 && @createtopic_links == 0) {
@@ -177,8 +180,8 @@ sub beforeSaveHandler
 #here we strip off the tag, keep the title at top and make a note of where it's come from
 	for ($i = 0; $i < @createtopic_links; $i++){
 		$page_content = getPage($createtopic_links[$i]);
-		if (length($page_content) > 0){
-			$htmlpage = HTML2Twiki($page_content, $createtopic_links[$i]);
+		if ( $page_content =~ /^(..*)$/ ) {
+			$htmlpage = HTML2Twiki($1, $createtopic_links[$i]);
 #whenever we have a successful download we first save the new topic
 # and then do a search and replace and replace the link to the new topic
 			$topic = substr($createtopic_links[$i], 6);
@@ -235,7 +238,7 @@ sub beforeSaveHandler
 #cache rather than the online version [[ToRead][http://abergh.com/webmail]]
 			$tmp = $links[$i];
 			$tmpnew = "[[" . $twiki_url . "/" . $topic . ".html][" . $tmp . "]]";
-			$_[0] =~ s/(^|\s)\Q$tmp/$tmpnew/igx;
+			$_[0] =~ s/(^|\s)\Q$tmp/$1$tmpnew/igx;
 		}
 	}
 #reset the flag
