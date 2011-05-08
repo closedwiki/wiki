@@ -1,23 +1,17 @@
----+!! %TOPIC%
+%META:TOPICINFO{author="TWikiContributor" date="1304831036" format="1.1" version="$Rev$"}%
+---+!! <nop>%TOPIC%
 <!--
-
-   PLEASE DO NOT EDIT THIS TOPIC
-
-   It is automatically generated from the subversion repository, and any changes
-   you make will simply be overwritten the next time a release is generated.
-
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
+   Contributions to this extension are appreciated. Please update the extension page at
+   http://twiki.org/cgi-bin/view/Plugins/LdapContrib or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/LdapContribDev.
+   If you are a TWiki contributor please update the extension in the SVN repository.
 -->
-%TOC{title="On this page"}%
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{ title="Page contents" depth="2" }%
+</div></sticky>
+%SHORTDESCRIPTION%
+
 ---++ Introduction
-<table style="float:right">
-<tr>
-  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
-  <td><a href="http://wikiring.com" title="Make your Wiki ring!" style="text-decoration:none">
-      Powered by <br /> <nop>WikiRing Consultants </a>
-  </td>
-</tr>
-</table>
 
 This package offers basic LDAP services for TWiki and offers authentication of
 wiki users by binding to an LDAP server as well as incorporate LDAP user
@@ -1115,21 +1109,29 @@ using ldap-specific tools.
 
 this method only returns 1 if the group is a topic-based group
 
-
-
----++ Dependencies
-<table class="TWikiTable" border="1"><tr><th>Name</th><th>Version</th><th>Description</th></tr><tr><td align="left">Authen::SASL</td><td align="left">&gt;=2.00</td><td align="left">Optional</td></tr><tr><td align="left">DB_File</td><td align="left">&gt;=1.00</td><td align="left">Required</td></tr><tr><td align="left">Digest::MD5</td><td align="left">&gt;=2.36</td><td align="left">Required</td></tr><tr><td align="left">Net::LDAP</td><td align="left">&gt;=0.33</td><td align="left">Required</td></tr><tr><td align="left">IO::Socket::SSL</td><td align="left">&gt;=1.0</td><td align="left">Optional</td></tr><tr><td align="left">Unicode::MapUTF8</td><td align="left">&gt;=1.11</td><td align="left">Optional</td></tr></table>
-
 ---++ Installation Instructions
-You do not need to install anything in the browser to use this extension. The following instructions are for the administrator who installs the extension on the server.
 
-Open configure, and open the "Extensions" section. Use "Find More Extensions" to get a list of available extensions. Select "Install".
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrat
+or who installs the plugin on the TWiki server.
 
-If you have any problems, or if the extension isn't available in =configure=, then you can still install manually from the command-line. See http://TWiki.org/Support/ManuallyInstallingExtensions for more help.
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
 
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Extension topic |
+        | ==lib/TWiki/Contrib/%TOPIC%.pm== | Extension Perl module |
+        | ==lib/TWiki/Contrib/%TOPIC%/Config.spec== | Used by configure |
+        | ==lib/TWiki/LoginManager/LdapApacheLogin.pm== | Perl module |
+        | ==lib/TWiki/Users/LdapUserMapping.pm== | Perl module |
+        | ==lib/TWiki/Users/LdapPasswdUser.pm== | Perl module |
+        | ==tools/ldaptest== | Test utility |
+      * Set the ownership of the extracted directories and files to the webserver user.
 
-   * Read the above documentation, i.e. the [[#Configuration][Configuration]] section.
-   * Use <a href="%SCRIPTURLPATH{"configure"}%">configure</a> to set the LDAP settings.
+   * Plugin __configuration and testing__:
+      * Read the above documentation, i.e. the [[#Configuration][Configuration]] section.
+      * Use [[%SCRIPTURL{"configure"}%][configure]] to set the LDAP settings.
 
 ---++ Contrib Info
 <!--
@@ -1148,8 +1150,9 @@ This work was partly sponsored by
 |  Copyright&nbsp;&copy;: | 2006-2010 Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Release: | 4.30 |
-|  Version: | 10335 (2010-12-16) |
+|  Version: | 2011-05-07 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-05-07: | TWikibug:Item6701: Doc improvements -- TWiki:Main.PeterThoeny |
 |  16 Dec 2010: | implemented new =expand= feature of =GROUPINFO= found in newer TWikis |
 |  02 Dec 2010: | fixed glitch where IDs weren't extracted from the cache db |
 |  01 Dec 2010: | added workaround to make the TWiki::Func API usable early enough in the processing chain; \
@@ -1247,7 +1250,11 @@ This work was partly sponsored by
 |  19 July 2006: | public release |
 |  24 May 2006: | API adjustments, improved wikiname generation |
 |  28 Apr 2006: | Initial version |
-|  Home: | TWiki:Plugins/%TOPIC% |
-|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
-|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  Other Dependencies: | %$DEPENDENCIES% |
+|  Perl Version: | 5.8 |
+|  Contrib Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
+__Related Topics:__ %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiUserAuthentication
