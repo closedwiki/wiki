@@ -1,6 +1,18 @@
-%META:TOPICINFO{author="ArildBergh" date="1117233436" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305087871" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="InstalledPlugins"}%
----+Caches URLs referenced in the text.
+---+!! Caches URLs referenced in the text.
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   [[http://thoeny.org/pub-trunk/TWiki/URLCachePlugin/twikiorgcgibinviewPluginsURLCachePlugin.html][http://twiki.org/cgi-bin/view/Plugins/URLCachePlugin]] or provide feedback at
+   [[http://thoeny.org/pub-trunk/TWiki/URLCachePlugin/twikiorgcgibinviewPluginsURLCachePluginDev.html][http://twiki.org/cgi-bin/view/Plugins/URLCachePluginDev]].
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
 
 This is a plugin which will download a web page that is referenced in a topic and change the link to point to the cached page. The cached pages will have a date showing when it was cached, and a link to the original page. 
 
@@ -17,49 +29,56 @@ If you add a + (plus sign) in front it will cache it as a new topic. The topic w
 The difference between caching as a standalone page or as a topic is that topics can be searched through the normal TWiki search engine.
 
 To avoid having URLs cached you have three options:
-	* For single URLs just make sure it does not have spaces around it, you may use normal brackets: (http://mylink.com) or a TWiki formatting code such as underscores for italic.
-	* For an entire page put the following code anywhere in the page: *&lt;!--NOCACHE--&gt;* this is in fact a hidden HTML comment and will not show up in the page itself.
-	* For an entire web (for instance the main TWiki web which has lots of pointers to live support information) add them to the _IGNORE_ setting below. By default the TWiki web is there already.
+   * For single URLs just make sure it does not have spaces around it, you may use normal brackets: (http://mylink.com) or a TWiki formatting code such as underscores for italic.
+   * For an entire page put the following code anywhere in the page: *&lt;!--NOCACHE--&gt;* this is in fact a hidden HTML comment and will not show up in the page itself.
+   * For an entire web (for instance the main TWiki web which has lots of pointers to live support information) add them to the _IGNORE_ setting below. By default the TWiki web is there already.
 
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>URLCACHEPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>URLCACHEPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = This plugin copies a referenced webpage to the TWiki server to avoid broken links
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Copy referenced webpages to the TWiki server to avoid broken links
 
-	* Stop these webs from being cached, list them as a comma separate list here
-		* Set IGNORE = %TWIKIWEB%
-		
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
+   * Stop these webs from being cached, list them as a comma separate list here
+      * Set IGNORE = %SYSTEMWEB%
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
-__Note:__ These instructions are for the TWiki maintainer. No changes to your browser are required. *This plugin uses several additional CPAN Perl modules (listed below), make sure they are all installed and working.*
 
-	* Download the ZIP file from the Plugin web (see below). Contents:
-	| *File:* | *Description:* |
-	| ==data/TWiki/URLCachePlugin.txt== | Plugin topic |
-	| ==lib/TWiki/Plugins/URLCachePlugin.pm== | Plugin Perl module |
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-	* Unzip ==URLCachePlugin.zip== in your twiki installation directory.
-	* If you have some webs that you do not want to use the cache for, set them in the =IGNORE= setting in this topic.
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/URLCachePlugin.txt== | Plugin topic |
+        | ==lib/TWiki/Plugins/URLCachePlugin.pm== | Plugin Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Test if the installation was successful: Create a page with a URL in the Sandbox web.
+      * If you have some webs that you do not want to use the cache for, set them in the =IGNORE= setting in this topic.
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ArildBergh |
-|  Plugin Version: | 10 June 2005 |
+|  Copyright: | &copy; 2005 TWiki:Main.ArildBergh <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  Plugin Version: | 2011-05-10 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-05-10: | TWikibug:Item6701: Fix plugin to use only published API; doc improvements -- TWiki:Main.PeterThoeny |
 |  10 Jun 2005: | Initial version |
 |  CPAN Dependencies: | CPAN:Date::Format, CPAN:HTML::FormatText, CPAN:HTML::Parse, CPAN:LWP::UserAgent, CPAN:HTML::LinkExtor, CPAN:File::Basename, CPAN:Time::ParseDate, CPAN:Date::Format |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
+|  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 99%, %TOPIC% 99% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main.ArildBergh - 11 Jun 2005 %BR% 
-
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins

@@ -29,7 +29,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-05-08';
+$RELEASE = '2011-05-10';
 
 $pluginName = 'URLCachePlugin';  # Name of this Plugin
 
@@ -196,7 +196,8 @@ sub _cacheURL
             my $file = substr( $url, 6 );
             $file =~ s/\W//g;
 #here we add a line at the top of the page showing that it's cached
-            my $cachedfrom = "<div style='text-align: center;'><pre>Downloaded from <a href='$url'>$url</a>\n"
+            my $date = TWiki::Func::formatTime( time(), '$year-$mo-$day $hour:$min', 'servertime' );
+            my $cachedfrom = "<div style='text-align: center;'><pre>Downloaded from <a href='$url'>$url</a> "
                            . "on $date\n<a href='$twiki_thisurl'>Return to TWiki</a></pre></div><hr />";
             $htmlpage =~ s/(<body.*?>)(.*?)/$1$2$cachedfrom/ig;
             TWiki::Func::saveFile( "$twiki_pubdir/$file.html", $htmlpage );
