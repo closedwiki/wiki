@@ -73,12 +73,17 @@ sub handleEmbedPDF
     my ( $thePDFFile, $theTopic, $theWeb ) = @_;
 
     if ( $prerendered && -r TWiki::Func::getPubDir() . "/$theWeb/$theTopic/$thePDFFile.$prerendered" ) {
-	$result = "<img src=\"%ATTACHURL%/$thePDFFile.$prerendered\">";
+	$result = "<img src=\"\%ATTACHURL%/$thePDFFile.$prerendered\" />";
     } else {
-	$result = "<embed src=\"%ATTACHURL%/$thePDFFile.pdf\" %EMBEDPDFSIZE{$thePDFFile}% />";
+	$result = "<object data=\"\%ATTACHURLPATH%/$thePDFFile.pdf\" \%EMBEDPDFSIZE{$thePDFFile}% type=\"application/pdf\">"
+                . "<param name=\"src\" value=\"\%ATTACHURL%/$thePDFFile.pdf\" />"
+                . "<a href=\"\%ATTACHURLPATH%/$thePDFFile.pdf\">$thePDFFile.pdf</a>"
+                . '</object>';
     }
-
-    $result = "<table><tbody><tr><td align=\"center\">$result</td></tr><tr><td align=\"center\"><a href=\"%ATTACHURL%/$thePDFFile.pdf\">$linkText</a></td></tr></tbody></table>" if $linkText;
+    if( $linkText ) {
+        $result = "<table><tbody><tr><td align=\"center\">$result</td></tr><tr><td align=\"center\">"
+                . "<a href=\"\%ATTACHURLPATH%/$thePDFFile.pdf\">$linkText</a></td></tr></tbody></table>";
+    }
     return $result;
 }
 
