@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305084494" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305085114" format="1.1" version="$Rev$"}%
 ---+!! Redirect Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -89,7 +89,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-05-10 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2-11-05-10: | TWikibug:Item6701: Doc improvements, adding VarREDIRECT variable documentation -- TWiki:Main.PeterThoeny |
+|  2011-05-10: | TWikibug:Item6701: Doc improvements, adding VarREDIRECT variable documentation -- TWiki:Main.PeterThoeny |
 |  2011-02-14: | TWikibug:Item6664: Remove any newline characters from redirect URL before redirecting -- TWiki:Main.DipuDeshmukh |
 |  2010-07-25: | TWikibug:Item6530: Doc fixes |
 |  24 Nov 2008: | TWiki:Main.AndrewRJones: Ability to display Wikipedia like "Redirected from..." |
