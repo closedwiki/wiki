@@ -32,12 +32,14 @@
 #    				  of tables in table object
 #    getRow($row,$c1,$c2)	- Return the data at the specified row
 #    				  starting at column 1 and ending at column 2
-#    getData($tblnum,$range,$transpose)	- Return the data at the specified range.
+#    getData($tblnum,$range,$dataOrientedVertically, $replicateConstants)
+#                               - Return the data at the specified range.
 #    				  If a single row or single column, then
 #    				  return the data.  If multiple
 #    				  rows/columns, then return the data in row
-#    				  format.  $transpose indicates whether to
-#    				  get data by column or data by row.
+#    				  format.  $dataOrientedVertically indicates whether to
+#    				  get data by column or data by row.  $replicateConstants
+#    				  indicates whether to replicate constants or not.
 #    getRowColumnCount($range)	- Return the number of rows/columns
 #    				  specified in the range
 
@@ -88,24 +90,27 @@ sub getNumColsInTable {
 # Parse a spreadsheet-style range specification to get an array
 # of normalised data ranges
 sub getTableRanges {
-    my ($this, $tableName, $str) = @_;
+    my ($this, $tableName, $str, $dataOrientedVertically) = @_;
 
+    my $maxRowNum = $this->getNumRowsInTable($tableName);
+    my $maxColNum = $this->getNumColsInTable($tableName);
     my @sets = ();
     foreach my $dataSet (split(/\s*,\s*/, $str)) {
         my @set = ();
         foreach my $range (split(/\s*\+\s*/, $dataSet)) {
             if ($range =~ /^R(\d+)\:C(\d+)\s*(\.\.+\s*R(\d+)\:C(\d+))?$/) {
-                my $r1 = $1 - 1;
-                my $c1 = $2 - 1;
-                my $r2 = $4 ? ($4 - 1) : $r1;
-                my $c2 = $5 ? ($5 - 1) : $c1;
+                my $r1 = $1;
+                my $c1 = $2;
+                my $r2 = $4 ? ($4) : $r1;
+                my $c2 = $5 ? ($5) : $c1;
                 # trim range to actual table size
-                my $maxRow = $this->getNumRowsInTable($tableName) - 1;
-                my $maxCol = $this->getNumColsInTable($tableName) - 1;
-                $r1 = $maxRow if ($r1 > $maxRow);
-                $c1 = $maxCol if ($c1 > $maxCol);
-                $r2 = $maxRow if ($r2 > $maxRow);
-                $c2 = $maxCol if ($c2 > $maxCol);
+		if ($dataOrientedVertically) {
+		    $r1 = $maxRowNum if ($r1 > $maxRowNum);
+		    $r2 = $maxRowNum if ($r2 > $maxRowNum);
+		} else {
+		    $c1 = $maxColNum if ($c1 > $maxColNum);
+		    $c2 = $maxColNum if ($c2 > $maxColNum);
+		}
 		#<<<
                 push(@set, {
 		    startRow	=> $r1,
@@ -114,7 +119,10 @@ sub getTableRanges {
 		    endCol	=> $c2}
 		);
 		#>>>
-            }
+            } else {
+                push(@set, {text => $range}
+		);
+	    }
         } ## end foreach my $range (split(/\s*\+\s*/...))
         push(@sets, \@set) if scalar(@set);
     } ## end foreach my $dataSet (split(...))
@@ -237,9 +245,31 @@ sub _trim {
 # R6C3 R6C4 R6C5
 # R7C3 R7C5 R7C5
 sub getData {
-    my ($this, $tableName, $spreadSheetSyntax, $transpose) = @_;
+    my ($this, $tableName, $spreadSheetSyntax, $dataOrientedVertically, $replicateConstants) = @_;
     my @selectedTable = $this->getTable($tableName);
-    my @ranges = $this->getTableRanges($tableName, $spreadSheetSyntax);
+    my @ranges = $this->getTableRanges($tableName, $spreadSheetSyntax, $dataOrientedVertically);
+
+    # Compute the max length of the requested data.  This is needed so if
+    # a constant is specified instead of a spreadsheet range, we know how
+    # many copies of the constant to make.
+    my $maxDataLen = 1;
+    if ($replicateConstants) {
+	foreach my $set (@ranges) {
+	    foreach my $range (@$set) {
+		if ($dataOrientedVertically) {
+		    if (defined($range->{endRow})) {
+			my $len = abs($range->{endRow} - $range->{startRow}) + 1;
+			$maxDataLen = $len if ($len > $maxDataLen);
+		    }
+		} else {
+		    if (defined($range->{endCol})) {
+			my $len = abs($range->{endCol} - $range->{startCol}) + 1;
+			$maxDataLen = $len if ($len > $maxDataLen);
+		    }
+		}
+	    }
+	}
+    }
 
     my @rows    = ();
     my $rowbase = 0;
@@ -249,44 +279,56 @@ sub getData {
 
         # For each range within the dataset
         foreach my $range (@$set) {
-            if ($transpose) {
-                my $rs = abs($range->{endCol} - $range->{startCol}) + 1;
-                $rh = $rs if ($rs > $rh);
-		my $startCol   = $range->{startCol};
-		my $endCol     = $range->{endCol};
-		my $nextColInc = ($startCol <= $endCol) ? 1 : -1;
-		my $newColIndex = 0;
-		for (my $c = $startCol; $c != $endCol + $nextColInc; $c = $c + $nextColInc) {
-		    my $startRow   = $range->{startRow};
-		    my $endRow     = $range->{endRow};
-		    my $nextRowInc = ($startRow <= $endRow) ? 1 : -1;
-		    for (my $r = $startRow; $r != $endRow + $nextRowInc; $r = $r + $nextRowInc) {
-                        my $value = $selectedTable[$r][$c];
-                        if (defined $value) {
-                            push(@{$rows[$rowbase + $newColIndex]}, $value);
-                        }
-                    }
-		    $newColIndex++;
-                }
-            } else {
-                my $rs = abs($range->{endRow} - $range->{startRow}) + 1;
-                $rh = $rs if ($rs > $rh);
-		my $startRow   = $range->{startRow};
-		my $endRow     = $range->{endRow};
-		my $nextRowInc = ($startRow <= $endRow) ? 1 : -1;
-		my $newRowIndex = 0;
-		for (my $r = $startRow; $r != $endRow + $nextRowInc; $r = $r + $nextRowInc) {
-		    my $startCol   = $range->{startCol};
-		    my $endCol     = $range->{endCol};
+            if ($dataOrientedVertically) {
+		if (defined($range->{text})) {
+		    foreach my $i (1..$maxDataLen) {
+			push(@{$rows[$rowbase]}, $range->{text});
+		    }
+		} else {
+		    my $rs = abs($range->{endCol} - $range->{startCol}) + 1;
+		    $rh = $rs if ($rs > $rh);
+		    my $startCol   = $range->{startCol} - 1;
+		    my $endCol     = $range->{endCol} - 1;
 		    my $nextColInc = ($startCol <= $endCol) ? 1 : -1;
+		    my $newColIndex = 0;
 		    for (my $c = $startCol; $c != $endCol + $nextColInc; $c = $c + $nextColInc) {
-                        my $value = $selectedTable[$r][$c];
-                        if (defined $value) {
-                            push(@{$rows[$rowbase + $newRowIndex]}, $value);
-                        }
-                    }
-		$newRowIndex++;
-                }
+			my $startRow   = $range->{startRow} - 1;
+			my $endRow     = $range->{endRow} - 1;
+			my $nextRowInc = ($startRow <= $endRow) ? 1 : -1;
+			for (my $r = $startRow; $r != $endRow + $nextRowInc; $r = $r + $nextRowInc) {
+			    my $value = $selectedTable[$r][$c];
+			    if (defined $value) {
+				push(@{$rows[$rowbase + $newColIndex]}, $value);
+			    }
+			}
+			$newColIndex++;
+		    }
+		}
+            } else {
+		if (defined($range->{text})) {
+		    foreach my $i (1..$maxDataLen) {
+			push(@{$rows[$rowbase]}, $range->{text});
+		    }
+		} else {
+		    my $rs = abs($range->{endRow} - $range->{startRow}) + 1;
+		    $rh = $rs if ($rs > $rh);
+		    my $startRow   = $range->{startRow} - 1;
+		    my $endRow     = $range->{endRow} - 1;
+		    my $nextRowInc = ($startRow <= $endRow) ? 1 : -1;
+		    my $newRowIndex = 0;
+		    for (my $r = $startRow; $r != $endRow + $nextRowInc; $r = $r + $nextRowInc) {
+			my $startCol   = $range->{startCol} - 1;
+			my $endCol     = $range->{endCol} - 1;
+			my $nextColInc = ($startCol <= $endCol) ? 1 : -1;
+			for (my $c = $startCol; $c != $endCol + $nextColInc; $c = $c + $nextColInc) {
+			    my $value = $selectedTable[$r][$c];
+			    if (defined $value) {
+				push(@{$rows[$rowbase + $newRowIndex]}, $value);
+			    }
+			}
+		    $newRowIndex++;
+		    }
+		}
             }
         } ## end foreach my $range (@$set)
             # Start the next dataset on a new row
@@ -320,16 +362,21 @@ sub max {$_[0] > $_[1] ? $_[0] : $_[1]}
 # Given a range of TWiki table data (in SpreadSheetPlugin format), return
 # an array containing the number of rows/columns specified by the range.
 sub getRowColumnCount {
-    my ($this, $tableName, $spreadSheetSyntax) = @_;
-    my @ranges = $this->getTableRanges($tableName, $spreadSheetSyntax);
+    my ($this, $tableName, $spreadSheetSyntax, $dataOrientedVertically) = @_;
+    my @ranges = $this->getTableRanges($tableName, $spreadSheetSyntax, $dataOrientedVertically);
     my $rows   = 0;
     my $cols   = 0;
     foreach my $set (@ranges) {
         my $r = 0;
         my $c = 0;
         foreach my $range (@$set) {
-            $r = max($r, abs($range->{endRow} - $range->{startRow}) + 1);
-            $c += abs($range->{endCol} - $range->{startCol}) + 1;
+	    if (defined($range->{text})) {
+		$r = max($r, 1);
+		$c += 1;
+	    } else {
+		$r = max($r, abs($range->{endRow} - $range->{startRow}) + 1);
+		$c += abs($range->{endCol} - $range->{startCol}) + 1;
+	    }
         }
         $rows += $r;
         $cols = $c if $c > $cols;

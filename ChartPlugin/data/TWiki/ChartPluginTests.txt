@@ -236,6 +236,22 @@ This table is used for testing when both =data= and =data2= are used
    * Set scatterTest13 = name='scatterTest13' type='scatter' subtype='bar bar bar pline' table='3' data='R8:C2..R99:C99' xaxis='R8:C1..R99:C1' title='scatter test #13' xlabel='Yep, an X label' legend='R1:C2..R1:C99' yaxis='on' ygrid='on' ymin='0' xgrid='on' width='500'
 
 -----------------------------------------------------------
+-- Define the spark tests
+-----------------------------------------------------------
+   * Set sparkData1 = 88, 84, 82, 92, 82, 86, 66, 82, 44, 64, 66, 88, 96, 80, 24, 26, 14, 0, 0, 26, 8, 6, 6, 24, 52, 66, 36, 6, 10, 14, 30
+   * Set sparkData2 = 88, 84, 82, 92, 82, 86, 66, 82, 44, 64, 66, 88, 96, 80, 24, 26, 14, 0, 0, 26, 8, 6, 6, 24, 52, 66, 36, 6, 10, 14, 30, 88, 84, 82, 92, 82, 86, 66, 82, 44, 64, 66, 88, 96, 80, 24, 26, 14, 0, 0, 26, 8, 6, 6, 24, 52, 66, 36, 6, 10, 14, 30
+   * Set sparkTest01 = name='sparkTest01' type='sparkline' table='1' data='R2:C7..R7:C7' width='100' height='16' bgcolor='#EEEEEE'
+   * Set sparkTest02 = name='sparkTest02' type='sparkbar' table='1' data='R2:C7..R7:C7' width='100' height='16' bgcolor='#EEEEEE'
+   * Set sparkTest03 = name='sparkTest03' type='sparkarea' table='1' data='R2:C7..R7:C7' width='100' height='16' bgcolor='#EEEEEE'
+   * Set sparkTest04 = name='sparkTest04' type='sparkline' data='%sparkData1%' width='100' height='16' bgcolor='#EEEEEE'
+   * Set sparkTest05 = name='sparkTest05' type='sparkbar' data='%sparkData1%' width='100' height='16' bgcolor='#EEEEEE'
+   * Set sparkTest06 = name='sparkTest06' type='sparkarea' data='%sparkData1%' width='100' height='16' bgcolor='#EEEEEE'
+   * Set sparkTest07 = name='sparkTest07' type='sparkline' data='%sparkData2%' width='100' height='16' bgcolor='#EEEEEE'
+   * Set sparkTest08 = name='sparkTest08' type='sparkbar' data='%sparkData2%' width='100' height='16' bgcolor='#EEEEEE'
+   * Set sparkTest09 = name='sparkTest09' type='sparkbar' data='%sparkData2%' width='0' height='16' bgcolor='#EEEEEE'
+   * Set sparkTest10 = name='sparkTest10' type='sparkarea' data='%sparkData2%' width='100' height='16' bgcolor='#EEEEEE'
+
+-----------------------------------------------------------
 -- Define the legend placement tests
 -----------------------------------------------------------
    * Set legendTest01 = name='legendTest01' table='4' data='R2:C2..R3:C5' xaxis='R2:C1..R9:C1' title='legend test #01' legend='R1:C2..R1:C5' yaxis='on' ygrid='off'
@@ -359,6 +375,13 @@ This table is used for testing when both =data= and =data2= are used
    * Set datalabel04 = name='datalabel04' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='data legend test #04' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='auto box, 2box, box 3, 4 box' bgcolor='#FFFFFF, #FFFFFF, #E0E0E0'
 
 -----------------------------------------------------------
+-- Define some constant data tests
+-----------------------------------------------------------
+   * Set constDataTest01 = name="constDataTest01" type='line' table='table1' data='R2:C4..R99:C7' xaxis='R2:C2..R7:C2' title='Constant data test #01' yaxis='on' legend='R1:C4..R1:C7' ymin='0'
+   * Set constDataTest02 = name="constDataTest02" type='line' table='table1' data='R2:C4..R99:C7,50' xaxis='R2:C2..R7:C2' title='Constant data test #02' yaxis='on' legend='R1:C4..R1:C7,--50--' ymin='0'
+   * Set constDataTest03 = name="constDataTest03" type='line' table='table1' data='R2:C4..R99:C7,50' xaxis='R2:C2..R7:C2' title='Constant data test #03' yaxis='on' legend='line 1, Line2,line3 3 3 3,4,--50--' ymin='0'
+
+-----------------------------------------------------------
 -- Define the error tests
 -----------------------------------------------------------
    * Set errorTest01 = ""
@@ -370,13 +393,15 @@ This table is used for testing when both =data= and =data2= are used
    * Set errorTest07 = name='errorTest07' data='R2:C4..R7:C7' xaxis='R2:C4..R7:C7'
    * Set errorTest09 = name='errorTest09' data='R2:C4..R7:C7' ymin='10' ymax='10'
    * Set errorTest10 = name='errorTest10' data='R2:C4..R7:C7' ymin='10' ymax='-10'
-   * Set errorTest11 = name='errorTest11' data='R2:C4..R2:C7'
+   * Set errorTest11 = name='errorTest11' data='R2:C4..R2:C4'
    * Set errorTest12 = name='errorTest12' data='R2:C4..R7:C7' legend='R1:C4'
    * Set errorTest13 = name='errorTest13' data='R2:C3..R7:C7' scale='semilog'
    * Set errorTest14 = name='errorTest14' data='R2:C4..R7:C7' legend='R1:C4' showerror='image'
    * Set errorTest15 = name='errorTest15' data='R2:C4..R7:C7' legend='R1:C4' showerror='none'
    * Set errorTest16 = name='errorTest16' data='R2:C4..R7:C7' legend='R1:C4' showerror='text'
    * Set errorTest17 = name='errorTest17' data='R2:C4..R7:C7' legend='R1:C4' width='200' height='200' showerror='image'
+   * Set errorTest18 = name='errorTest18' type='combo' subtype='line sparkline' data='R2:C4..R7:C4,R2:C5..R7:C5' width='200' height='200'
+   * Set errorTest19 = name='errorTest19' type='sparkbar' subtype='line bar' data='R2:C4..R7:C4' width='200' height='200'
 
 -->
 
@@ -412,7 +437,7 @@ This table is used for testing when both =data= and =data2= are used
 | Back to local data and add the =alt= tag = =This is the alt tag for test28=. %CHART{%lineTest28%}% |
 | Show a chart from table5 where the table contains numbers surrounded by HTML tags. %CHAR{%lineTest29%}% |
 | Show a chart from table5 where the table contains exponential formated numbers. %CHART{%lineTest30%}% |
-| Show a chart from table5 where the table contains the same numbers. %CHART{%lineTest31%}% |
+| Show a chart from table5 where all the values are identical (=10). %CHART{%lineTest31%}% |
 | Show a chart from table5 where the table contains the same numbers and setting ymin = the same #. %CHART{%lineTest32%}% |
 | Show a chart from table5 where the table contains the same numbers and setting ymax = the same #. %CHART{%lineTest33%}% |
 | Show a chart from table5 setting =ymin= = =0= and =ymax= = =123=. %CHART{%lineTest34%}% |
@@ -447,7 +472,7 @@ This table is used for testing when both =data= and =data2= are used
 | Add =height= = =150= to above. %CHART{%areaTest25%}% |
 | Default width/height.  Get data from %WEB%.ChartPluginTestsRemote.  Specify =table="2"= on new =topic= = =ChartPluginTestsRemote=.  Actual values should show up incremented by 0.52 since data is from a different topic page and the 0.02 denotes the data is from the 2nd table.  Legend should show up with =Remote= since the data on the remote page was set up to include =Remote= in the legends. %CHART{%areaTest26%}% |
 | Same as above except add an additional data set (*averages*) that is calculated by %<nop>CALC%.  Also shows that since only 4 default area colors are specified, the 5th area reuses the 1st default area color. %CHART{%areaTest27%}% |
-| Chage =title= to above and add the =alt= tag = =This is the alt tag=. %CHART{%areaTest28%}% |
+| Change =title= to above and add the =alt= tag = =This is the alt tag=. %CHART{%areaTest28%}% |
 
 ---++ bar tests
 | Simple single bar.  No other markings at all. %CHART{%barTest01%}% |
@@ -477,7 +502,7 @@ This table is used for testing when both =data= and =data2= are used
 | Add =height= = =150= to above. %CHART{%barTest25%}% |
 | Default width/height.  Get data from %WEB%.ChartPluginTestsRemote.  Specify =table="2"= on new =topic= = =ChartPluginTestsRemote=.  Actual values should show up incremented by 0.52 since data is from a different topic page and the 0.02 denotes the data is from the 2nd table.  Legend should show up with =Remote= since the data on the remote page was set up to include =Remote= in the legends. %CHART{%barTest26%}% |
 | Same as above except add an additional data set (*averages*) that is calculated by %<nop>CALC%.  Also shows that since only 4 default bar colors are specified, the 5th bar reuses the 1st default bar color. %CHART{%barTest27%}% |
-| Chage =title= to above and add the =alt= tag = =This is the alt tag=. %CHART{%barTest28%}% |
+| Change =title= to above and add the =alt= tag = =This is the alt tag=. %CHART{%barTest28%}% |
 
 ---++ combo tests
 | Simple combo graph using table #2.  Since no =datatype= is defined and only a single data set, =combo= defaults to a single =line=. %CHART{%comboTest01%}% |
@@ -506,6 +531,18 @@ This table is used for testing when both =data= and =data2= are used
 | Change =subtype="bar bar bar pline"= to above. %CHART{%scatterTest11%}% |
 | Adjust data range to see how the X labeling is affected. %CHART{%scatterTest12%}% |
 | Adjust data range to see how the X labeling is affected. %CHART{%scatterTest13%}% |
+
+---++ Spark tests
+| Simple spark line using data from table #1. %CHART{%sparkTest01%}% |
+| Simple spark bar using data from table #1. %CHART{%sparkTest02%}% |
+| Simple spark area using data from table #1. %CHART{%sparkTest03%}% |
+| Simple spark line using directly specified data (no data from any table). %CHART{%sparkTest04%}% |
+| Simple spark bar using directly specified data (no data from any table). %CHART{%sparkTest05%}% |
+| Simple spark area using directly specified data (no data from any table). %CHART{%sparkTest06%}% |
+| Simple spark line using directly specified data (no data from any table), but with twice as much data as above. %CHART{%sparkTest07%}% |
+| Simple spark bar using directly specified data (no data from any table), but with twice as much data as above. Since there is so much data displayed in such a narrow width, the bars are of uneven width. %CHART{%sparkTest08%}% |
+| Same as above, but by setting =width="0"= the chart width is auto calculated such that the bars have equal widths. %CHART{%sparkTest09%}% |
+| Simple spark area using directly specified data (no data from any table), but with twice as much data as above. %CHART{%sparkTest10%}% |
 
 ---++ Test various legend placement situations
 | Test that when all lines overlap on the very bottom of the chart, the legends all show up non-overlapped. %CHART{%legendTest01%}% |
@@ -600,6 +637,11 @@ This table is used for testing when both =data= and =data2= are used
 | Same as above except change =type="scatter"=. %CHART{%multiDataTest15%}% |
 | Same as above except change =type="semilog"=, =ymin="1", =ymin2="1"=, and removing definition for =ytics=, =ytics=, =ymax=, and =ymax2=. %CHART{%multiDataTest16%}% |
 
+---++ Constant data tests (both in =data= and =legend=
+| Sample 4 line chart. %CHART{%constDataTest01%}% |
+| Same as above, but adding a constant value = ="50"= to =data= as well as adding a =datalegend= for this new data set = ="--50--"=. %CHART{%constDataTest02%}% |
+| Same as above, but using constant values for =legend= instead of data from the table. %CHART{%constDataTest03%}% |
+
 ---++ Error handling tests
 | *Description* | *Expected Output* | *Output* |
 | No parameters passed to CHART %BR% =%<nop>CHART{%errorTest01%}%= | <nop>ChartPlugin error: parameter *name* must be specified | %CHART{%errorTest01%}% |
@@ -618,6 +660,8 @@ This table is used for testing when both =data= and =data2= are used
 | Same =legend= error as above, but now no error should appear since setting =showerror='none'=. %BR% =%<nop>CHART{%errorTest15%}%= | &lt;nothing should be seen&gt; | %CHART{%errorTest15%}% |
 | Same =legend= error as above, but show the error in text form since setting =showerror='text'=. %BR% =%<nop>CHART{%errorTest16%}%= | <nop>ChartPlugin error: parameter *legend* contains an invalid value 'R1:C4' since it specifies 1 legends and there are 4 data sets. | %CHART{%errorTest16%}% |
 | Same =legend= error as above, but show the error inside of an image by setting =showerror='image'=. Also, the image size will be different since =width= and =height= have been specified.  %BR% =%<nop>CHART{%errorTest17%}%= | <nop>ChartPlugin error: parameter *legend* contains an invalid value 'R1:C4' since it specifies 1 legends and there are 4 data sets. | %CHART{%errorTest17%}% |
+| Mixing a regular =line= with =sparkline=. | <nop>ChartPlugin error: unkown subtypes: sparkline. | %CHART{%errorTest18%}% |
+| Mixing a regular =line= with =sparkline=. | <nop>ChartPlugin error: subtype can not be used when type = 'sparkbar' | %CHART{%errorTest19%}% |
 
 -- __Contributors:__ TWiki:Main/TaitCyrus, TWiki:Main/PeterThoeny - 2010-04-07
 -- Updated: TWiki:Main/TaitCyrus - 2011-04-25

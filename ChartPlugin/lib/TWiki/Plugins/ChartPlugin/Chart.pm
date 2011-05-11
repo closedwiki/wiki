@@ -193,6 +193,8 @@
 #    getBGcolor()	- Get the background color of the chart
 #    setGridColor($color)- Set the color of the grid
 #    getGridColor()	- Get the color of the grid
+#    setBorderColor($color)- Set the color of the chart border
+#    getBorderColor()	- Get the color of the gridchart border
 #
 #    computeFinalColors	- Computes the final colors to be used by each data
 #    			  set taking colors from either the user specified
@@ -211,18 +213,26 @@
 #    setLineWidth($width)- Set the width, in pixels, lines are drawn with
 #    getLineWidth()	- Get the width of drawn lines
 #
-#    setBarLeadingSpace($pixels)
-#    			- Set the leading space (in pixels) before the first drawn bar graph
-#    getBarLeadingSpace()
+#    setBarLeadingSpaceUnits($units)
+#    			- Set the leading space (in units) before the first drawn bar graph
+#    getBarLeadingSpaceUnits()
 #    			- Get the space before the first drawn bar graph
-#    setBarTrailingSpace($pixels)
-#    			- Set the trailing space (in pixels) after the last drawn bar graph
-#    getBarTrailingSpace()
+#    setBarTrailingSpaceUnits($units)
+#    			- Set the trailing space (in units) after the last drawn bar graph
+#    getBarTrailingSpaceUnits()
 #    			- Get the space before the last drawn bar graph
-#    setBarSpace($pixels)
-#    			- Set the space (in pixels) between bar graphs
-#    getBarSpace()
+#    setBarSpaceUnits($units)
+#    			- Set the space (in units) between bar graphs
+#    getBarSpaceUnits()
 #    			- Get the space between bar graphs
+#    setBarWidthUnits($units)
+#    			- Set the width (in units) of bars
+#    getBarWidthUnits()
+#    			- Get the width of bars
+#    setShowBarBorder($flag)
+#                       - Set whether a black line is drawn around bars
+#    getShowBarBorder()
+#                       - Get the bar border flag
 
 # =========================
 package TWiki::Plugins::ChartPlugin::Chart;
@@ -289,14 +299,17 @@ use POSIX;
     setLineColors getLineColors
     setColors getColors
     setGridColor getGridColor
+    setBorderColor getBorderColor
     setFileDir getFileDir
     setFileName getFileName
     setMargin getMargin
     setPointSize getPointSize
     setLineWidth getLineWidth
-    setBarLeadingSpace getBarLeadingSpace
-    setBarTrailingSpace getBarTrailingSpace
-    setBarSpace getBarSpace
+    setBarLeadingSpaceUnits getBarLeadingSpaceUnits
+    setBarTrailingSpaceUnits getBarTrailingSpaceUnits
+    setBarSpaceUnits getBarSpaceUnits
+    setBarWidthUnits getBarWidthUnits
+    setShowBarBorder getShowBarBorder
     );
 
 use strict;
@@ -314,6 +327,7 @@ sub new {
     $this->setMargin(10);
     $this->setColors();
     $this->setGridColor("#FFFFFF");
+    $this->setBorderColor("#FFFFFF");
     $this->setLegend();
     $this->setYaxis("off");
     $this->setYaxis2("off");
@@ -595,6 +609,9 @@ sub getColors {my ($this) = @_; return @{$$this{COLORS}}}
 sub setGridColor {my ($this, @gridColor) = @_; $$this{GRID_COLOR} = \@gridColor}
 sub getGridColor {my ($this) = @_; return @{$$this{GRID_COLOR}}}
 
+sub setBorderColor {my ($this, $borderColor) = @_; $$this{BORDER_COLOR} = $borderColor}
+sub getBorderColor {my ($this) = @_; return $$this{BORDER_COLOR}}
+
 sub setFileDir {my ($this, $dir) = @_; $$this{FILE_DIR} = $dir}
 sub getFileDir {my ($this) = @_; return $$this{FILE_DIR}}
 
@@ -638,12 +655,16 @@ sub getPointSize {my ($this) = @_; return $$this{POINT_SIZE}}
 sub setLineWidth {my ($this, $pixels) = @_; $$this{LINE_WIDTH} = $pixels}
 sub getLineWidth {my ($this) = @_; return $$this{LINE_WIDTH}}
 
-sub setBarLeadingSpace {my ($this, $pixels) = @_; $$this{BAR_LEADING_SPACE} = $pixels}
-sub getBarLeadingSpace {my ($this) = @_; return $$this{BAR_LEADING_SPACE}}
-sub setBarTrailingSpace {my ($this, $pixels) = @_; $$this{BAR_TRAILING_SPACE} = $pixels}
-sub getBarTrailingSpace {my ($this) = @_; return $$this{BAR_TRAILING_SPACE}}
-sub setBarSpace {my ($this, $pixels) = @_; $$this{BAR_SPACE} = $pixels}
-sub getBarSpace {my ($this) = @_; return $$this{BAR_SPACE}}
+sub setBarLeadingSpaceUnits {my ($this, $units) = @_; $$this{BAR_LEADING_SPACE_UNITS} = $units}
+sub getBarLeadingSpaceUnits {my ($this) = @_; return $$this{BAR_LEADING_SPACE_UNITS}}
+sub setBarTrailingSpaceUnits {my ($this, $units) = @_; $$this{BAR_TRAILING_SPACE_UNITS} = $units}
+sub getBarTrailingSpaceUnits {my ($this) = @_; return $$this{BAR_TRAILING_SPACE_UNITS}}
+sub setBarSpaceUnits {my ($this, $units) = @_; $$this{BAR_SPACE_UNITS} = $units}
+sub getBarSpaceUnits {my ($this) = @_; return $$this{BAR_SPACE_UNITS}}
+sub setBarWidthUnits {my ($this, $units) = @_; $$this{BAR_WIDTH_UNITS} = $units}
+sub getBarWidthUnits {my ($this) = @_; return $$this{BAR_WIDTH_UNITS}}
+sub setShowBarBorder {my ($this, $flag) = @_; $$this{BAR_BORDER_FLAG} = $flag}
+sub getShowBarBorder {my ($this) = @_; return $$this{BAR_BORDER_FLAG}}
 
 # Make sure colors are defined for each data set on each Y axis
 sub computeFinalColors {
@@ -816,6 +837,13 @@ sub makeChart {
     my $initialBGcolorText = "#FFFFFF"; # White
     my $initialBGcolor     = $im->colorAllocate(_convert_color($initialBGcolorText));
     my $black              = $im->colorAllocate(0, 0, 0);
+    my $borderColorText    = $this->getBorderColor();
+    my $borderColor;
+    if ($borderColorText eq "transparent") {
+	$borderColor = undef;
+    } else {
+	$borderColor = $im->colorAllocate(_convert_color($borderColorText));
+    }
 
     # Start with a totally white background
     $im->filledRectangle(0, 0, $imageWidth - 1, $imageHeight - 1, $initialBGcolor);
@@ -1212,26 +1240,37 @@ sub makeChart {
     # calculate other various values.
 
     # Calculate the width/height of the chart portion.
-    my $chartWidthInPixels  = $xUR - $xLL;
-    my $chartHeightInPixels = $yLL - $yUR;
+    my $chartWidthInPixels  = $xUR - $xLL + 1;
+    my $chartHeightInPixels = $yLL - $yUR + 1;
 
     # If any of the subTypes are 'bar', then compute how wide the bars need
     # to be given how many bars are to be drawn and how much space is
     # available for them to be drawn in.
-    my $xBarWidth         = 0;
-    my $barHalfWidth      = 0;
-    my $xBarLeadingSpace  = 0;    # Define the leading space (in pixels) before the first bar
-    my $xBarTrailingSpace = 0;    # Define the trailing space (in pixels) after the last bar (in addition to space between bars)
-    my $xBarSpace         = 0;    # Define the space (in pixels) between bars
+    my $xShowBarBorder	  = $this->getShowBarBorder();
+    my $barLeadingSpacePixels = 0;
+    my $barSpacePixels = 0;
+    my $barWidthPixels = 0;
+    my $barTrailingSpacePixels = 0;
     if ($numBarDataSets) {
         # Check to see if any of the types is 'area' as it doesn't make
         # sense to mix 'area' and 'bar' on the same chart.
         return "Error: Can't mix 'area' and 'bar' subtypes on the same chart" if (grep(/area/, @subTypes));
-        $xBarSpace         = $this->getBarSpace;
-        $xBarLeadingSpace  = $this->getBarLeadingSpace;
-        $xBarTrailingSpace = $this->getBarTrailingSpace - $xBarSpace;
-        $xBarWidth         = ((($chartWidthInPixels / $numDataPoints[$LEFT]) - $xBarLeadingSpace - $xBarTrailingSpace) / $numBarDataSets) - ($xBarSpace + 1);
-        $barHalfWidth      = $xBarWidth / 2;
+	my $numDataPoints  = $numDataPoints[$LEFT];
+
+	# Calculate N such that 2N = width of a single bar and the space
+	# between bars is N and the space before the first bar and after
+	# the last bar is 2N.
+	my $dataPointPixelsWide = $chartWidthInPixels / $numDataPoints;
+	my $barLeadingSpaceUnits = $this->getBarLeadingSpaceUnits();
+	my $barSpaceUnits = $this->getBarSpaceUnits();
+	my $barWidthsUnits = $this->getBarWidthUnits();
+	my $barTrailingSpaceUnits = $this->getBarTrailingSpaceUnits();
+	my $numBarUnits = $barLeadingSpaceUnits + ($numBarDataSets * $barWidthsUnits) + (($numBarDataSets - 1) * $barSpaceUnits) + $barTrailingSpaceUnits;
+	my $barPixelsPerUnit = $dataPointPixelsWide / $numBarUnits;
+	$barLeadingSpacePixels = $barLeadingSpaceUnits * $barPixelsPerUnit;
+	$barSpacePixels = $barSpaceUnits * $barPixelsPerUnit;
+	$barWidthPixels = $barWidthsUnits * $barPixelsPerUnit;
+	$barTrailingSpacePixels = $barTrailingSpaceUnits * $barPixelsPerUnit;
     }
 
     # Calculate the width of the chart (in terms of graphed data) and the
@@ -1260,7 +1299,7 @@ sub makeChart {
 
     # Draw box around entire chart so area filling won't get outside of the
     # box
-    $im->rectangle($xLL, $yLL, $xUR, $yUR, $black);
+    $im->rectangle($xLL, $yLL, $xUR, $yUR, $borderColor) if (defined($borderColor));
     # If a user specified bgcolor (and it isn't the same as the default
     # background color), then set this color to surround the chart.
     if (defined $outsideBGColor && $outsideBGColor !~ /$initialBGcolorText/i) {
@@ -1295,7 +1334,7 @@ sub makeChart {
     # Note: all areas are drawn first so they appear behind the lines and
     # won't hide other data sets.
     my $lineNum = $this->getNumDataSets1() + $this->getNumDataSets2() - 1;
-    foreach my $yAxisLoc (@yAxisLocs) {
+    foreach my $yAxisLoc (reverse(@yAxisLocs)) {
 	my $numDataSets = $this->_getNumDataSets($yAxisLoc);
 	my @data = $this->_getData($yAxisLoc);
 	foreach (my $dataSet = $numDataSets - 1; $dataSet >= 0; $dataSet--) {
@@ -1303,7 +1342,7 @@ sub makeChart {
 	    my @row = @{$data[$dataSet]};
 
 	    my $color = $allocatedColors[$lineNum];
-	    if ($subTypes[$dataSet] eq "area") {
+	    if ($subTypes[$lineNum] eq "area") {
 		# Data set is an area.  Create a polygon representing the area
 		# and then fill in that polygon.  Note: As a special case, if
 		# the area to be drawn is lower on the chart than a previously
@@ -1525,15 +1564,18 @@ sub makeChart {
 		    } else {
 			$y = $yLL - ($currentYValue - $scaledYAxisMin[$yAxisLoc]) * $yPixelsPerValue[$yAxisLoc];
 		    }
+		    # Calculate the X position of the start of this data point.
 		    my $x;
 		    if ($scatterChart) {
 			$x = $xLL + (($xAxisIndex{$xIndex} - $xAxisMin) * $xPixelsPerValue);
 		    } else {
 			$x = $xLL + ($xDrawInc * $xIndex);
 		    }
-		    $x += $xBarLeadingSpace + (($xBarWidth + ($xBarSpace + 1)) * $barNum) + $barHalfWidth;
-		    $im->filledRectangle($x - $barHalfWidth, $y, $x + $barHalfWidth, $yLL, $color);
-		    $im->rectangle($x - $barHalfWidth, $y, $x + $barHalfWidth, $yLL, $black);
+		    # Now ajust the X position for this given bar with in
+		    # this data point.
+		    $x += $barLeadingSpacePixels + ($barNum * ($barWidthPixels + $barSpacePixels));
+		    $im->filledRectangle($x, $y, $x + $barWidthPixels - 1, $yLL, $color);
+		    $im->rectangle($x, $y, $x + $barWidthPixels - 1, $yLL, $black) if ($xShowBarBorder);
 		} ## end for my $xIndex (0 .. ($numDataPoints[$yAxisLoc]...))
 		$barNum++;
 	    } ## end if ($subTypes[$dataSet...])
@@ -1649,7 +1691,7 @@ sub makeChart {
     # 5555555555555555555555555555555555555555555555555555555555555555555555
     # Redraw box around entire chart in case it got overwritten by
     # anything.
-    $im->rectangle($xLL, $yLL, $xUR, $yUR, $black);
+    $im->rectangle($xLL, $yLL, $xUR, $yUR, $borderColor) if (defined($borderColor));
 
     # 6666666666666666666666666666666666666666666666666666666666666666666666
     # If requested, draw in labels for the charted values.  This is done
@@ -1723,7 +1765,7 @@ sub makeChart {
 			# itself, then perform a slightly different adjustment.
 			if ($numBarDataSets) {
 			    if ($subTypes[$dataSet] eq "bar") {
-				$x1 += $xBarLeadingSpace + (($xBarWidth + ($xBarSpace + 1)) * $barNum) + $barHalfWidth;
+				$x1 += $barLeadingSpacePixels + ($barNum * ($barWidthPixels + $barSpacePixels));
 			    } else {
 				$x1 += $xDrawInc / 2;
 			    }
@@ -1832,7 +1874,7 @@ sub makeChart {
 		# Since this @row might contain sparse data, we walk
 		# backwards through the data looking for the 1st non-empty
 		# value.
-                my $lastValue = undef;
+                my $lastValue = 0;
 		for (my $xIndex = $numDataPoints - 1; $xIndex >= 0; $xIndex--) {
 		    if ($row[$xIndex] ne "") {
 			$lastValue = $row[$xIndex];

@@ -43,15 +43,17 @@ use vars qw(
     $pluginInitialized $initError
     $defaultType @defaultAreaColors @defaultLineColors
     $defaultWidth $defaultHeight $defaultBGcolor
-    $defaultDataValue $defaultScale $defaultGridColor $defaultPointSize
+    $defaultDataValue $defaultScale $defaultGridColor $defaultBorderColor $defaultPointSize
     $defaultLineWidth $defaultNumYGrids
     $defaultYMin $defaultYMax
-    $defaultBarLeadingSpace $defaultBarTrailingSpace $defaultBarSpace $defaultShowError
+    $defaultBarLeadingSpaceUnits $defaultBarTrailingSpaceUnits $defaultBarSpaceUnits $defaultBarWidthUnits
+    $defaultSparkBarLeadingSpaceUnits $defaultSparkBarTrailingSpaceUnits $defaultSparkBarSpaceUnits $defaultSparkBarWidthUnits
+    $defaultShowError
     %cachedTables $showParameters
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-11-04';
+$RELEASE = '2011-05-11';
 
 $pluginInitialized = 0;
 $initError         = '';
@@ -103,39 +105,58 @@ sub _init_defaults {
     }
 
     # Get default chart type
-    $defaultType = TWiki::Func::getPreferencesValue("CHARTPLUGIN_TYPE") || 'line';
-    $defaultYMin = TWiki::Func::getPreferencesValue("CHARTPLUGIN_YMIN") || undef;
-    $defaultYMax = TWiki::Func::getPreferencesValue("CHARTPLUGIN_YMAX") || undef;
+    $defaultType = getChartPluginPreferencesValue("TYPE", 'line');
+    $defaultYMin = getChartPluginPreferencesValue("YMIN", undef);
+    $defaultYMax = getChartPluginPreferencesValue("YMAX", undef);
     # Get default chart values
-    $defaultWidth  = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_WIDTH")  || 60;
-    $defaultHeight = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_HEIGHT") || 16;
-    my $defaultAreaColors = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_AREA_COLORS") || "#FF0000 #FFFF00 #00FF00";
+    $defaultWidth  = getChartPluginPreferencesValue("WIDTH",  60);
+    $defaultHeight = getChartPluginPreferencesValue("HEIGHT", 16);
+    my $defaultAreaColors = getChartPluginPreferencesValue("AREA_COLORS", "#FF0000 #FFFF00 #00FF00");
     @defaultAreaColors = split(/[\s,]+/, $defaultAreaColors);
-    my $defaultLineColors = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_LINE_COLORS") || "#FFFF00 #FF00FF #00FFFF";
+    my $defaultLineColors = getChartPluginPreferencesValue("LINE_COLORS", "#FFFF00 #FF00FF #00FFFF");
     @defaultLineColors = split(/[\s,]+/, $defaultLineColors);
     # Get default chart bgcolor
-    $defaultBGcolor = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_BGCOLOR") || '#FFFFFF #FFFFFF';
+    $defaultBGcolor = getChartPluginPreferencesValue("BGCOLOR", '#FFFFFF #FFFFFF');
     # Get default number of Y axis grids
-    $defaultNumYGrids = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_NUMYGRIDS");
+    $defaultNumYGrids = getChartPluginPreferencesValue("NUMYGRIDS", undef);
     # Get default value to use if there is no data seen in the table
-    $defaultDataValue = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_DEFAULTDATA");
+    $defaultDataValue = getChartPluginPreferencesValue("DEFAULTDATA", "none");
     # Get default value for the scale (linear/semilog)
-    $defaultScale = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_SCALE");
+    $defaultScale = getChartPluginPreferencesValue("SCALE", "linear");
     # Get default grid color.
-    $defaultGridColor = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_GRIDCOLOR") || '#000000';
+    $defaultGridColor = getChartPluginPreferencesValue("GRIDCOLOR", '#000000');
+    # Get default chart border color.
+    $defaultBorderColor = getChartPluginPreferencesValue("BORDERCOLOR", '#FFFFFF');
     # Get default value for the size, in pixels, of drawn data points
-    $defaultPointSize = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_POINTSIZE") || 2;
+    $defaultPointSize = getChartPluginPreferencesValue("POINTSIZE", 2);
     # Get default value for the width, in pixels, of drawn lines
-    $defaultLineWidth = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_LINEWIDTH") || 3;
+    $defaultLineWidth = getChartPluginPreferencesValue("LINEWIDTH", 3);
     # Get default value for the leading space before the first bar.
-    $defaultBarLeadingSpace = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_BARLEADINGSPACE") || 0;
+    $defaultBarLeadingSpaceUnits = getChartPluginPreferencesValue("BARLEADINGSPACEUNITS", 0);
     # Get default value for the trailing space after the last bar.
-    $defaultBarTrailingSpace = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_BARTRAILINGSPACE") || 0;
+    $defaultBarTrailingSpaceUnits = getChartPluginPreferencesValue("BARTRAILINGSPACEUNITS", 0);
     # Get default value for the space between bars.
-    $defaultBarSpace = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_BARSPACE") || 0;
+    $defaultBarSpaceUnits = getChartPluginPreferencesValue("BARSPACEUNITS", 1);
+    # Get default value for the width of bars.
+    $defaultBarWidthUnits = getChartPluginPreferencesValue("BARWIDTHUNITS", 2);
+    # Get default value for the leading space before the first sparkbar.
+    $defaultSparkBarLeadingSpaceUnits = getChartPluginPreferencesValue("SPARKBARLEADINGSPACEUNITS", 0);
+    # Get default value for the trailing space after the last sparkbar.
+    $defaultSparkBarTrailingSpaceUnits = getChartPluginPreferencesValue("SPARKBARTRAILINGSPACEUNITS", 0);
+    # Get default value for the space between sparkbars.
+    $defaultSparkBarSpaceUnits = getChartPluginPreferencesValue("SPARKBARSPACEUNITS", 1);
+    # Get default value for the width of sparkbars.
+    $defaultSparkBarWidthUnits = getChartPluginPreferencesValue("SPARKBARWIDTHUNITS", 2);
     # Get default value for showerror
-    $defaultShowError = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_SHOWERROR") || "text";
+    $defaultShowError = getChartPluginPreferencesValue("SHOWERROR", "text");
 } ## end sub _init_defaults
+
+sub getChartPluginPreferencesValue {
+    my ($key, $default) = @_;
+    my $value = &TWiki::Func::getPreferencesValue("CHARTPLUGIN_$key");
+    return $default if (! defined($value));
+    return $value;
+}
 
 # Object constructor for creating a ChartPlugin Perl object.  The object is
 # initialized with the current web.topic.
@@ -328,7 +349,7 @@ sub _makeChart {
     $this->{name} = $name;
 
     # Get the chart width and height
-    $this->{width} = int($this->_Parameters->getParameter("width", $defaultWidth));
+    $this->{width} = _max(1, int($this->_Parameters->getParameter("width", $defaultWidth)));
     $this->{height} = int($this->_Parameters->getParameter("height", $defaultHeight));
     $chart->setImageWidth($this->{width});
     $chart->setImageHeight($this->{height});
@@ -337,7 +358,7 @@ sub _makeChart {
     # parameter.  If it is missing, then generate an error message.
     my $type = $this->_Parameters->getParameter("type", $defaultType);
     return $this->_make_error("parameter *type* must be specified") if (! defined $type);
-    my @unknownTypes = grep(! /area|line|bar|arealine|combo|scatter/, ($type));
+    my @unknownTypes = grep(! /area|line|bar|arealine|combo|scatter|sparkline|sparkbar/, ($type));
     # Check for a valid type
     return $this->_make_error("Invalid value of *$type* for parameter *type* ") if (@unknownTypes);
     $chart->setType($type);
@@ -355,7 +376,11 @@ sub _makeChart {
     if (defined($subType)) {
         my @subTypes = split(/[\s,]+/, $subType);
         # Check for valid subtypes
-        my @unknownSubTypes = grep(! /area|line|point|pline|scatter|bar/, @subTypes);
+        my @unknownSubTypes;
+	foreach my $subType (@subTypes) {
+	    my $ok = grep {$_ eq $subType} qw(area line point pline scatter bar);
+	    push(@unknownSubTypes, $subType) if (! $ok);
+	}
         return $this->_make_error("unknown subtypes: " . join(", ", @unknownSubTypes)) if (@unknownSubTypes);
         # Now check to make sure that the subtypes specified are valid for the
         # specified type.
@@ -381,6 +406,10 @@ sub _makeChart {
         if ($type eq "combo") {
             @unknownSubTypes = grep(! /area|line|point|pline|bar/, @subTypes);
             return $this->_make_error("unsupported subtypes: " . join(", ", @unknownSubTypes) . " for type combo") if (@unknownSubTypes);
+        }
+        ### Check 'spark*' types
+        if ($type =~ /^spark/) {
+            return $this->_make_error("subtype can not be used when type = '$type'");
         }
 
         # All OK so set the subtype.
@@ -563,6 +592,10 @@ sub _makeChart {
     $colors = "$colors,$colors2" if (defined($colors2));
     $chart->setColors(split(/[\s,]+/, $colors)) if (defined($colors));
 
+    # Get the chart border  color.
+    my $borderColor = $this->_Parameters->getParameter("bordercolor", $defaultBorderColor);
+    $chart->setBorderColor($borderColor);
+
     # Get the chart grid  color.
     my $gridColor = $this->_Parameters->getParameter("gridcolor", $defaultGridColor);
     $chart->setGridColor(split(/[\s,]+/, $gridColor));
@@ -578,56 +611,34 @@ sub _makeChart {
     $chart->setFileDir($dir);
     $chart->setFileName($filename);
 
-    # See if the parameter 'legend' is available.
-    my $legend = $this->_Parameters->getParameter("legend", undef);
-
-    # Validate the legend data
-    my @legend;
-    if ($legend) {
-        my ($legendRows, $legendColumns) = $this->_tables->getRowColumnCount($tableName, $legend);
-	my $columnOrdered = 0;
-        if (abs($legendRows) > 1) {
-	    $columnOrdered = 1;
-	}
-	my @d = $this->_tables->getData($tableName, $legend, $columnOrdered);
-	# Since users can do things like specifying R1:C5..R1:C99,R1:C4
-	# which gets returned as multiply arrays of arrays, we combine all
-	# arrays into a single array where we will later validate whether
-	# there is enough legends to match the data to chart.
-	foreach my $d (@d) {
-	    push(@legend, @$d);
-	}
-        my $cnt = @legend;
-        if ($cnt == 0) {
-            return $this->_make_error("parameter *legend* contains an invalid value '$legend'.");
-        }
-        $chart->setLegend(@legend);
-    } ## end if ($legend)
-
     # If the user specified an X axis range, then extract from the X axis
     # data the starting and ending row/columns.  This defines whether the
     # data is row ordered or column ordered.  If there is no X axis
     # information specified, then assume that the data is in column order.
-    my $columnOrdered = 0;
+    my $dataOrientedVertically = 0;
     if (defined($xAxis)) {
-        my ($xAxisRows, $xAxisColumns) = $this->_tables->getRowColumnCount($tableName, $xAxis);
-        return $this->_make_error("parameter *xaxis* value of '$xAxis' is not valid")
-            if (! defined($xAxisRows));
+        my ($xAxisRows, $xAxisColumns) = $this->_tables->getRowColumnCount($tableName, $xAxis, $dataOrientedVertically);
+	if (! defined($xAxisRows)) {
+	    return $this->_make_error("parameter *xaxis* value of '$xAxis' is not valid");
+	}
         if (abs($xAxisRows) > 1) {
             if ($xAxisColumns > 1) {
                 return $this->_make_error("parameter *xaxis* specifies multiple (${xAxisRows}X$xAxisColumns) rows and columns.");
             }
-            $columnOrdered = 1;
+            $dataOrientedVertically = 1;
         }
-        my @d = $this->_tables->getData($tableName, $xAxis, $columnOrdered);
+        my @d = $this->_tables->getData($tableName, $xAxis, $dataOrientedVertically, 0);
         return $this->_make_error("no X axis data found in specified area of table [$xAxis]") if (! @d);
         $chart->setXaxis(@{$d[0]});
     } else {
-        $columnOrdered = 1;
+	# If no xaxis parameter, look at the data parameter to see if we can figure out
+	# the orientation of the data.
+        my ($dataRows, $dataColumns) = $this->_tables->getRowColumnCount($tableName, $data, 0);
+        $dataOrientedVertically = 1 if ($dataRows > $dataColumns);
     }
 
     # Get the actual data for dataSet=1.
-    my @data = $this->_tables->getData($tableName, $data, $columnOrdered);
+    my @data = $this->_tables->getData($tableName, $data, $dataOrientedVertically, 1);
     # Validate that there is real data returned.
     return $this->_make_error("data ($data) points to no data") if (! @data);
     my $yminData1 = $chart->setData(@data);
@@ -640,7 +651,7 @@ sub _makeChart {
     my @data2;
     if (defined($data2)) {
 	# Get the actual data for dataSet=2.
-	@data2 = $this->_tables->getData($tableName, $data2, $columnOrdered);
+	@data2 = $this->_tables->getData($tableName, $data2, $dataOrientedVertically, 1);
 	# Validate that there is real data returned.
 	return $this->_make_error("data2 ($data2) points to no data") if (! @data2);
 	my $yminData2 = $chart->setData2(@data2);
@@ -651,9 +662,30 @@ sub _makeChart {
 	}
     }
 
-    # Make sure that there are enough legends to go with all specified
-    # data sets (if legends were specified)
+    # See if the parameter 'legend' is available.
+    my $legend = $this->_Parameters->getParameter("legend", undef);
+
+    # Validate the legend data
+    my @legend;
     if ($legend) {
+	# Assume that if the data is vertically oriented, then the legends
+	# is horizontally oriented and vis-versa
+	my $legendOrientedVertically = 0;
+	$legendOrientedVertically = 1 if ($dataOrientedVertically == 0);
+	my @d = $this->_tables->getData($tableName, $legend, $legendOrientedVertically, 0);
+	# Since users can do things like specifying R1:C5..R1:C99,R1:C4
+	# which gets returned as multiply arrays of arrays, we combine all
+	# arrays into a single array where we will later validate whether
+	# there is enough legends to match the data to chart.
+	foreach my $d (@d) {
+	    push(@legend, @$d);
+	}
+        my $cnt = @legend;
+        if ($cnt == 0) {
+            return $this->_make_error("parameter *legend* contains an invalid value '$legend'.");
+        }
+	# Make sure that there are enough legends to go with all specified
+	# data sets (if legends were specified)
         my $numLegends  = @legend;
         my $numDataSets = @data;
         $numDataSets += @data2;
@@ -662,7 +694,9 @@ sub _makeChart {
                 "parameter *legend* contains an invalid value '$legend' since it specifies $numLegends legends and there are $numDataSets data sets."
             );
         }
-    }
+
+        $chart->setLegend(@legend);
+    } ## end if ($legend)
 
     # Set the default point size
     $chart->setPointSize(_max(1, int($this->_Parameters->getParameter("pointsize", $defaultPointSize))));
@@ -671,9 +705,33 @@ sub _makeChart {
     $chart->setLineWidth(_max(1, int($this->_Parameters->getParameter("linewidth", $defaultLineWidth))));
 
     # Set default bar graph values
-    $chart->setBarLeadingSpace($defaultBarLeadingSpace);
-    $chart->setBarTrailingSpace($defaultBarTrailingSpace);
-    $chart->setBarSpace($defaultBarSpace);
+    if ($type =~ /spark(.*)/) {
+	$type = $1;
+	$chart->setType($type);
+	$chart->setBarLeadingSpaceUnits(0);
+	$chart->setBarTrailingSpaceUnits($defaultSparkBarSpaceUnits);
+	$chart->setBarSpaceUnits(0);
+	$chart->setBarWidthUnits($defaultSparkBarWidthUnits);
+	$chart->setShowBarBorder(0);
+	$chart->setBorderColor("transparent");
+	$chart->setYgrid("off");
+	$chart->setLineWidth(1);
+	$chart->setMargin(0);
+	if ($type eq "bar" && $this->{width} <= 1) {
+	    # If 'sparkbar', check to see if we need to replace the user's
+	    # 'width' with an auto-computed value so all bars are seen as
+	    # expected (2 pixels wide with 1 pixel spacer).
+	    my $numDataPoints  = $chart->getNumDataPoints1();
+	    my $minWidth = $numDataPoints * ($defaultSparkBarWidthUnits + $defaultSparkBarSpaceUnits);
+	    $chart->setImageWidth($this->{width} = $minWidth);
+	}
+    } else {
+	$chart->setBarLeadingSpaceUnits($defaultBarLeadingSpaceUnits);
+	$chart->setBarTrailingSpaceUnits($defaultBarTrailingSpaceUnits);
+	$chart->setBarSpaceUnits($defaultBarSpaceUnits);
+	$chart->setBarWidthUnits($defaultBarWidthUnits);
+	$chart->setShowBarBorder(1);
+    }
 
     # Create the actual chart.
     my $err = $chart->makeChart();
@@ -682,6 +740,7 @@ sub _makeChart {
     # Get remaining parameters and pass to <img ... />
     my $options    = "";
     my %parameters = $this->_Parameters->getAllParameters();
+    delete $parameters{_RAW};
     foreach my $k (keys %parameters) {
         $options .= "$k=\"$parameters{$k}\" ";
     }
@@ -781,4 +840,12 @@ sub commonTagsHandler {
     $_[0] =~ s/%CHART_TIMER{(\d+) (.*)}%/$chart->_timeit($1, $2, $topic, $web)/eog;
 } ## end sub commonTagsHandler
 
+sub mylog {
+    my ($msg) = @_;
+    use POSIX;
+    open(LOG, ">>/tmp/mylog.txt");
+    print LOG strftime("%Y/%m/%d %H:%M:%S %Z: ", localtime(time()));
+    print LOG "$msg\n";
+    close(LOG);
+}
 1;
