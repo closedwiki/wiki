@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="TWikiContributor" date="1305084494" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarREDIRECT
+---+++ REDIRECT{"url"} -- create a redirect to another topic or website
+   * The =%<nop>REDIRECT{}%= variable is handled by the RedirectPlugin.
+   * Syntax: =%<nop>REDIRECT{"TopicName"}%=
+   * Examples:
+      * =%<nop>REDIRECT{"ExampleTopic"}%= redirects to the !ExampleTopic topic
+      * =%<nop>REDIRECT{"OtherWeb.ExampleTopic"}%= redirects to the !OtherWeb.ExampleTopic topic
+      * =%<nop>REDIRECT{"http://twiki.org/"}%= redirects to http://twiki.org/
+   * Related: RedirectPlugin
