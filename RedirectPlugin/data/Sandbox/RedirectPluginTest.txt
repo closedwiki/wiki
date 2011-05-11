@@ -1,8 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1149875269" format="1.1" reprev="1.1" version="1.1"}%
----+ %TWIKIWEB%.RedirectPlugin Test Topic: origin
+%META:TOPICINFO{author="TWikiContributor" date="1305084498" format="1.1" version="$Rev$"}%
+---+ !RedirectPlugin Test Topic: Origin
 
 %REDIRECT{"RedirectPluginDestination"}%
 
-=noredirect= is set to =%URLPARAM{"noredirect" default="nothing"}%=
+=noredirect= is set to =%URLPARAM{"noredirect" default="nothing"}%=.
 
-[[%TOPIC%][Test again]]
+[[%TOPIC%][Test again]].
+
+__Related:__ %SYSTEMWEB%.RedirectPlugin, %SYSTEMWEB%.VarREDIRECT, RedirectPluginDestination

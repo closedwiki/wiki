@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1280121034" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305084494" format="1.1" version="$Rev$"}%
 ---+!! Redirect Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -28,7 +28,7 @@ You can use this plugin to make easy-to-type shortforms/acronyms of topic names.
       * Parameters can also be passed to the variable: =%<nop>REDIRECT{"Someweb.SomeTopic?q=LDAP"}%=
       * =REDIRECT= parameters override url parameters
 
----++ Prevent redirecting
+---++ Prevent Redirecting
 
 To view the topic that contains a =REDIRECT=, pass parameter =noredirect=on= to the url. For example:
 
@@ -36,7 +36,7 @@ To view the topic that contains a =REDIRECT=, pass parameter =noredirect=on= to 
 http://domain.com/twiki/bin/view/Main/WebHome?noredirect=on
 </verbatim>   
    
----++ Wikipedia like "Redirected from..."
+---++ Wikipedia-like "Redirected from..."
 
 A redirect now appends the =redirectedfrom= parameter to the url which contains the Web.Topic that the user has been redirected from. This allows us to display Wikipedia like "Redirected from ..." text on the destination topic. You can use the =%<nop>URLPARAM{redirectedfrom}%= variable to access the parameter and create the "Redirected from..." text. 
 
@@ -62,7 +62,7 @@ Which will display the following on topics that have been redirected:
    * Set SHORTDESCRIPTION = Create a redirect to another topic or website
    * Set DEBUG = 0
 
----++ Test topics
+---++ Test Topics
 
 If installed:
    * Sandbox.RedirectPluginTest - this topic should redirect to landing page:
@@ -76,19 +76,22 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==data/TWiki/VarREDIRECT.txt== | REDIRECT variable documentation topic |
+     | ==data/Sandbox/RedirectPluginTest.txt== | Test topic |
+     | ==data/Sandbox/RedirectPluginDestination.txt== | Test topic, landing page |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * Test if the installation was successful (see above syntax notes)
+   * Test if the installation was successful (see Test Topics section above)
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.SteveMokris |
-|  Copyright: | &copy; 2003 TWiki:Main.SteveMokris, %BR% &copy; 2003-2010 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2003 TWiki:Main.SteveMokris, %BR% &copy; 2003-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-07-25 |
+|  Plugin Version: | 2011-05-10 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-02-14: | TWikibug:Item6664 - Remove any newline characters from redirect URL before redirecting TWiki:Main/DipuDeshmukh |
-|  2010-07-25: | TWikibug:Item6530 - doc fixes |
+|  2-11-05-10: | TWikibug:Item6701: Doc improvements, adding VarREDIRECT variable documentation -- TWiki:Main.PeterThoeny |
+|  2011-02-14: | TWikibug:Item6664: Remove any newline characters from redirect URL before redirecting -- TWiki:Main.DipuDeshmukh |
+|  2010-07-25: | TWikibug:Item6530: Doc fixes |
 |  24 Nov 2008: | TWiki:Main.AndrewRJones: Ability to display Wikipedia like "Redirected from..." |
 |  22 Apr 2007: | Arthur Clemens: url parameters are now passed on. Adapted from TWiki:Main.JohnRouillard. |
 |  21 Apr 2007: | Arthur Clemens: fixed redirect to non-wiki word topics; added =noredirect=on= parameter; added support for TWiki:Codev.ShorterURLs. |
@@ -100,3 +103,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Perl Version: | 5.005 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/RedirectPlugin |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/RedirectPluginDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/RedirectPluginAppraisal |
+
+__Related Topics:__ VarREDIRECT, Sandbox.RedirectPluginDestination, Sandbox.RedirectPluginTest, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.AdminDocumentationCategory

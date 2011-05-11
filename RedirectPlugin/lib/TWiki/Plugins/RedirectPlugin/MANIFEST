@@ -1,4 +1,5 @@
-data/TWiki/RedirectPlugin.txt NEW
-lib/TWiki/Plugins/RedirectPlugin.pm NEW
-data/Sandbox/RedirectPluginTest.txt NEW
-data/Sandbox/RedirectPluginDestination.txt NEW
+data/TWiki/RedirectPlugin.txt  0644
+data/TWiki/VarREDIRECT.txt 0644
+data/Sandbox/RedirectPluginTest.txt 0644
+data/Sandbox/RedirectPluginDestination.txt 0644
+lib/TWiki/Plugins/RedirectPlugin.pm 0644

@@ -1,9 +1,10 @@
-%META:TOPICINFO{author="MeredithLesly" date="1150118041" format="1.1" version="1.1"}%
----+ %TWIKIWEB%.RedirectPlugin Test Topic: destination
+%META:TOPICINFO{author="TWikiContributor" date="1305084498" format="1.1" version="$Rev$"}%
+---+ !RedirectPlugin Test Topic: Destination
 
-This is the destination of the !RedirectPlugin test topic. %BR%
-You should end up here coming from <a href="%SCRIPTURL{view}%/%WEB%/RedirectPluginTest?noredirect=on">RedirectPluginTest</a>
+This is the destination of the %SYSTEMWEB%.RedirectPlugin test topic. You should end up here coming from [[%SCRIPTURL{view}%/%WEB%/RedirectPluginTest?noredirect=on][RedirectPluginTest]].
 
 The following demonstrates how to use the =redirectedfrom= parameter:
 
 You have been redirected from: %URLPARAM{redirectedfrom}%
+
+__Related:__ %SYSTEMWEB%.RedirectPlugin, %SYSTEMWEB%.VarREDIRECT, RedirectPluginTest

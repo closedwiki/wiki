@@ -3,7 +3,7 @@
 # Copyright (C) 2006 Motorola, thomas.weigert@motorola.com
 # Copyright (C) 2006 Meredith Lesly, msnomer@spamcop.net
 # Copyright (C) 2003 Steve Mokris, smokris@softpixel.com
-# Copyright (C) 2006-2010 TWiki Contributors
+# Copyright (C) 2006-2011 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ use vars qw( $VERSION $RELEASE $debug $pluginName );
 use strict;
 
 $VERSION    = '$Rev$';
-$RELEASE    = '2011-03-14';
+$RELEASE    = '2011-05-10';
 $pluginName = 'RedirectPlugin';
 
 # =========================
