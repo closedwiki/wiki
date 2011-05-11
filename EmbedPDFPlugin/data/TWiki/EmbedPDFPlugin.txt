@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305095385" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305098647" format="1.1" version="$Rev$"}%
 ---+ <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -13,9 +13,9 @@
  
 ---++ Introduction
 
-Many browsers can show PDF documents embedded just like pictures within HTML documents using the =&lt;embed&gt;= HTML tag. Unfortunately, they are usually unable to detect the preferred (screen) size and aspect ratio of the PDF document and display only a little unreadable thumbnail version of the PDF file. 
+Many browsers can show PDF documents embedded just like pictures within HTML documents using the =&lt;object&gt;= HTML tag. Unfortunately, they are usually unable to detect the preferred (screen) size and aspect ratio of the PDF document and display only a little unreadable thumbnail version of the PDF file. 
 
-This plugin adds =%<nop>EMBEDPDF{...}%= and =%<nop>EMBEDPDFSIZE{...}%= variables. These variables are helpful for embedding PDF documents in TWiki webs. =%<nop>EMBEDPDF{...}%= will create an =&lt;embed&gt;= HTML tag to show the specified PDF file in a reasonable size (as specified within that PDF file). =%<nop>EMBEDPDFSIZE{...}%= will expand to the width and height of the file.
+This plugin adds =%<nop>EMBEDPDF{...}%= and =%<nop>EMBEDPDFSIZE{...}%= variables. These variables are helpful for embedding PDF documents in TWiki webs. =%<nop>EMBEDPDF{...}%= will create an =&lt;object&gt;= HTML tag to show the specified PDF file in a reasonable size (as specified within that PDF file). =%<nop>EMBEDPDFSIZE{...}%= will expand to the width and height of the file.
 
 ---++ Caution
 
@@ -34,13 +34,15 @@ You might want to restrict _write_ access to your Web to prevent intruders from 
 
 Assume that test.pdf has a height of 40 points and a width of 100 points. Then:
    * =%<nop>EMBEDPDF{ test }%= expands to %BR%
-        =&lt;embed src="%<nop>ATTACHURL%/test" width="100" height="40"&gt;=, and
+     =&lt;object data="%<nop>ATTACHURLPATH%/test.pdf" width="100" height="40" type="application/pdf"&gt;= %BR%
+     =&lt;param name="src" value="%<nop>ATTACHURLPATH%/test.pdf" /&gt;= %BR%
+     =&lt;a href="%ATTACHURLPATH%/pdf.pdf"&gt;pdf.pdf&lt;/a&gt;= %BR%
+     =&lt;/object&gt;=
    * =%<nop>EMBEDPDFSIZE{ test }%= expands to %BR%
-        =width="100" height="40"=
+     =width="100" height="40"=
 Note that the =.pdf= extension is automatically added to the attachment name.
 
-The plugin checks the user agent setting reported by your browser to detect IE. For IE, the width and height will be
-enlarged since IE displays the PDF viewer controls within the HTML document along with the PDF document itself.
+The plugin checks the user agent setting reported by your browser to detect IE. For IE, the width and height will be enlarged since IE displays the PDF viewer controls within the HTML document along with the PDF document itself.
 
 ---++ <nop>%TOPIC% Global Settings
 
@@ -77,7 +79,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
       * Test if the installation was successful: The following two pictures should look the same (assuming you have a PDF plugin installed in your browser)
          * Embed tag created using =%<nop>EMBEDPDF{ pdf }%=: %BR% %EMBEDPDF{ pdf }%
-         * Hard coded embed tag: %BR% <embed SRC="%ATTACHURL%/pdf.pdf" width="216" height="31" />
+         * Hard coded embed tag: %BR% <object data="%ATTACHURLPATH%/pdf.pdf" width="216" height="31" type="application/pdf"><param name="src" value="%ATTACHURLPATH%/pdf.pdf" /><a href="%ATTACHURLPATH%/pdf.pdf">pdf.pdf</a></object>
       * The width and height of %ATTACHURL%/pdf.pdf as determined by =%<nop>EMBEDPDFSIZE{ pdf }%= are as follows:
          * %EMBEDPDFSIZE{ pdf }%
       * Here is a pdf file for which we have a pre-rendered version available. The actual pdf file is missing, so the link under the image is dead: %BR% %EMBEDPDF{ pdf-prerendered }%
@@ -88,7 +90,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Copyright: | &copy; 2003 TWiki:Main.JohannesMartin <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  Plugin Version: | 2011-05-10 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-05-10: | TWikibug:Item6701: Doc improvements -- TWiki:Main.PeterThoeny |
+|  2011-05-10: | TWikibug:Item6701: Change &lt;embed&gt; tag to &lt;object&gt; tag; doc improvements -- TWiki:Main.PeterThoeny |
 |  07 Mar 2003: | added support for IE and link text |
 |  06 Mar 2003: | Initial version |
 |  CPAN Dependencies: | none |
