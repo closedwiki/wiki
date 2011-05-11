@@ -1,10 +1,9 @@
 #!/usr/bin/perl -w
-use strict;
 #
 # Example build class. Copy this file to the equivalent place in your
 # plugin or contrib and edit.
 #
-# Read the comments at the top of lib/TWiki/Contrib/Build.pm for
+# Read the comments at the top of lib/TWiki/Plugins/Build.pm for
 # details of how the build process works, and what files you
 # have to provide and where.
 #
@@ -27,8 +26,29 @@ BEGIN {
 
 use TWiki::Contrib::Build;
 
+# Declare our build package
+{ package DBIQueryPluginBuild;
+
+  @DBIQueryPluginBuild::ISA = ( "TWiki::Contrib::Build" );
+
+  sub new {
+    my $class = shift;
+    return bless( $class->SUPER::new( "DBIQueryPlugin", "Build" ), $class );
+  }
+
+  # Example: Override the build target
+  sub target_build {
+    my $this = shift;
+
+    $this->SUPER::target_build();
+
+    # Do other build stuff here
+  }
+}
+
 # Create the build object
-$build = new TWiki::Contrib::Build( 'DBIQueryPlugin' );
+$build = new DBIQueryPluginBuild();
 
 # Build the target on the command line, or the default target
 $build->build($build->{target});
+
