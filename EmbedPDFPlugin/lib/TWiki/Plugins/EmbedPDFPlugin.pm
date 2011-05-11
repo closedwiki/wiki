@@ -1,7 +1,8 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2008-2011 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -13,42 +14,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
-#
-# =========================
-#
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
-#
-# Each plugin is a package that may contain these functions:        VERSION:
-#
-#   initPlugin              ( $topic, $web, $user, $installWeb )    1.000
-#   initializeUserHandler   ( $loginName, $url, $pathInfo )         1.010
-#   registrationHandler     ( $web, $wikiName, $loginName )         1.010
-#   commonTagsHandler       ( $text, $topic, $web )                 1.000
-#   startRenderingHandler   ( $text, $web )                         1.000
-#   outsidePREHandler       ( $text )                               1.000
-#   insidePREHandler        ( $text )                               1.000
-#   endRenderingHandler     ( $text )                               1.000
-#   beforeEditHandler       ( $text, $topic, $web )                 1.010
-#   afterEditHandler        ( $text, $topic, $web )                 1.010
-#   beforeSaveHandler       ( $text, $topic, $web )                 1.010
-#   writeHeaderHandler      ( $query )                              1.010  Use only in one Plugin
-#   redirectCgiQueryHandler ( $query, $url )                        1.010  Use only in one Plugin
-#   getSessionValueHandler  ( $key )                                1.010  Use only in one Plugin
-#   setSessionValueHandler  ( $key, $value )                        1.010  Use only in one Plugin
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, all handlers except initPlugin are
-# disabled. To enable a handler remove the leading DISABLE_ from
-# the function name. Remove disabled handlers you do not need.
-#
-# NOTE: To interact with TWiki use the official TWiki functions 
-# in the TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
-
 
 # =========================
-package TWiki::Plugins::EmbedPDFPlugin;    # change the package name and $pluginName!!!
+package TWiki::Plugins::EmbedPDFPlugin;
 
 # =========================
 use vars qw(
@@ -56,15 +24,8 @@ use vars qw(
         $debug $linkText $prerendered
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2011-05-10';
 
 $pluginName = 'EmbedPDFPlugin';  # Name of this Plugin
 
