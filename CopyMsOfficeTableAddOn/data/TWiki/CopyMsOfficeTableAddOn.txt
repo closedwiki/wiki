@@ -1,0 +1,87 @@
+%META:TOPICINFO{author="PeterThoeny" date="1305180840" format="1.1" reprev="1.2" version="1.2"}%
+---+ Copy Table from/to Spreadsheet/table Programs Add-On
+
+With this program is it possible to copy a table from an office program (or an tabs separated file) to Twiki with some lay-out functions, or to copy it back from twiki for simple and fast editing. 
+
+Its written in Delphi 4 so for the time being it works only with windows, but with wine it will run on Linux. And maybe it is compileble with Lazarus (open source crossplatform Delphi clone) or Kylix on Linux http://www.lazarus.freepascal.org (I can't get lazarus installed on my machine Linux and Windows). 
+
+In the attachment is the program file the source and an Help file (in Dutch). 
+
+---++ This program works with
+---+++ From
+   * Tables in Twiki format
+   * Office applications (<nop>OpenOffice.org, MS Office and more)
+   * HTML Tables (from the generated view not the source)
+   * tab seperated files
+---+++ To
+   * Twiki in twiki format
+   * Spreadshead programs
+---++ Usage Version 0.5
+   * The Cells to be copied *have* to be selected.
+   * Moving rows or columns: select an row or colum at the grey part and move it to the desired place. 
+   * *The mousemenue*
+---++ To Do
+   * <nop>PastFromTwiki is not working perfect
+%TABLE{tableborder="0" cellpadding"1" cellspacing="3" }%
+|*Copy and Paste*||
+|<nop>CopyToTwiki |Copys the selected cells to paste it to Twiki|
+|Copy |Copys the selected cells to paste it to an program with tables|
+|<nop>PastFromTwiki |Paste an table in twiki format to <nop>CopyTwiki|
+|Past |Paste the coped cells from an program with cells|
+|Cut |Clears the selected cells|
+|*Aligning*||
+|Left |Align the selected cells to the left|
+|Right |Align the selected cells to the right|
+|Center |Align the selected cells to the middel|
+|Bold |Makes the tekst in the cell bold|
+|Itallic |Makes the tekst in the cell itallic|
+|Clean|Cleans aligning and bold and Itallic|
+   * Table setting menu (Select "Table setting" for this menue)
+%TABLE{tableborder="0" cellpadding"1" cellspacing="3" }%
+|*Sort*||
+|Sort |Set sort option on true|
+|Inisort |Defines the default sort column|
+|Up of Down |Set sort on up or down|
+|*Border*||
+|Border |Define the border of the table|
+|Cell |padding ? I dont know what it does...|
+|Cell |spacing ? I dont know what it does...|
+|*Color*||
+|User |Sets this option on true|
+|headerbg |Defines the background color of the header/footer|
+|databg |Defines the background color of the cells|
+|*Titel*||
+|Headerrows|Defines ammount of headerrows|
+|Footerrows|Defines ammount of footerrows|
+
+<img src="%ATTACHURLPATH%/CopyToTwiki.png" alt="CopyToTwiki.png"  />
+---++ Add-On Installation Instructions
+   * Download the <nop>CopyTwiki.zip file from the Add-on Home (see below)
+   * Unzip ==CopyTwiki.zip== Wherever you want. Content:
+     | *File:* | *Description:* |
+     | ==<nop>CopyTwiki.EXE== |The Program  |
+   * Test if the installation was successful:
+      * _describe, with example_
+
+---++ Add-On Info
+
+   * Set SHORTDESCRIPTION = Copy a tables to/from a Microsoft Office program (or a tabs separated file) and TWiki
+
+|  Add-on Author: | TWiki:Main/FrankPauw |
+|  Add-on Version: | 07 Aug 2003 (v1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  08 Aug 2003: | Initial version |
+|  16 Jan 2004: | *Add* <br>-Clean cells<br>-Title headerrows and footerrows<br> *Fix* <br>-Sort notation<br>-header footer notation<br>-more  |
+|  27 June 2004: | *Fix* <br>-inisort notation  |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | Windows |
+|  Perl Version: | N/A |
+|  License: | GPL |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+
+-- TWiki:Main/FrankPauw - 07 Aug 2003
+
+%META:FILEATTACHMENT{name="CopyToTwiki.png" attachment="CopyToTwiki.png" attr="h" comment="" date="1305180839" path="CopyToTwiki.png" size="19188" user="PeterThoeny" version="1"}%
