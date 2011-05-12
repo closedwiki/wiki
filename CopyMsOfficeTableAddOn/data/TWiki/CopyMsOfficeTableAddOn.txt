@@ -1,42 +1,67 @@
-%META:TOPICINFO{author="PeterThoeny" date="1305180840" format="1.1" reprev="1.2" version="1.2"}%
----+ Copy Table from/to Spreadsheet/table Programs Add-On
+%META:TOPICINFO{author="TWikiContributor" date="1305183412" format="1.1" version="$Rev$"}%
+---+!! Copy Microsoft Office Table to/from TWiki Table Add-On
+<!--
+   Contributions to this contrib are appreciated. Please update the contrib page at
+   http://twiki.org/cgi-bin/view/Plugins/CopyMsOfficeTableAddOn or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/CopyMsOfficeTableAddOnDev.
+   If you are a TWiki contributor please update the contrib in the SVN repository.
+-->
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+</sticky>
+%SHORTDESCRIPTION%
 
-With this program is it possible to copy a table from an office program (or an tabs separated file) to Twiki with some lay-out functions, or to copy it back from twiki for simple and fast editing. 
+---++ Overview
 
-Its written in Delphi 4 so for the time being it works only with windows, but with wine it will run on Linux. And maybe it is compileble with Lazarus (open source crossplatform Delphi clone) or Kylix on Linux http://www.lazarus.freepascal.org (I can't get lazarus installed on my machine Linux and Windows). 
+Use this program to copy a table from an office program (or a tabs separated file) to TWiki with some layout functions, or to copy it back from TWiki for simple and fast editing.
 
-In the attachment is the program file the source and an Help file (in Dutch). 
+To install, download [[%ATTACHURL%/CopyTwiki.zip][CopyTwiki.zip]] (attached to this topic), unzip the Windows executable =CopyTwiki.exe=, and copy the executable to a folder of choice. Run the program to convert tables.
 
----++ This program works with
+---++ Screenshot
+
+<img src="%ATTACHURLPATH%/CopyToTwiki.png" alt="" width="735" height="504" />
+
+---++ Table Conversion
+
 ---+++ From
-   * Tables in Twiki format
+
+   * Tables in TWiki format
    * Office applications (<nop>OpenOffice.org, MS Office and more)
    * HTML Tables (from the generated view not the source)
-   * tab seperated files
+   * Tab-separated files
+
 ---+++ To
-   * Twiki in twiki format
-   * Spreadshead programs
+
+   * TWiki in TWiki format
+   * Spreadsheet programs
+
 ---++ Usage Version 0.5
+
    * The Cells to be copied *have* to be selected.
-   * Moving rows or columns: select an row or colum at the grey part and move it to the desired place. 
-   * *The mousemenue*
+   * Moving rows or columns: select a row or column at the gray part and move it to the desired location. 
+   * *The mouse menu*
+
 ---++ To Do
-   * <nop>PastFromTwiki is not working perfect
+
+   * <nop>PastFromTwiki is not working perfectly:
 %TABLE{tableborder="0" cellpadding"1" cellspacing="3" }%
 |*Copy and Paste*||
-|<nop>CopyToTwiki |Copys the selected cells to paste it to Twiki|
-|Copy |Copys the selected cells to paste it to an program with tables|
-|<nop>PastFromTwiki |Paste an table in twiki format to <nop>CopyTwiki|
+|<nop>CopyToTwiki |Copies the selected cells to paste it to TWiki|
+|Copy |Copies the selected cells to paste it to an program with tables|
+|<nop>PastFromTwiki |Paste a table in TWiki format to <nop>CopyTwiki|
 |Past |Paste the coped cells from an program with cells|
 |Cut |Clears the selected cells|
 |*Aligning*||
 |Left |Align the selected cells to the left|
 |Right |Align the selected cells to the right|
-|Center |Align the selected cells to the middel|
-|Bold |Makes the tekst in the cell bold|
-|Itallic |Makes the tekst in the cell itallic|
-|Clean|Cleans aligning and bold and Itallic|
-   * Table setting menu (Select "Table setting" for this menue)
+|Center |Align the selected cells to the middle|
+|Bold |Makes the text in the cell bold|
+|Itallic |Makes the text in the cell italic|
+|Clean|Cleans aligning, bold and italic|
+
+   * Table setting menu (Select "Table setting" for this menu)
 %TABLE{tableborder="0" cellpadding"1" cellspacing="3" }%
 |*Sort*||
 |Sort |Set sort option on true|
@@ -44,44 +69,65 @@ In the attachment is the program file the source and an Help file (in Dutch).
 |Up of Down |Set sort on up or down|
 |*Border*||
 |Border |Define the border of the table|
-|Cell |padding ? I dont know what it does...|
-|Cell |spacing ? I dont know what it does...|
+|Cell |padding ? I don't know what it does...|
+|Cell |spacing ? I don't know what it does...|
 |*Color*||
 |User |Sets this option on true|
 |headerbg |Defines the background color of the header/footer|
 |databg |Defines the background color of the cells|
 |*Titel*||
-|Headerrows|Defines ammount of headerrows|
-|Footerrows|Defines ammount of footerrows|
+|Headerrows|Defines amount of headerrows|
+|Footerrows|Defines amount of footerrows|
 
-<img src="%ATTACHURLPATH%/CopyToTwiki.png" alt="CopyToTwiki.png"  />
+---++ Source Code
+
+The Delphi 4 source code is attached, [[%ATTACHURL%/CopyTwikiSource.zip][CopyTwikiSource.zip]].
+
+The program is written in Delphi 4, so for the time being it works only on Windows, but with wine it will run on Linux. And maybe it is compilable with Lazarus (open source cross-platform Delphi clone) or Kylix on Linux http://www.lazarus.freepascal.org.
+
 ---++ Add-On Installation Instructions
-   * Download the <nop>CopyTwiki.zip file from the Add-on Home (see below)
-   * Unzip ==CopyTwiki.zip== Wherever you want. Content:
+
+   * Download the [[%ATTACHURL%/CopyTwiki.zip][CopyTwiki.zip]] from the Add-on page.
+   * Unzip ==CopyTwiki.zip== to a folder of choice. Content:
      | *File:* | *Description:* |
-     | ==<nop>CopyTwiki.EXE== |The Program  |
-   * Test if the installation was successful:
-      * _describe, with example_
+     | ==<nop>CopyTwiki.exe== | Windows executable |
+
+__Note:__ The following instructions are for the administrator who installs the add-on on the server where TWiki is running. As a user you can safely ignore these steps:
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+ 
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Add-on topic |
+        | ==pub/TWiki/%TOPIC%/CopyToTwiki.png== | Screenshot |
+        | ==pub/TWiki/%TOPIC%/CopyTwiki.zip== | ZIP file containing the executable |
+        | ==pub/TWiki/%TOPIC%/CopyTwikiSource.zip== | ZIP file containing the Delphi 4 source code |
+        | ==lib/TWiki/Contrib/%TOPIC%.pm== | Add-on Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
 
 ---++ Add-On Info
 
-   * Set SHORTDESCRIPTION = Copy a tables to/from a Microsoft Office program (or a tabs separated file) and TWiki
+   * Set SHORTDESCRIPTION = Convert Microsoft Office tables or tab-separated files to/from TWiki tables and vice versa
 
-|  Add-on Author: | TWiki:Main/FrankPauw |
-|  Add-on Version: | 07 Aug 2003 (v1.000) |
+|  Add-on Author: | TWiki:Main.FrankPauw |
+|  Copyright: | &copy; 2003-2004 TWiki:Main.FrankPauw <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Add-on Version: | 2011-05-12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  08 Aug 2003: | Initial version |
-|  16 Jan 2004: | *Add* <br>-Clean cells<br>-Title headerrows and footerrows<br> *Fix* <br>-Sort notation<br>-header footer notation<br>-more  |
+|  2011-05-12: | TWikibug:Item6701: Doc improvements; import into SVN -- TWiki:Main.PeterThoeny |
 |  27 June 2004: | *Fix* <br>-inisort notation  |
+|  16 Jan 2004: | *Add* <br>-Clean cells<br>-Title headerrows and footerrows<br> *Fix* <br>-Sort notation<br>-header footer notation<br>-more  |
+|  08 Aug 2003: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | Windows |
 |  Perl Version: | N/A |
-|  License: | GPL |
 |  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+__Related Topic:__ %SYSTEMWEB%.TWikiAddOns
 
--- TWiki:Main/FrankPauw - 07 Aug 2003
-
-%META:FILEATTACHMENT{name="CopyToTwiki.png" attachment="CopyToTwiki.png" attr="h" comment="" date="1305180839" path="CopyToTwiki.png" size="19188" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="CopyToTwiki.png" attachment="CopyToTwiki.png" attr="h" comment="" date="1305180839" path="CopyToTwiki.png" size="19188" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="CopyTwikiSource.zip" attachment="CopyTwikiSource.zip" attr="h" comment="Delphi 4 source code of copytwiki.exe" date="1305181384" path="CopyTwikiSource.zip" size="22186" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="CopyTwiki.zip" attachment="CopyTwiki.zip" attr="h" comment="ZIP file containing Windows executable" date="1305181445" path="CopyTwiki.zip" size="199833" user="TWikiContributor" version="1"}%
