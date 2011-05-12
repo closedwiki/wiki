@@ -1524,11 +1524,20 @@ Return: error message or undef.
 
 *Since:* TWiki::Plugins::VERSION 1.000 (29 Jul 2001)
 
-For example,
+Example:
 <verbatim>
-my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic )
-$text =~ s/APPLE/ORANGE/g;
-TWiki::Func::saveTopic( $web, $topic, $meta, $text, { forcenewrevision => 1 } );
+    # read topic:
+    my( $topicMeta, $topicText ) = TWiki::Func::readTopic( $web, $topic )
+    # example to change topic text:
+    $topicText =~ s/APPLE/ORANGE/g;
+    # example to change TWiki form field:
+    my $field = $topicMeta->get( 'FIELD', 'Title' );
+    if( $field ) {
+        $field->{value} = $newTitle;
+        $topicMeta->putKeyed( 'FIELD', $field );
+    }
+    # save updated topic:
+    TWiki::Func::saveTopic( $web, $topic, $topicMeta, $topicText, { forcenewrevision => 1 } );
 </verbatim>
 
 __Note:__ Plugins handlers ( e.g. =beforeSaveHandler= ) will be called as
@@ -1749,6 +1758,8 @@ release, or can be inspected in the =lib/TWiki/Meta.pm= file.
 This method *ignores* topic access permissions. You should be careful to use
 =checkAccessPermission= to ensure the current user has read access to the
 topic.
+
+See usage example at [[#SaveTopic][TWiki::Func::saveTopic]].
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
 
