@@ -23,7 +23,7 @@ Six types of charts, _line_, _area_, _bar_, _scatter_, _combo_, and _spark_ are 
 | Line | =line= | Shows a chart using simple lines, points only, or lines with points to represent the data. %BR% __Note:__ Any areas that fall behind already drawn areas are drawn as lines to make them visible | <img alt="" src="%ATTACHURLPATH%/lineexample.png" /> |
 | Scatter | =scatter= | Shows a scatter chart (XY data points) and allows mixing =area= or =bar= with =line=, =point=, and =pline= | <img alt="" src="%ATTACHURLPATH%/scatterexample.png" /> |
 | Combo | =combo= | Shows a chart combining the features from =area= or =bar= with =line=, =point=, and =pline= %BR% __Note:__ Formally known as =arealine= which is still supported | <img alt="" src="%ATTACHURLPATH%/comboexample.png" /> |
-| Spark | =sparkline=, =sparkbar=, and =sparkarea= | Shows a sparkline, sparkbar, and sparkarea chart | <img alt="" src="%ATTACHURLPATH%/sparklineexample.png" />%BR% <img alt="" src="%ATTACHURLPATH%/sparkbarexample2.png" />%BR% <img alt="" src="%ATTACHURLPATH%/sparkareaexample.png" /> |
+| Spark | =sparkline=, =sparkbar=, and =sparkarea= | Shows a sparkline, sparkbar, and sparkarea chart. All chart parameters are supported. | <img alt="" src="%ATTACHURLPATH%/sparklineexample.png" />%BR% <img alt="" src="%ATTACHURLPATH%/sparkbarexample2.png" />%BR% <img alt="" src="%ATTACHURLPATH%/sparkareaexample.png" /> |
 
 The =%<nop>CHART{...}%= variable gets expanded to an image representing the chart. Parameters and global settings determine the type of chart, dimensions, and values.
 
@@ -135,8 +135,8 @@ The =%<nop>CHART{...}%= variable gets expanded to an image representing the char
 | =width= | Defines the overall width of the chart in pixels.%BR%%BR%Note: if =type="sparkbar"= and =width="0"=, then the width will be auto computed to be the minimum width to allow easily readable spark bars. | Global =WIDTH= setting |
 | =height= | Defines the overall height of the chart in pixels. | Global =HEIGHT= setting |
 | =alt= | Alternate text for chart image | Empty alt tag |
-| =colors= and =colors2= | A list of colors defining the color of each set of data points for =data= and =data2=. | Global =LINE_COLORS= setting for lines; global =AREA_COLORS= setting for area |
-| =bgcolor= | Background color of the area surrounding/outside the chart. For example, ="#E7E7E7"= sets a light gray background (outside the chart) color.  Optionally specify a second values for the chart background itself (the inside color) and an optional third value which is the value of the color to fill data label boxes with. For example, ="#E7E7E7, #FFFFC0"= defines a chart with a light yellow inside background on a light gray outside, with default data label box background color. | Global =BGCOLOR= setting |
+| =colors= and =colors2= | A list of colors defining the color of each set of data points for =data= and =data2=. Color values are of the form: #RRGGBB or =transparent= | Global =LINE_COLORS= setting for lines; global =AREA_COLORS= setting for area |
+| =bgcolor= | Background color of the area surrounding/outside the chart, the area inside the chart, and the data label boxes.  Color values are of the form: #RRGGBB or =transparent=.  For example, ="#E7E7E7"= sets a light gray background (outside the chart) color.  Optionally specify a second values for the chart background itself (the inside color) and an optional third value which is the value of the color to fill data label boxes with. For example, ="#E7E7E7, #FFFFC0"= defines a chart with a light yellow inside background on a light gray outside, with default data label box background color. | Global =BGCOLOR= setting |
 | =gridcolor= | Colors/style of the grid (if any). If =xgrid= or =ygrid= = "on" then use the first =gridcolor= for drawing solid grid lines. If =xgrid= or =ygrid= = "dot", then use the full set of colors to define the line style for drawing the grid lines ("transparent" can be used to introduce holes in the line)" | Global =GRIDCOLOR= setting |
 | =linewidth= | Width of data lines in pixel | Global =LINEWIDTH= setting |
 | =pointsize= | Size of data points in pixel | Global =POINTSIZE= setting |
@@ -278,6 +278,7 @@ If the required parameters are not defined, then an error message is returned or
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-05-11 (v%$VERSION%) |
 |  Change History: | <!-- specify latest version first --> |
+|  2011-05-13: | <ul><li> TWikibug:Item6720: Allow support for =transparent= to be used in =colors= and =bgcolor= </li></ul> -- TWiki:Main.TaitCyrus |
 |  2011-05-11: | <ul><li> TWikibug:Item6716: Add ability to support constant values in addtion to spreadsheet ranges.</li><li> TWikibug:Item6717: Fix bug with =area= colors when =data2= is used.</li><li> TWikibug:Item6718: Add new types: =sparkline=, =sparkbar=, and =sparkarea= </li><li> TWikibug:Item6719: Retool how bar widths/spaces are used/calculated so they are now proportional instead of fixed sizing</li></ul> -- TWiki:Main.TaitCyrus |
 |  2011-05-05: | TWikibug:Item6714: Enhance error processing by adding =showerror= option.%BR%-- TWiki:Main.TaitCyrus |
 |  2011-05-03: | <ul><li>TWikibug:Item6709: Fix runtime warnings.</li><li> TWikibug:Item6705: Remove dependency on TWiki:Plugins.SetGetPlugin</li><li> TWikibug:Item6706: Add support for both a left and right Y-axis (plus new tests).</li><li> TWikibug:Item6707: Add ability to change the =datalabel= background color (plus new tests).</li><li> TWikibug:Item6703: Added greater control over number of =datalabels= drawn (plus new tests).</li><li> TWikibug:Item6708: Remove custom plugin parameter parser instead using TWiki::Attrs.</li></ul> -- TWiki:Main.TaitCyrus |
@@ -320,3 +321,7 @@ __Related Topics:__ VarCHART, ChartPluginTests, ChartPluginTestsRemote, %SYSTEMW
 %META:FILEATTACHMENT{name="bar1.png" attr="h" comment="" date="1093917742" path="bar1.png" size="1041" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="combo2.png" attr="h" comment="" date="1093917971" path="combo2.png" size="1583" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="barexample.png" attr="h" comment="" date="1093918158" path="barexample.png" size="1886" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="sparklineexample.png" attr="h" comment="" date="1305304913" path="sparklineexample.png" size="222" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="sparkbarexample1.png" attr="h" comment="" date="1305304913" path="sparkbarexample1.png" size="175" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="sparkbarexample2.png" attr="h" comment="" date="1305304913" path="sparkbarexample2.png" size="178" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="sparkareaexample.png" attr="h" comment="" date="1305304913" path="sparkareaexample.png" size="202" user="TWikiContributor" version="1.1"}%

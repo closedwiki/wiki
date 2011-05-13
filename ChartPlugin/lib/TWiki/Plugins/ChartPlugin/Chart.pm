@@ -319,6 +319,11 @@ use strict;
 # people might not have.
 my $LEFT  = 1;
 my $RIGHT = 2;
+my $transparentColorValue = "#010101";
+my $whiteColorValue = "#FFFFFF";
+my $blackColorValue = "#000000";
+my $redColorValue = "#FF0000";
+my %colorCache;
 
 sub new {
     my ($class) = @_;
@@ -326,8 +331,8 @@ sub new {
     bless $this, $class;
     $this->setMargin(10);
     $this->setColors();
-    $this->setGridColor("#FFFFFF");
-    $this->setBorderColor("#FFFFFF");
+    $this->setGridColor($whiteColorValue);
+    $this->setBorderColor($whiteColorValue);
     $this->setLegend();
     $this->setYaxis("off");
     $this->setYaxis2("off");
@@ -621,7 +626,11 @@ sub getFileName {my ($this) = @_; return $$this{FILE_NAME}}
 sub setMargin {my ($this, $margin) = @_; $$this{MARGIN} = $margin}
 sub getMargin {my ($this) = @_; return $$this{MARGIN}}
 
-sub setImage {my ($this, $image) = @_; $$this{IMAGE} = $image}
+sub setImage {
+    my ($this, $image) = @_;
+    $$this{IMAGE} = $image;
+    undef %colorCache;
+}
 sub getImage {my ($this) = @_; return $$this{IMAGE}}
 
 sub setFont {
@@ -714,7 +723,7 @@ sub computeFinalColors {
     # Walk through each color and allocate it in the GD.
     my @allocatedColors;
     for my $color (@chartColors) {
-        push(@allocatedColors, $im->colorAllocate(_convert_color($color)));
+        push(@allocatedColors, $this->allocateColor($color));
     }
     return @allocatedColors;
 } ## end sub computeFinalColors
@@ -774,6 +783,17 @@ sub computeSubTypes {
     return @subTypes;
 } ## end sub computeSubTypes
 
+# This routine is used to 'cache' colors so colors are reused instead of
+# replicated.
+sub allocateColor {
+    my ($this, $color) = @_;
+    my $im = $this->getImage();
+    if (! defined($colorCache{$color})) {
+	$colorCache{$color} = $im->colorAllocate(_convert_color($color));
+    }
+    return $colorCache{$color};
+}
+
 # This places and error inside of an image.
 sub makeError {
     my ($this, $msg)      = @_;
@@ -782,9 +802,8 @@ sub makeError {
     my $im = new GD::Image($imageWidth, $imageHeight);
     $this->setImage($im);
 
-    my $initialBGcolorText = "#FFFFFF"; # White
-    my $initialBGcolor     = $im->colorAllocate(_convert_color($initialBGcolorText));
-    my $red                = $im->colorAllocate(_convert_color("#FF0000"));
+    my $initialBGcolor     = $this->allocateColor($whiteColorValue);
+    my $red                = $this->allocateColor($redColorValue);
     my $font		   = $this->getFont("title");
     my $lineSpacing	   = 2;
 
@@ -834,16 +853,19 @@ sub makeChart {
 
     # Define some commonly used colors
     my ($outsideBGColor, $insideBGColor, $boxBGColor) = $this->getBGcolor();
-    my $initialBGcolorText = "#FFFFFF"; # White
-    my $initialBGcolor     = $im->colorAllocate(_convert_color($initialBGcolorText));
-    my $black              = $im->colorAllocate(0, 0, 0);
+    my $initialBGcolor     = $this->allocateColor($whiteColorValue);
+    my $transparentColor   = $this->allocateColor("transparent");
+    my $black              = $this->allocateColor($blackColorValue);
     my $borderColorText    = $this->getBorderColor();
     my $borderColor;
     if ($borderColorText eq "transparent") {
 	$borderColor = undef;
     } else {
-	$borderColor = $im->colorAllocate(_convert_color($borderColorText));
+	$borderColor = $this->allocateColor($borderColorText);
     }
+
+    # Define the transparent color so users can pick a transparent background.
+    $im->transparent($transparentColor);
 
     # Start with a totally white background
     $im->filledRectangle(0, 0, $imageWidth - 1, $imageHeight - 1, $initialBGcolor);
@@ -901,7 +923,7 @@ sub makeChart {
     # Allocate color for each unique grid color
     for my $color (keys %gridColors) {
         next if ($color eq "transparent");
-        $gridColors{$color} = $im->colorAllocate(_convert_color($color));
+        $gridColors{$color} = $this->allocateColor($color);
     }
     my @gridColors;
     # Now define array of colors for grid
@@ -1302,15 +1324,15 @@ sub makeChart {
     $im->rectangle($xLL, $yLL, $xUR, $yUR, $borderColor) if (defined($borderColor));
     # If a user specified bgcolor (and it isn't the same as the default
     # background color), then set this color to surround the chart.
-    if (defined $outsideBGColor && $outsideBGColor !~ /$initialBGcolorText/i) {
-        my $bgcolorOutside = $im->colorAllocate(_convert_color($outsideBGColor));
+    if (defined $outsideBGColor && $outsideBGColor !~ /$whiteColorValue/i) {
+	my $bgcolorOutside = $this->allocateColor($outsideBGColor);
         $im->fill(1, 1, $bgcolorOutside);
     }
     # If a user also specified bgcolor with a 2nd value (and it isn't the
     # same as the default background color), then set this color to fill
     # the inside of the chart.
-    if (defined $insideBGColor && $insideBGColor !~ /$initialBGcolorText/i) {
-        my $bgcolorInside = $im->colorAllocate(_convert_color($insideBGColor));
+    if (defined $insideBGColor && $insideBGColor !~ /$whiteColorValue/i) {
+	my $bgcolorInside = $this->allocateColor($insideBGColor);
         $im->fill($xLL + 1, $yUR + 1, $bgcolorInside);
     }
 
@@ -1704,7 +1726,7 @@ sub makeChart {
         my $font       = $this->getFont("data");
         my $fontWidth  = $this->getFontWidth("data");
         my $fontHeight = $this->getFontHeight("data");
-	my $boxBG = $im->colorAllocate(_convert_color($boxBGColor));
+	my $boxBG = $this->allocateColor($boxBGColor);
 	$barNum = 0;
 	$lineNum = 0;
 	foreach my $yAxisLoc (@yAxisLocs) {
@@ -2188,6 +2210,7 @@ sub computeNumDigits {
 # (RED GREEN BLUE).
 sub _convert_color {
     my ($hexcolor) = @_;
+    return _convert_color($transparentColorValue) if ($hexcolor eq "transparent");
     my ($red, $green, $blue);
     $hexcolor =~ /#?(..)(..)(..)/;
     $red   = hex($1);

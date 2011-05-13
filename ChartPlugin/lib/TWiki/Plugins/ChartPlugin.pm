@@ -76,6 +76,8 @@ sub initPlugin {
 
     &TWiki::Func::writeDebug("- TWiki::Plugins::ChartPlugin::initPlugin($web.$topic) is OK") if $debug;
 
+    TWiki::Func::registerTagHandler('CHART_PARAMOUTPUT', \&_setParamOutput);
+
     # Mark that we are not fully initialized yet.  Only get the default
     # values from the plugin topic page iff a CHART is found in a topic
     $pluginInitialized = 0;
@@ -796,9 +798,9 @@ sub _timeit {
 # where outputFormat can contain anything users want, but %IMG% is replaced
 # with the generated CHART tag and %PARAMS% is replaced with the CHART
 # parameters.
-sub _parameterOutput {
-    my ($this, $params, $topic, $web) = @_;
-    $showParameters = $params;
+sub _setParamOutput {
+    my ($session, $params, $theTopic, $theWeb) = @_;
+    $showParameters = $params->{_DEFAULT};
     return "";
 }
 
@@ -835,17 +837,8 @@ sub commonTagsHandler {
     }
     _init_defaults();
     my $chart = ChartPlugin($topic, $web, $_[0]);
-    $_[0] =~ s/%CHART_PARAMOUTPUT{(.*)}%/$chart->_parameterOutput($1, $topic, $web)/eog;
     $_[0] =~ s/%CHART{(.*?)}%/$chart->_makeChart($1, $topic, $web)/eog;
     $_[0] =~ s/%CHART_TIMER{(\d+) (.*)}%/$chart->_timeit($1, $2, $topic, $web)/eog;
 } ## end sub commonTagsHandler
 
-sub mylog {
-    my ($msg) = @_;
-    use POSIX;
-    open(LOG, ">>/tmp/mylog.txt");
-    print LOG strftime("%Y/%m/%d %H:%M:%S %Z: ", localtime(time()));
-    print LOG "$msg\n";
-    close(LOG);
-}
 1;

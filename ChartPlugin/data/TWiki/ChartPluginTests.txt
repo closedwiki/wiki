@@ -97,7 +97,8 @@ This table is used for testing when both =data= and =data2= are used
 <!--
   -- The following line is an undocumented API that is only designed to make
   -- this topic page easier to read.
-%CHART_PARAMOUTPUT{%BR%%BR% =%<nop>CHART{%PARAMS%}%= | %IMG%}%
+   * Set ParamOutputColor = %BR%%BR% =%<nop>CHART{%PARAMS%}<nop>%= | %GREENBG% %IMG% %ENDCOLOR%
+%CHART_PARAMOUTPUT{%ParamOutputColor%}%
 
 -----------------------------------------------------------
 -- Define the line tests
@@ -117,10 +118,14 @@ This table is used for testing when both =data= and =data2= are used
    * Set lineTest13 = name='lineTest13' table='table1' type='line' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='line test #13' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C7..R1:C7'
    * Set lineTest14 = name='lineTest14' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #14' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7'
    * Set lineTest15 = name='lineTest15' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #15' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7' colors='#ffAAAA,#AAffAA,#AAAAff,#AAAAAA'
+   * Set lineTest15b = name='lineTest15b' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #15b' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7' colors='transparent,#AAffAA,#AAAAff,#AAAAAA'
    * Set lineTest16 = name='lineTest16' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #16' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7'
    * Set lineTest17 = name='lineTest17' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #17' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#EEEEFF'
    * Set lineTest18 = name='lineTest18' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #18' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#FFFFFF #EEEEFF'
    * Set lineTest19 = name='lineTest19' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #19' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#EEEEEE #EEFFEE'
+   * Set lineTest19b = name='lineTest19b' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #19b' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='transparent #FFFFFF'
+   * Set lineTest19c = name='lineTest19c' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #19c' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#FFFFFF transparent'
+   * Set lineTest19d = name='lineTest19d' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #19d' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='transparent transparent'
    * Set lineTest20 = name='lineTest20' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #20' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='on'
    * Set lineTest21 = name='lineTest21' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #21' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off'
    * Set lineTest22 = name='lineTest22' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='line test #22' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' ygrid='off' xgrid='on'
@@ -157,6 +162,7 @@ This table is used for testing when both =data= and =data2= are used
    * Set areaTest13 = name='areaTest13' type='area' data='R2:C7..R999:C7' xaxisangle='1' title='area test #13' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C7..R1:C7'
    * Set areaTest14 = name='areaTest14' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #14' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7'
    * Set areaTest15 = name='areaTest15' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #15' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7' colors='#ffAAAA,#AAffAA,#AAAAff,#AAAAAA'
+   * Set areaTest15b = name='areaTest15b' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #15' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7' colors='transparent,#AAffAA,#AAAAff,#AAAAAA'
    * Set areaTest16 = name='areaTest16' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #16' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7'
    * Set areaTest17 = name='areaTest17' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #17' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#AAAAAA'
    * Set areaTest18 = name='areaTest18' type='area' data='R2:C4..R999:C7' xaxisangle='1' title='area test #18' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#FFFFFF #EEEEEE'
@@ -189,6 +195,7 @@ This table is used for testing when both =data= and =data2= are used
    * Set barTest13 = name='barTest13' type='bar' data='R2:C7..R999:C7' xaxisangle='1' title='bar test #13' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C7..R1:C7'
    * Set barTest14 = name='barTest14' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #14' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7'
    * Set barTest15 = name='barTest15' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #15' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7' colors='#ffAAAA,#AAffAA,#AAAAff,#AAAAAA'
+   * Set barTest15b = name='barTest15b' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #15b' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='box' legend='R1:C4..R1:C7' colors='transparent,#AAffAA,#AAAAff,#AAAAAA'
    * Set barTest16 = name='barTest16' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #16' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7'
    * Set barTest17 = name='barTest17' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #17' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#AAAAAA'
    * Set barTest18 = name='barTest18' type='bar' data='R2:C4..R999:C7' xaxisangle='1' title='bar test #18' xaxis='R2:C2..R7:C2' yaxis='on' ymin='0' ylabel='Hello there' xlabel='Yep, an X label' datalabel='off off on box' legend='R1:C4..R1:C7' bgcolor='#FFFFFF #EEEEEE'
@@ -296,6 +303,7 @@ This table is used for testing when both =data= and =data2= are used
    * Set colorTest04 = name='colorTest04' table='table1' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='grid color test #04' xgrid='on' ygrid='on' gridcolor='#000000, #000000, #000000, #000000, #000000, transparent, transparent, transparent, transparent, transparent' ygrid='dot' xgrid='dot'
    * Set colorTest05 = name='colorTest05' table='table1' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='grid color test #05' xgrid='on' ygrid='on' gridcolor='#FF0000, #FF0000, #FF0000, #FF0000, #00FF00, #00FF00, #00FF00, #00FF00, #0000FF, #0000FF, #0000FF, #0000FF, transparent, transparent, transparent, transparent' ygrid='dot' xgrid='dot'
    * Set colorTest06 = name='colorTest06' table='table1' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='grid color test #06' xgrid='on' ygrid='on' gridcolor='#000000' ygrid='dot' xgrid='dot'
+   * Set colorTest07 = name='colorTest07' table='table1' data='R2:C7..R7:C7' xaxis='R2:C2..R7:C2' title='grid color test #07' xgrid='on' ygrid='on' gridcolor='transparent'
 
 -----------------------------------------------------------
 -- Define some reversed data ranges along with multiple data ranges.
@@ -373,6 +381,7 @@ This table is used for testing when both =data= and =data2= are used
    * Set datalabel02 = name='datalabel02' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='data legend test #02' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='on, box, off, 2 box'
    * Set datalabel03 = name='datalabel03' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='data legend test #03' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='auto box, 2box, box 3, 4 box'
    * Set datalabel04 = name='datalabel04' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='data legend test #04' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='auto box, 2box, box 3, 4 box' bgcolor='#FFFFFF, #FFFFFF, #E0E0E0'
+   * Set datalabel05 = name='datalabel05' table='table1' type='line' data='R2:C4..R7:C7' xaxis='R2:C2..R7:C2' title='data legend test #05' yaxis='on' ymin='0' ymax='100' ylabel='Hello there' xlabel='Yep, an X label' datalabel='auto box, 2box, box 3, 4 box' bgcolor='#FFFFFF, #FFFFFF, transparent'
 
 -----------------------------------------------------------
 -- Define some constant data tests
@@ -380,6 +389,11 @@ This table is used for testing when both =data= and =data2= are used
    * Set constDataTest01 = name="constDataTest01" type='line' table='table1' data='R2:C4..R99:C7' xaxis='R2:C2..R7:C2' title='Constant data test #01' yaxis='on' legend='R1:C4..R1:C7' ymin='0'
    * Set constDataTest02 = name="constDataTest02" type='line' table='table1' data='R2:C4..R99:C7,50' xaxis='R2:C2..R7:C2' title='Constant data test #02' yaxis='on' legend='R1:C4..R1:C7,--50--' ymin='0'
    * Set constDataTest03 = name="constDataTest03" type='line' table='table1' data='R2:C4..R99:C7,50' xaxis='R2:C2..R7:C2' title='Constant data test #03' yaxis='on' legend='line 1, Line2,line3 3 3 3,4,--50--' ymin='0'
+
+-----------------------------------------------------------
+-- Define some constant data tests
+-----------------------------------------------------------
+   * Set transparentTest01 = name="transparentTest01" type='line' table='table1' data='R2:C4..R99:C7' xaxis='R2:C2..R7:C2' title='Constant data test #01' yaxis='on' legend='R1:C4..R1:C7' ymin='0'
 
 -----------------------------------------------------------
 -- Define the error tests
@@ -422,10 +436,14 @@ This table is used for testing when both =data= and =data2= are used
 | Add =legend= to above. %CHART{%lineTest13%}% |
 | Add additional data lines to above and update =legend= to above. %CHART{%lineTest14%}% |
 | Specify different line colors to above. %CHART{%lineTest15%}% |
+| Specify different line colors to above where line "Acceptable" has a color of =transparent= so the background color will be seen as the line color. %CHART{%lineTest15b%}% |
 | Restore default colors and change =datalabel= such that only the last line has values in boxes and the 2nd to last has values (no box) to above. %CHART{%lineTest16%}% |
 | Add =bgcolor="#EEEEEE" to above. %CHART{%lineTest17%}% |
 | Change =bgcolor="#FFFFFF #EEEEEE"= to above. %CHART{%lineTest18%}% |
 | Change =bgcolor="#EEEEEE #EEFFEE"= to above. %CHART{%lineTest19%}% |
+| Change =bgcolor="transparent #FFFFFF"= to above. So the outside color should be transparent allowing the background color (green) to show through. %CHART{%lineTest19b%}% |
+| Change =bgcolor="#FFFFFF transparent"= to above. So the inside color should be transparent allowing the background color (green) to show through. %CHART{%lineTest19c%}% |
+| Change =bgcolor="transparent transparent"= to above. So both the inside and outside color should be transparent allowing the background color (green) to show through. %CHART{%lineTest19d%}% |
 | Restore =bgcolor= and add =ygrid= = =on= (changing from dotted ygrid to solid ygrid) to above. %CHART{%lineTest20%}% |
 | Change =ygrid= = =off= to above. %CHART{%lineTest21%}% |
 | Add =xgrid= = =on= (changing from dotted xgrid to solid xgrid) to above. %CHART{%lineTest22%}% |
@@ -460,6 +478,7 @@ This table is used for testing when both =data= and =data2= are used
 | Add =legend= = to above. %CHART{%areaTest13%}% |
 | Add additional data areas and update =legend= to above. %CHART{%areaTest14%}% |
 | Specify different colors to above.  Now are lite red, lite green, lite blue, gray instead of defaults. %CHART{%areaTest15%}% |
+| Specify different colors to above where line "Acceptable" has a color of =transparent= so the background color will be seen as the area color. %CHART{%areaTest15b%}% |
 | Restore default colors and change =datalabel= such that only the last area has values in boxes and the 2nd to last has values (no box) to above. %CHART{%areaTest16%}% |
 | Add =bgcolor="#AAAAAA"= to above. %CHART{%areaTest17%}% |
 | Change =bgcolor="#FFFFFF #EEEEEE"= to above. %CHART{%areaTest18%}% |
@@ -490,6 +509,7 @@ This table is used for testing when both =data= and =data2= are used
 | Add =legend= = to above. %CHART{%barTest13%}% |
 | Add additional data bars and update =legend= to above. %CHART{%barTest14%}% |
 | Specify different colors to above.  Now are lite red, lite green, lite blue, gray instead of defaults. %CHART{%barTest15%}% |
+| Specify different colors to above where bar "Acceptable" has a color of =transparent= so the background color will be seen as the bar color. %CHART{%barTest15b%}% |
 | Restore default colors and change =datalabel= such that only the last bar has values in boxes and the 2nd to last has values (no box) to above. %CHART{%barTest16%}% |
 | Add =bgcolor="#AAAAAA"= to above. %CHART{%barTest17%}% |
 | Change =bgcolor="#FFFFFF #EEEEEE"= to above. %CHART{%barTest18%}% |
@@ -579,12 +599,14 @@ This table is used for testing when both =data= and =data2= are used
 | Change the grid style to be 5 black dots and 5 transparent dots. %CHART{%colorTest04%}% |
 | Change the grid style to be 4 red dots, 4 green dots, 4 blue dots and 4 transparent dots. %CHART{%colorTest05%}% |
 | Change the grid style to be 1 black dot which basically makes a solid line. %CHART{%colorTest06%}% |
+| Change the grid color to =transparent=. %CHART{%colorTest07%}% |
 
 ---++ Test _datalegend_ option
 | Show a simple chart with =datalabel="box"=. %CHART{%datalabel01%}% |
 | Same chart, but =datalabel="on, box, off, 2 box"=. %CHART{%datalabel02%}% |
 | Same chart, but =datalabel="auto box, 2box, box 3, 4 box"=. %CHART{%datalabel03%}% |
 | Same chart as above, but set the background color in the =datalabel= boxes to #E0E0E0. %CHART{%datalabel04%}% |
+| Same chart as above, but set the background color in the =datalabel= boxes to =transparenet=. %CHART{%datalabel05%}% |
 
 ---++ Tests showing both single column data ranges as well as multi-column data ranges both top to bottom as well as bottom to top and left to right and right to left.
 
