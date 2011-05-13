@@ -52,6 +52,14 @@ These are GaugePlugin tests.
 | %GAUGE{ name="foo34" value="34" }% | value="34" |
 | %GAUGE{ name="foo35" value="35" }% | value="35" |
 |||
+| *Values less than and greater than scale* ||
+| %GAUGE{ name="edge1" value="-10" }% | value="-10" |
+| %GAUGE{ name="edge2" value="1000" }% | value="1000" |
+| %GAUGE{ name="edge3" value="-500" scale="-1000 -2000 -3000 -4000"}% | value="-500" scale="-1000 -2000 -3000 -4000" |
+| %GAUGE{ name="edge4" value="-5000" scale="-1000 -2000 -3000 -4000"}% | value="-5000" scale="-1000 -2000 -3000 -4000" |
+| %GAUGE{ name="edge5" value="0.0005" scale="0.001 0.002 0.003 0.004"}% | value="0.0005" scale="0.001 0.002 0.003 0.004" |
+| %GAUGE{ name="edge6" value="0.005" scale="0.001 0.002 0.003 0.004"}% | value="0.005" scale="0.001 0.002 0.003 0.004" |
+|||
 | *Error: no arguments at all so arg _name_ is missing* ||
 | %GAUGE{}% ||
 |||
@@ -84,6 +92,9 @@ These are GaugePlugin tests.
 | %GAUGE{ name="foorev675" value="-675" scale="-100 -200 -400 -800" }% | value="-675" scale="-100 -200 -400 -800" |
 | %GAUGE{ name="foorev-505" value="-50" scale="-100 -200 -400 -800" }% | value="-50" scale="-100 -200 -400 -800" |
 | %GAUGE{ name="foorev900" value="-900" scale="-100 -200 -400 -800" }% | value="-900" scale="-100 -200 -400 -800" |
+| %GAUGE{ name="fooexp1" value="1.23e1" scale="1e1 2e1 3e1 4e1" }% | value="1.23e1" scale="1e1 2e1 3e1 4e1" |
+| %GAUGE{ name="fooexp2" value="2.23e-1" scale="1e-1 2e-1 3e-1 4e-1" }% | value="2.23e-1" scale="1e-1 2e-1 3e-1 4e-1" |
+| %GAUGE{ name="fooexp3" value="3.23e-5" scale="1e-5 2e-5 3e-5 4e-5" }% | value="3.23e-5" scale="1e-5 2e-5 3e-5 4e-5" |
 |||
 | *Overriding the default tambar height %GAUGEPLUGIN_TAMBAR_HEIGHT%* ||
 | %GAUGE{ name="foo15h1" value="15" height="40" }% | value="15" height="40" |
@@ -105,8 +116,8 @@ These are GaugePlugin tests.
 | %GAUGE{ name="foo13i4" value="13" align="left" }% <font size="+2">Align</font> | value="13" align="left" |
 | %GAUGE{ name="foo13i5" value="13" align="right" }% <font size="+2">Align</font> | value="13" align="right" |
 |||
-| *Specify a border around the image* ||
-| %GAUGE{ name="foo26border" value="26" border="5" }% | value="26" border="5" |
+| *Specify a border around the image (using CSS since the =border= attribute of &lt;img&gt; is deprecated)* ||
+| %GAUGE{ name="foo26border" value="26" style="border:5px solid black" }% | value="26" style="border:5px solid black" |
 
 ---++ Trend Gauge
 
@@ -143,4 +154,4 @@ These are GaugePlugin tests.
 
 __Related topics:__ GaugePlugin, VarGAUGE
 
--- __Contributors:__ TWiki:Main/TaitCyrus, TWiki:Main/PeterThoeny - 2010-04-08
+-- __Contributors:__ TWiki:Main/TaitCyrus, TWiki:Main/PeterThoeny - 2011-05-13

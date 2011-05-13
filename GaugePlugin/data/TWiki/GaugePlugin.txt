@@ -19,7 +19,7 @@ Two types of gauges are currently available, a target measure bar and a trend ic
 
 | *Type of Gauge* | *Name* | *What it Does* | *Example* |
 | Target Measure Bar | =tambar= | Shows the actual state of a measure in a bar. The bar has two parts, the upper thick bar shows the actual value, the lower thin bar shows the scale of the gauge.  For example regions with a relative distribution of bad (red), acceptable (yellow) and good (green) values | <img src="%ATTACHURLPATH%/tambar1.gif" alt="Actual: 35" width="60" height="16" /> |
-| Trend Icon | =trend= | Shows the up trend, no change and down trend of a measure | <img src="%ATTACHURLPATH%/trendup.gif" alt="up trend" width="16" height="16" />, <img src="%ATTACHURLPATH%/trendeq.gif" alt="no change" width="16" height="16" />, <img src="%ATTACHURLPATH%/trenddn.gif" alt="down trend" width="16" height="16" /> |
+| Trend Icon | =trend= | Shows the up trend, no change and down trend of a measure | <img src="%ATTACHURLPATH%/trendup.gif" alt="up trend" width="16" height="16" /> <img src="%ATTACHURLPATH%/trendeq.gif" alt="no change" width="16" height="16" /> <img src="%ATTACHURLPATH%/trenddn.gif" alt="down trend" width="16" height="16" /> |
 
 The Target Measure Bar has scale regions (the lower thin bar) like red, yellow and green. Each region has a start and end boundary, the end boundary of one region is the start of the next. The scale determines the boundaries, e.g. a scale of =0, 10, 20, 40= has a red region with range =0...10=, a yellow one with range =10...20= and a green one with range =20...40=. 
 
@@ -46,6 +46,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
       * Set TAMBAR_HEIGHT = 16
       * Set TAMBAR_SCALE = 0, 33, 67, 100
       * Set TAMBAR_COLORS = #FF0000, #FFCCCC, #FFFF00, #FFFFCC, #00FF00, #CCFFCC
+      * Set TAMBAR_SCALE_HEIGHT_PERCENTAGE = 20
 
    * Default dimensions for Trend Icon
       * Set TREND_WIDTH = 16
@@ -62,14 +63,19 @@ The =%<nop>GAUGE{...}%= variable gets expanded to an image representing the gaug
 | =alt= | Alternate text for image | Value is =value= parameter |
 | =width= | Defines the width of the gauge in pixels. | Global =&lt;type&gt;_WIDTH= setting |
 | =height= | Defines the height of the gauge in pixels. | Global =&lt;type&gt;_HEIGHT= setting |
-| =scale= | For =tambar=: Defines the number and position of the scales.  For example a value of ="5, 12, 35, 57"= denotes that there are three regions on the bar gauge, ="5...12"=, ="12...35"= and ="35...57"=. <br /> For =trend=: N/A | Global =&lt;type&gt;_SCALE= setting |
-| =colors= | For =tambar=: List of colors, each region has two colors. For =trend=: N/A | Global =&lt;type&gt;_COLORS= setting |
+| =scale= | For =tambar=: Defines the number and position of the scales.  For example a value of ="5, 12, 35, 57"= denotes that there are three regions on the bar gauge, ="5...12"=, ="12...35"= and ="35...57"=. <br /> For =trend=: N/A | Global =TAMBAR_SCALE= setting |
+| =scalesize= | For =tambar=: Defines the size, in percentage, of the scale size is relative to the height of the gauge. Values can be: =scalesize="0"= to =scalesize="100"= | Global =TAMBAR_SCALE_HEIGHT_PERCENTAGE= setting |
+| =colors= | For =tambar=: List of colors, each region has two colors. For =trend=: N/A | Global =TAMBAR_COLORS= setting |
 
+<!--
+   * Set tambarTest1 = type="tambar" name="tambarTest1" scale="0, 10, 20, 40" value="27"
+   * Set trendTest1 = type="trend" name="trendTest1" value="-3"
+-->
 ---++ Examples
 
 | *Type of gauge* | *You type* | *You should get...* | *...if installed* |
-| Target Measure Bar | =%<nop>GAUGE{ type="tambar" name="t1" scale="0, 10, 20, 40" value="27" }%= | <img src="%ATTACHURLPATH%/tambar1.gif" width="60" height="16" alt="27" /> | %GAUGE{ type="tambar" name="t1" scale="0, 10, 20, 40" value="27" }% |
-| Trend Icon | =%<nop>GAUGE{ type="trend" name="t2" value="-3" }%= | <img src="%ATTACHURLPATH%/trenddn.gif" alt="down trend" width="16" height="16" /> | %GAUGE{ type="trend" name="t2" value="-3" }% |
+| Target Measure Bar | =%<nop>GAUGE{%tambarTest1%}%= | <img src="%ATTACHURLPATH%/tambar1.gif" width="60" height="16" alt="27" /> | %GAUGE{%tambarTest1%}% |
+| Trend Icon | =%<nop>GAUGE{%trendTest1%}%= | <img src="%ATTACHURLPATH%/trenddn.gif" alt="down trend" width="16" height="16" /> | %GAUGE{%trendTest1%}% |
 
 The "if installed" column shows images instead of variables in case the plugin is installed correctly.
 
@@ -108,8 +114,9 @@ __Note:__ You do not need to install anything on your browser to use this plugin
 |  Plugin Author: | TWiki:Main/PeterThoeny, TWiki:Main/TaitCyrus |
 |  Copyright: | &copy; 2002-2010, TWiki:Main/PeterThoeny; <br /> &copy; 2008-2010, TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-05-06 |
+|  Plugin Version: | 2011-05-13 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-05-13: | <ul><li> TWikibug:Item6722 - Add ability to control scale height (from 0% to 100% of the gauge)</li><li> TWikibug:Item6723 - Fix data parsing issues that limited the use of very small values (like 0.01)</li></ul> -- TWiki:Main/TaitCyrus |
 |  2010-05-06: | TWikibug:Item6433 - Doc fixes -- TWiki:Main/PeterThoeny |
 |  2010-05-05: | TWikibug:Item6419 - Validate and untaint input values -- TWiki:Main/PeterThoeny |
 |  2010-04-08: | TWikibug:Item6420 - Added VarGAUGE variable documentation page; other doc improvements -- TWiki:Main/PeterThoeny |

@@ -36,13 +36,18 @@ use vars qw(
         $defaultType $defaultColors
         $defaultTambarScale $defaultTambarWidth $defaultTambarHeight
         $defaultTrendWidth $defaultTrendHeight
+	$defaultTambarScaleHeightPercentage
+	%colorCache $transparentColorValue
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-05-05';
+$RELEASE = '2011-05-13';
 
 $pluginInitialized = 0;
 $perlGDModuleFound = 0;
+$transparentColorValue = "#FFFFFF";
+my $blackColor = "#000000";
+my $redColor = "#FF0000";
 
 # =========================
 sub initPlugin
@@ -84,6 +89,7 @@ sub _init_defaults
     $defaultTambarHeight = &TWiki::Func::getPreferencesValue( "GAUGEPLUGIN_TAMBAR_HEIGHT" ) || 16;
     $defaultColors = &TWiki::Func::getPreferencesValue( "GAUGEPLUGIN_TAMBAR_COLORS" )
                      || "#FF0000 #FFCCCC #FFFF00 #FFFFCC #00FF00 #CCFFCC";
+    $defaultTambarScaleHeightPercentage = &TWiki::Func::getPreferencesValue( "GAUGEPLUGIN_TAMBAR_SCALE_HEIGHT_PERCENTAGE" ) || 20;
 
     # Get 'trend' default values
     $defaultTrendWidth = &TWiki::Func::getPreferencesValue( "GAUGEPLUGIN_TREND_WIDTH" ) || 16;
@@ -109,14 +115,14 @@ sub _min
 # Convert a color in the form of either #RRGGBB or just RRGGBB (both in hex
 # format) to a 3 element array of decimal numbers in the form
 # (RED GREEN BLUE).
-sub _convert_color
-{
-    my ( $hexcolor ) = @_;
-    my ( $red, $green, $blue );
-    $hexcolor =~ /#(..)(..)(..)/;
-    $red        = hex($1);
-    $green      = hex($2);
-    $blue       = hex($3);
+sub _convert_color {
+    my ($hexcolor) = @_;
+    return _convert_color($transparentColorValue) if ($hexcolor eq "transparent");
+    my ($red, $green, $blue);
+    $hexcolor =~ /#?(..)(..)(..)/;
+    $red   = hex($1);
+    $green = hex($2);
+    $blue  = hex($3);
     return ($red, $green, $blue);
 }
 
@@ -159,7 +165,7 @@ sub _parse_parameters
 
     # Now break each parameter into a key=value pair.
     for (my $i = 0; $i < $index; $i++) {
-        my ( $key, $value ) = split(/=/, $field[$i]);
+        my ( $key, $value ) = split(/=/, $field[$i], 2);
         #print "field[$i] = [$field[$i]]\n";
         $args{$key} = $value;
     }
@@ -174,18 +180,18 @@ sub _get_parameter
 {
     my ( $var_name, $type, $default, $parameters ) = @_;
     my $value = delete $$parameters{$var_name};         # Delete since already parsed.
-    unless( defined $value && $value ne "" ) {
+    unless( defined($value) && $value ne "" ) {
         $value = $default;
     }
     my $filter = '';
     if( $type eq 'word' ) {
         $filter = '[^a-zA-Z0-9_\-]';
-    } elsif( $type eq 'float' ) {
-        $filter = '[^\-\+0-9e]';
+    } elsif( $type eq 'float') {
+        $filter = '[^\-\+\.0-9e]';
     } elsif( $type eq 'pos' ) {
-        $filter = '[^0-9]';
+        $filter = '[^0-9\+]';
     } elsif( $type eq 'scale' ) {
-        $filter = '[^0-9\., ]';
+        $filter = '[^\-\+\.0-9e, ]';
     } elsif( $type eq 'colors' ) {
         $filter = '[^\#a-zA-Z0-9\, ]';
     }
@@ -253,10 +259,11 @@ sub _make_error_image
     $height = _max($height, $font_height + 2);
     # Create the new image.
     my $im = new GD::Image($width, $height);
+    undef %colorCache;
     # Allocate colors needed in the graphic.
-    my $white = $im->colorAllocate(255,255,255);        # white background
-    my $black = $im->colorAllocate(0,0,0);              # black border
-    my $red = $im->colorAllocate(255,0,0);              # Red letters
+    my $white = _allocateColor($im, $transparentColorValue);        # white background
+    my $black = _allocateColor($im, $blackColor);              # black border
+    my $red = _allocateColor($im, $redColor);              # Red letters
     # Make white background
     $im->filledRectangle(0, 0, $width - 1, $height - 1, $white);
     # Write text error message into graphic (centered)
@@ -310,7 +317,7 @@ sub _make_poly_box
     $poly->addPt($x2, $y2);
     $poly->addPt($x1, $y2);
     $poly->offset(- $left, $yoffset);
-    $poly->scale($xscale, 1);
+    $poly->scale($xscale, 1, 0, 0);
     my @b = $poly->bounds;
     return $poly;
 }
@@ -370,11 +377,19 @@ sub _make_tambar_gauge
     # Get the tambar gauge width and height (different from scale used)
     my $tambar_width  = _get_parameter( 'width', 'pos', $defaultTambarWidth, $parameters);
     my $tambar_height = _get_parameter( 'height', 'pos', $defaultTambarHeight, $parameters);
+    my $tambar_scalesize = _get_parameter( 'scalesize', 'pos', $defaultTambarScaleHeightPercentage, $parameters);
 
     # Compute the height of the scale portion of the gauge.  A minimum
-    # value of 2, but is in general an 8th the size of the gauge value
+    # value of 0, but is in general an 8th the size of the gauge value
     # part.
-    my $tambar_scale_height = _max(2, $tambar_height / 8);
+    my $tambar_scale_top;
+    my $tambar_scale_bottom = $tambar_height;
+    if ($tambar_scalesize == 0) {
+	$tambar_scale_top = $tambar_height;
+    } else {
+	my $tambar_scale_height = _max(0, $tambar_height * ($tambar_scalesize / 100.0));
+	$tambar_scale_top = $tambar_height - $tambar_scale_height;
+    }
 
     # See if the parameter 'name' is available.  This is a required
     # parameter.  If it is missing, then generate an error message.
@@ -391,7 +406,7 @@ sub _make_tambar_gauge
     my $alt = _get_parameter( 'alt', '', $value, $parameters ) || "";
 
     # clean up numerical value
-    if( ( defined $value ) && ( $value =~ /^.*?([\+\-]?[0-9\.]+).*$/ ) ) {
+    if( ( defined $value ) && ($value =~ m/([\-]?[0-9.]+[eE]?[+-]?\d*)/)) {
         $value = $1;
     } else {
         # If there is no numerical value, then create an error graphic noting the error
@@ -405,10 +420,11 @@ sub _make_tambar_gauge
     # Create an image with a width = the last value specified in
     # tambar_scale.
     my $im = new GD::Image($tambar_width, $tambar_height);
+    undef %colorCache; 
 
     # Allocate some colors used by the image.
-    my $white = $im->colorAllocate(255,255,255);
-    my $black = $im->colorAllocate(0,0,0);
+    my $white = _allocateColor($im, $transparentColorValue);        # white background
+    my $black = _allocateColor($im, $blackColor);              # black border
 
     # Make white the transparent color
     $im->transparent($white);
@@ -418,14 +434,14 @@ sub _make_tambar_gauge
     # Draw the scale for the bar gauge
     for $i (1..@tambar_scale - 1) {
         # Obtain the colors for the dark and light versions of each color.
-        $color_fg = $im->colorAllocate(_convert_color($tambar_colors[($i - 1) * 2]));
-        $color_bg = $im->colorAllocate(_convert_color($tambar_colors[($i - 1) * 2 + 1]));
+        $color_fg = _allocateColor($im, $tambar_colors[($i - 1) * 2]);
+        $color_bg = _allocateColor($im, $tambar_colors[($i - 1) * 2 + 1]);
         # Make a polygon that is initially in scale specified by the user
         # but then is remapped to fit inside the actual graphic size.
         $poly = _make_poly_box(
-            $tambar_scale[$i - 1], 0,
-            $tambar_scale[$i], $tambar_scale_height,
-            $tambar_height - $tambar_scale_height - 2,
+            $tambar_scale[$i - 1], $tambar_scale_top,
+            $tambar_scale[$i], $tambar_scale_bottom,
+            0,
             $tambar_width, $tambar_left, $tambar_right
             );
         $im->filledPolygon($poly, $color_fg);
@@ -444,19 +460,17 @@ sub _make_tambar_gauge
         $value_color_light = $color_bg;
     }
 
-    # Compute a 'value' to display.  If 'value' < min gauge value, then
-    # force the 'value' to a value inside of the scale such that when
-    # displayed, there is at least 1 pixels worth of dark color.  The
-    # amount to add to value is calculated as a percentage since the amount
-    # to add will vary depending on how width the scale actually is
-    # compared to the actual width (in pixels) of the image.
+    # Compute a 'value' to display forcing the display value to be within
+    # the scale.  If the value is left of the left side of the scale, then
+    # force a small bar (2 pixels) to be drawn.
     my $values_per_pixel = ($tambar_right - $tambar_left) / $tambar_width;
-    my $v = _max($value, $tambar_left + POSIX::ceil($values_per_pixel + 0.5));
+    my $valueInc = $values_per_pixel * 2;
+    my $displayValue = _max($value, ($tambar_left + $valueInc));
 
     # Draw the gauge value
     $poly = _make_poly_box(
         $tambar_left, 0,
-        $v, $tambar_height - $tambar_scale_height - 2,
+        $displayValue, $tambar_scale_top,
         0,
         $tambar_width, $tambar_left, $tambar_right );
     $im->filledPolygon($poly, $value_color_dark);
@@ -464,8 +478,8 @@ sub _make_tambar_gauge
     # Fill out a lighter color from the gauge value to the end of the
     # gauge.
     $poly = _make_poly_box(
-        $v, 0,
-        $tambar_right, $tambar_height - $tambar_scale_height - 2,
+        $displayValue, 0,
+        $tambar_right, $tambar_scale_top,
         0,
         $tambar_width, $tambar_left, $tambar_right );
     $im->filledPolygon($poly, $value_color_light);
@@ -473,15 +487,14 @@ sub _make_tambar_gauge
     # Draw a black line at the gauge value.  Use the poly routine since it
     # does the scaling automatically for us.
     $poly = _make_poly_box(
-        $v, 0,
-        $v, $tambar_height - $tambar_scale_height - 2,
+        $displayValue, 0,
+        $displayValue, $tambar_scale_top,
         0,
         $tambar_width, $tambar_left, $tambar_right );
     $im->filledPolygon($poly, $black);
 
     # Draw the black line separating the gauge value from the gauge scale.
-    my $line_y = $tambar_height - $tambar_scale_height - 2;
-    $im->line(0, $line_y, $tambar_width, $line_y, $black);
+    $im->line(0, $tambar_scale_top, $tambar_width, $tambar_scale_top, $black);
 
     # Draw a black border around the entire gauge.
     $im->rectangle(0, 0, $tambar_width - 1, $tambar_height - 1, $black);
@@ -510,8 +523,9 @@ sub _make_tambar_gauge
     foreach my $k (keys %$parameters) {
         $options .= "$k=\"$$parameters{$k}\" ";
     }
-    return "<img src=\"%ATTACHURL%/$filename?t=$timestamp\" alt=\"$alt\""
+    my $img = "<img src=\"%ATTACHURL%/$filename?t=$timestamp\" alt=\"$alt\""
          . " width=\"$tambar_width\" height=\"$tambar_height\" $options />";
+    return $img;
 }
 
 # Make a trend gauge (an arrow)
@@ -557,6 +571,16 @@ sub _make_trend_gauge
     my $timestamp = time();
     return "<img src=\"%PUBURL%/$installWeb/GaugePlugin/$filename?t=$timestamp\""
          . " width=\"$trend_width\" height=\"$trend_height\" alt=\"$alt\" $options />";
+}
+
+# This routine is used to 'cache' colors so colors are reused instead of
+# replicated.
+sub _allocateColor {
+    my ($im, $color) = @_;
+    if (! defined($colorCache{$color})) {
+	$colorCache{$color} = $im->colorAllocate(_convert_color($color));
+    }
+    return $colorCache{$color};
 }
 
 # The following is really for debugging and timing purposes and is not an
