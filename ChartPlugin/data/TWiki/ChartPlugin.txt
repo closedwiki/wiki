@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305353937" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305354321" format="1.1" version="$Rev$"}%
 ---+!! Chart Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
@@ -316,19 +316,19 @@ If the required parameters are not defined, then an error message is returned or
 
 __Related Topics:__ VarCHART, ChartPluginTests, ChartPluginTestsRemote, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
-%META:FILEATTACHMENT{name="line1.png" attr="h" comment="" date="1093917753" path="line1.png" size="1220" user="TWikiContributor" version="1.4"}%
-%META:FILEATTACHMENT{name="line2.png" attr="h" comment="" date="1093917765" path="line2.png" size="1993" user="TWikiContributor" version="1.4"}%
-%META:FILEATTACHMENT{name="lineexample.png" attr="h" comment="" date="1084659332" path="lineexample.png" size="2462" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="areaexample.png" attr="h" comment="" date="1024533210" path="areaexample.png" size="3370" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="combo1.png" attr="h" comment="" date="1093917959" path="combo1.png" size="1696" user="TWikiContributor" version="1.2"}%
-%META:FILEATTACHMENT{name="comboexample.png" attr="h" comment="" date="1084659314" path="comboexample.png" size="3071" user="TWikiContributor" version="1.2"}%
-%META:FILEATTACHMENT{name="scatter1.png" attr="h" comment="" date="1093917951" path="scatter1.png" size="2071" user="TWikiContributor" version="1.2"}%
-%META:FILEATTACHMENT{name="scatterexample.png" attr="h" comment="" date="1093918171" path="scatterexample.png" size="1858" user="TWikiContributor" version="1.2"}%
-%META:FILEATTACHMENT{name="area1.png" attr="h" comment="" date="1093917730" path="area1.png" size="1774" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="bar1.png" attr="h" comment="" date="1093917742" path="bar1.png" size="1041" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="combo2.png" attr="h" comment="" date="1093917971" path="combo2.png" size="1583" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="barexample.png" attr="h" comment="" date="1093918158" path="barexample.png" size="1886" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="sparklineexample.png" attr="h" comment="" date="1305304913" path="sparklineexample.png" size="222" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="sparkbarexample1.png" attr="h" comment="" date="1305304913" path="sparkbarexample1.png" size="175" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="sparkbarexample2.png" attr="h" comment="" date="1305304913" path="sparkbarexample2.png" size="178" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="sparkareaexample.png" attr="h" comment="" date="1305304913" path="sparkareaexample.png" size="202" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="line1.png" attr="h" comment="" date="1093917753" path="line1.png" size="1220" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="line2.png" attr="h" comment="" date="1093917765" path="line2.png" size="1993" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="lineexample.png" attr="h" comment="" date="1084659332" path="lineexample.png" size="2462" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="areaexample.png" attr="h" comment="" date="1024533210" path="areaexample.png" size="3370" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="combo1.png" attr="h" comment="" date="1093917959" path="combo1.png" size="1696" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="comboexample.png" attr="h" comment="" date="1084659314" path="comboexample.png" size="3071" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="scatter1.png" attr="h" comment="" date="1093917951" path="scatter1.png" size="2071" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="scatterexample.png" attr="h" comment="" date="1093918171" path="scatterexample.png" size="1858" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="area1.png" attr="h" comment="" date="1093917730" path="area1.png" size="1774" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="bar1.png" attr="h" comment="" date="1093917742" path="bar1.png" size="1041" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="combo2.png" attr="h" comment="" date="1093917971" path="combo2.png" size="1583" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="barexample.png" attr="h" comment="" date="1093918158" path="barexample.png" size="1886" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="sparklineexample.png" attr="h" comment="" date="1305304913" path="sparklineexample.png" size="222" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="sparkbarexample1.png" attr="h" comment="" date="1305304913" path="sparkbarexample1.png" size="175" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="sparkbarexample2.png" attr="h" comment="" date="1305304913" path="sparkbarexample2.png" size="178" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="sparkareaexample.png" attr="h" comment="" date="1305304913" path="sparkareaexample.png" size="202" user="TWikiContributor" version="1"}%
