@@ -1,0 +1,98 @@
+%META:TOPICINFO{author="ThadeuCascardo" date="1197981551" format="1.1" version="1.3"}%
+---+!! <nop>%TOPIC%
+
+This Plugin allows one to add videos in a topic using the Cortado Java Applet.
+
+%TOC%
+
+---++ Syntax Rules
+
+   * %<nop>CORTADO{"filename" [web="Web"] [topic="Topic"] [width="int"] [height="int"] [CORTADO_OPTIONS]}%
+
+CORTADO_OPTIONS comes from the Cortado README:
+
+| *Option:* | *Type:* | *Default:* | *Description:* |
+| seekable | boolean | false | Whether or not you can seek in the file.  For live streams, this should be false; for on-demand files, this can be true. |
+| duration | int | | Length of clip in seconds.  Needed when seekable is true, to allow the seek bar to work. |
+| keepAspect | boolean | true | Try to keep the natural aspect of the video when resizing the applet window. |
+| video | boolean | true | Use video. When not using video, this property will not create resources to play a video stream. |
+| audio | boolean | true | Use audio. When not using audio, this property will not create resources to play an audio stream. |
+| statusHeight | int | 12 | The height of the status area |
+| autoPlay | boolean | true | Automatically start playback |
+| showStatus | enum (auto,show,hide) | auto | Controls how to make the status area visible. auto will show the status area when hovered over with the mouse. hide will only show the status area on error. show will always show the status area. |
+| hideTimeout | int | 0 | Timeout in seconds to hide the status area when showStatus is auto. This timeout is to make sure that the status area is visible for the first timeout seconds of playback so that the user can see that there is a clickable status area too.|
+| bufferSize | int | 200 | The size of the network buffer, in KB. A good value is max Kbps of the stream * 33 |
+| bufferLow | int | 10 | Percentage of low watermark for buffer.  Below this, the applet will stop playing and rebuffer until the high watermark is reached. |
+| bufferHigh | int | 70 | Percentage of high watermark for buffer.  At startup or when rebuffering, the applet will not play until this percentage of buffer fill status is reached. |
+| userId | string | | user id for basic authentication. |
+| password | string | | password for basic authentication. |
+| debug | int | 3 | debug level, 0 - 4.  Defaults to 3.  Output goes to the Java console. |
+
+
+---++ Examples
+
+   * %<nop>CORTADO{"video.ogg" web="Main" topic="MyTopic" width="320" height="240" autoPlay="false"}%
+   * %<nop>CORTADO{"video.ogg" seekable="true" showStatus="show" audio="false" duration="272"}%
+
+---++ Plugin Settings
+
+   Plugin settings are stored in TWiki configuration.
+<verbatim>
+$TWiki::cfg{Plugins}{CortadoPlugin}{DEBUG} = 1;
+$TWiki::cfg{Plugins}{CortadoPlugin}{CortadoPath} = "/cortado-ovt-stripped-0.3.jar";
+</verbatim>
+
+   You may change them in the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script.
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+
+   * Download the ZIP file from the Plugin Home (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==lib/TWiki/Plugins/%TOPIC%/Config.spec== | Plugin Config spec |
+   * Configure the Plugin:
+      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+      * Change the Plugin settings as needed
+   * Test if the installation was successful:
+
+__Note:__ You also need to install the Cortado applet in the server. Binaries can be downloaded from [[http://www.flumotion.net/jar/cortado/]]. Sources can be found in [[http://www.flumotion.net/src/cortado/]]. The applet should be uploaded to the TWiki web server and its absolute URL path configured in <nop>LocalSite.cfg using the variable pointed above as <nop>CortadoPath in the section Plugin Settings.
+
+   * Download [[http://www.flumotion.net/jar/cortado/cortado-ovt-stripped-0.2.2.jar]]
+   * Attach it to the CortadoPlugin topic
+   * Edit <nop>LocalSite.cfg and add the following line, replacing "/twiki/pub" by the twiki pub URL path of you installation.
+      * $TWiki::cfg{Plugins}{CortadoPlugin}{CortadoPath} = "/twiki/pub/TWiki/CortadoPlugin/cortado-ovt-0.2.2.jar";
+
+
+---++ Plugin Info
+
+This work has been possible with the help of the following sponsors:
+   * [[http://www.redelivre.org.br/Capa/WebHome][Rede Livre]]
+   * [[http://www.ulevel.com/][ULevel]]
+   * [[http://coletivodigital.org.br/][Coletivo Digital]]
+
+|  Plugin Author: | TWiki:Main.ThadeuCascardo |
+|  Copyright: | &copy; 2007, 2008, TWiki:Main.ThadeuCascardo |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 15 Jan 2008 (V1.001) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  17 Dec 2007: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | [[http://www.flumotion.net/cortado/][Cortado]] |
+|  Perl Version: | 5.005 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+-- TWiki:Main.ThadeuCascardo - 17 Dec 2007
+
+
+
+
