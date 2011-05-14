@@ -1,0 +1,5 @@
+MIME::Base64>3.13, cpan,Required. Available from the CPAN:Mime archive
+Crypt::CBC,>=2.30, cpan,Required. Available from the CPAN:Crypt archive
+Crypt::Rijndael_PP>=1.08, cpan,Required. Available from the CPAN:Crypt archive
+Crypt::RC4,2.02, cpan,Required. Available from the CPAN:Crypt archive
+Crypt::OpenSSL::RSA,>=0.25 cpan,Required. Available from the CPAN:Crypt archive

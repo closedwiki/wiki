@@ -1,0 +1,4 @@
+data/TWiki/TopicCryptPlugin.txt 0644
+lib/TWiki/Plugins/TopicCryptPlugin/Config.spec 0644
+lib/TWiki/Plugins/TopicCryptPlugin.pm 0644
+pub/TWiki/TopicCryptPlugin/uparrow.gif 0644
