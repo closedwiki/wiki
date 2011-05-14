@@ -1,4 +1,4 @@
-# ---+ Plugins
+# ---+ Extensions
 # ---++ CortadoPlugin
 
 # **BOOLEAN**
