@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305356143" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305356365" format="1.1" version="$Rev$"}%
 ---+!! Chart Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
@@ -284,7 +284,7 @@ If the required parameters are not defined, then an error message is returned or
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-05-13 (v%$VERSION%) |
 |  Change History: | <!-- specify latest version first --> |
-|  2011-05-13: | TWikibug:Item6701: Doc improvements -- TWiki:Main.PeterThoeny |
+|  2011-05-13: | TWikibug:Item6701: Doc improvements; use transparent background for sparkline examples -- TWiki:Main.PeterThoeny |
 |  2011-05-13: | <ul><li> TWikibug:Item6720: Allow support for =transparent= to be used in =colors= and =bgcolor= </li></ul> -- TWiki:Main.TaitCyrus |
 |  2011-05-11: | <ul><li> TWikibug:Item6716: Add ability to support constant values in addtion to spreadsheet ranges.</li><li> TWikibug:Item6717: Fix bug with =area= colors when =data2= is used.</li><li> TWikibug:Item6718: Add new types: =sparkline=, =sparkbar=, and =sparkarea= </li><li> TWikibug:Item6719: Retool how bar widths/spaces are used/calculated so they are now proportional instead of fixed sizing</li></ul> -- TWiki:Main.TaitCyrus |
 |  2011-05-05: | TWikibug:Item6714: Enhance error processing by adding =showerror= option.%BR%-- TWiki:Main.TaitCyrus |
