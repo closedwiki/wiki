@@ -1,15 +1,21 @@
-%META:TOPICINFO{author="ThadeuCascardo" date="1197981551" format="1.1" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305410136" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
-
-This Plugin allows one to add videos in a topic using the Cortado Java Applet.
-
-%TOC%
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page
+   at http://twiki.org/cgi-bin/view/Plugins/CortadoPlugin or provide feedback
+   at http://twiki.org/cgi-bin/view/Plugins/CortadoPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+This plugin allows one to add videos in a topic using the Cortado Java Applet.
 
 ---++ Syntax Rules
 
-   * %<nop>CORTADO{"filename" [web="Web"] [topic="Topic"] [width="int"] [height="int"] [CORTADO_OPTIONS]}%
+   * =%<nop>CORTADO{ "filename" _web="Web" topic="Topic" width="int" height="int" CORTADO_OPTIONS_ }%=
 
-CORTADO_OPTIONS comes from the Cortado README:
+The =CORTADO_OPTIONS= and other options except the ="filename"= are optional. The =CORTADO_OPTIONS= come from the [[http://www.flumotion.net/cortado/][Cortado]] README:
 
 | *Option:* | *Type:* | *Default:* | *Description:* |
 | seekable | boolean | false | Whether or not you can seek in the file.  For live streams, this should be false; for on-demand files, this can be true. |
@@ -28,45 +34,47 @@ CORTADO_OPTIONS comes from the Cortado README:
 | password | string | | password for basic authentication. |
 | debug | int | 3 | debug level, 0 - 4.  Defaults to 3.  Output goes to the Java console. |
 
-
 ---++ Examples
 
-   * %<nop>CORTADO{"video.ogg" web="Main" topic="MyTopic" width="320" height="240" autoPlay="false"}%
-   * %<nop>CORTADO{"video.ogg" seekable="true" showStatus="show" audio="false" duration="272"}%
+   * =%<nop>CORTADO{"video.ogg" web="Main" topic="MyTopic" width="320" height="240" autoPlay="false"}%=
+   * =%<nop>CORTADO{"video.ogg" seekable="true" showStatus="show" audio="false" duration="272"}%=
 
 ---++ Plugin Settings
 
-   Plugin settings are stored in TWiki configuration.
+Plugin settings are stored in TWiki configuration.
 <verbatim>
 $TWiki::cfg{Plugins}{CortadoPlugin}{DEBUG} = 1;
 $TWiki::cfg{Plugins}{CortadoPlugin}{CortadoPath} = "/cortado-ovt-stripped-0.3.jar";
 </verbatim>
 
-   You may change them in the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script.
+You may change them in the [[%SCRIPTURL{configure}%][configure]] script.
+
+   * Set SHORTDESCRIPTION = Embed videos in a topic using the Cortado Java Applet
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
 
-   * Download the ZIP file from the Plugin Home (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-     | ==lib/TWiki/Plugins/%TOPIC%/Config.spec== | Plugin Config spec |
-   * Configure the Plugin:
-      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
-      * Change the Plugin settings as needed
-   * Test if the installation was successful:
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+ 
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+        | ==lib/TWiki/Plugins/%TOPIC%/Config.spec== | Plugin Config spec |
+      * Set the ownership of the extracted directories and files to the webserver user.
 
-__Note:__ You also need to install the Cortado applet in the server. Binaries can be downloaded from [[http://www.flumotion.net/jar/cortado/]]. Sources can be found in [[http://www.flumotion.net/src/cortado/]]. The applet should be uploaded to the TWiki web server and its absolute URL path configured in <nop>LocalSite.cfg using the variable pointed above as <nop>CortadoPath in the section Plugin Settings.
+   * Install the Cortado applet in the server:
+      * Binaries can be downloaded from [[http://www.flumotion.net/jar/cortado/]]. Sources can be found in [[http://www.flumotion.net/src/cortado/]].
+      * Download [[http://www.flumotion.net/jar/cortado/cortado-ovt-stripped-0.2.2.jar]]
+      * Attach it to the CortadoPlugin topic
 
-   * Download [[http://www.flumotion.net/jar/cortado/cortado-ovt-stripped-0.2.2.jar]]
-   * Attach it to the CortadoPlugin topic
-   * Edit <nop>LocalSite.cfg and add the following line, replacing "/twiki/pub" by the twiki pub URL path of you installation.
-      * $TWiki::cfg{Plugins}{CortadoPlugin}{CortadoPath} = "/twiki/pub/TWiki/CortadoPlugin/cortado-ovt-0.2.2.jar";
-
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script, enable the plugin in the __Plugins__ section, and configure the plugin in the __Extensions__ section.
+      * Set the ={Plugins}{CortadoPlugin}{CortadoPath}= setting to point to the plugin's attachment directory, such as =%ATTACHURL%/%WEB%/%TOPIC%/cortado-ovt-0.2.2.jar=
+      * Test if the installation was successful: Attach a =.ogg= file to a topic in the Sandbox web and a =%<nop>CORTADO{}%= variable.
 
 ---++ Plugin Info
 
@@ -76,10 +84,11 @@ This work has been possible with the help of the following sponsors:
    * [[http://coletivodigital.org.br/][Coletivo Digital]]
 
 |  Plugin Author: | TWiki:Main.ThadeuCascardo |
-|  Copyright: | &copy; 2007, 2008, TWiki:Main.ThadeuCascardo |
+|  Copyright: | &copy; 2007-2008 TWiki:Main.ThadeuCascardo <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 15 Jan 2008 (V1.001) |
+|  Plugin Version: | 2011-05-14 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-05-14: | TWikibug:Item6701: Import into Subversion; doc improvements -- TWiki:Main.PeterThoeny |
 |  17 Dec 2007: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
@@ -89,10 +98,4 @@ This work has been possible with the help of the following sponsors:
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
-
--- TWiki:Main.ThadeuCascardo - 17 Dec 2007
-
-
-
-
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences

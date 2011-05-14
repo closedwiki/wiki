@@ -1,8 +1,9 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2003 Peter Thoeny, peter@thoeny.com
-# Copyright (C) 2007 Thadeu Lima de Souza Cascardo, cascardo@holoscopio.com
+# Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2007-2008 Thadeu Lima de Souza Cascardo, cascardo@holoscopio.com
+# Copyright (C) 2008-2011 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,21 +23,20 @@
 # Many unused functions/hooks and simple explanation comments were removed.
 # The Handler was changed to deal with Cortado Java Applet instead of
 # MediaPlayer.
-#
-
 
 # =========================
 package TWiki::Plugins::CortadoPlugin;
 
 use Error qw( :try );
 use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName
+        $web $topic $user $installWeb $VERSION $REVISON $pluginName
         $SHORTDESCRIPTION
         $debug $cortadoPath
     );
 
-$SHORTDESCRIPTION = 'Allows users to add videos in a topic using Cortado';
+$SHORTDESCRIPTION = 'Embed videos in a topic using the Cortado Java Applet';
 $VERSION = '1.001';
+$REVISION = '2011-05-14';
 $pluginName = 'CortadoPlugin';  # Name of this Plugin
 
 # =========================
@@ -177,18 +177,6 @@ sub afterEditHandler
 	                            params => ([ 'File is not a supported media' ]));
       }
     }
-
-}
-
-# =========================
-sub DISABLE_beforeSaveHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
-
-    # This handler is called by TWiki::Store::saveTopic just before the save action.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
 
 }
 
