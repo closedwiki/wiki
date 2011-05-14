@@ -1,6 +1,5 @@
-%META:TOPICINFO{author="TaitCyrus" date="1302821457" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305353937" format="1.1" version="$Rev$"}%
 ---+!! Chart Plugin
-
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
    at http://twiki.org/cgi-bin/view/Plugins/ChartPlugin or provide feedback
@@ -11,7 +10,7 @@
 %TOC{title="Page contents"}%
 </div></sticky>
 
-This plugin helps you visualize data in TWiki tables as charts, using a default linear scale or an optional semilogarithmic scale.
+This plugin helps you visualize data in TWiki tables as charts, using a default linear scale or an optional semi-logarithmic scale.
 
 ---++ Introduction
 
@@ -23,18 +22,18 @@ Six types of charts, _line_, _area_, _bar_, _scatter_, _combo_, and _spark_ are 
 | Line | =line= | Shows a chart using simple lines, points only, or lines with points to represent the data. %BR% __Note:__ Any areas that fall behind already drawn areas are drawn as lines to make them visible | <img alt="" src="%ATTACHURLPATH%/lineexample.png" /> |
 | Scatter | =scatter= | Shows a scatter chart (XY data points) and allows mixing =area= or =bar= with =line=, =point=, and =pline= | <img alt="" src="%ATTACHURLPATH%/scatterexample.png" /> |
 | Combo | =combo= | Shows a chart combining the features from =area= or =bar= with =line=, =point=, and =pline= %BR% __Note:__ Formally known as =arealine= which is still supported | <img alt="" src="%ATTACHURLPATH%/comboexample.png" /> |
-| Spark | =sparkline=, =sparkbar=, and =sparkarea= | Shows a sparkline, sparkbar, and sparkarea chart. All chart parameters are supported. | <img alt="" src="%ATTACHURLPATH%/sparklineexample.png" />%BR% <img alt="" src="%ATTACHURLPATH%/sparkbarexample2.png" />%BR% <img alt="" src="%ATTACHURLPATH%/sparkareaexample.png" /> |
+| Sparkline | =sparkline= | Shows a [[http://en.wikipedia.org/wiki/Sparkline][sparkline]]. Sparklines are <img alt="" src="%ATTACHURLPATH%/sparklineexample.png" /> small graphs that are part of the flow of a sentence or paragraph. ||
+| Sparkbar | =sparkbar= | Shows a <img alt="" src="%ATTACHURLPATH%/sparkbarexample2.png" /> sparkline in the shape of small bars. ||
+| Sparkarea | =sparkarea= | Shows a <img alt="" src="%ATTACHURLPATH%/sparkareaexample.png" /> sparkline in the shape of small bars. ||
 
 The =%<nop>CHART{...}%= variable gets expanded to an image representing the chart. Parameters and global settings determine the type of chart, dimensions, and values.
 
 ---++ <nop>%TOPIC% Global Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>CHARTPLUGIN_TYPE%==
-
-__NOTE:__ Do not change the settings here, overload them in the [[%LOCALSITEPREFS%]]. Prefix a setting with ==CHARTPLUGIN_==, e.g. to overload ==AREA_COLORS== define a ==CHARTPLUGIN_AREA_COLORS== setting in the <nop>%LOCALSITEPREFS%.
+Plugin settings are stored as preferences variables. Do not change the settings here, overload them in [[%LOCALSITEPREFS%]]. To overload a plugin setting, prefix it with =CHARTPLUGIN_=. For example, to overload the =BGCOLOR= setting, add a =* Set CHARTPLUGIN_BGCOLOR = ...= bullet in <nop>%LOCALSITEPREFS%.
 
    * Short description: 
-      * Set SHORTDESCRIPTION = Create area, bar, line and scatter  charts to visualize TWiki tables
+      * Set SHORTDESCRIPTION = Visualize TWiki tables with area charts, bar charts, line graphs, scatter charts and sparklines
 
    * Set DEBUG to 1 to get debug messages in =data/debug.txt=. Default: =0= 
       * Set DEBUG = 0
@@ -100,15 +99,15 @@ The =%<nop>CHART{...}%= variable gets expanded to an image representing the char
    * All parameters ending with =2= (like: =data2= and =ylabel2=) are relative to the right Y axis.  The default is relative to the left Y axis.
 
 | *%<nop>CHART% Parameter* | *Comment* | *Default* |
-| =type= | The type of chart to create. One of ="area"=, ="bar"=, ="line"=, ="scatter"=, ="combo"=, ="sparkline"=, ="sparkbar"=, or ="sparkarea"= | Global =TYPE setting |
+| =type= | The type of chart to create. One of ="area"=, ="bar"=, ="line"=, ="scatter"=, ="combo"=, ="sparkline"=, ="sparkbar"=, or ="sparkarea"= | Global =TYPE= setting |
 | =subtype= and =subtype2= | Sub type of selected data. =subtype= applies to =data= while =subtype2= applies to =data2=.  Supported values depend on chart type: | |
-| ^ | - for =type="area"= =&nbsp;&nbsp;&nbsp;subtype="area" | ="area"= |
-| ^ | - for =type="bar"= =&nbsp;&nbsp;&nbsp;&nbsp;subtype="bar" | ="bar"= |
-| ^ | - for =type="line"= =&nbsp;&nbsp;&nbsp;subtype="line, point, pline" (point line) | ="line"= |
-| ^ | - for =type="scatter"= subtype="area, bar, line, point, pline"%BR%Note: you cannot mix =area= and =bar= on the same chart.%BR%Note: It is not recommended using showing a =bar= on a =scatter= chart as the X axis placement is skewed with =bar= and will not exactly line up with drawn X axis values which will defeat the purpose of using =scatter= in the first place. | ="point"= |
-| ^ | - for =type="combo"=&nbsp;&nbsp;subtype="area, bar, line, point, pline" (note: you can not mix =area= and =bar= on the same chart) | All but the last data set are drawn as ="area"= and the last is drawn as ="line"= |
+| ^ | - for =type="area"=: =&nbsp;&nbsp;&nbsp;&nbsp;subtype="area"= | ="area"= |
+| ^ | - for =type="bar"=: =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;subtype="bar"= | ="bar"= |
+| ^ | - for =type="line"=: =&nbsp;&nbsp;&nbsp;&nbsp;subtype="line, point, pline"= (point line) | ="line"= |
+| ^ | - for =type="scatter"=: =&nbsp;subtype="area, bar, line, point, pline"= %BR%Note: you cannot mix =area= and =bar= on the same chart.%BR%Note: It is not recommended using showing a =bar= on a =scatter= chart as the X axis placement is skewed with =bar= and will not exactly line up with drawn X axis values which will defeat the purpose of using =scatter= in the first place. | ="point"= |
+| ^ | - for =type="combo"=: =&nbsp;&nbsp;&nbsp;subtype="area, bar, line, point, pline"= (note: you can not mix =area= and =bar= on the same chart) | All but the last data set are drawn as ="area"= and the last is drawn as ="line"= |
 | ^ | You can use a comma delimited list of values to set a specific subtype for each data set. For example ="area, area, point, line"= would say that the first two data sets are areas, the third is point and the last one is a line | |
-| =scale= | The scale to use when creating the chart. ="linear"= or ="semilog"= | Global =SCALE setting |
+| =scale= | The scale to use when creating the chart. ="linear"= or ="semilog"= | Global =SCALE= setting |
 | =name= | Name to uniquely identify the chart file that is auto-created. | None; is required for all charts |
 | =web= | The web in which to find =topic= (specified below) in which to find the TWiki tables | The current web |
 | =topic= | The topic in which to find the TWiki tables | The current topic |
@@ -116,7 +115,7 @@ The =%<nop>CHART{...}%= variable gets expanded to an image representing the char
 | =title= | The title placed at the top of the chart | None |
 | =xlabel= | The label placed under the X axis describing the X values | None |
 | =ylabel= and =ylabel2= | The label placed to the left of the left Y axis (=ylabel=) or right of the right Y axis (=ylabel2=) describing the Y values | None |
-| =data= and =data2= | The source data displayed on the chart. Values specified with =data= are displayed relative to the left Y axis while values specified with =data2= are displayed relative to the right Y axis. In both cases, they define either a range of table cells or explicit data values. For example for =type="line"=, a =data="R2:C3..R999:C6"= would say that four lines were to be drawn with the first line being rows 2-999 column 3 and last line being rows 2-999 column 6. In the case of a scatter graph, data represents the actual Y values. Note: Reversed data is allowed so =data="R999:C6..R2:C3"= is a legal data specification. Explicit data is also allowed so =data="R999:C6..R2:C3,0" would draw 5 lines, the first 4 coming from the table and the 5th having a constant value of =0=. | None; is required for all charts |
+| =data= and =data2= | The source data displayed on the chart. Values specified with =data= are displayed relative to the left Y axis while values specified with =data2= are displayed relative to the right Y axis. In both cases, they define either a range of table cells or explicit data values. For example for =type="line"=, a =data="R2:C3..R999:C6"= would say that four lines were to be drawn with the first line being rows 2-999 column 3 and last line being rows 2-999 column 6. In the case of a scatter graph, data represents the actual Y values. Note: Reversed data is allowed so =data="R999:C6..R2:C3"= is a legal data specification. Explicit data is also allowed so =data="R999:C6..R2:C3,0"= would draw 5 lines, the first 4 coming from the table and the 5th having a constant value of =0=. | None; is required for all charts |
 | =defaultdata= | If there is sparse data, then use the value specified by =defaultdata= to fill in the missing data. A value of ="none"= means only draw actual data points. | Global =DEFAULTDATA= setting |
 | =xaxis= | X-Axis labels: The values are defined as a range of table cells. In case of scatter graph, =xaxis= represents the actual X values. The range also defines the orientation -- row or column oriented (if specified). For example ="R2:C2..R999:C2"= would take all of column 2 starting at row 2 and going through row 999. It would also denote that all remaining data is oriented columnar. | None. Is required for =type="scatter"=. If not specified, then no X axis labels shown and data assumed to be in columnar format. |
 | =xaxisangle= | Angle the X-Axis labels are drawn. Only two angles are supported at this time, ="0"= draws horizontal labels, other numbers draw vertical labels | ="0"= |
@@ -130,14 +129,14 @@ The =%<nop>CHART{...}%= variable gets expanded to an image representing the char
 | =numygrids= | Number of Y axis grids drawn | Global =NUMYGRIDS= setting |
 | =ytics= and =ytics2= | Number of tic marks to draw between Y axis grid lines for the left (=ytics=) and right (=ytics2=) Y axis.  | If =scale="semilog"=, then =ytics="10"=, else defaults to ="0"= |
 | =numxgrids= | Number of X axis grids drawn. This can be used if there are a large number of X axis data points such that the X axis labels overlap. | Draw all X-Axis labels |
-| =datalabel= and =datalabel2= | Shows data value labels above drawn data points for =data= and =data2= data.  Possible values are: <table border=1> <tr> <td> ="off"= </td> <td>Do not show any data value labels</td> </tr> <tr> <td> ="on"= </td> <td>Show the data value labels for all data points</td> </tr> <tr> <td> ="box"= </td> <td>Show the data value labels inside of a box for all data points</td> </tr> <tr> <td> ="auto"= </td> <td>Show the data value labels for only data points falling on an X-axis grid line.  This option should be used when there are a lot of data points and the data values start to be drawn on top of each other making them impossible to read.</td> </tr> <tr> <td> ="autobox"= or ="auto box"= or ="boxauto"= or ="box auto"= </td> <td>Show the data value labels inside of a box for only data points falling on an X-axis grid line.  This option should be used when there are a lot of data points and the data values start to be drawn on top of each other making them impossible to read.</td> </tr> <tr> <td> ="##"= </td> <td>Show the first and last data value labels along with trying to show (## - 2) additional data value labels in between. An even distribution of data value labels will be shown so it is possible that fewer data value labels than requested will be displayed.  For example with 16 data values charted, requesting ="7"=, ="8"=, or ="9"= data value labels would only show a total of 8.</td> </tr> <tr> <td> ="##box"= or ="## box"= or ="box##"= or ="box ##"= </td> <td>Show the first and last data value labels inside of a box along with trying to show (## - 2) additional data value labels (in boxes) in between. An even distribution of data value labels will be shown so it is possible that fewer data value labels than requested will be displayed.  For example with 16 data values charted, requesting ="7"=, ="8"=, or ="9"= data value labels would only show a total of 8.</td> </tr> </table> | ="off"= |
+| =datalabel= and =datalabel2= | Shows data value labels above drawn data points for =data= and =data2= data.  Possible values are: <table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"> ="off"= </td><td> Do not show any data value labels </td></tr><tr><td valign="top"> ="on"= </td><td> Show the data value labels for all data points </td></tr><tr><td valign="top"> ="box"= </td><td> Show the data value labels inside of a box for all data points </td></tr><tr><td> ="auto"= </td><td> Show the data value labels for only data points falling on an X-axis grid line.  This option should be used when there are a lot of data points and the data values start to be drawn on top of each other making them impossible to read.</td></tr><tr><td valign="top"> <div style="white-space: nowrap"> ="autobox"= or%BR% ="auto box"= or%BR% ="boxauto"= or%BR% ="box auto"= </div> </td><td> Show the data value labels inside of a box for only data points falling on an X-axis grid line.  This option should be used when there are a lot of data points and the data values start to be drawn on top of each other making them impossible to read. </td></tr><tr><td valign="top"> ="##"= %BR% (an integer number) </td><td> Show the first and last data value labels along with trying to show (=##= - 2) additional data value labels in between. An even distribution of data value labels will be shown so it is possible that fewer data value labels than requested will be displayed.  For example with 16 data values charted, requesting ="7"=, ="8"=, or ="9"= data value labels would only show a total of 8. </td></tr><tr><td valign="top"> <div style="white-space: nowrap"> ="##box"= or%BR% ="## box"= or%BR% ="box##"= or%BR% ="box ##"= </div> </td><td> Show the first and last data value labels inside of a box along with trying to show (=##= - 2) additional data value labels (in boxes) in between. An even distribution of data value labels will be shown so it is possible that fewer data value labels than requested will be displayed.  For example with 16 data values charted, requesting ="7"=, ="8"=, or ="9"= data value labels would only show a total of 8. </td></tr></table> | ="off"= |
 | =legend= | Legend shown to the right of the chart. For example ="R1:C3..R1:C6"= would take all of row 1 starting at column 3 and going through column 6 as the name/legend of each set of data points | None; no legend if not specified |
-| =width= | Defines the overall width of the chart in pixels.%BR%%BR%Note: if =type="sparkbar"= and =width="0"=, then the width will be auto computed to be the minimum width to allow easily readable spark bars. | Global =WIDTH= setting |
+| =width= | Defines the overall width of the chart in pixels.%BR%Note: if =type="sparkbar"= and =width="0"=, then the width will be auto computed to be the minimum width to allow easily readable spark bars. | Global =WIDTH= setting |
 | =height= | Defines the overall height of the chart in pixels. | Global =HEIGHT= setting |
 | =alt= | Alternate text for chart image | Empty alt tag |
-| =colors= and =colors2= | A list of colors defining the color of each set of data points for =data= and =data2=. Color values are of the form: #RRGGBB or =transparent= | Global =LINE_COLORS= setting for lines; global =AREA_COLORS= setting for area |
-| =bgcolor= | Background color of the area surrounding/outside the chart, the area inside the chart, and the data label boxes.  Color values are of the form: #RRGGBB or =transparent=.  For example, ="#E7E7E7"= sets a light gray background (outside the chart) color.  Optionally specify a second values for the chart background itself (the inside color) and an optional third value which is the value of the color to fill data label boxes with. For example, ="#E7E7E7, #FFFFC0"= defines a chart with a light yellow inside background on a light gray outside, with default data label box background color. | Global =BGCOLOR= setting |
-| =gridcolor= | Colors/style of the grid (if any). If =xgrid= or =ygrid= = "on" then use the first =gridcolor= for drawing solid grid lines. If =xgrid= or =ygrid= = "dot", then use the full set of colors to define the line style for drawing the grid lines ("transparent" can be used to introduce holes in the line)" | Global =GRIDCOLOR= setting |
+| =colors= and =colors2= | A list of colors defining the color of each set of data points for =data= and =data2=. Color values are of the form: Hexadecimal RGB color ="#ffffff"= or ="transparent"= | Global =LINE_COLORS= setting for lines; global =AREA_COLORS= setting for area |
+| =bgcolor= | Background color of the area surrounding/outside the chart, the area inside the chart, and the data label boxes.  Color values are of the form: Hexadecimal RGB color ="#ffffff"= or ="transparent"=.  For example, ="#e7e7e7"= sets a light gray background (outside the chart) color.  Optionally specify a second values for the chart background itself (the inside color) and an optional third value which is the value of the color to fill data label boxes with. For example, ="#e7e7e7, #ffffc0"= defines a chart with a light yellow inside background on a light gray outside, with default data label box background color. | Global =BGCOLOR= setting |
+| =gridcolor= | Colors/style of the grid (if any). If =xgrid="on"= or =ygrid="on"= then use the first =gridcolor= for drawing solid grid lines. If =xgrid="dot"= or =ygrid="dot"=, then use the full set of colors to define the line style for drawing the grid lines. ="transparent"= can be used to introduce holes in the line." | Global =GRIDCOLOR= setting |
 | =linewidth= | Width of data lines in pixel | Global =LINEWIDTH= setting |
 | =pointsize= | Size of data points in pixel | Global =POINTSIZE= setting |
 | =showerror= | Specify how any error messages are handled.  Possible values are:%BR%<ul><li> ="text"= -- all error messages are produced as regular (red) text</li><li> ="image"= -- all error message are placed inside of an image sized according to the size of the chart if there were no error.</li><li> ="none"= or ="no"= -- no error messages are produced.  HTML text of =&<nop>nbsp;= is returned</li></ul> | Global =SHOWERROR= setting |
@@ -236,6 +235,9 @@ Charts can be created dynamically based on TWiki tables with SEARCH and CALC.
 | 3 | 5 | 7 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
 </verbatim>
 </td>
+<td>
+&nbsp;
+</td>
 <td valign="top">
 *Table:* 
 %TABLE{name="exampleTableWithCALC"}%
@@ -243,6 +245,9 @@ Charts can be created dynamically based on TWiki tables with SEARCH and CALC.
 | 1 | 7 | 9 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
 | 2 | 5 | 2 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
 | 3 | 5 | 7 | %CALC{$SUM(R$ROW():C1..R$ROW():C3)}% |
+</td>
+<td>
+&nbsp;
 </td>
 <td valign="top">
 *Resulting chart:* %BR% 
@@ -254,6 +259,7 @@ Charts can be created dynamically based on TWiki tables with SEARCH and CALC.
 __%X% Attention:__ You can get unexpected results if you [[%SYSTEMWEB%.VarINCLUDE][INCLUDE]] a topic that has a CHART pointing to a table with CALCs. By default, the SpreadSheetPlugin delays CALCs in included topics and evaluates them once all INCLUDEs are processed. With that, the CHART in an included topic sees unprocessed CALCs, resulting in a chart with incorrect values. To get he desired result you need to set the following preference setting in the topic that _includes_ the topic containing the CHART:
 
    * Set SPREADSHEETPLUGIN_SKIPINCLUDE = 0
+
 This setting tells the !SpreadSheetPlugin to process the CALCs in the included page, e.g. it will not delay the evaluation of the formulas.
 
 ---++ Output
@@ -274,10 +280,11 @@ If the required parameters are not defined, then an error message is returned or
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.TaitCyrus |
-|  Copyright: | &copy; 2002-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
+|  Copyright: | &copy; 2002-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]  <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-05-11 (v%$VERSION%) |
+|  Plugin Version: | 2011-05-13 (v%$VERSION%) |
 |  Change History: | <!-- specify latest version first --> |
+|  2011-05-13: | TWikibug:Item6701: Doc improvements -- TWiki:Main.PeterThoeny |
 |  2011-05-13: | <ul><li> TWikibug:Item6720: Allow support for =transparent= to be used in =colors= and =bgcolor= </li></ul> -- TWiki:Main.TaitCyrus |
 |  2011-05-11: | <ul><li> TWikibug:Item6716: Add ability to support constant values in addtion to spreadsheet ranges.</li><li> TWikibug:Item6717: Fix bug with =area= colors when =data2= is used.</li><li> TWikibug:Item6718: Add new types: =sparkline=, =sparkbar=, and =sparkarea= </li><li> TWikibug:Item6719: Retool how bar widths/spaces are used/calculated so they are now proportional instead of fixed sizing</li></ul> -- TWiki:Main.TaitCyrus |
 |  2011-05-05: | TWikibug:Item6714: Enhance error processing by adding =showerror= option.%BR%-- TWiki:Main.TaitCyrus |
