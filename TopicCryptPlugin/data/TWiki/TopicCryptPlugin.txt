@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TestUser2" date="1146763683" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="TWikiContributor" date="1146763683" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 %SHORTDESCRIPTION%
 
@@ -64,24 +64,33 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 	* Maximum number of signatures on a topic: (See output in =data/debug.txt=)
 		* Set MAX_SIGNATURES = 5
 	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 1
+		* Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
-	* Download the tarball file from the Plugin web (see below)
-	* Untar ==%TOPIC%.tgz== in your twiki installation directory. Content:
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+
+   * Or, follow these __manual installation__ steps:
+
+      * Download the tarball file from the Plugin web (see below)
+      * Untar ==%TOPIC%.tgz== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* Create your asymetric key with =openssl= (currently only RSA key is supported): %BR%
+      * Install the following [[http://search.cpan.org][CPAN]] modules:
+         * Mime::Base64
+         * Crypt::CBC
+         * Crypt::Rijndael_PP
+         * Crypt::RC4
+         * Crypt::OpenSSL::RSA
+
+   * The following applies to both manual, as well as to automatic install
+      * Create your asymetric key with =openssl= (currently only RSA key is supported): %BR%
 	  =openssl genrsa -out /var/lib/twiki/cryptkey.priv 2048=
-	* Be sure to set the variable $TopicCryptPlugin::PRIVKEY_FILE with the appropiate location of the =private key file= (if you change it). The default is:
-	  =$PRIVKEY_FILE="/var/lib/twiki/cryptkey.priv"=
-	* Install the following [[http://search.cpan.org][CPAN]] modules:
-		* Mime::Base64
-		* Crypt::CBC
-		* Crypt::Rijndael_PP
-		* Crypt::RC4
-		* Crypt::OpenSSL::RSA
+      * Be sure to configure the variable PRIVKEY_FILE in _lib/LocalSite.cfg_ with the platform specific location of the =private key file= . The default is:
+	  =$TWiki::cfg{Plugins}{TopicCryptPlugin}{PRIVKEY_FILE}="/var/lib/twiki/cryptkey.priv"=
 
 ---++ Plugin Info
 
@@ -90,6 +99,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 14 May 2006 (V1.000) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14 May 2011: | TWikibug:Item6721: Initial import into SVN; integrate patch tcp_patch422. Move configuration of key file location to LocalSite.cfg -- TWiki:Main.DipuDeshmukh |
 |  14 May 2006: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | Mime::Base64, Crypt::CPC, Crypt::Rijndael_PP, Crypt::RC4, Crypt::OpenSSL::RSA |

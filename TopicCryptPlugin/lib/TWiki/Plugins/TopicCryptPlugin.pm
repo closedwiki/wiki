@@ -195,9 +195,11 @@ sub userIsInGroup
 	if( $TWiki::Plugins::VERSION < 1.1 ) {
 		# Cairo
 		return TWiki::Access::userIsInGroup($user,$groupName);
-	} else {
+	} elsif( $TWiki::Plugins::VERSION < 1.2 ) {
 		# Dakar
 		return $TWiki::Plugins::SESSION->{user}->isInList($groupName);
+	} else {
+    return TWiki::Func::isGroupMember($groupName,$user);
 	}
 }
 
@@ -1158,6 +1160,9 @@ sub initPlugin
 	
 	# Get the private key file path
 	$privateKeyFile=$PRIVKEY_FILE;
+  if ($TWiki::cfg{Plugins}{TopicCryptPlugin}{PRIVKEY_FILE}) {
+       $privateKeyFile = "$TWiki::cfg{Plugins}{TopicCryptPlugin}{PRIVKEY_FILE}"
+  }
 
 	my $method =
 		TWiki::Func::getPluginPreferencesValue( "DEFAULT_METHOD" );
