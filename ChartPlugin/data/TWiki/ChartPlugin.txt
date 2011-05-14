@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305354321" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305356143" format="1.1" version="$Rev$"}%
 ---+!! Chart Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
@@ -22,9 +22,9 @@ Six types of charts, _line_, _area_, _bar_, _scatter_, _combo_, and _spark_ are 
 | Line | =line= | Shows a chart using simple lines, points only, or lines with points to represent the data. %BR% __Note:__ Any areas that fall behind already drawn areas are drawn as lines to make them visible | <img alt="" src="%ATTACHURLPATH%/lineexample.png" /> |
 | Scatter | =scatter= | Shows a scatter chart (XY data points) and allows mixing =area= or =bar= with =line=, =point=, and =pline= | <img alt="" src="%ATTACHURLPATH%/scatterexample.png" /> |
 | Combo | =combo= | Shows a chart combining the features from =area= or =bar= with =line=, =point=, and =pline= %BR% __Note:__ Formally known as =arealine= which is still supported | <img alt="" src="%ATTACHURLPATH%/comboexample.png" /> |
-| Sparkline | =sparkline= | Shows a [[http://en.wikipedia.org/wiki/Sparkline][sparkline]]. Sparklines are <img alt="" src="%ATTACHURLPATH%/sparklineexample.png" /> small graphs that are part of the flow of a sentence or paragraph. ||
-| Sparkbar | =sparkbar= | Shows a <img alt="" src="%ATTACHURLPATH%/sparkbarexample2.png" /> sparkline in the shape of small bars. ||
-| Sparkarea | =sparkarea= | Shows a <img alt="" src="%ATTACHURLPATH%/sparkareaexample.png" /> sparkline in the shape of small bars. ||
+| Sparkline | =sparkline= | Shows a [[http://en.wikipedia.org/wiki/Sparkline][sparkline]]. Sparklines are small graphs <span style="vertical-align:text-bottom"><img alt="" src="%ATTACHURLPATH%/sparklineexample.png" style="vertical-align:text-bottom" /></span> that are part of the flow of a sentence or paragraph. ||
+| Sparkbar | =sparkbar= | Shows a <span style="vertical-align:text-bottom"><img alt="" src="%ATTACHURLPATH%/sparkbarexample2.png" /></span> sparkline in the shape of small bars. ||
+| Sparkarea | =sparkarea= | Shows a <span style="vertical-align:text-bottom"><img alt="" src="%ATTACHURLPATH%/sparkareaexample.png" /></span> sparkline in the shape of an area. ||
 
 The =%<nop>CHART{...}%= variable gets expanded to an image representing the chart. Parameters and global settings determine the type of chart, dimensions, and values.
 
@@ -196,10 +196,10 @@ Assuming the following three TWiki tables. The first shows the data oriented in 
    * Set scatter1 = name="scatter1" table="exampleTable3" type="scatter" subtype="pline" data="R2:C2..R6:C4" xaxis="R2:C1..R6:C1" legend="R1:C2..R1:C4" ymin="1" ymax="10" xmax="12" numygrids="8" numxgrids="8" linewidth="1" width="225" height="200"
    * Set combo1 = name="combo1" table="exampleTable2" type="combo" subtype="area, pline, point, line" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" ymin="5" ymax="30" numygrids="4" numxgrids="4" width="225" height="200"
    * Set combo2 = name="combo2" table="exampleTable2" type="combo" subtype="bar, pline, point, line" data="R2:C2..R5:C6" xaxis="R1:C2..R1:C6" legend="R2:C1..R5:C1" ymin="5" ymax="30" numygrids="4" numxgrids="4" width="225" height="200"
-   * Set sparkline = name="sparkline" type="sparkline" data="88, 84, 82, 92, 82, 86, 66, 82, 44, 64, 66, 88, 96, 80, 24, 26, 14, 0, 0, 26, 8, 6, 6, 24, 52, 66, 36, 6, 10, 14, 30" width="75" height="16" colors='#0000FF' bgcolor='#EEEEEE'
-   * Set sparkbar1 = name="sparkbar1" type="sparkbar" data="88, 84, 82, 92, 82, 86, 66, 82, 44, 64, 66, 88, 96, 80, 24, 26, 14, 0, 0, 26, 8, 6, 6, 24, 52, 66, 36, 6, 10, 14, 30" width="75" height="16" colors='#0000FF' bgcolor='#EEEEEE'
-   * Set sparkbar2 = name="sparkbar2" type="sparkbar" data="88, 84, 82, 92, 82, 86, 66, 82, 44, 64, 66, 88, 96, 80, 24, 26, 14, 0, 0, 26, 8, 6, 6, 24, 52, 66, 36, 6, 10, 14, 30" width="0" height="16" colors='#0000FF' bgcolor='#EEEEEE'
-   * Set sparkarea = name="sparkarea" type="sparkarea" data="88, 84, 82, 92, 82, 86, 66, 82, 44, 64, 66, 88, 96, 80, 24, 26, 14, 0, 0, 26, 8, 6, 6, 24, 52, 66, 36, 6, 10, 14, 30" width="75" height="16" colors='#0000FF' bgcolor='#EEEEEE'
+   * Set sparkline = name="sparkline" type="sparkline" data="88, 84, 82, 92, 82, 86, 66, 82, 44, 64, 66, 88, 96, 80, 24, 26, 14, 0, 0, 26, 8, 6, 6, 24, 52, 66, 36, 6, 10, 14, 30" width="75" height="16" colors='#224262' bgcolor='transparent'
+   * Set sparkbar1 = name="sparkbar1" type="sparkbar" data="88, 84, 82, 92, 82, 86, 66, 82, 44, 64, 66, 88, 96, 80, 24, 26, 14, 0, 0, 26, 8, 6, 6, 24, 52, 66, 36, 6, 10, 14, 30" width="75" height="16" colors='#224262' bgcolor='transparent'
+   * Set sparkbar2 = name="sparkbar2" type="sparkbar" data="88, 84, 82, 92, 82, 86, 66, 82, 44, 64, 66, 88, 96, 80, 24, 26, 14, 0, 0, 26, 8, 6, 6, 24, 52, 66, 36, 6, 10, 14, 30" width="0" height="16" colors='#224262' bgcolor='transparent'
+   * Set sparkarea = name="sparkarea" type="sparkarea" data="88, 84, 82, 92, 82, 86, 66, 82, 44, 64, 66, 88, 96, 80, 24, 26, 14, 0, 0, 26, 8, 6, 6, 24, 52, 66, 36, 6, 10, 14, 30" width="75" height="16" colors='#224262' bgcolor='transparent'
 -->
 
 | *Type of chart* | *You type* | *You should get...* | *...if installed* |
@@ -328,7 +328,7 @@ __Related Topics:__ VarCHART, ChartPluginTests, ChartPluginTestsRemote, %SYSTEMW
 %META:FILEATTACHMENT{name="bar1.png" attr="h" comment="" date="1093917742" path="bar1.png" size="1041" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="combo2.png" attr="h" comment="" date="1093917971" path="combo2.png" size="1583" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="barexample.png" attr="h" comment="" date="1093918158" path="barexample.png" size="1886" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="sparklineexample.png" attr="h" comment="" date="1305304913" path="sparklineexample.png" size="222" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="sparkbarexample1.png" attr="h" comment="" date="1305304913" path="sparkbarexample1.png" size="175" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="sparkbarexample2.png" attr="h" comment="" date="1305304913" path="sparkbarexample2.png" size="178" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="sparkareaexample.png" attr="h" comment="" date="1305304913" path="sparkareaexample.png" size="202" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="sparklineexample.png" attachment="sparklineexample.png" attr="h" comment="" date="1305355618" path="sparklineexample.png" size="214" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="sparkbarexample1.png" attachment="sparkbarexample1.png" attr="h" comment="" date="1305355618" path="sparkbarexample1.png" size="181" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="sparkbarexample2.png" attachment="sparkbarexample2.png" attr="h" comment="" date="1305355618" path="sparkbarexample2.png" size="185" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="sparkareaexample.png" attachment="sparkareaexample.png" attr="h" comment="" date="1305355618" path="sparkareaexample.png" size="206" user="TWikiContributor" version="1"}%
