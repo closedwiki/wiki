@@ -13,3 +13,5 @@ $TWiki::cfg{Plugins}{AutoViewTemplatePlugin}{Override} = 0;
 # **SELECT exist,section**
 # How to find the view or edit template. 'exist' means the template name is derived from the name of the form definition topic. 'section' means the template name is defined in a section in the form definition topic.
 $TWiki::cfg{Plugins}{AutoViewTemplatePlugin}{Mode} = 'exist';
+
+1;

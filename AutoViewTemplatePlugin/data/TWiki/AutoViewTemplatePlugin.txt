@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293674114" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305422928" format="1.1" version="$Rev$"}%
 ---+!! <nop>AutoViewTemplatePlugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -94,11 +94,12 @@ Manual installation:
    * Set SHORTDESCRIPTION = Automatically sets VIEW_TEMPLATE and EDIT_TEMPLATE
 -->
 |  Plugin Author: | TWiki:Main.OliverKrueger |
-|  Copyright: | &copy; 2008-2009, Oliver Krueger; <br /> &copy; 2008-2010 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2008-2009, Oliver Krueger; <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Release: | 2010-12-29 |
+|  Release: | 2011-05-14 |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-05-14: | TWikibug:Item6701: Small doc fixes -- TWiki:Main.PeterThoeny |
 |  2010-12-29: | TWikibug:Item6530: Doc improvements, code sync |
 |  31 Jul 2010: | Documentation updates |
 |  06 Oct 2009: | Plugin got better documentation. No change in behavior. |

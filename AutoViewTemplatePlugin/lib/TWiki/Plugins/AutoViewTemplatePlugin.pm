@@ -3,7 +3,7 @@
 # Copyright (C) 2008 Oliver Krueger <oliver@wiki-one.net>
 # All Rights Reserved.
 #
-# Copyright (C) 2008-2010 TWiki Contributors. TWiki Contributors
+# Copyright (C) 2008-2011 TWiki Contributors. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
@@ -28,7 +28,7 @@ use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION
   $pluginName $NO_PREFS_IN_TOPIC );
 
 $VERSION           = '$Rev$';
-$RELEASE           = '2010-12-29';
+$RELEASE           = '2011-05-14';
 $SHORTDESCRIPTION  = 'Automatically sets VIEW_TEMPLATE and EDIT_TEMPLATE';
 $NO_PREFS_IN_TOPIC = 1;
 
