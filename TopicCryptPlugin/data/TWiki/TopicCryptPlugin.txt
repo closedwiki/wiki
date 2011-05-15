@@ -1,46 +1,68 @@
-%META:TOPICINFO{author="TWikiContributor" date="1146763683" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305482296" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/TopicCryptPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TopicCryptPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
 %SHORTDESCRIPTION%
 
-%TOC%
+---++ Introduction
 
-%WIKITOOLNAME% has no efficient way to restrict topic viewing from a list of users or a list of groups. Moreover one may want to forbid only _parts_ of a topic to some users and not the whole page (e.g. hide some columns of a table). The goal of this plugin is to allow to crypt some parts of a topic when storing it into the filesystem of the hosting machine and offers the posibility to atach a digital signature for the topic content. The crypted parts are automatically decrypted before viewing or editing the topic. The advantage of this method is to defeat the use of some directives such as =SEARCH= for accessing to hidden (crypted) parts. Its direct drawback is that the hidden (crypted) parts cannot be taken into account by directives such as =SEARCH= which use direct access to the topic and then will find the crypted version of texts even when running for authorized users.
+TWiki has no efficient way to restrict topic viewing from a list of users or a list of groups. Moreover one may want to forbid only _parts_ of a topic to some users and not the whole page (e.g. hide some columns of a table). The goal of this plugin is to allow to crypt some parts of a topic when storing it into the file system of the hosting machine and offers the possibility to attach a digital signature for the topic content. The encrypted parts are automatically decrypted before viewing or editing the topic. The advantage of this method is to defeat the use of some directives such as =SEARCH= for accessing to hidden (encrypted) parts. Its direct drawback is that the hidden (encrypted) parts cannot be taken into account by directives such as =SEARCH= which use direct access to the topic and then will find the encrypted version of texts even when running for authorized users.
 
 ---++ Syntax Rules
-There are 3 main directives for handling topic crypting. A directive to set general crypting options, a directive to set table crypting options and a directive to encrypt a text. There are also 3 directives used for the digital signature.
+
+There are 3 main directives for handling topic encrypting. A directive to set general encrypting options, a directive to set table encrypting options and a directive to encrypt a text. There are also 3 directives used for the digital signature.
 
 ---+++ =%<nop>CRYPT_OPTIONS{...}%=
-The directive for options is =<verbatim>%CRYPT_OPTIONS{...}%</verbatim>= and can occur in the beginning of the topic to have effect on all crypting directives. This header directive can be overrided by another =<verbatim>%CRYPT_OPTIONS{...}%</verbatim>= placed at the beginning of a line, this directive apply to all crypting directives in the same line. The list of settings controled by a =<verbatim>%CRYPT_OPTIONS{...}%</verbatim>= is given in the following table:
+
+The directive for options is =%<nop>CRYPT_OPTIONS{...}%= and can occur in the beginning of the topic to have effect on all crypting directives. This header directive can be overrided by another =<nop>%CRYPT_OPTIONS{...}%= placed at the beginning of a line, this directive apply to all encrypting directives in the same line. The list of settings controlled by a =<nop>%CRYPT_OPTIONS{...}%= is given in the following table:
+
 | *Setting* | *Description* | *Default* |
-|method | method to use to crypt the text | =base64= |
-|aclmode | precise the behaviour of ACL options | =append= |
-|allowtextread | users and groups allowed to view crypted text (or =*= as a wildcard for everybody) | initial user who typed the text to be crypted |
-|allowtextchange | users and groups allowed to modify crypted text (or =*= as a wildcard for everybody) | initial user who typed the text to be crypted |
-|denytextread | users and groups that cannot view crypted text | void |
-|denytextchange | users and groups that cannot modify crypted text | void |
-|begin | shortcut delimiter for crypted text beginning | <verbatim>{{</verbatim> |
-|end | shortcut delimiter for crypted text ending | <verbatim>}}</verbatim> |
+|method | method to use to encrypt the text | =base64= |
+|aclmode | precise the behavior of ACL options | =append= |
+|allowtextread | users and groups allowed to view encrypted text (or =*= as a wildcard for everybody) | initial user who typed the text to be encrypted |
+|allowtextchange | users and groups allowed to modify encrypted text (or =*= as a wildcard for everybody) | initial user who typed the text to be encrypted |
+|denytextread | users and groups that cannot view encrypted text | void |
+|denytextchange | users and groups that cannot modify encrypted text | void |
+|begin | shortcut delimiter for encrypted text beginning | ={<nop>{= |
+|end | shortcut delimiter for encrypted text ending | =}<nop>}= |
 |alt | an alternative string to be displayed when user is not allowed to decrypt text | void string |
-You can only specify =base64= or =rsa_xxx= as crypting methods (where "xxx" stands for the name of a symetric key encryption algorithm; you ca choose between "rc4" or "rijndael"). The =base64= method is totaly insecure (a mere base64 encoding) and is used only for demonstration and trial purposes. For production you must use the =rsa_xxx= method (for each text to be crypted, a key is generated and used to crypt the text, both this crypted text and the symetric key ciphered using the global RSA key - see below in Settings section - are saved into the topic).
+
+You can only specify =base64= or =rsa_xxx= as crypting methods (where "xxx" stands for the name of a symmetric key encryption algorithm; you ca choose between "rc4" or "rijndael"). The =base64= method is totally insecure (a mere base64 encoding) and is used only for demonstration and trial purposes. For production you must use the =rsa_xxx= method (for each text to be encrypted, a key is generated and used to crypt the text, both this encrypted text and the symmetric key ciphered using the global RSA key - see below in Settings section - are saved into the topic).
+
 The lists of users and groups are comma separated lists. The list is appended to lists defined by previous setting directives unless the =aclmode= is set to =override=.
 
 ---+++ =%<nop>CRYPT_TABLE_OPTIONS{...}%=
-This directive is used for setting crypting options for a table. It should appear in a line previous to the table itself.This feature allows a user to specify a special column in a table by inserting the following html comment in the column name =&lt;!--UserIDCol--&gt;=. Each field of this column will contain a list of twiki ids. The crypted directives found on the rows of the table will be crypted with view permission only for the users specifed in this column. The edit permissions of the the crypted texts from the table will be those set in the =<verbatim>%CRYPT_TABLE_OPTIONS{...}%</verbatim>= or the global ones.<br/>
-The =<verbatim>%CRYPT_TABLE_OPTIONS{...}%</verbatim>= directive is intended so that a user can specify who is allowed to edit the crypted texts from the table or the =alt= option (an alternative string to be displayed when user is not allowed to decrypt text).
+
+This directive is used for setting encrypting options for a table. It should appear in a line previous to the table itself.This feature allows a user to specify a special column in a table by inserting the following HTML comment in the column name =&lt;!--UserIDCol--&gt;=. Each field of this column will contain a list of twiki ids. The encrypted directives found on the rows of the table will be encrypted with view permission only for the users specified in this column. The edit permissions of the the encrypted texts from the table will be those set in the =<nop>%CRYPT_TABLE_OPTIONS{...}%= or the global ones.
+
+The =<nop>%CRYPT_TABLE_OPTIONS{...}%= directive is intended so that a user can specify who is allowed to edit the encrypted texts from the table or the =alt= option (an alternative string to be displayed when user is not allowed to decrypt text).
 
 ---+++ =%<nop>CRYPT_BEGIN{...}%= and =%<nop>CRYPT_END%=
-A text to be crypted must be enclosed between the directives =<verbatim>%CRYPT_BEGIN{...}%</verbatim>= and =<verbatim>%CRYPT_END%</verbatim>=. The =<verbatim>%CRYPT_BEGIN{...}%</verbatim>= directive can take the same options as directive =<verbatim>%CRYPT_SETTINGS{...}%</verbatim>=. Another way to specify a text to be crypted is to use the shortcuts which default to =<verbatim>{{</verbatim>= and =<verbatim>}}</verbatim>= but it is not possible with this method to alter crypting settings.
-When one is allowed to edit a topic (by standard %WIKITOOLNAME% access control methods) and not allowed to edit some crypted texts, these texts appear in crypted form into a <verbatim></verbatim> directive. If the user delete or change the textual order of one of these directives it will not be allowed to save its changes.
-When viewing a topic, the crypted texts a user is not allowed to see are replaced by an alternative text which default to a void string.
+
+A text to be encrypted must be enclosed between the directives =<nop>%CRYPT_BEGIN{...}%= and =<nop>%CRYPT_END%=. The =<nop>%CRYPT_BEGIN{...}%= directive can take the same options as directive =<nop>%CRYPT_SETTINGS{...}%=. Another way to specify a text to be encrypted is to use the shortcuts which default to ={<nop>{= and =}<nop>}= but it is not possible with this method to alter the encrypting settings.
+
+When one is allowed to edit a topic (by standard TWiki access control methods) and not allowed to edit some encrypted texts, these texts appear in encrypted form into a =&lt;verbatim&gt;...&lt;/verbatim&gt;= directive. If the user delete or change the textual order of one of these directives it will not be allowed to save its changes.
+
+When viewing a topic, the encrypted texts a user is not allowed to see are replaced by an alternative text which default to a void string.
 
 ---+++ =%<nop>SIGNPAGE%=
+
 When inserted in the edit box this directive generates a "Sign" button. When pressed, a hash of the topic text is added in the page meta data.
 
----+++ =%<nop>VALID_SIGNATURES%= and =%<nop>OUTDATED_SIGNATURES%=
-This directives are expanded into: ="Valid Signatures: signature(date time),..."= and ="Outdated Signatures: signature(date time),..."=. This directives were intented to be introduced in the skin templates(for example: view.pattern.tmpl) by the admin of twiki site, so the signatures can't be modified by users. 
+---+++ =%<nop>VALID_SIGNATURES%= !!and =%<nop>OUTDATED_SIGNATURES%=
+
+This directives are expanded into: ="Valid Signatures: signature(date time),..."= and ="Outdated Signatures: signature(date time),..."=. This directives are intended to be used in the skin templates (for example =view.pattern.tmpl=) by the admin of TWiki site, so the signatures can't be modified by users.
 
 ---++ Examples
-The text below is crypted. You should see it only if you are authorized to decrypt it:
+
+The text below is encrypted. You should see it only if you are authorized to decrypt it:
 
 <pre>
 {{crypted text}}
@@ -55,16 +77,21 @@ The text below is crypted. You should see it only if you are authorized to decry
 </pre>
 
 ---++ <nop>%TOPIC% Settings
+
 Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TOPICCRYPTPLUGIN_SHORTDESCRIPTION%==
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Encrypt parts of a topic for privacy and add digital signatures to topics
-	* The default crypting method to use (change to =rsa_rca4= if you want this plugin to be useful):
-		* Set DEFAULT_METHOD = rsa_rc4
-	* Maximum number of signatures on a topic: (See output in =data/debug.txt=)
-		* Set MAX_SIGNATURES = 5
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Encrypt parts of a topic for privacy and add digital signatures to topics
+
+   * The default crypting method to use (change to =rsa_rca4= if you want this plugin to be useful):
+      * Set DEFAULT_METHOD = rsa_rc4
+
+   * Maximum number of signatures on a topic: (See output in =data/debug.txt=)
+      * Set MAX_SIGNATURES = 5
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
@@ -76,9 +103,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
       * Download the tarball file from the Plugin web (see below)
       * Untar ==%TOPIC%.tgz== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
       * Install the following [[http://search.cpan.org][CPAN]] modules:
          * Mime::Base64
          * Crypt::CBC
@@ -88,29 +115,27 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
    * The following applies to both manual, as well as to automatic install
       * Create your asymetric key with =openssl= (currently only RSA key is supported): %BR%
-	  =openssl genrsa -out /var/lib/twiki/cryptkey.priv 2048=
-      * Be sure to configure the variable PRIVKEY_FILE in _lib/LocalSite.cfg_ with the platform specific location of the =private key file= . The default is:
-	  =$TWiki::cfg{Plugins}{TopicCryptPlugin}{PRIVKEY_FILE}="/var/lib/twiki/cryptkey.priv"=
+        =openssl genrsa -out /var/lib/twiki/cryptkey.priv 2048=
+      * Be sure to configure the variable PRIVKEY_FILE in _lib/LocalSite.cfg_ with the platform specific location of the =private key file= . The default is: %BR%
+        =$TWiki::cfg{Plugins}{TopicCryptPlugin}{PRIVKEY_FILE}="/var/lib/twiki/cryptkey.priv"=
 
 ---++ Plugin Info
 
-|  Plugin Author: | XavierRedon, TWiki:Main.AlexIancu |
-|  Copyright: | &copy; 2006, TWiki:Main.AlexIancu |
+|  Plugin Author: | TWiki:Main.XavierRedon, TWiki:Main.AlexIancu |
+|  Copyright: | &copy; 2006, TWiki:Main.AlexIancu <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 14 May 2006 (V1.000) |
+|  Plugin Version: | 2011-05-15 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  14 May 2011: | TWikibug:Item6721: Initial import into SVN; integrate patch tcp_patch422. Move configuration of key file location to LocalSite.cfg -- TWiki:Main.DipuDeshmukh |
+|  2011-05-15: | TWikibug:Item6701: Doc improvements -- TWiki:Main.PeterThoeny |
+|  14 May 2011: | TWikibug:Item6721: Initial import into SVN; integrate patch tcp_patch422. Move configuration of key file location to !LocalSite.cfg -- TWiki:Main.DipuDeshmukh |
 |  14 May 2006: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | Mime::Base64, Crypt::CPC, Crypt::Rijndael_PP, Crypt::RC4, Crypt::OpenSSL::RSA |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 98%, %TOPIC% nn% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 98%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
-
--- TWiki:Main.AlexIancu - 14 May 2006
-
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences

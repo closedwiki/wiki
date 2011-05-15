@@ -1,4 +1,21 @@
-# Plugin for TWiki Collaboration Platform, http://TWiki.org/
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2006 TWiki:Main.AlexIancu
+# Copyright (C) 2008-2011 TWiki Contributors
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# As per the GPL, removal of this notice is prohibited.
+#
+# =========================
 #
 # This plugin allow a selective crypting of topic parts.
 # The crypted parts are decrypted before topic viewing and topic editing
@@ -6,7 +23,6 @@
 # The parts to be crypted are crypted before topic saving, so the topic
 # is stored crypted into the twiki filesystem forbiding retrieval by a
 # SEARCH directive.
-#
 
 # =========================
 package TWiki::Plugins::TopicCryptPlugin;
@@ -16,12 +32,13 @@ use strict;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName
+        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
         $debug $privateKeyFile $warningEdit $maxSignatures
     );
 
 # General constants
 $VERSION = '1.010';
+$RELEASE = '2011-05-15';
 $pluginName = 'TopicCryptPlugin';
 
 # Crypting constants
