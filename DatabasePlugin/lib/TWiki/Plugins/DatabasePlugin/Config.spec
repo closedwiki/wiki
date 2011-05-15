@@ -84,3 +84,5 @@ $TWiki::cfg{Plugins}{DatabasePlugin}{Databases} =
        table_name => '',
    },
 ];
+
+1;
