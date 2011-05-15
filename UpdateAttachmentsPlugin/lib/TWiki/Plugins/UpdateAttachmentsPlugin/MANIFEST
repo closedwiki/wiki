@@ -1,4 +1,4 @@
 # Release manifest for UpdateAttachmentsPlugin
 data/TWiki/UpdateAttachmentsPlugin.txt 0644 Documentation
 lib/TWiki/Plugins/UpdateAttachmentsPlugin.pm 0644 Perl module
-lib/TWiki/Plugins/UpdateAttachmentsPlugin/Config.spec
+lib/TWiki/Plugins/UpdateAttachmentsPlugin/Config.spec 0644

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293783022" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305441172" format="1.1" version="$Rev$"}%
 ---+!! !UpdateAttachmentsPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -56,11 +56,12 @@ This plugin _may_ not function correctly if =$TWiki::cfg{AutoAttachPubFiles}= is
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.SvenDowideit - http://distributedINFORMATION.com |
-|  Copyright: | &copy; 2007 SvenDowideit@distributedINFORMATION.com; <br /> &copy; 2007-2010, TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2007 SvenDowideit@distributedINFORMATION.com; <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-05-04: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
+|  2011-05-14: | TWikibug:Item6701: Small fix in Config.spec -- TWiki:Main.PeterThoeny |
+|  2010-05-04: | TWikibug:Item6433: Doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  Dec 2007: | add !AttachAsUser |
 |  Nov 2007: | initial release |
 |  Dependencies: | %$DEPENDENCIES% |
