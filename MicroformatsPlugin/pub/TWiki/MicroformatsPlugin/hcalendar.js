@@ -30,7 +30,7 @@ SOFTWARE.
 var dayNames = new Array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
 var dayAbbrevs = new Array("S", "M", "T", "W", "T", "F", "S");
 var firstDayOfWeek = 0;
-var DEBUG = 1;
+var DEBUG = 0;
 
 /* stolen from somebody's blog */
 

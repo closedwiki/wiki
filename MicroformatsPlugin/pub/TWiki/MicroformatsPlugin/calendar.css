@@ -13,7 +13,6 @@
   text-align: center;
 }
 
-
 .calDay {
   background-color:#EDECD8; 
   height:80px; 
@@ -34,7 +33,9 @@
   text-align: right;
 }
 
-.calEvent				{ font-size:10px; line-height:16px; font-family:verdana, arial, helvetica; color:#000 }
+.calEvent {
+ font-size:10px; line-height:16px; font-family:verdana, arial, helvetica; color:#000
+}
 
 td.calColumnHeader {
   background-color:#72747A; 

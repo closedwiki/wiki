@@ -1,25 +1,45 @@
+%META:TOPICINFO{author="TWikiContributor" date="1305433754" format="1.1" version="$Rev$"}%
 ---+!! !MicroformatsPlugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/MicroformatsPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/MicroformatsPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+</sticky>
 <a href="http://microformats.org/" style="float:right;padding:12px;"><img src="%ATTACHURLPATH%/logo.gif" alt="microformats"/></a>
 <!--
 One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = microformat support for TWiki
+   * Set SHORTDESCRIPTION = Microformat support for TWiki
 -->
 %SHORTDESCRIPTION%
 
-%TOC%
-
 ---++ Usage
+
 This Plugins adds support for a number of [[http://microformats.org][microformats]]. 
    1 <img src="%ATTACHURLPATH%/MicroID.png" alt="microID"/> [[http://microid.org][MicroID]], which allows a user to Verifiably Claim their User Topic, through the use of a hash of the Url and their registered email address
       * The microid will be automatically added to the html header when viewing any user's topic.
    1 <img src="%ATTACHURLPATH%/icon-hcard.png" alt="xfn"/> [[http://microformats.org/wiki/hcard][hCard]] with a little xfn, a simple, open, distributed format for representing TWiki users. 
-      * useage: =%<nop>HCARD{"WikiName"}% - uses the TWiki.UserForm data on a user's Topic to create a hCard.
+      * useage: =%<nop>HCARD{"WikiName"}% - uses the %SYSTEMWEB%.UserForm data on a user's Topic to create a hCard.
       * perhaps will need to use JS to auto add hCards to user topics?
+   1 =HEVENT{start="" end="" url="" location="" summary="" description=""}= calendar view (work in progress)
 
 ---++ Examples
 
+If installed and enabled (=%<nop>HCARD{%<nop>WIKINAME%}%=):
+%HCARD{%WIKINAME%}%
+
+=HEVENT{start="" end="" url="" location="" summary="" description=""}=
+%HEVENT{start="%DATE%" url="http://twiki.org/" location="Cupertino Community Center" summary="TWiki helps the enterprise to be agile" description="TWiki Enterprise Collaboration Platform"}%
+
 ---++ Browser addins
+
 [[http://microformats.org/wiki/Safari][Safari microformats plugin]] and [[http://microformats.org/wiki/Operator][Operator for Firefox]] are 2 addins that extend your Browser to help you use Microformats.
+
 ---++ Installation Instructions
 
 %$INSTALL_INSTRUCTIONS%
@@ -29,22 +49,20 @@ This Plugins adds support for a number of [[http://microformats.org][microformat
    * [[http://factorycity.net/projects/microformats-icons/][Microformat Icons]] by [[http://bartelme.at/][Wolfgang Bartelme]]
    * [[http://www.hicksdesign.co.uk/journal/highlight-microformats-with-css][expose-mf.css]] by Hicks Design
 
-|  Plugin Author: | TWiki:Main.SvenDowideit - SvenDowideit@fosiki.com - <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] |
-|  Copyright: | &copy; 2008, SvenDowideit@fosiki.com |
-|  License: | <a href="http://www.gnu.org/licenses/gpl.html" rel="license">GPL (Gnu General Public License)</a> |
-|  Plugin Version: | %$VERSION% |
+|  Plugin Authors: | TWiki:Main.SvenDowideit - SvenDowideit@fosiki.com - [[http://www.wikiring.com][WikiRing.com]] |
+|  Copyright: | &copy; 2008 SvenDowideit@fosiki.com <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-05-14 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-05-14: | TWikibug:Item6701: Doc improvements -- TWiki:Main.PeterThoeny |
+|  2008-02-20: | Initial release |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/MicroformatsPlugin |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/MicroformatsPluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/MicroformatsPluginAppraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences, %USERSWEB%.TWikiPreferences
 
-
--- SvenDowideit@fosiki.com - [[http://www.wikiring.com][WikiRing.com]]
-
-%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="wikiringlogo20x20.png" date="1161609076" size="" user="Main.SvenDowideit" version="1"}%
-%META:FILEATTACHMENT{name="logo.gif" attr="h" comment="http://microformats.org/wordpress/wp-content/themes/microformats/img/logo.gif" date="1161609076" size="" user="" version="1"}%
-%META:FILEATTACHMENT{name="icon-hcard.png" attr="h" comment="http://microformats.org/wiki/icons" date="1161609076" size="" user="" version="1"}%
-%META:FILEATTACHMENT{name="MicroID.png" attr="h" comment="http://microformats.org/wiki/icons" date="1161609076" size="" user="" version="1"}%
+%META:FILEATTACHMENT{name="logo.gif" attr="h" comment="http://microformats.org/wordpress/wp-content/themes/microformats/img/logo.gif" date="1161609076" size="2452" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="icon-hcard.png" attr="h" comment="http://microformats.org/wiki/icons" date="1161609076" size="1052" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="MicroID.png" attr="h" comment="http://microformats.org/wiki/icons" date="1161609076" size="543" user="TWikiContributor" version="1"}%
