@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1283332043" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305422140" format="1.1" version="$Rev$"}%
 ---+!! !ApprovalPlugin
 <!--
   Contributions to this plugin are appreciated. Please update the plugin page at
@@ -9,10 +9,10 @@
 One line description, required for plugins repository catalog.
    * Set SHORTDESCRIPTION = Defines a set of states for one or more topics, with each state requiring approval by one or more users
 --> 
-%SHORTDESCRIPTION%
 <sticky><div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px">
 %TOC{title="Page contents"}%
 </div></sticky>
+%SHORTDESCRIPTION%
 
 ---++ Introduction
 
@@ -141,6 +141,7 @@ __Note__ The examples will only work if the plugin is installed and enabled.
 |  Plugin Release: | 1.0 |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-05-14: | TWikibug:Item6701: Doc improvements; fixing Config.spec -- TWiki:Main.PeterThoeny |
 |  2010-09-01: | TWikibug:Item6530: Doc improvements; changed TWIKIWEB to SYSTEMWEB |
 |  01 Apr 2009 | Released as 1.0 |
 |  03 Feb 2009 | Small doc changes; tested on TWiki |
