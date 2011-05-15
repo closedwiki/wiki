@@ -1,5 +1,5 @@
 # ---+ Extensions
-# ---+++ RecentVisitorPlugin
+# ---++ RecentVisitorPlugin
 # **BOOLEAN**
 # Debug plugin. See output in data/debug.txt
 $TWiki::cfg{Plugins}{RecentVisitorPlugin}{Debug} = 0;

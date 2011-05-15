@@ -30,7 +30,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-05-01';
+$RELEASE = '2011-05-14';
 
 # One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 $SHORTDESCRIPTION = 'Show recent visitors to a TWiki site';
