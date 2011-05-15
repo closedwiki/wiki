@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305482296" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305482454" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -106,6 +106,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
         | *File:* | *Description:* |
         | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
         | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+        | ==lib/TWiki/Plugins/%TOPIC%/Config.spec== | Settings for configure script |
       * Install the following [[http://search.cpan.org][CPAN]] modules:
          * Mime::Base64
          * Crypt::CBC
