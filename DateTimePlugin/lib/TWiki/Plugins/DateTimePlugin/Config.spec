@@ -1,4 +1,5 @@
-#---+ DateTimePlugin
+#---+ Extensions
+#---++ DateTimePlugin
 # **STRING 200**
 # Localized date names: Portuguese
 $TWiki::cfg{DateTimePlugin}{Dates}{MonthsShort}{pt} = 'Jan Fev Mar Abr Mai Jun Jul Ago Set Out Nov Dez';
@@ -17,3 +18,4 @@ $TWiki::cfg{DateTimePlugin}{TimezoneOffset} = '0';
 # **BOOLEAN**
 #Debug - Turn on debug mode
 $TWiki::cfg{DateTimePlugin}{Debug} = '0';
+1;
