@@ -1,6 +1,5 @@
 # ---+ Extensions
-# ---++ PLUGINS
-# ---+++ ReStructuredTextPlugin
+# ---++ ReStructuredTextPlugin
 # **PATH M**
 # Path to trip executable, located at =twiki/lib/TWiki/Plugins/ReStructuredTextPlugin/trip/bin/trip=. Set this to an absolute path matching your TWiki installation.
 $TWiki::cfg{Plugins}{ReStructuredTextPlugin}{TripCmd} = '$TWiki::cfg{DataDir}/../lib/TWiki/Plugins/ReStructuredTextPlugin/trip/bin/trip';
@@ -10,5 +9,4 @@ $TWiki::cfg{Plugins}{ReStructuredTextPlugin}{TripOptions} = '-D source_link=0 -D
 # **BOOLEAN**
 # Debug flag
 $TWiki::cfg{Plugins}{ReStructuredTextPlugin}{Debug} = 0;
-
 1;

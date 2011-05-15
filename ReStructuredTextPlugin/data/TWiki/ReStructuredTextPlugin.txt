@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1292489251" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305439919" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -98,8 +98,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Trip tool Author: | TWiki:Main.MarkNodine |
 |  Trip tool Copyright: | &copy; 2002-2005 Freescale Semiconductor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-12-16 (V1.2) |
+|  Plugin Version: | 2011-05-14 (V1.2) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-05-14: | TWikibug:Item6701: Doc improvements; small fix in Config.spec -- TWiki:Main.PeterThoeny |
 |  2010-12-16: | TWikibug:Item6530: Move plugin settings to configure (to fix security issue); filter options parameter (to fix security issue) -- TWiki:Main.PeterThoeny |
 |  2010-12-15: | TWikibug:Item6530: Doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  2005-05-19: | Initial version |

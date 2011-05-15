@@ -1,10 +1,9 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org
 # Copyright (C) 2005 TWiki:Main.SteveRJones
-# Copyright (C) 2010 TWiki:Main.PeterThoeny
-# Copyright (C) 2005-2010 TWiki:TWiki.TWikiContributor
+# Copyright (C) 2005-2011 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -41,7 +40,7 @@ use vars qw(
 	    );
 
 $VERSION = '1.2';
-$RELEASE = '2010-12-16';
+$RELEASE = '2011-05-14';
 
 $pluginName = 'ReStructuredTextPlugin';  # Name of this Plugin
 
