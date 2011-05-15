@@ -22,7 +22,7 @@ use strict;
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC $id $doneYui $doneStyle @loadedData);
 
 $VERSION = '$Rev: 14277$';
-$RELEASE = '2010-05-01';
+$RELEASE = '2010-05-14';
 $SHORTDESCRIPTION = 'Auto-complete input field with select options as you type ';
 
 $NO_PREFS_IN_TOPIC = 1;
