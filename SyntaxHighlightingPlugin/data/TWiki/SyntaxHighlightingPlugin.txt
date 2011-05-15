@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1287893169" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305440560" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiPreferences"}%
 ---+!! Syntax Highlighting Plugin
 <!--
@@ -184,8 +184,9 @@ This has been changed to be more consistent with other twiki variables. There is
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-10-23: | Bugs:Item6530: Doc improvements - TWiki:Main.PeterThoeny, TWiki:Main.AndreasKeil |
-|  2008-09-11: | Bugs:Item5995: Rewritten to work on TWiki 4.2 |
+|  2011-05-14: | TWikibug:Item6701: Small fix in Config.spec -- TWiki:Main.PeterThoeny |
+|  2010-10-23: | TWikibug:Item6530: Doc improvements - TWiki:Main.PeterThoeny, TWiki:Main.AndreasKeil |
+|  2008-09-11: | TWikibug:Item5995: Rewritten to work on TWiki 4.2 |
 |  2002-07-12: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  Dependencies: | enscript >= 1.6.3, CPAN:IPC::Run |

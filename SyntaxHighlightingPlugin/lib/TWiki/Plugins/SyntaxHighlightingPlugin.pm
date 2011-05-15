@@ -1,10 +1,9 @@
-#
-# TWiki WikiClone ($wikiversion has version info)
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2008 Andrew Jones, andrewjones86@gmail.com
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
-# Copyright (C) 2008-2010 TWiki Contributors
+# Copyright (C) 2001-2011 Peter Thoeny, Peter[at]Thoeny.org
+# Copyright (C) 2008-2011 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -48,7 +47,7 @@ use vars qw(    $VERSION
            );
 
 $VERSION = '1.010';
-$RELEASE = '2010-10-23';
+$RELEASE = '2011-05-14';
 $SHORTDESCRIPTION = 'Highlights code fragments for many languages using ==enscript==';
 $NO_PREFS_IN_TOPIC = 1;
 

@@ -1,6 +1,5 @@
 # ---+ Extensions
-# ---++ PLUGINS
-# ---+++ SyntaxHighlightingPlugin
+# ---++ SyntaxHighlightingPlugin
 # **STRING** 
 # Configure the enscript path.
 $TWiki::cfg{Plugins}{SyntaxHighlightingPlugin}{EnscriptPath} = 'enscript';
