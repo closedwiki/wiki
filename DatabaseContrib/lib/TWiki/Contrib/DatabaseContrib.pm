@@ -36,7 +36,7 @@ use vars qw( $initialized %dbi_connections $dieOnFailure );
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-03-13';
+$RELEASE = '2011-05-14';
 
 $SHORTDESCRIPTION = 'Set up connection to database through DBI.';
 

@@ -1,4 +1,4 @@
-data/TWiki/DatabaseContrib.txt
-lib/TWiki/Contrib/DatabaseContrib.pm
-lib/TWiki/Contrib/DatabaseContrib/Config.spec
-lib/TWiki/Configure/Types/TEXT.pm
+data/TWiki/DatabaseContrib.txt 0644
+lib/TWiki/Contrib/DatabaseContrib.pm 0644
+lib/TWiki/Contrib/DatabaseContrib/Config.spec 0644
+lib/TWiki/Configure/Types/TEXT.pm 0644

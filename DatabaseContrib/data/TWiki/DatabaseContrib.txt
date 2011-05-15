@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1300053313" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305441780" format="1.1" version="$Rev$"}%
 ---+!! Database Contrib Package
 <!--
    Contributions to this contrinb module are appreciated. Please update the contrib page at
@@ -138,8 +138,9 @@ __Note:__ You do not need to install anything on the browser to use this module.
 |  Author: | TWiki:Main.ThomasWeigert |
 |  Copyright: | &copy; 2009 TWiki:Main.ThomasWeigert <br /> &copy; 2009-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-03-13 |
+|  Plugin Version: | 2011-05-14 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-05-14: | TWikibug:Item6701: Small fix in Config.spec and MANIFEST -- TWiki:Main.PeterThoeny |
 |  2011-03-13: | TWikibug:Item6661: Import into SVN; adding build stuff -- TWiki:Main.DipuDeshmukh |
 |  2009-05-20: | Initial version |
 |  CPAN Dependencies: | CPAN:DBI |

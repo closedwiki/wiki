@@ -1,4 +1,5 @@
-#---+ DatabaseContrib
+#---+ Extensions
+#---++ DatabaseContrib
 # **TEXT 20**
 # <h2>Setup for Local databases table</h2>
 # Table of configuration info for all the databases you might access.
@@ -29,3 +30,4 @@ $TWiki::cfg{Plugins}{DatabaseContrib}{connections} =
 	    # host => 'localhost',
 	},
   );
+1;
