@@ -27,3 +27,4 @@ $TWiki::cfg{Plugins}{GoogleAnalyticsPlugin}{Tracking}{Enable}{Users} = '*';
 # Comma-separated list of users to <strong>not</strong> track. For instance, you might want to disable tracking visits from AdminUser.<br />
 # Use <code>*</code> as wildcard to disabled tracking of everyone's visits. This setting overrides the <code>Enable</code> setting.
 $TWiki::cfg{Plugins}{GoogleAnalyticsPlugin}{Tracking}{Disable}{Users} = '';
+1;

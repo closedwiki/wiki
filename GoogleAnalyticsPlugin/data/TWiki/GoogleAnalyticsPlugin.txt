@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1289264581" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305430202" format="1.1" version="$Rev$"}%
 ---+!! Google Analytics Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -94,12 +94,15 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
+   * Set SHORTDESCRIPTION = Adds Google Analytics Javascript code to specified pages
+
 |  Authors: | TWiki:Main.ArthurClemens |
-|  Copyright: | &copy; 2006,2009 Arthur Clemens,<br /> &copy; 2009 Will Norris,<br /> &copy; 2006-2010 TWiki:TWiki/TWikiContributor |
-|  License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
+|  Copyright: | &copy; 2006, 2009 Arthur Clemens <br /> &copy; 2009 Will Norris <br /> &copy; 2006-2011 TWiki:TWiki/TWikiContributor |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Version: | %$VERSION% |
-|  Release: | 2.1.1 |
+|  Release: | 2011-05-14 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-05-14: | TWikibug:Item6701: Small fix in Config.spec -- TWiki:Main.PeterThoeny |
 |  27 Aug 2009 | 2.1 Arthur Clemens: Moved settings to configure. No longer uses a skin template. Tracking can be specified per web, user and script. |
 |  26 Feb 2009 | 2.0.1 converted to skin template, increased apparent page rendering speed (TWiki:Main.WillNorris) |
 |  25 Feb 2009 | 2.0.0 Ported to ga.js (TWiki:Main.WillNorris) |
@@ -114,5 +117,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, [[%USERSWEB%.TWikiPreferences]]
 
-%META:FILEATTACHMENT{name="Google_Analytics_Dashboard.png" attr="h" comment="" date="1251498130" path="Google_Analytics_Dashboard.png" size="167221" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="Google_Analytics_Dashboard_small.gif" attr="h" comment="" date="1251498252" path="Google_Analytics_Dashboard_small.gif" size="28103" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="Google_Analytics_Dashboard.png" attr="h" comment="" date="1251498130" path="Google_Analytics_Dashboard.png" size="167221" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Google_Analytics_Dashboard_small.gif" attr="h" comment="" date="1251498252" path="Google_Analytics_Dashboard_small.gif" size="28103" user="TWikiContributor" version="1"}%
