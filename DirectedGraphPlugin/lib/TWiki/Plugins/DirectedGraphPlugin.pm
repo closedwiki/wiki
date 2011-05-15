@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004-2005 Cole Beck, cole.beck@vanderbilt.edu
-# Copyright (C) 2004-2010 TWikiContributors
+# Copyright (C) 2004-2011 TWikiContributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -34,33 +34,10 @@ use File::Temp;
 use File::Spec;
 use File::Copy;    # Used for TWiki attach API bypass
 
-# $VERSION is referred to by TWiki, and is the only global variable that
-# # *must* exist in this package.
-# # This should always be $Rev$ so that TWiki can determine the checked-in
-# # status of the plugin. It is used by the build automation tools, so
-# # you should leave it alone.
 our $VERSION = '$Rev$';
+our $RELEASE = '2011-04-14';
 
-#
-# # This is a free-form string you can use to "name" your own plugin version.
-# # It is *not* used by the build automation tools, but is reported as part
-# # of the version number in PLUGINDESCRIPTIONS.
-our $RELEASE = '1.8';
-
-#
-# # Short description of this plugin
-# # One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
 our $SHORTDESCRIPTION = 'Draw graphs using the !GraphViz utility';
-
-#
-# # You must set $NO_PREFS_IN_TOPIC to 0 if you want your plugin to use
-# # preferences set in the plugin topic. This is required for compatibility
-# # with older plugins, but imposes a significant performance penalty, and
-# # is not recommended. Instead, leave $NO_PREFS_IN_TOPIC at 1 and use
-# # =$TWiki::cfg= entries set in =LocalSite.cfg=, or if you want the users
-# # to be able to change settings, then use standard TWiki preferences that
-# # can be defined in your %USERSWEB%.SitePreferences and overridden at the web
-# # and topic level.
 our $NO_PREFS_IN_TOPIC = 1;
 
 #

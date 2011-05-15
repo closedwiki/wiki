@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277540468" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305426704" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="Plugins"}%
 ---+!! Directed Graph Plugin
 <!--
@@ -609,10 +609,11 @@ Details on how to install cairo, graphviz and imagemagick are beyond the scope o
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/ColeBeck, TWiki:Main/GeorgeClark |
-|  Copyright: | &copy; 2004-2005 Cole Beck, cole.beck[at]vanderbilt.edu<br /> &copy; 2004-2010 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2004-2005 Cole Beck, cole.beck[at]vanderbilt.edui <br /> &copy; 2004-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-05-14: | TWikibug:Item6701: Small fix in Config.spec -- TWiki:Main.PeterThoeny |
 |  <span style="white-space:nowrap">28 Mar 2010 (1.8):</span> | Add support for Graphviz 2.26<br/> Add support for mod_perl2<br/> |
 |  8 Mar 2010 (1.7): | Resolve some taint issues.  Release as 1.7 |
 |  12 Feb 2010: | Insert image size in &lt;/img> and &lt;object tags |

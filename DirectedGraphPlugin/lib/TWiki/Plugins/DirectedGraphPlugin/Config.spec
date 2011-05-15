@@ -52,4 +52,4 @@ $TWiki::cfg{Plugins}{DirectedGraphPlugin}{attachPath} = '';
 # {PubUrlPath} for linking to attachments. If the attachPath is not provided, then this parameter
 # will be ignored.
 $TWiki::cfg{Plugins}{DirectedGraphPlugin}{attachUrlPath} = '';
-
+1;
