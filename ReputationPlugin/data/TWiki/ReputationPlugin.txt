@@ -1,15 +1,15 @@
-%META:TOPICINFO{author="JoonaKannisto" date="1301388662" format="1.1" reprev="1.7" version="1.7"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305437822" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
-
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
    http://twiki.org/cgi-bin/view/Plugins/ReputationPlugin or provide feedback at
    http://twiki.org/cgi-bin/view/Plugins/ReputationPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 --> 
-%SHORTDESCRIPTION%
-
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
 ---++ Introduction and Features
 
@@ -93,7 +93,7 @@ These are standard [[http://twiki.org/cgi-bin/view/TWiki/TWikiAccessControl][TWi
       * Set ALLOWTOPICRPREAD =
    * Votes can be restricted 
       * Set ALLOWTOPICRPVOTE = 
----+++ Plugin settings which only have effect in WebPreferences
+---+++ Settings having effect in WebPreferences
    * This controls the number of voting options shown to user (currently has options 2 and 4) 
       * Set REPUTATIONPLUGIN_VOTEOPTIONS = 2 
    * With restricted votes it can be a good idea to hide the toplist for the web as well 
@@ -152,24 +152,25 @@ Skin can be excluded from any topic, user or web by setting the skin preference 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.JoonaKannisto |
-|  Copyright: | © 2009 TWiki:Main.JoonaKannisto, %BR% © 2009-2010 TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2009-2011 TWiki:Main.JoonaKannisto %BR% &copy; 2009-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-10-25 (V1.2) |
-|  Change History: | <!-- versions below in reverse order --> |
-| 2010-12-08 | Many new features and improvements |
-|  2010-07-26 | TWikibug:Item6532 - move to SVN repository; doc fixes; changing TWIKIWEB to SYSTEMWEB |
+|  Plugin Version: | 2011-05-14 (V1.2) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-05-14: | TWikibug:Item6701: Doc improvements; small fix in Config.spec -- TWiki:Main.PeterThoeny |
+|  2010-12-08: | Many new features and improvements |
+|  2010-07-26: | TWikibug:Item6532 - move to SVN repository; doc fixes; changing TWIKIWEB to SYSTEMWEB |
 |  2009-11-24: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.2 |
 |  CPAN Dependencies: | Locale::Maketext HTML::Entities |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.ReputationPluginChangeValues, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ ReputationPluginChangeValues, ReputationPluginInfofi, ReputationPluginInfo, ReputationPluginToplist, ReputationPluginVotedfi, ReputationPluginVoted, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
-%META:FILEATTACHMENT{name="valuesliders.png" attachment="valuesliders.png" attr="h" comment="Inerface which shows the current trust values and offers easy way to change them." date="1290592736" path="valuesliders.png" size="21762" stream="valuesliders.png" tmpFilename="/usr/tmp/CGItemp3026" user="JoonaKannisto" version="1"}%
-%META:FILEATTACHMENT{name="UI.png" attachment="UI.png" attr="h" comment="" date="1291884469" path="UI.png" size="5824" user="SeppoTaalasmaa" version="1"}%
+%META:FILEATTACHMENT{name="valuesliders.png" attachment="valuesliders.png" attr="h" comment="Inerface which shows the current trust values and offers easy way to change them." date="1290592736" path="valuesliders.png" size="21762" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="UI.png" attachment="UI.png" attr="h" comment="" date="1291884469" path="UI.png" size="5824" user="TWikiContributor" version="1"}%
 %META:PREFERENCE{name="SKIN" title="SKIN" type="Set" value="pattern"}%

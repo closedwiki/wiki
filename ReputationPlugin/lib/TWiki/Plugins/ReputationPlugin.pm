@@ -1,12 +1,14 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006 Peter Thoeny, peter@thoeny.org
-# Copyright (c) 2006 Fred Morris, m3047-twiki@inwa.net
-# Copyright (c) 2007 Crawford Currie, http://c-dot.co.uk
-# Copyright (c) 2007 Sven Dowideit, SvenDowideit@DistributedINFORMATION.com
-# Copyright (c) 2007 Arthur Clemens, arthur@visiblearea.com
-# Copyright (c) 2009-2010 Joona Kannisto
-# Copyright (c) 2010 Marko Helenius
+# Copyright (C) 2006 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2006 Fred Morris, m3047-twiki@inwa.net
+# Copyright (C) 2007 Crawford Currie, http://c-dot.co.uk
+# Copyright (C) 2007 Sven Dowideit, SvenDowideit@DistributedINFORMATION.com
+# Copyright (C) 2007 Arthur Clemens, arthur@visiblearea.com
+# Copyright (C) 2009-2011 Joona Kannisto
+# Copyright (C) 2010 Marko Helenius
+# Copyright (C) 2008-2011 TWiki Contributors. All Rights Reserved.
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -21,7 +23,6 @@
 # =========================
 # Much of the code for this plugin is taken from TagmePlugin.
 
-# change the package name and $pluginName!!! ...DONE
 package TWiki::Plugins::ReputationPlugin;
 
 # Always use strict to enforce variable scoping
@@ -37,26 +38,18 @@ use TWiki::Contrib::RatingContrib;
 use BerkeleyDB;
 use MLDBM qw(BerkeleyDB::Btree) ;
 
-# $VERSION is referred to by TWiki, and is the only global variable that
-# *must* exist in this package.
 # Global variables used in this plugin
-use vars qw($web $topic $user $sanitizedtopic $installWeb $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName  $NO_PREFS_IN_TOPIC $absolute $backlinkmax $LH $workAreaDir
-			$attachUrl $voterreputation $recommendations $topfile $trustfile $topicfile $userfile $commentfile);
+use vars qw( $web $topic $user $sanitizedtopic $installWeb $VERSION $RELEASE $SHORTDESCRIPTION
+             $debug $pluginName $NO_PREFS_IN_TOPIC $absolute $backlinkmax $LH $workAreaDir
+             $attachUrl $voterreputation $recommendations $topfile $trustfile $topicfile
+             $userfile $commentfile );
 
-# This should always be $Rev: 12445$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev: 12445$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2011-05-14';
 
 # Short description of this plugin
 # One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 $SHORTDESCRIPTION = 'Build and manage reputation';
-
 $NO_PREFS_IN_TOPIC = 1;
 
 # Name of this Plugin, only used in this module
@@ -75,7 +68,6 @@ our @systemTopics = qw(WebChanges
                        WebTopicList);
 
 BEGIN {
-
     #I18N initialization
     if ( $TWiki::cfg{UseLocale} ) {
         require locale;

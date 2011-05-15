@@ -1,4 +1,5 @@
-# ---+ ReputationPlugin
+# ---+ Extensions
+# ---++ ReputationPlugin
 # This plugin is used for content rating in TWiki. 
 # Plugin maintains also information about the reputation of the users in relation to eachother
 # **BOOLEAN**
@@ -10,4 +11,4 @@ $TWiki::cfg{Plugins}{ReputationPlugin}{Voterreputation} = 0;
 # **BOOLEAN EXPERT**
 # Turn debug mode on or off 
 $TWiki::cfg{Plugins}{ReputationPlugin}{Debug} = 0;
-
+1;
