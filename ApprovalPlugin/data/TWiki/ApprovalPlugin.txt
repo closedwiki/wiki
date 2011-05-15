@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305422140" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305422410" format="1.1" version="$Rev$"}%
 ---+!! !ApprovalPlugin
 <!--
   Contributions to this plugin are appreciated. Please update the plugin page at
@@ -136,7 +136,7 @@ __Note__ The examples will only work if the plugin is installed and enabled.
 ---++ Plugin Info
 
 |  Plugin Author(s): | TWiki:Main.AndrewRJones |
-|  Copyright: | &copy; 2007-2009 TWiki:Main.AndrewRJones %BR% &copy; 2008-2010, TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2007-2009 TWiki:Main.AndrewRJones %BR% &copy; 2008-2011, TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Release: | 1.0 |
 |  Plugin Version: | %$VERSION% |
