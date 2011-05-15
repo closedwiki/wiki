@@ -1,5 +1,4 @@
 # ---+ Extensions
-# ---++ PLUGINS
 # ---++ EasyTimelinePlugin
 # **PATH M**
 # Path to Ploticus on your system
@@ -10,5 +9,4 @@ $TWiki::cfg{Plugins}{EasyTimelinePlugin}{EasyTimelineScript} = '$TWiki::cfg{Data
 # **BOOLEAN**
 # Debug flag
 $TWiki::cfg{Plugins}{EasyTimelinePlugin}{Debug} = 0;
-
 1;

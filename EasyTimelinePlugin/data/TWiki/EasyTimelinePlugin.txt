@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1288937945" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305429073" format="1.1" version="$Rev$"}%
 ---+!! Easy Timeline Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -18,7 +18,7 @@ One line description, required for plugins repository catalog.
 
 As the saying goes: a picture is worth a thousand words. This is certainly true for graphical timelines. A detailed listing of events and dates in tabular form may offer the reader a lot of specifics, but may fail to provide an overview, a grand perspective.
 
-This plugin allows one to use a %<nop>TIMELINE% variable to generate a timeline on the fly. This plugin is equal in function to the [[http://meta.wikimedia.org/wiki/EasyTimeline][EasyTimeline Plugin for MediaWiki]] by Erik Zachte, on which this is based.
+This plugin allows one to use a =%<nop>TIMELINE%= variable to generate a timeline on the fly. This plugin is equal in function to the [[http://meta.wikimedia.org/wiki/EasyTimeline][EasyTimeline Plugin for MediaWiki]] by Erik Zachte, on which this is based.
 
 For first time users <nop>%TOPIC% may not seem that easy at all. As with all script languages it takes some getting used to. Also the syntax description may be a bit bewildering due to its sheer size. Fortunately many elements of the script language are optional.
 
@@ -756,7 +756,7 @@ PlotData=
 %ENDTIMELINE%
 -->
 
----+++ Timeline of Conquests of the Ottoman Empire Example
+---+++ Timeline of Conquests of the Ottoman Empire
 
 A somewhat dense and graphic timeline; could probably be lightened with good effect :-). View Raw Text of this topic to see source.
 
@@ -856,13 +856,13 @@ Once you have installed the plugin you should visit =configure= and check that t
 
 ---++ Plugin Info
 
-|  Plugin Author(s): | TWiki:Main.AndrewJones |
-|  Previous Author(s): | TWiki:Main.SteffenPoulsen, TWiki:Main.MikeMarion |
-|  Copyright: | &copy; 2006 - 2010, TWiki:TWiki/TWikiContributor,<br /> &copy; 2009 - 2010, Andrew Jones,<br /> &copy; 2006, Mike Marion |
+|  Plugin Authors: | TWiki:Main.AndrewJones, TWiki:Main.SteffenPoulsen, TWiki:Main.MikeMarion |
+|  Copyright: | &copy; 2009-2010 Andrew Jones <br /> &copy; 2006 Mike Marion <br /> &copy; 2006-2011 TWiki:TWiki/TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Plugin Release: | 1.2 |
+|  Plugin Release: | 1.3 |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-05-14: | TWikibug:Item6701: Doc fixes; small fix in Config.spec -- TWiki:Main.PeterThoeny |
 |  11 Feb 2010  | v1.2 - Missing screenshot; Set NOWYSIWYG for plugin topic; Update =pl= dependency. Thanks to TWiki:Main.BryanThale. - TWiki:Main.AndrewJones |
 |  22 Oct 2009  | v1.1 - Fix hyperlinks and upgrade docs - TWiki:Main.AndrewJones |
 |  13 Mar 2009  | v1.0 - New standard syntax and script to convert; Updated EasyTimeline.pl script; Changes to code to use more of the official extension API; Configuration items now set in configure - TWiki:Main.AndrewJones |
@@ -877,12 +877,12 @@ Once you have installed the plugin you should visit =configure= and check that t
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences, %USERSWEB%.TWikiPreferences
 
-%META:FILEATTACHMENT{name="IcelandicHeritageExample.png" attr="h" autoattached="1" comment="Icelandic Heritage Example" date="1145658157" path="IcelandicHeritageExample.png" size="2012" user="Main.TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="Vocal_and_Instrumental_Pitch_Ranges_Example.png" attr="h" autoattached="1" comment="Vocal and Instrumental Pitch Ranges" date="1145658299" path="Vocal_and_Instrumental_Pitch_Ranges_Example.png" size="11237" user="Main.TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="UNIXVersionsExample.png" attr="h" autoattached="1" comment="UNIX Versions Example" date="1145658216" path="UNIXVersionsExample.png" size="7305" user="Main.TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="KurdistanWorkersPartyExample.png" attr="h" autoattached="1" comment="Kurdistan Workers Party Example" date="1145658236" path="KurdistanWorkersPartyExample.png" size="1442" user="Main.TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="FreecivTimelineExample.png" attr="h" autoattached="1" comment="Freeciv Timeline Example" date="1145658275" path="FreecivTimelineExample.png" size="1777" user="Main.TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="BinaryLogicExample.png" attr="h" autoattached="1" comment="Binary Logic Example" date="1145658197" path="BinaryLogicExample.png" size="493" user="Main.TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="NewKingdomExample.png" attr="h" autoattached="1" comment="New Kingdom Example" date="1145658255" path="NewKingdomExample.png" size="4963" user="Main.TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="WindowsVersionsExample.png" attr="h" autoattached="1" comment="Windows Versions Example" date="1145658178" path="WindowsVersionsExample.png" size="2682" user="Main.TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="Timeline_of_Conquests_of_the_Ottoman_Empire_Example.png" attr="h" autoattached="1" comment="Timeline of Conquests of the Ottoman Empire Example" date="1145658328" path="Timeline_of_Conquests_of_the_Ottoman_Empire_Example.png" size="3565" user="Main.TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="IcelandicHeritageExample.png" attr="h" comment="Icelandic Heritage Example" date="1145658157" path="IcelandicHeritageExample.png" size="2012" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Vocal_and_Instrumental_Pitch_Ranges_Example.png" attr="h" comment="Vocal and Instrumental Pitch Ranges" date="1145658299" path="Vocal_and_Instrumental_Pitch_Ranges_Example.png" size="11237" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="UNIXVersionsExample.png" attr="h" comment="UNIX Versions Example" date="1145658216" path="UNIXVersionsExample.png" size="7305" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="KurdistanWorkersPartyExample.png" attr="h" comment="Kurdistan Workers Party Example" date="1145658236" path="KurdistanWorkersPartyExample.png" size="1442" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="FreecivTimelineExample.png" attr="h" comment="Freeciv Timeline Example" date="1145658275" path="FreecivTimelineExample.png" size="1777" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="BinaryLogicExample.png" attr="h" comment="Binary Logic Example" date="1145658197" path="BinaryLogicExample.png" size="493" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="NewKingdomExample.png" attr="h" comment="New Kingdom Example" date="1145658255" path="NewKingdomExample.png" size="4963" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="WindowsVersionsExample.png" attr="h" comment="Windows Versions Example" date="1145658178" path="WindowsVersionsExample.png" size="2682" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Timeline_of_Conquests_of_the_Ottoman_Empire_Example.png" attr="h" comment="Timeline of Conquests of the Ottoman Empire Example" date="1145658328" path="Timeline_of_Conquests_of_the_Ottoman_Empire_Example.png" size="3565" user="TWikiContributor" version="1"}%
