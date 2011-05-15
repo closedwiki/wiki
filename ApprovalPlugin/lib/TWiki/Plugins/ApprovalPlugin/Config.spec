@@ -1,4 +1,4 @@
-# ---+ Plugins
+# ---+ Extensions
 # ---++ ApprovalPlugin
 # **BOOLEAN** 
 # Disables all notification emails being sent from this plugin.
