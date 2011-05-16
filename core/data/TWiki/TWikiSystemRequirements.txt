@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1303364223" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305526412" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki System Requirements
 
@@ -23,39 +23,45 @@ TWiki is written in Perl 5, uses a number of shell commands, and requires [[http
 | Web server | Apache is well supported; see TWiki:TWiki.InstallingTWiki#OtherWebServers for other servers |
 
 ---+++ Required CPAN Modules
+
 The following Perl modules are used by TWiki:
-| *Module* | *Preferred version* |
-| Algorithm::Diff (included in TWiki distribution) | |
-| CGI::Carp | &gt;=1.26 |
-| Config | &gt;=0 |
-| Cwd | &gt;=3.05 | 
-| Data::Dumper | &gt;=2.121 |
-| Encode | &gt;=2.1 |
-| Error (included in TWiki distribution) | |
-| File::Copy | &gt;=2.06 |
-| File::Find | &gt;=1.05 |
-| File::Spec | &gt;=3.05 |
-| File::Temp | &gt;=0.18 (included with perl 5.6 and later) |
-| !FileHandle | &gt;=2.01 |
-| IO::File | &gt;=1.10 |
-| Text::Diff (included in TWiki distribution) | |
-| Time::Local | &gt;=1.11 |
+
+| *Module* | *Preferred version* | *Comment* |
+| =Algorithm::Diff= | | Included in TWiki distribution |
+| =CGI::Carp= | &gt;=1.26 | |
+| =Config= | &gt;=0 | |
+| =Cwd= | &gt;=3.05 | |
+| =Data::Dumper= | &gt;=2.121 | |
+| =Encode= | &gt;=2.1 | |
+| =Error= | | Included in TWiki distribution |
+| =File::Copy= | &gt;=2.06 | |
+| =File::Find= | &gt;=1.05 | |
+| =File::Spec= | &gt;=3.05 | |
+| =File::Temp= | &gt;=0.18 | Included with perl 5.6 and later |
+| =FileHandle= | &gt;=2.01 | |
+| =HTML::Parser= | &gt;=3.28 | Needed by the WysiwygPlugin for WYSIWYG editing |
+| =HTML::Entities= | &gt;=1.25 | Needed by the WysiwygPlugin for WYSIWYG editing |
+| =IO::File= | &gt;=1.10 | |
+| =Net::SMTP= | &gt;=2.29 | Used for sending mail |
+| =Text::Diff= | | Included in TWiki distribution |
+| =Time::Local= | &gt;=1.11 | |
 
 ---+++ Optional CPAN Modules
+
 The following Perl modules may be used by TWiki:
+
 | *Module* | *Preferred version* | *Description* |
-| CGI::Cookie | &gt;=1.24 | Used for session support |
-| CGI::Session | &gt;=3.95 | Used for session support |
-| Digest::base | | |
-| Digest::SHA1 | | |
-| Jcode | | Used for <nop>I18N support with perl 5.6 |
-| Locale::Maketext::Lexicon | &gt;=0 | Used for <nop>I18N support |
-| Net::SMTP | &gt;=2.29 | Used for sending mail |
-| Unicode::Map | | Used for <nop>I18N support with perl 5.6 |
-| Unicode::Map8 | | Used for <nop>I18N support with perl 5.6 |
-| Unicode::MapUTF8 | | Used for <nop>I18N support with perl 5.6 |
-| Unicode::String | | Used for <nop>I18N support with perl 5.6 |
-| URI | | Used for configure |
+| =CGI::Cookie= | &gt;=1.24 | Used for session support |
+| =CGI::Session= | &gt;=3.95 | Used for session support |
+| =Digest::base= | | |
+| =Digest::SHA1= | | |
+| =Jcode= | | Used for <nop>I18N support with perl 5.6 |
+| =Locale::Maketext::Lexicon= | &gt;=0 | Used for <nop>I18N support |
+| =Unicode::Map= | | Used for <nop>I18N support with perl 5.6 |
+| =Unicode::Map8= | | Used for <nop>I18N support with perl 5.6 |
+| =Unicode::MapUTF8= | | Used for <nop>I18N support with perl 5.6 |
+| =Unicode::String= | | Used for <nop>I18N support with perl 5.6 |
+| =URI= | | Used for configure |
 
 Most of them will probably already be available in your installation. You can check version numbers with the =configure= script, or if you're still trying to get to that point, check from the command line like this:
 <verbatim>
