@@ -2,8 +2,9 @@
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
+# Copyright (C) 2001-2011 TWiki Contributors.
+# All Rights Reserved. TWiki Contributors are listed in the AUTHORS
+# file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
@@ -62,33 +63,32 @@ the text had been included from another topic.
 
 =cut
 
+# Always use strict to enforce variable scoping
+use strict;
+
 # change the package name and $pluginName!!!
 package TWiki::Plugins::EmptyPlugin;
 
-# Always use strict to enforce variable scoping
-use strict;
+# Name of this Plugin, only used in this module
+our $pluginName = 'EmptyPlugin';
 
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
 # $VERSION is referred to by TWiki, and is the only global variable that
-# *must* exist in this package.
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC );
-
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev$';
+# *must* exist in this package. It should always be Rev enclosed in dollar
+# signs so that TWiki can determine the checked-in status of the plugin.
+# It is used by the build automation tools, so you should leave it alone.
+our $VERSION = '$Rev$';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS. Add a release date in ISO
 # format (preferred) or a release number such as '1.3'.
-$RELEASE = '2011-03-06';
+our $RELEASE = '2011-05-17';
 
-# Short description of this plugin
 # One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
-$SHORTDESCRIPTION = 'Empty Plugin used as a template for new Plugins';
+our $SHORTDESCRIPTION = 'Empty Plugin used as a template for new Plugins';
 
 # You must set $NO_PREFS_IN_TOPIC to 0 if you want your plugin to use preferences
 # stored in the plugin topic. This default is required for compatibility with
@@ -97,10 +97,10 @@ $SHORTDESCRIPTION = 'Empty Plugin used as a template for new Plugins';
 # if you want the users to be able to change settings, then use standard TWiki
 # preferences that can be defined in your Main.TWikiPreferences and overridden
 # at the web and topic level.
-$NO_PREFS_IN_TOPIC = 1;
+our $NO_PREFS_IN_TOPIC = 1;
 
-# Name of this Plugin, only used in this module
-$pluginName = 'EmptyPlugin';
+# Define other global package variables
+our $debug;
 
 =pod
 
@@ -131,7 +131,6 @@ __Note:__ Please align variables names with the Plugin name, e.g. if
 your Plugin is called FooBarPlugin, name variables FOOBAR and/or 
 FOOBARSOMETHING. This avoids namespace issues.
 
-
 =cut
 
 sub initPlugin {
@@ -159,8 +158,8 @@ sub initPlugin {
     # seen in the topic text.
     TWiki::Func::registerTagHandler( 'EXAMPLEVAR', \&_EXAMPLEVAR );
 
-    # Allow a sub to be called from the REST interface 
-    # using the provided alias
+    # Allow a sub to be called from the REST interface using the provided alias.
+    # To invoke, call /twiki/bin/rest/EmptyPlugin/example.
     TWiki::Func::registerRESTHandler('example', \&restExample);
 
     # Plugin correctly initialized
@@ -181,9 +180,31 @@ sub _EXAMPLEVAR {
     # $theWeb   - name of the web in the query
     # Return: the result of processing the variable
 
-    # For example, %EXAMPLEVAR{'hamburger' sideorder="onions"}%
-    # $params->{_DEFAULT} will be 'hamburger'
-    # $params->{sideorder} will be 'onions'
+    # For example, %EXAMPLEVAR{'existence' proof="thinking"}%
+    # $params->{_DEFAULT} will be 'existence'
+    # $params->{proof} will be 'thinking'
+
+    return 'Cogito ergo sum.';
+}
+
+=pod
+
+---++ restExample($session) -> $text
+
+This is an example of a sub to be called by the =rest= script. The parameter is:
+   * =$session= - The TWiki object associated to this session.
+
+Additional parameters can be recovered via de query object in the $session.
+
+For more information, check TWiki:TWiki.TWikiScripts#rest
+
+*Since:* TWiki::Plugins::VERSION 1.1
+
+=cut
+
+sub restExample {
+   #my ($session) = @_;
+   return "This is an example of a REST invocation\n\n";
 }
 
 =pod
@@ -558,7 +579,8 @@ sub DISABLE_afterRenameHandler {
    * =\%attrHash= - reference to hash of attachment attribute values
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
-   * =$meta= - meta-data object for the topic
+   * =$meta= - meta-data object for the topic (since TWiki::Plugins::VERSION 1.4)
+
 This handler is called once when an attachment is uploaded. When this
 handler is called, the attachment has *not* been recorded in the database.
 
@@ -585,7 +607,8 @@ sub DISABLE_beforeAttachmentSaveHandler {
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
    * =$error= - any error string generated during the save process
-   * =$meta= - meta-data object for the topic
+   * =$meta= - meta-data object for the topic (since TWiki::Plugins::VERSION 1.4)
+
 This handler is called just after the save action. The attributes hash
 will include at least the following attributes:
    * =attachment= => the attachment name
@@ -774,26 +797,6 @@ cache and security plugins.
 sub DISABLE_completePageHandler {
     #my($html, $httpHeaders) = @_;
     # modify $_[0] or $_[1] if you must change the HTML or headers
-}
-
-=pod
-
----++ restExample($session) -> $text
-
-This is an example of a sub to be called by the =rest= script. The parameter is:
-   * =$session= - The TWiki object associated to this session.
-
-Additional parameters can be recovered via de query object in the $session.
-
-For more information, check TWiki:TWiki.TWikiScripts#rest
-
-*Since:* TWiki::Plugins::VERSION 1.1
-
-=cut
-
-sub restExample {
-   #my ($session) = @_;
-   return "This is an example of a REST invocation\n\n";
 }
 
 1;
