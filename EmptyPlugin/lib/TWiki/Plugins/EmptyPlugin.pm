@@ -38,11 +38,10 @@ variables elsewhere in TWiki, as these are subject to change
 without prior warning, and your plugin may suddenly stop
 working.
 
-For increased performance, all handlers except initPlugin are
-disabled below. *To enable a handler* remove the leading DISABLE_ from
-the function name. For efficiency and clarity, you should comment out or
-delete the whole of handlers you don't use before you release your
-plugin.
+For increased performance, all handlers except initPlugin are commented 
+out. Remove the # comments on handlers you need. For efficiency and 
+clarity, you should delete the whole of handlers you don't use before 
+you release your plugin.
 
 __NOTE:__ When developing a plugin it is important to remember that
 TWiki is tolerant of plugins that do not compile. In this case,
@@ -160,7 +159,7 @@ sub initPlugin {
 
     # Allow a sub to be called from the REST interface using the provided alias.
     # To invoke, call /twiki/bin/rest/EmptyPlugin/example.
-    TWiki::Func::registerRESTHandler('example', \&restExample);
+    TWiki::Func::registerRESTHandler('example', \&_restExample);
 
     # Plugin correctly initialized
     return 1;
@@ -189,7 +188,7 @@ sub _EXAMPLEVAR {
 
 =pod
 
----++ restExample($session) -> $text
+---++ _restExample($session) -> $text
 
 This is an example of a sub to be called by the =rest= script. The parameter is:
    * =$session= - The TWiki object associated to this session.
@@ -202,7 +201,7 @@ For more information, check TWiki:TWiki.TWikiScripts#rest
 
 =cut
 
-sub restExample {
+sub _restExample {
    #my ($session) = @_;
    return "This is an example of a REST invocation\n\n";
 }
@@ -218,9 +217,9 @@ If it returns a non-null error string, the plugin will be disabled.
 
 =cut
 
-sub DISABLE_earlyInitPlugin {
-    return undef;
-}
+#sub earlyInitPlugin {
+#    return undef;
+#}
 
 =pod
 
@@ -240,12 +239,12 @@ This handler is called very early, immediately after =earlyInitPlugin=.
 
 =cut
 
-sub DISABLE_initializeUserHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $loginName, $url, $pathInfo ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::initializeUserHandler( $_[0], $_[1] )" ) if $debug;
-}
+#sub initializeUserHandler {
+#    # do not uncomment, use $_[0], $_[1]... instead
+#    ### my ( $loginName, $url, $pathInfo ) = @_;
+#
+#    TWiki::Func::writeDebug( "- ${pluginName}::initializeUserHandler( $_[0], $_[1] )" ) if $debug;
+#}
 
 =pod
 
@@ -260,12 +259,12 @@ Called when a new user registers with this TWiki.
 
 =cut
 
-sub DISABLE_registrationHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $web, $wikiName, $loginName ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::registrationHandler( $_[0], $_[1] )" ) if $debug;
-}
+#sub registrationHandler {
+#    # do not uncomment, use $_[0], $_[1]... instead
+#    ### my ( $web, $wikiName, $loginName ) = @_;
+#
+#    TWiki::Func::writeDebug( "- ${pluginName}::registrationHandler( $_[0], $_[1] )" ) if $debug;
+#}
 
 =pod
 
@@ -299,22 +298,22 @@ handler. Use the =$meta= object.
 
 =cut
 
-sub DISABLE_commonTagsHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web, $included, $meta ) = @_;
-    
-    # If you don't want to be called from nested includes...
-    #   if( $_[3] ) {
-    #   # bail out, handler called from an %INCLUDE{}%
-    #         return;
-    #   }
-
-    TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/%XYZ%/&handleXyz()/ge;
-    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
-}
+#sub commonTagsHandler {
+#    # do not uncomment, use $_[0], $_[1]... instead
+#    ### my ( $text, $topic, $web, $included, $meta ) = @_;
+#    
+#    # If you don't want to be called from nested includes...
+#    #   if( $_[3] ) {
+#    #   # bail out, handler called from an %INCLUDE{}%
+#    #         return;
+#    #   }
+#
+#    TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
+#
+#    # do custom extension rule, like for example:
+#    # $_[0] =~ s/%XYZ%/&handleXyz()/ge;
+#    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
+#}
 
 =pod
 
@@ -339,12 +338,12 @@ __NOTE:__ This handler is not separately called on included topics.
 
 =cut
 
-sub DISABLE_beforeCommonTagsHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web, $meta ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
-}
+#sub beforeCommonTagsHandler {
+#    # do not uncomment, use $_[0], $_[1]... instead
+#    ### my ( $text, $topic, $web, $meta ) = @_;
+#
+#    TWiki::Func::writeDebug( "- ${pluginName}::beforeCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
+#}
 
 =pod
 
@@ -366,12 +365,12 @@ handler.
 
 =cut
 
-sub DISABLE_afterCommonTagsHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web, $meta ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::afterCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
-}
+#sub afterCommonTagsHandler {
+#    # do not uncomment, use $_[0], $_[1]... instead
+#    ### my ( $text, $topic, $web, $meta ) = @_;
+#
+#    TWiki::Func::writeDebug( "- ${pluginName}::afterCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
+#}
 
 =pod
 
@@ -421,10 +420,10 @@ Since TWiki::Plugins::VERSION = '1.026'
 
 =cut
 
-sub DISABLE_preRenderingHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    #my( $text, $pMap ) = @_;
-}
+#sub preRenderingHandler {
+#    # do not uncomment, use $_[0], $_[1]... instead
+#    #my( $text, $pMap ) = @_;
+#}
 
 =pod
 
@@ -441,10 +440,10 @@ Since TWiki::Plugins::VERSION = '1.026'
 
 =cut
 
-sub DISABLE_postRenderingHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    #my $text = shift;
-}
+#sub postRenderingHandler {
+#    # do not uncomment, use $_[0], $_[1]... instead
+#    #my $text = shift;
+#}
 
 =pod
 
@@ -462,12 +461,12 @@ __NOTE__: meta-data may be embedded in the text passed to this handler
 
 =cut
 
-sub DISABLE_beforeEditHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeEditHandler( $_[2].$_[1] )" ) if $debug;
-}
+#sub beforeEditHandler {
+#    # do not uncomment, use $_[0], $_[1]... instead
+#    ### my ( $text, $topic, $web ) = @_;
+#
+#    TWiki::Func::writeDebug( "- ${pluginName}::beforeEditHandler( $_[2].$_[1] )" ) if $debug;
+#}
 
 =pod
 
@@ -488,12 +487,12 @@ handler. Use the =$meta= object.
 
 =cut
 
-sub DISABLE_afterEditHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::afterEditHandler( $_[2].$_[1] )" ) if $debug;
-}
+#sub afterEditHandler {
+#    # do not uncomment, use $_[0], $_[1]... instead
+#    ### my ( $text, $topic, $web ) = @_;
+#
+#    TWiki::Func::writeDebug( "- ${pluginName}::afterEditHandler( $_[2].$_[1] )" ) if $debug;
+#}
 
 =pod
 
@@ -516,12 +515,12 @@ text format.
 
 =cut
 
-sub DISABLE_beforeSaveHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
-}
+#sub beforeSaveHandler {
+#    # do not uncomment, use $_[0], $_[1]... instead
+#    ### my ( $text, $topic, $web ) = @_;
+#
+#    TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
+#}
 
 =pod
 
@@ -541,12 +540,12 @@ __NOTE:__ meta-data is embedded in $text (using %META: tags)
 
 =cut
 
-sub DISABLE_afterSaveHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web, $error, $meta ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::afterSaveHandler( $_[2].$_[1] )" ) if $debug;
-}
+#sub afterSaveHandler {
+#    # do not uncomment, use $_[0], $_[1]... instead
+#    ### my ( $text, $topic, $web, $error, $meta ) = @_;
+#
+#    TWiki::Func::writeDebug( "- ${pluginName}::afterSaveHandler( $_[2].$_[1] )" ) if $debug;
+#}
 
 =pod
 
@@ -565,13 +564,13 @@ This handler is called just after the rename/move/delete action of a web, topic 
 
 =cut
 
-sub DISABLE_afterRenameHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::afterRenameHandler( " .
-                             "$_[0].$_[1] $_[2] -> $_[3].$_[4] $_[5] )" ) if $debug;
-}
+#sub afterRenameHandler {
+#    # do not uncomment, use $_[0], $_[1]... instead
+#    ### my ( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment ) = @_;
+#
+#    TWiki::Func::writeDebug( "- ${pluginName}::afterRenameHandler( " .
+#                             "$_[0].$_[1] $_[2] -> $_[3].$_[4] $_[5] )" ) if $debug;
+#}
 
 =pod
 
@@ -594,11 +593,11 @@ The attributes hash will include at least the following attributes:
 
 =cut
 
-sub DISABLE_beforeAttachmentSaveHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ###   my( $attrHashRef, $topic, $web ) = @_;
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
-}
+#sub beforeAttachmentSaveHandler {
+#    # do not uncomment, use $_[0], $_[1]... instead
+#    ###   my( $attrHashRef, $topic, $web ) = @_;
+#    TWiki::Func::writeDebug( "- ${pluginName}::beforeAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
+#}
 
 =pod
 
@@ -619,11 +618,11 @@ will include at least the following attributes:
 
 =cut
 
-sub DISABLE_afterAttachmentSaveHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
-    ###   my( $attrHashRef, $topic, $web ) = @_;
-    TWiki::Func::writeDebug( "- ${pluginName}::afterAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
-}
+#sub afterAttachmentSaveHandler {
+#    # do not uncomment, use $_[0], $_[1]... instead
+#    ###   my( $attrHashRef, $topic, $web ) = @_;
+#    TWiki::Func::writeDebug( "- ${pluginName}::afterAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
+#}
 
 =pod
 
@@ -671,8 +670,8 @@ required to resolve concurrent edits on a topic.
 
 =cut
 
-sub DISABLE_mergeHandler {
-}
+#sub mergeHandler {
+#}
 
 =pod
 
@@ -695,11 +694,11 @@ using the =TWiki::Func::addToHEAD= method.
 
 =cut
 
-sub DISABLE_modifyHeaderHandler {
-    my ( $headers, $query ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::modifyHeaderHandler()" ) if $debug;
-}
+#sub modifyHeaderHandler {
+#    my ( $headers, $query ) = @_;
+#
+#    TWiki::Func::writeDebug( "- ${pluginName}::modifyHeaderHandler()" ) if $debug;
+#}
 
 =pod
 
@@ -717,12 +716,12 @@ the others will be ignored.
 
 =cut
 
-sub DISABLE_redirectCgiQueryHandler {
-    # do not uncomment, use $_[0], $_[1] instead
-    ### my ( $query, $url ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::redirectCgiQueryHandler( query, $_[1] )" ) if $debug;
-}
+#sub redirectCgiQueryHandler {
+#    # do not uncomment, use $_[0], $_[1] instead
+#    ### my ( $query, $url ) = @_;
+#
+#    TWiki::Func::writeDebug( "- ${pluginName}::redirectCgiQueryHandler( query, $_[1] )" ) if $debug;
+#}
 
 =pod
 
@@ -753,8 +752,8 @@ extend the form field types, but does not work for TWiki < 4.2.
 
 =cut
 
-sub DISABLE_renderFormFieldForEditHandler {
-}
+#sub renderFormFieldForEditHandler {
+#}
 
 =pod
 
@@ -773,10 +772,10 @@ Return the new link text.
 
 =cut
 
-sub DISABLE_renderWikiWordHandler {
-    my( $linkText, $hasExplicitLinkLabel, $web, $topic ) = @_;
-    return $linkText;
-}
+#sub renderWikiWordHandler {
+#    my( $linkText, $hasExplicitLinkLabel, $web, $topic ) = @_;
+#    return $linkText;
+#}
 
 =pod
 
@@ -794,9 +793,9 @@ cache and security plugins.
 
 =cut
 
-sub DISABLE_completePageHandler {
-    #my($html, $httpHeaders) = @_;
-    # modify $_[0] or $_[1] if you must change the HTML or headers
-}
+#sub completePageHandler {
+#    #my($html, $httpHeaders) = @_;
+#    # modify $_[0] or $_[1] if you must change the HTML or headers
+#}
 
 1;
