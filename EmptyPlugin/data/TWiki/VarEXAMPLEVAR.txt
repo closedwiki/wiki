@@ -1,10 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297235055" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305670273" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarEXAMPLEVAR
 ---+++ EXAMPLEVAR -- example variable
-   * The =%<nop>EXAMPLEVAR{}%= variable is handled by the ExamplePlugin
+   * The =%<nop>EXAMPLEVAR{}%= variable is handled by the EmptyPlugin
    * Syntax: =%<nop>EXAMPLEVAR{"text" format="..."}%=
    * Parameter =text="..."= - example text.
    * Parameter =format="..."= - format of report.
    * Example: =%<nop>EXAMPLEVAR{"hello" format="| $topic: $summary |"}%=
-   * Related: ExamplePlugin
+   * Related: EmptyPlugin
