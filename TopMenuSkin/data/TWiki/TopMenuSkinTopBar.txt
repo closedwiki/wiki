@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1291339938" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305705261" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkin"}%
 ---+ Top Bar of !TopMenuSkin
 
@@ -41,7 +41,7 @@ Top bar of TopMenuSkin, replacing WebTopBar.
 %IF{
  "'%USERNAME%'!='guest' AND istopic '%USERSWEB%.%WIKINAME%LeftBar'"
  then="      * [[%USERSWEB%.%WIKINAME%LeftBar][---- %MAKETEXT{My links}% ----]]$n$percntSEARCH{\"^[ ]+\*[ ]*[\[<]\" type=\"regex\" web=\"%USERSWEB%\" topic=\"%WIKINAME%LeftBar\" multiple=\"on\" nonoise=\"on\" format=\"      * $dollarpattern([ ]+\*[ ]*([^\n\r]*).*)\"}$percnt"
- else="%IF{"'%USERNAME%'!='guest'" then="      * <a href='%SCRIPTURLPATH{edit}%/%USERSWEB%/%WIKINAME%LeftBar?templatetopic=%SYSTEMWEB%.WebLeftBarPersonalTemplate&amp;topicparent=%WIKINAME%'>%MAKETEXT{Create personal sidebar}%</a>" else="<nop>"}%"
+ else="%IF{"'%USERNAME%'!='guest'" then="      * <a href='%SCRIPTURLPATH{edit}%/%USERSWEB%/%WIKINAME%LeftBar?templatetopic=%SYSTEMWEB%.WebLeftBarPersonalTemplate&amp;topicparent=%WIKINAME%'>%MAKETEXT{Create personal links}%</a>" else="<nop>"}%"
 }%
 </div></td>
 <td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="1" alt="" /></td>
@@ -61,10 +61,12 @@ Top bar of TopMenuSkin, replacing WebTopBar.
 </noautolink>
 </td>
 <td width="15"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="15" height="1" alt="" /></td>
+%IF{ "defined 'READONLYSKINMODE' AND ($ READONLYSKINMODE > 0)" then="<!--" else="<nop>" }%
 <td width="165" valign="bottom"><div id="twTopBarButtons">
    * %TMPL:P{"activatable_edit_or_create"}%
    * %TMPL:P{"activatable_attach"}%
 </div></td>
+%IF{ "defined 'READONLYSKINMODE' AND ($ READONLYSKINMODE > 0)" then="-->" else="<nop>" }%
 <td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="1" alt="" /></td>
 </tr>
 </table>%STOPINCLUDE%
