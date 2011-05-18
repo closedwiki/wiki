@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299701716" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305707580" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -63,6 +63,10 @@ Example !WebTopBar menu structure with additional "Bugs" pulldown menu:
       * [[ConfirmedBugs][Confirmed bugs]]
       * [[FixedBugs][Fixed bugs]]
 </verbatim>
+
+---++ Read-Only Skin Mode
+
+This skin and the PatternSkin support a read-only mode. This is mainly useful if you have TWiki application pages or dashboards where you do not want regular users to change content. The read-only mode is enabled with a READONLYSKINMODE preferences setting set to 1. Details in %SYSTEMWEB%.PatternSkinCustomization#ReadOnlySkinMode.
 
 ---++ Use Menu-Bars in Topics
 
@@ -239,8 +243,9 @@ The top bar TopMenuSkinTopBar (with menu bar, logo and search boxes) can be clon
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Screenshot" title="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2011-03-09 (v1.94) |
+|  Skin Version: | 2011-05-18 (v2.0) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-05-18: | TWikibug:Item6682: Read-only skin mode with READONLYSKINMODE preferences setting |
 |  2011-03-09: | TWikibug:Item6659: Customizable web-specific TopMenuSkinTopBar |
 |  2011-01-03: | TWikibug:Item6628: Minor gradient fix - change action buttons area from plain white to pale gray to align with PatternSkin; adding pale shadow |
 |  2010-12-02: | TWikibug:Item6614: Always show Register User link in Account menu, regardless of login status |

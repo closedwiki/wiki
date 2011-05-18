@@ -1,5 +1,5 @@
 package TWiki::Contrib::TopMenuSkin;
 use vars qw( $VERSION $RELEASE );
-$VERSION = '1.94';
-$RELEASE = '2011-03-09';
+$VERSION = '2.0';
+$RELEASE = '2011-05-18';
 1;
