@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305703827" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305707210" format="1.1" version="$Rev$"}%
 ---+!! !PatternSkin Customization
 
 _Guidelines how to create and customize page templates of the %SYSTEMWEB%.PatternSkin._ For styling your TWiki using stylesheets, see PatternSkinCssCookbook.
@@ -90,6 +90,7 @@ view
             %SYSTEMWEB%.WebBottomBar
 </verbatim>
 
+#ReadOnlySkinMode
 ---++ Read-only skin mode
 
 The !PatternSkin can be turned into read-only mode. This is mainly useful if you have TWiki application pages or dashboards where you do not want regular users to change content. The read-only mode is enabled with a READONLYSKINMODE preferences setting set to 1 in the [[%LOCALSITEPREFS%]] (site level), in a WebPreferences (web level) or in any topic (page level):
