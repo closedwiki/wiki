@@ -26,7 +26,7 @@
 
 %TMPL:DEF{"top:toolbarbuttons"}%%TMPL:P{"activatable_edit_or_create"}%%TMPL:P{"activatable_attach"}%%TMPL:END%
 
-%TMPL:DEF{"top"}%<div class="patternTop"><span class="patternHomePath twikiLeft">%TMPL:P{"breadcrumb"}%</span><!-- /patternHomePath--><span class="patternToolBar twikiRight">%TMPL:P{"top:toolbarbuttons"}%</span><!-- /patternToolBar--><br class="twikiClear" /></div><!--/patternTop-->%TMPL:END%
+%TMPL:DEF{"top"}%<div class="patternTop"><span class="patternHomePath twikiLeft">%TMPL:P{"breadcrumb"}%</span><!-- /patternHomePath--><span class="patternToolBar twikiRight">%IF{ "defined 'READONLYSKINMODE' AND ($ READONLYSKINMODE > 0)" then="<div style='display:none'>" }%%TMPL:P{"top:toolbarbuttons"}%%IF{ "defined 'READONLYSKINMODE' AND ($ READONLYSKINMODE > 0)" then="</div><!--/display:none-->" }%</span><!-- /patternToolBar--><br class="twikiClear" /></div><!--/patternTop-->%TMPL:END%
 
 %TMPL:DEF{"breadcrumb:separator"}%<span class='twikiSeparator'>&gt;</span>%TMPL:END%
 
