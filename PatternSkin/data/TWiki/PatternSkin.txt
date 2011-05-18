@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1294110909" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305703821" format="1.1" version="$Rev$"}%
 ---+!! Pattern Skin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -43,13 +43,13 @@ The original Photoshop files of the skin graphics (mainly background images) are
 
 !PatternSkin has been tested successfully on the following browsers:
    * Windows
-      * Internet Explorer 7.0, 6.0, 5.5 (note: Explorer 5.0 is *not* supported: will function but shows visual quirks)
-      * Mozilla/Firefox 2.0, 1.5
+      * Internet Explorer 8.0, 7.0, 6.0, 5.5
+      * Mozilla/Firefox 3.5, 2.0, 1.5
    * Mac OS X
-      * Safari 3.0.2
-      * Mozilla/Firefox 2.0, 1.5 (note: Firefox 1.0 will show visual quirks)
+      * Safari 5.0.5, 3.0.2
+      * Mozilla/Firefox 3.5, 2.0, 1.5
    * *nix
-      * Mozilla/Firefox 1.5 (note: Firefox 1.0 will show visual quirks)
+      * Mozilla/Firefox 1.5
 
 ---++ Installation
 
@@ -88,15 +88,16 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 
 ---++ Skin Info
 
-|  Skin Author: | TWiki:Main.ArthurClemens |
-|  Copyright: | &copy; 2004-2008 TWiki:Main.ArthurClemens; <br /> &copy; 2004-2010 TWiki:TWiki.TWikiContributor |
+|  Skin Author: | TWiki:Main.ArthurClemens, TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2004-2008 TWiki:Main.ArthurClemens <br /> &copy; 2008-2011 TWiki:Main.PeterThoeny <br /> &copy; 2004-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Description: | TWiki's default skin; CSS based, flexible and <nop>W3C-compliant |
+|  Description: | TWiki's base skin; CSS based, flexible and <nop>W3C-compliant |
 |  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.png" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this skin]] |
 |  Base Name: | pattern |
-|  Skin Version: | 2011-01-03 |
+|  Skin Version: | 2011-05-18 |
 |  History: | <!-- specify latest version first -->&nbsp; |
+|  2011-05-18: | TWikibug:Item6682: Read-only skin mode with READONLYSKINMODE preferences setting -- TWiki:Main.PeterThoeny |
 |  2011-01-03: | TWikibug:Item6628: Minor gradient fix - change main window gradient from pale red to pale gray -- TWiki:Main.PeterThoeny |
 |  2010-12-20: | TWikibug:Item6622 - Don't hide non-hidden attachments by default, e.g. toggle state is "show" on initial view -- TWiki:Main.PeterThoeny |
 |  2010-11-25: | TWikibug:Item6608 - Reduce the size of H1 and H2 fonts -- TWiki:Main.PeterThoeny |

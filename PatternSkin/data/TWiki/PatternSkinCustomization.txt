@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1276663448" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1305703827" format="1.1" version="$Rev$"}%
 ---+!! !PatternSkin Customization
 
 _Guidelines how to create and customize page templates of the %SYSTEMWEB%.PatternSkin._ For styling your TWiki using stylesheets, see PatternSkinCssCookbook.
@@ -89,6 +89,21 @@ view
         viewbottombar
             %SYSTEMWEB%.WebBottomBar
 </verbatim>
+
+---++ Read-only skin mode
+
+The !PatternSkin can be turned into read-only mode. This is mainly useful if you have TWiki application pages or dashboards where you do not want regular users to change content. The read-only mode is enabled with a READONLYSKINMODE preferences setting set to 1 in the [[%LOCALSITEPREFS%]] (site level), in a WebPreferences (web level) or in any topic (page level):
+
+<blockquote><pre>
+   * Set <nop>READONLY<nop>SKINMODE = 1
+</pre></blockquote>
+
+If set, the edit and attach buttons on top, and the topic action bar at the bottom are removed. There is a hard to find edit link for people who need to edit content: The topic revision info at the bottom has a dash before the WikiName that is turned into an edit link, such as:%BR%
+<blockquote>
+Topic revision: r7 - 2011-05-18 [[%SCRIPTURL{edit}%/%WEB%/%TOPIC%?nowysiwyg=%SERVERTIME{$epoch}%][-]] [[%USERSWEB%.TWikiAdminUser][TWikiAdminUser]]
+</blockquote>
+
+%T% Please note that this _not_ a replacement for access control, use it in addition to %SYSTEMWEB%.TWikiAccessControl.
 
 ---++ Logo
 
@@ -458,4 +473,3 @@ To give the twisty toggle link the same style as the attachment twisty link, add
    font-weight:bold;
 }
 </verbatim>
-
