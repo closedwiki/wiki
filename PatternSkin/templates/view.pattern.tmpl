@@ -54,7 +54,8 @@
 %TMPL:DEF{"patterntopiccontents"}%%TMPL:P{"broadcastmessage"}%%TMPL:P{"top"}%%TMPL:P{"contentheaderstylewrapper"}%%TMPL:P{"formtop"}%%TMPL:P{"attachmentstop"}%<div class="patternContent"><div class="patternTopic">%TMPL:P{"content"}%</div><!-- /patternTopic-->
 %TMPL:P{"contentfooterstylewrapper"}%%TMPL:P{"formbottom"}%%TMPL:P{"attachmentsbottom"}%</div><!-- /patternContent-->
 <div class="clear"></div>
-%TMPL:P{"topicaction"}%%TMPL:P{"footernote"}%%TMPL:END%
+%IF{ "defined 'READONLYSKINMODE' AND ($ READONLYSKINMODE > 0)" then="<hr /><div style='display:none'>" }%%TMPL:P{"topicaction"}%
+%IF{ "defined 'READONLYSKINMODE' AND ($ READONLYSKINMODE > 0)" then="</div><!--/display:none-->" }%%TMPL:P{"footernote"}%%TMPL:END%
 
 %TMPL:DEF{"standardheader"}%%TMPL:END%
 %TMPL:DEF{"simpleheader"}%%TMPL:P{"flashnote"}%%TMPL:P{"standardheader"}%%TMPL:END%
@@ -70,6 +71,6 @@
 %TMPL:DEF{"printaction"}%%TMPL:P{"activatable_printable"}%%TMPL:END%
 
 %TMPL:DEF{"footernote"}%%TMPL:P{"topicinfo"}%%TMPL:END%
-%TMPL:DEF{"topicinfo"}%<div class="patternInfo twikiGrayText"><div class="patternRevInfo">%MAKETEXT{"Topic revision:"}% %REVINFO{format="r$rev - $date - [[$wikiusername][$wikiname]]"}%</div><!-- /patternRevInfo--></div><!-- /patternInfo-->%TMPL:END%
+%TMPL:DEF{"topicinfo"}%<div class="patternInfo twikiGrayText"><div class="patternRevInfo">%MAKETEXT{"Topic revision:"}% %REVINFO{format="r$rev - $date [[%SCRIPTURL{edit}%/%WEB%/%TOPIC%?nowysiwyg=%SERVERTIME{$epoch}%][-]] [[$wikiusername][$wikiname]]"}%</div><!-- /patternRevInfo--></div><!-- /patternInfo-->%TMPL:END%
 
 %TMPL:DEF{"sig_textareabuttons"}%<div class="patternSigLine">%TMPL:P{"textareabuttons"}%<br class="twikiClear" /></div><!-- /patternSigLine-->%TMPL:END%
