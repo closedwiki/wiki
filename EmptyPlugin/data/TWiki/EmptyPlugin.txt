@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305670403" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1306124026" format="1.1" version="$Rev$"}%
 ---+!! Empty TWiki Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -66,7 +66,8 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-05-17: | TWikibug:Item6725: Plugins: Change global package variables from "use vars" to "ours"; doc improvements -- TWiki:Main.PeterThoeny |
+|  2011-05-22: | TWikibug:Item6724: Pass text and meta data to registerTagHandler callback -- TWiki:Main.PeterThoeny |
+|  2011-05-17: | TWikibug:Item6725: Change global package variables from "use vars" to "ours"; doc improvements -- TWiki:Main.PeterThoeny |
 |  2011-03-06: | TWikibug:Item6656: Add meta data to attachment save handlers |
 |  2011-02-08: | TWikibug:Item6593: Doc improvements; adding VarEXAMPLEVAR variable documentation |
 |  2010-05-08: | TWikibug:Item6433: Doc improvements; replacing TWIKIWEB with SYSTEMWEB |
@@ -75,11 +76,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  2004-03-21: | Added afterSaveHandler |
 |  2001-07-14: | Changed to plug&amp;play |
 |  2001-02-27: | Initial version |
-|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.4 |
 |  Dependencies: | %$DEPENDENCIES |
 |  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 99%, %TOPIC% 99% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ VarEXAMPLEVAR, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ VarEXAMPLEVAR, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.TWikiFuncDotPm, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences

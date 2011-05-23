@@ -84,7 +84,7 @@ our $VERSION = '$Rev$';
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS. Add a release date in ISO
 # format (preferred) or a release number such as '1.3'.
-our $RELEASE = '2011-05-17';
+our $RELEASE = '2011-05-22';
 
 # One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
 our $SHORTDESCRIPTION = 'Empty Plugin used as a template for new Plugins';
@@ -168,7 +168,7 @@ sub initPlugin {
 # The function used to handle the %EXAMPLEVAR{...}% variable
 # You would have one of these for each variable you want to process.
 sub _EXAMPLEVAR {
-    my($session, $params, $theTopic, $theWeb) = @_;
+    my($session, $params, $theTopic, $theWeb, $meta, $textRef) = @_;
     # $session  - a reference to the TWiki session object (if you don't know
     #             what this is, just ignore it)
     # $params=  - a reference to a TWiki::Attrs object containing parameters.
@@ -177,6 +177,9 @@ sub _EXAMPLEVAR {
     #             parameter.
     # $theTopic - name of the topic in the query
     # $theWeb   - name of the web in the query
+    # $meta     - topic meta-data to use while expanding, can be undef (Since TWiki::Plugins::VERSION 1.4)
+    # $textRef  - reference to unexpanded topic text, can be undef (Since TWiki::Plugins::VERSION 1.4)
+
     # Return: the result of processing the variable
 
     # For example, %EXAMPLEVAR{'existence' proof="thinking"}%
@@ -595,7 +598,7 @@ The attributes hash will include at least the following attributes:
 
 #sub beforeAttachmentSaveHandler {
 #    # do not uncomment, use $_[0], $_[1]... instead
-#    ###   my( $attrHashRef, $topic, $web ) = @_;
+#    ###   my( $attrHashRef, $topic, $web, $meta ) = @_;
 #    TWiki::Func::writeDebug( "- ${pluginName}::beforeAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
 #}
 
@@ -620,7 +623,7 @@ will include at least the following attributes:
 
 #sub afterAttachmentSaveHandler {
 #    # do not uncomment, use $_[0], $_[1]... instead
-#    ###   my( $attrHashRef, $topic, $web ) = @_;
+#    ###   my( $attrHashRef, $topic, $web, $error, $meta ) = @_;
 #    TWiki::Func::writeDebug( "- ${pluginName}::afterAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
 #}
 
