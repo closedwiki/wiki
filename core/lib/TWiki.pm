@@ -2775,7 +2775,7 @@ The rules for tag expansion are:
 
 sub expandAllTags {
     my $this = shift;
-    my $text = shift; # reference
+    my $textRef = shift; # reference
     my ( $topic, $web, $meta ) = @_;
     $web =~ s#\.#/#go;
 
@@ -2787,7 +2787,7 @@ sub expandAllTags {
     $this->{SESSION_TAGS}{WEB}     = $web;
 
     # Escape ' !%VARIABLE%'
-    $$text =~ s/(?<=\s)!%($regex{tagNameRegex})/&#37;$1/g;
+    $$textRef =~ s/(?<=\s)!%($regex{tagNameRegex})/&#37;$1/g;
 
     # Make sure func works, for registered tag handlers
     $TWiki::Plugins::SESSION = $this;
@@ -2801,8 +2801,8 @@ sub expandAllTags {
     # when debugging. The default is set to 16
     # to match the original limit on search expansion, though this of
     # course applies to _all_ tags and not just search.
-    $$text = _processTags( $this, $$text, \&_expandTagOnTopicRendering,
-                                  16, @_ );
+    $$textRef = _processTags( $this, $$textRef, \&_expandTagOnTopicRendering,
+                                  16, $topic, $web, $meta, $textRef );
 
     # restore previous context
     $this->{SESSION_TAGS}{TOPIC}   = $memTopic;
@@ -2818,7 +2818,9 @@ sub expandAllTags {
 sub _processTags {
     my $this = shift;
     my $text = shift;
-    my $tagf = shift;
+    my $tagFunction = shift;
+    # my ( $topic, $web, $meta, $fullTextRef ) = @_;
+
     my $tell = 0;
 
     return '' if (
@@ -2876,7 +2878,13 @@ sub _processTags {
             if ( $stackTop =~ m/^%(($regex{tagNameRegex})(?:{(.*)})?)$/so ) {
                 my( $expr, $tag, $args ) = ( $1, $2, $3 );
                 #print STDERR ' ' x $tell,"POP $tag\n";
-                my $e = &$tagf( $this, $tag, $args, @_ );
+
+                # Call tag function. @_ is( $topic, $web, $meta, $fullTextRef ),
+                # values may be undef. $meta and $text are passed along so that
+                # they can be referenced by tag handlers. $fullTextRef is a
+                # reference to the full text, it cannot be updated because text
+                # is reconstructed via $stackTop.
+                my $e = &$tagFunction( $this, $tag, $args, @_ );
 
                 if ( defined( $e )) {
                     #print STDERR ' ' x $tell--,"EXPANDED $tag -> $e\n";
@@ -2889,7 +2897,8 @@ sub _processTags {
                         next;
                     }
                     # Recursively expand tags in the expansion of $tag
-                    $stackTop .= _processTags($this, $e, $tagf, $depth-1, @_ );
+                    $stackTop .= _processTags($this, $e, $tagFunction, $depth-1, @_ );
+
                 } else { # expansion failed
                     #print STDERR ' ' x $tell++,"EXPAND $tag FAILED\n";
                     # To handle %NOP
@@ -2920,11 +2929,13 @@ sub _processTags {
                         $stackTop = '%'; # open new context
                     }
                 }
+
             } else {
                 push( @stack, $stackTop );
                 $stackTop = '%'; # push a new context
                 #$tell++;
             }
+
         } else {
             $stackTop .= $token;
         }
