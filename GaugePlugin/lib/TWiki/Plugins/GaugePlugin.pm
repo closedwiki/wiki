@@ -28,6 +28,7 @@
 package TWiki::Plugins::GaugePlugin;
 
 use strict;
+use MIME::Base64 qw(encode_base64);
 
 # =========================
 use vars qw(
@@ -37,11 +38,12 @@ use vars qw(
         $defaultTambarScale $defaultTambarWidth $defaultTambarHeight
         $defaultTrendWidth $defaultTrendHeight
 	$defaultTambarScaleHeightPercentage
+	$defaultTambarAccess
 	%colorCache $transparentColorValue
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-05-13';
+$RELEASE = '2011-05-23';
 
 $pluginInitialized = 0;
 $perlGDModuleFound = 0;
@@ -50,8 +52,7 @@ my $blackColor = "#000000";
 my $redColor = "#FF0000";
 
 # =========================
-sub initPlugin
-{
+sub initPlugin {
     ( my $topic, my $web, my $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
@@ -68,14 +69,17 @@ sub initPlugin
     # Mark that we are not fully initialized yet.  Only get the default
     # values from the plugin topic page iff a GAUGE is found in a topic
     $pluginInitialized = 0;
+    TWiki::Func::registerTagHandler('GAUGE', \&_make_gauge);
+    TWiki::Func::registerTagHandler('GAUGETEST', \&testit);
+    TWiki::Func::registerTagHandler('GAUGE_TIMER', \&_timeit);
+
     return 1;
 }
 
 # =========================
 
 # Initialize all default values from the plugin topic page.
-sub _init_defaults
-{
+sub _init_defaults {
     $pluginInitialized = 1;
     eval {
         $perlGDModuleFound = require GD;
@@ -90,6 +94,7 @@ sub _init_defaults
     $defaultColors = &TWiki::Func::getPreferencesValue( "GAUGEPLUGIN_TAMBAR_COLORS" )
                      || "#FF0000 #FFCCCC #FFFF00 #FFFFCC #00FF00 #CCFFCC";
     $defaultTambarScaleHeightPercentage = &TWiki::Func::getPreferencesValue( "GAUGEPLUGIN_TAMBAR_SCALE_HEIGHT_PERCENTAGE" ) || 20;
+    $defaultTambarAccess = &TWiki::Func::getPreferencesValue( "GAUGEPLUGIN_TAMBAR_ACCESS" ) || "file";
 
     # Get 'trend' default values
     $defaultTrendWidth = &TWiki::Func::getPreferencesValue( "GAUGEPLUGIN_TREND_WIDTH" ) || 16;
@@ -97,16 +102,14 @@ sub _init_defaults
 }
 
 # Return the maximum value of the two specified numbers.
-sub _max
-{
+sub _max {
     my ( $v1, $v2 ) = @_;
     return $v1 if( $v1 > $v2 );
     return $v2;
 }
 
 # Return the minimum value of the two specified numbers.
-sub _min
-{
+sub _min {
     my ( $v1, $v2 ) = @_;
     return $v1 if( $v1 < $v2 );
     return $v2;
@@ -126,58 +129,11 @@ sub _convert_color {
     return ($red, $green, $blue);
 }
 
-# Parse the parameter list returning a hash of all found parameters
-sub _parse_parameters
-{
-    my ( $args ) = @_;
-    my %args;
-    my $length = length ($args);
-    my ( $char, @field );
-
-    # First break the args into individual parameters
-    my $in_quote = 0;
-    my $field = "";
-    my $index = 0;
-    for (my $i = 0; $i < $length; $i++) {
-        # Get character
-        $char = substr( $args, $i, 1 );
-        if( $char eq '"' ) {
-            if( $in_quote ) {   # If a " and already in a quote, then the end
-                $in_quote = 0;
-            } else {            # Beginning of quoted field
-                $in_quote = 1;
-            }
-        } else {
-            if( $char =~ /[,\s]+/ ) {   # A field separater only if not in quote
-                if( $in_quote ) {
-                    $field .= $char;
-                } else {
-                    $field[$index++] = $field if( $field ne "" );
-                    $field = "";
-                }
-            } else {
-                $field .= $char;
-            }
-        }
-    }
-    # Deal with last field
-    $field[$index++] = $field if( $field ne "" );
-
-    # Now break each parameter into a key=value pair.
-    for (my $i = 0; $i < $index; $i++) {
-        my ( $key, $value ) = split(/=/, $field[$i], 2);
-        #print "field[$i] = [$field[$i]]\n";
-        $args{$key} = $value;
-    }
-    return %args;
-}
-
 # Return the value for the specified TWiki plugin parameter.  If the
 # parameter does not exist, then return the specified default value.  The
 # parameter is deleted from the list of specified parameters allowing the
 # code to determine what parameters remain and were not requested.
-sub _get_parameter
-{
+sub _get_parameter {
     my ( $var_name, $type, $default, $parameters ) = @_;
     my $value = delete $$parameters{$var_name};         # Delete since already parsed.
     unless( defined($value) && $value ne "" ) {
@@ -206,8 +162,7 @@ sub _get_parameter
 # Generate the file name in which the graphic file will be placed.  Also
 # make sure that the directory in which the graphic file will be placed
 # exists.  If not, create it.
-sub _make_filename
-{
+sub _make_filename {
     my ( $type, $name, $topic, $web ) = @_;
     # Generate the file name to be created
     my $fullname;
@@ -237,16 +192,25 @@ sub _make_filename
 }
 
 # This routine returns an red colored error message.
-sub _make_error
-{
+sub _make_error {
     my ( $msg ) = @_;
     return "<font color=red>GaugePlugin error: $msg</font>";
 }
 
+# This routine returns an error similar to _make_error_image() but using a
+# simple <div> (making it look like an image).
+sub _make_error_div {
+    my ($msg, $width, $height) = @_;
+    $height -= 2;
+    $width -= 2;
+    my $lineHeight = $height - 2;
+    my $ret = "<div style='width:${width}px; height:${height}px; border:1px solid black;background-color:white; text-align:center;vertical-align:top;font-size:0.9em;padding:0px;overflow:hidden;'><span style='margin:0px;color:red;line-height:${lineHeight}px'>$msg</span></div>";
+    return $ret;
+}
+
 # This routine creates and returns a PNG (optionally GIF) containing an
 # error message.
-sub _make_error_image
-{
+sub _make_error_image {
     my ( $msg, $dir, $filename, $width, $height, $parameters ) = @_;
     my $msglen = length($msg);
     # Get info on the font used in the message so we know how much space
@@ -275,7 +239,7 @@ sub _make_error_image
     $im->rectangle(0, 0, $width - 1, $height - 1, $black);
 
     # Write image file.
-    umask( 002 );
+    my $prevUmask = umask( 002 );
     open(IMAGE, ">$dir/$filename") || return _make_error "Can't create '$dir/$filename': $!";
     binmode IMAGE;
     if( $GD::VERSION > 1.19 ) {
@@ -284,6 +248,7 @@ sub _make_error_image
         print IMAGE $im->gif;
     }
     close IMAGE;
+    umask($prevUmask);
 
     # Make a unique value to append to the image name that forces a web
     # browser to reload the image each time the image is viewed.  This is
@@ -304,8 +269,7 @@ sub _make_error_image
 
 # Make a polygon that matches the gauge scale size.  Then scale the polygon
 # to fit into the width/height of the actual image.
-sub _make_poly_box
-{
+sub _make_poly_box {
     my ( $x1, $y1, $x2, $y2, $yoffset, $width, $left, $right ) = @_;
     # Clip the x values so they stay inside of gauge.
     $x1 = _max($x1, $left);
@@ -322,19 +286,134 @@ sub _make_poly_box
     return $poly;
 }
 
+# This is the poor mans gauge that uses simple HTML tables to build simple
+# gauges.
+sub _makeSimpleGauge {
+    my ($topic, $web, $parameters) = @_;
+
+    # Get the gauge colors (use defaults if not specified).
+    my $colors = _get_parameter( 'colors', 'colors', $defaultColors, $parameters );
+    my @colors = split(/[\s,]+/, $colors);
+
+    # Get the tambar gauge scale values (use defaults of not specified).
+    my $scale = _get_parameter( 'scale', 'scale', $defaultTambarScale, $parameters);
+    my @scale = split(/[\s,]+/, $scale);
+    # Get the left and right side values.  Needed to scale to the image
+    # size.
+    my $leftValue = $scale[0];
+    my $rightValue = $scale[@scale - 1];
+    # Check to see if this is a reverse gauge where the scale goes from
+    # higher values down to lower values.  If so, then we need to do some
+    # extra work to get this to display correctly.
+    my $reverseGauge = 0;       # 0 = scale lower to higher, 1 = scale higher to lower
+    if( $leftValue > $rightValue ) {
+        $reverseGauge = 1;
+        # Negate all scale values
+        foreach my $s (@scale) {
+            $s = -$s;
+        }
+        # Reset the left/right side of tambar
+        $leftValue = -$leftValue;
+        $rightValue = -$rightValue;
+    }
+
+    # Get the tambar gauge width and height (different from scale used)
+    my $barWidth  = _get_parameter( 'width', 'pos', $defaultTambarWidth, $parameters);
+    my $barHeight = _get_parameter( 'height', 'pos', $defaultTambarHeight, $parameters);
+    my $scalesize = _get_parameter( 'scalesize', 'pos', $defaultTambarScaleHeightPercentage, $parameters);
+
+    # Get the gauge value.
+    my $barValue = _get_parameter( 'value', 'float', undef, $parameters );
+    return _make_error_div("no data", $barWidth, $barHeight) if(! defined($barValue) );
+
+    # If this is a reverse gauge, then negate the value
+    $barValue = -$barValue if( $reverseGauge );
+
+    # Compute the height of the scale portion of the gauge.  A minimum
+    # value of 0.  Since we are using tables and 1px is used for the top
+    # and bottom borders, we need to subtract 2 as we calculate the scale
+    # height.
+    my $scaleHeight = _max(0, ($barHeight - 2) * ($scalesize / 100.0));
+
+    my $scaleRange = $rightValue - $leftValue;
+    # Get the colors to use when drawing the bar.
+    my $value_color_dark;
+    my $value_color_light;
+    my $color_fg;
+    my $color_bg;
+    my $scaleWidth = $barWidth - 2;
+    my $scaleHTML = "<table style='width:${scaleWidth}px; height:${scaleHeight}px;' cellSpacing='0' cellPadding='0'><tr>";
+    my $scaleColumns = 0;
+    for my $i (1..@scale - 1) {
+        # Obtain the colors for the dark and light versions of each color.
+        $color_fg = $colors[($i - 1) * 2];
+        $color_bg = $colors[($i - 1) * 2 + 1];
+        # Determine the dark/light color to be used to represent the actual
+        # value of the gauge.
+        if( ($barValue <= $scale[$i]) && ! defined($value_color_dark)) {
+            $value_color_dark = $color_fg;
+            $value_color_light = $color_bg;
+        }
+	my $left = (($scale[$i - 1] - $leftValue) / $scaleRange) * $barWidth;
+	my $right = (($scale[$i] - $leftValue) / $scaleRange) * $barWidth;
+	my $w = $right - $left;
+	$scaleHTML .= "<td style='background-color:$color_fg; width:${w}px;border:0;padding:0;'></td>";
+	$scaleColumns++;
+    }
+    $scaleHTML .= "</tr></table>";
+    # If not defined, then the value is greater than the max of the scale
+    # so use the last colors seen
+    if( ! defined $value_color_dark ) {
+        $value_color_dark = $color_fg;
+        $value_color_light = $color_bg;
+    }
+
+    # Force the value to be inside the bar. 
+    $barValue = $leftValue if ($barValue < $leftValue);
+    $barValue = $rightValue if ($barValue > $rightValue);
+
+    # Adjust the barValue to have a min value such that it gets drawn with
+    # a least a little color.
+    my $minBarValue = $leftValue + $scaleRange * 0.03;
+    $barValue = $minBarValue if ($barValue < $minBarValue);
+
+    my $leftWidth = (($barValue - $leftValue) / $scaleRange) * $barWidth;
+    my $rightWidth = $barWidth - $leftWidth;
+    my $valueHeight = $barHeight - $scaleHeight - 2;
+
+    my $ret = "<table style='display: inline-block; width:${barWidth}px; height:${barHeight}px; border-collapse:collapse; vertical-align:top;' cellSpacing='0' cellPadding='0'>";
+    my $colSpan = 1;
+    if ($scaleHeight < ($barHeight - 3)) {
+	$ret .= "<tr><td style='background-color:$value_color_dark;width:${leftWidth}px;height:${valueHeight}px;border:1px solid black;padding:0px;'></td>";
+	if ($rightWidth > 0) {
+	    $ret .= "<td style='background-color:$value_color_light;width:${rightWidth}px;border:1px solid black;padding:0px;'></td></tr>";
+	    $colSpan++;
+	}
+    }
+    if ($scaleHeight) {
+	$ret .= "<tr><td colspan=$colSpan valign=bottom style='height:${scaleHeight}px;border:1px solid black;padding:0px;'>$scaleHTML</td></tr>";
+    }
+    $ret .= "</table>";
+
+    return $ret;
+}
+
 # Make a gauge.  Determine the type so we know what to do.
-sub _make_gauge
-{
-    my ( $args, $topic, $web ) = @_;
+sub _make_gauge {
+    my ($session, $params, $topic, $web) = @_;
     _init_defaults() if( !$pluginInitialized );
+    my $parameters = new TWiki::Attrs($params->{_RAW}, 1);
+    my $type = _get_parameter( 'type', 'word', $defaultType, $parameters );
+    return _makeSimpleGauge($topic, $web, $parameters) if($type eq "simple");
+    return _make_trend_gauge($topic, $web, $parameters) if($type eq "trend");
+
     # If the GD module was found, then create an error image.
     if( $perlGDModuleFound ) {
-        my %parameters = _parse_parameters( $args );
-        my ( $type ) = _get_parameter( 'type', 'word', $defaultType, \%parameters );
-        return _make_tambar_gauge( $topic, $web, \%parameters ) if( $type eq "tambar" );
-        return _make_trend_gauge( $topic, $web, \%parameters ) if( $type eq "trend" );
+        return _make_tambar_gauge( $topic, $web, $parameters ) if( $type eq "tambar" );
         return _make_error( "Unknown gauge type '$type'" );
     } else {
+	# Since no GD library, if 'tambar', fail over to 'simple'
+	return _makeSimpleGauge($topic, $web, $parameters) if( $type eq "tambar" );
         # It appears that the GD library wasn't found so we return a
         # different type of error that is just plain text.
         return _make_error("Required Perl module 'GD' not found");
@@ -342,8 +421,7 @@ sub _make_gauge
 }
 
 # Make a tambar gauge
-sub _make_tambar_gauge
-{
+sub _make_tambar_gauge {
     my ( $topic, $web, $parameters ) = @_;
     my ( $poly, $i, $scale );
     my ( $color_fg, $color_bg, $value_color_dark, $value_color_light );
@@ -378,6 +456,10 @@ sub _make_tambar_gauge
     my $tambar_width  = _get_parameter( 'width', 'pos', $defaultTambarWidth, $parameters);
     my $tambar_height = _get_parameter( 'height', 'pos', $defaultTambarHeight, $parameters);
     my $tambar_scalesize = _get_parameter( 'scalesize', 'pos', $defaultTambarScaleHeightPercentage, $parameters);
+    my $tambar_access = _get_parameter( 'access', 'word', $defaultTambarAccess, $parameters);
+    if ($tambar_access ne "inline" && $tambar_access ne "file") {
+	return _make_error("parameter *access* must be one of *inline* or *file*.");
+    }
 
     # Compute the height of the scale portion of the gauge.  A minimum
     # value of 0, but is in general an 8th the size of the gauge value
@@ -499,8 +581,18 @@ sub _make_tambar_gauge
     # Draw a black border around the entire gauge.
     $im->rectangle(0, 0, $tambar_width - 1, $tambar_height - 1, $black);
 
+    if ($tambar_access eq "inline") {
+	my $ret;
+	if( $GD::VERSION > 1.19 ) {
+	    $ret = "<img src=\"data:image/png;base64," .  raw2URI($im->png) . "\" />";
+	} else {
+	    $ret = "<img src=\"data:image/gif;base64," .  raw2URI($im->gif) . "\" />";
+	}
+	return $ret;
+    }
+
     # Create the file.
-    umask( 002 );
+    my $prevUmask = umask( 002 );
     open(IMAGE, ">$dir/$filename") || return _make_error "Can't create '$dir/$filename': $!";
     binmode IMAGE;
     if( $GD::VERSION > 1.19 ) {
@@ -509,6 +601,7 @@ sub _make_tambar_gauge
         print IMAGE $im->gif;
     }
     close IMAGE;
+    umask($prevUmask);
 
     # Make a unique value to append to the image name that forces a web
     # browser to reload the image each time the image is viewed.  This is
@@ -529,8 +622,7 @@ sub _make_tambar_gauge
 }
 
 # Make a trend gauge (an arrow)
-sub _make_trend_gauge
-{
+sub _make_trend_gauge {
     my ( $topic, $web, $parameters ) = @_;
     my ( $poly, $i, $scale );
     my ( $color_fg, $color_bg, $value_color_dark, $value_color_light );
@@ -573,6 +665,27 @@ sub _make_trend_gauge
          . " width=\"$trend_width\" height=\"$trend_height\" alt=\"$alt\" $options />";
 }
 
+# This routine converts a file into a data URI
+sub file2URI {
+    my ($file) = @_;
+    my $base64 = "";
+    open(FILE, $file);
+    my $buf;
+    while (read(FILE, $buf, 57)) {
+	$base64 .= encode_base64($buf);
+    }
+    close(FILE);
+    $base64 =~ s/\n//g;
+    return $base64;
+}
+
+sub raw2URI {
+    my ($data) = @_;
+    my $base64 = encode_base64($data);
+    $base64 =~ s/\n//g;
+    return $base64;
+}
+
 # This routine is used to 'cache' colors so colors are reused instead of
 # replicated.
 sub _allocateColor {
@@ -588,14 +701,15 @@ sub _allocateColor {
 # gauges and (roughly) times how long it took to create them.
 # Usage: %GAUGE_TIMER{###}%
 # where ### is the number of gauges to create.
-sub _timeit
-{
-    my ( $loops, $topic, $web ) = @_;
+sub _timeit {
+    my ($session, $params, $topic, $web) = @_;
+    my $loops = $params->{_RAW};
+
     my $start_time = time();
     my $ret;
     for (my $i = 0; $i < $loops; $i++) {
         my $str = "name=\"timeit_$i\" value=\"8\"";
-        $ret = _make_gauge( $str, $topic, $web );
+        $ret = _make_gauge( undef, {_RAW => $str}, $topic, $web );
     }
     my $finish_time = time();
     my $diff = $finish_time - $start_time;
@@ -607,16 +721,47 @@ sub _timeit
     return "To make $loops gauges it (roughly) took $diff seconds.";
 }
 
-# =========================
-sub commonTagsHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-    my $topic = $_[1];
-    my $web = $_[2];
-
-#_#    &TWiki::Func::writeDebug( "- TWiki::Plugins::GaugePlugin [$_[0]]") if $debug;
-    $_[0] =~ s/%GAUGE{(.*?)}%/&_make_gauge($1, $topic, $web)/eog;
-    $_[0] =~ s/%GAUGE_TIMER{(.*)}%/&_timeit($1, $topic, $web)/eog;
+# This routine is for internal use only to make it easier to test various
+# edge cases.
+sub testit {
+    my ($session, $params, $topic, $web) = @_;
+    my $test = 0;
+    my $minValue = 10;
+    my $maxValue = 110;
+    my $incValue = ($maxValue - $minValue) / 10;
+    my $html = "<table style='border-collapse:collapse; border:0;'>";
+    for (my $scaleSize = 0; $scaleSize <= 100; $scaleSize += 10) {
+	$html .= "<tr>";
+	for (my $value = $minValue; $value <= $maxValue; $value += $incValue) {
+	    my $params = "name='test$test' value='$value' scalesize='$scaleSize' height='50'";
+	    $html .= "<td valign=top style='border-left:3px solid blue;'>";
+	    $html .= _make_gauge(0, {_RAW => $params}, $topic, $web);
+	    $html .= "</td>";
+	    $html .= "<td valign=top>";
+	    $html .= _make_gauge(0, {_RAW => "$params, type='simple'"}, $topic, $web);
+	    $html .= "</td>";
+	    $test++;
+	}
+	$html .= "</tr>";
+    }
+#    $html .= "</table>";
+#    $html .= "<table style='border-collapse:collapse; border:0;'>";
+    for (my $value = $minValue; $value <= $maxValue; $value += $incValue) {
+	$html .= "<tr>";
+	for (my $scaleSize = 0; $scaleSize <= 100; $scaleSize += 10) {
+	    my $params = "name='test$test' value='$value' scalesize='$scaleSize' height='50'";
+	    $html .= "<td valign=top style='border-left:3px solid blue;'>";
+	    $html .= _make_gauge(0, {_RAW => $params}, $topic, $web);
+	    $html .= "</td>";
+	    $html .= "<td valign=top>";
+	    $html .= _make_gauge(0, {_RAW => "$params, type='simple'"}, $topic, $web);
+	    $html .= "</td>";
+	    $test++;
+	}
+	$html .= "</tr>";
+    }
+    $html .= "</table>";
+    return $html;
 }
 
 1;

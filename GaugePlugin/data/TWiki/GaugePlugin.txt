@@ -13,19 +13,20 @@
 
 ---++ Introduction
 
-This plugin can be used to build dashboards that contain graphical images of gauges like %ATTACHURL%/tambar1.gif (target measure gauge) and %ATTACHURL%/trendup.gif (trend icons).
+This plugin can be used to build dashboards that contain graphical image gauges or non-graphical gauges like %ATTACHURL%/tambar1.gif (target measure gauge) and %ATTACHURL%/trendup.gif (trend icons).
 
 Two types of gauges are currently available, a target measure bar and a trend icon.
 
 | *Type of Gauge* | *Name* | *What it Does* | *Example* |
 | Target Measure Bar | =tambar= | Shows the actual state of a measure in a bar. The bar has two parts, the upper thick bar shows the actual value, the lower thin bar shows the scale of the gauge.  For example regions with a relative distribution of bad (red), acceptable (yellow) and good (green) values | <img src="%ATTACHURLPATH%/tambar1.gif" alt="Actual: 35" width="60" height="16" /> |
+|^| =simple= | This is identical to =tambar= with the exception that instead of creating a graphic it uses the HTML &lt;table&gt; tag to create the measure bar. |^|
 | Trend Icon | =trend= | Shows the up trend, no change and down trend of a measure | <img src="%ATTACHURLPATH%/trendup.gif" alt="up trend" width="16" height="16" /> <img src="%ATTACHURLPATH%/trendeq.gif" alt="no change" width="16" height="16" /> <img src="%ATTACHURLPATH%/trenddn.gif" alt="down trend" width="16" height="16" /> |
 
 The Target Measure Bar has scale regions (the lower thin bar) like red, yellow and green. Each region has a start and end boundary, the end boundary of one region is the start of the next. The scale determines the boundaries, e.g. a scale of =0, 10, 20, 40= has a red region with range =0...10=, a yellow one with range =10...20= and a green one with range =20...40=. 
 
 The upper value region (the thick bar) has two colors, a dark color used for actual value and a light color for filling out the rest of the gauge with a lighter color.
 
-The =%<nop>GAUGE{...}%= variable gets expanded to an image representing the gauge. Parameters and global settings determine the type of gauge, dimensions, scale and values.
+The =%<nop>GAUGE{...}%= variable gets expanded to either an image representing the gauge or HTML &lt;table&gt; representing the gauge. Parameters and global settings determine the type of gauge, dimensions, scale and values.
 
 ---++ <nop>%TOPIC% Global Settings
 
@@ -33,13 +34,16 @@ Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Create graphical images of gauges, typically used for dashboards
+      * Set SHORTDESCRIPTION = Create gauges (graphical or not), typically used for dashboards
 
    * Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
       * Set DEBUG = 0
 
-   * Default gauge used: =tambar=, =trend=. Default: =tambar=
+   * Default gauge used. Possible values are: =tambar=, =simple=, or =trend=. Default: =tambar=
       * Set TYPE = tambar
+
+   * Default way to access gauge data: =inline= or =file=.%BR%=inline= means the gauge image data is accessed via &lt;img src="data:image/png;base64,&lt;base64_data&gt;" /&gt; %BR%=file= means the gauge image data is accessed from a created file.%BR%Caution should be used since depending on the age of browsers, there might be a max length limit to =inline= data or no support at all for inline images (i.e. IE7 and earlier don't support inline images).  No limit is imposed in this plugin leaving this up to users to keep track of.
+      * Set TAMBAR_ACCESS = file
 
    * Default dimensions, scale and colors for Target Measure Bar. See details in the syntax rules.
       * Set TAMBAR_WIDTH = 60
@@ -54,39 +58,49 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 
 ---++ Syntax Rules
 
-The =%<nop>GAUGE{...}%= variable gets expanded to an image representing the gauge. 
+The =%<nop>GAUGE{...}%= variable gets expanded to either an image representing the gauge or HTML &lt;table&gt; representing the gauge.
 
 | *%<nop>GAUGE{}%<br />Parameters* | *Comment* | *Default* |
-| =type="tambar"<br />type="trend"= | The type of gauge to be used, =tambar= for target measure bar, or =trend= for trend icon | Global =TYPE= setting |
-| =name= | Name to uniquely identify the gauge file that is auto-created. | None; required for =tambar= (not required for =trend=) |
-| =value= | For =tambar=: The actual value of the gauge<br /> For =trend=: Positive = arrow up, 0 = arrow right, negative = arrow down | None. Show "no data" if missing |
-| =alt= | Alternate text for image | Value is =value= parameter |
+| =type="tambar"<br />type="trend"<br />type="simple"= | The type of gauge to be used, =tambar= for target measure bar (graphic), =simple= for target measure bar (non-graphic, only HTML), or =trend= for trend icon | Global =TYPE= setting |
+| =name= | Name to uniquely identify the gauge file that is auto-created. | None; required for =tambar= (not required for =simple= or =trend=) |
+| =value= | For =tambar= and =simple=: The actual value of the gauge<br /> For =trend=: Positive = arrow up, 0 = arrow right, negative = arrow down | None. Show "no data" if missing |
+| =alt= | Alternate text for image (only used for =tambar= and =trend=) | Value is =value= parameter |
 | =width= | Defines the width of the gauge in pixels. | Global =&lt;type&gt;_WIDTH= setting |
 | =height= | Defines the height of the gauge in pixels. | Global =&lt;type&gt;_HEIGHT= setting |
-| =scale= | For =tambar=: Defines the number and position of the scales.  For example a value of ="5, 12, 35, 57"= denotes that there are three regions on the bar gauge, ="5...12"=, ="12...35"= and ="35...57"=. <br /> For =trend=: N/A | Global =TAMBAR_SCALE= setting |
-| =scalesize= | For =tambar=: Defines the size, in percentage, of the scale size is relative to the height of the gauge. Values can be: =scalesize="0"= to =scalesize="100"= | Global =TAMBAR_SCALE_HEIGHT_PERCENTAGE= setting |
-| =colors= | For =tambar=: List of colors, each region has two colors. For =trend=: N/A | Global =TAMBAR_COLORS= setting |
+| =scale= | For =tambar= and =simple=: Defines the number and position of the scales.  For example a value of ="5, 12, 35, 57"= denotes that there are three regions on the bar gauge, ="5...12"=, ="12...35"= and ="35...57"=. <br /> For =trend=: N/A | Global =TAMBAR_SCALE= setting |
+| =scalesize= | For =tambar= and =simple=: Defines the size, in percentage, of the scale size is relative to the height of the gauge. Values can be: =scalesize="0"= to =scalesize="100"= | Global =TAMBAR_SCALE_HEIGHT_PERCENTAGE= setting |
+| =colors= | For =tambar= and =simple=: List of colors, each region has two colors. For =trend=: N/A | Global =TAMBAR_COLORS= setting |
+| =access= | For =tambar= and =simple= define how the created image is accessed,  Valid values are =inline= and =file=. Not support for =trend= %BR%%BR%Caution should be used when using =inline= since some older browsers limit the max length of =inline= data or don't support inline images at all (i.e. IE7 and earlier don't support inline images).  No limit is imposed in this plugin rather leaving it up to users to keep track of. | Global =TAMBAR_ACCESS= setting |
 
 <!--
    * Set tambarTest1 = type="tambar" name="tambarTest1" scale="0, 10, 20, 40" value="27"
+   * Set simpleTest1 = type="simple" name="simpleTest1" scale="0, 10, 20, 40" value="27"
    * Set trendTest1 = type="trend" name="trendTest1" value="-3"
 -->
 ---++ Examples
 
 | *Type of gauge* | *You type* | *You should get...* | *...if installed* |
-| Target Measure Bar | =%<nop>GAUGE{%tambarTest1%}%= | <img src="%ATTACHURLPATH%/tambar1.gif" width="60" height="16" alt="27" /> | %GAUGE{%tambarTest1%}% |
+| Target Measure Bar (=tambar=) | =%<nop>GAUGE{%tambarTest1%}%= | <img src="%ATTACHURLPATH%/tambar1.gif" width="60" height="16" alt="27" /> | %GAUGE{%tambarTest1%}% |
+| Target Measure Bar (=simple=) | =%<nop>GAUGE{%simpleTest1%}%= | <img src="%ATTACHURLPATH%/tambar1.gif" width="60" height="16" alt="27" /> | %GAUGE{%simpleTest1%}% |
 | Trend Icon | =%<nop>GAUGE{%trendTest1%}%= | <img src="%ATTACHURLPATH%/trenddn.gif" alt="down trend" width="16" height="16" /> | %GAUGE{%trendTest1%}% |
 
 The "if installed" column shows images instead of variables in case the plugin is installed correctly.
 
 ---++ Output
 
-   * A PNG graphics file is created containing the gauge results.  The file is placed in =%<nop>PUBURLPATH%/%<nop>WEB%/%<nop>TOPIC%/_GaugePlugin_&lt;type&gt;_&lt;name&gt;.png=
-   * =%<nop>GAUGE{...}%= gets expanded to an =&lt;img ... /&gt;= image tag.
+   * For =tambar= and =trend=
+      * =access="file"=
+         * A PNG graphics file is created containing the gauge results.  The file is placed in =%<nop>PUBURLPATH%/%<nop>WEB%/%<nop>TOPIC%/_GaugePlugin_&lt;type&gt;_&lt;name&gt;.png=
+         * =%<nop>GAUGE{...}%= gets expanded to an =&lt;img ... /&gt;= image tag.
+      * =access="inline"=
+         * No image file is created, instead the image is sent inline in base64 format.  =%<nop>GAUGE{...}%=  gets expanded to an inline =&lt;img ... /&gt;= image tag like:
+            * =&lt;img src="data:image/png;base64,&lt;base64_data&gt;" /&gt;=
+   * For =simple=
+      * An HTML &lt;table&gt; is used to create the requested gauge.  No file is created.
 
 ---++ Error Handling
 
-If the required parameters are not defined, then an error message is returned or an &lt;img ... /&gt; image tag is returned pointing to a graphic containing the error message.
+If the required parameters are not defined, then an error message is returned.  If =tambar=, then the error might be returned in an &lt;img ... /&gt; image or as plan text.  If =simple=, then the error will be returned inside of a &lt;table%gt;.
 
 ---++ Plugin Installation Instructions
 
@@ -112,10 +126,11 @@ __Note:__ You do not need to install anything on your browser to use this plugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny, TWiki:Main/TaitCyrus |
-|  Copyright: | &copy; 2002-2010, TWiki:Main/PeterThoeny; <br /> &copy; 2008-2010, TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2002-2011, TWiki:Main/PeterThoeny; <br /> &copy; 2008-2011, TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-05-13 |
+|  Plugin Version: | 2011-05-20 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-05-20: | <ul><li> TWikibug:Item6726 - Add new =type="simple"= which creates a gauge only using HTML &lt;table&gt; instead of creating a PNG image. This allows this plugin to be run without having to install the gd library </li><li> TWikibug:Item6728 - Add new option of =access= which defaults to =file=, but allows =access="inline"= to embed the image in HTML (no image needs to be created).</li><li>TWikibug:Item6729 - Fix bug with =umask= not getting reset after use.</li></ul> -- TWiki:Main/TaitCyrus |
 |  2011-05-13: | <ul><li> TWikibug:Item6722 - Add ability to control scale height (from 0% to 100% of the gauge)</li><li> TWikibug:Item6723 - Fix data parsing issues that limited the use of very small values (like 0.01)</li></ul> -- TWiki:Main/TaitCyrus |
 |  2010-05-06: | TWikibug:Item6433 - Doc fixes -- TWiki:Main/PeterThoeny |
 |  2010-05-05: | TWikibug:Item6419 - Validate and untaint input values -- TWiki:Main/PeterThoeny |
@@ -124,8 +139,8 @@ __Note:__ You do not need to install anything on your browser to use this plugin
 |  08 Sep 2002: | Added missing binmode (for Windows); pass parameters also to error image (V1.001) |
 |  23 May 2002: | Initial version (V1.0) |
 |  16 May 2002: | Initial spec (V1.0) |
-|  Dependencies: | gd graphics library, http://www.libgd.org/ <br /> libpng PNG graphics library, http://www.libpng.org/pub/png/libpng.html |
-|  CPAN Dependencies | CPAN:GD, CPAN:POSIX |
+|  Dependencies: | (optional) gd graphics library, http://www.libgd.org/ <br /> libpng PNG graphics library, http://www.libpng.org/pub/png/libpng.html |
+|  CPAN Dependencies | (optional) CPAN:GD, CPAN:POSIX, MIME::Base64 |
 |  Perl Version: | 5.005 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |

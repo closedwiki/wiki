@@ -6,118 +6,369 @@ These are GaugePlugin tests.
 
 %TOC%
 
+<!--
+   * Set test01 = name='test01' value='-5'
+   * Set test02 = name='test02' value='-4'
+   * Set test03 = name='test03' value='-3'
+   * Set test04 = name='test04' value='-2'
+   * Set test05 = name='test05' value='-1'
+   * Set test06 = name='test06' value='0'
+   * Set test07 = name='test07' value='1'
+   * Set test08 = name='test08' value='2'
+   * Set test09 = name='test09' value='3'
+   * Set test10 = name='test10' value='4'
+   * Set test11 = name='test11' value='5'
+   * Set test12 = name='test12' value='6'
+   * Set test13 = name='test13' value='7'
+   * Set test14 = name='test14' value='8'
+   * Set test15 = name='test15' value='9'
+   * Set test16 = name='test16' value='10'
+   * Set test17 = name='test17' value='11'
+   * Set test18 = name='test18' value='12'
+   * Set test19 = name='test19' value='13'
+   * Set test20 = name='test20' value='14'
+   * Set test21 = name='test21' value='15'
+   * Set test22 = name='test22' value='16'
+   * Set test23 = name='test23' value='17'
+   * Set test24 = name='test24' value='18'
+   * Set test25 = name='test25' value='19'
+   * Set test26 = name='test26' value='20'
+   * Set test27 = name='test27' value='21'
+   * Set test28 = name='test28' value='22'
+   * Set test29 = name='test29' value='23'
+   * Set test30 = name='test30' value='24'
+   * Set test31 = name='test31' value='25'
+   * Set test32 = name='test32' value='26'
+   * Set test33 = name='test33' value='27'
+   * Set test34 = name='test34' value='28'
+   * Set test35 = name='test35' value='29'
+   * Set test36 = name='test36' value='30'
+   * Set test37 = name='test37' value='31'
+   * Set test38 = name='test38' value='32'
+   * Set test39 = name='test39' value='33'
+   * Set test40 = name='test40' value='34'
+   * Set test41 = name='test41' value='35'
+   * Set test42 = name='test42' value='36'
+   * Set test43 = name='test43' value='37'
+   * Set test44 = name='test44' value='38'
+   * Set test45 = name='test45' value='39'
+   * Set test46 = name='test46' value='40'
+   * Set test47 = name='test47' value='41'
+   * Set test48 = name='test48' value='42'
+   * Set test49 = name='test49' value='43'
+   * Set test50 = name='test50' value='44'
+   * Set test51 = name='test51' value='45'
+   * Set test52 = name='test52' value='46'
+   * Set test53 = name='test53' value='47'
+   * Set test54 = name='test54' value='48'
+   * Set test55 = name='test55' value='49'
+   * Set test56 = name='test56' value='50'
+   * Set test57 = name='test57' value='51'
+   * Set test58 = name='test58' value='52'
+   * Set test59 = name='test59' value='53'
+   * Set test60 = name='test60' value='54'
+   * Set test61 = name='test61' value='55'
+   * Set test62 = name='test62' value='56'
+   * Set test63 = name='test63' value='57'
+   * Set test64 = name='test64' value='58'
+   * Set test65 = name='test65' value='59'
+   * Set test66 = name='test66' value='60'
+   * Set test67 = name='test67' value='61'
+   * Set test68 = name='test68' value='62'
+   * Set test69 = name='test69' value='63'
+   * Set test70 = name='test70' value='64'
+   * Set test71 = name='test71' value='65'
+   * Set test72 = name='test72' value='66'
+   * Set test73 = name='test73' value='67'
+   * Set test74 = name='test74' value='68'
+   * Set test75 = name='test75' value='69'
+   * Set test76 = name='test76' value='70'
+   * Set test77 = name='test77' value='71'
+   * Set test78 = name='test78' value='72'
+   * Set test79 = name='test79' value='73'
+   * Set test80 = name='test80' value='74'
+   * Set test81 = name='test81' value='75'
+   * Set test82 = name='test82' value='76'
+   * Set test83 = name='test83' value='77'
+   * Set test84 = name='test84' value='78'
+   * Set test85 = name='test85' value='79'
+   * Set test86 = name='test86' value='80'
+   * Set test87 = name='test87' value='81'
+   * Set test88 = name='test88' value='82'
+   * Set test89 = name='test89' value='83'
+   * Set test90 = name='test90' value='84'
+   * Set test91 = name='test91' value='85'
+   * Set test92 = name='test92' value='86'
+   * Set test93 = name='test93' value='87'
+   * Set test94 = name='test94' value='88'
+   * Set test95 = name='test95' value='89'
+   * Set test96 = name='test96' value='90'
+   * Set test97 = name='test97' value='91'
+   * Set test98 = name='test98' value='92'
+   * Set test99 = name='test99' value='93'
+   * Set test100 = name='test100' value='94'
+   * Set test101 = name='test101' value='95'
+   * Set test102 = name='test102' value='96'
+   * Set test103 = name='test103' value='97'
+   * Set test104 = name='test104' value='98'
+   * Set test105 = name='test105' value='99'
+   * Set test106 = name='test106' value='100'
+   * Set test107 = name='test107' value='101'
+   * Set test108 = name='test108' value='102'
+   * Set test109 = name='test109' value='103'
+   * Set test110 = name='test110' value='104'
+   * Set test111 = name='test111' value='105'
+
+   * Set edge1 = name='edge1' value="-10"
+   * Set edge2 = name='edge2' value="1000"
+   * Set edge3 = name='edge3' value="-500" scale="-1000 -2000 -3000 -4000"
+   * Set edge4 = name='edge4' value="500" scale="1000 2000 3000 4000"
+   * Set edge5 = name='edge5' value="-5000" scale="-1000 -2000 -3000 -4000"
+   * Set edge6 = name='edge6' value="5000" scale="1000 2000 3000 4000"
+   * Set edge7 = name='edge7' value="0.0005" scale="0.001 0.002 0.003 0.004"
+   * Set edge8 = name='edge8' value="0.005" scale="0.001 0.002 0.003 0.004"
+
+   * Set multiLine01 = name='multiLine01' value='7'
+   * Set multiLine02 = name='multiLine02' value='53'
+
+   * Set error1 = name='error1'
+   * Set error2 = name='error2' value=''
+   * Set error3 = name='error3' width="100" height="40"
+
+   * Set color1 = name='color1' value='8' colors="#00FF00 #CCFFCC #FFFF00 #FFFFCC #FF0000 #FFCCCC"
+   * Set color2 = name='color2' value='38' colors="#00FF00 #CCFFCC #FFFF00 #FFFFCC #FF0000 #FFCCCC"
+   * Set color3 = name='color3' value='78' colors="#00FF00 #CCFFCC #FFFF00 #FFFFCC #FF0000 #FFCCCC"
+
+   * Set scale01 = name='scale01' value="58" scale="0 40 80 120"
+   * Set scale02 = name='scale02' value="5" scale="-10 0 10 20"
+   * Set scale03 = name='scale03' value="-5" scale="-10 0 10 20"
+   * Set scale04 = name='scale04' value="350" scale="100 200 300 400"
+   * Set scale05 = name='scale05' value="17.7" scale="0, 15.8, 22.5, 29.3"
+   * Set scale06 = name='scale06' value="600" scale="800 200 100 -100"
+   * Set scale07 = name='scale07' value="150" scale="800 200 100 -100"
+   * Set scale08 = name='scale08' value="75" scale="800 200 100 -100"
+   * Set scale09 = name='scale09' value="-75" scale="800 200 100 -100"
+   * Set scale10 = name='scale10' value="-175" scale="-100 -200 -400 -800"
+   * Set scale11 = name='scale11' value="-375" scale="-100 -200 -400 -800"
+   * Set scale12 = name='scale12' value="-675" scale="-100 -200 -400 -800"
+   * Set scale13 = name='scale13' value="-50" scale="-100 -200 -400 -800"
+   * Set scale14 = name='scale14' value="-900" scale="-100 -200 -400 -800"
+   * Set scale15 = name='scale15' value="1.23e1" scale="1e1 2e1 3e1 4e1"
+   * Set scale16 = name='scale16' value="2.23e-1" scale="1e-1 2e-1 3e-1 4e-1"
+   * Set scale17 = name='scale17' value="3.23e-5" scale="1e-5 2e-5 3e-5 4e-5"
+
+   * Set height1 = name='height1' value="15" height="40"
+   * Set height2 = name='height2' value="15" height="8"
+
+   * Set width1 = name='width1' value="15" width="40"
+   * Set width2 = name='width2' value="15" width="140"
+
+   * Set alt1 = name='alt1' value="15" alt="The actual value is 15"
+
+   * Set change01 = name='change01' value="75" colors="#00FF00 #CCFFCC #FFFF00 #FFFFCC #FF0000 #FFCCCC" scale="0,33,66,100" scalesize='50' height="32" width="140"
+   * Set change02 = name='change02' value="9"
+
+   * Set options01 = name='options01' value="13" align="top"
+   * Set options02 = name='options02' value="13" align="bottom"
+   * Set options03 = name='options03' value="13" align="middle"
+   * Set options04 = name='options04' value="13" align="left"
+   * Set options05 = name='options05' value="13" align="right"
+
+   * Set border01 = name='border01' value="26" style="border:5px solid black"
+
+   * Set access01 = name='access01' value="26" access="file";
+   * Set access02 = name='access02' value="26" access="inline";
+   * Set access03 = name='access03' value="26" access="bad";
+-->
 ---++ Target Measure Bar Gauge
 
-%TABLE{ sort="off" tableborder="1" cellpadding="1" cellspacing="1" headerbg="#99CCCC" databg="#C8CB8F,#DBDDB5" }% 
-| *Value Range* ||
-| %GAUGE{ name="foo-5" value="-5" }% | value="-5" |
-| %GAUGE{ name="foo-4" value="-4" }% | value="-4" |
-| %GAUGE{ name="foo-3" value="-3" }% | value="-3" |
-| %GAUGE{ name="foo-2" value="-2" }% | value="-2" |
-| %GAUGE{ name="foo-1" value="-1" }% | value="-1" |
-| %GAUGE{ name="foo0" value="0" }% | value="0" |
-| %GAUGE{ name="foo1" value="1" }% | value="1" |
-| %GAUGE{ name="foo2" value="2" }% | value="2" |
-| %GAUGE{ name="foo3" value="3" }% | value="3" |
-| %GAUGE{ name="foo4" value="4" }% | value="4" |
-| %GAUGE{ name="foo5" value="5" }% | value="5" |
-| %GAUGE{ name="foo6" value="6" }% | value="6" |
-| %GAUGE{ name="foo7" value="7" }% | value="7" |
-| %GAUGE{ name="foo8" value="8" }% | value="8" |
-| %GAUGE{ name="foo9" value="9" }% | value="9" |
-| %GAUGE{ name="foo10" value="10" }% | value="10" |
-| %GAUGE{ name="foo11" value="11" }% | value="11" |
-| %GAUGE{ name="foo12" value="12" }% | value="12" |
-| %GAUGE{ name="foo13" value="13" }% | value="13" |
-| %GAUGE{ name="foo14" value="14" }% | value="14" |
-| %GAUGE{ name="foo15" value="15" }% | value="15" |
-| %GAUGE{ name="foo16" value="16" }% | value="16" |
-| %GAUGE{ name="foo17" value="17" }% | value="17" |
-| %GAUGE{ name="foo18" value="18" }% | value="18" |
-| %GAUGE{ name="foo19" value="19" }% | value="19" |
-| %GAUGE{ name="foo20" value="20" }% | value="20" |
-| %GAUGE{ name="foo21" value="21" }% | value="21" |
-| %GAUGE{ name="foo22" value="22" }% | value="22" |
-| %GAUGE{ name="foo23" value="23" }% | value="23" |
-| %GAUGE{ name="foo24" value="24" }% | value="24" |
-| %GAUGE{ name="foo25" value="25" }% | value="25" |
-| %GAUGE{ name="foo26" value="26" }% | value="26" |
-| %GAUGE{ name="foo27" value="27" }% | value="27" |
-| %GAUGE{ name="foo28" value="28" }% | value="28" |
-| %GAUGE{ name="foo29" value="29" }% | value="29" |
-| %GAUGE{ name="foo30" value="30" }% | value="30" |
-| %GAUGE{ name="foo31" value="31" }% | value="31" |
-| %GAUGE{ name="foo32" value="32" }% | value="32" |
-| %GAUGE{ name="foo33" value="33" }% | value="33" |
-| %GAUGE{ name="foo34" value="34" }% | value="34" |
-| %GAUGE{ name="foo35" value="35" }% | value="35" |
-|||
-| *Values less than and greater than scale* ||
-| %GAUGE{ name="edge1" value="-10" }% | value="-10" |
-| %GAUGE{ name="edge2" value="1000" }% | value="1000" |
-| %GAUGE{ name="edge3" value="-500" scale="-1000 -2000 -3000 -4000"}% | value="-500" scale="-1000 -2000 -3000 -4000" |
-| %GAUGE{ name="edge4" value="-5000" scale="-1000 -2000 -3000 -4000"}% | value="-5000" scale="-1000 -2000 -3000 -4000" |
-| %GAUGE{ name="edge5" value="0.0005" scale="0.001 0.002 0.003 0.004"}% | value="0.0005" scale="0.001 0.002 0.003 0.004" |
-| %GAUGE{ name="edge6" value="0.005" scale="0.001 0.002 0.003 0.004"}% | value="0.005" scale="0.001 0.002 0.003 0.004" |
-|||
-| *Error: no arguments at all so arg _name_ is missing* ||
-| %GAUGE{}% ||
-|||
-| *Make sure that more then one gauge can exist on a single line* ||
-| %GAUGE{ name="line1a" value="7" }%%GAUGE{ name="line1b" value="19" }% ||
-|||
-| *Value not defined* ||
-| %GAUGE{ name="undef1" }% | Value not defined, default sizes |
-| %GAUGE{ name="null" value="" }% | value="", default sizes |
-| %GAUGE{ name="undef2" width="100" height="40" }% | width="100" height="40", value not defined |
-| %GAUGE{ name="undef3" width="10" height="10" }% | width="10" height="10", value not defined |
-|||
-| *Overriding the default colors.  Instead of red, yellow, and then green it is green, yellow, and then red* ||
-| %GAUGE{ name="foo8c" value="8" colors="#00FF00 #CCFFCC #FFFF00 #FFFFCC #FF0000 #FFCCCC" }% | value="8" colors="#00FF00 #CCFFCC #FFFF00 #FFFFCC #FF0000 #FFCCCC" |
-| %GAUGE{ name="foo20c" value="19" colors="#00FF00 #CCFFCC #FFFF00 #FFFFCC #FF0000 #FFCCCC" }% | value="19" colors="#00FF00 #CCFFCC #FFFF00 #FFFFCC #FF0000 #FFCCCC" |
-| %GAUGE{ name="foo54c" value="54" colors="#00FF00 #CCFFCC #FFFF00 #FFFFCC #FF0000 #FFCCCC" }% | value="54" colors="#00FF00 #CCFFCC #FFFF00 #FFFFCC #FF0000 #FFCCCC" |
-|||
-| *Overriding the default tambar scale %GAUGEPLUGIN_TAMBAR_SCALE%* ||
-| %GAUGE{ name="foo58s1" value="58" scale="0 40 80 120" }% | value="58" scale="0 40 80 120" |
-| %GAUGE{ name="foo5s2" value="5" scale="-10 0 10 20" }% | value="5" scale="-10 0 10 20" |
-| %GAUGE{ name="foo-5s2" value="-5" scale="-10 0 10 20" }% | value="-5" scale="-10 0 10 20" |
-| %GAUGE{ name="foo350s3" value="350" scale="100 200 300 400" }% | value="350" scale="100 200 300 400" |
-| %GAUGE{ name="foo17s4" value="17.7" scale="0, 15.8, 22.5, 29.3" }% | value="17.7" scale="0, 15.8, 22.5, 29.3" |
-| %GAUGE{ name="foorev600" value="600" scale="800 200 100 -100" }% | value="600" scale="800 200 100 -100" |
-| %GAUGE{ name="foorev150" value="150" scale="800 200 100 -100" }% | value="150" scale="800 200 100 -100" |
-| %GAUGE{ name="foorev75" value="75" scale="800 200 100 -100" }% | value="75" scale="800 200 100 -100" |
-| %GAUGE{ name="foorev-75" value="-75" scale="800 200 100 -100" }% | value="-75" scale="800 200 100 -100" |
-| %GAUGE{ name="foorev175" value="-175" scale="-100 -200 -400 -800" }% | value="-175" scale="-100 -200 -400 -800" |
-| %GAUGE{ name="foorev375" value="-375" scale="-100 -200 -400 -800" }% | value="-375" scale="-100 -200 -400 -800" |
-| %GAUGE{ name="foorev675" value="-675" scale="-100 -200 -400 -800" }% | value="-675" scale="-100 -200 -400 -800" |
-| %GAUGE{ name="foorev-505" value="-50" scale="-100 -200 -400 -800" }% | value="-50" scale="-100 -200 -400 -800" |
-| %GAUGE{ name="foorev900" value="-900" scale="-100 -200 -400 -800" }% | value="-900" scale="-100 -200 -400 -800" |
-| %GAUGE{ name="fooexp1" value="1.23e1" scale="1e1 2e1 3e1 4e1" }% | value="1.23e1" scale="1e1 2e1 3e1 4e1" |
-| %GAUGE{ name="fooexp2" value="2.23e-1" scale="1e-1 2e-1 3e-1 4e-1" }% | value="2.23e-1" scale="1e-1 2e-1 3e-1 4e-1" |
-| %GAUGE{ name="fooexp3" value="3.23e-5" scale="1e-5 2e-5 3e-5 4e-5" }% | value="3.23e-5" scale="1e-5 2e-5 3e-5 4e-5" |
-|||
-| *Overriding the default tambar height %GAUGEPLUGIN_TAMBAR_HEIGHT%* ||
-| %GAUGE{ name="foo15h1" value="15" height="40" }% | value="15" height="40" |
-| %GAUGE{ name="foo15h2" value="15" height="8" }% | value="15" height="8" |
-| *Overriding the default tambar width %GAUGEPLUGIN_TAMBAR_WIDTH%* ||
-| %GAUGE{ name="foo15w" value="15" width="140" }% | value="15" width="140" |
-|||
-| *Override the =alt= parameter* ||
-| %GAUGE{ name="fooalt" value="15" alt="The actual value is 15" }% | value="15" alt="The actual value is 15" |
-|||
-| *Overriding everything on the tambar* ||
-| %GAUGE{ name="foo75all" value="75" colors="#00FF00 #CCFFCC #FFFF00 #FFFFCC #FF0000 #FFCCCC" scale="0,33,66,100" height="32" width="140" }% | value="75" colors="#00FF00 #CCFFCC #FFFF00 #FFFFCC #FF0000 #FFCCCC" scale="0,33,66,100" height="32" width="140" |
-| %GAUGE{ name="foo9d" value="9" }% | Now go back to using just default values, with value="9" |
-|||
-| *Add some additional IMG options* ||
-| %GAUGE{ name="foo13i1" value="13" align="top" }% <font size="+2">Align</font> | value="13" align="top" |
-| %GAUGE{ name="foo13i2" value="13" align="bottom" }% <font size="+2">Align</font> | value="13" align="bottom" |
-| %GAUGE{ name="foo13i3" value="13" align="middle" }% <font size="+2">Align</font> | value="13" align="middle" |
-| %GAUGE{ name="foo13i4" value="13" align="left" }% <font size="+2">Align</font> | value="13" align="left" |
-| %GAUGE{ name="foo13i5" value="13" align="right" }% <font size="+2">Align</font> | value="13" align="right" |
-|||
-| *Specify a border around the image (using CSS since the =border= attribute of &lt;img&gt; is deprecated)* ||
-| %GAUGE{ name="foo26border" value="26" style="border:5px solid black" }% | value="26" style="border:5px solid black" |
+%TABLE{ sort="off" tableborder="1" cellpadding="0" cellspacing="0" headerbg="#99CCCC" databg="#C8CB8F,#DBDDB5" }% 
+| *Gauge as image: =type='tambar'= * | *Gauge as HTML table: =type='simple'= * | *Value Range* |
+| %GAUGE{%test01%}% | %GAUGE{type='simple' %test01%}% | %test01% |
+| %GAUGE{%test02%}% | %GAUGE{type='simple' %test02%}% | %test02% |
+| %GAUGE{%test03%}% | %GAUGE{type='simple' %test03%}% | %test03% |
+| %GAUGE{%test04%}% | %GAUGE{type='simple' %test04%}% | %test04% |
+| %GAUGE{%test05%}% | %GAUGE{type='simple' %test05%}% | %test05% |
+| %GAUGE{%test06%}% | %GAUGE{type='simple' %test06%}% | %test06% |
+| %GAUGE{%test07%}% | %GAUGE{type='simple' %test07%}% | %test07% |
+| %GAUGE{%test08%}% | %GAUGE{type='simple' %test08%}% | %test08% |
+| %GAUGE{%test09%}% | %GAUGE{type='simple' %test09%}% | %test09% |
+| %GAUGE{%test10%}% | %GAUGE{type='simple' %test10%}% | %test10% |
+| %GAUGE{%test11%}% | %GAUGE{type='simple' %test11%}% | %test11% |
+| %GAUGE{%test12%}% | %GAUGE{type='simple' %test12%}% | %test12% |
+| %GAUGE{%test13%}% | %GAUGE{type='simple' %test13%}% | %test13% |
+| %GAUGE{%test14%}% | %GAUGE{type='simple' %test14%}% | %test14% |
+| %GAUGE{%test15%}% | %GAUGE{type='simple' %test15%}% | %test15% |
+| %GAUGE{%test16%}% | %GAUGE{type='simple' %test16%}% | %test16% |
+| %GAUGE{%test17%}% | %GAUGE{type='simple' %test17%}% | %test17% |
+| %GAUGE{%test18%}% | %GAUGE{type='simple' %test18%}% | %test18% |
+| %GAUGE{%test19%}% | %GAUGE{type='simple' %test19%}% | %test19% |
+| %GAUGE{%test20%}% | %GAUGE{type='simple' %test20%}% | %test20% |
+| %GAUGE{%test21%}% | %GAUGE{type='simple' %test21%}% | %test21% |
+| %GAUGE{%test22%}% | %GAUGE{type='simple' %test22%}% | %test22% |
+| %GAUGE{%test23%}% | %GAUGE{type='simple' %test23%}% | %test23% |
+| %GAUGE{%test24%}% | %GAUGE{type='simple' %test24%}% | %test24% |
+| %GAUGE{%test25%}% | %GAUGE{type='simple' %test25%}% | %test25% |
+| %GAUGE{%test26%}% | %GAUGE{type='simple' %test26%}% | %test26% |
+| %GAUGE{%test27%}% | %GAUGE{type='simple' %test27%}% | %test27% |
+| %GAUGE{%test28%}% | %GAUGE{type='simple' %test28%}% | %test28% |
+| %GAUGE{%test29%}% | %GAUGE{type='simple' %test29%}% | %test29% |
+| %GAUGE{%test30%}% | %GAUGE{type='simple' %test30%}% | %test30% |
+| %GAUGE{%test31%}% | %GAUGE{type='simple' %test31%}% | %test31% |
+| %GAUGE{%test32%}% | %GAUGE{type='simple' %test32%}% | %test32% |
+| %GAUGE{%test33%}% | %GAUGE{type='simple' %test33%}% | %test33% |
+| %GAUGE{%test34%}% | %GAUGE{type='simple' %test34%}% | %test34% |
+| %GAUGE{%test35%}% | %GAUGE{type='simple' %test35%}% | %test35% |
+| %GAUGE{%test36%}% | %GAUGE{type='simple' %test36%}% | %test36% |
+| %GAUGE{%test37%}% | %GAUGE{type='simple' %test37%}% | %test37% |
+| %GAUGE{%test38%}% | %GAUGE{type='simple' %test38%}% | %test38% |
+| %GAUGE{%test39%}% | %GAUGE{type='simple' %test39%}% | %test39% |
+| %GAUGE{%test40%}% | %GAUGE{type='simple' %test40%}% | %test40% |
+| %GAUGE{%test41%}% | %GAUGE{type='simple' %test41%}% | %test41% |
+| %GAUGE{%test42%}% | %GAUGE{type='simple' %test42%}% | %test42% |
+| %GAUGE{%test43%}% | %GAUGE{type='simple' %test43%}% | %test43% |
+| %GAUGE{%test44%}% | %GAUGE{type='simple' %test44%}% | %test44% |
+| %GAUGE{%test45%}% | %GAUGE{type='simple' %test45%}% | %test45% |
+| %GAUGE{%test46%}% | %GAUGE{type='simple' %test46%}% | %test46% |
+| %GAUGE{%test47%}% | %GAUGE{type='simple' %test47%}% | %test47% |
+| %GAUGE{%test48%}% | %GAUGE{type='simple' %test48%}% | %test48% |
+| %GAUGE{%test49%}% | %GAUGE{type='simple' %test49%}% | %test49% |
+| %GAUGE{%test50%}% | %GAUGE{type='simple' %test50%}% | %test50% |
+| %GAUGE{%test51%}% | %GAUGE{type='simple' %test51%}% | %test51% |
+| %GAUGE{%test52%}% | %GAUGE{type='simple' %test52%}% | %test52% |
+| %GAUGE{%test53%}% | %GAUGE{type='simple' %test53%}% | %test53% |
+| %GAUGE{%test54%}% | %GAUGE{type='simple' %test54%}% | %test54% |
+| %GAUGE{%test55%}% | %GAUGE{type='simple' %test55%}% | %test55% |
+| %GAUGE{%test56%}% | %GAUGE{type='simple' %test56%}% | %test56% |
+| %GAUGE{%test57%}% | %GAUGE{type='simple' %test57%}% | %test57% |
+| %GAUGE{%test58%}% | %GAUGE{type='simple' %test58%}% | %test58% |
+| %GAUGE{%test59%}% | %GAUGE{type='simple' %test59%}% | %test59% |
+| %GAUGE{%test60%}% | %GAUGE{type='simple' %test60%}% | %test60% |
+| %GAUGE{%test61%}% | %GAUGE{type='simple' %test61%}% | %test61% |
+| %GAUGE{%test62%}% | %GAUGE{type='simple' %test62%}% | %test62% |
+| %GAUGE{%test63%}% | %GAUGE{type='simple' %test63%}% | %test63% |
+| %GAUGE{%test64%}% | %GAUGE{type='simple' %test64%}% | %test64% |
+| %GAUGE{%test65%}% | %GAUGE{type='simple' %test65%}% | %test65% |
+| %GAUGE{%test66%}% | %GAUGE{type='simple' %test66%}% | %test66% |
+| %GAUGE{%test67%}% | %GAUGE{type='simple' %test67%}% | %test67% |
+| %GAUGE{%test68%}% | %GAUGE{type='simple' %test68%}% | %test68% |
+| %GAUGE{%test69%}% | %GAUGE{type='simple' %test69%}% | %test69% |
+| %GAUGE{%test70%}% | %GAUGE{type='simple' %test70%}% | %test70% |
+| %GAUGE{%test71%}% | %GAUGE{type='simple' %test71%}% | %test71% |
+| %GAUGE{%test72%}% | %GAUGE{type='simple' %test72%}% | %test72% |
+| %GAUGE{%test73%}% | %GAUGE{type='simple' %test73%}% | %test73% |
+| %GAUGE{%test74%}% | %GAUGE{type='simple' %test74%}% | %test74% |
+| %GAUGE{%test75%}% | %GAUGE{type='simple' %test75%}% | %test75% |
+| %GAUGE{%test76%}% | %GAUGE{type='simple' %test76%}% | %test76% |
+| %GAUGE{%test77%}% | %GAUGE{type='simple' %test77%}% | %test77% |
+| %GAUGE{%test78%}% | %GAUGE{type='simple' %test78%}% | %test78% |
+| %GAUGE{%test79%}% | %GAUGE{type='simple' %test79%}% | %test79% |
+| %GAUGE{%test80%}% | %GAUGE{type='simple' %test80%}% | %test80% |
+| %GAUGE{%test81%}% | %GAUGE{type='simple' %test81%}% | %test81% |
+| %GAUGE{%test82%}% | %GAUGE{type='simple' %test82%}% | %test82% |
+| %GAUGE{%test83%}% | %GAUGE{type='simple' %test83%}% | %test83% |
+| %GAUGE{%test84%}% | %GAUGE{type='simple' %test84%}% | %test84% |
+| %GAUGE{%test85%}% | %GAUGE{type='simple' %test85%}% | %test85% |
+| %GAUGE{%test86%}% | %GAUGE{type='simple' %test86%}% | %test86% |
+| %GAUGE{%test87%}% | %GAUGE{type='simple' %test87%}% | %test87% |
+| %GAUGE{%test88%}% | %GAUGE{type='simple' %test88%}% | %test88% |
+| %GAUGE{%test89%}% | %GAUGE{type='simple' %test89%}% | %test89% |
+| %GAUGE{%test90%}% | %GAUGE{type='simple' %test90%}% | %test90% |
+| %GAUGE{%test91%}% | %GAUGE{type='simple' %test91%}% | %test91% |
+| %GAUGE{%test92%}% | %GAUGE{type='simple' %test92%}% | %test92% |
+| %GAUGE{%test93%}% | %GAUGE{type='simple' %test93%}% | %test93% |
+| %GAUGE{%test94%}% | %GAUGE{type='simple' %test94%}% | %test94% |
+| %GAUGE{%test95%}% | %GAUGE{type='simple' %test95%}% | %test95% |
+| %GAUGE{%test96%}% | %GAUGE{type='simple' %test96%}% | %test96% |
+| %GAUGE{%test97%}% | %GAUGE{type='simple' %test97%}% | %test97% |
+| %GAUGE{%test98%}% | %GAUGE{type='simple' %test98%}% | %test98% |
+| %GAUGE{%test99%}% | %GAUGE{type='simple' %test99%}% | %test99% |
+| %GAUGE{%test100%}% | %GAUGE{type='simple' %test100%}% | %test100% |
+| %GAUGE{%test101%}% | %GAUGE{type='simple' %test101%}% | %test101% |
+| %GAUGE{%test102%}% | %GAUGE{type='simple' %test102%}% | %test102% |
+| %GAUGE{%test103%}% | %GAUGE{type='simple' %test103%}% | %test103% |
+| %GAUGE{%test104%}% | %GAUGE{type='simple' %test104%}% | %test104% |
+| %GAUGE{%test105%}% | %GAUGE{type='simple' %test105%}% | %test105% |
+| %GAUGE{%test106%}% | %GAUGE{type='simple' %test106%}% | %test106% |
+| %GAUGE{%test107%}% | %GAUGE{type='simple' %test107%}% | %test107% |
+| %GAUGE{%test108%}% | %GAUGE{type='simple' %test108%}% | %test108% |
+| %GAUGE{%test109%}% | %GAUGE{type='simple' %test109%}% | %test109% |
+| %GAUGE{%test110%}% | %GAUGE{type='simple' %test110%}% | %test110% |
+| %GAUGE{%test111%}% | %GAUGE{type='simple' %test111%}% | %test111% |
+||||
+| *Values less than and greater than scale* |||
+| %GAUGE{%edge1%}% | %GAUGE{type='simple' %edge1%}% | %edge1% |
+| %GAUGE{%edge2%}% | %GAUGE{type='simple' %edge2%}% | %edge2% |
+| %GAUGE{%edge3%}% | %GAUGE{type='simple' %edge3%}% | %edge3% |
+| %GAUGE{%edge4%}% | %GAUGE{type='simple' %edge4%}% | %edge4% |
+| %GAUGE{%edge5%}% | %GAUGE{type='simple' %edge5%}% | %edge5% |
+| %GAUGE{%edge6%}% | %GAUGE{type='simple' %edge6%}% | %edge6% |
+| %GAUGE{%edge7%}% | %GAUGE{type='simple' %edge7%}% | %edge7% |
+| %GAUGE{%edge8%}% | %GAUGE{type='simple' %edge8%}% | %edge8% |
+||||
+| *Error: no arguments at all so arg _name_ is missing* |||
+| %GAUGE{}% | %GAUGE{type='simple' }% |  |
+||||
+| *Make sure that more then one gauge can exist on a single line (on older browsers =simple= forces line break)* |||
+| %GAUGE{%multiLine01%}%%GAUGE{%multiLine02%}% | <span style='white-space: nowrap'>%GAUGE{type='simple' %multiLine01%}%%GAUGE{type='simple' %multiLine02%}%</span> | %multiLine01%%BR%%multiLine02% |
+||||
+| *Value not defined* |||
+| %GAUGE{%error1%}% | %GAUGE{type='simple' %error1%}% | Value not defined, default sizes%BR%%error1% |
+| %GAUGE{%error2%}% | %GAUGE{type='simple' %error2%}% | Empty value%BR%%error2% |
+| %GAUGE{%error3%}% | %GAUGE{type='simple' %error3%}% | Value not defined, but other parameters specified%BR%%error3% |
+||||
+| *Overriding the default colors.  Instead of red, yellow, and then green it is green, yellow, and then red* |||
+| %GAUGE{%color1%}% | %GAUGE{type='simple' %color1%}% | %color1% |
+| %GAUGE{%color2%}% | %GAUGE{type='simple' %color2%}% | %color2% |
+| %GAUGE{%color3%}% | %GAUGE{type='simple' %color3%}% | %color3% |
+||||
+| *Overriding the default tambar scale %GAUGEPLUGIN_TAMBAR_SCALE%* |||
+| %GAUGE{%scale01%}% | %GAUGE{type='simple' %scale01%}% | %scale01% |
+| %GAUGE{%scale02%}% | %GAUGE{type='simple' %scale02%}% | %scale02% |
+| %GAUGE{%scale03%}% | %GAUGE{type='simple' %scale03%}% | %scale03% |
+| %GAUGE{%scale04%}% | %GAUGE{type='simple' %scale04%}% | %scale04% |
+| %GAUGE{%scale05%}% | %GAUGE{type='simple' %scale05%}% | %scale05% |
+| %GAUGE{%scale06%}% | %GAUGE{type='simple' %scale06%}% | %scale06% |
+| %GAUGE{%scale07%}% | %GAUGE{type='simple' %scale07%}% | %scale07% |
+| %GAUGE{%scale08%}% | %GAUGE{type='simple' %scale08%}% | %scale08% |
+| %GAUGE{%scale09%}% | %GAUGE{type='simple' %scale09%}% | %scale09% |
+| %GAUGE{%scale10%}% | %GAUGE{type='simple' %scale10%}% | %scale10% |
+| %GAUGE{%scale11%}% | %GAUGE{type='simple' %scale11%}% | %scale11% |
+| %GAUGE{%scale12%}% | %GAUGE{type='simple' %scale12%}% | %scale12% |
+| %GAUGE{%scale13%}% | %GAUGE{type='simple' %scale13%}% | %scale13% |
+| %GAUGE{%scale14%}% | %GAUGE{type='simple' %scale14%}% | %scale14% |
+| %GAUGE{%scale15%}% | %GAUGE{type='simple' %scale15%}% | %scale15% |
+| %GAUGE{%scale16%}% | %GAUGE{type='simple' %scale16%}% | %scale16% |
+| %GAUGE{%scale17%}% | %GAUGE{type='simple' %scale17%}% | %scale17% |
+||||
+| *Overriding the default tambar height %GAUGEPLUGIN_TAMBAR_HEIGHT%* |||
+| %GAUGE{%height1%}% | %GAUGE{type='simple' %height1%}% | %height1% |
+| %GAUGE{%height2%}% | %GAUGE{type='simple' %height2%}% | %height2% |
+| *Overriding the default tambar width %GAUGEPLUGIN_TAMBAR_WIDTH%* |||
+| %GAUGE{%width1%}% | %GAUGE{type='simple' %width1%}% | %width1% |
+| %GAUGE{%width2%}% | %GAUGE{type='simple' %width2%}% | %width2% |
+||||
+| *Override the =alt= parameter* |||
+| %GAUGE{%alt1%}% | %GAUGE{type='simple' %alt1%}% | %alt1% |
+||||
+| *Overriding everything on the tambar* |||
+| %GAUGE{%change01%}% | %GAUGE{type='simple' %change01%}% | %change01% |
+| %GAUGE{%change02%}% | %GAUGE{type='simple' %change02%}% | %change02% |
+||||
+| *Add some additional IMG options* |||
+| Text1%GAUGE{%options01%}%Text2 | --does not apply-- | %options01% |
+| Text1%GAUGE{%options02%}%Text2 | --does not apply-- | %options02% |
+| Text1%GAUGE{%options03%}%Text2 | --does not apply-- | %options03% |
+| Text1%GAUGE{%options04%}%Text2 | --does not apply-- | %options04% |
+| Text1%GAUGE{%options05%}%Text2 | --does not apply-- | %options05% |
+||||
+| *All unknowns options are passed to the &lt;img&gt; tag.* |||
+| %GAUGE{%border01%}% | --does not apply-- | %border01% |
+||||
+| *Change how the created =tambar= image is accessed * |||
+| %GAUGE{%access01%}% | --does not apply-- | Access via file:%br%%access01% |
+| %GAUGE{%access02%}% | --does not apply-- | Access via inline (won't work on older browsers):%BR%%access02% |
+| %GAUGE{%access03%}% | --does not apply-- | Error message should be generated:%br%%access03% |
 
 ---++ Trend Gauge
 
