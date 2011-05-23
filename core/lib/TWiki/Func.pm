@@ -2378,6 +2378,8 @@ where:
    * =\%params= - a reference to a TWiki::Attrs object containing parameters. This can be used as a simple hash that maps parameter names to values, with _DEFAULT being the name for the default parameter.
    * =$topic= - name of the topic in the query
    * =$web= - name of the web in the query
+   * =$meta= - topic meta-data to use while expanding, can be undef (Since TWiki::Plugins::VERSION 1.4)
+   * =$textRef= - reference to unexpanded topic text, can be undef (Since TWiki::Plugins::VERSION 1.4)
 for example, to execute an arbitrary command on the server, you might do this:
 <verbatim>
 sub initPlugin{
@@ -2392,7 +2394,6 @@ sub boo {
 
     my $result = `$cmd 2>&1`;
     return $params->{silent} ? '' : $result;
-}
 }
 </verbatim>
 would let you do this:
@@ -3373,8 +3374,8 @@ $TWiki::Plugins::VERSION 1.025
    * =beforeCommonTagsHandler($text, $topic, $web)=
    * =earlyInitPlugin()=
 ---++++ Func.pm
-   * =afterAttachmentSaveHandler(\%attrHash, $topic, $web, $error)=
-   * =beforeAttachmentSaveHandler(\%attrHash, $topic, $web)=
+   * =afterAttachmentSaveHandler(\%attrHash, $topic, $web, $error, $meta)=
+   * =beforeAttachmentSaveHandler(\%attrHash, $topic, $web, $meta)=
    * =checkDependencies($moduleName, $dependenciesRef) -> $error=
    * =extractParameters($attr) -> %params=
    * =formatTime($time, $format, $timezone) -> $text=
@@ -3493,8 +3494,10 @@ No changes
 ---+++ TWiki-5.1 (Istanbul Release)
 $TWiki::Plugins::VERSION 1.4
 ---++++ EmptyPlugin.pm
-No changes
+   * Callback function registered by =registerTagHandler= has two new parameters =$meta= and =$textRef=
 ---++++ Func.pm
+   * =afterAttachmentSaveHandler(\%attrHash, $topic, $web, $error, $meta)= -- added =$meta=
+   * =beforeAttachmentSaveHandler(\%attrHash, $topic, $web, $meta)= == added =$meta=
    * =writeLog( $action, $extra, $web, $topic, $user )=
 
 =cut
