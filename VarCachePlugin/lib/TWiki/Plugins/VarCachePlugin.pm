@@ -23,11 +23,12 @@ package TWiki::Plugins::VarCachePlugin;
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-        $debug $paramMsg
+        $debug $NO_PREFS_IN_TOPIC
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-05-01';
+$RELEASE = '2011-05-24';
+$NO_PREFS_IN_TOPIC = 1;
 
 $pluginName = 'VarCachePlugin';  # Name of this Plugin
 
@@ -59,7 +60,7 @@ sub beforeCommonTagsHandler
 
     return unless( $_[0] =~ /%VARCACHE/ );
 
-    $_[0] =~ s/%VARCACHE{(.*?)}%/_handleVarCache( $_[2], $_[1], $1 )/ge;
+    $_[0] =~ s/%VARCACHE(?:{(.*?)})?%/_handleVarCache( $_[2], $_[1], $1 )/ge;
 
     # if "read cache", replace all text with marker, to be filled in afterCommonTagsHandler
     $_[0] =~ s/^.*(%--VARCACHE\:read\:.*?--%).*$/$1/os;
@@ -74,15 +75,16 @@ sub afterCommonTagsHandler
 
     return unless( $_[0] =~ /%--VARCACHE\:/ );
 
-    if( $_[0] =~ /%--VARCACHE\:([a-z]+)\:?(.*?)--%/ ) {
+    if( $_[0] =~ /%--VARCACHE\:([a-z]+)\:?(.*?)(?:\001(.*?)\001)?--%/ ) {
         my $save = ( $1 eq "save" );
         my $age = $2 || 0;
+        my $tag = $3;
         my $cacheFilename = _cacheFileName( $_[2], $_[1], $save );
 
         if( $save ) {
             # update cache
             TWiki::Func::saveFile( $cacheFilename, $_[0] );
-            $msg = _formatMsg( $_[2], $_[1] );
+            $msg = _formatMsg( $_[2], $_[1], $tag );
             $_[0] =~ s/%--VARCACHE\:.*?--%/$msg/go;
 
             # cache addToHEAD info
@@ -101,7 +103,7 @@ sub afterCommonTagsHandler
         } else {
             # read cache
             my $text = TWiki::Func::readFile( $cacheFilename );
-            $msg = _formatMsg( $_[2], $_[1] );
+            $msg = _formatMsg( $_[2], $_[1], $tag );
             $msg =~ s/\$age/_formatAge($age)/geo;
             $text =~ s/%--VARCACHE.*?--%/$msg/go;
             $_[0] = $text;
@@ -121,9 +123,8 @@ sub afterCommonTagsHandler
 # =========================
 sub _formatMsg
 {
-    my ( $theWeb, $theTopic ) = @_;
+    my ( $theWeb, $theTopic, $msg ) = @_;
 
-    my $msg = $paramMsg; # FIXME: Global variable not reliable in mod_perl
     $msg =~ s|<nop>||go;
     $msg =~ s|\$link|%SCRIPTURL{view}%/%WEB%/%TOPIC%?varcache=refresh|go;
     $msg =~ s|%ATTACHURL%|%PUBURL%/$installWeb/$pluginName|go;
@@ -168,7 +169,7 @@ sub _handleVarCache
         if( $tmp eq "refresh" ) {
             $action = "refresh";
         } else {
-            $action = "" if( grep{ !/^refresh$/ } $query->param );
+            $action = "" if( grep{ !/^varcache$/ } $query->param );
         }
     }
 
@@ -181,17 +182,18 @@ sub _handleVarCache
             $filename = TWiki::Func::getDataDir() . "/$theWeb/$theTopic.txt";
             my $topicTime = (stat $filename)[9] || 10000000000;
             my $refresh = TWiki::Func::extractNameValuePair( $theArgs )
-                       || TWiki::Func::extractNameValuePair( $theArgs, "refresh" )
-                       || TWiki::Func::getPreferencesValue( "\U$pluginName\E_REFRESH" ) || 24;
+                       || TWiki::Func::extractNameValuePair( $theArgs, "refresh" );
+            $refresh = TWiki::Func::getPreferencesValue( "\U$pluginName\E_REFRESH" ) unless( $refresh || $refresh eq '0' );
+            $refresh = 24 unless( $refresh || $refresh eq '0' );
             $refresh *= 3600;
             if( ( ( $refresh == 0 ) || ( $cacheTime >= $now - $refresh ) )
              && ( $cacheTime >= $topicTime ) ) {
                 # add marker for afterCommonTagsHandler to read cached file
-                $paramMsg = TWiki::Func::extractNameValuePair( $theArgs, "cachemsg" )
-                         || TWiki::Func::getPreferencesValue( "\U$pluginName\E_CACHEMSG" )
-                         || 'This topic was cached $age ago ([[$link][refresh]])';
+                my $paramMsg = TWiki::Func::extractNameValuePair( $theArgs, "cachemsg" )
+                            || TWiki::Func::getPreferencesValue( "\U$pluginName\E_CACHEMSG" )
+                            || 'This topic was cached $age ago ([[$link][refresh]])';
                 $cacheTime = sprintf( "%1.6f", ( $now - $cacheTime ) / 3600 );
-                return "%--VARCACHE\:read:$cacheTime--%";
+                return "%--VARCACHE\:read:$cacheTime\001$paramMsg\001--%";
             }
         }
         $action = "refresh";
@@ -199,11 +201,11 @@ sub _handleVarCache
 
     if( $action eq "refresh" ) {
         # add marker for afterCommonTagsHandler to refresh cache file
-        $paramMsg = TWiki::Func::extractNameValuePair( $theArgs, "updatemsg" )
-                 || TWiki::Func::getPreferencesValue( "\U$pluginName\E_UPDATEMSG" )
-                 || 'This topic is now cached ([[$link][refresh]])';
+        my $paramMsg = TWiki::Func::extractNameValuePair( $theArgs, "updatemsg" )
+                    || TWiki::Func::getPreferencesValue( "\U$pluginName\E_UPDATEMSG" )
+                    || 'This topic is now cached ([[$link][refresh]])';
         
-        return "%--VARCACHE\:save--%";
+        return "%--VARCACHE\:save\001$paramMsg\001--%";
     }
 
     # else normal uncached processing
@@ -215,21 +217,14 @@ sub _cacheFileName
 {
     my ( $web, $topic, $mkDir, $isHead ) = @_;
 
-    # Create web directory "pub/$web" if needed
-    my $dir = TWiki::Func::getPubDir() . "/$web";
+    my $dir = TWiki::Func::getWorkArea($pluginName) . "/$web";
     if( ( $mkDir ) && ( ! -e "$dir" ) ) {
-        umask( 002 );
-        mkdir( $dir, 0775 );
+        my $sumsk = umask( 002 );
+        mkdir( $dir, $TWiki::cfg{RCS}{dirPermission} );
+        umask( $sumsk );
     }
-    # Create topic directory "pub/$web/$topic" if needed
-    $dir .= "/$topic";
-    if( ( $mkDir ) && ( ! -e "$dir" ) ) {
-        umask( 002 );
-        mkdir( $dir, 0775 );
-    }
-    my $fileName = '_cache.txt';
-    $fileName    = '_cache.head' if( $isHead );
-    return "$dir/_${pluginName}${fileName}";
+
+    return "$dir/${topic}_cache." . ($isHead? 'head' : 'txt');
 }
 
 # =========================
