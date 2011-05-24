@@ -184,7 +184,7 @@ sub _handleVarCache
             my $refresh = TWiki::Func::extractNameValuePair( $theArgs )
                        || TWiki::Func::extractNameValuePair( $theArgs, "refresh" );
             $refresh = TWiki::Func::getPreferencesValue( "\U$pluginName\E_REFRESH" ) unless( $refresh || $refresh eq '0' );
-            $refresh = 24 unless( $refresh || $refresh eq '0' );
+            $refresh = 24 unless( $refresh || defined $refresh && $refresh eq '0' );
             $refresh *= 3600;
             if( ( ( $refresh == 0 ) || ( $cacheTime >= $now - $refresh ) )
              && ( $cacheTime >= $topicTime ) ) {
