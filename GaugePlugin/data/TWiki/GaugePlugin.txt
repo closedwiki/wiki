@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293781685" format="1.1" version="$Rev$"}%
----+ Gauge Plugin
+%META:TOPICINFO{author="TWikiContributor" date="1306199435" format="1.1" version="$Rev$"}%
+---+!! Gauge Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
    http://twiki.org/cgi-bin/view/Plugins/GaugePlugin or provide feedback at
