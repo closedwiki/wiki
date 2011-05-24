@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1304136485" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1306222740" format="1.1" version="$Rev$"}%
 ---+!! Variable Cache Plugin 
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -42,27 +42,23 @@ The rendering of TWiki markup to HTML is not cached. That is, user specific HTML
       * the topic has URL parameters other than =varcache= (e.g. to show dynamic content properly, such as table sorting, filtering, searching)
       * the topic is previewed after editing
    * Limitations:
-      * The cache is not user specific. For example, all users see the expanded =%<nop>WIKIUSERNAME%= of the person who refreshed the cache (on demand or by looking at a topic with an exired cache)
+      * The cache is not user specific. For example, all users see the expanded =%<nop>WIKIUSERNAME%= of the person who refreshed the cache (on demand or by looking at a topic with an expired cache)
 
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>VARCACHEPLUGIN_SHORTDESCRIPTION%==
-
-   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Cache TWiki variables in selected topics for faster page rendering
+This plugin can be configured with preferences settings in [[%LOCALSITEPREFS%]] (site level), a WebPreferences (web level) or in a topic (page level). Do not change the settings here, they are here only to illustrate the default values. To overload, copy the settings to one of the aforementioned topics.
 
    * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 0
+      * Set VARCACHEPLUGIN_DEBUG = 0
 
    * Default refresh period in hours. No automatic refresh: =0=, default: =24=
-      * Set REFRESH = 24
+      * Set VARCACHEPLUGIN_REFRESH = 24
 
    * Cache help messages. Use =$age= to indicate age of cache, =$link= to indicate the refresh URL:
-      * Set CACHEMSG = This topic was cached $age ago ([<nop>[$link][refresh]])
-      * Set UPDATEMSG = This topic is now cached ([<nop>[$link][refresh]])
-      * #Set CACHEMSG = <a href="$link"><img src="%ATTACHURLPATH%/cachetopic.gif" title="This topic was cached $age ago. Click the icon to refresh." alt="Refresh cache" width="16" height="16" border="0" /></a>
-      * #Set UPDATEMSG = <a href="$link"><img src="%ATTACHURLPATH%/cachetopic.gif" title="This topic is now cached. Click the icon to refresh." alt="Refresh cache" width="16" height="16" border="0" /></a>
-
+      * Set VARCACHEPLUGIN_CACHEMSG = This topic was cached $age ago ([<nop>[$link][refresh]])
+      * Set VARCACHEPLUGIN_UPDATEMSG = This topic is now cached ([<nop>[$link][refresh]])
+      * #Set VARCACHEPLUGIN_CACHEMSG = <a href="$link"><img src="%ATTACHURLPATH%/cachetopic.gif" title="This topic was cached $age ago. Click the icon to refresh." alt="Refresh cache" width="16" height="16" border="0" /></a>
+      * #Set VARCACHEPLUGIN_UPDATEMSG = <a href="$link"><img src="%ATTACHURLPATH%/cachetopic.gif" title="This topic is now cached. Click the icon to refresh." alt="Refresh cache" width="16" height="16" border="0" /></a>
 
 ---++ Plugin Installation Instructions
 
@@ -83,11 +79,15 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Cache TWiki variables in selected topics for faster page rendering
+
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2004-2011, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-05-01 |
+|  Plugin Version: | 2011-05-24 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-05-24: | TWikibug:Item6730: Move cache data from pub directory to working directory; Use proper umask for directories created; Fix to make it better run under mod_perl; Support abbreviated %<nop>VARCACHE% syntax; Possible to specify a refresh of 0 (meaning infinite) -- TWiki:Main.TimotheLitt |
 |  2011-05-01: | TWikibug:Item6701: Doc improvements |
 |  2010-04-25: | TWikibug:Item6433: Doc fix: Changing TWIKIWEB to SYSTEMWEB |
 |  2010-04-06: | TWikibug:Item5414: Support for plugins that dynamically add !JavaScript and CSS using TWiki::Func::addToHEAD(); added !VarVARCACHE variable documentation topic; support nameless parameter for refresh time; fixed typo in UPDATEMSG plugin setting name |
