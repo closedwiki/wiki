@@ -1,5 +1,5 @@
 data/TWiki/VarCachePlugin.txt 0644
 data/TWiki/VarCachePluginTest.txt 0644
 data/TWiki/VarVARCACHE.txt 0644
-lib/TWiki/Plugins/VarCachePlugin.pm 0444
-pub/TWiki/VarCachePlugin/cachetopic.gif 0444
+lib/TWiki/Plugins/VarCachePlugin.pm 0644
+pub/TWiki/VarCachePlugin/cachetopic.gif 0644
