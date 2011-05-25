@@ -52,7 +52,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-07-12';
+$RELEASE = '2011-05-24';
 
 BEGIN {
     # 'Use locale' for internationalisation of Perl sorting and searching - 
@@ -78,7 +78,7 @@ sub initPlugin {
     my $man = TWiki::Func::getRegularExpression('mixedAlphaNum');
     my $ua = TWiki::Func::getRegularExpression('upperAlpha');
     $sitePattern    = "([$ua][$man]+)";
-    $pagePattern    = "([${man}\_\~\%\/][$man" . '\.\/\+\_\~\,\&\;\:\=\!\?\%\#\@\-]*?)';
+    $pagePattern    = "((?:'[^']*')|(?:\"[^\"]*\")|(?:[${man}\_\~\%\/][$man" . '\.\/\+\_\~\,\&\;\:\=\!\?\%\#\@\-]*?))';
 
     # Get plugin preferences from InterwikiPlugin topic
     $interLinkFormat =
@@ -127,6 +127,12 @@ sub _link {
     $page ||= '';
     $postfix ||= '';
 
+    my $upage = $page;
+    if( $page =~ /^['"](.*)["']$/ ) {
+	$page = $1;
+	$upage = TWiki::urlEncode( $1 );
+    }
+
     my $text = $prefix;
     if( defined( $interSiteTable{$site} ) ) {
         my $tooltip = $interSiteTable{$site}{tooltip};
@@ -137,7 +143,11 @@ sub _link {
             # TWikibug:Item6503 - hack to prettify TWiki.org link URL
             $page =~ s/^([A-Za-z0-9]+)\./$1\//; # change first '.' to '/' 
         }
-        $url .= $page unless( $url =~ /\$page/ );
+        if( $url =~ /\$page/ ) {
+	    $url =~ s/\$page/$upage/g;
+	} else {
+	    $url .= $upage;
+	}
 
         if( $postfix ) {
             # [[...]] or [[...][...]] interwiki link
