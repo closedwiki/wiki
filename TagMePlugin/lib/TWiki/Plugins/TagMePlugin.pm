@@ -35,8 +35,8 @@ use vars qw(
   $topicsRegex $action $style $label $header $footer $button
 );
 
-$VERSION    = '1.7';
-$RELEASE    = '2010-06-12';
+$VERSION    = '1.8';
+$RELEASE    = '2011-05-25';
 $pluginName = 'TagMePlugin';    # Name of this Plugin
 
 $initialized = 0;
@@ -1446,7 +1446,7 @@ sub _canChange {
     my @groupsAndUsers = split( ",", $allowModifyPrefNames );
     foreach (@groupsAndUsers) {
         my $name = $_;
-        $name =~ s/(Main\.|\%MAINWEB\%\.)//go;
+        $name =~ s/.*\.//go; # Remove web prefix from Main.WikiName
         return 1 if ( $name eq TWiki::Func::getWikiName(undef) ); # user is listed
         return 1 if _isGroupMember( $name );
     }
