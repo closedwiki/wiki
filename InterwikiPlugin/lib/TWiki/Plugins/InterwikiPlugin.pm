@@ -41,18 +41,14 @@ use strict;
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
-use vars qw(
-            $VERSION
-            $RELEASE
-            $interWeb
-            $interLinkFormat
-            $sitePattern
-            $pagePattern
-            %interSiteTable
-    );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-05-24';
 
-$VERSION = '$Rev$';
-$RELEASE = '2011-05-24';
+our $interWeb;
+our $interLinkFormat;
+our $sitePattern;
+our $pagePattern;
+our %interSiteTable;
 
 BEGIN {
     # 'Use locale' for internationalisation of Perl sorting and searching - 
