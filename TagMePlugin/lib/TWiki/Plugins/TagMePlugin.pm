@@ -28,25 +28,38 @@ package TWiki::Plugins::TagMePlugin;
 use strict;
 
 # =========================
-use vars qw(
-  $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
-  $initialized $workAreaDir $attachUrl $logAction $tagLinkFormat 
-  $tagQueryFormat $alphaNum $doneHeader $normalizeTagInput $lineRegex
-  $topicsRegex $action $style $label $header $footer $button
-);
+our $VERSION    = '1.7';
+our $RELEASE    = '2011-05-25';
 
-$VERSION    = '1.8';
-$RELEASE    = '2011-05-25';
-$pluginName = 'TagMePlugin';    # Name of this Plugin
+# =========================
+our $pluginName = 'TagMePlugin';    # Name of this Plugin
+our $initialized = 0;
+our $lineRegex   = "^0*([0-9]+), ([^,]+), (.*)";
+our $tagChangeRequestTopic = 'TagMeChangeRequests';
+our $tagChangeRequestLink = "[[$tagChangeRequestTopic][Tag change requests]]";
+our $web;
+our $topic;
+our $user;
+our $installWeb;
+our $debug;
+our $workAreaDir;
+our $attachUrl;
+our $logAction;
+our $tagLinkFormat;
+our $tagQueryFormat;
+our $alphaNum;
+our $doneHeader;
+our $normalizeTagInput;
+our $topicsRegex;
+our $action;
+our $style;
+our $label;
+our $header;
+our $footer;
+our $button;
 
-$initialized = 0;
-$lineRegex   = "^0*([0-9]+), ([^,]+), (.*)";
-my $tagChangeRequestTopic = 'TagMeChangeRequests';
-my $tagChangeRequestLink =
-  "[[$tagChangeRequestTopic][Tag change requests]]";
-
+# =========================
 BEGIN {
-
     # I18N initialization
     if ( $TWiki::cfg{UseLocale} ) {
         require locale;
