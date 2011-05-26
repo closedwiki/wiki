@@ -34,6 +34,7 @@ in a [[link]] or [[link][text]] expression.
 
 =cut
 
+# =========================
 package TWiki::Plugins::InterwikiPlugin;
 
 use strict;
@@ -41,15 +42,20 @@ use strict;
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
+# =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-05-24';
+our $RELEASE = '2011-05-25';
 
+# =========================
+our $SHORTDESCRIPTION = 'Link ==ExternalSite:Page== text to external sites based on aliases defined in a rules topic';
+our $NO_PREFS_IN_TOPIC = 1;
 our $interWeb;
 our $interLinkFormat;
 our $sitePattern;
 our $pagePattern;
 our %interSiteTable;
 
+# =========================
 BEGIN {
     # 'Use locale' for internationalisation of Perl sorting and searching - 
     if( $TWiki::cfg{UseLocale} ) {
@@ -58,7 +64,7 @@ BEGIN {
     }
 }
 
-# Read preferences and get all InterWiki Site->URL mappings
+# =========================
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
@@ -79,11 +85,10 @@ sub initPlugin {
     # Get plugin preferences from InterwikiPlugin topic
     $interLinkFormat =
       TWiki::Func::getPreferencesValue( 'INTERWIKIPLUGIN_INTERLINKFORMAT' ) ||
-      '<a href="$url" title="$tooltip"><noautolink>$label</noautolink></a>';
+      '<a href="$url" title="$tooltip" class="interwikiLink"><noautolink>$label</noautolink></a>';
 
     my $interTopic =
-      TWiki::Func::getPreferencesValue( 'INTERWIKIPLUGIN_RULESTOPIC' )
-          || 'InterWikis';
+      TWiki::Func::getPreferencesValue( 'INTERWIKIPLUGIN_RULESTOPIC' ) || 'InterWikis';
     ( $interWeb, $interTopic ) =
       TWiki::Func::normalizeWebTopicName( $interWeb, $interTopic );
     if( $interTopic =~ s/^(.*)\.// ) {
@@ -99,6 +104,7 @@ sub initPlugin {
     return 1;
 }
 
+# =========================
 sub _map {
     my( $site, $url, $tooltip ) = @_;
     if( $site ) {
@@ -108,6 +114,7 @@ sub _map {
     return '';
 }
 
+# =========================
 sub preRenderingHandler {
     # ref in [[ref]] or [[ref][
     $_[0] =~ s/(\[\[)$sitePattern:$pagePattern(\]\]|\]\[[^\]]+\]\])/_link($1,$2,$3,$4)/geo;
@@ -115,6 +122,7 @@ sub preRenderingHandler {
     $_[0] =~ s/(^|[\s\-\*\(])$sitePattern:$pagePattern(?=[\s\.\,\;\:\!\?\)\|]*(\s|$))/_link($1,$2,$3)/geo;
 }
 
+# =========================
 sub _link {
     my( $prefix, $site, $page, $postfix ) = @_;
 
@@ -166,4 +174,5 @@ sub _link {
     return $text;
 }
 
+# =========================
 1;

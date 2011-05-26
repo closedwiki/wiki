@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1288937457" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1306385127" format="1.1" version="$Rev$"}%
 ---+!! Interwiki Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -17,11 +17,13 @@ The <nop>%TOPIC% links ==ExternalSite:Page== text to external sites based on ali
 
 ---++ Syntax Rules
 
-   * Enter ==ExternalSite:Page== to create a link that points to the ==Page== on the ==ExternalSite== server.
+   * Enter ==ExternalSite:Page== to create a link that points to the ==Page== on the ==ExternalSite== server. For example, type =RFC<nop>:2397= to get RFC:2397.
    * Enter ==[<nop>[ExternalSite:Page][any label]]== to specify a custom label.
    * All ==ExternalSite== aliases are defined in the %SYSTEMWEB%.InterWikis topic.
-   * Add and edit aliases in %SYSTEMWEB%.InterWikis.
-   * Each entry must be of format: <br /> ==| External site alias | URL | Tooltip help text |==.
+   * Optionally, the ==Page== can be enclosed in single quotes or double quotes. Use quotes if your ==Page== contains spaces or other special characters. Links of quoted pages are URL encoded. Example: ==Photos:"San Francisco Trip 2011"==.
+   * Add and edit aliases in %SYSTEMWEB%.InterWikis (or the one specified in the =INTERWIKIPLUGIN_RULESTOPIC= setting).
+   * Each entry must be of format: <br />
+     ==| External site alias | URL | Tooltip help text |==
    * Site aliases must start with an upper case letter and may contain alphanumeric letters.
    * The URL and Tooltip Text may contain optional ==$page== variables; the variable gets expanded to the page name.
    * %H% For TWiki sites, both the *web* and the *topic* have to be specified: ==<nop>TWikisite:Webname/<nop>SomePage==
@@ -29,13 +31,10 @@ The <nop>%TOPIC% links ==ExternalSite:Page== text to external sites based on ali
 
 ---++ <nop>%TOPIC% Settings
 
-Plugin settings are stored as Preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
-
-   * One-line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Link ==ExternalSite:Page== text to external sites based on aliases defined in a rules topic
+This plugin can be configured with preferences settings in [[%LOCALSITEPREFS%]] (site level), a WebPreferences (web level) or in a topic (page level). Do not change the settings here, they are here only to illustrate the default values. To overload, copy the settings to one of the aforementioned topics.
 
    * Link rules topic name: (default is %SYSTEMWEB%.InterWikis)
-      * Set RULESTOPIC = 
+      * Set INTERWIKIPLUGIN_RULESTOPIC = InterWikis
 
    * Inter-link format, with variables:
      | $site | Site alias |
@@ -43,7 +42,7 @@ Plugin settings are stored as Preferences variables. To reference a plugin setti
      | $url | Site URL (might contain $page) |
      | $label | Equal to $site:$page |
      | $tooltip | Tooltip message |
-      * Set INTERLINKFORMAT = <a href="$url" title="$tooltip" class="interwikiLink"><noautolink>$label</noautolink></a>
+      * Set INTERWIKIPLUGIN_INTERLINKFORMAT = <a href="$url" title="$tooltip" class="interwikiLink"><noautolink>$label</noautolink></a>
 
 ---++ Plugin Installation Instructions
 
@@ -59,11 +58,16 @@ __%X% Note:__ This plugin is included in the TWiki distribution package. You do 
 
 ---++ Plugin Info
 
+   * One-line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Link ==ExternalSite:Page== text to external sites based on aliases defined in a rules topic
+
 |  Plugin Author: | TWiki:Main/AndreaSterbini, TWiki:Main/PeterThoeny |
-|  Copyright: | &copy; 2001-2009 Andrea Sterbini,%BR% &copy; 2001-2010 Peter Thoeny ([[http://www.twiki.net/][Twiki, Inc.]]),%BR% &copy; 2001-2010 TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2001-2009 Andrea Sterbini,%BR% &copy; 2001-2011 Peter Thoeny ([[http://www.twiki.net/][Twiki, Inc.]]),%BR% &copy; 2001-2011 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-05-25: | TWikibug:Item6731: Small code fixes; documentation of Timothe's enhancements -- TWiki:Main.PeterThoeny |
+|  2011-05-25: | TWikibug:Item6731: Allow quotes in page pattern, and URL-encode quoted page patterns -- TWiki:Main.TimotheLitt |
 |  2010-07-12: | TWikibug:Item6521 - add ~ and % to allowed characters in page part of Site:page link |
 |  2010-06-23: | TWikibug:Item6503 - fix TWiki.org specific !TWiki:Web.Topic interwiki links to have .../view/Web/Topic type URLs |
 |  2010-05-15: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
