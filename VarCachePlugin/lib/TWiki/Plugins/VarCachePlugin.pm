@@ -19,6 +19,7 @@
 
 # =========================
 package TWiki::Plugins::VarCachePlugin;
+use strict;
 
 # =========================
 our $VERSION = '$Rev$';
@@ -28,7 +29,11 @@ our $RELEASE = '2011-05-24';
 our $SHORTDESCRIPTION = 'Cache TWiki variables in selected topics for faster page rendering';
 our $NO_PREFS_IN_TOPIC = 1;
 our $pluginName = 'VarCachePlugin';  # Name of this Plugin
-our $web, $topic, $user, $installWeb, $debug;
+our $web;
+our $topic;
+our $user;
+our $installWeb;
+our $debug;
 
 # =========================
 sub initPlugin
@@ -82,7 +87,7 @@ sub afterCommonTagsHandler
         if( $save ) {
             # update cache
             TWiki::Func::saveFile( $cacheFilename, $_[0] );
-            $msg = _formatMsg( $_[2], $_[1], $tag );
+            my $msg = _formatMsg( $_[2], $_[1], $tag );
             $_[0] =~ s/%--VARCACHE\:.*?--%/$msg/go;
 
             # cache addToHEAD info
@@ -101,7 +106,7 @@ sub afterCommonTagsHandler
         } else {
             # read cache
             my $text = TWiki::Func::readFile( $cacheFilename );
-            $msg = _formatMsg( $_[2], $_[1], $tag );
+            my $msg = _formatMsg( $_[2], $_[1], $tag );
             $msg =~ s/\$age/_formatAge($age)/geo;
             $text =~ s/%--VARCACHE.*?--%/$msg/go;
             $_[0] = $text;
