@@ -21,16 +21,14 @@
 package TWiki::Plugins::VarCachePlugin;
 
 # =========================
-use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-        $debug $NO_PREFS_IN_TOPIC
-    );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-05-24';
 
-$VERSION = '$Rev$';
-$RELEASE = '2011-05-24';
-$NO_PREFS_IN_TOPIC = 1;
-
-$pluginName = 'VarCachePlugin';  # Name of this Plugin
+# =========================
+our $SHORTDESCRIPTION = 'Cache TWiki variables in selected topics for faster page rendering';
+our $NO_PREFS_IN_TOPIC = 1;
+our $pluginName = 'VarCachePlugin';  # Name of this Plugin
+our $web, $topic, $user, $installWeb, $debug;
 
 # =========================
 sub initPlugin

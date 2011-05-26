@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1306222740" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1306382349" format="1.1" version="$Rev$"}%
 ---+!! Variable Cache Plugin 
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -85,8 +85,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2004-2011, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-05-24 |
+|  Plugin Version: | 2011-05-25 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-05-25: | TWikibug:Item6701: Small code refactor; adding $SHORTDESCRIPTION that was missing in previous release |
 |  2011-05-24: | TWikibug:Item6730: Move cache data from pub directory to working directory; Use proper umask for directories created; Fix to make it better run under mod_perl; Support abbreviated %<nop>VARCACHE% syntax; Possible to specify a refresh of 0 (meaning infinite) -- TWiki:Main.TimotheLitt |
 |  2011-05-01: | TWikibug:Item6701: Doc improvements |
 |  2010-04-25: | TWikibug:Item6433: Doc fix: Changing TWIKIWEB to SYSTEMWEB |
