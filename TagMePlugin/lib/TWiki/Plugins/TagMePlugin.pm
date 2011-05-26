@@ -28,7 +28,7 @@ package TWiki::Plugins::TagMePlugin;
 use strict;
 
 # =========================
-our $VERSION    = '1.7';
+our $VERSION    = '1.8';
 our $RELEASE    = '2011-05-25';
 
 # =========================
