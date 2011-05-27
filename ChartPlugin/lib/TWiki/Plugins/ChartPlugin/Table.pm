@@ -1,7 +1,6 @@
 # ChartPlugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004-2011 Peter Thoeny, Peter[at]Thoeny.org
-# Copyright (C) 2008-2011 TWiki Contributors
+# Copyright (C) 2004-2010 Peter Thoeny, Peter@Thoeny.org
 # Plugin written by http://TWiki.org/cgi-bin/view/Main/TaitCyrus
 #
 # For licensing info read LICENSE file in the TWiki root.
@@ -285,6 +284,7 @@ sub getData {
 		    foreach my $i (1..$maxDataLen) {
 			push(@{$rows[$rowbase]}, $range->{text});
 		    }
+		    $rh = 1;
 		} else {
 		    my $rs = abs($range->{endCol} - $range->{startCol}) + 1;
 		    $rh = $rs if ($rs > $rh);
@@ -310,6 +310,7 @@ sub getData {
 		    foreach my $i (1..$maxDataLen) {
 			push(@{$rows[$rowbase]}, $range->{text});
 		    }
+		    $rh = 1;
 		} else {
 		    my $rs = abs($range->{endRow} - $range->{startRow}) + 1;
 		    $rh = $rs if ($rs > $rh);
@@ -332,7 +333,8 @@ sub getData {
 		}
             }
         } ## end foreach my $range (@$set)
-            # Start the next dataset on a new row
+
+	# Start the next dataset on a new row
         $rowbase += $rh;
     } ## end foreach my $set (@ranges)
 

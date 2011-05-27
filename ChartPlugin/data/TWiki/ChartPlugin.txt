@@ -282,8 +282,9 @@ If the required parameters are not defined, then an error message is returned or
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.TaitCyrus |
 |  Copyright: | &copy; 2002-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]  <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-05-13 (v%$VERSION%) |
+|  Plugin Version: | 2011-05-27 (v%$VERSION%) |
 |  Change History: | <!-- specify latest version first --> |
+|  2011-05-27: | TWikibug:Item6735: Fix bug with constant data -- TWiki:Main.TaitCyrus |
 |  2011-05-13: | TWikibug:Item6701: Doc improvements; use transparent background for sparkline examples -- TWiki:Main.PeterThoeny |
 |  2011-05-13: | <ul><li> TWikibug:Item6720: Allow support for =transparent= to be used in =colors= and =bgcolor= </li></ul> -- TWiki:Main.TaitCyrus |
 |  2011-05-11: | <ul><li> TWikibug:Item6716: Add ability to support constant values in addtion to spreadsheet ranges.</li><li> TWikibug:Item6717: Fix bug with =area= colors when =data2= is used.</li><li> TWikibug:Item6718: Add new types: =sparkline=, =sparkbar=, and =sparkarea= </li><li> TWikibug:Item6719: Retool how bar widths/spaces are used/calculated so they are now proportional instead of fixed sizing</li></ul> -- TWiki:Main.TaitCyrus |
