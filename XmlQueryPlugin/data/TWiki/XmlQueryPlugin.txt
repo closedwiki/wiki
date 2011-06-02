@@ -492,7 +492,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PatrickDiamond |
 |  Copyright: | &copy; 2004-2006 TWiki:Main.PatrickDiamond <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-04-10 |
+|  Plugin Version: | 2011-06-02 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  2011-06-02: | TWikibug:Item6743: Fixed XInclude error problem with VERSION string  -- TWiki:Main.DipuDeshmukh |
 |  2011-04-10: | TWikibug:Item6638: Doc improvements -- TWiki:Main.PeterThoeny |
