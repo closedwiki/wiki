@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305356365" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1306978197" format="1.1" version="$Rev$"}%
 ---+!! Chart Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
@@ -93,7 +93,7 @@ The =%<nop>CHART{...}%= variable gets expanded to an image representing the char
          | ==R2:C1== | ==R2:C2== | ==R2:C3== | ==R2:C4== |
    * A range of table cells is defined by two cell addresses separated by ==".."==. For example, "row 1-20, column 3" is: ==R1:C3..R20:C3== and "row 15-5, column 2" is: ==R15:C2..R5:C2==
    * Ranges can be discontinuous. Discontinous ranges are joined using =="+"== or ==","==. For example: ==R4:C1..R5:C2+R9:C1..R15:C2==.
-   * When you are specifying datasets, you specify the range so that you have one data set per row (column). You can also specify multiple data sets using discontinuous blocks of cells; for example, ==R4:C1..R5:C2,R9:C1..R10:C2== specifies *4* data sets: R4:C1..R4:C2, R5:C1..R5:C2, R9:C1..R9:C15 and R10:C1..R10:C2
+   * When you are specifying datasets, you specify the range so that you have one data set per row (column). You can also specify multiple data sets using discontinuous blocks of cells; for example, ==R4:C1..R5:C2,R9:C1..R10:C2== specifies *4* data sets: R4:C1..R4:C2, R5:C1..R5:C2, R9:C1..R9:C2 and R10:C1..R10:C2
    * It is possible to specify a constant value instead of a range of table cells.  For example: ==R1:C3..R20:C3,0== as a =data= or =data2= value would create a data set with the constant value = =0= which could be used to highlight the zero line when data is both negative and positive, or ==R1:C1..R1:C3,0== as a =datalegend= value would set the legend of the 4th data set = =0=.
    * ==+== has higher precedence than ==,==
    * All parameters ending with =2= (like: =data2= and =ylabel2=) are relative to the right Y axis.  The default is relative to the left Y axis.
