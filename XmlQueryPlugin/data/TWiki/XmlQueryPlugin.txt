@@ -448,8 +448,8 @@ To learn more about XML and XSLT try the following online resources
    * The result is returned.
 
 *Notes on Plugin operation*
-   * The above caching schmea makes the use of TWiki variables and includes etc embedded into the XSLT a problem. If you do this it is best to switch off caching. To avoid having to do this pass the TWiki variables etc into the XSLT as parameters.
-   * The caching schema unfortunality doesn't cache the most expensive part of the XSLT processing. The parsing of the XML. What this means is that when parameters to the XSLT are changed the XML has to be reparsed :( . The reason for this is that the serialize function on <nop>LibXML gives a result which is no quicker to load than the original XML text.
+   * The above caching scheme makes the use of TWiki variables and includes etc embedded into the XSLT a problem. If you do this it is best to switch off caching. To avoid having to do this pass the TWiki variables etc into the XSLT as parameters.
+   * The caching schema unfortunately doesn't cache the most expensive part of the XSLT processing. The parsing of the XML. What this means is that when parameters to the XSLT are changed the XML has to be reparsed :( . The reason for this is that the serialize function on <nop>LibXML gives a result which is no quicker to load than the original XML text.
 
 ---++ Plugin Requirements
 
@@ -494,6 +494,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-04-10 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-06-02: | TWikibug:Item6743: Fixed XInclude error problem with VERSION string  -- TWiki:Main.DipuDeshmukh |
 |  2011-04-10: | TWikibug:Item6638: Doc improvements -- TWiki:Main.PeterThoeny |
 |  2011-03-14: | TWikibug:Item6663: Remove hardcoded folder reference for Windows, use TWiki:Plugins.DatabaseContrib to provide connection services to the database -- TWiki:Main.DipuDeshmukh |
 |  16th Aug 2006: | removed unsafe plugin preferences | 

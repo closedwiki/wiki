@@ -64,7 +64,7 @@ BEGIN {
     # see Plugin documentation for more info on this
     $initialized = 0;
     $VERSION = '$Rev$';
-    $RELEASE = '2011-03-14';
+    $RELEASE = '2011-06-02';
     $debug   = 0;
     $cache   = undef;
 }
@@ -139,6 +139,12 @@ sub initPlugin {
 	       $xmldir      = '/var/tmp/twiki_xml';
       }
     }
+
+    # clean up VERSION string so it does not cause XINCLUDE error (bug #6743)
+
+    $VERSION =~ s/://g ;	# remove all colons
+    $VERSION =~ s/\s*//g ;	# remove all spaces
+
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug(
