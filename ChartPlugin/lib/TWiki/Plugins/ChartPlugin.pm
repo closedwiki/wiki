@@ -274,7 +274,7 @@ sub _make_filename {
 
 # This routine returns an red colored error message.
 sub _make_error {
-    my ($this, $msg) = @_;
+    my ($this, $msg, $customError) = @_;
 
     my $showError = $this->{showerror};
     if ($showError eq "image") {
@@ -296,7 +296,11 @@ sub _make_error {
 	$chart->setFileDir($dir);
 	$chart->setFileName($filename);
 	$chart->setTitle($msg);
-	$chart->makeError("ChartPlugin error: $msg");
+	if ($customError) {
+	    $chart->makeError("$msg");
+	} else {
+	    $chart->makeError("ChartPlugin error: $msg");
+	}
 
 	my $timestamp = time();
 	my $img = "<img src=\"%ATTACHURL%/$filename?t=$timestamp\" alt=\"Error seen\" />";
@@ -306,7 +310,12 @@ sub _make_error {
     } else {
 	$Text::Wrap::columns = 40;
 	my $numLines = my @lines = split(/\n/, Text::Wrap::wrap("", "", $msg));
-	my $ret = "<span width='300' style='color:red; white-space:nowrap;'>ChartPlugin error:<br/>";
+	my $ret;
+	if ($customError) {
+	    $ret = "<span width='300' style='color:red; white-space:nowrap;'><br/>";
+	} else {
+	    $ret = "<span width='300' style='color:red; white-space:nowrap;'>ChartPlugin error:<br/>";
+	}
 	foreach my $line (@lines) {
 	    $ret .= "$line<br/>";
 	}
@@ -344,6 +353,17 @@ sub _makeChart {
 
     # Make a chart object in which we will place user specified parameters
     my $chart = TWiki::Plugins::ChartPlugin::Chart->new();
+
+    # See if the user has specified a custom error msg when no data is
+    # seen.
+    my $errmsg_nodata = $this->_Parameters->getParameter("errmsg_nodata", undef);
+    if (defined($errmsg_nodata)) {
+	$chart->setErrMsg("nodata", "CUSTOM:$errmsg_nodata");
+    }
+    my $errmsg_nodata2 = $this->_Parameters->getParameter("errmsg_nodata2", undef);
+    if (defined($errmsg_nodata2)) {
+	$chart->setErrMsg("nodata2", "CUSTOM:$errmsg_nodata2");
+    }
 
     # See if the parameter 'name' is available.  This is a required
     # parameter.  If it is missing, then generate an error message.
@@ -444,7 +464,12 @@ sub _makeChart {
     my $tableName = $this->_Parameters->getParameter("table", 1);
     # Verify that the table name is valid.
     if (! $this->_tables->checkTableExists($tableName)) {
-        return $this->_make_error("parameter *table* is not valid table; the specified table '$tableName' does not exist.");
+	# As a special case, if the chart type is 'spark*', then it is OK
+	# for there to not be a table since the data could be specified
+	# inside of the 'data="...."' statement
+	if ($type !~ /spark(.*)/) {
+	    return $this->_make_error("parameter *table* is not valid table; the specified table '$tableName' does not exist.");
+	}
     }
 
     # See if the parameter 'title' is available.
@@ -738,7 +763,15 @@ sub _makeChart {
 
     # Create the actual chart.
     my $err = $chart->makeChart();
-    return $this->_make_error("chart error: name=$name: $err") if ($err);
+    if ($err) {
+	# If a user custom error msg, then just return it, else add some
+	# additional text to the error msg.
+	if ($err =~ m/^CUSTOM:(.*)/) {
+	    return $this->_make_error($1, 1);
+	} else {
+	    return $this->_make_error("chart error: name=$name: $err");
+	}
+    }
 
     # Get remaining parameters and pass to <img ... />
     my $options    = "";

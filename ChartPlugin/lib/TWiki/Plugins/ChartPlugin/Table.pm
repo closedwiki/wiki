@@ -245,8 +245,18 @@ sub _trim {
 # R2C1 R2C2 0
 # R6C3 R6C4 R6C5
 # R7C3 R7C5 R7C5
+# As a special case, handle the situation where ALL data is explicitly
+# specified inline with no SpreadSheetPlugin cell specifiers.
 sub getData {
     my ($this, $tableName, $spreadSheetSyntax, $dataOrientedVertically, $replicateConstants) = @_;
+    # Deal with the situation where all data is explicitly specified with
+    # no SpreadSheetPlugin cell specifiers.
+    if ($spreadSheetSyntax !~ m/R\d/) {
+	$spreadSheetSyntax =~ s/ //g;
+	my @result = split(/,/, $spreadSheetSyntax);
+	return [@result];
+    }
+
     my @selectedTable = $this->getTable($tableName);
     my @ranges = $this->getTableRanges($tableName, $spreadSheetSyntax, $dataOrientedVertically);
 

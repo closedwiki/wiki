@@ -140,6 +140,7 @@ The =%<nop>CHART{...}%= variable gets expanded to an image representing the char
 | =linewidth= | Width of data lines in pixel | Global =LINEWIDTH= setting |
 | =pointsize= | Size of data points in pixel | Global =POINTSIZE= setting |
 | =showerror= | Specify how any error messages are handled.  Possible values are:%BR%<ul><li> ="text"= -- all error messages are produced as regular (red) text</li><li> ="image"= -- all error message are placed inside of an image sized according to the size of the chart if there were no error.</li><li> ="none"= or ="no"= -- no error messages are produced.  HTML text of =&<nop>nbsp;= is returned</li></ul> | Global =SHOWERROR= setting |
+| =errmsg_nodata= and =errmsg_nodata2= | =errmsg_nodata=: Specify a custom error message when no data is available.  =errmsg_nodata2=: Specify a custom error message when no data in =data2= is available.%BR%These are useful when this plugin is charting data from %<nop>DBI_QUERY% and no data is returned from this query and you want your own custom error message instead of the generic plugin error message. | Default plugin error message. |
 | (other parameters) | Other parameters are passed on to the =img= tag. Useful to add additional image parameters like =align="right"= | None |
 
 __Note:__ To support legacy syntax, =datatype= maps to =subtype=, =arealine= maps to =combo=.
@@ -282,8 +283,9 @@ If the required parameters are not defined, then an error message is returned or
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.TaitCyrus |
 |  Copyright: | &copy; 2002-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]  <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-06-01 (v%$VERSION%) |
+|  Plugin Version: | 2011-06-02 (v%$VERSION%) |
 |  Change History: | <!-- specify latest version first --> |
+|  2011-06-02: | <ul><li> TWikibug:Item6740: Add new parameters =errmsg_nodata= and =errmsg_nodata2= providing the ability to specify a custom error message when there is no data to chart.</li><li> TWikibug:Item6742: Fixed =spark= data handing all inline data and no data from a table</li></ul> -- TWiki:Main.TaitCyrus |
 |  2011-06-01: | TWikibug:Item6741: Minor doc fix -- TWiki:Main.EnriqueCadalso |
 |  2011-05-27: | TWikibug:Item6735: Fix bug with constant data -- TWiki:Main.TaitCyrus |
 |  2011-05-13: | TWikibug:Item6701: Doc improvements; use transparent background for sparkline examples -- TWiki:Main.PeterThoeny |

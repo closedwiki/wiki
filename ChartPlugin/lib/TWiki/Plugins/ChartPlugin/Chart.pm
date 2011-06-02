@@ -234,6 +234,8 @@
 #                       - Set whether a black line is drawn around bars
 #    getShowBarBorder()
 #                       - Get the bar border flag
+#    setErrMsg($type,$msg)- Specify a custom error msg when error of $type seen.
+#    getErrMsg($type)   - Get the custom error msg for error $type
 
 # =========================
 package TWiki::Plugins::ChartPlugin::Chart;
@@ -311,6 +313,7 @@ use POSIX;
     setBarSpaceUnits getBarSpaceUnits
     setBarWidthUnits getBarWidthUnits
     setShowBarBorder getShowBarBorder
+    setErrMsg getErrMsg
     );
 
 use strict;
@@ -357,6 +360,8 @@ sub new {
     $this->setNumDataSets($RIGHT, 0);
     $this->setNumYDigits(0);
     $this->setNumXDigits(0);
+    $this->setErrMsg("nodata", "Error: Number of data points needs to be > 1");
+    $this->setErrMsg("nodata2", "Error: Number of data points for data2 needs to be > 1");
     return $this;
 } ## end sub new
 
@@ -675,6 +680,8 @@ sub setBarWidthUnits {my ($this, $units) = @_; $$this{BAR_WIDTH_UNITS} = $units}
 sub getBarWidthUnits {my ($this) = @_; return $$this{BAR_WIDTH_UNITS}}
 sub setShowBarBorder {my ($this, $flag) = @_; $$this{BAR_BORDER_FLAG} = $flag}
 sub getShowBarBorder {my ($this) = @_; return $$this{BAR_BORDER_FLAG}}
+sub setErrMsg {my ($this, $type, $msg) = @_; $$this{"ERROR_MSG_$type"} = $msg}
+sub getErrMsg {my ($this, $type) = @_; return $$this{"ERROR_MSG_$type"}}
 
 # Make sure colors are defined for each data set on each Y axis
 sub computeFinalColors {
@@ -903,8 +910,8 @@ sub makeChart {
     my @numDataPoints;
     $numDataPoints[$LEFT] = $this->getNumDataPoints1();
     $numDataPoints[$RIGHT] = $this->getNumDataPoints2();
-    return "Error: Number of data points needs to be > 1" if ($numDataPoints[$LEFT] <= 1);
-    return "Error: Number of data points for data2 needs to be > 1" if ($isData2Data && $numDataPoints[$RIGHT] <= 1);
+    return $this->getErrMsg("nodata") if ($numDataPoints[$LEFT] <= 1);
+    return $this->getErrMsg("nodata2") if ($isData2Data && $numDataPoints[$RIGHT] <= 1);
 
     # Calculate the colors that will be needed for the various lines and
     # areas figuring out which color is needed when and also dealing with

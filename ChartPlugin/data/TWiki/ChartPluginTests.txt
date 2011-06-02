@@ -416,6 +416,8 @@ This table is used for testing when both =data= and =data2= are used
    * Set errorTest17 = name='errorTest17' data='R2:C4..R7:C7' legend='R1:C4' width='200' height='200' showerror='image'
    * Set errorTest18 = name='errorTest18' type='combo' subtype='line sparkline' data='R2:C4..R7:C4,R2:C5..R7:C5' width='200' height='200'
    * Set errorTest19 = name='errorTest19' type='sparkbar' subtype='line bar' data='R2:C4..R7:C4' width='200' height='200'
+   * Set errorTest20 = name='errorTest20' data='R2:C4..R2:C4' data2='R2:C4..R2:C4' errmsg_nodata="No data available to chart"
+   * Set errorTest21 = name='errorTest21' data='R2:C4..R7:C4' data2='R2:C4..R2:C4' errmsg_nodata2="No data2 data available to chart"
 
 -->
 
@@ -684,6 +686,8 @@ This table is used for testing when both =data= and =data2= are used
 | Same =legend= error as above, but show the error inside of an image by setting =showerror='image'=. Also, the image size will be different since =width= and =height= have been specified.  %BR% =%<nop>CHART{%errorTest17%}%= | <nop>ChartPlugin error: parameter *legend* contains an invalid value 'R1:C4' since it specifies 1 legends and there are 4 data sets. | %CHART{%errorTest17%}% |
 | Mixing a regular =line= with =sparkline=. | <nop>ChartPlugin error: unkown subtypes: sparkline. | %CHART{%errorTest18%}% |
 | Mixing a regular =line= with =sparkline=. | <nop>ChartPlugin error: subtype can not be used when type = 'sparkbar' | %CHART{%errorTest19%}% |
+| Show custom error message%BR% =%<nop>CHART{%errorTest20%}%= | Should see a custom user error msg about "No data available to chart". | %CHART{%errorTest20%}% |
+| Show custom error message%BR% =%<nop>CHART{%errorTest21%}%= | Should see a custom user error msg about "No data2 data available to chart". | %CHART{%errorTest21%}% |
 
 -- __Contributors:__ TWiki:Main/TaitCyrus, TWiki:Main/PeterThoeny - 2010-04-07
 -- Updated: TWiki:Main/TaitCyrus - 2011-04-25
