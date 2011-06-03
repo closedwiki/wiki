@@ -27,8 +27,8 @@ use strict;
 use vars qw( $VERSION $RELEASE $debug $pluginName );
 use vars qw( $savedAlready $defaultKeepPars $defaultComment ); 
 
-$VERSION = '$Rev: 11069$';
-$RELEASE = '2010-08-01';
+$VERSION = '$Rev$';
+$RELEASE = '2011-06-03';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'AttachContentPlugin';
@@ -53,14 +53,51 @@ sub initPlugin {
 =pod
 
 ---++ commonTagsHandler($text, $topic, $web )
+   * =$text= - text to be processed
+   * =$topic= - the name of the topic in the current CGI query
+   * =$web= - the name of the web in the current CGI query
+   * =$included= - Boolean flag indicating whether the handler is invoked on an included topic
+   * =$meta= - meta-data object for the topic MAY BE =undef=
+This handler is called by the code that expands %<nop>TAGS% syntax in
+the topic body and in form fields. It may be called many times while
+a topic is being rendered.
 
-Only implemented to remove the plugin tags from topic view
+For variables with trivial syntax it is far more efficient to use
+=TWiki::Func::registerTagHandler= (see =initPlugin=).
+
+Plugins that have to parse the entire topic content should implement
+this function. Internal TWiki
+variables (and any variables declared using =TWiki::Func::registerTagHandler=)
+are expanded _before_, and then again _after_, this function is called
+to ensure all %<nop>TAGS% are expanded.
+
+__NOTE:__ when this handler is called, &lt;verbatim> blocks have been
+removed from the text (though all other blocks such as &lt;pre> and
+&lt;noautolink> are still present).
+
+__NOTE:__ meta-data is _not_ embedded in the text passed to this
+handler. Use the =$meta= object.
+
+*Since:* $TWiki::Plugins::VERSION 1.000
+Implemented to remove the plugin tags from topic view, and also save the attachment
 
 =cut
 
 sub commonTagsHandler {
-    $_[0] =~ s/%STARTATTACH{.*?}%//gs;
-    $_[0] =~ s/%ENDATTACH%//gs;
+    # do not uncomment, use $_[0], $_[1]... instead
+    ### my ( $text, $topic, $web, $meta ) = @_;
+
+    my $page = $_[0];
+     $_[0] =~ s/%STARTATTACH{.*?}%//gs;
+     $_[0] =~ s/%ENDATTACH%//gs;
+
+    TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
+    return if $savedAlready;
+    $savedAlready = 1;
+
+    $page =~ s/%STARTATTACH{(.*?)}%(.*?)%ENDATTACH%/&handleAttach($1, $2, $_[2], $_[1] )/ges;
+    $savedAlready = 0;
+
 }
 
 =pod
@@ -82,7 +119,7 @@ __Since:__ TWiki::Plugins::VERSION = '1.020'
 =cut
 
 sub afterSaveHandler {
-    # do not uncomment, use $_[0], $_[1]... instead
+# do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web, $error, $meta ) = @_;
 
     my $query = TWiki::Func::getCgiQuery();
@@ -99,6 +136,7 @@ sub afterSaveHandler {
 
     $_[0] =~ s/%STARTATTACH{(.*?)}%(.*?)%ENDATTACH%/&handleAttach($1, $2, $_[2], $_[1])/ges;
     $savedAlready = 0;
+   
 }
 
 =pod
@@ -126,6 +164,7 @@ sub handleAttach {
     my %params = TWiki::Func::extractParameters($attrs);
 
     my $attrFileName = $params{_DEFAULT};
+    
     return '' unless $attrFileName;
     
     my $web = $params{'web'} || $inWeb;
@@ -139,6 +178,7 @@ sub handleAttach {
     } else {
         $keepPars = $defaultKeepPars;
     }
+    TWiki::Func::writeDebug( "- ${pluginName}::handleAttach( attrs = $attrs, web = $web, topic = $topic, hide= $hide )" ) if $debug;
     
     my $workArea = TWiki::Func::getWorkArea($pluginName);
 
@@ -174,8 +214,10 @@ sub handleAttach {
 	    $content =~ s/\[\[.+?\]\[(.+?)\]\]/$1/go;
 	    $content =~ s/\[\[(.+?)\]\]/$1/go;
     }
+      # Change twiki mangling of % back
+      $content =~ s/&#37;/%/go;
 
-    TWiki::Func::writeDebug("tempName: $tempName") if $debug;
+    TWiki::Func::writeDebug("${pluginName}::handleAttach, tempName: $tempName") if $debug;
     
     # Saving temporary file
     TWiki::Func::saveFile($tempName, $content);

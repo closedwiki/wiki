@@ -19,7 +19,7 @@ This plugin puts any text between a =%<nop>STARTATTACH{"filename"}%= and =%<nop>
 
 Pass filename, topic, web or comment as parameters.
 
-The current version only refreshes the attachment when the topic is saved. Obviously this means that the attachment can get out of synch if, for example, it explicitly or implicitly refers to other topics.
+The plugin refreshes the attachment when the topic is saved, or viewed. 
 
 This plugin is written specifically to be able to put css into topic(s) and still be able to have efficient stylesheets: i.e., without the overhead of TWiki processing. The feature can be used for many other things where you want TWiki to generate a plain text file a smart way. %BR%
 For example: write a =SEARCH= in a topic and save the search results to an XML file. The XML data can be used for efficient look-up.
@@ -86,6 +86,8 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
+You may also choose to install this plugin using the "Find More Extensions" link on the =configure= script of your TWiki installation, or do so manually using the instructions below.
+
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
@@ -101,6 +103,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-06-03: | TWikibug:Item6745 - enhancement to allow attach on Topic view, not just on save -- TWiki:Main.DipuDeshmukh|
 |  2010-07-27: | TWikibug:Item6530 - doc fixes; changing TWIKIWEB to SYSTEMWEB |
 |  16 Apr 2007 (2.2.0) | Kenneth Lavrsen: Add added =keeppars= parameter. Settings change to being plugin settings only. Removal of plugin tags fixed so text between is still visible. |
 |  15 Apr 2007 (2.1.0) | Arthur Clemens: added parameters =web=, =topic=, =comment= and =hide=. Plugin tags are removed from view. Added configurable default comment. |
