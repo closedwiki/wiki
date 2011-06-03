@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (c) 2006 by Meredith Lesly, Kenneth Lavrsen
-# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
+# Copyright (C) 2006-2011 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 #
@@ -24,14 +24,16 @@ use strict;
 
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package
-use vars qw( $VERSION $RELEASE $debug $pluginName );
-use vars qw( $savedAlready $defaultKeepPars $defaultComment ); 
-
-$VERSION = '$Rev$';
-$RELEASE = '2011-06-03';
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-06-03';
 
 # Name of this Plugin, only used in this module
-$pluginName = 'AttachContentPlugin';
+our $pluginName = 'AttachContentPlugin';
+
+our $debug;
+our $savedAlready;
+our $defaultKeepPars;
+our $defaultComment;
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
@@ -61,25 +63,6 @@ sub initPlugin {
 This handler is called by the code that expands %<nop>TAGS% syntax in
 the topic body and in form fields. It may be called many times while
 a topic is being rendered.
-
-For variables with trivial syntax it is far more efficient to use
-=TWiki::Func::registerTagHandler= (see =initPlugin=).
-
-Plugins that have to parse the entire topic content should implement
-this function. Internal TWiki
-variables (and any variables declared using =TWiki::Func::registerTagHandler=)
-are expanded _before_, and then again _after_, this function is called
-to ensure all %<nop>TAGS% are expanded.
-
-__NOTE:__ when this handler is called, &lt;verbatim> blocks have been
-removed from the text (though all other blocks such as &lt;pre> and
-&lt;noautolink> are still present).
-
-__NOTE:__ meta-data is _not_ embedded in the text passed to this
-handler. Use the =$meta= object.
-
-*Since:* $TWiki::Plugins::VERSION 1.000
-Implemented to remove the plugin tags from topic view, and also save the attachment
 
 =cut
 
@@ -113,8 +96,6 @@ sub commonTagsHandler {
 This handler is called each time a topic is saved.
 
 __NOTE:__ meta-data is embedded in $text (using %META: tags)
-
-__Since:__ TWiki::Plugins::VERSION = '1.020'
 
 =cut
 
@@ -151,8 +132,6 @@ intopic WebHome
 
 inweb ''
 intopic ''
-
-
 
 =cut
 

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1280727549" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307138520" format="1.1" version="$Rev$"}%
 ---+!! Attach Content Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -99,12 +99,13 @@ You may also choose to install this plugin using the "Find More Extensions" link
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MeredithLesly, TWiki:Main.KennethLavrsen, TWiki:Main.ArthurClemens |
-|  Copyright: | &copy; 2006 TWiki:Main.MeredithLesly, %BR% &copy; 2006-2007 TWiki:Main.KennethLavrsen, %BR% &copy; 2007 TWiki:Main.ArthurClemens, %BR% &copy; 2006-2010 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2006 TWiki:Main.MeredithLesly, %BR% &copy; 2006-2007 TWiki:Main.KennethLavrsen, %BR% &copy; 2007 TWiki:Main.ArthurClemens, %BR% &copy; 2006-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-06-03: | TWikibug:Item6745 - enhancement to allow attach on Topic view, not just on save -- TWiki:Main.DipuDeshmukh|
-|  2010-07-27: | TWikibug:Item6530 - doc fixes; changing TWIKIWEB to SYSTEMWEB |
+|  2011-06-03: | TWikibug:Item6725: Change global package variables from "use vars" to "ours" -- TWiki:Main.PeterThoeny |
+|  2011-06-03: | TWikibug:Item6745: Enhancement to allow attach on Topic view, not just on save -- TWiki:Main.DipuDeshmukh |
+|  2010-07-27: | TWikibug:Item6530: Doc fixes; changing TWIKIWEB to SYSTEMWEB |
 |  16 Apr 2007 (2.2.0) | Kenneth Lavrsen: Add added =keeppars= parameter. Settings change to being plugin settings only. Removal of plugin tags fixed so text between is still visible. |
 |  15 Apr 2007 (2.1.0) | Arthur Clemens: added parameters =web=, =topic=, =comment= and =hide=. Plugin tags are removed from view. Added configurable default comment. |
 |  19 Oct 2006 (2.0) | TWiki:Main.KennethLavrsen<br />Fixed major security issue. Original version allowed /../ in the filename so files could be stored everywhere<br />Plugin now cleans up the its work area and no longer leaves temporary files<br />Temporary filenames made pseudo random to avoid race condition<br />Plugin now also removed nops and TML square bracket links<br />Attachment is no longer saved when uploading other files and changing attributes. |
