@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1289002431" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307221879" format="1.1" version="$Rev$"}%
 ---+!! !TWikiUserMappingContrib
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -51,7 +51,7 @@ It includes:
       * TWiki.NewUserTemplate
       * TWiki.UserForm
       * TWiki.TWikiUsersTemplate
-      * Main.UserHomepageHeader        
+      * Main.UserProfileHeader        
       * TWiki.TWikiUserSetting
       * Main.TWikiGroupTemplate        
 

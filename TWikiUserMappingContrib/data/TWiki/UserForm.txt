@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307218917" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307221911" format="1.1" version="$Rev$"}%
 ---+ User Form
 
 __Note:__ This is a maintenance topic, used by the TWiki administrator.
@@ -29,4 +29,4 @@ user form, then:
 
 __%X% Note:__ Please keep the %SYSTEMWEB%.TWikiRegistration form and this form definition in sync. When you update this form you need to edit/save the %SYSTEMWEB%.NewUserTemplate topic. This ensures that the fields are in the right order.
 
-__Related topics:__ %USERSWEB%.%WIKIUSERSTOPIC%, %USERSWEB%.PatternSkinUserViewTemplate, %SYSTEMWEB%.NewUserTemplate, %USERSWEB%.UserHomepageHeader, %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.TWikiRegistration
+__Related topics:__ %USERSWEB%.%WIKIUSERSTOPIC%, %USERSWEB%.PatternSkinUserViewTemplate, %SYSTEMWEB%.NewUserTemplate, %USERSWEB%.UserProfileHeader, %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.TWikiRegistration
