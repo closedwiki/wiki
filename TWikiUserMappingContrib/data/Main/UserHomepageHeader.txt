@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273956256" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307219771" format="1.1" version="$Rev$"}%
 ---+ Header of User Homepages
 
 __Note:__ This is a maintenance topic, used by the TWiki administrator.
@@ -7,10 +7,9 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 
 -----
 %STARTINCLUDE%
-%SEARCH{ "%BASETOPIC%" scope="topic" topic="%BASETOPIC%" nonoise="on" format="---+!! $formfield(FirstName) $formfield(LastName)$n()$n()| Organization: | <b> $formfield(OrganisationName) </b> |&nbsp;| Country: | <b> $formfield(Country) </b> |&nbsp;| Location: | <b> $formfield(Location) </b> |$n()| Telephone: | <b> $formfield(Telephone) </b> |&nbsp;| E-mail: | <b> $formfield(Email) </b> |" }%
-%TOC%
+%SEARCH{ "%BASETOPIC%" scope="topic" topic="%BASETOPIC%" nonoise="on" format="---+!! $formfield(FirstName) $formfield(LastName)$n()$n()| Department: | <b> $formfield(Department) </b> |&nbsp;| Organization: | <b> $formfield(Organization) </b> |&nbsp;| Location: | <b> $formfield(Location) </b> |$n()| Telephone: | <b> $formfield(Telephone) </b> |&nbsp;| Mobile: |<b> $formfield(Mobile) </b> |&nbsp;| E-mail: | <b> $formfield(Email) </b> |"
+}%
 %STOPINCLUDE%
 -----
 
 __Related topics:__ [[%WIKIUSERSTOPIC%]], [[%SYSTEMWEB%.UserForm][UserForm]], [[%SYSTEMWEB%.NewUserTemplate][NewUserTemplate]], [[%SYSTEMWEB%.TWikiRegistration][TWikiRegistration]], [[%SYSTEMWEB%.TWikiForms][TWikiForms]]
-
