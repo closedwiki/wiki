@@ -1,7 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2006 TWiki:Main.MagnusLewisSmith
-# Copyright (C) 2006-2010 TWikiContributors
+# Copyright (C) 2006-2011 TWikiContributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,14 +18,10 @@
 package TWiki::Plugins::DirectedGraphWebMapPlugin;
 
 # =========================
-use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
-    );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-06-04';
 
-$VERSION = '$Rev$';
-$RELEASE = '2010-09-07';
-
-$pluginName = 'DirectedGraphWebMapPlugin';  # Name of this Plugin
+our $pluginName = 'DirectedGraphWebMapPlugin';  # Name of this Plugin
 
 our %webmap; # $webmap{$baseTopic}{$targetTopic} = 1 if $baseTopic links to $targetTopic.  DOES NOT CROSS WEBS
 our $excludeSystem = 0;
@@ -40,6 +36,11 @@ our @systemTopics = qw(WebChanges
                        WebSearchAdvanced
                        WebStatistics
                        WebTopicList);
+our $web;
+our $topic;
+our $user;
+our $installWeb;
+our $debug;
 
 # =========================
 sub initPlugin
