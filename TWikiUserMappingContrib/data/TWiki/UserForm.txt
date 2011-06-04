@@ -1,33 +1,32 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273956409" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307218917" format="1.1" version="$Rev$"}%
 ---+ User Form
 
 __Note:__ This is a maintenance topic, used by the TWiki administrator.
 
-This form defines the form of the home pages of registered TWiki users listed
-in %USERSWEB%.%WIKIUSERSTOPIC%. *Do not edit this topic* - if you want to customise the
+This form defines the form of the user profile pages of registered TWiki users listed
+in %USERSWEB%.%WIKIUSERSTOPIC%. *Do not edit this topic* - if you want to customize the
 user form, then:
-   1 Take a copy of this topic and save it to %USERSWEB%.<nop>UserForm
-   1 Customise %USERSWEB%.<nop>UserForm
-   1 Take a copy of NewUserTemplate and save it to %USERSWEB%.<nop>NewUserTemplate
-   1 Modify %USERSWEB%.<nop>NewUserTemplate and change the form to select your new user form.
+   1 Take a copy of this topic and save it to <nop>%USERSWEB%.UserForm in the <nop>%USERSWEB% web
+   1 Customise <nop>%USERSWEB%.UserForm
+   1 Take a copy of NewUserTemplate and save it to <nop>%USERSWEB%.NewUserTemplate
+   1 Modify <nop>%USERSWEB%.NewUserTemplate and change the form to select your new user form.
 
 |*Name*  |*Type*  |*Size*  |*Values*  |*Tooltip message*  |*Attributes*  |
-| <nop>FirstName | text | 40 | | | |
-| <nop>LastName | text | 40 | | | |
-| <nop>OrganisationName | text | 40 | | | |
-| <nop>OrganisationURL | text | 40 | | | |
-| Profession | text | 40 | | | |
-| Country | text | 40 | | | |
-| State | text | 40 | | | |
-| Address | text | 40 | | | |
-| Location | text | 40 | | | |
-| Telephone | text | 40 | | | |
-| <nop>VoIP | text | 40 | | | |
-| <nop>InstantMessaging (IM) | textarea | 50x4 | | (One account per line, if several) | |
-| Email | text | 40 | | | |
-| <nop>HomePage | text | 40 | | | |
-| Comment | textarea | 50x6 | | | |
+| First Name | text | 60 | | | |
+| Last Name | text | 60 | | | |
+| Title | text | 60 | | | |
+| Email | text | 60 | | | |
+| Telephone | text | 60 | | | |
+| Mobile | text | 60 | | | |
+| Skype ID | text | 60 | | | |
+| Organization | text | 60 | | | |
+| Department | text | 60 | | | |
+| URL | text | 60 | | | |
+| Location | text | 60 | | | |
+| Country | text | 60 | | | |
+| Image | text | 60 | | Name of image attached to user the profile page (resize to 200 pixel width for best result) | |
+| Comment | textarea | 60x6 | | | |
 
 __%X% Note:__ Please keep the %SYSTEMWEB%.TWikiRegistration form and this form definition in sync. When you update this form you need to edit/save the %SYSTEMWEB%.NewUserTemplate topic. This ensures that the fields are in the right order.
 
-__Related topics:__ %USERSWEB%.%WIKIUSERSTOPIC%, %SYSTEMWEB%.UserViewTemplate, %SYSTEMWEB%.NewUserTemplate, %USERSWEB%.UserHomepageHeader, %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.TWikiRegistration
+__Related topics:__ %USERSWEB%.%WIKIUSERSTOPIC%, %USERSWEB%.PatternSkinUserViewTemplate, %SYSTEMWEB%.NewUserTemplate, %USERSWEB%.UserHomepageHeader, %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.TWikiRegistration
