@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307220633" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307221774" format="1.1" version="$Rev$"}%
 %TMPL:INCLUDE{"view"}%
 
-%TMPL:DEF{"formtop"}%%INCLUDE{UserHomepageHeader}%%TMPL:END%
+%TMPL:DEF{"formtop"}%%INCLUDE{UserProfileHeader}%%TMPL:END%
