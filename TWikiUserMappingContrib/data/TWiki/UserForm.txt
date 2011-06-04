@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307221911" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307229620" format="1.1" version="$Rev$"}%
 ---+ User Form
 
 __Note:__ This is a maintenance topic, used by the TWiki administrator.
@@ -12,20 +12,20 @@ user form, then:
    1 Modify <nop>%USERSWEB%.NewUserTemplate and change the form to select your new user form.
 
 |*Name*  |*Type*  |*Size*  |*Values*  |*Tooltip message*  |*Attributes*  |
-| First Name | text | 60 | | | |
-| Last Name | text | 60 | | | |
-| Title | text | 60 | | | |
-| Email | text | 60 | | | |
-| Telephone | text | 60 | | | |
-| Mobile | text | 60 | | | |
-| Skype ID | text | 60 | | | |
-| Organization | text | 60 | | | |
-| Department | text | 60 | | | |
-| URL | text | 60 | | | |
-| Location | text | 60 | | | |
-| Country | text | 60 | | | |
-| Image | text | 60 | | Name of image attached to user the profile page (resize to 200 pixel width for best result) | |
-| Comment | textarea | 60x6 | | | |
+| First Name | text | 60 | | First name of person | |
+| Last Name | text | 60 | | First name of person | |
+| Titles | text | 60 | | Titles or profession | |
+| Email | text | 60 | | E-mail address | |
+| Telephone | text | 60 | | Telephone number | |
+| Mobile | text | 60 | | Mobile number | |
+| Skype ID | text | 60 | | Skype ID | |
+| Organization | text | 60 | | Company, agency or educational institution | |
+| Department | text | 60 | | Department or group within organization | |
+| URL | text | 60 | | Website link of organization | |
+| Location | text | 60 | | Office location | |
+| Region | text | 60 | | State, province or region | |
+| Country | text | 60 | | Country | |
+| Image | text | 60 | | Name of image attached to the user profile page (for best result resize to 200 pixel width) | |
 
 __%X% Note:__ Please keep the %SYSTEMWEB%.TWikiRegistration form and this form definition in sync. When you update this form you need to edit/save the %SYSTEMWEB%.NewUserTemplate topic. This ensures that the fields are in the right order.
 
