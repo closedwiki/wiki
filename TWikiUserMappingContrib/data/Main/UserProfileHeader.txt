@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307263039" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307315799" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -17,7 +17,7 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
  }
 </style>
 <div style="padding: 10px 0 0 0">
-<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top"  class="profileBox" style="width: 200px;">
+<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top" class="profileBox" style="width: 200px;" rowspan="2">
 <img src="%PUBURLPATH%/%WEB%/%INCLUDINGTOPIC%/%FORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }%" width="200" />
 <div style="overflow: hidden; white-space: nowrap; line-height: 26px; width: 200px;">
 %ICON{mail}% %FORMFIELD{ "Email" topic="%INCLUDINGTOPIC%" }% &nbsp;
@@ -27,13 +27,24 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 </div>
 </td><td valign="top">
 <img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="20" height="1" />
-</td><td valign="top" class="profileBox">
+</td><td valign="top" colspan="3">
 <noautolink>
 ---+!! %FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }% %FORMFIELD{ "LastName" topic="%INCLUDINGTOPIC%" }%<span style="font-size: 70%">, %FORMFIELD{ "Titles" topic="%INCLUDINGTOPIC%" }%</span>
 </noautolink>
-|  Organization: | %FORMFIELD{ "Organization" topic="%INCLUDINGTOPIC%" }% ||  Location: | %FORMFIELD{ "Location" topic="%INCLUDINGTOPIC%" }% |
-|  Department: | %FORMFIELD{ "Department" topic="%INCLUDINGTOPIC%" }% ||  Region: | %FORMFIELD{ "Region" topic="%INCLUDINGTOPIC%" }% |
-|  URL: | %FORMFIELD{ "URL" topic="%INCLUDINGTOPIC%" }% ||  Country: | %FORMFIELD{ "Country" topic="%INCLUDINGTOPIC%" }% |
+</td></tr><tr><td></td><td valign="top" class="profileBox">
+<b>Info:</b>
+|  Organization: | %FORMFIELD{ "Organization" topic="%INCLUDINGTOPIC%" }% |
+|  Department: | %FORMFIELD{ "Department" topic="%INCLUDINGTOPIC%" }% |
+|  URL: | %FORMFIELD{ "URL" topic="%INCLUDINGTOPIC%" }% |
+|  Location: | %FORMFIELD{ "Location" topic="%INCLUDINGTOPIC%" }% |
+|  Region: | %FORMFIELD{ "Region" topic="%INCLUDINGTOPIC%" }% |
+|  Country: | %FORMFIELD{ "Country" topic="%INCLUDINGTOPIC%" }% |
+</td><td valign="top">
+<img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="20" height="1" />
+</td><td valign="top" class="profileBox" style="width: 200px;">
+<b>Tag cloud of <nop>%FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }%:</b>
+%BR%
+%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%SYSTEMWEB%/TagMeSearch?tag=$tag;by=%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%\" style=\"font-size:$size%\">$tag</a>" separator="&nbsp; "  minsize="80" maxsize="120" by="%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%" }%
 </td></tr></table>
 </div>
 %STOPINCLUDE%
