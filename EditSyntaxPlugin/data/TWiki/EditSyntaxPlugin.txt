@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1288412774" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307232610" format="1.1" version="$Rev$"}%
 ---+!! Edit Syntax Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -91,7 +91,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Change the plugin settings as needed
       * %X% For proper operation, tell TWiki to run this plugin _after_ the WYSIWYG editor: Add the =TinyMCEPlugin= to the ={PluginsOrder}= setting, such as: =SpreadSheetPlugin, !TinyMCEPlugin=
    * Test if the installation was successful:
-      * Enable the Mediawiki syntax with this setting in your home page:
+      * Enable the Mediawiki syntax with this setting in your user profile page:
          * =Set EDITSYNTAX = Mediawiki=
       * Edit a test topic that contains headings, bullets, *bold text* and _italic text_
          * You should see the content in Mediawiki syntax
@@ -111,10 +111,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2006-2010, TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2006-2011 TWiki:Main.PeterThoeny <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-10-29 (V1.1) |
+|  Plugin Version: | 2011-06-04 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-06-04: | TWikibug:Item6701: Small doc fix; change code from "use vars" to "ours" -- TWiki:Main.PeterThoeny |
 |  2010-10-29: | Fix to make this plugin coexist with new WYSIWYG editor in TWiki-4.2 and later |
 |  2006-07-09: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |

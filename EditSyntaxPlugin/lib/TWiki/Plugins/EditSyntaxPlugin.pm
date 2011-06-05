@@ -1,6 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006-2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2006-2011 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2008-2011 TWikiContributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,13 +18,15 @@
 package TWiki::Plugins::EditSyntaxPlugin;
 
 use strict;
-use vars qw( $VERSION $RELEASE $debug $pluginName $installWeb );
 
-$VERSION = 'V1.1 - $Rev$';
-$RELEASE = '2010-10-29';
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-06-04';
 
 # Name of this Plugin, only used in this module
-$pluginName = 'EditSyntaxPlugin';
+our $pluginName = 'EditSyntaxPlugin';
+
+our $debug;
+our $installWeb;
 
 # ================================================================
 sub initPlugin
