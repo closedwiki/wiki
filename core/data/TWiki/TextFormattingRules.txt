@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1289516436" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307235339" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Text Formatting
 
@@ -27,13 +27,11 @@ Being able to create links without any special formatting is a core TWiki featur
 
 ---+++ External Links
 
-   * =http://...=, =https://...=, =ftp://...=, =gopher://...=, =news://...=, =file://...=, =telnet://...=
-     and =mailto:...@...= are linked automatically.
+   * =http://...=, =https://...=, =ftp://...=, =gopher://...=, =news://...=, =file://...=, =telnet://...= and =mailto:...@...= are linked automatically.
+
+   * Write =[<nop>[URL][label]]= to get an external link with a descriptive text for the link, such as =[<nop>[http://google.com/][Google home page]]= to get [[http://google.com/][Google home page]].
 
    * E-mail addresses like =name@domain.com= are linked automatically.
-
-   * =[<nop>[Square bracket rules]]= let you easily create [[#SquareBrackets][non-WikiWord links]].
-      * You can also write =[<nop>[http://yahoo.com Yahoo home page]]= as an easier way of doing external links with descriptive text for the link, such as [[http://yahoo.com/ Yahoo home page]].
 
 ---++ TWiki Variables
 
