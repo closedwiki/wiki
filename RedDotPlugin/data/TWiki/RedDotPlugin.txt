@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1280217529" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307245998" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -42,7 +42,7 @@ Furthermore, the RedDotPlugin respects the =WHITEBOARD= topic variable. If you a
 ---++ Examples
 
    * %TOPIC%%REDDOT%  will get a red dot only if you are in the %USERSWEB%.TWikiAdminGroup.
-      * %WIKIUSERNAME%%REDDOT{"%WIKIUSERNAME%"}% points to your homepage.
+      * %WIKIUSERNAME%%REDDOT{"%WIKIUSERNAME%"}% points to your profile page.
 
 ---++ Plugin Installation Instructions
 
@@ -58,11 +58,12 @@ Furthermore, the RedDotPlugin respects the =WHITEBOARD= topic variable. If you a
    * Set SHORTDESCRIPTION = Renders edit-links as little red dots
 -->
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright: | &copy; 2005-2008 Michael Daum http://michaeldaumconsulting.com, %BR% &copy; 2005-2010 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2005-2008 Michael Daum http://michaeldaumconsulting.com, %BR% &copy; 2005-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-07-27: | TWikibug:Item6530 - doc fixes; changing TWIKIWEB to SYSTEMWEB |
+|  2011-06-04: | TWikibug:Item6733: More Visual User Homepages - change terminology from "user homepage" to "user profile page" -- TWiki:Main.PeterThoeny |
+|  2010-07-27: | TWikibug:Item6530: Doc fixes; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  03 Jan 2008: | using TWiki-4 APIs to register tags; fixed default values for reddots |
 |  18 Sep 2006: | don't use private apis; removed endRenderingHandler: this plugin does not work on older twiki releases!; create cgi urls properly |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
