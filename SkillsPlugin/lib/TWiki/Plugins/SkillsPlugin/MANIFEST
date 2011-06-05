@@ -1,5 +1,6 @@
 # Release manifest for SkillsPlugin
 data/TWiki/SkillsAdminIntroduction.txt 0664 UI Topic
+data/TWiki/SkillsAdvancedSearch.txt 0664 UI Topic
 data/TWiki/SkillsPlugin.txt 0664 Plugin Topic
 data/TWiki/SkillsBrowseAll.txt 0664 UI Topic
 data/TWiki/SkillsCreateNewCategory.txt 0664 UI Topic

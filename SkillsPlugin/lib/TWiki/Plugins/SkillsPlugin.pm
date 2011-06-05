@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2007 - 2009 Andrew Jones, andrewjones86@googlemail.com
-# Copyright (C) 2007-2011 TWiki:TWiki.TWikiContributor
+# Copyright (C) 2008-2011 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,21 +24,14 @@ package TWiki::Plugins::SkillsPlugin;
 #require TWiki::Plugins::SkillsPlugin::SkillsStore;
 
 use strict;
-use vars qw(    $VERSION
-  $RELEASE
-  $NO_PREFS_IN_TOPIC
-  $SHORTDESCRIPTION
-  $pluginName
-  $doneHeads
-);
 
 # Plugin Variables
-$VERSION           = '$Rev$';
-$RELEASE           = '2011-01-17';
-$NO_PREFS_IN_TOPIC = 1;
-$SHORTDESCRIPTION =
-  'Allows users to list their skills, which can then be searched';
-$pluginName = 'SkillsPlugin';
+our $VERSION           = '$Rev$';
+our $RELEASE           = '2011-06-04';
+our $NO_PREFS_IN_TOPIC = 1;
+our $SHORTDESCRIPTION  = 'Allows users to list their skills, which can then be searched';
+our $pluginName = 'SkillsPlugin';
+our $doneHeads;
 
 # ========================= INIT
 sub initPlugin {

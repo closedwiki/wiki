@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1295336872" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307234510" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -111,10 +111,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.AndrewRJones |
-|  Copyright: | &copy; 2007 - 2009, TWiki:Main.AndrewRJones <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2007 - 2009, TWiki:Main.AndrewRJones <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-06-04: | TWikibug:Item6725: Change code from "use vars" to "our"; small doc fixes -- TWiki:Main.PeterThoeny |
 |  2011-01-17: | TWikibug:Item6530: Doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  05 Feb 2009 | Complete rewrite; more scaleable; better performace; can use special characters in skill names; can use templates to change output |
 |  14032 | Bugs:Item4209 - Initial release |
@@ -126,7 +127,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ %SEARCH{ "^Skills" scope="topic" type="regex" excludetopic="%TOPIC%" nonoise="on" format="[[$topic]]" separator=", " }%, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
 %META:FILEATTACHMENT{name="style.css" attr="h" comment="" date="1171245554" path="style.css" size="2317" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="skills_screenshot_thumb.png" attr="h" comment="" date="1171248289" path="skills_screenshot_thumb.png" size="48997" user="TWikiContributor" version="2"}%

@@ -1,20 +1,20 @@
-%META:TOPICINFO{author="TWikiContributor" date="1176297285" format="1.1" version="0"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307234539" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="SkillsPlugin"}%
----++ Display Users Skills On Their Home Pages
+---+ Display Users Skills on User Profile Pages
 
-This topic will show you how to get the users skills displayed on their home page using the TWikiTemplates system. An example is shown in the screen shot below. This example uses the default PatternSkin, and using an unchanged Main.PatternSkinUserViewTemplate.
+This topic will show you how to get the users skills displayed on their user profile page using the TWikiTemplates system. An example is shown in the screen shot below. This example uses the default PatternSkin, and using an unchanged %USERSWEB%.PatternSkinUserViewTemplate.
 
 <a href="%PUBURLPATH%/%WEB%/SkillsPlugin/skills_screenshot_full.png"><img src="%PUBURLPATH%/%WEB%/SkillsPlugin//skills_screenshot_thumb.png" alt="skills_screenshot_thumb.png" /></a>
 
-The topic you need to edit is [[%MAINWEB%.PatternSkinUserViewTemplate]].
+The topic you need to edit is [[%USERSWEB%.PatternSkinUserViewTemplate]].
 
----+++ Step 1.
+---++ Step 1.
 
-Firstly, add the following line to %MAINWEB%.PatternSkinUserViewTemplate. This needs to be anywhere between =%TMPL:INCLUDE{"view"}%= and =%TMPL:DEF{"formattop"}%=:
+Firstly, add the following line to %USERSWEB%.PatternSkinUserViewTemplate. This needs to be anywhere between =%TMPL:INCLUDE{"view"}%= and =%TMPL:DEF{"formattop"}%=:
 
 <verbatim>%TMPL:DEF{"skills"}%<div class="skills_UserHomePage">%SKILLS{action="userskills" user="%TOPIC%"}%</div>%TMPL:END%</verbatim>
 
----+++ Step 2.
+---++ Step 2.
 
 Next, remove the line: 
 
@@ -29,4 +29,6 @@ and replace with the following:
 </table>%TMPL:END%
 </verbatim>
 
-You should now be able to view the users skills on their home page!
+You should now be able to view the users skills on their profile page!
+
+__Related:__ %SEARCH{ "^Skills" scope="topic" type="regex" excludetopic="%TOPIC%" nonoise="on" format="[[$topic]]" separator=", " }%, %USERSWEB%.PatternSkinUserViewTemplate
