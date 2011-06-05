@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307251765" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %STARTINCLUDE%
 ---+ TWiki Glossary
@@ -11,7 +11,7 @@ _Simple glossary of TWiki terms_
 | Page: | A regular Web page. A page in TWiki is composed of the _template/skin_ decoration and _topic_ content. |
 | Plugin: | Prepackaged server-side extension that adds all sorts of additional functions, seamlessly integrated into TWiki. [[TWikiPlugins][Details...]] |
 | Plugin API: | The standard interface for creating TWiki _Plugins_ and add-on programs that ensure a perfect integration. [[TWikiFuncDotPm][Details...]] |
-| Preferences: | The site-wide, single _web_ and single user-level preferences settings. The settings are stored in TWikiPreferences, WebPreferences and %USERSWEB%.TWikiUsers home pages. [[TWikiVariables#PreferencesVariables][Details...]] |
+| Preferences: | The site-wide, single _web_ and single user-level preferences settings. The settings are stored in TWikiPreferences, WebPreferences and %USERSWEB%.TWikiUsers profile pages. [[TWikiVariables#PreferencesVariables][Details...]] |
 | Site: | A TWiki installation consisting of one or more _webs_. [[TWikiSite][Details...]] |
 | Skin: | Skins overlay regular _templates_ with alternate header/footer layout of _pages_; topic text is not affected. Skins are typically enabled site-wide or per _web_. [[TWikiSkins][Details...]] |
 | Templates: | (1) Regular templates define header/footer layout of _pages_; topic text is not affected. (2) Template topics set the default content for new _topics_. [[TWikiTemplates][Details...]] |
@@ -22,5 +22,3 @@ _Simple glossary of TWiki terms_
 | Web: | A collection of _topics_ under a common name. Various features, like search, access privileges, Plugin availability, template design, can be controlled on a web-wide basis. [[ManagingWebs][Details...]] |
 
 __Related Topics:__ UserDocumentationCategory
-
-

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1302335712" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307251765" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki User Authentication
 
@@ -82,9 +82,9 @@ TWikiAccessControl has more information on setting up access controls.
 
 %X% At this time TWikiAccessControls cannot control access to files in the =pub= area, unless they are only accessed through the =viewfile= script. If your =pub= directory is set up in the webserver to allow open access you may want to add =.htaccess= files in there to restrict access.
 
-%T% You can create a custom version of the TWikiRegistration form by copying the topic, and then deleting or adding input tags in your copy. The =name=""= parameter of the input tags must start with: ="Twk0..."= (if this is an optional entry), or ="Twk1..."= (if this is a required entry). This ensures that the fields are carried over into the user home page correctly. Do *not* modify the version of TWikiRegistration shipped with TWiki, as your changes will be overwritten next time you upgrade.
+%T% You can create a custom version of the TWikiRegistration form by copying the topic, and then deleting or adding input tags in your copy. The =name=""= parameter of the input tags must start with: ="Twk0..."= (if this is an optional entry), or ="Twk1..."= (if this is a required entry). This ensures that the fields are carried over into the user profile page correctly. Do *not* modify the version of TWikiRegistration shipped with TWiki, as your changes will be overwritten next time you upgrade.
 
-%T% The default new user template page is in [[%SYSTEMWEB%.NewUserTemplate][%SYSTEMWEB%.NewUserTemplate]]. The same variables get expanded as in the [[TWikiTemplates#Template_Topics][template topics]]. You can create a custom new user home page by creating the [[%USERSWEB%.NewUserTemplate][%USERSWEB%.NewUserTemplate]] topic, which will then override the default.
+%T% The default new user template page is in [[%SYSTEMWEB%.NewUserTemplate][%SYSTEMWEB%.NewUserTemplate]]. The same variables get expanded as in the [[TWikiTemplates#Template_Topics][template topics]]. You can create a custom new user profile page by creating the [[%USERSWEB%.NewUserTemplate][%USERSWEB%.NewUserTemplate]] topic, which will then override the default.
 
 #ApacheLogin
 ---+++ Apache Login (select =TWiki::LoginManager::ApacheLogin= in configure)
@@ -107,8 +107,8 @@ You can use any other Apache authentication module that sets REMOTE_USER.
    1 Use [[%SCRIPTURLPATH{"configure"}%#PasswordManager][configure]] to set up TWiki to create the right kind of =.htpasswd= entries.
    1 Create a =.htaccess= file in the =twiki/bin= directory.<br />%H% There is an template for this file in =twiki/bin/.htaccess.txt= that you can copy and change. The comments in the file explain what need to be done.<br />%H% If you got it right, the browser should now ask for login name and password when you click on the <u>Edit</u>. If =.htaccess= does not have the desired effect, you may need to "AllowOverride All" for the directory in =httpd.conf= (if you have root access; otherwise, e-mail web server support)
     <br /> %X% At this time TWikiAccessControls do not control access to files in the =pub= area, unless they are only accessed through the =viewfile= script. If your =pub= directory is set up to allow open access you may want to add =.htaccess= files in there as well to restrict access 
-   1 You can create a custom version of the TWikiRegistration form by copying the default topic, and then deleting or adding input tags in your copy. The =name=""= parameter of the input tags must start with: ="Twk0..."= (if this is an optional entry), or ="Twk1..."= (if this is a required entry). This ensures that the fields are carried over into the user home page correctly. Do *not* modify the version of TWikiRegistration shipped with TWiki, as your changes will be overwritten next time you upgrade.
-    <br />The default new user template page is in [[%SYSTEMWEB%.NewUserTemplate][%SYSTEMWEB%.NewUserTemplate]]. The same variables get expanded as in the [[TWikiTemplates#Template_Topics][template topics]]. You can create a custom new user home page by creating the [[%USERSWEB%.NewUserTemplate][%USERSWEB%.NewUserTemplate]] topic, which will then override the default.
+   1 You can create a custom version of the TWikiRegistration form by copying the default topic, and then deleting or adding input tags in your copy. The =name=""= parameter of the input tags must start with: ="Twk0..."= (if this is an optional entry), or ="Twk1..."= (if this is a required entry). This ensures that the fields are carried over into the user profile page correctly. Do *not* modify the version of TWikiRegistration shipped with TWiki, as your changes will be overwritten next time you upgrade.
+    <br />The default new user template page is in [[%SYSTEMWEB%.NewUserTemplate][%SYSTEMWEB%.NewUserTemplate]]. The same variables get expanded as in the [[TWikiTemplates#Template_Topics][template topics]]. You can create a custom new user profile page by creating the [[%USERSWEB%.NewUserTemplate][%USERSWEB%.NewUserTemplate]] topic, which will then override the default.
    1 Register yourself in the TWikiRegistration topic.
     <br /> %H% Check that a new line with the username and encrypted password is added to the =.htpasswd= file. If not, you may have got a path wrong, or the permissions may not allow the webserver user to write to that file.
    1 Create a new topic to check if authentication works.
@@ -164,13 +164,13 @@ This section applies only if you are using authentication with existing login na
 
    * *Login Username:* When you login to the intranet, you use your existing login username, ex: ==pthoeny==. This name is normally passed to TWiki by the ==REMOTE_USER== environment variable, and used internally. Login Usernames are maintained by your system administrator.
 
-   * *TWiki Username:* Your name in WikiNotation, ex: ==PeterThoeny==, is recorded when you register using TWikiRegistration; doing so also generates a personal home page in the %USERSWEB% web.
+   * *TWiki Username:* Your name in WikiNotation, ex: ==PeterThoeny==, is recorded when you register using TWikiRegistration; doing so also generates a user profile page in the %USERSWEB% web.
 
 TWiki can automatically map an Intranet (Login) Username to a TWiki Username if the {AllowLoginName} is enabled in [[%SCRIPTURLPATH{"configure"}%][configure]]. The default is to use your WikiName as a login name.
 
 <blockquote>
 __NOTE:__ *To correctly enter a WikiName* - your own or someone else's - be sure to include the %USERSWEB% web name in front of the Wiki username, followed by a period, and no spaces, for example ==%USERSWEB%.<nop>WikiUsername== or ==%<nop>USERSWEB%.<nop>WikiUsername==.
-This points ==<nop>WikiUsername== to the %USERSWEB% web, where user home pages are located, no matter which web it's entered in. Without the web prefix, the name appears as a NewTopic everywhere but in the %USERSWEB% web.
+This points ==<nop>WikiUsername== to the %USERSWEB% web, where user profile pages are located, no matter which web it's entered in. Without the web prefix, the name appears as a NewTopic everywhere but in the %USERSWEB% web.
 </blockquote>
 
 #ChangingPasswords

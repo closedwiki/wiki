@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1291755710" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307251765" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki CGI and Command Line Scripts
 
@@ -204,7 +204,7 @@ TODO:
 
 | *Parameter* | *Description* | *Default* |
 | =action= | =register= or =verify= or =resetPassword= or =approve= | |
-| =topicparent= | The parent topic of the new user homepage | ={UsersTopicName}= configure setting |
+| =topicparent= | The parent topic of the new user profile page | ={UsersTopicName}= configure setting |
 
 __Note:__ The =register= script can only be called via http POST method, not GET. Make sure to specify the ="post"= method if you call the =register= script via a form action.
 

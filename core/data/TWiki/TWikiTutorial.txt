@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299039971" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307251732" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ 20-Minute TWiki Tutorial
 
@@ -82,7 +82,7 @@ You can attach _any_ type of file to a topic - documents, images, programs, what
    * Do this again - this time, upload a =.gif=, =.png= or =.jpg= image file.
       * Check the =Link= box to _create a link to the attached file at the end of the topic_. The image will show up at the bottom of the topic. 
       * Edit the topic to move/resize the image.
-   * If you have an image of yourself, your cat, your sprawling family estate...why not upload it now to personalize your TWiki homepage %WIKIUSERNAME%?
+   * If you have an image of yourself, your cat, your sprawling family estate...why not upload it now to personalize your TWiki profile page %WIKIUSERNAME%?
 
 ---++ 8. Get alerted whenever topics are changed...
 
