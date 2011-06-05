@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307234778" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307246499" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -17,7 +17,7 @@ This plugin allows users to specify what skills they have and their level of pro
 
 ---++ Example
 
-Below is a screenshot of the users skill being displayed on their homepage. Click for the full image.
+Below is a screenshot of the users skill being displayed on their profile page. Click for the full image.
 
 <a href="%ATTACHURLPATH%/skills_screenshot_full.png"><img src="%ATTACHURLPATH%/skills_screenshot_thumb.png" alt="skills_screenshot_thumb.png" /></a>
 
