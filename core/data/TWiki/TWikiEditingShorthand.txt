@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307240817" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307241672" format="1.1" version="$Rev$"}%
 ---+ TWiki Editing Shorthand
 
 _These instructions are for contributors who prefer to use the Raw Edit over the default WYSIWYG editor._
@@ -18,6 +18,7 @@ _These instructions are for contributors who prefer to use the Raw Edit over the
 </tr>
 <tr valign="top">
 <td>
+#TheParagraphs
  *Paragraphs:* %BR%
  Blank lines will create new paragraphs.
 </td><td>
@@ -35,6 +36,7 @@ _These instructions are for contributors who prefer to use the Raw Edit over the
 </tr>
 <tr valign="top">
 <td>
+#TheHeadings
  *Headings:* %BR%
 Three or more dashes at the beginning of a line, followed by plus signs and the heading text. One plus creates a top level heading, two pluses a second level heading, etc. The maximum heading depth is 6.
 
@@ -56,6 +58,7 @@ You can create a table of contents with the [[VarTOC][%<nop>TOC%]] variable. If 
 </tr>
 <tr valign="top">
 <td>
+#BoldText
  *Bold Text:* %BR%
  Words get shown in *bold* by enclosing them in =*= asterisks.
 </td><td>
@@ -69,6 +72,7 @@ You can create a table of contents with the [[VarTOC][%<nop>TOC%]] variable. If 
 </tr>
 <tr valign="top">
 <td>
+#ItalicText
  *Italic Text:* %BR%
  Words get shown in _italic_ by enclosing them in =_= underscores.
 </td><td>
@@ -82,6 +86,7 @@ _Italic_
 </tr>
 <tr valign="top">
 <td>
+#BoldItalic
  *Bold Italic:* %BR%
  Words get shown in __bold italic__ by enclosing them in =__= double-underscores.
 </td><td>
@@ -95,6 +100,7 @@ __Bold italic__
 </tr>
 <tr valign="top">
 <td>
+#FixedFont
  *Fixed Font:* %BR%
  Words get shown in =fixed font= by enclosing them in =<nop>=<nop>= equal signs.
 </td><td>
@@ -109,6 +115,7 @@ __Bold italic__
 </tr>
 <tr valign="top">
 <td>
+#BoldFixedFont
  *Bold Fixed Font:* %BR%
  Words get shown in ==bold fixed font== by enclosing them in ==<nop>== double equal signs.
 </td><td>
@@ -143,6 +150,7 @@ too_
 </tr>
 <tr valign="top">
 <td>
+#HorizontalRule
  *Separator (Horizontal Rule):* %BR%
 Three or more three dashes at the beginning of a line..
 </td><td>
@@ -156,6 +164,7 @@ Three or more three dashes at the beginning of a line..
 </tr>
 <tr valign="top">
 <td>
+#BulletedList
  *Bulleted List:* %BR%
 Multiple of three spaces, an asterisk, and another space.%BR%
 %H% For all the list types, you can break a list item over several lines by indenting lines after the first one by *at least 3 spaces*.
@@ -182,8 +191,9 @@ Multiple of three spaces, an asterisk, and another space.%BR%
 </tr>
 <tr valign="top">
 <td>
-*Numbered List:* %BR%
-Multiple of three spaces, a type character, a dot, and another space. Several types are available besides a number:
+#NumberedList
+ *Numbered List:* %BR%
+ Multiple of three spaces, a type character, a dot, and another space. Several types are available besides a number:
 | *Type* | *Generated Style* | *Sample Sequence* |
 | 1. | Arabic numerals | 1, 2, 3, 4... |
 | A. | Uppercase letters | A, B, C, D... |
@@ -221,6 +231,7 @@ Multiple of three spaces, a type character, a dot, and another space. Several ty
 </tr>
 <tr valign="top">
 <td>
+#DefinitionList
  *Definition List:* %BR%
  Three spaces, a dollar sign, the term, a colon, a space, followed by the definition.
 
@@ -238,6 +249,7 @@ Multiple of three spaces, a type character, a dot, and another space. Several ty
 </tr>
 <tr valign="top">
 <td>
+#TheTable
  *Table:* %BR%
 Each row of the table is a line containing of one or more cells. Each cell starts and ends with a vertical bar '|'. Any spaces at the beginning of a line are ignored.
    * =| <nop>*bold*<nop> |= header cell with text in asterisks
@@ -281,6 +293,7 @@ Each row of the table is a line containing of one or more cells. Each cell start
 </tr>
 <tr valign="top">
 <td>
+#WikiWordLinks
  *<nop>WikiWord Links:* %BR%
  <nop>CapitalizedWordsStuckTogether (or WikiWords) will produce a link automatically if preceded by whitespace or parenthesis. %BR%
 %T% If you want to link to a topic in a different web write =Otherweb.TopicName=. %BR%
@@ -312,6 +325,7 @@ Sandbox.%HOMETOPIC%
 </tr>
 <tr valign="top">
 <td>
+#TheAnchors
  *Anchors:* %BR%
  You can define a reference inside a TWiki topic (called an anchor name) and link to that. To __define__ an anchor write =#AnchorName= at the beginning of a line. The anchor name must be a WikiWord of no more than 32 characters. To __link__ to an anchor name use the =[<nop>[MyTopic#MyAnchor]]= syntax. You can omit the topic name if you want to link within the same topic.
 </td><td>
@@ -374,6 +388,7 @@ escaped:
 </tr>
 <tr valign="top">
 <td>
+#PreventLink
  *Prevent a Link:* %BR%
  Prevent a WikiWord from being linked by prepending it with an exclamation point.
 </td><td>
@@ -405,8 +420,9 @@ escaped:
 </tr>
 <tr valign="top">
 <td>
-*Mailto Links:* %BR%
-E-mail addresses are linked automatically. To create e-mail links that have more descriptive link text, specify subject lines or message bodies, or omit the e-mail address, you can write =[<nop>[mailto:user@domain][descriptive text]]=.
+#MailtoLinks
+ *Mailto Links:* %BR%
+ E-mail addresses are linked automatically. To create e-mail links that have more descriptive link text, specify subject lines or message bodies, or omit the e-mail address, you can write =[<nop>[mailto:user@domain][descriptive text]]=.
 </td><td>
 <verbatim>
 a@b.com
@@ -429,7 +445,8 @@ a@b.com
 </tr>
 <tr valign="top">
 <td>
- *Verbatim (Literal) Text:* %BR%
+#VerbatimText
+ *Verbatim Text:* %BR%
  Surround code excerpts and other formatted text with =&lt;verbatim&gt;= and =&lt;/verbatim&gt;= tags.%BR%
 %T% =verbatim= tags disable HTML code. Use =&lt;pre&gt;= and =&lt;/pre&gt;= tags instead if you want the HTML code within the tags to be interpreted.%BR%
 __%X% NOTE:__ Preferences variables (* Set NAME = value) are set within verbatim tags.
@@ -455,7 +472,8 @@ class CatAnimal {
 </tr>
 <tr valign="top">
 <td>
- *Literal content:* %BR%
+#LiteralText
+ *Literal Text:* %BR%
  TWiki generates HTML code from TWiki shorthand.
  *Experts* surround anything that must be output literally in the HTML code, without the application of
  TWiki shorthand rules, with =&lt;literal&gt;..&lt;/literal&gt;= tags. %X% any HTML
@@ -476,7 +494,8 @@ class CatAnimal {
 </tr>
 <tr valign="top">
 <td>
- *Protected content:* %BR%
+#ProtectedText
+ *Protected Text:* %BR%
  *Experts* protect text from mangling by WYSIWYG editors using
  =&lt;sticky&gt;..&lt;/sticky&gt;= tags. Sticky tags don't have any effect on normal
  topic display; they are only relevant when content has to be
