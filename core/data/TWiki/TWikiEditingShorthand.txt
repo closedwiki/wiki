@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1289516436" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307240817" format="1.1" version="$Rev$"}%
 ---+ TWiki Editing Shorthand
 
 _These instructions are for contributors who prefer to use the Raw Edit over the default WYSIWYG editor._
@@ -124,43 +124,21 @@ __Bold italic__
 <td>
 %T% You can follow the closing bold, italic, or other (=* _ __ = ===) indicator
 with normal punctuation, such as commas and full stops.
-
-%X% Make sure there is no space between the text and the indicators.
+%BR%%X% Make sure there is no space between the text and the indicators.
+%BR%%X% All words enclosed by the indicators need to be on the same line.
 </td><td>
 <verbatim>
 _This works_,
 _this does not _
+_this fails
+too_
 </verbatim>
 </td><td>
 
-_This works_,%BR%
-_this does not _
-</td>
-</tr>
-<tr valign="top">
-<td>
- *Verbatim (Literal) Text:* %BR%
- Surround code excerpts and other formatted text with =&lt;verbatim&gt;= and =&lt;/verbatim&gt;= tags.%BR%
-%T% =verbatim= tags disable HTML code. Use =&lt;pre&gt;= and =&lt;/pre&gt;= tags instead if you want the HTML code within the tags to be interpreted.%BR%
-__%X% NOTE:__ Preferences variables (* Set NAME = value) are set within verbatim tags.
-</td><td>
-<verbatim>
-<verbatim>
-class CatAnimal {
-  void purr() {
-    <code here>
-  }
-}
-</verbatim>
-</verbatim>
-</td><td>
-<verbatim>
-class CatAnimal {
-  void purr() {
-    <code here>
-  }
-}
-</verbatim>
+_This works_, %BR%
+_this does not _ %BR%
+_this fails
+too_
 </td>
 </tr>
 <tr valign="top">
@@ -335,14 +313,15 @@ Sandbox.%HOMETOPIC%
 <tr valign="top">
 <td>
  *Anchors:* %BR%
- You can define a reference inside a TWiki topic (called an anchor name) and link to that. To __define__ an anchor write =#AnchorName= at the beginning of a line. The anchor name must be a WikiWord of no more than 32 characters. To __link to__ an anchor name use the =[<nop>[MyTopic#MyAnchor]]= syntax. You can omit the topic name if you want to link within the same topic.
+ You can define a reference inside a TWiki topic (called an anchor name) and link to that. To __define__ an anchor write =#AnchorName= at the beginning of a line. The anchor name must be a WikiWord of no more than 32 characters. To __link__ to an anchor name use the =[<nop>[MyTopic#MyAnchor]]= syntax. You can omit the topic name if you want to link within the same topic.
 </td><td>
 <verbatim>
 [[WikiWord#NotThere]]
 
 [[#MyAnchor][Jump]]
 
-#MyAnchor To here
+#MyAnchor
+To here
 </verbatim>
 </td><td>
 
@@ -350,54 +329,47 @@ Sandbox.%HOMETOPIC%
 
 [[#MyAnchor][Jump]]
 
-#MyAnchor To here
+#MyAnchor
+To here
 </td>
 </tr>
 <tr valign="top">
 <td>
+#ForcedLinks
 #HeRe
  *Forced Links:* %BR%
- You can create a forced internal link by enclosing words in double square brackets.
-%BR% 
-Text within the brackets may contain optional spaces; the topic name is formed by capitalizing the initial letter and by removing the spaces; for example, =[<nop>[text formatting FAQ]]= links to topic TextFormattingFAQ.  You can also refer to a different web and use anchors.
-%BR%
-%T% To "escape" double square brackets that would otherwise make a link, prefix the leading left square bracket with an exclamation point.
+ Use double square brackets to create forced links: Write =[<nop>[link]]= or =[<nop>[link][label]]= to force a link. Use the former for singleton words and if [[#DisableLinks][automatic linking is disabled]]. Use the latter one to specify a link label other than the link. For the link, you can use internal link references (e.g. WikiWords) and URLs (e.g. http://TWiki.org/). 
+ %BR% %T% Anchor names can be added to create a link to a specific place in a document.
+ %BR% %T% To "escape" double square brackets that would otherwise make a link, prefix the leading left square bracket with an exclamation point.
 </td><td>
 <verbatim>
-[[wiki syntax]]
+[[WikiWord]]
 
-[[Main.TWiki groups]]
-
-escaped:
-![[wiki syntax]]
-</verbatim>
-</td><td>
-
-[[wiki syntax]]
-
-[[%USERSWEB%.TWiki groups]]
-
-escaped:
-![[wiki syntax]]
-</td>
-</tr>
-<tr valign="top">
-<td>
- *Specific Links:* %BR%
- You can create a link where you specify the link text and the URL separately using nested square brackets =[<nop>[reference][text]]=. Internal link references (e.g. WikiSyntax) and URLs (e.g. http://TWiki.org/) are both supported.
-The rules described under __Forced Links__ apply for internal link references.
- %BR% %T% Anchor names can be added as well, to create a link to a specific place in a topic.
-</td><td>
-<verbatim>
-[[WikiSyntax][wiki syntax]]
-
-[[http://gnu.org][GNU]]
-</verbatim>
-</td><td>
+[[WikiWord#TheSyntax]]
 
 [[WikiSyntax][wiki syntax]]
 
-[[http://gnu.org][GNU]]
+[[http://gnu.org/][GNU]]
+
+[[Singleton]]
+
+escaped:
+![[WikiSyntax]]
+</verbatim>
+</td><td>
+
+[[WikiWord]]
+
+[[WikiWord#TheSyntax]]
+
+[[WikiSyntax][wiki syntax]]
+
+[[http://gnu.org/][GNU]]
+
+[[Singleton]]
+
+escaped:
+![[WikiSyntax]]
 </td>
 </tr>
 <tr valign="top">
@@ -414,6 +386,7 @@ The rules described under __Forced Links__ apply for internal link references.
 </tr>
 <tr valign="top">
 <td>
+#DisableLinks
  *Disable Links:* %BR%
  You can disable automatic linking of WikiWords by surrounding text with =&lt;noautolink&gt;= and =&lt;/noautolink&gt;= tags.%BR%
 %H% It is possible to turn off all auto-linking with a NOAUTOLINK preferences setting.
@@ -454,7 +427,33 @@ a@b.com
 [[mailto:?subject=Hi][Hi]]
 </td>
 </tr>
-<tr>
+<tr valign="top">
+<td>
+ *Verbatim (Literal) Text:* %BR%
+ Surround code excerpts and other formatted text with =&lt;verbatim&gt;= and =&lt;/verbatim&gt;= tags.%BR%
+%T% =verbatim= tags disable HTML code. Use =&lt;pre&gt;= and =&lt;/pre&gt;= tags instead if you want the HTML code within the tags to be interpreted.%BR%
+__%X% NOTE:__ Preferences variables (* Set NAME = value) are set within verbatim tags.
+</td><td>
+<verbatim>
+<verbatim>
+class CatAnimal {
+  void purr() {
+    <code here>
+  }
+}
+</verbatim>
+</verbatim>
+</td><td>
+<verbatim>
+class CatAnimal {
+  void purr() {
+    <code here>
+  }
+}
+</verbatim>
+</td>
+</tr>
+<tr valign="top">
 <td>
  *Literal content:* %BR%
  TWiki generates HTML code from TWiki shorthand.
@@ -475,7 +474,7 @@ a@b.com
 </literal>
 </td>
 </tr>
-<tr>
+<tr valign="top">
 <td>
  *Protected content:* %BR%
  *Experts* protect text from mangling by WYSIWYG editors using
