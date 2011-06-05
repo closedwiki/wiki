@@ -37,12 +37,11 @@ use vars qw(
     );
 
 # General constants
-$VERSION = '1.010';
-$RELEASE = '2011-05-15';
+$VERSION = '$Rev$';
+$RELEASE = '2011-06-4';
 $pluginName = 'TopicCryptPlugin';
 
 # Crypting constants
-my $PRIVKEY_FILE="/var/lib/twiki/cryptkey.priv";
 my $MAX_SIGNATURES=5;
 my $RC4_KEY_SIZE=16;
 my $RIJNDAEL_KEY_SIZE=32;
@@ -899,6 +898,7 @@ sub doTextCrypt
 sub extractBlocks
 {
 	my ($text) = @_;
+	my $lastchar = substr($text,-1,1);
 	my @block=();
 	my $result="";
 	my $insidePRE=(-1);
@@ -930,6 +930,10 @@ sub extractBlocks
 		if($start==1){ $index++; $block[$index]=""; }
 		$block[$index] .= "$_\n";
 	}
+
+	if ($lastchar eq '\n') { return @block; }
+	if ($index == -1 ) { return @block; }
+	$block[$index] =~ s/\n$//;
 	return @block;
 }
 
@@ -952,6 +956,7 @@ sub compactOutsidePreBlocks
 sub reExtractBlocks
 {
 	my ($text) = @_;
+	my $lastchar = substr($text,-1,1);
 	my @block=();
 	my $index=(0);
 
@@ -967,7 +972,10 @@ sub reExtractBlocks
 		if($start==1){ $index++; $block[$index]=""; }
 		$block[$index] .= "$_\n";
 	}
+	if ($lastchar eq '\n') { return @block; }
+	$block[$index] =~ s/\n$//;
 	return @block;
+
 }
 
 # =========================
@@ -1176,9 +1184,13 @@ sub initPlugin
 	$OPTDEF_ALL{"allowtextchange"}=$username;
 	
 	# Get the private key file path
-	$privateKeyFile=$PRIVKEY_FILE;
   if ($TWiki::cfg{Plugins}{TopicCryptPlugin}{PRIVKEY_FILE}) {
        $privateKeyFile = "$TWiki::cfg{Plugins}{TopicCryptPlugin}{PRIVKEY_FILE}"
+  }
+  else {
+		TWiki::Func::writeWarning(
+		"Missing definition for Private key File. Use Plugin Configure to provide location" );
+		return 0;
   }
 
 	my $method =
