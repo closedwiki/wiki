@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1288411416" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307244375" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="CreoleEditSyntaxRegex"}%
 ---+ Creole Wiki Syntax Summary 
 
-This topic provides online help for users who activated the Wiki Creole syntax in their user homepage with a =EDITSYNTAX = Creole= setting. Syntax conversion is provided by the EditSyntaxPlugin.
+This topic provides online help for users who activated the Wiki Creole syntax in their user profile page with a =EDITSYNTAX = Creole= setting. Syntax conversion is provided by the EditSyntaxPlugin.
 
 Keeping this help text short and simple is important since this page is aimed at new users.  It does include pop-up links for more detailed help.
 
@@ -55,4 +55,6 @@ div#MarkupHelp p { font-size: 100%; }
 %STOPINCLUDE%
 ---
 
--- TWiki:Main.PeterThoeny - 2010-10-29
+__Related:__ EditSyntaxPlugin, CreoleEditSyntaxRegex
+
+-- TWiki:Main.PeterThoeny - 2011-06-04
