@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1285227436" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307251420" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Manage Users
 
@@ -22,7 +22,7 @@ _Register users on your TWiki site; change/reset/install passwords; remove user 
 
 ---++ Register Users
 
-You don't have to have user home pages in TWiki for Authentication to work - see TWikiUserAuthentication for details.
+You don't have to have user profile pages in TWiki for Authentication to work - see TWikiUserAuthentication for details.
 
    * TWikiRegistration is used when you want new users to individually register with TWiki by filling out a form
 
@@ -53,7 +53,7 @@ __For administrators only:__
 
 To change the user's WikiName:
 
-   * Rename the user's TWiki homepage in the %USERSWEB% web, such as from =JaneSmith= to =JaneMiller=.
+   * Rename the user profile page in the %USERSWEB% web, such as from =JaneSmith= to =JaneMiller=.
       * Fix backlinks in the %USERSWEB% web only
       * Make sure the group topics are updated (if any.)
    * Edit the [[%USERSWEB%.TWikiUsers]] topic and move the user's entry so that the list is in proper alphabetical order.
