@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1165884692" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307245372" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="PatternSkin"}%
 <!--
 <div class="twikiBroadcastMessage"> <strong>NOTE:</strong> Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled TWiki maintenance.</div>
@@ -105,7 +105,7 @@ Numbered list:
 <div class="twikiForm">
 <table class='twikiFormTable' border='1'><tr><th class='twikiFormTableHRow twikiFirstCol' colspan='2'>
 <a href="/twiki4/MAIN/bin/view/Main/UserForm" class="twikiLink">Main.UserForm</a>
-</th></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Title </td><td>  </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> FirstName </td><td> Arthur </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> LastName </td><td> Clemens </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> OrganisationName </td><td>  </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> OrganisationURL </td><td>  </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Profession </td><td>  </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Country </td><td> Netherlands </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> State </td><td>  </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Address </td><td>  </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Location </td><td>  </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Telephone </td><td>  </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> VoIP </td><td>  </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> InstantMessaging (IM) </td><td>  </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> HomePage </td><td>  </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Comment </td><td>  </td></tr></table>
+</th></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Title </td><td>  </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> First Name </td><td> Arthur </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Last Name </td><td> Clemens </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Organization </td><td>  </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> URL </td><td>  </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Titles </td><td>  </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Country </td><td> Netherlands </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Location </td><td>  </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Telephone </td><td>  </td></tr></table>
 </div><!-- /twikiForm -->
 </noautolink>
 
@@ -215,7 +215,7 @@ Describe the file so other people know what it is.
 
 ---++ Links
 
-[[WebHome]] DoesNotExist
+[[WebHome]], DoesNotExist
 
 ---++ Form elements
 
