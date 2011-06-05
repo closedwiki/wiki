@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307244348" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307244619" format="1.1" version="$Rev$"}%
 ---+!! Edit Syntax Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -15,7 +15,7 @@
 
 ---++ Introduction
 
-This plugin allows users to edit TWiki content with their favorite wiki syntax. Users can set their preferred syntax as a user preferences setting in their user homepage. Edit syntax converters convert the TWiki Markup Language (TML) into another syntax when a user edits a topic, and converts it back after edit. The content is always saved in TML, that is, different users can edit the same content using different edit syntax.
+This plugin allows users to edit TWiki content with their favorite wiki syntax. Users can set their preferred syntax as a user preferences setting in their user profile page. Edit syntax converters convert the TWiki Markup Language (TML) into another syntax when a user edits a topic, and converts it back after edit. The content is always saved in TML, that is, different users can edit the same content using different edit syntax.
 
 ---++ Syntax Rules & Activating an Edit Syntax
 
@@ -26,7 +26,7 @@ Currently available converters:
 | =TWiki= | =<nop>   * Set EDITSYNTAX = <nop>= | [[%SYSTEMWEB%.WikiSyntaxSummary][Summary]], [[%SYSTEMWEB%.TextFormattingRules][Help]] | N/A |
 %SEARCH{ "EditSyntaxRegex" scope="topic" topic="*EditSyntaxRegex" nonoise="on" format="| =$percntCALC{$SET(name, $SUBSTITUTE($topic, EditSyntaxRegex))$GET(name)}$percnt= | =<nop>   * Set EDITSYNTAX = <nop>$percntCALC{$GET(name)}$percnt= | [[$percntCALC{$GET(name)}$percntWikiSyntaxSummary][Summary]], [[$percntCALC{$GET(name)}$percntTextFormattingRules][Help]] | [[$topic][$percntCALC{$GET(name)}$percnt converter]] |" }%
 
-Syntax converters are activated with an EDITSYNTAX preferences setting in the user homepage. Copy these bullets to the Personal Preferences section:
+Syntax converters are activated with an EDITSYNTAX preferences setting in the user profile page. Copy these bullets to the Personal Preferences section:
 
 <pre>
    * Activate preferred edit syntax (see available edit syntax converters at %SYSTEMWEB%.EditSyntaxPlugin) :
