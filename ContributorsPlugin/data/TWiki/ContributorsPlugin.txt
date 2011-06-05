@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299739735" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307233136" format="1.1" version="$Rev$"}%
 ---+ Contributors Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -45,7 +45,7 @@ The following parameters to %<nop>CONTRIBUTORS% are also allowed:
 In the format string, the user can use the following variables:
 
 |*Variable*|*Expands to*|
-|$author|the person who made that specific change (linked to their TWiki home page)|
+|$author|the person who made that specific change (linked to their TWiki user profile page)|
 |$date|the date in GMT time|
 |$rev|the revision number (linked to that revision of the page)|
 |$n|\n|
@@ -118,8 +118,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main:DuckySherwood |
 |  Copyright: | &copy; 2004 TWiki:Main.DuckySherwood <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-03-09  |
+|  Plugin Version: | 2011-04-06 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-06-04: | TWikibug:Item6701: Small doc fix; change code from "use vars" to "ours" -- TWiki:Main.PeterThoeny |
 |  2011-03-09: | TWikibug:Item6638: Doc fixes; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  2004-12-04: | Initial version |
 |  CPAN Dependencies: | none |

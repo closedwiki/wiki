@@ -50,15 +50,16 @@
 package TWiki::Plugins::ContributorsPlugin;    
 
 # =========================
-use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-        $debug
-    );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-06-04';
 
-$VERSION = '$Rev$';
-$RELEASE = '2011-03-09';
+our $pluginName = 'ContributorsPlugin';  
 
-$pluginName = 'ContributorsPlugin';  
+our $web;
+our $topic;
+our $user;
+our $installWeb;
+our $debug;
 
 # =========================
 sub initPlugin
