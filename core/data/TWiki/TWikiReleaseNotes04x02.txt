@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1294118002" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307247040" format="1.1" version="$Rev$"}%
 ---+!! TWiki Release 4.2.4 (Freetown), 2008-12-06
 
 __Note:__ _This is the release note for the previous major release version 4.2.X. This note, TWikiReleaseNotes04x00 and TWikiReleaseNotes04x01 are included with 4.3.X because they contain valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes04x03 for the 4.3.X release notes_
@@ -398,7 +398,7 @@ The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item3900][Item3900]] | New CARET preferences variable |
 | [[%BUGS%/Item3897][Item3897]] | Fix sanitizeAttachmentName |
 | [[%BUGS%/Item3895][Item3895]] | Structure the TWiki version number to make accessible from plugins (code included) |
-| [[%BUGS%/Item3892][Item3892]] | Do not automatically lock user homepages when this is not set in !NewUserTemplate |
+| [[%BUGS%/Item3892][Item3892]] | Do not automatically lock user profile pages when this is not set in !NewUserTemplate |
 | [[%BUGS%/Item3890][Item3890]] | EDITTABLE expands variables in table cells |
 | [[%BUGS%/Item3889][Item3889]] | $EXISTS() should default to topic in current web |
 | [[%BUGS%/Item3885][Item3885]] | Plugin installation doesn't work through some proxies |

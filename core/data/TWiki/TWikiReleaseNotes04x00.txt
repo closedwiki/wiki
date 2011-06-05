@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1294118921" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307247044" format="1.1" version="$Rev$"}%
 ---+!! TWiki Release 4.0 (Dakar)
 
 __Note:__ This is the release note for the previous major release version 4.0.X. It is included with 4.1.X because it contains valuable information for people upgrading from earlier versions. Both for the admin and the users. See TWikiReleaseNotes04x01 for the 4.1.X release notes.
@@ -658,7 +658,7 @@ The following fixes and minor enhancements have been addressed in this release:
 | [[%BUGS%/Item1430][Item1430]] | inconsistent width constraints on topbar and content area |
 
 ---+++ TWiki 4.0.2 Enhancements
-| [[%BUGS%/Item1964][Item1964]] | Configurable user homepage layout |
+| [[%BUGS%/Item1964][Item1964]] | Configurable user profile page layout |
 | [[%BUGS%/Item1960][Item1960]] | WebRss lacks search options |
 | [[%BUGS%/Item1956][Item1956]] | Cleaned up Plugins.EmptyPlugin |
 | [[%BUGS%/Item1926][Item1926]] | Usability: Add tabindex + setfocus to template login form in TWiki.PatternSkin |
@@ -708,7 +708,7 @@ The following fixes and minor enhancements have been addressed in this release:
 | [[%BUGS%/Item2380][Item2380]] | Logins / logouts with template login does not work with <nop>I18N topic names |
 | [[%BUGS%/Item2379][Item2379]] | Inconsistent meta data in registration |
 | [[%BUGS%/Item2369][Item2369]] | WIKIUSERNAME incorrectly expanded |
-| [[%BUGS%/Item2365][Item2365]] | Email address handling for registration and in users homepage is confusing and not working |
+| [[%BUGS%/Item2365][Item2365]] | Email address handling for registration and in user profile page is confusing and not working |
 | [[%BUGS%/Item2356][Item2356]] | in sequential rdiff a changed region is classified as twikiDiffAdd* |
 | [[%BUGS%/Item2353][Item2353]] | Cannot lock out re-registration by using htpasswd file anymore |
 | [[%BUGS%/Item2352][Item2352]] | Support secret values in configure (display stars for passwords) |

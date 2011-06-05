@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1303605009" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307247034" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.0.2-rc1 (Helsinki), 2011-04-21
 
 %TOC%
@@ -244,7 +244,7 @@ TWiki-5.0.2-rc1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWiki
 | TWikibug:Item6608 | PatternSkin: Reduce font size of H1 and H2 headings |
 | TWikibug:Item6609 | In TWikiForms type table, automatically list form field types that are defined in contribs |
 | TWikibug:Item6614 | TopMenuSkin: Always show register link in Account menu, regardless of login status |
-| TWikibug:Item6618 | User definable topic parent for new user homepages |
+| TWikibug:Item6618 | User definable topic parent for new user profile pages |
 | TWikibug:Item6621 | In QUERYPARAMS, deprecate encoding="" parameter, and add encode="" |
 | TWikibug:Item6622 | PatternSkin: Don't hide non-hidden attachments |
 | TWikibug:Item6626 | SlideShowPlugin: New slide navigation using keys: Home, Left-arrow, Page-up, Right-arrow, Page-down, End and Esc |
