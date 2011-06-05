@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307234510" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307234778" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -13,7 +13,7 @@
 
 ---++ Introduction
 
-This plugin allows users to specify what skills they have and their level of proficiency. The user can then display their skills on their home page, and view other users skills by browsing through specific categories/skills.
+This plugin allows users to specify what skills they have and their level of proficiency. The user can then display their skills on their user profile page, and view other users skills by browsing through specific categories/skills.
 
 ---++ Example
 
@@ -21,7 +21,7 @@ Below is a screenshot of the users skill being displayed on their homepage. Clic
 
 <a href="%ATTACHURLPATH%/skills_screenshot_full.png"><img src="%ATTACHURLPATH%/skills_screenshot_thumb.png" alt="skills_screenshot_thumb.png" /></a>
 
-To get the skills displayed on the users home page, as in this example, see SkillsDisplayOnHomePage.
+To get the skills displayed on the users profile page, as in this example, see SkillsDisplayOnHomePage.
 
 ---++ User Interface
 
