@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307241672" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307242333" format="1.1" version="$Rev$"}%
 ---+ TWiki Editing Shorthand
 
 _These instructions are for contributors who prefer to use the Raw Edit over the default WYSIWYG editor._
@@ -40,9 +40,9 @@ _These instructions are for contributors who prefer to use the Raw Edit over the
  *Headings:* %BR%
 Three or more dashes at the beginning of a line, followed by plus signs and the heading text. One plus creates a top level heading, two pluses a second level heading, etc. The maximum heading depth is 6.
 
-You can create a table of contents with the [[VarTOC][%<nop>TOC%]] variable. If you want to *exclude* a heading from the TOC, put =!!= after the =---+=.
-
-%X% Empty headings are allowed, but won't appear in the table of contents.
+%T% You can create a table of contents with the [[VarTOC][%<nop>TOC%]] variable.
+%BR% %T% If you want to *exclude* a heading from the TOC, put =!!= after the =---+=.
+%BR% %X% Empty headings are allowed and won't appear in the table of contents.
 </td><td>
 <verbatim>
 ---++ Sushi
