@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273873714" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307397574" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Plugins
 
@@ -67,17 +67,41 @@ Plugins can be enabled and disabled with the [[%SCRIPTURLPATH{configure}%][confi
 
 By default, TWiki executes plugins in alphabetical order on plugin name. It is possible to change the order, for example to evaluate database variables before the spreadsheet CALCs. This can be done with ={PluginsOrder}= in the plugins section of [[%SCRIPTURLPATH{configure}%][configure]].
 
+#PluginSpecificSettings
 ---+++ Plugin-Specific Settings
 
-Some plugins are configured with plugin preferences variables, newer plugins with configure variables.
+Plugins can be configured with 1. preferences settings and/or 2. with configure settings. Older plugins use plugin preferences settings defined in the plugin topic, which is no longer recommended.
 
-Configure variables are accessible though the [[%SCRIPTURLPATH{"configure"}%][configure]] interface. 
+__1. Use preferences settings:__
 
-Plugin preferences variables are defined in the plugin topic and can be overloaded. The SHORTDESCRIPTION preferences variable is always present, it is needed for the TWiki:Plugins repository on twiki.org. Example preferences variable defined in the TablePlugin topic:
+Adinistrators can set plugin-specific settings in the local site preferences at <nop>%LOCALSITEPREFS% and users can overload them at the web level and page level. This approach is recommended if users should be able to overload settings. For security this is __not recommended for system settings__, such as a path to an executable. By convention, preferences setting names start with the plugin name in all caps, and an underscore. For example, to set the cache refresh period of the TWiki:Plugins.VarCachePlugin, add this bullet in <nop>%LOCALSITEPREFS%
 
-   * =Set SHORTDESCRIPTION = Control attributes of tables and sorting of table columns=
- 
-Preferences variables of active plugins can be retrieved anywhere in TWiki with =%&lt;pluginname&gt;_&lt;var&gt;%=, such as =%<nop>TABLEPLUGIN_SHORTDESCRIPTION%=. They can also be redefined with the =%&lt;pluginname&gt;_&lt;var&gt;%= setting at a lower level in the [[%LOCALSITEPREFS%]] or at the web level. For an easier upgrade it is recommended to customize plugin preferences variables in <nop>%LOCALSITEPREFS% only.
+   * =Set VARCACHEPLUGIN_REFRESH = 24=
+
+Preferences settings that have been defined in <nop>%LOCALSITEPREFS% can be retrieved anywhere in TWiki with =%&lt;pluginname&gt;_&lt;setting&gt;%=, such as =%<nop>VARCACHEPLUGIN_REFRESH%=.
+
+To learn how this is done, use the TWiki:Plugins.VarCachePlugin documentation and Perl plugin code as a reference.
+
+__2. Use configure settings:__
+
+The administrator can set plugin settings in the [[%SCRIPTURL{configure}%][configure]] interface. Recommended if only site administrators should be able to change settings. Chose this option to set sensitive or dangerous system settings, such as passwords or path to executables. To define plugin-specific configure settings,
+
+   * [[#ConfigSpec][Create a Config.spec file]] in =lib/TWiki/Plugins/YourPlugin/= with variables, such as%BR%
+     =$TWiki::cfg{Plugins}{RecentVisitorPlugin}{ShowIP} = 0;=
+   * In the plugin, use those those variables, such as%BR%
+     =$showIP = $TWiki::cfg{Plugins}{RecentVisitorPlugin}{ShowIP} || 0;=
+
+To learn how this is done, use the TWiki:Plugins.RecentVisitorPlugin documentation and Perl plugin code as a reference.
+
+In either case, define a SHORTDESCRIPTION setting in two places:
+
+   * As a setting in the plugin documentation, which is needed for the extension reports on twiki.org. Example:%BR%
+      * =Set SHORTDESCRIPTION = Show recent visitors to a TWiki site=
+   * As a global Perl package variable in the plugin package, which is needed by TWiki to show info on installed plugins. Example:%BR%
+     =our $SHORTDESCRIPTION = 'Show recent visitors to a TWiki site';=
+
+For better performance, make sure you define this in the plugin package:%BR%
+=our $NO_PREFS_IN_TOPIC = 1;=
 
 ---+++ Listing Active Plugins
 
@@ -112,9 +136,9 @@ __%X% Note:__ If you use other core functions not described in =Func.pm=, you ru
 
 In addition to TWiki core functions, plugins can use *predefined hooks*, or *callbacks*, as described in the =lib/TWiki/Plugins/EmptyPlugin.pm= module.
 
-   * All but the initPlugin are disabled. To enable a callback, remove =DISABLE_= from the function name.
+   * All but the initPlugin are commented out. To enable a callback, remove the leading  =#= from all lines of the callback.
 
-TWiki:Codev/StepByStepRenderingOrder helps you decide which rendering handler to use.
+TWiki:Codev.StepByStepRenderingOrder helps you decide which rendering handler to use.
 
 #FastPluginHints
 ---+++ Hints on Writing Fast Plugins
@@ -124,9 +148,9 @@ TWiki:Codev/StepByStepRenderingOrder helps you decide which rendering handler to
         =eval { require IPC::Run }= %BR%
         =return "&lt;font color=\"red\"&gt;SamplePlugin: Can't load required modules ($@)&lt;/font&gt;" if $@;=
    * Keep the main plugin package as small as possible; create other packages that are loaded if and only if they are used. For example, create sub-packages of !BathPlugin in =lib/TWiki/Plugins/BathPlugin/=.
-   * Avoid using preferences in the plugin topic; set =$NO_PREFS_IN_TOPIC= if you possibly can, as that will stop TWiki from reading the plugin topic for every page. Use [[#ConfigSpec][Config.spec]] instead. 
-   * Use registered tag handlers
-   * [[#MeasurePerformance][Measure the performance]] to see the difference
+   * Avoid using preferences in the plugin topic; Define =$NO_PREFS_IN_TOPIC= in your plugin package as that will stop TWiki from reading the plugin topic for every page. Use [[#ConfigSpec][Config.spec]] or preferences settings instead. ([[#PluginSpecificSettings][See details]]). 
+   * Use registered tag handlers.
+   * [[#MeasurePerformance][Measure the performance]] to see the difference.
 
 ---+++ Version Detection
 
@@ -206,9 +230,6 @@ Check the plugins web on TWiki.org for the latest plugin doc topic template. Her
 *Example:* &lt;<i>Include an example of the plugin in action. Possibly include a static HTML version of the example to compare if the installation was a success!</i>&gt;"
 
 *Plugin Settings:* &lt;<i>Description and settings for custom plugin %<nop>VARIABLES%, and those required by TWiki.</i>&gt;"
-
-   * *Plugins Preferences* &lt;<i>If user settings are needed, explain... Entering values works exactly like %SYSTEMWEB%.TWikiPreferences and WebPreferences: six (6) spaces and then:</i>&gt;"
-      * *Set &lt;<i>EXAMPLE = value added</i>&gt;*
 
 *Plugin Installation Instructions:* &lt;<i>Step-by-step set-up guide, user help, whatever it takes to install and run, goes here.</i>&gt;"
 
@@ -291,7 +312,8 @@ Some TWiki extensions have setup requirements that are best integrated into =con
 ---+++ Structure of a <code>Config.spec</code> file
 The =Config.spec= file for an extension starts with the extension announcing what it is:
 <verbatim>
-# ---+ BathPlugin
+# ---+ Extensions
+# ---++ BathPlugin
 # This plugin senses the level of water in your bath, and ensures the plug
 # is not removed while the water is still warm.
 </verbatim> 
@@ -316,7 +338,7 @@ if( $TWiki::cfg{BathPlugin}{TempSensorEnabled} && $curTemperature > 50 ) {
 }
 </verbatim>
 
-The config.spec file is read by =configure=, which then writes =LocalSite.cfg= with the values chosen by the local site admin.
+The Config.spec file is read by =configure=, which then writes =LocalSite.cfg= with the values chosen by the local site admin.
 
 A range of types are available for use in =Config.spec= files:
 
