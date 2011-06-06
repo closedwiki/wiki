@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307315799" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307337132" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -21,15 +21,27 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 <img src="%PUBURLPATH%/%WEB%/%INCLUDINGTOPIC%/%FORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }%" width="200" />
 <div style="overflow: hidden; white-space: nowrap; line-height: 26px; width: 200px;">
 %ICON{mail}% %FORMFIELD{ "Email" topic="%INCLUDINGTOPIC%" }% &nbsp;
-%BR%%ICON{phone}% %FORMFIELD{ "Telephone" topic="%INCLUDINGTOPIC%" }% &nbsp;
-%BR%%ICON{mobile}% %FORMFIELD{ "Mobile" topic="%INCLUDINGTOPIC%" }% &nbsp;
-%BR%%ICON{skype}% %FORMFIELD{ "SkypeID" topic="%INCLUDINGTOPIC%" }% &nbsp;
+%IF{
+ "'%FORMFIELD{ "Telephone" topic="%INCLUDINGTOPIC%" encode="url" }%'!=''"
+ then='%BR%$percntICON{phone}$percnt $percntFORMFIELD{ "Telephone" topic="%INCLUDINGTOPIC%" encode="html" }$percnt &nbsp;'
+}%<nop>
+%IF{
+ "'%FORMFIELD{ "Mobile" topic="%INCLUDINGTOPIC%" encode="url" }%'!=''"
+ then='%BR%$percntICON{mobile}$percnt $percntFORMFIELD{ "Mobile" topic="%INCLUDINGTOPIC%" encode="html" }$percnt &nbsp;'
+}%<nop>
+%IF{
+ "'%FORMFIELD{ "SkypeID" topic="%INCLUDINGTOPIC%" encode="url" }%'!=''"
+ then='%BR%$percntICON{skype}$percnt $percntFORMFIELD{ "SkypeID" topic="%INCLUDINGTOPIC%" encode="html" }$percnt &nbsp;'
+}%<nop>
 </div>
 </td><td valign="top">
 <img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="20" height="1" />
 </td><td valign="top" colspan="3">
 <noautolink>
----+!! %FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }% %FORMFIELD{ "LastName" topic="%INCLUDINGTOPIC%" }%<span style="font-size: 70%">, %FORMFIELD{ "Titles" topic="%INCLUDINGTOPIC%" }%</span>
+---+!! %FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }% %FORMFIELD{ "LastName" topic="%INCLUDINGTOPIC%" }%%IF{
+ "'%FORMFIELD{ "Titles" topic="%INCLUDINGTOPIC%" encode="url" }%'!=''"
+ then='<span style="font-size: 70%">, $percntFORMFIELD{ "Titles" topic="%INCLUDINGTOPIC%" encode="html" }$percnt</span>'
+}%
 </noautolink>
 </td></tr><tr><td></td><td valign="top" class="profileBox">
 <b>Info:</b>
@@ -41,8 +53,8 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 |  Country: | %FORMFIELD{ "Country" topic="%INCLUDINGTOPIC%" }% |
 </td><td valign="top">
 <img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="20" height="1" />
-</td><td valign="top" class="profileBox" style="width: 200px;">
-<b>Tag cloud of <nop>%FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }%:</b>
+</td><td valign="top" class="profileBox" style="width: 250px;">
+<b>Tag Cloud of <nop>%FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }%:</b>
 %BR%
 %TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%SYSTEMWEB%/TagMeSearch?tag=$tag;by=%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%\" style=\"font-size:$size%\">$tag</a>" separator="&nbsp; "  minsize="80" maxsize="120" by="%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%" }%
 </td></tr></table>
