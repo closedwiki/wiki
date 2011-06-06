@@ -25,15 +25,23 @@ use strict;
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-06-03';
+our $RELEASE = '2011-06-05';
 
 # Name of this Plugin, only used in this module
 our $pluginName = 'AttachContentPlugin';
+
+# Actions needing saving
+my $ACTION_VIEW="view";
+my $ACTION_SAVE="save";
+
 
 our $debug;
 our $savedAlready;
 our $defaultKeepPars;
 our $defaultComment;
+our $attachonviewglobal;
+our $SHORTDESCRIPTION = "Saves dynamic topic text to an attachment";
+our $NO_PREFS_IN_TOPIC = 1;
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
@@ -44,9 +52,10 @@ sub initPlugin {
         return 0;
     }
 
-    $debug = TWiki::Func::getPreferencesFlag("ATTACHCONTENTPLUGIN_DEBUG");
-    $defaultKeepPars = TWiki::Func::getPreferencesFlag("ATTACHCONTENTPLUGIN_KEEPPARS") || 0;
-    $defaultComment = TWiki::Func::getPreferencesValue("ATTACHCONTENTPLUGIN_ATTACHCONTENTCOMMENT") || '';
+    $defaultKeepPars = $TWiki::cfg{Plugins}{AttachContentPlugin}{KeepPars}  || 0;
+    $defaultComment = $TWiki::cfg{Plugins}{AttachContentPlugin}{AttachmentComment} || '';
+    $attachonviewglobal = $TWiki::cfg{Plugins}{AttachContentPlugin}{AttachOnView} || 0;
+    $debug = $TWiki::cfg{Plugins}{AttachContentPlugin}{Debug} || 0;
 
     # Plugin correctly initialized
     return 1;
@@ -73,12 +82,12 @@ sub commonTagsHandler {
     my $page = $_[0];
      $_[0] =~ s/%STARTATTACH{.*?}%//gs;
      $_[0] =~ s/%ENDATTACH%//gs;
-
+     
     TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
     return if $savedAlready;
     $savedAlready = 1;
 
-    $page =~ s/%STARTATTACH{(.*?)}%(.*?)%ENDATTACH%/&handleAttach($1, $2, $_[2], $_[1] )/ges;
+    $page =~ s/%STARTATTACH{(.*?)}%(.*?)%ENDATTACH%/&handleAttach($ACTION_VIEW, $1, $2, $_[2], $_[1] )/ges;
     $savedAlready = 0;
 
 }
@@ -115,14 +124,14 @@ sub afterSaveHandler {
 
     TWiki::Func::writeDebug( "- ${pluginName}::afterSaveHandler( $_[2].$_[1] )" ) if $debug;
 
-    $_[0] =~ s/%STARTATTACH{(.*?)}%(.*?)%ENDATTACH%/&handleAttach($1, $2, $_[2], $_[1])/ges;
+    $_[0] =~ s/%STARTATTACH{(.*?)}%(.*?)%ENDATTACH%/&handleAttach($ACTION_SAVE, $1, $2, $_[2], $_[1])/ges;
     $savedAlready = 0;
    
 }
 
 =pod
 
----++ handleAttach($inAttr, $inContent, $inWeb, $inTopic)
+---++ handleAttach($action, $inAttr, $inContent, $inWeb, $inTopic)
 
 inweb	''
 intopic WebHome
@@ -137,7 +146,7 @@ intopic ''
 
 sub handleAttach {
 
-    my ($inAttr, $inContent, $inWeb, $inTopic) = @_;
+    my ($action, $inAttr, $inContent, $inWeb, $inTopic) = @_;
 
     my $attrs = TWiki::Func::expandCommonVariables($inAttr, $inTopic, $inWeb);
     my %params = TWiki::Func::extractParameters($attrs);
@@ -145,6 +154,12 @@ sub handleAttach {
     my $attrFileName = $params{_DEFAULT};
     
     return '' unless $attrFileName;
+    
+    # If we are in "view" mode, then do not save unless it is globally enabled, or overridden
+    if ($action eq 'view') {
+      my $attachonview = $params{'attachonview'} || $attachonviewglobal ; # default = global setting
+      return '' unless $attachonview;
+    }
     
     my $web = $params{'web'} || $inWeb;
     my $topic = $params{'topic'} || $inTopic;
