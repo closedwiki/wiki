@@ -33,6 +33,7 @@ data/TWiki/TWikiUsersTemplate.txt 0644 Default template for a new TWikiUsers top
 data/TWiki/UserForm.txt 0644 Default form attached to a user topic
 data/TWiki/UserToolsCategory.txt 0644
 
+pub/Main/UserProfileHeader/default-user-profile.jpg 0644
 pub/Main/UserProfileHeader/gradient-title.png 0644
 pub/Main/UserProfileHeader/spacer.gif 0644
 
