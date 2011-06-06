@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1306385127" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307391691" format="1.1" version="$Rev$"}%
 ---+!! Interwiki Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -66,6 +66,7 @@ __%X% Note:__ This plugin is included in the TWiki distribution package. You do 
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-06-06: | TWikibug:Item6701: Adding TWikisvn link rule -- TWiki:Main.PeterThoeny |
 |  2010-05-25: | TWikibug:Item6731: Small code fixes; documentation of Timothe's enhancements -- TWiki:Main.PeterThoeny |
 |  2011-05-25: | TWikibug:Item6731: Allow quotes in page pattern, and URL-encode quoted page patterns -- TWiki:Main.TimotheLitt |
 |  2010-07-12: | TWikibug:Item6521 - add ~ and % to allowed characters in page part of Site:page link |

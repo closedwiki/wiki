@@ -44,7 +44,7 @@ require TWiki::Plugins; # For the API version
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-05-25';
+our $RELEASE = '2011-06-06';
 
 # =========================
 our $SHORTDESCRIPTION = 'Link ==ExternalSite:Page== text to external sites based on aliases defined in a rules topic';

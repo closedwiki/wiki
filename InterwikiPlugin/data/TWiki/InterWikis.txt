@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273986057" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307391681" format="1.1" version="$Rev$"}%
 ---+ <nop>Inter-Wiki Link Rules (or Links to other Sites)
 
 This topic lists all aliases needed to map Inter-Site links to external wikis/sites.
@@ -54,6 +54,7 @@ Whenever you write ==ExternalSite:Page== it will be linked automatically to the 
 | TWiki | http://twiki.org/cgi-bin/view/ | '$page' on TWiki.org |
 | TWikibug | http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/ | '$page' on the TWiki issue tracking site |
 | TWikirev | http://develop.twiki.org/trac/changeset/ | revision $page of TWiki svn |
+| TWikisvn | http://svn.twiki.org/svn/twiki/trunk/ | Download '$page' file from TWiki !SVN repository |
 | UseMod | http://www.usemod.com/cgi-bin/wiki.pl? | '$page' on 'UseMod' Wiki site |
 | VisualWorks | http://wiki.cs.uiuc.edu/VisualWorks/ | '$page' on 'VisualWorks' site |
 | Wiki | http://c2.com/cgi/wiki? | '$page' on the original 'WikiWikiWeb' site |
