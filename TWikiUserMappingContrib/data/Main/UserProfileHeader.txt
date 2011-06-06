@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307337132" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307340895" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -18,8 +18,12 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 </style>
 <div style="padding: 10px 0 0 0">
 <table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top" class="profileBox" style="width: 200px;" rowspan="2">
-<img src="%PUBURLPATH%/%WEB%/%INCLUDINGTOPIC%/%FORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }%" width="200" />
-<div style="overflow: hidden; white-space: nowrap; line-height: 26px; width: 200px;">
+<img src="%IF{
+ "'%INCLUDINGTOPIC%'/attachments[name='%FORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }%']"
+ then='%PUBURLPATH%/%WEB%/%INCLUDINGTOPIC%/$percntFORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }$percnt'
+ else='%PUBURLPATH%/%WEB%/UserProfileHeader/default-user-profile.jpg'
+}%" width="200" alt="" />
+<div style="overflow: hidden; white-space: nowrap; line-height: 28px; width: 200px;">
 %ICON{mail}% %FORMFIELD{ "Email" topic="%INCLUDINGTOPIC%" }% &nbsp;
 %IF{
  "'%FORMFIELD{ "Telephone" topic="%INCLUDINGTOPIC%" encode="url" }%'!=''"
@@ -66,3 +70,4 @@ __Related topics:__ [[%WIKIUSERSTOPIC%]], [[%SYSTEMWEB%.UserForm][UserForm]], [[
 
 %META:FILEATTACHMENT{name="gradient-title.png" attachment="gradient-title.png" attr="h" comment="" date="1307256050" path="gradient-title.png" size="207" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="spacer.gif" attachment="spacer.gif" attr="h" comment="" date="1307260346" path="spacer.gif" size="43" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="default-user-profile.jpg" attachment="default-user-profile.jpg" attr="h" comment="" date="1307339778" path="default-user-profile.jpg" size="7976" user="TWikiContributor" version="1"}%
