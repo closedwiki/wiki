@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307341876" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307342654" format="1.1" version="$Rev$"}%
 ---+ User Form
 
 __Note:__ This is a maintenance topic, used by the TWiki administrator.
@@ -26,6 +26,7 @@ user form, then:
 | Region | text | 60 | | State, province or region | |
 | Country | text | 60 | | Country | |
 | Image | text | 60 | | Name of image attached to the user profile page (for best result resize to 200 pixel width) | |
+| Status Update | text | 60 | | Short status update (out of office etc.) | |
 
 __%X% Note:__ Please keep the %SYSTEMWEB%.TWikiRegistration form and this form definition in sync. When you update this form you need to edit/save the %SYSTEMWEB%.NewUserTemplate topic. This ensures that the fields are in the right order.
 

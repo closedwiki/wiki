@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307342188" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307342641" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -42,7 +42,7 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 <img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="20" height="1" />
 </td><td valign="top" colspan="3">
 <noautolink>
----+!! %FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }% %FORMFIELD{ "LastName" topic="%INCLUDINGTOPIC%" }%
+---+!! %FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }% %FORMFIELD{ "LastName" topic="%INCLUDINGTOPIC%" }% <span style="font-size: 60%"> %FORMFIELD{ "StatusUpdate" topic="%INCLUDINGTOPIC%" }%</span>
 </noautolink>
 </td></tr><tr><td></td><td valign="top" class="profileBox">
 <b>Info:</b>

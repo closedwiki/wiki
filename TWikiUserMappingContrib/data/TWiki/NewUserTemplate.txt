@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307341870" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307342646" format="1.1" version="$Rev$"}%
 ---++ My Links
 
 %STARTSECTION{ type="expandvariables" }%
@@ -98,4 +98,5 @@ Text for multilingual wiki community, copy from here to %<nop>ENDSECTION{type="t
 %META:FIELD{name="Region" attributes="" title="Region" value=""}%
 %META:FIELD{name="Country" attributes="" title="Country" value=""}%
 %META:FIELD{name="Image" attributes="" title="Image" value=""}%
+%META:FIELD{name="StatusUpdate" attributes="" title="Status Update" value=""}%
 %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="UserView"}%
