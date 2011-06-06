@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307229867" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307341870" format="1.1" version="$Rev$"}%
 ---++ My Links
 
 %STARTSECTION{ type="expandvariables" }%
@@ -91,8 +91,8 @@ Text for multilingual wiki community, copy from here to %<nop>ENDSECTION{type="t
 %META:FIELD{name="Telephone" attributes="" title="Telephone" value=""}%
 %META:FIELD{name="Mobile" attributes="" title="Mobile" value=""}%
 %META:FIELD{name="SkypeID" attributes="" title="Skype ID" value=""}%
-%META:FIELD{name="Organization" attributes="" title="Organization" value=""}%
 %META:FIELD{name="Department" attributes="" title="Department" value=""}%
+%META:FIELD{name="Organization" attributes="" title="Organization" value=""}%
 %META:FIELD{name="URL" attributes="" title="URL" value=""}%
 %META:FIELD{name="Location" attributes="" title="Location" value=""}%
 %META:FIELD{name="Region" attributes="" title="Region" value=""}%

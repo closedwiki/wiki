@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307340895" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307341865" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -49,8 +49,8 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 </noautolink>
 </td></tr><tr><td></td><td valign="top" class="profileBox">
 <b>Info:</b>
-|  Organization: | %FORMFIELD{ "Organization" topic="%INCLUDINGTOPIC%" }% |
 |  Department: | %FORMFIELD{ "Department" topic="%INCLUDINGTOPIC%" }% |
+|  Organization: | %FORMFIELD{ "Organization" topic="%INCLUDINGTOPIC%" }% |
 |  URL: | %FORMFIELD{ "URL" topic="%INCLUDINGTOPIC%" }% |
 |  Location: | %FORMFIELD{ "Location" topic="%INCLUDINGTOPIC%" }% |
 |  Region: | %FORMFIELD{ "Region" topic="%INCLUDINGTOPIC%" }% |

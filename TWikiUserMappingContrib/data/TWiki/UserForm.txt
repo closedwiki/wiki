@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307229620" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307341876" format="1.1" version="$Rev$"}%
 ---+ User Form
 
 __Note:__ This is a maintenance topic, used by the TWiki administrator.
@@ -19,8 +19,8 @@ user form, then:
 | Telephone | text | 60 | | Telephone number | |
 | Mobile | text | 60 | | Mobile number | |
 | Skype ID | text | 60 | | Skype ID | |
-| Organization | text | 60 | | Company, agency or educational institution | |
 | Department | text | 60 | | Department or group within organization | |
+| Organization | text | 60 | | Company, agency or educational institution | |
 | URL | text | 60 | | Website link of organization | |
 | Location | text | 60 | | Office location | |
 | Region | text | 60 | | State, province or region | |
