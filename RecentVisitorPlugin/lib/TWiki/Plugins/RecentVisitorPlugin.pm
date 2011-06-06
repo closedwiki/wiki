@@ -24,24 +24,23 @@ use strict;
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
-use vars qw(
-      $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC
-      $pluginName $debug $showIP $onlyAdmins $baseTopic $baseWeb $loginUser $loginIsAdmin
-    );
-
-$VERSION = '$Rev$';
-$RELEASE = '2011-05-14';
+# =========================
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-06-06';
 
 # One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-$SHORTDESCRIPTION = 'Show recent visitors to a TWiki site';
-
-$NO_PREFS_IN_TOPIC = 1;
-
-$pluginName = 'RecentVisitorPlugin';
+our $SHORTDESCRIPTION = 'Show recent visitors to a TWiki site';
+our $NO_PREFS_IN_TOPIC = 1;
+our $pluginName = 'RecentVisitorPlugin';
+our $debug;
+our $showIP;
+our $onlyAdmins;
+our $loginUser;
+our $loginIsAdmin;
 
 # =========================
 sub initPlugin {
-    ( $baseTopic, $baseWeb, $loginUser ) = @_;
+    my ( $baseTopic, $baseWeb, $user ) = @_;
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.1 ) {
@@ -54,6 +53,7 @@ sub initPlugin {
     $showIP     = $TWiki::cfg{Plugins}{RecentVisitorPlugin}{ShowIP} || 0;
     $onlyAdmins = $TWiki::cfg{Plugins}{RecentVisitorPlugin}{OnlyAdmins} || 0;
     $loginIsAdmin = 0;
+    $loginUser = $user;
 
     TWiki::Func::registerTagHandler( 'RECENTVISITOR', \&_RECENTVISITOR );
 
