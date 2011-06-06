@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307341865" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307342188" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -42,13 +42,11 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 <img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="20" height="1" />
 </td><td valign="top" colspan="3">
 <noautolink>
----+!! %FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }% %FORMFIELD{ "LastName" topic="%INCLUDINGTOPIC%" }%%IF{
- "'%FORMFIELD{ "Titles" topic="%INCLUDINGTOPIC%" encode="url" }%'!=''"
- then='<span style="font-size: 70%">, $percntFORMFIELD{ "Titles" topic="%INCLUDINGTOPIC%" encode="html" }$percnt</span>'
-}%
+---+!! %FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }% %FORMFIELD{ "LastName" topic="%INCLUDINGTOPIC%" }%
 </noautolink>
 </td></tr><tr><td></td><td valign="top" class="profileBox">
 <b>Info:</b>
+|  Title: | %FORMFIELD{ "Titles" topic="%INCLUDINGTOPIC%" }% |
 |  Department: | %FORMFIELD{ "Department" topic="%INCLUDINGTOPIC%" }% |
 |  Organization: | %FORMFIELD{ "Organization" topic="%INCLUDINGTOPIC%" }% |
 |  URL: | %FORMFIELD{ "URL" topic="%INCLUDINGTOPIC%" }% |
