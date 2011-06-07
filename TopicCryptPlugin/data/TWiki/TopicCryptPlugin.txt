@@ -127,7 +127,8 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  4 Jun 2011: | TWikibug:Item6727: Fix page mangling, evident in pulldown menu corruption -- TWiki:Main.DipuDeshmukh |
+|  2011-06-07: | TWikibug:Item6721: Fix problem with recognizing valid named users in list -- TWiki:Main.DipuDeshmukh |
+|  2011-06-04: | TWikibug:Item6727: Fix page mangling, evident in pulldown menu corruption -- TWiki:Main.DipuDeshmukh |
 |  2011-05-15: | TWikibug:Item6701: Doc improvements -- TWiki:Main.PeterThoeny |
 |  14 May 2011: | TWikibug:Item6721: Initial import into SVN; integrate patch tcp_patch422. Move configuration of key file location to !LocalSite.cfg -- TWiki:Main.DipuDeshmukh |
 |  14 May 2006: | Initial version |

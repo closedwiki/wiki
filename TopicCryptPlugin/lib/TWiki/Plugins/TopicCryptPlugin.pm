@@ -38,7 +38,7 @@ use vars qw(
 
 # General constants
 $VERSION = '$Rev$';
-$RELEASE = '2011-06-4';
+$RELEASE = '2011-06-7';
 $pluginName = 'TopicCryptPlugin';
 
 # Crypting constants
