@@ -230,7 +230,7 @@ sub isUserInList
 	foreach(@items){
 		# remove spaces surounding the user name
 		$_ =~ s/^\s*(.*)\s*$/$1/;
-		if($_ eq "*"){ $found=1; } 
+    if($_ eq "*" || $_ eq $user){ $found=1; }
 		else{ $found=userIsInGroup($user,$_)||userIsInGroup($login,$_); }
 		if($found){ return 1; }
 	}
