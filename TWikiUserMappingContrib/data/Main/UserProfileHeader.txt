@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307434134" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307435310" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -19,6 +19,7 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
   min-width:19em;
  }
 </style>
+<!-- ===== VIEW RECORD ===== -->
 <div id="viewRecord" style="display: block; padding: 10px 0 0 0">
 <table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top" class="profileBox" style="width: 200px;" rowspan="2">
 <img src="%IF{
@@ -26,7 +27,7 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
  then='%PUBURLPATH%/%WEB%/%INCLUDINGTOPIC%/$percntFORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }$percnt'
  else='%PUBURLPATH%/%WEB%/UserProfileHeader/default-user-profile.jpg'
 }%" width="200" alt="" />
-<div style="overflow: hidden; white-space: nowrap; line-height: 28px; width: 200px;">
+<div style="margin-top: 5px; overflow: hidden; white-space: nowrap; line-height: 28px; width: 200px;">
 %ICON{mail}% %FORMFIELD{ "Email" topic="%INCLUDINGTOPIC%" }% &nbsp;
 %IF{
  "'%FORMFIELD{ "Telephone" topic="%INCLUDINGTOPIC%" encode="url" }%'!=''"
@@ -69,6 +70,7 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 %TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%SYSTEMWEB%/TagMeSearch?tag=$tag;by=%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%\" style=\"font-size:$size%\">$tag</a>" separator="&nbsp; "  minsize="80" maxsize="120" by="%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%" }%
 </td></tr></table>
 </div>
+<!-- ===== EDIT RECORD ===== -->
 <div id="editRecord" style="display: none; padding: 10px 0 0 0">
 <form action="%SCRIPTURL{save}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%" method="post">
 <table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top" class="profileBox" style="width: 200px;" rowspan="2">
@@ -77,7 +79,7 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
  then='%PUBURLPATH%/%WEB%/%INCLUDINGTOPIC%/$percntFORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }$percnt'
  else='%PUBURLPATH%/%WEB%/UserProfileHeader/default-user-profile.jpg'
 }%" width="200" alt="" />
-<div style="overflow: hidden; white-space: nowrap; line-height: 28px; width: 200px;">
+<div style="margin-top: 5px; overflow: hidden; white-space: nowrap; line-height: 28px; width: 200px;">
 %ICON{mail}% <input type="text" name="Email" value="%FORMFIELD{ "Email" topic="%INCLUDINGTOPIC%" encode="entity" }%" style="width:170px" class="twikiInputField" />
 %BR%
 %ICON{phone}% <input type="text" name="Telephone" value="%FORMFIELD{ "Telephone" topic="%INCLUDINGTOPIC%" encode="entity" }%" style="width:170px" class="twikiInputField" />
