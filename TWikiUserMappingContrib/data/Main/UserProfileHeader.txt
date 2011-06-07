@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307342641" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307431974" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -16,7 +16,7 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
   background-color: #ffffff;
  }
 </style>
-<div style="padding: 10px 0 0 0">
+<div id="viewRecord" style="display: block; padding: 10px 0 0 0">
 <table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top" class="profileBox" style="width: 200px;" rowspan="2">
 <img src="%IF{
  "'%INCLUDINGTOPIC%'/attachments[name='%FORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }%']"
@@ -46,6 +46,9 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 </noautolink>
 </td></tr><tr><td></td><td valign="top" class="profileBox">
 <b>Info:</b>
+<div style="float: right">
+<a href="%SCRIPTURL{edit}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%?action=form;t=%SERVERTIME{$epoch}%" style="text-decoration: none; border: 0 none;" onclick="document.getElementById('viewRecord').style.display = 'none'; document.getElementById('editRecord').style.display = 'block'; return false;"><img src='%ICONURLPATH{uweb-bo12}%' width='12' height='12' alt='' title='Edit this record' border='0' style='vertical-align: middle' /> Edit</a>
+</div>
 |  Title: | %FORMFIELD{ "Titles" topic="%INCLUDINGTOPIC%" }% |
 |  Department: | %FORMFIELD{ "Department" topic="%INCLUDINGTOPIC%" }% |
 |  Organization: | %FORMFIELD{ "Organization" topic="%INCLUDINGTOPIC%" }% |
@@ -60,6 +63,55 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 %BR%
 %TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%SYSTEMWEB%/TagMeSearch?tag=$tag;by=%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%\" style=\"font-size:$size%\">$tag</a>" separator="&nbsp; "  minsize="80" maxsize="120" by="%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%" }%
 </td></tr></table>
+</div>
+<div id="editRecord" style="display: none; padding: 10px 0 0 0">
+<form action="%SCRIPTURL{save}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%" method="post">
+<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top" class="profileBox" style="width: 200px;" rowspan="2">
+<img src="%IF{
+ "'%INCLUDINGTOPIC%'/attachments[name='%FORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }%']"
+ then='%PUBURLPATH%/%WEB%/%INCLUDINGTOPIC%/$percntFORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }$percnt'
+ else='%PUBURLPATH%/%WEB%/UserProfileHeader/default-user-profile.jpg'
+}%" width="200" alt="" />
+<div style="overflow: hidden; white-space: nowrap; line-height: 28px; width: 200px;">
+%ICON{mail}% <input type="text" name="Email" value="%FORMFIELD{ "Email" topic="%INCLUDINGTOPIC%" encode="entity" }%" style="width:170px" class="twikiInputField" />
+%BR%
+%ICON{phone}% <input type="text" name="Telephone" value="%FORMFIELD{ "Telephone" topic="%INCLUDINGTOPIC%" encode="entity" }%" style="width:170px" class="twikiInputField" />
+%BR%
+%ICON{mobile}% <input type="text" name="Mobile" value="%FORMFIELD{ "Mobile" topic="%INCLUDINGTOPIC%" encode="entity" }%" style="width:170px" class="twikiInputField" />
+%BR%
+%ICON{skype}% <input type="text" name="SkypeID" value="%FORMFIELD{ "SkypeID" topic="%INCLUDINGTOPIC%" encode="entity" }%" style="width:170px" class="twikiInputField" />
+</div>
+</td><td valign="top">
+<img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="20" height="1" />
+</td><td valign="top" colspan="3">
+<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top" style="white-space: nowrap">
+<noautolink>
+---+!! %FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }% %FORMFIELD{ "LastName" topic="%INCLUDINGTOPIC%" }%
+</noautolink>
+</td><td>&nbsp;</td><td valign="top">
+<input type="text" name="StatusUpdate" value="%FORMFIELD{ "StatusUpdate" topic="%INCLUDINGTOPIC%" encode="entity" }%" size="50" class="twikiInputField" />
+<span style="font-size:90%; color:#666666; white-space: nowrap">%BR%%T% Status update: Make a sentence, such as: =is out of office= </span>
+</td></tr></table>
+</td></tr><tr><td></td><td valign="top" class="profileBox">
+<b>Info:</b>
+<div style="float: right">
+<input type="submit" value="Save" class="twikiSubmit" /> <a href="%SCRIPTURL{view}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%" style="text-decoration: none; border: 0 none;" onclick="document.getElementById('viewRecord').style.display = 'block'; document.getElementById('editRecord').style.display = 'none'; return false;">Cancel</a>
+</div>
+|  Title: | <input type="text" name="Titles" value="%FORMFIELD{ "Titles" topic="%INCLUDINGTOPIC%" encode="entity" }%" size="36" class="twikiInputField" /> |
+|  Department: | <input type="text" name="Department" value="%FORMFIELD{ "Department" topic="%INCLUDINGTOPIC%" encode="entity" }%" size="36" class="twikiInputField" /> |
+|  Organization: | <input type="text" name="Organization" value="%FORMFIELD{ "Organization" topic="%INCLUDINGTOPIC%" encode="entity" }%" size="36" class="twikiInputField" /> |
+|  URL: | <input type="text" name="URL" value="%FORMFIELD{ "URL" topic="%INCLUDINGTOPIC%" encode="entity" }%" size="36" class="twikiInputField" /> |
+|  Location: | <input type="text" name="Location" value="%FORMFIELD{ "Location" topic="%INCLUDINGTOPIC%" encode="entity" }%" size="36" class="twikiInputField" /> |
+|  Region: | <input type="text" name="Region" value="%FORMFIELD{ "Region" topic="%INCLUDINGTOPIC%" encode="entity" }%" size="36" class="twikiInputField" /> |
+|  Country: | <input type="text" name="Country" value="%FORMFIELD{ "Country" topic="%INCLUDINGTOPIC%" encode="entity" }%" size="36" class="twikiInputField" /> |
+</td><td valign="top">
+<img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="20" height="1" />
+</td><td valign="top" class="profileBox" style="width: 250px;">
+<b>Tag Cloud of <nop>%FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }%:</b>
+%BR%
+%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%SYSTEMWEB%/TagMeSearch?tag=$tag;by=%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%\" style=\"font-size:$size%\">$tag</a>" separator="&nbsp; "  minsize="80" maxsize="120" by="%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%" }%
+</td></tr></table>
+</form>
 </div>
 %STOPINCLUDE%
 -----
