@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307436579" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307515694" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -22,11 +22,11 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 <!-- ===== VIEW RECORD ===== -->
 <div id="viewRecord" style="display: block; padding: 10px 0 0 0">
 <table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top" class="profileBox" style="width: 200px;" rowspan="2">
-<img src="%IF{
+<a href="%SCRIPTURL{view}%/%WEB%/ChangeProfilePicture?wikiname=%INCLUDINGTOPIC%" title="%MAKETEXT{"Change profile picture"}%"><img src="%IF{
  "'%INCLUDINGTOPIC%'/attachments[name='%FORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }%']"
  then='%PUBURLPATH%/%WEB%/%INCLUDINGTOPIC%/$percntFORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }$percnt'
  else='%PUBURLPATH%/%WEB%/UserProfileHeader/default-user-profile.jpg'
-}%" width="200" alt="" />
+}%" width="200" border="0" alt="" /></a>
 <div style="margin-top: 5px; overflow: hidden; white-space: nowrap; line-height: 28px; width: 200px;">
 %ICON{mail}% %FORMFIELD{ "Email" topic="%INCLUDINGTOPIC%" }% &nbsp;
 %IF{
