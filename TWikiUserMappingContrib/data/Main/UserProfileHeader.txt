@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307515694" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307556515" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -29,18 +29,9 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 }%" width="200" border="0" alt="" /></a>
 <div style="margin-top: 5px; overflow: hidden; white-space: nowrap; line-height: 28px; width: 200px;">
 %ICON{mail}% %FORMFIELD{ "Email" topic="%INCLUDINGTOPIC%" }% &nbsp;
-%IF{
- "'%FORMFIELD{ "Telephone" topic="%INCLUDINGTOPIC%" encode="url" }%'!=''"
- then='%BR%$percntICON{phone}$percnt $percntFORMFIELD{ "Telephone" topic="%INCLUDINGTOPIC%" encode="html" }$percnt &nbsp;'
-}%<nop>
-%IF{
- "'%FORMFIELD{ "Mobile" topic="%INCLUDINGTOPIC%" encode="url" }%'!=''"
- then='%BR%$percntICON{mobile}$percnt $percntFORMFIELD{ "Mobile" topic="%INCLUDINGTOPIC%" encode="html" }$percnt &nbsp;'
-}%<nop>
-%IF{
- "'%FORMFIELD{ "SkypeID" topic="%INCLUDINGTOPIC%" encode="url" }%'!=''"
- then='%BR%$percntICON{skype}$percnt $percntFORMFIELD{ "SkypeID" topic="%INCLUDINGTOPIC%" encode="html" }$percnt &nbsp;'
-}%<nop>
+%BR%%ICON{phone}% %FORMFIELD{ "Telephone" topic="%INCLUDINGTOPIC%" encode="html" }% &nbsp;
+%BR%%ICON{mobile}% %FORMFIELD{ "Mobile" topic="%INCLUDINGTOPIC%" encode="html" }% &nbsp;
+%BR%%ICON{skype}% %FORMFIELD{ "SkypeID" topic="%INCLUDINGTOPIC%" encode="html" }% &nbsp;
 </div>
 </td><td valign="top">
 <img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="20" height="1" />
