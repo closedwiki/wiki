@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307515795" format="1.1" version="$Rev$"}%
----+ Change Profile Picture of %URLPARAM{wikiname}%
+%META:TOPICINFO{author="TWikiContributor" date="1307516870" format="1.1" version="$Rev$"}%
+---+ %MAKETEXT{"Change Profile Picture of  [_1]" args="%URLPARAM{ "wikiname" default=" " }%" }%
 
 <style type='text/css' media='all'>
  .profileBox {
@@ -14,7 +14,7 @@
  }
 </style>
 <table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top" class="profileBox" style="width: 200px;">
-__Current picture:__
+__%MAKETEXT{"Current picture"}%:__
 <img src="%IF{
  "'%URLPARAM{wikiname}%'/attachments[name='%FORMFIELD{ "Image" topic="%URLPARAM{wikiname}%" }%']"
  then='%PUBURLPATH%/%WEB%/%URLPARAM{wikiname}%/$percntFORMFIELD{ "Image" topic="%URLPARAM{wikiname}%" }$percnt'
@@ -24,20 +24,22 @@ __Current picture:__
 <img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="20" height="1" />
 </td><td valign="top" class="profileBox">
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURL{upload}%/%WEB%/%URLPARAM{wikiname}%" method="post" />
-__Upload new picture:__ %BR%
+__%MAKETEXT{"Upload new picture"}%:__ %BR%
 <input type="file" name="filepath" value="" size="36" %IF{ "defined 'wikiname'" else="disabled=''disabled'" }% />
-<input type="submit" class="twikiSubmit" value='Upload' %IF{ "defined 'wikiname'" else="disabled=''disabled'" }% />
+<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Upload"}%' %IF{ "defined 'wikiname'" else="disabled=''disabled'" }% />
 <input type="hidden" name="filename" value="" />
 <input type="hidden" name="filecomment" value="" />
 <input type="hidden" name="createlink" value="" />
 <input type="hidden" name="hidefile" value="on" />
 <input type="hidden" name="updatefield" value="Image" />
-%IF{ "defined 'wikiname'" then="&nbsp; [[%URLPARAM{wikiname}%][Cancel]]" }%
+%IF{ "defined 'wikiname'" then="&nbsp; [[%URLPARAM{wikiname}%][%MAKETEXT{"Cancel"}%]]" }%
+<div style="margin-top: 5px">
+%T% %MAKETEXT{"Recommended step before upload: Crop the image to about square size, and resize it to a width of 200 pixels. This makes it load faster."}%
+</div>
 </form>
-%T% Recommended step before uploading: Crop the picture to about square shape, and resize it to be 200 pixels wide. This makes it load faster.
 </td></tr></table>
 
-%IF{ "defined 'wikiname'" then="__Return to:__ [[%URLPARAM{wikiname}%]]" }%
+%IF{ "defined 'wikiname'" then="__%MAKETEXT{"Return to"}%:__ [[%URLPARAM{wikiname}%]]" }%
 
 <!--
    * Set ALLOWTOPICCHANGE = %USERSWEB%.TWikiAdminGroup
