@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307521934" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307522644" format="1.1" version="$Rev$"}%
 ---+ %MAKETEXT{"Change Profile Picture of  [_1]" args="%URLPARAM{ "wikiname" default=" " }%" }%
 
 <style type='text/css' media='all'>
@@ -9,12 +9,20 @@
   background-repeat: repeat-x;
   background-color: #ffffff;
  }
+ .profileHeader {
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-style: italic;
+  color: #333333;
+}
  #viewInfo .twikiLastCol {
   min-width:19em;
  }
 </style>
 <table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top" class="profileBox" style="width: 200px;" rowspan="3">
-__%MAKETEXT{"Current picture"}%:__
+<div class="profileHeader">
+%MAKETEXT{"Current picture"}%:
+</div>
 <img src="%IF{
  "'%URLPARAM{wikiname}%'/attachments[name='%FORMFIELD{ "Image" topic="%URLPARAM{wikiname}%" }%']"
  then='%PUBURLPATH%/%WEB%/%URLPARAM{wikiname}%/$percntFORMFIELD{ "Image" topic="%URLPARAM{wikiname}%" }$percnt'
@@ -23,8 +31,10 @@ __%MAKETEXT{"Current picture"}%:__
 </td><td valign="top">
 <img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="20" height="1" />
 </td><td valign="top" class="profileBox">
+<div class="profileHeader">
+%MAKETEXT{"Upload new picture"}%:
+</div>
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURL{upload}%/%WEB%/%URLPARAM{wikiname}%" method="post" />
-__%MAKETEXT{"Upload new picture"}%:__ %BR%
 <input type="file" name="filepath" value="" size="36" %IF{ "defined 'wikiname'" else="disabled=''disabled'" }% />
 <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Upload"}%' %IF{ "defined 'wikiname'" else="disabled=''disabled'" }% />
 <input type="hidden" name="filename" value="" />
@@ -33,14 +43,16 @@ __%MAKETEXT{"Upload new picture"}%:__ %BR%
 <input type="hidden" name="hidefile" value="on" />
 <input type="hidden" name="updatefield" value="Image" />
 %IF{ "defined 'wikiname'" then="&nbsp; [[%URLPARAM{wikiname}%][%MAKETEXT{"Cancel"}%]]" }%
-<div style="margin-top: 5px">
+<div style="margin-top: 5px; color: #444444">
 %T% %MAKETEXT{"Recommended step before upload: Crop the image to about square size, and resize it to a width of 200 pixels. This makes it load faster."}%
 </div>
 </form>
 </td></tr><tr><td></td><td>
 <img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="1" height="20" />
 </td></tr><tr><td></td><td valign="top" class="profileBox">
-__%MAKETEXT{"Select existing picture"}%:__ %BR%
+<div class="profileHeader">
+%MAKETEXT{"Select existing picture"}%:
+</div>
 %CALC{$LISTJOIN(&nbsp; , $LISTMAP(<form action="%SCRIPTURL{save}%/%WEB%/%URLPARAM{wikiname}%" method="post" /> <input type="hidden" name="Image" value="$item" /> <input type="image" src="%PUBURLPATH%/%WEB%/%URLPARAM{wikiname}%/$item" XXwidth="100" height="60" alt="" border="0" class="twikiButton" style="padding:10px" /></form>, $LISTIF($NOT($EXACT($item,undef)), %SEARCH{ "%URLPARAM{wikiname}%" scope="topic" topic="%URLPARAM{wikiname}%" nonoise="1" limit="1" format="$query(attachments[name~'*.jpg'].name), $query(attachments[name~'*.JPG'].name), $query(attachments[name~'*.png'].name), $query(attachments[name~'*.PNG'].name), $query(attachments[name~'*.gif'].name), $query(attachments[name~'*.GIF'].name)" }%)))}%
 </td></tr></table>
 
