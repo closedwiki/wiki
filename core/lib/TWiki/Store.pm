@@ -1041,6 +1041,7 @@ sub saveAttachment {
             $attrs->{path} = $opts->{filepath} if (defined($opts->{filepath}));
             $attrs->{size} = $opts->{filesize} if (defined($opts->{filesize}));
             $attrs->{date} = $opts->{filedate} if (defined($opts->{filedate}));
+
         } else {
             # Property change
             $action = 'save';
@@ -1056,6 +1057,14 @@ sub saveAttachment {
         if( $opts->{createlink} ) {
             $text .= $this->{session}->attach->getAttachmentLink(
                 $user, $web, $topic, $attachment, $meta );
+        }
+
+        if( $opts->{updatefield} ) {
+            my $fieldName = $meta->get( 'FIELD', $opts->{updatefield} );
+            if( defined $fieldName ) {
+                $fieldName->{value} = $attachment;
+                $meta->putKeyed( 'FIELD', $fieldName );
+            }
         }
 
         $this->saveTopic( $user, $web, $topic, $text, $meta, {} );

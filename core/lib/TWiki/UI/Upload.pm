@@ -217,6 +217,7 @@ sub upload {
     my $fileComment = $query->param('filecomment') || '';
     my $createLink  = $query->param('createlink')  || '';
     my $doPropsOnly = $query->param('changeproperties');
+    my $updateField = $query->param('updatefield') || '';
 
     $fileComment =~ s/\s+/ /go;
     $fileComment =~ s/^\s*//o;
@@ -330,6 +331,7 @@ sub upload {
                         filesize    => $fileSizes[$i],
                         filedate    => $fileDates[$i],
                         tmpFilename => $tmpFilePath[$i],
+                        updatefield => $updateField,
                     }
                 );
             }
