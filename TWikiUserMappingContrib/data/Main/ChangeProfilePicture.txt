@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307516870" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307521934" format="1.1" version="$Rev$"}%
 ---+ %MAKETEXT{"Change Profile Picture of  [_1]" args="%URLPARAM{ "wikiname" default=" " }%" }%
 
 <style type='text/css' media='all'>
@@ -13,7 +13,7 @@
   min-width:19em;
  }
 </style>
-<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top" class="profileBox" style="width: 200px;">
+<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top" class="profileBox" style="width: 200px;" rowspan="3">
 __%MAKETEXT{"Current picture"}%:__
 <img src="%IF{
  "'%URLPARAM{wikiname}%'/attachments[name='%FORMFIELD{ "Image" topic="%URLPARAM{wikiname}%" }%']"
@@ -37,6 +37,11 @@ __%MAKETEXT{"Upload new picture"}%:__ %BR%
 %T% %MAKETEXT{"Recommended step before upload: Crop the image to about square size, and resize it to a width of 200 pixels. This makes it load faster."}%
 </div>
 </form>
+</td></tr><tr><td></td><td>
+<img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="1" height="20" />
+</td></tr><tr><td></td><td valign="top" class="profileBox">
+__%MAKETEXT{"Select existing picture"}%:__ %BR%
+%CALC{$LISTJOIN(&nbsp; , $LISTMAP(<form action="%SCRIPTURL{save}%/%WEB%/%URLPARAM{wikiname}%" method="post" /> <input type="hidden" name="Image" value="$item" /> <input type="image" src="%PUBURLPATH%/%WEB%/%URLPARAM{wikiname}%/$item" XXwidth="100" height="60" alt="" border="0" class="twikiButton" style="padding:10px" /></form>, $LISTIF($NOT($EXACT($item,undef)), %SEARCH{ "%URLPARAM{wikiname}%" scope="topic" topic="%URLPARAM{wikiname}%" nonoise="1" limit="1" format="$query(attachments[name~'*.jpg'].name), $query(attachments[name~'*.JPG'].name), $query(attachments[name~'*.png'].name), $query(attachments[name~'*.PNG'].name), $query(attachments[name~'*.gif'].name), $query(attachments[name~'*.GIF'].name)" }%)))}%
 </td></tr></table>
 
 %IF{ "defined 'wikiname'" then="__%MAKETEXT{"Return to"}%:__ [[%URLPARAM{wikiname}%]]" }%
