@@ -1,6 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307522644" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307640554" format="1.1" version="$Rev$"}%
 ---+ %MAKETEXT{"Change Profile Picture of  [_1]" args="%URLPARAM{ "wikiname" default=" " }%" }%
 
+<!--<pre>-->
 <style type='text/css' media='all'>
  .profileBox {
   border: solid #dddddd 1px;
@@ -19,6 +20,27 @@
   min-width:19em;
  }
 </style>
+<script type="text/javascript">
+function validateFileType( fieldID, allowedTypes )
+{
+  var fileName=document.getElementById( fieldID ).value;
+  if( !fileName ) {
+    alert( 'Please specify a file of type '+allowedTypes+'.' );
+    return false;
+  } else {
+    var fileExt = (fileName.substring((fileName.lastIndexOf('.')+1)).toLowerCase());
+    var ext=allowedTypes.split( /, */ );
+    for ( var i in ext ) {
+      if( ext[i]==fileExt ) {
+        return true;
+      }
+    }
+    alert( 'Invalid file type. Please specify a file of type '+allowedTypes+'.' );        
+    return false;
+  }
+}
+</script>
+<!--</pre>-->
 <table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top" class="profileBox" style="width: 200px;" rowspan="3">
 <div class="profileHeader">
 %MAKETEXT{"Current picture"}%:
@@ -34,8 +56,8 @@
 <div class="profileHeader">
 %MAKETEXT{"Upload new picture"}%:
 </div>
-<form name="main" enctype="multipart/form-data" action="%SCRIPTURL{upload}%/%WEB%/%URLPARAM{wikiname}%" method="post" />
-<input type="file" name="filepath" value="" size="36" %IF{ "defined 'wikiname'" else="disabled=''disabled'" }% />
+<form name="main" enctype="multipart/form-data" onsubmit="return validateFileType( 'imageFile', 'jpg, png, gif' );" action="%SCRIPTURL{upload}%/%WEB%/%URLPARAM{wikiname}%" method="post" />
+<input type="file" name="filepath" id="imageFile" value="" size="36" %IF{ "defined 'wikiname'" else="disabled=''disabled'" }% />
 <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Upload"}%' %IF{ "defined 'wikiname'" else="disabled=''disabled'" }% />
 <input type="hidden" name="filename" value="" />
 <input type="hidden" name="filecomment" value="" />
