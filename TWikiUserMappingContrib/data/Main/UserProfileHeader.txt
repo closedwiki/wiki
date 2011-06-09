@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307556515" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307603772" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -8,20 +8,39 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 -----
 %STARTINCLUDE%
 <style type='text/css' media='all'>
- .profileBox {
+.profileBox {
   border: solid #dddddd 1px;
   padding: 10px;
   background-image: url(%PUBURLPATH%/%WEB%/UserProfileHeader/gradient-title.png);
   background-repeat: repeat-x;
   background-color: #ffffff;
- }
- #viewInfo .twikiLastCol {
+}
+#viewInfo .twikiLastCol {
   min-width:19em;
- }
+}
+#changePicture {
+  text-decoration: none;
+  border: 0 none;
+  font-size: 14px;
+  line-height: 18px;
+  background-color: #ffffff;
+  opacity: .2;
+  -moz-opacity: .2;
+  filter: alpha(opacity=20);
+}
+#changePicture:hover {
+  color: #333333;
+  opacity: .7;
+  -moz-opacity: .7;
+  filter: alpha(opacity=70);
+}
 </style>
 <!-- ===== VIEW RECORD ===== -->
 <div id="viewRecord" style="display: block; padding: 10px 0 0 0">
 <table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top" class="profileBox" style="width: 200px;" rowspan="2">
+<div style="position: absolute; width: 200px; margin-top: -1px; text-align:right;">
+<a href="%SCRIPTURL{view}%/%WEB%/ChangeProfilePicture?wikiname=%INCLUDINGTOPIC%" title="%MAKETEXT{"Change profile picture"}%" id="changePicture">&nbsp;<img src='%ICONURLPATH{uweb-bo12}%' width='12' height='12' alt='' border='0' style='vertical-align: middle' /> %MAKETEXT{"Change"}%&nbsp;</a>
+</div>
 <a href="%SCRIPTURL{view}%/%WEB%/ChangeProfilePicture?wikiname=%INCLUDINGTOPIC%" title="%MAKETEXT{"Change profile picture"}%"><img src="%IF{
  "'%INCLUDINGTOPIC%'/attachments[name='%FORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }%']"
  then='%PUBURLPATH%/%WEB%/%INCLUDINGTOPIC%/$percntFORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }$percnt'
