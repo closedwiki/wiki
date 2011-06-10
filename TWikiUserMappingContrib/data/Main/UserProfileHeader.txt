@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307603772" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307684573" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
 
-The part between the horizontal rules gets included at the top of every [[%WIKIUSERSTOPIC%]] profile page. The header can be customized to the needs of your organization. For example, to show all frequently used fields from the [[%SYSTEMWEB%.UserForm][UserForm]] on top, followed by a personalized portal. The portal can pull content from other places, such as headline news by department, a list of current projects, etc. The TWiki:TWiki.UserHomepageSupplement has some additional documentation and ideas on customizing the user profile pages.
+The part between the horizontal rules gets included at the top of every [[%WIKIUSERSTOPIC%]] profile page. The header can be customized to the needs of your organization. The TWiki:TWiki.UserHomepageSupplement has some additional documentation and ideas on customizing the user profile pages.
 
 -----
 %STARTINCLUDE%
@@ -74,7 +74,7 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 </div>
 </td><td valign="top">
 <img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="20" height="1" />
-</td><td valign="top" class="profileBox" style="width: 250px;">
+</td><td valign="top" class="profileBox" style="min-width: 200px;">
 <b>Tag Cloud of <nop>%FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }%:</b>
 %BR%
 %TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%SYSTEMWEB%/TagMeSearch?tag=$tag;by=%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%\" style=\"font-size:$size%\">$tag</a>" separator="&nbsp; "  minsize="80" maxsize="120" by="%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%" }%
@@ -123,7 +123,7 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 |  %MAKETEXT{"Country"}%: | <input type="text" name="Country" value="%FORMFIELD{ "Country" topic="%INCLUDINGTOPIC%" encode="entity" }%" size="36" class="twikiInputField" /> |
 </td><td valign="top">
 <img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="20" height="1" />
-</td><td valign="top" class="profileBox" style="width: 250px;">
+</td><td valign="top" class="profileBox" style="min-width: 200px;">
 <b>Tag Cloud of <nop>%FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }%:</b>
 %BR%
 %TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%SYSTEMWEB%/TagMeSearch?tag=$tag;by=%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%\" style=\"font-size:$size%\">$tag</a>" separator="&nbsp; "  minsize="80" maxsize="120" by="%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%" }%
@@ -132,6 +132,8 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 </div>
 %STOPINCLUDE%
 -----
+
+   * Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
 __Related topics:__ [[%WIKIUSERSTOPIC%]], [[%SYSTEMWEB%.UserForm][UserForm]], [[%SYSTEMWEB%.NewUserTemplate][NewUserTemplate]], [[%SYSTEMWEB%.TWikiRegistration][TWikiRegistration]], [[%SYSTEMWEB%.TWikiForms][TWikiForms]]
 
