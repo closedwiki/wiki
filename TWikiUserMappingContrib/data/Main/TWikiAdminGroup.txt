@@ -1,17 +1,25 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273956256" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307735017" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiGroups"}%
 ---+ TWiki Administrator Group
 
+This is a super user group that has access to all content, regardless of [[%SYSTEMWEB%.TWikiAccessControl][access control]]. This group has also access to the [[%SCRIPTURL{configure}%][configure]] script to do system level configuration.
+
    * Member list (comma-separated list):
       * Set GROUP = 
+
    * Persons/group who can change the list:
       * Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
+%T% Both settings accept a comma-space delimited list of users and groups in %SYSTEMWEB%.WikiWord format. Groups can be nested.
+
+<noautolink>
+%EDITPREFERENCES{ "%SYSTEMWEB%.TWikiPreferencesForm" editbutton="Edit %TOPIC% settings" }%
+</noautolink>
+
 %INCLUDE{"TWikiAdminUser" section="sudo_login"}%
 
-%IF{"(NOT defined GROUP) OR $GROUP = ''" then="" else="<!--"}%
-<sticky><div style="background-color:yellow"></sticky>
-__How to add the first administrator__ %BR%
+<sticky><div style="background-color:#FFF263; padding: 10px; display: %IF{"(NOT defined GROUP) OR $GROUP = ''" then="block" else="none"}%"></sticky>
+__How to add the first administrator:__ %BR%
 If you haven't previously set up an administrator, follow these steps:
    1 Authenticate as the internal TWiki administrator:
       * %ADMINLOGIN%
@@ -23,6 +31,8 @@ If you haven't previously set up an administrator, follow these steps:
    1 Make sure always to keep this topic write protected by keeping the already defined ALLOWTOPICCHANGE setting
    1 The ALLOWTOPICHANGE and ALLOWTOPICRENAME settings in [[%SYSTEMWEB%.TWikiPreferences]] and [[%USERSWEB%.TWikiPreferences]] have already been set to this group (<nop>TWikiAdminGroup), restricting edit of site-wide preferences to the TWiki Administrator Group
 <sticky></div></sticky>
-%IF{"(NOT defined GROUP) OR $GROUP = ''" then="" else="-->"}%
 
-__Related topics:__ [[%WIKIUSERSTOPIC%]], [[TWikiAdminUser]], [[TWikiGroups]], [[%SYSTEMWEB%.TWikiAccessControl][TWikiAccessControl]]
+<!--
+   * Set READONLYSKINMODE = 1
+-->
+__Related topics:__ [[TWikiGroups]], [[%SYSTEMWEB%.TWikiAccessControl][TWikiAccessControl]], [[UserList]], [[%WIKIUSERSTOPIC%]], [[TWikiAdminUser]]
