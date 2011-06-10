@@ -31,7 +31,7 @@ require TWiki::Plugins; # For the API version
 use vars qw( $VERSION $RELEASE @shelter );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-05-15';
+$RELEASE = '2010-06-10';
 
 my $MARKER = "\007";
 
@@ -69,6 +69,7 @@ sub beforeCommonTagsHandler {
         $formDef =
           new TWiki::Form( $TWiki::Plugins::SESSION, $formWeb, $form );
     }
+    my $editButton = $attrs->{editbutton} || 'Edit Preferences';
 
     my $query = TWiki::Func::getCgiQuery();
 
@@ -129,7 +130,7 @@ sub beforeCommonTagsHandler {
         return;
     }
     # implicit action="view", or drop through from "save" or "cancel"
-    $_[0] =~ s/%EDITPREFERENCES({.*?})?%/_generateEditButton($web, $topic)/ge;
+    $_[0] =~ s/%EDITPREFERENCES({.*?})?%/_generateEditButton($web, $topic, $editButton)/ge;
 }
 
 # Use the post-rendering handler to plug our formatted editor units
@@ -198,7 +199,7 @@ sub _generateEditField {
 
 # Generate the button that replaces the EDITPREFERENCES tag in view mode
 sub _generateEditButton {
-    my( $web, $topic ) = @_;
+    my( $web, $topic, $buttonLabel ) = @_;
 
     my $viewUrl = TWiki::Func::getScriptUrl(
         $web, $topic, 'viewauth' );
@@ -211,8 +212,8 @@ sub _generateEditButton {
         name => 'prefsaction',
         value => 'edit'});
     $text .= CGI::submit(-name => 'edit',
-                         -value=>'Edit Preferences',
-                         -class=>'twikiButton');
+                         -value=> $buttonLabel,
+                         -class=> 'twikiButton');
     $text .= CGI::end_form();
     $text =~ s/\n//sg;
     return $text;
