@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307251436" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307687139" format="1.1" version="$Rev$"}%
 ---+ %MAKETEXT{"Registration"}%
 
 %IF{"context registration_supported" 
@@ -337,6 +337,7 @@ function capitalise(name)
   <td>
     <input type="hidden" name="rx" value='%BLACKLISTPLUGIN{ action="magic" }%' />
     <input type="hidden" name="topic" value="%TOPIC%" />
+    <input type="hidden" name="topicparent" value="UserList" /> 
     <input type="hidden" name="action" value="register" />
     <input %NOREGISTRATION%  type="submit" class="twikiSubmit" value=' %MAKETEXT{"Submit"}% ' />
   </td>
