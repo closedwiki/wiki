@@ -1,6 +1,15 @@
-%META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307686495" format="1.1" version="$Rev$"}%
 ---+ User List sorted by name
 
 %INCLUDE{"UserListHeader"}%
 
-%SEARCH{"form.name~'*UserForm'" nosearch="on" type="query" header="| *FirstName* | *LastName* | *Organization* | *State* | *Country* |" format="| [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(OrganisationName) | $formfield(State) | $formfield(Country) |" excludetopic="Web*, *Template"}%
+%SEARCH{
+ "form.name~'*UserForm'"
+ nosearch="on"
+ type="query"
+ header="| ** | *Name* | *Contact* | *Department* | *Organization* | *Location* | *Country* |"
+ format="| <a href='%SCRIPTURLPATH{view}%/$web/$topic' title='View profile page'><img src='$percntIF{ \"'$formfield(Image)'!=''\" then='%PUBURLPATH%/$web/$topic/$formfield(Image)' else='%PUBURLPATH%/%WEB%/UserProfileHeader/default-user-profile.jpg'
+ }$percnt' width='70' border='0' alt='' /></a> | [[$topic][$formfield(FirstName)%BR%$formfield(LastName)]] | $percntICON{mail}$percnt $formfield(Email) $percntIF{ \"'$formfield(Telephone)'!=''\" then='%BR% $percntICON{phone}$percnt $formfield(Telephone)' }$percnt $percntIF{ \"'$formfield(Mobile)'!=''\" then='%BR% $percntICON{mobile}$percnt $formfield(Mobile)' }$percnt $percntIF{ \"'$formfield(SkypeID)'!=''\" then='%BR% $percntICON{skype}$percnt $formfield(SkypeID)' }$percnt | $formfield(Department) | $formfield(Organization) | $formfield(Location) | $formfield(Country) |" excludetopic="*Template"
+}%
+
+%INCLUDE{"UserListHeader"}%
