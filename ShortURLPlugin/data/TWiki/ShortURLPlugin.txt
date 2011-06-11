@@ -1,0 +1,74 @@
+%META:TOPICINFO{author="KarlKaiser" date="1181588683" format="1.1" reprev="1.4" version="1.4"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+!! <nop>%TOPIC%
+
+The "Short URL TWiki Plugin" allows to shorten long URLs from something like =<nop>http://twiki.org/cgi-bin/view/Main/WebHome= to  =<nop>http://twiki....ebHome=.  This plugin aims to improve table rendering of long links if the data is provided by a database.  Note that only URLs where the URL text matches the "href:" attribute are altered. That means all wiki words are unaffected by this plugin.
+
+%TOC%
+
+---++ Syntax Rules
+
+Not applicable, there is no syntax you need to embed into your twiki pages.
+
+---++ Examples
+
+Not applicable, see note under Syntax Rules.
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = This plugin does shorten URLs to a user specifiable length.
+
+   * Your can disable the pugin:
+      * Set DISABLE = 0
+
+   * Debug plugin: (See output in =data/debug.txt=) ( 1 = debug enabled, 0 = debug disabled )
+      * Set DEBUG = 0
+
+   * This parameter allows to set the length the URL is shortened to (number of characters long URLs are shortened to):
+      * Set URLMAXLENGTH = 16 
+
+   * This parameter is used to specify what URLs (http://..., https://..., file:// ) the shortening is applied to:
+      * Set SCHEMES = http https 
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==data/Main/%TOPIC%.txt== | Plugin Test and demo page |
+   * Configure the Plugin:
+      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+      * Change the Plugin settings as needed
+   * Test if the installation was successful:
+      * go to Main.%TOPIC% and check if the page looks right
+
+   * If you want to run the plugin only on specific pages you can disable it    ==* Set DISABLEDPLUGINS = <nop>ShortURLPlugin== on the  TWiki.TWikiPreferences and then enable it on the local page with another  ==* Set DISABLEDPLUGINS == instruction.
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.KarlKaiser based on TWiki:Main.IanBygrave %TWIKIWEB%:Plugins.ExitPlugin  |
+|  Copyright: | &copy; 2007, TWiki:Main.KarlKaiser |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 08 Jun 2007 (V1.002) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  11 Jun 2007: | Fixed some preferences setting issues |
+|  08 Jun 2007: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+-- TWiki:Main.KarlKaiser - 08 Jun 2007

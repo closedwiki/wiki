@@ -1,0 +1,15 @@
+%META:TOPICINFO{author="KarlKaiser" date="1181588563" format="1.1" version="1.8"}%
+%META:TOPICPARENT{name="WebHome"}%
+This Page is to test the TWiki.ShortURLPlugin plugin
+
+Normal naked URL: =<nop>http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc= http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc
+
+Twiki style URL with text lable matching long URL: =[ [http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc] [http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc] ]=
+ [[http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc][http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc]]
+
+Twiki style URL with text lable: =[ [http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc][Link to external Site] ]= [[http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc][Link to external Site]]
+
+Twkiki Word:  VeryLongTwikiWordThatIsUsedToTest
+
+
+-- TWiki:Main.KarlKaiser - 07 Jun 2007
