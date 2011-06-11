@@ -1,15 +1,25 @@
-%META:TOPICINFO{author="KarlKaiser" date="1181588563" format="1.1" version="1.8"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307762989" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
-This Page is to test the TWiki.ShortURLPlugin plugin
+---+ Test !ShortURLPlugin
 
-Normal naked URL: =<nop>http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc= http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc
+This page tests the %SYSTEMWEB%.ShortURLPlugin.
 
-Twiki style URL with text lable matching long URL: =[ [http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc] [http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc] ]=
- [[http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc][http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc]]
+   * Normal naked URL:
+      * Source text: =http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc=
+      * Renders as: http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc
 
-Twiki style URL with text lable: =[ [http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc][Link to external Site] ]= [[http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc][Link to external Site]]
+   * TWiki style URL with text label matching long URL:
+      * Source text: =[<nop>[http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc][http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc]]=
+      * Renders as: [[http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc][http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc]]
 
-Twkiki Word:  VeryLongTwikiWordThatIsUsedToTest
+   * TWiki style URL with text label:
+      * Source text: =[<nop>[http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc][Link to external Site]]=
+      * Renders as: [[http://sw-web/pvcsdocs/quartus/documents/swweb/sed_state_machine_fd.doc][Link to external Site]]
 
+   * TWiki Word:
+      * Source text: =VeryLongTwikiWordThatIsUsedToTest=
+      * Renders as: VeryLongTwikiWordThatIsUsedToTest
+
+__Related:__ %SYSTEMWEB%.ShortURLPlugin
 
 -- TWiki:Main.KarlKaiser - 07 Jun 2007
