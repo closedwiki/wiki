@@ -1,6 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2007 Karl Kaiser kkaiser@bentosys.com
+# Copyright (C) 2008-2011 TWiki:TWiki.TWikiContributor
 #
 # Credit: This plugin was derived from the 
 #         ExitPlugin of Ian Bygrave, ian@bygrave.me.uk 
@@ -24,24 +25,20 @@
 package TWiki::Plugins::ShortURLPlugin;
 
 # =========================
-use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName
-        $debug $disable $urlmaxlen $schemepat
-    );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-06-10';
 
-$VERSION = '$Revision: 002 $';
-$pluginName = 'ShortURLPlugin';  # Name of this Plugin
-
-# =========================
-
-sub patFromPref
-{
-    return
-        "(?:" .
-        join( "|",
-              map( quotemeta, split( /\s+/, TWiki::Func::getPluginPreferencesValue( $_[0] ) ) ) )
-        . ")" ;
-}
+our $pluginName = 'ShortURLPlugin';  # Name of this Plugin
+our $NO_PREFS_IN_TOPIC = 1;
+our $SHORTDESCRIPTION = 'Shorten external URLs to a user specifiable length';
+our $web;
+our $topic;
+our $user;
+our $installWeb;
+our $debug;
+our $disable;
+our $urlmaxlen;
+our $schemepat;
 
 # =========================
 sub initPlugin
@@ -49,25 +46,30 @@ sub initPlugin
     ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.001 ) {
+    if( $TWiki::Plugins::VERSION < 1.1 ) {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
 
     # Get plugin debug flag
-    $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
+    $debug = TWiki::Func::getPreferencesFlag( "SHORTURLPLUGIN_DEBUG" ) || 0;
     TWiki::Func::writeDebug( "- ${pluginName} debug  = ${debug}" ) if $debug; 
 	
     # Get disable flag
-    $disable = TWiki::Func::getPluginPreferencesFlag( "DISABLE" );
+    $disable = TWiki::Func::getPreferencesFlag( "SHORTURLPLUGIN_DISABLE" ) || 0;
     TWiki::Func::writeDebug( "- ${pluginName} disable = ${disable}" ) if $debug;
 	
     # Get schemes to redirect
-    $schemepat = patFromPref("SCHEMES");
+    $schemepat = TWiki::Func::getPreferencesValue( "SHORTURLPLUGIN_SCHEMES" ) || 'http, https';
+    $schemepat = 
+       "(?:" .
+       join( "|",
+           map( quotemeta, split( /[,\s]+/, $schemepat ) ) )
+           . ")";
     TWiki::Func::writeDebug( "- ${pluginName} schemepat = ${schemepat}" ) if $debug;
 
     # Get Maximal URL Length
-    $urlmaxlen = TWiki::Func::getPluginPreferencesValue( "URLMAXLENGTH" );
+    $urlmaxlen = TWiki::Func::getPreferencesValue( "SHORTURLPLUGIN_URLMAXLENGTH" ) || 20;
     TWiki::Func::writeDebug( "- ${pluginName} urlmaxlen = ${urlmaxlen}" ) if $debug;
     
     # Plugin correctly initialized
@@ -76,24 +78,17 @@ sub initPlugin
 }
 
 # =========================
-
 sub linkreplace
 {
     my ( $pretags, $url, $posttags, $text, $close ) = @_;
 
-if ( length($text) > $urlmaxlen && $url eq $text ) {
-    	substr($text,($urlmaxlen/2)-2,length($text)-$urlmaxlen+3,'...');
-	}
-
-return $pretags.$url.$posttags.$text.$close;
+    if ( length($text) > $urlmaxlen && $url eq $text ) {
+        substr( $text, ($urlmaxlen/2)-2, length( $text ) - $urlmaxlen + 3,'...' );
+    }
+    return $pretags.$url.$posttags.$text.$close;
 }
 
-$TWikiCompatibility{endRenderingHandler} = 1.1;
-sub endRenderingHandler
-{
-    &postRenderingHandler;
-}
-
+# =========================
 sub postRenderingHandler {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
     if ( $disable ) {
@@ -108,5 +103,4 @@ sub postRenderingHandler {
 }
 
 # =========================
-
 1;
