@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307765633" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307766094" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+!! <nop>%TOPIC%
 <!--
@@ -82,4 +82,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ Sandbox.Test%TOPIC%, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
