@@ -19,9 +19,7 @@ package TWiki::Contrib::TWikiUserMappingContrib;
 
 use strict;
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
-
-$VERSION = '$Rev$';
-$RELEASE = '4.5';
-$SHORTDESCRIPTION = 'Traditional TWiki topic based user management and user mapping';
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-06-10';
+our $SHORTDESCRIPTION = 'Traditional TWiki topic based user management and user mapping';
 
