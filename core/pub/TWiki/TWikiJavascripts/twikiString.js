@@ -124,6 +124,6 @@ twiki.StringConstants.prototype.init = function () {
 	
 	twiki.StringConstants.prototype.WIKIWORD_REGEX = "^" + "[" + twiki.StringConstants.prototype.UPPER_ALPHA_CHARS + "]" + "+" + "[" + twiki.StringConstants.prototype.LOWER_ALPHANUM_CHARS + "]" + "+" + "[" + twiki.StringConstants.prototype.UPPER_ALPHA_CHARS + "]" + "+" + "[" + twiki.StringConstants.prototype.MIXED_ALPHANUM_CHARS + "]" + "*";
 	
-	twiki.StringConstants.prototype.ALLOWED_URL_CHARS = twiki.StringConstants.prototype.MIXED_ALPHANUM_CHARS + "-_^";
+	twiki.StringConstants.prototype.ALLOWED_URL_CHARS = twiki.StringConstants.prototype.MIXED_ALPHANUM_CHARS + "\\-_";
 }
 
