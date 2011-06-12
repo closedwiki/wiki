@@ -34,6 +34,7 @@ use CGI qw( -any );
 
 package TWiki::Plugins::CommentPlugin::Comment;
 
+# =========================
 # PUBLIC save the given comment.
 sub save {
     #my ( $text, $topic, $web ) = @_;
@@ -51,6 +52,7 @@ sub save {
     }
 }
 
+# =========================
 # PUBLIC STATIC convert COMMENT statements to form prompts
 sub prompt {
     #my ( $previewing, $text, $web, $topic ) = @_;
@@ -69,6 +71,8 @@ sub prompt {
     my $idx = 0;
     $_[1] =~ s/%COMMENT({.*?})?%/_handleInput($1,$_[2],$_[3],\$idx,$message,$disable,$defaultType)/eg;
 }
+
+# =========================
 
 =pod
 
@@ -89,6 +93,7 @@ sub _getTemplateLocation {
     return $templatetopic;
 }
 
+# =========================
 # PRIVATE generate an input form for a %COMMENT tag
 sub _handleInput {
     my ( $attributes, $web, $topic, $pidx, $message,
@@ -204,6 +209,7 @@ sub _handleInput {
     return $input;
 }
 
+# =========================
 # PRIVATE get the given template and do standard expansions
 sub _getTemplate {
     my ( $name, $topic, $web, $templatetopic, $warn ) = @_;
@@ -229,6 +235,7 @@ sub _getTemplate {
     return $t;
 }
 
+# =========================
 # PRIVATE expand special %param|default% parameters in PROMPT template
 sub _expandPromptParams {
     my ( $name, $default, $attrs ) = @_;
@@ -238,6 +245,7 @@ sub _expandPromptParams {
     return $default;
 }
 
+# =========================
 # PRIVATE STATIC Performs comment insertion in the topic.
 sub _buildNewTopic {
     #my ( $text, $topic, $web ) = @_;
@@ -247,8 +255,7 @@ sub _buildNewTopic {
     return unless $query;
 
     my $type = $query->param( 'comment_type' ) ||
-      TWiki::Func::getPreferencesValue('COMMENTPLUGIN_DEFAULT_TYPE') ||
-          'below';
+      TWiki::Func::getPreferencesValue('COMMENTPLUGIN_DEFAULT_TYPE') || 'above';
     my $index = $query->param( 'comment_index' ) || 0;
     my $anchor = $query->param( 'comment_anchor' );
     my $location = $query->param( 'comment_location' );
@@ -348,6 +355,7 @@ sub _buildNewTopic {
     $_[0] = $premeta . $text . $postmeta;
 }
 
+# =========================
 # PRIVATE embed output if this comment is the interesting one
 sub _nth {
     my ( $tag, $pidx, $position, $index, $output ) = @_;
@@ -363,6 +371,7 @@ sub _nth {
     return $tag;
 }
 
+# =========================
 # PRIVATE remove the nth comment box
 sub _remove_nth {
     my( $tag, $pidx, $index ) = @_;
@@ -371,4 +380,5 @@ sub _remove_nth {
     return $tag;
 }
 
+# =========================
 1;

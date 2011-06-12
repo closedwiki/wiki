@@ -27,13 +27,13 @@ use strict;
 require TWiki::Func;
 require TWiki::Plugins;
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC );
+# =========================
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-03-28';
+our $SHORTDESCRIPTION = 'Quickly post comments to a page without an edit/preview/save cycle';
+our $NO_PREFS_IN_TOPIC = 1;
 
-$VERSION = '$Rev$';
-$RELEASE = '2011-03-28';
-
-$SHORTDESCRIPTION = 'Allows users to quickly post comments to a page without an edit/preview/save cycle';
-
+# =========================
 sub initPlugin {
     #my ( $topic, $web, $user, $installWeb ) = @_;
 
@@ -45,6 +45,7 @@ sub initPlugin {
     return 1;
 }
 
+# =========================
 sub commonTagsHandler {
     my ( $text, $topic, $web, $meta ) = @_;
 
@@ -63,6 +64,7 @@ sub commonTagsHandler {
                                                     $_[0], $web, $topic );
 }
 
+# =========================
 sub beforeSaveHandler {
     #my ( $text, $topic, $web ) = @_;
 
@@ -77,4 +79,5 @@ sub beforeSaveHandler {
     TWiki::Plugins::CommentPlugin::Comment::save( @_ );
 }
 
+# =========================
 1;

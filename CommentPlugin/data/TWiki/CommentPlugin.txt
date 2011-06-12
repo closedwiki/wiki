@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301343379" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307861708" format="1.1" version="$Rev$"}%
 ---+!! Comment Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -77,7 +77,7 @@ A set of default comment templates are shipped with the plugin - see also Commen
 | =threadmode= | Wiki thread mode comment, signed and dated (server time) |
 | =tableprepend= | Comments, signed and dated (server time), formatted as an HTML table row, added below the anchor (which must be in an HTML &lt;table>) |
 | =tableappend= | Comments, signed and dated (server time), formatted as an HTML table row, added above the anchor (which must be in an HTML &lt;table>) |
-| =action= | Action added to action table directly above comment box (see <a href="#Installation">Plugin Installation Instructions</a> below for important notes) |
+| =action= | Action added to action table directly above comment box (see [[#PluginInstallation][Plugin Installation Instructions]] below for important notes) |
 | =table= | Tablerows adding on end |
 | =toctalk= | Talk using TOC adding on end |
 | =bookmark= | Create a list of annotated bookmarks |
@@ -225,29 +225,23 @@ There are also four position tags that are used to indicate where the comment sh
     | =%<nop>POS:BEFORE%= | If present, comments will be inserted <b>immediately before the =%<nop>COMMENT%= tag</b> |
     | =%<nop>POS:AFTER%= | If present, comments will be inserted <b>immediately after the =%<nop>COMMENT%= tag</b> |
 
-Note that these position tags are obviously mutually exclusive. If you define more than one, the result is undefined. If none is present, the default is taken from the plugin setting =DEFAULT_TYPE=
+Note that these position tags are obviously mutually exclusive. If you define more than one, the result is undefined. If none is present, the default is taken from the plugin setting =COMMENTPLUGIN_DEFAULT_TYPE=
 
     | =%<nop>COMMENTPROMPT%= | Use with a custom form. If present, the comment prompt will be positioned here. |
     
 All the usual TWikiVariables that can be used in a topic template can also be used in an =OUTPUT= template. See %SYSTEMWEB%.TWikiVariables for details.
 
----++ Settings
+---++ Plugin Settings
 
-<!-- required for compatibility
-      * Set SHORTDESCRIPTION = Allows users to quickly post comments to a page without an edit/preview/save cycle.
-   * Name of file in the 'templates' directory that contains the comment templates. The default 'comments.tmpl' automatically includes user templates from %SYSTEMWEB%.CommentPluginTemplate
-      * Set TEMPLATES = comments
-   * Default template type (if not present, defaults to "below")
-      * Set DEFAULT_TYPE = above
--->
-Two TWiki Preference variables are recognized by the CommentPlugin:
+Plugin settings are stored as preferences settings. Do __not__ change the settings here, they are here only for illustration purposes showing the default values. Define the settings in [[%LOCALSITEPREFS%]], in a !WebPreferences or in individual topics. For example, to customize the =COMMENTPLUGIN_DEFAULT_TYPE= setting, add a =* Set COMMENTPLUGIN_DEFAULT_TYPE = ...= bullet in <nop>%LOCALSITEPREFS%.
 
-| *Preference* | *Default* | *Description* |
-| =%<nop>COMMENTPLUGIN_TEMPLATES%= | =comments= | Name of template file in the 'templates' directory that contains the comment templates. The default 'comments.tmpl' automatically includes user templates from %SYSTEMWEB%.CommentPluginTemplate, which in turn includes %SYSTEMWEB%.UserCommentsTemplate. |
-| =%<nop>COMMENTPLUGIN_DEFAULT_TYPE%= | =above= | Default template type |
-These can be set in !TWikiPreferences, in !WebPreferences or in individual topics.
+   * Name of file in the =twiki/templates= directory that contains the comment templates. The default 'comments.tmpl' automatically includes user templates from [[%SYSTEMWEB%.CommentPluginTemplate]], which in turn includes [[%SYSTEMWEB%.UserCommentsTemplate]].
+      * Set COMMENTPLUGIN_TEMPLATES = comments
 
-#Installation
+   * Default template type (above or below) :
+      * Set COMMENTPLUGIN_DEFAULT_TYPE = above
+
+#PluginInstallation
 ---++ Plugin Installation Instructions
 
    * This plugin is pre-installed in TWiki releases. However if you need to upgrade the plugin for any reason:
@@ -266,11 +260,14 @@ Note that if you want to use the =action= template then you must also:
 
 ---++ Plugin Info
 
+   * Set SHORTDESCRIPTION = Quickly post comments to a page without an edit/preview/save cycle.
+
 |  Plugin Author: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk inspired by the work of TWiki:Main.DavidWeller and TWiki:Main.PeterMasiar |
 |  Copyright: | &copy; 2004, TWiki:Main.CrawfordCurrie; %BR% &copy; 2009 TWiki:Main.SopanShewale; %BR% &copy; 2004-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-06-11: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2011-03-28: | TWikibug:Item6672 - doc improvements: Adding link to HIDE |
 |  2010-12-11: | TWikibug:Item6530 - doc improvements -- TWiki:Main.ScottGutman |
 |  2010-05-16: | TWikibug:Item6433 - doc improvements |
