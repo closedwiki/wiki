@@ -1,7 +1,7 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2011 Peter Thoeny, peter[at]thoeny.org
-# Copyright (C) 2011 TWiki Contributors. All Rights Reserved.
+# Copyright (C) 2010-2011 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2010-2011 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution. NOTE: Please extend that file, not this notice.
 #
@@ -30,18 +30,13 @@ use strict;
 
 require TWiki::Func;    # The plugins API
 
-use vars qw( 
-  $VERSION $RELEASE $SHORTDESCRIPTION 
-  $NO_PREFS_IN_TOPIC
-  $doneHeader $header
-);
-
-$VERSION = '$Rev$';
-$RELEASE = '2010-11-30';
-$SHORTDESCRIPTION = "Color picker, packaged for use in TWiki forms and TWiki applications";
-$NO_PREFS_IN_TOPIC = 1;
-
-$header = <<'HERE';
+# ==========================================================================
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-06-11';
+our $SHORTDESCRIPTION = "Color picker, packaged for use in TWiki forms and TWiki applications";
+our $NO_PREFS_IN_TOPIC = 1;
+our $doneHeader;
+our $header = <<'HERE';
 <script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/ColorPickerPlugin/farbtastic.js"></script>
 <link rel="stylesheet" href="%PUBURLPATH%/%SYSTEMWEB%/ColorPickerPlugin/farbtastic.css" type="text/css" media="all" />
 HERE
@@ -99,22 +94,6 @@ sub handleColorPicker  {
 ---+++ renderForEdit
 
 TWiki::Plugins::ColorPickerPlugin::renderForEdit($name, $value, [, \%options]) -> $html
-
-This is the simplest way to use the color picker from a plugin.
-
-   * =$name= is the name of the CGI parameter for the color picker
-     (it should be unique),
-   * =$value= is the color such as '#8899aa' (may be empty)
-   * =\%options= is an optional hash containing base options for
-     the textfield.
-Example:
-<verbatim>
-use TWiki::Plugins::ColorPickerPlugin;
-TWiki::Plugins::ColorPickerPlugin::addHEAD();
-my $html = "<form>\n";
-$html .= TWiki::Plugins::ColorPickerPlugin::renderForEdit( 'webcolor', $value );
-...
-</verbatim>
 
 =cut
 
