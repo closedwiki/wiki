@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307861708" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307862400" format="1.1" version="$Rev$"}%
 ---+!! Comment Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -267,7 +267,7 @@ Note that if you want to use the =action= template then you must also:
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-06-11: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
+|  2011-06-12: | TWikibug:Item6725: Change global package variables from "use vars" to "our"; adding NO_PREFS_IN_TOPIC in plugin package -- TWiki:Main.PeterThoeny |
 |  2011-03-28: | TWikibug:Item6672 - doc improvements: Adding link to HIDE |
 |  2010-12-11: | TWikibug:Item6530 - doc improvements -- TWiki:Main.ScottGutman |
 |  2010-05-16: | TWikibug:Item6433 - doc improvements |
