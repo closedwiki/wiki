@@ -65,46 +65,33 @@ function canSubmit(inForm, inShouldConvertInput) {
 		twiki.HTML.setHtmlOfElementWithId("webTopicCreatorFeedback", "");
 		return false;
 	}
-	
-	var hasNonWikiWordCheck = (inForm.nonwikiword != undefined);
-	var userAllowsNonWikiWord = true;
-	if (hasNonWikiWordCheck) {
-		userAllowsNonWikiWord = inForm.nonwikiword.checked;
-	}
-	
-	/* check if current input is a valid WikiWord */
-	var noSpaceName = removeSpacesAndPunctuation(inputForTopicName);
+
+	var userAllowsNonWikiWord = 
+          ( ( inForm.nonwikiword != undefined ) && inForm.nonwikiword.checked ) ? true : false;
 
 	/*
 	if necessary, create a WikiWord from the input name
 	(when a non-WikiWord is not allowed)
 	*/
-	var wikiWordName = noSpaceName;
-	if (!userAllowsNonWikiWord) {
-		wikiWordName = removeSpacesAndPunctuation(twiki.String.capitalize(inputForTopicName));
-	}
-	if (userAllowsNonWikiWord) {
-		wikiWordName = removeSpacesAndPunctuation(capitalizeSentence(inputForTopicName));
+	if( userAllowsNonWikiWord ) {
+		inputForTopicName = capitalizeFirstChar( inputForTopicName );
+		inputForTopicName = removeSpacesAndPunctuation( inputForTopicName );
+	} else {
+		inputForTopicName = twiki.String.capitalize( inputForTopicName );
+		inputForTopicName = twiki.String.removeSpaces( inputForTopicName );
+		inputForTopicName = twiki.String.removePunctuation( inputForTopicName );
 	}
 	
 	if (inShouldConvertInput) {
-		if (hasNonWikiWordCheck && userAllowsNonWikiWord) {
-			inForm.topic.value = noSpaceName;
-		} else {
-			inForm.topic.value = wikiWordName;
-		}
+		inForm.topic.value = inputForTopicName;
 	}
 
 	/* Update feedback field */
-	if (wikiWordName != inputForTopicName) {
-		feedbackHeader = "<strong>" + TEXT_FEEDBACK_HEADER + "</strong>";
-		feedbackText = feedbackHeader + wikiWordName;
-		twiki.HTML.setHtmlOfElementWithId("webTopicCreatorFeedback", feedbackText);
-	} else {
-		twiki.HTML.setHtmlOfElementWithId("webTopicCreatorFeedback", "");
-	}
-	
-	if (twiki.String.isWikiWord(wikiWordName) || userAllowsNonWikiWord) {
+	feedbackHeader = "<strong>" + TEXT_FEEDBACK_HEADER + "</strong>";
+	feedbackText = feedbackHeader + inputForTopicName;
+	twiki.HTML.setHtmlOfElementWithId( "webTopicCreatorFeedback", feedbackText );
+
+	if( twiki.String.isWikiWord( inputForTopicName ) || userAllowsNonWikiWord ) {
 		enableSubmit(inForm.submit);
 		return true;
 	} else {
@@ -113,9 +100,12 @@ function canSubmit(inForm, inShouldConvertInput) {
 	}
 }
 function removeSpacesAndPunctuation (inText) {
-	return twiki.String.removePunctuation(twiki.String.removeSpaces(inText));
+        inText = twiki.String.removeSpaces(inText);
+        var allowedRegex = "[^" + ALLOWED_URL_CHARS + "]";
+        var re = new RegExp(allowedRegex, "g");
+        return inText.replace(re, "");
 }
-function capitalizeSentence (inText) {
+function capitalizeFirstChar (inText) {
 	return inText.substr(0,1).toUpperCase() + inText.substr(1);
 }
 /**
