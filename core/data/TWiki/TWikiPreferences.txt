@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1289001006" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1307861933" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -221,6 +221,13 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
    * Detailed diagnostics can be found in InstalledPlugins
    * Legacy settings:
       * Set INSTALLEDPLUGINS = The INSTALLEDPLUGINS variable is no longer supported. You can set the Plugins execution order using the [[%SCRIPTURLPATH{"configure"}%][configure]] interface.
+
+<!-- Legacy settings for !CommentPlugin:
+   * Name of file in the 'templates' directory that contains the comment templates:
+      * Set COMMENTPLUGIN_TEMPLATES = comments
+   * Default template type:
+      * Set COMMENTPLUGIN_DEFAULT_TYPE = above
+-->
 
 #RenderingShortcuts
 ---++ Rendering Shortcuts Settings
