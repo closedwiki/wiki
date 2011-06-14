@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1292905900" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1308023687" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarQUERYPARAMS
 ---+++ QUERYPARAMS -- show paramaters to the query
@@ -13,5 +13,5 @@
      | =$name= | Name of the parameter |
      | =$value= | String value of the parameter. Multi-valued parameters will have a "row" for each value. |
 %INCLUDE{FormatTokens}%
-   * Example: =%<nop>QUERYPARAMS{format="&lt;input type='hidden' name='$name' value='$value' encoding="entity" />"}%=
+   * Example: =%<nop>QUERYPARAMS{format="&lt;input type='hidden' name='$name' value='$value' encoding="html" />"}%=
    * See also [[VarQUERYSTRING][QUERYSTRING]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarURLPARAM][URLPARAM]]
