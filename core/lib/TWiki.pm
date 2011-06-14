@@ -3926,15 +3926,18 @@ sub _encode {
     my ($type, $text) = @_;
 
     if ( $type =~ /^entit(y|ies)$/i ) {
+        # entity encode
         return entityEncode( $text );
     } elsif ( $type =~ /^html$/i ) {
-        return entityEncode( $text, "\n\r" );
+        # entity encode, encode also space, newline and linefeed
+        return entityEncode( $text, " \n\r" );
     } elsif ( $type =~ /^quotes?$/i ) {
         # escape quotes with backslash (Bugs:Item3383 fix)
         $text =~ s/\"/\\"/go;
         return $text;
     } elsif ($type =~ /^url$/i) {
-        $text =~ s/\r*\n\r*/<br \/>/; # Legacy.
+        # legacy
+        $text =~ s/\r*\n\r*/<br \/>/;
         return urlEncode( $text );
     } elsif ( $type =~ /^(off|none)$/i ) {
         # no encoding
