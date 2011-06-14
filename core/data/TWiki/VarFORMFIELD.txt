@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1294556032" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1308022908" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarFORMFIELD
 ---+++ FORMFIELD{"fieldname"} -- renders a field in the form attached to some topic
@@ -11,7 +11,7 @@
      | =default="..."= | Text shown when no value is defined for the field | =""= |
      | =alttext="..."= | Text shown when field is not found in the form | =""= |
      | =newline="$br"= | Convert newlines in textarea to other delimiters. Variable =$br= expands to =&lt;br /&gt;= tag, and =$n= to a newline. Other text is encoded based on =encode= parameter. | no conversion |
-     | =encode="entity"= | Encode special characters into HTML entities. If a FORMFIELD is passed into an HTML form field it must be entity encoded. Additional encodings: =encode="quote"=, =encode="moderate"=, =encode="safe"=, =encode="html"= and =encode="url"=. See [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENCODE][ENCODE]] for more details. | =""= (no encoding) |
+     | =encode="html"= | Encode special characters into HTML entities. If a FORMFIELD is passed into an HTML form field it should be encoded as ="html"=. Additional encodings available: =encode="quote"=, =encode="moderate"=, =encode="safe"=, =encode="entity"= and =encode="url"=. See [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENCODE][ENCODE]] for details. | =""= (no encoding) |
    * Example: =%<nop>FORMFIELD{"<nop>ProjectName" topic="Projects.<nop>SushiProject" default="(not set)" alttext="<nop>ProjectName field not found"}%= 
-   * Example: =&lt;input type="text" name="Address" value="%<nop>FORMFIELD{ "Address" encode="entity" }%" /&gt;=
+   * Example: =&lt;input type="text" name="Address" value="%<nop>FORMFIELD{ "Address" encode="html" }%" /&gt;=
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENCODE][ENCODE]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarMETASEARCH][METASEARCH]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSEARCH][SEARCH]], FormattedSearch, QuerySearch, SearchHelp
