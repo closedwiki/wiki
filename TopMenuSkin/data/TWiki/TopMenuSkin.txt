@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305707580" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1308114756" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -243,8 +243,9 @@ The top bar TopMenuSkinTopBar (with menu bar, logo and search boxes) can be clon
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Screenshot" title="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2011-05-18 (v2.0) |
+|  Skin Version: | 2011-06-14 (v2.1) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-06-14: | TWikibug:Item6751: Fix for cutoff buttons in header when using IE7 -- TWiki:Main.BradleyMellen |
 |  2011-05-18: | TWikibug:Item6682: Read-only skin mode with READONLYSKINMODE preferences setting |
 |  2011-03-09: | TWikibug:Item6659: Customizable web-specific TopMenuSkinTopBar |
 |  2011-01-03: | TWikibug:Item6628: Minor gradient fix - change action buttons area from plain white to pale gray to align with PatternSkin; adding pale shadow |
