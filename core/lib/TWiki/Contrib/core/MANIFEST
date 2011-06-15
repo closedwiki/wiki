@@ -486,6 +486,8 @@ lib/TWiki/Configure/Checkers/ScriptUrlPath.pm 0444
 lib/TWiki/Configure/Checkers/Sessions/ExpireAfter.pm 0444
 lib/TWiki/Configure/Checkers/Site/CharSet.pm 0444
 lib/TWiki/Configure/Checkers/Site/Locale.pm 0444
+lib/TWiki/Configure/Checkers/SmimeCertificateFile.pm 0444
+lib/TWiki/Configure/Checkers/SmimeKeyFile.pm 0444
 lib/TWiki/Configure/Checkers/StoreImpl.pm 0444
 lib/TWiki/Configure/Checkers/TemplateDir.pm 0444
 lib/TWiki/Configure/Checkers/UploadFilter.pm 0444
