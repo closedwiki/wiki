@@ -1037,6 +1037,24 @@ $TWiki::cfg{WebMasterEmail} = '';
 # last name, e.g. =Fred Smith=) (used in %WIKIWEBMASTERNAME%)
 $TWiki::cfg{WebMasterName} = 'TWiki Administrator';
 
+# **PATH**
+# Secure email certificate.  If you want e-mail sent by TWiki to be signed,
+# specify the filename of the administrator's X.509 certificate here.  It 
+# must be in PEM format.  You must also use a mail program (not Net::SMTP)
+# in the following settings. <em>If you do not want signed e-mail,
+# leave this field blank. </em>
+$TWiki::cfg{SmimeCertificateFile} = '$TWiki::cfg{DataDir}/cert.pem';
+
+# **PATH**
+# Secure email certificate.  If you want e-mail sent by TWiki to be signed,
+# specify the filename of the administrator's X.509 private key here.  It 
+# must be in PEM format.  <em>Be sure that this file is only readable by the 
+# TWiki software; it must NOT be readable by users!</em>
+# You must also use a mail program (not Net::SMTP)
+# in the following settings. <em>If you do not want signed e-mail,
+# leave this field blank. </em>
+$TWiki::cfg{SmimeKeyFile} = '$TWiki::cfg{DataDir}/key.pem';
+
 # **COMMAND**
 # Mail program. If Net::SMTP is installed, it will be used in preference. 
 # To force TWiki to use the {MailProgram}, unset both {SMTP}{MAILHOST} 
@@ -1087,7 +1105,7 @@ $TWiki::cfg{NotifyTopicName}     = 'WebNotify';
 
 # **BOOLEAN EXPERT**
 # Set this option on to enable debug
-# mode in SMTP. Output will go to the webserver error log.
+# mode in SMTP. Output will go to the webserver error log
 $TWiki::cfg{SMTP}{Debug} = 0;
 
 # **STRING 30 EXPERT**

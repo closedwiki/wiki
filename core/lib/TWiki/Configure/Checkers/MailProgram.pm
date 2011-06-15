@@ -30,21 +30,31 @@ use base 'TWiki::Configure::Checker';
 sub check {
     my $this = shift;
 
-    return '' if( !$Twiki::cfg{EnableEmail} );
+    return '' if( !$TWiki::cfg{EnableEmail} );
 
     eval "use Net::SMTP";
-    my $n;
+    my $n = '';
     my $useprog = 0;
+
+    my $signmail = 0;
+    if( $TWiki::cfg{SmimeCertificateFile} || $TWiki::cfg{SmimeKeyFile} ) {
+	$signmail = 1;
+	unless( $TWiki::cfg{SmimeCertificateFile} && $TWiki::cfg{SmimeKeyFile} ) {
+	    $n = $this->WARN( "Signed e-mail requires both a certificate and a key file."); 
+	}
+    }
     if ($@) {
-        $n = "Net::SMTP is <b>not</b> installed in this environment. ";
+        $n .= "Net::SMTP is <b>not</b> installed in this environment. ";
         $useprog = 1;
     } elsif( !$TWiki::cfg{SMTP}{MAILHOST} ) {
-        $n = $this->WARN('Net::SMTP is installed in this environment, but {SMTP}{MAILHOST} is not defined, so the {MailProgram} <b>will</b> be used..');
+        $n .= $this->WARN('Net::SMTP is installed in this environment, but {SMTP}{MAILHOST} is not defined, so the {MailProgram} <b>will</b> be used..') unless( $signmail );
         $useprog = 1;
     } else {
-        $n = $this->NOTE('<em>Net::SMTP is installed in this environment, so this setting will <b>not</b> be used.</em>');
+        $n .= $this->NOTE('<em>Net::SMTP is installed in this environment, so this setting will <b>not</b> be used.</em>');
+	$n .= $this->WARN('<em>Signed e-mail is not supported by Net::SMTP.  If you want signed e-mail, please leave {SMTP}{MAILHOST} blank.  If not, please leave {SmimeCertificateFile} and {SmimeKeyFile} blank.') if( $signmail );
         $useprog = 0;
     }
+
     if ($useprog) {
         my $val = $TWiki::cfg{MailProgram} || '';
         $val =~ s/\s.*$//g;

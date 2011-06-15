@@ -359,6 +359,8 @@ sub sendEmail {
             # be nasty to errors that we didn't throw. They may be
             # caused by SMTP or perl, and give away info about the
             # install that we don't want to share.
+	    $e = join( "\n", grep( /^ERROR/, split( /\n/, $e ) ) );
+
             unless( $e =~ /^ERROR/ ) {
                 $e = "Mail could not be sent - see TWiki warning log.";
             }
@@ -382,6 +384,24 @@ sub _fixLineLength {
 }
 
 # =======================================
+sub _slurpFile( $ ) {
+    my $file = shift;
+
+    unless( open( IN, '<', $file ) ) {
+	( $<,$>) = ( $>,$<);
+	die( "Failed to open $file: $!\n" );
+    }
+    my $text = do { local( $/ ); <IN> };
+
+    unless( close IN ) {
+	( $<,$>) = ( $>,$<);
+	die( "Failed to close $file: $!\n" );
+    }
+
+    return $text;
+}
+
+# =======================================
 sub _sendEmailBySendmail {
     my( $this, $text ) = @_;
 
@@ -390,6 +410,14 @@ sub _sendEmailBySendmail {
     $header =~ s/([\n\r])(From|To|CC|BCC)(\:\s*)([^\n\r]*)/$1.$2.$3._fixLineLength($4)/geois;
     $text = "$header\n\n$body";   # rebuild message
 
+    if( $TWiki::cfg{SmimeCertificateFile} && $TWiki::cfg{SmimeKeyFile} ) {
+	use Crypt::SMIME;
+
+	my $smime = Crypt::SMIME->new();
+
+	$smime->setPrivateKey( _slurpFile( $TWiki::cfg{SmimeKeyFile} ), _slurpFile( $TWiki::cfg{SmimeCertificateFile} ) );
+	$text = $smime->sign( $text );
+    }
     open( MAIL, '|'.$TWiki::cfg{MailProgram} ) ||
       die "ERROR: Can't send mail using TWiki::cfg{MailProgram}";
     print MAIL $text;
