@@ -411,7 +411,7 @@ sub _sendEmailBySendmail {
     $text = "$header\n\n$body";   # rebuild message
 
     if( $TWiki::cfg{SmimeCertificateFile} && $TWiki::cfg{SmimeKeyFile} ) {
-	use Crypt::SMIME;
+	require Crypt::SMIME;
 
 	my $smime = Crypt::SMIME->new();
 
