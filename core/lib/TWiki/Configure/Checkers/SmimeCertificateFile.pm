@@ -1,4 +1,3 @@
-+# TWiki Enterprise Collaboration Platform, http://TWiki.org/
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2009-2011 TWiki Contributors.
