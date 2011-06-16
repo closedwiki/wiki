@@ -583,9 +583,11 @@ sub searchWeb {
     # Generate 'Search:' part showing actual search string used
     unless( $noSearch ) {
         my $searchStr = $searchString;
-        $searchStr  =~ s/&/&amp;/go;
-        $searchStr  =~ s/</&lt;/go;
-        $searchStr  =~ s/>/&gt;/go;
+        $searchStr  =~ s/&/&amp;/go; # escape entities
+        $searchStr  =~ s/</&lt;/go;  # escape HTML
+        $searchStr  =~ s/>/&gt;/go;  # escape HTML
+        $searchStr  =~ s/%/&#37;/go; # escape TWiki variables
+        $searchStr  =~ s/ /&#32;/go; # escape TWiki text formatting
         $searchStr  =~ s/^\.\*$/Index/go;
         $tmplSearch =~ s/%SEARCHSTRING%/$searchStr/go;
         if( defined $callback ) {
