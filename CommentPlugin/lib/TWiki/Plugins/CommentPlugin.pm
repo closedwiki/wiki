@@ -29,7 +29,7 @@ require TWiki::Plugins;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-06-12';
+our $RELEASE = '2011-06-16';
 our $SHORTDESCRIPTION = 'Quickly post comments to a page without an edit/preview/save cycle';
 our $NO_PREFS_IN_TOPIC = 1;
 
