@@ -35,13 +35,17 @@ BEGIN {
     }
 }
 
-use vars qw(
-            $disabledFlag $disablePluralToSingular
-            $webNameRegex $wikiWordRegex $abbrevRegex $singleMixedAlphaNumRegex
-            $noAutolink $redirectable $initialised @webList %linkedWords $findAcronyms
-           );
-
-$initialised = 0;
+our $disablePluralToSingular;
+our $webNameRegex;
+our $wikiWordRegex;
+our $abbrevRegex;
+our $singleMixedAlphaNumRegex;
+our $noAutolink;
+our $redirectable;
+our $initialised = 0;
+our @webList;
+our %linkedWords;
+our $findAcronyms;
 
 sub _debug {
     # Uncomment for debug

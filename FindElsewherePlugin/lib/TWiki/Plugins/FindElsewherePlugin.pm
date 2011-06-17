@@ -27,15 +27,12 @@ package TWiki::Plugins::FindElsewherePlugin;
 
 use strict;
 
-use vars qw(
-            $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION $disabled
-           );
+our $RELEASE = '$Rev$';
+our $VERSION = '2011-06-16';
 
-$RELEASE = '$Rev$';
-$VERSION = '2011-06-16';
-
-$NO_PREFS_IN_TOPIC = 1;
-$SHORTDESCRIPTION = "Automatically link to topic in other web(s) if it isn't found in the current web";
+our $NO_PREFS_IN_TOPIC = 1;
+our $SHORTDESCRIPTION = "Automatically link to topic in other web(s) if it isn't found in the current web";
+our $disabled;
 
 sub initPlugin {
     #my( $topic, $web, $user, $installWeb ) = @_;
@@ -51,7 +48,7 @@ sub initPlugin {
     unless( defined( $disabled )) {
         # Compatibility, deprecated
         $disabled =
-          TWiki::Func::getPluginPreferencesFlag( "DISABLELOOKELSEWHERE" );
+          TWiki::Func::getPreferencesFlag( "FINDELSEWHEREPLUGIN_DISABLELOOKELSEWHERE" );
     }
 
     return !$disabled;
