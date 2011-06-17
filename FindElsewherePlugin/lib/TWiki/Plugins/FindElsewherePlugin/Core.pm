@@ -3,7 +3,7 @@
 # Copyright (C) 2002 Mike Barton, Marco Carnut, Peter HErnst
 # Copyright (C) 2003 Martin Cleaver, (C) 2004 Matt Wilkie
 # Copyright (C) 2007 Crawford Currie
-# Copyright (C) 2002-2010 TWiki Contributors. All Rights Reserved.
+# Copyright (C) 2002-2011 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 #
@@ -253,7 +253,7 @@ sub findTopicElsewhere {
             return $renderedLink;
         }
     }
-    return $linkText;
+    return $original;
 }
 
 sub makeSingular  {

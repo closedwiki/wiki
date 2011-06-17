@@ -3,7 +3,7 @@
 # Copyright (C) 2002 Mike Barton, Marco Carnut, Peter HErnst
 # Copyright (C) 2003 Martin Cleaver, (C) 2004 Matt Wilkie
 # Copyright (C) 2007 Crawford Currie
-# Copyright (C) 2002-2010 TWiki Contributors. All Rights Reserved.
+# Copyright (C) 2002-2011 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 #
@@ -32,7 +32,7 @@ use vars qw(
            );
 
 $RELEASE = '$Rev$';
-$VERSION = '2010-08-06';
+$VERSION = '2011-06-16';
 
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = "Automatically link to topic in other web(s) if it isn't found in the current web";
