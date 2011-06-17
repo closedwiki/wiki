@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1308285704" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1308286674" format="1.1" version="$Rev$"}%
 ---+!! Find Elsewhere Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -124,11 +124,12 @@ Enabled for demo and testing - try it on and off
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MikeBarton |
-|  Copyright: | &copy; 2002 TWiki:Main.MikeBarton, %BR% &copy; 2002-2010 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2002 TWiki:Main.MikeBarton, %BR% &copy; 2002-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-08-06: | TWikibug:Item6753: Fix for plugin failing on Specific Links =[<nop>[WikiWord][displayed reference]]= when !WikiWord doesn't exist -- TWiki:Main.JohnRouillard |
+|  2011-06-16: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
+|  2011-06-16: | TWikibug:Item6753: Fix for plugin failing on Specific Links =[<nop>[WikiWord][displayed reference]]= when !WikiWord doesn't exist -- TWiki:Main.JohnRouillard |
 |  2010-08-06: | TWikibug:Item6530 - doc enhancements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  19 Dec 2007: | TWiki:Main.SteffenPoulsen - Link none, first or all standalone abbreviations (LOOKELSEWHEREFORACRONYMS option added) |
 |  18 Dec 2007: | TWiki:Main.SteffenPoulsen - Abbrev with alternative linktext found elsewhere again |
