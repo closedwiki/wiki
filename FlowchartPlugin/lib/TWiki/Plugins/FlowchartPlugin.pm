@@ -782,9 +782,11 @@ sub encaixaMapImg {
     $title =~ s/\"/\'/g;
     $title =~ s/\s+/ /g;
     my $anchor = $title;
-    $anchor =~ s/[^a-zA-Z0-9]/_/g;
-    $anchor =~ s/_+/_/g;
-    $anchor =~ s/(^_*|_*$)//g;
+    $anchor =~ s/[^a-zA-Z0-9]/_/g;      # remove illegal chars
+    $anchor =~ s/_+/_/g;                # remove excessive '_'
+    $anchor =~ s/^_+//;                 # no leading '_'
+    $anchor = substr( $anchor, 0, 32 ); # truncate to 32 chars
+    $anchor =~ s/_+$//;                 # no trailing '_'
     my $x =
       ( $fluxItens{$id}->{x} * $caixa{areaX} -
           ( ( $caixa{areaX} + $caixa{w} ) / 2 ) ) * $reduce;
