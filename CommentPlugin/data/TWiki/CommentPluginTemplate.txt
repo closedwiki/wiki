@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1269058626" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1308282927" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="CommentPlugin"}%
 ---+!! Templates for CommentPlugin
 
@@ -210,6 +210,7 @@ Action added to action table directly above comment box
 </verbatim>
 <verbatim>
 %TMPL:DEF{OUTPUT:action}%%POS:BEFORE%%AC%NOP%TION{who="%URLPARAM{"action_who"}%" due="%URLPARAM{"action_due"}%"}% %URLPARAM{"action_comment" newline="<br />"}%<br />- Created by %WIKIUSERNAME%, %SERVERTIME%
+%ENDAC%NOP%TION%
 %TMPL:END%
 </verbatim>
 
