@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1281126060" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1308285704" format="1.1" version="$Rev$"}%
 ---+!! Find Elsewhere Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -8,10 +8,12 @@
 
    * Set SHORTDESCRIPTION = Automatically link to topic in other web(s) if it isn't found in the current web
 -->
-%SHORTDESCRIPTION%
-<sticky><div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
-</div></sticky>
+</div>
+</sticky>
+%SHORTDESCRIPTION%
 
 ---++ Introduction
 
@@ -126,6 +128,7 @@ Enabled for demo and testing - try it on and off
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-08-06: | TWikibug:Item6753: Fix for plugin failing on Specific Links =[<nop>[WikiWord][displayed reference]]= when !WikiWord doesn't exist -- TWiki:Main.JohnRouillard |
 |  2010-08-06: | TWikibug:Item6530 - doc enhancements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  19 Dec 2007: | TWiki:Main.SteffenPoulsen - Link none, first or all standalone abbreviations (LOOKELSEWHEREFORACRONYMS option added) |
 |  18 Dec 2007: | TWiki:Main.SteffenPoulsen - Abbrev with alternative linktext found elsewhere again |
@@ -145,3 +148,5 @@ Enabled for demo and testing - try it on and off
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.UserDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory
