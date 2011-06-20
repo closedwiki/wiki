@@ -25,10 +25,11 @@ use TWiki::Configure::Load;
 sub check {
     my $this = shift;
 
-    my $certFile = $TWiki::cfg{SmimeKeyFile} || "";
-    $certFile =~ s/%DATE%/DATE/;
-    TWiki::Configure::Load::expandValue($certFile);
-    my $e = !-r ( $certFile ) && "Can\'t read $certFile";
+    my $keyFile = $TWiki::cfg{SmimeKeyFile} || "";
+    $keyFile =~ s/%DATE%/DATE/;
+    TWiki::Configure::Load::expandValue($keyFile);
+    return undef unless( $keyFile );
+    my $e = !-r ( $keyFile ) && "Can\'t read key file $keyFile";
     $e = $this->ERROR($e) if $e;
     return $e;
 }

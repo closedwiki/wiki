@@ -28,7 +28,8 @@ sub check {
     my $certFile = $TWiki::cfg{SmimeCertificateFile} || "";
     $certFile =~ s/%DATE%/DATE/;
     TWiki::Configure::Load::expandValue($certFile);
-    my $e = !-r ( $certFile ) && "Can\'t read $certFile";
+    return undef unless( $certFile );
+    my $e = !-r ( $certFile ) && "Can\'t read cert file $certFile";
     $e = $this->ERROR($e) if $e;
     return $e;
 }
