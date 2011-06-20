@@ -1043,7 +1043,7 @@ $TWiki::cfg{WebMasterName} = 'TWiki Administrator';
 # must be in PEM format.  You must also use a mail program (not Net::SMTP)
 # in the following settings. <em>If you do not want signed e-mail,
 # leave this field blank. </em>
-$TWiki::cfg{SmimeCertificateFile} = '$TWiki::cfg{DataDir}/cert.pem';
+$TWiki::cfg{SmimeCertificateFile} = '';
 
 # **PATH**
 # Secure email certificate.  If you want e-mail sent by TWiki to be signed,
@@ -1053,7 +1053,7 @@ $TWiki::cfg{SmimeCertificateFile} = '$TWiki::cfg{DataDir}/cert.pem';
 # You must also use a mail program (not Net::SMTP)
 # in the following settings. <em>If you do not want signed e-mail,
 # leave this field blank. </em>
-$TWiki::cfg{SmimeKeyFile} = '$TWiki::cfg{DataDir}/key.pem';
+$TWiki::cfg{SmimeKeyFile} = '';
 
 # **COMMAND**
 # Mail program. If Net::SMTP is installed, it will be used in preference. 
