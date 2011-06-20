@@ -1039,18 +1039,18 @@ $TWiki::cfg{WebMasterName} = 'TWiki Administrator';
 
 # **PATH**
 # Secure email certificate.  If you want e-mail sent by TWiki to be signed,
-# specify the filename of the administrator's X.509 certificate here.  It 
-# must be in PEM format.  You must also use a mail program (not Net::SMTP)
-# in the following settings. <em>If you do not want signed e-mail,
-# leave this field blank. </em>
+# specify the filename of the administrator's X.509 certificate here, such
+# as /etc/pki/tls/certs/cert.pem.  It must be in PEM format.  You must also
+# use a mail program (not Net::SMTP) in the following settings. <em>If you
+# do not want signed e-mail, leave this field blank. </em>
 $TWiki::cfg{SmimeCertificateFile} = '';
 
 # **PATH**
 # Secure email certificate.  If you want e-mail sent by TWiki to be signed,
-# specify the filename of the administrator's X.509 private key here.  It 
-# must be in PEM format.  <em>Be sure that this file is only readable by the 
-# TWiki software; it must NOT be readable by users!</em>
-# You must also use a mail program (not Net::SMTP)
+# specify the filename of the administrator's X.509 private key here, such
+# as /etc/pki/tls/private/key.pem.  It must be in PEM format.  <em>Be sure
+# that this file is only readable by the TWiki software; it must NOT be
+# readable by users!</em> You must also use a mail program (not Net::SMTP)
 # in the following settings. <em>If you do not want signed e-mail,
 # leave this field blank. </em>
 $TWiki::cfg{SmimeKeyFile} = '';
