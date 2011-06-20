@@ -804,7 +804,7 @@ register</a> as a normal user first and then add your wikiname to the <a rel="no
       highlighted.</li>
      <li><span class='warn'>Warnings</span> are non-fatal, but are often a good
       indicator that something that is wrong.</li>
-     <li>The little <span class='twikiAlert' title="Not here, stupid. In the table below!">&delta;</span> after an entry means that the current value is <b>not</b> the same as the default value. If you hover the cursor over the <span class='twikiAlert' title="Not here, stupid. In the table below!">&delta;</span>, a popup will show you what the default value is.</li>
+     <li>The little <span class='twikiAlert' title="Default: TWiki Administrator">&delta;</span> after an entry means that the current value is <b>not</b> the same as the default value. If you hover the cursor over the <span class='twikiAlert' title="Default: TWiki Administrator">&delta;</span>, a popup will show you what the default value is.</li>
      <li><b><font color="#f00">EXPERT</font></b> means a setting is for expert use only. You should not fiddle with it unless you know what you are doing, or at least have read all the documentation.
 HERE
         if ( !$expertsMode ) {
