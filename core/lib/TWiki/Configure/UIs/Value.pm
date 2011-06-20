@@ -74,7 +74,7 @@ sub open_html {
       if $value->{mandatory};
     if ($value->needsSaving($valuer)) {
         my $v = $valuer->defaultValue($value) || '';
-        $row2col1 .= CGI::span({title => 'default = '.$v,
+        $row2col1 .= CGI::span({title => 'Default: '.$v,
                                 class => 'twikiAlert'}, '&delta;');
     }
 
