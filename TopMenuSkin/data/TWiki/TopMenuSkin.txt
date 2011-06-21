@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1308114756" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1308641455" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -217,7 +217,7 @@ document.onclick = twTopMenuClose;
    * *Note* on upgrading existing TWiki:
       * See [[#WebSpecific][Web-specific Menu-Bars]] above on how to retrofit and customize menu-bars.
    * *Note* on using this skin on TWiki 4.2 and 4.3:
-      * This skin depends on TWiki 5.0 specific feature =%<nop>WEB{format="$current"}%= to show the current web in the Web menu. To use this skin on TWiki 4.2 or 4.3, remove the parameter from the WEB variable (to show only =%<nop>WEB%=), or apply patch TWiki:Item6424 (to add the format parameter feature).
+      * This skin depends on TWiki 5.0 specific feature =%<nop>WEB{format="$current"}%= to show the current web in the Web menu. To use this skin on TWiki 4.2 or 4.3, remove the parameter from the WEB variable (to show only =%<nop>WEB%=), or apply patch TWikibug:Item6424 (to add the format parameter feature).
       * This skin depends on TWiki 5.0 specific feature =%<nop>ADDTOHEAD{}%= to add style sheets to the HTML head section. Apply patch TWiki:Support.SID-01117 to inline style sheets.
       * Apply patch TWikibug:Item6430 so that Edit and Attach buttons point to the current topic instead of !TopMenuSkinTopBar.
       * Attach %ATTACHURL%/menu-down.gif to %SYSTEMWEB%.TWikiDocGraphics.
