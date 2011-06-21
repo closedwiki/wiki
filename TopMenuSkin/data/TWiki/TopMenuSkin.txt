@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1308641455" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1308679030" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -220,6 +220,7 @@ document.onclick = twTopMenuClose;
       * This skin depends on TWiki 5.0 specific feature =%<nop>WEB{format="$current"}%= to show the current web in the Web menu. To use this skin on TWiki 4.2 or 4.3, remove the parameter from the WEB variable (to show only =%<nop>WEB%=), or apply patch TWikibug:Item6424 (to add the format parameter feature).
       * This skin depends on TWiki 5.0 specific feature =%<nop>ADDTOHEAD{}%= to add style sheets to the HTML head section. Apply patch TWiki:Support.SID-01117 to inline style sheets.
       * Apply patch TWikibug:Item6430 so that Edit and Attach buttons point to the current topic instead of !TopMenuSkinTopBar.
+      * Apply patch TWikibug:Item6438 so that breadcrumb links point to the current web instead of the %SYSTEMWEB% web.
       * Attach %ATTACHURL%/menu-down.gif to %SYSTEMWEB%.TWikiDocGraphics.
       * Attach %ATTACHURL%/twiki-gray.gif to %SYSTEMWEB%.TWikiDocGraphics.
       * If you have more than 30 webs, apply TWikibug:Item6429 to limit the number of webs shown in the "Home" menu.
