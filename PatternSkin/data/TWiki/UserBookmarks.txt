@@ -1,0 +1,100 @@
+%META:TOPICINFO{author="TWikiContributor" date="1308728002" format="1.1" version="$Rev$"}%
+---+ Bookmarks Application Page
+
+This page contains several parts that are used by used bookmark pages. Bookmark pages reside in the %USERSWEB% and are named &lt;wikiname&gt;Bookmarks, such as !JimmyNeutronBookmarks.
+
+---++ Bookmarks Preview in Account Pulldown Menu
+
+%STARTINCLUDE%<div style="float: right; width: 300px;">
+<table><tr><td valign="top" style="white-space: nowrap">
+&nbsp; *Preview:* &nbsp;
+</td><td valign="top">
+%IF{ "' %SKIN% ' ~ '*topmenu*'" then="<nop>" else="$percntINCLUDE{%SYSTEMWEB%.TopMenuSkin}$percnt"}%
+<div class="twTopMenuTab">
+   * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   * [[%WIKIUSERNAME%][ %ICON{"person"}% %MAKETEXT{"Account"}% %ICON{menu-down}%]]
+%IF{
+ "context authenticated"
+ then='      * [[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]'
+ else="<nop>"
+}%
+%IF{
+ "context registration_supported AND context registration_enabled"
+ then="      * [[%SYSTEMWEB%.TWikiRegistration][%MAKETEXT{"Register User"}%]]"
+ else="<nop>"
+}%
+%IF{
+ "'%USERNAME%'!='guest' AND istopic '%USERSWEB%.%WIKINAME%Bookmarks'"
+ then="      * [[%USERSWEB%.%WIKINAME%Bookmarks][----- %MAKETEXT{Bookmarks}% -----]]$n      * [[%SCRIPTURL{viewauth}%/%USERSWEB%/%BASETOPIC%?link=%BASEWEB%.%BASETOPIC%;label=%CALC{$NOP(%)ENCODE{$PROPERSPACE($SUBSTRING(.%BASETOPIC%,2,20))}$NOP(%)}%#AddBookmark][Bookmark this page...]]"
+ else="%IF{"'%USERNAME%'!='guest'" then="      * <a href='%SCRIPTURLPATH{edit}%/%USERSWEB%/%WIKINAME%Bookmarks?templatetopic=%SYSTEMWEB%.UserBookmarksTemplate&amp;topicparent=%WIKINAME%'>%MAKETEXT{Create Bookmarks}%</a>" else="<nop>"}%"
+}%
+%SEARCH{
+ "^\| *<\!\-\-BOOKMARK\-\-> *\|"
+ type="regex"
+ web="%USERSWEB%"
+ topic="%BASETOPIC%"
+ multiple="on"
+ nonoise="on"
+ format="      * [[$pattern(\| *<\!\-\-BOOKMARK\-\-> *\| *(.*?) *\|.*)][$pattern(\| *<\!\-\-BOOKMARK\-\-> *\|[^\|]*\| *(.*?) *\|.*)]]"
+}%<nop>
+   * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</div>
+</td></tr></table>
+</div>%STOPINCLUDE%
+<div style="clear: both"></div>
+
+---++ Edit Table Definition
+
+<verbatim>
+%EDITTABLE{ format="| label, 1, <!--BOOKMARK--> | text, 40 | text, 20 |" changerows="add" buttonrow="bottom" editbutton="Edit bookmarks" }%
+</verbatim>
+
+---++ Comment Plugin Input Form Definition
+<verbatim>
+%TMPL:DEF{PROMPT:bookmark_page_comment_template}%<div class="commentPlugin commentPluginPromptBox">
+#AddBookmark
+---++ Add Bookmark
+<table border="0" style="background-color: #f4f4f8; padding: 10px; margin-top: -6px"><tr><th>
+</th><th colspan="2">
+*Link:*
+&nbsp; &nbsp;
+%GRAY% =Web.TopicName= or =URL= %ENDCOLOR%
+</th><th colspan="3">
+*Link Label:*
+&nbsp; &nbsp;
+%GRAY% keep it short %ENDCOLOR%
+</th>
+</tr>
+<tr><td align="right">
+<tt>[<nop>[</tt>
+</td><td>
+<input type="text" name="link" value="%URLPARAM{ "link" encode="html" }%" size="35" class="twikiInputField" style="font-size: 95%" />
+</td><td>
+<tt>][</tt>
+</td><td>
+<input type="text" name="label" value="%URLPARAM{ "label" encode="html" }%" size="20" class="twikiInputField" style="font-size: 95%" />
+</td><td>
+<tt>]<nop>]</tt>
+</td><td>
+<input %DISABLED% type="submit" value="%button|Add Bookmark%" class="twikiButton" />
+</td></tr>
+<tr><td>
+Example:&nbsp;
+</td><td colspan="2">
+=Engineering.StatusReport=
+</td><td colspan="3">
+=Status report=
+</td></tr>
+</table>
+</div><!--/commentPlugin-->
+%BR%%TMPL:END%
+</verbatim>
+
+---++ Comment Plugin Output Form Definition
+
+<verbatim>
+%TMPL:DEF{OUTPUT:bookmark_page_comment_template}%%POS:BEFORE%| <!--BOOKMARK--> | %URLPARAM{ "link" encode="moderate" }% | %URLPARAM{ "label" encode="moderate" }% |
+%TMPL:END%
+</verbatim>
+
+__Related:__ UserBookmarksTemplate, %USERSWEB%.UserList
