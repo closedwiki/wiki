@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1300309552" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1308714845" format="1.1" version="$Rev$"}%
 ---+!! Shared Contact DB Add-On
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -39,6 +39,7 @@ You can add/change the form fields. Follow this sequence.
    * !ContactTemplate - edit and save the template page (also if no changes are needed)
    * !ContactHeader - tweak the contact header if needed
    * !ContactDB - tweak the report header and SEARCH format as needed
+   * !ContactsAsCSV - tweak the SEARCH format as needed
 
 ---++ Installation Instructions
 
@@ -50,12 +51,13 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
      | ==data/TWiki/%TOPIC%.txt== | Add-on documentation page |
      | ==data/Sandbox/ContactDB.txt== | Contact database home page |
      | ==data/Sandbox/ContactForm.txt== | Form definition for contact pages |
-     | ==data/Sandbox/ContactTemplate.txt== | Template for new contact pages |
      | ==data/Sandbox/ContactHeader.txt== | Header for contact pages |
+     | ==data/Sandbox/ContactsAsCSV.txt== | Report topic, export to Excel in CSV format |
+     | ==data/Sandbox/ContactTemplate.txt== | Template for new contact pages |
      | ==data/Sandbox/NewContact.txt== | Create new contact page |
      | ==lib/TWiki/Contrib/ContactDbAddOn.pm== | Module with version info |
    * You get a contact database residing in [[Sandbox.ContactDB]]
-   * Duplicate the application pages from the Sandbox web to your own team's web: !ContactDB, !ContactForm, !ContactTemplate, !ContactHeader and !NewContact. You can copy them on the shell level or clone the pages using your browser.
+   * Duplicate the application pages from the Sandbox web to your own team's web: !ContactDB, !ContactForm, !ContactHeader, !ContactsAsCSV, !ContactTemplate and !NewContact. You can copy them on the shell level or clone the pages using your browser.
    * __Note:__ If you are not an administrator you can unzip the package on your computer and create the application pages in your team's web based on the content of the files in =data/Sandbox/=. For example, if your web is Marketing, create a page called !ContactDB in the Marketing web with the content of the =data/Sandbox/ContactDB.txt= file. Repeat for other pages. The =lib/TWiki/Contrib/ContactDbAddOn.pm= files are not needed for a manual installation.
 
 ---++ Add-On Info
@@ -65,8 +67,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2010-2011 TWiki:Main.PeterThoeny <br /> &copy; 2010-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2011-03-16 |
+|  Add-on Version: | 2011-06-21 |
 |  Change History: | <!-- versions below in reverse order --> |
+|  2011-06-21: | TWikibug:Item6761: Add export to Excel feature |
 |  2011-03-16: | TWikibug:Item6596: Rebrand "Contact DB" to "Shared Contact DB" |
 |  2010-10-14: | TWikibug:Item6596: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 4.0) |
@@ -75,7 +78,8 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topic:__ %SYSTEMWEB%.TWikiAddOns
+__Related Topic:__ %SYSTEMWEB%.TWikiAddOns, Sandbox.ContactForm, Sandbox.ContactTemplate, Sandbox.ContactHeader, Sandbox.ContactDB, Sandbox.ContactsAsCSV
 
-%META:FILEATTACHMENT{name="screen-db1.png" attachment="screen-db1.png" attr="h" comment="" date="1287091401" path="screen-db1.png" size="56658" user="TWikiContributor" version="1"}%
+
+%META:FILEATTACHMENT{name="screen-db1.png" attachment="screen-db1.png" attr="h" comment="" date="1308713772" path="screen-db1.png" size="57691" user="TWikiContributor" version="2"}%
 %META:FILEATTACHMENT{name="screen-db2.png" attachment="screen-db2.png" attr="h" comment="" date="1287030628" path="screen-db2.png" size="56416" user="TWikiContributor" version="1"}%
