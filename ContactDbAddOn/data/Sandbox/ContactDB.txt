@@ -1,9 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1300309559" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1308713984" format="1.1" version="$Rev$"}%
 ---+ Shared Contact Database
 
 %ICON{newtopic}% [[#NewContact][Add entry]]
 &nbsp;
 %ICON{index}% [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?Name=][Show all]]
+&nbsp;
+%ICON{download}% [[%SCRIPTURL{view}%/%WEB%/ContactsAsCSV?Name=%URLPARAM{"Name" encode="url"}%;Company=%URLPARAM{"Company" encode="url"}%;Phone=%URLPARAM{"Phone" encode="url"}%;Mobile=%URLPARAM{"Mobile" encode="url"}%;Email=%URLPARAM{"Email" encode="url"}%;t=%SERVERTIME{$epoch}%;skin=text;contenttype=text/csv%0Acontent-disposition%3A+attachment%3B+filename%3DContacts-%SERVERTIME{$year-$mo-$day}%.csv][Export to Excel]]
 <form name="new" action="%SCRIPTURLPATH{view}%/%WEB%/%TOPIC%">
 | *&nbsp;* | *%ICON{person}% Name* | *%ICON{building}% Company* | *%ICON{phone}% Phone* | *%ICON{mobile}% Mobile* | *%ICON{mail}% Email* |
 | *<input type="submit" class="twikiSubmit" value="Filter" />* | *<input type="text" name="Name" value="%URLPARAM{"Name" encode="entity"}%" size="10" class="twikiInputField" />* | *<input type="text" name="Company" value="%URLPARAM{"Company" encode="entity"}%" size="10" class="twikiInputField" />* | *<input type="text" name="Phone" value="%URLPARAM{"Phone" encode="entity"}%" size="10" class="twikiInputField" />* | *<input type="text" name="Mobile" value="%URLPARAM{"Mobile" encode="entity"}%" size="10" class="twikiInputField" />*  | *<input type="text" name="Email" value="%URLPARAM{"Email" encode="entity"}%" size="10" class="twikiInputField" />* |
