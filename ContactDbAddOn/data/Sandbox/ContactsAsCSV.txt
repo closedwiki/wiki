@@ -1,0 +1,20 @@
+%META:TOPICINFO{author="TWikiContributor" date="1308713980" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="ContactDB"}%
+%IF{
+ "defined 'Name'"
+ then="<nop>"
+ else="__Note:__ This is a report topic of the [[ContactDB]] application, do not change or delete."
+}%
+<noautolink>
+%SEARCH{
+ "META:FORM.*[C]ontactForm%IF{
+  "defined 'Name'"
+  else=";imp0ssible_search-string"
+}%;META:FIELD.*name=.Name.*value=.*%URLPARAM{"Name" encode="safe"}%;META:FIELD.*name=.Company.*value=.*%URLPARAM{"Company" encode="safe"}%;META:FIELD.*name=.Phone.*value=.*%URLPARAM{"Phone" encode="safe"}%;META:FIELD.*name=.Mobile.*value=.*%URLPARAM{"Mobile" encode="safe"}%;META:FIELD.*name=.Email.*value=.*%URLPARAM{"Email" encode="safe"}%"
+ type="regex"
+ excludetopic="*Template"
+ nonoise="on"
+ header="$quot_Salutation:_$quot,$quot_Name:_$quot,$quot_Job Title:_$quot,$quot_Company:_$quot,$quot_Phone:_$quot,$quot_Mobile:_$quot,$quot_Fax:_$quot,$quot_Email:_$quot,$quot_URL:_$quot"
+ format="$quot$formfield(Salutation)$quot,$quot$formfield(Name)$quot,$quot$formfield(Job Title)$quot,$quot$formfield(Company)$quot,$quot$formfield(Phone)$quot,$quot$formfield(Mobile)$quot,$quot$formfield(Fax)$quot,$quot$formfield(Email)$quot,$quot$formfield(URL)$quot"
+}%
+</noautolink>
