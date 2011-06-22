@@ -19,6 +19,8 @@ data/TWiki/PatternSkinElements.txt 0644
 data/TWiki/PatternSkinGraphics.txt 0644
 data/TWiki/PatternSkinHeaderArt.txt 0644
 data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt 0644
+data/TWiki/UserBookmarks.txt 0644
+data/TWiki/UserBookmarksTemplate.txt 0644
 data/TWiki/WebBottomBar.txt 0644
 data/TWiki/WebLeftBar.txt 0644
 data/TWiki/WebLeftBarCookbook.txt 0644
