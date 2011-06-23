@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305705261" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1308813007" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkin"}%
 ---+ Top Bar of !TopMenuSkin
 
@@ -39,10 +39,23 @@ Top bar of TopMenuSkin, replacing WebTopBar.
  else="<nop>"
 }%
 %IF{
- "'%USERNAME%'!='guest' AND istopic '%USERSWEB%.%WIKINAME%LeftBar'"
- then="      * [[%USERSWEB%.%WIKINAME%LeftBar][---- %MAKETEXT{My links}% ----]]$n$percntSEARCH{\"^[ ]+\*[ ]*[\[<]\" type=\"regex\" web=\"%USERSWEB%\" topic=\"%WIKINAME%LeftBar\" multiple=\"on\" nonoise=\"on\" format=\"      * $dollarpattern([ ]+\*[ ]*([^\n\r]*).*)\"}$percnt"
- else="%IF{"'%USERNAME%'!='guest'" then="      * <a href='%SCRIPTURLPATH{edit}%/%USERSWEB%/%WIKINAME%LeftBar?templatetopic=%SYSTEMWEB%.WebLeftBarPersonalTemplate&amp;topicparent=%WIKINAME%'>%MAKETEXT{Create personal links}%</a>" else="<nop>"}%"
-}%
+ "'%USERNAME%'='guest' OR '%USERNAME%'='TWikiGuest'"
+ then="<nop>"
+ else="%IF{
+  "istopic '%USERSWEB%.%WIKINAME%Bookmarks'"
+  then="      * [[%USERSWEB%.%WIKINAME%Bookmarks][----- %MAKETEXT{Bookmarks}% -----]]$n      * [[%SCRIPTURL{viewauth}%/%USERSWEB%/%WIKINAME%Bookmarks?link=%BASEWEB%.%BASETOPIC%;label=%CALC{$NOP(%)ENCODE{$PROPERSPACE($SUBSTRING(.%BASETOPIC%,2,20))}$NOP(%)}%#AddBookmark][Bookmark this page...]]"
+  else="      * [[%SCRIPTURL{viewauth}%/%USERSWEB%/%WIKINAME%Bookmarks?createifnotexist=1&amp;templatetopic=%SYSTEMWEB%.UserBookmarksTemplate&amp;topicparent=%WIKINAME%][----- %MAKETEXT{Bookmarks}% -----]]$n      * [[%SCRIPTURL{viewauth}%/%USERSWEB%/%WIKINAME%Bookmarks?createifnotexist=1&amp;templatetopic=%SYSTEMWEB%.UserBookmarksTemplate&amp;topicparent=%WIKINAME%&amp;redirectto=%SCRIPTURL{viewauth}%/%USERSWEB%/%WIKINAME%Bookmarks%3Flink%3D%BASEWEB%.%BASETOPIC%%26amp%3Blabel%3D%CALC{$NOP(%)ENCODE{$PROPERSPACE($SUBSTRING(.%BASETOPIC%,2,20))}$NOP(%)}%#AddBookmark][Bookmark this page...]]"
+  }%"
+ }%
+%SEARCH{
+ "^\| *<\!\-\-BOOKMARK\-\-> *\|"
+ type="regex"
+ web="%USERSWEB%"
+ topic="%WIKINAME%Bookmarks"
+ multiple="on"
+ nonoise="on"
+ format="      * [[$pattern(\| *<\!\-\-BOOKMARK\-\-> *\| *(.*?) *\|.*)][$pattern(\| *<\!\-\-BOOKMARK\-\-> *\|[^\|]*\| *(.*?) *\|.*)]]"
+}%<nop>
 </div></td>
 <td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="1" alt="" /></td>
 </tr>
