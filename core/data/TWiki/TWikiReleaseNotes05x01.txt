@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1304280314" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1308807287" format="1.1" version="$Rev$"}%
 ---+!! Placeholder for Release Notes of TWiki-5.1 (Istanbul), 2010-FIXME
 
 %TOC%
@@ -69,6 +69,10 @@ The statistics script contacts twiki.org to query the number of plugins availabl
 <br />Example response:
 =<br />  plugins: 196=
 <br />The statistics script will not contact twiki.org if a ={Stats}{DontContactTWikiOrg}= configure setting is set.
+
+---+++ Better usability and automation to create pages automatically on view
+
+FIXME document TWiki:Codev.AutoCreatePageOnViewIfNotExist
 
 ---+++ Upgrade From Earlier Releases
 
