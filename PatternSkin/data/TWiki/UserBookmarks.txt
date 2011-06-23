@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1308807407" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1308812717" format="1.1" version="$Rev$"}%
 ---+ Bookmarks Application Page
 
 This page contains several parts that are used by user bookmark pages. Bookmark pages reside in the %USERSWEB% web and are named &lt;wikiname&gt;Bookmarks, such as !JimmyNeutronBookmarks.
@@ -23,11 +23,8 @@ This page contains several parts that are used by user bookmark pages. Bookmark 
  then="      * [[%SYSTEMWEB%.TWikiRegistration][%MAKETEXT{"Register User"}%]]"
  else="<nop>"
 }%
-%IF{
- "'%USERNAME%'!='guest' AND istopic '%USERSWEB%.%WIKINAME%Bookmarks'"
- then="      * [[%USERSWEB%.%WIKINAME%Bookmarks][----- %MAKETEXT{Bookmarks}% -----]]$n      * [[%SCRIPTURL{viewauth}%/%USERSWEB%/%BASETOPIC%?link=%BASEWEB%.%BASETOPIC%;label=%CALC{$NOP(%)ENCODE{$PROPERSPACE($SUBSTRING(.%BASETOPIC%,2,20))}$NOP(%)}%#AddBookmark][Bookmark this page...]]"
- else="%IF{"'%USERNAME%'!='guest'" then="      * <a href='%SCRIPTURLPATH{edit}%/%USERSWEB%/%WIKINAME%Bookmarks?templatetopic=%SYSTEMWEB%.UserBookmarksTemplate&amp;topicparent=%WIKINAME%'>%MAKETEXT{Create Bookmarks}%</a>" else="<nop>"}%"
-}%
+      * [[%USERSWEB%.%BASETOPIC%][----- %MAKETEXT{Bookmarks}% -----]]
+      * [[%SCRIPTURL{viewauth}%/%USERSWEB%/%BASETOPIC%?link=%BASEWEB%.%BASETOPIC%;label=%CALC{$NOP(%)ENCODE{$PROPERSPACE($SUBSTRING(.%BASETOPIC%,2,20))}$NOP(%)}%#AddBookmark][Bookmark this page...]]
 %SEARCH{
  "^\| *<\!\-\-BOOKMARK\-\-> *\|"
  type="regex"
