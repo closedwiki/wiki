@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1308812717" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1308813588" format="1.1" version="$Rev$"}%
 ---+ Bookmarks Application Page
 
 This page contains several parts that are used by user bookmark pages. Bookmark pages reside in the %USERSWEB% web and are named &lt;wikiname&gt;Bookmarks, such as !JimmyNeutronBookmarks.
@@ -48,7 +48,7 @@ This page contains several parts that are used by user bookmark pages. Bookmark 
 
 ---++ Comment Plugin Input Form Definition
 <verbatim>
-%TMPL:DEF{PROMPT:bookmark_page_comment_template}%<div class="commentPlugin commentPluginPromptBox">
+%TMPL:DEF{PROMPT:bookmark_page_comment_template}%<div class="commentPlugin commentPluginPromptBox" style="display: %IF{ "defined 'ettablenr'" then="none" else="block" }%">
 #AddBookmark
 ---++ Add Bookmark
 <table border="0" style="background-color: #f4f4f8; padding: 10px; margin-top: -6px">
