@@ -134,6 +134,19 @@ sub view {
         }
 
     } else { # Topic does not exist yet
+
+        if( $query->param( 'createifnotexist' ) ) {
+            # redirect to the save script to force topic creation
+            my $redirecturl = $session->getScriptUrl( 1, 'save', $webName, $topicName );
+
+            # force POST method because GET is disabled in save
+            $query->request_method( 'POST' ); # SMELL: Security issue?
+            $query->delete( 'createifnotexist' ); # remove 'createifnotexist' parameter
+
+            # redirect to save script, all URL parameters are taken into account
+            $session->redirect( $redirecturl, 1 );
+        }
+
         $indexableView = 0;
         $session->enterContext( 'new_topic' );
         $rev = 1;
