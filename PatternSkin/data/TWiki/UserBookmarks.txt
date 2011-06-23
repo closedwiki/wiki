@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1308728002" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1308807407" format="1.1" version="$Rev$"}%
 ---+ Bookmarks Application Page
 
-This page contains several parts that are used by used bookmark pages. Bookmark pages reside in the %USERSWEB% and are named &lt;wikiname&gt;Bookmarks, such as !JimmyNeutronBookmarks.
+This page contains several parts that are used by user bookmark pages. Bookmark pages reside in the %USERSWEB% web and are named &lt;wikiname&gt;Bookmarks, such as !JimmyNeutronBookmarks.
 
 ---++ Bookmarks Preview in Account Pulldown Menu
 
@@ -54,7 +54,8 @@ This page contains several parts that are used by used bookmark pages. Bookmark 
 %TMPL:DEF{PROMPT:bookmark_page_comment_template}%<div class="commentPlugin commentPluginPromptBox">
 #AddBookmark
 ---++ Add Bookmark
-<table border="0" style="background-color: #f4f4f8; padding: 10px; margin-top: -6px"><tr><th>
+<table border="0" style="background-color: #f4f4f8; padding: 10px; margin-top: -6px">
+<tr><th>
 </th><th colspan="2">
 *Link:*
 &nbsp; &nbsp;
@@ -86,6 +87,12 @@ Example:&nbsp;
 =Status report=
 </td></tr>
 </table>
+
+<div style="display: %IF{ "defined 'link'" then="block" else="none" }%">
+<span style="background-color: #fcf995; margin-top: 30px; padding: 5px;">
+%T% Modify the Link Label if desired, and press "Add Bookmark" to create a bookmark for [[%URLPARAM{ "link" encode="html" }%]].
+</span>
+</div>
 </div><!--/commentPlugin-->
 %BR%%TMPL:END%
 </verbatim>
