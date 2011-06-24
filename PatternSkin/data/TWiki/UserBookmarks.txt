@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1308813588" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1308906146" format="1.1" version="$Rev$"}%
 ---+ Bookmarks Application Page
 
 This page contains several parts that are used by user bookmark pages. Bookmark pages reside in the %USERSWEB% web and are named &lt;wikiname&gt;Bookmarks, such as !JimmyNeutronBookmarks.
@@ -66,15 +66,15 @@ This page contains several parts that are used by user bookmark pages. Bookmark 
 <tr><td align="right">
 <tt>[<nop>[</tt>
 </td><td>
-<input type="text" name="link" value="%URLPARAM{ "link" encode="html" }%" size="35" class="twikiInputField" style="font-size: 95%" />
+<input type="text" name="link" id="linkTarget" value="%URLPARAM{ "link" encode="html" }%" size="35" class="twikiInputField" style="font-size: 95%" onKeyUp="disableSubmitIfEmpty()" />
 </td><td>
 <tt>][</tt>
 </td><td>
-<input type="text" name="label" value="%URLPARAM{ "label" encode="html" }%" size="20" class="twikiInputField" style="font-size: 95%" />
+<input type="text" name="label" id="linkLabel" value="%URLPARAM{ "label" encode="html" }%" size="20" class="twikiInputField" style="font-size: 95%" onKeyUp="disableSubmitIfEmpty()" />
 </td><td>
 <tt>]<nop>]</tt>
 </td><td>
-<input %DISABLED% type="submit" value="%button|Add Bookmark%" class="twikiButton" />
+<input %DISABLED% type="submit" id="bookmarkSubmit" value="%button|Add Bookmark%" class="twikiButton" />
 </td></tr>
 <tr><td>
 Example:&nbsp;
@@ -84,6 +84,14 @@ Example:&nbsp;
 =Status report=
 </td></tr>
 </table>
+<script language="javascript">
+function disableSubmitIfEmpty() {
+  var linkTargetValue = document.getElementById( "linkTarget" ).value;
+  var linkLabelValue = document.getElementById( "linkLabel" ).value;
+  document.getElementById( "bookmarkSubmit" ).disabled = !(linkTargetValue && linkLabelValue);
+}
+disableSubmitIfEmpty();
+</script>
 
 <div style="display: %IF{ "defined 'link'" then="block" else="none" }%">
 <span style="background-color: #fcf995; margin-top: 30px; padding: 5px;">
