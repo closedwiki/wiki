@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299701720" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1309582689" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkinDefaultWebTopMenu"}%
 ---+ Home Menu of !TopMenuSkin
 
@@ -18,5 +18,8 @@ This topic defines the Home pulldown menu, used by the TopMenuSkin.
    * <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-right.png' alt='' width='8' height='22' />
 <nop>%STOPINCLUDE%</div>
 -----
+
+   * Disable WYSIWYG editor for this page:
+      * Set TINYMCEPLUGIN_DISABLE = on
 
 __Related topics:__ TopMenuSkin, TopMenuSkinTopBar, WebTopMenu, TopMenuSkinDefaultWebTopMenu, TopMenuSkinTopicMenu

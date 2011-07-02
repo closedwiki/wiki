@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274422913" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1309582683" format="1.1" version="$Rev$"}%
 ---+ Top Menu of <nop>%WEB% Web
 
 This topic defines the menu structure of the <nop>%WEB% web, used by the [[%SYSTEMWEB%.TopMenuSkin][TopMenuSkin]].
@@ -20,5 +20,8 @@ This topic defines the menu structure of the <nop>%WEB% web, used by the [[%SYST
 %INCLUDE{%SYSTEMWEB%.TopMenuSkinTopicMenu}%
 %STOPINCLUDE%</div>
 -----
+
+   * Disable WYSIWYG editor for this page:
+      * Set TINYMCEPLUGIN_DISABLE = on
 
 __Related topics:__ [[%SYSTEMWEB%.TopMenuSkin][TopMenuSkin]], [[%SYSTEMWEB%.TopMenuSkinHomeMenu][TopMenuSkinHomeMenu]], [[%SYSTEMWEB%.TopMenuSkinTopicMenu][TopMenuSkinTopicMenu]]
