@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272932307" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1304147514" format="1.1" version="$Rev$"}%
 ---+!! !NativeSearchContrib
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -8,11 +8,10 @@
 
    * Set SHORTDESCRIPTION = Native code search for use with CGI accelerators
 -->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
 %SHORTDESCRIPTION%
-
-<div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
-%TOC%
-</div>
 
 ---++ Introduction
 
@@ -64,12 +63,13 @@ Many thanks to the following sponsors for supporting this work:
    * Wind River Systems http://windriver.com
 
 |  Contrib Author: | Crawford Currie http://c-dot.co.uk |
-|  Copyright: | &copy; 2007 !WikiRing; <br /> &copy; 2007-2010, TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2007 !WikiRing; <br /> &copy; 2007-2011 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Contrib Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-05-03: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
-|  2007-09-27: | TWikibug:Item4713 - initial version |
+|  2011-07-06: | TWikibug:Item6764: Doc improvements -- TWiki:Main.PeterThoeny |
+|  2010-05-03: | TWikibug:Item6433: Doc improvements; replacing TWIKIWEB with SYSTEMWEB |
+|  2007-09-27: | TWikibug:Item4713: Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/NativeSearchContrib |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/NativeSearchContribDev |

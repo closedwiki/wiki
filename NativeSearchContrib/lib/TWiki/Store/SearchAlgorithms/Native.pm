@@ -1,7 +1,7 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2007 WikiRing.
-# Copyright (C) 2007-2010 TWiki Contributor. All Rights Reserved.
+# Copyright (C) 2007-2011 TWiki Contributor. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution. NOTE: Please extend that file, not this notice.
 #

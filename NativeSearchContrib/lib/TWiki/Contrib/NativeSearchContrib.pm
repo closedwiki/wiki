@@ -1,7 +1,7 @@
 # Contrib for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2007 WikiRing.
-# Copyright (C) 2007-2010 TWiki Contributor. All Rights Reserved.
+# Copyright (C) 2007-2011 TWiki Contributor. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 #
@@ -23,6 +23,6 @@ use strict;
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-05-03';
+$RELEASE = '2011-07-06';
 $SHORTDESCRIPTION = 'Accelerated search for use with mod_perl';
 
