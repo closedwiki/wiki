@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272695238" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1304146675" format="1.1" version="$Rev$"}%
 ---+!! !MediaWikiToTWikiAddOn
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -8,9 +8,12 @@
 
    * Set SHORTDESCRIPTION = <nop>MediaWiki to TWiki conversion tool
 -->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
 %SHORTDESCRIPTION%
 
-%TOC%
+---++ Introduction
 
 This is a commandline tool to import <nop>MediaWiki pages and images
 to TWiki. It processes a <nop>MediaWiki XML dump to extract the pages
@@ -109,11 +112,12 @@ should test the conversion result by using the -debug, -dry and -max.
 Sponsored by <a href="http://www.schenck-rotec.net"><img src="%ATTACHURLPATH%/schenck_logo.gif" border="0" title="Schenck-RoTec"/></a>
 
 |  <nop>AddOn Author: | TWiki:Main.MichaelDaum |
-|  Copyright: | &copy; 2006-2007, Michael Daum http://wikiring.de <br /> &copy; 2006-2010, TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2006-2007 Michael Daum http://wikiring.de <br /> &copy; 2006-2011 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  <nop>AddOn Version: | v1.1 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-04-30: | TWikibug:Item6433 - doc improvements |
+|  2011-07-06: | TWikibug:Item6764: Doc improvements |
+|  2010-04-30: | TWikibug:Item6433: Doc improvements |
 |  20 Jul 2007 | initial release |
 |  Dependencies: | %$DEPENDENCIES% |
 |  <nop>AddOn Home: | http://twiki.org/cgi-bin/view/Plugins/MediaWikiToTWikiAddOn |

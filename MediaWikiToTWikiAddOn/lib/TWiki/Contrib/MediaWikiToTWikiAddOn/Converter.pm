@@ -1,5 +1,5 @@
 # Copyright (C) 2006-2007 Michael Daum http://wikiring.de
-# Copyright (C) 2006-2010 TWiki Contributor. All Rights Reserved.
+# Copyright (C) 2006-2011 TWiki Contributor. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 #
