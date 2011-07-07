@@ -1,4 +1,5 @@
-#---+ DBCacheContrib
+#---+ Extensions
+#---++ DBCacheContrib
 # This extension is a performance cache used by the DBCachePlugin
 # and FormQueryPlugin.
 # **SELECTCLASS TWiki::Contrib::DBCacheContrib::Archivist::* **
@@ -7,9 +8,7 @@
 # have installed. If you have the CPAN 'Storable' module installed you
 # should use that. Only use File if you have no other choice (it is
 # relatively slow and insecure).
-$TWiki::cfg{DBCacheContrib}{Archivist} =
-    'TWiki::Contrib::DBCacheContrib::Archivist::Storable';
-
+$TWiki::cfg{DBCacheContrib}{Archivist} = 'TWiki::Contrib::DBCacheContrib::Archivist::Storable';
 
 # **BOOLEAN**
 # if  $TWiki::cfg{DBCache}{AlwaysUpdateCache}  is set to FALSE (defaults to TRUE for compatibility)
@@ -22,3 +21,4 @@ $TWiki::cfg{DBCache}{AlwaysUpdateCache} = $TRUE;
 # thus reducing the impact on individual topic views, or spreading the upadte over several UpdateCache rest requests.
 # default of 0 removes the limit
 $TWiki::cfg{DBCache}{LoadFileLimit} = 0;
+1;

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1272600311" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310077687" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -95,12 +95,13 @@ If  $TWiki::cfg{DBCache}{AlwaysUpdateCache}  is set to FALSE (defaults to TRUE f
 
 ---++ Contrib Info
 
-|  Author: | TWiki:Main/CrawfordCurrie |
-|  Copyright: | This code is based on an original development of Motorola Inc. and is protected by the following copyrights: <br />&copy; 2002-2003 Motorola Inc. All Rights Reserved. <br />Portions copyright &copy; 2004. Crawford Currie http://www.c-dot.co.uk <br /> &copy; 2004-2010, TWiki:TWiki/TWikiContributor |
+|  Author: | TWiki:Main.CrawfordCurrie |
+|  Copyright: | This code is based on an original development of Motorola Inc. and is protected by the following copyrights: <br />&copy; 2002-2003 Motorola Inc. All Rights Reserved. <br />Portions copyright &copy; 2004. Crawford Currie http://www.c-dot.co.uk <br /> &copy; 2004-2011, TWiki:TWiki.TWikiContributor |
 |  License: | As required for the publication of all extensions to TWiki, this software is published under the terms of the [[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-04-29: | TWikibug:Item6433 - doc improvements |
+|  2011-07-07: | TWikibug:Item6711: Small doc fix in Config.spec |
+|  2010-04-29: | TWikibug:Item6433: Doc improvements |
 |  16347 | remove META data from text hash; include META data in all hash. TWiki:Main/MichaelDaum |
 |  16346 | caching all topic elements to an =all= field to allow th search in all of the text and the formfields like the normal grep-based SEARCH does. TWiki:Main/MichaelDaum |
 |  15868 | fixed WITHIN_DAYS and EARLIER_THAN. TWiki:Main/MichaelDaum |

@@ -2,7 +2,7 @@
 #
 # Copyright (C) Motorola 2003 - All rights reserved
 # Copyright (C) 2004 Crawford Currie
-# Copyright (C) 2004-2010 TWiki Contributor. All Rights Reserved.
+# Copyright (C) 2004-2011 TWiki Contributor. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 #
