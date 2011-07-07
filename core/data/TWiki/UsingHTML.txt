@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1275721972" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310075332" format="1.1" version="$Rev$"}%
 ---+ Using HTML, CSS and !JavaScript
 
 %STARTINCLUDE%
@@ -25,9 +25,9 @@ It is also possible to add Cascading Style Sheets ([[http://en.wikipedia.org/wik
 
 <table border="0" cellpadding="5" cellspacing="10">
 <tr bgcolor="#DDDDDD"><th valign="top">
-CSS Example:
-</th><th valign="top">
 !JavaScript Example:
+</th><th valign="top">
+CSS Example:
 <tr bgcolor="#EEEEEE"><td valign="top">
 <verbatim>
 <!-- <pre> -->
