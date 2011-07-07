@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310077687" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310078091" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -8,7 +8,7 @@
 -->
 <sticky>
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
-%TOC{title="Page contents"}%
+%TOC{ title="Page contents" depth="2" }%
 </div>
 </sticky>
 %SHORTDESCRIPTION%
