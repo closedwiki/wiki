@@ -23,14 +23,27 @@ package TWiki::Plugins::EditTablePlugin::Core;
 use strict;
 use Assert;
 
-use vars qw(
-  $preSp %params @format @formatExpanded
-  $prefsInitialized $prefCHANGEROWS $prefEDIT_BUTTON $prefSAVE_BUTTON $prefQUIET_SAVE_BUTTON
-  $prefADD_ROW_BUTTON $prefDELETE_LAST_ROW_BUTTON $prefCANCEL_BUTTON
-  $prefMESSAGE_INCLUDED_TOPIC_DOES_NOT_EXIST $prefQUIETSAVE
-  $nrCols $encodeStart $encodeEnd $table $query %regex
-  $warningMessage
-);
+my $preSp;
+my %params;
+my @format;
+my @formatExpanded;
+my $prefsInitialized;
+my $prefCHANGEROWS;
+my $prefEDIT_BUTTON;
+my $prefSAVE_BUTTON;
+my $prefQUIET_SAVE_BUTTON;
+my $prefADD_ROW_BUTTON;
+my $prefDELETE_LAST_ROW_BUTTON;
+my $prefCANCEL_BUTTON;
+my $prefMESSAGE_INCLUDED_TOPIC_DOES_NOT_EXIST;
+my $prefQUIETSAVE;
+my $nrCols;
+my $encodeStart;
+my $encodeEnd;
+my $table;
+my $query;
+my %regex;
+my $warningMessage;
 
 my $RENDER_HACK                  = "\n<nop>\n";
 my $DEFAULT_FIELD_SIZE           = 16;

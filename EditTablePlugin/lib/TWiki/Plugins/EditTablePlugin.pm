@@ -22,20 +22,22 @@ package TWiki::Plugins::EditTablePlugin;
 
 use strict;
 
-use vars qw(
-  $web $topic $user $VERSION $RELEASE $debug
-  $query $usesJavascriptInterface $viewModeHeaderDone $editModeHeaderDone $encodeStart $encodeEnd $prefsInitialized
-  %editMode %saveMode $ASSET_URL
-);
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-07';
 
-$VERSION = '$Rev$';
-$RELEASE = '5.1';
-
-$encodeStart = '--EditTableEncodeStart--';
-$encodeEnd   = '--EditTableEncodeEnd--';
-%editMode    = ( 'NONE', 0, 'EDIT', 1 );
-%saveMode    = ( 'NONE', 0, 'SAVE', 1, 'SAVEQUIET', 2 );
-$ASSET_URL   = '%PUBURL%/%SYSTEMWEB%/EditTablePlugin';
+our $web;
+our $topic;
+our $user;
+our $debug = 0;
+our $usesJavascriptInterface = 0;
+our $viewModeHeaderDone = 0;
+our $editModeHeaderDone = 0;
+our $prefsInitialized = 0;
+our $encodeStart = '--EditTableEncodeStart--';
+our $encodeEnd   = '--EditTableEncodeEnd--';
+our %editMode    = ( 'NONE', 0, 'EDIT', 1 );
+our %saveMode    = ( 'NONE', 0, 'SAVE', 1, 'SAVEQUIET', 2 );
+our $ASSET_URL   = '%PUBURL%/%SYSTEMWEB%/EditTablePlugin';
 
 sub initPlugin {
     ( $topic, $web, $user ) = @_;
@@ -47,10 +49,8 @@ sub initPlugin {
         return 0;
     }
 
-    $query = TWiki::Func::getCgiQuery();
-    if ( !$query ) {
-        return 0;
-    }
+    # disable plugin unless in cgi mode
+    return 0 unless( TWiki::Func::getCgiQuery() );
 
     # Get plugin debug flag
     $debug = TWiki::Func::getPreferencesFlag('EDITTABLEPLUGIN_DEBUG');
