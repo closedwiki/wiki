@@ -29,17 +29,22 @@ use strict;
 use Digest::MD5 qw(md5_hex);
 
 # =========================
-use vars qw(
-        $web $topic $debug
-        $defaultRefresh $defaultLimit $defaultHeader $defaultFormat
-	$useLWPUserAgent $isInitialized %entityHash
-	$userAgent $userAgentTimeout $userAgentName $doneHeader
-   );
+my $debug = 0; # toggle me
 
-
-$debug = 0; # toggle me
-
-%entityHash = (
+# =========================
+my $web;
+my $topic;
+my $defaultRefresh;
+my $defaultLimit;
+my $defaultHeader;
+my $defaultFormat;
+my $useLWPUserAgent;
+my $isInitialized;
+my $userAgent;
+my $userAgentTimeout;
+my $userAgentName;
+my $doneHeader;
+my %entityHash = (
   160 => 'nbsp',
   161 => 'iexcl',
   162 => 'cent',
