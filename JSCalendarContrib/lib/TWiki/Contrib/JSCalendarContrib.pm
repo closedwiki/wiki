@@ -34,11 +34,9 @@ use strict;
 
 require TWiki::Func;    # The plugins API
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
-
-$VERSION = '$Rev$';
-$RELEASE = '2010-12-03';
-$SHORTDESCRIPTION = "[[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]], packaged for use by plugins, skins and add-ons";
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-08';
+our $SHORTDESCRIPTION = "[[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]], packaged for use by plugins, skins and add-ons";
 
 # Max width of different mishoo format components
 my %w = (
