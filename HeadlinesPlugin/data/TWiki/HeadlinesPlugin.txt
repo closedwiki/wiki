@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310089354" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310171542" format="1.1" version="$Rev$"}%
 ---+!! Headlines Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -7,7 +7,7 @@
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
 <sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
-%TOC{title="Page contents"}%
+%TOC{ title="Page contents" depth="2" }%
 </div></sticky>
 %SHORTDESCRIPTION%
 
@@ -15,60 +15,59 @@
 
 This plugin displays RSS and ATOM feeds from news sites. Use it to build news portals that show headline news.
 
-__Note:__ Syndic8.com ( http://www.syndic8.com/ ) lists many RSS feeds.
+__Note:__ Syndic8.com ( http://www.syndic8.com/ ) lists many RSS and ATOM feeds.
 
+#SyntaxRules
 ---++ Syntax Rules
 
 =%<nop>HEADLINES{"..."}%=
 
 | *Parameter* | *Explanation* | *Default* |
-| ="..."= | source of RSS feed; this can be an url (starting with http) \
-            or a <nop>web.topic location for internal feeds \
-| None; is required |
+| ="..."= | Source of RSS or ATOM feed; this can be an url (starting with http) or a <nop>web.topic location for internal feeds | None; is required |
 | =href="..."= | (Alternative to above) | N/A |
 | =refresh="60"= | Refresh rate in minutes for caching feed; ="0"= for no caching | Global =REFRESH= setting |
 | =limit="12"= | Maximum number of items shown | Global =LIMIT= setting |
-| =touch="..."= | Touch (edit/save) topics if the feed has updates. Specify a comma-space delimited list of !TopicNames or !Web.TopicNames, such as ="%<nop>TOPIC%, !NewsLetter"=. Useful to send out newsletter using MailerContrib, showing new feeds since last newsletter. To update feeds, visit topics with feeds in regular intervals (using cron with wget or the like). | N/A |
-| =header= | Header. Can include these variables: \
-             - $channeltitle, $title: title of channel (channel.title) %BR% \
-             - $channellink, $link: link of channel (channel.link) %BR% \
-             - $channeldescription, $description: description (channel.description) %BR% \
-             - $channeldate, $date: publication date of the channel (channel.pubDate) %BR% \
-             - $rights: copyrights of the channel (channel.copyright) %BR% \
-             - $imagetitle: title text for site (image.title) %BR% \
-             - $imagelink: link for site (image.link) %BR% \
-             - $imageurl: URL of image (image.url) %BR% \
-             - $imagedescription: description of image (image.description) \
+| =header="..."= | Header. May include these variables: %BR% \
+             - =$channeltitle=, =$title=: title of channel (channel.title) %BR% \
+             - =$channellink=, =$link=: link of channel (channel.link) %BR% \
+             - =$channeldescription=, =$description=: description (channel.description) %BR% \
+             - =$channeldate=, =$date=: publication date of the channel (channel.pubDate) %BR% \
+             - =$rights=: copyrights of the channel (channel.copyright) %BR% \
+             - =$imagetitle=: title text for site (image.title) %BR% \
+             - =$imagelink=: link for site (image.link) %BR% \
+             - =$imageurl=: URL of image (image.url) %BR% \
+             - =$imagedescription=: description of image (image.description) \
              | Global =HEADER= setting |
-| =format= | Format of one item. Can include these variables: %BR% \
-             - $title: news item title (item.title) %BR% \
-             - $link: news item link (item.link)  %BR% \
-             - $description: news item description (item.description) %BR% \
-             - $date: the publication date (item.pubDate, item.date) %BR% \
-             - $category: the article category (item.category) \
+| =format="..."= | Format of one item. May include these variables: %BR% \
+             - =$title=: news item title (item.title) %BR% \
+             - =$link=: news item link (item.link)  %BR% \
+             - =$description=: news item description (item.description) %BR% \
+             - =$date=: the publication date (item.pubDate, item.date) %BR% \
+             - =$category=: the article category (item.category) \
              | Global =FORMAT= setting |
+| =touch="..."= | Touch (edit/save) topics if the feed has updates. Specify a comma-space delimited list of !TopicNames or !Web.TopicNames, such as ="%<nop>TOPIC%, !NewsLetter"=. Useful to send out newsletter using MailerContrib, showing new feeds since last newsletter. To update feeds, visit topics with feeds in regular intervals (using cron with wget or the like). | N/A |
 
 The =header= and =format= parameters might also use variables rendering the =dc=, =image= and =content= namespace information. Note, that only bits of interest have been implemented so far and those namespaces might not be implemented fully yet.
 
 ---+++ Rendering the =dc= namespace
 
-The following variables are extracting the =dc= namespace info, that could be used in =header= and =format=. Nnote, that some of the variables are already used above. This is done by purpose to use different feeds with the same formating parameters. If there's a conflict the non-dc tags have higher precedence, i.e. a &lt;title&gt; content &lt;/title&gt; is prefered over &lt;dc:title&gt; content &lt;/dc:title&gt; .
-   * $title: channel/article title (dc:title)
-   * $creator: channel creator (dc:creator)
-   * $subject: subject text; this will also add an image according to the subject hash
+The following variables are extracting the =dc= namespace info, that could be used in =header= and =format=. Note that some of the variables are already used above. This is done by purpose to use different feeds with the same formatting parameters. If there's a conflict the non-dc tags have higher precedence, i.e. a =&lt;title&gt; content &lt;/title&gt;= is preferred over =&lt;dc:title&gt; content &lt;/dc:title&gt;=.
+   * =$title=: channel/article title (dc:title)
+   * =$creator=: channel creator (dc:creator)
+   * =$subject=: subject text; this will also add an image according to the subject hash
                list, see [[#Subject_Images][above]] (dc:subject)
-   * $description: ... (dc:description)
-   * $publisher: the channel/article publisher (dc:publisher)
-   * $contributor: ... (dc:contributor)
-   * $date: ... (dc:date)
-   * $type: ... (dc:type)
-   * $format: ... (dc:format)
-   * $identifier: ... (dc:identifier)
-   * $source: ... (dc:source)
-   * $language: ... (dc:language)
-   * $relation: ... (dc:relation)
-   * $coverage: ... (dc: coverage)
-   * $rights: ... (dc: rights)
+   * =$description=: ... (dc:description)
+   * =$publisher=: the channel/article publisher (dc:publisher)
+   * =$contributor=: ... (dc:contributor)
+   * =$date=: ... (dc:date)
+   * =$type=: ... (dc:type)
+   * =$format=: ... (dc:format)
+   * =$identifier=: ... (dc:identifier)
+   * =$source=: ... (dc:source)
+   * =$language=: ... (dc:language)
+   * =$relation=: ... (dc:relation)
+   * =$coverage=: ... (dc: coverage)
+   * =$rights=: ... (dc: rights)
 
 ---+++ Rendering the =image= namespace
 
@@ -80,7 +79,7 @@ An =image:item= is converted into an &lt;img&gt; tag using the following mapping
 
 ---+++ Rendering the =content= namespace
 
-The variable $content is refering to the &lt;content:encoding&gt; content &lt;/content:encoding&gt;.
+The variable =$content= is referring to the =&lt;content:encoding&gt; content &lt;/content:encoding&gt;=.
 
 ---++ Examples
 
@@ -152,19 +151,19 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 The default HEADER and FORMAT settings use the following styles. See the [[%ATTACHURL%/style.css][style.css]] file defining the default CSS properties  (indentation illustrates enclosure).
 
-   * headlinesRss: output of the HeadlinesPlugin (div)
-      * headlinesChannel: channel header (div)
-         * headlinesLogo: channel logo (div)
-         * headlinesTitle: channel title (div)
-         * headlinesDate: channel date (div)
-         * headlinesDescription: channel description (div)
-         * headlinesRight: channel copyright (div)
-      * headlinesArticle: one news item (div)
-         * headlinesTitle: article title (div)
-         * headlinesDate: article date (span)
-         * headlinesCreator: author of article (span)
-         * headlinesSubject: subect category of the article (span)
-         * headlinesText: article text (div)
+   * =headlinesRss=: output of the HeadlinesPlugin (div)
+      * =headlinesChannel=: channel header (div)
+         * =headlinesLogo=: channel logo (div)
+         * =headlinesTitle=: channel title (div)
+         * =headlinesDate=: channel date (div)
+         * =headlinesDescription=: channel description (div)
+         * =headlinesRight=: channel copyright (div)
+      * =headlinesArticle=: one news item (div)
+         * =headlinesTitle=: article title (div)
+         * =headlinesDate=: article date (span)
+         * =headlinesCreator=: author of article (span)
+         * =headlinesSubject=: subect category of the article (span)
+         * =headlinesText=: article text (div)
 
 ---++ Plugin Installation Instructions
 
@@ -192,14 +191,15 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.MichaelDaum |
-|  Copyright: | &copy; 2002-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]%BR% 2005-2007 Michael Daum http://wikiring.de |
+|  Copyright: | &copy; 2002-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]%BR% &copy; 2005-2007 Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-07-08 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-07-08: | TWikibug:Item6764: Add VarHEADLINES variable documentation; doc improvements |
 |  2011-07-08: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
-|  2010-05-16: | TWikibug:Item6433 - more doc improvements |
-|  2010-04-25: | TWikibug:Item6433 - doc fix: Changing TWIKIWEB to SYSTEMWEB |
-|  2010-02-27: | TWikibug:Item6313 - fixed bug in ATOM feed with =&lt;link ...&gt;&lt;/link&gt;= instead of =&lt;link ... /&gt;= -- Peter Thoeny |
+|  2010-05-16: | TWikibug:Item6433: More doc improvements |
+|  2010-04-25: | TWikibug:Item6433: Doc fix: Changing TWIKIWEB to SYSTEMWEB |
+|  2010-02-27: | TWikibug:Item6313: Fixed bug in ATOM feed with =&lt;link ...&gt;&lt;/link&gt;= instead of =&lt;link ... /&gt;= -- Peter Thoeny |
 |  2009-09-30: | fixed bug in lastBuildDate of feeds affecting touch parameter functionality -- Peter Thoeny |
 |  2009-08-29: | added touch parameter -- Peter Thoeny |
 |  12 Feb 2009: | {PROXY}{HOST} supports domain with and without protocol -- Peter Thoeny |
@@ -226,4 +226,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ %SYSTEMWEB%.VarHEADLINES, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
