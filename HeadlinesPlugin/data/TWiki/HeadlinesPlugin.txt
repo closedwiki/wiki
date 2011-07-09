@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310171542" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1310173212" format="1.1" reprev="1.1" version="1.1"}%
 ---+!! Headlines Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -110,36 +110,33 @@ to get the latest postings on the "Business Opportunities" weblog:
 
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>HEADLINESPLUGIN_SHORTDESCRIPTION%==. *Note:* Don't modify the settings here; copy and customize the settings in [[%LOCALSITEPREFS%]]. For example, to customize the USERAGENTNAME setting, create a HEADLINESPLUGIN_USERAGENTNAME setting in <nop>%LOCALSITEPREFS%.
+Plugin settings are stored as preferences settings. Do __not__ change the settings here, they are here only for illustration purposes showing the default values. Define the settings in [[%LOCALSITEPREFS%]]. For example, to customize the =HEADLINESPLUGIN_USERAGENTNAME= setting, add a =* Set HEADLINESPLUGIN_USERAGENTNAME = ...= bullet in [[%LOCALSITEPREFS%]].
 
-   * One line description, shown in the TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Show headline news in TWiki pages based on RSS and ATOM news feeds from external sites
+   * Refresh rate in minutes for cached feeds. Set to =0= to disable caching:
+      * Set HEADLINESPLUGIN_REFRESH = 60
 
-   * Refresh rate in minutes for cached feeds. Disable caching: =0=, default: =60=
-      * Set REFRESH = 60
+   * Maximum number of items shown:
+      * Set HEADLINESPLUGIN_LIMIT = 100
 
-   * Maximum number of items shown. Default: =100=
-      * Set LIMIT = 100
+   * Use LWP::UserAgent if set to =1=, or fallback to TWiki's internal =getUrl()= method if set to =0=:
+      * Set HEADLINESPLUGIN_USELWPUSERAGENT = 1
 
-   * Use LWP::UserAgent, or fallback to TWiki's internal =getUrl()= method. Default: =yes=
-      * Set USELWPUSERAGENT = yes
+   * Timeout fetching a feed using the LWP::UserAgent:
+      * Set HEADLINESPLUGIN_USERAGENTTIMEOUT = 20
 
-   * Timeout fetching a feed using the LWP::UserAgent. Default: =20=
-      * Set USERAGENTTIMEOUT = 20
-
-   * Name of user agent. Default: =TWikiHeadlinesPlugin/2.21=
-<verbatim>
-      * Set USERAGENTNAME = TWikiHeadlinesPlugin/2.21
-</verbatim>
+<noautolink>
+   * Name of user agent:
+      * Set HEADLINESPLUGIN_USERAGENTNAME = TWikiHeadlinesPlugin/2011-07-08
+</noautolink>
 
    * Default header: (variables are explained in the syntax rules)
 <verbatim>
-      * Set HEADER = <div class="headlinesChannel"><div class="headlinesLogo"><img src="$imageurl" alt="$imagetitle" border="0" />%BR%</div><div class="headlinesTitle">$n---+!! <a href="$link">$title</a></div><div class="headlinesDate">$date</div><div class="headlinesDescription">$description</div><div class="headlinesRight">$rights</div></div>
+      * Set HEADLINESPLUGIN_HEADER = <div class="headlinesChannel"><div class="headlinesLogo"><img src="$imageurl" alt="$imagetitle" border="0" />%BR%</div><div class="headlinesTitle">$n---+!! <a href="$link">$title</a></div><div class="headlinesDate">$date</div><div class="headlinesDescription">$description</div><div class="headlinesRight">$rights</div></div>
 </verbatim>
 
    * Default format of one item: (variables are explained in the syntax rules)
 <verbatim>
-      * Set FORMAT = <div class="headlinesArticle"><div class="headlinesTitle"><a href="$link">$title</a></div>$n<span class="headlinesDate">$date</span> <span class="headlinesCreator"> $creator</span> <span class="headlinesSubject"> $subject </span>$n<div class="headlinesText"> $description</div></div>
+      * Set HEADLINESPLUGIN_FORMAT = <div class="headlinesArticle"><div class="headlinesTitle"><a href="$link">$title</a></div>$n<span class="headlinesDate">$date</span> <span class="headlinesCreator"> $creator</span> <span class="headlinesSubject"> $subject </span>$n<div class="headlinesText"> $description</div></div>
 </verbatim>
 
    * Values taken from configure: (only supported if CPAN:LWP is installed)
@@ -190,12 +187,15 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
+   * One line description, shown in the TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Show headline news in TWiki pages based on RSS and ATOM news feeds from external sites
+
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.MichaelDaum |
 |  Copyright: | &copy; 2002-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]%BR% &copy; 2005-2007 Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-07-08 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2011-07-08: | TWikibug:Item6764: Add VarHEADLINES variable documentation; doc improvements |
+|  2011-07-08: | TWikibug:Item6764: Add VarHEADLINES variable documentation; doc improvements; setting NO_PREFS_IN_TOPIC |
 |  2011-07-08: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2010-05-16: | TWikibug:Item6433: More doc improvements |
 |  2010-04-25: | TWikibug:Item6433: Doc fix: Changing TWIKIWEB to SYSTEMWEB |

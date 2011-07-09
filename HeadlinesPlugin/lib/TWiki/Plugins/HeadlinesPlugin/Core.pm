@@ -312,11 +312,11 @@ sub doInit {
   $defaultRefresh = TWiki::Func::getPreferencesValue('HEADLINESPLUGIN_REFRESH') || 60;
   $defaultLimit   = TWiki::Func::getPreferencesValue('HEADLINESPLUGIN_LIMIT') || 100;
   $defaultHeader  = TWiki::Func::getPreferencesValue('HEADLINESPLUGIN_HEADER') ||
-    '| *[[$link][$title ]]* |';
+    '<div class="headlinesChannel"><div class="headlinesLogo"><img src="$imageurl" alt="$imagetitle" border="0" />%BR%</div><div class="headlinesTitle">$n---+!! <a href="$link">$title</a></div><div class="headlinesDate">$date</div><div class="headlinesDescription">$description</div><div class="headlinesRight">$rights</div></div>';
   $defaultFormat  = TWiki::Func::getPreferencesValue('HEADLINESPLUGIN_FORMAT') ||
-    '| [[$link][$title]] |';
+    '<div class="headlinesArticle"><div class="headlinesTitle"><a href="$link">$title</a></div>$n<span class="headlinesDate">$date</span> <span class="headlinesCreator"> $creator</span> <span class="headlinesSubject"> $subject </span>$n<div class="headlinesText"> $description</div></div>';
   $useLWPUserAgent = TWiki::Func::getPreferencesValue('HEADLINESPLUGIN_USELWPUSERAGENT') 
-    || 'on';
+    || '1';
   $userAgentTimeout = TWiki::Func::getPreferencesValue("HEADLINESPLUGIN_USERAGENTTIMEOUT")
     || 20;
   $userAgentName = TWiki::Func::getPreferencesValue("HEADLINESPLUGIN_USERAGENTNAME") ||
