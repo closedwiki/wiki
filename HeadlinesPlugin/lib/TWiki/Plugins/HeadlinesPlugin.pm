@@ -28,7 +28,7 @@ use strict;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-07-08;
+our $RELEASE = '2011-07-08';
 our $isInitialized = 0;
 our $doneHeader = 0;
 
