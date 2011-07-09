@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301680698" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310174747" format="1.1" version="$Rev$"}%
 ---+!! JQuery Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -160,8 +160,9 @@ See [[http://jqueryui.com/themeroller/][jQuery Theme Roller]] for look & feel of
 |  Plugin Author: | TWiki:Main.MichaelDaum, TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2007-2008 Michael Daum http://michaeldaumconsulting.com <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 1.3 (2011-04-01) |
+|  Plugin Version: | 1.4 (2011-07-08) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-08: | TWikibug:Item6725: Plugins: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2011-03-01: | TWikibug:Item6675: Possible to specify JQTHEME more than once per page, but only first one takes effect -- TWiki:Main.PeterThoeny |
 |  2011-03-01: | TWikibug:Item6653: Update plugin to jquery-1.5.1 and jquery-ui-1.8.10 -- TWiki:Main.PeterThoeny |
 |  2010-06-08: | TWikibug:Item6486 - upgrade to latest jquery-1.4.2 release -- TWiki:Main/SopanShewale; add variable documentation topics !VarJQTABPANE, !VarJQTAB, !VarJQENDTAB, !VarJQENDTABPANE -- TWiki:Main/PeterThoeny |
