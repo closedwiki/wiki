@@ -43,10 +43,10 @@ require TWiki::Contrib::MailerContrib::WebNotify;
 require TWiki::Contrib::MailerContrib::Change;
 require TWiki::Contrib::MailerContrib::UpData;
 
-use vars qw ( $VERSION $RELEASE $verbose );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-08';
 
-$VERSION = '$Rev$';
-$RELEASE = '2010-07-09';
+our $verbose = 0;
 
 # PROTECTED STATIC ensure the contrib is initernally initialised
 sub initContrib {
