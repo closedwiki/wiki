@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1291364551" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310175141" format="1.1" version="$Rev$"}%
 ---+!! JS Calendar Contrib
 <!--
    Contributions to this contrib package are appreciated. Please update this page at
@@ -65,12 +65,13 @@ If the contrib is installed, you will see such a field here:
 
    * Set SHORTDESCRIPTION = Mishoo JSCalendar: A pop-up calendar for use in TWiki forms and TWiki applications
 
-|  Author: | TWiki:Main/CrawfordCurrie http://c-dot.co.uk |
-|  Copyright: | &copy; See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] for Mishoo JSCalendar %BR% &copy; 2007-2010 TWiki:TWiki/TWikiContributor for TWiki !JSCalendarContrib |
+|  Author: | TWiki:Main.CrawfordCurrie http://c-dot.co.uk |
+|  Copyright: | &copy; See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] for Mishoo JSCalendar %BR% &copy; 2007-2011 TWiki:TWiki.TWikiContributor for TWiki !JSCalendarContrib |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 | Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-08: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2010-12-03: | TWikibug:Item6609: In %SYSTEMWEB%.TWikiForms type table, automatically list the =date= form field type defined in this contrib -- TWiki:Main.PeterThoeny |
 |  2010-11-17: | TWikibug:Item6530: Doc fixes: Changing TWIKIWEB to SYSTEMWEB |
 |  2010-11-04: | TWikibug:Item6603: Add transparent image for nicer date button in TWiki Forms |
