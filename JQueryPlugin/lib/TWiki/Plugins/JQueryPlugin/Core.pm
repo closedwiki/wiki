@@ -16,7 +16,9 @@ package TWiki::Plugins::JQueryPlugin::Core;
 use strict;
 use constant DEBUG => 0; # toggle me
 
-use vars qw( $tabPaneCounter $tabCounter $jqPubUrlPath );
+my $tabPaneCounter;
+my $tabCounter;
+my $jqPubUrlPath;
 
 ###############################################################################
 sub init {

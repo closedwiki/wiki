@@ -20,20 +20,16 @@
 
 package TWiki::Plugins::JQueryPlugin;
 use strict;
-use vars qw( 
-  $VERSION $RELEASE $SHORTDESCRIPTION 
-  $NO_PREFS_IN_TOPIC
-  $doneInit $doneHeader $doneJQueryUI
-  $jqPubUrlPath $header
-);
 
-$VERSION = '$Rev$';
-$RELEASE = '2011-04-01';
-$SHORTDESCRIPTION = 'jQuery <nop>JavaScript library for TWiki';
-$NO_PREFS_IN_TOPIC = 1;
-
-$jqPubUrlPath = '%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin';
-$header = "<script type=\"text/javascript\" src=\"$jqPubUrlPath/jquery.js\"></script>\n"
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-08';
+our $SHORTDESCRIPTION = 'jQuery <nop>JavaScript library for TWiki';
+our $NO_PREFS_IN_TOPIC = 1;
+our $doneInit = 0;
+our $doneHeader = 0;
+our $doneJQueryUI = 0;
+our $jqPubUrlPath = '%PUBURLPATH%/%SYSTEMWEB%/JQueryPlugin';
+our $header = "<script type=\"text/javascript\" src=\"$jqPubUrlPath/jquery.js\"></script>\n"
         . "<link rel=\"stylesheet\" href=\"$jqPubUrlPath/jquery-all.css\" type=\"text/css\" media=\"all\" />\n"
         . "<script type=\"text/javascript\" src=\"$jqPubUrlPath/jquery-all.js\"></script>\n";
 
