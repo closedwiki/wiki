@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1278700226" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310175589" format="1.1" version="$Rev$"}%
 ---+!! Mailer Contrib
 <!--
    Contributions to this TWiki extension are appreciated. Please update the page at
@@ -165,11 +165,12 @@ Many thanks to the following sponsors for supporting this work:
    * [[http://www.windriver.com][Wind River]]
    * [[http://wikigardens.com][WikiGardens]]
 
-|  Author: | TWiki:Main/CrawfordCurrie (http://c-dot.co.uk) |
-|  Copyright: | &copy; 2004, Wind River Systems;%BR% &copy; 2008, http://WikiRing.com%BR% &copy; 2004-2010 TWiki:TWiki/TWikiContributor |
+|  Author: | TWiki:Main.CrawfordCurrie (http://c-dot.co.uk) |
+|  Copyright: | &copy; 2004, Wind River Systems;%BR% &copy; 2008, http://WikiRing.com%BR% &copy; 2004-2010 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-07-08: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2010-07-09: | TWikibug:Item6518 - Fix for notification e-mail showing %MAKETEXT{"Web"} in subject |
 |  2010-06-12: | TWikibug:Item6489 - Separate WIKITOOLNAME from WEB name; escape WEB name to avoid auto-linking in case web is !WikiWord |
 |  2010-05-26: | TWikibug:Item6474 - Fix for mailnotify failing due to non-existing _alert method |
