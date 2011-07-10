@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1285040561" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310274658" format="1.1" version="$Rev$"}%
 ---+!! The Smilies Plugin <nop>:-)
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -88,9 +88,10 @@ This plugin is installed by default with a TWiki release. You should not need to
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2001-2007 Andrea Sterbini,%BR% &copy; 2001-2010 Peter Thoeny,%BR% &copy; 2001-2010 TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2001-2007 Andrea Sterbini,%BR% &copy; 2001-2011 Peter Thoeny,%BR% &copy; 2001-2011 TWiki:TWiki.TWikiContributor |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-07-09: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2010-09-20: | TWikibug:Item6580: Added "red", "yellow", "green", "blue" smilies |
 |  2010-05-15: | TWikibug:Item6433: Doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  21 Nov 2007: | Doc improvements |
