@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1298620957" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310338326" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+!! !AbusePlugin
 <!--
@@ -60,8 +60,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.RahulMundke, TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2003 TWiki:Main.RahulMundke <br /> &copy; 2011 TWiki:Main.PeterThoeny <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-02-25 |
+|  Plugin Version: | 2011-07-10 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-10: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2011-02-25: | TWikibug:Item6638: Use ABUSEWORD plugin setting instead of hard-coded filename for abuse words; adding docs -- TWiki:Main.PeterThoeny |
 |  2003-11-20: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
