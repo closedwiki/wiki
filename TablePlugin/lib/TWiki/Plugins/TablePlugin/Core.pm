@@ -24,22 +24,64 @@ package TWiki::Plugins::TablePlugin::Core;
 
 use Time::Local;
 
-use vars qw( $translationToken
-  $insideTABLE $tableCount @curTable $sortCol $maxSortCols $requestedTable $up
-  $sortTablesInText $sortAttachments $currTablePre $sortColFromUrl
-  $tableWidth @columnWidths
-  $tableBorder $tableFrame $tableRules $cellPadding $cellSpacing $cellBorder
-  @headerAlign @dataAlign $vAlign $headerVAlign $dataVAlign
-  $headerBg $headerBgSorted $headerColor $sortAllTables $twoCol @dataBg @dataBgSorted @dataColor
-  @isoMonth
-  $headerRows $footerRows
-  $upchar $downchar $diamondchar $url
-  @isoMonth %mon2num $initSort $initDirection $currentSortDirection
-  @rowspan $pluginAttrs $prefsAttrs $tableId $tableSummary $tableCaption
-  $iconUrl $unsortEnabled
-  %sortDirection %columnType
-  %cssAttrs %defaultCssAttrs $didWriteDefaultStyle
-);
+my $translationToken;
+my $insideTABLE;
+my $tableCount;
+my @curTable;
+my $sortCol;
+my $maxSortCols;
+my $requestedTable;
+my $up;
+my $sortTablesInText;
+my $sortAttachments;
+my $currTablePre;
+my $sortColFromUrl;
+my $tableWidth;
+my @columnWidths;
+my $tableBorder;
+my $tableFrame;
+my $tableRules;
+my $cellPadding;
+my $cellSpacing;
+my $cellBorder;
+my @headerAlign;
+my @dataAlign;
+my $vAlign;
+my $headerVAlign;
+my $dataVAlign;
+my $headerBg;
+my $headerBgSorted;
+my $headerColor;
+my $sortAllTables;
+my $twoCol;
+my @dataBg;
+my @dataBgSorted;
+my @dataColor;
+my @isoMonth;
+my $headerRows;
+my $footerRows;
+my $upchar;
+my $downchar;
+my $diamondchar;
+my $url;
+my @isoMonth;
+my %mon2num;
+my $initSort;
+my $initDirection;
+my $currentSortDirection;
+my @rowspan;
+my $pluginAttrs;
+my $prefsAttrs;
+my $tableId;
+my $tableSummary;
+my $tableCaption;
+my $iconUrl;
+my $unsortEnabled;
+my %sortDirection;
+my %columnType;
+my %cssAttrs;
+my %defaultCssAttrs;
+my $didWriteDefaultStyle
 
 BEGIN {
     $translationToken = "\0";

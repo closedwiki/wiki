@@ -28,11 +28,15 @@ package TWiki::Plugins::TablePlugin;
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
-use vars qw( $topic $installWeb $VERSION $RELEASE $initialised );
+# =========================
+our $VERSION = '$Rev$';
+our $RELEASE = '1.2';
 
-$VERSION = '$Rev$';
-$RELEASE = '1.2';
+our $topic;
+our $installWeb;
+our $initialised;
 
+# =========================
 sub initPlugin {
     my( $web, $user );
     ( $topic, $web, $user, $installWeb ) = @_;
@@ -51,6 +55,7 @@ sub initPlugin {
     return 1;
 }
 
+# =========================
 sub preRenderingHandler {
     ### my ( $text, $removed ) = @_;
 
