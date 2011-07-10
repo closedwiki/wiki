@@ -18,15 +18,14 @@ package TWiki::Plugins::TWikiNetSkinPlugin;
 
 use strict;
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-10';
 
-$VERSION = '$Rev$';
-$RELEASE = '1.1';
-
-$SHORTDESCRIPTION = 'Helps formatting TWikiNetSkin design. Enable by setting the skin to "twikinet"';
+our $SHORTDESCRIPTION = 'Helps formatting TWikiNetSkin design. Enable by setting the skin to "twikinet"';
 
 # Name of this Plugin, only used in this module
-$pluginName = 'TWikiNetSkinPlugin';
+my $pluginName = 'TWikiNetSkinPlugin';
+my $debug;
 
 sub initPlugin {
     my ( $topic, $web, $user, $installWeb ) = @_;
