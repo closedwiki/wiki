@@ -19,12 +19,11 @@ package TWiki::Plugins::TinyMCEPlugin;
 
 use strict;
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 use Assert;
 
-$VERSION = '$Rev$';
-$RELEASE = '2010-11-05';
-$SHORTDESCRIPTION = 'Integration of TinyMCE with WysiwygPlugin';
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-10';
+our $SHORTDESCRIPTION = 'Integration of TinyMCE with WysiwygPlugin';
 
 use TWiki::Func;
 
