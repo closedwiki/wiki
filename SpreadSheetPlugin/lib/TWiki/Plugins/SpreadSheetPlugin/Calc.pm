@@ -32,18 +32,21 @@ use Time::Local;
 use Time::Local qw( timegm_nocheck timelocal_nocheck );  # Necessary for DOY
 
 # =========================
-use vars qw(
-        $web $topic $debug $dontSpaceRE
-        $renderingWeb @tableMatrix $cPos $rPos $escToken
-        %varStore @monArr @wdayArr %mon2num
-    );
-
-$escToken = "\0";
-%varStore = ();
-$dontSpaceRE = "";
-@monArr = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
-@wdayArr = ( "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" );
-{ my $count = 0;
+my $web;
+my $topic;
+my $debug;
+my $renderingWeb;
+my @tableMatrix;
+my $cPos;
+my $rPos;
+my $escToken = "\0";
+my %varStore = ();
+my $dontSpaceRE = "";
+my @monArr = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
+my @wdayArr = ( "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" );
+my %mon2num;
+{
+  my $count = 0;
   %mon2num = map { $_ => $count++ } @monArr;
 }
 
