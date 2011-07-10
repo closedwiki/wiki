@@ -19,17 +19,16 @@
 package TWiki::Plugins::AbusePlugin;
 
 # =========================
-use vars qw(
-        $VERSION $RELEASE $web $topic $user $installWeb $debug $abuseWordsRE
-    );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-10';
 
-$VERSION = '$Rev$';
-$RELEASE = '2011-02-24';
+my $debug;
+my $abuseWordsRE;
 
 # =========================
 sub initPlugin
 {
-    ( $topic, $web, $user, $installWeb ) = @_;
+    my ( $topic, $web ) = @_;
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.024 ) {
