@@ -25,15 +25,16 @@ package TWiki::Plugins::SetGetPlugin;
 
 
 # =========================
-use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $debug $core
-    );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-09';
 
-# Plugin version
-$VERSION = '$Rev$';
-$RELEASE = '2011-04-04';
-
-$moduleLoaded = 0;
+our $web;
+our $topic;
+our $user;
+our $installWeb;
+our $debug;
+our $core;
+our $moduleLoaded = 0;
 
 # =========================
 sub initPlugin
