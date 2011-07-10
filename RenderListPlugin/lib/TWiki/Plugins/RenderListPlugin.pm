@@ -21,14 +21,18 @@
 package TWiki::Plugins::RenderListPlugin;    # change the package name and $pluginName!!!
 
 # =========================
-use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-        $debug $pubUrl $attachUrl
-    );
+our $VERSION = '$Rev: 16234 $';
+our $RELEASE = '2011-06-09';
 
-$VERSION = '$Rev: 16234 $';
-$RELEASE = '2.1';
-$pluginName = 'RenderListPlugin';  # Name of this Plugin
+our $web;
+our $topic;
+our $user;
+our $installWeb;
+our $debug;
+our $pubUrl;
+our $attachUrl;
+
+our $pluginName = 'RenderListPlugin';  # Name of this Plugin
 
 # =========================
 sub initPlugin
