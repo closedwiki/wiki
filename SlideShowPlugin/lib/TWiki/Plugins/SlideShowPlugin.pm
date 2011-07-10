@@ -19,12 +19,15 @@
 
 package TWiki::Plugins::SlideShowPlugin;
 
-use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $debug
-    );
+# =========================
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-09';
 
-$VERSION = '$Rev$';
-$RELEASE = '2010-12-28';
+our $web;
+our $topic;
+our $user;
+our $installWeb;
+our $debug;
 
 # =========================
 sub initPlugin
