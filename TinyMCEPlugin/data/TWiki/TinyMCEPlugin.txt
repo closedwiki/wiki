@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1289002747" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310334724" format="1.1" version="$Rev$"}%
 ---+!! !TinyMCEPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -132,11 +132,12 @@ Many thanks to the following sponsors for supporting this work:
    * [[http://twiki.net/][Twiki, Inc.]]
 
 |  Plugin Author: | TWiki:Main.CrawfordCurrie |
-|  Copyright: | &copy; 2007-2008 Crawford Currie http://c-dot.co.uk, %BR% &copy; 2007-2010 TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2007-2008 Crawford Currie http://c-dot.co.uk, %BR% &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
 |             | This package also includes the complete sources for version 3.2.4.1 of the !TinyMCE editor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Plugin Version: | 2010-11-05 %$VERSION% |
+|  Plugin Version: | 2011-07-10 %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-10: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2010-11-05 | TWikibug:Item6604: Add documentation for EDITMETHOD setting |
 |  2010-04-24 | TWikibug:Item6433: Doc improvements, prepare for TWiki 5.0 release |
 |  2009-09-08 | TWikibug:Item6334: Upgrade plugin to latest !TinyMCE version 3.2.4.1 from 2.1.1.1 -- TWiki:Main/SopanShewale |
