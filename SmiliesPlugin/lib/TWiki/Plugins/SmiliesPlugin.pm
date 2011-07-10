@@ -26,13 +26,17 @@ use strict;
 
 use TWiki::Func;
 
-use vars qw( $VERSION $RELEASE
-            %smiliesUrls %smiliesEmotions
-            $smiliesPubUrl $allPattern $smiliesFormat );
+# =========================
+our $VERSION = '$Rev$';
+our $RELEASE = '2010-09-20';
 
-$VERSION = '$Rev$';
-$RELEASE = '2010-09-20';
+our %smiliesUrls;
+our %smiliesEmotions;
+our $smiliesPubUrl;
+our $allPattern;
+our $smiliesFormat;
 
+# =========================
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
@@ -76,17 +80,20 @@ sub initPlugin {
     return 1;
 }
 
+# =========================
 sub commonTagsHandler {
     # my ( $text, $topic, $web ) = @_;
     $_[0] =~ s/%SMILIES%/_allSmiliesTable()/geo;
 }
 
+# =========================
 sub preRenderingHandler {
 #    my ( $text, \%removed ) = @_;
 
     $_[0] =~ s/(\s|^)$allPattern(?=\s|$)/_renderSmily($1,$2)/geo;
 }
 
+# =========================
 sub _renderSmily {
     my ( $thePre, $theSmily ) = @_;
 
@@ -100,6 +107,7 @@ sub _renderSmily {
     return $text;
 }
 
+# =========================
 sub _allSmiliesTable {
     my $text = "| *What to Type* | *Graphic That Will Appear* | *Emotion* |\n";
 
@@ -110,4 +118,5 @@ sub _allSmiliesTable {
     return $text;
 }
 
+# =========================
 1;
