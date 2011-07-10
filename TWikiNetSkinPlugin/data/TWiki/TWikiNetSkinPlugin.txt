@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293781492" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310335539" format="1.1" version="$Rev$"}%
 ---+!! !TWikiNetSkin Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -40,10 +40,11 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
-|  Copyright: | &copy; 2007-2010 [[http://www.twiki.net/][Twiki, Inc.]] |
+|  Copyright: | &copy; 2007-2011 [[http://www.twiki.net/][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-10: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2010-05-06: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  2007-07-30: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
