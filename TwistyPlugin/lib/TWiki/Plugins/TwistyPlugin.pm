@@ -33,15 +33,23 @@ use TWiki::Func;
 use CGI::Cookie;
 use strict;
 
-use vars
-  qw( $VERSION $RELEASE $pluginName $debug @modes $doneHeader $twistyCount
-  $prefMode $prefShowLink $prefHideLink $prefRemember
-  $defaultMode $defaultShowLink $defaultHideLink $defaultRemember );
+our $VERSION = '$Rev: 15653$';
+our $RELEASE = '1.6';
 
-$VERSION = '$Rev: 15653$';
-$RELEASE = '1.6';
+my $pluginName = 'TwistyPlugin';
 
-$pluginName = 'TwistyPlugin';
+my $debug;
+my @modes;
+my $doneHeader;
+my $twistyCount;
+my $prefMode;
+my $prefShowLink;
+my $prefHideLink;
+my $prefRemember;
+my $defaultMode;
+my $defaultShowLink;
+my $defaultHideLink;
+my $defaultRemember;
 
 my $TWISTYPLUGIN_COOKIE_PREFIX  = "TwistyContrib_";
 my $TWISTYPLUGIN_CONTENT_HIDDEN = 0;
