@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307695749" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310272255" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page
@@ -53,6 +53,7 @@ In edit mode, the edit button is replaced by Save and Cancel buttons, with their
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-08: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2011-06-10: | TWikibug:Item6748: New =editbutton= parameter -- TWiki:Main.PeterThoeny |
 |  2011-02-09: | TWikibug:Item6593: Larger size for URL fields -- TWiki:Main.PeterThoeny |
 |  2011-02-01: | TWikibug:Item6615: Adding type 'color' to WEBBGCOLOR because TWiki:Plugins.ColorPickerPlugin is part of the core distribution since TWiki-5.1 -- TWiki:Main.PeterThoeny |
