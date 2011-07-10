@@ -28,11 +28,10 @@ use strict;
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
-use vars qw( $VERSION $RELEASE @shelter );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-06-09';
 
-$VERSION = '$Rev$';
-$RELEASE = '2010-06-10';
-
+my @shelter;
 my $MARKER = "\007";
 
 # Markers used during form generation
