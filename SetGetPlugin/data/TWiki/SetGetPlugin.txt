@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301947470" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310273804" format="1.1" version="$Rev$"}%
 ---+!! !SetGetPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -223,8 +223,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2010-2011 TWiki:Main.PeterThoeny <br /> &copy; 2010-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-04-04 (V1.2) |
+|  Plugin Version: | 2011-07-09 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-09: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2011-04-04: | TWikibug:Item6638: Small doc improvements |
 |  2011-03-26: | TWikibug:Item6670: Make variables persistent across topic invocations |
 |  2010-10-17: | TWikibug:Item6597: Initial version |
