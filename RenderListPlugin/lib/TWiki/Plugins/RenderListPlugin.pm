@@ -148,7 +148,7 @@ sub renderIconList
 
         # remove uncles and siblings above current node
         my @before = ();
-        for( my $i = scalar( @tree ) - 1; $i >= 0; $i-- ) {
+        for( $i = scalar( @tree ) - 1; $i >= 0; $i-- ) {
             if( $tree[$i]->{'level'} < $level ) {
                 push( @before, $tree[$i] );
                 $level = $tree[$i]->{'level'};
@@ -204,7 +204,7 @@ sub renderIconList
     my $start = 0;
     $start = 1 unless( $showLead );
     my @listIcon = ();
-    for( my $i = 0; $i < scalar( @tree ); $i++ ) {
+    for( $i = 0; $i < scalar( @tree ); $i++ ) {
         $text .= '<table border="0" cellspacing="0" cellpadding="0"><tr>' . "\n";
         $level = $tree[$i]->{'level'};
         for( my $l = $start; $l < $level; $l++ ) {
