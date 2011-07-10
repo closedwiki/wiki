@@ -24,15 +24,16 @@
 package TWiki::Plugins::SpreadSheetPlugin;
 
 # =========================
-use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $debug $skipInclude $doInit
-    );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-09';
 
-# Plugin version
-$VERSION = '$Rev$';
-$RELEASE = '2011-04-25';
-
-$doInit = 0;
+our $web;
+our $topic;
+our $user;
+our $installWeb;
+our $debug;
+our $skipInclude;
+our $doInit = 0;
 
 # =========================
 sub initPlugin
