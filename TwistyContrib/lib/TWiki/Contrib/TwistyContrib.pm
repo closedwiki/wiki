@@ -1,7 +1,6 @@
 package TWiki::Contrib::TwistyContrib;
-use vars qw( $VERSION $RELEASE );
 
-$VERSION = '$Rev$';
-$RELEASE = '1.5';
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-10';
 
 1;
