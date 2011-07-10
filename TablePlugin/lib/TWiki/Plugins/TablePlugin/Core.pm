@@ -64,7 +64,6 @@ my $upchar;
 my $downchar;
 my $diamondchar;
 my $url;
-my @isoMonth;
 my %mon2num;
 my $initSort;
 my $initDirection;
@@ -81,7 +80,7 @@ my %sortDirection;
 my %columnType;
 my %cssAttrs;
 my %defaultCssAttrs;
-my $didWriteDefaultStyle
+my $didWriteDefaultStyle;
 
 BEGIN {
     $translationToken = "\0";
