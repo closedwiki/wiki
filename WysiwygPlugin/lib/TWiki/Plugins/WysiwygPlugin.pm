@@ -51,16 +51,19 @@ use TWiki::Func;    # The plugins API
 use TWiki::Plugins; # For the API version
 use TWiki::Plugins::WysiwygPlugin::Constants;
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $SECRET_ID $NO_PREFS_IN_TOPIC );
-use vars qw( $html2tml $tml2html $recursionBlock $imgMap );
-use vars qw( %TWikiCompatibility @refs );
+our $SHORTDESCRIPTION = 'Translator framework for Wysiwyg editors';
+our $NO_PREFS_IN_TOPIC = 1;
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-10';
 
-$SHORTDESCRIPTION = 'Translator framework for Wysiwyg editors';
-$NO_PREFS_IN_TOPIC = 1;
-$VERSION = '$Rev$';
-$RELEASE = '2010-05-17';
+our $SECRET_ID = 'WYSIWYG content - do not remove this comment, and never use this identical text in your topics';
 
-$SECRET_ID = 'WYSIWYG content - do not remove this comment, and never use this identical text in your topics';
+our $html2tml;
+our $tml2html;
+our $recursionBlock;
+our $imgMap;
+our %TWikiCompatibility;
+our @refs;
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
