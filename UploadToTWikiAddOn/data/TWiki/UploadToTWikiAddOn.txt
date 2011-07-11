@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1294902969" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310359585" format="1.1" version="$Rev$"}%
 ---+!! Upload to TWiki Add-On
 <!--
    Contributions to this TWiki add-on are appreciated. Please update the add-on page at
@@ -69,8 +69,9 @@ __Note:__ This is a command line tool for administrators; regular TWiki user can
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2007-2011, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]], <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | uploadtotwiki/2011-01-12 |
+|  Add-on Version: | uploadtotwiki/2011-07-10 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-10: | TWikibug:Item6725: Adding build stuff |
 |  2011-01-12: | TWikibug:Item6530: Doc improvements |
 |  2007-02-12: | Added =-l=, =-p=, =-c=, =-h=, =-i=, =-d= parameters; support for multiple files |
 |  2007-02-11: | Initial version |
