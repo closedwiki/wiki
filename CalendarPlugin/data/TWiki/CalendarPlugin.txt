@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1298016344" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310355508" format="1.1" version="$Rev$"}%
 ---+!! Calendar Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -382,8 +382,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny, TWiki:Main.NathanKerr, TWiki:Main.DavidBright, TWiki:Main.DanielRohde, TWiki:Main. |
 |  Copyright: | &copy; 2001 TWiki:Main.AndreaSterbini <br /> &copy; 2002-2011 TWiki:Main.PeterThoeny <br /> &copy; 2002-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-02-18 |
+|  Plugin Version: | 2011-07-10 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-10: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2011-02-18: | TWikibug:Item6650: Add cellspacing, cellpadding parameters; fix sharpborders="0" issue -- TWiki:Main.PeterThoeny |
 |  2011-02-17: | TWikibug:Item6649: Support anniversary, yearly, weekly and periodic events with ISO date format -- TWiki:Main.PeterThoeny |
 |  2011-02-16: | TWikibug:Item6649: Support exceptions with ISO date format -- TWiki:Main.PeterThoeny |
