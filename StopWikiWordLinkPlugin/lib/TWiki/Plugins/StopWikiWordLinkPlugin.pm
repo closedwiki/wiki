@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006-2010 Peter Thoeny, peter@thoeny.org
-# Copyright (C) 2006-2010 TWiki Contributors. All Rights Reserved.
+# Copyright (C) 2006-2011 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2006-2011 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution. NOTE: Please extend that file, not this notice.
 #
@@ -21,17 +21,16 @@ package TWiki::Plugins::StopWikiWordLinkPlugin;
 
 use strict;
 
-use vars qw( $VERSION $RELEASE $debug $pluginName $stopWordsRE );
+#===========================================================================
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-10';
 
-$VERSION = '$Rev$';
-$RELEASE = '2010-11-09';
-
-$pluginName = 'StopWikiWordLinkPlugin';
+my $debug;
+my $stopWordsRE;
+my $pluginName = 'StopWikiWordLinkPlugin';
 
 #===========================================================================
 sub initPlugin {
-    my( $topic, $web, $user, $installWeb ) = @_;
-
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.026 ) {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
