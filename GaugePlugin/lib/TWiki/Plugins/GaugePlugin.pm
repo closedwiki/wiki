@@ -32,23 +32,25 @@ use strict;
 use MIME::Base64 qw(encode_base64);
 
 # =========================
-use vars qw(
-        $installWeb $VERSION $RELEASE $debug
-        $pluginInitialized $perlGDModuleFound
-        $defaultType $defaultColors
-        $defaultTambarScale $defaultTambarWidth $defaultTambarHeight
-        $defaultTrendWidth $defaultTrendHeight
-	$defaultTambarScaleHeightPercentage
-	$defaultTambarAccess
-	%colorCache $transparentColorValue
-    );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-05-23';
 
-$VERSION = '$Rev$';
-$RELEASE = '2011-05-23';
+my $installWeb;
+my $debug;
+my $defaultType;
+my $defaultColors;
+my $defaultTambarScale;
+my $defaultTambarWidth;
+my $defaultTambarHeight;
+my $defaultTrendWidth;
+my $defaultTrendHeight;
+my $defaultTambarScaleHeightPercentage;
+my $defaultTambarAccess;
+my %colorCache;
 
-$pluginInitialized = 0;
-$perlGDModuleFound = 0;
-$transparentColorValue = "#FFFFFF";
+my $pluginInitialized = 0;
+my $perlGDModuleFound = 0;
+my $transparentColorValue = "#FFFFFF";
 my $blackColor = "#000000";
 my $redColor = "#FF0000";
 
