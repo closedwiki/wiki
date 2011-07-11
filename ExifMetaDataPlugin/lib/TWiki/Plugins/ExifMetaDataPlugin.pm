@@ -1,7 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004 Pascal Buchbinder, pascal@joebar.ch
-# Copyright (C) 2005-2010 TWiki:TWiki.TWikiContributor
+# Copyright (C) 2005-2011 TWiki:TWiki.TWikiContributor
 #
 # $Id$
 #
@@ -29,12 +29,10 @@ package TWiki::Plugins::ExifMetaDataPlugin;
 use strict;
 
 # =========================
-use vars qw(
-    $web $topic $user $installWeb $VERSION $RELEASE $debug
-);
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-01-09';
 
-$VERSION = '$Rev$';
-$RELEASE = '2011-01-09';
+my $debug = 0;
 
 # =========================
 # markers are FFXX where XX is one of those below
@@ -133,10 +131,7 @@ my %tagid = (
 
 # =========================
 sub initPlugin {
-    ( $topic, $web, $user, $installWeb ) = @_;
-
     TWiki::Func::registerTagHandler( 'EXIFMETADATA', \&_handleEXIFMETADATA );
-
     return 1;
 }
 
