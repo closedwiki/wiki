@@ -21,20 +21,16 @@ package TWiki::Plugins::UsageStatisticsPlugin;
 
 
 # =========================
-use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $debug $core
-    );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-10';
 
-# Plugin version
-$VERSION = '$Rev$';
-$RELEASE = '2011-04-23';
-
-$moduleLoaded = 0;
+my $debug = 0;
+my $core;
 
 # =========================
 sub initPlugin
 {
-    ( $topic, $web, $user, $installWeb ) = @_;
+    my ( $topic, $web ) = @_;
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.2 ) {
