@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1278813181" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310353924" format="1.1" version="$Rev$"}%
 ---+!! Black List Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -62,7 +62,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 #BanList
 <form name="banlist" action="%SCRIPTURL{viewauth}%/%WEB%/%TOPIC%#BanList" method="post">
    * BANLIST: Automatically updated list of IP addresses based on BANLIST configuration
-      * Action: <select name="ban_action"> <option></option> <option value="ban_add">Add</option> <option value="ban_remove">Remove</option> </select> IP address(es) <input type="text" name="ip" size="16" value="" /> <input type="submit" value="Submit" /> %BLACKLISTPLUGIN{ action="%URLPARAM{ban_action}%" value="%URLPARAM{ip}%" }%
+      * Action: <select name="ban_action"> <option></option> <option value="ban_add">Add</option> <option value="ban_remove">Remove</option> </select> IP address(es) <input type="text" name="ip" size="16" value="" class="twikiInputField" /> <input type="submit" value="Submit" class="twikiSubmit" /> %BLACKLISTPLUGIN{ action="%URLPARAM{ban_action}%" value="%URLPARAM{ip}%" }%
       * Current list: %BLACKLISTPLUGIN{ action="ban_show" }%
 </form>
 
@@ -90,14 +90,14 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 #SpamList
 <form name="spamlist" action="%SCRIPTURL{viewauth}%/%WEB%/%TOPIC%#SpamList" method="post">
    * Local SPAMLIST: Manually maintained list of spam patterns (NOTE: *Must be* %SYSTEMWEB%.RegularExpression patterns)
-      * Action: <select name="spam_action"> <option></option> <option value="spam_add">Add</option> <option value="spam_remove">Remove</option> </select> wiki-spam regex pattern(s) <code>http://.*?</code><input type="text" name="spam" size="32" value="" /> <input type="submit" value="Submit" /> %BLACKLISTPLUGIN{ action="%URLPARAM{spam_action}%" value="%URLPARAM{spam}%" }%
+      * Action: <select name="spam_action"> <option></option> <option value="spam_add">Add</option> <option value="spam_remove">Remove</option> </select> wiki-spam regex pattern(s) <code>http://.*?</code><input type="text" name="spam" size="32" value="" class="twikiInputField" /> <input type="submit" value="Submit" class="twikiSubmit" /> %BLACKLISTPLUGIN{ action="%URLPARAM{spam_action}%" value="%URLPARAM{spam}%" }%
       * Current list: %BLACKLISTPLUGIN{ action="spam_show" }%
 </form>
 
 #ExcludeList
 <form name="spamlist" action="%SCRIPTURL{viewauth}%/%WEB%/%TOPIC%#ExcludeList" method="post">
    * EXCLUDELIST: Manually maintained list of exceptions to public wiki-spam patterns, useful to exclude patterns listed incorrectly as spam (NOTE: *Must be* %SYSTEMWEB%.RegularExpression patterns)
-      * Action: <select name="exclude_action"> <option></option> <option value="exclude_add">Add</option> <option value="exclude_remove">Remove</option> </select> exclude spam regex pattern(s) <code>http://.*?</code><input type="text" name="spam" size="32" value="" /> <input type="submit" value="Submit" /> %BLACKLISTPLUGIN{ action="%URLPARAM{exclude_action}%" value="%URLPARAM{spam}%" }%
+      * Action: <select name="exclude_action"> <option></option> <option value="exclude_add">Add</option> <option value="exclude_remove">Remove</option> </select> exclude spam regex pattern(s) <code>http://.*?</code><input type="text" name="spam" size="32" value="" class="twikiInputField" /> <input type="submit" value="Submit" class="twikiSubmit" /> %BLACKLISTPLUGIN{ action="%URLPARAM{exclude_action}%" value="%URLPARAM{spam}%" }%
       * Current list: %BLACKLISTPLUGIN{ action="exclude_show" }%
 </form>
 
@@ -151,7 +151,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Known Issues and Limitations
 
-   * With TWiki 4.0.2 on some platforms, notably Solaris, attached files are uploaded with a zero file size. This is because there is a bug in how TWiki 4.0.2 handles the beforeAttachmentSaveHandler. If affected, upgrade TWiki or apply bug fix [[TWikibug:Item2390][Item2390]]
    * Scan for script eval() and escape() is currently hardcoded
 
 ---++ Plugin Info
@@ -159,6 +158,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-10: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2010-07-10: | TWikibug:Item6519 - fix for empty oops messages in TWiki-4.x; fix for redirect to oops not working in TWiki-5.0 |
 |  29 Mar 2007: | Doc fixes; change view=raw penalty from 20 to 5 |
 |  18 Mar 2007: | Scan for evil script eval() and escape() in topic text and attachments; support for TWiki 4.2 (using new =TWiki::Func::getExternalResource=) |
