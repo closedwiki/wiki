@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
@@ -32,15 +32,18 @@ use strict;
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $installWeb $debug $defaultSites $pluginName $NO_PREFS_IN_TOPIC $siteDefs );
+our $VERSION = '$Rev$';
+our $RELEASE = '2010-12-04';
+our $SHORTDESCRIPTION = 'Icon bar to share a TWiki page on popular social media sites such as Facebook, StumbleUpon, Twitter';
+our $NO_PREFS_IN_TOPIC = 0;
 
-$VERSION = '$Rev$';
-$RELEASE = '2010-12-04';
-$SHORTDESCRIPTION = 'Icon bar to share a TWiki page on popular social media sites such as Facebook, StumbleUpon, Twitter';
-$NO_PREFS_IN_TOPIC = 0;
+my $installWeb;
+my $debug;
+my $defaultSites;
+my $siteDefs;
 
 # Name of this Plugin, only used in this module
-$pluginName = 'ShareMePlugin';
+my $pluginName = 'ShareMePlugin';
 
 =pod
 
@@ -53,13 +56,14 @@ $pluginName = 'ShareMePlugin';
 =cut
 
 sub initPlugin {
-    my( $topic, $web, $user, $installWeb ) = @_;
+    my( $topic, $web, $user, $instWeb ) = @_;
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.026 ) {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
+    $installWeb = $instWeb;
 
     # Get plugin settings
     $debug = TWiki::Func::getPreferencesFlag( "SHAREMEPLUGIN_DEBUG" );
