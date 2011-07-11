@@ -3,8 +3,8 @@
 # Copyright (C) 2001 Andrea Sterbini, a.sterbini@flashnet.it
 # Christian Schultze: debugging, relative month/year, highlight today
 # Akim Demaille <akim@freefriends.org>: handle date intervals.
-# Copyright (C) 2002-2011 Peter Thoeny, peter@thoeny.org
-# Copyright (C) 2002-2010 TWiki Contributors
+# Copyright (C) 2002-2011 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2002-2011 TWiki Contributors
 #
 # For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -34,10 +34,8 @@ use Time::Local;
 #use HTML::CalendarMonthSimple;
 
 # =========================
-use vars qw( $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
-	    $libsLoaded $libsError $defaultsInitialized %defaults );
-$VERSION   = '$Rev$';
-$RELEASE = '2011-02-18';
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-10';
 
 #$VERSION   = '1.020'; #dab# Bug fix from TWiki:Main.MarcLangheinrich for multiday events that were not properly displayed because the first day occurred in the current month, but before the first day included in the list.
 #$VERSION   = '1.019'; #dab# Added support for monthly repeaters specified as "L Fri" (last Friday in all months).
@@ -61,15 +59,16 @@ $RELEASE = '2011-02-18';
 #VERSION   = '1.001';  #as# delayed load
 #VERSION   = '1.000';  #as# initial release
 
-$pluginName="CalendarPlugin";
-
-$debug=0;
-
-
-$libsLoaded = 0;
-$libsError  = 0;
-$defaultsInitialized = 0;
-%defaults   = ();
+my $web;
+my $topic;
+my $user;
+my $installWeb;
+my $debug=0;
+my $libsLoaded = 0;
+my $libsError  = 0;
+my $defaultsInitialized = 0;
+my %defaults   = ();
+my $pluginName = "CalendarPlugin";
 
 # =========================
 sub initPlugin
