@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004-2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2004-2011 Peter Thoeny, peter[at]thoeny.org
 #
 # For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -23,15 +23,20 @@
 package TWiki::Plugins::BlackListPlugin;
 
 # =========================
-use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $pluginName $pluginUpper
-        $debug %cfg
-        $userScore $isBlackSheep
-    );
-use vars qw( %TWikiCompatibility );
+our $VERSION = '$Rev: 13186 $';
+our $RELEASE = '2011-07-10';
 
-$VERSION = '$Rev: 13186 $';
-$RELEASE = '2010-07-10';
+my $web;
+my $topic;
+my $user;
+my $installWeb;
+my $pluginName;
+my $pluginUpper;
+my $debug;
+my %cfg;
+my $userScore;
+my $isBlackSheep;
+my %TWikiCompatibility;
 
 BEGIN {
     $pluginName  = 'BlackListPlugin';  # Name of this Plugin
