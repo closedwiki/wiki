@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1308024196" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310534298" format="1.1" version="$Rev$"}%
 ---+!! !TWikiUserMappingContrib
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -70,8 +70,9 @@ It's a part of the default distribution of the TWiki Core.
 |  Contrib Authors: | TWiki:Main.SvenDowideit, TWiki:Main.PeterThoeny, TWiki:TWiki.TWikiContributor |
 |  Copyright: | &copy; 2007 Sven Dowideit;%BR% &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Contrib Version: | 2011-06-13 |
+|  Contrib Version: | 2011-07-12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-12: | TWikibug:Item6768: Avoid %USERINFO in tag cloud of user profile page (not reliable if {AntiSpam}{HideUserDetails} configure setting is set); no longer needed because !TagMePlugin now allows !WikiWord name for =by=""= tag queries |
 |  2011-06-13: | TWikibug:Item6733: More visual user profile pages with picture selector and status updates -- TWiki:Main.PeterThoeny |
 |  2010-11-05: | TWikibug:Item6604: Add documentation for EDITMETHOD setting |
 |  2010-06-12: | TWikibug:Item5335: Force-linking some WikiWords so that TWiki can work with NOAUTOLINK set or cleared |
