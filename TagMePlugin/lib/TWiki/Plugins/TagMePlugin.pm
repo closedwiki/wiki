@@ -617,7 +617,12 @@ sub _showAllTags {
     $format =~ s/\$n/\n/go;
 
     $by = $user if ( $by eq 'me' );
-    $by = ''    if ( $by eq 'all' );
+    if ( $by eq 'all' ) {
+        $by = '';
+    } else {
+        # $user is login name, convert to login name if needed
+        $by = TWiki::Func::wikiToUserName( $by ) || $by;
+    }
     $maxSize = 180 unless ($maxSize);    # Max % size of font
     $minSize = 90  unless ($minSize);
     my $text = '';
@@ -770,7 +775,12 @@ sub _queryTag {
         $topicsRegex = '^.*\.(' . $topicsRegex . ')$';
     }
     $qBy = '' unless ($qBy);
-    $qBy = '' if ( $qBy eq 'all' );
+    if ( $qBy eq 'all' ) {
+        $qBy = '';    
+    } else {    
+        # $user is login name, convert to login name if needed
+        $qBy = TWiki::Func::wikiToUserName( $qBy ) || $qBy;
+    }
     my $by = $qBy;
     $by = $user if ( $by eq 'me' );
     $format    =~ s/([^\\])\"/$1\\\"/go;
