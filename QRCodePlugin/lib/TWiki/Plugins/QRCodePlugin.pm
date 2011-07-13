@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2011 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org
 # Copyright (C) 2011 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution. NOTE: Please extend that file, not this notice.
@@ -24,15 +24,13 @@ use strict;
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC $pluginName $debug );
+#==========================
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-12';
 
-$VERSION = '$Rev$';
-$RELEASE = '2011-02-15';
-
-$SHORTDESCRIPTION = 'Create QR Code (a matrix barcode) in TWiki pages, useful for mobile applications';
-$NO_PREFS_IN_TOPIC = 1;
-
-$pluginName = 'QRCodePlugin';
+our $SHORTDESCRIPTION = 'Create QR Code (a matrix barcode) in TWiki pages, useful for mobile applications';
+our $NO_PREFS_IN_TOPIC = 1;
+our $pluginName = 'QRCodePlugin';
 
 #==========================
 sub initPlugin {
@@ -43,8 +41,6 @@ sub initPlugin {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
-
-    $debug = $TWiki::cfg{Plugins}{QRCodePlugin}{Debug} || 0;
 
     TWiki::Func::registerTagHandler( 'QRCODE', \&_QRCODE );
 
