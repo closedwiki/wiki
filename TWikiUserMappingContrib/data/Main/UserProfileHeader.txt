@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1308023966" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310534067" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -79,7 +79,7 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 </td><td valign="top" class="profileBox" style="min-width: 200px;">
 <b>Tag Cloud of <nop>%FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }%:</b>
 %BR%
-%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%SYSTEMWEB%/TagMeSearch?tag=$tag;by=%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%\" style=\"font-size:$size%\">$tag</a>" separator="&nbsp; "  minsize="80" maxsize="120" by="%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%" }%
+%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%SYSTEMWEB%/TagMeSearch?tag=$tag;by=%INCLUDINGTOPIC%\" style=\"font-size:$size%\">$tag</a>" separator="&nbsp; "  minsize="80" maxsize="120" by="%INCLUDINGTOPIC%" }%
 </td></tr></table>
 </div>
 <!-- ===== EDIT RECORD ===== -->
@@ -128,7 +128,7 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 </td><td valign="top" class="profileBox" style="min-width: 200px;">
 <b>Tag Cloud of <nop>%FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }%:</b>
 %BR%
-%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%SYSTEMWEB%/TagMeSearch?tag=$tag;by=%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%\" style=\"font-size:$size%\">$tag</a>" separator="&nbsp; "  minsize="80" maxsize="120" by="%USERINFO{ "%INCLUDINGTOPIC%" format="$username" }%" }%
+%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%SYSTEMWEB%/TagMeSearch?tag=$tag;by=%INCLUDINGTOPIC%\" style=\"font-size:$size%\">$tag</a>" separator="&nbsp; "  minsize="80" maxsize="120" by="%INCLUDINGTOPIC%" }%
 </td></tr></table>
 </form>
 </div>
