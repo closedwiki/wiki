@@ -28,8 +28,8 @@ package TWiki::Plugins::TagMePlugin;
 use strict;
 
 # =========================
-our $VERSION    = '1.8';
-our $RELEASE    = '2011-05-25';
+our $VERSION    = '1.9';
+our $RELEASE    = '2011-07-12';
 
 # =========================
 our $pluginName = 'TagMePlugin';    # Name of this Plugin
@@ -703,10 +703,15 @@ sub _showAllTags {
             }
         }
         if ( $by && !scalar @tags ) {
-            return
-              "__Note:__ You haven't yet added any tags. To add a tag, go to "
-              . "a topic of interest, and add a tag from the list, or put your "
-              . "vote on an existing tag.";
+            if( $by eq $user ) {
+                return
+                  '__Note:__ You haven\'t yet added any tags. To add a tag, go to '
+                  . 'a topic of interest, and add a tag from the list, or put your '
+                  . 'vote on an existing tag.';
+             } else {
+                $by = TWiki::Func::getWikiName( $by ) || $by;
+                return "__Note:__ <nop>$by hasn't yet added any tags."
+             }
         }
 
 #        my @ordered = sort { $tagCount{$a} <=> $tagCount{$b} } @tags;
