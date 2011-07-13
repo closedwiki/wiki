@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1306389807" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310529529" format="1.1" version="$Rev$"}%
 ---+!! Tag-me Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -407,8 +407,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens |
 |  Copyright: | &copy; 2006-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc]]; <br /> &copy; 2006-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-05-25 (v1.8) |
+|  Plugin Version: | 2011-07-12 (v1.9) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-12: | TWikibug:Item6768: Allow login name or !WikiWord name for =by=""= tag queries |
 |  2011-05-25: | TWikibug:Item6732: Fix for administrator not able to delete tag if Main web is renamed to User web |
 |  2010-06-12: | TWikibug:Item6490: Fixing hardcoded link to TWiki web |
 |  2010-05-26: | TWikibug:Item6433: Doc improvements |
