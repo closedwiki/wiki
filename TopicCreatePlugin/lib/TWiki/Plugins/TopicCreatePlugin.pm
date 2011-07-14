@@ -1,7 +1,8 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005-2009 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2005-2011 Peter Thoeny, peter[at]thoeny.org
 # Copyright (C) 2009 Andrew Jones, andrewjones86@gmail.com
+# Copyright (C) 2008-2011 TWiki Contributors. All Rights Reserved.
 #
 # For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -20,19 +21,20 @@
 package TWiki::Plugins::TopicCreatePlugin;
 
 # =========================
-use vars qw(
-  $web $topic $user $installWeb $debug $doInit $VERSION $RELEASE $pluginName
-);
-
 our $VERSION           = '$Rev$';
-our $RELEASE           = '1.1';
+our $RELEASE           = '2011-07-13';
 our $pluginName        = 'TopicCreatePlugin';
 
-our $doInit = 0;
+my $doInit = 0;
+my $web;
+my $topic;
+my $user;
+my $debug;
+
 
 # =========================
 sub initPlugin {
-    ( $topic, $web, $user, $installWeb ) = @_;
+    ( $topic, $web, $user ) = @_;
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1 ) {
