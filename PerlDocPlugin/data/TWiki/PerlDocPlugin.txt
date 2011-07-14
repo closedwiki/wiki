@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1295942362" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310624112" format="1.1" version="$Rev$"}%
 ---+!! Perl Doc Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -74,10 +74,11 @@ Silly paragraph
 ---+ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2002-2010, TWiki:Main.PeterThoeny; <br /> &copy; 2008-2010, TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2002-2011 TWiki:Main.PeterThoeny; <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-13: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2011-01-25: | TWikibug:Item6638: Doc improvements |
 |  2010-08-25: | TWikibug:Item6530: Fix for TWiki-5.0; doc improvements; changing TWIKIWEB to SYSTEMWEB |
 |  20 May 2007 | Fixed for TWiki-4, added "=pod", repackaged with !BuildContrib - TWiki:Main.CrawfordCurrie |
