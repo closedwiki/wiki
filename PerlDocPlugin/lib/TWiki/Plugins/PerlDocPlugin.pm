@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2002-2010 Peter Thoeny, peter@thoeny.org
-# Copyright (C) 2008-2010 TWiki Contributor. All Rights Reserved.
+# Copyright (C) 2002-2011 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2008-2011 TWiki Contributor. All Rights Reserved.
 #
 # For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -42,10 +42,8 @@ Last paragraph of this document block
 package TWiki::Plugins::PerlDocPlugin;
 
 # =========================
-use vars qw( $VERSION $RELEASE );
-
-$VERSION = '$Rev$';
-$RELEASE = '2011-01-25';
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-13';
 
 # =========================
 sub initPlugin {
