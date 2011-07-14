@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1280699694" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310625449" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -58,11 +58,12 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>L
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2001-2010 Peter Thoeny, %BR% &copy; 2001-2010 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2001-2011 Peter Thoeny, %BR% &copy; 2001-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-08-01: | TWikibug:Item6530 - doc fixes; changing TWIKIWEB to SYSTEMWEB |
+|  2011-07-13: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
+|  2010-08-01: | TWikibug:Item6530: Doc fixes; changing TWIKIWEB to SYSTEMWEB |
 |  19 Nov 2004: | Minor code cleanup; added benchmarks |
 |  23 Nov 2003: | New URL for gateway (www.bsdi.com is decommissioned); choice of internal date calculation |
 |  14 Jul 2001: | Changed to plug & play |
