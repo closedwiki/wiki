@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1256463078" format="1.1" version="$Rev$}%
+%META:TOPICINFO{author="TWikiContributor" date="1310622795" format="1.1" version="$Rev$"}%
 ---+!! Topic Create Plugin 
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
@@ -6,12 +6,12 @@
    at http://twiki.org/cgi-bin/view/TopicCreatePlugins/PluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
-
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
 This Plugin allows you to automatically create topics or attach files at topic save time. This is typically used by TWiki applications to create a set of template based topics.
 
-%TOC%
-
----++ <nop>TOPICCREATE - Automatically Create a Set of TWiki Topics
+---++ <nop>TOPICCREATE!! - Automatically Create a Set of TWiki Topics
 
    * The =%<nop>TOPICCREATE{}%= <nop>TWikiVariable is useful for creating topics based on templates
    * Example scenario: You have a notebook application where users can create new notebooks based on a notebook template topic. Each time a user creates a new notebook you would like to create a set of child topics, each based on a separate template.
@@ -29,7 +29,7 @@ This Plugin allows you to automatically create topics or attach files at topic s
    * Write =%<nop>TOPICCREATE{ template="<nop>MyTemplate" topic="<nop>%<nop>TOPIC%MyNewTopicName" parameters="MyParameterName=MyParameterValue&Hello=Goodbye" }%= to create a twiki topic based on another topic =<nop>MyTemplate= with the name =<nop>%<nop>TOPIC%MyNewTopicName=. Any =%<nop>URLPARAM{}%=  with the name =MyParameterName= and =Hello= present in =MyTemplate= will be replaced with =MyParameterValue= and =Goodbye=.
    * To prevent the action from happening in your template topic you should either include the =disable= argument, or escape it: =%<nop>TOPICCRE%<nop>NOP%ATE{...}%=. The =%<nop>NOP%= gets removed when a topic gets instantiated based on a template.
 
----++ <nop>TOPICATTACH - Automatically Copy Attachments to a Topic 
+---++ <nop>TOPICATTACH!! - Automatically Copy Attachments to a Topic 
 
    * Example scenario: You have a template topic and would like to attach a file whose's content or name is determined by URL parameters at topic creation time.  This is usually done for a topic that was just created via TOPICCREATE as described above.
    * Syntax: =%<nop>TOPICATTACH{ &lt;attributes&gt; }%=
@@ -106,10 +106,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.StanleyKnutson, TWiki:Main.PeterThoeny, TWiki:Main.PaulineCheung, TWiki:Main.AndrewRJones |
-|  Copyright: | &copy; 2005 - 2009, Peter Thoeny; &copy; 2009, Andrew Jones |
+|  Copyright: | &copy; 2005-2011 Peter Thoeny; <br /> &copy; 2009 Andrew Jones; <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 25 Oct 2009 (v1.1) |
+|  Plugin Version: | 2011-07-13 |
 |  Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-13: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  25 Oct 2009: | TWikibug:Item6357 - removed dependency on Unix utilities =cp= and =mkdir=, should now work on any OS that TWiki does; removed depreciated API calls -- TWiki:Main.AndrewRJones |
 |  11686 | TWikibug:Item2956 - freeze !TWikiRelease04x00 and copy it to new branch MAIN |
 |  10613 | TWikibug:Item2473 - files in pub and data directories shouldn't be marked executable in svn (Ordnung muss sein) |
@@ -127,5 +128,3 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
-
--- TWiki:Main.PeterThoeny - 25 Oct 2009
