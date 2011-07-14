@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1296630286" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310624388" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -66,8 +66,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.WillNorris, TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2003 TWiki:Main.WillNorris <br /> &copy; 2011 TWiki:Main.PeterThoeny <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-02-01 |
+|  Plugin Version: | 2011-07-13 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-13: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2011-02-01: | TWikibug:Item6638: Code rewrite from scratch (same functionality); doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  2003-10-25: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
