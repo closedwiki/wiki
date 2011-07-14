@@ -32,16 +32,19 @@ use strict;
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC $moduleEnum $geoIP $error );
+our $VERSION = '$Rev$';
+our $RELEASE = '20110-05-01';
 
-$VERSION = '$Rev$';
-$RELEASE = '20110-05-01';
-
-$SHORTDESCRIPTION = 'Lookup geolocation by IP address or domain name';
-$NO_PREFS_IN_TOPIC = 0;
+our $SHORTDESCRIPTION = 'Lookup geolocation by IP address or domain name';
+our $NO_PREFS_IN_TOPIC = 0;
 
 # Name of this Plugin, only used in this module
-$pluginName = 'GeoLookupPlugin';
+my $pluginName = 'GeoLookupPlugin';
+
+my $debug;
+my $moduleEnum;
+my $geoIP;
+my $error;
 
 =pod
 
