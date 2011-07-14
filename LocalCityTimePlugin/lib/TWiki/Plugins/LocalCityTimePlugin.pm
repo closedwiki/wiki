@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org
 #
 # For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -29,29 +29,23 @@
 package TWiki::Plugins::LocalCityTimePlugin;
 
 # =========================
-use vars qw(
-        $web $topic $user $installWeb
-        $tzDir $dateCmd $dateParam $gatewayUrl
-        $VERSION $RELEASE $debug $useDateCmd
-    );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-13';
 
-# =========================
 # Plugin configuration
-$tzDir     = '/usr/share/zoneinfo';                     # root dir of zone info files
-$dateCmd   = '/bin/date';                               # path to date command
-$dateParam = "'+\%a, \%d \%b \%Y \%T \%z \%Z'";         # RFC-822 compliant date format
-                                                        # Example: Fri, 14 Nov 2003 23:46:52 -0800 PST
-$gatewayUrl   = "http://TWiki.org/cgi-bin/xtra/tzdate"; # URL of date and time gateway
-$gatewayParam = "?tz=";                                 # parameter of date and time gateway
-
-$VERSION = '$Rev$';
-$RELEASE = '2010-08-01';
-
+my $tzDir     = '/usr/share/zoneinfo';                     # root dir of zone info files
+my $dateCmd   = '/bin/date';                               # path to date command
+my $dateParam = "'+\%a, \%d \%b \%Y \%T \%z \%Z'";         # RFC-822 compliant date format
+                                                           # Example: Fri, 14 Nov 2003 23:46:52 -0800 PST
+my $gatewayUrl   = "http://TWiki.org/cgi-bin/xtra/tzdate"; # URL of date and time gateway
+my $gatewayParam = "?tz=";                                 # parameter of date and time gateway
+my $useDateCmd;
+my $debug;
 
 # =========================
 sub initPlugin
 {
-    ( $topic, $web, $user, $installWeb ) = @_;
+    my ( $topic, $web ) = @_;
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1 ) {
@@ -90,8 +84,8 @@ sub handleCityTime
     $timeZone =~ s/[^\w\-\/\_\+]//gos;
     unless( $timeZone ) {
         # return help
-        return "$installWeb.LocalCityTimePlugin help: Write a Continent/City timezone code listed in $gatewayUrl, "
-             . "e.g. %<nop>LOCALCITYTIME{\"Europe/Zurich\"}%";
+        return '%SYSTEMWEB%.LocalCityTimePlugin help: Write a Continent/City timezone code listed in '
+             . $gatewayUrl . ', such as %<nop>LOCALCITYTIME{"Europe/Zurich"}%';
     }
 
     # try date command and zoneinfo file
@@ -99,8 +93,9 @@ sub handleCityTime
         my $tz = $tzDir . "/" . $timeZone;
         &TWiki::Func::writeDebug( "- LocalCityTimePlugin::handleCityTime: Try zoneinfo file $tz" ) if $debug;
         unless( -f $tz ) {
-            return "$installWeb.LocalCityTimePlugin warning: Invalid Timezone '$timeZone'. Use a Continent/City timezone code "
-                 . "listed in $gatewayUrl, e.g. %<nop>LOCALCITYTIME{\"Europe/Zurich\"}%";
+            return '%SYSTEMWEB%.LocalCityTimePlugin warning: '
+                 . "Invalid Timezone '$timeZone'. Use a Continent/City timezone code "
+                 . "listed in $gatewayUrl, such as %<nop>LOCALCITYTIME{\"Europe/Zurich\"}%";
         }
         my $saveTZ = $ENV{'TZ'};       # save timezone
         $ENV{'TZ'} = $tz;
@@ -118,12 +113,14 @@ sub handleCityTime
     # &TWiki::Func::writeDebug( "- LocalCityTimePlugin::hand: getUrl has: $text" ) if $debug;
 
     if( $text =~ /Invalid Timezone/ ) {
-        return "$installWeb.LocalCityTimePlugin warning: Invalid Timezone '$timeZone'. Use a Continent/City timezone code "
+        return '%SYSTEMWEB%.LocalCityTimePlugin warning: '
+             . "Invalid Timezone '$timeZone'. Use a Continent/City timezone code "
              . "listed in $gatewayUrl, e.g. %<nop>LOCALCITYTIME{\"Europe/Zurich\"}%";
     }
     $text =~ s/.*<!\-\-tzdate:date\-\->(.*?)<\!\-\-\/tzdate:date\-\->.*/$1/os;
     unless( $1 ) {
-        return "$installWeb.LocalCityTimePlugin error: Can't read $gatewayUrl$gatewayParam$timeZone (due to a "
+        return '%SYSTEMWEB%.LocalCityTimePlugin error: '
+             . "Can't read $gatewayUrl$gatewayParam$timeZone (due to a "
              . "proxy problem?), or received data has invalid format (due to change in web page layout?).";
     }
     &TWiki::Func::writeDebug( "- LocalCityTimePlugin::handleCityTime: gateway returns <<$text>>" ) if $debug;
