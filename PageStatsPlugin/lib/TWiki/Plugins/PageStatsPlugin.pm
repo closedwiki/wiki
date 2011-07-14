@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org
 # Copyright (C) 2003 TWiki:Main.WillNorris
 # Copyright (C) 2008-2011 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
@@ -26,10 +26,10 @@ use strict;
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
-use vars qw( $VERSION $RELEASE $debug );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-02-01';
 
-$VERSION = '$Rev$';
-$RELEASE = '2011-02-01';
+my $debug;
 
 #=========================================================
 sub initPlugin {
