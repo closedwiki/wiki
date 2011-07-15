@@ -30,7 +30,7 @@ use strict;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-01-09';
+our $RELEASE = '2011-07-15';
 
 my $debug = 0;
 
