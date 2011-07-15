@@ -19,13 +19,14 @@
 # =========================
 package TWiki::Plugins::RedirectPlugin;
 
-# =========================
-use vars qw( $VERSION $RELEASE $debug $pluginName );
 use strict;
 
-$VERSION    = '$Rev$';
-$RELEASE    = '2011-05-10';
-$pluginName = 'RedirectPlugin';
+# =========================
+our $VERSION    = '$Rev$';
+our $RELEASE    = '2011-07-15';
+
+my $pluginName = 'RedirectPlugin';
+my $debug;
 
 # =========================
 sub initPlugin {
