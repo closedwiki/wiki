@@ -333,7 +333,8 @@ sub _collectSystemData {
                 my( $output, $exit ) =
                   $this->{Sandbox}->sysCommand( $cmd, TOKEN => $searchString, FILES => \@set );
                 unless( $exit ) {
-                    $systemData->{attachments} += scalar split( /[\n\r?]/, $output );
+                    @set = split( /[\n\r?]/, $output );
+                    $systemData->{attachments} += scalar @set;
                 }
             } catch Error::Simple with {
                 # ignore errors
