@@ -147,7 +147,7 @@ sub _handleEXIFMETADATA {
     $debug = TWiki::Func::getPreferencesFlag( "EXIFMETADATAPLUGIN_DEBUG" );
 
     my $tags_string = $params->{tags};
-    if( $tags_string eq "" ) {
+    unless( $tags_string ) {
         foreach my $myKey (keys %defaulttag) {
             $tags{$myKey} = "selected";
         }
