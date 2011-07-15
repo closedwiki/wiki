@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305085114" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310767104" format="1.1" version="$Rev$"}%
 ---+!! Redirect Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -70,25 +70,33 @@ If installed:
 
 ---++ Installation Instructions
 
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/VarREDIRECT.txt== | REDIRECT variable documentation topic |
-     | ==data/Sandbox/RedirectPluginTest.txt== | Test topic |
-     | ==data/Sandbox/RedirectPluginDestination.txt== | Test topic, landing page |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * Test if the installation was successful (see Test Topics section above)
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+ 
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==data/TWiki/VarREDIRECT.txt== | REDIRECT variable documentation topic |
+        | ==data/Sandbox/RedirectPluginTest.txt== | Test topic |
+        | ==data/Sandbox/RedirectPluginDestination.txt== | Test topic, landing page |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script, and enable the plugin in the __Plugins__ section.
+      * Test if the installation was successful: See Test Topics section above.
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.SteveMokris |
 |  Copyright: | &copy; 2003 TWiki:Main.SteveMokris, %BR% &copy; 2003-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-05-10 |
+|  Plugin Version: | 2011-07-15 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-15: | TWikibug:Item6725: Change global package variables from "use vars" to "our"; doc improvements |
 |  2011-05-10: | TWikibug:Item6701: Doc improvements, adding VarREDIRECT variable documentation -- TWiki:Main.PeterThoeny |
 |  2011-02-14: | TWikibug:Item6664: Remove any newline characters from redirect URL before redirecting -- TWiki:Main.DipuDeshmukh |
 |  2010-07-25: | TWikibug:Item6530: Doc fixes |
