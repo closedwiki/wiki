@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307251765" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310777500" format="1.1" version="$Rev$"}%
 ---+ TWiki Access Control
 
 _Restricting read and write access to topics and webs, by Users and groups_
@@ -54,17 +54,17 @@ The default visitor name is %USERSWEB%.TWikiGuest. This is the non-authenticated
 
 The following describes the standard TWiki support for groups. Your local TWiki may have an alternate group mapping manager installed. Check with your TWiki administrator if you are in doubt.
 
-Groups are defined by group topics located in the ==%USERSWEB%== web. To create a new group, visit  %USERSWEB%.TWikiGroups and enter the name of the new group ending in ==Group== into the "new group" form field. This will create a new group topic with two important settings:
+Groups are defined by group topics located in the ==%USERSWEB%== web. To create a new group, visit %USERSWEB%.TWikiGroups and enter the name of the new group ending in ==Group== into the "new group" form field. This will create a new group topic with two important settings:
    * ==Set <nop>GROUP = &lt; list of Users and/or Groups &gt;==
    * ==Set <nop>ALLOWTOPICCHANGE = &lt; list of Users and/or Groups &gt;==
 
 The GROUP setting is a comma-separated list of users and/or other groups. Example:
-   * ==Set GROUP = %USERSWEB%.<nop>SomeUser, %USERSWEB%.<nop>OtherUser, %USERSWEB%.<nop>SomeGroup==
+   * ==Set GROUP = !SomeUser, !OtherUser, !SomeGroup==
 
-The ALLOWTOPICCHANGE setting defines who is allowed to change the group topic; it is a comma delimited list of users and groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic. This prevents users not in the group from editing the topic to give themselves or others access. For example, for the <nop>KasabianGroup topic write:
-   * ==Set <nop>ALLOWTOPICCHANGE = %USERSWEB%.<nop>KasabianGroup==
+The ALLOWTOPICCHANGE setting defines who is allowed to change the group topic; it is a comma delimited list of users and groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic. This prevents users not in the group from editing the topic to give themselves or others access. For example, for the !MarketingGroup topic write:
+   * ==Set <nop>ALLOWTOPICCHANGE = !MarketingGroup==
 
-__%X% Note:__ TWiki has strict formatting rules. Make sure you have three spaces, an asterisk, and an extra space in front of any access control rule.
+__%X% Note:__ TWiki has strict formatting rules. Make sure you have a real bullet. (In raw edit it is three or six spaces, an asterisk, and an extra space in front of any access control rule.)
 
 #SuperAdminGroup
 ---+++ The Super Admin Group
@@ -72,7 +72,7 @@ __%X% Note:__ TWiki has strict formatting rules. Make sure you have three spaces
 A number of TWiki functions (for example, renaming webs) are only available to administrators. Administrators are simply users who belong to the *SuperAdminGroup*. This is a standard user group, the name of which is defined by {SuperAdminGroup} setting in [[%SCRIPTURLPATH{"configure"}%][configure]]. The default name of this group is the =TWikiAdminGroup=. The system administrator may have chosen a different name for this group if your local TWiki uses an alternate group mapping manager but for simplicity we will use the default name !TWikiAdminGroup in the rest of this topic.
 
 You can create new administrators simply by adding them to the %USERSWEB%.TWikiAdminGroup topic. For example,
-   * ==Set <nop>GROUP = <nop>%USERSWEB%.ElizabethWindsor, <nop>%USERSWEB%.TonyBlair==
+   * ==Set <nop>GROUP = !RobertCailliau, !TimBernersLee==
 A member of the Super Admin Group has unrestricted access throughout the TWiki, so only trusted staff should be added to this group.
 
 #RestrictingAccess
@@ -102,12 +102,15 @@ You can define restrictions on who is allowed to view a <nop>%WIKITOOLNAME% web.
       * ==Set <nop>DENYWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
       * ==Set <nop>ALLOWWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
 
+For example, set this to restrict a web to be viewable only by the !MarketingGroup:
+   * ==Set <nop>ALLOWWEBVIEW = <nop>%USERSWEB%.MarketingGroup==
+
 If your site allows hierarchical webs, then access to sub-webs is determined from the access controls of the parent web, plus the access controls in the sub-web. So, if the parent web has ==ALLOWWEBVIEW== set, this will also apply to the subweb. Also note that you will need to ensure that the parent web's ==FINALPREFERENCES== does not include the access control settings listed above. Otherwise you will not be able override the parent web's access control settings in sub-webs.
 
 Creation and renaming of sub-webs is controlled by the WEBCHANGE setting on the parent web (or ROOTCHANGE for [[#RootWebs][root webs]]). Renaming is additionally restricted by the setting of WEBRENAME in the web itself.
 
 __Note:__  If you restrict access to the %USERSWEB%, make sure to add the =TWikiRegistrationAgent= so that users can register. Example:
-      * ==Set <nop>ALLOWWEBCHANGE = !TWikiAdminGroup, !TWikiRegistrationAgent==
+   * ==Set <nop>ALLOWWEBCHANGE = !TWikiAdminGroup, !TWikiRegistrationAgent==
 
 __Note:__  For Web level access rights Setting any of these settings to an empty value has the same effect as not setting them at all. Please note that the documentation of TWiki 4.0 and earlier versions of TWiki 4.1 did not reflect the actual implementation, e.g. an empty ALLOWWEBVIEW does _not_ prevent anyone from viewing the web, and an an empty DENYWEBVIEW does _not_ allow all to view the web.
 
@@ -121,6 +124,9 @@ __Note:__  For Web level access rights Setting any of these settings to an empty
       * ==Set <nop>ALLOWTOPICCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
       * ==Set <nop>DENYTOPICRENAME = &lt; comma-delimited list of Users and Groups &gt;==
       * ==Set <nop>ALLOWTOPICRENAME = &lt; comma-delimited list of Users and Groups &gt;==
+
+For example, set this to restrict a topic to be viewable only by the !MarketingExecGroup:
+   * ==Set <nop>ALLOWTOPICVIEW = <nop>%USERSWEB%.MarketingExecGroup==
 
 Remember when opening up access to specific topics within a restricted web that other topics in the web - for example, the WebLeftBar - may also be accessed when viewing the topics. The message you get when you are denied access should tell you what topic you were not permitted to access.
 
@@ -168,7 +174,7 @@ __Notes:__
 ---+++ Controlling who can manage top-level webs
 
 Top level webs are a special case, because they don't have a parent web with a %WEBPREFSTOPIC%. So there has to be a special control just for the root level.
-   * You can define these settings in the %USERSWEB%.%TWIKIPREFSTOPIC% topic, preferable towards the end of the topic:
+   * You can define these settings in the [[%LOCALSITEPREFS%]] topic, preferable towards the end of the topic:
       * ==Set <nop>DENYROOTCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
       * ==Set <nop>ALLOWROOTCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
 Note that you do *not* require =ROOTCHANGE= access to rename an existing top-level web. You just need =WEBCHANGE= in the web itself.
@@ -206,15 +212,6 @@ Examples: Topic A includes topic B
 
 #QuickRecipes
 ---++ Access Control quick recipes
-
----+++ Obfuscating Webs
-
-Another way of hiding webs is to keep them hidden by not publishing the URL and by preventing the ==all webs== search option from accessing obfuscated webs. Do so by enabling the ==NOSEARCHALL== variable in %WEBPREFSTOPIC%:
-   * ==Set <nop>NOSEARCHALL = on==
-
-This setup can be useful to hide a new web until content its ready for deployment, or to hide view access restricted webs.
-
-__%X% Note:__ Obfuscating a web without view access control is *very* insecure, as anyone who knows the URL can access the web.
 
 ---+++ Restrict Access to Whole TWiki Site
 
@@ -261,6 +258,20 @@ Alternatively, place them in HTML comment markers, but this exposes the access s
 ==&nbsp;  * Set <nop>DENYTOPICCHANGE = %USERSWEB%.<nop>SomeGroup== <br />
 ==--&gt;==
 </blockquote>
+
+
+---+++ Obfuscating Webs
+
+Another way of hiding webs is to keep them hidden by not publishing the URL and by preventing the ==all webs== search option from accessing obfuscated webs. Do so by enabling the ==NOSEARCHALL== variable in %WEBPREFSTOPIC%:
+   * ==Set <nop>NOSEARCHALL = on==
+
+This setup can be useful to hide a new web until content its ready for deployment, or to hide view access restricted webs.
+
+__%X% Note:__ Obfuscating a web without view access control is *very* insecure, as anyone who knows the URL can access the web.
+
+---+++ Read-only Skin Mode
+
+It is possible to turn the PatternSkin and TopMenuSkin into read-only mode by removing the edit and attach controls (links and buttons). This is mainly useful if you have TWiki application pages or dashboards where you do not want regular users to change content. The read-only skin mode is not a replacement for access control; you can use it in addition to access control. Details at [[PatternSkinCustomization#ReadOnlySkinMode]].
 
 %STOPINCLUDE%
 
