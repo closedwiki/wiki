@@ -1295,6 +1295,7 @@ $TWiki::cfg{Operators}{If} = [ 'TWiki::If::OP_allows', 'TWiki::If::OP_defined', 
 # *PLUGINS* Marker used by bin/configure script - do not remove!
 # The plugins listed below were discovered by searching the @INC path for
 # modules that match the TWiki standard e.g. TWiki/Plugins/MyPlugin.pm.
+$TWiki::cfg{Plugins}{BackupRestorePlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{ColorPickerPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{CommentPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{EditTablePlugin}{Enabled} = 1;

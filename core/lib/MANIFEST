@@ -1,3 +1,4 @@
+!include ../BackupRestorePlugin/lib/TWiki/Plugins/BackupRestorePlugin
 !include ../BehaviourContrib/lib/TWiki/Contrib/BehaviourContrib
 !include ../ClassicSkin/lib/TWiki/Contrib/ClassicSkin
 !include ../ColorPickerPlugin/lib/TWiki/Plugins/ColorPickerPlugin
