@@ -1,6 +1,73 @@
-%META:TOPICINFO{author="PeterThoeny" date="1294730995" format="1.1" reprev="1.1" version="1.1"}%
----+!! Backup &amp; Restore Plugin
+%META:TOPICINFO{author="TWikiContributor" date="1310784533" format="1.1" version="$Rev$"}%
+---+!! Backup &amp; Restore Plugin - Alpha Version (Work in Progress)
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/BackupRestorePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/BackupRestorePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-PLACEHOLDER TOPIC
+---++ Introduction
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, BackupRestoreConsole, AdminToolsCategory
+This is a work-in-progress implementation for a comprehensive backup solution for TWiki (not yet functional). Proposal at TWiki:Codev/BackupRestoreUtility
+
+FIXME
+
+---++ Syntax Rules
+
+=%<nop>BACKUPRESTORE{"..."}%=
+
+| *Parameter* | *Explanation* | *Default* |
+| ="..."= | Default parameter. | (none) |
+FIXME
+
+---++ Examples
+
+   * FIXME
+
+---++ Plugin Installation &amp; Configuration
+
+__Note:__ This plugin is pre-installed. You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+        | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | Core backup module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+      * Install the dependencies (if any).
+
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Configure additional plugin settings in the __Extensions__ section if needed.
+      * Test if the installation was successful: See example above.
+
+---++ Plugin Info
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Administrator utility to backup, restore and upgrade a TWiki site
+
+|  Plugin Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny <br /> &copy; 2011 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2011-07-15 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-15: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/BackupRestorePlugin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/BackupRestorePluginDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/BackupRestorePluginAppraisal |
+
+__Related Topics:__ BackupRestoreConsole, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.AdminToolsCategory

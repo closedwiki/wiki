@@ -30,7 +30,7 @@ use vars qw(
   );
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-01-16';
+$RELEASE = '2011-07-15';
 $SHORTDESCRIPTION = 'Administrator utility to backup, restore and upgrade a TWiki site';
 $NO_PREFS_IN_TOPIC = 1;
 
