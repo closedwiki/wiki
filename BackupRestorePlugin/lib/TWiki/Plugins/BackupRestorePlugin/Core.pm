@@ -28,12 +28,6 @@ use TWiki::Plugins::BackupRestorePlugin::CaptureOutput qw( capture_exec capture_
 # modules except LocalSite.cfg
 
 #==================================================================
-# Constants
-my @createZipCmd = ( 'zip', '-r' );   # Append: zip dir1 dir2 -x exlude1 exlude2
-my @listZipCmd   = ( 'unzip', '-l' ); # Append: zip
-my @unZipCmd     = ( 'unzip', '-o' ); # Append: zip
-
-#==================================================================
 sub new {
     my ( $class, $this ) = @_;
 
@@ -51,11 +45,18 @@ sub new {
     $this->{listZipCmd}   = $TWiki::cfg{Plugins}{BackupRestorePlugin}{listZipCmd} || 'unzip -l';
     $this->{unZipCmd}     = $TWiki::cfg{Plugins}{BackupRestorePlugin}{unZipCmd} || 'unzip -o';
 
+    bless( $this, $class );
+
+    $this->{Location} = $this->_gatherLocation();
+
     $this->{error} = '';
 
-    bless( $this, $class );
     return $this;
 }
+
+#==================================================================
+# HIGH LEVEL BACKUP/RESTORE METHODS
+#==================================================================
 
 #==================================================================
 sub BACKUPRESTORE {
@@ -68,11 +69,54 @@ sub BACKUPRESTORE {
     return $text;
 }
 
+
+#==================================================================
+# MID LEVEL BACKUP/RESTORE METHODS
+#==================================================================
+
+#==================================================================
+sub createBackup {
+    my( $this ) = @_;
+
+}
+
+#==================================================================
+# LOW LEVEL METHODS
+#==================================================================
+
+#==================================================================
+sub _gatherLocation {
+    my( $this ) = @_;
+
+    my $loc;
+    my $root = $TWiki::cfg{DataDir};
+    $root =~ s|(.*)[\\/]+.*|$1|;
+$loc->{Root} = $root;
+    $loc->{DataDir}    = $TWiki::cfg{DataDir};
+    $loc->{PubDir}     = $TWiki::cfg{PubDir};
+    $loc->{WorkingDir} = $TWiki::cfg{WorkingDir};
+    $loc->{LocalLib}   = '';
+    $loc->{LocalSite}  = '';
+    $loc->{ApacheConf} = '';
+
+    return $loc;
+}
+
 #==================================================================
 sub _testZipMethods {
     my( $this ) = @_;
 
     my $text = '';
+use Cwd;
+    $text .= "\n<br />===== Dirs <pre>\n"
+           . "-pwd:        " . cwd() . "\n" 
+           . "-Root:       $this->{Location}{Root}\n"
+           . "-DataDir:    $this->{Location}{DataDir}\n"
+           . "-PubDir:     $this->{Location}{PubDir}\n"
+           . "-LocalLib:   $this->{Location}{LocalLib}\n"
+           . "-LocalSite:  $this->{Location}{LocalSite}\n"
+           . "-ApacheConf: $this->{Location}{ApacheConf}\n"
+           . "\n</pre>\n";
 
     $text .= "\n<br />===== Test _listAllBackups()<pre>\n"
            . join( "\n", $this->_listAllBackups() )
