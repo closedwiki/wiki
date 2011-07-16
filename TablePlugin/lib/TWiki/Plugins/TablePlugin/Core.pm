@@ -23,18 +23,16 @@ use strict;
 package TWiki::Plugins::TablePlugin::Core;
 
 use Time::Local;
+use TWiki::Func;
 
-my $translationToken;
 my $insideTABLE;
 my $tableCount;
 my @curTable;
 my $sortCol;
-my $maxSortCols;
 my $requestedTable;
 my $up;
 my $sortTablesInText;
 my $sortAttachments;
-my $currTablePre;
 my $sortColFromUrl;
 my $tableWidth;
 my @columnWidths;
@@ -57,12 +55,8 @@ my $twoCol;
 my @dataBg;
 my @dataBgSorted;
 my @dataColor;
-my @isoMonth;
 my $headerRows;
 my $footerRows;
-my $upchar;
-my $downchar;
-my $diamondchar;
 my $url;
 my %mon2num;
 my $initSort;
@@ -74,13 +68,20 @@ my $prefsAttrs;
 my $tableId;
 my $tableSummary;
 my $tableCaption;
-my $iconUrl;
-my $unsortEnabled;
+my %cssAttrs;
+my $translationToken;
+my $currTablePre;
+my $upchar;
+my $downchar;
+my $diamondchar;
+my @isoMonth;
 my %sortDirection;
 my %columnType;
-my %cssAttrs;
-my %defaultCssAttrs;
+my $maxSortCols;
+my $iconUrl;
+my $unsortEnabled;
 my $didWriteDefaultStyle;
+my %defaultCssAttrs;
 
 BEGIN {
     $translationToken = "\0";
@@ -110,7 +111,7 @@ BEGIN {
       . '/TWikiDocGraphics/';
     $unsortEnabled        = 1;    # if true, table columns can be unsorted
     $didWriteDefaultStyle = 0;
-    my %defaultCssAttrs = ();
+    %defaultCssAttrs = ();
 }
 
 sub _setDefaults {
