@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310864659" format="1.1" version="$Rev$"}%
----+!! Placeholder for Release Notes of TWiki-5.1-rc1 (Istanbul), 2010-07-16
+%META:TOPICINFO{author="TWikiContributor" date="1310940011" format="1.1" version="$Rev$"}%
+---+!! Release Notes of TWiki-5.1-rc1 (Istanbul), 2011-07-17
 
 %TOC%
 
@@ -8,6 +8,9 @@
 FIXME
 
 ---++ New Features Highlights
+
+---++ Enhancements
+
 
    * *Security Enhancements*
       * 
@@ -80,9 +83,9 @@ Follow the TWikiUpgradeGuide to install TWiki and migrate data from your existin
 
 FIXME
 
----++ TWiki-5.1.0 Major Release - Details
+---++ TWiki-5.1.0-rc1 Major Release - Details
 
-TWiki-5.1.0 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x01 revision rFIXME (2010-FIXME)
+TWiki-5.1.0-rc1 was built from SVN http://svn.twiki.org/svn/twiki/trunk revision r21774 (2011-07-17)
 
 ---+++ Enhancements
 

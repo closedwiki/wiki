@@ -1,8 +1,27 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307251732" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310940054" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
 %TOC%
+
+#HelsinkiRelease
+---++ TWiki Release 5.1 rc1 (Istanbul) released on 2011-07-17 
+
+__New Features and Enhancements of TWiki Release 5.1 rc1__
+
+   * *Security Enhancements*
+
+   * *Usability Enhancements*
+
+   * *TWiki Application Platform Enhancements*
+
+   * *Search Enhancements*
+
+   * *Miscellaneous Feature Enhancements*
+
+   * *Plugin Enhancements*
+
+   * *Bug Fixes*
 
 #HelsinkiRelease
 ---++ TWiki Release 5.0 (Helsinki) released on 2010-05-29 &amp; 2011-04-21
@@ -43,6 +62,7 @@ __New Features and Enhancements of TWiki Release 5.0__
       * SpreadSheetPlugin: New $LISTNONEMPTY(), $SPLIT() and $WHILE() functions - added in TWiki-5.0.2
    * *Bug Fixes*
       * 70 bug fixes since TWiki-4.3.2
+
 
 #HelsinkiHallOfFame
 __Hall of Fame of TWiki Release 5.0__
