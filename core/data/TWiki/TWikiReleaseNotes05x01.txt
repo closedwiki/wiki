@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1308807287" format="1.1" version="$Rev$"}%
----+!! Placeholder for Release Notes of TWiki-5.1 (Istanbul), 2010-FIXME
+%META:TOPICINFO{author="TWikiContributor" date="1310864659" format="1.1" version="$Rev$"}%
+---+!! Placeholder for Release Notes of TWiki-5.1-rc1 (Istanbul), 2010-07-16
 
 %TOC%
 
@@ -24,11 +24,11 @@ See the full list of new features and bug fixes further below.
 
 TWiki-5.1 ships with:
 
-   * *Plugins:* CommentPlugin, EditTablePlugin, EmptyPlugin, HeadlinesPlugin, InterwikiPlugin, JQueryPlugin, PreferencesPlugin, RenderListPlugin, SlideShowPlugin, SmiliesPlugin, SpreadSheetPlugin, TablePlugin, TinyMCEPlugin, TagMePlugin, TWikiNetSkinPlugin, TwistyPlugin, WysiwygPlugin
+   * *Plugins:* BackupRestorePlugin, ColorPickerPlugin, CommentPlugin, EditTablePlugin, EmptyPlugin, HeadlinesPlugin, InterwikiPlugin, JQueryPlugin, PreferencesPlugin, RenderListPlugin, SetGetPlugin, SlideShowPlugin, SmiliesPlugin, SpreadSheetPlugin, TablePlugin, TagMePlugin, TinyMCEPlugin, TWikiNetSkinPlugin, TwistyPlugin, WysiwygPlugin
    * *Contribs:* BehaviourContrib, JSCalendarContrib, MailerContrib, TipsContrib, TWikiUserMappingContrib, TwistyContrib
-   * *Skins:* ClassicSkin, PatternSkin, TopMenuSkin, TWikiNetSkin,
+   * *Skins:* ClassicSkin, PatternSkin, PlainSkin, PrintSkin, TopMenuSkin, TWikiNetSkin,
 
-__Note:__ FIXME are new in TWiki-5.1.
+__Note:__ BackupRestorePlugin, ColorPickerPlugin, SetGetPlugin are new in TWiki-5.1.
 
 ---++ Supported User Interface Languages
 
@@ -62,7 +62,7 @@ For each month, the following items are recorded using system data and TWiki log
 
 The statistics script contacts twiki.org to query the number of plugins available for the currently installed TWiki version via an http GET. It also sends anonymized site usage statistics to twiki.org via query string. Example http request:
 =<br />  /cgi-bin/pluginstats?statSite=978B8B8FC5D0D0888888D18B97909A9186D1908D98;statDate=2011-04;=
-=<br />  statWebs=20;statWebsViewed=15;statWebsUpdated=6;statTopics=1501;statTopicsViewed=724;
+=<br />  statWebs=20;statWebsViewed=15;statWebsUpdated=6;statTopics=1501;statTopicsViewed=724;=
 =<br />  statTopicsUpdated=137;statAttachments=724;statViews=578;statSaves=223;statUploads=19;=
 =<br />  statDataSize=46.4;statPubSize=238.4;statDiskUse=93%25;statUsers=31;statGroups=7;statPlugins=22;=
 =<br />  statVersion=TWiki-5.1.0;=
@@ -87,15 +87,55 @@ TWiki-5.1.0 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRele
 ---+++ Enhancements
 
 <noautolink>
-| TWikibug:ItemFIXME | FIXME |
+| TWikibug:Item6511 | New PARENTTOPIC variable |
+| TWikibug:Item6512 | Adjust the search order for WebTopicEditTemplate to also include the USERSWEB |
+| TWikibug:Item6515 | Relative Heading Levels for INCLUDE |
+| TWikibug:Item6516 | Hide TOC flag in INCLUDE |
+| TWikibug:Item6528 | Set the Flag to Change Password in next Login  |
+| TWikibug:Item6560 | Relative Heading Levels for SEARCH |
+| TWikibug:Item6586 | User Data Management API and GUI |
+| TWikibug:Item6587 | Support Disabled Users in Password Manager |
+| TWikibug:Item6598 | Feature: Parameterized Variables |
+| TWikibug:Item6599 | Add format parameter to var URLPARAM |
+| TWikibug:Item6615 | Build: Add ColorPickerPlugin to Core TWiki Distribution |
+| TWikibug:Item6620 | Add encode parameter to FORMFIELD |
+| TWikibug:Item6639 | Add writeLog() to TWiki::Func |
+| TWikibug:Item6640 | Add isValidWebName() and isValidTopicName() to TWiki::Func |
+| TWikibug:Item6656 | Add meta data to attachment save handler |
+| TWikibug:Item6670 | SetGetPlugin: Make variables persistent across topic invocations |
+| TWikibug:Item6671 | Build: Add SetGetPlugin to Core TWiki Distribution |
+| TWikibug:Item6672 | New HIDE variable |
+| TWikibug:Item6680 | Add counter to session variables |
+| TWikibug:Item6684 | Include parameters with default feature |
+| TWikibug:Item6690 | SpreadSheetPlugin: New functions BITXOR(), HEXDECODE(), HEXDECODE(), XOR() |
+| TWikibug:Item6724 | Feature Proposal: Pass text and meta data to registerTagHandler callback |
+| TWikibug:Item6731 | InterwikiPlugin: Allow quotes in page pattern, and URL-encode quoted page patterns |
+| TWikibug:Item6733 | TWikiUserMappingContrib: More Visual User Profile Pages |
+| TWikibug:Item6747 | Set form field on file upload (for better usability of profile picture upload) |
+| TWikibug:Item6748 | TWikiUserMappingContrib: Usability: Use PreferencesPlugin to edit TWiki group settings |
+| TWikibug:Item6749 | S/Mime support for notification e-mails |
+| TWikibug:Item6750 | Encode also space in encode="html" to preserve TML in HTML input fields |
+| TWikibug:Item6759 | PatternSkin: User Bookmarks for better usability |
+| TWikibug:Item6762 | Usability: Auto-create page on view if it does not exist |
+| TWikibug:Item6768 | TagMePlugin: Allow login name or !WikiName for queries |
+| TWikibug:Item6769 | Build: Add BackupRestorePlugin to core TWiki distribution |
 </noautolink>
-Total: FIXME
+Total: 32
 
 ---+++ Fixes
 
 <noautolink>
-| TWikibug:ItemFIXME | FIXME |
+| TWikibug:Item6209 | WebTopicCreator: underscores in topic name with WebTopicCreator are not possible |
+| TWikibug:Item6687 | Statistics: Statistics script leaves temp files behind |
+| TWikibug:Item6715 | Better layout for checkboxes of TWiki forms while in edit mode |
+| TWikibug:Item6732 | TagMePlugin: Administrator can't delete tag if Main web is renamed to User web |
+| TWikibug:Item6751 | TopMenuSkin: Cutoff buttons in header when using IE7 |
+| TWikibug:Item6754 | CommentPlugin: Action comment template in CommentPlugin is missing %<nop>ENDACTION% |
+| TWikibug:Item6755 | Displayed search string shows expanded TWiki variables and text formatting |
+| TWikibug:Item6757 | Configure: Unprofessional text in Configure utility |
+| TWikibug:Item6763 | TopMenuSkin: WYSIWG editor corrupts TopMenuSkin system pages |
+| TWikibug:Item6767 | TWiki statistics update not working properly on !CentOS 5 |
 </noautolink>
-Total: FIXME
+Total: 10
 
 __Related Topics:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide, %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%
