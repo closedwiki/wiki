@@ -28,7 +28,7 @@ use strict;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-07-08';
+our $RELEASE = '2011-07-17';
 our $NO_PREFS_IN_TOPIC = 1;
 our $SHORTDESCRIPTION = 'Show headline news in TWiki pages based on RSS and ATOM news feeds from external sites';
 our $isInitialized = 0;
