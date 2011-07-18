@@ -120,7 +120,7 @@ END
             print `$cmd`;
             #print "$cmd\n";
             die $@ if $@;
-            $cmd = "svn commit -m 'Item000: $tim' ../lib/TWiki.pm";
+            $cmd = "svn commit -m 'Item6711: $tim' ../lib/TWiki.pm";
             print `$cmd`;
             #print "$cmd\n";
             die $@ if $@;

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277358495" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310965824" format="1.1" version="$Rev$"}%
 <sticky>
 <div style="float:right;width:255px;padding:1em;text-align:center;">
 <a href="http://twiki.org"><img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiLogos/T-logo-235x67-t.gif" style="margin:.3em 0;" width="235" height="67" alt="Collaborate with TWiki -- visit TWiki.org" title="Collaborate with TWiki -- visit TWiki.org" border="0" /></a>
@@ -23,7 +23,7 @@ TWiki is a flexible, powerful, secure, yet simple web-based collaboration platfo
    * [[TWikiFAQ][Frequently Asked Questions]] - about TWiki
    * [[TWikiReferenceManual][Reference Manual]] - documentation for system administrators
    * [[AdminToolsCategory][Admin Tools]] - manage the TWiki site
-   * [[TWikiReleaseNotes05x00][TWiki-5.0 Release Notes]] - describes what's new in this release
+   * [[TWikiReleaseNotes05x01][TWiki-5.1 Release Notes]] - describes what's new in this release
 
 ---++ <nop>%WEB% Web Utilities
 
