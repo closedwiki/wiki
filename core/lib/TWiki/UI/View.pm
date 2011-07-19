@@ -143,6 +143,11 @@ sub view {
             $query->request_method( 'POST' ); # SMELL: Security issue?
             $query->delete( 'createifnotexist' ); # remove 'createifnotexist' parameter
 
+            # add crypt token if needed
+            if( $TWiki::cfg{CryptToken}{Enable} ) {
+                $query->param( 'crypttoken', $session->CRYPTTOKEN() );
+            }
+
             # redirect to save script, all URL parameters are taken into account
             $session->redirect( $redirecturl, 1 );
         }
