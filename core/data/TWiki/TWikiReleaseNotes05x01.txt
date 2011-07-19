@@ -1,25 +1,36 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310965847" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311054640" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.1-rc1 (Istanbul), 2011-07-17
 
 %TOC%
 
 ---++ Introduction
 
-FIXME
+TWiki is an enterprise collaboration platform and application platform. TWiki has been downloaded over half a million times and is used by many leading Fortune 500 businesses and government agencies as an intranet, extranet or a public internet website.
+
+TWiki Release 5.1 is a minor release that brings many usability enhancements (such as point and click user data management, more visual user profile pages with picture selector, and a backup feature that helps upgrade TWiki sites) and strengthens TWiki as an application platform (such as a new macro language with parameterized variables).
 
 ---++ New Features Highlights
 
----++ Enhancements
-
-
-   * *Security Enhancements*
-      * 
+   * *Usability Enhancements*
+      * API and GUI for point and click user data management
+      * Support disabled users in password manager
+      * More visual user profile pages with in-place editing of form fields and picture selector
+      * In-place editing of TWiki group settings using !PreferencesPlugin
+      * Point and click bookmarks for better usability
+      * Improved statistics showing overall site usage over time, such as total number of webs, topics, users, etc
    * *TWiki Application Platform Enhancements*
-      * 
-   * *Miscellaneous Feature Enhancements*
-      * Improved statistics showing overall site usage over time, such as total number of webs, topics, users, etc.
+      * Macro language with parameterized variables
+      * Ability to auto-create page on view if it does not exist
+      * Relative heading levels for INCLUDE
+      * Relative heading levels for SEARCH
+   * *Security Enhancements*
+      * Set a flag to force password change on next login
+      * S/Mime support for notification e-mails
    * *Plugin Enhancements*
-      * 
+      * New BackupRestorePlugin to easily backup, restore and upgrade TWiki installations
+      * New SetGetPlugin that can store variables persistently
+      * New ColorPickerPlugin to pick a color in form fields
+      * SpreadSheetPlugin: New functions BITXOR(), HEXDECODE(), HEXDECODE(), XOR()
 
 See the full list of new features and bug fixes further below.
 
@@ -85,7 +96,7 @@ FIXME
 
 ---++ TWiki-5.1.0-rc1 Major Release - Details
 
-TWiki-5.1.0-rc1 was built from SVN http://svn.twiki.org/svn/twiki/trunk revision r21779 (2011-07-17)
+TWiki-5.1.0-rc1 was built from SVN http://svn.twiki.org/svn/twiki/trunk revision r21776 (2011-07-17)
 
 ---+++ Enhancements
 
