@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1296362341" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311273434" format="1.1" version="$Rev$"}%
 ---+!! !PeerPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -66,8 +66,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.SteveRoe under contract to <nop>DrKW |
 |  Copyright: | &copy; 2001 <nop>DrKW <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-02-01 (V1.1) |
+|  Plugin Version: | 2011-07-21 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-21: | TWikibug:Item6771: Code-refactor, use only official TWiki::Func API -- TWiki:Main.PeterThoeny |
 |  2011-02-01: | TWikibug:Item6638: Doc improvements; XHTML fixes; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  2001-08-22: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
