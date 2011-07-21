@@ -3,7 +3,7 @@
 #
 # Copyright (C) 2002-2003 Will Norris. All Rights Reserved. (wbniv@saneasylumstudios.com)
 # Copyright (C) 2005-2008 Michael Daum http://michaeldaumconsulting.com
-# Copyright (C) 2002-2010 TWiki Contributor. All Rights Reserved.
+# Copyright (C) 2002-2011 TWiki Contributor. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 #
@@ -112,7 +112,7 @@ sub isImage {
   writeDebug("called isImage(". $attachment->{name}.")");
 
   my $suffix = '';
-  if ($attachment->{name} =~ /\.(.+?)$/) {
+  if ($attachment->{name} =~ /.*\.(.+?)$/) {
     $suffix = lc($1);
   }
 

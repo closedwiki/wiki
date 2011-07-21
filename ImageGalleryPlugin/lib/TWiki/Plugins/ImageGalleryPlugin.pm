@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2002-2003 Will Norris. All Rights Reserved. (wbniv@saneasylumstudios.com)
 # Copyright (C) 2005-2008 Michael Daum http://michaeldaumconsulting.com
-# Copyright (C) 2002-2010 TWiki Contributor. All Rights Reserved.
+# Copyright (C) 2002-2011 TWiki Contributor. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 #
@@ -28,7 +28,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '3.73';
+$RELEASE = '2011-07-21 - 3.74';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Show image gallery with auto-generated thumbnails from attachments';
 
