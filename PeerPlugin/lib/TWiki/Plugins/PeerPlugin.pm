@@ -23,14 +23,24 @@
 package TWiki::Plugins::PeerPlugin;
 
 # =========================
-use vars qw( $web $topic $user $installWeb $VERSION $RELEASE
-        $myConfigVar %wikiToUserList $mainWebname 
-        $linkIcon $ratingSuffix 
-        $listIconPrefix $listIconHeight $listIconWidth
-        $ratingIconPrefix $ratingIconHeight $ratingIconWidth);
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-21';
 
-$VERSION = '$Rev$';
-$RELEASE = '2011-07-21';
+my $web;
+my $topic;
+my $user;
+my $installWeb;
+my $myConfigVar;
+my %wikiToUserList;
+my $mainWebname;
+my $linkIcon;
+my $ratingSuffix;
+my $listIconPrefix;
+my $listIconHeight;
+my $listIconWidth;
+my $ratingIconPrefix;
+my $ratingIconHeight;
+my $ratingIconWidth;
 
 # =========================
 use TWiki::Plugins::PeerPlugin::Review;
