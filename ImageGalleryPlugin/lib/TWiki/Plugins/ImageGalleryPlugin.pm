@@ -22,15 +22,14 @@ package TWiki::Plugins::ImageGalleryPlugin;
 use strict;
 
 # =========================
-use vars qw(
-        $VERSION $RELEASE $isInitialized $igpId $doneHeader
-        $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
-    );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-21i - v3.74';
+our $NO_PREFS_IN_TOPIC = 1;
+our $SHORTDESCRIPTION = 'Show image gallery with auto-generated thumbnails from attachments';
 
-$VERSION = '$Rev$';
-$RELEASE = '2011-07-21 - 3.74';
-$NO_PREFS_IN_TOPIC = 1;
-$SHORTDESCRIPTION = 'Show image gallery with auto-generated thumbnails from attachments';
+my $isInitialized;
+my $igpId;
+my $doneHeader;
 
 # =========================
 sub initPlugin {
