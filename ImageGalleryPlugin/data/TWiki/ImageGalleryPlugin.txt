@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1311274617" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311275023" format="1.1" version="$Rev$"}%
 ---+!! <nop>ImageGalleryPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -142,13 +142,13 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 <!--
    * Set SHORTDESCRIPTION = Show image gallery with auto-generated thumbnails from attachments
 -->
-|  Plugin Author: | TWiki:Main/MichaelDaum, TWiki:Main/WillNorris |
-|  Copyright: | &copy; 2002-2003, Will Norris;<br /> &copy; 2005-2008, Michael Daum http://michaeldaumconsulting.com;<br /> &copy; 2008-2010 TWiki:TWiki/TWikiContributor |
+|  Plugin Author: | TWiki:Main.MichaelDaum, TWiki:Main.WillNorris |
+|  Copyright: | &copy; 2002-2003, Will Norris;<br /> &copy; 2005-2008, Michael Daum http://michaeldaumconsulting.com;<br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-07-21 - v3.74 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-07-21 | TWikibug:Item6772: No images found error if image name has dots in name -- TWiki:Main.JoshuaTharp |
-|  2010-04-26 | TWikibug:Item6433: Doc improvements |
+|  2011-07-21 | TWikibug:Item6772: No images found error if image name has dots in name  -- TWiki:Main.JoshuaTharp; %BR% change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
+|  2010-04-26 | TWikibug:Item6433: Doc improvements -- TWiki:Main.PeterThoeny |
 |  16 Jul 2008 | don't crash on images that start with a digits pattern |
 |  07 Jul 2008 | fixing use of string as hash |
 |  03 Jul 2008 | applying patch by Aurélio A. Heckert (see Bugs:Item5753); \
