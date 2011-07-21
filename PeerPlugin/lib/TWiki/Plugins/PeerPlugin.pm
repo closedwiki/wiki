@@ -30,7 +30,7 @@ use vars qw( $web $topic $user $installWeb $VERSION $RELEASE
         $ratingIconPrefix $ratingIconHeight $ratingIconWidth);
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-02-01';
+$RELEASE = '2011-07-21';
 
 # =========================
 use TWiki::Plugins::PeerPlugin::Review;
@@ -72,7 +72,8 @@ sub prTestVal #check input values in range 1-5
 sub prTestTopic #check if topic is an internal wiki page
 {
     my $prTopic = shift;
-    if( $prTopic =~ /$TWiki::urlHost/ )
+    my $urlHost = TWiki::Func::getUrlHost();
+    if( $prTopic =~ /$urlHost/ )
     {
         return 1;
     } else {
@@ -110,7 +111,7 @@ sub prDispPrTopicRev #format db revision (INT) to wiki rev 1.INT if internal wik
 sub prDispPrDateTime #format db datetime for wiki
 {
     my $epSecs = shift;
-    return( &TWiki::formatTime( $epSecs ) );  #FIXME - do something!
+    return( TWiki::Func::formatTime( $epSecs ) );
 }
 
 # ===========================
@@ -153,7 +154,7 @@ sub prTestRev #test if review rev matches latest topic rev
 # ============================
 sub prLink
 {
-    my ( $revdate, $revuser, $maxrev ) = &TWiki::Store::getRevisionNumber( $web, $topic );
+    my ( $revdate, $revuser, $maxrev ) = &TWiki::Func::getRevisionInfo( $web, $topic );
     my $link = "";
     
     my $linkImg = "";
@@ -213,7 +214,7 @@ sub prDoForm
         my $fmComment = TWiki::Func::getCgiQuery()->param( 'comment' );
           
         # check access permission - FIXME if we want to manage access permission on the PeerReviewView page - need one for each web
-        my $changeAccessOK = &TWiki::Access::checkAccessPermission( "CHANGE", &TWiki::userToWikiName( $user ), $_[0] , $topic, $web );
+        my $changeAccessOK = &TWiki::Func::checkAccessPermission( "CHANGE", $user, $_[0] , $topic, $web );
         if( ! $changeAccessOK )
         {
             $opText .= "<p><font color='red'>You do not have permission to add reviews.</font></p>";
@@ -291,7 +292,7 @@ sub prList
     if( $format eq "topicview" ) {
         @rvList = &Review::rvList( $dbh, $format, "Topic" => $prUrl );
     } elsif( $format eq "userview" ) {
-       @rvList = &Review::rvList( $dbh, $format, "Reviewer" => &TWiki::wikiToUserName( $prTopic ) );
+       @rvList = &Review::rvList( $dbh, $format, "Reviewer" => TWiki::Func::wikiToUserName( $prTopic ) );
     }
     
     #&TWiki::Func::writeDebug( "PeerPlugin: rvList is @rvList" );  
@@ -301,7 +302,7 @@ sub prList
     {
         $tbText = $tbTemp;
     
-        $tbText =~ s/%PRREVIEWER%/&TWiki::userToWikiName( $rv->reviewer() )/geo;
+        $tbText =~ s/%PRREVIEWER%/&TWiki::Func::userToWikiName( $rv->reviewer() )/geo;
         $tbText =~ s/%PRTOPICREV%/&prDispPrTopicRev( $rv->topic(), $rv->topicRev(), $format )/geo;
         $tbText =~ s/%PRDATETIME%/&prDispPrDateTime( $rv->epSecs( $dbh ) )/geo;
         $tbText =~ s/%PRTITLECOLOR%/&prTitleColor( $rv ->topicRev )/geo;
@@ -349,9 +350,10 @@ sub prRating
     }  
    
     # find out if this is a personal topic
-    if( $prWeb eq $TWiki::mainWebname && exists( $TWiki::wikiToUserList{$prTopic} ) ) {
+    my $login = TWiki::Func::wikiToUserName( $prTopic );
+    if( $prWeb eq $TWiki::cfg{UsersWebName} && $login ) {
         $format = "usertherm";
-        $prUser = &TWiki::wikiToUserName( $prTopic );
+        $prUser = $login;
     } else {
         $format = "topictherm";
     }    
@@ -378,7 +380,7 @@ sub prRating
 sub prTestUserTopic
 # find out if this is a personal topic or the Wiki.PeerPluginUser topic
 {
-    if( $web eq $TWiki::mainWebname && exists( $TWiki::wikiToUserList{$topic} ) ) { return 1; } 
+    if( $web eq $TWiki::cfg{UsersWebName} && TWiki::Func::wikiToUserName( $topic ) ) { return 1; } 
     elsif( $topic eq "PeerPluginUser" ) { return 1; } 
     elsif( $topic eq "PeerPluginForm" ) { return 1; } 
     elsif( $topic eq "PeerPluginView" ) { return 1; } 
@@ -456,7 +458,7 @@ sub prStats
         $item = shift( @rvUserTen );
         $opText .= "$item ";
         $item = shift( @rvUserTen );
-        $item = &TWiki::userToWikiName( $item );
+        $item = TWiki::Func::userToWikiName( $item );
         $opText .= "$item <br /> ";
     }
     
@@ -481,8 +483,8 @@ sub prInclude
     if( &prTestTopic( $item ) && $item =~ /.*\/(.*)\/(.*)/ )
     {
         $prWeb = $1;
-        $prTopic = $2;     
-        my $opText = &TWiki::handleIncludeFile( "\"$prWeb.$prTopic\"", $topic, $web );
+        $prTopic = $2;
+        my $opText = TWiki::Func::expandCommonVariables( "\%INCLUDE{$prWeb.$prTopic}\%", $topic, $web );
         return $opText;
     } else {    
         return "<iframe name='content' width='800' height='800' src='$item'></iframe>";
