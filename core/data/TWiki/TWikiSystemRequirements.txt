@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305526412" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311458896" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki System Requirements
 
@@ -13,7 +13,7 @@ Low client and server base requirements are core features that keep TWiki widely
 TWiki is written in Perl 5, uses a number of shell commands, and requires [[http://www.gnu.org/software/rcs/rcs.html][RCS (Revision Control System)]], a GNU Free Software package. TWiki is developed in a basic Linux/Apache environment. It also works with Microsoft Windows, and should have no problem on any other platform that meets the requirements.
 
 | *Resource* | *Required Server Environment *<nop>* |
-| Perl | 5.6.1 or higher (5.8.4 or higher is recommended) |
+| Perl | 5.8.0 or higher (5.8.4 or higher is recommended) |
 | RCS | 5.7 or higher (including GNU =diff=) %BR% Optional, TWiki includes a pure perl implementation of RCS that can be used instead (although it's slower) |
 | GNU =diff= | GNU =diff= 2.7 or higher is required when not using the all-Perl <nop>RcsLite.  %BR% Install on PATH if not included with RCS (check version with =diff -v=)  %BR% Must be the version used by RCS, to avoid problems with binary attachments - RCS may have hard-coded path to =diff= |
 | GNU =df= | Used by the site statistics to record disk usage statistics, optional. The df command is pre-installed on Linux and OS-X. On Windows install the <a href="http://gnuwin32.sourceforge.net/packages/coreutils.htm">CoreUtils for Windows</a>. |
@@ -55,12 +55,7 @@ The following Perl modules may be used by TWiki:
 | =CGI::Session= | &gt;=3.95 | Used for session support |
 | =Digest::base= | | |
 | =Digest::SHA1= | | |
-| =Jcode= | | Used for <nop>I18N support with perl 5.6 |
 | =Locale::Maketext::Lexicon= | &gt;=0 | Used for <nop>I18N support |
-| =Unicode::Map= | | Used for <nop>I18N support with perl 5.6 |
-| =Unicode::Map8= | | Used for <nop>I18N support with perl 5.6 |
-| =Unicode::MapUTF8= | | Used for <nop>I18N support with perl 5.6 |
-| =Unicode::String= | | Used for <nop>I18N support with perl 5.6 |
 | =URI= | | Used for configure |
 
 Most of them will probably already be available in your installation. You can check version numbers with the =configure= script, or if you're still trying to get to that point, check from the command line like this:
