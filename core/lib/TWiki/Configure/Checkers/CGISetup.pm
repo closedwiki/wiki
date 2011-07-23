@@ -97,48 +97,19 @@ HERE
     $n = $];
     $n .= " ($Config::Config{osname})";
     $n .= $this->NOTE(<<HERE);
-Note that by convention "Perl version 5.008" is referred to as "Perl version 5.8" and "Perl 5.008004" as "Perl 5.8.4" (i.e. ignore the leading zeros after the .)
+Note that by convention "Perl version 5.008" is referred to as 
+"Perl version 5.8" and "Perl 5.008004" as "Perl 5.8.4" (that is, 
+ignore the leading zeros after the period.)
 HERE
 
-    if ( $] < 5.006 ) {
+    if ( $] < 5.008 ) {
         $n .= $this->WARN(<<HERE);
-Perl version is older than 5.6.0.
-TWiki has only been successfully tested on Perl 5.6.X and 5.8.X,
-and there have been reports that it does not run on 5.5.
-You will need to upgrade Perl libraries and tweak the TWiki
-code to make TWiki work on older versions of Perl
+Perl version is older than 5.8.0. Recommended version 5.8.4 or later.
+TWiki has been tested on Perl 5.8.X and 5.10.X.  Older versions may
+work, but you may need to upgrade Perl libraries and tweak the TWiki
+code.
 HERE
     }
-    
-    
-    {
-        #from http://search.cpan.org/src/ASH/DBIx-Class-0.08010/lib/DBIx/Class/StartupCheck.pm
-        { package TestRHBug; use overload bool => sub { 0 } }
-
-        sub _has_bug_34925 {
-            my %thing;
-            my $r1 = \%thing;
-            my $r2 = \%thing;
-            bless $r1 => 'TestRHBug';
-            return !!$r2;
-        }
-
-        sub _possibly_has_bad_overload_performance {
-            return $] < 5.008009 && ! _has_bug_34925();
-        }
-
-        if (!_possibly_has_bad_overload_performance()) {
-            $n .= "<br /> This version of Perl is likely to exhibit " .
-            "extremely slow performance for certain critical operations. <br />" .
-            "Please consider recompiling Perl.  For more information, see <br />" .
-            "http://twiki.org/cgi-bin/view/Codev/PerlOnRedHatIsSlow <br />" .
-            "https://bugzilla.redhat.com/show_bug.cgi?id=196836 and/or <br />" .
-            "http://blog.vipul.net/2008/08/24/redhat-perl-what-a-tragedy/ <br />" .
-            "http://lists.scsys.co.uk/pipermail/dbix-class/2007-October/005119.html.  <br />" .
-            "<br />";
-        }
-    }
-
 
     $block .= $this->setting('Perl version', $n);
 
@@ -149,8 +120,6 @@ HERE
 This is the Perl library path, used to load TWiki modules,
 third-party modules used by some plugins, and Perl built-in modules.
 HERE
-
-
 
     $block .= $this->setting(
         'CGI bin directory', $this->_checkBinDir());
