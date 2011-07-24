@@ -24,17 +24,25 @@ package TWiki::Plugins::PublishWebPlugin;
 use strict;
 
 # =========================
-use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
-        $initialized $error $publishWeb $publishSkin $excludeTopic $homeLabel %niceTopicFilter
-        $templatePath $publishPath $attachPath $publishDir $attachDir
-    );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-23';
 
-$VERSION = '$Rev$';
-$RELEASE = '2011-07-23';
-$pluginName = 'PublishWebPlugin';  # Name of this Plugin
-$initialized = 0;
-$error = "";
+my $pluginName = 'PublishWebPlugin';  # Name of this Plugin
+my $initialized = 0;
+my $error = "";
+my $web;
+my $topic;
+my $debug;
+my $publishWeb;
+my $publishSkin;
+my $excludeTopic;
+my $homeLabel;
+my %niceTopicFilter;
+my $templatePath;
+my $publishPath;
+my $attachPath;
+my $publishDir;
+my $attachDir;
 
 # template path for skin file; empty for twiki/templates; must be absolute path if specified
 $templatePath = $TWiki::cfg{Plugins}{PublishWebPlugin}{TemplatePath} || "";
@@ -48,7 +56,7 @@ $attachPath  = $TWiki::cfg{Plugins}{PublishWebPlugin}{AttachPath} || "_publish";
 # =========================
 sub initPlugin
 {
-    ( $topic, $web, $user, $installWeb ) = @_;
+    ( $topic, $web ) = @_;
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.024 ) {
