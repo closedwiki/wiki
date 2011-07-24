@@ -382,17 +382,16 @@ __%MAKETEXT{"Note:"}%__
 ---+++ %MAKETEXT{"Either you did not specify a file name, or the file you are trying to upload [_1] has no content. You may not upload an empty file." args="<code>%PARAM1%</code>"}%
 %MAKETEXT{"Please go back in your browser and check again."}%
 
-
-%MAKETEXT{"Or Please try  again [[%WEB%.%TOPIC%][OK]]"}%
-
+*[[%WEB%.%TOPIC%][%MAKETEXT{"OK"}%]]*
 
 %TMPL:END%
 %TMPL:DEF{"oversized_upload"}%
 ---+++ %MAKETEXT{"Uploaded file is too big"}%
 %MAKETEXT{"Uploaded file [_1] exceeds limit of [_2] KB" args="<code>%PARAM1%</code>,%PARAM2%"}%
 
+%MAKETEXT{"Please try small size files or contact Administrator."}%
 
-%MAKETEXT{"Please try small size files or contact Administrator - [[%WEB%.%TOPIC%][OK]]"}%
+*[[%WEB%.%TOPIC%][%MAKETEXT{"OK"}%]]*
 
 %TMPL:END%
 %TMPL:DEF{"save_error"}%
