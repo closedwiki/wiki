@@ -31,7 +31,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-07-21';
+$RELEASE = '2011-07-23';
 $pluginName = 'PublishWebPlugin';  # Name of this Plugin
 $initialized = 0;
 $error = "";
