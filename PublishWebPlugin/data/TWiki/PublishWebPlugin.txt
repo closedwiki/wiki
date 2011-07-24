@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1311488365" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311490379" format="1.1" version="$Rev$"}%
 ---+!! Publish Web Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -93,14 +93,16 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
                * If empty or omitted: the =twiki/templates= directory is assumed; normal %SYSTEMWEB%.TWikiTemplates search path applies, e.g. for a =PUBLISHSKIN = website= setting, a =twiki/templates/view.website.tmpl= template file is assumed
                * If specified: Must be an absolute path; skin is assumed to be an html page at that location, e.g. for a =PUBLISHSKIN = website= setting, a =$TWiki::cfg{Plugins}{PublishWebPlugin}{TemplatePath}/website.html= file is referenced
             * =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath}=: Path where the plugin places the generated html files.
-               * Specify an absolute or relative path to the Apache htdocs root
-               * If relative, path is relative to =twiki/pub=, such as ='..'=
+               * Specify an absolute or relative path to the Apache HTML document root
+               * If relative, path is relative to =twiki/pub=, such as ='../../html'=
             * =$TWiki::cfg{Plugins}{PublishWebPlugin}{AttachPath}=: Path where the plugin places images and other topic attachments.
                * Must be relative to =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath}=, default is ='_publish'=
+            * =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishUrlPath}=: URL path that corresponds to ={PublishPath}= directory. Leave empty if it is the HTML document root.
             * Example:%BR%
               =$TWiki::cfg{Plugins}{PublishWebPlugin}{TemplatePath} = '';= %BR%
-              =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath} = '/path/to/apache/httpdocs';= %BR%
-              =$TWiki::cfg{Plugins}{PublishWebPlugin}{AttachPath} = '_publish';=
+              =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath} = '/path/to/apache/html';= %BR%
+              =$TWiki::cfg{Plugins}{PublishWebPlugin}{AttachPath} = '_publish';= %BR%
+              =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishUrlPath} = '';=
          * Create the directory indicated in the ={PublishPath}= setting if needed
          * Create the directory indicated in the ={AttachPath}= setting (relative to ={PublishPath}=)
          * Change the permission of directories indicated by ={PublishPath}= and ={AttachPath}= to be writable by the cgi user (such as user =nobody= on !RedHat Linux)
@@ -136,7 +138,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-07-21 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-07-23: | TWikibug:Item6773: Move config settings to =LocalSite.cfg=; support multiple skins; support template path outside TWiki file path; add view.website.tmpl as a publish skin for demo; possible to publish into subdirectory of html doc root; change global package variables from "use vars" to "our"; remove URL parameters in links of published page to make TOC and other TWiki internal links work |
+|  2011-07-23: | TWikibug:Item6773: Move config settings to =LocalSite.cfg=; support multiple skins; support template path outside TWiki file path; add view.website.tmpl as a publish skin for demo; possible to publish into sub-directory of html doc root indicated by {PublishUrlPath} setting; change global package variables from "use vars" to "our"; remove URL parameters in links of published page to make TOC and other TWiki internal links work |
 |  2006-02-15: | Added =%<nop>PUBLISHWEB{"publish" topic="Name"}%= |
 |  2006-02-13: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
