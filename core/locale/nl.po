@@ -15,28 +15,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Report-Msgid-Bugs-To: \n"
 
-#: ../core/data/TWiki/TWikiPreferences.txt:318
+#: ../core/data/TWiki/TWikiPreferences.txt:369
 #, fuzzy
 msgid "$text (this topic does not yet exist; you can create it)"
 msgstr "Let op: Deze pagina bestaat niet"
 
 #. ($days)
-#: ../core/lib/TWiki/Time.pm:292
+#: ../core/lib/TWiki/Time.pm:309
 msgid "%*(%1,day) "
 msgstr "%*(%1,dag,dagen) "
 
 #. ($hours)
-#: ../core/lib/TWiki/Time.pm:295
+#: ../core/lib/TWiki/Time.pm:312
 msgid "%*(%1,hour) "
 msgstr "%*(%1,uur,uren) "
 
 #. ($mins)
-#: ../core/lib/TWiki/Time.pm:298
+#: ../core/lib/TWiki/Time.pm:315
 msgid "%*(%1,minute) "
 msgstr "%*(%1,minuut,minuten) "
 
 #. ($secs)
-#: ../core/lib/TWiki/Time.pm:301
+#: ../core/lib/TWiki/Time.pm:318
 msgid "%*(%1,second) "
 msgstr "%*(%1,seconde,seconden)"
 
@@ -45,30 +45,36 @@ msgstr "%*(%1,seconde,seconden)"
 msgid "%1"
 msgstr "%1"
 
-#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:116
+#: ../core/templates/registernotifyadminfail.tmpl:3
+#: ../core/templates/registernotifyadminfailrem.tmpl:3
+#, fuzzy
+msgid "%1 - Registration failure for %2 (%3)"
+msgstr "%1 - Registratie voor %2 (%3)"
+
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:110
 #: ../core/templates/registernotify.tmpl:3
 #: ../core/templates/registernotifyadmin.tmpl:3
 msgid "%1 - Registration for %2 (%3)"
 msgstr "%1 - Registratie voor %2 (%3)"
 
-#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:62
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:63
 msgid "%1 - complete TWiki documentation, Quick Start to Reference"
 msgstr ""
 "%1 - volledige TWiki documentatie voor TWiki gebruikers, naslagoverzicht"
 
-#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:64
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:65
 msgid "%1 - just for me"
 msgstr "%1 - voor mij alleen"
 
-#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:61
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:62
 msgid "%1 - starting points on TWiki"
 msgstr "%1 - waar te beginnen met TWiki"
 
-#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:63
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:64
 msgid "%1 - try out TWiki on your own"
 msgstr "%1 - probeer TWiki uit voor jezelf"
 
-#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:60
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:61
 msgid "%1 - view a short introductory presentation on TWiki for beginners"
 msgstr "%1 - een korte introductie tot TWiki voor nieuwe gebruikers"
 
@@ -86,7 +92,7 @@ msgstr "%1 recente wijzigingen in %2 Web"
 #: ../TWikiNetSkin/templates/view.twikinet.tmpl:21
 #: ../TopMenuSkin/data/Main/WebTopMenu.txt:10
 #: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:10
-#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:38
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:50
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:11
 #: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:11
 #: ../TopMenuSkin/data/Trash/WebTopMenu.txt:10
@@ -98,22 +104,22 @@ msgstr "%1 Web"
 msgid "%1 Web Home"
 msgstr "%1 Web Home"
 
-#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:78
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:79
 msgid "%1 for changing your email address"
 msgstr "%1 om je e-mailadres te wijzigen"
 
-#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:77
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:78
 msgid "%1 for changing your password"
 msgstr "%1 om je wachtwoord te wijzigen"
 
-#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:47
-#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:37
-#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:79
-#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:38
+#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:43
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:38
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:80
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:31
 msgid "%1 has a list of other TWiki users"
 msgstr "%1 heeft een lijst van andere TWikigebruikers"
 
-#: ../core/templates/messages.tmpl:433
+#: ../core/templates/messages.tmpl:461
 msgid ""
 "%1 has been editing the topic for %2 and the lease is still active for "
 "another %3."
@@ -122,18 +128,16 @@ msgstr ""
 "blijft actief voor nog eens %3."
 
 #: ../core/templates/registernotifyadmin.tmpl:10
+#: ../core/templates/registernotifyadminfail.tmpl:10
+#: ../core/templates/registernotifyadminfailrem.tmpl:10
 msgid "%1 has been registered with e-mail %2"
 msgstr "%1 is geregistreerd met e-mail %2"
 
-#: ../core/templates/messages.tmpl:23
-msgid "%1 home"
-msgstr "%1 home"
-
-#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:80
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:81
 msgid "%1 is a list of TWiki user documentation"
 msgstr "%1 is een lijst van pagina&#39;s van de TWiki gebruikersdocumentatie"
 
-#: ../core/templates/messages.tmpl:106
+#: ../core/templates/messages.tmpl:114
 msgid "%1 is an invalid name for a new web"
 msgstr "%1 is geen geldige naam voor een nieuw web"
 
@@ -141,15 +145,15 @@ msgstr "%1 is geen geldige naam voor een nieuw web"
 msgid "%1 is currently logged in"
 msgstr "%1 is op dit moment ingelogd"
 
-#: ../core/templates/messages.tmpl:404
+#: ../core/templates/messages.tmpl:432
 msgid "%1 is currently set to %2"
 msgstr "%1 is op dit moment %2"
 
-#: ../core/templates/messages.tmpl:431
+#: ../core/templates/messages.tmpl:459
 msgid "%1 is editing %2."
 msgstr "%1 is %2 aan het bewerken."
 
-#: ../core/templates/messages.tmpl:49
+#: ../core/templates/messages.tmpl:57
 msgid "%1 is in at least one group and cannot be removed"
 msgstr "%1 is lid van tenminste âÂ©âÂ©n groep en kan niet worden verwijderd"
 
@@ -157,36 +161,28 @@ msgstr "%1 is lid van tenminste âÂ©âÂ©n groep en kan niet worden v
 msgid "%1 is the default topic for deleted attachments."
 msgstr "%1 is de standaard pagina voor verwijderde bijlagen."
 
-#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:81
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:82
 msgid "%1 lists all TWiki user tools"
 msgstr "%1 vermeldt alle TWiki gebruikershulpmiddelen"
 
-#: ../core/templates/messages.tmpl:439
+#: ../core/templates/messages.tmpl:467
 msgid "%1 may still be editing %2."
 msgstr "%1 is mogelijk %2 nog aan het bewerken."
 
 #. ("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
-#: ../core/lib/TWiki/Render.pm:203
+#: ../core/lib/TWiki/Render.pm:218
 msgid "%1 moved from %2 on %3 by %4"
 msgstr "%1 is door %4 verplaatst van %2 op %3"
 
-#: ../core/templates/messages.tmpl:22
-msgid "%1 to create another web"
-msgstr "%1 om nog een web aan te maken"
-
-#: ../core/templates/messages.tmpl:21
+#: ../core/templates/messages.tmpl:26
 msgid "%1 to customize the web specific preferences"
 msgstr "%1 om webinstellingen aan te passen"
 
-#: ../core/templates/messages.tmpl:20
-msgid "%1 to start working on the new web"
-msgstr "%1 om te beginnen in het nieuwe web"
-
-#: ../core/templates/messages.tmpl:503 ../core/templates/messages.tmpl:514
+#: ../core/templates/messages.tmpl:531 ../core/templates/messages.tmpl:542
 msgid "%1 topic does not exist"
 msgstr "pagina %1 bestaat niet"
 
-#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:24
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:56
 #, fuzzy
 msgid "&Attach"
 msgstr "Bij&lage bijvoegen"
@@ -195,25 +191,17 @@ msgstr "Bij&lage bijvoegen"
 msgid "&Cancel"
 msgstr "&Afbreken"
 
-#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:12
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:21
 #, fuzzy
 msgid "&Edit"
 msgstr "Bewerken"
-
-#: ../PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:14
-msgid "&Edit text"
-msgstr "Tekst &bewerken"
 
 #: ../ClassicSkin/templates/twiki.classic.tmpl:159
 #: ../core/templates/twiki.tmpl:102
 msgid "&History"
 msgstr "&Geschiedenis"
 
-#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:36
-msgid "&Print version"
-msgstr ""
-
-#: ../core/templates/messages.tmpl:262
+#: ../core/templates/messages.tmpl:270
 msgid "'%1' is not a valid %2 "
 msgstr "'%1' is geen geldige %2 "
 
@@ -234,19 +222,25 @@ msgstr "(%1 vs. %2)"
 msgid "(=all= to show all topics)"
 msgstr "(=all= om alle pagina&#39;s te tonen)"
 
-#: ../core/data/Sandbox/WebHome.txt:9
+#: ../core/templates/oopsinvalidtoken.tmpl:4
+msgid "(Invalid Crypt Token)"
+msgstr ""
+
+#: ../core/data/Sandbox/WebHome.txt:10
 msgid "(Use a topic name in TWiki.WikiNotation)"
 msgstr "(Gebruik een paginanaam in [[%TWIKIWEB%.WikiNotation][Wikinotatie]])"
 
-#: ../core/templates/messages.tmpl:156
-msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
+#: ../core/templates/messages.tmpl:164
+#, fuzzy
+msgid ""
+"(__Suggestion:__ How about uploading your picture to your profile page?)"
 msgstr "(__Suggestie:__ Wat dacht je van een foto op je persoonlijke pagina?)"
 
 #: ../core/templates/oopsaccessdenied.tmpl:4
 msgid "(access denied)"
 msgstr "(toegang geweigerd)"
 
-#: ../PatternSkin/templates/attach.pattern.tmpl:8
+#: ../PatternSkin/templates/attach.pattern.tmpl:4
 #: ../core/templates/attachnew.tmpl:2
 msgid "(attach)"
 msgstr "(Bijlage bijvoegen)"
@@ -297,11 +291,11 @@ msgstr "(tekst bewerken)"
 msgid "(edit)"
 msgstr "(bewerken)"
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:106
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:107
 msgid "(how you log in) LoginName:"
 msgstr "(hoe je inlogt) Login-naam:"
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:101
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:102
 msgid "(identifies you to others) WikiName:"
 msgstr "(zo zien anderen jou) Wiki-naam:"
 
@@ -321,12 +315,12 @@ msgstr "(bijlage verplaatsen)"
 msgid "(no parent, orphaned topic)"
 msgstr "(geen bovenliggende pagina, verweesde pagina)"
 
-#: ../core/lib/TWiki/UI/Manage.pm:1071 ../core/lib/TWiki/UI/Manage.pm:1074
-#: ../core/lib/TWiki/UI/Manage.pm:1077 ../core/lib/TWiki/UI/Manage.pm:1111
-#: ../core/lib/TWiki/UI/Manage.pm:1134 ../core/lib/TWiki/UI/Manage.pm:685
-#: ../core/lib/TWiki/UI/Manage.pm:689 ../core/lib/TWiki/UI/Manage.pm:693
-#: ../core/lib/TWiki/UI/Manage.pm:697 ../core/lib/TWiki/UI/Manage.pm:940
-#: ../core/lib/TWiki/UI/Manage.pm:965
+#: ../core/lib/TWiki/UI/Manage.pm:1074 ../core/lib/TWiki/UI/Manage.pm:1099
+#: ../core/lib/TWiki/UI/Manage.pm:1205 ../core/lib/TWiki/UI/Manage.pm:1208
+#: ../core/lib/TWiki/UI/Manage.pm:1211 ../core/lib/TWiki/UI/Manage.pm:1245
+#: ../core/lib/TWiki/UI/Manage.pm:1268 ../core/lib/TWiki/UI/Manage.pm:755
+#: ../core/lib/TWiki/UI/Manage.pm:759 ../core/lib/TWiki/UI/Manage.pm:763
+#: ../core/lib/TWiki/UI/Manage.pm:767
 msgid "(none)"
 msgstr "(geen)"
 
@@ -334,10 +328,6 @@ msgstr "(geen)"
 #: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:3
 msgid "(oops)"
 msgstr "(melding)"
-
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:322
-msgid "(optional)"
-msgstr "(optioneel)"
 
 #: ../core/data/TWiki/WebSearch.txt:33
 #: ../core/data/TWiki/WebSearchAdvanced.txt:42
@@ -388,15 +378,15 @@ msgstr "(puntkomma =;= voor en)"
 msgid "(set preferences)"
 msgstr "(instellingen aanpassen)"
 
-#: ../core/templates/messages.tmpl:275
+#: ../core/templates/messages.tmpl:283
 msgid "(single character first name)"
 msgstr "(enkel teken voornaam)"
 
-#: ../core/templates/messages.tmpl:274
+#: ../core/templates/messages.tmpl:282
 msgid "(single character last name)"
 msgstr "(enkel teken achternaam)"
 
-#: ../core/lib/TWiki/UI/Manage.pm:922
+#: ../core/lib/TWiki/UI/Manage.pm:1056
 msgid "(skipped)"
 msgstr "(overgeslagen)"
 
@@ -411,7 +401,7 @@ msgstr ""
 "gewijzigd, maar de toelichting in het bijlage-geschiedenisoverzicht blijft "
 "de toelichting toen het bestand werd geupload."
 
-#: ../core/data/TWiki/WikiSyntaxSummary.txt:8
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:11
 msgid "*Formatting help:*"
 msgstr "*Opmaakhulp:*"
 
@@ -454,11 +444,11 @@ msgstr ""
 "is) kun je wijzigen zonder een bestand te uploaden. Klik op \"Alleen "
 "eigenschappen wijzigen\"; zie %1."
 
-#: ../core/data/TWiki/WikiSyntaxSummary.txt:9
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:12
 msgid "*bold* put word/phrase in asterisks: =<nop>*your phrase*="
 msgstr "*vetgedrukt* zet woord/zin tussen asterisks: =<nop>*jouw zin*="
 
-#: ../core/data/TWiki/WikiSyntaxSummary.txt:10
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:13
 msgid ""
 "*bullet list* 3 spaces, asterisk, 1 space: =&&nbsp;&&nbsp;&&nbsp;*&&nbsp;"
 "your text="
@@ -466,57 +456,46 @@ msgstr ""
 "*bullet lijst* 3 spaties, asterisk, 1 spatie: =&&nbsp;&&nbsp;&&nbsp;*&&nbsp;"
 "jouw text="
 
-#: ../core/data/TWiki/WikiSyntaxSummary.txt:14
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:17
+#, fuzzy
 msgid ""
-"*external links* =http://yahoo.com= or =[<nop>[http://yahoo.com/][link to "
-"Yahoo]]="
+"*external links* =http://google.com/= or =[<nop>[http://google.com/][link to "
+"Google]]="
 msgstr ""
 "*externe links* =http://yahoo.com= of =[<nop>[http://yahoo.com/][link naar "
 "Yahoo]]="
 
-#: ../core/data/TWiki/WikiSyntaxSummary.txt:11
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:14
 msgid "*headings* 3 dashes, 1 to 6 pluses, 1 space: =---++&&nbsp;Your Heading="
 msgstr "*koppen* 3 minnen, 1 tot 6 plussen, 1 spatie: =---++&&nbsp;Jouw Kop="
 
-#: ../core/data/TWiki/WikiSyntaxSummary.txt:12
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:15
 msgid "*italic* put word/phrase in underscores: =_<nop>your words_="
 msgstr ""
 "*schuingedrukt* zet woord/zin tussen liggende streepjes: =_<nop>jouw "
 "woorden_="
 
-#: ../core/data/TWiki/WikiSyntaxSummary.txt:15
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:18
 msgid "*monospaced* put word/phrase in equal signs: =<nop>=your words=="
 msgstr ""
 "*machineschrift* zet woord/zin tussen '=' tekens: =<nop>=jouw woorden=="
 
-#: ../core/data/TWiki/WikiSyntaxSummary.txt:16
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:19
 msgid "*paragraphs* separate with blank line"
 msgstr "*paragrafen* scheiden met een lege regel"
 
-#: ../core/data/TWiki/WikiSyntaxSummary.txt:13
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:16
 msgid "*site links* use topic name: =%1= or =[<nop>[%1][Our homepage]]="
 msgstr ""
 "*site links* gebruik de paginanaam: =%1= of =[<nop>[%1][Onze homepage]]="
 
-#: ../core/lib/TWiki/I18N/Extract.pm:104
+#: ../core/lib/TWiki/I18N/Extract.pm:106
 msgid "..."
 msgstr "..."
 
 #: ../core/templates/oopsmore.tmpl:14
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr "<a href='%1' rel='nofollow'>Bewerk instellingen</a> voor deze pagina"
-
-#: ../core/data/TWiki/WebChanges.txt:8
-msgid ""
-"<a href='%1'>RSS feed</a>, recent changes with <a href='%2'>50</a>, <a "
-"href='%3' rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a "
-"href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> "
-"topics, <a href='%7' rel='nofollow'>all changes</a>"
-msgstr ""
-"<a href='%1'>RSS feed</a>, recente wijzigingen met <a href='%2'>50</a>, <a "
-"href='%3' rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a "
-"href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> "
-"pagina&#39;s, <a href='%7' rel='nofollow'>alle wijzigingen</a>"
 
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:21
 #: ../core/templates/oopsmore.tmpl:41
@@ -528,7 +507,7 @@ msgstr "alleen <em>in %1 web</em>"
 msgid "<em>in all public webs</em>"
 msgstr "<em>in alle publieke webs</em>"
 
-#: ../core/templates/messages.tmpl:486
+#: ../core/templates/messages.tmpl:514
 msgid ""
 "A %1 is divided into webs; each one represents one subject, one area of "
 "collaboration. You are trying to %2 in a web that does not exist."
@@ -536,13 +515,13 @@ msgstr ""
 "Een %1 is opgedeeld in webs; elk web staat voor een onderwerp of terrein van "
 "samenwerking. Je probeert %2 in een web dat niet bestaat."
 
-#: ../core/templates/messages.tmpl:354
+#: ../core/templates/messages.tmpl:374
 msgid "A =.txt= extension is appended to some filenames for security reasons"
 msgstr ""
 "Een <code>.txt</code>-extensie is om veiligheidsredenen aan enkele "
 "bestandsnamen toegevoegd"
 
-#: ../core/templates/messages.tmpl:123
+#: ../core/templates/messages.tmpl:131
 msgid ""
 "A color starts with a # sign, followed by 6 hexadecimal numbers, e.g. "
 "=#FFFF00=."
@@ -551,11 +530,11 @@ msgstr ""
 "bijvoorbeeld =#FFFF00=."
 
 #. ($data->{Email})
-#: ../core/lib/TWiki/UI/Register.pm:862
+#: ../core/lib/TWiki/UI/Register.pm:865
 msgid "A confirmation e-mail has been sent to %1"
 msgstr "Een bevestigingse-mail is verstuurd naar %1"
 
-#: ../core/templates/messages.tmpl:490
+#: ../core/templates/messages.tmpl:518
 msgid ""
 "A link to a topic located in another web is written like %1. Make sure that "
 "the name of the web is not spelt wrongly on the previous page; fix the link "
@@ -565,12 +544,7 @@ msgstr ""
 "als %1. Let op dat de naam van het web niet verkeerd is gespeld op de vorige "
 "pagina; repareer de link als het nodig mocht zijn."
 
-#: ../core/data/Sandbox/WebHome.txt:25
-msgid "A more extensive changes list is available via [[%1][Recent Changes]]."
-msgstr ""
-"Een meer uitgebreide lijst van wijzigingen is te zien in [[%1][Wijzigingen]]."
-
-#: ../core/templates/messages.tmpl:462
+#: ../core/templates/messages.tmpl:490
 msgid ""
 "A new system-generated password for your login name %1 (!WikiName %2) has "
 "been sent to your registered e-mail address. If your e-mail address is no "
@@ -591,7 +565,7 @@ msgstr ""
 msgid "Access Denied"
 msgstr "Geen toegang"
 
-#: ../core/templates/messages.tmpl:470
+#: ../core/templates/messages.tmpl:498
 msgid "Access check on %1 failed"
 msgstr "Toegangscontrole op %1 niet gelukt"
 
@@ -601,7 +575,8 @@ msgstr "Toegangscontrole op %1 niet gelukt"
 msgid "Access keys"
 msgstr "Sneltoetsen"
 
-#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:19
+#: ../PatternSkin/data/TWiki/UserBookmarks.txt:15
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:20
 #, fuzzy
 msgid "Account"
 msgstr "Actie"
@@ -611,7 +586,7 @@ msgstr "Actie"
 msgid "Action"
 msgstr "Actie"
 
-#: ../core/templates/messages.tmpl:471
+#: ../core/templates/messages.tmpl:499
 msgid "Action %1: %2."
 msgstr "Actie %1: %2."
 
@@ -620,15 +595,15 @@ msgstr "Actie %1: %2."
 msgid "Add form"
 msgstr "Formulier toevoegen"
 
-#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:180
+#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:182
 msgid "Add row"
 msgstr "Rij erbij"
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:331
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:351
 msgid "Add your name to the list of users in the %1 topic in the %2 web."
 msgstr "Je naam toevoegen aan de lijst van gebruikers in pagina %1 in %2 web."
 
-#: ../core/templates/messages.tmpl:342
+#: ../core/templates/messages.tmpl:350
 msgid "Adding a %1 variable in WebPreferences"
 msgstr "Een %1 variabele wordt toegevoegd in WebPreferences"
 
@@ -657,11 +632,11 @@ msgstr ""
 "Nadat je dit formulier hebt verstuurd wordt je e-mail gewijzigd, en wordt je "
 "weer teruggebracht naar dit formulier."
 
-#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:12
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:16
 msgid "After submitting this form your password will be changed."
 msgstr "Nadat je dit formulier hebt verstuurd wordt je wachtwoord gewijzigd."
 
-#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:15
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:12
 msgid ""
 "After submitting this form, you will receive an e-mail with your new, "
 "*system-generated* password, and a link to a page where you can change it."
@@ -675,11 +650,16 @@ msgstr ""
 msgid "All public webs"
 msgstr "Alle publieke webs"
 
+#: ../core/data/TWiki/WebTopicList.txt:2
+#, fuzzy
+msgid "All topics in %1 web"
+msgstr "Onderliggende pagina&#39;s in %1 web"
+
 #: ../core/templates/twiki.tmpl:7
 msgid "Allow non <nop>WikiWord for the new topic name"
 msgstr "Een niet-<nop>WikiWord mag worden gebruikt als paginanaam"
 
-#: ../core/templates/messages.tmpl:256
+#: ../core/templates/messages.tmpl:264
 msgid ""
 "Alternatively hit back to go back to TWiki.TWikiRegistration and choose a "
 "different username."
@@ -687,7 +667,7 @@ msgstr ""
 "Of klik op Terug naar TWiki.TWikiRegistration en kies een andere "
 "gebruikersnaam."
 
-#: ../core/templates/messages.tmpl:243
+#: ../core/templates/messages.tmpl:251
 msgid ""
 "An e-mail could not be delivered. Please notify your %1 administrator, %2"
 msgstr ""
@@ -712,11 +692,12 @@ msgstr ""
 "Alle wijzigingen die je hebt gedaan voor je op deze pagina kwam zijn bewaard."
 
 #: ../TWikiNetSkin/templates/viewtopbar.twikinet.tmpl:111
-#: ../core/templates/viewtopicactionbuttons.tmpl:66
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:136
+#: ../core/templates/viewtopicactionbuttons.tmpl:68
 msgid "Attach"
 msgstr "Bij&lage bijvoegen"
 
-#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:26
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:29
 #, fuzzy
 msgid "Attach file or image"
 msgstr "Voeg bijlage toe aan pagina %1"
@@ -726,37 +707,42 @@ msgstr "Voeg bijlage toe aan pagina %1"
 msgid "Attach file to %1"
 msgstr "Voeg bijlage toe aan pagina %1"
 
-#: ../PatternSkin/templates/attach.pattern.tmpl:11
+#: ../PatternSkin/templates/attach.pattern.tmpl:5
 msgid "Attach image or document on %1"
 msgstr "Voeg afbeelding of document toe aan %1"
 
-#: ../PatternSkin/templates/attach.pattern.tmpl:37
-#: ../core/templates/attach.tmpl:17 ../core/templates/attachnew.tmpl:6
+#: ../PatternSkin/templates/attach.pattern.tmpl:20
+#: ../core/templates/attach.tmpl:15 ../core/templates/attachnew.tmpl:6
 #: ../core/templates/attachnew.tmpl:8
 msgid "Attach new file"
 msgstr "Voeg nieuwe bijlage toe"
+
+#: ../PatternSkin/templates/attach.pattern.tmpl:23
+#, fuzzy
+msgid "Attach up to 10 files at a time."
+msgstr "Voeg bijlage toe aan pagina %1"
 
 #: ../core/templates/attachtables.tmpl:4
 msgid "Attachment"
 msgstr "Bijlage"
 
-#: ../core/templates/messages.tmpl:520
+#: ../core/templates/messages.tmpl:548
 msgid "Attachment '%1' does not exist"
 msgstr "Bijlage '%1' bestaat niet"
 
-#: ../core/lib/TWiki/UI/Manage.pm:386
+#: ../core/lib/TWiki/UI/Manage.pm:456
 msgid "Attachment already exists in new topic"
 msgstr "Bijlage bestaat al in de nieuwe pagina"
 
-#: ../core/templates/messages.tmpl:62
+#: ../core/templates/messages.tmpl:70
 msgid "Attachment delete failed"
 msgstr "Verwijderen van bijlage is niet gelukt"
 
-#: ../core/lib/TWiki/UI/Manage.pm:367
+#: ../core/lib/TWiki/UI/Manage.pm:436
 msgid "Attachment does not exist"
 msgstr "Bijlage bestaat niet"
 
-#: ../core/templates/messages.tmpl:54
+#: ../core/templates/messages.tmpl:62
 msgid "Attachment move failed"
 msgstr "Verplaatsen van bijlage is niet gelukt"
 
@@ -764,16 +750,16 @@ msgstr "Verplaatsen van bijlage is niet gelukt"
 msgid "Attachments"
 msgstr "Bijlagen"
 
-#: ../PatternSkin/templates/attach.pattern.tmpl:14
+#: ../PatternSkin/templates/attach.pattern.tmpl:6
 msgid "Attachments help"
 msgstr "Help bij Bijlagen"
 
-#: ../core/templates/attach.tmpl:7
+#: ../core/templates/attach.tmpl:5
 msgid "Attachments of %1"
 msgstr "Bijlagen van %1"
 
-#: ../PatternSkin/templates/attach.pattern.tmpl:58
-#: ../core/templates/attach.tmpl:47
+#: ../PatternSkin/templates/attach.pattern.tmpl:39
+#: ../core/templates/attach.tmpl:46
 msgid "Attachments will not be shown in topic view page."
 msgstr "Bijlage zal niet worden getoond in de lijst van bijlagen op de pagina."
 
@@ -782,6 +768,7 @@ msgstr "Bijlage zal niet worden getoond in de lijst van bijlagen op de pagina."
 #: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:4
 #: ../core/templates/oopsaccessdenied.tmpl:5
 #: ../core/templates/oopsattention.tmpl:5
+#: ../core/templates/oopsinvalidtoken.tmpl:5
 #: ../core/templates/oopslanguagechanged.tmpl:13
 #: ../core/templates/oopsleaseconflict.tmpl:4
 #: ../core/templates/oopssaveerr.tmpl:10
@@ -795,10 +782,6 @@ msgstr "Kenmerk"
 #: ../MailerContrib/templates/mailnotify.tmpl:62
 msgid "Automated notification of topic changes"
 msgstr "Automatische kennisgeving van paginawijzigingen"
-
-#: ../core/data/_default/WebHome.txt:4
-msgid "Available Information"
-msgstr "Beschikbare informatie"
 
 #: ../PatternSkin/templates/changeform.pattern.tmpl:13
 #: ../core/templates/changeform.tmpl:34
@@ -814,8 +797,9 @@ msgid "Back to topic"
 msgstr "Terug naar pagina"
 
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:17
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:163
 #: ../core/templates/oopsmore.tmpl:37
-#: ../core/templates/viewtopicactionbuttons.tmpl:89
+#: ../core/templates/viewtopicactionbuttons.tmpl:91
 msgid "Backlinks"
 msgstr "Verwijzingen"
 
@@ -827,11 +811,11 @@ msgstr "Verwijzingen naar %1 in %2 Web"
 msgid "Backlinks to %1 in all Webs"
 msgstr "Verwijzingen naar %1 in alle Webs"
 
-#: ../core/templates/messages.tmpl:280
+#: ../core/templates/messages.tmpl:288
 msgid "Bad password"
 msgstr "Verkeerd wachtwoord"
 
-#: ../core/templates/messages.tmpl:118
+#: ../core/templates/messages.tmpl:126
 msgid "Base web %1 is missing or does not exist"
 msgstr "Basisweb %1 ontbreekt of bestaat niet"
 
@@ -848,7 +832,7 @@ msgstr ""
 "Maar bestaande formuliergegevens worden gewist. Je kunt deze gegevens altijd "
 "terugvinden in de paginageschiedenis."
 
-#: ../core/data/Trash/WebHome.txt:8
+#: ../core/data/Trash/WebHome.txt:10
 msgid ""
 "By default, viewing the Trash web is restricted to %1. If you would like to "
 "allow all users to view the Trash web, remove the =ALLOWWEBVIEW= restriction "
@@ -858,17 +842,19 @@ msgstr ""
 "Als je alle gebruikers toegang wilt geven tot het Prullenmand web, verwijder "
 "dan de =ALLOWWEBVIEW= beperking in WebPreferences."
 
-#: ../core/templates/messages.tmpl:44 ../core/templates/messages.tmpl:460
+#: ../core/templates/messages.tmpl:488 ../core/templates/messages.tmpl:52
 msgid "Can't find user %1"
 msgstr "Kan gebruiker %1 niet vinden"
 
-#: ../core/templates/messages.tmpl:461
+#: ../core/templates/messages.tmpl:489
 msgid "Can't get an e-mail address for %1 (required for password reset)"
 msgstr ""
 "Kan geen e-mailadres vinden voor %1 (vereist voor instellen van wachtwoord)"
 
 #: ../ClassicSkin/templates/twiki.classic.tmpl:68
-#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:182
+#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:184
+#: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:67
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:117
 #: ../core/templates/twiki.tmpl:80
 msgid "Cancel"
 msgstr "Afbreken"
@@ -877,15 +863,15 @@ msgstr "Afbreken"
 msgid "Cancel editing and discard changes"
 msgstr "Bewerken afbreken en wijzigingen niet bewaren"
 
-#: ../core/templates/messages.tmpl:69
+#: ../core/templates/messages.tmpl:77
 msgid "Cannot create %1 because it already exists."
 msgstr "Kan %1 niet aanmaken omdat deze al bestaat."
 
-#: ../core/templates/messages.tmpl:114
+#: ../core/templates/messages.tmpl:122
 msgid "Cannot create web %1 because it already exists"
 msgstr "Kan %1 web niet aanmaken omdat deze al bestaat."
 
-#: ../core/templates/messages.tmpl:75 ../core/templates/messages.tmpl:81
+#: ../core/templates/messages.tmpl:83 ../core/templates/messages.tmpl:89
 msgid "Cannot rename %1 to %2 because it already exists."
 msgstr "Kan %1 niet hernoemen naar %2 omdat deze al bestaat."
 
@@ -894,13 +880,23 @@ msgid "Case sensitive"
 msgstr "Hoofdlettergevoelig"
 
 #: ../PatternSkin/data/TWiki/WebLeftBar.txt:34
-#: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:39
+#: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:40
 msgid "Categories"
 msgstr "Categorieën"
+
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:42
+#, fuzzy
+msgid "Change"
+msgstr "Gewijzigd"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:2
 msgid "Change Password"
 msgstr "Wachtwoord wijzigen"
+
+#: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:2
+#, fuzzy
+msgid "Change Profile Picture of %1"
+msgstr "Wijzig pagina"
 
 #: ../PatternSkin/templates/attachagain.pattern.tmpl:16
 msgid "Change comment and properties only"
@@ -937,6 +933,12 @@ msgstr "Wijzig links in pagina&#39;s die verwijzen naar %1 in %2 Web"
 msgid "Change password"
 msgstr "Wijzig wachtwoord"
 
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:42
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:44
+#, fuzzy
+msgid "Change profile picture"
+msgstr "Wijzig pagina"
+
 #: ../core/templates/attachagain.tmpl:21
 msgid "Change properties only"
 msgstr "Alleen eigenschappen wijzigen"
@@ -966,7 +968,7 @@ msgstr "Gewijzigd:"
 #: ../PatternSkin/data/_default/WebLeftBar.txt:7
 #: ../TopMenuSkin/data/Main/WebTopMenu.txt:15
 #: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:14
-#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:42
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:54
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:15
 #: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:17
 #: ../TopMenuSkin/data/Trash/WebTopMenu.txt:14
@@ -975,11 +977,11 @@ msgid "Changes"
 msgstr "Wijzigingen"
 
 #. ($r2, $r1)
-#: ../core/lib/TWiki/UI/RDiff.pm:484
+#: ../core/lib/TWiki/UI/RDiff.pm:492
 msgid "Changes from r%1 to r%2"
 msgstr "Wijzigingen van r%1 naar r%2"
 
-#: ../core/templates/messages.tmpl:402
+#: ../core/templates/messages.tmpl:430
 msgid ""
 "Check your configuration settings for {TemplateDir} and {TemplatePath}. If "
 "that's not the problem, it may be because you have a setting of %1 that is "
@@ -1011,11 +1013,11 @@ msgid "Choose a new form for %1"
 msgstr "Kies een nieuw formulier voor %1"
 
 #: ../PatternSkin/templates/renamebase.pattern.tmpl:33
-#: ../core/lib/TWiki/Form/Checkbox.pm:39
+#: ../core/lib/TWiki/Form/Checkbox.pm:59
 msgid "Clear all"
 msgstr "Vink uit"
 
-#: ../core/lib/TWiki/Render.pm:186
+#: ../core/lib/TWiki/Render.pm:201
 msgid ""
 "Click to move topic back to previous location, with option to change "
 "references."
@@ -1023,22 +1025,27 @@ msgstr ""
 "Klik om de pagina terug te plaatsen naar de vorige locatie, met de optieom "
 "verwijzigen te wijzigen."
 
-#: ../TwistyPlugin/data/TWiki/TwistyPlugin.txt:550
+#: ../TagMePlugin/lib/TWiki/Plugins/TagMePlugin.pm:859
+msgid "Click to refine the search"
+msgstr ""
+
+#: ../TwistyPlugin/data/TWiki/TwistyPlugin.txt:559
 msgid "Close"
 msgstr "Sluiten"
 
-#: ../core/templates/messages.tmpl:122
+#: ../core/templates/messages.tmpl:130
 msgid "Color %1 has an invalid format"
 msgstr "Kleur %1 heeft een ongeldig formaat"
 
-#: ../PatternSkin/templates/attach.pattern.tmpl:46
-#: ../core/templates/attach.tmpl:26 ../core/templates/attachtables.tmpl:37
+#: ../PatternSkin/templates/attach.pattern.tmpl:27
+#: ../core/templates/attach.tmpl:25 ../core/templates/attachtables.tmpl:37
 #: ../core/templates/attachtables.tmpl:4
 msgid "Comment"
 msgstr "Toelichting"
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:322
-msgid "Comments:"
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:332
+#, fuzzy
+msgid "Comment:"
 msgstr "Opmerkingen:"
 
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:44
@@ -1046,7 +1053,7 @@ msgstr "Opmerkingen:"
 msgid "Compare revisions"
 msgstr "Vergelijk revisies"
 
-#: ../core/templates/messages.tmpl:199
+#: ../core/templates/messages.tmpl:207
 #, fuzzy
 msgid "Confirm registration"
 msgstr "Registreren"
@@ -1056,7 +1063,7 @@ msgstr "Registreren"
 msgid "Confirm rename or move"
 msgstr "Bevestig hernoemen of verplaatsen"
 
-#: ../core/templates/messages.tmpl:31
+#: ../core/templates/messages.tmpl:39
 msgid ""
 "Confirm your changes using TWiki's [[%1][topic history comparison tool "
 "(diff)]]."
@@ -1069,14 +1076,14 @@ msgstr ""
 msgid "Conflict"
 msgstr "Conflict"
 
-#: ../core/templates/messages.tmpl:473 ../core/templates/messages.tmpl:479
-#: ../core/templates/messages.tmpl:500 ../core/templates/messages.tmpl:511
-#: ../core/templates/messages.tmpl:517 ../core/templates/messages.tmpl:523
-#: ../core/templates/messages.tmpl:532
+#: ../core/templates/messages.tmpl:501 ../core/templates/messages.tmpl:507
+#: ../core/templates/messages.tmpl:528 ../core/templates/messages.tmpl:539
+#: ../core/templates/messages.tmpl:545 ../core/templates/messages.tmpl:551
+#: ../core/templates/messages.tmpl:560
 msgid "Contact %1 if you have any questions."
 msgstr "Neem bij vragen contact op met %1."
 
-#: ../core/templates/messages.tmpl:394
+#: ../core/templates/messages.tmpl:422
 msgid "Continue and try to rename web?"
 msgstr "Doorgaan om het web te hernoemen?"
 
@@ -1084,40 +1091,53 @@ msgstr "Doorgaan om het web te hernoemen?"
 msgid "Continue to create the new page"
 msgstr "Ga door en maak het nieuwe %1 web aan"
 
-#: ../core/data/TWiki/TWikiPreferences.txt:40
-#: ../core/data/TWiki/WebPreferences.txt:35
+#: ../core/data/TWiki/TWikiPreferences.txt:39
+#: ../core/data/TWiki/WebPreferences.txt:36
+#, fuzzy
 msgid ""
-"Copyright &&copy; by the contributing authors. All material on this "
+"Copyright &&copy; %1 by the contributing authors. All material on this "
 "collaboration platform is the property of the contributing authors."
 msgstr ""
 "Copyright &&copy; de contribuerende auteurs. Al het materiaal op dit "
 "samenwerkingsplatform is eigendom van de contribuerende auteurs."
 
-#: ../core/templates/messages.tmpl:132
+#: ../core/templates/messages.tmpl:140
 msgid "Could not create the new web %1"
 msgstr "Kon het nieuwe %1 web niet aanmaken"
 
-#: ../core/templates/messages.tmpl:400
+#: ../core/templates/messages.tmpl:428
 msgid "Could not find template"
 msgstr "Kon template niet vinden"
 
-#: ../core/templates/messages.tmpl:465
+#: ../core/templates/messages.tmpl:493
 msgid "Could not perform search. Error was: %1"
 msgstr "Kon geen zoekactie uitvoeren. Foutmelding was: %1"
 
-#: ../core/templates/messages.tmpl:312
+#: ../core/templates/messages.tmpl:320
 msgid "Could not save %1."
 msgstr "Kon %1 niet bewaren."
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:126
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:125
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:75
+#, fuzzy
+msgid "Country"
+msgstr "Land:"
+
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:136
 msgid "Country:"
 msgstr "Land:"
 
-#: ../core/data/TWiki/WebTopicViewTemplate.txt:27
+#: ../TagMePlugin/data/TWiki/TagMeCreateNewTag.txt:23
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:27
+#, fuzzy
+msgid "Create"
+msgstr "'%1' aanmaken"
+
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:30
 msgid "Create '%1'"
 msgstr "'%1' aanmaken"
 
-#: ../core/data/Sandbox/WebHome.txt:18
+#: ../core/data/Sandbox/WebHome.txt:19
 msgid "Create <nop>TestTopic###"
 msgstr "<nop>Testpagina### aanmaken"
 
@@ -1125,7 +1145,7 @@ msgstr "<nop>Testpagina### aanmaken"
 #: ../PatternSkin/data/Sandbox/WebLeftBar.txt:5
 #: ../PatternSkin/data/_default/WebLeftBar.txt:4
 #: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:11
-#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:39
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:51
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:12
 #: ../TopMenuSkin/data/_default/WebTopMenu.txt:11
 msgid "Create New Topic"
@@ -1136,20 +1156,20 @@ msgstr "Nieuwe pagina aanmaken"
 msgid "Create New Topic in %1 Web"
 msgstr "Nieuwe pagina aanmaken in %1 Web"
 
-#: ../PatternSkin/templates/attach.pattern.tmpl:56
-#: ../core/templates/attach.tmpl:39
+#: ../PatternSkin/templates/attach.pattern.tmpl:37
+#: ../core/templates/attach.tmpl:38
 msgid "Create a link to the attached file"
 msgstr "Maak een link naar de bijlage"
 
-#: ../core/data/Sandbox/WebHome.txt:16
+#: ../core/data/Sandbox/WebHome.txt:17
 msgid "Create a new auto-numbered test topic:"
 msgstr "Maak een nieuwe automatisch genummerde testpagina aan:"
 
-#: ../core/data/Sandbox/WebHome.txt:9
+#: ../core/data/Sandbox/WebHome.txt:10
 msgid "Create a new document by name:"
 msgstr "Maak een nieuwe pagina aan met naam:"
 
-#: ../core/data/Sandbox/WebHome.txt:10
+#: ../core/data/Sandbox/WebHome.txt:11
 msgid "Create by Name"
 msgstr "Pagina aanmaken"
 
@@ -1157,18 +1177,17 @@ msgstr "Pagina aanmaken"
 msgid "Create personal sidebar"
 msgstr "Persoonlijk menu aanmaken"
 
-#: ../core/templates/messages.tmpl:498
+#: ../core/templates/messages.tmpl:526
 msgid "Create the topic"
 msgstr "Maak deze pagina aan"
 
-#: ../core/data/TWiki/TWikiPreferences.txt:321
-#: ../core/data/TWiki/TWikiPreferences.txt:323
+#: ../core/data/TWiki/TWikiPreferences.txt:371
 #: ../core/data/TWiki/WebCreateNewTopicTemplate.txt:60
-#: ../core/lib/TWiki/Render.pm:92
+#: ../core/lib/TWiki/Render.pm:110
 msgid "Create this topic"
 msgstr "Maak deze pagina aan"
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:330
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:350
 msgid ""
 "Create your personal %1 topic using your WikiName as topic name, and add the "
 "data you submitted to the topic."
@@ -1176,7 +1195,7 @@ msgstr ""
 "Je persoonlijke pagina %1 aanmaken, met je [[WikiName][Wikinaam]] als "
 "paginanaam, en de verstuurde gegevens toevoegen aan de pagina."
 
-#: ../core/templates/messages.tmpl:341
+#: ../core/templates/messages.tmpl:349
 msgid "Creating a suitable Form Definition topic"
 msgstr "Een passend formulierdefinitie pagina aanmaken"
 
@@ -1189,9 +1208,14 @@ msgstr "Huidige locatie:"
 msgid "Current parent:"
 msgstr "Huidige bovenliggende pagina:"
 
-#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:23
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:27
 msgid "Current password"
 msgstr "Huidige wachtwoord"
+
+#: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:46
+#, fuzzy
+msgid "Current picture"
+msgstr "Huidige bovenliggende pagina:"
 
 #: ../core/templates/attachtables.tmpl:37
 #: ../core/templates/attachtables.tmpl:4
@@ -1213,6 +1237,7 @@ msgstr "Standaard template"
 
 #: ../PatternSkin/templates/attachagain.pattern.tmpl:24
 #: ../PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
+#: ../TagMePlugin/data/TWiki/TagMeDeleteTag.txt:29
 #: ../core/templates/renamedelete.tmpl:34
 #: ../core/templates/renamedelete.tmpl:7
 msgid "Delete"
@@ -1222,7 +1247,7 @@ msgstr "Verwijder"
 msgid "Delete attachment"
 msgstr "Bijlage verwijderen"
 
-#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:181
+#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:183
 msgid "Delete last row"
 msgstr "Laatste rij weg"
 
@@ -1237,15 +1262,20 @@ msgstr "Pagina verwijderen"
 msgid "Delete topic..."
 msgstr "Verwijder pagina..."
 
-#: ../PatternSkin/templates/attach.pattern.tmpl:48
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:120
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:70
+msgid "Department"
+msgstr ""
+
+#: ../PatternSkin/templates/attach.pattern.tmpl:29
 msgid "Describe the file so other people know what it is."
 msgstr "Beschrijf de bijlage zodat anderen weten wat het is."
 
-#: ../core/lib/TWiki/Form.pm:271
+#: ../core/lib/TWiki/Form.pm:289
 msgid "Details in separate window"
 msgstr "Details in een ander venster"
 
-#: ../core/data/TWiki/WebTopicViewTemplate.txt:11
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:14
 msgid "Did you spell the %1 correctly?"
 msgstr "Heb je %1 juist gespeld?"
 
@@ -1261,8 +1291,8 @@ msgstr "Verschil:"
 msgid "Do not forget to save your changes"
 msgstr "Vergeet niet om je veranderingen te bewaren"
 
-#: ../PatternSkin/templates/attach.pattern.tmpl:58
-#: ../core/templates/attach.tmpl:47
+#: ../PatternSkin/templates/attach.pattern.tmpl:39
+#: ../core/templates/attach.tmpl:46
 msgid "Do not show attachment in table"
 msgstr "Toon bijlage niet in de tabel"
 
@@ -1270,11 +1300,11 @@ msgstr "Toon bijlage niet in de tabel"
 msgid "Do show:"
 msgstr "Toon:"
 
-#: ../core/data/TWiki/WebTopicViewTemplate.txt:26
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:29
 msgid "Do you wish to create the topic %1?"
 msgstr "Wil je pagina %1 aanmaken?"
 
-#: ../core/data/TWiki/WebTopicViewTemplate.txt:18
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:6
 msgid "Do you wish to navigate quickly to a similar topic?"
 msgstr "Wil je snel naar een vergelijkbare pagina navigeren?"
 
@@ -1282,7 +1312,7 @@ msgstr "Wil je snel naar een vergelijkbare pagina navigeren?"
 msgid "Don't show:"
 msgstr "Toon niet:"
 
-#: ../core/templates/messages.tmpl:63
+#: ../core/templates/messages.tmpl:71
 msgid ""
 "During deletion of attachment =%1= an error was found. Please notify your %2 "
 "administrator."
@@ -1290,7 +1320,7 @@ msgstr ""
 "Tijdens het verwijderen van bijlage =%1= is een fout opgetreden. Stel je %2 "
 "beheerder op de hoogte."
 
-#: ../core/templates/messages.tmpl:55
+#: ../core/templates/messages.tmpl:63
 msgid ""
 "During move of attachment %1 to %2 an error was found. Please notify your %3 "
 "administrator."
@@ -1298,7 +1328,7 @@ msgstr ""
 "Tijdens het verplaatsen van bijlage %1 naar %2 is een fout opgetreden. Stel "
 "je %3 beheerder op de hoogte."
 
-#: ../core/templates/messages.tmpl:91
+#: ../core/templates/messages.tmpl:99
 msgid ""
 "During rename of topic %1 to %2 an error (%3) was found. Please notify your %"
 "4 administrator."
@@ -1306,7 +1336,7 @@ msgstr ""
 "Tijdens het hernoemen van pagina %1 naar %2 is een fout (%3) opgetreden. "
 "Stel je %4 beheerder op de hoogte."
 
-#: ../core/templates/messages.tmpl:94
+#: ../core/templates/messages.tmpl:102
 msgid ""
 "During rename of web %1 to %2 an error (%3) was found. Please notify your %4 "
 "administrator."
@@ -1314,7 +1344,7 @@ msgstr ""
 "Tijdens het hernoemen van %1 web naar %2 is een fout (%3) opgetreden. Stel "
 "je %4 beheerder op de hoogte."
 
-#: ../core/templates/messages.tmpl:371 ../core/templates/oopssaveerr.tmpl:17
+#: ../core/templates/messages.tmpl:399 ../core/templates/oopssaveerr.tmpl:17
 msgid ""
 "During save of %1 an error was found by the version control system. Please "
 "notify your %2 administrator."
@@ -1322,11 +1352,11 @@ msgstr ""
 "Tijdens het bewaren van %1 is een fout opgetreden in het "
 "versiebeheersysteem. Stel je %2 beheerder op de hoogte."
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:110
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:111
 msgid "E-mail address:"
 msgstr "E-mailadres:"
 
-#: ../core/templates/messages.tmpl:183
+#: ../core/templates/messages.tmpl:191
 msgid "E-mail changed successfully!"
 msgstr "E-mail succesvol gewijzigd!"
 
@@ -1335,13 +1365,15 @@ msgid "Each preference has the syntax"
 msgstr "Elke voorkeurinstelling heeft de syntax"
 
 #: ../TWikiNetSkin/templates/viewtopbar.twikinet.tmpl:97
-#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:24
-#: ../core/templates/viewtopicactionbuttons.tmpl:45
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:112
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:66
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:27
+#: ../core/templates/viewtopicactionbuttons.tmpl:47
 msgid "Edit"
 msgstr "Bewerken"
 
 #: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:27
-#: ../core/templates/oopsleaseconflict.tmpl:25
+#: ../core/templates/oopsleaseconflict.tmpl:21
 msgid "Edit Anyway"
 msgstr "Bewerk hoe dan ook"
 
@@ -1349,40 +1381,33 @@ msgstr "Bewerk hoe dan ook"
 msgid "Edit help"
 msgstr "Help bij Bewerken"
 
-#: ../PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:5
-msgid "Edit personal data"
-msgstr "Bewerk persoonlijke gegevens"
-
-#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:176
+#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:178
 msgid "Edit table"
 msgstr "Bewerk tabel"
 
-#: ../PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
-msgid "Edit text"
-msgstr "Bewerk tekst"
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:66
+#, fuzzy
+msgid "Edit this record"
+msgstr "Bewerk deze tabel"
 
-#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:177
+#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:179
 msgid "Edit this table"
 msgstr "Bewerk deze tabel"
 
-#: ../PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:18
-msgid "Edit this topic text"
-msgstr "Bewerk de paginatekst"
-
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:60
-#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:27
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:30
 #: ../core/templates/oopsmore.tmpl:13
 msgid "Edit topic preference settings"
 msgstr "Paginavoorkeuren"
 
-#: ../core/templates/messages.tmpl:297
+#: ../core/templates/messages.tmpl:305
 msgid ""
 "Either the code is not valid, or you have already confirmed your "
 "registration using it."
 msgstr ""
 "Of de code is niet geldig, of je hebt je registratie al eerder bevestigd."
 
-#: ../core/templates/messages.tmpl:362
+#: ../core/templates/messages.tmpl:382
 msgid ""
 "Either you did not specify a file name, or the file you are trying to upload "
 "%1 has no content. You may not upload an empty file."
@@ -1390,7 +1415,7 @@ msgstr ""
 "Je hebt geen bestand geselecteerd, of het bestand dat je wil uploaden is "
 "leeg (0 bytes). Je kunt geen leeg bestand uploaden."
 
-#: ../core/lib/TWiki/UI/Register.pm:432 ../core/lib/TWiki/UI/Register.pm:479
+#: ../core/lib/TWiki/UI/Register.pm:433 ../core/lib/TWiki/UI/Register.pm:480
 msgid "Email has been disabled for this TWiki installation"
 msgstr "E-mail is gedeactiveerd voor deze TWiki"
 
@@ -1419,15 +1444,15 @@ msgstr ""
 "JanDevries, tenzij je bewust anders kiest). Ga naar de [[%TWIKIWEB%."
 "TWikiRegistration][registratiepagina]] als je geen login hebt."
 
-#: ../core/templates/messages.tmpl:233
+#: ../core/templates/messages.tmpl:241
 msgid "Error registering new user"
 msgstr "Fout tijdens het registeren van nieuwe gebruiker"
 
-#: ../core/templates/messages.tmpl:224
+#: ../core/templates/messages.tmpl:232
 msgid "Error registering user %1"
 msgstr "Fout tijdens het registeren van gebruiker %1"
 
-#: ../core/templates/messages.tmpl:370
+#: ../core/templates/messages.tmpl:398
 msgid "Error saving topic"
 msgstr "Fout tijdens het bewaren van de pagina"
 
@@ -1435,11 +1460,11 @@ msgstr "Fout tijdens het bewaren van de pagina"
 msgid "Error: %1"
 msgstr "Foutmelding: %1"
 
-#: ../core/templates/messages.tmpl:453
+#: ../core/templates/messages.tmpl:481
 msgid "Error: File attachment at %1,%2 does not exist"
 msgstr "Foutmelding: Bijlage in %1,%2 bestaat niet"
 
-#: ../core/templates/messages.tmpl:455
+#: ../core/templates/messages.tmpl:483
 msgid ""
 "Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or "
 "=text/css=)"
@@ -1447,33 +1472,34 @@ msgstr ""
 "Foutmelding: Contenttype wordt niet ondersteund: %1 (Moet zijn =text/html=, "
 "=text/plain= of =text/css=)"
 
-#: ../core/templates/messages.tmpl:454
+#: ../core/templates/messages.tmpl:482
 msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
 msgstr ""
 "Foutmelding: Protocol wordt niet ondersteund. (Moet zijn 'http://domain/...')"
 
-#: ../core/templates/messages.tmpl:247
+#: ../core/templates/messages.tmpl:255
 msgid "Errors"
 msgstr "Foutmeldingen"
 
-#: ../core/templates/messages.tmpl:411
+#: ../core/templates/messages.tmpl:439
 #, fuzzy
 msgid "Example:"
 msgstr "Goede voorbeelden:"
 
-#: ../core/templates/messages.tmpl:463
+#: ../core/templates/messages.tmpl:491
 msgid "Failed to include URL %1"
 msgstr "Opnemen van URL %1 is niet gelukt"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:32
-#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:21
-#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:26
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:91
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:25
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:23
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:92
 msgid "Fields marked %1 are required"
 msgstr "Velden gemarkeerde met %1 zijn verplicht"
 
-#: ../core/templates/messages.tmpl:347
-msgid "File has been uploaded with different name"
+#: ../core/templates/messages.tmpl:356
+#, fuzzy
+msgid "Files have been uploaded with different name"
 msgstr "Het bestand is geupload met een andere naam"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:21
@@ -1487,7 +1513,7 @@ msgstr "Verwijzingen"
 msgid "Find topics that link to %1 ..."
 msgstr "Pagina's die verwijzen naar %1 ..."
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:329
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:349
 msgid ""
 "Finish creating an account for you, so that you can start editing pages "
 "using your WikiName."
@@ -1495,7 +1521,7 @@ msgstr ""
 "De account aanmaken afronden, zodat je kan beginnen met het bewerken van "
 "pagina&#39;s met gebruik van je [[WikiName][Wikinaam]]."
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:94
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:95
 msgid "First Name:"
 msgstr "Voornaam:"
 
@@ -1507,16 +1533,16 @@ msgstr "Forceer nieuwe revisie"
 msgid "Forgotten your password?"
 msgstr "Je wachtwoord vergeten?"
 
-#: ../PatternSkin/data/TWiki/PatternSkinCustomization.txt:432
+#: ../PatternSkin/data/TWiki/PatternSkinCustomization.txt:447
 #, fuzzy
 msgid "Form"
 msgstr "of"
 
-#: ../core/templates/messages.tmpl:319
+#: ../core/templates/messages.tmpl:327
 msgid "Form Definition %1 missing"
 msgstr "Formulierdefinitie %1 ontbreekt"
 
-#: ../core/templates/messages.tmpl:324
+#: ../core/templates/messages.tmpl:332
 msgid "Form definition missing"
 msgstr "Formulierdefinitie ontbreekt"
 
@@ -1554,19 +1580,19 @@ msgstr "Abonneer je op wijzigingen op deze zoekvraag"
 msgid "Go back"
 msgstr "Terug"
 
-#: ../core/templates/messages.tmpl:316
+#: ../core/templates/messages.tmpl:324
 msgid ""
 "Go back in your browser and insert information for all mandatory fields."
 msgstr ""
 "Ga terug met je browser en vul de informatie bij de verplichte velden in."
 
-#: ../core/templates/messages.tmpl:377 ../core/templates/oopssaveerr.tmpl:21
+#: ../core/templates/messages.tmpl:405 ../core/templates/oopssaveerr.tmpl:21
 msgid "Go back in your browser and save your changes locally."
 msgstr ""
 "Ga terug met je browser en bewaar je veranderingen lokaal (bijvoorbeeld op "
 "je harde schijf)."
 
-#: ../core/templates/messages.tmpl:271
+#: ../core/templates/messages.tmpl:279
 msgid "Good examples:"
 msgstr "Goede voorbeelden:"
 
@@ -1590,7 +1616,7 @@ msgstr "Hallo %1!"
 msgid "Help"
 msgstr "Help"
 
-#: ../core/templates/attach.tmpl:45
+#: ../core/templates/attach.tmpl:44
 msgid "Hide file"
 msgstr "Verberg bestand"
 
@@ -1598,7 +1624,7 @@ msgstr "Verberg bestand"
 msgid "Hide help"
 msgstr "Verberg help"
 
-#: ../core/templates/messages.tmpl:109
+#: ../core/templates/messages.tmpl:117
 msgid "Hierarchical Webs is currently disabled, you cannot create Nested webs."
 msgstr ""
 "Hiërarchische Webs zijn niet geactiveerd; je kunt geen genest web aanmaken."
@@ -1608,7 +1634,7 @@ msgstr ""
 msgid "History"
 msgstr "&Geschiedenis"
 
-#: ../TopMenuSkin/data/TWiki/TopMenuSkinHomeMenu.txt:10
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinHomeMenu.txt:11
 msgid "Home"
 msgstr ""
 
@@ -1620,27 +1646,34 @@ msgstr "Wat dacht je van het bijvoegen van je foto?"
 msgid "How to activate your %1 registration"
 msgstr "Hoe activeer je je %1 registratie"
 
-#: ../core/templates/messages.tmpl:349
+#: ../core/templates/registernotifyadminfail.tmpl:12
 msgid ""
-"However, the filename has been changed from %1 to %2. Please make a note of "
-"it."
-msgstr "Let wel, de bestandsnaam is veranderd van %1 naar %2."
+"However, confirmation e-mail to %2 failed, indicating probable fraudulent "
+"registration.  The %1 user could not be removed automatically."
+msgstr ""
+
+#: ../core/templates/registernotifyadminfailrem.tmpl:12
+msgid ""
+"However, confirmation e-mail to %2 failed, indicating probable fraudulent "
+"registration.  The %1 was removed automatically, however you must remove the "
+"user's topic manually."
+msgstr ""
 
 #: ../core/templates/login.tmpl:65
 msgid "I forgot my password"
 msgstr "Wachtwoord vergeten?"
 
-#: ../core/data/TWiki/TWikiPreferences.txt:40
-#: ../core/data/TWiki/WebPreferences.txt:35
+#: ../core/data/TWiki/TWikiPreferences.txt:39
+#: ../core/data/TWiki/WebPreferences.txt:36
 msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
 msgstr ""
 "Ideeën, verzoeken of problemen aangaande %1? <a href='%2'>Stuur feedback</a>"
 
-#: ../core/templates/messages.tmpl:333
+#: ../core/templates/messages.tmpl:341
 msgid "If this line isn't present see _upgrade_ section below"
 msgstr "Als deze regel niet aanwezig is, zie _upgrade_ sectie hieronder"
 
-#: ../core/templates/messages.tmpl:327
+#: ../core/templates/messages.tmpl:335
 msgid "If this topic is missing create it, otherwise check it for errors."
 msgstr ""
 "Als deze pagina niet bestaat kun je deze aanmaken, of anders loop deze na op "
@@ -1655,7 +1688,7 @@ msgstr ""
 "Als je de paginanaam al weet, voer de naam in in het [[%1]['Spring' veld]] "
 "bovenaan"
 
-#: ../core/templates/messages.tmpl:415 ../core/templates/messages.tmpl:424
+#: ../core/templates/messages.tmpl:443 ../core/templates/messages.tmpl:452
 msgid ""
 "If you are developing a <nop>TWikiApplication, see %1 for a description of "
 "the correct parameters."
@@ -1663,7 +1696,7 @@ msgstr ""
 "Als je een [[TWikiApplication][TWiki applicatie]] ontwikkelt, zie %1 voor "
 "een beschrijving van de juiste pagina&#39;s."
 
-#: ../core/templates/messages.tmpl:488
+#: ../core/templates/messages.tmpl:516
 msgid "If you came here by clicking on a question mark link"
 msgstr "Als je hier bent gekomen via een directe creatielink"
 
@@ -1673,8 +1706,7 @@ msgstr ""
 "Als je een andere naam opgeeft, controleer dan eerst of de pagina ook "
 "bestaat."
 
-#: ../core/templates/registerconfirm.tmpl:14
-#: ../core/templates/registernotify.tmpl:23
+#: ../core/templates/registernotify.tmpl:25
 msgid ""
 "If you got this e-mail by mistake: Somebody (%1) registered at the %2 site "
 "using your mail address %3. Contact %4 if this is in error."
@@ -1683,13 +1715,23 @@ msgstr ""
 "geregistreerd op de %2 site met gebruik van je e-mailadres %3. Neem contact "
 "op met %4 als dit niet juist is."
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:349
+#: ../core/templates/registerconfirm.tmpl:14
+#, fuzzy
+msgid ""
+"If you got this e-mail by mistake: Somebody (%1, %5) registered at the %2 "
+"site using your mail address %3. Contact %4 if this is in error."
+msgstr ""
+"Als je deze e-mail per ongeluk hebt gekregen: Iemand (%1) heeft zich "
+"geregistreerd op de %2 site met gebruik van je e-mailadres %3. Neem contact "
+"op met %4 als dit niet juist is."
+
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:363
 msgid "If you have any questions about registration, send an e-mail to %1."
 msgstr "Bij vragen over registratie kun je een e-mail sturen aan %1."
 
-#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:46
+#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:42
 #: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:36
-#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:39
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:33
 #: ../core/templates/login.tmpl:76
 msgid "If you have any questions, please contact %1"
 msgstr "Als je vragen hebt kun je contact opnemen met %1"
@@ -1700,14 +1742,14 @@ msgstr "Als je vragen hebt kun je contact opnemen met %1"
 msgid "If you have any questions, please contact %1."
 msgstr "Neem bij vragen contact op met %1."
 
-#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:146
-#: ../core/templates/registernotify.tmpl:25
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:140
+#: ../core/templates/registernotify.tmpl:27
 msgid "If you haven't set a password yet or you want to reset it, go to: %1"
 msgstr ""
 "Als je nog geen wachtwoord hebt ingesteld, of als je het wachtwoord opnieuw "
 "wilt instellen, ga dan naar %1"
 
-#: ../core/templates/messages.tmpl:422
+#: ../core/templates/messages.tmpl:450
 msgid ""
 "If you received a link to this topic in an e-mail or just want to look at "
 "the topic, [[%1][cancel save]] to go to %2."
@@ -1715,11 +1757,11 @@ msgstr ""
 "Als je een link naar deze pagina hebt ontvangen in een e-mail of gewoon deze "
 "pagina wilt bekijken, [[%1][breek af]] om naar %2 te gaan."
 
-#: ../core/templates/messages.tmpl:497
+#: ../core/templates/messages.tmpl:525
 msgid "If you want to create the topic"
 msgstr "Als je deze pagina wilt aanmaken"
 
-#: ../core/templates/messages.tmpl:493
+#: ../core/templates/messages.tmpl:521
 msgid "If you would like to create this web"
 msgstr "Als je dit web wilt aanmaken"
 
@@ -1742,8 +1784,8 @@ msgstr ""
 "kunnen veranderen), en als je je e-mailadres niet registreert met dit "
 "formulier,  kan je gebruikersaccount worden gekaapt door iemand anders."
 
-#: ../PatternSkin/templates/attach.pattern.tmpl:56
-#: ../core/templates/attach.tmpl:39
+#: ../PatternSkin/templates/attach.pattern.tmpl:37
+#: ../core/templates/attach.tmpl:38
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr ""
 "Afbeeldingen worden getoond op de pagina; voor anderssoortige bestanden "
@@ -1753,7 +1795,7 @@ msgstr ""
 msgid "In reversed order"
 msgstr "In omgekeerde volgorde"
 
-#: ../core/templates/messages.tmpl:352
+#: ../core/templates/messages.tmpl:372
 msgid ""
 "In some cases, TWiki changes the name of the uploaded file to make it safe "
 "and accessible across all platforms:"
@@ -1761,19 +1803,19 @@ msgstr ""
 "In sommige gevallen verandert TWiki de naam van het geuploaded bestand om "
 "deze toegankelijk te maken voor alle platforms."
 
-#: ../core/templates/messages.tmpl:261 ../core/templates/messages.tmpl:268
+#: ../core/templates/messages.tmpl:269 ../core/templates/messages.tmpl:276
 msgid "Incorrect %1"
 msgstr "Onjuiste %1"
 
-#: ../core/templates/messages.tmpl:271
+#: ../core/templates/messages.tmpl:279
 msgid "Incorrect %1.WikiNames:"
 msgstr "Onjuiste [[%1.WikiNames][Wikinamen]]:"
 
-#: ../core/templates/messages.tmpl:97
+#: ../core/templates/messages.tmpl:105
 msgid "Incorrect Password"
 msgstr "Onjuist wachtwoord"
 
-#: ../core/templates/messages.tmpl:420
+#: ../core/templates/messages.tmpl:448
 msgid "Incorrect parameters to the =%1= script"
 msgstr "Onjuiste parameters aan het =%1= script"
 
@@ -1785,7 +1827,7 @@ msgstr "Onjuiste parameters aan het =%1= script"
 #: ../PatternSkin/data/_default/WebLeftBar.txt:5
 #: ../TopMenuSkin/data/Main/WebTopMenu.txt:13
 #: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:12
-#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:40
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:52
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:13
 #: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:15
 #: ../TopMenuSkin/data/Trash/WebTopMenu.txt:12
@@ -1793,11 +1835,16 @@ msgstr "Onjuiste parameters aan het =%1= script"
 msgid "Index"
 msgstr "Index"
 
-#: ../core/templates/messages.tmpl:235
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:115
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:64
+msgid "Info"
+msgstr ""
+
+#: ../core/templates/messages.tmpl:243
 msgid "Internal error when sending email to %1."
 msgstr "Interne fout bij het versturen van e-mail naar %1."
 
-#: ../core/templates/messages.tmpl:356
+#: ../core/templates/messages.tmpl:376
 msgid ""
 "International (8-bit) characters are removed (replaced by US-ASCII "
 "equivalents for Latin-1)"
@@ -1805,15 +1852,19 @@ msgstr ""
 "Internationale (8-bit) karakters zijn verwijderd (vervangen door het US-"
 "ASCII-equivalent voor Latin-1)"
 
-#: ../core/templates/messages.tmpl:294
+#: ../core/templates/messages.tmpl:302
 msgid "Invalid Activation Code"
 msgstr "Ongeldige activeringscode"
 
-#: ../core/templates/messages.tmpl:286
+#: ../core/templates/oopsinvalidtoken.tmpl:6
+msgid "Invalid Crypt Token"
+msgstr ""
+
+#: ../core/templates/messages.tmpl:294
 msgid "Invalid e-mail address"
 msgstr "Ongeldig e-mailadres"
 
-#: ../core/templates/messages.tmpl:435
+#: ../core/templates/messages.tmpl:463
 msgid ""
 "It is probably OK to go ahead and edit - unless you intend to change data in "
 "a form attached to the topic. If %1 actually _does_ save the topic while you "
@@ -1855,12 +1906,12 @@ msgstr ""
 #: ../PatternSkin/data/TWiki/WebLeftBarSearch.txt:2
 #: ../PatternSkin/data/TWiki/WebTopBar.txt:7
 #: ../PatternSkin/templates/twiki.pattern.tmpl:36
-#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:55
-#: ../core/data/TWiki/WebTopicViewTemplate.txt:11
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:69
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:20
 msgid "Jump"
 msgstr "Direct naar pagina"
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:98
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:99
 msgid "Last Name:"
 msgstr "Achternaam:"
 
@@ -1879,15 +1930,16 @@ msgstr "Beperk resultaten tot:"
 #. ($left)
 #. ($right)
 #: ../core/lib/TWiki/UI/RDiff.pm:158 ../core/lib/TWiki/UI/RDiff.pm:160
+#: ../core/lib/TWiki/UI/RDiff.pm:194
 msgid "Line: %1"
 msgstr "Regel: %1"
 
 #. ($left,$right)
-#: ../core/lib/TWiki/UI/RDiff.pm:299
+#: ../core/lib/TWiki/UI/RDiff.pm:308
 msgid "Line: %1 to %2"
 msgstr "Regel: %1 tot %2"
 
-#: ../core/templates/attach.tmpl:37
+#: ../core/templates/attach.tmpl:36
 msgid "Link"
 msgstr "Link"
 
@@ -1896,7 +1948,7 @@ msgstr "Link"
 msgid "List all topics in the %1 web in alphabetical order"
 msgstr "Toon alle pagina&#39;s in het %1 web in alfabetische volgorde"
 
-#: ../core/data/TWiki/WebTopicViewTemplate.txt:23
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:11
 msgid "List more similar topic in this web"
 msgstr "Toon vergelijkbare pagina&#39;s in dit web"
 
@@ -1909,6 +1961,12 @@ msgstr "Toon alle pagina&#39;s die beginnen met de letter:"
 msgid "Local customisations of site-wide preferences"
 msgstr "Plaatselijke aanpassingen aan sitebrede voorkeuren"
 
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:123
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:73
+#, fuzzy
+msgid "Location"
+msgstr "Actie"
+
 #: ../PatternSkin/templates/twiki.pattern.tmpl:4
 msgid "Log In"
 msgstr "Log in"
@@ -1916,6 +1974,11 @@ msgstr "Log in"
 #: ../PatternSkin/templates/twiki.pattern.tmpl:5
 msgid "Log Out"
 msgstr "Log uit"
+
+#: ../core/templates/registernotify.tmpl:18
+msgid ""
+"Login as \"%1\". Please note that login and password are case sensitive."
+msgstr ""
 
 #: ../ClassicSkin/templates/mailresetpassword.classic.tmpl:9
 #: ../core/templates/mailresetpassword.tmpl:9
@@ -1927,7 +1990,7 @@ msgstr "Inlognaam %1"
 msgid "Logon"
 msgstr "Log in"
 
-#: ../core/templates/messages.tmpl:245
+#: ../core/templates/messages.tmpl:253
 msgid "Mail to"
 msgstr "Verstuur mail aan"
 
@@ -1935,11 +1998,11 @@ msgstr "Verstuur mail aan"
 msgid "Make search:"
 msgstr "Maak de zoekactie:"
 
-#: ../core/templates/messages.tmpl:212
+#: ../core/templates/messages.tmpl:220
 msgid "Missing Fields"
 msgstr "Ontbrekende velden"
 
-#: ../core/templates/messages.tmpl:36
+#: ../core/templates/messages.tmpl:44
 msgid "Missing action command"
 msgstr "Ontbrekende actieopdracht"
 
@@ -1951,23 +2014,24 @@ msgstr "Pas zoekactie aan"
 msgid "More Actions on Topic %1"
 msgstr "Meer pagina-acties voor pagina %1"
 
-#: ../core/data/TWiki/WikiSyntaxSummary.txt:17
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:20
 msgid "More formatting help"
 msgstr "Meer opmaakhulp"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:23
-#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:29
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:32
 #, fuzzy
 msgid "More topic actions"
 msgstr "Meer pagina acties..."
 
 #: ../PatternSkin/templates/rdiff.pattern.tmpl:29
-#: ../core/templates/viewtopicactionbuttons.tmpl:76
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:146
+#: ../core/templates/viewtopicactionbuttons.tmpl:78
 msgid "More topic actions..."
 msgstr "Meer pagina acties..."
 
-#: ../TopMenuSkin/data/TWiki/TopMenuSkinHomeMenu.txt:15
-#: ../TwistyPlugin/data/TWiki/TwistyPlugin.txt:548
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinHomeMenu.txt:16
+#: ../TwistyPlugin/data/TWiki/TwistyPlugin.txt:557
 msgid "More..."
 msgstr "Meer..."
 
@@ -2000,27 +2064,32 @@ msgstr "Verplaats naar web:"
 msgid "Move topic to web:"
 msgstr "Verplaats pagina naar web:"
 
-#: ../core/lib/TWiki/UI/Manage.pm:1084
+#: ../core/lib/TWiki/UI/Manage.pm:1218
 msgid "Move/Rename"
 msgstr "Verplaats/Hernoem"
 
-#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:58
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:126
+#, fuzzy
+msgid "Must change password"
+msgstr "Wijzig wachtwoord"
+
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:59
 msgid "My Links"
 msgstr "Mijn links"
 
-#: ../core/lib/TWiki/Search.pm:892
+#: ../core/lib/TWiki/Search.pm:909
 msgid "NEW"
 msgstr "NIEUW"
 
-#: ../core/templates/messages.tmpl:103
+#: ../core/templates/messages.tmpl:111
 msgid "Name of new web is missing"
 msgstr "Naam van het nieuwe web ontbreekt"
 
-#: ../core/templates/messages.tmpl:145
+#: ../core/templates/messages.tmpl:153
 msgid "New User Registration disabled"
 msgstr "Registratie van nieuwe gebruikers is gedeactiveerd"
 
-#: ../core/templates/messages.tmpl:136
+#: ../core/templates/messages.tmpl:144
 msgid "New User Registration not supported"
 msgstr "Aanmelden van nieuwe gebruikers wordt niet ondersteund"
 
@@ -2030,18 +2099,19 @@ msgstr "Nieuwe e-mails (spatie-gescheiden lijst)"
 
 #: ../MailerContrib/templates/mailnotify.tmpl:73
 #: ../MailerContrib/templates/mailnotify.tmpl:9
-msgid "New or changed topics in %1, since %2:"
+#, fuzzy
+msgid "New or changed topics in %1 web since %2:"
 msgstr "Nieuwe of gewijzigde pagina&#39;s in %1, sinds %2:"
 
 #: ../core/templates/renamewebbase.tmpl:10
 msgid "New parent web:"
 msgstr "Nieuw bovenliggend web:"
 
-#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:24
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:28
 msgid "New password"
 msgstr "Nieuw wachtwoord"
 
-#: ../core/templates/messages.tmpl:87
+#: ../core/templates/messages.tmpl:95
 msgid "New topic name %1 is not a %2"
 msgstr "Nieuwe paginanaam %1 is geen %2"
 
@@ -2058,7 +2128,7 @@ msgstr "Nieuwere revisie:"
 msgid "No child topics"
 msgstr "Geen onderliggende pagina&#39;s"
 
-#: ../core/templates/messages.tmpl:452
+#: ../core/templates/messages.tmpl:480
 msgid "No permission to view %1"
 msgstr "Geen permissie om %1 te bekijken"
 
@@ -2067,7 +2137,7 @@ msgstr "Geen permissie om %1 te bekijken"
 msgid "No previous revision exists."
 msgstr "Er is geen vorige paginarevisie beschikbaar."
 
-#: ../core/templates/messages.tmpl:205
+#: ../core/templates/messages.tmpl:213
 msgid "No users to reset passwords for."
 msgstr "Geen gebruikers om de wachtwoorden opnieuw voor in te stellen."
 
@@ -2083,11 +2153,11 @@ msgstr ""
 "Weet dat URLs die verwijzen naar de bijlage gebroken links zullen opleveren "
 "na deze verplaatsing."
 
-#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:144
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:138
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:13
-#: ../core/templates/messages.tmpl:299 ../core/templates/messages.tmpl:351
+#: ../core/templates/messages.tmpl:307 ../core/templates/messages.tmpl:371
 #: ../core/templates/registerconfirm.tmpl:13
-#: ../core/templates/registernotify.tmpl:22
+#: ../core/templates/registernotify.tmpl:24
 msgid "Note:"
 msgstr "Opmerking:"
 
@@ -2105,7 +2175,7 @@ msgstr "Opmerkingen:"
 #: ../PatternSkin/data/_default/WebLeftBar.txt:8
 #: ../TopMenuSkin/data/Main/WebTopMenu.txt:16
 #: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:15
-#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:43
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:55
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:16
 #: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:18
 #: ../TopMenuSkin/data/_default/WebTopMenu.txt:15
@@ -2121,8 +2191,10 @@ msgstr "Aantal pagina&#39;s:"
 
 #: ../ClassicSkin/templates/oopsaccessdenied.classic.tmpl:6
 #: ../ClassicSkin/templates/twiki.classic.tmpl:69
-#: ../core/templates/messages.tmpl:173 ../core/templates/messages.tmpl:180
+#: ../core/templates/messages.tmpl:181 ../core/templates/messages.tmpl:188
+#: ../core/templates/messages.tmpl:385 ../core/templates/messages.tmpl:394
 #: ../core/templates/oopsaccessdenied.tmpl:7
+#: ../core/templates/oopsinvalidtoken.tmpl:7
 #: ../core/templates/oopssaveerr.tmpl:14 ../core/templates/twiki.tmpl:81
 msgid "OK"
 msgstr "OK"
@@ -2131,13 +2203,13 @@ msgstr "OK"
 msgid "Older revision:"
 msgstr "Oudere revisie"
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:337
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:357
 msgid "Once registered you can login using your %1 and password."
 msgstr ""
 "Wanneer je geregistreerd bent kun je inloggen met gebruik van je %1 en "
 "wachtwoord."
 
-#: ../core/templates/messages.tmpl:477
+#: ../core/templates/messages.tmpl:505
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr ""
 "Alleen leden van de %1 hebben de mogelijkheid deze actie uit te voeren."
@@ -2161,15 +2233,18 @@ msgstr "Verander eventueel de paginanaam:"
 msgid "Optionally enter a different topic name:"
 msgstr "Voer eventueel een andere paginanaam in:"
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:123
-msgid "Organisation URL:"
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:121
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:71
+#, fuzzy
+msgid "Organization"
 msgstr "URL van organisatie:"
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:120
-msgid "Organisation name:"
-msgstr "Naam van organisatie:"
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:130
+#, fuzzy
+msgid "Organization:"
+msgstr "URL van organisatie:"
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:317
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:327
 msgid "Other Country"
 msgstr "Ander land"
 
@@ -2190,24 +2265,29 @@ msgstr ""
 msgid "Password"
 msgstr "Wachtwoord"
 
-#: ../core/templates/messages.tmpl:166
+#: ../core/templates/messages.tmpl:174
 msgid "Password changed successfully!"
 msgstr "Wachtwoord succesvol gewijzigd!"
 
-#: ../core/templates/messages.tmpl:176
+#: ../core/templates/messages.tmpl:184
 msgid "Password could not be changed"
 msgstr "Wachtwoord kon niet worden veranderd"
 
-#: ../core/templates/messages.tmpl:204 ../core/templates/messages.tmpl:208
+#: ../core/templates/messages.tmpl:212 ../core/templates/messages.tmpl:216
 msgid "Password reset failed"
 msgstr "Wachtwoord opnieuw instellen niet gelukt"
 
-#: ../core/templates/messages.tmpl:218
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:116
+#, fuzzy
+msgid "Password:"
+msgstr "Wachtwoord"
+
+#: ../core/templates/messages.tmpl:226
 msgid "Passwords do not match"
 msgstr "Wachtwoorden komen niet overeen"
 
-#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:54
-#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:68
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:55
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:69
 msgid "Personal Preferences"
 msgstr "Persoonlijke instellingen"
 
@@ -2217,7 +2297,7 @@ msgstr "Persoonlijke instellingen"
 msgid "Pick from a list"
 msgstr "Kies uit de lijst"
 
-#: ../core/templates/messages.tmpl:125
+#: ../core/templates/messages.tmpl:133
 msgid "Pick one of the %1."
 msgstr "Kies een van de %1."
 
@@ -2225,12 +2305,12 @@ msgstr "Kies een van de %1."
 msgid "Placeholder for trashed attachments"
 msgstr "Standaardpagina voor weggegooide bijlagen"
 
-#: ../core/templates/messages.tmpl:258 ../core/templates/messages.tmpl:308
+#: ../core/templates/messages.tmpl:266 ../core/templates/messages.tmpl:316
 msgid "Please contact %1 if you have any questions."
 msgstr "Neem bij vragen contact op met %1."
 
-#: ../core/templates/messages.tmpl:140 ../core/templates/messages.tmpl:149
-#: ../core/templates/messages.tmpl:228 ../core/templates/messages.tmpl:237
+#: ../core/templates/messages.tmpl:148 ../core/templates/messages.tmpl:157
+#: ../core/templates/messages.tmpl:236 ../core/templates/messages.tmpl:245
 msgid "Please contact %1."
 msgstr "Neem contact op met %1."
 
@@ -2242,16 +2322,16 @@ msgstr "TWiki beheerder login"
 msgid "Please enter your username and password"
 msgstr "Vul je gebruikersnaam en wachtwoord in"
 
-#: ../core/templates/messages.tmpl:71 ../core/templates/messages.tmpl:77
-#: ../core/templates/messages.tmpl:83
+#: ../core/templates/messages.tmpl:79 ../core/templates/messages.tmpl:85
+#: ../core/templates/messages.tmpl:91
 msgid "Please go _back_ in your browser and try a new name."
 msgstr "Ga _terug_ met je browser en probeer een andere naam."
 
-#: ../core/templates/messages.tmpl:363
+#: ../core/templates/messages.tmpl:383
 msgid "Please go back in your browser and check again."
 msgstr "Ga terug met je browser en probeer het opnieuw."
 
-#: ../core/templates/messages.tmpl:88
+#: ../core/templates/messages.tmpl:96
 msgid ""
 "Please go back in your browser and choose a topic name that is a %1.WikiWord "
 "or check the allow non-Wiki Word box"
@@ -2259,24 +2339,28 @@ msgstr ""
 "Ga terug met je browser en kies een paginanaam dat een %1.WikiWord is of "
 "vink de checkbox 'niet-<nop>WikiWoord mag gebruikt worden' aan"
 
-#: ../core/templates/messages.tmpl:100 ../core/templates/messages.tmpl:104
-#: ../core/templates/messages.tmpl:111 ../core/templates/messages.tmpl:115
-#: ../core/templates/messages.tmpl:119 ../core/templates/messages.tmpl:129
-#: ../core/templates/messages.tmpl:215 ../core/templates/messages.tmpl:221
-#: ../core/templates/messages.tmpl:265 ../core/templates/messages.tmpl:277
-#: ../core/templates/messages.tmpl:283 ../core/templates/messages.tmpl:291
-#: ../core/templates/messages.tmpl:37 ../core/templates/messages.tmpl:41
-#: ../core/templates/messages.tmpl:59
+#: ../core/templates/messages.tmpl:108 ../core/templates/messages.tmpl:112
+#: ../core/templates/messages.tmpl:119 ../core/templates/messages.tmpl:123
+#: ../core/templates/messages.tmpl:127 ../core/templates/messages.tmpl:137
+#: ../core/templates/messages.tmpl:223 ../core/templates/messages.tmpl:229
+#: ../core/templates/messages.tmpl:273 ../core/templates/messages.tmpl:285
+#: ../core/templates/messages.tmpl:291 ../core/templates/messages.tmpl:299
+#: ../core/templates/messages.tmpl:45 ../core/templates/messages.tmpl:49
+#: ../core/templates/messages.tmpl:67
 msgid "Please go back in your browser and try again."
 msgstr "Ga terug met je browser en probeer het opnieuw."
 
-#: ../core/templates/messages.tmpl:45
+#: ../core/templates/messages.tmpl:53
 msgid ""
 "Please make sure you spelled the %1 correctly and try again. If you get "
 "stuck, please mail %2."
 msgstr ""
 "Let dat je %1 juist hebt gespeld en probeer opnieuw. Als je niet verder kan, "
 "mail %2."
+
+#: ../core/templates/messages.tmpl:392
+msgid "Please try small size files or contact Administrator."
+msgstr ""
 
 #: ../ClassicSkin/templates/mailresetpassword.classic.tmpl:12
 #: ../core/templates/mailresetpassword.tmpl:12
@@ -2291,7 +2375,7 @@ msgstr ""
 #: ../PatternSkin/data/_default/WebLeftBar.txt:11
 #: ../TopMenuSkin/data/Main/WebTopMenu.txt:19
 #: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:18
-#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:46
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:58
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:19
 #: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:21
 #: ../TopMenuSkin/data/_default/WebTopMenu.txt:18
@@ -2307,7 +2391,7 @@ msgstr "Instellingen voor"
 msgid "Print version"
 msgstr ""
 
-#: ../PatternSkin/templates/attach.pattern.tmpl:54
+#: ../PatternSkin/templates/attach.pattern.tmpl:35
 msgid "Properties"
 msgstr "Eigenschappen"
 
@@ -2319,7 +2403,7 @@ msgstr ""
 "Snel aanpassen van bestaande instellingen (om nieuwe instellingen aan te "
 "maken: bewerk de paginatekst)"
 
-#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:179
+#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:181
 msgid "Quiet save"
 msgstr "Stil bewaren"
 
@@ -2329,22 +2413,22 @@ msgstr "Stil bewaren"
 #: ../PatternSkin/data/_default/WebLeftBar.txt:9
 #: ../TopMenuSkin/data/Main/WebTopMenu.txt:17
 #: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:16
-#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:44
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:56
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:17
 #: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:19
 #: ../TopMenuSkin/data/_default/WebTopMenu.txt:16
 msgid "RSS Feed"
 msgstr "RSS Feed"
 
-#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:25
-#: ../core/templates/viewtopicactionbuttons.tmpl:61
-msgid "Raw edit"
-msgstr "Brontekst bewerken"
-
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:19
 #, fuzzy
-msgid "Raw view"
+msgid "Raw View"
 msgstr "(brontekst)"
+
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:28
+#: ../core/templates/viewtopicactionbuttons.tmpl:63
+msgid "Raw edit"
+msgstr "Brontekst bewerken"
 
 #: ../core/templates/registernotify.tmpl:10
 msgid ""
@@ -2363,25 +2447,37 @@ msgstr "Open de helptekst over nieuwe revisies in een nieuw venster"
 msgid "Read on"
 msgstr "Lees verder"
 
-#: ../core/data/Trash/WebHome.txt:10
-#, fuzzy
-msgid "Recently Deleted Topics"
-msgstr "Recent gewijzigd"
-
-#: ../core/data/Sandbox/WebHome.txt:21 ../core/data/TWiki/WebSearch.txt:46
+#: ../core/data/TWiki/WebSearch.txt:46
 #: ../core/data/TWiki/WebSearchAdvanced.txt:88
 msgid "Recently changed topics"
 msgstr "Recent gewijzigd"
 
-#: ../core/lib/TWiki/UI/Manage.pm:1083
+#: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:69
+msgid ""
+"Recommended step before upload: Crop the image to about square size, and "
+"resize it to a width of 200 pixels. This makes it load faster."
+msgstr ""
+
+#: ../core/lib/TWiki/UI/Manage.pm:1217
 msgid "Refresh"
 msgstr "Verversen"
 
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:124
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:74
+#, fuzzy
+msgid "Region"
+msgstr "Revisie"
+
 #: ../ClassicSkin/templates/twiki.classic.tmpl:9
 #: ../PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
-#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:37
 #: ../core/templates/twiki.tmpl:106
 msgid "Register"
+msgstr "Meld je aan"
+
+#: ../PatternSkin/data/TWiki/UserBookmarks.txt:23
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:38
+#, fuzzy
+msgid "Register User"
 msgstr "Meld je aan"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:13
@@ -2394,7 +2490,7 @@ msgstr ""
 msgid "Registration"
 msgstr "Registreren"
 
-#: ../core/templates/messages.tmpl:297
+#: ../core/templates/messages.tmpl:305
 msgid "Registration codes can only be used once."
 msgstr "Registratiecodes kunnen slechts eenmaal gebruikt worden."
 
@@ -2402,17 +2498,25 @@ msgstr "Registratiecodes kunnen slechts eenmaal gebruikt worden."
 msgid "Regular expression search"
 msgstr "Regular expression zoeken"
 
-#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:75
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:76
 msgid "Related Topics"
 msgstr "Gerelateerde pagina&#39;s"
 
-#: ../TWikiUserMappingContrib/data/Main/TWikiGroupTemplate.txt:10
-#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:52
+#: ../TagMePlugin/lib/TWiki/Plugins/TagMePlugin.pm:858
+#, fuzzy
+msgid "Related tags"
+msgstr "Gerelateerde pagina&#39;s:"
+
+#: ../TWikiUserMappingContrib/data/Main/TWikiGroupTemplate.txt:22
+#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:48
 #: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:42
-#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:43
-#: ../core/data/Sandbox/WebNotify.txt:10 ../core/data/Trash/WebNotify.txt:9
-#: ../core/data/_default/WebNotify.txt:8 ../core/templates/messages.tmpl:475
-#: ../core/templates/messages.tmpl:482
+#: ../TWikiUserMappingContrib/data/TWiki/EditUserAccount.txt:15
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:149
+#: ../TWikiUserMappingContrib/data/TWiki/QueryUsers.txt:10
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:37
+#: ../core/data/Sandbox/WebNotify.txt:10 ../core/data/Trash/WebNotify.txt:10
+#: ../core/data/_default/WebNotify.txt:10 ../core/templates/messages.tmpl:503
+#: ../core/templates/messages.tmpl:510
 msgid "Related topics:"
 msgstr "Gerelateerde pagina&#39;s:"
 
@@ -2424,7 +2528,7 @@ msgstr "Onthou mij op deze computer"
 msgid "Remember me on this computer"
 msgstr "Onthou mij op deze computer"
 
-#: ../core/templates/messages.tmpl:185
+#: ../core/templates/messages.tmpl:193
 msgid ""
 "Remember to update your user topic if you want your e-mail change to be "
 "reflected there as well."
@@ -2436,19 +2540,20 @@ msgstr ""
 msgid "Remember your password?"
 msgstr "Weet je je wachtwoord?"
 
-#: ../core/data/TWiki/WebTopicViewTemplate.txt:11
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:22
 msgid "Remember, a %1 is case sensitive."
 msgstr "Let op, een %1 is hoofdlettergevoelig."
 
-#: ../core/templates/messages.tmpl:51
+#: ../core/templates/messages.tmpl:59
 msgid "Remove the user from the group(s) %1 first."
 msgstr "Verwijder de gebruiker eerst van groep(en) %1"
 
+#: ../TagMePlugin/data/TWiki/TagMeRenameTag.txt:34
 #: ../core/templates/rename.tmpl:7 ../core/templates/renameweb.tmpl:7
 msgid "Rename"
 msgstr "Hernoem"
 
-#: ../core/templates/messages.tmpl:74 ../core/templates/messages.tmpl:80
+#: ../core/templates/messages.tmpl:82 ../core/templates/messages.tmpl:88
 msgid "Rename failed"
 msgstr "Hernoemen mislukt"
 
@@ -2485,7 +2590,7 @@ msgstr "Vervang formulier..."
 msgid "Reset Password"
 msgstr "Wachtwoord opnieuw instellen"
 
-#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:32
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:25
 msgid "Reset password"
 msgstr "Wachtwoord instellen"
 
@@ -2512,19 +2617,24 @@ msgstr "Zet pagina terug naar deze revisie"
 msgid "Results from %1 web"
 msgstr "Resultaten van %1 web"
 
-#: ../core/templates/messages.tmpl:189
+#: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:81
+#, fuzzy
+msgid "Return to"
+msgstr "Ga terug naar %1."
+
+#: ../core/templates/messages.tmpl:197
 msgid "Return to %1."
 msgstr "Ga terug naar %1."
 
-#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:25
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:29
 msgid "Retype new password"
 msgstr "Typ wachtwoord opnieuw"
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:116
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:117
 msgid "Retype password:"
 msgstr "Typ wachtwoord opnieuw:"
 
-#: ../core/templates/messages.tmpl:27
+#: ../core/templates/messages.tmpl:35
 msgid "Rev %1 was saved by %2, while you were still editing."
 msgstr ""
 "Revisie %1 werd opgeslagen door %2 terwijl je nog aan het bewerken was."
@@ -2558,11 +2668,18 @@ msgstr ""
 "B = Bewaren, S = Stil bewaren, D = Bewaren en Doorgaan, V = Voorvertoning, A "
 "= Afbreken"
 
-#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:178
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:117
+#, fuzzy
+msgid "Save"
+msgstr "Bewaard in:"
+
+#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:180
 msgid "Save table"
 msgstr "Bewaren"
 
 #: ../core/templates/registernotifyadmin.tmpl:16
+#: ../core/templates/registernotifyadminfail.tmpl:18
+#: ../core/templates/registernotifyadminfailrem.tmpl:18
 msgid "Saved to:"
 msgstr "Bewaard in:"
 
@@ -2577,15 +2694,14 @@ msgstr "Bewaard in:"
 #: ../PatternSkin/templates/twiki.pattern.tmpl:37
 #: ../TopMenuSkin/data/Main/WebTopMenu.txt:14
 #: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:13
-#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:41
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:53
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:14
-#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:57
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:71
 #: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:16
 #: ../TopMenuSkin/data/Trash/WebTopMenu.txt:13
 #: ../TopMenuSkin/data/_default/WebTopMenu.txt:13
 #: ../core/data/TWiki/WebSearch.txt:24
 #: ../core/data/TWiki/WebSearchAdvanced.txt:31
-#: ../core/data/_default/WebHome.txt:11
 msgid "Search"
 msgstr "Zoeken"
 
@@ -2603,7 +2719,7 @@ msgstr "Zoek in a&lle webs"
 msgid "Search all webs for topics that link to here"
 msgstr "Zoek in alle webs naar pagina&#39;s die hierheen linken"
 
-#: ../core/data/TWiki/WebTopicViewTemplate.txt:24
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:12
 msgid "Search similar topics in all public webs"
 msgstr "Zoek naar vergelijkbare pagina&#39;s in alle publieke webs"
 
@@ -2626,17 +2742,17 @@ msgstr "Waar zoeken:"
 msgid "Searched:"
 msgstr "Gezocht:"
 
-#: ../core/data/Trash/WebHome.txt:6
+#: ../core/data/Trash/WebHome.txt:8
 msgid "Security Note:"
 msgstr "Veiligheidsopmerking:"
 
-#: ../core/templates/messages.tmpl:47
+#: ../core/templates/messages.tmpl:55
 msgid "See %1 for a list of existing users or register as new user in %2."
 msgstr ""
 "Zie %1 voor een lijst van bestaande gebruikers, of registreer als nieuwe "
 "gebruiker in %2."
 
-#: ../core/templates/messages.tmpl:320
+#: ../core/templates/messages.tmpl:328
 msgid "See %1 for information about Form Definitions."
 msgstr "Zie %1 voor informatie over Formulierdefinities."
 
@@ -2644,11 +2760,11 @@ msgstr "Zie %1 voor informatie over Formulierdefinities."
 msgid "See also the faster %1"
 msgstr "Zie ook de snellere %1"
 
-#: ../core/data/TWiki/WebTopicList.txt:4
+#: ../core/data/TWiki/WebTopicList.txt:6
 msgid "See also the verbose %1."
 msgstr "Zie ook de uitgebreide %1."
 
-#: ../core/data/TWiki/RenameWeb.txt:3 ../core/data/TWiki/WebChanges.txt:6
+#: ../core/data/TWiki/RenameWeb.txt:3
 msgid "See also:"
 msgstr "Zie ook:"
 
@@ -2668,6 +2784,11 @@ msgstr "Kies een nieuw lokaal bestand om deze bijlage te vernieuwen"
 msgid "Select all"
 msgstr "Vink aan"
 
+#: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:76
+#, fuzzy
+msgid "Select existing picture"
+msgstr "Selecteer bovenliggende pagina:"
+
 #: ../core/templates/oopsmore.tmpl:55
 msgid "Select topic parent:"
 msgstr "Selecteer bovenliggende pagina:"
@@ -2677,7 +2798,7 @@ msgstr "Selecteer bovenliggende pagina:"
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr "Kopieer en plak je signatuur onderaan je toevoeging"
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:332
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:352
 msgid "Send you a confirmation of your registration by e-mail."
 msgstr "Een bevestiging van je registratie versturen per e-mail."
 
@@ -2685,11 +2806,11 @@ msgstr "Een bevestiging van je registratie versturen per e-mail."
 msgid "Sequential"
 msgstr "Sequentieel"
 
-#: ../core/lib/TWiki/Form/Checkbox.pm:34
+#: ../core/lib/TWiki/Form/Checkbox.pm:54
 msgid "Set all"
 msgstr "Vink aan"
 
-#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:28
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:31
 #: ../core/templates/oopsmore.tmpl:59
 msgid "Set new parent"
 msgstr "Stel bovenliggende pagina in"
@@ -2703,7 +2824,20 @@ msgstr "Bovenliggende pagina instellen"
 msgid "Show help"
 msgstr "Toon help"
 
-#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:70
+#: ../core/data/TWiki/WebChanges.txt:16
+#, fuzzy
+msgid ""
+"Show recent changes with <a href='%2'>50</a>, <a href='%3' "
+"rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a href='%5' "
+"rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> topics, <a "
+"href='%7' rel='nofollow'>all changes</a>"
+msgstr ""
+"<a href='%1'>RSS feed</a>, recente wijzigingen met <a href='%2'>50</a>, <a "
+"href='%3' rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a "
+"href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> "
+"pagina&#39;s, <a href='%7' rel='nofollow'>alle wijzigingen</a>"
+
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:71
 msgid "Show tool-tip topic info on mouse-over of %1 links, on or off:"
 msgstr "Toon tooltip pagina-informatie bij muizen over %1 links, aan of uit:"
 
@@ -2715,7 +2849,7 @@ msgstr "Tekstvak verkleinen"
 msgid "Side by side"
 msgstr "Naast elkaar"
 
-#: ../core/data/TWiki/WebTopicViewTemplate.txt:21
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:9
 msgid "Similar topics in this web (if any):"
 msgstr "Vergelijkbare pagina&#39;s in dit web (eventueel):"
 
@@ -2723,7 +2857,7 @@ msgstr "Vergelijkbare pagina&#39;s in dit web (eventueel):"
 msgid "Simple search"
 msgstr "Eenvoudig zoeken"
 
-#: ../TopMenuSkin/data/TWiki/TopMenuSkinHomeMenu.txt:11
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinHomeMenu.txt:12
 msgid "Site map"
 msgstr ""
 
@@ -2745,16 +2879,20 @@ msgstr ""
 msgid "Size"
 msgstr "Grootte"
 
-#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:137
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:132
 #: ../core/templates/registernotify.tmpl:15
 msgid "Some add schedule information and vacation notice."
 msgstr "Sommige voegen afwezigheidsberichten en vakantieschema's toe."
 
-#: ../core/templates/messages.tmpl:355
+#: ../core/templates/messages.tmpl:375
 msgid "Some characters such as =&#126;=, =$=, =@=, =%= are removed"
 msgstr "Sommige tekens zoals =&#126;=, =$=, =@=, =%= zijn verwijderd"
 
-#: ../core/templates/messages.tmpl:300
+#: ../core/templates/messages.tmpl:358
+msgid "Some files have been renamed on upload:"
+msgstr ""
+
+#: ../core/templates/messages.tmpl:308
 msgid ""
 "Some mail tools have an error that causes them to send the same request "
 "twice when you click on a link. It you did this, it is possible that you "
@@ -2764,7 +2902,7 @@ msgstr ""
 "tweemaal versturen als je op een link klikt. In deze situatie is het "
 "mogelijk dat je *wel* succesvol bent reregistreerd."
 
-#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:136
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:131
 #: ../core/templates/registernotify.tmpl:14
 msgid ""
 "Some people turn it into a personal portal with favorite links, what they "
@@ -2780,8 +2918,8 @@ msgstr "Sorry, registratie is tijdelijk gedeactiveerd"
 #: ../TWikiUserMappingContrib/data/TWiki/BulkRegistration.txt:83
 #: ../TWikiUserMappingContrib/data/TWiki/BulkResetPassword.txt:17
 #: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:21
-#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:13
-#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:16
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:17
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:13
 msgid "Sorry, the password system is currently read only, please contact %1"
 msgstr ""
 "Sorry, het wachtwoordsysteem blijkt alleen te kunnen lezen, niet "
@@ -2791,7 +2929,7 @@ msgstr ""
 msgid "Sort results by:"
 msgstr "Sorteer resultaten op:"
 
-#: ../core/templates/messages.tmpl:353
+#: ../core/templates/messages.tmpl:373
 msgid "Spaces are replaced by underscores"
 msgstr "Spaties zijn vervangen door liggende streepjes"
 
@@ -2801,21 +2939,27 @@ msgstr "Spaties zijn vervangen door liggende streepjes"
 #: ../PatternSkin/data/_default/WebLeftBar.txt:10
 #: ../TopMenuSkin/data/Main/WebTopMenu.txt:18
 #: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:17
-#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:45
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:57
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:18
 #: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:20
 #: ../TopMenuSkin/data/_default/WebTopMenu.txt:17
 msgid "Statistics"
 msgstr "Statistieken"
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:343
-#: ../core/templates/messages.tmpl:305
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:112
+msgid "Status update: Make a sentence, such as: =is out of office="
+msgstr ""
+
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:342
+#: ../core/templates/messages.tmpl:313
 msgid "Submit"
 msgstr "Versturen"
 
-#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:148
-#: ../core/templates/registernotify.tmpl:18
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:142
+#: ../core/templates/registernotify.tmpl:20
 #: ../core/templates/registernotifyadmin.tmpl:12
+#: ../core/templates/registernotifyadminfail.tmpl:14
+#: ../core/templates/registernotifyadminfailrem.tmpl:14
 msgid "Submitted content:"
 msgstr "Verstuurde gegevens:"
 
@@ -2863,11 +3007,11 @@ msgstr ""
 "en druk op \"Taal wijzigen\". Om terug te gaan naar de vorige pagina, klik "
 "op \"Afbreken\" onderaan de pagina."
 
-#: ../core/templates/messages.tmpl:508
+#: ../core/templates/messages.tmpl:536
 msgid "Template %1 does not exist"
 msgstr "Template %1 bestaat niet"
 
-#: ../core/data/Sandbox/WebHome.txt:6
+#: ../core/data/Sandbox/WebHome.txt:7
 msgid "Test Topics"
 msgstr "Testpagina's"
 
@@ -2876,7 +3020,7 @@ msgstr "Testpagina's"
 msgid "Text body"
 msgstr "Tekst"
 
-#: ../core/templates/messages.tmpl:154 ../core/templates/messages.tmpl:192
+#: ../core/templates/messages.tmpl:162 ../core/templates/messages.tmpl:200
 msgid "Thank you for registering"
 msgstr "Bedankt voor je registratie"
 
@@ -2896,11 +3040,11 @@ msgstr ""
 "Bedankt voor je registratie in het %1 samenwerkingsplatform. Je "
 "verificatiecode is %2."
 
-#: ../core/templates/messages.tmpl:526
+#: ../core/templates/messages.tmpl:554
 msgid "That user has already been activated "
 msgstr "Die gebruiker is al geactiveerd "
 
-#: ../core/templates/messages.tmpl:269
+#: ../core/templates/messages.tmpl:277
 msgid ""
 "The %1 field must be your first and last name in %2, e.g. your capitalized "
 "first and last name with spaces removed."
@@ -2908,13 +3052,13 @@ msgstr ""
 "Het %1 veld moet je voornaam en achternaam in %2 zijn, d.w.z. je voornaam en "
 "achternaam beide met een hoofdletter en zonder spaties."
 
-#: ../core/templates/messages.tmpl:263
+#: ../core/templates/messages.tmpl:271
 msgid "The %1 field must match the {LoginNameFilterIn} filter for this site"
 msgstr ""
 "Het %1 veld moet overeenkomen met het {LoginNameFilterIn} filter voor deze "
 "site"
 
-#: ../core/templates/messages.tmpl:68
+#: ../core/templates/messages.tmpl:76
 msgid "The %1 topic already exists"
 msgstr "Pagina %1 bestaat al"
 
@@ -2923,22 +3067,9 @@ msgstr "Pagina %1 bestaat al"
 msgid "The %1 web cannot be renamed."
 msgstr "Het nieuwe web is aangemaakt"
 
-#: ../core/templates/messages.tmpl:485
+#: ../core/templates/messages.tmpl:513
 msgid "The %1 web does not exist"
 msgstr "Het %1 web bestaat nog niet"
-
-#: ../core/data/Sandbox/WebHome.txt:4
-msgid ""
-"The %1 web is the sandbox you can use for testing. Everybody is welcome to "
-"add or delete some stuff. It is recommended to walk through the %2 to get a "
-"jumpstart on the %3 tool. A good rule of thumb is to add at the end of the "
-"page and sign and date it with your %4."
-msgstr ""
-"Het %1 web is de zogenaamde speeltuin die je kan gebruiken om uit te "
-"proberen. Iedereen is welkom om toe te voegen of te verwijderen. We raden je "
-"aan om %2 te doorlopen om een overzicht van de %3 tool te krijgen. Een goede "
-"vuistregel is om toe te voegen aan het einde van de pagina en te signeren en "
-"dateren met je %4."
 
 #: ../core/data/Sandbox/WebRss.txt:5 ../core/data/Trash/WebRss.txt:5
 #: ../core/data/_default/WebAtom.txt:3 ../core/data/_default/WebRss.txt:5
@@ -2949,15 +3080,15 @@ msgstr ""
 "Het %1 web van TWiki. TWiki is een internet samenwerkingsplatform voor de "
 "onderneming."
 
-#: ../core/templates/messages.tmpl:410
+#: ../core/templates/messages.tmpl:438
 msgid "The =%1= script can only be called with POST method."
 msgstr ""
 
-#: ../core/templates/messages.tmpl:147
+#: ../core/templates/messages.tmpl:155
 msgid "The Administrator has disabled new user registration."
 msgstr "De beheerder heeft registratie van nieuwe gebruikers gedeactiveerd."
 
-#: ../core/templates/messages.tmpl:295
+#: ../core/templates/messages.tmpl:303
 msgid "The activation code %1 is invalid."
 msgstr "De activeringscode %1 is ongeldig."
 
@@ -2967,7 +3098,7 @@ msgstr ""
 "De bijlage en bijlage-geschiedenis zullen worden verplaatst naar de nieuwe "
 "pagina."
 
-#: ../core/templates/messages.tmpl:443
+#: ../core/templates/messages.tmpl:471
 msgid ""
 "The chances are good that %1 has simply navigated away from the edit page "
 "without saving."
@@ -2984,31 +3115,32 @@ msgstr ""
 "formulier te zien krijgen waarin je pagina&#39;s kunt hernoemen die zijn "
 "vergendeld)."
 
-#: ../core/templates/messages.tmpl:287
+#: ../core/templates/messages.tmpl:295
 msgid "The e-mail address for this account is not valid."
 msgstr "Het e-mailadres voor deze account is ongeldig."
 
-#: ../core/templates/messages.tmpl:459
+#: ../core/templates/messages.tmpl:487
 msgid "The entry for user %1 was missing in the password system."
 msgstr "De ingang voor gebruiker %1 ontbrak in het wachtwoordsysteem."
 
-#: ../core/templates/messages.tmpl:348
-msgid "The file has been uploaded and attached properly to the %1 topic."
+#: ../core/templates/messages.tmpl:357
+#, fuzzy
+msgid "The files have been uploaded and attached properly to the %1 topic."
 msgstr "Het bestand is geupload en succesvol bijgevoegd bij pagina %1."
 
-#: ../core/templates/messages.tmpl:384
+#: ../core/templates/messages.tmpl:412
 msgid "The following topics are locked for edit, and cannot be moved:"
 msgstr ""
 "De volgende pagina&#39;s zijn vergrendeld voor bewerken, en kunnen niet "
 "verplaatst worden:"
 
-#: ../core/templates/messages.tmpl:390
+#: ../core/templates/messages.tmpl:418
 msgid "The following topics refer to topics in this web, but are being edited:"
 msgstr ""
 "De volgende pagina&#39;s verwijzen naar pagina&#39;s in dit web, maar worden "
 "op dit moment bewerkt:"
 
-#: ../core/templates/messages.tmpl:387
+#: ../core/templates/messages.tmpl:415
 msgid ""
 "The following topics refer to topics in this web, but you are denied access "
 "to them:"
@@ -3016,11 +3148,11 @@ msgstr ""
 "De volgende pagina&#39;s verwijzen naar pagina&#39;s in dit web, maar je "
 "hebt geen toegang ertoe:"
 
-#: ../core/templates/messages.tmpl:326
+#: ../core/templates/messages.tmpl:334
 msgid "The form should be defined in the topic %1"
 msgstr "Het formulier zou moeten zijn gedefinieerd in pagina %1"
 
-#: ../core/templates/messages.tmpl:441
+#: ../core/templates/messages.tmpl:469
 msgid "The lease on this topic expired %1 ago."
 msgstr "De tijdelijke vergrendeling is %1 geleden verlopen."
 
@@ -3032,17 +3164,17 @@ msgstr "De nieuw te kiezen pagina moet al bestaan."
 msgid "The new web has been created"
 msgstr "Het nieuwe web is aangemaakt"
 
-#: ../core/templates/messages.tmpl:98
+#: ../core/templates/messages.tmpl:106
 msgid "The password you entered in the *old password* field is incorrect."
 msgstr ""
 "Het wachtwoord dat je hebt ingevoerd in het *oude wachtwoord*-veld is "
 "onjuist."
 
-#: ../core/templates/messages.tmpl:314
+#: ../core/templates/messages.tmpl:322
 msgid "The required field %1 was not filled in."
 msgstr "Het vereiste veld %1 is niet ingevuld."
 
-#: ../core/templates/messages.tmpl:138
+#: ../core/templates/messages.tmpl:146
 msgid "The selected User System does not support new user registration."
 msgstr "Het gekozen gebruikerssysteem ondersteunt geen nieuwe registraties."
 
@@ -3050,29 +3182,29 @@ msgstr "Het gekozen gebruikerssysteem ondersteunt geen nieuwe registraties."
 msgid "The topic %1 you are trying to access does not exist, yet."
 msgstr "Pagina %1 bestaat nog niet."
 
-#: ../core/templates/messages.tmpl:329
+#: ../core/templates/messages.tmpl:337
 msgid "The topic is in an old format"
 msgstr "De pagina is in een oud formaat"
 
-#: ../core/templates/messages.tmpl:219
+#: ../core/templates/messages.tmpl:227
 msgid "The two passwords you entered do not match."
 msgstr "De twee wachtwoorden die je hebt ingevoerd komen niet overeen."
 
-#: ../core/templates/messages.tmpl:528
+#: ../core/templates/messages.tmpl:556
 msgid "The user %1 has already been activated, and should be able to log in."
 msgstr "Gebruiker %1 is al geactiveerd, en zou moeten kunnen inloggen."
 
-#: ../core/templates/messages.tmpl:380
+#: ../core/templates/messages.tmpl:408
 msgid "There are problems with renaming this web:"
 msgstr "Er zijn problemen met het hernoemen van dit web:"
 
-#: ../core/templates/messages.tmpl:226
+#: ../core/templates/messages.tmpl:234
 msgid "There has been a problem adding your user id to the Password system."
 msgstr ""
 "Er was een probleem met het toevoegen van je gebruikers-ID aan het "
 "wachtwoordsysteem."
 
-#: ../core/templates/messages.tmpl:332
+#: ../core/templates/messages.tmpl:340
 msgid "There should be a line that includes %1, look for %2 (or %3)"
 msgstr "Er zou een regel moeten zijn die %1 bevat; kijk uit naar %2 (of %3)"
 
@@ -3080,11 +3212,11 @@ msgstr "Er zou een regel moeten zijn die %1 bevat; kijk uit naar %2 (of %3)"
 msgid "This TWiki does _not_ support new User Registration"
 msgstr "Deze TWiki ondersteunt _geen_ registratie van nieuwe gebruikers"
 
-#: ../core/templates/messages.tmpl:339
+#: ../core/templates/messages.tmpl:347
 msgid "This can be automatically upgraded by:"
 msgstr "Deze kan automatisch worden opgewaardeerd door:"
 
-#: ../core/templates/messages.tmpl:322
+#: ../core/templates/messages.tmpl:330
 msgid "This could be for several reasons:"
 msgstr "Dit kan meerdere oorzaken hebben:"
 
@@ -3100,8 +3232,8 @@ msgstr ""
 "van e-mails over wachtwoordwijzigingen. De adressen die je hier registreert "
 "worden geheimgehouden en worden *niet gepubliceerd* op deze site."
 
-#: ../core/data/Sandbox/WebNotify.txt:4 ../core/data/Trash/WebNotify.txt:3
-#: ../core/data/_default/WebNotify.txt:2
+#: ../core/data/Sandbox/WebNotify.txt:4 ../core/data/Trash/WebNotify.txt:4
+#: ../core/data/_default/WebNotify.txt:4
 msgid ""
 "This is a subscription service to be automatically notified by e-mail when "
 "topics change in this %1 web. This is a convenient service, so you do not "
@@ -3121,12 +3253,14 @@ msgid "This is an automated e-mail from %1."
 msgstr "Dit is een geautomatiseerde e-mail van %1."
 
 #: ../core/templates/registernotifyadmin.tmpl:8
+#: ../core/templates/registernotifyadminfail.tmpl:8
+#: ../core/templates/registernotifyadminfailrem.tmpl:8
 msgid "This is an automated e-mail notification of user registration in %1."
 msgstr ""
 "Dit is een geautomatiseerde e-mailberichtgeving van gebruikersregistratie in "
 "%1."
 
-#: ../core/data/Trash/WebHome.txt:3
+#: ../core/data/Trash/WebHome.txt:5
 msgid ""
 "This is the Trash. Here you can undelete topics; deleted attachments are in "
 "TrashAttachment."
@@ -3142,15 +3276,15 @@ msgstr ""
 "Deze naam is uigekozen zodat deze niet conflicteert met andere pagina&#39;s "
 "die al aanwezig zijn in het %1 web."
 
-#: ../core/templates/messages.tmpl:337
+#: ../core/templates/messages.tmpl:345
 msgid "This requires the form definition to be present."
 msgstr "Dit vereist dat formulierdefinities bestaan."
 
-#: ../core/templates/messages.tmpl:281
+#: ../core/templates/messages.tmpl:289
 msgid "This site requires at least %1 character passwords"
 msgstr "Deze site vereist wachtwoorden met ten minste %1 tekens"
 
-#: ../core/data/TWiki/WebTopicViewTemplate.txt:19
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:7
 msgid "This topic has moved to %1."
 msgstr "Deze pagina is verplaatst naar %1."
 
@@ -3167,7 +3301,7 @@ msgstr ""
 msgid "This topic:"
 msgstr "Deze pagina:"
 
-#: ../core/templates/messages.tmpl:29
+#: ../core/templates/messages.tmpl:37
 msgid ""
 "Those changes have been merged with yours to create Rev %1. Text fields will "
 "have been merged, but other data such as form fields may have overwritten "
@@ -3180,6 +3314,12 @@ msgstr ""
 "andere gebruikers. Controleer de pagina of deze in orde is, in het bijzonder "
 "als je veranderingen hebt gedaan in formuliervelden."
 
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:119
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:69
+#, fuzzy
+msgid "Title"
+msgstr "Paginatitel"
+
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:5
 msgid ""
 "To edit pages on this TWikiSite, you must have a registered user name and "
@@ -3189,16 +3329,23 @@ msgstr ""
 "gebruikersnaam en wachtwoord nodig."
 
 #: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:22
-#: ../core/templates/oopsleaseconflict.tmpl:20
+#: ../core/templates/oopsleaseconflict.tmpl:18
 msgid "To edit the topic anyway, click "
 msgstr "Om de pagina toch te bewerken, klik "
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:85
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:86
 msgid "To register as a new user, simply fill out this form:"
 msgstr "Om te registreren als nieuwe gebruiker vul je dit formulier in:"
 
+#: ../core/templates/messages.tmpl:568
+msgid ""
+"To save your changes, press the browser back button, copy all content into "
+"the clipboard, cancel edit, edit again, and replace content with clipboard "
+"content. Whew ... nothing lost!"
+msgstr ""
+
 #: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:18
-#: ../core/templates/oopsleaseconflict.tmpl:16
+#: ../core/templates/oopsleaseconflict.tmpl:14
 msgid "To see if %1 has finished editing yet, click "
 msgstr "Om te zien of %1 klaar is met bewerken, klik "
 
@@ -3212,7 +3359,12 @@ msgstr "Naar pagina:"
 msgid "To web:"
 msgstr "Naar web:"
 
-#: ../core/templates/messages.tmpl:311
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:18
+#, fuzzy
+msgid "Topic"
+msgstr "Naar pagina:"
+
+#: ../core/templates/messages.tmpl:319
 msgid "Topic Save Error"
 msgstr "Pagina bewaarfout"
 
@@ -3220,7 +3372,7 @@ msgstr "Pagina bewaarfout"
 msgid "Topic attachments"
 msgstr "Bijlagen bij deze pagina"
 
-#: ../core/templates/messages.tmpl:335
+#: ../core/templates/messages.tmpl:343
 msgid "Topic can not be upgraded from old style category table"
 msgstr ""
 "De pagina kan niet worden opgewaardeerd van een vroegere versie categorie-"
@@ -3243,7 +3395,7 @@ msgstr "Bovenliggende pagina:"
 #: ../ClassicSkin/templates/viewprint.classic.tmpl:12
 #: ../PatternSkin/templates/rdiff.pattern.tmpl:19
 #: ../PatternSkin/templates/view.pattern.tmpl:47
-#: ../PatternSkin/templates/view.pattern.tmpl:72
+#: ../PatternSkin/templates/view.pattern.tmpl:74
 #: ../TWikiNetSkin/templates/view.twikinet.tmpl:25
 #: ../core/templates/viewprint.tmpl:14
 msgid "Topic revision:"
@@ -3262,7 +3414,7 @@ msgstr "Pagina-templates in %1 Web"
 msgid "Topic title"
 msgstr "Paginatitel"
 
-#: ../core/templates/messages.tmpl:26
+#: ../core/templates/messages.tmpl:34
 msgid "Topic was merged"
 msgstr "Pagina is samengevoegd"
 
@@ -3309,15 +3461,24 @@ msgid "Total matches"
 msgstr "Totaal aantal treffers"
 
 #: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:19
-#: ../core/templates/oopsleaseconflict.tmpl:17
+#: ../core/templates/oopsleaseconflict.tmpl:15
 msgid "Try Again"
 msgstr "Probeer opnieuw"
+
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:122
+#: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:72
+msgid "URL"
+msgstr ""
+
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:133
+msgid "URL:"
+msgstr ""
 
 #: ../core/templates/login.sudo.tmpl:5
 msgid "Unrecognised user and/or password"
 msgstr "Gebruiker en/of wachtwoord niet bekend"
 
-#: ../core/templates/messages.tmpl:40
+#: ../core/templates/messages.tmpl:48
 msgid "Unrecognized action command %1"
 msgstr "Actieopdracht %1 niet bekend"
 
@@ -3330,21 +3491,31 @@ msgstr "Vernieuw bijlage %1 van %2"
 msgid "Update links"
 msgstr "Ververs links"
 
+#: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:61
+#, fuzzy
+msgid "Upload"
+msgstr "Bestand uploaden"
+
 #: ../PatternSkin/templates/attachagain.pattern.tmpl:28
 #: ../PatternSkin/templates/attachnew.pattern.tmpl:7
 #: ../core/templates/attachagain.tmpl:21 ../core/templates/attachnew.tmpl:9
 msgid "Upload file"
 msgstr "Bestand uploaden"
 
-#: ../PatternSkin/templates/attach.pattern.tmpl:39
+#: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:57
+#, fuzzy
+msgid "Upload new picture"
+msgstr "Bestand uploaden"
+
+#: ../PatternSkin/templates/attach.pattern.tmpl:22
 msgid "Upload up to %1 KB."
 msgstr "Uploaden is mogelijk tot %1 KB."
 
-#: ../core/templates/messages.tmpl:367
+#: ../core/templates/messages.tmpl:390
 msgid "Uploaded file %1 exceeds limit of %2 KB"
 msgstr "Geupload bestand %1 overschrijdt limiet van %2 KB"
 
-#: ../core/templates/messages.tmpl:366
+#: ../core/templates/messages.tmpl:389
 msgid "Uploaded file is too big"
 msgstr "Geupload bestand is te groot"
 
@@ -3353,10 +3524,28 @@ msgstr "Geupload bestand is te groot"
 msgid "Use %1 instead."
 msgstr "Ga dan naar %1."
 
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:122
+#, fuzzy
+msgid "Use system generated password"
+msgstr "Typ wachtwoord opnieuw"
+
 #: ../PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:61
 #: ../core/data/TWiki/WebCreateNewTopicTemplate.txt:39
 msgid "Use template:"
 msgstr "Gebruik template:"
+
+#: ../core/data/Sandbox/WebHome.txt:5
+#, fuzzy
+msgid ""
+"Use this web to try out TWiki. Everybody is invited to add or delete some "
+"stuff. It is recommended to walk through the %1 to learn the basics of "
+"TWiki. It is good practice to sign your contributions with your %2 and date."
+msgstr ""
+"Het %1 web is de zogenaamde speeltuin die je kan gebruiken om uit te "
+"proberen. Iedereen is welkom om toe te voegen of te verwijderen. We raden je "
+"aan om %2 te doorlopen om een overzicht van de %3 tool te krijgen. Een goede "
+"vuistregel is om toe te voegen aan het einde van de pagina en te signeren en "
+"dateren met je %4."
 
 #: ../core/templates/messages.tmpl:10
 msgid "User Account %1 Deleted"
@@ -3383,7 +3572,7 @@ msgstr "Gebruikersnaam"
 msgid "Users"
 msgstr "Gebruikers"
 
-#: ../core/templates/messages.tmpl:163
+#: ../core/templates/messages.tmpl:171
 msgid ""
 "Users with automatically generated passwords should proceed immediately to "
 "[[%1][change password]] to change their password to something memorable."
@@ -3418,7 +3607,7 @@ msgid "View previous topic revision"
 msgstr "Bekijk vorige paginarevisie"
 
 #: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
-#: ../core/templates/oopsleaseconflict.tmpl:28
+#: ../core/templates/oopsleaseconflict.tmpl:24
 msgid "View raw text without formatting"
 msgstr "Bekijk brontekst zonder opmaak"
 
@@ -3431,9 +3620,8 @@ msgid "View templates"
 msgstr "Bekijk templates"
 
 #: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
-#: ../PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
 #: ../PatternSkin/templates/rdiff.pattern.tmpl:29
-#: ../core/templates/oopsleaseconflict.tmpl:28
+#: ../core/templates/oopsleaseconflict.tmpl:24
 msgid "View topic"
 msgstr "Bekijk pagina"
 
@@ -3446,34 +3634,51 @@ msgstr "Bekijk totale paginageschiedenis"
 msgid "WARNING:"
 msgstr "WAARSCHUWING:"
 
-#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:185
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:114
+msgid "WYSIWYG"
+msgstr ""
+
+#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:187
 msgid "Warning: 'include' topic does not exist!"
 msgstr "Let op: ingevoegde pagina bestaat niet!"
 
-#: ../core/templates/messages.tmpl:457
+#: ../core/templates/messages.tmpl:485
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
 msgstr ""
 "Waarschuwing: Kan %1 niet herhaald invoegen; de pagina is al ingevoegd. %2"
 
-#: ../core/templates/messages.tmpl:456
+#: ../core/templates/messages.tmpl:484
 msgid "Warning: Can't find topic %1.%2"
 msgstr "Waarschuwing: Kan pagina %1.%2 niet vinden"
 
-#: ../core/lib/TWiki/UI/Register.pm:859
+#: ../core/lib/TWiki/UI/Register.pm:862
 msgid "Warning: Could not send confirmation email"
 msgstr "Waarschuwing: kon geen bevestigingse-mail versturen"
 
-#: ../core/lib/TWiki/UI/Register.pm:866
+#: ../core/lib/TWiki/UI/Register.pm:869
 msgid "Warning: Could not send confirmation email, email has been disabled"
 msgstr ""
 "Waarschuwing: kon geen bevestigings e-email versturen; e-mail is "
 "gedeactiveerd"
 
-#: ../core/templates/messages.tmpl:464
+#: ../core/templates/messages.tmpl:492
 msgid "Warning: This site does not allow %<nop>INCLUDE% of URLs"
 msgstr ""
 "Waarschuwing: Op deze site is het niet toegestaan om %<nop>INCLUDE% van URLs "
 "te gebruiken"
+
+#: ../MailerContrib/data/TWiki/MailerContrib.txt:174
+#: ../MailerContrib/templates/mailnotify.tmpl:62
+#, fuzzy
+msgid "Web"
+msgstr "Webs"
+
+#: ../core/data/Main/WebNotify.txt:2 ../core/data/Sandbox/WebNotify.txt:2
+#: ../core/data/TWiki/WebNotify.txt:2 ../core/data/Trash/WebNotify.txt:2
+#: ../core/data/_default/WebNotify.txt:2
+#, fuzzy
+msgid "Web Notification"
+msgstr "Blijf op de hoogte"
 
 #: ../core/data/TWiki/WebSearch.txt:3
 msgid "Web Search"
@@ -3484,11 +3689,11 @@ msgstr "Zoeken in Web"
 msgid "Webs"
 msgstr "Webs"
 
-#: ../core/data/Sandbox/WebHome.txt:2 ../core/data/_default/WebHome.txt:2
+#: ../core/data/Sandbox/WebHome.txt:3 ../core/data/_default/WebHome.txt:3
 msgid "Welcome to the %1 web"
 msgstr "Welkom in het %1 web"
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:328
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:348
 msgid ""
 "When %1 receives the form, it will mail an account activation code to the e-"
 "mail address you gave above. Enter that activation code in the following "
@@ -3510,19 +3715,19 @@ msgstr "Wie"
 msgid "Would you like to go to:"
 msgstr "Wil je:"
 
-#: ../core/templates/messages.tmpl:251
+#: ../core/templates/messages.tmpl:259
 msgid "You are already registered"
 msgstr "Je bent al geregistreerd"
 
-#: ../core/templates/messages.tmpl:157
+#: ../core/templates/messages.tmpl:165
 msgid "You are also listed in the %1 topic"
 msgstr "Je staat ook vermeld op pagina %1"
 
-#: ../core/templates/messages.tmpl:381
+#: ../core/templates/messages.tmpl:409
 msgid "You are denied access to the following topics in the web:"
 msgstr "Je hebt geen toegang tot the volgende pagina&#39;s in web:"
 
-#: ../core/templates/messages.tmpl:445
+#: ../core/templates/messages.tmpl:473
 msgid ""
 "You are encouraged to go ahead and edit - unless you intend to change data "
 "in a form attached to the topic. If %1 actually _does_ save while you are "
@@ -3542,7 +3747,7 @@ msgstr ""
 msgid "You are here:"
 msgstr "Je bent hier:"
 
-#: ../core/templates/messages.tmpl:107
+#: ../core/templates/messages.tmpl:115
 msgid ""
 "You are recommended to choose short names, preferably less than 10 "
 "characters, starting with an upper-case alphabetic character and using only "
@@ -3556,15 +3761,20 @@ msgstr ""
 "gebruiken om nieuwe webs aan te maken) kies dan een naam die begint met een "
 "liggende streep (underscore) en met alleen alfanumerieke tekens."
 
-#: ../core/templates/messages.tmpl:521
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:12
+#, fuzzy
+msgid "You are required to change your password."
+msgstr "Je kunt je wachtwoord wijzigen via %1"
+
+#: ../core/templates/messages.tmpl:549
 msgid "You are trying to %1 an attachment that does not exist."
 msgstr "Je probeert om te %1 bij een bijlage die niet bestaat."
 
-#: ../core/templates/messages.tmpl:509
+#: ../core/templates/messages.tmpl:537
 msgid "You are trying to create a topic from a template that does not exist."
 msgstr "Je probeert een pagina aan te maken van een template dat niet bestaat."
 
-#: ../core/templates/messages.tmpl:504
+#: ../core/templates/messages.tmpl:532
 msgid ""
 "You are trying to perform an action on a topic that does not exist (action '%"
 "1')."
@@ -3572,11 +3782,11 @@ msgstr ""
 "Je probeert een bewerking te doen op een pagina die niet bestaat (actie '% "
 "1')."
 
-#: ../core/templates/messages.tmpl:515
+#: ../core/templates/messages.tmpl:543
 msgid "You are trying to rename a topic that does not exist."
 msgstr "Je probeert een pagina die niet bestaat ter hernoemen."
 
-#: ../core/templates/messages.tmpl:494
+#: ../core/templates/messages.tmpl:522
 msgid ""
 "You can [[%1][create a new web]] if you have permission. Contact %2 if you "
 "have any questions."
@@ -3584,7 +3794,7 @@ msgstr ""
 "Je kan een [[%1][nieuw web aanmaken]] als je permissies hebt. Neem contact "
 "op met %2 als je vragen hebt."
 
-#: ../core/templates/messages.tmpl:127
+#: ../core/templates/messages.tmpl:135
 msgid ""
 "You can also use the names of the standard HTML colors (black, silver, gray, "
 "white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, "
@@ -3594,8 +3804,8 @@ msgstr ""
 "gray, white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, "
 "blue, teal, of aqua)"
 
-#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:145
-#: ../core/templates/registernotify.tmpl:24
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:139
+#: ../core/templates/registernotify.tmpl:26
 msgid "You can change your password at via %1"
 msgstr "Je kunt je wachtwoord wijzigen via %1"
 
@@ -3611,16 +3821,16 @@ msgstr ""
 "Je kunt de taal van je keuze blijvend instellen door de %1 variabele in te "
 "stellen op je persoonlijke pagina."
 
-#: ../core/templates/messages.tmpl:252
+#: ../core/templates/messages.tmpl:260
 msgid "You cannot register twice, the name %1 is already registered."
 msgstr "Je kan niet twee keer registreren, de naam %1 is al geregistreerd."
 
-#: ../core/templates/messages.tmpl:142 ../core/templates/messages.tmpl:151
-#: ../core/templates/messages.tmpl:230 ../core/templates/messages.tmpl:239
+#: ../core/templates/messages.tmpl:150 ../core/templates/messages.tmpl:159
+#: ../core/templates/messages.tmpl:238 ../core/templates/messages.tmpl:247
 msgid "You have *not* been registered."
 msgstr "Je bent *niet* geregistreerd"
 
-#: ../core/templates/messages.tmpl:357
+#: ../core/templates/messages.tmpl:377
 msgid ""
 "You may be able to get your TWiki administrator to change the settings if "
 "they are inappropriate for your environment."
@@ -3628,7 +3838,7 @@ msgstr ""
 "Je zou je TWiki beheerder zover kunnen krijgen om de instellingen te "
 "veranderen als ze niet van toepassing zijn op jouw omgeving."
 
-#: ../core/templates/messages.tmpl:530
+#: ../core/templates/messages.tmpl:558
 msgid ""
 "You may have clicked a registration verification link that you had already "
 "visited."
@@ -3636,7 +3846,7 @@ msgstr ""
 "Misschien heb je een verificatielink geklikt terwijl je die pagina al had "
 "bezocht."
 
-#: ../core/templates/messages.tmpl:170
+#: ../core/templates/messages.tmpl:178
 msgid "You may need to close your browser to make this change take effect."
 msgstr "Je moet misschien je browser sluiten om deze verandering te zien."
 
@@ -3665,17 +3875,17 @@ msgid "You will be able to review the topic before saving it to a new revision"
 msgstr ""
 "Je kan de pagina bekijken voordat je deze opslaat in een nieuwe revisie"
 
-#: ../core/templates/messages.tmpl:344
+#: ../core/templates/messages.tmpl:352
 msgid "You will probably have to ask your administrator, %1, to do this."
 msgstr "Je moet waarschijnlijk je administrator, %1, vragen om dit te doen."
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:33
-#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:22
-#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:27
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:26
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:24
 msgid "Your %1.LoginName"
 msgstr "Je [[%1.LoginName][Log in naam]]"
 
-#: ../core/templates/messages.tmpl:194
+#: ../core/templates/messages.tmpl:202
 msgid ""
 "Your activation code has been sent to %1.  Either click on the link in your "
 "e-mail or enter the code in the box below to activate your membership. (This "
@@ -3698,23 +3908,28 @@ msgstr ""
 msgid "Your password has been changed to %1."
 msgstr "Je wachtwoord is veranderd in %1."
 
-#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:115
-msgid "Your password:"
-msgstr "Je wachtwoord:"
-
-#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:134
-#: ../core/templates/registernotify.tmpl:12
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:129
 msgid ""
 "Your personal %1 topic is located at %2. You can customize it as you like:"
 msgstr ""
 "Je persoonlijke %1 pagina bevindt zich op %2. Je kan het aanpassen zoals je "
 "zelf wilt."
 
-#: ../core/templates/messages.tmpl:155
-msgid "Your personal TWiki topic %1 has been created"
+#: ../core/templates/registernotify.tmpl:12
+#, fuzzy
+msgid ""
+"Your personal %1 user profile page is located at %2. You can customize it as "
+"you like:"
+msgstr ""
+"Je persoonlijke %1 pagina bevindt zich op %2. Je kan het aanpassen zoals je "
+"zelf wilt."
+
+#: ../core/templates/messages.tmpl:163
+#, fuzzy
+msgid "Your personal TWiki user profile page %1 has been created"
 msgstr "Je persoonlijke TWiki pagina %1 is aangemaakt"
 
-#: ../core/templates/messages.tmpl:187
+#: ../core/templates/messages.tmpl:195
 msgid "Your registered e-mail address(es) are updated to: %1."
 msgstr "Je geregistreerde e-mailadres(sen) zijn vernieuwd naar: %1."
 
@@ -3723,7 +3938,7 @@ msgstr "Je geregistreerde e-mailadres(sen) zijn vernieuwd naar: %1."
 msgid "Your signature to copy/paste:"
 msgstr "Je signatuur om te kopiëren/plakken:"
 
-#: ../core/templates/messages.tmpl:178
+#: ../core/templates/messages.tmpl:186
 msgid ""
 "Your system may not support changing passwords through TWiki. Check with "
 "your TWiki administrator."
@@ -3740,7 +3955,17 @@ msgstr ""
 msgid "Your user topic has not been renamed. Please e-mail %1 to request this."
 msgstr "Je gebruikerspagina is niet hernoemd. E-mail %1 om dit aan te vragen."
 
-#: ../core/templates/messages.tmpl:331
+#: ../core/templates/messages.tmpl:30
+#, fuzzy
+msgid "[[%1][%2 home]]"
+msgstr "%1 home"
+
+#: ../core/templates/messages.tmpl:22
+#, fuzzy
+msgid "[[%1][%2 home]] to start working on the new web"
+msgstr "%1 om te beginnen in het nieuwe web"
+
+#: ../core/templates/messages.tmpl:339
 msgid "[[%1][Debug topic text]]."
 msgstr "[[%1][Paginatekst debuggen]]."
 
@@ -3796,11 +4021,13 @@ msgstr "toegang tot web niet toegestaan"
 msgid "accesskey='c'"
 msgstr "accesskey='a'"
 
-#: ../core/data/_default/WebHome.txt:11
+#: ../core/data/Main/WebHome.txt:19 ../core/data/Sandbox/WebHome.txt:27
+#: ../core/data/TWiki/WebHome.txt:31 ../core/data/Trash/WebHome.txt:16
+#: ../core/data/_default/WebHome.txt:14
 msgid "advanced search"
 msgstr "geavanceerd zoeken"
 
-#: ../core/data/TWiki/WikiSyntaxSummary.txt:17
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:20
 msgid "and"
 msgstr "en"
 
@@ -3812,15 +4039,15 @@ msgstr "veranderen, vernieuwen, voorgaande versies, verplaaten, verwijderen..."
 msgid "checkboxes of referenced topics"
 msgstr "checkboxes van paginaverwijzingen"
 
-#: ../core/templates/messages.tmpl:406
+#: ../core/templates/messages.tmpl:434
 msgid "don't forget to check your Topic Settings"
 msgstr "vergeet niet om je pagina voorkeurinstellingen na te kijken"
 
-#: ../core/templates/messages.tmpl:213
+#: ../core/templates/messages.tmpl:221
 msgid "fields are required."
 msgstr "velden are vereist."
 
-#: ../core/templates/attach.tmpl:5
+#: ../core/templates/attach.tmpl:3
 msgid "has more information about attaching files."
 msgstr "heeft meer informatie over het toevoegen van bestanden."
 
@@ -3829,7 +4056,7 @@ msgstr "heeft meer informatie over het toevoegen van bestanden."
 msgid "help"
 msgstr "help"
 
-#: ../core/data/TWiki/WikiSyntaxSummary.txt:17
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:20
 msgid "hints on good style"
 msgstr "tips voor een goede stijl"
 
@@ -3856,7 +4083,7 @@ msgstr "zoeken naar verwijzingen in _alle publieke webs_"
 msgid "manage"
 msgstr "beheren"
 
-#: ../core/data/Trash/WebHome.txt:12
+#: ../core/data/TWiki/WebChangesRightBox.txt:16
 msgid "more..."
 msgstr "meer..."
 
@@ -3885,7 +4112,7 @@ msgstr "of"
 msgid "preview"
 msgstr "voorvertoning"
 
-#: ../core/lib/TWiki/Render.pm:196
+#: ../core/lib/TWiki/Render.pm:211
 msgid "put it back"
 msgstr "terugplaatsen"
 
@@ -3902,24 +4129,36 @@ msgstr "zoekt naar verwijzingen alleen in _%1 web_"
 msgid "scans links in _all public webs_"
 msgstr "zoekt in _alle publieke webs_"
 
-#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:22
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:88
+#: ../core/templates/viewtopicactionbuttons.tmpl:9
+msgid "title='%IF{ "
+msgstr ""
+
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:54
 #, fuzzy
 msgid "title='Attach an image or document to this topic' accesskey='a'"
 msgstr ""
 "title='Voeg een afbeelding of document toe aan deze pagina' "
 "accesskey='l'>Bij&lage"
 
-#: ../core/templates/viewtopicactionbuttons.tmpl:14
+#: ../core/templates/viewtopicactionbuttons.tmpl:16
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
 msgstr ""
 "title='Voeg een afbeelding of document toe aan deze pagina' "
 "accesskey='l'>Bij&lage"
 
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:9
 #: ../core/templates/viewtopicactionbuttons.tmpl:4
 msgid "title='Create new topic' accesskey='c'>&Create"
 msgstr "title='Nieuwe pagina aanmaken' accesskey='a'>&Aanmaken"
 
-#: ../core/templates/viewtopicactionbuttons.tmpl:17
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:38
+#, fuzzy
+msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
+msgstr "title='Nieuwe pagina aanmaken' accesskey='a'>&Aanmaken"
+
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:91
+#: ../core/templates/viewtopicactionbuttons.tmpl:19
 msgid ""
 "title='Delete or rename this topic; set parent topic; view and compare "
 "revisions' accesskey='m'>&More topic actions"
@@ -3927,7 +4166,7 @@ msgstr ""
 "title='Verwijder of hernoem deze pagina; bovenliggende pagina instellen; "
 "bekijk en vergelijk revisies' accesskey='m'>&Meer pagina-acties"
 
-#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:10
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:19
 #, fuzzy
 msgid "title='Edit this topic text' accesskey='e'"
 msgstr "title='Bewerk deze paginatekst' accesskey='b'>&Bewerken"
@@ -3937,27 +4176,31 @@ msgstr "title='Bewerk deze paginatekst' accesskey='b'>&Bewerken"
 msgid "title='Edit this topic text' accesskey='e'>%1 &Edit"
 msgstr "title='Bewerk deze paginatekst' accesskey='b'>&Bewerken"
 
-#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:34
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:30
 #, fuzzy
-msgid "title='Printable version of this topic' accesskey='p'"
+msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
+msgstr "title='Bewerk deze paginatekst' accesskey='b'>&Bewerken"
+
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:76
+#, fuzzy
+msgid "title='PDF version of this topic'>&PDF version"
 msgstr "title='Printbare versie van deze pagina' accesskey='p'>&Printversie"
 
-#: ../core/templates/viewtopicactionbuttons.tmpl:21
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:66
+#: ../core/templates/viewtopicactionbuttons.tmpl:23
 msgid "title='Printable version of this topic' accesskey='p'>&Print version"
 msgstr "title='Printbare versie van deze pagina' accesskey='p'>&Printversie"
 
-#: ../core/templates/viewtopicactionbuttons.tmpl:9
-msgid "title='Raw Edit this topic text' accesskey='w'>Ra&w edit"
-msgstr "title='Bewerk pagina in brontekst' accesskey='e'>Brontekst b&ewerken"
-
-#: ../core/templates/viewtopicactionbuttons.tmpl:28
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:97
+#: ../core/templates/viewtopicactionbuttons.tmpl:30
 msgid ""
 "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
 msgstr ""
 "title='Zoek in alle webs naar pagina&#39;s die hierheen linken' "
 "accesskey='l'>A&lle Webs"
 
-#: ../core/templates/viewtopicactionbuttons.tmpl:30
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:99
+#: ../core/templates/viewtopicactionbuttons.tmpl:32
 msgid ""
 "title='Search the %1 Web for topics that link to here' "
 "accesskey='b'>&Backlinks"
@@ -3965,27 +4208,32 @@ msgstr ""
 "title='Zoek in %1 Web naar pagina&#39;s die hierheen linken' "
 "accesskey='w'>Verwijzingen in &Web"
 
-#: ../core/templates/viewtopicactionbuttons.tmpl:26
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:95
+#: ../core/templates/viewtopicactionbuttons.tmpl:28
 msgid ""
 "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
 msgstr ""
 "title='Zoek in %1 Web naar pagina&#39;s die hierheen linken' "
 "accesskey='w'>Verwijzingen in &Web"
 
-#: ../core/templates/viewtopicactionbuttons.tmpl:38
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:81
+#: ../core/templates/viewtopicactionbuttons.tmpl:40
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
 msgstr "title='Bekijk brontekst zonder opmaak' accesskey='r'>B&rontekst"
 
-#: ../core/templates/viewtopicactionbuttons.tmpl:11
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:46
+#: ../core/templates/viewtopicactionbuttons.tmpl:13
 msgid "title='View topic' accesskey='v'>&View topic"
 msgstr "title='Bekijk pagina' accesskey='k'>Be&kijk pagina"
 
-#: ../core/templates/viewtopicactionbuttons.tmpl:33
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:103
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:105
 #: ../core/templates/viewtopicactionbuttons.tmpl:35
+#: ../core/templates/viewtopicactionbuttons.tmpl:37
 msgid "title='View total topic history' accesskey='h'>&History"
 msgstr "title='Bekijk paginageschiedenis' accesskey='g'>&Geschiedenis"
 
-#: ../core/lib/TWiki.pm:4415
+#: ../core/lib/TWiki.pm:4558
 msgid "user list truncated"
 msgstr "gebruikerslijst afgebroken"
 
@@ -4018,7 +4266,7 @@ msgstr "value='Bewaren' accesskey='b'"
 msgid "view"
 msgstr "bekijken"
 
-#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:22
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:19
 msgid ""
 "you *must* have at least one valid registered e-mail to be able to reset "
 "your password. If none of your registered e-mail addresses is valid, and you "
@@ -4028,6 +4276,56 @@ msgstr ""
 "wachtwoord opnieuw te kunnen instellen. Als geen van je geregistreerde e-"
 "mailadressen geldig zijn, en je je wachtwoord bent vergeten, neem dan "
 "contact op met %1."
+
+#~ msgid "%1 to create another web"
+#~ msgstr "%1 om nog een web aan te maken"
+
+#~ msgid "&Edit text"
+#~ msgstr "Tekst &bewerken"
+
+#~ msgid "(optional)"
+#~ msgstr "(optioneel)"
+
+#~ msgid ""
+#~ "A more extensive changes list is available via [[%1][Recent Changes]]."
+#~ msgstr ""
+#~ "Een meer uitgebreide lijst van wijzigingen is te zien in [[%1]"
+#~ "[Wijzigingen]]."
+
+#~ msgid "Available Information"
+#~ msgstr "Beschikbare informatie"
+
+#~ msgid "Edit personal data"
+#~ msgstr "Bewerk persoonlijke gegevens"
+
+#~ msgid "Edit text"
+#~ msgstr "Bewerk tekst"
+
+#~ msgid "Edit this topic text"
+#~ msgstr "Bewerk de paginatekst"
+
+#~ msgid ""
+#~ "However, the filename has been changed from %1 to %2. Please make a note "
+#~ "of it."
+#~ msgstr "Let wel, de bestandsnaam is veranderd van %1 naar %2."
+
+#~ msgid "Organisation name:"
+#~ msgstr "Naam van organisatie:"
+
+#, fuzzy
+#~ msgid "Recently Deleted Topics"
+#~ msgstr "Recent gewijzigd"
+
+#~ msgid "Your password:"
+#~ msgstr "Je wachtwoord:"
+
+#, fuzzy
+#~ msgid "title='Printable version of this topic' accesskey='p'"
+#~ msgstr "title='Printbare versie van deze pagina' accesskey='p'>&Printversie"
+
+#~ msgid "title='Raw Edit this topic text' accesskey='w'>Ra&w edit"
+#~ msgstr ""
+#~ "title='Bewerk pagina in brontekst' accesskey='e'>Brontekst b&ewerken"
 
 #~ msgid ""
 #~ "Uncomment preferences variables to activate them (remove the #-sign). "
