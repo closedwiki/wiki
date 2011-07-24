@@ -183,7 +183,6 @@ sub publishTopic
 sub fixAndCopyAttachments
 {
     my ( $pubUrl, $path, $pubDir ) = @_;
-    my $link = "/$attachPath/$path";
     my $file = $path;
     $file =~ s/.*\///;
     my $from = "$pubDir/$path";
@@ -194,7 +193,7 @@ sub fixAndCopyAttachments
         $error = "Error: Can't copy $from $to ($!)";
         TWiki::Func::writeWarning( "- ${pluginName}: $error\n" );
     }
-    return "/$attachPath/$file";
+    return "$attachPath/$file";
 }
 
 # =========================
@@ -291,7 +290,7 @@ sub buildName
     my ( $topic, $type ) = @_;
     # $type for 'Topic_Name':
     # 'name':   'topic_name.html'
-    # 'url':    '/topic_name.html'
+    # 'url':    'topic_name.html'
     # 'file':   '/file/path/to/topic_name.html'
     # 'label':  'Topic Name'
     my $text = lc( $topic ) . '.html';
@@ -299,7 +298,7 @@ sub buildName
     $text =~ /(.*)/;
     $text = $1; # untaint
     if( $type eq 'url' ) {
-        $text = '/' . $text;
+        # keep text as is (relative URL)
     } elsif( $type eq 'file' ) {
         $text = $publishDir . '/' . $text;
     } elsif( $type eq 'label' ) {
