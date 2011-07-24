@@ -43,6 +43,7 @@ my $publishPath;
 my $attachPath;
 my $publishDir;
 my $attachDir;
+my $publishUrlPath;
 
 # template path for skin file; empty for twiki/templates; must be absolute path if specified
 $templatePath = $TWiki::cfg{Plugins}{PublishWebPlugin}{TemplatePath} || "";
@@ -52,6 +53,9 @@ $publishPath = $TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath} || "..";
 
 # attach dir; must be relative to $publishPath
 $attachPath  = $TWiki::cfg{Plugins}{PublishWebPlugin}{AttachPath} || "_publish";
+
+# URL path corresponding to $publishPath
+$publishUrlPath = $TWiki::cfg{Plugins}{PublishWebPlugin}{PublishUrlPath} || "";
 
 # =========================
 sub initPlugin
@@ -246,6 +250,8 @@ sub handlePublish
         $text =  buildName( $topicName, 'link' );
     } elsif( $action eq "topicurl" ) {
         $text =  buildName( $topicName, 'url' );
+    } elsif( $action eq "publishurlpath" ) {
+        $text =  buildName( $topicName, 'publishurlpath' );
     } elsif( $action eq "publish" ) {
         $topicName = TWiki::Func::extractNameValuePair( $attr, "topic" ); # again, without || $topic
         if( $topicName eq "all" ) {
@@ -304,6 +310,7 @@ sub buildName
     # 'url':    'topic_name.html'
     # 'file':   '/file/path/to/topic_name.html'
     # 'label':  'Topic Name'
+    # 'publishurlpath': {Plugins}{PublishWebPlugin}{PublishUrlPath} configure setting
     my $text = lc( $topic ) . '.html';
     $text =~ s/[^a-z0-9_\-\.]+//go;
     $text =~ /(.*)/;
@@ -319,6 +326,8 @@ sub buildName
         }
         $text =~ s/_/ /go;
         $text =~ s/^Index$/$homeLabel/o;
+    } elsif( $type eq 'publishurlpath' ) {
+        $text = $publishUrlPath;
     }
     return $text;
 }
