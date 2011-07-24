@@ -178,6 +178,9 @@ sub publishTopic
     $tmpl =~ s/<\/?(nop|noautolink)\/?>\n?//gois;
     $tmpl =~ s|https?://[^/]*/$attachPath|/$attachPath|gois; # Cut protocol and host
 
+    # remove URL parameters to make TOC and other TWiki internal links work
+    $tmpl =~ s/(<a href=[\"\'][A-Za-z0-9_\-\/]*)\?[^\#\"\']*/$1/gos;
+
     my $name = buildName( $topic, 'file' );
     writeDebug( "publishTopic, saving file $name using $skin skin" );
     TWiki::Func::saveFile( $name, $tmpl );
