@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1311292403" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311485764" format="1.1" version="$Rev$"}%
 ---+!! Publish Web Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -84,9 +84,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==data/Website/WebPublish.txt== | Publish page topic |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==templates/view.website.tmpl== | Demo publish skin |
    * Configure and test the installated Plugin:
       * Run the [[%SCRIPTURL{configure}%][configure]] script to enable the Plugin
-      * Change the Plugin settings as needed (for now leave =PUBLISHSKIN = print= setting)
       * Configuration on shell level:
          * Add/customize these =twiki/lib/LocalSite.cfg= settings: %BR%
             * =$TWiki::cfg{Plugins}{PublishWebPlugin}{TemplatePath}=: Template path where skin files are located.
@@ -101,8 +101,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
               =$TWiki::cfg{Plugins}{PublishWebPlugin}{TemplatePath} = '';= %BR%
               =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath} = '/path/to/apache/httpdocs';= %BR%
               =$TWiki::cfg{Plugins}{PublishWebPlugin}{AttachPath} = '_publish';=
-         * Create the directory indicated in the ={AttachPath}= setting
-         * Change the permission of directories indicated by ={PublishPath}= and ={AttachPath}= to be writable by the cgi user (typically user =nobody=)
+         * Create the directory indicated in the ={PublishPath}= setting if needed
+         * Create the directory indicated in the ={AttachPath}= setting (relative to ={PublishPath}=)
+         * Change the permission of directories indicated by ={PublishPath}= and ={AttachPath}= to be writable by the cgi user (such as user =nobody= on !RedHat Linux)
       * Create a new TWiki web for website publishing:
          * Create a new =Website= web (name indicated by the =PUBLISHWEBNAME= Plugin setting)
          * In !WebPreferences of that web, set the =NOAUTOLINK= setting to =on=
@@ -117,7 +118,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
          * This should generate a =sandbox_page.html= page on topic save
          * Create =Index= topic and other topics
    * Publish skin:
-      * Create a new publish skin based on your branding. The [[%SYSTEMWEB%.TWikiSkins][TWiki skin]] can be derived from any =twiki/templates/view.*.tmpl= skin file, or can be created from scratch
+      * Create a new publish skin that matches the look of your website. The [[%SYSTEMWEB%.TWikiSkins][TWiki skin]] can be derived from any =twiki/templates/view.*.tmpl= skin file, or can be created from scratch. This plugin contains a bare bone demo skin called =website= located at =twiki/templates/view/website.tmpl=
       * Omit any links to TWiki, such as edit and attach links
       * The skin can use Plugin specific settings =%<nop>PUBLISHWEB{"breadcrumb"}%= and =%<nop>PUBLISHWEB{"nicetopic"}%=
       * The skin can introduce skin specific !WebPreferences settings, such as =%<nop>PUBLISH_SITE%=, =%<nop>PUBLISH_LOGO%=, etc.
@@ -135,7 +136,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-07-21 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-07-21: | TWikibug:Item6773: Move config settings to =LocalSite.cfg=; support multiple skins; support template path outside TWiki file path |
+|  2011-07-21: | TWikibug:Item6773: Move config settings to =LocalSite.cfg=; support multiple skins; support template path outside TWiki file path; add view.website.tmpl as a demo publish skin |
 |  2006-02-15: | Added =%<nop>PUBLISHWEB{"publish" topic="Name"}%= |
 |  2006-02-13: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
