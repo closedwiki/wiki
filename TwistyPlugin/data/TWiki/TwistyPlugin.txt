@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1288941619" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1310336724" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -605,12 +605,13 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 ---++ Plugin Info
 
-|  Authors: | TWiki:Main/RafaelAlvarez, TWiki:Main/ArthurClemens, TWiki:Main/PeterThoeny |
-|  Copyright: | &copy; 2005 Rafael Alvarez;%BR% &copy; 2006-2008 Arthur Clemens;%BR% &copy; 2010 Peter Thoeny;%BR% &copy; 2005-2010 TWiki:TWiki/TWikiContributor |
+|  Authors: | TWiki:Main.RafaelAlvarez, TWiki:Main.ArthurClemens, TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2005 Rafael Alvarez;%BR% &copy; 2006-2008 Arthur Clemens;%BR% &copy; 2010-2011 Peter Thoeny;%BR% &copy; 2005-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | None |
-|  Plugin&nbsp;Version: | 2010-05-17 (version 1.6) |
+|  Plugin&nbsp;Version: | 2011-07-10 |
 |  Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-10: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2010-05-17: | 1.6 TWikibug:Item6433 - doc improvements -- Peter Thoeny |
 |  2010-03-31: | 1.5 TWikibug:Item6354 - make !TwistyPlugin work with TWiki:Plugins/VarCachePlugin; added VarTWISTY variable documentation -- Peter Thoeny |
 |  08 Oct 2008 | 1.4.11, 1.4.12 It is now possible to have a twisty on the same line without a linebreak. |
