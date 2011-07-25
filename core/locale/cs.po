@@ -2406,7 +2406,7 @@ msgstr ""
 
 #: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:181
 msgid "Quiet save"
-msgstr ""
+msgstr "Ulož bez emailu"
 
 #: ../PatternSkin/data/Main/WebLeftBar.txt:10
 #: ../PatternSkin/data/Sandbox/WebLeftBar.txt:10
@@ -2667,13 +2667,13 @@ msgstr ""
 #: ../PatternSkin/templates/preview.pattern.tmpl:14
 #, fuzzy
 msgid "S = Save, Q = Quiet save, K = Save and Continue, D = Discard"
-msgstr "S = Ulož, Q = Ulož potichu, K = Bod návratu, D = Neukládat"
+msgstr "S = Ulož, Q = Ulož bez emailu, K = Ulož a pokračuj, D = Neukládat"
 
 #: ../PatternSkin/templates/edit.pattern.tmpl:53
 #, fuzzy
 msgid ""
 "S = Save, Q = Quiet save, K = Save and Continue, P = Preview, C = Cancel"
-msgstr "S = Ulož, Q = Ulož potichu, K = Bod návratu, P = Ukázka, C = Přerušit"
+msgstr "S = Ulož, Q = Ulož bez emailu, K = Ulož a pokračuj, P = Ukázka, C = Přerušit"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:117
 msgid "Save"
@@ -4236,7 +4236,7 @@ msgstr "value='Ukázka' accesskey='p'"
 
 #: ../PatternSkin/templates/edit.pattern.tmpl:41
 msgid "value='Quiet save' accesskey='q'"
-msgstr "value='Ulož a pokračuj' accesskey='q'"
+msgstr "value='Ulož bez emailu' accesskey='q'"
 
 #: ../PatternSkin/templates/edit.pattern.tmpl:43
 #, fuzzy
