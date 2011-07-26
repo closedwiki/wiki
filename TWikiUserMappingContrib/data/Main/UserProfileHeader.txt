@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310534067" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311664934" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -66,13 +66,13 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 <a href="%SCRIPTURL{edit}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%?action=form;t=%SERVERTIME{$epoch}%" title='%MAKETEXT{"Edit this record"}%' style="text-decoration: none; border: 0 none;" onclick="document.getElementById('viewRecord').style.display = 'none'; document.getElementById('editRecord').style.display = 'block'; return false;"><img src='%ICONURLPATH{uweb-bo12}%' width='12' height='12' alt='' border='0' style='vertical-align: middle' /> %MAKETEXT{"Edit"}%</a>
 </div>
 <div id="viewInfo">
-|  %MAKETEXT{"Title"}%: | %FORMFIELD{ "Titles" topic="%INCLUDINGTOPIC%" }% |
-|  %MAKETEXT{"Department"}%: | %FORMFIELD{ "Department" topic="%INCLUDINGTOPIC%" }% |
-|  %MAKETEXT{"Organization"}%: | %FORMFIELD{ "Organization" topic="%INCLUDINGTOPIC%" }% |
+|  %MAKETEXT{"Title"}%: | <noautolink> %FORMFIELD{ "Titles" topic="%INCLUDINGTOPIC%" }% </noautolink> |
+|  %MAKETEXT{"Department"}%: | <noautolink> %FORMFIELD{ "Department" topic="%INCLUDINGTOPIC%" }% </noautolink> |
+|  %MAKETEXT{"Organization"}%: | <noautolink> %FORMFIELD{ "Organization" topic="%INCLUDINGTOPIC%" }% </noautolink> |
 |  %MAKETEXT{"URL"}%: | %FORMFIELD{ "URL" topic="%INCLUDINGTOPIC%" }% |
-|  %MAKETEXT{"Location"}%: | %FORMFIELD{ "Location" topic="%INCLUDINGTOPIC%" }% |
-|  %MAKETEXT{"Region"}%: | %FORMFIELD{ "Region" topic="%INCLUDINGTOPIC%" }% |
-|  %MAKETEXT{"Country"}%: | %FORMFIELD{ "Country" topic="%INCLUDINGTOPIC%" }% |
+|  %MAKETEXT{"Location"}%: | <noautolink> %FORMFIELD{ "Location" topic="%INCLUDINGTOPIC%" }% </noautolink> |
+|  %MAKETEXT{"Region"}%: | <noautolink> %FORMFIELD{ "Region" topic="%INCLUDINGTOPIC%" }% </noautolink> |
+|  %MAKETEXT{"Country"}%: | <noautolink> %FORMFIELD{ "Country" topic="%INCLUDINGTOPIC%" }% </noautolink> |
 </div>
 </td><td valign="top">
 <img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="20" height="1" />
