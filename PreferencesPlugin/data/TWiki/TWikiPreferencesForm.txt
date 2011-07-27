@@ -10,10 +10,11 @@
 | NOSEARCHALL | select | 1 | ,on | Exclude web from a =web="all"= search| S |
 | NOAUTOLINK | select | 1 | ,on | Boolean | S |
 | INCLUDEWARNING | text | 30 | on, off | Boolean | S |
-| LINKTOOLTIPINFO | text | 80 | | Format of tooltip info | S |
+| LINKTOOLTIPINFO | select | 1 | off, on, $username - $date - $rev: $summary, $topic: $summary ($date) | Format of tooltip info, on, off, or specific format | S |
 | EDITBOXWIDTH | text | 30 | 70 | Horizontal size of text edit box. | S |
 | EDITBOXHEIGHT | text | 30 | 15 | Vertical size of text edit box. | S |
 | EDITBOXSTYLE | text | 30 | width: 99% | CSS style | S |
+| EDITMETHOD | select | 1 | wysiwyg, raw | Edit in WYSIWYG mode or in raw mode | S |
 | PREVIEWBGIMAGE | text | 80 | %PUBURLPATH%/%SYSTEMWEB%/PreviewBackground/preview2bg.gif | Image URL | S |
 | FORCENEWREVISIONCHECKBOX | select | 1 | , checked="checked" | Select checked to enable | S |
 | DONTNOTIFYCHECKBOX | select | 1 | ,checked="checked" | Select checked to enable | S |
