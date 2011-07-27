@@ -29,7 +29,7 @@ require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-06-09';
+our $RELEASE = '2011-07-27';
 
 my @shelter;
 my $MARKER = "\007";
@@ -205,7 +205,7 @@ sub _generateEditButton {
     my $text = CGI::start_form(
         -name => 'editpreferences',
         -method => 'post',
-        -action => $viewUrl );
+        -action => $viewUrl . '#EditPreferences' );
     $text .= CGI::input({
         type => 'hidden',
         name => 'prefsaction',
@@ -222,10 +222,11 @@ sub _generateEditButton {
 sub _generateControlButtons {
     my( $web, $topic ) = @_;
 
-    my $text = $START_MARKER.CGI::submit(-name=>'prefsaction',
-                                         -value=>'Save new settings',
-                                         -class=>'twikiSubmit',
-                                         -accesskey=>'s');
+    my $text = "#EditPreferences\n";
+    $text .= $START_MARKER.CGI::submit( -name=>'prefsaction',
+                                        -value=>'Save new settings',
+                                        -class=>'twikiSubmit',
+                                        -accesskey=>'s' );
     $text .= '&nbsp;';
     $text .= CGI::submit(-name=>'prefsaction', -value=>'Cancel',
                          -class=>'twikiButton',
