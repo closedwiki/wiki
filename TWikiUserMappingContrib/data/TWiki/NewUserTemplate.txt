@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307342646" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311807872" format="1.1" version="$Rev$"}%
 ---++ My Links
 
 %STARTSECTION{ type="expandvariables" }%
@@ -11,17 +11,17 @@
    * 
 
 ---++ My Personal Preferences
-
+%ENDSECTION{ type="expandvariables" }%
+%EDITPREFERENCES{"%SYSTEMWEB%.TWikiPreferencesForm"}%
+%STARTSECTION{ type="expandvariables" }%
    * Show tool-tip topic info on mouse-over of [[%SYSTEMWEB%.WikiWord][WikiWord]] links, on or off:
       * Set LINKTOOLTIPINFO = off
 
    * Preference for the editor, default is the WYSIWYG editor. The options are raw, wysiwyg:
       * Set EDITMETHOD = wysiwyg
-
 %ENDSECTION{ type="expandvariables" }%
 %INCLUDE{%SYSTEMWEB%.PersonalPreferencesHelp}%
 %STARTSECTION{ type="expandvariables" }%
-
 ---++ Related Topics
 
    * [[%SYSTEMWEB%.ChangePassword][ChangePassword]] for changing your password
@@ -68,8 +68,13 @@ Text for multilingual wiki community, copy from here to %<nop>ENDSECTION{type="t
 
 ---++ %MAKETEXT{"Personal Preferences"}%
 
+%EDITPREFERENCES{"%SYSTEMWEB%.TWikiPreferencesForm"}%
+
    * %MAKETEXT{"Show tool-tip topic info on mouse-over of [_1] links, on or off:" args="[[%SYSTEMWEB%.WikiWord][WikiWord]]"}%
       * Set LINKTOOLTIPINFO = off
+
+   * Preference for the editor, default is the WYSIWYG editor. The options are raw, wysiwyg:
+      * Set EDITMETHOD = wysiwyg
 
 %INCLUDE{%SYSTEMWEB%.PersonalPreferencesHelp}%
 
@@ -97,6 +102,6 @@ Text for multilingual wiki community, copy from here to %<nop>ENDSECTION{type="t
 %META:FIELD{name="Location" attributes="" title="Location" value=""}%
 %META:FIELD{name="Region" attributes="" title="Region" value=""}%
 %META:FIELD{name="Country" attributes="" title="Country" value=""}%
-%META:FIELD{name="Image" attributes="" title="Image" value=""}%
+%META:FIELD{name="Image" attributes="H" title="Image" value=""}%
 %META:FIELD{name="StatusUpdate" attributes="" title="Status Update" value=""}%
 %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="UserView"}%
