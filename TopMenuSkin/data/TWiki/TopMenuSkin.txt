@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1311890457" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311890722" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -246,7 +246,7 @@ The top bar TopMenuSkinTopBar (with menu bar, logo and search boxes) can be clon
 |  Base Name: | topmenu,pattern |
 |  Skin Version: | 2011-07-28 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2011-07-28: | TWikibug:Item6780: Usability: Link to UserList topic instead of TWikiUsers |
+|  2011-07-28: | TWikibug:Item6780: Usability: Link to !UserList topic instead of !TWikiUsers |
 |  2011-07-10: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2011-07-01: | TWikibug:Item6763: Fix for WYSIWYG editor corrupting system pages |
 |  2011-06-14: | TWikibug:Item6751: Fix for cutoff buttons in header when using IE7 -- TWiki:Main.BradleyMellen |
