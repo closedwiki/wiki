@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1311830829" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311890923" format="1.1" version="$Rev$"}%
 ---+!! Pattern Skin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -95,8 +95,9 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 |  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.png" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this skin]] |
 |  Base Name: | pattern |
-|  Skin Version: | 2011-07-27 |
+|  Skin Version: | 2011-07-28 |
 |  History: | <!-- specify latest version first -->&nbsp; |
+|  2011-07-28: | TWikibug:Item6780: Usability: Link to !UserList topic instead of !TWikiUsers |
 |  2011-07-27: | TWikibug:Item6779: Fix for tables rendering too dark in Firefox 4 |
 |  2011-06-11: | TWikibug:Item6209: Fix for underscores in topic name with WebTopicCreator are not possible -- TWiki:Main.PeterThoeny |
 |  2011-05-18: | TWikibug:Item6682: Read-only skin mode with READONLYSKINMODE preferences setting -- TWiki:Main.PeterThoeny |
