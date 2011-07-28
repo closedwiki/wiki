@@ -30,7 +30,7 @@ require TWiki::Plugins; # For the API version
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-07-15';
+our $RELEASE = '2011-07-27';
 
 our $topic;
 our $installWeb;

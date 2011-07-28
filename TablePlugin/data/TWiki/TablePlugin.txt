@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310778602" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311829998" format="1.1" version="$Rev$"}%
 ---+!! Table Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -66,7 +66,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
       * Set SORT = all
 
    * Default table attributes:
-      * Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="0" valign="top" headercolor="#ffffff" headerbg="#687684" headerbgsorted="#334455" databg="#ffffff,#edf4f9" databgsorted="#f1f7fc,#ddebf6" tablerules="rows"
+      * Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="0" valign="top" headercolor="#ffffff" headerbg="#687684" headerbgsorted="#334455" databg="#ffffff,#edf4f9" databgsorted="#f1f7fc,#ddebf6" tablerules="all"
 
 ---++ Table Attributes
 
@@ -143,8 +143,9 @@ This plugin is pre-installed with your TWiki release. You should not have to ins
 |  Plugin Author: | TWiki:Main.JohnTalintyre, TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2001-2003 TWiki:Main.JohnTalintyre, %BR% &copy; 2001-2011 Peter[at]Thoeny.org, [[http://www.twiki.net/][Twiki, Inc.]],%BR% &copy; 2005-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-07-15 |
+|  Plugin Version: | 2011-07-27 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-07-27: | TWikibug:Item6779: Fix for tables rendering too dark in Firefox 4 |
 |  2011-07-15: | TWikibug:Item6764: Minor fix to remove warning message in error log |
 |  2011-07-09: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2010-05-16: | 1.2 TWikibug:Item6433 - doc improvements |
