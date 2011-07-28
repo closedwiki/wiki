@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1309582689" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311890457" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkin"}%
 ---+ Top Bar of !TopMenuSkin
 
@@ -86,6 +86,6 @@ Top bar of TopMenuSkin, replacing WebTopBar.
 -----
 
    * Disable WYSIWYG editor for this page:
-      * Set TINYMCEPLUGIN_DISABLE = on
+      * Set EDITMETHOD = raw
 
 __Related topics:__ TopMenuSkin, TopMenuSkinTopBar, TopMenuSkinDefaultWebTopMenu, WebTopMenu

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310355065" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311890457" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -237,15 +237,16 @@ The top bar TopMenuSkinTopBar (with menu bar, logo and search boxes) can be clon
 
    * Set SHORTDESCRIPTION = Skin with pulldown menus in top bar
 
-|  Skin Author: | TWiki:Main/PeterThoeny |
-|  Copyright: | &copy; 2010-2011, TWiki:Main/PeterThoeny, [[http://twiki.net][Twiki, Inc.]] <br /> &copy; 2010-2011 TWiki:TWiki.TWikiContributor |
+|  Skin Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2010-2011, TWiki:Main.PeterThoeny, [[http://twiki.net][Twiki, Inc.]] <br /> &copy; 2010-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Description: | Top-menu skin |
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Screenshot" title="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2011-07-10 |
+|  Skin Version: | 2011-07-28 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-07-28: | TWikibug:Item6780: Usability: Link to UserList topic instead of TWikiUsers |
 |  2011-07-10: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2011-07-01: | TWikibug:Item6763: Fix for WYSIWYG editor corrupting system pages |
 |  2011-06-14: | TWikibug:Item6751: Fix for cutoff buttons in header when using IE7 -- TWiki:Main.BradleyMellen |
@@ -270,7 +271,7 @@ The top bar TopMenuSkinTopBar (with menu bar, logo and search boxes) can be clon
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related topics:__ WebTopMenu, TopMenuSkinDefaultWebTopMenu, TopMenuSkinHomeMenu, TopMenuSkinTopBar, TopMenuSkinTopicMenu, %SYSTEMWEB%.TWikiSkins, %SYSTEMWEB%.TWikiSkinBrowser, %SYSTEMWEB%.UserDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory
+__Related topics:__ TopMenuSkinDefaultWebTopMenu, TopMenuSkinHomeMenu, TopMenuSkinTopBar, TopMenuSkinTopicMenu, WebTopMenu, [[_default.WebTopMenu]], [[%USERSWEB%.WebTopMenu]], [[Sandbox.WebTopMenu]], [[Trash.WebTopMenu]], %SYSTEMWEB%.TWikiSkins, %SYSTEMWEB%.TWikiSkinBrowser, %SYSTEMWEB%.UserDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory
 
 %META:FILEATTACHMENT{name="fullscreen.png" attachment="fullscreen.png" attr="h" comment="" date="1271719988" path="fullscreen.png" size="36985" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1271719875" path="screenshot.png" size="15762" user="TWikiContributor" version="1"}%

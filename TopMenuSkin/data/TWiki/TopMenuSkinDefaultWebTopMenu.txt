@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1309582689" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311890457" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkin"}%
 ---+ Default Web Top Menu of !TopMenuSkin
 
@@ -22,6 +22,6 @@ This topic defines the default menu structure of a web. It is used by the TopMen
 -----
 
    * Disable WYSIWYG editor for this page:
-      * Set TINYMCEPLUGIN_DISABLE = on
+      * Set EDITMETHOD = raw
 
 __Related topics:__ TopMenuSkin, TopMenuSkinTopBar, WebTopMenu, TopMenuSkinHomeMenu, TopMenuSkinTopicMenu

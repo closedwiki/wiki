@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1309582689" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311890457" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkinDefaultWebTopMenu"}%
 ---+ Topic Menu of !TopMenuSkin
 
@@ -35,6 +35,6 @@ This topic defines the Topic pulldown menu with topic actions, used by the TopMe
 -----
 
    * Disable WYSIWYG editor for this page:
-      * Set TINYMCEPLUGIN_DISABLE = on
+      * Set EDITMETHOD = raw
 
 __Related topics:__ TopMenuSkin, TopMenuSkinTopBar, WebTopMenu, TopMenuSkinDefaultWebTopMenu, TopMenuSkinHomeMenu
