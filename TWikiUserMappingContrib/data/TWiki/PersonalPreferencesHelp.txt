@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1311807318" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311826626" format="1.1" version="$Rev$"}%
 ---+ Personal Preferences Help
 
 Below help text gets included by user profile pages instantiated from [[NewUserTemplate]] or [[%USERSWEB%.NewUserTemplate]] (if exists)
@@ -6,7 +6,7 @@ Below help text gets included by user profile pages instantiated from [[NewUserT
 -----
 %STARTINCLUDE%
    * %TWISTY{
-showlink="More preferences are available."
+showlink="More preferences "
 hidelink=""
 showimgright="%ICONURLPATH{toggleopen-small}%"
 hideimgleft="%ICONURLPATH{toggleclose-small}%"
