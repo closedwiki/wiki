@@ -1,10 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307515832" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311913434" format="1.1" version="$Rev$"}%
 ---+ User Form
 
 __Note:__ This is a maintenance topic, used by the TWiki administrator.
 
 This form defines the form of the user profile pages of registered TWiki users listed
-in %USERSWEB%.%WIKIUSERSTOPIC%. *Do not edit this topic* - if you want to customize the
+in %USERSWEB%.%WIKIUSERSTOPIC% and %USERSWEB%.UserList. *Do not edit this topic* - if you want to customize the
 user form, then:
    1 Take a copy of this topic and save it to <nop>%USERSWEB%.UserForm in the <nop>%USERSWEB% web
    1 Customise <nop>%USERSWEB%.UserForm
@@ -30,4 +30,4 @@ user form, then:
 
 __%X% Note:__ Please keep the %SYSTEMWEB%.TWikiRegistration form and this form definition in sync. When you update this form you need to edit/save the %SYSTEMWEB%.NewUserTemplate topic. This ensures that the fields are in the right order.
 
-__Related topics:__ %USERSWEB%.%WIKIUSERSTOPIC%, %USERSWEB%.PatternSkinUserViewTemplate, %SYSTEMWEB%.NewUserTemplate, %USERSWEB%.UserProfileHeader, %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.TWikiRegistration
+__Related topics:__ %USERSWEB%.%WIKIUSERSTOPIC%, %USERSWEB%.UserList, %USERSWEB%.PatternSkinUserViewTemplate, %SYSTEMWEB%.NewUserTemplate, %USERSWEB%.UserProfileHeader, %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.TWikiRegistration
