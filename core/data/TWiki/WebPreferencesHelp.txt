@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="TWikiContributor" date="1311913285" format="1.1" version="$Rev$"}%
 ---++ Help on Preferences
    * A preference setting is defined by: <br /> =3 or 6 spaces * Set NAME = value= <br /> Example:
       * S<nop>et WEBBGCOLOR = #FFFFC0
@@ -10,7 +11,7 @@
 
 ---++ Related Topics
    * [[%SYSTEMWEB%.%WIKIPREFSTOPIC%]], [[%LOCALSITEPREFS%]] - site-level preferences
-   * [[%USERSWEB%.%WIKIUSERSTOPIC%][%WIKIUSERSTOPIC%]] - list of user topics. User topics can have optional user preferences
+   * [[%USERSWEB%.UserList][UserList]] - list of user topics. User topics can have optional user preferences
    * [[%SYSTEMWEB%.TWikiVariables][TWikiVariables]] - list of common =%<nop>VARIABLES%=
    * [[%SYSTEMWEB%.TWikiAccessControl][TWikiAccessControl]] - explains how to restrict access by users or groups
 

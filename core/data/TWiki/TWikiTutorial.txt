@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307251732" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311913285" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ 20-Minute TWiki Tutorial
 
@@ -27,7 +27,7 @@ To edit topics or participate in restricted webs, you need to have a TWiki accou
 
 ---++ 4. Check out TWiki users &amp; groups...
 
-   * Go to the %USERSWEB%.%WIKIUSERSTOPIC% topic; it has a list of all users of TWiki. Your WikiName will be in this list after you register.
+   * Go to the %USERSWEB%.UserList topic; it has a list of all users of TWiki. Your name will be in this list after you register.
    * Go to the %USERSWEB%.TWikiGroups topic in the %USERSWEB% web; it has a list of groups which can be used to define fine grained TWikiAccessControl in TWiki.
 
 ---++ 5. Learn the page controls...

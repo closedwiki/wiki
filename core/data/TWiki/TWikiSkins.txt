@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273873869" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1311913285" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Skins
 
@@ -154,7 +154,7 @@ Navigate:
 <select name="sel" onchange="this.form.topic.value=this.options[this.selectedIndex].value; this.form.submit()">
 <option selected="selected" value="">...</option>
 <option value="http://twiki.org/">Intranet home</option>
-<option value="%USERSWEB%.%WIKIUSERSTOPIC%">Employee index</option>
+<option value="%USERSWEB%.UserList">Employee index</option>
 <option value="%USERSWEB%.%HOMETOPIC%">%USERSWEB% web</option>
 <option value="%SYSTEMWEB%.%HOMETOPIC%">%SYSTEMWEB% web</option>
 <option value="http://www.google.com/">Google</option>
