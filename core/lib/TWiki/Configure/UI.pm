@@ -30,6 +30,7 @@
 package TWiki::Configure::UI;
 
 use strict;
+use Carp;
 use File::Spec;
 use FindBin;
 
@@ -93,7 +94,8 @@ sub loadUI {
 # Static checker factory
 # Checkers *need not* exist
 sub loadChecker {
-    my ($id, $item) = @_;
+    my ($keys, $item) = @_;
+    my $id = $keys;
     $id =~ s/}{/::/g;
     $id =~ s/[}{]//g;
     $id =~ s/'//g;
@@ -103,8 +105,16 @@ sub loadChecker {
 
     eval "use $checkClass; \$checker = new $checkClass(\$item);";
     # Can't locate errors are OK
-    die $@ if ($@ && $@ !~ /Can't locate /);
-
+    if ($@) {
+	die $@ unless ($@ =~ /Can't locate /);
+	# See if type can generate a generic checker
+	if ($item->can('getType' )) {
+	    my $type = $item->getType();
+	    if ($type && $type->can('makeChecker')) {
+		$checker = $type->makeChecker($item, $keys);
+	    }
+	}
+    }
     return $checker;
 }
 

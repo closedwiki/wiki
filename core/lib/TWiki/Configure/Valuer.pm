@@ -86,13 +86,18 @@ sub loadCGIParams {
     foreach $param ( $query->param ) {
         # the - (and therefore the ' and ") is required for languages
         # e.g. {Languages}{'zh-cn'}.
-        next unless $param =~ /^TYPEOF:((?:{[-\w'"]+})*)/;
+        next unless $param =~ /^TYPEOF:((?:\{[-\w'"]+})*)/;
         my $keys = $1;
         # The value of TYPEOF: is the type name
         my $typename = $query->param( $param );
         $typename =~ /(\w+)/; $typename = $1; # check and untaint
         my $type = TWiki::Configure::Type::load($typename);
-        my $newval = $type->string2value( $query->param( $keys ));
+	my $newval;
+        if( $type->{NeedsQuery} ) {
+            $newval = $type->string2value($query, $keys);
+        } else {
+            $newval = $type->string2value($query->param( $keys ));
+        }
         my $xpr = '$this->{values}->'.$keys;
         my $curval = eval $xpr;
         if (!$type->equals($newval, $curval)) {
