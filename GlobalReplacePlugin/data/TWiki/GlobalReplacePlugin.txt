@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1295741450" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1312326770" format="1.1" version="$Rev$"}%
 ---+!! Global Replace Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -85,10 +85,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PaulineCheung, TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2004-2006 Wind River <br /> &copy; 2007-2008 Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] <br /> &copy; 2007-2011 TWiki:Main.TWikiContributors |
+|  Copyright: | &copy; 2004-2006 Wind River <br /> &copy; 2007-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] <br /> &copy; 2007-2011 TWiki:Main.TWikiContributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-01-22 |
+|  Plugin Version: | 2011-08-02 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-08-02: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2011-01-22: | TWikibug:Item6638: Many doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  05 Oct 2008: | TWiki:Main/PeterThoeny: Selectable web; TWiki 4.x compatible |
 |  31 Oct 2005: | TWiki:Main.MikkoLaakso: Added some examples, tested on W2K. |
@@ -104,4 +105,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ GlobalSearchAndReplace, GlobalSearchAndReplaceHelp, GlobalSearchAndReplaceTopics, %SYSTEMWEB%.TWikiPlugins, SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ GlobalSearchAndReplace, GlobalSearchAndReplaceHelp, GlobalSearchAndReplaceTopics, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
