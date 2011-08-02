@@ -39,25 +39,39 @@ package TWiki::Plugins::ChartPlugin;
 use strict;
 
 # =========================
-use vars qw(
-    $installWeb $VERSION $RELEASE $debug
-    $pluginInitialized $initError
-    $defaultType @defaultAreaColors @defaultLineColors
-    $defaultWidth $defaultHeight $defaultBGcolor
-    $defaultDataValue $defaultScale $defaultGridColor $defaultBorderColor $defaultPointSize
-    $defaultLineWidth $defaultNumYGrids
-    $defaultYMin $defaultYMax
-    $defaultBarLeadingSpaceUnits $defaultBarTrailingSpaceUnits $defaultBarSpaceUnits $defaultBarWidthUnits
-    $defaultSparkBarLeadingSpaceUnits $defaultSparkBarTrailingSpaceUnits $defaultSparkBarSpaceUnits $defaultSparkBarWidthUnits
-    $defaultShowError
-    %cachedTables $showParameters
-    );
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-08-02';
 
-$VERSION = '$Rev$';
-$RELEASE = '2011-06-01';
-
-$pluginInitialized = 0;
-$initError         = '';
+my $pluginInitialized = 0;
+my $initError         = '';
+my $installWeb;
+my $debug;
+my $defaultType;
+my @defaultAreaColors;
+my @defaultLineColors;
+my $defaultWidth;
+my $defaultHeight;
+my $defaultBGcolor;
+my $defaultDataValue;
+my $defaultScale;
+my $defaultGridColor;
+my $defaultBorderColor;
+my $defaultPointSize;
+my $defaultLineWidth;
+my $defaultNumYGrids;
+my $defaultYMin;
+my $defaultYMax;
+my $defaultBarLeadingSpaceUnits;
+my $defaultBarTrailingSpaceUnits;
+my $defaultBarSpaceUnits;
+my $defaultBarWidthUnits;
+my $defaultSparkBarLeadingSpaceUnits;
+my $defaultSparkBarTrailingSpaceUnits;
+my $defaultSparkBarSpaceUnits;
+my $defaultSparkBarWidthUnits;
+my $defaultShowError;
+my %cachedTables;
+my $showParameters;
 
 # =========================
 sub initPlugin {
