@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1288414386" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1312327638" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -6,9 +6,9 @@
    http://twiki.org/cgi-bin/view/Plugins/RequireRegistrationPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
-<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
-</div>
+</div></sticky>
 %SHORTDESCRIPTION%
 
 ---++ Introduction
@@ -61,10 +61,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ByronIgoe |
-|  Copyright: | &copy; 2007 TWiki:Main.ByronIgoe, %BR% &copy; 2009-2010 TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2007 TWiki:Main.ByronIgoe <br /> &copy; 2009-2011 TWiki:Main.PeterThoeny <br /> &copy; 2008-2011 TWiki:Main.TWikiContributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-10-29 (v1.2) |
+|  Plugin Version: | 2011-08-02 (v1.3) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-08-02: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2010-10-29: | Doc fixes -- Peter Thoeny |
 |  2008-03-04: | Fix bug in addToHEAD, made redirect method and refresh time configurable -- Peter Thoeny |
 |  2007-08-27: | Initial version |
