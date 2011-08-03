@@ -16,9 +16,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 
 #: ../core/data/TWiki/TWikiPreferences.txt:369
-#, fuzzy
 msgid "$text (this topic does not yet exist; you can create it)"
-msgstr "Let op: Deze pagina bestaat niet"
+msgstr "$text (Deze pagina bestaat nog niet; je kan hem aanmaken)"
 
 #. ($days)
 #: ../core/lib/TWiki/Time.pm:309
@@ -47,9 +46,8 @@ msgstr "%1"
 
 #: ../core/templates/registernotifyadminfail.tmpl:3
 #: ../core/templates/registernotifyadminfailrem.tmpl:3
-#, fuzzy
 msgid "%1 - Registration failure for %2 (%3)"
-msgstr "%1 - Registratie voor %2 (%3)"
+msgstr "%1 - Registratie gefaald voor %2 (%3)"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:110
 #: ../core/templates/registernotify.tmpl:3
@@ -183,18 +181,16 @@ msgid "%1 topic does not exist"
 msgstr "pagina %1 bestaat niet"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:56
-#, fuzzy
 msgid "&Attach"
-msgstr "Bij&lage bijvoegen"
+msgstr "Bijl&age bijvoegen"
 
 #: ../PatternSkin/templates/twiki.pattern.tmpl:9
 msgid "&Cancel"
 msgstr "&Afbreken"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:21
-#, fuzzy
 msgid "&Edit"
-msgstr "Bewerken"
+msgstr "&Bewerken"
 
 #: ../ClassicSkin/templates/twiki.classic.tmpl:159
 #: ../core/templates/twiki.tmpl:102
@@ -231,10 +227,9 @@ msgid "(Use a topic name in TWiki.WikiNotation)"
 msgstr "(Gebruik een paginanaam in [[%TWIKIWEB%.WikiNotation][Wikinotatie]])"
 
 #: ../core/templates/messages.tmpl:164
-#, fuzzy
 msgid ""
 "(__Suggestion:__ How about uploading your picture to your profile page?)"
-msgstr "(__Suggestie:__ Wat dacht je van een foto op je persoonlijke pagina?)"
+msgstr "(__Suggestie:__ Zet eens een foto op je persoonlijke pagina?)"
 
 #: ../core/templates/oopsaccessdenied.tmpl:4
 msgid "(access denied)"
@@ -457,13 +452,12 @@ msgstr ""
 "jouw text="
 
 #: ../core/data/TWiki/WikiSyntaxSummary.txt:17
-#, fuzzy
 msgid ""
 "*external links* =http://google.com/= or =[<nop>[http://google.com/][link to "
 "Google]]="
 msgstr ""
-"*externe links* =http://yahoo.com= of =[<nop>[http://yahoo.com/][link naar "
-"Yahoo]]="
+"*externe links* =http://yahoo.com= of =[<nop>[http://google.com/][link naar "
+"Google]]="
 
 #: ../core/data/TWiki/WikiSyntaxSummary.txt:14
 msgid "*headings* 3 dashes, 1 to 6 pluses, 1 space: =---++&&nbsp;Your Heading="
@@ -577,9 +571,8 @@ msgstr "Sneltoetsen"
 
 #: ../PatternSkin/data/TWiki/UserBookmarks.txt:15
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:20
-#, fuzzy
 msgid "Account"
-msgstr "Actie"
+msgstr "Profiel"
 
 #: ../core/templates/attachtables.tmpl:37
 #: ../core/templates/attachtables.tmpl:4 ../core/templates/changeform.tmpl:10
@@ -651,9 +644,8 @@ msgid "All public webs"
 msgstr "Alle publieke webs"
 
 #: ../core/data/TWiki/WebTopicList.txt:2
-#, fuzzy
 msgid "All topics in %1 web"
-msgstr "Onderliggende pagina&#39;s in %1 web"
+msgstr "Alle pagina&acute;s in %1 web"
 
 #: ../core/templates/twiki.tmpl:7
 msgid "Allow non <nop>WikiWord for the new topic name"
@@ -698,9 +690,8 @@ msgid "Attach"
 msgstr "Bij&lage bijvoegen"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:29
-#, fuzzy
 msgid "Attach file or image"
-msgstr "Voeg bijlage toe aan pagina %1"
+msgstr "Voeg bestand of beeld toe"
 
 #: ../PatternSkin/templates/attachnew.pattern.tmpl:4
 #: ../core/templates/attachnew.tmpl:4
@@ -718,9 +709,8 @@ msgid "Attach new file"
 msgstr "Voeg nieuwe bijlage toe"
 
 #: ../PatternSkin/templates/attach.pattern.tmpl:23
-#, fuzzy
 msgid "Attach up to 10 files at a time."
-msgstr "Voeg bijlage toe aan pagina %1"
+msgstr "Voeg maximaal 10 bestanden per keer toe."
 
 #: ../core/templates/attachtables.tmpl:4
 msgid "Attachment"
@@ -885,18 +875,16 @@ msgid "Categories"
 msgstr "Categorieën"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:42
-#, fuzzy
 msgid "Change"
-msgstr "Gewijzigd"
+msgstr "Wijzig"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:2
 msgid "Change Password"
 msgstr "Wachtwoord wijzigen"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:2
-#, fuzzy
 msgid "Change Profile Picture of %1"
-msgstr "Wijzig pagina"
+msgstr "Verander profielfoto van %1"
 
 #: ../PatternSkin/templates/attachagain.pattern.tmpl:16
 msgid "Change comment and properties only"
@@ -935,9 +923,8 @@ msgstr "Wijzig wachtwoord"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:42
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:44
-#, fuzzy
 msgid "Change profile picture"
-msgstr "Wijzig pagina"
+msgstr "Verander profielfoto"
 
 #: ../core/templates/attachagain.tmpl:21
 msgid "Change properties only"
@@ -1044,9 +1031,8 @@ msgid "Comment"
 msgstr "Toelichting"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:332
-#, fuzzy
 msgid "Comment:"
-msgstr "Opmerkingen:"
+msgstr "Opmerking:"
 
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:44
 #: ../core/templates/oopsmore.tmpl:94
@@ -1054,9 +1040,8 @@ msgid "Compare revisions"
 msgstr "Vergelijk revisies"
 
 #: ../core/templates/messages.tmpl:207
-#, fuzzy
 msgid "Confirm registration"
-msgstr "Registreren"
+msgstr "Bevestig registratie"
 
 #: ../core/templates/renameconfirm.tmpl:7
 #: ../core/templates/renamewebconfirm.tmpl:7
@@ -1093,12 +1078,11 @@ msgstr "Ga door en maak het nieuwe %1 web aan"
 
 #: ../core/data/TWiki/TWikiPreferences.txt:39
 #: ../core/data/TWiki/WebPreferences.txt:36
-#, fuzzy
 msgid ""
 "Copyright &&copy; %1 by the contributing authors. All material on this "
 "collaboration platform is the property of the contributing authors."
 msgstr ""
-"Copyright &&copy; de contribuerende auteurs. Al het materiaal op dit "
+"Auteursrecht &&copy; de contribuerende auteurs. Al het materiaal op dit "
 "samenwerkingsplatform is eigendom van de contribuerende auteurs."
 
 #: ../core/templates/messages.tmpl:140
@@ -1119,9 +1103,8 @@ msgstr "Kon %1 niet bewaren."
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:125
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:75
-#, fuzzy
 msgid "Country"
-msgstr "Land:"
+msgstr "Land"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:136
 msgid "Country:"
@@ -1129,9 +1112,8 @@ msgstr "Land:"
 
 #: ../TagMePlugin/data/TWiki/TagMeCreateNewTag.txt:23
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:27
-#, fuzzy
 msgid "Create"
-msgstr "'%1' aanmaken"
+msgstr "Aanmaken"
 
 #: ../core/data/TWiki/WebTopicViewTemplate.txt:30
 msgid "Create '%1'"
@@ -1213,9 +1195,8 @@ msgid "Current password"
 msgstr "Huidige wachtwoord"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:46
-#, fuzzy
 msgid "Current picture"
-msgstr "Huidige bovenliggende pagina:"
+msgstr "Huidige foto"
 
 #: ../core/templates/attachtables.tmpl:37
 #: ../core/templates/attachtables.tmpl:4
@@ -1386,9 +1367,8 @@ msgid "Edit table"
 msgstr "Bewerk tabel"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:66
-#, fuzzy
 msgid "Edit this record"
-msgstr "Bewerk deze tabel"
+msgstr "Bewerk deze informatie"
 
 #: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:179
 msgid "Edit this table"
@@ -1482,9 +1462,8 @@ msgid "Errors"
 msgstr "Foutmeldingen"
 
 #: ../core/templates/messages.tmpl:439
-#, fuzzy
 msgid "Example:"
-msgstr "Goede voorbeelden:"
+msgstr "Voorbeeld:"
 
 #: ../core/templates/messages.tmpl:491
 msgid "Failed to include URL %1"
@@ -1498,14 +1477,12 @@ msgid "Fields marked %1 are required"
 msgstr "Velden gemarkeerde met %1 zijn verplicht"
 
 #: ../core/templates/messages.tmpl:356
-#, fuzzy
 msgid "Files have been uploaded with different name"
-msgstr "Het bestand is geupload met een andere naam"
+msgstr "Sommige bestanden zijn geupload met een andere naam"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:21
-#, fuzzy
 msgid "Find backlinks"
-msgstr "Verwijzingen"
+msgstr "Vind verwijzingen naar deze pagina"
 
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:18
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:20
@@ -1534,9 +1511,8 @@ msgid "Forgotten your password?"
 msgstr "Je wachtwoord vergeten?"
 
 #: ../PatternSkin/data/TWiki/PatternSkinCustomization.txt:447
-#, fuzzy
 msgid "Form"
-msgstr "of"
+msgstr "Formulier"
 
 #: ../core/templates/messages.tmpl:327
 msgid "Form Definition %1 missing"
@@ -1630,8 +1606,7 @@ msgstr ""
 "Hiërarchische Webs zijn niet geactiveerd; je kunt geen genest web aanmaken."
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:22
-#, fuzzy
-msgid "History"
+msgid "&History"
 msgstr "&Geschiedenis"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinHomeMenu.txt:11
@@ -1716,12 +1691,11 @@ msgstr ""
 "op met %4 als dit niet juist is."
 
 #: ../core/templates/registerconfirm.tmpl:14
-#, fuzzy
 msgid ""
 "If you got this e-mail by mistake: Somebody (%1, %5) registered at the %2 "
 "site using your mail address %3. Contact %4 if this is in error."
 msgstr ""
-"Als je deze e-mail per ongeluk hebt gekregen: Iemand (%1) heeft zich "
+"Als je deze e-mail zonder reden hebt gekregen: Iemand (%1, %5) heeft zich "
 "geregistreerd op de %2 site met gebruik van je e-mailadres %3. Neem contact "
 "op met %4 als dit niet juist is."
 
@@ -1963,9 +1937,8 @@ msgstr "Plaatselijke aanpassingen aan sitebrede voorkeuren"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:123
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:73
-#, fuzzy
 msgid "Location"
-msgstr "Actie"
+msgstr "Locatie"
 
 #: ../PatternSkin/templates/twiki.pattern.tmpl:4
 msgid "Log In"
@@ -2020,9 +1993,8 @@ msgstr "Meer opmaakhulp"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:23
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:32
-#, fuzzy
 msgid "More topic actions"
-msgstr "Meer pagina acties..."
+msgstr "Meer pagina acties"
 
 #: ../PatternSkin/templates/rdiff.pattern.tmpl:29
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:146
@@ -2069,9 +2041,8 @@ msgid "Move/Rename"
 msgstr "Verplaats/Hernoem"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:126
-#, fuzzy
 msgid "Must change password"
-msgstr "Wijzig wachtwoord"
+msgstr "U moet uw wachtwoord wijzigen"
 
 #: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:59
 msgid "My Links"
@@ -2099,9 +2070,8 @@ msgstr "Nieuwe e-mails (spatie-gescheiden lijst)"
 
 #: ../MailerContrib/templates/mailnotify.tmpl:73
 #: ../MailerContrib/templates/mailnotify.tmpl:9
-#, fuzzy
 msgid "New or changed topics in %1 web since %2:"
-msgstr "Nieuwe of gewijzigde pagina&#39;s in %1, sinds %2:"
+msgstr "Nieuwe of gewijzigde pagina&acute;s in %1 web, sinds %2:"
 
 #: ../core/templates/renamewebbase.tmpl:10
 msgid "New parent web:"
@@ -2235,14 +2205,12 @@ msgstr "Voer eventueel een andere paginanaam in:"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:121
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:71
-#, fuzzy
 msgid "Organization"
-msgstr "URL van organisatie:"
+msgstr "Organizatie"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:130
-#, fuzzy
 msgid "Organization:"
-msgstr "URL van organisatie:"
+msgstr "Organizatie:"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:327
 msgid "Other Country"
@@ -2278,9 +2246,8 @@ msgid "Password reset failed"
 msgstr "Wachtwoord opnieuw instellen niet gelukt"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:116
-#, fuzzy
 msgid "Password:"
-msgstr "Wachtwoord"
+msgstr "Wachtwoord:"
 
 #: ../core/templates/messages.tmpl:226
 msgid "Passwords do not match"
@@ -2421,9 +2388,8 @@ msgid "RSS Feed"
 msgstr "RSS Feed"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:19
-#, fuzzy
 msgid "Raw View"
-msgstr "(brontekst)"
+msgstr "Brontekst"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:28
 #: ../core/templates/viewtopicactionbuttons.tmpl:63
@@ -2464,21 +2430,19 @@ msgstr "Verversen"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:124
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:74
-#, fuzzy
 msgid "Region"
-msgstr "Revisie"
+msgstr "Regio"
 
 #: ../ClassicSkin/templates/twiki.classic.tmpl:9
 #: ../PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 #: ../core/templates/twiki.tmpl:106
 msgid "Register"
-msgstr "Meld je aan"
+msgstr "Registreer"
 
 #: ../PatternSkin/data/TWiki/UserBookmarks.txt:23
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:38
-#, fuzzy
 msgid "Register User"
-msgstr "Meld je aan"
+msgstr "Registreer gebruiker"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:13
 msgid "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
@@ -2503,9 +2467,8 @@ msgid "Related Topics"
 msgstr "Gerelateerde pagina&#39;s"
 
 #: ../TagMePlugin/lib/TWiki/Plugins/TagMePlugin.pm:858
-#, fuzzy
 msgid "Related tags"
-msgstr "Gerelateerde pagina&#39;s:"
+msgstr "Gerelateerde kernwoorden"
 
 #: ../TWikiUserMappingContrib/data/Main/TWikiGroupTemplate.txt:22
 #: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:48
@@ -2618,9 +2581,8 @@ msgid "Results from %1 web"
 msgstr "Resultaten van %1 web"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:81
-#, fuzzy
 msgid "Return to"
-msgstr "Ga terug naar %1."
+msgstr "Ga terug naar"
 
 #: ../core/templates/messages.tmpl:197
 msgid "Return to %1."
@@ -2669,9 +2631,8 @@ msgstr ""
 "= Afbreken"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:117
-#, fuzzy
 msgid "Save"
-msgstr "Bewaard in:"
+msgstr "Bewaar"
 
 #: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:180
 msgid "Save table"
@@ -2785,9 +2746,8 @@ msgid "Select all"
 msgstr "Vink aan"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:76
-#, fuzzy
 msgid "Select existing picture"
-msgstr "Selecteer bovenliggende pagina:"
+msgstr "Selecteer bestaande foto"
 
 #: ../core/templates/oopsmore.tmpl:55
 msgid "Select topic parent:"
@@ -2825,14 +2785,13 @@ msgid "Show help"
 msgstr "Toon help"
 
 #: ../core/data/TWiki/WebChanges.txt:16
-#, fuzzy
 msgid ""
 "Show recent changes with <a href='%2'>50</a>, <a href='%3' "
 "rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a href='%5' "
 "rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> topics, <a "
 "href='%7' rel='nofollow'>all changes</a>"
 msgstr ""
-"<a href='%1'>RSS feed</a>, recente wijzigingen met <a href='%2'>50</a>, <a "
+"Toon recente wijzigingen met <a href='%2'>50</a>, <a "
 "href='%3' rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a "
 "href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> "
 "pagina&#39;s, <a href='%7' rel='nofollow'>alle wijzigingen</a>"
@@ -3063,9 +3022,8 @@ msgid "The %1 topic already exists"
 msgstr "Pagina %1 bestaat al"
 
 #: ../core/data/TWiki/RenameWeb.txt:3
-#, fuzzy
 msgid "The %1 web cannot be renamed."
-msgstr "Het nieuwe web is aangemaakt"
+msgstr "Het web %1 kan niet hernoemd worden."
 
 #: ../core/templates/messages.tmpl:513
 msgid "The %1 web does not exist"
@@ -3124,9 +3082,8 @@ msgid "The entry for user %1 was missing in the password system."
 msgstr "De ingang voor gebruiker %1 ontbrak in het wachtwoordsysteem."
 
 #: ../core/templates/messages.tmpl:357
-#, fuzzy
 msgid "The files have been uploaded and attached properly to the %1 topic."
-msgstr "Het bestand is geupload en succesvol bijgevoegd bij pagina %1."
+msgstr "De bestanden zijn geupload en succesvol bijgevoegd bij pagina %1."
 
 #: ../core/templates/messages.tmpl:412
 msgid "The following topics are locked for edit, and cannot be moved:"
@@ -3316,9 +3273,8 @@ msgstr ""
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:119
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:69
-#, fuzzy
 msgid "Title"
-msgstr "Paginatitel"
+msgstr "Titel"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:5
 msgid ""
@@ -3360,9 +3316,8 @@ msgid "To web:"
 msgstr "Naar web:"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:18
-#, fuzzy
 msgid "Topic"
-msgstr "Naar pagina:"
+msgstr "Pagina"
 
 #: ../core/templates/messages.tmpl:319
 msgid "Topic Save Error"
@@ -3492,9 +3447,8 @@ msgid "Update links"
 msgstr "Ververs links"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:61
-#, fuzzy
 msgid "Upload"
-msgstr "Bestand uploaden"
+msgstr "Uploaden"
 
 #: ../PatternSkin/templates/attachagain.pattern.tmpl:28
 #: ../PatternSkin/templates/attachnew.pattern.tmpl:7
@@ -3503,9 +3457,8 @@ msgid "Upload file"
 msgstr "Bestand uploaden"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:57
-#, fuzzy
 msgid "Upload new picture"
-msgstr "Bestand uploaden"
+msgstr "Nieuwe foto uploaden"
 
 #: ../PatternSkin/templates/attach.pattern.tmpl:22
 msgid "Upload up to %1 KB."
@@ -3525,9 +3478,8 @@ msgid "Use %1 instead."
 msgstr "Ga dan naar %1."
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:122
-#, fuzzy
 msgid "Use system generated password"
-msgstr "Typ wachtwoord opnieuw"
+msgstr "Gebruik paswoord dat door het systeem gegenereerd werd"
 
 #: ../PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:61
 #: ../core/data/TWiki/WebCreateNewTopicTemplate.txt:39
@@ -3535,17 +3487,15 @@ msgid "Use template:"
 msgstr "Gebruik template:"
 
 #: ../core/data/Sandbox/WebHome.txt:5
-#, fuzzy
 msgid ""
 "Use this web to try out TWiki. Everybody is invited to add or delete some "
 "stuff. It is recommended to walk through the %1 to learn the basics of "
 "TWiki. It is good practice to sign your contributions with your %2 and date."
 msgstr ""
-"Het %1 web is de zogenaamde speeltuin die je kan gebruiken om uit te "
-"proberen. Iedereen is welkom om toe te voegen of te verwijderen. We raden je "
-"aan om %2 te doorlopen om een overzicht van de %3 tool te krijgen. Een goede "
-"vuistregel is om toe te voegen aan het einde van de pagina en te signeren en "
-"dateren met je %4."
+"Dit web is de zogenaamde speeltuin die je kan gebruiken om Twiki uit te "
+"proberen. Iedereen mag onderwerpen toe voegen of verwijderen. We raden je "
+"aan om %1 te doorlopen om een overzicht van TWiki te krijgen. Een goede "
+"vuistregel is om te signeren met %2 en de datum."
 
 #: ../core/templates/messages.tmpl:10
 msgid "User Account %1 Deleted"
@@ -3557,9 +3507,8 @@ msgid "User Reference"
 msgstr "Gebruikershandleiding"
 
 #: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:12
-#, fuzzy
 msgid "User registration"
-msgstr "Registreren"
+msgstr "Gebruiker registreren"
 
 #: ../PatternSkin/data/TWiki/PatternSkinElements.txt:182
 #: ../core/templates/login.tmpl:42
@@ -3669,16 +3618,14 @@ msgstr ""
 
 #: ../MailerContrib/data/TWiki/MailerContrib.txt:174
 #: ../MailerContrib/templates/mailnotify.tmpl:62
-#, fuzzy
 msgid "Web"
-msgstr "Webs"
+msgstr "Web"
 
 #: ../core/data/Main/WebNotify.txt:2 ../core/data/Sandbox/WebNotify.txt:2
 #: ../core/data/TWiki/WebNotify.txt:2 ../core/data/Trash/WebNotify.txt:2
 #: ../core/data/_default/WebNotify.txt:2
-#, fuzzy
 msgid "Web Notification"
-msgstr "Blijf op de hoogte"
+msgstr "Web notificatie"
 
 #: ../core/data/TWiki/WebSearch.txt:3
 msgid "Web Search"
@@ -3762,9 +3709,8 @@ msgstr ""
 "liggende streep (underscore) en met alleen alfanumerieke tekens."
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:12
-#, fuzzy
 msgid "You are required to change your password."
-msgstr "Je kunt je wachtwoord wijzigen via %1"
+msgstr "Je moet je wachtwoord wijzigen."
 
 #: ../core/templates/messages.tmpl:549
 msgid "You are trying to %1 an attachment that does not exist."
@@ -3916,18 +3862,16 @@ msgstr ""
 "zelf wilt."
 
 #: ../core/templates/registernotify.tmpl:12
-#, fuzzy
 msgid ""
 "Your personal %1 user profile page is located at %2. You can customize it as "
 "you like:"
 msgstr ""
-"Je persoonlijke %1 pagina bevindt zich op %2. Je kan het aanpassen zoals je "
+"Je persoonlijke %1 profiel pagina bevindt zich op %2. Je kan het aanpassen zoals je "
 "zelf wilt."
 
 #: ../core/templates/messages.tmpl:163
-#, fuzzy
 msgid "Your personal TWiki user profile page %1 has been created"
-msgstr "Je persoonlijke TWiki pagina %1 is aangemaakt"
+msgstr "Je persoonlijke TWiki profiel pagina %1 is aangemaakt"
 
 #: ../core/templates/messages.tmpl:195
 msgid "Your registered e-mail address(es) are updated to: %1."
@@ -3956,14 +3900,12 @@ msgid "Your user topic has not been renamed. Please e-mail %1 to request this."
 msgstr "Je gebruikerspagina is niet hernoemd. E-mail %1 om dit aan te vragen."
 
 #: ../core/templates/messages.tmpl:30
-#, fuzzy
 msgid "[[%1][%2 home]]"
-msgstr "%1 home"
+msgstr "[[%1][%2 home]]"
 
 #: ../core/templates/messages.tmpl:22
-#, fuzzy
 msgid "[[%1][%2 home]] to start working on the new web"
-msgstr "%1 om te beginnen in het nieuwe web"
+msgstr "[[%1][%2 home]] om te beginnen in het nieuwe web"
 
 #: ../core/templates/messages.tmpl:339
 msgid "[[%1][Debug topic text]]."
@@ -3977,9 +3919,8 @@ msgstr ""
 "[waarde]"
 
 #: ../core/data/TWiki/RenameWeb.txt:3
-#, fuzzy
 msgid "__Note:__"
-msgstr "Opmerking:"
+msgstr "__Opmerking:__"
 
 #: ../core/lib/TWiki/I18N.pm:292
 msgid "_language_name"
@@ -4135,11 +4076,10 @@ msgid "title='%IF{ "
 msgstr ""
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:54
-#, fuzzy
 msgid "title='Attach an image or document to this topic' accesskey='a'"
 msgstr ""
 "title='Voeg een afbeelding of document toe aan deze pagina' "
-"accesskey='l'>Bij&lage"
+"accesskey='l'"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:16
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
@@ -4153,9 +4093,8 @@ msgid "title='Create new topic' accesskey='c'>&Create"
 msgstr "title='Nieuwe pagina aanmaken' accesskey='a'>&Aanmaken"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:38
-#, fuzzy
 msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
-msgstr "title='Nieuwe pagina aanmaken' accesskey='a'>&Aanmaken"
+msgstr "title='Nieuwe pagina aanmaken' accesskey='w'>Aanmaken (&WYSIWYG)"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:91
 #: ../core/templates/viewtopicactionbuttons.tmpl:19
@@ -4167,24 +4106,20 @@ msgstr ""
 "bekijk en vergelijk revisies' accesskey='m'>&Meer pagina-acties"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:19
-#, fuzzy
 msgid "title='Edit this topic text' accesskey='e'"
-msgstr "title='Bewerk deze paginatekst' accesskey='b'>&Bewerken"
+msgstr "title='Bewerk deze paginatekst' accesskey='e'"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:7
-#, fuzzy
 msgid "title='Edit this topic text' accesskey='e'>%1 &Edit"
-msgstr "title='Bewerk deze paginatekst' accesskey='b'>&Bewerken"
+msgstr "title='Bewerk deze paginatekst' accesskey='e'>B&ewerken"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:30
-#, fuzzy
 msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
-msgstr "title='Bewerk deze paginatekst' accesskey='b'>&Bewerken"
+msgstr "title='Bewerk deze paginatekst' accesskey='w'>&WYSIWYG"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:76
-#, fuzzy
 msgid "title='PDF version of this topic'>&PDF version"
-msgstr "title='Printbare versie van deze pagina' accesskey='p'>&Printversie"
+msgstr "title='PDF versie van deze pagina'>&PDF versie"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:66
 #: ../core/templates/viewtopicactionbuttons.tmpl:23
