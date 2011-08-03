@@ -24,19 +24,21 @@ use strict;
 use File::Copy;
 use TWiki::Plugins::BackupRestorePlugin::CaptureOutput qw( capture_exec capture_exec_combined );
 
-# Note: To remain compatible with older releases, do not use any TWiki internal
-# modules except LocalSite.cfg
+my @apacheConfLocations = (
+    '/etc/httpd/conf.d',             # RHEL / Fedora / CentOS
+    '/etc/apache2/conf.d/',          # Debian / Ubuntu / openSUSE
+    '/usr/local/apache/conf.d',      # Cygwin
+    '/usr/local/apache/conf/conf.d',
+    '/usr/local/apache2/conf.d',
+    '/usr/local/httpd/conf.d',
+  );
+
+# Note: To remain compatible with older TWiki releases, do not use any TWiki internal
+# modules except LocalSite.cfg. And LocalSite.cfg is optional too.
 
 #==================================================================
 sub new {
     my ( $class, $this ) = @_;
-
-    TWiki::Func::writeDebug( "- BackupRestorePlugin constructor" ) if $this->{Debug};
-
-    # $this->
-    #   {BaseTopic}  => $baseTopic,
-    #   {BaseWeb}    => $baseWeb,
-    #   {User}       => $user,
 
     $this->{Debug}        = $TWiki::cfg{Plugins}{BackupRestorePlugin}{Debug} || 0;
     $this->{BackupDir}    = $TWiki::cfg{Plugins}{BackupRestorePlugin}{BackupDir} || '/tmp';
@@ -44,6 +46,8 @@ sub new {
     $this->{createZipCmd} = $TWiki::cfg{Plugins}{BackupRestorePlugin}{createZipCmd} || 'zip -r';
     $this->{listZipCmd}   = $TWiki::cfg{Plugins}{BackupRestorePlugin}{listZipCmd} || 'unzip -l';
     $this->{unZipCmd}     = $TWiki::cfg{Plugins}{BackupRestorePlugin}{unZipCmd} || 'unzip -o';
+
+    TWiki::Func::writeDebug( "- BackupRestorePlugin constructor" ) if $this->{Debug};
 
     bless( $this, $class );
 
@@ -89,15 +93,43 @@ sub _gatherLocation {
     my( $this ) = @_;
 
     my $loc;
-    my $root = $TWiki::cfg{DataDir};
-    $root =~ s|(.*)[\\/]+.*|$1|;
-$loc->{Root} = $root;
-    $loc->{DataDir}    = $TWiki::cfg{DataDir};
-    $loc->{PubDir}     = $TWiki::cfg{PubDir};
-    $loc->{WorkingDir} = $TWiki::cfg{WorkingDir};
-    $loc->{LocalLib}   = '';
-    $loc->{LocalSite}  = '';
-    $loc->{ApacheConf} = '';
+
+    # discover TWiki bin dir
+    my $binDir = $ENV{SCRIPT_FILENAME};
+    $binDir =~ s|(.*)[\\/]+.*|$1|;       # cut off script to get name of bin dir
+    $binDir = cwd() unless( $binDir ) ;  # last resort to discover bin dir
+
+    # discover TWiki root dir
+    my $rootDir = $TWiki::cfg{DataDir} || $binDir || cwd();
+    $rootDir =~ s|(.*)[\\/]+.*|$1|;      # go one directory up
+    $loc->{RootDir} = $rootDir;
+
+    # discover common TWiki directories
+    $loc->{DataDir}    = $TWiki::cfg{DataDir} || "$rootDir/data";
+    $loc->{PubDir}     = $TWiki::cfg{PubDir}  || "$rootDir/pub";
+    $loc->{WorkingDir} = $TWiki::cfg{WorkingDir} || '';
+
+    # discover twiki/bin/LocalLib.cfg
+    $loc->{LocalLib}   = "$binDir/LocalLib.cfg" if( -e "$binDir/LocalLib.cfg" );
+
+    # discover twiki/lib/LocalSite.cfg
+    foreach my $dir ( @INC ) {
+        if( -e "$dir/LocalSite.cfg" ) {
+            $loc->{LocalSite} = "$dir/LocalSite.cfg";
+            last;
+        }
+    }
+    if( !$loc->{LocalSite} && -e "$rootDir/lib/LocalSite.cfg" ) {
+        $loc->{LocalSite} =      "$rootDir/lib/LocalSite.cfg";
+    }
+
+    # discover apache conf file twiki.conf
+    foreach my $dir ( @apacheConfLocations ) {
+        if( -e "$dir/twiki.conf" ) {
+            $loc->{ApacheConf} = "$dir/twiki.conf";
+            last;
+        }
+    }
 
     return $loc;
 }
@@ -109,10 +141,14 @@ sub _testZipMethods {
     my $text = '';
 use Cwd;
     $text .= "\n<br />===== Dirs <pre>\n"
+           . "-BaseTopic:  $this->{BaseTopic}\n"
+           . "-BaseWeb:    $this->{BaseWeb}\n"
+           . "-User:       $this->{User}\n"
            . "-pwd:        " . cwd() . "\n" 
-           . "-Root:       $this->{Location}{Root}\n"
+           . "-Root:       $this->{Location}{RootDir}\n"
            . "-DataDir:    $this->{Location}{DataDir}\n"
            . "-PubDir:     $this->{Location}{PubDir}\n"
+           . "-WorkingDir: $this->{Location}{WorkingDir}\n"
            . "-LocalLib:   $this->{Location}{LocalLib}\n"
            . "-LocalSite:  $this->{Location}{LocalSite}\n"
            . "-ApacheConf: $this->{Location}{ApacheConf}\n"
