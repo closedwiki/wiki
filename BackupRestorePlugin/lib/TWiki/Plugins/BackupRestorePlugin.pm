@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2011 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2011 Peter Thoeny, peter[at]thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -24,15 +24,16 @@ use strict;
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
-use vars qw(
-    $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC
-    $core $baseTopic $baseWeb $user
-  );
+#==================================================================
+our $VERSION = '$Rev$';
+our $RELEASE = '2011-07-15';
+our $SHORTDESCRIPTION = 'Administrator utility to backup, restore and upgrade a TWiki site';
+our $NO_PREFS_IN_TOPIC = 1;
 
-$VERSION = '$Rev$';
-$RELEASE = '2011-07-15';
-$SHORTDESCRIPTION = 'Administrator utility to backup, restore and upgrade a TWiki site';
-$NO_PREFS_IN_TOPIC = 1;
+my $core;
+my $baseTopic;
+my $baseWeb;
+my $user;
 
 #==================================================================
 sub initPlugin {
