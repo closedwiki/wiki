@@ -1,12 +1,12 @@
 # TWiki translation for Japanese
 # This file is distributed under the same license as TWiki itself
-# Copyright (C) 2005-2007 Peter Thoeny, and TWiki Contributors.
+# Copyright (C) 2005-2011 Peter Thoeny, and TWiki Contributors.
 # Translators:
-#   TWiki:Main/Ken, 05/20 2010
+#   TWiki:Main/KenYuminaga, 2011-08-03
 msgid ""
 msgstr ""
 "Project-Id-Version: TWiki $IdPOT-Creation-Date: YEAR-MO-DA HO:MI+ZONEPO-"
-"Revision-Date: 2010-05-20 20:00-0800Last-Translator: Ken <ken.yuminaga at "
+"Revision-Date: 2010-08-03 00:00-0800Last-Translator: Ken <ken.yuminaga at "
 "gmail.com>;Language-Team: TWiki Japanese &lt;<ken.yuminaga at gmail.com>MIME-"
 "Version: 1.0Content-Type: text/plain; charset=UTF-8Content-Transfer-"
 "Encoding: 8bitReport-Msgid-Bugs-To: X-Poedit-Country: JAPANX-Poedit-"
@@ -44,9 +44,8 @@ msgstr "%1"
 
 #: ../core/templates/registernotifyadminfail.tmpl:3
 #: ../core/templates/registernotifyadminfailrem.tmpl:3
-#, fuzzy
 msgid "%1 - Registration failure for %2 (%3)"
-msgstr "%1 - %2 (%3) の登録"
+msgstr "%1 - %2 (%3) 登録失敗"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:110
 #: ../core/templates/registernotify.tmpl:3
@@ -226,10 +225,9 @@ msgid "(Use a topic name in TWiki.WikiNotation)"
 msgstr "( TWiki.WikiNotation の中で一つのトピック名を使用します)"
 
 #: ../core/templates/messages.tmpl:164
-#, fuzzy
 msgid ""
 "(__Suggestion:__ How about uploading your picture to your profile page?)"
-msgstr "(__提案:__ あなたのトピックに関するピクチャをアップロードしませんか?)"
+msgstr "(__提案:__ プロフィールページにあなたの写真をアップロードしませんか?)"
 
 #: ../core/templates/oopsaccessdenied.tmpl:4
 msgid "(access denied)"
@@ -432,7 +430,6 @@ msgid ""
 msgstr "*ブレットリスト* 三つのスペース，アスタリスク，一つのスペース： =&&nbsp;&&nbsp;&&nbsp;*&&nbsp;テキスト="
 
 #: ../core/data/TWiki/WikiSyntaxSummary.txt:17
-#, fuzzy
 msgid ""
 "*external links* =http://google.com/= or =[<nop>[http://google.com/][link to "
 "Google]]="
@@ -440,7 +437,7 @@ msgstr "*外部リンク* =http://yahoo.com= 又は =[<nop>[http://yahoo.com/][Y
 
 #: ../core/data/TWiki/WikiSyntaxSummary.txt:14
 msgid "*headings* 3 dashes, 1 to 6 pluses, 1 space: =---++&&nbsp;Your Heading="
-msgstr "*ヘッダー*三つのダッシュ，1～6個のプラス記号，一つのスペース： =---++&&nbsp;ヘッダー="
+msgstr "*ヘッダー*三つのダッシュ，1～6個のプラス記号，1個のスペース： =---++&&nbsp;ヘッダー="
 
 #: ../core/data/TWiki/WikiSyntaxSummary.txt:15
 msgid "*italic* put word/phrase in underscores: =_<nop>your words_="
@@ -600,7 +597,6 @@ msgid "All public webs"
 msgstr "全てのパブリックウェブ"
 
 #: ../core/data/TWiki/WebTopicList.txt:2
-#, fuzzy
 msgid "All topics in %1 web"
 msgstr "%1の中の全てのトピック"
 
@@ -660,9 +656,8 @@ msgid "Attach new file"
 msgstr "新しいファイルを添付します"
 
 #: ../PatternSkin/templates/attach.pattern.tmpl:23
-#, fuzzy
 msgid "Attach up to 10 files at a time."
-msgstr "ファイル又は画像を添付します"
+msgstr "一回最大10個のファイルを添付します"
 
 #: ../core/templates/attachtables.tmpl:4
 msgid "Attachment"
@@ -821,18 +816,16 @@ msgid "Categories"
 msgstr "カテゴリー"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:42
-#, fuzzy
 msgid "Change"
-msgstr "変更しました"
+msgstr "変更"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:2
 msgid "Change Password"
 msgstr "パスワードを変更します"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:2
-#, fuzzy
 msgid "Change Profile Picture of %1"
-msgstr "トピックを変更します"
+msgstr "プロフィールの写真を変更 %1"
 
 #: ../PatternSkin/templates/attachagain.pattern.tmpl:16
 msgid "Change comment and properties only"
@@ -871,9 +864,8 @@ msgstr "パスワードを変更します"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:42
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:44
-#, fuzzy
 msgid "Change profile picture"
-msgstr "トピックを変更します"
+msgstr "プロフィールの写真を変更"
 
 #: ../core/templates/attachagain.tmpl:21
 msgid "Change properties only"
@@ -1016,11 +1008,10 @@ msgstr "続けて新しいページを作成します"
 
 #: ../core/data/TWiki/TWikiPreferences.txt:39
 #: ../core/data/TWiki/WebPreferences.txt:36
-#, fuzzy
 msgid ""
 "Copyright &&copy; %1 by the contributing authors. All material on this "
 "collaboration platform is the property of the contributing authors."
-msgstr "コピーライト &&copy; 著作者。本プラットフォームにある全ての物は本プラットフォームの貢献者たちに帰属します。"
+msgstr "コピーライト &&copy; 著作者 本コラボレーションプラットフォームにある全ての物がプラットフォームの貢献者たちに帰属します。"
 
 #: ../core/templates/messages.tmpl:140
 msgid "Could not create the new web %1"
@@ -1040,9 +1031,8 @@ msgstr "%1を保存できませんでした"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:125
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:75
-#, fuzzy
 msgid "Country"
-msgstr "国:"
+msgstr "国"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:136
 msgid "Country:"
@@ -1050,9 +1040,8 @@ msgstr "国:"
 
 #: ../TagMePlugin/data/TWiki/TagMeCreateNewTag.txt:23
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:27
-#, fuzzy
 msgid "Create"
-msgstr "作成 '%1'"
+msgstr "作成"
 
 #: ../core/data/TWiki/WebTopicViewTemplate.txt:30
 msgid "Create '%1'"
@@ -1132,9 +1121,8 @@ msgid "Current password"
 msgstr "現在のパスワード"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:46
-#, fuzzy
 msgid "Current picture"
-msgstr "現在の親トピック："
+msgstr "現在の画像："
 
 #: ../core/templates/attachtables.tmpl:37
 #: ../core/templates/attachtables.tmpl:4
@@ -1183,9 +1171,8 @@ msgstr "トピックを削除..."
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:120
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:70
-#, fuzzy
 msgid "Department"
-msgstr "親"
+msgstr "部門"
 
 #: ../PatternSkin/templates/attach.pattern.tmpl:29
 msgid "Describe the file so other people know what it is."
@@ -1296,9 +1283,8 @@ msgid "Edit table"
 msgstr "テーブルを編集する"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:66
-#, fuzzy
 msgid "Edit this record"
-msgstr "このテーブルを編集する"
+msgstr "テーブルを編集する"
 
 #: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:179
 msgid "Edit this table"
@@ -1395,7 +1381,6 @@ msgid "Fields marked %1 are required"
 msgstr "%1とマークされたフィールドは必須入力項目です"
 
 #: ../core/templates/messages.tmpl:356
-#, fuzzy
 msgid "Files have been uploaded with different name"
 msgstr "ファイルは既に他の名称でアップロードされました"
 
@@ -1586,11 +1571,10 @@ msgid ""
 msgstr "間違ってこのメールが届いた場合：だれか( %1 )がすでにウェブサイト %2 でお使いのメールアドレス %3 で登録しました。  %4 に連絡して、ご説明ください。"
 
 #: ../core/templates/registerconfirm.tmpl:14
-#, fuzzy
 msgid ""
 "If you got this e-mail by mistake: Somebody (%1, %5) registered at the %2 "
 "site using your mail address %3. Contact %4 if this is in error."
-msgstr "間違ってこのメールが届いた場合：だれか( %1 )がすでにウェブサイト %2 でお使いのメールアドレス %3 で登録しました。  %4 に連絡して、ご説明ください。"
+msgstr "何らかの間違いで心当たりのないメールを受信された場合：何方か( %1, %5)がすでにウェブサイト %2 でお使いのメールアドレス %3 で登録しました。 %4までご連絡下さい。"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:363
 msgid "If you have any questions about registration, send an e-mail to %1."
@@ -1799,9 +1783,8 @@ msgstr "site-wideプロパティをカスタマイズします"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:123
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:73
-#, fuzzy
 msgid "Location"
-msgstr "変更"
+msgstr "位置"
 
 #: ../PatternSkin/templates/twiki.pattern.tmpl:4
 msgid "Log In"
@@ -1904,9 +1887,8 @@ msgid "Move/Rename"
 msgstr "移動/リネーム"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:126
-#, fuzzy
 msgid "Must change password"
-msgstr "パスワードを変更します"
+msgstr "パスワードを変更しなければならない"
 
 #: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:59
 msgid "My Links"
@@ -1934,9 +1916,8 @@ msgstr "新メールアドレス(スペースで区切るリスト)"
 
 #: ../MailerContrib/templates/mailnotify.tmpl:73
 #: ../MailerContrib/templates/mailnotify.tmpl:9
-#, fuzzy
 msgid "New or changed topics in %1 web since %2:"
-msgstr "%2後、%1にある新規作成又は変更のトピック"
+msgstr "%2後、%1にある新規作成又は変更されたトピック"
 
 #: ../core/templates/renamewebbase.tmpl:10
 msgid "New parent web:"
@@ -2063,14 +2044,12 @@ msgstr "又は違うトピック名をご入力ください："
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:121
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:71
-#, fuzzy
 msgid "Organization"
-msgstr "組織URL："
+msgstr "組織"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:130
-#, fuzzy
 msgid "Organization:"
-msgstr "組織URL："
+msgstr "組織："
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:327
 msgid "Other Country"
@@ -2104,9 +2083,8 @@ msgid "Password reset failed"
 msgstr "パスワードの変更に失敗しました"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:116
-#, fuzzy
 msgid "Password:"
-msgstr "パスワード"
+msgstr "パスワード:"
 
 #: ../core/templates/messages.tmpl:226
 msgid "Passwords do not match"
@@ -2181,9 +2159,8 @@ msgid ""
 msgstr "%1が正確にスペルされていることをご確認してもう一度試してください。それでもだめな場合は、%2にメールしてください。"
 
 #: ../core/templates/messages.tmpl:392
-#, fuzzy
 msgid "Please try small size files or contact Administrator."
-msgstr " %1 管理者 %2までご連絡ください"
+msgstr "サイズの小さいファイルを試すか、管理者までご連絡ください。"
 
 #: ../ClassicSkin/templates/mailresetpassword.classic.tmpl:12
 #: ../core/templates/mailresetpassword.tmpl:12
@@ -2241,14 +2218,13 @@ msgid "RSS Feed"
 msgstr "RSSフィード"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:19
-#, fuzzy
 msgid "Raw View"
-msgstr "生表示"
+msgstr "コード表示"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:28
 #: ../core/templates/viewtopicactionbuttons.tmpl:63
 msgid "Raw edit"
-msgstr "生編集"
+msgstr "コード編集"
 
 #: ../core/templates/registernotify.tmpl:10
 msgid ""
@@ -2281,9 +2257,8 @@ msgstr ""
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:124
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:74
-#, fuzzy
 msgid "Region"
-msgstr "改訂"
+msgstr "地域"
 
 #: ../ClassicSkin/templates/twiki.classic.tmpl:9
 #: ../PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
@@ -2293,9 +2268,8 @@ msgstr "登録"
 
 #: ../PatternSkin/data/TWiki/UserBookmarks.txt:23
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:38
-#, fuzzy
 msgid "Register User"
-msgstr "登録"
+msgstr "登録ユーザー"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:13
 msgid "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
@@ -2318,9 +2292,8 @@ msgid "Related Topics"
 msgstr "関連トピック："
 
 #: ../TagMePlugin/lib/TWiki/Plugins/TagMePlugin.pm:858
-#, fuzzy
 msgid "Related tags"
-msgstr "関連トピック：:"
+msgstr "関連タグ"
 
 #: ../TWikiUserMappingContrib/data/Main/TWikiGroupTemplate.txt:22
 #: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:48
@@ -2431,9 +2404,8 @@ msgid "Results from %1 web"
 msgstr "%1ウェブの結果"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:81
-#, fuzzy
 msgid "Return to"
-msgstr "%1に戻る"
+msgstr "戻る"
 
 #: ../core/templates/messages.tmpl:197
 msgid "Return to %1."
@@ -2592,9 +2564,8 @@ msgid "Select all"
 msgstr "全て選択"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:76
-#, fuzzy
 msgid "Select existing picture"
-msgstr "親トピックを選択してください："
+msgstr "画像を選択"
 
 #: ../core/templates/oopsmore.tmpl:55
 msgid "Select topic parent:"
@@ -2632,13 +2603,12 @@ msgid "Show help"
 msgstr "ヘルプを表示します"
 
 #: ../core/data/TWiki/WebChanges.txt:16
-#, fuzzy
 msgid ""
 "Show recent changes with <a href='%2'>50</a>, <a href='%3' "
 "rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a href='%5' "
 "rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> topics, <a "
 "href='%7' rel='nofollow'>all changes</a>"
-msgstr "<a href='%1'>RSS フィード</a>, 最新の変更トピック <a href='%2'>50件</a>, <a href='%3' rel='nofollow'>100件</a>, <a href='%4' rel='nofollow'>200件</a>, <a href='%5' rel='nofollow'>500件</a>, <a href='%6' rel='nofollow'>1000件</a> topics, <a href='%7' rel='nofollow'>全ての更新トピック</a>"
+msgstr "<a href='%1'>RSS フィード</a>, 最近更新されたトピック <a href='%2'>50件</a>, <a href='%3' rel='nofollow'>100件</a>, <a href='%4' rel='nofollow'>200件</a>, <a href='%5' rel='nofollow'>500件</a>, <a href='%6' rel='nofollow'>1000件</a> topics, <a href='%7' rel='nofollow'>更新された全てのトピック</a>"
 
 #: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:71
 msgid "Show tool-tip topic info on mouse-over of %1 links, on or off:"
@@ -2891,9 +2861,8 @@ msgid "The entry for user %1 was missing in the password system."
 msgstr "ユーザー%1はパスワードシステムの中で失われました"
 
 #: ../core/templates/messages.tmpl:357
-#, fuzzy
 msgid "The files have been uploaded and attached properly to the %1 topic."
-msgstr "ファイルは既にアップロードされトピック%1に添付されました"
+msgstr "ファイルは既にトピック%1にアップロードされ、添付されています。"
 
 #: ../core/templates/messages.tmpl:412
 msgid "The following topics are locked for edit, and cannot be moved:"
@@ -3051,9 +3020,8 @@ msgstr "ご変更をバージョン%1と合併しました。テキストフィ�
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:119
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:69
-#, fuzzy
 msgid "Title"
-msgstr "トピックタイトル"
+msgstr "タイトル"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:5
 msgid ""
@@ -3216,9 +3184,8 @@ msgid "Update links"
 msgstr "リンクを更新します"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:61
-#, fuzzy
 msgid "Upload"
-msgstr "ファイルをアップロードします"
+msgstr "アップロード"
 
 #: ../PatternSkin/templates/attachagain.pattern.tmpl:28
 #: ../PatternSkin/templates/attachnew.pattern.tmpl:7
@@ -3227,9 +3194,8 @@ msgid "Upload file"
 msgstr "ファイルをアップロードします"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:57
-#, fuzzy
 msgid "Upload new picture"
-msgstr "ファイルをアップロードします"
+msgstr "新しい画像をアップロードします"
 
 #: ../PatternSkin/templates/attach.pattern.tmpl:22
 msgid "Upload up to %1 KB."
@@ -3249,9 +3215,8 @@ msgid "Use %1 instead."
 msgstr "代わりに %1 を使用します"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:122
-#, fuzzy
 msgid "Use system generated password"
-msgstr "新パスワードを再度入力してください"
+msgstr "システムが自動生成されたパスワードを使用してください"
 
 #: ../PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:61
 #: ../core/data/TWiki/WebCreateNewTopicTemplate.txt:39
@@ -3259,12 +3224,11 @@ msgid "Use template:"
 msgstr "テンプレートを使用します："
 
 #: ../core/data/Sandbox/WebHome.txt:5
-#, fuzzy
 msgid ""
 "Use this web to try out TWiki. Everybody is invited to add or delete some "
 "stuff. It is recommended to walk through the %1 to learn the basics of "
 "TWiki. It is good practice to sign your contributions with your %2 and date."
-msgstr "%1ウェブはテストのために使われる砂箱です。誰でもその中身を追加したり削除したりすることが出来ます。まず%2、そして%3ツールをご覧になることをお勧めします。ページの最後に追加することと、あなたの%4 で署名や日付をつけることはとてもいい習慣です。"
+msgstr "このページを使用してTWikiを試してください。誰でもお気軽に内容を削除、追加可能です。%1でTWikiの基本を理解することをお勧めします。あなたの投稿に%2と日付を入れることがとてもいい練習になります。"
 
 #: ../core/templates/messages.tmpl:10
 msgid "User Account %1 Deleted"
@@ -3380,16 +3344,14 @@ msgstr "警告： このウェブサイトでは %<nop>INCLUDE% リンクは使�
 
 #: ../MailerContrib/data/TWiki/MailerContrib.txt:174
 #: ../MailerContrib/templates/mailnotify.tmpl:62
-#, fuzzy
 msgid "Web"
 msgstr "ウェブ"
 
 #: ../core/data/Main/WebNotify.txt:2 ../core/data/Sandbox/WebNotify.txt:2
 #: ../core/data/TWiki/WebNotify.txt:2 ../core/data/Trash/WebNotify.txt:2
 #: ../core/data/_default/WebNotify.txt:2
-#, fuzzy
 msgid "Web Notification"
-msgstr "公告"
+msgstr "ウェブ通知"
 
 #: ../core/data/TWiki/WebSearch.txt:3
 msgid "Web Search"
@@ -3457,9 +3419,8 @@ msgid ""
 msgstr "短い名前でお願いします。10桁以下、頭文字を大文字にする英数字が一番いいです。テンプレートウェブ(新しいウェブを作成するためのウェブ)をお使いになりたい場合は、アンダースコアで始まる英数字のみからなる名称を選んでください"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:12
-#, fuzzy
 msgid "You are required to change your password."
-msgstr "%1を通じてパスワードを変更することができます"
+msgstr "パスワードを変更してください。"
 
 #: ../core/templates/messages.tmpl:549
 msgid "You are trying to %1 an attachment that does not exist."
@@ -3584,11 +3545,10 @@ msgid ""
 msgstr "あなた個人の %1は %2 にあります。これをカスタマイズすることができます "
 
 #: ../core/templates/registernotify.tmpl:12
-#, fuzzy
 msgid ""
 "Your personal %1 user profile page is located at %2. You can customize it as "
 "you like:"
-msgstr "あなた個人の %1は %2 にあります。これをカスタマイズすることができます "
+msgstr "あなたの個人 %1 ユーザープロフィールは%2にあります。お好きなようにカスタマイズ可能です"
 
 #: ../core/templates/messages.tmpl:163
 msgid "Your personal TWiki user profile page %1 has been created"
@@ -3618,14 +3578,12 @@ msgid "Your user topic has not been renamed. Please e-mail %1 to request this."
 msgstr "あなたのユーザートピックはまだリネームされています。 %1 にメールして申し込んでください。"
 
 #: ../core/templates/messages.tmpl:30
-#, fuzzy
 msgid "[[%1][%2 home]]"
-msgstr "%1トップ"
+msgstr "[[%1][%2 ホーム]]"
 
 #: ../core/templates/messages.tmpl:22
-#, fuzzy
 msgid "[[%1][%2 home]] to start working on the new web"
-msgstr "%1 は新ウェブ上で仕事を始めます"
+msgstr"[[%1][%2 ホーム]] 新ウェブ上で仕事を始めます"
 
 #: ../core/templates/messages.tmpl:339
 msgid "[[%1][Debug topic text]]."
@@ -3831,9 +3789,8 @@ msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
 msgstr "title='このトピックのテキストを編集します' accesskey='w'>WYSIWYG "
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:76
-#, fuzzy
 msgid "title='PDF version of this topic'>&PDF version"
-msgstr "title='このトピックの印刷用バージョン' accesskey='p'>印刷用バージョン"
+msgstr "title='トピックのPDFバージョン' accesskey='p'>PDFバージョン"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:66
 #: ../core/templates/viewtopicactionbuttons.tmpl:23
