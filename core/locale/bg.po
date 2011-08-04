@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bg\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2011-08-04 00:50+0200\n"
+"PO-Revision-Date: 2011-08-04 22:03+0200\n"
 "Last-Translator: Krasimir Berov <k.berov@gmail.com>\n"
 "Language-Team: Bulgarian <k.berov@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -984,7 +984,7 @@ msgstr "Продължете, за да създадете новата стра
 #: ../core/data/TWiki/TWikiPreferences.txt:39
 #: ../core/data/TWiki/WebPreferences.txt:36
 msgid "Copyright &&copy; %1 by the contributing authors. All material on this collaboration platform is the property of the contributing authors."
-msgstr "Авторските права &&copy; %1 принадлежат на сътрудничещите автори. Всички материали по тази платформа за сътрудничество са собственост на сътрудничещите автори."
+msgstr "Авторските права &&copy; %1 принадлежат на сътрудничещите автори. Всички материали в този сайт за сътрудничество са собственост на сътрудничещите автори."
 
 #: ../core/templates/messages.tmpl:140
 msgid "Could not create the new web %1"
@@ -2685,11 +2685,11 @@ msgstr "Благодарим, че се регистрирахте"
 
 #: ../core/templates/registernotify.tmpl:8
 msgid "Thank you for registering in the %1 collaboration platform. Please save this e-mail for future reference."
-msgstr "Благодарим ви че се регистрирахте в платформата за сътрудничество %1. Моля, запазете това писмо за бъдещи справки."
+msgstr "Благодарим ви че се регистрирахте в сайта за сътрудничество %1. Моля, запазете това писмо за бъдещи справки."
 
 #: ../core/templates/registerconfirm.tmpl:9
 msgid "Thank you for registering in the %1 collaboration platform. Your verification code is %2."
-msgstr ""
+msgstr "Благодарим Ви че се регистрирахте в сайта за сътрудничество %1. Вашият код за проверка е %2."
 
 #: ../core/templates/messages.tmpl:554
 msgid "That user has already been activated "
@@ -2697,7 +2697,7 @@ msgstr "Този потребител вече е активиран "
 
 #: ../core/templates/messages.tmpl:277
 msgid "The %1 field must be your first and last name in %2, e.g. your capitalized first and last name with spaces removed."
-msgstr ""
+msgstr "Полето %1 трябва да се състои от Вашето собствено и фамилно име във формат %2 - имената без разстояние между тях."
 
 #: ../core/templates/messages.tmpl:271
 msgid "The %1 field must match the {LoginNameFilterIn} filter for this site"
@@ -2744,7 +2744,7 @@ msgstr "Най вероятно %1 просто е напуснал(а) стра
 
 #: ../core/templates/renamebase.tmpl:70
 msgid "The checkmarked topics will be updated (another form will appear which will _eventually_ allow you to rename any topics that were locked)"
-msgstr ""
+msgstr "Отбелязаните страници ще се обновят (ще се появи друга форма, която _най-вероятно_ ще ви позволи да преименувате заключените страници)."
 
 #: ../core/templates/messages.tmpl:295
 msgid "The e-mail address for this account is not valid."
@@ -2840,13 +2840,13 @@ msgstr "Това може да се случи по няколко причин�
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:5
 msgid "This form is used to change your registered e-mail addresses. Your registered e-mails are used by TWiki for sending you e-mails, include notifications of password changes. The addresses you register via this form are kept secret and will *not* be published anywhere on this site."
-msgstr ""
+msgstr "Тази форма ще Ви позволи да промените адреса си за електронна поща. Адресите се използват от TWiki за уведомяване или промяна на паролата. Всички адреси за е-поща, които регистрирате, използвайки тази форма се пазят в тайна и *няма* да се публикуват никъде в сайта."
 
 #: ../core/data/Sandbox/WebNotify.txt:4
 #: ../core/data/Trash/WebNotify.txt:4
 #: ../core/data/_default/WebNotify.txt:4
 msgid "This is a subscription service to be automatically notified by e-mail when topics change in this %1 web. This is a convenient service, so you do not have to come back and check all the time if something has changed. To subscribe, please add a bullet with your %2 in alphabetical order to this list:"
-msgstr ""
+msgstr "Това е абонамент за автоматично уведомяване чрез е-поща, когато се променя страница в този раздел. Така не Ви се налага да се връщате и да проверявате дали нещо се е променило. За да се запишете, моля добавете %2 в списъка както другите, като спазвате азбучния ред."
 
 #: ../MailerContrib/templates/mailnotify.tmpl:7
 #: ../MailerContrib/templates/mailnotify.tmpl:71
@@ -2890,7 +2890,7 @@ msgstr "Тази страница:"
 
 #: ../core/templates/messages.tmpl:37
 msgid "Those changes have been merged with yours to create Rev %1. Text fields will have been merged, but other data such as form fields may have overwritten the other users changes. Please inspect the topic to make sure it is OK, especially if you made any changes to form fields."
-msgstr ""
+msgstr "Чуждите промени бяха обединени с Вашите, за да се създаде версия %1. Текстовите полета ще са обединени, но ако сте редактирали полета във форми най-вероятно Вашите промени са се записали върху чуждите. Моля, разгледайте страницата, за да се уверите, че всичко е наред, особено ако сте променяли полета във форми."
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:119
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:69
@@ -3258,7 +3258,7 @@ msgstr "На вас ви е отказан достъп до следните с
 
 #: ../core/templates/messages.tmpl:473
 msgid "You are encouraged to go ahead and edit - unless you intend to change data in a form attached to the topic. If %1 actually _does_ save while you are editing, your changes will be merged, and nothing will be lost. Form data cannot easily be merged though, so in this case you are recommended to check with %1 first."
-msgstr ""
+msgstr "Не се притеснявайте да редактирате страницата. Ако _все пак_ %1 запише страницата, докато Вие редактирате, промените и на двама ви ще се обединят и нищо няма да бъде загубено. Данните във форми не могат лесно да се обединят с промените на другите. Ако възнамерявате да променяте форма, прикачена към страницата, Ви препоръчваме да се свържете с %1."
 
 #: ../PatternSkin/templates/view.pattern.tmpl:39
 #: ../TWikiNetSkin/templates/view.twikinet.tmpl:17
