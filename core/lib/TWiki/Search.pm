@@ -449,6 +449,9 @@ sub searchWeb {
     }
     $limit = 32000 unless( $limit );
 
+    # Limit DoD attack, Item6784: DoS on bin/search whith an asterisk wildcard 
+    $limit = 64 if( $doBookView && $limit > 64 );
+
     $type = 'regex' if( $params{regex} );
 
     my $mixedAlpha = $TWiki::regex{mixedAlpha};
