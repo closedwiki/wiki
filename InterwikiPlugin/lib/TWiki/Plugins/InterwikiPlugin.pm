@@ -143,9 +143,8 @@ sub _link {
         my $url = $interSiteTable{$site}{url};
         my $label = "$site:$page";
         if( $site eq 'TWiki' ) {
-            $tooltip =~ s/\$page/$page/g;
             # TWikibug:Item6503 - hack to prettify TWiki.org link URL
-            $page =~ s/^([A-Za-z0-9]+)\./$1\//; # change first '.' to '/' 
+            $upage =~ s/^([A-Za-z0-9]+)\./$1\//; # change first '.' to '/' 
         }
         if( $url =~ /\$page/ ) {
 	    $url =~ s/\$page/$upage/g;
@@ -169,7 +168,7 @@ sub _link {
         $format =~ s/\$page/$page/g;
         $text .= $format;
     } else {
-        $text .= "$site\:$page$postfix";
+        $text .= "$site\:$upage$postfix";
     }
     return $text;
 }
