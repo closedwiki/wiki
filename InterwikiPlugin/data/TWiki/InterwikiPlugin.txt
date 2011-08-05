@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307391691" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1312521220" format="1.1" version="$Rev$"}%
 ---+!! Interwiki Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -66,6 +66,7 @@ __%X% Note:__ This plugin is included in the TWiki distribution package. You do 
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-08-04: | TWikibug:Item6786: Fix for TWiki.org specific link fix no longer working as implemented in Item6731 - bug was introduced by Item6731 -- TWiki:Main.PeterThoeny |
 |  2010-06-06: | TWikibug:Item6701: Adding TWikisvn link rule -- TWiki:Main.PeterThoeny |
 |  2010-05-25: | TWikibug:Item6731: Small code fixes; documentation of Timothe's enhancements -- TWiki:Main.PeterThoeny |
 |  2011-05-25: | TWikibug:Item6731: Allow quotes in page pattern, and URL-encode quoted page patterns -- TWiki:Main.TimotheLitt |
