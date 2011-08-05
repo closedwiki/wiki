@@ -1163,7 +1163,9 @@ sub _make_params {
         if( $p eq '#' ) {
             $anchor .= '#' . shift( @args );
         } else {
-            $ps .= ';' . $p.'='.urlEncode(shift( @args )||'');
+            my $arg = shift( @args );
+            $arg = '' unless defined( $arg );
+            $ps .= ";$p=" . urlEncode( $arg );
         }
     }
     if( $ps ) {
