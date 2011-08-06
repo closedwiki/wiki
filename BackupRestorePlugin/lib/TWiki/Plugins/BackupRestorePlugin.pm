@@ -26,18 +26,17 @@ require TWiki::Plugins; # For the API version
 
 #==================================================================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-07-15';
+our $RELEASE = '2011-08-06';
 our $SHORTDESCRIPTION = 'Administrator utility to backup, restore and upgrade a TWiki site';
 our $NO_PREFS_IN_TOPIC = 1;
 
 my $core;
 my $baseTopic;
 my $baseWeb;
-my $user;
 
 #==================================================================
 sub initPlugin {
-    ( $baseTopic, $baseWeb, $user ) = @_;
+    ( $baseTopic, $baseWeb ) = @_;
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.026 ) {
@@ -62,7 +61,6 @@ sub _BACKUPRESTORE {
         my $cfg = {
           BaseTopic  => $baseTopic,
           BaseWeb    => $baseWeb,
-          User       => $user,
         };
         $core = new TWiki::Plugins::BackupRestorePlugin::Core( $cfg );
     }

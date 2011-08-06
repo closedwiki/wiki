@@ -52,14 +52,13 @@ sub new {
     bless( $this, $class );
 
     $this->{Location} = $this->_gatherLocation();
-
     $this->{error} = '';
 
     return $this;
 }
 
 #==================================================================
-# HIGH LEVEL BACKUP/RESTORE METHODS
+# HIGH-LEVEL BACKUP/RESTORE METHODS
 #==================================================================
 
 #==================================================================
@@ -68,25 +67,79 @@ sub BACKUPRESTORE {
 
     TWiki::Func::writeDebug( "- BackupRestorePlugin->BACKUPRESTORE" ) if $this->{Debug};
 
-    my $text = "Placeholder for BACKUPRESTORE, user !$this->{User}, base web $this->{BaseWeb}";
+    my $text = '';
+    if( TWiki::Func::isAnAdmin( TWiki::Func::getCanonicalUserID() ) ) {
+        my $action = $params->{action} || '';
+        if( $action eq 'create_backup' ) {
+            $this->_startBackup( $session, $params );
+            $text .= $this->_showBackupSummary( $session, $params );
+        } elsif( $action eq 'delete_backup' ) {
+            $this->_deleteBackup( $session, $params );
+            $text .= $this->_showBackupSummary( $session, $params );
+        } elsif( $action eq 'restore_backup' ) {
+            $this->_restoreFromBackup( $session, $params );
+            $text .= $this->_showBackupSummary( $session, $params );
+        } else {
+            $text = $this->_showBackupSummary( $session, $params );
+        }
+
+    } else {
+        $this->{error} = 'ERROR: Only members of the %USERSWEB%.TWikiAdminGroup can see the backup & restore console.';
+    }
+
+    $text = $this->_renderError() . $text;
+    return $text;
+}
+
+#==================================================================
+sub _showBackupSummary {
+    my( $this, $session, $params ) = @_;
+
+    my $text = "Placeholder for BACKUPRESTORE, user " . TWiki::Func::getCanonicalUserID() . ", base web $this->{BaseWeb}";
     $text .= "<br /> " . $this->_testZipMethods();
     return $text;
 }
 
 
 #==================================================================
-# MID LEVEL BACKUP/RESTORE METHODS
+# MID-LEVEL BACKUP/RESTORE METHODS
 #==================================================================
 
 #==================================================================
-sub createBackup {
-    my( $this ) = @_;
+sub _startBackup {
+    my( $this, $session, $params ) = @_;
 
 }
 
 #==================================================================
-# LOW LEVEL METHODS
+sub _deleteBackup {
+    my( $this, $session, $params ) = @_;
+
+}
+
 #==================================================================
+sub _restoreFromBackup {
+    my( $this, $session, $params ) = @_;
+
+}
+
+
+#==================================================================
+# LOW-LEVEL METHODS
+#==================================================================
+
+#==================================================================
+sub _renderError {
+    my( $this ) = @_;
+
+    return '' unless $this->{error};
+
+    my $text = '<div style="background-color: #f0f0f4; padding: 10px 20px">'
+             . $this->{error}
+             . "</div>\n";
+    $this->{error} = '';
+    return $text;
+}
 
 #==================================================================
 sub _gatherLocation {
