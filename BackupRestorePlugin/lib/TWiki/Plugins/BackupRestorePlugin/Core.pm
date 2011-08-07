@@ -176,6 +176,14 @@ sub _restoreFromBackup {
 
 }
 
+#==================================================================
+sub _checkBackupState {
+    my( $this ) = @_;
+#FIXME
+    my $inProgress = 1;
+    my $fileName = $this->_buildFileName();
+    return( $inProgress, $fileName );
+}
 
 #==================================================================
 # LOW-LEVEL METHODS
@@ -195,12 +203,16 @@ sub _renderError {
 }
 
 #==================================================================
-sub _checkBackupState {
+sub _buildFileName {
     my( $this ) = @_;
-#FIXME
-    my $inProgress = 0;
-    my $fileName = 'twiki-backup-2011-08-06-21-45.zip';
-    return( $inProgress, $fileName );
+    my( $sec, $min, $hour, $day, $mon, $year ) = localtime( time() );
+    my $text = 'twiki-backup-';
+    $text .= sprintf( "%.4u", $year + 1900 ) . '-';
+    $text .= sprintf( "%.2u", $mon + 1 ) . '-';
+    $text .= sprintf( "%.2u", $day ) . '-';
+    $text .= sprintf( "%.2u", $hour ) . '-';
+    $text .= sprintf( "%.2u", $min ) . '.zip';
+    return $text;
 }
 
 #==================================================================
