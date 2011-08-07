@@ -1,7 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310784533" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1312676182" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="BackupRestorePlugin"}%
 ---+!! TWiki Backup &amp; Restore Console
 
-%BACKUPRESTORE{}%
+%BACKUPRESTORE{
+ action="%URLPARAM{ "action" encode="quote" }%"
+ file="%URLPARAM{ "file" encode="quote" }%"
+}%
 
 __Related Topics:__ BackupRestorePlugin, %SYSTEMWEB%.AdminToolsCategory

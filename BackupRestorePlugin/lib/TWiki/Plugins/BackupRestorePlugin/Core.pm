@@ -65,12 +65,17 @@ sub new {
 sub BACKUPRESTORE {
     my( $this, $session, $params, $theTopic, $theWeb ) = @_;
 
+    my $action = $params->{action} || '';
+    $this->{Debug} = 1 if( $action eq 'debug' );
+
     TWiki::Func::writeDebug( "- BackupRestorePlugin->BACKUPRESTORE" ) if $this->{Debug};
 
     my $text = '';
     if( TWiki::Func::isAnAdmin( TWiki::Func::getCanonicalUserID() ) ) {
         my $action = $params->{action} || '';
-        if( $action eq 'create_backup' ) {
+        if( $action eq 'backup_detail' ) {
+            $text .= $this->_showBackupDetail( $session, $params );
+        } elsif( $action eq 'create_backup' ) {
             $this->_startBackup( $session, $params );
             $text .= $this->_showBackupSummary( $session, $params );
         } elsif( $action eq 'delete_backup' ) {
@@ -79,8 +84,10 @@ sub BACKUPRESTORE {
         } elsif( $action eq 'restore_backup' ) {
             $this->_restoreFromBackup( $session, $params );
             $text .= $this->_showBackupSummary( $session, $params );
+        } elsif( $action eq 'debug' ) {
+            $text .= $this->_debugBackup( $session, $params );
         } else {
-            $text = $this->_showBackupSummary( $session, $params );
+            $text .= $this->_showBackupSummary( $session, $params );
         }
 
     } else {
@@ -95,7 +102,33 @@ sub BACKUPRESTORE {
 sub _showBackupSummary {
     my( $this, $session, $params ) = @_;
 
-    my $text = "Placeholder for BACKUPRESTORE, user " . TWiki::Func::getCanonicalUserID() . ", base web $this->{BaseWeb}";
+    my $text = "| *Backup* | *Action* |\n";
+    my @backupFiles = $this->_listAllBackups();
+    if( scalar @backupFiles ) {
+        foreach my $fileName ( @backupFiles ) {
+            $text .= "| $fileName | |\n"; 
+        }
+    } else {
+        $text .= "| (no existing backups ) | |\n";
+    }
+    return $text;
+}
+
+#==================================================================
+sub _showBackupDetail {
+    my( $this, $session, $params ) = @_;
+
+    my $text = '';
+    my $fileName = $params->{file};
+    $text .= "(file: $fileName)";
+    return $text;
+}
+
+#==================================================================
+sub _debugBackup {
+    my( $this, $session, $params ) = @_;
+
+    my $text = "Debug BACKUPRESTORE, user " . TWiki::Func::getCanonicalUserID() . ", base web $this->{BaseWeb}";
     $text .= "<br /> " . $this->_testZipMethods();
     return $text;
 }
@@ -148,12 +181,17 @@ sub _gatherLocation {
     my $loc;
 
     # discover TWiki bin dir
-    my $binDir = $ENV{SCRIPT_FILENAME};
+    my $binDir = $ENV{SCRIPT_FILENAME} || '';
     $binDir =~ s|(.*)[\\/]+.*|$1|;       # cut off script to get name of bin dir
-    $binDir = cwd() unless( $binDir ) ;  # last resort to discover bin dir
+    unless( $binDir )  {
+        # last resort to discover bin dir
+        require Cwd;
+        import Cwd qw( cwd );
+        $binDir;
+    }
 
     # discover TWiki root dir
-    my $rootDir = $TWiki::cfg{DataDir} || $binDir || cwd();
+    my $rootDir = $TWiki::cfg{DataDir} || $binDir;
     $rootDir =~ s|(.*)[\\/]+.*|$1|;      # go one directory up
     $loc->{RootDir} = $rootDir;
 
@@ -192,12 +230,9 @@ sub _testZipMethods {
     my( $this ) = @_;
 
     my $text = '';
-use Cwd;
     $text .= "\n<br />===== Dirs <pre>\n"
            . "-BaseTopic:  $this->{BaseTopic}\n"
            . "-BaseWeb:    $this->{BaseWeb}\n"
-           . "-User:       $this->{User}\n"
-           . "-pwd:        " . cwd() . "\n" 
            . "-Root:       $this->{Location}{RootDir}\n"
            . "-DataDir:    $this->{Location}{DataDir}\n"
            . "-PubDir:     $this->{Location}{PubDir}\n"
