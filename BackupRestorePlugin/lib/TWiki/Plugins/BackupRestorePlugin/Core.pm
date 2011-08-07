@@ -134,7 +134,8 @@ sub _showBackupSummary {
                    . '<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
                    . '<input type="hidden" name="action" value="delete_backup" />'
                    . '<input type="hidden" name="file" value="' . $fileName . '" />'
-                   . '<input type="submit" value="Delete..." class="twikiButton" />'
+                   . '<input type="submit" value="Delete..." class="twikiButton" onClick="return confirm('
+                   . "'Are you sure you want to delete $fileName?'" . ');" />'
                    . '</form> |' . "\n";
         }
     } else {
@@ -201,7 +202,8 @@ sub _cancelBackup {
 #==================================================================
 sub _deleteBackup {
     my( $this, $session, $params ) = @_;
-    #FIXME
+
+    return $this->_deleteZip( $params->{file} );
 }
 
 #==================================================================
