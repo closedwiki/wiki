@@ -110,13 +110,13 @@ sub _showBackupSummary {
     my $text = "| *Backup* | *Action* |\n";
     my( $inProgress, $fileName ) = $this->_checkBackupState();
     if( $inProgress ) {
-        $text .= '| %ICON{zip}% ' . $fileName . '| %ICON{processing}% Creating backup, please wait. '
+        $text .= '| %ICON{processing}% ' . $fileName . '| Creating backup now, please wait. '
                . '<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
                . '<input type="hidden" name="action" value="cancel_backup" />'
                . '<input type="submit" value="Cancel" class="twikiButton" />'
                . '</form> |' . "\n";
     } else {
-        $text .= '| %ICON{zip}% ' . $fileName
+        $text .= '| %ICON{newtopic}% ' . $fileName
                . '| <form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
                . '<input type="hidden" name="action" value="create_backup" />'
                . '<input type="submit" value="Create backup now" class="twikiButton" />'
