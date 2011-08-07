@@ -103,10 +103,30 @@ sub _showBackupSummary {
     my( $this, $session, $params ) = @_;
 
     my $text = "| *Backup* | *Action* |\n";
+    my( $inProgress, $fileName ) = $this->_checkBackupState();
+    if( $inProgress ) {
+        $text .= "| \%ICON{zip}\% $fileName | \%ICON{processing}\% Creating backup, please wait. |\n";
+    } else {
+        $text .= "| \%ICON{zip}\% $fileName "
+               . '| <form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
+               . '<input type="hidden" name="action" value="create_backup" />'
+               . '<input type="submit" value="Create backup now" class="twikiButton" />'
+               . "</form> |\n"; 
+
+    }
     my @backupFiles = $this->_listAllBackups();
     if( scalar @backupFiles ) {
-        foreach my $fileName ( @backupFiles ) {
-            $text .= "| $fileName | |\n"; 
+        foreach $fileName ( @backupFiles ) {
+            $text .= "| \%ICON{zip}\% [[\%SCRIPTURL{view}\%/\%WEB\%/\%TOPIC\%/$fileName][$fileName]] "
+                   . '| <form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
+                   . '<input type="hidden" name="action" value="backup_detail" />'
+                   . '<input type="hidden" name="file" value="' . $fileName . '" />'
+                   . '<input type="submit" value="Details / Restore..." class="twikiButton" />'
+                   . "</form> "
+                   . '<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
+                   . '<input type="hidden" name="action" value="delete_backup" />'
+                   . '<input type="submit" value="Delete..." class="twikiButton" />'
+                   . "</form> |\n";     
         }
     } else {
         $text .= "| (no existing backups ) | |\n";
@@ -172,6 +192,15 @@ sub _renderError {
              . "</div>\n";
     $this->{error} = '';
     return $text;
+}
+
+#==================================================================
+sub _checkBackupState {
+    my( $this ) = @_;
+#FIXME
+    my $inProgress = 0;
+    my $fileName = 'twiki-backup-2011-08-06-21-45.zip';
+    return( $inProgress, $fileName );
 }
 
 #==================================================================
