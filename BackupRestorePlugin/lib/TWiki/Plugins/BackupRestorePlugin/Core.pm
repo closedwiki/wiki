@@ -42,6 +42,7 @@ sub new {
 
     $this->{Debug}        = $TWiki::cfg{Plugins}{BackupRestorePlugin}{Debug} || 0;
     $this->{BackupDir}    = $TWiki::cfg{Plugins}{BackupRestorePlugin}{BackupDir} || '/tmp';
+    $this->{TempDir}      = $TWiki::cfg{Plugins}{BackupRestorePlugin}{TempDir} || '/tmp';
     $this->{KeepNumBUs}   = $TWiki::cfg{Plugins}{BackupRestorePlugin}{KeepNumberOfBackups} || '5';
     $this->{createZipCmd} = $TWiki::cfg{Plugins}{BackupRestorePlugin}{createZipCmd} || 'zip -r';
     $this->{listZipCmd}   = $TWiki::cfg{Plugins}{BackupRestorePlugin}{listZipCmd} || 'unzip -l';
@@ -428,7 +429,7 @@ sub _unZip {
 }
 
 #==================================================================
-sub readFile {
+sub _readFile {
     my $name = shift;
     my $data = '';
     open( IN_FILE, "<$name" ) || return '';
@@ -440,7 +441,7 @@ sub readFile {
 }
 
 #==================================================================
-sub saveFile {
+sub _saveFile {
     my( $name, $text ) = @_;
 
     unless ( open( FILE, ">$name" ) )  {
