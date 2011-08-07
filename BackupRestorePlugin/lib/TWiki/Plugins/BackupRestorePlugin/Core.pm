@@ -78,6 +78,9 @@ sub BACKUPRESTORE {
         } elsif( $action eq 'create_backup' ) {
             $this->_startBackup( $session, $params );
             $text .= $this->_showBackupSummary( $session, $params );
+        } elsif( $action eq 'cancel_backup' ) {
+            $this->_cancelBackup( $session, $params );
+            $text .= $this->_showBackupSummary( $session, $params );
         } elsif( $action eq 'delete_backup' ) {
             $this->_deleteBackup( $session, $params );
             $text .= $this->_showBackupSummary( $session, $params );
@@ -105,28 +108,32 @@ sub _showBackupSummary {
     my $text = "| *Backup* | *Action* |\n";
     my( $inProgress, $fileName ) = $this->_checkBackupState();
     if( $inProgress ) {
-        $text .= "| \%ICON{zip}\% $fileName | \%ICON{processing}\% Creating backup, please wait. |\n";
+        $text .= '| %ICON{zip}% ' . $fileName . '| %ICON{processing}% Creating backup, please wait. '
+               . '<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
+               . '<input type="hidden" name="action" value="cancel_backup" />'
+               . '<input type="submit" value="Cancel" class="twikiButton" />'
+               . '</form> |' . "\n";
     } else {
-        $text .= "| \%ICON{zip}\% $fileName "
+        $text .= '| %ICON{zip}% ' . $fileName
                . '| <form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
                . '<input type="hidden" name="action" value="create_backup" />'
                . '<input type="submit" value="Create backup now" class="twikiButton" />'
-               . "</form> |\n"; 
-
+               . '</form> |' . "\n";
     }
     my @backupFiles = $this->_listAllBackups();
     if( scalar @backupFiles ) {
-        foreach $fileName ( @backupFiles ) {
-            $text .= "| \%ICON{zip}\% [[\%SCRIPTURL{view}\%/\%WEB\%/\%TOPIC\%/$fileName][$fileName]] "
+        foreach $fileName ( reverse sort @backupFiles ) {
+            $text .= '| %ICON{zip}% [[%SCRIPTURL{view}%/%WEB%/%TOPIC%/' . "$fileName][$fileName]] "
                    . '| <form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
                    . '<input type="hidden" name="action" value="backup_detail" />'
                    . '<input type="hidden" name="file" value="' . $fileName . '" />'
                    . '<input type="submit" value="Details / Restore..." class="twikiButton" />'
-                   . "</form> "
+                   . '</form> '
                    . '<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
                    . '<input type="hidden" name="action" value="delete_backup" />'
+                   . '<input type="hidden" name="file" value="' . $fileName . '" />'
                    . '<input type="submit" value="Delete..." class="twikiButton" />'
-                   . "</form> |\n";     
+                   . '</form> |' . "\n";
         }
     } else {
         $text .= "| (no existing backups ) | |\n";
@@ -160,6 +167,12 @@ sub _debugBackup {
 
 #==================================================================
 sub _startBackup {
+    my( $this, $session, $params ) = @_;
+
+}
+
+#==================================================================
+sub _cancelBackup {
     my( $this, $session, $params ) = @_;
 
 }
