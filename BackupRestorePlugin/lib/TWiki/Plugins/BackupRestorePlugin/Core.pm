@@ -53,6 +53,7 @@ sub new {
     bless( $this, $class );
 
     $this->{Location} = $this->_gatherLocation();
+    $this->{SemaphorFile} = $this->{TempDir} . '/BackupRestorePlugin.dat';
     $this->{error} = '';
 
     return $this;
@@ -167,37 +168,48 @@ sub _debugBackup {
 #==================================================================
 
 #==================================================================
+sub _checkBackupState {
+    my( $this ) = @_;
+    return( -e $this->{SemaphorFile}, $this->_buildFileName() );
+}
+
+#==================================================================
 sub _startBackup {
     my( $this, $session, $params ) = @_;
 
+    if( -e $this->{SemaphorFile} ) {
+        $this->{error} = 'ERROR: Backup is already in progress.';
+    } else {
+        my $text = "File: " . $this->_buildFileName() . "\n";
+        _saveFile( $this->{SemaphorFile}, $text );
+        #FIXME: start backup
+    }
 }
 
 #==================================================================
 sub _cancelBackup {
     my( $this, $session, $params ) = @_;
 
+    if( -e $this->{SemaphorFile} ) {
+        #FIXME: kill backup
+        unlink( $this->{SemaphorFile} );
+    } else {
+        $this->{error} = 'ERROR: No backup in progress.';
+    }
 }
 
 #==================================================================
 sub _deleteBackup {
     my( $this, $session, $params ) = @_;
-
+    #FIXME
 }
 
 #==================================================================
 sub _restoreFromBackup {
     my( $this, $session, $params ) = @_;
-
+    #FIXME
 }
 
-#==================================================================
-sub _checkBackupState {
-    my( $this ) = @_;
-#FIXME
-    my $inProgress = 1;
-    my $fileName = $this->_buildFileName();
-    return( $inProgress, $fileName );
-}
 
 #==================================================================
 # LOW-LEVEL METHODS
@@ -286,15 +298,17 @@ sub _testZipMethods {
 
     my $text = '';
     $text .= "\n<br />===== Dirs <pre>\n"
-           . "-BaseTopic:  $this->{BaseTopic}\n"
-           . "-BaseWeb:    $this->{BaseWeb}\n"
-           . "-Root:       $this->{Location}{RootDir}\n"
-           . "-DataDir:    $this->{Location}{DataDir}\n"
-           . "-PubDir:     $this->{Location}{PubDir}\n"
-           . "-WorkingDir: $this->{Location}{WorkingDir}\n"
-           . "-LocalLib:   $this->{Location}{LocalLib}\n"
-           . "-LocalSite:  $this->{Location}{LocalSite}\n"
-           . "-ApacheConf: $this->{Location}{ApacheConf}\n"
+           . "-BaseTopic:    $this->{BaseTopic}\n"
+           . "-BaseWeb:      $this->{BaseWeb}\n"
+           . "-Root:         $this->{Location}{RootDir}\n"
+           . "-DataDir:      $this->{Location}{DataDir}\n"
+           . "-PubDir:       $this->{Location}{PubDir}\n"
+           . "-WorkingDir:   $this->{Location}{WorkingDir}\n"
+           . "-LocalLib:     $this->{Location}{LocalLib}\n"
+           . "-LocalSite:    $this->{Location}{LocalSite}\n"
+           . "-ApacheConf:   $this->{Location}{ApacheConf}\n"
+           . "-TempDir:      $this->{TempDir}\n"
+           . "-SemaphorFile: $this->{SemaphorFile}\n"
            . "\n</pre>\n";
 
     $text .= "\n<br />===== Test _listAllBackups()<pre>\n"
@@ -448,7 +462,7 @@ sub _saveFile {
         return "Can't create file $name - $!\n";
     }
     print FILE $text;
-    close( FILE);
+    close( FILE );
     return '';
 }
 
