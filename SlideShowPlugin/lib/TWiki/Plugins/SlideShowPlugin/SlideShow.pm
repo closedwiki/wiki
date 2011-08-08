@@ -61,7 +61,8 @@ sub handler
     # Build query string based on existingURL parameters
     my $qparams = '?slideshow=on;skin=print';
     foreach my $name ( $query->param ) {
-        next if ( $name =~ /(text|keywords|web|topic|slideshow|skin|\#)/ );
+        next if ( $name =~ s/[^a-zA-Z0-9_\-]//go ); # Item6789: Santize parameter name
+        next if ( $name =~ /^(text|keywords|web|topic|slideshow|skin)$/ );
         $qparams .= ';' . $name . '=' . urlEncode( $query->param($name) );
     }
 

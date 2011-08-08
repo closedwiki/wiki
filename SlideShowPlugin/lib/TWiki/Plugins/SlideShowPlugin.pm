@@ -21,7 +21,7 @@ package TWiki::Plugins::SlideShowPlugin;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-07-09';
+our $RELEASE = '2011-08-08';
 
 our $web;
 our $topic;
