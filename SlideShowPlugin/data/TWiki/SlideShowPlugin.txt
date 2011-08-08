@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310274293" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1312843903" format="1.1" version="$Rev$"}%
 ---+!! Slide Show Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -169,10 +169,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2002-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]%BR% &copy; 2002-2010 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2002-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]%BR% &copy; 2002-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-07-09 |
+|  Plugin Version: | 2011-08-08 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-08-08: | TWikibug:Item6789: Better error handling in SLIDESHOWSTART variable |
 |  2011-07-09: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2010-12-28: | TWikibug:Item6626: New slide navigation using keys: Home, Left-arrow, Page-up, Right-arrow, Page-down, End and Esc |
 |  2010-05-16: | TWikibug:Item6433: Doc improvements |
