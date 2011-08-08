@@ -19,7 +19,7 @@ msgstr ""
 #: ../core/data/TWiki/TWikiPreferences.txt:369
 #, fuzzy
 msgid "$text (this topic does not yet exist; you can create it)"
-msgstr "BEMÆRK: Denne Wiki-side er ikke oprettet endnu"
+msgstr "$text (denne side er ikke oprettet endnu. Det kan du gøre)"
 
 #. ($days)
 #: ../core/lib/TWiki/Time.pm:309
@@ -48,9 +48,8 @@ msgstr "%1"
 
 #: ../core/templates/registernotifyadminfail.tmpl:3
 #: ../core/templates/registernotifyadminfailrem.tmpl:3
-#, fuzzy
 msgid "%1 - Registration failure for %2 (%3)"
-msgstr "%1 - Registrerings-information for %2 (%3)"
+msgstr "%1 - Registrering fejlede for %2 (%3)"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:110
 #: ../core/templates/registernotify.tmpl:3
@@ -82,7 +81,7 @@ msgstr "%1 - se en kort introduktion til TWiki for begyndere"
 
 #: ../core/data/TWiki/WebChanges.txt:2
 msgid "%1 Recent Changes in %2 Web"
-msgstr "%1 senest ændrede sider i %2-webbet"
+msgstr "%1 senest ændringer i %2-webbet"
 
 #: ../PatternSkin/data/Main/WebLeftBar.txt:4
 #: ../PatternSkin/data/Sandbox/WebLeftBar.txt:4
@@ -108,24 +107,24 @@ msgstr "%1 Web Home"
 
 #: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:79
 msgid "%1 for changing your email address"
-msgstr "%1 for at opdatere din e-mail-adresse"
+msgstr "%1 for at ændre din e-mail-adresse"
 
 #: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:78
 msgid "%1 for changing your password"
-msgstr "%1 for at skifte dit password"
+msgstr "%1 for at ændre dit kodeord"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:43
 #: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:38
 #: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:80
 #: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:31
 msgid "%1 has a list of other TWiki users"
-msgstr "%1 er en liste over andre TWiki brugere."
+msgstr "%1 indeholder en liste over andre TWiki brugere."
 
 #: ../core/templates/messages.tmpl:461
 msgid ""
 "%1 has been editing the topic for %2 and the lease is still active for "
 "another %3."
-msgstr "%1 har nu editeret siden i %2 og låsen er stadig aktiv i %3 endnu."
+msgstr "%1 har haft editerings-låsen i %2 og beholder den i endnu %3."
 
 #: ../core/templates/registernotifyadmin.tmpl:10
 #: ../core/templates/registernotifyadminfail.tmpl:10
@@ -151,11 +150,11 @@ msgstr "%1 er i øjeblikket sat til %2"
 
 #: ../core/templates/messages.tmpl:459
 msgid "%1 is editing %2."
-msgstr "%1 editerer i øjeblikket %2"
+msgstr "%1 er ved at editerer %2"
 
 #: ../core/templates/messages.tmpl:57
 msgid "%1 is in at least one group and cannot be removed"
-msgstr "%1 er medlem af mindst en gruppe og kan ikke fjernes"
+msgstr "%1 er medlem af mindst en gruppe og kan derfor ikke fjernes"
 
 #: ../PatternSkin/templates/renameattachmentdelete.pattern.tmpl:40
 msgid "%1 is the default topic for deleted attachments."
@@ -186,7 +185,6 @@ msgid "%1 topic does not exist"
 msgstr "siden %1 eksisterer ikke"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:56
-#, fuzzy
 msgid "&Attach"
 msgstr "Vedhæft"
 
@@ -195,7 +193,6 @@ msgid "&Cancel"
 msgstr "Fortryd (&C)"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:21
-#, fuzzy
 msgid "&Edit"
 msgstr "Editér"
 
@@ -206,7 +203,7 @@ msgstr "&Historik"
 
 #: ../core/templates/messages.tmpl:270
 msgid "'%1' is not a valid %2 "
-msgstr "'%1' er ikke en korrekt %2 "
+msgstr "'%1' er ikke en gyldig %2 "
 
 #: ../core/data/TWiki/WebTopicCreator.txt:2
 msgid "'Create New Topic' page has moved"
@@ -227,14 +224,13 @@ msgstr "(=all= for at vise alle sider)"
 
 #: ../core/templates/oopsinvalidtoken.tmpl:4
 msgid "(Invalid Crypt Token)"
-msgstr ""
+msgstr "(Ugyldig krypterings-polet)"
 
 #: ../core/data/Sandbox/WebHome.txt:10
 msgid "(Use a topic name in TWiki.WikiNotation)"
-msgstr "(Brug et sidenavn i TWiki.WikiNotation)"
+msgstr "(Brug et sidenavn som overholder TWiki.WikiNotation)"
 
 #: ../core/templates/messages.tmpl:164
-#, fuzzy
 msgid ""
 "(__Suggestion:__ How about uploading your picture to your profile page?)"
 msgstr ""
@@ -422,7 +418,7 @@ msgid ""
 msgstr ""
 "*Vigtigt:* Informationen du opgiver i denne formular vil blive gemt på TWiki-"
 "serveren. Informationen bliver tilgængelig for alle som kan nå serveren via "
-"webbet (dit password vil dog blive krypteret og skjult, og din e-mail-"
+"webbet (dit kodeord vil dog blive krypteret og skjult, og din e-mail-"
 "adresse vil blive vist forvansket for at afværge spam). Dit oprindelsesland "
 "(eller det land hvor serveren befinder sig) kan have data- eller "
 "personbeskyttelseslove, der omfatter denne type information. Hvis du er i "
@@ -463,13 +459,11 @@ msgstr ""
 "*&&nbsp;din tekst="
 
 #: ../core/data/TWiki/WikiSyntaxSummary.txt:17
-#, fuzzy
 msgid ""
 "*external links* =http://google.com/= or =[<nop>[http://google.com/][link to "
 "Google]]="
 msgstr ""
-"*eksterne links* brug et sidenavn eller URL: =%HOMETOPIC%=, =http://yahoo."
-"com=, eller =[<nop>[http://yahoo.com/][link til Yahoo]]="
+"*eksterne links* =http://google.com=, eller =[<nop>[http://google.com/][link til Google]]="
 
 #: ../core/data/TWiki/WikiSyntaxSummary.txt:14
 msgid "*headings* 3 dashes, 1 to 6 pluses, 1 space: =---++&&nbsp;Your Heading="
@@ -558,9 +552,9 @@ msgid ""
 "been sent to your registered e-mail address. If your e-mail address is no "
 "longer valid, please contact %3"
 msgstr ""
-"Et nyt system-genereret password til dit brugernavn %1 (!WikiName %2) er "
-"blevet sendt til den registrerede e-mail-adresse. Hvis din e-mail-adresse "
-"ikke længere er gyldig, kontakt da venligst %3"
+"Et nyt system-genereret kodeord til dit brugernavn %1 (!WikiName %2) er "
+"blevet sendt til den registrerede e-mail-adresse. Kontakt venligst %3"
+" Hvis du ikke længere bruger den e-mail-adresse."
 
 #: ../core/data/TWiki/WebTemplateTopics.txt:4
 msgid "A topic template defines the initial content of a newly created topic."
@@ -583,9 +577,8 @@ msgstr "Tastatur-genveje"
 
 #: ../PatternSkin/data/TWiki/UserBookmarks.txt:15
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:20
-#, fuzzy
 msgid "Account"
-msgstr "Handling"
+msgstr "Konto"
 
 #: ../core/templates/attachtables.tmpl:37
 #: ../core/templates/attachtables.tmpl:4 ../core/templates/changeform.tmpl:10
@@ -640,7 +633,7 @@ msgstr ""
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:16
 msgid "After submitting this form your password will be changed."
-msgstr "Når du har sendt denne formular, vil dit password blive opdateret."
+msgstr "Når du har sendt denne formular, vil dit kodeord blive opdateret."
 
 #: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:12
 msgid ""
@@ -648,7 +641,7 @@ msgid ""
 "*system-generated* password, and a link to a page where you can change it."
 msgstr ""
 "Når du har sendt denne formular, vil du modtage en e-mail med dit nye "
-"*system-genererede* password, samt et link til en side hvor du selv kan "
+"*system-genererede* kodeord, samt et link til en side hvor du selv kan "
 "ændre det."
 
 #: ../core/data/TWiki/WebSearch.txt:33
@@ -657,9 +650,8 @@ msgid "All public webs"
 msgstr "Alle offentlige webs"
 
 #: ../core/data/TWiki/WebTopicList.txt:2
-#, fuzzy
 msgid "All topics in %1 web"
-msgstr "Alle sider i %1"
+msgstr "Alle sider i %1-webbet"
 
 #: ../core/templates/twiki.tmpl:7
 msgid "Allow non <nop>WikiWord for the new topic name"
@@ -703,9 +695,8 @@ msgid "Attach"
 msgstr "Vedhæft"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:29
-#, fuzzy
 msgid "Attach file or image"
-msgstr "Vedhæft en fil til siden %1"
+msgstr "Vedhæft en fil eller billede"
 
 #: ../PatternSkin/templates/attachnew.pattern.tmpl:4
 #: ../core/templates/attachnew.tmpl:4
@@ -723,9 +714,8 @@ msgid "Attach new file"
 msgstr "Vedhæft ny fil"
 
 #: ../PatternSkin/templates/attach.pattern.tmpl:23
-#, fuzzy
 msgid "Attach up to 10 files at a time."
-msgstr "Vedhæft en fil til siden %1"
+msgstr "Vedhæft op til 10 filer på en gang"
 
 #: ../core/templates/attachtables.tmpl:4
 msgid "Attachment"
@@ -818,7 +808,7 @@ msgstr "Referencer til %1 fra alle offentlige webs"
 
 #: ../core/templates/messages.tmpl:288
 msgid "Bad password"
-msgstr "Forkert password"
+msgstr "Forkert kodeord"
 
 #: ../core/templates/messages.tmpl:126
 msgid "Base web %1 is missing or does not exist"
@@ -855,7 +845,7 @@ msgstr "Kan ikke finde brugeren %1"
 msgid "Can't get an e-mail address for %1 (required for password reset)"
 msgstr ""
 "Kunne ikke finde e-mail-adresse for %1 (en e-mail-adresse er nødvendig for "
-"at kunne nulstille et password)"
+"at kunne nulstille et kodeord)"
 
 #: ../ClassicSkin/templates/twiki.classic.tmpl:68
 #: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:184
@@ -891,18 +881,16 @@ msgid "Categories"
 msgstr "Kategorier"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:42
-#, fuzzy
 msgid "Change"
-msgstr "Ændret"
+msgstr "Ændring"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:2
 msgid "Change Password"
-msgstr "Skift password"
+msgstr "Skift kodeord"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:2
-#, fuzzy
 msgid "Change Profile Picture of %1"
-msgstr "Opdatér side"
+msgstr "Opdatér profilbillede for %1"
 
 #: ../PatternSkin/templates/attachagain.pattern.tmpl:16
 msgid "Change comment and properties only"
@@ -937,13 +925,12 @@ msgstr "Opdater links fra sider, der peger på %1 (kun i %2-webbet)"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:30
 msgid "Change password"
-msgstr "Skift password"
+msgstr "Skift kodeord"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:42
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:44
-#, fuzzy
 msgid "Change profile picture"
-msgstr "Opdatér side"
+msgstr "Opdatér profil-billede"
 
 #: ../core/templates/attachagain.tmpl:21
 msgid "Change properties only"
@@ -1047,9 +1034,8 @@ msgid "Comment"
 msgstr "Kommentar"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:332
-#, fuzzy
 msgid "Comment:"
-msgstr "Kommentarer:"
+msgstr "Kommentar:"
 
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:44
 #: ../core/templates/oopsmore.tmpl:94
@@ -1057,9 +1043,8 @@ msgid "Compare revisions"
 msgstr "Sammenlign versioner"
 
 #: ../core/templates/messages.tmpl:207
-#, fuzzy
 msgid "Confirm registration"
-msgstr "Registrering"
+msgstr "Bekræft registrering"
 
 #: ../core/templates/renameconfirm.tmpl:7
 #: ../core/templates/renamewebconfirm.tmpl:7
@@ -1096,7 +1081,6 @@ msgstr "Fortsæt med at oprette den nye side"
 
 #: ../core/data/TWiki/TWikiPreferences.txt:39
 #: ../core/data/TWiki/WebPreferences.txt:36
-#, fuzzy
 msgid ""
 "Copyright &&copy; %1 by the contributing authors. All material on this "
 "collaboration platform is the property of the contributing authors."
@@ -1122,9 +1106,8 @@ msgstr "%1 kunne ikke gemmes."
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:125
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:75
-#, fuzzy
 msgid "Country"
-msgstr "Land:"
+msgstr "Land"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:136
 msgid "Country:"
@@ -1132,9 +1115,8 @@ msgstr "Land:"
 
 #: ../TagMePlugin/data/TWiki/TagMeCreateNewTag.txt:23
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:27
-#, fuzzy
 msgid "Create"
-msgstr "Opret '%1'"
+msgstr "Opret"
 
 #: ../core/data/TWiki/WebTopicViewTemplate.txt:30
 msgid "Create '%1'"
@@ -1215,12 +1197,11 @@ msgstr "Nuværende forælder:"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:27
 msgid "Current password"
-msgstr "Nuværende password:"
+msgstr "Nuværende kodeord:"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:46
-#, fuzzy
 msgid "Current picture"
-msgstr "Nuværende forælder:"
+msgstr "Nuværende billede"
 
 #: ../core/templates/attachtables.tmpl:37
 #: ../core/templates/attachtables.tmpl:4
@@ -1270,7 +1251,7 @@ msgstr "Slet side..."
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:120
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:70
 msgid "Department"
-msgstr ""
+msgstr "Afdeling"
 
 #: ../PatternSkin/templates/attach.pattern.tmpl:29
 msgid "Describe the file so other people know what it is."
@@ -1286,7 +1267,7 @@ msgstr "Stavede du det brugte %1 korrekt?"
 
 #: ../core/data/TWiki/VarMAKETEXT.txt:19
 msgid "Did you want to [[%1][reset %2's password]]?"
-msgstr "Ønskede du at [[%1][resette passwordet for brugeren %2]]?"
+msgstr "Ønskede du at [[%1][nulstille kodeordet for brugeren %2]]?"
 
 #: ../PatternSkin/templates/rdiff.pattern.tmpl:14
 msgid "Difference:"
@@ -1391,9 +1372,8 @@ msgid "Edit table"
 msgstr "Editér tabel"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:66
-#, fuzzy
 msgid "Edit this record"
-msgstr "Editér denne tabel"
+msgstr "Editér denne række"
 
 #: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:179
 msgid "Edit this table"
@@ -1431,7 +1411,7 @@ msgstr "Forstør edit-boks"
 
 #: ../core/templates/login.tmpl:7
 msgid "Enter a new username and password to change identity"
-msgstr "Angiv et nyt brugernavn og password for at skifte identitet:"
+msgstr "Angiv et nyt brugernavn og kodeord for at skifte identitet:"
 
 #: ../core/templates/login.sudo.tmpl:18
 msgid "Enter the TWiki Administrator user or login as set in %1"
@@ -1486,9 +1466,8 @@ msgid "Errors"
 msgstr "Fejl"
 
 #: ../core/templates/messages.tmpl:439
-#, fuzzy
 msgid "Example:"
-msgstr "Gode eksempler:"
+msgstr "Eksempel:"
 
 #: ../core/templates/messages.tmpl:491
 msgid "Failed to include URL %1"
@@ -1502,9 +1481,8 @@ msgid "Fields marked %1 are required"
 msgstr "Felter mærket med %1 er obligatoriske"
 
 #: ../core/templates/messages.tmpl:356
-#, fuzzy
 msgid "Files have been uploaded with different name"
-msgstr "Filen er blevet uploadet under et ændret navn"
+msgstr "Filer er blevet uploadet under et ændret navn"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:21
 #, fuzzy
@@ -1535,12 +1513,11 @@ msgstr "Gennemtving ny version"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:5
 msgid "Forgotten your password?"
-msgstr "Har du glemt dit password?"
+msgstr "Har du glemt dit kodeord?"
 
 #: ../PatternSkin/data/TWiki/PatternSkinCustomization.txt:447
-#, fuzzy
 msgid "Form"
-msgstr "eller"
+msgstr "Formular"
 
 #: ../core/templates/messages.tmpl:327
 msgid "Form Definition %1 missing"
@@ -1634,13 +1611,12 @@ msgstr ""
 "underordnede webs."
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:22
-#, fuzzy
 msgid "History"
-msgstr "&Historik"
+msgstr "Historik"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinHomeMenu.txt:11
 msgid "Home"
-msgstr ""
+msgstr "Hjem"
 
 #: ../core/templates/registernotify.tmpl:16
 msgid "How about attaching your photo?"
@@ -1665,7 +1641,7 @@ msgstr ""
 
 #: ../core/templates/login.tmpl:65
 msgid "I forgot my password"
-msgstr "Jeg har glemt mit password"
+msgstr "Jeg har glemt mit kodeord"
 
 #: ../core/data/TWiki/TWikiPreferences.txt:39
 #: ../core/data/TWiki/WebPreferences.txt:36
@@ -1717,13 +1693,12 @@ msgstr ""
 "Kontakt venligst %4 hvis dette er en fejl."
 
 #: ../core/templates/registerconfirm.tmpl:14
-#, fuzzy
 msgid ""
 "If you got this e-mail by mistake: Somebody (%1, %5) registered at the %2 "
 "site using your mail address %3. Contact %4 if this is in error."
 msgstr ""
-"Hvis du er blevet tilsendt denne e-mail ved en fejl: En person (%1) har "
-"forsøgt at registrere sig på sitet '%2' ved at bruge din e-mail-adresse, %3. "
+"Hvis du har fået denne e-mail ved en fejl: Nogen (%1, %5) har "
+"forsøgt at registrere sig på sitet '%2' med din e-mail-adresse, %3. "
 "Kontakt venligst %4 hvis dette er en fejl."
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:363
@@ -1748,7 +1723,7 @@ msgstr "Hvis du har spørgsmål, så kontakt venligst %1."
 #: ../core/templates/registernotify.tmpl:27
 msgid "If you haven't set a password yet or you want to reset it, go to: %1"
 msgstr ""
-"Hvis du ikke har valgt et password endnu, eller du ønsker at nulstille det, "
+"Hvis du ikke har valgt et kodeord endnu, eller du ønsker at nulstille det, "
 "så gå til: %1"
 
 #: ../core/templates/messages.tmpl:450
@@ -1773,7 +1748,7 @@ msgid ""
 "any more) and you have forgotten your password, please contact %1 for help."
 msgstr ""
 "Hvis dine gamle e-mail-adresser alle er ugyldige (du kan ikke længere "
-"modtage e-mail på dem) og du har glemt dit password, kontakt da venligst %1."
+"modtage e-mail på dem) og du har glemt dit kodeord, kontakt da venligst %1."
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:11
 msgid ""
@@ -1815,7 +1790,7 @@ msgstr "Forkert %1.WikiNames:"
 
 #: ../core/templates/messages.tmpl:105
 msgid "Incorrect Password"
-msgstr "Forkert password"
+msgstr "Forkert kodeord"
 
 #: ../core/templates/messages.tmpl:448
 msgid "Incorrect parameters to the =%1= script"
@@ -1840,7 +1815,7 @@ msgstr "Index"
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:115
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:64
 msgid "Info"
-msgstr ""
+msgstr "Information"
 
 #: ../core/templates/messages.tmpl:243
 msgid "Internal error when sending email to %1."
@@ -1856,11 +1831,11 @@ msgstr ""
 
 #: ../core/templates/messages.tmpl:302
 msgid "Invalid Activation Code"
-msgstr "Forkert aktiveringskode"
+msgstr "Ugyldig aktiveringskode"
 
 #: ../core/templates/oopsinvalidtoken.tmpl:6
 msgid "Invalid Crypt Token"
-msgstr ""
+msgstr "Ugyldig krypterings-polet"
 
 #: ../core/templates/messages.tmpl:294
 msgid "Invalid e-mail address"
@@ -1962,9 +1937,8 @@ msgstr "Lokale tilretninger af generelle præferencer"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:123
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:73
-#, fuzzy
 msgid "Location"
-msgstr "Handling"
+msgstr "Opholdssted"
 
 #: ../PatternSkin/templates/twiki.pattern.tmpl:4
 msgid "Log In"
@@ -1978,6 +1952,8 @@ msgstr "Log ud"
 msgid ""
 "Login as \"%1\". Please note that login and password are case sensitive."
 msgstr ""
+"Log ind som \"%1\". Bemærk venligst at der tages højde for store og
+små bogstaver i bruger-navne og kodeord."
 
 #: ../ClassicSkin/templates/mailresetpassword.classic.tmpl:9
 #: ../core/templates/mailresetpassword.tmpl:9
@@ -2019,9 +1995,8 @@ msgstr "Mere formateringshjælp"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:23
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:32
-#, fuzzy
 msgid "More topic actions"
-msgstr "Flere muligheder med denne side..."
+msgstr "Flere mulige handlinger"
 
 #: ../PatternSkin/templates/rdiff.pattern.tmpl:29
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:146
@@ -2068,9 +2043,8 @@ msgid "Move/Rename"
 msgstr "Flyt/Omdøb"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:126
-#, fuzzy
 msgid "Must change password"
-msgstr "Skift password"
+msgstr "Skal skifte kodeord"
 
 #: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:59
 msgid "My Links"
@@ -2098,7 +2072,6 @@ msgstr "Nye e-mail-addresser (adskil med mellemrum)"
 
 #: ../MailerContrib/templates/mailnotify.tmpl:73
 #: ../MailerContrib/templates/mailnotify.tmpl:9
-#, fuzzy
 msgid "New or changed topics in %1 web since %2:"
 msgstr "Nye eller ændrede sider i %1-webbet, siden %2:"
 
@@ -2108,7 +2081,7 @@ msgstr "Nyt forælder-web:"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:28
 msgid "New password"
-msgstr "Nyt password"
+msgstr "Nyt kodeord"
 
 #: ../core/templates/messages.tmpl:95
 msgid "New topic name %1 is not a %2"
@@ -2138,7 +2111,7 @@ msgstr "Ingen tidligere version eksisterer"
 
 #: ../core/templates/messages.tmpl:213
 msgid "No users to reset passwords for."
-msgstr "Ingen brugere at nulstille passwords for."
+msgstr "Ingen brugere at nulstille kodeord for."
 
 #: ../core/templates/renamedelete.tmpl:31
 msgid "Not recommended when deleting a topic."
@@ -2205,7 +2178,7 @@ msgstr "Tidligere version:"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:357
 msgid "Once registered you can login using your %1 and password."
-msgstr "Når du er blevet registreret kan du logge ind med dit %1 og password."
+msgstr "Når du er blevet registreret kan du logge ind med dit %1 og kodeord."
 
 #: ../core/templates/messages.tmpl:505
 msgid "Only members of the %1 are allowed to perform this action."
@@ -2216,7 +2189,7 @@ msgid ""
 "Oops: we could not recognize you. Try again or [[%1][reset your password]]."
 msgstr ""
 "Hovsa. Vi kunne ikke genkende dig. Forsøg igen eller [[%1][nulstil dit "
-"password]]."
+"kodeord]]."
 
 #: ../ClassicSkin/templates/preview.classic.tmpl:10
 msgid "Opens page in new window"
@@ -2232,14 +2205,12 @@ msgstr "Benyt eventuelt et andet sidenavn (valgfrit):"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:121
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:71
-#, fuzzy
 msgid "Organization"
-msgstr "Organisationens <br />hjemmeside:"
+msgstr "Organisation"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:130
-#, fuzzy
 msgid "Organization:"
-msgstr "Organisationens <br />hjemmeside:"
+msgstr "Organisation:"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:327
 msgid "Other Country"
@@ -2253,35 +2224,34 @@ msgstr "Yderligere søgemuligheder:"
 #: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:5
 msgid "Otherwise, use this form to get a new one e-mailed to you."
 msgstr ""
-"Ellers, benyt da denne formular til at få et nyt password tilsendt i en e-"
+"Ellers, benyt da denne formular til at få et nyt kodeord tilsendt i en e-"
 "mail."
 
 #: ../PatternSkin/data/TWiki/PatternSkinElements.txt:188
 #: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:34
 #: ../core/templates/login.tmpl:60
 msgid "Password"
-msgstr "Password"
+msgstr "Kodeord"
 
 #: ../core/templates/messages.tmpl:174
 msgid "Password changed successfully!"
-msgstr "Passwordet er opdateret!"
+msgstr "Kodeordet er ændret!"
 
 #: ../core/templates/messages.tmpl:184
 msgid "Password could not be changed"
-msgstr "Passwordet kunne ikke opdateres"
+msgstr "Kodeordet kunne ikke ændres"
 
 #: ../core/templates/messages.tmpl:212 ../core/templates/messages.tmpl:216
 msgid "Password reset failed"
-msgstr "Nulstilling af passwordet fejlede"
+msgstr "Kodeordet kunne ikke nulstilles"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:116
-#, fuzzy
 msgid "Password:"
-msgstr "Password"
+msgstr "Kodeord:"
 
 #: ../core/templates/messages.tmpl:226
 msgid "Passwords do not match"
-msgstr "Passwords matcher ikke"
+msgstr "Kodeordene er ikke identiske"
 
 #: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:55
 #: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:69
@@ -2313,11 +2283,11 @@ msgstr "Kontakt venligst %1."
 
 #: ../core/templates/login.sudo.tmpl:7
 msgid "Please enter the TWiki admin password"
-msgstr "Indtast TWiki administrator-passwordet"
+msgstr "Indtast TWiki administrator-kodeordet"
 
 #: ../core/templates/login.tmpl:14
 msgid "Please enter your username and password"
-msgstr "Angiv venligst dit brugernavn og password:"
+msgstr "Angiv venligst dit brugernavn og kodeord:"
 
 #: ../core/templates/messages.tmpl:79 ../core/templates/messages.tmpl:85
 #: ../core/templates/messages.tmpl:91
@@ -2365,7 +2335,7 @@ msgstr ""
 msgid ""
 "Please visit %1 to change your password to something more memorable for you."
 msgstr ""
-"Besøg venligst siden %1 for at ændre dit password til et der er lettere at "
+"Besøg venligst siden %1 for at ændre dit kodeord til et der er lettere at "
 "huske."
 
 #: ../PatternSkin/data/Main/WebLeftBar.txt:12
@@ -2388,7 +2358,7 @@ msgstr "Præferencer for"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:20
 msgid "Print version"
-msgstr ""
+msgstr "Udskriv version"
 
 #: ../PatternSkin/templates/attach.pattern.tmpl:35
 msgid "Properties"
@@ -2420,9 +2390,8 @@ msgid "RSS Feed"
 msgstr "RSS-feed"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:19
-#, fuzzy
 msgid "Raw View"
-msgstr "(rå visning)"
+msgstr "Rå visning"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:28
 #: ../core/templates/viewtopicactionbuttons.tmpl:63
@@ -2463,9 +2432,8 @@ msgstr "Genopfrisk"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:124
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:74
-#, fuzzy
 msgid "Region"
-msgstr "Version"
+msgstr "Region"
 
 #: ../ClassicSkin/templates/twiki.classic.tmpl:9
 #: ../PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
@@ -2475,7 +2443,6 @@ msgstr "Registrér dig"
 
 #: ../PatternSkin/data/TWiki/UserBookmarks.txt:23
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:38
-#, fuzzy
 msgid "Register User"
 msgstr "Registrér dig"
 
@@ -2483,7 +2450,7 @@ msgstr "Registrér dig"
 msgid "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
 msgstr ""
 "Allerede registrerede brugere kan [[%1][skifte]] og [[%2][nulstille]] deres "
-"passwords."
+"kodeord."
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:2
 msgid "Registration"
@@ -2502,9 +2469,8 @@ msgid "Related Topics"
 msgstr "Relaterede sider"
 
 #: ../TagMePlugin/lib/TWiki/Plugins/TagMePlugin.pm:858
-#, fuzzy
 msgid "Related tags"
-msgstr "Relaterede sider:"
+msgstr "Relaterede etiketter"
 
 #: ../TWikiUserMappingContrib/data/Main/TWikiGroupTemplate.txt:22
 #: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:48
@@ -2537,7 +2503,7 @@ msgstr ""
 
 #: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:5
 msgid "Remember your password?"
-msgstr "Kan du huske dit password?"
+msgstr "Kan du huske dit kodeord?"
 
 #: ../core/data/TWiki/WebTopicViewTemplate.txt:22
 msgid "Remember, a %1 is case sensitive."
@@ -2587,11 +2553,11 @@ msgstr "Udskift formular..."
 
 #: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:3
 msgid "Reset Password"
-msgstr "Nulstil password"
+msgstr "Nulstil kodeord"
 
 #: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:25
 msgid "Reset password"
-msgstr "Nulstil password"
+msgstr "Nulstil kodeord"
 
 #: ../ClassicSkin/templates/oopsmore.classic.tmpl:53
 #: ../core/templates/oopsmore.tmpl:106
@@ -2617,9 +2583,8 @@ msgid "Results from %1 web"
 msgstr "Søgeresultater fra %1-webbet"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:81
-#, fuzzy
 msgid "Return to"
-msgstr "Tilbage til %1."
+msgstr "Tilbage til"
 
 #: ../core/templates/messages.tmpl:197
 msgid "Return to %1."
@@ -2627,11 +2592,11 @@ msgstr "Tilbage til %1."
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:29
 msgid "Retype new password"
-msgstr "Nyt password igen"
+msgstr "Indtast det nye kodeord igen"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:117
 msgid "Retype password:"
-msgstr "Gentag password:"
+msgstr "Gentag kodeord:"
 
 #: ../core/templates/messages.tmpl:35
 msgid "Rev %1 was saved by %2, while you were still editing."
@@ -2669,9 +2634,8 @@ msgstr ""
 "Vis udkast (Preview), C = Fortryd (Cancel)"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:117
-#, fuzzy
 msgid "Save"
-msgstr "Gemt i:"
+msgstr "Gem"
 
 #: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:180
 msgid "Save table"
@@ -2825,14 +2789,13 @@ msgid "Show help"
 msgstr "Vis hjælp"
 
 #: ../core/data/TWiki/WebChanges.txt:16
-#, fuzzy
 msgid ""
 "Show recent changes with <a href='%2'>50</a>, <a href='%3' "
 "rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a href='%5' "
 "rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> topics, <a "
 "href='%7' rel='nofollow'>all changes</a>"
 msgstr ""
-"<a href='%1'>RSS feed</a>, seneste ændringer med <a href='%2'>50</a>, <a "
+"Vis nylige ændringer med <a href='%2'>50</a>, <a "
 "href='%3' rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a "
 "href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> "
 "sider, <a href='%7' rel='nofollow'>alle ændringer</a>"
@@ -2859,7 +2822,7 @@ msgstr "Simpel søgning"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinHomeMenu.txt:12
 msgid "Site map"
-msgstr ""
+msgstr "Site-oversigt"
 
 #: ../core/data/Main/TWikiPreferences.txt:4
 msgid ""
@@ -2891,7 +2854,7 @@ msgstr "Nogle karakterer, såsom =&#126;=, =$=, =@= og =%= bliver fjernet"
 
 #: ../core/templates/messages.tmpl:358
 msgid "Some files have been renamed on upload:"
-msgstr ""
+msgstr "Nogle filer er blevet omdøbt i forbindelse med upload"
 
 #: ../core/templates/messages.tmpl:308
 msgid ""
@@ -2923,7 +2886,7 @@ msgstr "Beklager, registrering er midlertidigt slået fra"
 #: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:13
 msgid "Sorry, the password system is currently read only, please contact %1"
 msgstr ""
-"Beklager, passwordsystemer er i øjeblikket read-only, kontakt venligst %1"
+"Beklager, det er ikke muligt at skrive til kodeord-systemet i øjeblikket, kontakt venligst %1"
 
 #: ../core/data/TWiki/WebSearchAdvanced.txt:46
 msgid "Sort results by:"
@@ -2948,7 +2911,7 @@ msgstr "Statistik"
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:112
 msgid "Status update: Make a sentence, such as: =is out of office="
-msgstr ""
+msgstr "Status opdatering: skriv en sætning, f.eks. =er ved stranden="
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:342
 #: ../core/templates/messages.tmpl:313
@@ -2993,7 +2956,7 @@ msgstr "TWiki bruger-authenticering"
 #: ../ClassicSkin/templates/mailresetpassword.classic.tmpl:3
 #: ../core/templates/mailresetpassword.tmpl:3
 msgid "TWiki password reset for %1"
-msgstr "Nulstilling af TWiki-passwordet for %1"
+msgstr "TWiki-kodeordet for %1 er nulstillet"
 
 #: ../core/templates/oopschangelanguage.tmpl:12
 msgid ""
@@ -3062,9 +3025,8 @@ msgid "The %1 topic already exists"
 msgstr "Siden %1 eksisterer allerede"
 
 #: ../core/data/TWiki/RenameWeb.txt:3
-#, fuzzy
 msgid "The %1 web cannot be renamed."
-msgstr "Det nye web er blevet oprettet"
+msgstr "%1-webbet kan ikke omdøbes."
 
 #: ../core/templates/messages.tmpl:513
 msgid "The %1 web does not exist"
@@ -3081,7 +3043,7 @@ msgstr ""
 
 #: ../core/templates/messages.tmpl:438
 msgid "The =%1= script can only be called with POST method."
-msgstr ""
+msgstr "Scriptet =%1= kan kun kaldes via HTTP POST"
 
 #: ../core/templates/messages.tmpl:155
 msgid "The Administrator has disabled new user registration."
@@ -3118,17 +3080,15 @@ msgstr "E-mail-adressen for dette brugernavn er ikke gyldig."
 
 #: ../core/templates/messages.tmpl:487
 msgid "The entry for user %1 was missing in the password system."
-msgstr "Passwordet for brugernavnet %1 fandtes ikke i password-systemet."
+msgstr "Kodeordet for brugernavnet %1 fandtes ikke i kodeord-systemet."
 
 #: ../core/templates/messages.tmpl:357
-#, fuzzy
 msgid "The files have been uploaded and attached properly to the %1 topic."
-msgstr "Filen er blevet uploadet og vedhæftet korrekt til %1-siden."
+msgstr "Filerne er blevet uploadet og vedhæftet korrekt til %1-siden."
 
 #: ../core/templates/messages.tmpl:412
 msgid "The following topics are locked for edit, and cannot be moved:"
-msgstr ""
-"De følgende sider er låst (de editeres i øjeblikket), og kan ikke flyttes:"
+msgstr "Følgende sider er låst (de editeres i øjeblikket), og kan ikke flyttes:"
 
 #: ../core/templates/messages.tmpl:418
 msgid "The following topics refer to topics in this web, but are being edited:"
@@ -3162,7 +3122,7 @@ msgstr "Det nye web er blevet oprettet"
 
 #: ../core/templates/messages.tmpl:106
 msgid "The password you entered in the *old password* field is incorrect."
-msgstr "Passwordet, som du har indtastet i *Old password*-feltet er forkert."
+msgstr "Kodeordet, som du har indtastet i *Old password*-feltet er forkert."
 
 #: ../core/templates/messages.tmpl:322
 msgid "The required field %1 was not filled in."
@@ -3183,7 +3143,7 @@ msgstr "Siden er i et gammelt format"
 
 #: ../core/templates/messages.tmpl:227
 msgid "The two passwords you entered do not match."
-msgstr "De to passwords du har indtastet er ikke ens."
+msgstr "De to kodeord du har indtastet er ikke ens."
 
 #: ../core/templates/messages.tmpl:556
 msgid "The user %1 has already been activated, and should be able to log in."
@@ -3198,7 +3158,7 @@ msgstr "Der er problemer med at omdøbe dette web:"
 #: ../core/templates/messages.tmpl:234
 msgid "There has been a problem adding your user id to the Password system."
 msgstr ""
-"Der opstod et problem med at tilføje dit brugernavn til password-systemet."
+"Der opstod et problem med at tilføje dit brugernavn til kodeord-systemet."
 
 #: ../core/templates/messages.tmpl:340
 msgid "There should be a line that includes %1, look for %2 (or %3)"
@@ -3226,7 +3186,7 @@ msgid ""
 msgstr ""
 "Denne formular bruges til at opdatere dine registrerede e-mail-addresser. "
 "Dine registrerede e-mail adresser bruges af TWiki til at sende e-mails til "
-"dig, fx ved password-nulstilling. De adresser som du registrerer ved hjælp "
+"dig, fx ved kodeord-nulstilling. De adresser som du registrerer ved hjælp "
 "af denne formular bliver holdt hemmelige af systemet og vil ikke kunne ses "
 "nogen steder på dette site."
 
@@ -3278,7 +3238,7 @@ msgstr "Dette kræver at formular-definitionen er tilgængelig."
 
 #: ../core/templates/messages.tmpl:289
 msgid "This site requires at least %1 character passwords"
-msgstr "Dette site kræver at et password er mindst%1 karakterer langt"
+msgstr "Dette site kræver at et kodeord er mindst %1 tegn langt"
 
 #: ../core/data/TWiki/WebTopicViewTemplate.txt:7
 msgid "This topic has moved to %1."
@@ -3312,9 +3272,8 @@ msgstr ""
 
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:119
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:69
-#, fuzzy
 msgid "Title"
-msgstr "Sidenavn"
+msgstr "Titel"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:5
 msgid ""
@@ -3322,7 +3281,7 @@ msgid ""
 "password."
 msgstr ""
 "For at kunne editere siderne på dette TWikiSite, skal du have et brugernavn "
-"og et password."
+"og et kodeord."
 
 #: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:22
 #: ../core/templates/oopsleaseconflict.tmpl:18
@@ -3339,6 +3298,9 @@ msgid ""
 "the clipboard, cancel edit, edit again, and replace content with clipboard "
 "content. Whew ... nothing lost!"
 msgstr ""
+"Gør følgende, for at redde dine skriverier; klik på browserens "
+"tilbage-knap, kopier al teksten, fortryd editering, editer igen og "
+"erstat al tekst med det du kopierede. Pyha ... intet er tabt."
 
 #: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:18
 #: ../core/templates/oopsleaseconflict.tmpl:14
@@ -3356,9 +3318,8 @@ msgid "To web:"
 msgstr "Til web:"
 
 #: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:18
-#, fuzzy
 msgid "Topic"
-msgstr "Til side:"
+msgstr "Side"
 
 #: ../core/templates/messages.tmpl:319
 msgid "Topic Save Error"
@@ -3459,15 +3420,15 @@ msgstr "Forsøg igen"
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:122
 #: ../TWikiUserMappingContrib/data/Main/UserProfileHeader.txt:72
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:133
 msgid "URL:"
-msgstr ""
+msgstr "URL:"
 
 #: ../core/templates/login.sudo.tmpl:5
 msgid "Unrecognised user and/or password"
-msgstr "Ukendt brugernavn og/eller password"
+msgstr "Ukendt brugernavn og/eller kodeord"
 
 #: ../core/templates/messages.tmpl:48
 msgid "Unrecognized action command %1"
@@ -3483,9 +3444,8 @@ msgid "Update links"
 msgstr "Opdatér links"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:61
-#, fuzzy
 msgid "Upload"
-msgstr "Upload fil"
+msgstr "Upload"
 
 #: ../PatternSkin/templates/attachagain.pattern.tmpl:28
 #: ../PatternSkin/templates/attachnew.pattern.tmpl:7
@@ -3494,9 +3454,8 @@ msgid "Upload file"
 msgstr "Upload fil"
 
 #: ../TWikiUserMappingContrib/data/Main/ChangeProfilePicture.txt:57
-#, fuzzy
 msgid "Upload new picture"
-msgstr "Upload fil"
+msgstr "Upload nyt billede"
 
 #: ../PatternSkin/templates/attach.pattern.tmpl:22
 msgid "Upload up to %1 KB."
@@ -3516,9 +3475,8 @@ msgid "Use %1 instead."
 msgstr "Brug %1 i stedet."
 
 #: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:122
-#, fuzzy
 msgid "Use system generated password"
-msgstr "Nyt password igen"
+msgstr "Brug det kodeord som systemet har genereret"
 
 #: ../PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:61
 #: ../core/data/TWiki/WebCreateNewTopicTemplate.txt:39
@@ -3526,7 +3484,6 @@ msgid "Use template:"
 msgstr "Brug skabelon:"
 
 #: ../core/data/Sandbox/WebHome.txt:5
-#, fuzzy
 msgid ""
 "Use this web to try out TWiki. Everybody is invited to add or delete some "
 "stuff. It is recommended to walk through the %1 to learn the basics of "
@@ -3534,9 +3491,8 @@ msgid ""
 msgstr ""
 "%1-webbet er en såkaldt sandkasse, som må bruges til alle former for "
 "eksperimenter. Alle er velkomne til at tilføje eller slette det, de måtte "
-"have lyst til. Du opfordres til at læse %2 for at få et overblik over %3 "
-"værktøjet. En god tommelfingerregel er, at tilføje i bunden af en side, og "
-"underskrive og datere med sit %4."
+"have lyst til. En god tommelfingerregel er, at datere og underskrive "
+"sine bidrag med %2 i bunden af en side."
 
 #: ../core/templates/messages.tmpl:10
 msgid "User Account %1 Deleted"
@@ -3548,7 +3504,6 @@ msgid "User Reference"
 msgstr "Brugervejledninger"
 
 #: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:12
-#, fuzzy
 msgid "User registration"
 msgstr "Registrering"
 
@@ -3568,8 +3523,8 @@ msgid ""
 "Users with automatically generated passwords should proceed immediately to "
 "[[%1][change password]] to change their password to something memorable."
 msgstr ""
-"Brugere med system-genererede passwords opfordres til at [[%1][opdatere "
-"deres password]] til et der er nemmere at huske."
+"Brugere med system-genererede kodeord opfordres til at [[%1][opdatere "
+"deres kodeord]] til et der er nemmere at huske."
 
 #: ../core/templates/attachtables.tmpl:37
 msgid "Version"
@@ -3627,7 +3582,7 @@ msgstr "ADVARSEL:"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:114
 msgid "WYSIWYG"
-msgstr ""
+msgstr "WYSIWYG"
 
 #: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:187
 msgid "Warning: 'include' topic does not exist!"
@@ -3660,16 +3615,14 @@ msgstr ""
 
 #: ../MailerContrib/data/TWiki/MailerContrib.txt:174
 #: ../MailerContrib/templates/mailnotify.tmpl:62
-#, fuzzy
 msgid "Web"
-msgstr "Webs"
+msgstr "Web"
 
 #: ../core/data/Main/WebNotify.txt:2 ../core/data/Sandbox/WebNotify.txt:2
 #: ../core/data/TWiki/WebNotify.txt:2 ../core/data/Trash/WebNotify.txt:2
 #: ../core/data/_default/WebNotify.txt:2
-#, fuzzy
 msgid "Web Notification"
-msgstr "Notificering"
+msgstr "Web-notificering"
 
 #: ../core/data/TWiki/WebSearch.txt:3
 msgid "Web Search"
@@ -3751,9 +3704,8 @@ msgstr ""
 "indeholde bogstaver og tal."
 
 #: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:12
-#, fuzzy
 msgid "You are required to change your password."
-msgstr "Du kan skifte dit password v.h.a. %1"
+msgstr "Du skal skifte dit kodeord."
 
 #: ../core/templates/messages.tmpl:549
 msgid "You are trying to %1 an attachment that does not exist."
@@ -3797,7 +3749,7 @@ msgstr ""
 #: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:139
 #: ../core/templates/registernotify.tmpl:26
 msgid "You can change your password at via %1"
-msgstr "Du kan skifte dit password v.h.a. %1"
+msgstr "Du kan skifte dit kodeord v.h.a. %1"
 
 #: ../core/templates/renameweb.tmpl:21
 msgid "You can give this web a different name."
@@ -3900,7 +3852,7 @@ msgstr ""
 #: ../ClassicSkin/templates/mailresetpassword.classic.tmpl:10
 #: ../core/templates/mailresetpassword.tmpl:10
 msgid "Your password has been changed to %1."
-msgstr "Dit password er opdateret til %1."
+msgstr "Dit kodeord er opdateret til %1."
 
 #: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:129
 msgid ""
@@ -3910,7 +3862,6 @@ msgstr ""
 "tilpasse den efter dine egne behov og ønsker:"
 
 #: ../core/templates/registernotify.tmpl:12
-#, fuzzy
 msgid ""
 "Your personal %1 user profile page is located at %2. You can customize it as "
 "you like:"
@@ -3919,9 +3870,8 @@ msgstr ""
 "tilpasse den efter dine egne behov og ønsker:"
 
 #: ../core/templates/messages.tmpl:163
-#, fuzzy
 msgid "Your personal TWiki user profile page %1 has been created"
-msgstr "Din personlige side %1 er blevet oprettet"
+msgstr "Din personlige TWiki-bruger profil side %1 er blevet oprettet"
 
 #: ../core/templates/messages.tmpl:195
 msgid "Your registered e-mail address(es) are updated to: %1."
@@ -3937,7 +3887,7 @@ msgid ""
 "Your system may not support changing passwords through TWiki. Check with "
 "your TWiki administrator."
 msgstr ""
-"Dette system understøtter muligvis ikke skift af passwords gennem TWiki. "
+"Dette system understøtter muligvis ikke skift af kodeord gennem TWiki. "
 "Tjek med din TWiki administrator."
 
 #: ../core/templates/messages.tmpl:11
@@ -3951,14 +3901,12 @@ msgstr ""
 "og bed om at få dette gjort."
 
 #: ../core/templates/messages.tmpl:30
-#, fuzzy
 msgid "[[%1][%2 home]]"
-msgstr "%1 forside"
+msgstr "[[%1][%2 forside]]"
 
 #: ../core/templates/messages.tmpl:22
-#, fuzzy
 msgid "[[%1][%2 home]] to start working on the new web"
-msgstr "%1 for at komme i gang med at arbejde med det nye web"
+msgstr "[[%1][%2 forside]] for at komme i gang med at arbejde med det nye web"
 
 #: ../core/templates/messages.tmpl:339
 msgid "[[%1][Debug topic text]]."
@@ -3972,9 +3920,8 @@ msgstr ""
 "[mellemrum] = [værdi]"
 
 #: ../core/data/TWiki/RenameWeb.txt:3
-#, fuzzy
 msgid "__Note:__"
-msgstr "Note:"
+msgstr "__Note:__"
 
 # please enter the name of your language here (written in the native language):
 #: ../core/lib/TWiki/I18N.pm:292
@@ -4134,8 +4081,8 @@ msgstr ""
 #, fuzzy
 msgid "title='Attach an image or document to this topic' accesskey='a'"
 msgstr ""
-"title='Vedhæft fx et billede eller et dokument til denne side' "
-"accesskey='a'>Vedhæft (&A) "
+"title='Vedhæft et billede eller et dokument til denne side' "
+"accesskey='a'"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:16
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
@@ -4149,9 +4096,8 @@ msgid "title='Create new topic' accesskey='c'>&Create"
 msgstr "title='Opret ny side' accesskey='c'>Opret (&C)"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:38
-#, fuzzy
 msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
-msgstr "title='Opret ny side' accesskey='c'>Opret (&C)"
+msgstr "title='Opret ny side' accesskey='w'>Opret (&WYSIWYG)"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:91
 #: ../core/templates/viewtopicactionbuttons.tmpl:19
@@ -4163,24 +4109,20 @@ msgstr ""
 "revisioner' accesskey='m'>Flere side-&muligheder"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:19
-#, fuzzy
 msgid "title='Edit this topic text' accesskey='e'"
 msgstr "title='Editér denne side' accesskey='e'>&Editér"
 
 #: ../core/templates/viewtopicactionbuttons.tmpl:7
-#, fuzzy
 msgid "title='Edit this topic text' accesskey='e'>%1 &Edit"
-msgstr "title='Editér denne side' accesskey='e'>&Editér"
+msgstr "title='Editér denne side' accesskey='e'>%1 &Editér"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:30
-#, fuzzy
 msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
-msgstr "title='Editér denne side' accesskey='e'>&Editér"
+msgstr "title='Editér denne side' accesskey='w'>&WYSIWYG"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:76
-#, fuzzy
 msgid "title='PDF version of this topic'>&PDF version"
-msgstr "title='Printbar version af denne side' accesskey='p'>&Printable"
+msgstr "title='Printervenlig version af denne side' accesskey='p'>&Printervenlig"
 
 #: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:66
 #: ../core/templates/viewtopicactionbuttons.tmpl:23
@@ -4271,8 +4213,8 @@ msgid ""
 "have forgotten your password, contact %1."
 msgstr ""
 "Du *skal* have mindst en registreret e-mail-adresse for at kunne nulstille "
-"dit password. Hvis ingen af dine registrerede e-mail-adresser er valide, og "
-"du har glemt dit password, kontakt da %1."
+"dit kodeord. Hvis ingen af dine registrerede e-mail-adresser er valide, og "
+"du har glemt dit kodeord, kontakt da %1."
 
 #~ msgid "%1 to create another web"
 #~ msgstr "%1 for at oprette et nyt web"
@@ -4310,16 +4252,14 @@ msgstr ""
 #~ msgid "Organisation name:"
 #~ msgstr "Organisationsnavn:"
 
-#, fuzzy
 #~ msgid "Recently Deleted Topics"
-#~ msgstr "Senest ændrede sider"
+#~ msgstr "Nyligt slettede sider"
 
 #~ msgid "Your password:"
-#~ msgstr "Dit password:"
+#~ msgstr "Dit kodeord:"
 
-#, fuzzy
 #~ msgid "title='Printable version of this topic' accesskey='p'"
-#~ msgstr "title='Printbar version af denne side' accesskey='p'>&Printable"
+#~ msgstr "title='Printervenlig version af denne side' accesskey='p'"
 
 #~ msgid "title='Raw Edit this topic text' accesskey='w'>Ra&w edit"
 #~ msgstr ""
