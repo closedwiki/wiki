@@ -108,7 +108,7 @@ sub BACKUPRESTORE {
     $this->_writeDebug( "BACKUPRESTORE" );
 
     my $text = '';
-    if( TWiki::Func::isAnAdmin( TWiki::Func::getCanonicalUserID() ) ) {
+    if( $this->{ScriptType} eq 'cli' || TWiki::Func::isAnAdmin( TWiki::Func::getCanonicalUserID() ) ) {
         my $action = $params->{action} || '';
         if( $action eq 'backup_detail' ) {
             $text .= $this->_showBackupDetail( $session, $params );
@@ -511,7 +511,11 @@ sub _writeDebug {
     my( $this, $text ) = @_;
 
     return unless( $this->{Debug} );
-    TWiki::Func::writeDebug( "- BackupRestorePlugin: $text" );
+    if( $this->{ScriptType} eq 'cli' ) {
+        print "DEBUG: $text\n";
+    } else {
+        TWiki::Func::writeDebug( "- BackupRestorePlugin: $text" );
+    }
 }
 
 #==================================================================

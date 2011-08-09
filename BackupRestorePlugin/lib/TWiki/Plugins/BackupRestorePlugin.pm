@@ -53,7 +53,11 @@ sub initPlugin {
 
 #==================================================================
 sub _BACKUPRESTORE {
-#    my($session, $params, $theTopic, $theWeb) = @_;
+    my( $session ) = @_;
+
+    if( $session->inContext( 'command_line' ) ) {
+        return 'Note: The BACKUPRESTORE variable is only handled in CGI context';
+    }
 
     # delay loading core module until run-time
     unless( $core ) {
@@ -61,6 +65,7 @@ sub _BACKUPRESTORE {
         my $cfg = {
           BaseTopic  => $baseTopic,
           BaseWeb    => $baseWeb,
+          ScriptType => 'cgi',
         };
         $core = new TWiki::Plugins::BackupRestorePlugin::Core( $cfg );
     }
