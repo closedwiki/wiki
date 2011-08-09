@@ -81,7 +81,7 @@ msgstr "%1 - se en kort introduktion til TWiki for begyndere"
 
 #: ../core/data/TWiki/WebChanges.txt:2
 msgid "%1 Recent Changes in %2 Web"
-msgstr "%1 senest ændringer i %2-webbet"
+msgstr "%1 seneste ændringer i %2-webbet"
 
 #: ../PatternSkin/data/Main/WebLeftBar.txt:4
 #: ../PatternSkin/data/Sandbox/WebLeftBar.txt:4
@@ -224,7 +224,7 @@ msgstr "(=all= for at vise alle sider)"
 
 #: ../core/templates/oopsinvalidtoken.tmpl:4
 msgid "(Invalid Crypt Token)"
-msgstr "(Ugyldig krypterings-polet)"
+msgstr "(Ugyldig krypterings-token)"
 
 #: ../core/data/Sandbox/WebHome.txt:10
 msgid "(Use a topic name in TWiki.WikiNotation)"
@@ -327,7 +327,7 @@ msgstr "(ingen)"
 #: ../ClassicSkin/templates/oopsaccessdenied.classic.tmpl:3
 #: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:3
 msgid "(oops)"
-msgstr "(OBS)"
+msgstr "(ups)"
 
 #: ../core/data/TWiki/WebSearch.txt:33
 #: ../core/data/TWiki/WebSearchAdvanced.txt:42
@@ -1454,8 +1454,8 @@ msgid ""
 "Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or "
 "=text/css=)"
 msgstr ""
-"Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or "
-"=text/css=)"
+"Error: Ikke supporteret indholdstype: %1 (Skal være =text/html=, =text/plain= "
+"eller =text/css=)"
 
 #: ../core/templates/messages.tmpl:482
 msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
@@ -1835,7 +1835,7 @@ msgstr "Ugyldig aktiveringskode"
 
 #: ../core/templates/oopsinvalidtoken.tmpl:6
 msgid "Invalid Crypt Token"
-msgstr "Ugyldig krypterings-polet"
+msgstr "Ugyldig krypterings-token"
 
 #: ../core/templates/messages.tmpl:294
 msgid "Invalid e-mail address"
@@ -2136,7 +2136,7 @@ msgstr "Note:"
 
 #: ../core/data/TWiki/WebTopicViewTemplate.txt:2
 msgid "Note: This topic does not exist"
-msgstr "BEMÆRK: Denne Wiki-side er ikke oprettet endnu"
+msgstr "Bemærk: Denne Wiki-side er ikke oprettet endnu"
 
 #: ../core/data/TWiki/VarMAKETEXT.txt:13
 msgid "Notes:"
@@ -2894,7 +2894,7 @@ msgstr "Sortér resultater efter:"
 
 #: ../core/templates/messages.tmpl:373
 msgid "Spaces are replaced by underscores"
-msgstr "Et mellemrum bliver erstattet af et understregningstegn ( _ )"
+msgstr "Mellemrum bliver erstattet af et understregningstegn ( _ )"
 
 #: ../PatternSkin/data/Main/WebLeftBar.txt:11
 #: ../PatternSkin/data/Sandbox/WebLeftBar.txt:11
@@ -3916,7 +3916,7 @@ msgstr "[[%1][Debug kildetekst]]."
 msgid ""
 "[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
 msgstr ""
-"[3 mellemrum (et antal gange)] * [mellemrum] Set [mellemrum] VARIABELNAVN "
+"[multiplum af 3 mellemrum] * [mellemrum] Set [mellemrum] VARIABELNAVN "
 "[mellemrum] = [værdi]"
 
 #: ../core/data/TWiki/RenameWeb.txt:3
