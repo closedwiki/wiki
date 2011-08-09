@@ -83,9 +83,9 @@ sub new {
     $this->{listZipCmd}   = $TWiki::cfg{Plugins}{BackupRestorePlugin}{listZipCmd} || 'unzip -l';
     $this->{unZipCmd}     = $TWiki::cfg{Plugins}{BackupRestorePlugin}{unZipCmd} || 'unzip -o';
 
-    TWiki::Func::writeDebug( "- BackupRestorePlugin constructor" ) if $this->{Debug};
-
     bless( $this, $class );
+
+    $this->_writeDebug( "constructor" );
 
     $this->{Location} = $this->_gatherLocation();
     $this->{SemaphorFile} = $this->{TempDir} . '/BackupRestorePlugin.dat';
@@ -105,7 +105,7 @@ sub BACKUPRESTORE {
     my $action = $params->{action} || '';
     $this->{Debug} = 1 if( $action eq 'debug' );
 
-    TWiki::Func::writeDebug( "- BackupRestorePlugin->BACKUPRESTORE" ) if $this->{Debug};
+    $this->_writeDebug( "BACKUPRESTORE" );
 
     my $text = '';
     if( TWiki::Func::isAnAdmin( TWiki::Func::getCanonicalUserID() ) ) {
@@ -294,7 +294,7 @@ sub _gatherLocation {
         # last resort to discover bin dir
         require Cwd;
         import Cwd qw( cwd );
-        $binDir;
+        $binDir = cwd();
     }
 
     # discover TWiki root dir
@@ -392,7 +392,7 @@ sub _testZipMethods {
 sub _listAllBackups {
     my( $this ) = @_;
 
-    TWiki::Func::writeDebug( "- BackupRestorePlugin->_listAllBackups" ) if $this->{Debug};
+    $this->_writeDebug( "_listAllBackups" );
 
     my @files = ();
     unless( opendir( DIR, $this->{BackupDir} ) ) {
@@ -402,7 +402,7 @@ sub _listAllBackups {
     @files = grep{ /twiki-backup-.*\.zip/ }
              grep{ -f "$this->{BackupDir}/$_" }
              readdir( DIR );
-    closedir( LIST ); 
+    closedir( DIR ); 
 
     return @files;
 }
@@ -411,7 +411,7 @@ sub _listAllBackups {
 sub _createZip {
     my( $this, $name, @files ) = @_;
 
-    TWiki::Func::writeDebug( "- BackupRestorePlugin->_createZip( $name, " 
+    $this->_writeDebug( "_createZip( $name, " 
       . join( ", ", @files ) . " )" ) if $this->{Debug};
 
     my $zipFile = "$this->{BackupDir}/$name";
@@ -427,7 +427,7 @@ sub _createZip {
 sub _deleteZip {
     my( $this, $name ) = @_;
 
-    TWiki::Func::writeDebug( "- BackupRestorePlugin->_deleteZip( $name )" ) if $this->{Debug};
+    $this->_writeDebug( "_deleteZip( $name )" ) if $this->{Debug};
 
     my $zipFile = "$this->{BackupDir}/$name";
     unless( -e $zipFile ) {
@@ -444,7 +444,7 @@ sub _deleteZip {
 sub _listZip {
     my( $this, $name ) = @_;
 
-    TWiki::Func::writeDebug( "- BackupRestorePlugin->_listZip( $name )" ) if $this->{Debug};
+    $this->_writeDebug( "_listZip( $name )" ) if $this->{Debug};
 
     my @files = ();
     my $zipFile = "$this->{BackupDir}/$name";
@@ -467,7 +467,7 @@ sub _listZip {
 sub _unZip {
     my( $this, $name ) = @_;
 
-    TWiki::Func::writeDebug( "- BackupRestorePlugin->_unZip( $name )" ) if $this->{Debug};
+    $this->_writeDebug( "_unZip( $name )" ) if $this->{Debug};
 
     my $zipFile = "$this->{BackupDir}/$name";
     unless( -e $zipFile ) {
@@ -504,6 +504,14 @@ sub _saveFile {
     print FILE $text;
     close( FILE );
     return '';
+}
+
+#==================================================================
+sub _writeDebug {
+    my( $this, $text ) = @_;
+
+    return unless( $this->{Debug} );
+    TWiki::Func::writeDebug( "- BackupRestorePlugin: $text" );
 }
 
 #==================================================================
