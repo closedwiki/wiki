@@ -1,5 +1,6 @@
 #!/usr/bin/perl -wT
 #
+# TWiki Backup & Restore Utility, part of the
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2011 Peter Thoeny, peter[at]thoeny.org and
@@ -22,6 +23,9 @@ use strict;
 use warnings;
 
 my $cfg;
+my $session;
+my $params;
+
 BEGIN {
     if ( defined $ENV{GATEWAY_INTERFACE} or defined $ENV{MOD_PERL} ) {
         $cfg->{ScriptType} = 'cgi';
@@ -39,7 +43,18 @@ BEGIN {
 $cfg->{BaseWeb}   = $TWiki::cfg{SystemWebName} || 'TWiki';
 $cfg->{BaseTopic} = 'BackupRestoreConsole';
 
+if( $cfg->{ScriptType} eq 'cgi' ) {
+    require CGI;
+    my $query = CGI->new();
+    $params->{action} = $query->param( 'action' ) || '';
+    $params->{file}   = $query->param( 'file' ) || '';
+    print "Content-type: text/html\n\n";
+} else {
+    $params->{action} = $ARGV[0] || 'usage';
+    $params->{file}   = $ARGV[1] || '';
+}
+
 use TWiki::Plugins::BackupRestorePlugin::Core;
 my $core = new TWiki::Plugins::BackupRestorePlugin::Core( $cfg );
-print $core->BACKUPRESTORE( @_ );
-exit 1;
+print $core->backuprestore( $session, $params );
+exit 0;
