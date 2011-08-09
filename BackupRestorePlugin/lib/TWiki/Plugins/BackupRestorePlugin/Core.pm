@@ -59,8 +59,8 @@ function ajaxStatusCheck( urlStr, queryStr ) {
 };
 function checkStatusWithDelay( ) {
   setTimeout(
-    "ajaxStatusCheck( '%SCRIPTURLPATH{backuprestore}%', 'action=check_status' )",
-    60000
+    "ajaxStatusCheck( '%SCRIPTURLPATH{backuprestore}%', 'action=status' )",
+    20000
   );
 };
 checkStatusWithDelay();
@@ -99,8 +99,10 @@ sub new {
 #==================================================================
 
 #==================================================================
+# Callback of registerTagHandler
+#==================================================================
 sub BACKUPRESTORE {
-    my( $this, $session, $params, $theTopic, $theWeb ) = @_;
+    my( $this, $session, $params ) = @_;
 
     my $action = $params->{action} || '';
     $this->{Debug} = 1 if( $action eq 'debug' );
@@ -109,9 +111,10 @@ sub BACKUPRESTORE {
 
     my $text = '';
     if( $this->{ScriptType} eq 'cli' || TWiki::Func::isAnAdmin( TWiki::Func::getCanonicalUserID() ) ) {
-        my $action = $params->{action} || '';
         if( $action eq 'backup_detail' ) {
             $text .= $this->_showBackupDetail( $session, $params );
+        } elsif( $action eq 'status' ) {
+            $text .= $this->_showBackupStatus( $session, $params );
         } elsif( $action eq 'create_backup' ) {
             $this->_startBackup( $session, $params );
             $text .= $this->_showBackupSummary( $session, $params );
@@ -135,6 +138,54 @@ sub BACKUPRESTORE {
     }
 
     $text = $this->_renderError() . $text;
+    return $text;
+}
+
+#==================================================================
+# Main entry point of backuprestore utility (cgi & cli)
+#==================================================================
+sub backuprestore {
+    my( $this, $session, $params ) = @_;
+
+    my $action = $params->{action} || 'usage';
+    $this->{Debug} = 1 if( $action eq 'debug' );
+
+    $this->_writeDebug( "backuprestore" );
+
+    my $text = '';
+    if( $action eq 'status' ) {
+        $text .= $this->_showBackupStatus( $session, $params );
+    } elsif( $action eq 'debug' ) {
+        $text .= $this->_debugBackup( $session, $params );
+    } else {
+        $text .= $this->_showUsage( $session, $params );
+    }
+    $text = $this->_renderError() . $text;
+    return $text;
+}
+
+#==================================================================
+sub _showUsage {
+    my( $this, $session, $params ) = @_;
+
+    my $text = '';
+    $text .= "<pre>\n" if( $this->{ScriptType} eq 'cgi' );
+    $text .= "Backup and restore utility, part of TWiki's BackupRestorePlugin\n";
+    $text .= "Usage:\n";
+    $text .= "./backuprestore status         # show backup status\n";
+    $text .= "</pre>\n" if( $this->{ScriptType} eq 'cgi' );
+    return $text;
+}
+
+#==================================================================
+sub _showBackupStatus {
+    my( $this, $session, $params ) = @_;
+
+    my( $inProgress, $fileName ) = $this->_checkBackupState();
+    my $text = '';
+    $text .= "<pre>\n" if( $this->{ScriptType} eq 'cgi' );
+    $text .= "backup_status:$inProgress\nfile_name:$fileName\n";
+    $text .= "</pre>\n" if( $this->{ScriptType} eq 'cgi' ); 
     return $text;
 }
 
@@ -209,7 +260,7 @@ sub _debugBackup {
 #==================================================================
 sub _checkBackupState {
     my( $this ) = @_;
-    return( -e $this->{SemaphorFile}, $this->_buildFileName() );
+    return( -e $this->{SemaphorFile} ? 1 : 0, $this->_buildFileName() );
 }
 
 #==================================================================
