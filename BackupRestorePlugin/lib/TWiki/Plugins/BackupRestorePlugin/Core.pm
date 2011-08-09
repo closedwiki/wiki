@@ -33,8 +33,43 @@ my @apacheConfLocations = (
     '/usr/local/httpd/conf.d',
   );
 
+my $checkStatusJS = << 'ENDJS';
+<!--<pre>-->
+<script type="text/javascript">
+function ajaxStatusCheck( urlStr, queryStr ) {
+  var request = false;
+  var self = this;
+  if (window.XMLHttpRequest) {
+    self.request = new XMLHttpRequest();
+  } else if (window.ActiveXObject) {
+    self.request = new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  self.request.open( "POST", urlStr, true );
+  self.request.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded" );
+  self.request.onreadystatechange = function() {
+    if (self.request.readyState == 4) {
+      if( self.request.responseText.search( "backup_status:0" ) >= 0 ) {
+          location = '%SCRIPTURLPATH{view}%/%WEB%/%TOPIC%';
+      } else {
+          checkStatusWithDelay();
+      }
+    }
+  };
+  self.request.send( queryStr );
+};
+function checkStatusWithDelay( ) {
+  setTimeout(
+    "ajaxStatusCheck( '%SCRIPTURLPATH{backuprestore}%', 'action=check_status' )",
+    60000
+  );
+};
+checkStatusWithDelay();
+</script>
+<!--</pre>-->
+ENDJS
+
 # Note: To remain compatible with older TWiki releases, do not use any TWiki internal
-# modules except LocalSite.cfg. And LocalSite.cfg is optional too.
+# modules except LocalSite.cfg, and that file is optional too.
 
 #==================================================================
 sub new {
@@ -107,15 +142,18 @@ sub BACKUPRESTORE {
 sub _showBackupSummary {
     my( $this, $session, $params ) = @_;
 
-    my $text = "| *Backup* | *Action* |\n";
+    my $text = "";
     my( $inProgress, $fileName ) = $this->_checkBackupState();
     if( $inProgress ) {
+        $text .= "$checkStatusJS\n";
+        $text .= "| *Backup* | *Action* |\n";
         $text .= '| %ICON{processing}% ' . $fileName . '| Creating backup now, please wait. '
                . '<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
                . '<input type="hidden" name="action" value="cancel_backup" />'
                . '<input type="submit" value="Cancel" class="twikiButton" />'
                . '</form> |' . "\n";
     } else {
+        $text .= "| *Backup* | *Action* |\n";
         $text .= '| %ICON{newtopic}% ' . $fileName
                . '| <form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
                . '<input type="hidden" name="action" value="create_backup" />'
