@@ -3,3 +3,4 @@ data/TWiki/BackupRestoreConsole.txt 0644 Plugin doc page
 lib/TWiki/Plugins/BackupRestorePlugin.pm 0644 Plugin Perl module
 lib/TWiki/Plugins/BackupRestorePlugin/CaptureOutput.pm 0644 Perl module
 lib/TWiki/Plugins/BackupRestorePlugin/Core.pm 0644 Plugin Perl module
+bin/backuprestore 0755 CGI/command line utility
