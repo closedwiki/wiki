@@ -471,11 +471,16 @@ sub _createBackup {
     ( $base, $dir ) = _splitTopDir( $this->{Location}{PubDir} );
 #    $this->_createZip( $name, $base, $dir, @exclude );
 
-    # backup system configuration files (backup later in working dir)
+    # backup system configuration files (backed-up later in working dir)
     $dir = $this->{Location}{WorkingDir} . "/work_areas";
     $this->_makeDir( $dir ) unless( -e $dir );
     $dir .= "/BackupRestorePlugin";
     $this->_makeDir( $dir ) unless( -e $dir );
+    foreach my $junk ( _getDirContent( $dir ) ) {
+        unless( unlink( "$dir/$junk" ) ) {
+            $this->{error} = "Can't delete $dir/$junk - $!";
+        }
+    }
     my $file = $this->{Location}{LocalLib};
     $this->_copyFile( $file, $dir ) if( $file && -e $file );
     $file = $this->{Location}{LocalSite};
@@ -621,6 +626,21 @@ sub _saveFile {
     print FILE $text;
     close( FILE );
     return '';
+}
+
+#==================================================================
+sub _getDirContent {
+    my( $dir ) = @_;
+
+    my @files;
+    opendir( DIR, $dir ) or return;
+    while( my $file = readdir( DIR )) {
+        next if( $file =~ m/^\./ );
+	push( @files, _untaintChecked( $file ) );
+    }
+    closedir( DIR );
+
+    return @files;
 }
 
 #==================================================================
