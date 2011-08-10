@@ -351,31 +351,31 @@ sub _gatherLocation {
     # discover TWiki root dir
     my $rootDir = $TWiki::cfg{DataDir} || $binDir;
     $rootDir =~ s|(.*)[\\/]+.*|$1|;      # go one directory up
-    $loc->{RootDir} = $rootDir;
+    $loc->{RootDir} = _untaintChecked( $rootDir );
 
     # discover common TWiki directories
-    $loc->{DataDir}    = $TWiki::cfg{DataDir} || "$rootDir/data";
-    $loc->{PubDir}     = $TWiki::cfg{PubDir}  || "$rootDir/pub";
-    $loc->{WorkingDir} = $TWiki::cfg{WorkingDir} || '';
+    $loc->{DataDir}    = _untaintChecked( $TWiki::cfg{DataDir} || "$rootDir/data" );
+    $loc->{PubDir}     = _untaintChecked( $TWiki::cfg{PubDir}  || "$rootDir/pub" );
+    $loc->{WorkingDir} = _untaintChecked( $TWiki::cfg{WorkingDir} || '' );
 
     # discover twiki/bin/LocalLib.cfg
-    $loc->{LocalLib}   = "$binDir/LocalLib.cfg" if( -e "$binDir/LocalLib.cfg" );
+    $loc->{LocalLib}   = _untaintChecked( "$binDir/LocalLib.cfg" ) if( -e "$binDir/LocalLib.cfg" );
 
     # discover twiki/lib/LocalSite.cfg
     foreach my $dir ( @INC ) {
         if( -e "$dir/LocalSite.cfg" ) {
-            $loc->{LocalSite} = "$dir/LocalSite.cfg";
+            $loc->{LocalSite} = _untaintChecked( "$dir/LocalSite.cfg" );
             last;
         }
     }
     if( !$loc->{LocalSite} && -e "$rootDir/lib/LocalSite.cfg" ) {
-        $loc->{LocalSite} =      "$rootDir/lib/LocalSite.cfg";
+        $loc->{LocalSite} = _untaintChecked( "$rootDir/lib/LocalSite.cfg" );
     }
 
     # discover apache conf file twiki.conf
     foreach my $dir ( @apacheConfLocations ) {
         if( -e "$dir/twiki.conf" ) {
-            $loc->{ApacheConf} = "$dir/twiki.conf";
+            $loc->{ApacheConf} = _untaintChecked( "$dir/twiki.conf" );
             last;
         }
     }
@@ -590,9 +590,6 @@ sub _makeDir {
 sub _copyFile {
     my( $this, $fromFile, $toDir ) = @_;
 
-    $fromFile = $1 if( $fromFile =~ /^(.*)$/ ); # FIXME untaint
-    $toDir = $1 if( $toDir =~ /^(.*)$/ );
-
     unless( File::Copy::copy( $fromFile, $toDir ) ) {
         $this->{error} = "Error copying $fromFile to $toDir";
     }
@@ -636,6 +633,14 @@ sub _splitTopDir {
         $dir  = $2;
     }
     return( $base, $dir );
+}
+
+#==================================================================
+sub _untaintChecked {
+    my( $text ) = @_;
+
+    $text = $1 if( $text =~ /^(.*)$/ );
+    return $text;
 }
 
 #==================================================================
