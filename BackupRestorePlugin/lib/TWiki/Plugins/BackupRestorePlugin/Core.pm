@@ -289,6 +289,67 @@ sub _cancelBackup {
 }
 
 #==================================================================
+sub _createBackup {
+    my( $this, $name ) = @_;
+
+    $this->_writeDebug( "_createBackup( $name )" ) if $this->{Debug};
+
+    my @exclude = ( '-x', '*.svn/*' );
+
+    # backup data dir
+    my( $base, $dir ) = _splitTopDir( $this->{Location}{DataDir} );
+#    $this->_createZip( $name, $base, $diri, @exclude );
+
+    # backup pub dir
+    ( $base, $dir ) = _splitTopDir( $this->{Location}{PubDir} );
+#    $this->_createZip( $name, $base, $dir, @exclude );
+
+    # backup system configuration files (backed-up later in working dir)
+    $dir = $this->{Location}{WorkingDir} . "/work_areas";
+    $this->_makeDir( $dir ) unless( -e $dir );
+    $dir .= "/BackupRestorePlugin";
+    $this->_makeDir( $dir ) unless( -e $dir );
+    foreach my $junk ( _getDirContent( $dir ) ) {
+        unless( unlink( "$dir/$junk" ) ) {
+            $this->{error} = "Can't delete $dir/$junk - $!";
+        }
+    }
+    my $file = $this->{Location}{LocalLib};
+    $this->_copyFile( $file, $dir ) if( $file && -e $file );
+    $file = $this->{Location}{LocalSite};
+    $this->_copyFile( $file, $dir ) if( $file && -e $file );
+    $file = $this->{Location}{ApacheConf};
+    $this->_copyFile( $file, $dir ) if( $file && -e $file );
+    my $version = '';
+    my $short = '';
+    my $text = _readFile( $this->{Location}{LibDir} . "/TWiki.pm" );
+    if( $text =~ m/\$wikiversion *= *['"]([^'"]+)/s ) {
+        # older than TWiki-4.0
+        $version = 'TWiki-' . $1;
+        $version =~ s/ /-/go;
+        $short = '1.0' if( $version =~ m/-2001/ );
+        $short = '2.0' if( $version =~ m/-2003/ );
+        $short = '3.0' if( $version =~ m/-2004/ );
+        $this->_writeDebug( "found old $version, short version $short" );
+    } elsif( $text =~ m/\$RELEASE *= *['"]([^'"]+)/s ) {
+        # TWiki-4.0 and newer
+        $version = $1;
+        $short = $1 if( $version =~ m/([0-9]+\.[0-9]+)/ );
+        $this->_writeDebug( "found $version, short version $short" );
+    }
+    if( $version ) {
+        _saveFile( "$dir/twiki-version.txt", "version: $version\nshort: $short\n" );
+        _saveFile( "$dir/twiki-version-long-$version.txt", "(version is in file name)\n" );
+        _saveFile( "$dir/twiki-version-short-$short.txt", "(version is in file name)\n" );
+    }
+
+    # backup working dir
+    ( $base, $dir ) = _splitTopDir( $this->{Location}{WorkingDir} );
+    push( @exclude, '*/tmp/*', '*/registration_approvals/*' );
+    $this->_createZip( $name, $base, $dir, @exclude );
+}
+
+#==================================================================
 sub _deleteBackup {
     my( $this, $session, $params ) = @_;
 
@@ -457,67 +518,6 @@ sub _listAllBackups {
     closedir( DIR ); 
 
     return @files;
-}
-
-#==================================================================
-sub _createBackup {
-    my( $this, $name ) = @_;
-
-    $this->_writeDebug( "_createBackup( $name )" ) if $this->{Debug};
-
-    my @exclude = ( '-x', '*.svn/*' );
-
-    # backup data dir
-    my( $base, $dir ) = _splitTopDir( $this->{Location}{DataDir} );
-#    $this->_createZip( $name, $base, $diri, @exclude );
-
-    # backup pub dir
-    ( $base, $dir ) = _splitTopDir( $this->{Location}{PubDir} );
-#    $this->_createZip( $name, $base, $dir, @exclude );
-
-    # backup system configuration files (backed-up later in working dir)
-    $dir = $this->{Location}{WorkingDir} . "/work_areas";
-    $this->_makeDir( $dir ) unless( -e $dir );
-    $dir .= "/BackupRestorePlugin";
-    $this->_makeDir( $dir ) unless( -e $dir );
-    foreach my $junk ( _getDirContent( $dir ) ) {
-        unless( unlink( "$dir/$junk" ) ) {
-            $this->{error} = "Can't delete $dir/$junk - $!";
-        }
-    }
-    my $file = $this->{Location}{LocalLib};
-    $this->_copyFile( $file, $dir ) if( $file && -e $file );
-    $file = $this->{Location}{LocalSite};
-    $this->_copyFile( $file, $dir ) if( $file && -e $file );
-    $file = $this->{Location}{ApacheConf};
-    $this->_copyFile( $file, $dir ) if( $file && -e $file );
-    my $version = '';
-    my $short = '';
-    my $text = _readFile( $this->{Location}{LibDir} . "/TWiki.pm" );
-    if( $text =~ m/\$wikiversion *= *['"]([^'"]+)/s ) {
-        # older than TWiki-4.0
-        $version = 'TWiki-' . $1;
-        $version =~ s/ /-/go;
-        $short = '1.0' if( $version =~ m/-2001/ );
-        $short = '2.0' if( $version =~ m/-2003/ );
-        $short = '3.0' if( $version =~ m/-2004/ );
-        $this->_writeDebug( "found old $version, short version $short" );
-    } elsif( $text =~ m/\$RELEASE *= *['"]([^'"]+)/s ) {
-        # TWiki-4.0 and newer
-        $version = $1;
-        $short = $1 if( $version =~ m/([0-9]+\.[0-9]+)/ );
-        $this->_writeDebug( "found $version, short version $short" );
-    }
-    if( $version ) {
-        _saveFile( "$dir/twiki-version.txt", "version: $version\nshort: $short\n" );
-        _saveFile( "$dir/twiki-version-long-$version.txt", "(version is in file name)\n" );
-        _saveFile( "$dir/twiki-version-short-$short.txt", "(version is in file name)\n" );
-    }
-
-    # backup working dir
-    ( $base, $dir ) = _splitTopDir( $this->{Location}{WorkingDir} );
-    push( @exclude, '*/tmp/*', '*/registration_approvals/*' );
-    $this->_createZip( $name, $base, $dir, @exclude );
 }
 
 #==================================================================
