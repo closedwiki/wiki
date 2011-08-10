@@ -361,15 +361,18 @@ sub _gatherLocation {
     # discover twiki/bin/LocalLib.cfg
     $loc->{LocalLib}   = _untaintChecked( "$binDir/LocalLib.cfg" ) if( -e "$binDir/LocalLib.cfg" );
 
-    # discover twiki/lib/LocalSite.cfg
+    # discover twiki/lib/TWiki.pm and twiki/lib/LocalSite.cfg
     foreach my $dir ( @INC ) {
-        if( -e "$dir/LocalSite.cfg" ) {
-            $loc->{LocalSite} = _untaintChecked( "$dir/LocalSite.cfg" );
+        if( -e "$dir/TWiki.pm" ) {
+            $loc->{LibDir} = _untaintChecked( $dir );
             last;
         }
     }
-    if( !$loc->{LocalSite} && -e "$rootDir/lib/LocalSite.cfg" ) {
-        $loc->{LocalSite} = _untaintChecked( "$rootDir/lib/LocalSite.cfg" );
+    if( !$loc->{LibDir} && -e "$rootDir/lib/TWiki.pm" ) {
+        $loc->{LibDir} = _untaintChecked( "$rootDir/lib" );
+    }
+    if( -e $loc->{LibDir} . "/LocalSite.cfg" ) {
+        $loc->{LocalSite} = $loc->{LibDir} . "/LocalSite.cfg";
     }
 
     # discover apache conf file twiki.conf
@@ -392,6 +395,7 @@ sub _testZipMethods {
            . "- BaseTopic:    $this->{BaseTopic}\n"
            . "- BaseWeb:      $this->{BaseWeb}\n"
            . "- Root:         $this->{Location}{RootDir}\n"
+           . "- LibDir:       $this->{Location}{LibDir}\n"
            . "- DataDir:      $this->{Location}{DataDir}\n"
            . "- PubDir:       $this->{Location}{PubDir}\n"
            . "- WorkingDir:   $this->{Location}{WorkingDir}\n"
@@ -423,10 +427,10 @@ sub _testZipMethods {
            . $this->_unZip( $zip )
            . "\n</pre>Error return: $this->{error}\n";
 
-    $this->{error} = '';
-    $text .= "<br />===== Test _deleteZip( $zip )<pre>\n"
-           . join( "\n", $this->_deleteZip( "$zip" ) )
-           . "\n</pre>Error return: $this->{error}\n";
+#    $this->{error} = '';
+#    $text .= "<br />===== Test _deleteZip( $zip )<pre>\n"
+#           . join( "\n", $this->_deleteZip( "$zip" ) )
+#           . "\n</pre>Error return: $this->{error}\n";
 
     $this->{error} = '';
     $text .= "<br />===== Test _deleteZip( not-exist-$zip )<pre>\n"
@@ -487,6 +491,28 @@ sub _createBackup {
     $this->_copyFile( $file, $dir ) if( $file && -e $file );
     $file = $this->{Location}{ApacheConf};
     $this->_copyFile( $file, $dir ) if( $file && -e $file );
+    my $version = '';
+    my $short = '';
+    my $text = _readFile( $this->{Location}{LibDir} . "/TWiki.pm" );
+    if( $text =~ m/\$wikiversion *= *['"]([^'"]+)/s ) {
+        # older than TWiki-4.0
+        $version = 'TWiki-' . $1;
+        $version =~ s/ /-/go;
+        $short = '1.0' if( $version =~ m/-2001/ );
+        $short = '2.0' if( $version =~ m/-2003/ );
+        $short = '3.0' if( $version =~ m/-2004/ );
+        $this->_writeDebug( "found old $version, short version $short" );
+    } elsif( $text =~ m/\$RELEASE *= *['"]([^'"]+)/s ) {
+        # TWiki-4.0 and newer
+        $version = $1;
+        $short = $1 if( $version =~ m/([0-9]+\.[0-9]+)/ );
+        $this->_writeDebug( "found $version, short version $short" );
+    }
+    if( $version ) {
+        _saveFile( "$dir/twiki-version.txt", "version: $version\nshort: $short\n" );
+        _saveFile( "$dir/twiki-version-long-$version.txt", "(version is in file name)\n" );
+        _saveFile( "$dir/twiki-version-short-$short.txt", "(version is in file name)\n" );
+    }
 
     # backup working dir
     ( $base, $dir ) = _splitTopDir( $this->{Location}{WorkingDir} );
