@@ -465,11 +465,23 @@ sub _createBackup {
 
     # backup data dir
     my( $base, $dir ) = _splitTopDir( $this->{Location}{DataDir} );
-    $this->_createZip( $name, $base, $diri, @exclude );
+#    $this->_createZip( $name, $base, $diri, @exclude );
 
     # backup pub dir
     ( $base, $dir ) = _splitTopDir( $this->{Location}{PubDir} );
-    $this->_createZip( $name, $base, $dir, @exclude );
+#    $this->_createZip( $name, $base, $dir, @exclude );
+
+    # backup system configuration files (backup later in working dir)
+    $dir = $this->{Location}{WorkingDir} . "/work_areas";
+    $this->_makeDir( $dir ) unless( -e $dir );
+    $dir .= "/BackupRestorePlugin";
+    $this->_makeDir( $dir ) unless( -e $dir );
+    my $file = $this->{Location}{LocalLib};
+    $this->_copyFile( $file, $dir ) if( $file && -e $file );
+    $file = $this->{Location}{LocalSite};
+    $this->_copyFile( $file, $dir ) if( $file && -e $file );
+    $file = $this->{Location}{ApacheConf};
+    $this->_copyFile( $file, $dir ) if( $file && -e $file );
 
     # backup working dir
     ( $base, $dir ) = _splitTopDir( $this->{Location}{WorkingDir} );
@@ -565,6 +577,26 @@ sub _writeDebug {
     }
 }
 
+#==================================================================
+sub _makeDir {
+    my( $this, $dir ) = @_;
+
+    unless( mkdir( $dir ) ) {
+        $this->{error} = "Error creating $dir";
+    }
+}
+
+#==================================================================
+sub _copyFile {
+    my( $this, $fromFile, $toDir ) = @_;
+
+    $fromFile = $1 if( $fromFile =~ /^(.*)$/ ); # FIXME untaint
+    $toDir = $1 if( $toDir =~ /^(.*)$/ );
+
+    unless( File::Copy::copy( $fromFile, $toDir ) ) {
+        $this->{error} = "Error copying $fromFile to $toDir";
+    }
+}
 
 #==================================================================
 # LOW LEVEL FUNCTIONS (NOT METHODS)
@@ -593,7 +625,6 @@ sub _saveFile {
     close( FILE );
     return '';
 }
-
 
 #==================================================================
 sub _splitTopDir {
