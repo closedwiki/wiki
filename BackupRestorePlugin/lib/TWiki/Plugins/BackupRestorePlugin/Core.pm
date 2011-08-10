@@ -389,17 +389,17 @@ sub _testZipMethods {
 
     my $text = '';
     $text .= "\n<br />===== Dirs <pre>\n"
-           . "-BaseTopic:    $this->{BaseTopic}\n"
-           . "-BaseWeb:      $this->{BaseWeb}\n"
-           . "-Root:         $this->{Location}{RootDir}\n"
-           . "-DataDir:      $this->{Location}{DataDir}\n"
-           . "-PubDir:       $this->{Location}{PubDir}\n"
-           . "-WorkingDir:   $this->{Location}{WorkingDir}\n"
-           . "-LocalLib:     $this->{Location}{LocalLib}\n"
-           . "-LocalSite:    $this->{Location}{LocalSite}\n"
-           . "-ApacheConf:   $this->{Location}{ApacheConf}\n"
-           . "-TempDir:      $this->{TempDir}\n"
-           . "-SemaphorFile: $this->{SemaphorFile}\n"
+           . "- BaseTopic:    $this->{BaseTopic}\n"
+           . "- BaseWeb:      $this->{BaseWeb}\n"
+           . "- Root:         $this->{Location}{RootDir}\n"
+           . "- DataDir:      $this->{Location}{DataDir}\n"
+           . "- PubDir:       $this->{Location}{PubDir}\n"
+           . "- WorkingDir:   $this->{Location}{WorkingDir}\n"
+           . "- LocalLib:     $this->{Location}{LocalLib}\n"
+           . "- LocalSite:    $this->{Location}{LocalSite}\n"
+           . "- ApacheConf:   $this->{Location}{ApacheConf}\n"
+           . "- TempDir:      $this->{TempDir}\n"
+           . "- SemaphorFile: $this->{SemaphorFile}\n"
            . "\n</pre>\n";
 
     $text .= "\n<br />===== Test _listAllBackups()<pre>\n"
@@ -407,12 +407,9 @@ sub _testZipMethods {
            . "\n</pre>Error return: $this->{error} <p />\n";
 
     my $zip = 'twiki-backup-2011-01-18-19-33.zip';
-    my @files = ( 'data/', 'pub/Main/', 'pub/Sandbox/', 'working/',
-                  '\*.svn\*', 'working\/tmp\*' );
-    chdir( '/var/www/twiki' );
     $this->{error} = '';
-    $text .= "<br />===== Test _createZip( $zip, " . join( ", ", @files ) . " )<pre>\n" 
-           . $this->_createZip( $zip, @files ) 
+    $text .= "<br />===== Test _createBackup( $zip )<pre>\n" 
+           . $this->_createBackup( $zip ) 
            . "\n</pre>Error return: $this->{error}\n";
 
     $this->{error} = '';
@@ -459,15 +456,38 @@ sub _listAllBackups {
 }
 
 #==================================================================
+sub _createBackup {
+    my( $this, $name ) = @_;
+
+    $this->_writeDebug( "_createBackup( $name )" ) if $this->{Debug};
+
+    my @exclude = ( '-x', '*.svn/*' );
+
+    # backup data dir
+    my( $base, $dir ) = _splitTopDir( $this->{Location}{DataDir} );
+    $this->_createZip( $name, $base, $diri, @exclude );
+
+    # backup pub dir
+    ( $base, $dir ) = _splitTopDir( $this->{Location}{PubDir} );
+    $this->_createZip( $name, $base, $dir, @exclude );
+
+    # backup working dir
+    ( $base, $dir ) = _splitTopDir( $this->{Location}{WorkingDir} );
+    push( @exclude, '*/tmp/*', '*/registration_approvals/*' );
+    $this->_createZip( $name, $base, $dir, @exclude );
+}
+
+#==================================================================
 sub _createZip {
-    my( $this, $name, @files ) = @_;
+    my( $this, $name, $baseDir, @dirs ) = @_;
 
-    $this->_writeDebug( "_createZip( $name, " 
-      . join( ", ", @files ) . " )" ) if $this->{Debug};
+    $this->_writeDebug( "_createZip( $name, $baseDir, " 
+      . join( ", ", @dirs ) . " )" ) if $this->{Debug};
 
+    chdir( $baseDir );
     my $zipFile = "$this->{BackupDir}/$name";
     my @cmd = split( /\s+/, $this->{createZipCmd} );
-    my ( $stdOut, $stdErr, $success, $exitCode ) = capture_exec( @cmd, $zipFile, @files );
+    my ( $stdOut, $stdErr, $success, $exitCode ) = capture_exec( @cmd, $zipFile, @dirs );
     if( $exitCode ) {
         $this->{error} = "Error creating $name. $stdErr";
     }
@@ -534,6 +554,23 @@ sub _unZip {
 }
 
 #==================================================================
+sub _writeDebug {
+    my( $this, $text ) = @_;
+
+    return unless( $this->{Debug} );
+    if( $this->{ScriptType} eq 'cli' ) {
+        print "DEBUG: $text\n";
+    } else {
+        TWiki::Func::writeDebug( "- BackupRestorePlugin: $text" );
+    }
+}
+
+
+#==================================================================
+# LOW LEVEL FUNCTIONS (NOT METHODS)
+#==================================================================
+
+#==================================================================
 sub _readFile {
     my $name = shift;
     my $data = '';
@@ -557,16 +594,17 @@ sub _saveFile {
     return '';
 }
 
-#==================================================================
-sub _writeDebug {
-    my( $this, $text ) = @_;
 
-    return unless( $this->{Debug} );
-    if( $this->{ScriptType} eq 'cli' ) {
-        print "DEBUG: $text\n";
-    } else {
-        TWiki::Func::writeDebug( "- BackupRestorePlugin: $text" );
+#==================================================================
+sub _splitTopDir {
+    my( $dir ) = @_;
+
+    my $base = '';
+    if( $dir =~ /^(.*)[\/\\]+(.*)$/ ) {
+        $base = $1;
+        $dir  = $2;
     }
+    return( $base, $dir );
 }
 
 #==================================================================
