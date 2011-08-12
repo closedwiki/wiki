@@ -296,6 +296,10 @@ sub _startBackup {
         my $fileName = $this->_buildFileName();
         my $text = "file_name: " . $fileName . "\n";
         _saveFile( $this->{DaemonDir} . '/file_name.txt', $text );
+        # daemon is running as shell script, do not pass env vars that make it look like a cgi
+        my $SaveGATEWAY_INTERFACE = $ENV{GATEWAY_INTERFACE}; $ENV{GATEWAY_INTERFACE} = undef;
+        my $SaveMOD_PERL          = $ENV{MOD_PERL};          $ENV{MOD_PERL}          = undef;
+        # build backup daemon command
         my $cmd = $this->{Location}{BinDir} . "/backuprestore create_backup $fileName";
         $this->_writeDebug( "start new daemon: $cmd" );
         require TWiki::Plugins::BackupRestorePlugin::ProcDaemon;
@@ -306,7 +310,11 @@ sub _startBackup {
             pid_file     => $this->{DaemonDir} . '/pid.txt',
             exec_command => $cmd,
         );
-        my $pid = $daemon->Init(); # fork background process
+        # fork background daemon process
+        my $pid = $daemon->Init();
+        # restore environment variables
+        $ENV{GATEWAY_INTERFACE} = $SaveGATEWAY_INTERFACE;
+        $ENV{MOD_PERL}          = $SaveMOD_PERL;
     }
 }
 
