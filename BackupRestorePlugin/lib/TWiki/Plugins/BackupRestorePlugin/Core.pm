@@ -326,7 +326,7 @@ sub _cancelBackup {
 sub _createBackup {
     my( $this, $session, $params ) = @_;
 
-    my $name = $params->{file};
+    my $name = $params->{file} || $this->_buildFileName();
     $this->_writeDebug( "_createBackup( $name )" ) if $this->{Debug};
 
     my @exclude = ( '-x', '*.svn/*' );
