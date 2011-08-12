@@ -48,7 +48,7 @@ function ajaxStatusCheck( urlStr, queryStr ) {
   self.request.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded" );
   self.request.onreadystatechange = function() {
     if (self.request.readyState == 4) {
-      if( self.request.responseText.search( "backup_status:0" ) >= 0 ) {
+      if( self.request.responseText.search( "backup_status: 0" ) >= 0 ) {
           location = '%SCRIPTURLPATH{view}%/%WEB%/%TOPIC%';
       } else {
           checkStatusWithDelay();
@@ -88,7 +88,7 @@ sub new {
     $this->_writeDebug( "constructor" );
 
     $this->{Location} = $this->_gatherLocation();
-    $this->{SemaphorFile} = $this->{TempDir} . '/BackupRestorePlugin.dat';
+    $this->{DaemonDir} = $this->{TempDir} . '/BackupRestoreDaemon';
     $this->{error} = '';
 
     return $this;
@@ -150,13 +150,14 @@ sub backuprestore {
     my $action = $params->{action} || 'usage';
     $this->{Debug} = 1 if( $action eq 'debug' );
 
-    $this->_writeDebug( "backuprestore" );
-
+    $this->_writeDebug( "backuprestore, action $action" );
     my $text = '';
     if( $action eq 'status' ) {
         $text .= $this->_showBackupStatus( $session, $params );
     } elsif( $action eq 'debug' ) {
         $text .= $this->_debugBackup( $session, $params );
+    } elsif( $action eq 'create_backup' ) {
+        $this->_createBackup( $session, $params );
     } else {
         $text .= $this->_showUsage( $session, $params );
     }
@@ -181,10 +182,11 @@ sub _showUsage {
 sub _showBackupStatus {
     my( $this, $session, $params ) = @_;
 
-    my( $inProgress, $fileName ) = $this->_checkBackupState();
+    my $inProgress = $this->_daemonRunning();
+    my $fileName = $this->_getBackupName( $inProgress );
     my $text = '';
     $text .= "<pre>\n" if( $this->{ScriptType} eq 'cgi' );
-    $text .= "backup_status:$inProgress\nfile_name:$fileName\n";
+    $text .= "backup_status: $inProgress\nfile_name: $fileName\n";
     $text .= "</pre>\n" if( $this->{ScriptType} eq 'cgi' ); 
     return $text;
 }
@@ -194,7 +196,8 @@ sub _showBackupSummary {
     my( $this, $session, $params ) = @_;
 
     my $text = "";
-    my( $inProgress, $fileName ) = $this->_checkBackupState();
+    my $inProgress = $this->_daemonRunning();
+    my $fileName = $this->_getBackupName( $inProgress );
     if( $inProgress ) {
         $text .= "$checkStatusJS\n";
         $text .= "| *Backup* | *Action* |\n";
@@ -258,21 +261,52 @@ sub _debugBackup {
 #==================================================================
 
 #==================================================================
-sub _checkBackupState {
+sub _daemonRunning {
     my( $this ) = @_;
-    return( -e $this->{SemaphorFile} ? 1 : 0, $this->_buildFileName() );
+    my $pid = _untaintChecked( _readFile( $this->{DaemonDir} . '/pid.txt' ) );
+    return 1 if( $pid && (kill 0, $pid) );
+    return 0;
+}
+
+#==================================================================
+sub _getBackupName {
+    my( $this, $inProgress ) = @_;
+    if( $inProgress ) {
+        my $text = _readFile( $this->{DaemonDir} . '/file_name.txt' );
+        if( $text =~ m/file_name: ([^\n]+)/ ) {
+            return $1;
+        }
+        $this->{error} = 'ERROR: Can\'t determine backup filename.';
+        return '';
+    } else {
+        return $this->_buildFileName();
+    }
 }
 
 #==================================================================
 sub _startBackup {
     my( $this, $session, $params ) = @_;
 
-    if( -e $this->{SemaphorFile} ) {
+    $this->_writeDebug( "_startBackup()" );
+    $this->_makeDir( $this->{DaemonDir} ) unless( -e $this->{DaemonDir} );
+
+    if( $this->_daemonRunning() ) {
         $this->{error} = 'ERROR: Backup is already in progress.';
     } else {
-        my $text = "File: " . $this->_buildFileName() . "\n";
-        _saveFile( $this->{SemaphorFile}, $text );
-        #FIXME: start backup
+        my $fileName = $this->_buildFileName();
+        my $text = "file_name: " . $fileName . "\n";
+        _saveFile( $this->{DaemonDir} . '/file_name.txt', $text );
+        my $cmd = $this->{Location}{BinDir} . "/backuprestore create_backup $fileName";
+        $this->_writeDebug( "start new daemon: $cmd" );
+        require TWiki::Plugins::BackupRestorePlugin::ProcDaemon;
+        my $daemon = TWiki::Plugins::BackupRestorePlugin::ProcDaemon->new(
+            work_dir     => $this->{Location}{BinDir},
+            child_STDOUT => $this->{DaemonDir} . '/stdout.txt',
+            child_STDERR => $this->{DaemonDir} . '/stderr.txt',
+            pid_file     => $this->{DaemonDir} . '/pid.txt',
+            exec_command => $cmd,
+        );
+        my $pid = $daemon->Init(); # fork background process
     }
 }
 
@@ -280,9 +314,9 @@ sub _startBackup {
 sub _cancelBackup {
     my( $this, $session, $params ) = @_;
 
-    if( -e $this->{SemaphorFile} ) {
+    if( $this->_daemonRunning() ) {
         #FIXME: kill backup
-        unlink( $this->{SemaphorFile} );
+        unlink( $this->{DaemonDir} . '/pid.txt' );
     } else {
         $this->{error} = 'ERROR: No backup in progress.';
     }
@@ -290,8 +324,9 @@ sub _cancelBackup {
 
 #==================================================================
 sub _createBackup {
-    my( $this, $name ) = @_;
+    my( $this, $session, $params ) = @_;
 
+    my $name = $params->{file};
     $this->_writeDebug( "_createBackup( $name )" ) if $this->{Debug};
 
     my @exclude = ( '-x', '*.svn/*' );
@@ -408,6 +443,7 @@ sub _gatherLocation {
         import Cwd qw( cwd );
         $binDir = cwd();
     }
+    $loc->{BinDir} = _untaintChecked( $binDir );
 
     # discover TWiki root dir
     my $rootDir = $TWiki::cfg{DataDir} || $binDir;
@@ -456,6 +492,7 @@ sub _testZipMethods {
            . "- BaseTopic:    $this->{BaseTopic}\n"
            . "- BaseWeb:      $this->{BaseWeb}\n"
            . "- Root:         $this->{Location}{RootDir}\n"
+           . "- BinDir:       $this->{Location}{BinDir}\n"
            . "- LibDir:       $this->{Location}{LibDir}\n"
            . "- DataDir:      $this->{Location}{DataDir}\n"
            . "- PubDir:       $this->{Location}{PubDir}\n"
@@ -464,7 +501,7 @@ sub _testZipMethods {
            . "- LocalSite:    $this->{Location}{LocalSite}\n"
            . "- ApacheConf:   $this->{Location}{ApacheConf}\n"
            . "- TempDir:      $this->{TempDir}\n"
-           . "- SemaphorFile: $this->{SemaphorFile}\n"
+           . "- DaemonDir:    $this->{DaemonDir}\n"
            . "\n</pre>\n";
 
     $text .= "\n<br />===== Test _listAllBackups()<pre>\n"
@@ -473,8 +510,8 @@ sub _testZipMethods {
 
     my $zip = 'twiki-backup-2011-01-18-19-33.zip';
     $this->{error} = '';
-    $text .= "<br />===== Test _createBackup( $zip )<pre>\n" 
-           . $this->_createBackup( $zip ) 
+    $text .= "<br />===== Test _createBackup( { file => $zip } )<pre>\n" 
+           . $this->_createBackup( undef, { file => $zip } ) 
            . "\n</pre>Error return: $this->{error}\n";
 
     $this->{error} = '';
@@ -531,6 +568,9 @@ sub _createZip {
     my $zipFile = "$this->{BackupDir}/$name";
     my @cmd = split( /\s+/, $this->{createZipCmd} );
     my ( $stdOut, $stdErr, $success, $exitCode ) = capture_exec( @cmd, $zipFile, @dirs );
+    if( $this->{ScriptType} eq 'cli' ) {
+        print $stdOut;
+    }
     if( $exitCode ) {
         $this->{error} = "Error creating $name. $stdErr";
     }
