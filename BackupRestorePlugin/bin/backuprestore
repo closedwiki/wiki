@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wT
+#!/usr/bin/perl -w
 #
 # TWiki Backup & Restore Utility, part of the
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
@@ -27,7 +27,7 @@ my $session;
 my $params;
 
 BEGIN {
-    if ( defined $ENV{GATEWAY_INTERFACE} or defined $ENV{MOD_PERL} ) {
+    if ( ( $ENV{GATEWAY_INTERFACE} || $ENV{MOD_PERL} ) && ! $ARGV[0] ) {
         $cfg->{ScriptType} = 'cgi';
         use CGI::Carp qw(fatalsToBrowser);
         $SIG{__DIE__} = \&CGI::Carp::confess;
@@ -38,6 +38,7 @@ BEGIN {
     }
     @INC = ('.', grep { $_ ne '.' } @INC);
     require 'setlib.cfg';
+    do 'LocalSite.cfg';
 }
 
 $cfg->{BaseWeb}   = $TWiki::cfg{SystemWebName} || 'TWiki';
@@ -46,8 +47,8 @@ $cfg->{BaseTopic} = 'BackupRestoreConsole';
 if( $cfg->{ScriptType} eq 'cgi' ) {
     require CGI;
     my $query = CGI->new();
-    $params->{action} = $query->param( 'action' ) || '';
-    $params->{file}   = $query->param( 'file' ) || '';
+    $params->{action} = $query->param( 'action' ) || $ARGV[0] || 'usage';
+    $params->{file}   = $query->param( 'file' )   || $ARGV[1] || '';
     print "Content-type: text/html\n\n";
 } else {
     $params->{action} = $ARGV[0] || 'usage';
