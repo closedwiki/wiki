@@ -1768,7 +1768,7 @@ msgid "List all topics in the %1 web in alphabetical order"
 msgstr ""
 
 #: ../core/data/TWiki/WebTopicViewTemplate.txt:11
-msgid "List more similar topic in this web"
+msgid "List more similar topics in this web"
 msgstr ""
 
 #: ../core/data/TWiki/WebSearch.txt:45
