@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1311913285" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313109307" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Skins
 
@@ -29,7 +29,7 @@ TWiki default ships with the skin PatternSkin activated. You can set the skin fo
 
 ---++ Defining Skins
 
-You may want to define your own skin, for example to comply with corporate web guidelines, or because you have a aesthetic vision that you want to share. There are a couple of places you an start doing this.
+You may want to define your own skin, for example to comply with corporate web guidelines, or because you have a aesthetic vision that you want to share. There are a couple of places you can start doing this.
 
 The TWikiTemplates files used for skins are located in the =twiki/templates= directory and are named according to the skin: ==&lt;scriptname&gt;.&lt;skin&gt;.tmpl==. Skin files may also be defined in TWiki topics - see TWikiTemplates for details.
 
