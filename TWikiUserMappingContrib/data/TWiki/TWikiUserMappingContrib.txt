@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1312238801" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313177948" format="1.1" version="$Rev$"}%
 ---+!! !TWikiUserMappingContrib
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -72,6 +72,7 @@ It's a part of the default distribution of the TWiki Core.
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Contrib Version: | 2011-07-28 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-08-12: | TWikibug:Item6792: Usability: Typo fix in registration page -- TWiki:Main.TorstenEriksson |
 |  2011-08-01: | TWikibug:Item6782: Usability: Add search filter to !UserList -- TWiki:Main.PeterThoeny |
 |  2011-07-28: | TWikibug:Item6780: Usability: Link to !UserList topic instead of !TWikiUsers -- TWiki:Main.PeterThoeny |
 |  2011-07-27: | TWikibug:Item6778: Usability: Use PreferencesPlugin to edit user profile settings -- TWiki:Main.PeterThoeny |
