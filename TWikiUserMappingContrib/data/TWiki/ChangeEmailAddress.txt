@@ -2,7 +2,7 @@
 ---+ Change E-mail Address
 %STARTINCLUDE%
 
-<strong>%MAKETEXT{"This form is used to change your registered e-mail addresses. Your registered e-mails are used by TWiki for sending you e-mails, include notifications of password changes. The addresses you register via this form are kept secret and will *not* be published anywhere on this site."}%</strong>
+<strong>%MAKETEXT{"This form is used to change your registered e-mail addresses. Your registered e-mails are used by TWiki for sending you e-mails, including notifications of password changes. The addresses you register via this form are kept secret and will *not* be published anywhere on this site."}%</strong>
 
 %X% __Security Note__: %MAKETEXT{"You really ought to register a valid e-mail address. If TWiki can't find a registered e-mail for you in the secret database, it will look in your user topic for a line like this:"}%
 <verbatim>
