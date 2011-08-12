@@ -323,8 +323,15 @@ sub _cancelBackup {
     my( $this, $session, $params ) = @_;
 
     if( $this->_daemonRunning() ) {
-        #FIXME: kill backup
+        my $pid = _untaintChecked( _readFile( $this->{DaemonDir} . '/pid.txt' ) );
+        kill( 6, $pid ) if( $pid ); # send ABORT signal to backuprestore script
         unlink( $this->{DaemonDir} . '/pid.txt' );
+        sleep( 10 ); # wait for zip to cleanup before deleting zip file
+        my $text =  _readFile( $this->{DaemonDir} . '/file_name.txt' );
+        if( $text =~ m/file_name: ([^\n]+)/ ) {
+            my $zipFile = "$this->{BackupDir}/$1";
+            unlink( $zipFile ) if( -e $zipFile );
+        }
     } else {
         $this->{error} = 'ERROR: No backup in progress.';
     }
