@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1311458896" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313274495" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki System Requirements
 
@@ -19,6 +19,7 @@ TWiki is written in Perl 5, uses a number of shell commands, and requires [[http
 | GNU =df= | Used by the site statistics to record disk usage statistics, optional. The df command is pre-installed on Linux and OS-X. On Windows install the <a href="http://gnuwin32.sourceforge.net/packages/coreutils.htm">CoreUtils for Windows</a>. |
 | GNU =patch= | For upgrades only: GNU =patch= is required when using the TWiki:Codev.UpgradeTWiki script |
 | GNU =fgrep=, =egrep= | Modify command line parameters in configure if you use non-GNU grep programs |
+| =zip= | Zip archive command line utility. Used by the BackupRestorePlugin to create and restore from backups. |
 | Cron/scheduler | %BULLET% Unix: =cron= %BB% Windows: =cron= equivalents <!-- SMELL: Macintosh version? --> |
 | Web server | Apache is well supported; see TWiki:TWiki.InstallingTWiki#OtherWebServers for other servers |
 
