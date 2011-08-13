@@ -434,6 +434,7 @@ sub _downloadBackup {
     }
 
     my $file = $this->_getZipFilePath( $name );
+    my $size = -s $file;
     unless( open( ZIPFILE, $file ) ) {
         $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
         $this->{error} = "Backup $name does not exist";
@@ -446,7 +447,8 @@ sub _downloadBackup {
 
     # if in cgi context, output content-type
     if( $this->{ScriptType} eq 'cgi' ) {
-        print "Content-type: application/zip\n";
+        print "Content-Type: application/zip\n";
+        print "Content-Length: $size\n";
         print "Content-Disposition: attachment; filename=$name\n\n";
     }
 
