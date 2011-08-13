@@ -228,7 +228,7 @@ sub _showBackupSummary {
     my @backupFiles = $this->_listAllBackups();
     if( scalar @backupFiles ) {
         foreach $fileName ( reverse sort @backupFiles ) {
-            $text .= '| %ICON{zip}% [[%SCRIPTURL{backuprestore}%/%WEB%/%TOPIC%/?'
+            $text .= '| %ICON{zip}% [[%SCRIPTURL{backuprestore}%?'
                    . "action=download_backup;file=$fileName][$fileName]] "
                    . '| <form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
                    . '<input type="hidden" name="action" value="backup_detail" />'
@@ -262,7 +262,7 @@ sub _showBackupDetail {
     my ( $twikiVersion, $twikiShort ) = $this->_getTWikiVersion();
     my $text = "";
     $text .= "| *Details of $fileName:* ||\n";
-    $text .= '| Backup file: | [[%SCRIPTURL{backuprestore}%/%WEB%/%TOPIC%/?'
+    $text .= '| Backup file: | [[%SCRIPTURL{backuprestore}%?'
            . "action=download_backup;file=$fileName][$fileName]] |\n";
     $text .= "| Backup date: | $buDate |\n";
     $text .= "| Backup of: | $buVersion |\n";
