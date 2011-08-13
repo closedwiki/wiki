@@ -1,27 +1,78 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310940054" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313270034" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
 %TOC%
 
 #HelsinkiRelease
----++ TWiki Release 5.1 rc1 (Istanbul) released on 2011-07-17 
+---++ TWiki Release 5.1 (Istanbul) released on 2011-08-13
 
-__New Features and Enhancements of TWiki Release 5.1 rc1__
-
-   * *Security Enhancements*
+__New Features and Enhancements of TWiki Release 5.1__
 
    * *Usability Enhancements*
-
+      * API and GUI for point and click user data management
+      * Support disabled users in password manager
+      * More visual user profile pages with in-place editing of form fields and picture selector
+      * In-place editing of TWiki group settings using !PreferencesPlugin
+      * Point and click bookmarks for better usability
+      * Improved statistics showing overall site usage over time, such as total number of webs, topics, users, etc
    * *TWiki Application Platform Enhancements*
-
-   * *Search Enhancements*
-
-   * *Miscellaneous Feature Enhancements*
-
+      * Macro language with parameterized variables
+      * Ability to auto-create page on view if it does not exist
+      * Relative heading levels for INCLUDE
+      * Relative heading levels for SEARCH
+   * *Security Enhancements*
+      * Set a flag to force password change on next login
+      * S/Mime support for notification e-mails
    * *Plugin Enhancements*
-
+      * New BackupRestorePlugin to easily backup, restore and upgrade TWiki installations
+      * New SetGetPlugin that can store variables persistently
+      * New ColorPickerPlugin to pick a color in form fields
+      * SpreadSheetPlugin: New functions BITXOR(), HEXDECODE(), HEXDECODE(), XOR()
    * *Bug Fixes*
+      * 21 bug fixes since TWiki-5.0.2
+
+See the full list of new features and bug fixes in TWikiReleaseNotes05x01.
+
+#IstanbulHallOfFame
+__Hall of Fame of TWiki Release 5.1__
+
+Many people have been involved in creating TWiki 5.1. Special thanks go to the most active contributors in the following areas:
+
+   * *Sponsor and facilitator:* TWiki:Main.PeterThoeny
+   * *Spec and code:* TWiki:Main.PeterThoeny, TWiki:Main.SopanShewale, TWiki:Main.GeorgeTrubisky, TWiki:Main.PeterJones, TWiki:Main.ChrisLahti, TWiki:Main.TimotheLitt, TWiki:Main.ThomasWeigert, TWiki:Main.IanKluft
+   * *Testing and bug fixing:* TWiki:Main.GeorgeTrubisky, TWiki:Main.SopanShewale, TWiki:Main.PeterThoeny, TWiki:Main.TimotheLitt, TWiki:Main.StefanWalter, TWiki:Main.SpirosDenaxas
+   * *Documentation:* TWiki:Main.PeterThoeny, TWiki:Main.ThomasWeigert, TWiki:Main.ScottGutman, TWiki:Main.SebastianKlus, TWiki:Main.DavidWTucker, TWiki:Main.JonasThomsen, TWiki:Main.MichaelRoberts, TWiki:Main.TaitCyrus, TWiki:Main.TorstenEriksson
+   * *Release package builds:* TWiki:Main.GeorgeTrubisky
+   * *Usability:* TWiki:Main.PeterThoeny
+   * *Translations:* Coordinated by TWiki:Main.PeterThoeny
+      * Bulgarian: TWiki:Main.KrassimirBerov
+      * Chinese (simplified and traditional): TWiki:Main.CheDong
+      * Czech: TWiki:Main.JaromirHoudek, TWiki:Main.VladimirMarek
+      * Danish: TWiki:Main.ChristianOtkjaer, TWiki:Main.PeterLorenzen, TWiki:Main.ErikJohansen
+      * Dutch: TWiki:Main.WoutMertens, TWiki:Main.TomArnst
+      * Finnish: TWiki:Main.HeikkiToivonen
+      * French: TWiki:Main.JeanbDupont, TWiki:Main.JeanFruitet, TWiki:Main.RodolpheVidal
+      * German: TWiki:Main.MartinRaabe
+      * Italian: TWiki:Main.MassimoMancini
+      * Japanese: TWiki:Main.KenYuminaga
+      * Korean: TWiki:Main.JeremySuk, TWiki:Main.JustinKim
+      * Polish: TWiki:Main.ZbigniewKulesza
+      * Portuguese: TWiki:Main.CarlinhosCecconi
+      * Russian: TWiki:Main.AndreyTkachenko, TWiki:Main.SergejZnamenskij, TWiki:Main.SergeyJSinx
+      * Spanish: TWiki:Main.EnriqueMelendez, TWiki:Main.SebastianKlus, TWiki:Main.MiguelABayona
+      * Swedish: TWiki:Main.TorstenEriksson, TWiki:Main.ErikAman
+      * Ukrainian: TWiki:Main.SerhijDubyk
+   * *Marketing:* TWiki:Main.PeterThoeny, TWiki:Main.BrianMellea
+   * *Public relations:* TWiki:Main.PeterThoeny, TWiki:Main.BrianMellea
+   * *Meetups:* TWiki:Main.PeterThoeny
+   * *TWiki.org wiki champions:* TWiki:Main.PeterThoeny, TWiki:Main.ThomasWeigert, TWiki:Main.TimotheLitt, TWiki:Main.TaitCyrus, TWiki:Main.GeorgeTrubisky, TWiki:Main.SopanShewale, TWiki:Main.DanielRohde, TWiki:Main.DipuDeshmukh, TWiki:Main.IanKluft <!-- Blog, Codev, Plugins, TWiki webs -->
+   * *Customer support:* TWiki:Main.PeterThoeny, TWiki:Main.EnriqueCadalso, TWiki:Main.CarlaReitzenstein, TWiki:Main.ScottGutman, TWiki:Main.AaronLWalker, TWiki:Main.TimotheLitt <!-- Support web -->
+   * *System administration:* TWiki:Main.ChrisLahti, TWiki:Main.PeterThoeny, TWiki:Main.SopanShewale
+
+If you find an omission please fix it at TWiki:TWiki/TWikiHistory. For the full list of contributors see TWikiContributor.
+
+See more details on the TWiki 5.1 release at TWikiReleaseNotes05x01.
 
 #HelsinkiRelease
 ---++ TWiki Release 5.0 (Helsinki) released on 2010-05-29 &amp; 2011-04-21
