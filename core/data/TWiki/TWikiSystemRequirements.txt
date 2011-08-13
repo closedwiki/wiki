@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313275593" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313275868" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki System Requirements
 
@@ -8,6 +8,7 @@ Low client and server base requirements are core features that keep TWiki widely
 
 %TOC%
 
+%STARTSECTION{"requirements"}%
 ---++ Server Requirements
 
 TWiki is written in Perl 5, uses a number of shell commands, and requires [[http://www.gnu.org/software/rcs/rcs.html][RCS (Revision Control System)]], a GNU Free Software package. TWiki is developed in a basic Linux/Apache environment. It also works with Microsoft Windows, and should have no problem on any other platform that meets the requirements.
@@ -98,5 +99,6 @@ You can easily select a balance of browser capability versus look and feel. Try 
 ---++ Important note about TWiki Plugins
 
    * Plugins can require just about anything -  browser-specific functions, stylesheets (CSS), Java applets, cookies, specific Perl modules,... - check the individual Plugin specs.
+%STOPSECTION{"requirements"}%
 
 __Related Topics:__ AdminDocumentationCategory
