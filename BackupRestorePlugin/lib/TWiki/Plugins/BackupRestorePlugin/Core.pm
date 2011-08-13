@@ -160,7 +160,10 @@ sub backuprestore {
         $text .= $this->_debugBackup( $session, $params );
     } elsif( $action eq 'create_backup' ) {
         $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
-        $this->_createBackup( $session, $params );
+        $text .= $this->_createBackup( $session, $params );
+    } elsif( $action eq 'download_backup' ) {
+        # content type is handled in _downloadBackup
+        $text .= $this->_downloadBackup( $session, $params );
     } else {
         $text .= $this->_showUsage( $session, $params );
     }
@@ -179,8 +182,9 @@ sub _showUsage {
     $text .= "Plugin home and documentation:\n";
     $text .= "  http://twiki.org/cgi-bin/view/Plugins/BackupRestorePlugin\n";
     $text .= "Usage:\n";
-    $text .= "  ./backuprestore status         # show backup status\n";
-    $text .= "  ./backuprestore create_backup  # create new backup\n";
+    $text .= "  ./backuprestore status                  # show backup status\n";
+    $text .= "  ./backuprestore create_backup           # create new backup\n";
+    $text .= "  ./backuprestore dowload_backup <name>   # download a backup file\n";
     $text .= "</pre>\n" if( $this->{ScriptType} eq 'cgi' );
     return $text;
 }
@@ -224,7 +228,8 @@ sub _showBackupSummary {
     my @backupFiles = $this->_listAllBackups();
     if( scalar @backupFiles ) {
         foreach $fileName ( reverse sort @backupFiles ) {
-            $text .= '| %ICON{zip}% [[%SCRIPTURL{view}%/%WEB%/%TOPIC%/' . "$fileName][$fileName]] "
+            $text .= '| %ICON{zip}% [[%SCRIPTURL{backuprestore}%/%WEB%/%TOPIC%/?'
+                   . "action=download_backup;file=$fileName][$fileName]] "
                    . '| <form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
                    . '<input type="hidden" name="action" value="backup_detail" />'
                    . '<input type="hidden" name="file" value="' . $fileName . '" />'
@@ -431,6 +436,42 @@ sub _createBackup {
 }
 
 #==================================================================
+sub _downloadBackup {
+    my( $this, $session, $params ) = @_;
+
+    my $text = '';
+    my $name = $params->{file};
+    unless( $name ) {
+        $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
+        $this->{error} = "Backup filename must be specified";
+        return $text;
+    }
+
+    my $file = $this->_getZipFilePath( $name );
+    unless( open( ZIPFILE, $file ) ) {
+        $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
+        $this->{error} = "Backup $name does not exist";
+        return $text;
+    }
+
+    # enforce binmode for binary zip file
+    binmode( ZIPFILE );
+    binmode( STDOUT );
+
+    # if in cgi context, output content-type
+    print "Content-type: application/zip\n\n" if( $this->{ScriptType} eq 'cgi' );
+
+    # directly print to STDOUT because of potentially big zip file size
+    my $buffer;
+    while( read( ZIPFILE, $buffer, 8 * 2**10 ) ) {
+        print STDOUT $buffer;
+    }
+    close( ZIPFILE );
+
+    return ''; # empty
+}
+
+#==================================================================
 sub _deleteBackup {
     my( $this, $session, $params ) = @_;
 
@@ -452,11 +493,16 @@ sub _restoreFromBackup {
 sub _renderError {
     my( $this ) = @_;
 
-    return '' unless $this->{error};
+    my $text = '';
+    return $text unless $this->{error};
 
-    my $text = '<div style="background-color: #f0f0f4; padding: 10px 20px">'
-             . $this->{error}
-             . "</div>\n";
+    if( $this->{ScriptType} eq 'cgi' ) {
+        my $text = '<div style="background-color: #f0f0f4; padding: 10px 20px">'
+                 . $this->{error}
+                 . "</div>\n";
+    } else {
+        print STDERR $this->{error} . "\n";
+    }
     $this->{error} = '';
     return $text;
 }
@@ -601,6 +647,12 @@ sub _listAllBackups {
     closedir( DIR ); 
 
     return @files;
+}
+
+#==================================================================
+sub _getZipFilePath {
+    my( $this, $name ) = @_;
+    return "$this->{BackupDir}/$name";
 }
 
 #==================================================================
