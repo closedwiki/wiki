@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313224444" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313227869" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -94,6 +94,7 @@ This plugin starts a daemon (background process) when a backup is started. Statu
       * Restrict download of existing backups to members of !TWikiAdminGroup.
       * Test on older TWiki releases.
       * Add incremental backup and restore feature.
+      * Show file size of backup files.
 
 #PluginInstallation
 ---++ Plugin Installation &amp; Configuration
@@ -136,14 +137,14 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Set SHORTDESCRIPTION = Administrator utility to backup, restore and upgrade a TWiki site
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
-|  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny <br /> &copy; 2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny <br /> &copy; 2011 TWiki:TWiki.TWikiContributor <br /> &copy; 2004, 2005 Simon Flack (for CPAN:IO::CaptureOutput) <br /> &copy; 2007, 2008 David Golden (for CPAN:IO::CaptureOutput) <br /> &copy; 1997-2011 by Earl Hood and Detlef Pilzecker (for CPAN:Proc::Daemon) |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-08-12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  2011-08-12: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.0 |
-|  CPAN Dependencies: | none |
-|  Other Dependencies: | none |
+|  CPAN Dependencies: | none <br /> (=Proc::Daemon= included as =TWiki::Plugins::BackupRestorePlugin::ProcDaemon=) <br /> (=IO::CaptureOutput= included as =TWiki::Plugins::BackupRestorePlugin::CaptureOutput= ) |
+|  Other Dependencies: | GNU =zip= and =unzip= command line utilities |
 |  Perl Version: | 5.005 |
 |  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/BackupRestorePlugin |
