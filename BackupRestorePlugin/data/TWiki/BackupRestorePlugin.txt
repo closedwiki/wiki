@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313227869" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313229442" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -94,7 +94,6 @@ This plugin starts a daemon (background process) when a backup is started. Statu
       * Restrict download of existing backups to members of !TWikiAdminGroup.
       * Test on older TWiki releases.
       * Add incremental backup and restore feature.
-      * Show file size of backup files.
 
 #PluginInstallation
 ---++ Plugin Installation &amp; Configuration
