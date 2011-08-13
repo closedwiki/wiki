@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313274495" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313275593" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki System Requirements
 
@@ -25,10 +25,15 @@ TWiki is written in Perl 5, uses a number of shell commands, and requires [[http
 
 ---+++ Required CPAN Modules
 
-The following Perl modules are used by TWiki:
+Most of the !CPAN libraries listesd below are part of a standard Perl installation so you most likely have them all!
+
+See TWiki:TWiki.HowToInstallCpanModules for detailed information on how to install !CPAN libraries
+
+The following Perl <a href="http://cpan.perl.org/" target="_top">CPAN</a> modules are used by TWiki:
 
 | *Module* | *Preferred version* | *Comment* |
 | =Algorithm::Diff= | | Included in TWiki distribution |
+| =CGI= | &gt;=3.18 | Versions 2.89 and 3.37 must be avoided. Most version from 3.15 and onwards should work. |
 | =CGI::Carp= | &gt;=1.26 | |
 | =Config= | &gt;=0 | |
 | =Cwd= | &gt;=3.05 | |
@@ -51,12 +56,18 @@ The following Perl modules are used by TWiki:
 
 The following Perl modules may be used by TWiki:
 
+See TWiki:TWiki.HowToInstallCpanModules for detailed information on how to install !CPAN libraries
+
 | *Module* | *Preferred version* | *Description* |
+| =Archive::Tar= | | May be required by the Extensions Installer in configure if command line tar or unzip is not available |
+| =Authen::SASL= | | Used for SMTP Authentication |
 | =CGI::Cookie= | &gt;=1.24 | Used for session support |
 | =CGI::Session= | &gt;=3.95 | Used for session support |
+| =Crypt::SMIME= | &gt;=0.09 | Required if S/MIME-signed administrative e-mail is enabled. |
 | =Digest::base= | | |
 | =Digest::SHA1= | | |
 | =Locale::Maketext::Lexicon= | &gt;=0 | Used for <nop>I18N support |
+| =Net::SMTP= | &gt;=2.29 | Used for sending mail |
 | =URI= | | Used for configure |
 
 Most of them will probably already be available in your installation. You can check version numbers with the =configure= script, or if you're still trying to get to that point, check from the command line like this:
