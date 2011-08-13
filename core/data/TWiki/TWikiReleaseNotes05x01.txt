@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313262848" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313273860" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.1 (Istanbul), 2011-08-13
 
 %TOC%
@@ -106,6 +106,31 @@ Details in TWikiScripts#view.
 A new bookmark feature has been introduced that replaces the personal left-bar links. Bookmarking a page is now a simple point and click operation: In the Account pulldown menu, select "Bookmark this page...". Existing bookmarks can be managed with an edit table in <nop>%USERSWEB%.&lt;wikiname&gt;Bookmarks topic, accessible via the "----- Bookmarks -----" pulldown menu of the Account pulldown.
 
 The personal left-bar topics such as !JohnSmithLeftBar are no longer used. Ask users to select the "----- Bookmarks -----" pulldown menu of the Account pulldown to initially create the bookmarks topic, then to either bookmark pages, or to manually copy &amp; paste old left-bar links to the bookmarks topic.
+
+---+++ User Profile Pages Tailored for Workplace
+
+Previous user profile pages had a bare bone look and the form fields were more tailored for public TWiki sites. TWiki-5.1 brings a more visual/modern page layout with profile picture selector, as well as default form fields tailored for the workplace.
+
+Changes to the [[%SYSTEMWEB%.UserForm]]:
+
+__Renamed:__
+   * =FirstName= to =First Name= (no change in =%META:FIELD name=)
+   * =LastName= to =Last Name= (no change in =%META:FIELD name=)
+   * =OrganisationName= to =Organization=
+   * =OrganisationURL= to =URL=
+   * =Profession= to =Titles=
+   * =VoIP= to =Skype ID=
+   * =State= to =Region=
+__Removed:__
+   * =Address=
+   * =InstantMessaging (IM)=
+   * =HomePage=
+   * =Comment=
+__Added:__
+   * =Department=
+   * =Status Update=
+
+When upgrading user profile pages pay attention to the renamed and removed fields.
 
 ---+++ Upgrade From Earlier Releases
 
