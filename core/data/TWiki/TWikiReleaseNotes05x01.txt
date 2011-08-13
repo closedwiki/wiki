@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313258911" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313259716" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.1 (Istanbul), 2011-08-13
 
 %TOC%
@@ -86,7 +86,11 @@ The statistics script contacts twiki.org to query the number of plugins availabl
 
 ---+++ Better usability and automation to create pages automatically on view
 
-FIXME document TWiki:Codev.AutoCreatePageOnViewIfNotExist
+A new feature has been introduced to automatically create a non-existing topic on page view. With  this it is possible to link to a topic, and in case it does not exist, have the topic created based on a specific template when clicking on the link.
+
+Use-case example: The new user bookmarks feature has a pull-down menu link to bookmark the current page. That link points to the &lt;wikiname&gt;Bookmarks page, which has a form pre-filled with the page and name of the to-be-bookmarked page. In case the user bookmarks page does not exist it is created first before showing the topic with the pre-filled form.
+
+Details in TWikiScripts#view.
 
 ---+++ Upgrade From Earlier Releases
 
