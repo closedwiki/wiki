@@ -211,15 +211,15 @@ sub _showBackupSummary {
     my $fileName = $this->_getBackupName( $inProgress );
     if( $inProgress ) {
         $text .= "$checkStatusJS\n";
-        $text .= "| *Backup* | *Action* |\n";
-        $text .= '| %ICON{processing}% ' . $fileName . '| Creating backup now, please wait. '
+        $text .= "| *Backup* | *Size* | *Action* |\n";
+        $text .= '| %ICON{processing}% ' . $fileName . ' | | Creating backup now, please wait. '
                . '<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
                . '<input type="hidden" name="action" value="cancel_backup" />'
                . '<input type="submit" value="Cancel" class="twikiButton" />'
                . '</form> |' . "\n";
     } else {
-        $text .= "| *Backup* | *Action* |\n";
-        $text .= '| %ICON{newtopic}% ' . $fileName
+        $text .= "| *Backup* | *Size* | *Action* |\n";
+        $text .= '| %ICON{newtopic}% ' . $fileName . ' | '
                . '| <form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
                . '<input type="hidden" name="action" value="create_backup" />'
                . '<input type="submit" value="Create backup now" class="twikiButton" />'
@@ -228,8 +228,11 @@ sub _showBackupSummary {
     my @backupFiles = $this->_listAllBackups();
     if( scalar @backupFiles ) {
         foreach $fileName ( reverse sort @backupFiles ) {
+            my $size = -s $this->{BackupDir} . "/$fileName";
+            $size =~ s/(^[-+]?\d+?(?=(?>(?:\d{3})+)(?!\d))|\G\d{3}(?=\d))/$1,/g;
             $text .= '| %ICON{zip}% [[%SCRIPTURL{backuprestore}%?'
                    . "action=download_backup;file=$fileName][$fileName]] "
+                   . "|   $size "
                    . '| <form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
                    . '<input type="hidden" name="action" value="backup_detail" />'
                    . '<input type="hidden" name="file" value="' . $fileName . '" />'
@@ -260,11 +263,14 @@ sub _showBackupDetail {
                 $this->_listZip( $fileName );
     return '' if( $this->{error}); # bail out if _listZip could not find the file
     my ( $twikiVersion, $twikiShort ) = $this->_getTWikiVersion();
+    my $buSize = -s $this->{BackupDir} . "/$fileName";
+    $buSize =~ s/(^[-+]?\d+?(?=(?>(?:\d{3})+)(?!\d))|\G\d{3}(?=\d))/$1,/g;
     my $text = "";
     $text .= "| *Details of $fileName:* ||\n";
     $text .= '| Backup file: | [[%SCRIPTURL{backuprestore}%?'
            . "action=download_backup;file=$fileName][$fileName]] |\n";
     $text .= "| Backup date: | $buDate |\n";
+    $text .= "| Backup size: | $buSize |\n";
     $text .= "| Backup of: | $buVersion |\n";
     $text .= "| This TWiki: | $twikiVersion |\n";
     $text .= "| *Restore Options:* ||\n";
