@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1304528612" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313276171" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Installation Guide
 
@@ -242,89 +242,9 @@ If you need help, ask a question in the TWiki:Support web or on TWiki:Codev/TWik
 #SystemRequirements
 ---++ TWiki System Requirements
 
-Low client and server base requirements are core features that keep TWiki widely deployable, particularly across a range of browser platforms and versions. 
+Low client and server base requirements are core features that keep TWiki widely deployable, particularly across a range of browser platforms and versions.  Many [[TWiki:Plugins.PluginPackage][Plugins]] and [[TWiki:Plugins.ContribPackage][contrib modules]] exist which enhance and expand TWiki's capabilities; they may have additional requirements.
 
----+++ Server Requirements
-
-TWiki is written in Perl 5, uses a number of shell commands, and requires <a href="http://www.gnu.org/software/rcs/rcs.html" rel="nofollow" target="_top">RCS (Revision Control System)</a>, a GNU Free Software package. TWiki is developed in a basic Linux/Apache environment. It also works with Microsoft Windows, and should have no problem on any other platform that meets the requirements.
-
-| *Resource* | *Required Server Environment* |
-| Perl | 5.8.4 or higher is recommended. TWiki will run in perl 5.6.1 but only with Wysiwyg editor disabled. Wysiwyg requires unicode support which is provided by perl 5.8.1 and forward. |
-| RCS | 5.7 or higher (including GNU =diff=) <br /> Optional, TWiki includes a pure perl implementation of RCS that can be used instead (although it's slower) |
-| GNU =diff= | GNU =diff= 2.7 or higher is required when not using the all-Perl <nop>RcsLite.  <br /> Install on PATH if not included with RCS (check version with =diff -v=)  <br /> Must be the version used by RCS, to avoid problems with binary attachments - RCS may have hard-coded path to =diff= |
-| Other external programs | =fgrep, egrep= |
-| Cron/scheduler | &#8226; Unix: =cron= <br />&#8226; Windows: =cron= equivalents <!-- SMELL: Macintosh version? --> |
-| Web server | Apache is well supported; for information on other servers, see TWiki:TWiki.InstallingTWiki#OtherWebServers. |
-
----+++ Required CPAN Modules
-
-Most of the !CPAN libraries listesd below are part of a standard Perl installation so you most likely have them all!
-
-See TWiki:TWiki.HowToInstallCpanModules for detailed information on how to install !CPAN libraries
-
-The following Perl <a href="http://cpan.perl.org/" target="_top">CPAN</a> modules are used by TWiki:
-
-| *Module* | *Preferred version* |
-| Algorithm::Diff (included) | &nbsp; |
-| CGI | Versions 2.89 and 3.37 must be avoided. Most version from 3.15 and onwards should work. |
-| CGI::Carp | &gt;=1.26 |
-| Config | &gt;=0 |
-| Cwd | &gt;=3.05 |
-| Data::Dumper | &gt;=2.121 |
-| Error (included) | &nbsp; |
-| File::Copy | &gt;=2.06 |
-| File::Find | &gt;=1.05 |
-| File::Spec | &gt;=3.05 |
-| !FileHandle | &gt;=2.01 |
-| IO::File | &gt;=1.10 |
-| Text::Diff (included) | &nbsp; |
-| Time::Local | &gt;=1.11 |
-
----+++ Optional CPAN Modules
-
-The following Perl modules may be used by TWiki:
-
-See TWiki:TWiki.HowToInstallCpanModules for detailed information on how to install !CPAN libraries
-
-| *Module* | *Preferred version* | *Description* |
-| Archive::Tar | &nbsp; | May be required by the Extensions Installer in configure if command line tar or unzip is not available |
-| CGI::Cookie | &gt;=1.24 | Used for session support |
-| CGI::Session | &gt;=3.95 | Highly recommended! Used for session support |
-| Crypt::SMIME | &gt;=0.09 | Required if S/MIME-signed administrative e-mail is enabled. |
-| Digest::base | &nbsp; | &nbsp; |
-| Digest::SHA1 | &nbsp; | &nbsp; |
-| Jcode | &nbsp; | Used for !I18N support with perl 5.6 |
-| Locale::Maketext::Lexicon | &gt;=0 | Used for !I18N support |
-| Authen::SASL | &nbsp; | Used for SMTP Authentication |
-| Net::SMTP | &gt;=2.29 | Used for sending mail |
-| Unicode::Map | &nbsp; | Used for !I18N support with perl 5.6 |
-| Unicode::Map8 | &nbsp; | Used for !I18N support with perl 5.6 |
-| Unicode::MapUTF8 | &nbsp; | Used for !I18N support with perl 5.6 |
-| Unicode::String | &nbsp; | Used for !I18N support with perl 5.6 |
-| URI | &nbsp; | Used for configure |
-
-Most of them will probably already be available in your installation. You can check version numbers with the =configure= script, or if you're still trying to get to that point, check from the command line like this:
-
-<pre>
-perl -e 'use FileHandle; print $FileHandle::VERSION."\n"'
-</pre>
-
-#ClientRequirements
----+++ Client Requirements
-
-The TWiki standard installation has relatively low browser requirements:
-
-   * HTML 3.2 compliant
-   * Cookies, if persistent sessions are required
-
-CSS and Javascript are used in most skins, although there is a low-fat skin (Classic skin) available that minimises these requirements. Some skins will require more recent releases of browsers. The default skin (Pattern) is tested on IE 6, Safari, and Mozilla 5.0 based browsers (such as Firefox).
-
-You can easily select a balance of browser capability versus look and feel. Try the installed skins at TWikiSkinBrowser and more at TWiki:Plugins.SkinPackage.
-
----+++ Important note about TWiki Plugins
-
-   * Plugins can require just about anything -  browser-specific functions, stylesheets (CSS), Java applets, cookies, specific Perl modules,... - check the individual Plugin specs.
-      * __%T% Note:__ Plugins included in the TWiki distribution do not add requirements, except for the CommentPlugin which requires Perl 5.6.1.
+%INCLUDE{ "TWikiSystemRequirements" section="requirements" headingoffset="1" }%
 
 #NonRootInstallNotes
 ---++ Notes on Installing TWiki on Non-Root Account
