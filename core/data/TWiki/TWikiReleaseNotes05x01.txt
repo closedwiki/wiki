@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313258710" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313258911" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.1 (Istanbul), 2011-08-13
 
 %TOC%
@@ -122,6 +122,7 @@ TWiki-5.1.0 was built from SVN http://svn.twiki.org/svn/twiki/trunk revision r21
 | TWikibug:Item6680 | Add counter to session variables |
 | TWikibug:Item6684 | Include parameters with default feature |
 | TWikibug:Item6690 | SpreadSheetPlugin: New functions BITXOR(), HEXDECODE(), HEXDECODE(), XOR() |
+| TWikibug:Item6712 | User interface translation for TWiki-5.1.0 |
 | TWikibug:Item6724 | Feature Proposal: Pass text and meta data to registerTagHandler callback |
 | TWikibug:Item6731 | InterwikiPlugin: Allow quotes in page pattern, and URL-encode quoted page patterns |
 | TWikibug:Item6733 | TWikiUserMappingContrib: More Visual User Profile Pages |
@@ -139,7 +140,7 @@ TWiki-5.1.0 was built from SVN http://svn.twiki.org/svn/twiki/trunk revision r21
 | TWikibug:Item6781 | configure: Configure Support for Task Framework |
 | TWikibug:Item6782 | TWikiUserMappingContrib: Usability: Add search filter to !UserList |
 </noautolink>
-Total: 37
+Total: 38
 
 ---+++ Fixes
 
