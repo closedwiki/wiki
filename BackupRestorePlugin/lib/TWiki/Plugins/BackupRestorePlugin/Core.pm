@@ -386,11 +386,11 @@ sub _createBackup {
 
     # backup data dir
     my( $base, $dir ) = _splitTopDir( $this->{Location}{DataDir} );
-#    $this->_createZip( $name, $base, $diri, @exclude );
+    $this->_createZip( $name, $base, $dir, @exclude );
 
     # backup pub dir
     ( $base, $dir ) = _splitTopDir( $this->{Location}{PubDir} );
-#    $this->_createZip( $name, $base, $dir, @exclude );
+    $this->_createZip( $name, $base, $dir, @exclude );
 
     # backup system configuration files (backed-up later in working dir)
     $dir = $this->{Location}{WorkingDir} . "/work_areas";
