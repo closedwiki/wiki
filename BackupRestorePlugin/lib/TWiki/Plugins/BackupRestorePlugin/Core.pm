@@ -212,7 +212,8 @@ sub _showBackupSummary {
     if( $inProgress ) {
         $text .= "$checkStatusJS\n";
         $text .= "| *Backup* | *Size* | *Action* |\n";
-        $text .= '| %ICON{processing}% ' . $fileName . ' | | Creating backup now, please wait. '
+        $text .= '| %ICON{processing}% ' . $fileName . ' | %ICON{processing-bar}% '
+               . '| Creating backup now, please wait. '
                . '<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
                . '<input type="hidden" name="action" value="cancel_backup" />'
                . '<input type="submit" value="Cancel" class="twikiButton" />'
