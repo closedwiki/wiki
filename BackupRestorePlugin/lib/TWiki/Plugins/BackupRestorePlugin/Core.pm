@@ -344,6 +344,18 @@ sub _createBackup {
     my $name = $params->{file} || $this->_buildFileName();
     $this->_writeDebug( "_createBackup( $name )" ) if $this->{Debug};
 
+    # delete old backups based on $TWiki::cfg{Plugins}{BackupRestorePlugin}{KeepNumberOfBackups}
+    if( $this->{KeepNumBUs} > 0 ) {
+        my @backupFiles = sort $this->_listAllBackups();
+        my $nFiles = scalar @backupFiles;
+        if( $nFiles > $this->{KeepNumBUs} ) {
+            splice( @backupFiles, $nFiles - $this->{KeepNumBUs} + 1, $nFiles );
+            foreach my $fileName ( @backupFiles ) {
+                $this->_deleteZip( $fileName );
+            }
+        }
+    }
+
     my @exclude = ( '-x', '*.svn/*' );
 
     # backup data dir
