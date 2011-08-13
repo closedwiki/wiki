@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313257730" format="1.1" version="$Rev$"}%
----+!! Release Notes of TWiki-5.1-rc1 (Istanbul), 2011-07-17
+%META:TOPICINFO{author="TWikiContributor" date="1313258710" format="1.1" version="$Rev$"}%
+---+!! Release Notes of TWiki-5.1 (Istanbul), 2011-08-13
 
 %TOC%
 
@@ -92,11 +92,11 @@ FIXME document TWiki:Codev.AutoCreatePageOnViewIfNotExist
 
 Follow the TWikiUpgradeGuide to install TWiki and migrate data from your existing TWiki.
 
-FIXME
+Watch TWiki:Plugins.BackupRestorePlugin for an updated version. Once the web-based restore feature is implemented it will be easy to backup an old TWiki and restore content on a new TWiki.
 
----++ TWiki-5.1.0-rc1 Major Release - Details
+---++ TWiki-5.1.0 Major Release - Details
 
-TWiki-5.1.0-rc1 was built from SVN http://svn.twiki.org/svn/twiki/trunk revision r21776 (2011-07-17)
+TWiki-5.1.0 was built from SVN http://svn.twiki.org/svn/twiki/trunk revision r21776 (2011-08-13)
 
 ---+++ Enhancements
 
