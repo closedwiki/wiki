@@ -153,10 +153,13 @@ sub backuprestore {
     $this->_writeDebug( "backuprestore, action $action" );
     my $text = '';
     if( $action eq 'status' ) {
+        $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
         $text .= $this->_showBackupStatus( $session, $params );
     } elsif( $action eq 'debug' ) {
+        $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
         $text .= $this->_debugBackup( $session, $params );
     } elsif( $action eq 'create_backup' ) {
+        $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
         $this->_createBackup( $session, $params );
     } else {
         $text .= $this->_showUsage( $session, $params );

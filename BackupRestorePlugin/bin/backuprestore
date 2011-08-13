@@ -49,7 +49,6 @@ if( $cfg->{ScriptType} eq 'cgi' ) {
     my $query = CGI->new();
     $params->{action} = $query->param( 'action' ) || $ARGV[0] || 'usage';
     $params->{file}   = $query->param( 'file' )   || $ARGV[1] || '';
-    print "Content-type: text/html\n\n";
 } else {
     $params->{action} = $ARGV[0] || 'usage';
     $params->{file}   = $ARGV[1] || '';
