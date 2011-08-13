@@ -445,7 +445,10 @@ sub _downloadBackup {
     binmode( STDOUT );
 
     # if in cgi context, output content-type
-    print "Content-type: application/zip\n\n" if( $this->{ScriptType} eq 'cgi' );
+    if( $this->{ScriptType} eq 'cgi' ) {
+        print "Content-type: application/zip\n";
+        print "Content-Disposition: attachment; filename=$name\n\n";
+    }
 
     # directly print to STDOUT because of potentially big zip file size
     my $buffer;
