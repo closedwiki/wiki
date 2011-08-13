@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313259716" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313261537" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.1 (Istanbul), 2011-08-13
 
 %TOC%
@@ -84,13 +84,19 @@ The statistics script contacts twiki.org to query the number of plugins availabl
 =<br />  plugins: 196=
 <br />The statistics script will not contact twiki.org if a ={Stats}{DontContactTWikiOrg}= configure setting is set.
 
----+++ Better usability and automation to create pages automatically on view
+---+++ Automatically Create Topics on Page View
 
 A new feature has been introduced to automatically create a non-existing topic on page view. With  this it is possible to link to a topic, and in case it does not exist, have the topic created based on a specific template when clicking on the link.
 
-Use-case example: The new user bookmarks feature has a pull-down menu link to bookmark the current page. That link points to the &lt;wikiname&gt;Bookmarks page, which has a form pre-filled with the page and name of the to-be-bookmarked page. In case the user bookmarks page does not exist it is created first before showing the topic with the pre-filled form.
+Use-case example: The new user bookmarks feature has a pulldown menu link to bookmark the current page. That link points to the &lt;wikiname&gt;Bookmarks page, which has a form pre-filled with the page and name of the to-be-bookmarked page. In case the user bookmarks page does not exist it is created first before showing the topic with the pre-filled form.
 
 Details in TWikiScripts#view.
+
+---+++ New Page Bookmarks Feature
+
+A new bookmark feature has been introduced that replaces the personal left-bar links. Bookmarking a page is now a simple point and click operation: In the Account pulldown menu, select "Bookmark this page...". Existing bookmarks can be managed with an edit table in <nop>%USERSWEB%.&lt;wikiname&gt;Bookmarks topic, accessible via the "----- Bookmarks -----" pulldown menu of the Account pulldown.
+
+The personal left-bar topics such as !JohnSmithLeftBar are no longer used. Ask users to select the "----- Bookmarks -----" pulldown menu of the Account pulldown to initially create the bookmarks topic, then to either bookmark pages, or to manually copy &amp; paste old left-bar links to the bookmarks topic.
 
 ---+++ Upgrade From Earlier Releases
 
