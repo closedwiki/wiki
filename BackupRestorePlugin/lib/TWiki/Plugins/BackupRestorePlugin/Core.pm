@@ -261,7 +261,8 @@ sub _showBackupDetail {
     return '' if( $this->{error}); # bail out if _listZip could not find the file
     my $text = "";
     $text .= "| *Details of $fileName:* ||\n";
-    $text .= "| Backup file: | [[$fileName][$fileName]] |\n";
+    $text .= '| Backup file: | [[%SCRIPTURL{backuprestore}%/%WEB%/%TOPIC%/?'
+           . "action=download_backup;file=$fileName][$fileName]] |\n";
     $text .= "| Backup date: | $buDate |\n";
     $text .= "| Backup of: | $buVersion |\n";
     $text .= "| This TWiki: |  |\n";
