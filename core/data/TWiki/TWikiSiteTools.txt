@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1303624832" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313271802" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Site Tools
 
@@ -160,6 +160,10 @@ The above line will run mailnotify nightly at 01:00. The =-q= switch suppresses 
 
    * TWikiAccessControl describes how to restrict read and write access to topics and webs, by users and groups
    * SitePermissions lists the permissions settings of the webs on this TWiki site
+
+---++ Backup and Restore
+
+TWiki has a solution to backup, restore and upgrade TWiki sites. It can be used via browser and on the command line. The BackupRestorePlugin is pre-installed in TWiki-5.1 and later releases; it can be installed in older TWiki releases as low as TWiki-2001-09-01 (Athens Release) to easily create a backup that can be restored on a new TWiki release. This offers an easy upgrade path for TWiki. See also TWikiUpgradeGuide.
 
 ---++ Help with crontab
 
