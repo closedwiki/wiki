@@ -247,7 +247,7 @@ sub _showBackupSummary {
                    . '</form> |' . "\n";
         }
     } else {
-        $text .= "| (no existing backups ) | |\n";
+        $text .= "| (no existing backups ) | | |\n";
     }
     return $text;
 }
