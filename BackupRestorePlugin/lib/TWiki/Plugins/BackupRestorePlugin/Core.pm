@@ -244,9 +244,17 @@ sub _showBackupSummary {
 sub _showBackupDetail {
     my( $this, $session, $params ) = @_;
 
-    my $text = '';
     my $fileName = $params->{file};
-    $text .= "(file: $fileName)";
+    my $date = $fileName;
+    $date =~ s/[^0-9]*(.*?)-([0-9]+)-([0-9]+)\.zip/$1 $2:$3/;
+    my $text = "";
+    $text .= "| *Details of $fileName:* ||\n";
+    $text .= "| Backup file: | [[$fileName][$fileName]] |\n";
+    $text .= "| Backup date: | $date |\n";
+    $text .= "| Backup of: |  |\n";
+    $text .= "| This TWiki: |  |\n";
+    $text .= "| *Restore Options:* ||\n";
+    $text .= "| (Check TWiki:Plugins.BackupRestorePlugin for an updated plugin) ||\n";
     return $text;
 }
 
