@@ -171,9 +171,13 @@ sub _showUsage {
 
     my $text = '';
     $text .= "<pre>\n" if( $this->{ScriptType} eq 'cgi' );
-    $text .= "Backup and restore utility, part of TWiki's BackupRestorePlugin\n";
+    $text .= "Backup and restore utility of TWiki's BackupRestorePlugin.\n";
+    $text .= "Copyright 2011 Peter[at]Thoeny.org and TWiki Contributors.\n";
+    $text .= "Plugin home and documentation:\n";
+    $text .= "  http://twiki.org/cgi-bin/view/Plugins/BackupRestorePlugin\n";
     $text .= "Usage:\n";
-    $text .= "./backuprestore status         # show backup status\n";
+    $text .= "  ./backuprestore status         # show backup status\n";
+    $text .= "  ./backuprestore create_backup  # create new backup\n";
     $text .= "</pre>\n" if( $this->{ScriptType} eq 'cgi' );
     return $text;
 }
