@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1311054640" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313257730" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.1-rc1 (Istanbul), 2011-07-17
 
 %TOC%
@@ -133,13 +133,20 @@ TWiki-5.1.0-rc1 was built from SVN http://svn.twiki.org/svn/twiki/trunk revision
 | TWikibug:Item6762 | Usability: Auto-create page on view if it does not exist |
 | TWikibug:Item6768 | TagMePlugin: Allow login name or !WikiName for queries |
 | TWikibug:Item6769 | Build: Add BackupRestorePlugin to core TWiki distribution |
+| TWikibug:Item6777 | PreferencesPlugin: Scroll to preferences section on edit |
+| TWikibug:Item6778 | TWikiUserMappingContrib: Usability: Use PreferencesPlugin to edit user profile settings |
+| TWikibug:Item6780 | TopMenuSkin: Usability: Link to !UserList topic instead of !TWikiUsers |
+| TWikibug:Item6781 | configure: Configure Support for Task Framework |
+| TWikibug:Item6782 | TWikiUserMappingContrib: Usability: Add search filter to !UserList |
 </noautolink>
-Total: 32
+Total: 37
 
 ---+++ Fixes
 
 <noautolink>
 | TWikibug:Item6209 | WebTopicCreator: underscores in topic name with WebTopicCreator are not possible |
+| TWikibug:Item6496 | TWiki 5 configuration page wrongly complains "This version of Perl is likely to exhibit extremely slow performance for certain critical operations." |
+| TWikibug:Item6658 | When a URL parameter with value 0 is passed into getScriptUrl, it is incorrectly removed |
 | TWikibug:Item6687 | Statistics: Statistics script leaves temp files behind |
 | TWikibug:Item6715 | Better layout for checkboxes of TWiki forms while in edit mode |
 | TWikibug:Item6732 | TagMePlugin: Administrator can't delete tag if Main web is renamed to User web |
@@ -149,7 +156,16 @@ Total: 32
 | TWikibug:Item6757 | Configure: Unprofessional text in Configure utility |
 | TWikibug:Item6763 | TopMenuSkin: WYSIWG editor corrupts TopMenuSkin system pages |
 | TWikibug:Item6767 | TWiki statistics update not working properly on !CentOS 5 |
+| TWikibug:Item6770 | Warning message: Use of uninitialized value in lc at twiki/lib/TWiki/UI/Edit.pm line 83 |
+| TWikibug:Item6775 | Require Perl 5.8 or later |
+| TWikibug:Item6779 | TablePlugin: Tables rendering too dark in Firefox 4 |
+| TWikibug:Item6783 | configure: Incorrect file test in bin/configure |
+| TWikibug:Item6784 | DoS on bin/search with an asterisk wildcard using bookview |
+| TWikibug:Item6788 | Better error handling in create new topic screen |
+| TWikibug:Item6789 | SlideShowPlugin: Better error handling in SLIDESHOWSTART variable |
+| TWikibug:Item6790 | configure: Wrong type in "MailProgram.pm" of configure |
+| TWikibug:Item6792 | TWikiUserMappingContrib: Typo fix in registration page and change e-mail address page |
 </noautolink>
-Total: 10
+Total: 21
 
 __Related Topics:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide, %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%
