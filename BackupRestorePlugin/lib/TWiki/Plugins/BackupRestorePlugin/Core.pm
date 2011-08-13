@@ -259,13 +259,14 @@ sub _showBackupDetail {
                 grep{ /BackupRestorePlugin\/twiki-version-long-/ }
                 $this->_listZip( $fileName );
     return '' if( $this->{error}); # bail out if _listZip could not find the file
+    my ( $twikiVersion, $twikiShort ) = $this->_getTWikiVersion();
     my $text = "";
     $text .= "| *Details of $fileName:* ||\n";
     $text .= '| Backup file: | [[%SCRIPTURL{backuprestore}%/%WEB%/%TOPIC%/?'
            . "action=download_backup;file=$fileName][$fileName]] |\n";
     $text .= "| Backup date: | $buDate |\n";
     $text .= "| Backup of: | $buVersion |\n";
-    $text .= "| This TWiki: |  |\n";
+    $text .= "| This TWiki: | $twikiVersion |\n";
     $text .= "| *Restore Options:* ||\n";
     $text .= "| (Check TWiki:Plugins.BackupRestorePlugin for an updated plugin) ||\n";
     return $text;
@@ -407,23 +408,7 @@ sub _createBackup {
     $this->_copyFile( $file, $dir ) if( $file && -e $file );
     $file = $this->{Location}{ApacheConf};
     $this->_copyFile( $file, $dir ) if( $file && -e $file );
-    my $version = '';
-    my $short = '';
-    my $text = _readFile( $this->{Location}{LibDir} . "/TWiki.pm" );
-    if( $text =~ m/\$wikiversion *= *['"]([^'"]+)/s ) {
-        # older than TWiki-4.0
-        $version = 'TWiki-' . $1;
-        $version =~ s/ /-/go;
-        $short = '1.0' if( $version =~ m/-2001/ );
-        $short = '2.0' if( $version =~ m/-2003/ );
-        $short = '3.0' if( $version =~ m/-2004/ );
-        $this->_writeDebug( "found old $version, short version $short" );
-    } elsif( $text =~ m/\$RELEASE *= *['"]([^'"]+)/s ) {
-        # TWiki-4.0 and newer
-        $version = $1;
-        $short = $1 if( $version =~ m/([0-9]+\.[0-9]+)/ );
-        $this->_writeDebug( "found $version, short version $short" );
-    }
+    my( $version, $short ) = $this->_getTWikiVersion();
     if( $version ) {
         _saveFile( "$dir/twiki-version.txt", "version: $version\nshort: $short\n" );
         _saveFile( "$dir/twiki-version-long-$version.txt", "(version is in file name)\n" );
@@ -506,6 +491,30 @@ sub _renderError {
     }
     $this->{error} = '';
     return $text;
+}
+
+#==================================================================
+sub _getTWikiVersion {
+    my( $this ) = @_;
+
+    my $version = '';
+    my $short = '';
+    my $text = _readFile( $this->{Location}{LibDir} . "/TWiki.pm" );
+    if( $text =~ m/\$wikiversion *= *['"]([^'"]+)/s ) {
+        # older than TWiki-4.0
+        $version = 'TWiki-' . $1;
+        $version =~ s/ /-/go;
+        $short = '1.0' if( $version =~ m/-2001/ );
+        $short = '2.0' if( $version =~ m/-2003/ );
+        $short = '3.0' if( $version =~ m/-2004/ );
+        $this->_writeDebug( "found old $version, short version $short" );
+    } elsif( $text =~ m/\$RELEASE *= *['"]([^'"]+)/s ) {
+        # TWiki-4.0 and newer
+        $version = $1;
+        $short = $1 if( $version =~ m/([0-9]+\.[0-9]+)/ );
+        $this->_writeDebug( "found $version, short version $short" );
+    }
+    return( $version, $short );
 }
 
 #==================================================================
