@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313201587" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313208486" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="BackupRestorePlugin"}%
 ---+!! TWiki Backup &amp; Restore Console
-<b> %IF{ "$'URLPARAM{action}'='backup_detail'" then="[[%TOPIC%][Overview]] &raquo; Detail" else="Overview" }% </b>
+%IF{ "$'URLPARAM{action}'='backup_detail'" then="[[%TOPIC%][Overview]] &raquo; <b>Detail</b>" else="<b>Overview</b>" }%
 
 %BACKUPRESTORE{
  action="%URLPARAM{ "action" encode="quote" }%"

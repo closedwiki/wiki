@@ -245,13 +245,17 @@ sub _showBackupDetail {
     my( $this, $session, $params ) = @_;
 
     my $fileName = $params->{file};
-    my $date = $fileName;
-    $date =~ s/[^0-9]*(.*?)-([0-9]+)-([0-9]+)\.zip/$1 $2:$3/;
+    my $buDate = $fileName;
+    $buDate = '' unless( $buDate =~ s/[^0-9]*(.*?)-([0-9]+)-([0-9]+)\.zip/$1 $2:$3/ );
+    my ( $buVersion ) = map{ s/^.*BackupRestorePlugin\/twiki-version-long-(.*?)\.txt$/$1/; $_ }
+                grep{ /BackupRestorePlugin\/twiki-version-long-/ }
+                $this->_listZip( $fileName );
+    return '' if( $this->{error}); # bail out if _listZip could not find the file
     my $text = "";
     $text .= "| *Details of $fileName:* ||\n";
     $text .= "| Backup file: | [[$fileName][$fileName]] |\n";
-    $text .= "| Backup date: | $date |\n";
-    $text .= "| Backup of: |  |\n";
+    $text .= "| Backup date: | $buDate |\n";
+    $text .= "| Backup of: | $buVersion |\n";
     $text .= "| This TWiki: |  |\n";
     $text .= "| *Restore Options:* ||\n";
     $text .= "| (Check TWiki:Plugins.BackupRestorePlugin for an updated plugin) ||\n";
