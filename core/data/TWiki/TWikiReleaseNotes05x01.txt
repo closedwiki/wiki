@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313261537" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313262848" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.1 (Istanbul), 2011-08-13
 
 %TOC%
@@ -66,7 +66,16 @@ __Note:__ TWiki needs to be configured properly to display user interface langua
 
 ---+++ Improved User Data Management API and GUI
 
-FIXME
+TWiki-5.1 introduces a new API and GUI to manage user data. It enhances the  user mapping and password managers TWiki already has with point and click user management.
+
+Password managers can declare their own data (fields with name, value, type, note) so that TWiki's user manager can show queries and forms to display and manipulate user data in a transparent way. It is a data driven design that can be extended easily.
+
+There are two new topics for TWiki administrators:
+
+   * QueryUsers - find a user to manage
+   * EditUserAccount - see and change the account data of a user
+
+At this time, TWiki::Users::HtPasswdUser, TWiki::Users::TWikiUserMapping and TWiki::Users::BaseUserMapping support the new user data management API. Other user mapping and password managers will follow. The implementation details are described at TWiki:Codev.UserDataManagementApiAndGUI - developers are encouraged to use the new API.
 
 ---+++ Improved Statistics Showing Overall Site Usage
 
