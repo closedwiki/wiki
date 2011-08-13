@@ -182,9 +182,9 @@ sub _showUsage {
     $text .= "Plugin home and documentation:\n";
     $text .= "  http://twiki.org/cgi-bin/view/Plugins/BackupRestorePlugin\n";
     $text .= "Usage:\n";
-    $text .= "  ./backuprestore status                  # show backup status\n";
-    $text .= "  ./backuprestore create_backup           # create new backup\n";
-    $text .= "  ./backuprestore dowload_backup <name>   # download a backup file\n";
+    $text .= "  ./backuprestore status                   # show backup status\n";
+    $text .= "  ./backuprestore create_backup            # create new backup\n";
+    $text .= "  ./backuprestore download_backup <name>   # download a backup file\n";
     $text .= "</pre>\n" if( $this->{ScriptType} eq 'cgi' );
     return $text;
 }
