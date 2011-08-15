@@ -109,8 +109,20 @@ sub BACKUPRESTORE {
 
     $this->_writeDebug( "BACKUPRESTORE" );
 
+    my $accessOK = 0;
+    if( $this->{ScriptType} eq 'cli' ) {
+        $accessOK = 1;
+    } elsif( exists( &TWiki::Func::isAnAdmin ) && exists( &TWiki::Func::getCanonicalUserID ) ) {
+        $accessOK = TWiki::Func::isAnAdmin( TWiki::Func::getCanonicalUserID() );
+    } else {
+        $accessOK = 1;
+        $this->_setError( 'WARNING: This is an older TWiki version, access to the backup and restore '
+                        . 'console __is not resticted__ to the TWiki admin group. Everybody can create '
+                        . 'and download backups! Disable the BackupRestorePlugin after use!' );
+    }
+
     my $text = '';
-    if( $this->{ScriptType} eq 'cli' || TWiki::Func::isAnAdmin( TWiki::Func::getCanonicalUserID() ) ) {
+    if( $accessOK ) {
         if( $action eq 'backup_detail' ) {
             $text .= $this->_showBackupDetail( $session, $params );
         } elsif( $action eq 'status' ) {
@@ -290,7 +302,7 @@ sub _showBackupDetail {
 sub _debugBackup {
     my( $this, $session, $params ) = @_;
 
-    my $text = "Debug BACKUPRESTORE, user " . TWiki::Func::getCanonicalUserID() . ", base web $this->{BaseWeb}";
+    my $text = "Debug BACKUPRESTORE, base web $this->{BaseWeb}";
     $text .= "<br /> " . $this->_testZipMethods();
     return $text;
 }
@@ -836,9 +848,10 @@ sub _writeDebug {
     return unless( $this->{Debug} );
     if( $this->{ScriptType} eq 'cli' ) {
         print "DEBUG: $text\n";
-    } else {
-        # print STDERR "DEBUG: $text\n";
+    } elsif( exists( &TWiki::Func::writeDebug ) ) {
         TWiki::Func::writeDebug( "- BackupRestorePlugin: $text" );
+    } else {
+        print STDERR "DEBUG BackupRestorePlugin: $text\n";
     }
 }
 
