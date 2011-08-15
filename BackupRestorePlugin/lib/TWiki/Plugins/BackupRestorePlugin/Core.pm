@@ -153,19 +153,19 @@ sub backuprestore {
     $this->_writeDebug( "backuprestore, action $action" );
     my $text = '';
     if( $action eq 'status' ) {
-        $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
+        print "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
         $text .= $this->_showBackupStatus( $session, $params );
     } elsif( $action eq 'debug' ) {
-        $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
+        print "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
         $text .= $this->_debugBackup( $session, $params );
     } elsif( $action eq 'create_backup' ) {
-        $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
+        print "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
         $text .= $this->_createBackup( $session, $params );
     } elsif( $action eq 'download_backup' ) {
-        # content type is handled in _downloadBackup
+        # content type is printed in _downloadBackup
         $text .= $this->_downloadBackup( $session, $params );
     } else {
-        $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
+        print "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
         $text .= $this->_showUsage( $session, $params );
     }
     $text = $this->_renderError() . $text;
@@ -487,22 +487,22 @@ sub _downloadBackup {
     my $text = '';
     my $name = $params->{file};
     unless( $name ) {
-        $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
+        print "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
         $this->_setError( "Backup filename must be specified" );
         return $text;
     }
 
     my $magic = $params->{magic};
     if( $this->{ScriptType} eq 'cgi' && ! $this->_checkMagic( $magic ) ) {
-        $text = "Content-type: text/html\n\n";
-        $this->_setError( "Only TWiki administrators can download backups" );
+        print "Content-type: text/html\n\n";
+        $this->_setError( "Sorry, only TWiki administrators can download backups" );
         return $text;
     }
 
     my $file = $this->_getZipFilePath( $name );
     my $size = -s $file;
     unless( open( ZIPFILE, $file ) ) {
-        $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
+        print "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
         $this->_setError( "Backup $name does not exist" );
         return $text;
     }
@@ -837,8 +837,8 @@ sub _writeDebug {
     if( $this->{ScriptType} eq 'cli' ) {
         print "DEBUG: $text\n";
     } else {
-print STDERR "DEBUG: $text\n";
-#        TWiki::Func::writeDebug( "- BackupRestorePlugin: $text" );
+        # print STDERR "DEBUG: $text\n";
+        TWiki::Func::writeDebug( "- BackupRestorePlugin: $text" );
     }
 }
 
