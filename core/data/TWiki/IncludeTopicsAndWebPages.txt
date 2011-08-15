@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1302769282" format="1.1" version="$Rev$"}%
 ---+!! Include Topics and Web Pages Using =%<nop>INCLUDE{...}%= Variable
 
-Use the =%<nop>INCLUDE{...}%= variable to embed the content of another topic or web page inside a TWiki topic. The whole content or only parts of a page can be included.
+Use the =%<nop>INCLUDE{...}%= variable to embed the content of another topic or web page inside a TWiki topic. The whole content or only parts of a page can be included. If needed, set a proxy server in %WIKIPREFSTOPIC%.
 
 %TOC%
 
