@@ -53,7 +53,7 @@ sub initPlugin {
 
 #==================================================================
 sub _BACKUPRESTORE {
-    my( $session ) = @_;
+    my( $session, $params ) = @_;
 
     if( $session->inContext( 'command_line' ) ) {
         return 'Note: The BACKUPRESTORE variable is only handled in CGI context';
@@ -69,7 +69,7 @@ sub _BACKUPRESTORE {
         };
         $core = new TWiki::Plugins::BackupRestorePlugin::Core( $cfg );
     }
-    return $core->BACKUPRESTORE( @_ );
+    return $core->BACKUPRESTORE( $params );
 }
 
 #==================================================================

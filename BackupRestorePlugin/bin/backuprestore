@@ -23,7 +23,6 @@ use strict;
 use warnings;
 
 my $cfg;
-my $session;
 my $params;
 
 BEGIN {
@@ -58,5 +57,5 @@ if( $cfg->{ScriptType} eq 'cgi' ) {
 
 use TWiki::Plugins::BackupRestorePlugin::Core;
 my $core = new TWiki::Plugins::BackupRestorePlugin::Core( $cfg );
-print $core->backuprestore( $session, $params );
+print $core->backuprestore( $params );
 exit 0;

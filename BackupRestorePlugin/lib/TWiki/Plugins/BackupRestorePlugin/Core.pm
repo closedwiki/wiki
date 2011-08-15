@@ -102,7 +102,7 @@ sub new {
 # Callback of registerTagHandler
 #==================================================================
 sub BACKUPRESTORE {
-    my( $this, $session, $params ) = @_;
+    my( $this, $params ) = @_;
 
     my $action = $params->{action} || '';
     $this->{Debug} = 1 if( $action eq 'debug' );
@@ -124,25 +124,25 @@ sub BACKUPRESTORE {
     my $text = '';
     if( $accessOK ) {
         if( $action eq 'backup_detail' ) {
-            $text .= $this->_showBackupDetail( $session, $params );
+            $text .= $this->_showBackupDetail( $params );
         } elsif( $action eq 'status' ) {
-            $text .= $this->_showBackupStatus( $session, $params );
+            $text .= $this->_showBackupStatus( $params );
         } elsif( $action eq 'create_backup' ) {
-            $this->_startBackup( $session, $params );
-            $text .= $this->_showBackupSummary( $session, $params );
+            $this->_startBackup( $params );
+            $text .= $this->_showBackupSummary( $params );
         } elsif( $action eq 'cancel_backup' ) {
-            $this->_cancelBackup( $session, $params );
-            $text .= $this->_showBackupSummary( $session, $params );
+            $this->_cancelBackup( $params );
+            $text .= $this->_showBackupSummary( $params );
         } elsif( $action eq 'delete_backup' ) {
-            $this->_deleteBackup( $session, $params );
-            $text .= $this->_showBackupSummary( $session, $params );
+            $this->_deleteBackup( $params );
+            $text .= $this->_showBackupSummary( $params );
         } elsif( $action eq 'restore_backup' ) {
-            $this->_restoreFromBackup( $session, $params );
-            $text .= $this->_showBackupSummary( $session, $params );
+            $this->_restoreFromBackup( $params );
+            $text .= $this->_showBackupSummary( $params );
         } elsif( $action eq 'debug' ) {
-            $text .= $this->_debugBackup( $session, $params );
+            $text .= $this->_debugBackup( $params );
         } else {
-            $text .= $this->_showBackupSummary( $session, $params );
+            $text .= $this->_showBackupSummary( $params );
         }
 
     } else {
@@ -157,7 +157,7 @@ sub BACKUPRESTORE {
 # Main entry point of backuprestore utility (cgi & cli)
 #==================================================================
 sub backuprestore {
-    my( $this, $session, $params ) = @_;
+    my( $this, $params ) = @_;
 
     my $action = $params->{action} || 'usage';
     $this->{Debug} = 1 if( $action eq 'debug' );
@@ -166,19 +166,19 @@ sub backuprestore {
     my $text = '';
     if( $action eq 'status' ) {
         print "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
-        $text .= $this->_showBackupStatus( $session, $params );
+        $text .= $this->_showBackupStatus( $params );
     } elsif( $action eq 'debug' ) {
         print "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
-        $text .= $this->_debugBackup( $session, $params );
+        $text .= $this->_debugBackup( $params );
     } elsif( $action eq 'create_backup' ) {
         print "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
-        $text .= $this->_createBackup( $session, $params );
+        $text .= $this->_createBackup( $params );
     } elsif( $action eq 'download_backup' ) {
         # content type is printed in _downloadBackup
-        $text .= $this->_downloadBackup( $session, $params );
+        $text .= $this->_downloadBackup( $params );
     } else {
         print "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
-        $text .= $this->_showUsage( $session, $params );
+        $text .= $this->_showUsage( $params );
     }
     $text = $this->_renderError() . $text;
     return $text;
@@ -186,7 +186,7 @@ sub backuprestore {
 
 #==================================================================
 sub _showUsage {
-    my( $this, $session, $params ) = @_;
+    my( $this, $params ) = @_;
 
     my $text = '';
     $text .= "<pre>\n" if( $this->{ScriptType} eq 'cgi' );
@@ -208,7 +208,7 @@ sub _showUsage {
 
 #==================================================================
 sub _showBackupStatus {
-    my( $this, $session, $params ) = @_;
+    my( $this, $params ) = @_;
 
     my $inProgress = $this->_daemonRunning();
     my $fileName = $this->_getBackupName( $inProgress );
@@ -221,7 +221,7 @@ sub _showBackupStatus {
 
 #==================================================================
 sub _showBackupSummary {
-    my( $this, $session, $params ) = @_;
+    my( $this, $params ) = @_;
 
     my $text = "";
     my $inProgress = $this->_daemonRunning();
@@ -272,7 +272,7 @@ sub _showBackupSummary {
 
 #==================================================================
 sub _showBackupDetail {
-    my( $this, $session, $params ) = @_;
+    my( $this, $params ) = @_;
 
     my $fileName = $params->{file};
     my $buDate = $fileName;
@@ -300,7 +300,7 @@ sub _showBackupDetail {
 
 #==================================================================
 sub _debugBackup {
-    my( $this, $session, $params ) = @_;
+    my( $this, $params ) = @_;
 
     my $text = "Debug BACKUPRESTORE, base web $this->{BaseWeb}";
     $text .= "<br /> " . $this->_testZipMethods();
@@ -373,7 +373,7 @@ sub _getBackupName {
 
 #==================================================================
 sub _startBackup {
-    my( $this, $session, $params ) = @_;
+    my( $this, $params ) = @_;
 
     $this->_writeDebug( "_startBackup()" );
     $this->_makeDir( $this->{DaemonDir} ) unless( -e $this->{DaemonDir} );
@@ -416,7 +416,7 @@ sub _startBackup {
 
 #==================================================================
 sub _cancelBackup {
-    my( $this, $session, $params ) = @_;
+    my( $this, $params ) = @_;
 
     if( $this->_daemonRunning() ) {
         my $pid = _untaintChecked( _readFile( $this->{DaemonDir} . '/pid.txt' ) );
@@ -435,7 +435,7 @@ sub _cancelBackup {
 
 #==================================================================
 sub _createBackup {
-    my( $this, $session, $params ) = @_;
+    my( $this, $params ) = @_;
 
     my $name = $params->{file} || $this->_buildFileName();
     $this->_writeDebug( "_createBackup( $name )" ) if $this->{Debug};
@@ -494,7 +494,7 @@ sub _createBackup {
 
 #==================================================================
 sub _downloadBackup {
-    my( $this, $session, $params ) = @_;
+    my( $this, $params ) = @_;
 
     my $text = '';
     my $name = $params->{file};
@@ -542,14 +542,14 @@ sub _downloadBackup {
 
 #==================================================================
 sub _deleteBackup {
-    my( $this, $session, $params ) = @_;
+    my( $this, $params ) = @_;
 
     return $this->_deleteZip( $params->{file} );
 }
 
 #==================================================================
 sub _restoreFromBackup {
-    my( $this, $session, $params ) = @_;
+    my( $this, $params ) = @_;
     #FIXME
 }
 
