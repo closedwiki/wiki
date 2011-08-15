@@ -88,7 +88,7 @@ sub new {
     $this->_writeDebug( "constructor" );
 
     $this->{Location} = $this->_gatherLocation();
-    $this->{DaemonDir} = $this->{TempDir} . '/BackupRestoreDaemon';
+    $this->{DaemonDir} = $this->{TempDir} . '/TWiki_BackupRestorePlugin_Daemon';
     $this->_clearError();
 
     return $this;
@@ -233,11 +233,12 @@ sub _showBackupSummary {
     }
     my @backupFiles = $this->_listAllBackups();
     if( scalar @backupFiles ) {
+        my $magic = $this->_generateMagic();
         foreach $fileName ( reverse sort @backupFiles ) {
             my $size = -s $this->{BackupDir} . "/$fileName";
             $size =~ s/(^[-+]?\d+?(?=(?>(?:\d{3})+)(?!\d))|\G\d{3}(?=\d))/$1,/g;
             $text .= '| %ICON{zip}% [[%SCRIPTURL{backuprestore}%?'
-                   . "action=download_backup;file=$fileName][$fileName]] "
+                   . "action=download_backup;file=$fileName;magic=$magic][$fileName]] "
                    . "|   $size "
                    . '| <form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
                    . '<input type="hidden" name="action" value="backup_detail" />'
@@ -268,13 +269,14 @@ sub _showBackupDetail {
                 grep{ /BackupRestorePlugin\/twiki-version-long-/ }
                 $this->_listZip( $fileName );
     return '' if( $this->{error} ); # bail out if _listZip could not find the file
+    my $magic = $this->_generateMagic();
     my ( $twikiVersion, $twikiShort ) = $this->_getTWikiVersion();
     my $buSize = -s $this->{BackupDir} . "/$fileName";
     $buSize =~ s/(^[-+]?\d+?(?=(?>(?:\d{3})+)(?!\d))|\G\d{3}(?=\d))/$1,/g;
     my $text = "";
     $text .= "| *Details of $fileName:* ||\n";
     $text .= '| Backup file: | [[%SCRIPTURL{backuprestore}%?'
-           . "action=download_backup;file=$fileName][$fileName]] |\n";
+           . "action=download_backup;file=$fileName;magic=$magic][$fileName]] |\n";
     $text .= "| Backup date: | $buDate |\n";
     $text .= "| Backup size: | $buSize |\n";
     $text .= "| Backup of: | $buVersion |\n";
@@ -297,6 +299,42 @@ sub _debugBackup {
 #==================================================================
 # MID-LEVEL BACKUP/RESTORE METHODS
 #==================================================================
+
+#==================================================================
+sub _generateMagic {
+    my( $this ) = @_;
+
+    # create new magic number, used to protect web-based download of backups
+    my $magic = $this->_buildFileName();
+    $magic =~ s/\.zip//o;
+    $magic .= '-' . sprintf( "%.4u", int( rand( 10000 ) ) );
+
+    # read file with magic number array, add new magic number, and truncate array
+    $this->_makeDir( $this->{DaemonDir} ) unless( -e $this->{DaemonDir} );
+    my @magicArray = split( /\n/, _readFile( $this->{DaemonDir} . '/magic.txt' ) );
+    push( @magicArray, $magic );
+    my $size = scalar @magicArray;
+    if( $size > 32 ) {
+        splice( @magicArray, 0, $size - 32 );
+    }
+    _saveFile( $this->{DaemonDir} . '/magic.txt', join( "\n", @magicArray ) . "\n" );
+
+    $this->_writeDebug( "_generateMagic() => $magic" );
+
+    return $magic;
+}
+
+#==================================================================
+sub _checkMagic {
+    my( $this, $magic ) = @_;
+
+    my @magicArray = grep{ /^$magic$/ }
+                     split( /\n/, _readFile( $this->{DaemonDir} . '/magic.txt' ) );
+    my $found = scalar @magicArray;
+    $this->_writeDebug( "_checkMagic( $magic ) => $found" );
+
+    return $found;
+}
 
 #==================================================================
 sub _daemonRunning {
@@ -451,6 +489,13 @@ sub _downloadBackup {
     unless( $name ) {
         $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
         $this->_setError( "Backup filename must be specified" );
+        return $text;
+    }
+
+    my $magic = $params->{magic};
+    if( $this->{ScriptType} eq 'cgi' && ! $this->_checkMagic( $magic ) ) {
+        $text = "Content-type: text/html\n\n";
+        $this->_setError( "Only TWiki administrators can download backups" );
         return $text;
     }
 
@@ -792,7 +837,8 @@ sub _writeDebug {
     if( $this->{ScriptType} eq 'cli' ) {
         print "DEBUG: $text\n";
     } else {
-        TWiki::Func::writeDebug( "- BackupRestorePlugin: $text" );
+print STDERR "DEBUG: $text\n";
+#        TWiki::Func::writeDebug( "- BackupRestorePlugin: $text" );
     }
 }
 
