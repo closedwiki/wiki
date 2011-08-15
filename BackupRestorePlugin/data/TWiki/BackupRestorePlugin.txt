@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313381331" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313433985" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -86,7 +86,6 @@ This plugin starts a daemon (background process) when a backup is started. Statu
 ---++ Limitations and To-Do
 
    * A web-based backup is currently not supported on a native Windows installation of TWiki, however, the command line utility can be used on Windows.
-   * Download of existing backups could be done my people who are not in the !TWikiAdminGroup. This is unlikely because the name of the backup needs to be known in order to download a backup, and backup names are only visible to members of the !TWikiAdminGroup.
 
    * To-do:
       * Add restore from backup functionality.
