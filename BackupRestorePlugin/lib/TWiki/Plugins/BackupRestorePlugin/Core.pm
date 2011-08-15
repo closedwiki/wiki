@@ -89,7 +89,7 @@ sub new {
 
     $this->{Location} = $this->_gatherLocation();
     $this->{DaemonDir} = $this->{TempDir} . '/BackupRestoreDaemon';
-    $this->{error} = '';
+    $this->_clearError();
 
     return $this;
 }
@@ -134,7 +134,7 @@ sub BACKUPRESTORE {
         }
 
     } else {
-        $this->{error} = 'ERROR: Only members of the %USERSWEB%.TWikiAdminGroup can see the backup & restore console.';
+        $this->_setError( 'ERROR: Only members of the %USERSWEB%.TWikiAdminGroup can see the backup & restore console.' );
     }
 
     $text = $this->_renderError() . $text;
@@ -262,7 +262,7 @@ sub _showBackupDetail {
     my ( $buVersion ) = map{ s/^.*BackupRestorePlugin\/twiki-version-long-(.*?)\.txt$/$1/; $_ }
                 grep{ /BackupRestorePlugin\/twiki-version-long-/ }
                 $this->_listZip( $fileName );
-    return '' if( $this->{error}); # bail out if _listZip could not find the file
+    return '' if( $this->{error} ); # bail out if _listZip could not find the file
     my ( $twikiVersion, $twikiShort ) = $this->_getTWikiVersion();
     my $buSize = -s $this->{BackupDir} . "/$fileName";
     $buSize =~ s/(^[-+]?\d+?(?=(?>(?:\d{3})+)(?!\d))|\G\d{3}(?=\d))/$1,/g;
@@ -309,7 +309,7 @@ sub _getBackupName {
         if( $text =~ m/file_name: ([^\n]+)/ ) {
             return $1;
         }
-        $this->{error} = 'ERROR: Can\'t determine backup filename.';
+        $this->_setError( 'ERROR: Can\'t determine backup filename.' );
         return '';
     } else {
         return $this->_buildFileName();
@@ -324,14 +324,22 @@ sub _startBackup {
     $this->_makeDir( $this->{DaemonDir} ) unless( -e $this->{DaemonDir} );
 
     if( $this->_daemonRunning() ) {
-        $this->{error} = 'ERROR: Backup is already in progress.';
+        $this->_setError( 'ERROR: Backup is already in progress.' );
     } else {
         my $fileName = $this->_buildFileName();
         my $text = "file_name: " . $fileName . "\n";
         _saveFile( $this->{DaemonDir} . '/file_name.txt', $text );
         # daemon is running as shell script, do not pass env vars that make it look like a cgi
-        my $SaveGATEWAY_INTERFACE = $ENV{GATEWAY_INTERFACE}; $ENV{GATEWAY_INTERFACE} = undef;
-        my $SaveMOD_PERL          = $ENV{MOD_PERL};          $ENV{MOD_PERL}          = undef;
+        my $SaveGATEWAY_INTERFACE;
+        if( $ENV{GATEWAY_INTERFACE} ) {
+            $SaveGATEWAY_INTERFACE = $ENV{GATEWAY_INTERFACE};
+            delete $ENV{GATEWAY_INTERFACE};
+        }
+        my $SaveMOD_PERL; 
+        if( $ENV{MOD_PERL} ) {
+            $SaveMOD_PERL = $ENV{MOD_PERL};
+            delete $ENV{MOD_PERL};
+        }
         # build backup daemon command
         my $cmd = $this->{Location}{BinDir} . "/backuprestore create_backup $fileName";
         $this->_writeDebug( "start new daemon: $cmd" );
@@ -346,8 +354,8 @@ sub _startBackup {
         # fork background daemon process
         my $pid = $daemon->Init();
         # restore environment variables
-        $ENV{GATEWAY_INTERFACE} = $SaveGATEWAY_INTERFACE;
-        $ENV{MOD_PERL}          = $SaveMOD_PERL;
+        $ENV{GATEWAY_INTERFACE} = $SaveGATEWAY_INTERFACE if( $SaveGATEWAY_INTERFACE );
+        $ENV{MOD_PERL}          = $SaveMOD_PERL if( $SaveMOD_PERL );
     }
 }
 
@@ -366,7 +374,7 @@ sub _cancelBackup {
             unlink( $zipFile ) if( -e $zipFile );
         }
     } else {
-        $this->{error} = 'ERROR: No backup in progress.';
+        $this->_setError( 'ERROR: No backup in progress.' );
     }
 }
 
@@ -406,7 +414,7 @@ sub _createBackup {
     $this->_makeDir( $dir ) unless( -e $dir );
     foreach my $junk ( _getDirContent( $dir ) ) {
         unless( unlink( "$dir/$junk" ) ) {
-            $this->{error} = "Can't delete $dir/$junk - $!";
+            $this->_setError( "Can't delete $dir/$junk - $!" );
         }
     }
     my $file = $this->{Location}{LocalLib};
@@ -426,6 +434,7 @@ sub _createBackup {
     ( $base, $dir ) = _splitTopDir( $this->{Location}{WorkingDir} );
     push( @exclude, '*/tmp/*', '*/registration_approvals/*' );
     $this->_createZip( $name, $base, $dir, @exclude );
+    return '';
 }
 
 #==================================================================
@@ -436,7 +445,7 @@ sub _downloadBackup {
     my $name = $params->{file};
     unless( $name ) {
         $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
-        $this->{error} = "Backup filename must be specified";
+        $this->_setError( "Backup filename must be specified" );
         return $text;
     }
 
@@ -444,7 +453,7 @@ sub _downloadBackup {
     my $size = -s $file;
     unless( open( ZIPFILE, $file ) ) {
         $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
-        $this->{error} = "Backup $name does not exist";
+        $this->_setError( "Backup $name does not exist" );
         return $text;
     }
 
@@ -488,6 +497,18 @@ sub _restoreFromBackup {
 #==================================================================
 
 #==================================================================
+sub _clearError {
+    my( $this ) = @_;
+    $this->{error} = '';
+}
+
+#==================================================================
+sub _setError {
+    my( $this, $error ) = @_;
+    $this->{error} .=  "$error\n"
+}
+
+#==================================================================
 sub _renderError {
     my( $this ) = @_;
 
@@ -495,11 +516,13 @@ sub _renderError {
     return $text unless $this->{error};
 
     if( $this->{ScriptType} eq 'cgi' ) {
-        my $text = '<div style="background-color: #f0f0f4; padding: 10px 20px">'
-                 . $this->{error}
-                 . "</div>\n";
+        $this->{error} =~ s/\n*$//; # remove trailing newline
+        $this->{error} =~ s/\n/<br \/>\n/go if( $this->{error} ); # separate errors with <br />
+        $text = '<div style="background-color: #f0f0f4; padding: 10px 20px">'
+              . $this->{error}
+              . "</div>\n";
     } else {
-        print STDERR $this->{error} . "\n";
+        print STDERR $this->{error};
     }
     $this->{error} = '';
     return $text;
@@ -660,7 +683,7 @@ sub _listAllBackups {
 
     my @files = ();
     unless( opendir( DIR, $this->{BackupDir} ) ) {
-        $this->{error} = "Can't open the backup directory - $!";
+        $this->_setError( "Can't open the backup directory - $!" );
         return @files;
     }
     @files = grep{ /twiki-backup-.*\.zip/ }
@@ -692,7 +715,7 @@ sub _createZip {
         print $stdOut;
     }
     if( $exitCode ) {
-        $this->{error} = "Error creating $name. $stdErr";
+        $this->_setError( "Error creating $name. $stdErr" );
     }
     return;
 }
@@ -705,11 +728,11 @@ sub _deleteZip {
 
     my $zipFile = "$this->{BackupDir}/$name";
     unless( -e $zipFile ) {
-        $this->{error} = "Backup $name does not exist";
+        $this->_setError( "Backup $name does not exist" );
         return;
     }
     unless( unlink( $zipFile ) ) {
-        $this->{error} = "Can't delete $name - $!";
+        $this->_setError( "Can't delete $name - $!" );
     }
     return;
 }
@@ -723,13 +746,13 @@ sub _listZip {
     my @files = ();
     my $zipFile = "$this->{BackupDir}/$name";
     unless( -e $zipFile ) {
-        $this->{error} = "Backup $name does not exist";
+        $this->_setError( "Backup $name does not exist" );
         return @files;
     }
     my @cmd = split( /\s+/, $this->{listZipCmd} );
     my ( $stdOut, $stdErr, $success, $exitCode ) = capture_exec( @cmd, $zipFile );
     if( $exitCode ) {
-        $this->{error} = "Error listing content of $name. $stdErr";
+        $this->_setError( "Error listing content of $name. $stdErr" );
     }
     @files = map{ s/^\s*([0-9\-\:]+\s*){3}//; $_ }   # remove size and timestamp
              grep{ /^\s*[0-9]+\s*[0-9]+\-.*[^\/]$/ } # exclude header, footer & directories
@@ -745,13 +768,13 @@ sub _unZip {
 
     my $zipFile = "$this->{BackupDir}/$name";
     unless( -e $zipFile ) {
-        $this->{error} = "Backup $name does not exist";
+        $this->_setError( "Backup $name does not exist" );
         return;
     }
     my @cmd = split( /\s+/, $this->{unZipCmd} );
     my ( $stdOut, $stdErr, $success, $exitCode ) = capture_exec( @cmd, $zipFile );
     if( $exitCode ) {
-        $this->{error} = "Error unzipping $name. $stdErr";
+        $this->_setError( "Error unzipping $name. $stdErr" );
     }
     return;
 }
@@ -773,7 +796,7 @@ sub _makeDir {
     my( $this, $dir ) = @_;
 
     unless( mkdir( $dir ) ) {
-        $this->{error} = "Error creating $dir";
+        $this->_setError( "Error creating $dir" );
     }
 }
 
@@ -782,7 +805,7 @@ sub _copyFile {
     my( $this, $fromFile, $toDir ) = @_;
 
     unless( File::Copy::copy( $fromFile, $toDir ) ) {
-        $this->{error} = "Error copying $fromFile to $toDir";
+        $this->_setError( "Error copying $fromFile to $toDir" );
     }
 }
 
