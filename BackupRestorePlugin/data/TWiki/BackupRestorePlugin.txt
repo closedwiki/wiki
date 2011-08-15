@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313433985" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313443340" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -28,6 +28,11 @@ Once configured, visit the BackupRestoreConsole to:
    * List all backups.
    * Delete a backup.
    * Restore from a backup.
+
+__Screenshot:__ <br />
+<sticky><div style="margin:10px 0; padding: 10px; border: 1px solid #cccccc; width: 673px">
+<img src="%ATTACHURLPATH%/backup-console-overview.png" alt="Backup Console, Overview" width="673" height="222" />
+</div></sticky>
 
 ---++ Command Line Utility and Cron
 
@@ -150,3 +155,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/BackupRestorePluginAppraisal |
 
 __Related Topics:__ BackupRestoreConsole, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.AdminToolsCategory
+
+%META:FILEATTACHMENT{name="backup-console-overview.png" attachment="backup-console-overview.png" attr="h" comment="" date="1313441638" path="backup-console-overview.png" size="62137" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="processing.gif" attachment="processing.gif" attr="h" comment="" date="1313443304" path="processing.gif" size="2537" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="processing-bar.gif" attachment="processing-bar.gif" attr="h" comment="" date="1313443304" path="processing-bar.gif" size="1754" user="TWikiContributor" version="1"}%
