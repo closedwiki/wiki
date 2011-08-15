@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313367245" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313381331" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -91,7 +91,6 @@ This plugin starts a daemon (background process) when a backup is started. Statu
    * To-do:
       * Add restore from backup functionality.
       * Add Config.spec for easy configuration.
-      * Restrict download of existing backups to members of !TWikiAdminGroup.
       * Test on older TWiki releases.
       * Add incremental backup and restore feature.
 
@@ -140,7 +139,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-08-14 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-08-14: | TWikibug:Item6793: Better error handling |
+|  2011-08-14: | TWikibug:Item6793: Better error handling; add magic number to download URL to restrict download of backups to TWiki admins only |
 |  2011-08-12: | TWikibug:Item6631: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.0 |
 |  CPAN Dependencies: | none <br /> (=Proc::Daemon= included as =TWiki::Plugins::BackupRestorePlugin::ProcDaemon=) <br /> (=IO::CaptureOutput= included as =TWiki::Plugins::BackupRestorePlugin::CaptureOutput= ) |
