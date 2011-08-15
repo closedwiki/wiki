@@ -165,6 +165,7 @@ sub backuprestore {
         # content type is handled in _downloadBackup
         $text .= $this->_downloadBackup( $session, $params );
     } else {
+        $text = "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
         $text .= $this->_showUsage( $session, $params );
     }
     $text = $this->_renderError() . $text;
@@ -182,9 +183,13 @@ sub _showUsage {
     $text .= "Plugin home and documentation:\n";
     $text .= "  http://twiki.org/cgi-bin/view/Plugins/BackupRestorePlugin\n";
     $text .= "Usage:\n";
-    $text .= "  ./backuprestore status                   # show backup status\n";
-    $text .= "  ./backuprestore create_backup            # create new backup\n";
-    $text .= "  ./backuprestore download_backup <name>   # download a backup file\n";
+    if( $this->{ScriptType} ne 'cgi' ) {
+        $text .= "  ./backuprestore status                   # show backup status\n";
+        $text .= "  ./backuprestore create_backup            # create new backup\n";
+        $text .= "  ./backuprestore download_backup name     # download a backup file\n";
+    } else {
+        $text .= "  /backuprestore?action=status             # show backup status\n";
+    }
     $text .= "</pre>\n" if( $this->{ScriptType} eq 'cgi' );
     return $text;
 }
@@ -710,10 +715,10 @@ sub _createZip {
     chdir( $baseDir );
     my $zipFile = "$this->{BackupDir}/$name";
     my @cmd = split( /\s+/, $this->{createZipCmd} );
-    my ( $stdOut, $stdErr, $success, $exitCode ) = capture_exec( @cmd, $zipFile, @dirs );
     if( $this->{ScriptType} eq 'cli' ) {
-        print $stdOut;
+        print "Backing up to $name: " . join( ", ", @dirs ) . "\n";
     }
+    my ( $stdOut, $stdErr, $success, $exitCode ) = capture_exec( @cmd, $zipFile, @dirs );
     if( $exitCode ) {
         $this->_setError( "Error creating $name. $stdErr" );
     }
