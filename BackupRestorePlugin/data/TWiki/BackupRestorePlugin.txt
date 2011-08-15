@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313443340" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313444901" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -141,9 +141,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny <br /> &copy; 2011 TWiki:TWiki.TWikiContributor <br /> &copy; 2004, 2005 Simon Flack (for CPAN:IO::CaptureOutput) <br /> &copy; 2007, 2008 David Golden (for CPAN:IO::CaptureOutput) <br /> &copy; 1997-2011 by Earl Hood and Detlef Pilzecker (for CPAN:Proc::Daemon) |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-08-14 |
+|  Plugin Version: | 2011-08-15 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-08-14: | TWikibug:Item6793: Better error handling; add magic number to download URL to restrict download of backups to TWiki admins only |
+|  2011-08-15: | TWikibug:Item6793: Better error handling; add magic number to download URL to restrict download of backups to TWiki admins only; add screenshot |
 |  2011-08-12: | TWikibug:Item6631: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.0 |
 |  CPAN Dependencies: | none <br /> (=Proc::Daemon= included as =TWiki::Plugins::BackupRestorePlugin::ProcDaemon=) <br /> (=IO::CaptureOutput= included as =TWiki::Plugins::BackupRestorePlugin::CaptureOutput= ) |

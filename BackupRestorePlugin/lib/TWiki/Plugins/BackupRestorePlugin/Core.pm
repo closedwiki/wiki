@@ -229,7 +229,10 @@ sub _showBackupSummary {
     if( $inProgress ) {
         $text .= "$checkStatusJS\n";
         $text .= "| *Backup* | *Size* | *Action* |\n";
-        $text .= '| %ICON{processing}% ' . $fileName . ' | %ICON{processing-bar}% '
+        $text .= '| <img src="%PUBURL%/%SYSTEMWEB%/BackupRestorePlugin/processing.gif" '
+               . 'width="16" height="16" alt="Processing..." /> ' . $fileName
+               . '| <img src="%PUBURL%/%SYSTEMWEB%/BackupRestorePlugin/processing-bar.gif" '
+               . 'width="92" height="16" alt="Processing..." /> '
                . '| Creating backup now, please wait. '
                . '<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
                . '<input type="hidden" name="action" value="cancel_backup" />'
