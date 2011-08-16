@@ -17,11 +17,11 @@ $TWiki::cfg{Plugins}{BackupRestorePlugin}{TempDir} = '/tmp';
 # Path to zip command with options to recursively archive files and directory.
 $TWiki::cfg{Plugins}{BackupRestorePlugin}{createZipCmd} = '/usr/bin/zip -r';
 
-# **PATH M**
+# **STRING 50**
 # Path to unzip command with options to list all files.
 $TWiki::cfg{Plugins}{BackupRestorePlugin}{listZipCmd} = '/usr/bin/unzip -l';
 
-# **PATH M**
+# **STRING 50**
 # Path to unzip command with options to unzip all files with option to overwrite existing files.
 $TWiki::cfg{Plugins}{BackupRestorePlugin}{unZipCmd} = '/usr/bin/unzip -o';
 

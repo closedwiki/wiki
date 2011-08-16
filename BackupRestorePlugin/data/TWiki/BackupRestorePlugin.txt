@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313444901" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313478366" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -58,9 +58,9 @@ Make sure the plugin is [[#PluginInstallation][configured properly]] before crea
       * ={Plugins}{BackupRestorePlugin}{BackupDir}= - Backup destination directory. Default: =/tmp=.
       * ={Plugins}{BackupRestorePlugin}{KeepNumberOfBackups}= - keep number of backups (e.g. delete old backups), 0 to keep all. Default: =7=
       * ={Plugins}{BackupRestorePlugin}{TempDir}= - temp directory. Default: =/tmp=
-      * ={Plugins}{BackupRestorePlugin}{createZipCmd}= - create zip command. Default: =zip -r=
-      * ={Plugins}{BackupRestorePlugin}{listZipCmd}= - list zip content command. Default: =unzip -l=
-      * ={Plugins}{BackupRestorePlugin}{unZipCmd}= - unzip command. Default: =unzip -o=
+      * ={Plugins}{BackupRestorePlugin}{createZipCmd}= - create zip command. Default: =/usr/bin/zip -r=
+      * ={Plugins}{BackupRestorePlugin}{listZipCmd}= - list zip content command. Default: =/usr/bin/unzip -l=
+      * ={Plugins}{BackupRestorePlugin}{unZipCmd}= - unzip command. Default: =/usr/bin/unzip -o=
       * ={Plugins}{BackupRestorePlugin}{Debug}= - debug flag. Default: =0=
    * Backup files:
       * Location: Specified by the ={Plugins}{BackupRestorePlugin}{BackupDir}= configure setting.
@@ -94,7 +94,6 @@ This plugin starts a daemon (background process) when a backup is started. Statu
 
    * To-do:
       * Add restore from backup functionality.
-      * Add Config.spec for easy configuration.
       * Test on older TWiki releases.
       * Add incremental backup and restore feature.
 
@@ -120,16 +119,20 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
    * Plugin __configuration and testing__:
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
-      * <!-- Configure additional plugin settings in the __Extensions__ section. -->
-        Add the following to the =lib/LocalSite.cfg= and customize as needed:<verbatim>
-  # Backup destination directory
+      * Configure additional <nop>%TOPIC% settings in the __Extensions__ section. Alternatively (if you have an older TWiki), add the following to =twiki/lib/LocalSite.cfg= and customize as needed:<verbatim>
+  # Path to backup destination directory. Can be a volume mounted to the file system.
   $TWiki::cfg{Plugins}{BackupRestorePlugin}{BackupDir} = '/tmp';
-  # keep number of backups (e.g. delete old backups), 0 to keep all
+  # Keep number of backups (e.g. delete old backups), 0 to keep all.
   $TWiki::cfg{Plugins}{BackupRestorePlugin}{KeepNumberOfBackups} = '7';
+  # Path to temp directory, used by BackupRestorePlugin daemon for temporary data.
   $TWiki::cfg{Plugins}{BackupRestorePlugin}{TempDir} = '/tmp';
-  $TWiki::cfg{Plugins}{BackupRestorePlugin}{createZipCmd} = 'zip -r';
-  $TWiki::cfg{Plugins}{BackupRestorePlugin}{listZipCmd} = 'unzip -l';
-  $TWiki::cfg{Plugins}{BackupRestorePlugin}{unZipCmd} = 'unzip -o';
+  # Path to zip command with options to recursively archive files and directory.
+  $TWiki::cfg{Plugins}{BackupRestorePlugin}{createZipCmd} = '/usr/bin/zip -r';
+  # Path to unzip command with options to list all files.
+  $TWiki::cfg{Plugins}{BackupRestorePlugin}{listZipCmd} = '/usr/bin/unzip -l';
+  # Path to unzip command with options to unzip all files with option to overwrite existing files.
+  $TWiki::cfg{Plugins}{BackupRestorePlugin}{unZipCmd} = '/usr/bin/unzip -o';
+  # Debug plugin. See output in data/debug.txt
   $TWiki::cfg{Plugins}{BackupRestorePlugin}{Debug} = 0;</verbatim>
       * Test if the installation was successful: See BackupRestoreConsole.
 
@@ -141,9 +144,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny <br /> &copy; 2011 TWiki:TWiki.TWikiContributor <br /> &copy; 2004, 2005 Simon Flack (for CPAN:IO::CaptureOutput) <br /> &copy; 2007, 2008 David Golden (for CPAN:IO::CaptureOutput) <br /> &copy; 1997-2011 by Earl Hood and Detlef Pilzecker (for CPAN:Proc::Daemon) |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-08-15 |
+|  Plugin Version: | 2011-08-16 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-08-15: | TWikibug:Item6793: Better error handling; add magic number to download URL to restrict download of backups to TWiki admins only; add screenshot |
+|  2011-08-16: | TWikibug:Item6793: Add screenshot; add Config.spec configure file |
+|  2011-08-15: | TWikibug:Item6793: Better error handling; add magic number to download URL to restrict download of backups to TWiki admins only |
 |  2011-08-12: | TWikibug:Item6631: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.0 |
 |  CPAN Dependencies: | none <br /> (=Proc::Daemon= included as =TWiki::Plugins::BackupRestorePlugin::ProcDaemon=) <br /> (=IO::CaptureOutput= included as =TWiki::Plugins::BackupRestorePlugin::CaptureOutput= ) |
