@@ -55,17 +55,19 @@ sub initPlugin {
 sub _BACKUPRESTORE {
     my( $session, $params ) = @_;
 
-    if( $session->inContext( 'command_line' ) ) {
-        return 'Note: The BACKUPRESTORE variable is only handled in CGI context';
-    }
-
     # delay loading core module until run-time
     unless( $core ) {
+        my $type = 'cgi';
+        if( $session->can( 'inContext' ) ) {
+            $type = 'cli' if( $session->inContext( 'command_line' ) );
+        } elsif( ! $ENV{GATEWAY_INTERFACE} && ! $ENV{MOD_PERL} ) {
+            $type = 'cli';
+        }
         require TWiki::Plugins::BackupRestorePlugin::Core;
         my $cfg = {
           BaseTopic  => $baseTopic,
           BaseWeb    => $baseWeb,
-          ScriptType => 'cgi',
+          ScriptType => $type,
         };
         $core = new TWiki::Plugins::BackupRestorePlugin::Core( $cfg );
     }

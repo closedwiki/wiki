@@ -111,7 +111,7 @@ sub BACKUPRESTORE {
 
     my $accessOK = 0;
     if( $this->{ScriptType} eq 'cli' ) {
-        $accessOK = 1;
+        $this->_setError( 'Note: The backup and restore console is only available in CGI context' );
     } elsif( exists( &TWiki::Func::isAnAdmin ) && exists( &TWiki::Func::getCanonicalUserID ) ) {
         $accessOK = TWiki::Func::isAnAdmin( TWiki::Func::getCanonicalUserID() );
     } else {
@@ -145,6 +145,8 @@ sub BACKUPRESTORE {
             $text .= $this->_showBackupSummary( $params );
         }
 
+    } elsif( $this->{ScriptType} eq 'cli' ) {
+        # error already set
     } else {
         $this->_setError( 'ERROR: Only members of the %USERSWEB%.TWikiAdminGroup can see the backup & restore console.' );
     }
