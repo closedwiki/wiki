@@ -322,7 +322,7 @@ sub _generateMagic {
     # create new magic number, used to protect web-based download of backups
     my $magic = $this->_buildFileName();
     $magic =~ s/\.zip//o;
-    $magic .= '-' . sprintf( "%.12u", int( rand( 1000000000000 ) ) );
+    $magic .= '-' . sprintf( "%.10u", int( rand( 10000000000 ) ) );
 
     # read file with magic number array, add new magic number, and truncate array
     $this->_makeDir( $this->{DaemonDir} ) unless( -e $this->{DaemonDir} );
