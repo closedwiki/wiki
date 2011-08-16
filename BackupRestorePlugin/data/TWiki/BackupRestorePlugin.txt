@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313478366" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313481680" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -146,7 +146,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-08-16 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-08-16: | TWikibug:Item6793: Add screenshot; add Config.spec configure file |
+|  2011-08-16: | TWikibug:Item6793: Add screenshot; add Config.spec configure file; proper detection of command line mode also for older TWiki versions |
 |  2011-08-15: | TWikibug:Item6793: Better error handling; add magic number to download URL to restrict download of backups to TWiki admins only |
 |  2011-08-12: | TWikibug:Item6631: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.0 |
