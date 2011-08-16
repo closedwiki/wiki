@@ -1,12 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1276328757" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313522775" format="1.1" version="$Rev$"}%
 %INCLUDE{%SYSTEMWEB%.WebChangesRightBox}%
 ---+!! Welcome to the <nop>%USERSWEB% web 
 
-Congratulations, you have finished installing TWiki.
+Congratulations, you have finished installing TWiki! *Replace this text with a description of your new TWiki site and links to content.* Consider including the [[%SYSTEMWEB%.SiteMap][Site Map]].
 
-This site is running TWiki version *%WIKIVERSION%*, Plugin API version *%PLUGINVERSION{}%*
-
-To learn more about TWiki, visit the [[%SYSTEMWEB%.WebHome][TWiki web]]. Please ensure that the read/write permissions for each web on your site match your access control policies (see [[%SYSTEMWEB%.SitePermissions]] and [[%SYSTEMWEB%.TWikiPreferences]]). Replace this text with a description of your new %IF{"defined WIKITOOLNAME" then="<nop>%WIKITOOLNAME%" else="TWiki"}% site. 
+To learn more about TWiki, visit the [[%SYSTEMWEB%.WebHome][TWiki web]]. Please ensure that the read/write permissions for each web on your site match your access control policies (see [[%SYSTEMWEB%.SitePermissions]] and [[%SYSTEMWEB%.TWikiPreferences]]). This site is running TWiki version *%WIKIVERSION%*, Plugin API version *%PLUGINVERSION{}%*
 
 ---++ <nop>%WEB% Web Utilities
 
