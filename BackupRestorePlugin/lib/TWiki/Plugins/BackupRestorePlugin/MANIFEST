@@ -7,4 +7,5 @@ lib/TWiki/Plugins/BackupRestorePlugin.pm 0644 Plugin Perl module
 lib/TWiki/Plugins/BackupRestorePlugin/CaptureOutput.pm 0644 Perl module
 lib/TWiki/Plugins/BackupRestorePlugin/Core.pm 0644 Plugin Perl module
 lib/TWiki/Plugins/BackupRestorePlugin/ProcDaemon.pm 0644 Plugin Perl module
+lib/TWiki/Plugins/BackupRestorePlugin/Config.spec 0644 Spec file for configure
 bin/backuprestore 0755 CGI/command line utility
