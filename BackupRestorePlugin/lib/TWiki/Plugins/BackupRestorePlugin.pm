@@ -26,7 +26,7 @@ require TWiki::Plugins; # For the API version
 
 #==================================================================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-08-16';
+our $RELEASE = '2011-08-17';
 our $SHORTDESCRIPTION = 'Administrator utility to backup, restore and upgrade a TWiki site';
 our $NO_PREFS_IN_TOPIC = 1;
 
@@ -38,12 +38,6 @@ my $useRegisterTagHandler;
 #==================================================================
 sub initPlugin {
     ( $baseTopic, $baseWeb ) = @_;
-
-    # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.026 ) {
-        TWiki::Func::writeWarning( "Version mismatch between BackupRestorePlugin and Plugins.pm" );
-        return 0;
-    }
 
     $core = undef;
     $useRegisterTagHandler = exists( &TWiki::Func::registerTagHandler );
@@ -69,8 +63,14 @@ sub _handleBACKUPRESTORE {
     my( $text ) = @_;
 
     my $session;
-    my %params = TWiki::Func::extractParameters( $text );
-    return _BACKUPRESTORE( $session, \%params );
+    my $action = TWiki::Func::extractNameValuePair( $text, 'action' );
+    my $file   = TWiki::Func::extractNameValuePair( $text, 'file' );
+
+    my $params = {
+        action => $action,
+        file   => $file,
+    };
+    return _BACKUPRESTORE( $session, $params );
 }
 
 #==================================================================

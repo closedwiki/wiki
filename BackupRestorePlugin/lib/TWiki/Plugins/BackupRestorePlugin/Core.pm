@@ -49,7 +49,7 @@ function ajaxStatusCheck( urlStr, queryStr ) {
   self.request.onreadystatechange = function() {
     if (self.request.readyState == 4) {
       if( self.request.responseText.search( "backup_status: 0" ) >= 0 ) {
-          location = '%SCRIPTURLPATH{view}%/%WEB%/%TOPIC%';
+          location = '%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
       } else {
           checkStatusWithDelay();
       }
@@ -59,7 +59,7 @@ function ajaxStatusCheck( urlStr, queryStr ) {
 };
 function checkStatusWithDelay( ) {
   setTimeout(
-    "ajaxStatusCheck( '%SCRIPTURLPATH{backuprestore}%', 'action=status' )",
+    "ajaxStatusCheck( '%SCRIPTURLPATH%/backuprestore%SCRIPTSUFFIX%', 'action=status' )",
     20000
   );
 };
@@ -76,12 +76,19 @@ sub new {
     my ( $class, $this ) = @_;
 
     $this->{Debug}        = $TWiki::cfg{Plugins}{BackupRestorePlugin}{Debug} || 0;
-    $this->{BackupDir}    = $TWiki::cfg{Plugins}{BackupRestorePlugin}{BackupDir} || '/tmp';
-    $this->{TempDir}      = $TWiki::cfg{Plugins}{BackupRestorePlugin}{TempDir} || '/tmp';
     $this->{KeepNumBUs}   = $TWiki::cfg{Plugins}{BackupRestorePlugin}{KeepNumberOfBackups} || '7';
-    $this->{createZipCmd} = $TWiki::cfg{Plugins}{BackupRestorePlugin}{createZipCmd} || 'zip -r';
-    $this->{listZipCmd}   = $TWiki::cfg{Plugins}{BackupRestorePlugin}{listZipCmd} || 'unzip -l';
-    $this->{unZipCmd}     = $TWiki::cfg{Plugins}{BackupRestorePlugin}{unZipCmd} || 'unzip -o';
+    my $dir               = $TWiki::cfg{Plugins}{BackupRestorePlugin}{BackupDir} || '/tmp';
+    $this->{BackupDir}    = _untaintChecked( $dir );
+    $dir                  = $TWiki::cfg{Plugins}{BackupRestorePlugin}{TempDir} || '/tmp';
+    $this->{TempDir}      = _untaintChecked( $dir );
+    $dir                  = $TWiki::cfg{Plugins}{BackupRestorePlugin}{createZipCmd} || 'zip -r';
+    $this->{createZipCmd} = _untaintChecked( $dir );
+    $dir                  = $TWiki::cfg{Plugins}{BackupRestorePlugin}{listZipCmd} || 'unzip -l';
+    $this->{listZipCmd}   = _untaintChecked( $dir );
+    $dir                  = $TWiki::cfg{Plugins}{BackupRestorePlugin}{unZipCmd} || 'unzip -o';
+    $this->{unZipCmd}     = _untaintChecked( $dir );
+$this->{Debug} = 1;
+
 
     bless( $this, $class );
 
@@ -107,7 +114,7 @@ sub BACKUPRESTORE {
     my $action = $params->{action} || '';
     $this->{Debug} = 1 if( $action eq 'debug' );
 
-    $this->_writeDebug( "BACKUPRESTORE" );
+    $this->_writeDebug( "BACKUPRESTORE action=$action" );
 
     my $accessOK = 0;
     if( $this->{ScriptType} eq 'cli' ) {
@@ -164,7 +171,7 @@ sub backuprestore {
     my $action = $params->{action} || 'usage';
     $this->{Debug} = 1 if( $action eq 'debug' );
 
-    $this->_writeDebug( "backuprestore, action $action" );
+    $this->_writeDebug( "backuprestore, action=$action" );
     my $text = '';
     if( $action eq 'status' ) {
         print "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
@@ -225,25 +232,27 @@ sub _showBackupStatus {
 sub _showBackupSummary {
     my( $this, $params ) = @_;
 
+    $this->_writeDebug( '_showBackupSummary' );
     my $text = "";
     my $inProgress = $this->_daemonRunning();
     my $fileName = $this->_getBackupName( $inProgress );
     if( $inProgress ) {
         $text .= "$checkStatusJS\n";
         $text .= "| *Backup* | *Size* | *Action* |\n";
-        $text .= '| <img src="%PUBURL%/%SYSTEMWEB%/BackupRestorePlugin/processing.gif" '
+        $text .= '| <img src="%PUBURLPATH%/%WEB%/BackupRestorePlugin/processing.gif" '
                . 'width="16" height="16" alt="Processing..." /> ' . $fileName
-               . '| <img src="%PUBURL%/%SYSTEMWEB%/BackupRestorePlugin/processing-bar.gif" '
+               . '| <img src="%PUBURLPATH%/%WEB%/BackupRestorePlugin/processing-bar.gif" '
                . 'width="92" height="16" alt="Processing..." /> '
                . '| Creating backup now, please wait. '
-               . '<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
+               . '<form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">'
                . '<input type="hidden" name="action" value="cancel_backup" />'
                . '<input type="submit" value="Cancel" class="twikiButton" />'
                . '</form> |' . "\n";
     } else {
         $text .= "| *Backup* | *Size* | *Action* |\n";
-        $text .= '| %ICON{newtopic}% ' . $fileName . ' | '
-               . '| <form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
+        $text .= '| <img src="%PUBURLPATH%/%WEB%/BackupRestorePlugin/newtopic.gif" '
+               . 'width="16" height="16" alt="New backup" /> ' . $fileName . ' | '
+               . '| <form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">'
                . '<input type="hidden" name="action" value="create_backup" />'
                . '<input type="submit" value="Create backup now" class="twikiButton" />'
                . '</form> |' . "\n";
@@ -254,15 +263,16 @@ sub _showBackupSummary {
         foreach $fileName ( reverse sort @backupFiles ) {
             my $size = -s $this->{BackupDir} . "/$fileName";
             $size =~ s/(^[-+]?\d+?(?=(?>(?:\d{3})+)(?!\d))|\G\d{3}(?=\d))/$1,/g;
-            $text .= '| %ICON{zip}% [[%SCRIPTURL{backuprestore}%?'
+            $text .= '| <img src="%PUBURLPATH%/%WEB%/BackupRestorePlugin/zip.gif" '
+                   . 'width="16" height="16" alt="ZIP" /> [[%SCRIPTURL%/backuprestore%SCRIPTSUFFIX%?'
                    . "action=download_backup;file=$fileName;magic=$magic][$fileName]] "
                    . "|   $size "
-                   . '| <form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
+                   . '| <form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">'
                    . '<input type="hidden" name="action" value="backup_detail" />'
                    . '<input type="hidden" name="file" value="' . $fileName . '" />'
                    . '<input type="submit" value="Details / Restore..." class="twikiButton" />'
                    . '</form> '
-                   . '<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">'
+                   . '<form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">'
                    . '<input type="hidden" name="action" value="delete_backup" />'
                    . '<input type="hidden" name="file" value="' . $fileName . '" />'
                    . '<input type="submit" value="Delete..." class="twikiButton" onClick="return confirm('
@@ -279,20 +289,21 @@ sub _showBackupSummary {
 sub _showBackupDetail {
     my( $this, $params ) = @_;
 
-    my $fileName = $params->{file};
+    my $fileName = $params->{file} || '';
+    $this->_writeDebug( "_showBackupDetail file=$fileName" );
     my $buDate = $fileName;
     $buDate = '' unless( $buDate =~ s/[^0-9]*(.*?)-([0-9]+)-([0-9]+)\.zip/$1 $2:$3/ );
     my ( $buVersion ) = map{ s/^.*BackupRestorePlugin\/twiki-version-long-(.*?)\.txt$/$1/; $_ }
                 grep{ /BackupRestorePlugin\/twiki-version-long-/ }
                 $this->_listZip( $fileName );
-    return '' if( $this->{error} ); # bail out if _listZip could not find the file
+    return '' unless( -e $this->_getZipFilePath( $fileName ) ); # bail out if file does not exist
     my $magic = $this->_generateMagic();
     my ( $twikiVersion, $twikiShort ) = $this->_getTWikiVersion();
     my $buSize = -s $this->{BackupDir} . "/$fileName";
     $buSize =~ s/(^[-+]?\d+?(?=(?>(?:\d{3})+)(?!\d))|\G\d{3}(?=\d))/$1,/g;
     my $text = "";
     $text .= "| *Details of $fileName:* ||\n";
-    $text .= '| Backup file: | [[%SCRIPTURL{backuprestore}%?'
+    $text .= '| Backup file: | [[%SCRIPTURL%/backuprestore%SCRIPTSUFFIX%?'
            . "action=download_backup;file=$fileName;magic=$magic][$fileName]] |\n";
     $text .= "| Backup date: | $buDate |\n";
     $text .= "| Backup size: | $buSize |\n";
@@ -367,7 +378,7 @@ sub _getBackupName {
     if( $inProgress ) {
         my $text = _readFile( $this->{DaemonDir} . '/file_name.txt' );
         if( $text =~ m/file_name: ([^\n]+)/ ) {
-            return $1;
+            return _untaintChecked( $1 );
         }
         $this->_setError( 'ERROR: Can\'t determine backup filename.' );
         return '';
@@ -428,9 +439,9 @@ sub _cancelBackup {
         kill( 6, $pid ) if( $pid ); # send ABORT signal to backuprestore script
         unlink( $this->{DaemonDir} . '/pid.txt' );
         sleep( 10 ); # wait for zip to cleanup before deleting zip file
-        my $text =  _readFile( $this->{DaemonDir} . '/file_name.txt' );
+        my $text = _readFile( $this->{DaemonDir} . '/file_name.txt' );
         if( $text =~ m/file_name: ([^\n]+)/ ) {
-            my $zipFile = "$this->{BackupDir}/$1";
+            my $zipFile = _untaintChecked( "$this->{BackupDir}/$1" );
             unlink( $zipFile ) if( -e $zipFile );
         }
     } else {
@@ -442,7 +453,10 @@ sub _cancelBackup {
 sub _createBackup {
     my( $this, $params ) = @_;
 
-    my $name = $params->{file} || $this->_buildFileName();
+    my $name = $params->{file} || '';
+    $name =~ s/[^0-9a-zA-Z_\-\.]//g;
+    $name = $this->_buildFileName() unless( $name );
+    $name = _untaintChecked( $name );
     $this->_writeDebug( "_createBackup( $name )" ) if $this->{Debug};
 
     # delete old backups based on $TWiki::cfg{Plugins}{BackupRestorePlugin}{KeepNumberOfBackups}
@@ -452,7 +466,7 @@ sub _createBackup {
         if( $nFiles > $this->{KeepNumBUs} ) {
             splice( @backupFiles, $nFiles - $this->{KeepNumBUs} + 1, $nFiles );
             foreach my $fileName ( @backupFiles ) {
-                $this->_deleteZip( $fileName );
+                $this->_deleteZip( _untaintChecked( $fileName ) );
             }
         }
     }
@@ -468,7 +482,9 @@ sub _createBackup {
     $this->_createZip( $name, $base, $dir, @exclude );
 
     # backup system configuration files (backed-up later in working dir)
-    $dir = $this->{Location}{WorkingDir} . "/work_areas";
+    $dir = $this->{Location}{WorkingDir};
+    $this->_makeDir( $dir ) unless( -e $dir );
+    $dir .= "/work_areas";
     $this->_makeDir( $dir ) unless( -e $dir );
     $dir .= "/BackupRestorePlugin";
     $this->_makeDir( $dir ) unless( -e $dir );
@@ -502,7 +518,9 @@ sub _downloadBackup {
     my( $this, $params ) = @_;
 
     my $text = '';
-    my $name = $params->{file};
+    my $name = $params->{file} || '';
+    $name =~ s/[^0-9a-zA-Z_\-\.]//g;
+    $name = _untaintChecked( $name );
     unless( $name ) {
         print "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
         $this->_setError( "Backup filename must be specified" );
@@ -549,7 +567,9 @@ sub _downloadBackup {
 sub _deleteBackup {
     my( $this, $params ) = @_;
 
-    return $this->_deleteZip( $params->{file} );
+    my $name = $params->{file} || '';
+    $name =~ s/[^0-9a-zA-Z_\-\.]//g;
+    return $this->_deleteZip( _untaintChecked( $name ) );
 }
 
 #==================================================================
@@ -629,7 +649,7 @@ sub _buildFileName {
     $text .= sprintf( "%.2u", $day ) . '-';
     $text .= sprintf( "%.2u", $hour ) . '-';
     $text .= sprintf( "%.2u", $min ) . '.zip';
-    return $text;
+    return _untaintChecked( $text );
 }
 
 #==================================================================
@@ -649,32 +669,43 @@ sub _gatherLocation {
     }
     $loc->{BinDir} = _untaintChecked( $binDir );
 
-    # discover TWiki root dir
-    my $rootDir = $TWiki::cfg{DataDir} || $binDir;
-    $rootDir =~ s|(.*)[\\/]+.*|$1|;      # go one directory up
-    $loc->{RootDir} = _untaintChecked( $rootDir );
-
-    # discover common TWiki directories
-    $loc->{DataDir}    = _untaintChecked( $TWiki::cfg{DataDir} || "$rootDir/data" );
-    $loc->{PubDir}     = _untaintChecked( $TWiki::cfg{PubDir}  || "$rootDir/pub" );
-    $loc->{WorkingDir} = _untaintChecked( $TWiki::cfg{WorkingDir} || '' );
-
     # discover twiki/bin/LocalLib.cfg
     $loc->{LocalLib}   = _untaintChecked( "$binDir/LocalLib.cfg" ) if( -e "$binDir/LocalLib.cfg" );
 
-    # discover twiki/lib/TWiki.pm and twiki/lib/LocalSite.cfg
+    # discover lib dir via twiki/lib/TWiki.pm
     foreach my $dir ( @INC ) {
         if( -e "$dir/TWiki.pm" ) {
             $loc->{LibDir} = _untaintChecked( $dir );
             last;
         }
     }
-    if( !$loc->{LibDir} && -e "$rootDir/lib/TWiki.pm" ) {
-        $loc->{LibDir} = _untaintChecked( "$rootDir/lib" );
+    if( ! $loc->{LibDir} && $TWiki::cfg{DataDir} ) {
+        my $dir = $TWiki::cfg{DataDir};
+        $dir =~ s|(.*)[\\/]+.*|$1|;      # go one directory up
+        if( -e "$dir/lib/TWiki.pm" ) {
+            $loc->{LibDir} = _untaintChecked( "$dir/lib" );
+        }
     }
+    unless( $loc->{LibDir} ) {
+        my $dir = $loc->{BinDir};
+        $dir =~ s|(.*)[\\/]+.*|$1|;      # go one directory up
+        $loc->{LibDir} = _untaintChecked( "$dir/lib" );
+    }
+
+    # discover twiki/lib/LocalSite.cfg
     if( -e $loc->{LibDir} . "/LocalSite.cfg" ) {
         $loc->{LocalSite} = $loc->{LibDir} . "/LocalSite.cfg";
     }
+
+    # discover TWiki root dir
+    my $rootDir = $TWiki::cfg{DataDir} || $loc->{LibDir};
+    $rootDir =~ s|(.*)[\\/]+.*|$1|;      # go one directory up
+    $loc->{RootDir} = _untaintChecked( $rootDir );
+
+    # discover common TWiki directories
+    $loc->{DataDir}    = _untaintChecked( $TWiki::cfg{DataDir}    || "$rootDir/data" );
+    $loc->{PubDir}     = _untaintChecked( $TWiki::cfg{PubDir}     || "$rootDir/pub" );
+    $loc->{WorkingDir} = _untaintChecked( $TWiki::cfg{WorkingDir} || "$rootDir/working" );
 
     # discover apache conf file twiki.conf
     foreach my $dir ( @apacheConfLocations ) {
