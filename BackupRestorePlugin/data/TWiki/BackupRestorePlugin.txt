@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313543300" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313565873" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -94,7 +94,6 @@ This plugin starts a daemon (background process) when a backup is started. Statu
 
    * To-do:
       * Add restore from backup functionality.
-      * Test on older TWiki releases.
       * Add incremental backup and restore feature.
 
 #PluginInstallation
@@ -119,7 +118,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
    * Plugin __configuration and testing__:
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
-      * Configure additional <nop>%TOPIC% settings in the __Extensions__ section. Alternatively (if you have an older TWiki), add the following to =twiki/lib/LocalSite.cfg= and customize as needed:<verbatim>
+      * Configure additional <nop>%TOPIC% settings in the __Extensions__ section. Alternatively, add the following to =twiki/lib/LocalSite.cfg= and customize as needed:<verbatim>
   # Path to backup destination directory. Can be a volume mounted to the file system.
   $TWiki::cfg{Plugins}{BackupRestorePlugin}{BackupDir} = '/tmp';
   # Keep number of backups (e.g. delete old backups), 0 to keep all.
@@ -134,6 +133,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
   $TWiki::cfg{Plugins}{BackupRestorePlugin}{unZipCmd} = '/usr/bin/unzip -o';
   # Debug plugin. See output in data/debug.txt
   $TWiki::cfg{Plugins}{BackupRestorePlugin}{Debug} = 0;</verbatim>
+      * If your TWiki is older than TWiki-4.0, create a =twiki/lib/LocalSite.cfg= file with above =$TWiki::cfg= settings and end the file with: =1;=
+      * If your TWiki is an old TWiki-2001-09-01 (Athens Release), create a =twiki/bin/setlib.cfg= file with this content:<verbatim>
+  my $twikiLibPath = "/path/to/your/twiki/lib";
+  unshift @INC, $twikiLibPath;
+  1;</verbatim>
       * Test if the installation was successful: See BackupRestoreConsole.
 
 ---++ Plugin Info
@@ -144,8 +148,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny <br /> &copy; 2011 TWiki:TWiki.TWikiContributor <br /> &copy; 2004, 2005 Simon Flack (for CPAN:IO::CaptureOutput) <br /> &copy; 2007, 2008 David Golden (for CPAN:IO::CaptureOutput) <br /> &copy; 1997-2011 by Earl Hood and Detlef Pilzecker (for CPAN:Proc::Daemon) |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-08-16 |
+|  Plugin Version: | 2011-08-17 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-08-17: | TWikibug:Item6793: Avoid or work around newer APIs to make plugin run on old TWiki-2001-09-01 (Athens Release) for backup |
 |  2011-08-16: | TWikibug:Item6793: Add screenshot; add Config.spec configure file; proper detection of command line mode also for older TWiki versions; use TWiki::Func::registerTagHandler only if available so that plugin can run in older TWiki versions |
 |  2011-08-15: | TWikibug:Item6793: Better error handling; add magic number to download URL to restrict download of backups to TWiki admins only |
 |  2011-08-12: | TWikibug:Item6631: Initial version |
