@@ -36,7 +36,7 @@ BEGIN {
         $SIG{__DIE__} = \&Carp::confess;
     }
     @INC = ('.', grep { $_ ne '.' } @INC);
-    eval "require 'setlib.cfg'";
+    require 'setlib.cfg';
     do 'LocalSite.cfg';
 }
 
