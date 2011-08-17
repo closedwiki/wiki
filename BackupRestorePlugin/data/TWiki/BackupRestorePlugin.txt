@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313565873" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313605293" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -138,6 +138,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
   my $twikiLibPath = "/path/to/your/twiki/lib";
   unshift @INC, $twikiLibPath;
   1;</verbatim>
+      * If your TWiki is older than TWiki-4.2, create a =working= directory in the =twiki= root (same level as =twiki/lib=), and set ownership to the webserver user.
       * Test if the installation was successful: See BackupRestoreConsole.
 
 ---++ Plugin Info
