@@ -30,9 +30,10 @@ our $RELEASE = '2011-08-16';
 our $SHORTDESCRIPTION = 'Administrator utility to backup, restore and upgrade a TWiki site';
 our $NO_PREFS_IN_TOPIC = 1;
 
-my $core;
 my $baseTopic;
 my $baseWeb;
+my $core;
+my $useRegisterTagHandler;
 
 #==================================================================
 sub initPlugin {
@@ -45,10 +46,31 @@ sub initPlugin {
     }
 
     $core = undef;
-    TWiki::Func::registerTagHandler( 'BACKUPRESTORE', \&_BACKUPRESTORE );
-
+    $useRegisterTagHandler = exists( &TWiki::Func::registerTagHandler );
+    if( $useRegisterTagHandler ) {
+        TWiki::Func::registerTagHandler( 'BACKUPRESTORE', \&_BACKUPRESTORE );
+    }
     # Plugin correctly initialized
     return 1;
+}
+
+#==================================================================
+sub commonTagsHandler
+{
+### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+
+    return if( $useRegisterTagHandler );
+
+    $_[0] =~ s/\%BACKUPRESTORE\{(.*?)\}\%/_handleBACKUPRESTORE( $1 )/ges;
+}
+
+#==================================================================
+sub _handleBACKUPRESTORE {
+    my( $text ) = @_;
+
+    my $session;
+    my %params = TWiki::Func::extractParameters( $text );
+    return _BACKUPRESTORE( $session, \%params );
 }
 
 #==================================================================
@@ -58,7 +80,7 @@ sub _BACKUPRESTORE {
     # delay loading core module until run-time
     unless( $core ) {
         my $type = 'cgi';
-        if( $session->can( 'inContext' ) ) {
+        if( $session && $session->can( 'inContext' ) ) {
             $type = 'cli' if( $session->inContext( 'command_line' ) );
         } elsif( ! $ENV{GATEWAY_INTERFACE} && ! $ENV{MOD_PERL} ) {
             $type = 'cli';
