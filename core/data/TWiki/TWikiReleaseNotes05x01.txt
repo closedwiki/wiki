@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313880944" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313899111" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.1 (Istanbul), 2011-08-20
 
 %TOC%
@@ -140,7 +140,7 @@ Watch TWiki:Plugins.BackupRestorePlugin for an updated version. Once the web-bas
 
 ---++ TWiki-5.1.0 Major Release - Details
 
-TWiki-5.1.0 was built from SVN http://svn.twiki.org/svn/twiki/trunk revision r22118 (2011-08-20)
+TWiki-5.1.0 was built from SVN http://svn.twiki.org/svn/twiki/trunk revision r22128 (2011-08-20)
 
 ---+++ Enhancements
 
