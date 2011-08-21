@@ -70,8 +70,9 @@ It's a part of the default distribution of the TWiki Core.
 |  Contrib Authors: | TWiki:Main.SvenDowideit, TWiki:Main.PeterThoeny, TWiki:TWiki.TWikiContributor |
 |  Copyright: | &copy; 2007 Sven Dowideit;%BR% &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Contrib Version: | 2011-07-28 |
+|  Contrib Version: | 2011-08-20 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-08-20: | TWikibug:Item6711: Fix for !UserList topic was listed in table of users -- TWiki:Main.PeterThoeny |
 |  2011-08-12: | TWikibug:Item6792: Usability: Typo fix in registration page and change e-mail address page -- TWiki:Main.TorstenEriksson |
 |  2011-08-01: | TWikibug:Item6782: Usability: Add search filter to !UserList -- TWiki:Main.PeterThoeny |
 |  2011-07-28: | TWikibug:Item6780: Usability: Link to !UserList topic instead of !TWikiUsers -- TWiki:Main.PeterThoeny |
