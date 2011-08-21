@@ -1,8 +1,12 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307735017" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313887862" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiGroups"}%
 ---+ TWiki Administrator Group
 
 This is a super user group that has access to all content, regardless of [[%SYSTEMWEB%.TWikiAccessControl][access control]]. This group has also access to the [[%SCRIPTURL{configure}%][configure]] script to do system level configuration.
+
+<noautolink>
+%EDITPREFERENCES{ "%SYSTEMWEB%.TWikiPreferencesForm" editbutton="Edit %TOPIC% settings" }%
+</noautolink>
 
    * Member list (comma-separated list):
       * Set GROUP = 
@@ -11,10 +15,6 @@ This is a super user group that has access to all content, regardless of [[%SYST
       * Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
 %T% Both settings accept a comma-space delimited list of users and groups in %SYSTEMWEB%.WikiWord format. Groups can be nested.
-
-<noautolink>
-%EDITPREFERENCES{ "%SYSTEMWEB%.TWikiPreferencesForm" editbutton="Edit %TOPIC% settings" }%
-</noautolink>
 
 %INCLUDE{"TWikiAdminUser" section="sudo_login"}%
 
