@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1311806789" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1313897069" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page
@@ -53,6 +53,7 @@ In edit mode, the edit button is replaced by Save and Cancel buttons, with their
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-08-20: | TWikibug:Item6711: Fix topic meta timestamp (needed for proper build) -- TWiki:Main.PeterThoeny |
 |  2011-07-27: | TWikibug:Item6777: Scroll to preferences section on edit; adding EDITMETHOD; changing LINKTOOLTIPINFO to select -- TWiki:Main.PeterThoeny |
 |  2011-07-08: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2011-06-10: | TWikibug:Item6748: New =editbutton= parameter -- TWiki:Main.PeterThoeny |
