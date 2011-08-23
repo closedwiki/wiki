@@ -46,6 +46,7 @@ my $pluginInitialized = 0;
 my $initError         = '';
 my $installWeb;
 my $debug;
+my $cache;
 my $defaultType;
 my @defaultAreaColors;
 my @defaultLineColors;
@@ -85,6 +86,7 @@ sub initPlugin {
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag("CHARTPLUGIN_DEBUG") || 0;
+    $cache = &TWiki::Func::getPreferencesFlag("CHARTPLUGIN_CACHE") || 0;
 
     # Allow for debug output.  By default, we always just output an <img> tag.
     $showParameters = '%IMG%';
@@ -230,7 +232,7 @@ sub _setTopicContents {
     # Assuming that there might be multiple charts coming from the same
     # web/topic page, we want to cache the table parsing so we only do it
     # once per web/topic page.
-    if (defined($cachedTables{$inWeb}) && defined($cachedTables{$inWeb}{$inTopic})) {
+    if ($cache && defined($cachedTables{$inWeb}) && defined($cachedTables{$inWeb}{$inTopic})) {
 	$this->_setTables($cachedTables{$inWeb}{$inTopic});
     } else {
 	my $table = TWiki::Plugins::ChartPlugin::Table->new($topicContents);

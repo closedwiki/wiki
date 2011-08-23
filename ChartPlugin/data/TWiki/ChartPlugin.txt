@@ -38,6 +38,9 @@ Plugin settings are stored as preferences variables. Do not change the settings 
    * Set DEBUG to 1 to get debug messages in =data/debug.txt=. Default: =0= 
       * Set DEBUG = 0
 
+   * Set CACHE to 1 to enable caching of topic data.  So if you have 1 topic page with numerous charts, the topic page will only be parsed once for table data for all charts instead of once for each chart.
+      * Set CACHE = 0
+
    * Default chart used: =area=, =line=, =bar=, =scatter= or =combo=. Default: =line= 
       * Set TYPE = line
 
