@@ -296,10 +296,14 @@ sub _showBackupDetail {
     my $buDate = $fileName;
     $buDate = '' unless( $buDate =~ s/[^0-9]*(.*?)-([0-9]+)-([0-9]+)\.zip/$1 $2:$3/ );
     my @fileList = $this->_listZip( $fileName );
+    return '' unless( -e $this->_getZipFilePath( $fileName ) ); # bail out if file does not exist
+
     my ( $buVersion ) = map{ s/^.*BackupRestorePlugin\/twiki-version-long-(.*?)\.txt$/$1/; $_ }
         grep{ /BackupRestorePlugin\/twiki-version-long-/ }
         @fileList;
-    return '' unless( -e $this->_getZipFilePath( $fileName ) ); # bail out if file does not exist
+    my ( $buShort ) = map{ s/^.*BackupRestorePlugin\/twiki-version-short-(.*?)\.txt$/$1/; $_ }
+        grep{ /BackupRestorePlugin\/twiki-version-short-/ }
+        @fileList;
     my @webList = map{ s/^data\/(.*)\/WebPreferences\.txt$/$1/; $_ }
         grep{ /^data\/.*\/WebPreferences\.txt$/ }
         sort
@@ -324,13 +328,33 @@ sub _showBackupDetail {
         . '| | <input type="checkbox" name="workarea" id="workarea" /> '
         . '<label for="workarea"> Restore plugin work area </label>|' . "\n"
         . "| *Restore Webs:* ||\n";
+    my $systemWeb = 'TWiki';
+    $systemWeb =  $TWiki::cfg{SystemWebName} if( defined $TWiki::cfg{SystemWebName} );
     foreach my $web ( @webList ) {
-        $text .= "| | <input type=\"checkbox\" name=\"web_$web\" id=\"web_$web\" /> "
-            . "<label for=\"web_$web\">$web</label> |\n";
+        my $checked = 1;
+        my $note = '';
+        if( $buShort != $twikiShort && $web =~ /^($systemWeb|_default)$/ ) {
+             $checked = 0;
+             $note = 'do not restore over a different TWiki version!'
+        }
+        $text .= _renderWebRow( $web, $checked, $note );
     }
     $text .= "| *Restore Action:* ||\n"
         . "| (Restore is work in progress. Check TWiki:Plugins.BackupRestorePlugin for an updated plugin) ||\n"
         . '</form>';
+    return $text;
+}
+    
+#==================================================================
+sub _renderWebRow {
+    my( $web, $checked, $note ) = @_;
+    my $text = "| | <input type=\"checkbox\" name=\"web_$web\" id=\"web_$web\"";
+    $text .= ' checked="checked"' if( $checked );
+    $text .= " /> <label for=\"web_$web\">$web</label>";
+    if( $note ) {
+        $text .= " - \%RED\% $note \%ENDCOLOR\%";
+    }
+    $text .= " |\n";
     return $text;
 }
 
