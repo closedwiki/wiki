@@ -313,7 +313,21 @@ sub _showBackupDetail {
     my $buSize = -s $this->{BackupDir} . "/$fileName";
     $buSize =~ s/(^[-+]?\d+?(?=(?>(?:\d{3})+)(?!\d))|\G\d{3}(?=\d))/$1,/g;
     my $upgradeWebChecked = ( $buShort < $twikiShort) ? 'checked="checked" ' : '';
-    my $text = '<form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">' . "\n"
+    my $text = << 'ENDCHECK';
+<!--<pre>-->
+<script language="JavaScript">
+function checkAllWebs( theCheck )
+{
+  for( var i = 0; i < document.replace.length; i++ ) {
+    if( document.replace.elements[i].id.search( /^web:/ ) == 0 ) {
+      document.replace.elements[i].checked = theCheck;
+    }
+  }
+}
+</script>
+<!--</pre>-->
+ENDCHECK
+    $text .= '<form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" name="replace">' . "\n"
         . "| *Details of $fileName:* ||\n"
         . '| Backup file: | [[%SCRIPTURL%/backuprestore%SCRIPTSUFFIX%?'
         . "action=download_backup;file=$fileName;magic=$magic][$fileName]] |\n"
@@ -330,7 +344,12 @@ sub _showBackupDetail {
         . '<label for="restoreworkarea"> Restore plugin work area </label> |' . "\n";
 
     # Restore webs list
-    $text .= "| *Restore Webs:* ||\n";
+    $text .= '| *Restore Webs:'
+        . ' &nbsp; &nbsp; &nbsp; '
+        . '<input type="button" value="Set all" onClick="checkAllWebs(true);" class="twikiButton" />'
+        . ' &nbsp; &nbsp; '
+        . '<input type="button" value="Clear all" onClick="checkAllWebs(false);" class="twikiButton" />'
+        . "* ||\n";
     my $systemWeb = 'TWiki';
     $systemWeb =  $TWiki::cfg{SystemWebName} if( defined $TWiki::cfg{SystemWebName} );
     foreach my $web ( grep{ /^($systemWeb|_default)$/ } @webList ) {
