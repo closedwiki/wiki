@@ -60,7 +60,7 @@ function ajaxStatusCheck( urlStr, queryStr ) {
 function checkStatusWithDelay( ) {
   setTimeout(
     "ajaxStatusCheck( '%SCRIPTURLPATH%/backuprestore%SCRIPTSUFFIX%', 'action=status' )",
-    20000
+    10000
   );
 };
 checkStatusWithDelay();
@@ -87,8 +87,6 @@ sub new {
     $this->{listZipCmd}   = _untaintChecked( $dir );
     $dir                  = $TWiki::cfg{Plugins}{BackupRestorePlugin}{unZipCmd} || 'unzip -o';
     $this->{unZipCmd}     = _untaintChecked( $dir );
-$this->{Debug} = 1;
-
 
     bless( $this, $class );
 
@@ -137,14 +135,14 @@ sub BACKUPRESTORE {
         } elsif( $action eq 'create_backup' ) {
             $this->_startBackup( $params );
             $text .= $this->_showBackupSummary( $params );
+        } elsif( $action eq 'restore_backup' ) {
+            $this->_startRestore( $params );
+            $text .= $this->_showBackupSummary( $params );
         } elsif( $action eq 'cancel_backup' ) {
             $this->_cancelBackup( $params );
             $text .= $this->_showBackupSummary( $params );
         } elsif( $action eq 'delete_backup' ) {
             $this->_deleteBackup( $params );
-            $text .= $this->_showBackupSummary( $params );
-        } elsif( $action eq 'restore_backup' ) {
-            $this->_restoreFromBackup( $params );
             $text .= $this->_showBackupSummary( $params );
         } elsif( $action eq 'debug' ) {
             $text .= $this->_debugBackup( $params );
@@ -182,6 +180,9 @@ sub backuprestore {
     } elsif( $action eq 'create_backup' ) {
         print "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
         $text .= $this->_createBackup( $params );
+    } elsif( $action eq 'restore_backup' ) {
+        print "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
+        $text .= $this->_restoreFromBackup( $params );
     } elsif( $action eq 'download_backup' ) {
         # content type is printed in _downloadBackup
         $text .= $this->_downloadBackup( $params );
@@ -219,11 +220,11 @@ sub _showUsage {
 sub _showBackupStatus {
     my( $this, $params ) = @_;
 
-    my $inProgress = $this->_daemonRunning();
-    my $fileName = $this->_getBackupName( $inProgress );
+    my $daemonStatus = $this->_daemonRunning();
+    my $fileName = $this->_getBackupName( $daemonStatus );
     my $text = '';
     $text .= "<pre>\n" if( $this->{ScriptType} eq 'cgi' );
-    $text .= "backup_status: $inProgress\nfile_name: $fileName\n";
+    $text .= "backup_status: $daemonStatus\nfile_name: $fileName\n";
     $text .= "</pre>\n" if( $this->{ScriptType} eq 'cgi' ); 
     return $text;
 }
@@ -234,16 +235,17 @@ sub _showBackupSummary {
 
     $this->_writeDebug( '_showBackupSummary' );
     my $text = "";
-    my $inProgress = $this->_daemonRunning();
-    my $fileName = $this->_getBackupName( $inProgress );
-    if( $inProgress ) {
+    my $daemonStatus = $this->_daemonRunning();
+    my $fileName = $this->_getBackupName( $daemonStatus );
+    if( $daemonStatus ) {
+        my $message = $daemonStatus == 1 ? 'Creating backup now' : 'Restoring from backup now';
         $text .= "$checkStatusJS\n";
         $text .= "| *Backup* | *Size* | *Action* |\n";
         $text .= '| <img src="%PUBURLPATH%/%WEB%/BackupRestorePlugin/processing.gif" '
                . 'width="16" height="16" alt="Processing..." /> ' . $fileName
                . '| <img src="%PUBURLPATH%/%WEB%/BackupRestorePlugin/processing-bar.gif" '
                . 'width="92" height="16" alt="Processing..." /> '
-               . '| Creating backup now, please wait. '
+               . "| $message, please wait. "
                . '<form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">'
                . '<input type="hidden" name="action" value="cancel_backup" />'
                . '<input type="submit" value="Cancel" class="twikiButton" />'
@@ -368,7 +370,14 @@ sub _checkMagic {
 sub _daemonRunning {
     my( $this ) = @_;
     my $pid = _untaintChecked( _readFile( $this->{DaemonDir} . '/pid.txt' ) );
-    return 1 if( $pid && (kill 0, $pid) );
+    if( $pid && (kill 0, $pid) ) {
+        my $text = _readFile( $this->{DaemonDir} . '/file_name.txt' );
+        if( $text =~ m/type: ([0-9])-/s ) {
+            # type: 1-backup, type: 2-restore (return only a digit)
+            return $1;
+        }
+        return 1;
+    }
     return 0;
 }
 
@@ -394,11 +403,15 @@ sub _startBackup {
     $this->_writeDebug( "_startBackup()" );
     $this->_makeDir( $this->{DaemonDir} ) unless( -e $this->{DaemonDir} );
 
-    if( $this->_daemonRunning() ) {
+    my $daemonType = $this->_daemonRunning();
+    if( $daemonType == 1 ) {
         $this->_setError( 'ERROR: Backup is already in progress.' );
+    } elsif( $daemonType > 1 ) {
+        $this->_setError( 'ERROR: Backup not possible while restore is in progress.' );
     } else {
         my $fileName = $this->_buildFileName();
-        my $text = "file_name: " . $fileName . "\n";
+        my $text = "file_name: " . $fileName . "\n"
+                 . "type: 1-backup\n";
         _saveFile( $this->{DaemonDir} . '/file_name.txt', $text );
         # daemon is running as shell script, do not pass env vars that make it look like a cgi
         my $SaveGATEWAY_INTERFACE;
@@ -431,21 +444,81 @@ sub _startBackup {
 }
 
 #==================================================================
+sub _startRestore {
+    my( $this, $params ) = @_;
+
+    my $fileName = $params->{file} || '';
+    $this->_writeDebug( "_startRestore file=$fileName" );
+    $this->_makeDir( $this->{DaemonDir} ) unless( -e $this->{DaemonDir} );
+
+    unless( -e $this->_getZipFilePath( $fileName ) ) {
+        # bail out if file does not exist
+        $this->_setError( "ERROR: Backup $fileName does not exist" );
+    }
+
+    my $daemonType = $this->_daemonRunning();
+    if( $daemonType == 1 ) {
+        $this->_setError( 'ERROR: Restore not possible while backup is in progress.' );
+    } elsif( $daemonType > 1 ) {
+        $this->_setError( 'ERROR: Restore from backup is already in progress.' );
+    } else {
+        my $fileName = $params->{file};
+        my $text = "file_name: " . $fileName . "\n"
+                 . "type: 2-restore\n";
+        _saveFile( $this->{DaemonDir} . '/file_name.txt', $text );
+        # daemon is running as shell script, do not pass env vars that make it look like a cgi
+        my $SaveGATEWAY_INTERFACE;
+        if( $ENV{GATEWAY_INTERFACE} ) {
+            $SaveGATEWAY_INTERFACE = $ENV{GATEWAY_INTERFACE};
+            delete $ENV{GATEWAY_INTERFACE};
+        }
+        my $SaveMOD_PERL; 
+        if( $ENV{MOD_PERL} ) {
+            $SaveMOD_PERL = $ENV{MOD_PERL};
+            delete $ENV{MOD_PERL};
+        }
+        # build restore daemon command
+        my $cmd = $this->{Location}{BinDir} . "/backuprestore restore_backup $fileName";
+        $this->_writeDebug( "start new daemon: $cmd" );
+        require TWiki::Plugins::BackupRestorePlugin::ProcDaemon;
+        my $daemon = TWiki::Plugins::BackupRestorePlugin::ProcDaemon->new(
+            work_dir     => $this->{Location}{BinDir},
+            child_STDOUT => $this->{DaemonDir} . '/stdout.txt',
+            child_STDERR => $this->{DaemonDir} . '/stderr.txt',
+            pid_file     => $this->{DaemonDir} . '/pid.txt',
+            exec_command => $cmd,
+        );
+        # fork background daemon process
+        my $pid = $daemon->Init();
+        # restore environment variables
+        $ENV{GATEWAY_INTERFACE} = $SaveGATEWAY_INTERFACE if( $SaveGATEWAY_INTERFACE );
+        $ENV{MOD_PERL}          = $SaveMOD_PERL if( $SaveMOD_PERL );
+    }
+}
+
+#==================================================================
 sub _cancelBackup {
     my( $this, $params ) = @_;
 
-    if( $this->_daemonRunning() ) {
+    my $daemonType = $this->_daemonRunning();
+    if( $daemonType ) {
         my $pid = _untaintChecked( _readFile( $this->{DaemonDir} . '/pid.txt' ) );
         kill( 6, $pid ) if( $pid ); # send ABORT signal to backuprestore script
         unlink( $this->{DaemonDir} . '/pid.txt' );
         sleep( 10 ); # wait for zip to cleanup before deleting zip file
-        my $text = _readFile( $this->{DaemonDir} . '/file_name.txt' );
-        if( $text =~ m/file_name: ([^\n]+)/ ) {
-            my $zipFile = _untaintChecked( "$this->{BackupDir}/$1" );
-            unlink( $zipFile ) if( -e $zipFile );
+        if( $daemonType == 1 ) {
+            # cleanup backup
+            my $text = _readFile( $this->{DaemonDir} . '/file_name.txt' );
+            if( $text =~ m/file_name: ([^\n]+)/ ) {
+                my $zipFile = _untaintChecked( "$this->{BackupDir}/$1" );
+                unlink( $zipFile ) if( -e $zipFile );
+            }
+        } else {
+            # FIXME cleanup restore
         }
+
     } else {
-        $this->_setError( 'ERROR: No backup in progress.' );
+        $this->_setError( 'ERROR: No backup or restore is in progress.' );
     }
 }
 
@@ -514,6 +587,22 @@ sub _createBackup {
 }
 
 #==================================================================
+sub _restoreFromBackup {
+    my( $this, $params ) = @_;
+
+    my $name = $params->{file} || '';
+    $name =~ s/[^0-9a-zA-Z_\-\.]//g;
+    $name = $this->_buildFileName() unless( $name );
+    $name = _untaintChecked( $name );
+    $this->_writeDebug( "_restoreFromBackup( $name )" ) if $this->{Debug};
+
+    #FIXME
+    _saveFile( $this->{DaemonDir} . '/blah1.txt', 'restore!!' );
+    sleep( 30 );
+    _saveFile( $this->{DaemonDir} . '/blah2.txt', 'restore!!' );
+}
+
+#==================================================================
 sub _downloadBackup {
     my( $this, $params ) = @_;
 
@@ -570,12 +659,6 @@ sub _deleteBackup {
     my $name = $params->{file} || '';
     $name =~ s/[^0-9a-zA-Z_\-\.]//g;
     return $this->_deleteZip( _untaintChecked( $name ) );
-}
-
-#==================================================================
-sub _restoreFromBackup {
-    my( $this, $params ) = @_;
-    #FIXME
 }
 
 
