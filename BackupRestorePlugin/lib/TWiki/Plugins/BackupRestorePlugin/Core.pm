@@ -349,9 +349,11 @@ sub _showBackupDetail {
 #==================================================================
 sub _renderWebRow {
     my( $web, $checked, $note ) = @_;
-    my $text = "| | <input type=\"checkbox\" name=\"web_$web\" id=\"web_$web\"";
+    my $name = "web:$web";
+    $name =~ s/\//:/go; #replace '/' sub-web separator with legal ':' char
+    my $text = "| | <input type=\"checkbox\" name=\"$name\" id=\"$name\"";
     $text .= ' checked="checked"' if( $checked );
-    $text .= " /> <label for=\"web_$web\">$web</label>";
+    $text .= " /> <label for=\"$name\">$web</label>";
     if( $note ) {
         $text .= " - \%RED\% $note \%ENDCOLOR\%";
     }
