@@ -327,18 +327,19 @@ sub _showBackupDetail {
         . '| | <input type="checkbox" name="copysys" id="copysys" ' . $upgradeWebChecked . '/> '
         . '<label for="upgradewebs"> Upgrade restored webs with latest system pages (<nop>WebSearch etc.) </label> |' . "\n"
         . '| | <input type="checkbox" name="upgradewebs" id="upgradewebs" checked="checked" /> '
-        . '<label for="upgradewebs"> Restore plugin work area </label> |' . "\n"
-        . "| *Restore Webs:* ||\n";
+        . '<label for="upgradewebs"> Restore plugin work area </label> |' . "\n";
+
+    # Restore webs list
+    $text .= "| *Restore Webs:* ||\n";
     my $systemWeb = 'TWiki';
     $systemWeb =  $TWiki::cfg{SystemWebName} if( defined $TWiki::cfg{SystemWebName} );
+    foreach my $web ( grep{ /^($systemWeb|_default)$/ } @webList ) {
+        my $note = 'do not restore over a different TWiki version!';
+        $text .= _renderWebRow( $web, ( $buShort == $twikiShort ), $note );
+    }
     foreach my $web ( @webList ) {
-        my $checked = 1;
-        my $note = '';
-        if( $buShort != $twikiShort && $web =~ /^($systemWeb|_default)$/ ) {
-             $checked = 0;
-             $note = 'do not restore over a different TWiki version!'
-        }
-        $text .= _renderWebRow( $web, $checked, $note );
+        next if( $web =~ /^($systemWeb|_default)$/ );
+        $text .= _renderWebRow( $web, 1, '' );
     }
     $text .= "| *Restore Action:* ||\n"
         . "| (Restore is work in progress. Check TWiki:Plugins.BackupRestorePlugin for an updated plugin) ||\n"
