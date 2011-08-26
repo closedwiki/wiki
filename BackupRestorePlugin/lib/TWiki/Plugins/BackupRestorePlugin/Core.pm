@@ -324,10 +324,10 @@ sub _showBackupDetail {
         . "| *Restore Options:* ||\n"
         . '| | <input type="checkbox" name="overwrite" id="overwrite" checked="checked" /> '
         . '<label for="overwrite"> Overwrite existing pages </label> - %RED% this cannot be undone! %ENDCOLOR% |' . "\n"
-        . '| | <input type="checkbox" name="copysys" id="copysys" ' . $upgradeWebChecked . '/> '
+        . '| | <input type="checkbox" name="upgradewebs" id="upgradewebs" ' . $upgradeWebChecked . '/> '
         . '<label for="upgradewebs"> Upgrade restored webs with latest system pages (<nop>WebSearch etc.) </label> |' . "\n"
-        . '| | <input type="checkbox" name="upgradewebs" id="upgradewebs" checked="checked" /> '
-        . '<label for="upgradewebs"> Restore plugin work area </label> |' . "\n";
+        . '| | <input type="checkbox" name="restoreworkarea" id="restoreworkarea" checked="checked" /> '
+        . '<label for="restoreworkarea"> Restore plugin work area </label> |' . "\n";
 
     # Restore webs list
     $text .= "| *Restore Webs:* ||\n";
