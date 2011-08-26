@@ -318,16 +318,16 @@ sub _showBackupDetail {
 <script language="JavaScript">
 function checkAllWebs( theCheck )
 {
-  for( var i = 0; i < document.replace.length; i++ ) {
-    if( document.replace.elements[i].id.search( /^web:/ ) == 0 ) {
-      document.replace.elements[i].checked = theCheck;
+  for( var i = 0; i < document.restore_webs.length; i++ ) {
+    if( document.restore_webs.elements[i].id.search( /^web:/ ) == 0 ) {
+      document.restore_webs.elements[i].checked = theCheck;
     }
   }
 }
 </script>
 <!--</pre>-->
 ENDCHECK
-    $text .= '<form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" name="replace">' . "\n"
+    $text .= '<form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" name="restore_webs" method="post">' . "\n"
         . "| *Details of $fileName:* ||\n"
         . '| Backup file: | [[%SCRIPTURL%/backuprestore%SCRIPTSUFFIX%?'
         . "action=download_backup;file=$fileName;magic=$magic][$fileName]] |\n"
@@ -346,9 +346,9 @@ ENDCHECK
     # Restore webs list
     $text .= '| *Restore Webs:'
         . ' &nbsp; &nbsp; &nbsp; '
-        . '<input type="button" value="Set all" onClick="checkAllWebs(true);" class="twikiButton" />'
+        . '<input type="button" value="Set all webs" onClick="checkAllWebs(true);" class="twikiButton" />'
         . ' &nbsp; &nbsp; '
-        . '<input type="button" value="Clear all" onClick="checkAllWebs(false);" class="twikiButton" />'
+        . '<input type="button" value="Clear all webs" onClick="checkAllWebs(false);" class="twikiButton" />'
         . "* ||\n";
     my $systemWeb = 'TWiki';
     $systemWeb =  $TWiki::cfg{SystemWebName} if( defined $TWiki::cfg{SystemWebName} );
@@ -361,7 +361,11 @@ ENDCHECK
         $text .= _renderWebRow( $web, 1, '' );
     }
     $text .= "| *Restore Action:* ||\n"
+        . '| | <input type="submit" value="Restore from backup..." class="twikiButton" onClick="return confirm('
+        . "'Are you sure you want to restore from $fileName?'" . ');" /> |' . "\n"
         . "| (Restore is work in progress. Check TWiki:Plugins.BackupRestorePlugin for an updated plugin) ||\n"
+        . '<input type="hidden" name="action" value="restore_backup" />'
+        . '<input type="hidden" name="file" value="' . $fileName . '" />'
         . '</form>';
     return $text;
 }
