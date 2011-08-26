@@ -303,16 +303,26 @@ sub _showBackupDetail {
     my ( $twikiVersion, $twikiShort ) = $this->_getTWikiVersion();
     my $buSize = -s $this->{BackupDir} . "/$fileName";
     $buSize =~ s/(^[-+]?\d+?(?=(?>(?:\d{3})+)(?!\d))|\G\d{3}(?=\d))/$1,/g;
-    my $text = "";
-    $text .= "| *Details of $fileName:* ||\n";
-    $text .= '| Backup file: | [[%SCRIPTURL%/backuprestore%SCRIPTSUFFIX%?'
-           . "action=download_backup;file=$fileName;magic=$magic][$fileName]] |\n";
-    $text .= "| Backup date: | $buDate \%GRAY\% - local time of server \%ENDCOLOR\% |\n";
-    $text .= "| Backup size: | $buSize \%GRAY\% Bytes \%ENDCOLOR\% |\n";
-    $text .= "| Backup of: | $buVersion \%GRAY\% - the TWiki version this backup was taken from \%ENDCOLOR\% |\n";
-    $text .= "| This TWiki: | $twikiVersion \%GRAY\% - the TWiki version of the current installation \%ENDCOLOR\% |\n";
-    $text .= "| *Restore Options:* ||\n";
-    $text .= "| (Check TWiki:Plugins.BackupRestorePlugin for an updated plugin) ||\n";
+    my $text = '<form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">' . "\n"
+        . "| *Details of $fileName:* ||\n"
+        . '| Backup file: | [[%SCRIPTURL%/backuprestore%SCRIPTSUFFIX%?'
+        . "action=download_backup;file=$fileName;magic=$magic][$fileName]] |\n"
+        . "| Backup date: | $buDate \%GRAY\% - local time of server \%ENDCOLOR\% |\n"
+        . "| Backup size: | $buSize \%GRAY\% Bytes \%ENDCOLOR\% |\n"
+        . "| Backup of: | $buVersion \%GRAY\% - the TWiki version this backup was taken from \%ENDCOLOR\% |\n"
+        . "| This TWiki: | $twikiVersion \%GRAY\% - the TWiki version of the current installation \%ENDCOLOR\% |\n"
+        . "| *Restore Options:* ||\n"
+        . '| | <input type="checkbox" name="copysys" id="copysys" /> '
+        . '<label for="copysys"> Copy latest system pages (<nop>WebSearch etc.) to restored webs </label>|' . "\n"
+        . '| | <input type="checkbox" name="overwrite" id="overwrite" /> '
+        . '<label for="overwrite"> Overwrite existing pages </label>|' . "\n"
+        . '| | <input type="checkbox" name="workarea" id="workarea" /> '
+        . '<label for="workarea"> Restore plugin work area </label>|' . "\n"
+        . "| *Restore Webs:* ||\n"
+        . "| | FIXME |\n"
+        . "| *Restore Action:* ||\n"
+        . "| (Restore is work in progress. Check TWiki:Plugins.BackupRestorePlugin for an updated plugin) ||\n"
+        . '</form>';
     return $text;
 }
 
