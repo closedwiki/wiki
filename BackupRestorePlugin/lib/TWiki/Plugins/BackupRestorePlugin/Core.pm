@@ -312,6 +312,7 @@ sub _showBackupDetail {
     my ( $twikiVersion, $twikiShort ) = $this->_getTWikiVersion();
     my $buSize = -s $this->{BackupDir} . "/$fileName";
     $buSize =~ s/(^[-+]?\d+?(?=(?>(?:\d{3})+)(?!\d))|\G\d{3}(?=\d))/$1,/g;
+    my $upgradeWebChecked = ( $buShort < $twikiShort) ? 'checked="checked" ' : '';
     my $text = '<form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">' . "\n"
         . "| *Details of $fileName:* ||\n"
         . '| Backup file: | [[%SCRIPTURL%/backuprestore%SCRIPTSUFFIX%?'
@@ -321,12 +322,12 @@ sub _showBackupDetail {
         . "| Backup of: | $buVersion \%GRAY\% - the TWiki version this backup was taken from \%ENDCOLOR\% |\n"
         . "| This TWiki: | $twikiVersion \%GRAY\% - the TWiki version of the current installation \%ENDCOLOR\% |\n"
         . "| *Restore Options:* ||\n"
-        . '| | <input type="checkbox" name="copysys" id="copysys" /> '
-        . '<label for="copysys"> Copy latest system pages (<nop>WebSearch etc.) to restored webs </label>|' . "\n"
-        . '| | <input type="checkbox" name="overwrite" id="overwrite" /> '
-        . '<label for="overwrite"> Overwrite existing pages </label>|' . "\n"
-        . '| | <input type="checkbox" name="workarea" id="workarea" /> '
-        . '<label for="workarea"> Restore plugin work area </label>|' . "\n"
+        . '| | <input type="checkbox" name="overwrite" id="overwrite" checked="checked" /> '
+        . '<label for="overwrite"> Overwrite existing pages </label> - %RED% this cannot be undone! %ENDCOLOR% |' . "\n"
+        . '| | <input type="checkbox" name="copysys" id="copysys" ' . $upgradeWebChecked . '/> '
+        . '<label for="upgradewebs"> Upgrade restored webs with latest system pages (<nop>WebSearch etc.) </label> |' . "\n"
+        . '| | <input type="checkbox" name="upgradewebs" id="upgradewebs" checked="checked" /> '
+        . '<label for="upgradewebs"> Restore plugin work area </label> |' . "\n"
         . "| *Restore Webs:* ||\n";
     my $systemWeb = 'TWiki';
     $systemWeb =  $TWiki::cfg{SystemWebName} if( defined $TWiki::cfg{SystemWebName} );
