@@ -454,6 +454,7 @@ sub _startRestore {
     unless( -e $this->_getZipFilePath( $fileName ) ) {
         # bail out if file does not exist
         $this->_setError( "ERROR: Backup $fileName does not exist" );
+        return;
     }
 
     my $daemonType = $this->_daemonRunning();
