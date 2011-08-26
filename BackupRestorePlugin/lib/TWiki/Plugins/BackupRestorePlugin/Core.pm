@@ -307,10 +307,10 @@ sub _showBackupDetail {
     $text .= "| *Details of $fileName:* ||\n";
     $text .= '| Backup file: | [[%SCRIPTURL%/backuprestore%SCRIPTSUFFIX%?'
            . "action=download_backup;file=$fileName;magic=$magic][$fileName]] |\n";
-    $text .= "| Backup date: | $buDate |\n";
-    $text .= "| Backup size: | $buSize |\n";
-    $text .= "| Backup of: | $buVersion |\n";
-    $text .= "| This TWiki: | $twikiVersion |\n";
+    $text .= "| Backup date: | $buDate \%GRAY\% - local time of server \%ENDCOLOR\% |\n";
+    $text .= "| Backup size: | $buSize \%GRAY\% Bytes \%ENDCOLOR\% |\n";
+    $text .= "| Backup of: | $buVersion \%GRAY\% - the TWiki version this backup was taken from \%ENDCOLOR\% |\n";
+    $text .= "| This TWiki: | $twikiVersion \%GRAY\% - the TWiki version of the current installation \%ENDCOLOR\% |\n";
     $text .= "| *Restore Options:* ||\n";
     $text .= "| (Check TWiki:Plugins.BackupRestorePlugin for an updated plugin) ||\n";
     return $text;
