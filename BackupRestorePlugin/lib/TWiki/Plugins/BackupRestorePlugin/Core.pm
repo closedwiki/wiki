@@ -295,10 +295,15 @@ sub _showBackupDetail {
     $this->_writeDebug( "_showBackupDetail file=$fileName" );
     my $buDate = $fileName;
     $buDate = '' unless( $buDate =~ s/[^0-9]*(.*?)-([0-9]+)-([0-9]+)\.zip/$1 $2:$3/ );
+    my @fileList = $this->_listZip( $fileName );
     my ( $buVersion ) = map{ s/^.*BackupRestorePlugin\/twiki-version-long-(.*?)\.txt$/$1/; $_ }
-                grep{ /BackupRestorePlugin\/twiki-version-long-/ }
-                $this->_listZip( $fileName );
+        grep{ /BackupRestorePlugin\/twiki-version-long-/ }
+        @fileList;
     return '' unless( -e $this->_getZipFilePath( $fileName ) ); # bail out if file does not exist
+    my @webList = map{ s/^data\/(.*)\/WebPreferences\.txt$/$1/; $_ }
+        grep{ /^data\/.*\/WebPreferences\.txt$/ }
+        sort
+        @fileList;
     my $magic = $this->_generateMagic();
     my ( $twikiVersion, $twikiShort ) = $this->_getTWikiVersion();
     my $buSize = -s $this->{BackupDir} . "/$fileName";
@@ -318,9 +323,12 @@ sub _showBackupDetail {
         . '<label for="overwrite"> Overwrite existing pages </label>|' . "\n"
         . '| | <input type="checkbox" name="workarea" id="workarea" /> '
         . '<label for="workarea"> Restore plugin work area </label>|' . "\n"
-        . "| *Restore Webs:* ||\n"
-        . "| | FIXME |\n"
-        . "| *Restore Action:* ||\n"
+        . "| *Restore Webs:* ||\n";
+    foreach my $web ( @webList ) {
+        $text .= "| | <input type=\"checkbox\" name=\"web_$web\" id=\"web_$web\" /> "
+            . "<label for=\"web_$web\">$web</label> |\n";
+    }
+    $text .= "| *Restore Action:* ||\n"
         . "| (Restore is work in progress. Check TWiki:Plugins.BackupRestorePlugin for an updated plugin) ||\n"
         . '</form>';
     return $text;
