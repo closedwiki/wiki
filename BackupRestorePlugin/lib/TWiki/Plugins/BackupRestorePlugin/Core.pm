@@ -535,6 +535,10 @@ sub _startRestore {
         my $fileName = $params->{file};
         my $text = "file_name: " . $fileName . "\n"
                  . "type: 2-restore\n";
+        for my $key ( keys %$params ) {
+            next if( $key =~ /^(action|file|_RAW)$/o );
+            $text .= "$key: " . $params->{$key} . "\n";
+        }
         _saveFile( $this->{DaemonDir} . '/file_name.txt', $text );
         # daemon is running as shell script, do not pass env vars that make it look like a cgi
         my $SaveGATEWAY_INTERFACE;

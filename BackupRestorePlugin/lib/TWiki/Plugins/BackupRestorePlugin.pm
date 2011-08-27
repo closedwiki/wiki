@@ -93,6 +93,11 @@ sub _BACKUPRESTORE {
         };
         $core = new TWiki::Plugins::BackupRestorePlugin::Core( $cfg );
     }
+    my $query = TWiki::Func::getCgiQuery();
+    foreach my $key ( $query->param ) {
+        next if( defined $params->{$key} );
+        $params->{$key} = $query->param( $key );
+    }
     return $core->BACKUPRESTORE( $params );
 }
 

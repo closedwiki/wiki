@@ -49,10 +49,11 @@ if( $cfg->{ScriptType} eq 'cgi' ) {
     $params->{action} = $query->param( 'action' ) || $ARGV[0] || 'usage';
     $params->{file}   = $query->param( 'file' )   || $ARGV[1] || '';
     $params->{magic}  = $query->param( 'magic' )  || $ARGV[2] || '';
+
 } else {
     $params->{action} = $ARGV[0] || 'usage';
     $params->{file}   = $ARGV[1] || '';
-    $params->{magic}   = $ARGV[2] || '';
+    $params->{magic}  = $ARGV[2] || '';
 }
 
 use TWiki::Plugins::BackupRestorePlugin::Core;
