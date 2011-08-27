@@ -224,7 +224,8 @@ sub _showBackupStatus {
     my $fileName = $this->_getBackupName( $daemonStatus );
     my $text = '';
     $text .= "<pre>\n" if( $this->{ScriptType} eq 'cgi' );
-    $text .= "backup_status: $daemonStatus\nfile_name: $fileName\n";
+    $text .= "backup_status: $daemonStatus\n";
+    $text .= "file_name: $fileName\n";
     $text .= "</pre>\n" if( $this->{ScriptType} eq 'cgi' ); 
     return $text;
 }
@@ -535,7 +536,7 @@ sub _startRestore {
         my $fileName = $params->{file};
         my $text = "file_name: " . $fileName . "\n"
                  . "type: 2-restore\n";
-        for my $key ( keys %$params ) {
+        for my $key ( sort keys %$params ) {
             next if( $key =~ /^(action|file|_RAW)$/o );
             $text .= "$key: " . $params->{$key} . "\n";
         }
@@ -606,6 +607,11 @@ sub _createBackup {
     $name = _untaintChecked( $name );
     $this->_writeDebug( "_createBackup( $name )" ) if $this->{Debug};
 
+    if( $this->{ScriptType} eq 'cgi' ) {
+        $this->_setError( "Sorry, backup can only be done from the console or from the command line" );
+        return '';
+    }
+
     # delete old backups based on $TWiki::cfg{Plugins}{BackupRestorePlugin}{KeepNumberOfBackups}
     if( $this->{KeepNumBUs} > 0 ) {
         my @backupFiles = sort $this->_listAllBackups();
@@ -669,6 +675,16 @@ sub _restoreFromBackup {
     $name = $this->_buildFileName() unless( $name );
     $name = _untaintChecked( $name );
     $this->_writeDebug( "_restoreFromBackup( $name )" ) if $this->{Debug};
+
+    if( $this->{ScriptType} eq 'cgi' ) {
+        $this->_setError( "Sorry, restore from backup can only be done from the console" );
+        return '';
+    }
+
+    unless( $name ) {
+        $this->_setError( "Backup filename must be specified" );
+        return '';
+    }
 
     #FIXME
     _saveFile( $this->{DaemonDir} . '/blah1.txt', 'restore!!' );
