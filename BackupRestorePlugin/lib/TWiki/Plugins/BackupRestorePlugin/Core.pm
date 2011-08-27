@@ -49,7 +49,14 @@ function ajaxStatusCheck( urlStr, queryStr ) {
   self.request.onreadystatechange = function() {
     if (self.request.readyState == 4) {
       if( self.request.responseText.search( "backup_status: 0" ) >= 0 ) {
-          location = '%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
+          var url = '%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
+          var startPos = self.request.responseText.search( /std_err_start: /m );
+          var endPos   = self.request.responseText.search( /std_err_end/m );
+          if( startPos >= 0 && endPos >= 0 ) {
+              var err = self.request.responseText.substring( startPos + 15, endPos );
+              url = url + '?std_err=' + escape( err );
+          }
+          window.location = url;
       } else {
           checkStatusWithDelay();
       }
@@ -111,7 +118,8 @@ sub BACKUPRESTORE {
 
     my $action = $params->{action} || '';
     $this->{Debug} = 1 if( $action eq 'debug' );
-
+    $this->_clearError();
+    $this->_setError( $params->{std_err} ) if( $params->{std_err} );
     $this->_writeDebug( "BACKUPRESTORE action=$action" );
 
     my $accessOK = 0;
@@ -222,10 +230,12 @@ sub _showBackupStatus {
 
     my $daemonStatus = $this->_daemonRunning();
     my $fileName = $this->_getBackupName( $daemonStatus );
+    my $error = _untaintChecked( _readFile( $this->{DaemonDir} . '/stderr.txt' ) );
     my $text = '';
     $text .= "<pre>\n" if( $this->{ScriptType} eq 'cgi' );
     $text .= "backup_status: $daemonStatus\n";
     $text .= "file_name: $fileName\n";
+    $text .= "std_err_start: $error\nstd_err_end\n" if( $error );
     $text .= "</pre>\n" if( $this->{ScriptType} eq 'cgi' ); 
     return $text;
 }
