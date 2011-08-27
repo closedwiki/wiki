@@ -67,7 +67,7 @@ function ajaxStatusCheck( urlStr, queryStr ) {
 function checkStatusWithDelay( ) {
   setTimeout(
     "ajaxStatusCheck( '%SCRIPTURLPATH%/backuprestore%SCRIPTSUFFIX%', 'action=status' )",
-    10000
+    5000
   );
 };
 checkStatusWithDelay();
@@ -682,7 +682,6 @@ sub _restoreFromBackup {
 
     my $name = $params->{file} || '';
     $name =~ s/[^0-9a-zA-Z_\-\.]//g;
-    $name = $this->_buildFileName() unless( $name );
     $name = _untaintChecked( $name );
     $this->_writeDebug( "_restoreFromBackup( $name )" ) if $this->{Debug};
 
@@ -690,9 +689,12 @@ sub _restoreFromBackup {
         $this->_setError( "Sorry, restore from backup can only be done from the console" );
         return '';
     }
-
     unless( $name ) {
         $this->_setError( "Backup filename must be specified" );
+        return '';
+    }
+    unless( -e $this->_getZipFilePath( $name ) ) {
+        $this->_setError( "ERROR: Backup $name does not exist" );
         return '';
     }
 
