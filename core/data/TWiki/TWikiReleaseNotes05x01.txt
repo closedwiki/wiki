@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1314122667" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1314591069" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.1 (Istanbul), 2011-08-20
 
 %TOC%
@@ -30,7 +30,7 @@ TWiki Release 5.1 is a minor release that brings many usability enhancements (su
       * New BackupRestorePlugin to easily backup, restore and upgrade TWiki installations
       * New SetGetPlugin that can store variables persistently
       * New ColorPickerPlugin to pick a color in form fields
-      * SpreadSheetPlugin: New functions BITXOR(), HEXDECODE(), HEXDECODE(), XOR()
+      * SpreadSheetPlugin: New functions BITXOR(), HEXENCODE(), HEXDECODE(), XOR()
 
 See the full list of new features and bug fixes further below.
 
