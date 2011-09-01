@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1314858590" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1314892362" format="1.1" version="$Rev$"}%
 %INCLUDE{%SYSTEMWEB%.WebChangesRightBox}%
 ---+!! Welcome to the TWiki Enterprise Collaboration Platform
 
@@ -14,7 +14,7 @@ To learn more about TWiki, visit the [[%SYSTEMWEB%.WebHome][TWiki web]]. Please 
 
    * [[%SYSTEMWEB%.WelcomeGuest][WelcomeGuest]] - for first time visitors
    * [[%SYSTEMWEB%.TWikiRegistration][Registration]] - become a <nop>%WIKITOOLNAME% user
-   * [[%WIKIUSERSTOPIC%]] - list of users of this <nop>%WIKITOOLNAME% site
+   * [[UserList]] - list of users of this <nop>%WIKITOOLNAME% site
    * [[TWikiGroups]] - list of groups used for access control
    * [[WebSearch]] - simple search
    * [[WebSearchAdvanced]] - %MAKETEXT{"advanced search"}%
