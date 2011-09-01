@@ -586,9 +586,9 @@ sub _actionPromptPassword {
 
  <div class="explanation">
    <ul>
-    <li><b>If you are installing TWiki first time, </b> please read <a rel="nofollow" href="http://www.twiki.org/cgi-bin/view/TWiki/TWikiInstallationGuide">TWiki Installation Guide</a> and <a rel="nofollow" href="http://www.twiki.org/cgi-bin/view/TWiki/TWikiReleaseNotes05x00">TWiki-5.0 Release Notes</a> 
+    <li><b>If you are installing TWiki first time, </b> please read <a rel="nofollow" href="http://www.twiki.org/cgi-bin/view/TWiki/TWikiInstallationGuide">TWiki Installation Guide</a> and <a rel="nofollow" href="http://www.twiki.org/cgi-bin/view/TWiki/TWikiReleaseNotes05x01">TWiki-5.1 Release Notes</a>.
     </li>
-    <li><b>If you are upgrading an existing TWiki, </b> please read <a rel="nofollow" href="http://www.twiki.org/cgi-bin/view/TWiki/TWikiUpgradeGuide">TWiki Upgrade Guide</a> and <a rel="nofollow" href="http://www.twiki.org/cgi-bin/view/TWiki/TWikiReleaseNotes05x00">TWiki-5.0 Release Notes</a> 
+    <li><b>If you are upgrading an existing TWiki, </b> please read <a rel="nofollow" href="http://www.twiki.org/cgi-bin/view/TWiki/TWikiUpgradeGuide">TWiki Upgrade Guide</a> and <a rel="nofollow" href="http://www.twiki.org/cgi-bin/view/TWiki/TWikiReleaseNotes05x01">TWiki-5.1 Release Notes</a>.
     </li>
     <li><b>If your TWiki site is already working</b>, continue to
      <a rel="nofollow" href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/$TWiki::cfg{SystemWebName}/WebHome">
