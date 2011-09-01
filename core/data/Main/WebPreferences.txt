@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1296622872" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1314892574" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WEB% Web Preferences
 
 <sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
@@ -15,7 +15,7 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
    * Web settings:
       * Set WEBTOPICLIST = [[%WIKIUSERSTOPIC%][Users]] %SEP% [[TWikiGroups][Groups]] %SEP% [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
       * Set WEBBGCOLOR = #FFEFA6
-      * Set SITEMAPWHAT = <nop>%WIKITOOLNAME% home where [[%USERSWEB%.%WIKIUSERSTOPIC%][users]] and [[%USERSWEB%.TWikiGroups][groups]] are located
+      * Set SITEMAPWHAT = <nop>%WIKITOOLNAME% home with [[%USERSWEB%.UserList][users]] and [[%USERSWEB%.TWikiGroups][groups for access control]]
       * Set SITEMAPLIST = on
 
    * Default template for *new topics* in this web:
