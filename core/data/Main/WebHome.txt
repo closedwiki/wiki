@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1314858378" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1314858590" format="1.1" version="$Rev$"}%
 %INCLUDE{%SYSTEMWEB%.WebChangesRightBox}%
 ---+!! Welcome to the TWiki Enterprise Collaboration Platform
 
@@ -25,4 +25,5 @@ To learn more about TWiki, visit the [[%SYSTEMWEB%.WebHome][TWiki web]]. Please 
    * [[WebStatistics]] - listing popular topics and top contributors
    * [[WebTopMenu]] - top menu definition
    * [[WebPreferences]] - preferences of this web
+   * [[%LOCALSITEPREFS%]] - site level preferences
    * [[%SYSTEMWEB%.SiteMap][SiteMap]] - site map listing all <nop>%WIKITOOLNAME% webs
