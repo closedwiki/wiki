@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1296279422" format="1.1" version="$Rev$"}%
-<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 5px 15px 5px 15px; font-size: 90%">
+%META:TOPICINFO{author="TWikiContributor" date="1314940104" format="1.1" version="$Rev$"}%
+<div style="float:right; margin:0 0 20px 20px; padding: 10px 20px 10px 20px; border: solid #dddddd 1px; background-image: url(%PUBURLPATH%/%SYSTEMWEB%/WebChangesRightBox/gradient-title.png); background-repeat: repeat-x; background-color:#fbfbfd; color:#333333; font-size: 90%">
 *Recent changes in <nop>%BASEWEB{ format="$current" }% web:*
 %SEARCH{
  "^."
@@ -26,3 +26,5 @@ To update existing webs, add the following at the very top of <nop>%HOMETOPIC%:
 
 <br clear="all">
 -- __Contributors:__ Main.PeterThoeny - 2010-05-06
+
+%META:FILEATTACHMENT{name="gradient-title.png" attachment="gradient-title.png" attr="h" comment="" date="1314939113" path="gradient-title.png" size="207" user="TWikiContributor" version="1"}%
