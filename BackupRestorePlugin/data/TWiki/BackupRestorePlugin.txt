@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313605293" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1315049959" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -11,9 +11,11 @@
 </div></sticky>
 %SHORTDESCRIPTION%
 
----++ Introduction
+---++ Overview
 
 This is a solution to backup, restore and upgrade TWiki sites. It can be used via browser and on the command line. This plugin is pre-installed in TWiki-5.1 and later releases; it can be installed in older TWiki releases as low as TWiki-2001-09-01 (Athens Release) to easily create a backup that can be restored on a new TWiki release. This offers an easy upgrade path for TWiki.
+
+This plugin backs up page data, attachment data, the plugin workspace area and the TWiki configuration. However, it does not backup the TWiki engine, additional plugins and skins you might have installed. It is recommended to do a manual backup of the whole twiki directory after installing plugins and skins.
 
 __Note:__ The initial plugin release does not yet offer the restore functionality. Check TWiki:Plugins.BackupRestorePlugin for updates.
 
