@@ -119,12 +119,13 @@ sub BACKUPRESTORE {
     my $action = $params->{action} || '';
     $this->{Debug} = 1 if( $action eq 'debug' );
     $this->_clearError();
+    # script calling this script might pass an error message to display
     $this->_setError( $params->{std_err} ) if( $params->{std_err} );
     $this->_writeDebug( "BACKUPRESTORE action=$action" );
 
     my $accessOK = 0;
     if( $this->{ScriptType} eq 'cli' ) {
-        $this->_setError( 'Note: The backup and restore console is only available in CGI context' );
+        $this->_setError( 'NOTE: The backup and restore console is only available in CGI context' );
     } elsif( exists( &TWiki::Func::isAnAdmin ) && exists( &TWiki::Func::getCanonicalUserID ) ) {
         $accessOK = TWiki::Func::isAnAdmin( TWiki::Func::getCanonicalUserID() );
     } else {
@@ -161,7 +162,7 @@ sub BACKUPRESTORE {
     } elsif( $this->{ScriptType} eq 'cli' ) {
         # error already set
     } else {
-        $this->_setError( 'ERROR: Only members of the %USERSWEB%.TWikiAdminGroup can see the backup & restore console.' );
+        $this->_setError( 'NOTE: Only members of the %USERSWEB%.TWikiAdminGroup can see the backup & restore console.' );
     }
 
     $text = $this->_renderError() . $text;
@@ -618,7 +619,7 @@ sub _createBackup {
     $this->_writeDebug( "_createBackup( $name )" ) if $this->{Debug};
 
     if( $this->{ScriptType} eq 'cgi' ) {
-        $this->_setError( "Sorry, backup can only be done from the console or from the command line" );
+        $this->_setError( "ERROR: Backup can only be done from the console or from the command line" );
         return '';
     }
 
@@ -653,7 +654,7 @@ sub _createBackup {
     $this->_makeDir( $dir ) unless( -e $dir );
     foreach my $junk ( _getDirContent( $dir ) ) {
         unless( unlink( "$dir/$junk" ) ) {
-            $this->_setError( "Can't delete $dir/$junk - $!" );
+            $this->_setError( "ERROR: Can't delete $dir/$junk - $!" );
         }
     }
     my $file = $this->{Location}{LocalLib};
@@ -686,11 +687,11 @@ sub _restoreFromBackup {
     $this->_writeDebug( "_restoreFromBackup( $name )" ) if $this->{Debug};
 
     if( $this->{ScriptType} eq 'cgi' ) {
-        $this->_setError( "Sorry, restore from backup can only be done from the console" );
+        $this->_setError( "ERROR: Restore from backup can only be done from the console" );
         return '';
     }
     unless( $name ) {
-        $this->_setError( "Backup filename must be specified" );
+        $this->_setError( "ERROR: Backup filename must be specified" );
         return '';
     }
     unless( -e $this->_getZipFilePath( $name ) ) {
@@ -714,14 +715,14 @@ sub _downloadBackup {
     $name = _untaintChecked( $name );
     unless( $name ) {
         print "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
-        $this->_setError( "Backup filename must be specified" );
+        $this->_setError( "ERROR: Backup filename must be specified" );
         return $text;
     }
 
     my $magic = $params->{magic};
     if( $this->{ScriptType} eq 'cgi' && ! $this->_checkMagic( $magic ) ) {
         print "Content-type: text/html\n\n";
-        $this->_setError( "Sorry, only TWiki administrators can download backups" );
+        $this->_setError( "NOTE: Only TWiki administrators can download backups" );
         return $text;
     }
 
@@ -729,7 +730,7 @@ sub _downloadBackup {
     my $size = -s $file;
     unless( open( ZIPFILE, $file ) ) {
         print "Content-type: text/html\n\n" if( $this->{ScriptType} eq 'cgi' );
-        $this->_setError( "Backup $name does not exist" );
+        $this->_setError( "ERROR: Backup $name does not exist" );
         return $text;
     }
 
@@ -966,7 +967,7 @@ sub _listAllBackups {
 
     my @files = ();
     unless( opendir( DIR, $this->{BackupDir} ) ) {
-        $this->_setError( "Can't open the backup directory - $!" );
+        $this->_setError( "ERROR: Can't open the backup directory - $!" );
         return @files;
     }
     @files = grep{ /twiki-backup-.*\.zip/ }
@@ -998,7 +999,7 @@ sub _createZip {
     }
     my ( $stdOut, $stdErr, $success, $exitCode ) = capture_exec( @cmd, $zipFile, @dirs );
     if( $exitCode ) {
-        $this->_setError( "Error creating $name. $stdErr" );
+        $this->_setError( "ERROR: Can't create backup $name. $stdErr" );
     }
     return;
 }
@@ -1011,11 +1012,11 @@ sub _deleteZip {
 
     my $zipFile = "$this->{BackupDir}/$name";
     unless( -e $zipFile ) {
-        $this->_setError( "Backup $name does not exist" );
+        $this->_setError( "ERROR: Backup $name does not exist" );
         return;
     }
     unless( unlink( $zipFile ) ) {
-        $this->_setError( "Can't delete $name - $!" );
+        $this->_setError( "ERROR: Can't delete $name - $!" );
     }
     return;
 }
@@ -1029,13 +1030,13 @@ sub _listZip {
     my @files = ();
     my $zipFile = "$this->{BackupDir}/$name";
     unless( -e $zipFile ) {
-        $this->_setError( "Backup $name does not exist" );
+        $this->_setError( "ERROR: Backup $name does not exist" );
         return @files;
     }
     my @cmd = split( /\s+/, $this->{listZipCmd} );
     my ( $stdOut, $stdErr, $success, $exitCode ) = capture_exec( @cmd, $zipFile );
     if( $exitCode ) {
-        $this->_setError( "Error listing content of $name. $stdErr" );
+        $this->_setError( "ERROR: Can't list content of backup $name. $stdErr" );
     }
     @files = map{ s/^\s*([0-9\-\:]+\s*){3}//; $_ }   # remove size and timestamp
              grep{ /^\s*[0-9]+\s*[0-9]+\-.*[^\/]$/ } # exclude header, footer & directories
@@ -1051,13 +1052,13 @@ sub _unZip {
 
     my $zipFile = "$this->{BackupDir}/$name";
     unless( -e $zipFile ) {
-        $this->_setError( "Backup $name does not exist" );
+        $this->_setError( "ERROR: Backup $name does not exist" );
         return;
     }
     my @cmd = split( /\s+/, $this->{unZipCmd} );
     my ( $stdOut, $stdErr, $success, $exitCode ) = capture_exec( @cmd, $zipFile );
     if( $exitCode ) {
-        $this->_setError( "Error unzipping $name. $stdErr" );
+        $this->_setError( "ERROR: Can't unzip $name. $stdErr" );
     }
     return;
 }
