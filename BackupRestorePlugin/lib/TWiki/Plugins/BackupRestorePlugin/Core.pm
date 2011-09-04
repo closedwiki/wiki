@@ -705,7 +705,7 @@ sub _restoreFromBackup {
         $this->_setError( "ERROR: Restore can only be called from the console" );
         return '';
     }
-    my @webs =
+    my @webs = sort
         map{ s/\:/\//go; $_; }
         map{ /^web\:(.*)\: .*/; $1; }
         grep{ /^web\:.*\: / }
@@ -732,23 +732,63 @@ sub _restoreFromBackup {
 
     # restore webs
     foreach my $web ( @webs ) {
-        $this->_restoreWeb( $web );
-        if( $this->_isError() ) {
-            File::Path::rmtree( $tmpRestoreDir );
-            return '';
-        }
+        $this->_restoreWeb( $web, $tmpRestoreDir );
+        last if( $this->_isError() );
     }
-
+    unless( $this->_isError() ) {
+        $this->_setError( "NOTE: Backup $name has been restored successfully" );
+    }
 #    File::Path::rmtree( $tmpRestoreDir );
-    $this->_setError( "NOTE: Backup $name has been restored successfully" );
     return '';
 }
 
 #==================================================================
 sub _restoreWeb {
-    my( $this, $web ) = @_;
+    my( $this, $web, $baseDir ) = @_;
     $this->_writeDebug( "_restoreWeb( $web )" ) if $this->{Debug};
-    # FIXME restore
+
+    my $sourceDir = "$baseDir/data/$web";
+    my $destDir   = $this->{Location}{DataDir} . "/$web";
+    $this->_makeDir( $destDir ) unless( -e $destDir ); # FIXME recursive for sub-webs
+    return if( $this->_isError() );
+
+    foreach my $topic ( map{ s/\.txt$//; $_; } grep{ /\.txt$/ } _getDirContent( $sourceDir ) ) {
+        $this->_restoreTopic( $web, $topic, $baseDir, $destDir );
+        return if( $this->_isError() );
+    }
+}
+
+#==================================================================
+sub _restoreTopic {
+    my( $this, $web, $topic, $baseDir, $destDir ) = @_;
+    $this->_writeDebug( "_restoreTopic( $web, $topic, $baseDir, $destDir )" ) if $this->{Debug};
+
+    # copy topic
+    my $file = "$baseDir/data/$web/$topic.txt";
+    $this->_copyFile( $file, $destDir );
+    return if( $this->_isError() );
+
+    # copy rcs history
+    $file .= ',v';
+    $this->_copyFile( $file, $destDir ) if( -e $file );
+    return if( $this->_isError() );
+
+    # copy attachments (if any)
+    my $attachDir = "$baseDir/pub/$web/$topic";
+    if( -e $attachDir ) {
+        $destDir = $this->{Location}{PubDir} . "/$web";
+        $this->_makeDir( $destDir ) unless( -e $destDir ); # FIXME recursive for sub-webs
+        return if( $this->_isError() );
+        $destDir .= "/$topic";
+        $this->_makeDir( $destDir ) unless( -e $destDir );
+        return if( $this->_isError() );
+
+        foreach my $attachment ( _getDirContent( $attachDir ) ) {
+            $file = "$attachDir/$attachment";
+            $this->_copyFile( $file, $destDir );
+            return if( $this->_isError() );
+        }
+    }
 }
 
 #==================================================================
