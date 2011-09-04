@@ -699,6 +699,7 @@ sub _restoreFromBackup {
         return '';
     }
 
+    # get list of webs to restore
     my $text = _readFile( $this->{DaemonDir} . '/file_name.txt' );
     if( $text !~ m/type: 2-/s ) {
         $this->_setError( "ERROR: Restore can only be called from the console" );
@@ -719,20 +720,35 @@ sub _restoreFromBackup {
     my $tmpRestoreDir = $this->{DaemonDir} . '/_tmp_restore';
     File::Path::rmtree( $tmpRestoreDir ) if( $tmpRestoreDir );
     $this->_makeDir( $tmpRestoreDir ) unless( -e $tmpRestoreDir );
-    return $text if( $this->_isError() );
+    return '' if( $this->_isError() );
 
     # unzip into temp dir
     chdir( $tmpRestoreDir );
     $this->_unZip( $name );
     if( $this->_isError() ) {
         File::Path::rmtree( $tmpRestoreDir );
-        return $text;
+        return '';
     }
 
-    #FIXME restore webs
-    _saveFile( $this->{DaemonDir} . '/blah1.txt', 'restore!!' );
-    sleep( 30 );
-    _saveFile( $this->{DaemonDir} . '/blah2.txt', 'restore!!' );
+    # restore webs
+    foreach my $web ( @webs ) {
+        $this->_restoreWeb( $web );
+        if( $this->_isError() ) {
+            File::Path::rmtree( $tmpRestoreDir );
+            return '';
+        }
+    }
+
+#    File::Path::rmtree( $tmpRestoreDir );
+    $this->_setError( "NOTE: Backup $name has been restored successfully" );
+    return '';
+}
+
+#==================================================================
+sub _restoreWeb {
+    my( $this, $web ) = @_;
+    $this->_writeDebug( "_restoreWeb( $web )" ) if $this->{Debug};
+    # FIXME restore
 }
 
 #==================================================================
