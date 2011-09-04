@@ -699,7 +699,37 @@ sub _restoreFromBackup {
         return '';
     }
 
-    #FIXME
+    my $text = _readFile( $this->{DaemonDir} . '/file_name.txt' );
+    if( $text !~ m/type: 2-/s ) {
+        $this->_setError( "ERROR: Restore can only be called from the console" );
+        return '';
+    }
+    my @webs =
+        map{ s/\:/\//go; $_; }
+        map{ /^web\:(.*)\: .*/; $1; }
+        grep{ /^web\:.*\: / }
+        split( /\n/, $text );
+
+    unless( scalar @webs ) {
+        $this->_setError( "NOTE: Nothing to do, no webselected to restore" );
+        return '';
+    }
+
+    # remove and re-create temp dir for restore
+    my $tmpRestoreDir = $this->{DaemonDir} . '/_tmp_restore';
+    File::Path::rmtree( $tmpRestoreDir ) if( $tmpRestoreDir );
+    $this->_makeDir( $tmpRestoreDir ) unless( -e $tmpRestoreDir );
+    return $text if( $this->_isError() );
+
+    # unzip into temp dir
+    chdir( $tmpRestoreDir );
+    $this->_unZip( $name );
+    if( $this->_isError() ) {
+        File::Path::rmtree( $tmpRestoreDir );
+        return $text;
+    }
+
+    #FIXME restore webs
     _saveFile( $this->{DaemonDir} . '/blah1.txt', 'restore!!' );
     sleep( 30 );
     _saveFile( $this->{DaemonDir} . '/blah2.txt', 'restore!!' );
@@ -780,6 +810,12 @@ sub _setError {
     my( $this, $error ) = @_;
     $this->{error} .=  "$error\n"
 }
+
+#==================================================================
+sub _isError {
+    my( $this ) = @_;
+    $this->{error} ? return 1 : return 0;
+}   
 
 #==================================================================
 sub _renderError {
