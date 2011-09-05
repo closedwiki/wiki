@@ -783,11 +783,15 @@ sub _restoreTopic {
 
     # copy topic
     my $file = "$baseDir/data/$web/$topic.txt";
+    my $dest = "$destDir/$topic.txt";
+    unlink( $dest ) if( -e $dest );
     $this->_copyFile( $file, $destDir );
     return if( $this->_isError() );
 
     # copy rcs history
     $file .= ',v';
+    $dest .= ',v';
+    unlink( $dest ) if( -e $dest );
     $this->_copyFile( $file, $destDir ) if( -e $file );
     return if( $this->_isError() );
 
@@ -795,6 +799,7 @@ sub _restoreTopic {
     my $attachDir = "$baseDir/pub/$web/$topic";
     if( -e $attachDir ) {
         $destDir = $this->{Location}{PubDir} . "/$web";
+        File::Path::rmtree( $destDir ) if( -e $destDir );
         $this->_makeDir( $destDir ) unless( -e $destDir ); # FIXME recursive for sub-webs
         return if( $this->_isError() );
         $destDir .= "/$topic";
