@@ -797,19 +797,15 @@ sub _restoreTopic {
         $timestamp = $1; # use timestamp of topic meta if found
     }
     unlink( $dest ) if( -e $dest );
-    $this->_copyFile( $file, $destDir );
+    $this->_copyFile( $file, $destDir, 0644, $timestamp );
     return if( $this->_isError() );
-    chmod( 0644, $dest );
-    utime( $timestamp, $timestamp, $dest );
 
     # copy rcs history
     $file .= ',v';
     $dest .= ',v';
     unlink( $dest ) if( -e $dest );
-    $this->_copyFile( $file, $destDir ) if( -e $file );
+    $this->_copyFile( $file, $destDir, 0444, $timestamp ) if( -e $file );
     return if( $this->_isError() );
-    chmod( 0444, $dest );
-    utime( $timestamp, $timestamp, $dest );
 
     # copy attachments (if any)
     my $attachDir = "$baseDir/pub/$web/$topic";
@@ -824,13 +820,10 @@ sub _restoreTopic {
 
         foreach my $attachment ( _getDirContent( $attachDir ) ) {
             $file = "$attachDir/$attachment";
-            $dest = "$destDir/$attachment";
             if( -f $file ) {
-                $this->_copyFile( $file, $destDir );
-                return if( $this->_isError() );
                 my $mode = ( $file =~ /,v$/ ) ? 0444 : 0644;
-                chmod( $mode, $dest );
-                utime( $timestamp, $timestamp, $dest );
+                $this->_copyFile( $file, $destDir, $mode, $timestamp );
+                return if( $this->_isError() );
             } elsif( -d $file ) {
                 # FIXME sub-dir restore
             }
@@ -1228,11 +1221,20 @@ sub _makeDir {
 
 #==================================================================
 sub _copyFile {
-    my( $this, $fromFile, $toDir ) = @_;
+    my( $this, $fromFile, $toDir, $mode, $timestamp ) = @_;
 
     unless( File::Copy::copy( $fromFile, $toDir ) ) {
         $this->_setError( "Error copying $fromFile to $toDir" );
     }
+    return unless( $mode || $timestamp );
+
+    my $dest = $toDir;
+    if( -d $dest ) {
+        $fromFile =~ s/.*[\/\\]+//; # remove path from source file
+        $dest .= "/$fromFile";
+    }
+    chmod( $mode, $dest ) if( $mode );
+    utime( $timestamp, $timestamp, $dest ) if( $timestamp );
 }
 
 #==================================================================
