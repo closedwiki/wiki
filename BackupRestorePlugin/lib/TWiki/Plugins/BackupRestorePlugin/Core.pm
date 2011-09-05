@@ -600,7 +600,9 @@ sub _cancelBackup {
                 unlink( $zipFile ) if( -e $zipFile );
             }
         } else {
-            # FIXME cleanup restore
+            # cleanup restore
+            my $tmpRestoreDir = $this->{DaemonDir} . '/_tmp_restore';
+            File::Path::rmtree( $tmpRestoreDir ) if( -e $tmpRestoreDir );
         }
 
     } else {
@@ -726,7 +728,7 @@ sub _restoreFromBackup {
 
     # remove and re-create temp dir for restore
     my $tmpRestoreDir = $this->{DaemonDir} . '/_tmp_restore';
-    File::Path::rmtree( $tmpRestoreDir ) if( $tmpRestoreDir );
+    File::Path::rmtree( $tmpRestoreDir ) if( -e $tmpRestoreDir );
     $this->_makeDir( $tmpRestoreDir ) unless( -e $tmpRestoreDir );
     return '' if( $this->_isError() );
 
@@ -759,7 +761,7 @@ sub _restoreFromBackup {
     }
 
     # cleanup temp area
-#    File::Path::rmtree( $tmpRestoreDir );
+    File::Path::rmtree( $tmpRestoreDir );
     return '';
 }
 
