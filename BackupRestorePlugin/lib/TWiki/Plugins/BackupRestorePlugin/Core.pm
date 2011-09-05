@@ -768,8 +768,11 @@ sub _restoreWeb {
 
     my $sourceDir = "$baseDir/data/$web";
     my $destDir   = $this->{Location}{DataDir} . "/$web";
-    $this->_makeDir( $destDir ) unless( -e $destDir ); # FIXME recursive for sub-webs
-    return if( $this->_isError() );
+    unless( -e $destDir ) {
+        $this->_makeDir( $destDir ); # FIXME recursive for sub-webs
+        return if( $this->_isError() );
+        chmod( 0755, $destDir );
+    }
 
     foreach my $topic ( map{ s/\.txt$//; $_; } grep{ /\.txt$/ } _getDirContent( $sourceDir ) ) {
         next if( -e "$destDir/$topic.txt" && !$overwrite );
@@ -807,12 +810,18 @@ sub _restoreTopic {
     my $attachDir = "$baseDir/pub/$web/$topic";
     if( -e $attachDir ) {
         $destDir = $this->{Location}{PubDir} . "/$web";
-        $this->_makeDir( $destDir ) unless( -e $destDir ); # FIXME recursive for sub-webs
-        return if( $this->_isError() );
+        unless( -e $destDir ) {
+            $this->_makeDir( $destDir ); # FIXME recursive for sub-webs
+            return if( $this->_isError() );
+            chmod( 0755, $destDir );
+        }
         $destDir .= "/$topic";
         File::Path::rmtree( $destDir ) if( -e $destDir );
-        $this->_makeDir( $destDir ) unless( -e $destDir );
-        return if( $this->_isError() );
+        unless( -e $destDir ) {
+            $this->_makeDir( $destDir );
+            return if( $this->_isError() );
+            chmod( 0755, $destDir );
+        }
 
         foreach my $attachment ( _getDirContent( $attachDir ) ) {
             $file = "$attachDir/$attachment";
