@@ -825,6 +825,7 @@ sub _restoreTopic {
 
         foreach my $attachment ( _getDirContent( $attachDir ) ) {
             $file = "$attachDir/$attachment";
+            next unless( -f $file ); # FIXME sub-dirs
             $this->_copyFile( $file, $destDir );
             return if( $this->_isError() );
             my $mode = ( $file =~ /,v$/ ) ? 0444 : 0644;
