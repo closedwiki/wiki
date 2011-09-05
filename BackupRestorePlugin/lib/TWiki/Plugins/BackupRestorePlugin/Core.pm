@@ -699,12 +699,18 @@ sub _restoreFromBackup {
         return '';
     }
 
-    # get list of webs to restore
+    # get options and list of webs to restore
     my $text = _readFile( $this->{DaemonDir} . '/file_name.txt' );
     if( $text !~ m/type: 2-/s ) {
         $this->_setError( "ERROR: Restore can only be called from the console" );
         return '';
     }
+    my $overwrite = 0;
+    $overwrite = 1 if( $text =~ /(^|\n)overwrite\: on/m );
+    my $upgradeWebs = 0;
+    $upgradeWebs = 1 if( $text =~ /(^|\n)upgradewebs\: on/m );
+    my $restoreWorkArea = 0;
+    $restoreWorkArea = 1 if( $text =~ /(^|\n)restoreworkarea\: on/m );
     my @webs = sort
         map{ s/\:/\//go; $_; }
         map{ /^web\:(.*)\: .*/; $1; }
@@ -732,19 +738,26 @@ sub _restoreFromBackup {
 
     # restore webs
     foreach my $web ( @webs ) {
-        $this->_restoreWeb( $web, $tmpRestoreDir );
+        $this->_restoreWeb( $web, $tmpRestoreDir, $overwrite, $upgradeWebs );
         last if( $this->_isError() );
     }
     unless( $this->_isError() ) {
         $this->_setError( "NOTE: Backup $name has been restored successfully" );
     }
+
+    # restore plugin work aera
+    if( $restoreWorkArea ) {
+# FIXME
+    }
+
+    # cleanup temp area
 #    File::Path::rmtree( $tmpRestoreDir );
     return '';
 }
 
 #==================================================================
 sub _restoreWeb {
-    my( $this, $web, $baseDir ) = @_;
+    my( $this, $web, $baseDir, $overwrite, $upgradeWeb ) = @_;
     $this->_writeDebug( "_restoreWeb( $web )" ) if $this->{Debug};
 
     my $sourceDir = "$baseDir/data/$web";
@@ -755,6 +768,10 @@ sub _restoreWeb {
     foreach my $topic ( map{ s/\.txt$//; $_; } grep{ /\.txt$/ } _getDirContent( $sourceDir ) ) {
         $this->_restoreTopic( $web, $topic, $baseDir, $destDir );
         return if( $this->_isError() );
+    }
+
+    if( $upgradeWeb ) {
+# FIXME
     }
 }
 
