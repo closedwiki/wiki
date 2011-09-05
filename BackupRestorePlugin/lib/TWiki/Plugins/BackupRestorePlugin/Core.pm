@@ -766,6 +766,7 @@ sub _restoreWeb {
     return if( $this->_isError() );
 
     foreach my $topic ( map{ s/\.txt$//; $_; } grep{ /\.txt$/ } _getDirContent( $sourceDir ) ) {
+        next if( -e "$destDir/$topic.txt" && !$overwrite );
         $this->_restoreTopic( $web, $topic, $baseDir, $destDir );
         return if( $this->_isError() );
     }
