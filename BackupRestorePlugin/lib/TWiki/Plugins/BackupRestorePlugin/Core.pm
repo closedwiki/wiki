@@ -737,12 +737,18 @@ sub _restoreFromBackup {
     }
 
     # restore webs
+    my @processed = ();
     foreach my $web ( @webs ) {
         $this->_restoreWeb( $web, $tmpRestoreDir, $overwrite, $upgradeWebs );
         last if( $this->_isError() );
+        push( @processed, $web );
     }
-    unless( $this->_isError() ) {
-        $this->_setError( "NOTE: Backup $name has been restored successfully" );
+    if( scalar @processed == 1 ) {
+        $this->_setError( "NOTE: The following web of $name has been successfully restored: <nop>"
+                        . $processed[0] );
+    } elsif( scalar @processed ) {
+        $text = join( ', <nop>', @processed );
+        $this->_setError( "NOTE: The following webs of $name have been successfully restored: <nop>$text" );
     }
 
     # restore plugin work aera
