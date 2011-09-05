@@ -647,11 +647,11 @@ sub _createBackup {
 
     # backup system configuration files (backed-up later in working dir)
     $dir = $this->{Location}{WorkingDir};
-    $this->_makeDir( $dir ) unless( -e $dir );
+    $this->_makeDir( $dir, 0755 ) unless( -e $dir );
     $dir .= "/work_areas";
-    $this->_makeDir( $dir ) unless( -e $dir );
+    $this->_makeDir( $dir, 0755 ) unless( -e $dir );
     $dir .= "/BackupRestorePlugin";
-    $this->_makeDir( $dir ) unless( -e $dir );
+    $this->_makeDir( $dir, 0755 ) unless( -e $dir );
     foreach my $junk ( _getDirContent( $dir ) ) {
         unless( unlink( "$dir/$junk" ) ) {
             $this->_setError( "ERROR: Can't delete $dir/$junk - $!" );
@@ -753,7 +753,7 @@ sub _restoreFromBackup {
 
     # restore plugin work aera
     if( $restoreWorkArea ) {
-# FIXME
+        # FIXME
     }
 
     # cleanup temp area
@@ -768,11 +768,8 @@ sub _restoreWeb {
 
     my $sourceDir = "$baseDir/data/$web";
     my $destDir   = $this->{Location}{DataDir} . "/$web";
-    unless( -e $destDir ) {
-        $this->_makeDir( $destDir ); # FIXME recursive for sub-webs
-        return if( $this->_isError() );
-        chmod( 0755, $destDir );
-    }
+    $this->_makeDir( $destDir, 0755 ) unless( -e $destDir ); # FIXME recursive for sub-webs
+    return if( $this->_isError() );
 
     foreach my $topic ( map{ s/\.txt$//; $_; } grep{ /\.txt$/ } _getDirContent( $sourceDir ) ) {
         next if( -e "$destDir/$topic.txt" && !$overwrite );
@@ -781,7 +778,7 @@ sub _restoreWeb {
     }
 
     if( $upgradeWeb ) {
-# FIXME
+        # FIXME
     }
 }
 
@@ -810,26 +807,23 @@ sub _restoreTopic {
     my $attachDir = "$baseDir/pub/$web/$topic";
     if( -e $attachDir ) {
         $destDir = $this->{Location}{PubDir} . "/$web";
-        unless( -e $destDir ) {
-            $this->_makeDir( $destDir ); # FIXME recursive for sub-webs
-            return if( $this->_isError() );
-            chmod( 0755, $destDir );
-        }
+        $this->_makeDir( $destDir, 0755 ) unless( -e $destDir ); # FIXME recursive for sub-webs
+        return if( $this->_isError() );
         $destDir .= "/$topic";
         File::Path::rmtree( $destDir ) if( -e $destDir );
-        unless( -e $destDir ) {
-            $this->_makeDir( $destDir );
-            return if( $this->_isError() );
-            chmod( 0755, $destDir );
-        }
+        $this->_makeDir( $destDir, 0755 ) unless( -e $destDir );
+        return if( $this->_isError() );
 
         foreach my $attachment ( _getDirContent( $attachDir ) ) {
             $file = "$attachDir/$attachment";
-            next unless( -f $file ); # FIXME sub-dirs
-            $this->_copyFile( $file, $destDir );
-            return if( $this->_isError() );
-            my $mode = ( $file =~ /,v$/ ) ? 0444 : 0644;
-            chmod( $mode, "$destDir/$attachment" );
+            if( -f $file ) {
+                $this->_copyFile( $file, $destDir );
+                return if( $this->_isError() );
+                my $mode = ( $file =~ /,v$/ ) ? 0444 : 0644;
+                chmod( $mode, "$destDir/$attachment" );
+            } elsif( -d $file ) {
+                # FIXME sub-dir restore
+            }
         }
     }
 }
@@ -1214,10 +1208,13 @@ sub _writeDebug {
 
 #==================================================================
 sub _makeDir {
-    my( $this, $dir ) = @_;
+    my( $this, $dir, $mode ) = @_;
 
     unless( mkdir( $dir ) ) {
         $this->_setError( "Error creating $dir" );
+    }
+    if( $mode ) {
+        chmod( $mode, $dir );
     }
 }
 
