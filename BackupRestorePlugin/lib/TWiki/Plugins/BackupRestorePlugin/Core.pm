@@ -793,6 +793,7 @@ sub _restoreTopic {
     unlink( $dest ) if( -e $dest );
     $this->_copyFile( $file, $destDir );
     return if( $this->_isError() );
+    chmod( 0644, $dest );
 
     # copy rcs history
     $file .= ',v';
@@ -800,15 +801,16 @@ sub _restoreTopic {
     unlink( $dest ) if( -e $dest );
     $this->_copyFile( $file, $destDir ) if( -e $file );
     return if( $this->_isError() );
+    chmod( 0444, $dest );
 
     # copy attachments (if any)
     my $attachDir = "$baseDir/pub/$web/$topic";
     if( -e $attachDir ) {
         $destDir = $this->{Location}{PubDir} . "/$web";
-        File::Path::rmtree( $destDir ) if( -e $destDir );
         $this->_makeDir( $destDir ) unless( -e $destDir ); # FIXME recursive for sub-webs
         return if( $this->_isError() );
         $destDir .= "/$topic";
+        File::Path::rmtree( $destDir ) if( -e $destDir );
         $this->_makeDir( $destDir ) unless( -e $destDir );
         return if( $this->_isError() );
 
@@ -816,6 +818,8 @@ sub _restoreTopic {
             $file = "$attachDir/$attachment";
             $this->_copyFile( $file, $destDir );
             return if( $this->_isError() );
+            my $mode = ( $file =~ /,v$/ ) ? 0444 : 0644;
+            chmod( $mode, "$destDir/$attachment" );
         }
     }
 }
