@@ -786,17 +786,21 @@ sub _restoreWeb {
 
 #==================================================================
 sub _restoreTopic {
-    my( $this, $web, $topic, $baseDir, $destDir, $zipTimestamp ) = @_;
+    my( $this, $web, $topic, $baseDir, $destDir, $timestamp ) = @_;
     $this->_writeDebug( "_restoreTopic( $web, $topic, $baseDir, $destDir )" ) if $this->{Debug};
 
     # copy topic
     my $file = "$baseDir/data/$web/$topic.txt";
     my $dest = "$destDir/$topic.txt";
+    my $text = _readFile( $file, 1 ); # read topic meta
+    if( $text =~ /\%META\:TOPICINFO{[^\n]* date=\"([0-9]+)\"/ ) {
+        $timestamp = $1; # use timestamp of topic meta if found
+    }
     unlink( $dest ) if( -e $dest );
     $this->_copyFile( $file, $destDir );
     return if( $this->_isError() );
     chmod( 0644, $dest );
-    utime( $zipTimestamp, $zipTimestamp, $dest ); # FIXME use topic info timestamp if exists
+    utime( $timestamp, $timestamp, $dest );
 
     # copy rcs history
     $file .= ',v';
@@ -805,7 +809,7 @@ sub _restoreTopic {
     $this->_copyFile( $file, $destDir ) if( -e $file );
     return if( $this->_isError() );
     chmod( 0444, $dest );
-    utime( $zipTimestamp, $zipTimestamp, $dest );
+    utime( $timestamp, $timestamp, $dest );
 
     # copy attachments (if any)
     my $attachDir = "$baseDir/pub/$web/$topic";
@@ -826,7 +830,7 @@ sub _restoreTopic {
                 return if( $this->_isError() );
                 my $mode = ( $file =~ /,v$/ ) ? 0444 : 0644;
                 chmod( $mode, $dest );
-                utime( $zipTimestamp, $zipTimestamp, $dest );
+                utime( $timestamp, $timestamp, $dest );
             } elsif( -d $file ) {
                 # FIXME sub-dir restore
             }
@@ -1219,9 +1223,7 @@ sub _makeDir {
     unless( mkdir( $dir ) ) {
         $this->_setError( "Error creating $dir" );
     }
-    if( $mode ) {
-        chmod( $mode, $dir );
-    }
+    chmod( $mode, $dir ) if( $mode );
 }
 
 #==================================================================
@@ -1239,11 +1241,17 @@ sub _copyFile {
 
 #==================================================================
 sub _readFile {
-    my $name = shift;
+    my( $name, $lines ) = @_;
     my $data = '';
     open( IN_FILE, "<$name" ) || return '';
-    local $/ = undef; # set to read to EOF
-    $data = <IN_FILE>;
+    if( $lines ) {
+        # read up to $lines of file
+        while( $lines-- && ( $data .= <IN_FILE> ) ) { };
+    } else {
+        # read whole file at once to EOF
+        local $/ = undef;
+        $data = <IN_FILE>;
+    }
     close( IN_FILE );
     $data = '' unless $data; # no undefined
     return $data;
