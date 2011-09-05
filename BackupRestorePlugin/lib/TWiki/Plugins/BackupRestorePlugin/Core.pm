@@ -694,10 +694,12 @@ sub _restoreFromBackup {
         $this->_setError( "ERROR: Backup filename must be specified" );
         return '';
     }
-    unless( -e $this->_getZipFilePath( $name ) ) {
+    my $file = $this->_getZipFilePath( $name );
+    unless( -e $file ) {
         $this->_setError( "ERROR: Backup $name does not exist" );
         return '';
     }
+    my $zipTimestamp = ( stat( $file ) )[9];
 
     # get options and list of webs to restore
     my $text = _readFile( $this->{DaemonDir} . '/file_name.txt' );
@@ -739,7 +741,7 @@ sub _restoreFromBackup {
     # restore webs
     my @processed = ();
     foreach my $web ( @webs ) {
-        $this->_restoreWeb( $web, $tmpRestoreDir, $overwrite, $upgradeWebs );
+        $this->_restoreWeb( $web, $tmpRestoreDir, $overwrite, $upgradeWebs, $zipTimestamp );
         last if( $this->_isError() );
         push( @processed, $web );
     }
@@ -763,7 +765,7 @@ sub _restoreFromBackup {
 
 #==================================================================
 sub _restoreWeb {
-    my( $this, $web, $baseDir, $overwrite, $upgradeWeb ) = @_;
+    my( $this, $web, $baseDir, $overwrite, $upgradeWeb, $zipTimestamp ) = @_;
     $this->_writeDebug( "_restoreWeb( $web )" ) if $this->{Debug};
 
     my $sourceDir = "$baseDir/data/$web";
@@ -773,7 +775,7 @@ sub _restoreWeb {
 
     foreach my $topic ( map{ s/\.txt$//; $_; } grep{ /\.txt$/ } _getDirContent( $sourceDir ) ) {
         next if( -e "$destDir/$topic.txt" && !$overwrite );
-        $this->_restoreTopic( $web, $topic, $baseDir, $destDir );
+        $this->_restoreTopic( $web, $topic, $baseDir, $destDir, $zipTimestamp );
         return if( $this->_isError() );
     }
 
@@ -784,7 +786,7 @@ sub _restoreWeb {
 
 #==================================================================
 sub _restoreTopic {
-    my( $this, $web, $topic, $baseDir, $destDir ) = @_;
+    my( $this, $web, $topic, $baseDir, $destDir, $zipTimestamp ) = @_;
     $this->_writeDebug( "_restoreTopic( $web, $topic, $baseDir, $destDir )" ) if $this->{Debug};
 
     # copy topic
@@ -794,6 +796,7 @@ sub _restoreTopic {
     $this->_copyFile( $file, $destDir );
     return if( $this->_isError() );
     chmod( 0644, $dest );
+    utime( $zipTimestamp, $zipTimestamp, $dest ); # FIXME use topic info timestamp if exists
 
     # copy rcs history
     $file .= ',v';
@@ -802,6 +805,7 @@ sub _restoreTopic {
     $this->_copyFile( $file, $destDir ) if( -e $file );
     return if( $this->_isError() );
     chmod( 0444, $dest );
+    utime( $zipTimestamp, $zipTimestamp, $dest );
 
     # copy attachments (if any)
     my $attachDir = "$baseDir/pub/$web/$topic";
@@ -816,11 +820,13 @@ sub _restoreTopic {
 
         foreach my $attachment ( _getDirContent( $attachDir ) ) {
             $file = "$attachDir/$attachment";
+            $dest = "$destDir/$attachment";
             if( -f $file ) {
                 $this->_copyFile( $file, $destDir );
                 return if( $this->_isError() );
                 my $mode = ( $file =~ /,v$/ ) ? 0444 : 0644;
-                chmod( $mode, "$destDir/$attachment" );
+                chmod( $mode, $dest );
+                utime( $zipTimestamp, $zipTimestamp, $dest );
             } elsif( -d $file ) {
                 # FIXME sub-dir restore
             }
