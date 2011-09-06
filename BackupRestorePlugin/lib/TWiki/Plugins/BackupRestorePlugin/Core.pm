@@ -1217,8 +1217,10 @@ sub _makeDir {
 
     unless( mkdir( $dir ) ) {
         $this->_setError( "Error creating $dir" );
+        return 1;
     }
     chmod( $mode, $dir ) if( $mode );
+    return 0;
 }
 
 #==================================================================
@@ -1227,8 +1229,9 @@ sub _copyFile {
 
     unless( File::Copy::copy( $fromFile, $toDir ) ) {
         $this->_setError( "Error copying $fromFile to $toDir" );
+        return 1;
     }
-    return unless( $mode || $timestamp );
+    return 0 unless( $mode || $timestamp );
 
     my $dest = $toDir;
     if( -d $dest ) {
@@ -1237,6 +1240,51 @@ sub _copyFile {
     }
     chmod( $mode, $dest ) if( $mode );
     utime( $timestamp, $timestamp, $dest ) if( $timestamp );
+    return 0;
+}
+
+#==================================================================
+sub _copyDirRecursively {
+    my( $this, $fromDir, $toDir, $dirMode, $fileMode, $timestamp ) = @_;
+
+    unless( -d $fromDir ) {
+        $this->_setError( "ERROR: Can't copy directory, source directory $fromDir does not exist" );
+        return 1;
+    }
+    unless( -d $toDir ) {
+        $this->_setError( "ERROR: Can't copy directory, destination $toDir must be an existing directory" );
+        return 1;
+    }
+
+    # create destination directory if needed
+    my $dir = $fromDir;
+    $dir =~ s/.*[\/\\]+//; # remove path from source dir
+    $toDir .= "/$dir";
+    if( -d $toDir ) {
+        # copy into existing sub-dir
+    } elsif( -e $toDir ) {
+        $this->_setError( "ERROR: Can't copy directory, destination $toDir exists but is not a directory" );
+        return 1;
+    } else {
+        # create sub-dir
+        if( $this->_makeDir( $toDir, $dirMode ) ) {
+            return 1;
+        }
+    }
+
+    # copy directory content
+    foreach my $file ( _getDirContent( $fromDir ) ) {
+        if( -d "$fromDir/$file" ) {
+            if( $this->_copyDirRecursively( "$fromDir/$file", $toDir, $dirMode, $fileMode, $timestamp ) ) {
+                return 1;
+            }
+        } elsif( -f "$fromDir/$file" ) {
+            if( $this->_copyFile( "$fromDir/$file", $toDir, $fileMode, $timestamp ) ) {
+                return 1;
+            }
+        }
+    }
+    return 0;
 }
 
 #==================================================================
@@ -1280,7 +1328,7 @@ sub _getDirContent {
     my @files;
     opendir( DIR, $dir ) or return;
     while( my $file = readdir( DIR )) {
-        next if( $file =~ m/^\./ );
+        next if( $file =~ m/^\.\.?$/ );
 	push( @files, _untaintChecked( $file ) );
     }
     closedir( DIR );
