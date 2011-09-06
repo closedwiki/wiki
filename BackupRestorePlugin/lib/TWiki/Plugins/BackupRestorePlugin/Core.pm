@@ -828,7 +828,7 @@ sub _restoreTopic {
                 $this->_copyFile( $file, $destDir, $mode, $timestamp );
                 return if( $this->_isError() );
             } elsif( -d $file ) {
-                # FIXME sub-dir restore
+                $this->_copyDirRecursively( "$file", $destDir, 0775, 0644, $timestamp );
             }
         }
     }
