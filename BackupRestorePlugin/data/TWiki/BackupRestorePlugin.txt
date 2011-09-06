@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1315286499" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1315286906" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -42,7 +42,9 @@ The %SYSTEMWEB%.TWikiUpgradeGuide describes how to manually upgrade TWiki. It is
    1. Install the !BackupRestorePlugin on your old TWiki installation.
    1. Create a backup using the TWiki Backup & Restore Console (linked from plugin topic).
       * This creates a backup of name =twiki-backup-%SERVERTIME{$year-$mo-$day-$hour-$min}%.zip= in the backup directory (default =/tmp=).
-   1. Transfer the backup zip file to the backup directory of the new TWiki installation.
+   1. Install the latest TWiki and additional plugins you need.
+      * Install the latest !BackupRestorePlugin.
+   1. Transfer the backup zip file to the backup directory of the new TWiki installation (not needed if on same server).
       * The TWiki Backup & Restore Console overview should show the backup of the old TWiki.
    1. Use the TWiki Backup & Restore Console to restore the backup to the new TWiki.
       * Check the "Overwrite existing pages" checkbox.
