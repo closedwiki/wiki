@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1315240665" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1315240978" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -93,7 +93,8 @@ This plugin starts a daemon (background process) when a backup is started. Statu
    * A web-based backup is currently not supported on a native Windows installation of TWiki, however, the command line utility can be used on Windows.
 
    * To-do:
-      * Restore log files if flag set.
+      * Option to backup engine (bin, lib, locale, templates, tools).
+      * Option to restore log files.
       * Unlock RCS files if restore from old TWiki.
       * Add incremental backup and restore feature.
 
