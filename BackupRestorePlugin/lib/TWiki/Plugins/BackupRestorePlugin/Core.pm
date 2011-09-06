@@ -375,7 +375,6 @@ ENDCHECK
     $text .= "| *Restore Action:* ||\n"
         . '| | <input type="submit" value="Restore from backup..." class="twikiButton" onClick="return confirm('
         . "'Are you sure you want to restore from $fileName?'" . ');" /> |' . "\n"
-        . "| (Restore is work in progress. Check TWiki:Plugins.BackupRestorePlugin for an updated plugin) ||\n"
         . '<input type="hidden" name="action" value="restore_backup" />'
         . '<input type="hidden" name="file" value="' . $fileName . '" />'
         . '</form>';
