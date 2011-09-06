@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1315240978" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1315243271" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -29,9 +29,29 @@ Once configured, visit the BackupRestoreConsole to:
    * Delete a backup.
    * Restore from a backup.
 
-__Screenshot:__ <br />
+__Screenshot of Backup & Restore Console, overview:__ <br />
 <sticky><div style="margin:10px 0; padding: 10px; border: 1px solid #cccccc; width: 673px">
 <img src="%ATTACHURLPATH%/backup-console-overview.png" alt="Backup Console, Overview" width="673" height="222" />
+</div></sticky>
+
+#UpgradeTWiki
+---++ How to Upgrade TWiki
+
+The %SYSTEMWEB%.TWikiUpgradeGuide describes how to manually upgrade TWiki. It is much easier to use the !BackupRestorePlugin to do a TWiki upgrade. Follow these steps:
+
+   1. Install the !BackupRestorePlugin on your old TWiki installation.
+   1. Create a backup using the TWiki Backup & Restore Console (linked from plugin topic).
+      * This creates a backup of name =twiki-backup-%SERVERTIME{$year-$mo-$day-$hour-$min}%.zip= in the backup directory (default =/tmp=).
+   1. Transfer the backup zip file to the backup directory of the new TWiki installation.
+      * The TWiki Backup & Restore Console overview should show the backup of the old TWiki.
+   1. Use the TWiki Backup & Restore Console to restore the backup to the new TWiki.
+      * Check the "Overwrite existing pages" checkbox.
+      * Check the "Upgrade restored webs with latest system pages" checkbox.
+      * Check the "Restore plugin work area" checkbox.
+
+__Screenshot of Backup & Restore Console, detail view of very old TWiki-01-Sep-2001 backup:__ <br />
+<sticky><div style="margin:10px 0; padding: 10px; border: 1px solid #cccccc; width: 595px">
+<img src="%ATTACHURLPATH%/backup-console-detail.png" alt="Backup Console, Detail" width="595" height="585" />
 </div></sticky>
 
 ---++ Command Line Utility and Cron
@@ -159,7 +179,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2011-09-05 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-09-05: | TWikibug:Item6795: Add restore from backup functionality; upgrade old system topics on restore of old TWiki |
+|  2011-09-05: | TWikibug:Item6795: Add restore from backup functionality; upgrade old system topics on restore of old TWiki; describe how to upgrade TWiki |
 |  2011-08-17: | TWikibug:Item6793: Avoid or work around newer APIs to make plugin run on old TWiki-2001-09-01 (Athens Release) for backup |
 |  2011-08-16: | TWikibug:Item6793: Add screenshot; add Config.spec configure file; proper detection of command line mode also for older TWiki versions; use TWiki::Func::registerTagHandler only if available so that plugin can run in older TWiki versions |
 |  2011-08-15: | TWikibug:Item6793: Better error handling; add magic number to download URL to restrict download of backups to TWiki admins only |
@@ -178,3 +198,4 @@ __Related Topics:__ BackupRestoreConsole, %SYSTEMWEB%.TWikiPreferences, %SYSTEMW
 %META:FILEATTACHMENT{name="backup-console-overview.png" attachment="backup-console-overview.png" attr="h" comment="" date="1313441638" path="backup-console-overview.png" size="62137" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="processing.gif" attachment="processing.gif" attr="h" comment="" date="1313443304" path="processing.gif" size="2537" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="processing-bar.gif" attachment="processing-bar.gif" attr="h" comment="" date="1313443304" path="processing-bar.gif" size="1754" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="backup-console-detail.png" attachment="backup-console-detail.png" attr="h" comment="" date="1315242047" path="backup-console-detail.png" size="100654" user="TWikiContributor" version="1"}%
