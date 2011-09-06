@@ -1,5 +1,6 @@
 data/TWiki/BackupRestorePlugin.txt 0644 Plugin doc page
 data/TWiki/BackupRestoreConsole.txt 0644 Plugin doc page
+pub/TWiki/BackupRestorePlugin/backup-console-detail.png 0644 Screenshot
 pub/TWiki/BackupRestorePlugin/backup-console-overview.png 0644 Screenshot
 pub/TWiki/BackupRestorePlugin/newtopic.gif 0644 Icon file
 pub/TWiki/BackupRestorePlugin/processing.gif 0644 Icon file
