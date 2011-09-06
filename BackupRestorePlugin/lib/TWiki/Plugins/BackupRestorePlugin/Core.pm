@@ -773,7 +773,7 @@ sub _restoreWeb {
 
     my $sourceDir = "$baseDir/data/$web";
     my $destDir   = $this->{Location}{DataDir} . "/$web";
-    $this->_makeDir( $destDir, 0755 ) unless( -e $destDir ); # FIXME recursive for sub-webs
+    $this->_makeDir( $destDir, 0755, $zipTimestamp ) unless( -e $destDir ); # FIXME recursive for sub-webs
     return if( $this->_isError() );
 
     foreach my $topic ( map{ s/\.txt$//; $_; } grep{ /\.txt$/ } _getDirContent( $sourceDir ) ) {
@@ -814,11 +814,11 @@ sub _restoreTopic {
     my $attachDir = "$baseDir/pub/$web/$topic";
     if( -e $attachDir ) {
         $destDir = $this->{Location}{PubDir} . "/$web";
-        $this->_makeDir( $destDir, 0755 ) unless( -e $destDir ); # FIXME recursive for sub-webs
+        $this->_makeDir( $destDir, 0755, $timestamp ) unless( -e $destDir ); # FIXME recursive for sub-webs
         return if( $this->_isError() );
         $destDir .= "/$topic";
         File::Path::rmtree( $destDir ) if( -e $destDir );
-        $this->_makeDir( $destDir, 0755 ) unless( -e $destDir );
+        $this->_makeDir( $destDir, 0755, $timestamp ) unless( -e $destDir );
         return if( $this->_isError() );
 
         foreach my $attachment ( _getDirContent( $attachDir ) ) {
@@ -1214,13 +1214,14 @@ sub _writeDebug {
 
 #==================================================================
 sub _makeDir {
-    my( $this, $dir, $mode ) = @_;
+    my( $this, $dir, $mode, $timestamp ) = @_;
 
     unless( mkdir( $dir ) ) {
         $this->_setError( "ERROR: Can't create $dir" );
         return 1;
     }
     chmod( $mode, $dir ) if( $mode );
+    utime( $timestamp, $timestamp, $dir ) if( $timestamp );
     return 0;
 }
 
@@ -1268,7 +1269,7 @@ sub _copyDirRecursively {
         return 1;
     } else {
         # create sub-dir
-        if( $this->_makeDir( $toDir, $dirMode ) ) {
+        if( $this->_makeDir( $toDir, $dirMode, $timestamp ) ) {
             return 1;
         }
     }
