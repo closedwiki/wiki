@@ -653,12 +653,8 @@ sub _createBackup {
     $dir .= "/work_areas";
     $this->_makeDir( $dir, 0755 ) unless( -e $dir );
     $dir .= "/BackupRestorePlugin";
+    File::Path::rmtree( $dir ) if( -e $dir);
     $this->_makeDir( $dir, 0755 ) unless( -e $dir );
-    foreach my $junk ( _getDirContent( $dir ) ) {
-        unless( unlink( "$dir/$junk" ) ) {
-            $this->_setError( "ERROR: Can't delete $dir/$junk - $!" );
-        }
-    }
     my $file = $this->{Location}{LocalLib};
     $this->_copyFile( $file, $dir ) if( $file && -e $file );
     $file = $this->{Location}{LocalSite};
