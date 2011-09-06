@@ -777,19 +777,36 @@ sub _restoreWeb {
 
     foreach my $topic ( map{ s/\.txt$//; $_; } grep{ /\.txt$/ } _getDirContent( $sourceDir ) ) {
         next if( -e "$destDir/$topic.txt" && !$overwrite );
-        $this->_restoreTopic( $web, $topic, $baseDir, $destDir, $zipTimestamp );
+        $this->_restoreTopic( $web, $topic, $baseDir, $web, $destDir, $zipTimestamp );
         return if( $this->_isError() );
     }
 
     if( $upgradeWeb ) {
-        # FIXME
+        # base dir is parent of data dir, source web is '_default'
+        my( $base, $dir ) = _splitTopDir( $this->{Location}{DataDir} );
+
+        # upgrade old web, overwriting existing topics if overwrite flag set
+        my @topics = ( 'WebAtom', 'WebChanges', 'WebIndex', 'WebRss', 'WebSearchAdvanced', 'WebSearch', 'WebTopicList' );
+        foreach my $topic ( @topics ) {
+            next if( -e "$destDir/$topic.txt" && !$overwrite );
+            $this->_restoreTopic( '_default', $topic, $base, $web, $destDir, $zipTimestamp );
+            return if( $this->_isError() );
+        }
+
+        # upgrade old web, create topics if not exist
+        @topics = ( 'WebCreateNewTopic', 'WebTopMenu' );
+        foreach my $topic ( @topics ) {
+            next if( -e "$destDir/$topic.txt" );
+            $this->_restoreTopic( '_default', $topic, $base, $web, $destDir, $zipTimestamp );
+            return if( $this->_isError() );
+        }
     }
 }
 
 #==================================================================
 sub _restoreTopic {
-    my( $this, $web, $topic, $baseDir, $destDir, $timestamp ) = @_;
-    $this->_writeDebug( "_restoreTopic( $web, $topic, $baseDir, $destDir )" ) if $this->{Debug};
+    my( $this, $web, $topic, $baseDir, $destWeb, $destDir, $timestamp ) = @_;
+    $this->_writeDebug( "_restoreTopic( $web, $topic, $baseDir, $destWeb, $destDir )" ) if $this->{Debug};
 
     # copy topic
     my $file = "$baseDir/data/$web/$topic.txt";
@@ -813,7 +830,7 @@ sub _restoreTopic {
     my $attachDir = "$baseDir/pub/$web/$topic";
     if( -e $attachDir ) {
         my $destDir   = $this->{Location}{PubDir};
-        foreach my $subWeb ( split( /[\/\\]+/, $web ) ) {
+        foreach my $subWeb ( split( /[\/\\]+/, $destWeb ) ) {
             $destDir .= "/$subWeb";
             $this->_makeDir( $destDir, 0755, $timestamp ) unless( -e $destDir ); 
             return if( $this->_isError() );
