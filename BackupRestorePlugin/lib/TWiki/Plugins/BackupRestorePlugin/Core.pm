@@ -757,7 +757,8 @@ sub _restoreFromBackup {
 
     # restore plugin work aera
     if( $restoreWorkArea ) {
-        # FIXME
+        my ( $base, $dir ) = _splitTopDir( $this->{Location}{WorkingDir} );
+        $this->_copyDirRecursively( "$tmpRestoreDir/working", $base, 0775, 0644, $zipTimestamp );
     }
 
     # cleanup temp area
