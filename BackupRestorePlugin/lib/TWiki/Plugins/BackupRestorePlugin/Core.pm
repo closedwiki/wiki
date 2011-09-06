@@ -1216,7 +1216,7 @@ sub _makeDir {
     my( $this, $dir, $mode ) = @_;
 
     unless( mkdir( $dir ) ) {
-        $this->_setError( "Error creating $dir" );
+        $this->_setError( "ERROR: Can't create $dir" );
         return 1;
     }
     chmod( $mode, $dir ) if( $mode );
@@ -1228,7 +1228,7 @@ sub _copyFile {
     my( $this, $fromFile, $toDir, $mode, $timestamp ) = @_;
 
     unless( File::Copy::copy( $fromFile, $toDir ) ) {
-        $this->_setError( "Error copying $fromFile to $toDir" );
+        $this->_setError( "ERROR: Can't copy $fromFile to $toDir" );
         return 1;
     }
     return 0 unless( $mode || $timestamp );
