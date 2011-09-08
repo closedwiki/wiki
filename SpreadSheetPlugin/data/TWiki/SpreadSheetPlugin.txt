@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1315398413" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1315399267" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -309,7 +309,7 @@ Conventions for Syntax:
    * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncINT
----+++ INT( formula ) -- evaluate formula and round down to nearest integer
+---+++ INT( formula ) -- evaluate formula and return integer truncated towards 0
    * Addition, substraction, multiplication, division and modulus of numbers are supported. Any nesting is permitted
    * Numbers may be decimal integers (=1234=), binary integers (=0b1110011=), octal integers (=01234=), hexadecimal integers (=0x1234=) or of exponential notation (=12.34e-56=)
    * If you expect a single decimal integer value with leading zeros, use ==$INT( $VALUE( number ) )==
