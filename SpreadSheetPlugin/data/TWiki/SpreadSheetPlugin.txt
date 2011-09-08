@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310275211" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1315398413" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -861,8 +861,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2001-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]<br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-07-09 |
+|  Plugin Version: | 2011-09-07 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-09-07: | TWikibug:Item6803: Fix for EVAL function bug with zeroes after decimal point |
 |  2011-07-09: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2011-04-25: | TWikibug:Item6690: Added $BITXOR(), $HEXDECODE(), $HEXENCODE(), $XOR() |
 |  2011-04-08: | TWikibug:Item6681: Added $WHILE() |
