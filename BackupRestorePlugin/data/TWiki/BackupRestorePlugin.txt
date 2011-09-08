@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1315286906" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1315396782" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -113,6 +113,7 @@ This plugin starts a daemon (background process) when a backup is started. Statu
 ---++ Limitations and To-Do
 
    * A web-based backup is currently not supported on a native Windows installation of TWiki, however, the command line utility can be used on Windows.
+   * Cancelling a backup or restore might leave some temporary files in the ={Plugins}{BackupRestorePlugin}{BackupDir}= directory.
 
    * To-do:
       * Option to backup engine (bin, lib, locale, templates, tools).
