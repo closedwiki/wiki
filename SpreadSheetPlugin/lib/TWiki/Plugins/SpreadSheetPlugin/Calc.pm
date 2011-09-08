@@ -1118,7 +1118,7 @@ sub _safeEvalPerl
     $theText =~ s/\%\s*[^\-\+\*\/0-9\.\(\)]+//go; # defuse %hash but keep modulus
     # keep only numbers and operators (shh... don't tell anyone, we support comparison operators)
     $theText =~ s/[^\!\<\=\>\-\+\*\/\%0-9e\.\(\)]*//go;
-    $theText =~ s/\b0+(?=[0-9])//go;  # remove leading 0s to defuse interpretation of numbers as octals
+    $theText =~ s/(^|[^\.])\b0+(?=[0-9])/$1/go;  # remove leading 0s to defuse interpretation of numbers as octals
     $theText =~ s/(^|[^0-9])e/$1/go;  # remove "e"-s unless in expression such as "123e-4"
     $theText =~ /(.*)/;
     $theText = $1;  # untainted variable
