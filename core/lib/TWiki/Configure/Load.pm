@@ -85,8 +85,8 @@ GOLLYGOSH
     # we need to default them. otherwise we get peppered with
     # 'uninitialised variable' alerts later.
 
-    foreach my $var qw( DataDir DefaultUrlHost PubUrlPath WorkingDir
-                        PubDir TemplateDir ScriptUrlPath LocalesDir ) {
+    foreach my $var ( 'DataDir', 'DefaultUrlHost', 'PubUrlPath', 'WorkingDir',
+                      'PubDir', 'TemplateDir', 'ScriptUrlPath', 'LocalesDir' ) {
         # We can't do this, because it prevents TWiki being run without
         # a LocalSite.cfg, which we don't want
         # die "$var must be defined in LocalSite.cfg"
