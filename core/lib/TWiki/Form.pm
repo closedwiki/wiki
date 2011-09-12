@@ -56,9 +56,10 @@ use Error qw( :try );
 # used as field names in forms.
 my %reservedFieldNames =
   map { $_ => 1 }
-  qw( action breaklock contenttype cover dontnotify editaction
-      forcenewrevision formtemplate onlynewtopic onlywikiname
-      originalrev skin templatetopic text topic topicparent user );
+    ( 'action', 'breaklock', 'contenttype', 'cover', 'dontnotify', 'editaction',
+      'forcenewrevision', 'formtemplate', 'onlynewtopic', 'onlywikiname',
+      'originalrev', 'skin', 'templatetopic', 'text', 'topic', 'topicparent', 'user'
+    );
 
 =pod
 
