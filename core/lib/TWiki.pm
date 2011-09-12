@@ -1581,7 +1581,10 @@ sub new {
     } else {
         $ENV{PATH} = TWiki::Sandbox::untaintUnchecked( $ENV{PATH} );
     }
-    delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
+    delete $ENV{IFS};
+    delete $ENV{CDPATH};
+    delete $ENV{ENV};
+    delete $ENV{BASH_ENV};
 
     my $url = $query->url();
     if( $url && $url =~ m{^([^:]*://[^/]*).*$} ) {
