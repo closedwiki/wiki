@@ -203,7 +203,7 @@ sub _findAttachments {
         if ($filesListedInMeta{$file}) {
             # Bring forward any missing yet wanted attributes
             #SMELL: this will over-write (empty) any meta data field not listed here :( 
-            foreach my $field qw(comment attr user version) {
+            foreach my $field ( 'comment', 'attr', 'user', 'version' ) {
               if ($filesListedInMeta{$file}{$field}) {
                 $filesListedInPub{$file}{$field} =
                 $filesListedInMeta{$file}{$field};
