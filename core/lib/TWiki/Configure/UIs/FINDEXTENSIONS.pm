@@ -34,7 +34,7 @@ new extensions. <b>If you made any changes, save them first!<b>
 HERE
     # Check that the extensions UI is loadable
     my $bad = 0;
-    foreach my $module qw(TWiki::Configure::UIs::EXTEND TWiki::Configure::UIs::FINDEXTENSIONS) {
+    foreach my $module ( 'TWiki::Configure::UIs::EXTEND', 'TWiki::Configure::UIs::FINDEXTENSIONS' ) {
         eval "require $module";
         if ($@) {
             $bad = 1;
