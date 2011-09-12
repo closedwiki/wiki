@@ -72,7 +72,7 @@ use vars qw ( %aliases %isArrayType );
    );
 
 %isArrayType =
-  map { $_ => 1 } qw( FILEATTACHMENT FIELD PREFERENCE );
+  map { $_ => 1 } ( 'FILEATTACHMENT', 'FIELD', 'PREFERENCE' );
 
 # $data is the indexed object
 # $field is the scalar being used to index the object
