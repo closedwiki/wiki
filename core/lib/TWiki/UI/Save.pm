@@ -466,7 +466,7 @@ WARN
         return;
     }
 
-    my $editaction = lc($query->param( 'editaction' )) || '';
+    my $editaction = lc($query->param( 'editaction' ) || '');
     my $edit = $query->param( 'edit' ) || 'edit';
     my $editparams = $query->param( 'editparams' ) || '';
 
