@@ -1087,7 +1087,7 @@ sub target_archive {
 
     $this->pushd( $this->{basedir} );
     my @fs;
-    foreach my $f qw(.tgz _installer .zip) {
+    foreach my $f ( '.tgz', '_installer', '.zip' ) {
         push( @fs, "$project$f" ) if ( -e "$project$f" );
     }
     eval "require Digest::MD5";
@@ -1110,7 +1110,7 @@ sub target_archive {
     $this->popd();
     $this->popd();
 
-    foreach my $f qw(.tgz .zip .txt _installer) {
+    foreach my $f ( '.tgz', '.zip', '.txt', '_installer' ) {
         print "$f in $this->{basedir}/$project$f\n";
     }
 }
@@ -1451,7 +1451,7 @@ END
     return unless $doup;
 
     # Upload the standard files
-    foreach my $ext qw(.zip .tgz _installer .md5) {
+    foreach my $ext ( '.zip', '.tgz', '_installer', '.md5' ) {
         my $name = $to . $ext;
         next if $uploaded{$name};
         $this->_uploadAttachment( $userAgent, $user, $pass, $to . $ext,
@@ -1952,8 +1952,8 @@ sub target_dependencies {
     eval 'use B::PerlReq';
     die "B::PerlReq is required for 'dependencies': $@" if $@;
 
-    foreach my $m
-      qw(strict vars diagnostics base bytes constant integer locale overload warnings Assert TWiki)
+    foreach my $m ( 'strict', 'vars', 'diagnostics', 'base', 'bytes', 'constant',
+                    'integer', 'locale', 'overload', 'warnings', 'Assert', 'TWiki' )
     {
         $this->{satisfied}{$m} = 1;
     }
