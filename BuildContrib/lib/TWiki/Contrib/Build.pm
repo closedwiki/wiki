@@ -1,6 +1,6 @@
 # Module for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004 C-Dot Consultants - All rights reserved
+# Copyright (C) 2004-2008 C-Dot Consultants - All rights reserved
 # Copyright (C) 2004-2011 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
