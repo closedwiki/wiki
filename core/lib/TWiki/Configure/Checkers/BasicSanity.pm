@@ -120,8 +120,8 @@ HERE
     # If we got this far without definitions for key variables, then
     # we need to default them. otherwise we get peppered with
     # 'uninitialised variable' alerts later.
-    foreach my $var qw( DataDir DefaultUrlHost PubUrlPath
-                        PubDir TemplateDir ScriptUrlPath LocalesDir ) {
+    foreach my $var ( 'DataDir', 'DefaultUrlHost', 'PubUrlPath',
+                      'PubDir', 'TemplateDir', 'ScriptUrlPath', 'LocalesDir' ) {
         # NOT SET tells the checker to try and guess the value later on
         $TWiki::cfg{$var} = 'NOT SET' unless defined $TWiki::cfg{$var};
     }
@@ -139,8 +139,10 @@ HERE
         }
     }
     $ENV{PATH} = $TWiki::cfg{SafeEnvPath};
-    delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
-
+    delete $ENV{IFS};
+    delete $ENV{CDPATH};
+    delete $ENV{ENV};
+    delete $ENV{BASH_ENV};
 
 if ($TWiki::cfg{'Password'} eq '' || !defined $TWiki::cfg{'Password'}) {
      $badLSC = 3;
