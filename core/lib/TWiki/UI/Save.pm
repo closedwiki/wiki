@@ -418,8 +418,8 @@ sub save {
     }
 
     my $saveaction = '';
-    foreach my $action qw( save checkpoint quietsave cancel preview
-                           addform replaceform delRev repRev ) {
+    foreach my $action ( 'save', 'checkpoint', 'quietsave', 'cancel', 'preview',
+                         'addform', 'replaceform', 'delRev', 'repRev' ) {
         if ($query->param('action_' . $action)) {
             $saveaction = $action;
             last;
