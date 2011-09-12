@@ -1127,7 +1127,7 @@ Generate string representation for debugging
 sub stringify {
     my $this = shift;
     my @reply;
-    foreach my $key qw(web topic attachment file rcsFile) {
+    foreach my $key ( 'web', 'topic', 'attachment', 'file', 'rcsFile' ) {
         if (defined $this->{$key}) {
             push(@reply, "$key=$this->{$key}");
         }
