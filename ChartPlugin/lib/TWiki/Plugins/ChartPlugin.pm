@@ -108,14 +108,14 @@ sub _init_defaults {
     return if $pluginInitialized;
     $pluginInitialized = 1;
     require Exporter;
-    foreach my $module qw(
+    foreach my $module ( qw(
 	GD
 	POSIX
 	Text::Wrap
         TWiki::Plugins::ChartPlugin::Chart
         TWiki::Plugins::ChartPlugin::Parameters
         TWiki::Plugins::ChartPlugin::Table
-	) {
+	) ) {
         eval "require $module";
 	if ($@) {
 	    $initError = "Required Perl module '$module' not found: $@";
@@ -416,8 +416,9 @@ sub _makeChart {
         my @subTypes = split(/[\s,]+/, $subType);
         # Check for valid subtypes
         my @unknownSubTypes;
+        my @validTypes = ( 'area', 'line', 'point', 'pline', 'scatter', 'bar' );
 	foreach my $subType (@subTypes) {
-	    my $ok = grep {$_ eq $subType} qw(area line point pline scatter bar);
+	    my $ok = grep {$_ eq $subType} @validTypes;
 	    push(@unknownSubTypes, $subType) if (! $ok);
 	}
         return $this->_make_error("unknown subtypes: " . join(", ", @unknownSubTypes)) if (@unknownSubTypes);
