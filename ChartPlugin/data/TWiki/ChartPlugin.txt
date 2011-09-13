@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1312328748" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1315887316" format="1.1" version="$Rev$"}%
 ---+!! Chart Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
@@ -286,8 +286,10 @@ If the required parameters are not defined, then an error message is returned or
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.TaitCyrus |
 |  Copyright: | &copy; 2002-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]  <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-08-02 (v%$VERSION%) |
+|  Plugin Version: | 2011-09-12 (v%$VERSION%) |
 |  Change History: | <!-- specify latest version first --> |
+|  2011-09-12: | TWikibug:Item6800: Fix for using qw(...) as parentheses, which is deprecated in Perl 5.14 -- TWiki:Main.PeterThoeny |
+|  2011-08-23: | TWikibug:Item6791: Added new ChartPlugin default setting CACHE that allows users to either allow topic page caching or not -- TWiki:Main.TaitCyrus |
 |  2011-08-02: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2011-06-02: | <ul><li> TWikibug:Item6740: Add new parameters =errmsg_nodata= and =errmsg_nodata2= providing the ability to specify a custom error message when there is no data to chart.</li><li> TWikibug:Item6742: Fixed =spark= data handing all inline data and no data from a table</li></ul> -- TWiki:Main.TaitCyrus |
 |  2011-06-01: | TWikibug:Item6741: Minor doc fix -- TWiki:Main.EnriqueCadalso |
