@@ -616,8 +616,8 @@ sub beforeSaveHandler {
     my $query = TWiki::Func::getCgiQuery();
     my $changingState = 1;
     my %stateChangeInfo;
-    foreach my $p qw(WORKFLOWPENDINGACTION WORKFLOWCURRENTSTATE
-                     WORKFLOWPENDINGSTATE WORKFLOWWORKFLOW) {
+    foreach my $p ( qw(WORKFLOWPENDINGACTION WORKFLOWCURRENTSTATE
+                     WORKFLOWPENDINGSTATE WORKFLOWWORKFLOW) ) {
         $stateChangeInfo{$p} = $query->param($p);
         if (defined $stateChangeInfo{$p}) {
             $query->delete($p);
