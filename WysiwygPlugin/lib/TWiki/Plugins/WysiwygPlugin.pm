@@ -140,7 +140,7 @@ sub beforeEditHandler {
 
             # redirect
             my $query = TWiki::Func::getCgiQuery();
-            foreach my $p qw( skin cover ) {
+            foreach my $p ( qw( skin cover ) ) {
                 my $arg = $query->param( $p );
                 if( $arg && $arg =~ s/\b$skin\b// ) {
                     if( $arg =~ /^[\s,]*$/ ) {
