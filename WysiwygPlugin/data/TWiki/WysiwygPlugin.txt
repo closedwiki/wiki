@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310337269" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1315889428" format="1.1" version="$Rev$"}%
 ---+!! Wysiwyg Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -186,8 +186,9 @@ Many thanks to the following sponsors for supporting this work:
 |  Plugin Author: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
 |  Copyright | &copy; 2005 ILOG http://www.ilog.fr, %BR% &copy; 2007 [[http://www.twiki.net/][Twiki, Inc.]],%BR% &copy; 2005-2011 TWiki:TWiki.TWikiContributor |
 |  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Plugin Version: | 2011-07-10 %$VERSION% |
+|  Plugin Version: | 2011-09-12 %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-09-12: | TWikibug:Item6800: Fix for using qw(...) as parentheses, which is deprecated in Perl 5.14 -- TWiki:Main.PaulMerchantJr |
 |  2011-07-10: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2010-05-17: | TWikibug:Item6433 - more doc fixes; replacing TWIKIWEB with SYSTEMWEB |
 |  2010-04-24: | TWikibug:Item6433 - doc improvements, prepare for TWiki 5.0 release |
