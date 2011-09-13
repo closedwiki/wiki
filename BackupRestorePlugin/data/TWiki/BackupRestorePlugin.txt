@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1315396782" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1315934026" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -17,6 +17,7 @@ This is a solution to backup, restore and upgrade TWiki sites. It can be used vi
 
 This plugin backs up page data, attachment data, the plugin workspace area and the TWiki configuration. However, it __does not__ backup the TWiki engine, additional plugins and skins you might have installed. It is recommended to do a manual backup of the whole twiki directory after installing plugins and skins.
 
+#WebBased
 ---++ Web-based Operation
 
 The backup and restore functionality is restricted to members of the %USERSWEB%.TWikiAdminGroup.
@@ -56,16 +57,19 @@ __Screenshot of Backup & Restore Console, detail view of very old TWiki-01-Sep-2
 <img src="%ATTACHURLPATH%/backup-console-detail.png" alt="Backup Console, Detail" width="595" height="585" />
 </div></sticky>
 
+#CommandLine
 ---++ Command Line Utility and Cron
 
-The =bin/backuprestore= utility can be used to create a backup (scheduled or manually), to copy a backup and to check on the status of the backup process.
+The =backuprestore= utility can be used to create a backup (scheduled or manually), to copy a backup and to check on the status of the backup process.
 
 | *Command* | *Description* |
-| =twiki/bin/backuprestore status= | Show backup status. Returns =backup_status: 1= if web-based backup is in progress. |
-| =twiki/bin/backuprestore create_backup= | Create a backup. This is done without a background daemon process, e.g. the script returns when the backup is done. |
-| =twiki/bin/backuprestore download_backup &lt;name.zip&gt;= | Dump a backup file to STDOUT. If called as CGI script, download a backup file. |
+| =./backuprestore status= | Show backup status. Returns =backup_status: 1= if web-based backup is in progress. |
+| =./backuprestore create_backup= | Create a backup. This is done without a background daemon process, e.g. the script returns when the backup is done. |
+| =./backuprestore download_backup &lt;name.zip&gt;= | Dump a backup file to STDOUT. If called as CGI script, download a backup file. |
 
-__Important:__ The utility *must* run as the same user as the CGI scripts executed by the webserver. This can be =apache=, =nobody=, =www-data=, =wwwrun= or the like, and depends on the webserver configuration.
+__%X% Important Notes:__
+   * The utility *must* run as the same user as the CGI scripts executed by the webserver. This can be =apache=, =nobody=, =www-data=, =wwwrun= or the like, and depends on the webserver configuration.
+   * Change to the =twiki/bin= directory before executing the =backuprestore= utility.
 
 Scheduled backups can be done with a [[http://en.wikipedia.org/wiki/Cron][cron job]]. Example crontab entry that creates a backup at 10 minutes past midnight every Sunday:
 <verbatim>
@@ -74,6 +78,7 @@ Scheduled backups can be done with a [[http://en.wikipedia.org/wiki/Cron][cron j
 
 Make sure the plugin is [[#PluginInstallation][configured properly]] before creating backups. The backup destination can be local or remote. If remote, the remote server needs to be mounted on the TWiki server via NFS or the like.
 
+#SpecifiCation
 ---++ Specification
 
    * Configuration:
@@ -98,6 +103,7 @@ Make sure the plugin is [[#PluginInstallation][configured properly]] before crea
       * =working/BackupRestorePlugin/version-long-TWiki-5.1.0.txt= - file with TWiki version in filename
       * =working/BackupRestorePlugin/version-short-5.1.txt= - file with TWiki short-version in filename, name =version-short-&lt;major&gt;.&lt;minor&gt;.txt=
 
+#SyntaxRules
 ---++ Syntax Rules
 
 This section is only relevant to plugin developers. This plugin handles a =%<nop>BACKUPRESTORE{"..."}%= variable to perform all web-based operations. The variable is used in the BackupRestoreConsole page.
@@ -110,6 +116,7 @@ This section is only relevant to plugin developers. This plugin handles a =%<nop
 
 This plugin starts a daemon (background process) when a backup is started. Status is checked via Ajax calls. Once the new backup is finished it shows up in the backup table.
 
+#LimitationsAndToDo
 ---++ Limitations and To-Do
 
    * A web-based backup is currently not supported on a native Windows installation of TWiki, however, the command line utility can be used on Windows.
@@ -124,11 +131,12 @@ This plugin starts a daemon (background process) when a backup is started. Statu
       * Unlock RCS files if restoring from old TWiki.
       * Add incremental backup and restore feature.
 
+#LicenseAndBug
 ---++ License and Bug Reporting
 
-This plugin is distributed under GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
-
 This plugin has been reasonably tested. If you find any issues please file a bug report at TWikibug:BackupRestorePlugin.
+
+This plugin is distributed under GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
 
 #PluginInstallation
 ---++ Plugin Installation &amp; Configuration
@@ -175,6 +183,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * If your TWiki is older than TWiki-4.2, create a =working= directory in the =twiki= root (same level as =twiki/lib=), and set ownership to the webserver user.
       * Test if the installation was successful: See BackupRestoreConsole.
 
+#PluginInfo
 ---++ Plugin Info
 
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
@@ -183,8 +192,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny <br /> &copy; 2011 TWiki:TWiki.TWikiContributor <br /> &copy; 2004, 2005 Simon Flack (for CPAN:IO::CaptureOutput) <br /> &copy; 2007, 2008 David Golden (for CPAN:IO::CaptureOutput) <br /> &copy; 1997-2011 by Earl Hood and Detlef Pilzecker (for CPAN:Proc::Daemon) |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-09-05 |
+|  Plugin Version: | 2011-09-13 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-09-13: | TWikibug:Item6796: Improved docs on command line use |
 |  2011-09-05: | TWikibug:Item6795: Add restore from backup functionality; upgrade old system topics on restore of old TWiki; describe how to upgrade TWiki |
 |  2011-08-17: | TWikibug:Item6793: Avoid or work around newer APIs to make plugin run on old TWiki-2001-09-01 (Athens Release) for backup |
 |  2011-08-16: | TWikibug:Item6793: Add screenshot; add Config.spec configure file; proper detection of command line mode also for older TWiki versions; use TWiki::Func::registerTagHandler only if available so that plugin can run in older TWiki versions |
