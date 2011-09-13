@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1283592904" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1315888312" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -220,10 +220,11 @@ __Note:__ For strict access control, the plugin should know who is looking at th
 ---++ Plugin Info
 
 |  Authors: | TWiki:Main.ThomasHartkens, TWiki:Main.ThomasWeigert, TWiki:Main.CrawfordCurrie |
-|  Copyright: | &copy; 2005 TWiki:Main.ThomasHartkens %BR% &copy; 2005 TWiki:Main.ThomasWeigert %BR% &copy; 2008-2010 TWiki:Main.CrawfordCurrie %BR% &copy; 2005-2010, TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2005 TWiki:Main.ThomasHartkens %BR% &copy; 2005 TWiki:Main.ThomasWeigert %BR% &copy; 2008-2010 TWiki:Main.CrawfordCurrie %BR% &copy; 2005-2011, TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-09-12: | TWikibug:Item6800: Fix for using qw(...) as parentheses, which is deprecated in Perl 5.14 -- TWiki:Main.PaulMerchantJr |
 |  2010-09-04: | TWikibug:Item6577: Major import of plugin improvements; doc enhancements |
 |  25 Aug 2010 | F8908: fix obscure error that caused apparently inexplicable crashes; hint: _never_ use $_ as in iterator control variable in your perl code. |
 |  15 Jun 2010 | F9142: make the access controls checks more thorough |
