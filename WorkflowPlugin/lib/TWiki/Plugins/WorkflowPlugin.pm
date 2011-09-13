@@ -3,7 +3,7 @@
 # Copyright (C) 2005 Thomas Hartkens <thomas@hartkens.de>
 # Copyright (C) 2005 Thomas Weigert <thomas.weigert@motorola.com>
 # Copyright (C) 2008-2010 Crawford Currie http://c-dot.co.uk
-# Copyright (C) 2005-2010 TWiki:TWiki.TWikiContributor
+# Copyright (C) 2005-2011 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -549,8 +549,8 @@ sub beforeEditHandler {
     # check in this case)
     my $changingState = 1;
     my $query = TWiki::Func::getCgiQuery();
-    foreach my $p qw(WORKFLOWPENDINGACTION WORKFLOWCURRENTSTATE
-                     WORKFLOWPENDINGSTATE WORKFLOWWORKFLOW) {
+    foreach my $p ( qw(WORKFLOWPENDINGACTION WORKFLOWCURRENTSTATE
+                     WORKFLOWPENDINGSTATE WORKFLOWWORKFLOW) ) {
         if (!defined $query->param($p)) {
             # All params must be present to change state
             $changingState = 0;
