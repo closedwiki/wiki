@@ -1,14 +1,20 @@
-%META:TOPICINFO{author="TWikiContributor" date="1311289320" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1315964085" format="1.1" version="$Rev$"}%
 ---+ Web Publish
 
-Topics can be re-published without an edit/save cycle. Useful after a skin change.
+%T% Topics can be re-published without an edit/save cycle. Useful after a skin change.
 
 <form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">
 Publish topic:
 <select name="ptopic">
 <option>%URLPARAM{ "ptopic" }%</option>
 <option>all</option>
-%TOPICLIST{"<option>$name</option>"}%
+%SEARCH{
+ ".*"
+ type="regex"
+ scope="topic"
+ excludetopic="%PUBLISHWEBPLUGIN_EXCLUDETOPIC%"
+ format="<option>$topic</option>"
+}%
 </select>
 <input type="hidden" name="action" value="publish" />
 <input type="submit" class="twikiSubmit" value="Publish" />
@@ -17,4 +23,4 @@ Publish topic:
 
 %PUBLISHWEB{ "%URLPARAM{ "action" }%" topic="%URLPARAM{ "ptopic" }%" }%
 
-__Related topic:__ %SYSTEMWEB%.PublishWebPlugin
+__Related:__ [[%SYSTEMWEB%.PublishWebPlugin][PublishWebPlugin]]
