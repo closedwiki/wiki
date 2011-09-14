@@ -143,7 +143,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  2011-07-23: | TWikibug:Item6773: Move config settings to =LocalSite.cfg=; support multiple skins; support template path outside TWiki file path; add view.website.tmpl as a publish skin for demo; possible to publish into sub-directory of html doc root indicated by {PublishUrlPath} setting; change global package variables from "use vars" to "our"; remove URL parameters in links of published page to make TOC and other TWiki internal links work |
 |  2006-02-15: | Added =%<nop>PUBLISHWEB{"publish" topic="Name"}%= |
 |  2006-02-13: | Initial version |
-|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
