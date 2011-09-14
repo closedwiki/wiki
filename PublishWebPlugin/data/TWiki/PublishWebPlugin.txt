@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1311490379" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1315964076" format="1.1" version="$Rev$"}%
 ---+!! Publish Web Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -69,7 +69,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
       * __Note:__ It is also possible to specify a publish skin on a per page basis. Define a [[%SYSTEMWEB%.TWikiForms][TWiki Form]] with a form field called !PublishSkin. It can be of any type, but a select dropdown box is probably most convenient.
 
    * Exclude topics from publishing:
-      * Set EXCLUDETOPIC = WebPublish, WebAtom, WebChanges, WebCreateNewTopic, WebHome, WebIndex, WebLeftBar, WebNotify, WebPreferences, WebRss, WebSearchAdvanced, WebSearch, WebStatistics, WebTopicList, WebTopMenu, WebTopicCreator, WebTopicEditTemplate
+      * Set EXCLUDETOPIC = WebAtom, WebChanges, WebCreateNewTopic, WebHome, WebIndex, WebLeftBar, WebNotify, WebPublish, WebPreferences, WebRss, WebSearchAdvanced, WebSearch, WebStatistics, WebTopicList, WebTopMenu, WebTopicCreator, WebTopicEditTemplate
 
    * Home label, used in =%<nop>PUBLISHBREADCRUMB%=:
       * Set HOMELABEL = Home
@@ -108,14 +108,15 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
          * Change the permission of directories indicated by ={PublishPath}= and ={AttachPath}= to be writable by the cgi user (such as user =nobody= on !RedHat Linux)
       * Create a new TWiki web for website publishing:
          * Create a new =Website= web (name indicated by the =PUBLISHWEBNAME= Plugin setting)
-         * In !WebPreferences of that web, set the =NOAUTOLINK= setting to =on=
-         * For convenience, add these links to the WebLeftBar:
-            * =*Publishing*=
-            * =[<nop>[Index][Home page topic]]=
-            * =[<nop>[http://%<nop>HTTP_HOST%/index.html][/index.html]]=
-            * =[<nop>[http://%<nop>HTTP_HOST%%<nop>PUBLISHWEB{topicurl}%][%<nop>PUBLISHWEB{topicurl}%]]=
-            * =[<nop>[%<nop>SCRIPTURL{view}%/%<nop>WEB%/WebPublish?action=publish;ptopic=%<nop>BASETOPIC%][Re-publish this topic]]=
-            * =[<nop>[%<nop>SYSTEMWEB%.PublishWebPlugin][PublishWebPlugin]]=
+         * In !Website.WebPreferences of that web, set the =NOAUTOLINK= setting to =on=
+         * For convenience, add these links to !Website.WebTopMenu (or !Website.WebLeftBar if you use the PatternSkin):<verbatim>
+   * [[%BASEWEB%.WebHome][Publishing %ICON{menu-down}%]]
+      * [[%BASEWEB%.Index][Home page topic]]
+      * <a href="%PUBLISHWEB{"publishurlpath"}%/index.html">index.html</a>
+      * <a href="%PUBLISHWEB{"publishurlpath"}%/%PUBLISHWEB{topicurl}%">%PUBLISHWEB{topicurl}%</a>
+      * [[%SCRIPTURL{view}%/%BASEWEB%/WebPublish?action=publish;ptopic=%BASETOPIC%][Re-publish this topic]]
+      * [[%SYSTEMWEB%.PublishWebPlugin][PublishWebPlugin]]
+      </verbatim>
          * Create a =Sandbox_page= topic in that web
          * This should generate a =sandbox_page.html= page on topic save
          * Create =Index= topic and other topics
@@ -136,8 +137,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2006-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-07-21 |
+|  Plugin Version: | 2011-09-13 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-07-23: | TWikibug:Item6808: Fix for incorrect BASETOPIC used when topics are re-published; use registerTagHandler for PUBLISHWEB variable |
 |  2011-07-23: | TWikibug:Item6773: Move config settings to =LocalSite.cfg=; support multiple skins; support template path outside TWiki file path; add view.website.tmpl as a publish skin for demo; possible to publish into sub-directory of html doc root indicated by {PublishUrlPath} setting; change global package variables from "use vars" to "our"; remove URL parameters in links of published page to make TOC and other TWiki internal links work |
 |  2006-02-15: | Added =%<nop>PUBLISHWEB{"publish" topic="Name"}%= |
 |  2006-02-13: | Initial version |
