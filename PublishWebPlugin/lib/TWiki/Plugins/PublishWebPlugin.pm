@@ -68,9 +68,10 @@ sub initPlugin
         return 0;
     }
 
+    TWiki::Func::registerTagHandler( 'PUBLISHWEB', \&_handlePublishWeb );
+
     # Get plugin debug flag
     $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
-    #$debug=1;
 
     writeDebug( "initPlugin( $web.$topic ) is OK" );
     $initialized = 0;
@@ -78,6 +79,7 @@ sub initPlugin
     return 1;
 }
 
+# =========================
 sub initialize
 {
     return if( $initialized );
@@ -107,7 +109,6 @@ sub commonTagsHandler
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
     writeDebug( "commonTagsHandler( $_[2].$_[1] )" );
-    $_[0] =~ s/%PUBLISHWEB{(.*?)}%/&handlePublish($1)/ge;
     $_[0] =~ s/%(START|STOP)PUBLISH%[\n\r]*//go;
 }
 
@@ -127,7 +128,7 @@ sub afterSaveHandler
 # =========================
 sub publishTopic
 {
-    my( $theWeb, $theTopic, $text ) = @_;
+    my( $theWeb, $theTopic, $text, $session ) = @_;
 
     writeDebug( "publishTopic( $theWeb, $theTopic )" );
     return unless( $theWeb eq $publishWeb );
@@ -165,15 +166,36 @@ sub publishTopic
     $tmpl =~ s/%META\{.*?\}%[\n\r]*//gs;
     $tmpl =~ s/[\n\r]+$//os;
 
-    my $saveWeb   = $web;    $web   = $theWeb;
-    my $saveTopic = $topic;  $topic = $theTopic;
+    # merge template and page text
     $tmpl =~ s/%TEXT%/$text/;
-    $tmpl = TWiki::Func::expandCommonVariables( $tmpl, $topic, $web );
+
+    # temporarily trick TWiki to take current topic as base topic, needed
+    # to properly expand %BASETOPIC% if topic is republished in WebPublish
+    my( $saveWeb, $saveBaseWeb, $saveTopic, $saveBaseTopic );
+    if( $session ) {
+        $saveWeb       = $session->{SESSION_TAGS}{WEB};
+        $saveBaseWeb   = $session->{SESSION_TAGS}{BASEWEB};
+        $saveTopic     = $session->{SESSION_TAGS}{TOPIC};
+        $saveBaseTopic = $session->{SESSION_TAGS}{BASETOPIC};
+        $session->{SESSION_TAGS}{WEB}       = $theWeb;
+        $session->{SESSION_TAGS}{BASEWEB}   = $theWeb;
+        $session->{SESSION_TAGS}{TOPIC}     = $theTopic;
+        $session->{SESSION_TAGS}{BASETOPIC} = $theTopic;
+    }
+
+    $tmpl = TWiki::Func::expandCommonVariables( $tmpl, $theTopic, $theWeb );
     ## FIXME my $wikiWordRegex = TWiki::Func::getRegularExpression( "wikiWordRegex" );
     $tmpl =~ s/(^|[\(\s])([A-Z][A-Za-z0-9]*)\.([A-Z]+[a-z]+[A-Za-z0-9])/$1<nop>$3/go;
     $tmpl =~ s/\[\[(.*?)\]\[(.*?)\]\]/&handleLink($1,$2)/geo;
     $tmpl =~ s/\[\[(.*?)\]\]/&handleLink($1,$1)/geo;
-    $tmpl = TWiki::Func::renderText( $tmpl, $web );
+    $tmpl = TWiki::Func::renderText( $tmpl, $theWeb );
+
+    if( $session ) {
+        $session->{SESSION_TAGS}{WEB}       = $saveWeb;
+        $session->{SESSION_TAGS}{BASEWEB}   = $saveBaseWeb;
+        $session->{SESSION_TAGS}{TOPIC}     = $saveTopic;
+        $session->{SESSION_TAGS}{BASETOPIC} = $saveBaseTopic;
+    }
 
     # fix links to attachments
     my $pubDir = TWiki::Func::getPubDir();
@@ -185,13 +207,11 @@ sub publishTopic
     # remove URL parameters to make TOC and other TWiki internal links work
     $tmpl =~ s/(<a href=[\"\'][A-Za-z0-9_\-\/]*)\?[^\#\"\']*/$1/gos;
 
-    my $name = buildName( $topic, 'file' );
+    my $name = buildName( $theTopic, 'file' );
     writeDebug( "publishTopic, saving file $name using $skin skin" );
     TWiki::Func::saveFile( $name, $tmpl );
 
-    $web   = $saveWeb;
-    $topic = $saveTopic;
-    return $topic;
+    return $theTopic;
 }
 
 # =========================
@@ -227,15 +247,15 @@ sub handleLink
 }
 
 # =========================
-sub handlePublish
+sub _handlePublishWeb
 {
-    my ( $attr ) = @_;
-    my $action =    TWiki::Func::extractNameValuePair( $attr );
-    my $topicName = TWiki::Func::extractNameValuePair( $attr, "topic" ) || $topic;
+    my( $session, $params ) = @_;
+
+    my $action =    $params->{_DEFAULT};
+    my $topicName = $params->{topic} || $topic;
     my $text = '';
     initialize();
     if( $action eq "breadcrumb" ) {
-        $text = '';
         if( $topicName ne "Index" ) {
             $text .= "[[Index][$homeLabel]]";
             foreach( getParents( $web, $topicName ) ) {
@@ -253,12 +273,12 @@ sub handlePublish
     } elsif( $action eq "publishurlpath" ) {
         $text =  buildName( $topicName, 'publishurlpath' );
     } elsif( $action eq "publish" ) {
-        $topicName = TWiki::Func::extractNameValuePair( $attr, "topic" ); # again, without || $topic
+        $topicName = $params->{topic} || ''; # again, without || $topic
         if( $topicName eq "all" ) {
             my @topics = ();
             foreach( TWiki::Func::getTopicList( $publishWeb ) ) {
                 $topicName = $_;
-                if( publishTopic( $publishWeb, $topicName ) ) {
+                if( publishTopic( $publishWeb, $topicName, undef, $session ) ) {
                     push( @topics, "[[$publishWeb.$topicName]]" );
                 }
             }
@@ -266,7 +286,7 @@ sub handlePublish
             $text = "PUBLISHWEB: Published topics $done";
         } elsif( $topicName ) {
             if( TWiki::Func::topicExists( $publishWeb, $topicName ) ) {
-                if( publishTopic( $publishWeb, $topicName ) ) {
+                if( publishTopic( $publishWeb, $topicName, undef, $session ) ) {
                     $text = "PUBLISHWEB: Published topic [[$publishWeb.$topicName]]";
                 } else {
                     $text = "PUBLISHWEB error: Topic [[$publishWeb.$topicName]] not published";
