@@ -63,7 +63,7 @@ sub initPlugin
     ( $topic, $web ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.024 ) {
+    if( $TWiki::Plugins::VERSION < 1.1 ) {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
