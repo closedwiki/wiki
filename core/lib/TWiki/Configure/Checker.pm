@@ -236,7 +236,7 @@ sub checkRE {
     my $str;
     eval '$str = $TWiki::cfg'.$keys;
     return '' unless defined $str;
-    eval "qr/$str/";
+    eval "'x' =~ \$str";
     if ($@) {
         return $this->ERROR(<<MESS);
 Invalid regular expression: $@ <p />
