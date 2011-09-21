@@ -1490,6 +1490,8 @@ sub _saveSettings {
     my $settings = $query->param( 'text' );
     my $originalrev = $query->param( 'originalrev' );
 
+    TWiki::UI::checkAccess( $session, $wev, $topic, 'CHANGE', $session->{user} );
+
     $newMeta->remove( 'PREFERENCE' );  # delete previous settings
     # Note: $TWiki::regex{setVarRegex} cannot be used as it requires use in code
     # that parses multiline settings line by line.
