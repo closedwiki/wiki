@@ -56,13 +56,9 @@ sub load {
 sub prompt {
     my( $this, $id, $opts, $value ) = @_;
 
-    my $size = '55%';
+    my $size = '55';
     if( $opts =~ /\b(\d+)\b/ ) {
         $size = $1;
-        # These numbers are somewhat arbitrary..
-        if( $size > 25 ) {
-            $size = '55%';
-        }
     }
     return CGI::textfield( -name => $id, -size=>$size, -default=>$value );
 }
