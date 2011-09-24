@@ -602,6 +602,12 @@ WARN
         $store->clearLease( $web, $topic );
     }
 
+    if( $session->{topicName} ne $topic ) {
+        # TWikibug:Item6813: update $topic because it has changed in an plugin afterSaveHandler
+        $topic = $session->{topicName};
+        $redirecturl =~ s/([\/\\])[^\/\\]+([?#]|$)/$1$topic$2/; # replace topic
+    }
+
     if( $merged ) {
         throw TWiki::OopsException(
             'attention',
