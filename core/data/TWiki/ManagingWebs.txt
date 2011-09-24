@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1304670871" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1316842390" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Managing Webs
 
@@ -8,7 +8,14 @@ _Adding, renaming and deleting webs are all web-based operations._
 
 ---++ Overview
 
-A TWikiSite is divided into webs; each one represents one subject, one area of collaboration. Administrators can add/rename/delete webs.
+A TWikiSite is divided into webs; each one represents one workspace, one area of collaboration. Each web is a container for topics. Each topic is a container for page content and attachments. Administrators can add/rename/delete webs.
+
+#NamespaceAndURL
+---++ Namespace and URL
+
+The name of the web and topic is represented in the page URL. For example, =http://twiki.example.com/do/view/Sandbox/WebNotify= tells us that we __view__ topic __WebNotify__ located in the __Sandbox__ web.
+
+%T% __Tip:__ The URL of a web's homepage ends in =/%HOMETOPIC%= by default. The name of the homepage topic can safely be omitted to make for shorter and more legible links. For example, =http://twiki.example.com/do/view/Sandbox= links to the homepage of the Sandbox web.
 
 #WebTemplate
 ---++ Choose Web Template
