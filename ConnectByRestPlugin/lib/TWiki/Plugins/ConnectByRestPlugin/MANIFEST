@@ -1,0 +1,4 @@
+# Release manifest for ConnectByRestPlugin
+data/TWiki/ConnectByRestPlugin.txt 0644 Documentation
+lib/TWiki/Plugins/ConnectByRestPlugin.pm 0644 Perl module
+
