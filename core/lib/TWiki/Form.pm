@@ -541,11 +541,13 @@ sub renderForDisplay {
     my $text = $templates->expandTemplate( 'FORM:display:header' );
 
     my $rowTemplate = $templates->expandTemplate( 'FORM:display:row' );
+    my $fieldFound = 0;
     foreach my $fieldDef ( @{$this->{fields}} ) {
         my $fm = $meta->get( 'FIELD', $fieldDef->{name} );
         next unless $fm;
         my $fa = $fm->{attributes} || '';
         unless ( $fa =~ /H/ ) {
+            $fieldFound = 1;
             my $row = $rowTemplate;
              # Legacy; was %A_TITLE% before it was $title
             $row =~ s/%A_TITLE%/\$title/g;
@@ -553,6 +555,7 @@ sub renderForDisplay {
             $text .= $fieldDef->renderForDisplay( $row, $fm->{value} );
         }
     }
+    return '' unless( $fieldFound );
     $text .= $templates->expandTemplate( 'FORM:display:footer' );
     $text =~ s/%A_TITLE%/$this->{web}.$this->{topic}][$this->{topic}/g;
     return $text;
