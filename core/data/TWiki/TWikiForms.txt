@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1291358903" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1317083429" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Forms
 
@@ -157,7 +157,9 @@ The =Name=, =Type= and =Size= columns are required. Other columns are optional. 
 
 *Attributes column:* ==Attributes== specifies special attributes for the field. Multiple attributes can be entered, separated by spaces.
 
-   * An attribute =H= indicates that this field should not be shown in view mode. However, the field is available for editing and storing information.
+   * An attribute =H= indicates that this field is hidden, e.g. not shown in view mode. However, the field is available for editing and storing information.
+     %BR% %T% __Tip:__ The TWiki form header is suppressed in view mode if all fields of the form are hidden. For better usability it is good to hide the whole form if the display and interaction of all form fields is done externally. For example, the display and modification of form field values can be done in a header topic that is included in each page.
+
    * An attribute =M= indicates that this field is mandatory. The topic cannot be saved unless a value is provided for this field. If the field is found empty during topic save, an error is raised and the user is redirected to an =oops= page. Mandatory fields are indicated by an asterisks next to the field name.
 
 For example, a simple form just supporting entry of a name and a date would look as follows:
