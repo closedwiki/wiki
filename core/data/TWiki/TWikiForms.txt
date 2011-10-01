@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1317083429" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1317499718" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
----+ TWiki Forms
+---+ TWiki Forms - Foundation of TWiki Applications
 
 _Add structure to content with forms attached to twiki topics. TWiki forms (with form fields) and formatted search are the base for building database applications._
 
@@ -8,7 +8,7 @@ _Add structure to content with forms attached to twiki topics. TWiki forms (with
 
 ---++ Overview
 
-By adding form-based input to freeform content, you can structure topics with unlimited, easily searchable categories. A form is enabled for a web and can be added to a topic. The form data is shown in tabular format when the topic is viewed, and can be changed in edit mode using edit fields, radio buttons, check boxes and list boxes. Many different form types can be defined in a web, though a topic can only have one form attached to it at a time.
+By adding form-based input to free form content, you can structure topics with unlimited, easily searchable categories. A form is enabled for a web and can be added to a topic. The form data is shown in tabular format when the topic is viewed, and can be changed in edit mode using edit fields, radio buttons, check boxes and list boxes. Many different form types can be defined in a web, though a topic can only have one form attached to it at a time.
 
 Typical steps to build an application based on TWiki forms:
 
@@ -17,6 +17,8 @@ Typical steps to build an application based on TWiki forms:
    1. Add the form to a [[TWikiTemplates#Template_Topics][template topic]]
    1. Build an HTML form to create new topics based on that template topic
    1. Build a FormattedSearch to list topics that share the same form
+
+%T% __Tip:__ The blog [[TWiki:Blog.BlogEntry201009x1][How to Create a TWiki Application]] on TWiki.org is a good tutorial to get started with TWiki forms based applications.
 
 ---++ Defining a Form
 
