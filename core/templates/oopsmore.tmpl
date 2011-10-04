@@ -9,11 +9,14 @@
 %TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"canceltopicaction"}%%TMPL:END%
 
 
-
 %TMPL:DEF{"settings"}%---++ %MAKETEXT{"Edit topic preference settings"}%
    * %MAKETEXT{"<a href='[_1]' rel='nofollow'>Edit settings</a> for this topic" args="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%?action=editSettings"}%
 %TMPL:END%
 
+
+%TMPL:DEF{"setform"}%---++ %MAKETEXT{"Add or replace form"}%
+   * %MAKETEXT{"<a href='[_1]' rel='nofollow'>Add or replace form on this topic...</a>" args="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%?action_addform=1"}%
+%TMPL:END%
 
 
 %TMPL:DEF{"delete"}%---++ %MAKETEXT{"Delete topic"}%
@@ -119,6 +122,7 @@ table.twikiDiffOptions img {
 %TMPL:DEF{"message"}%
 %TMPL:P{"revision"}%
 %TMPL:P{"settings"}%
+%TMPL:P{"setform"}%
 %TMPL:P{"delete"}%
 %TMPL:P{"rename"}%
 %TMPL:P{"setparent"}%
