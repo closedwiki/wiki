@@ -360,10 +360,6 @@ sub init_edit {
         } else {
             $formText = $formDef->renderForEdit( $webName, $topic, $meta );
         }
-    } elsif( !$saveCmd && $session->{prefs}->getWebPreferencesValue( 'WEBFORMS', $webName )) {
-        $formText = $session->templates->readTemplate( "addform", $skin );
-        $formText = $session->handleCommonTags(
-            $formText, $webName, $topic, $meta );
     }
     $tmpl =~ s/%FORMFIELDS%/$formText/g;
 
