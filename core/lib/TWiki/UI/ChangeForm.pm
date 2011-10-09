@@ -98,9 +98,7 @@ sub generate {
 
     $page = $session->handleCommonTags( $page, $web, $topic );
     $page = $session->renderer->getRenderedVersion( $page, $web, $topic );
-
-    $text = CGI::hidden( -name => 'text', -value => $q->param( 'text' ) );
-    $page =~ s/%TEXT%/$text/go;
+    $page =~ s/%TEXT%//go;
 
     return $page;
 }
