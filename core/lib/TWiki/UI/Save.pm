@@ -224,6 +224,7 @@ sub buildNewTopic {
     if( $formName ) {
         # new form, default field values will be null
         $formName = '' if( $formName eq 'none' );
+        $copyMeta = $prevMeta if $prevMeta;;
     } elsif( $templateMeta ) {
         # populate the meta-data with field values from the template
         $formName = $templateMeta->get( 'FORM' );
@@ -248,6 +249,16 @@ sub buildNewTopic {
                 params => [ $webName, $formName ] );
         }
         $newMeta->put( 'FORM', { name => $formName });
+
+        # add all fields of form
+        foreach my $fieldDef ( @{$formDef->getFields()} ) {
+            $newMeta->putKeyed( 'FIELD',
+                                { name => $fieldDef->{name},
+                                  attributes => $fieldDef->{attributes}, 
+                                  title => $fieldDef->{title},
+                                  value => $fieldDef->isMandatory() ? '1' : ''
+                                } );
+        }
     }
     if( $copyMeta && $formDef ) {
         # Copy existing fields into new form, filtering on the
