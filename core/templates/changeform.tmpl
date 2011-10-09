@@ -13,16 +13,11 @@
 %TMPL:DEF{"topicactionbuttons"}%<input class="twikiSubmit" type="submit" name="submit" value='%MAKETEXT{"Select"}%' /> %MAKETEXT{"or"}% %TMPL:P{"gobacktopicaction"}%%TMPL:END%
 
 
-%TMPL:DEF{"formstart"}%<form name="main" action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%" method="post">%TMPL:END%
+%TMPL:DEF{"formstart"}%<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">%TMPL:END%
 %TMPL:DEF{"formend"}%</form>%TMPL:END%
 
 
-%TMPL:DEF{"hiddenformfields"}%<input type="hidden" name="t" value="t=%GMTIME{"$epoch"}%" />
-<input type="hidden" name="topicparent" value="%URLPARAM{"topicparent"}%" />
-<input type="hidden" name="redirectto" value="%URLPARAM{"redirectto"}%" />
-<input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
-<input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
-<input type="hidden" name="nowysiwyg" value="%URLPARAM{"nowysiwyg"}%" />%TMPL:END%
+%TMPL:DEF{"hiddenformfields"}%<input type="hidden" name="t" value="t=%GMTIME{"$epoch"}%" />%TMPL:END%
 
 
 %TMPL:DEF{"notes"}%<p>%MAKETEXT{"Any changes you made to the topic before coming to this page are preserved."}%<br />
