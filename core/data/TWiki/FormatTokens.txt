@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1275798951" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1318350118" format="1.1" version="$Rev$"}%
 ---+ Formatting Tokens
 
 TWiki defines some standard special tokens that can be used to replace characters in some parameters - notably those to FormattedSearch and IfStatements - to defer evaluation of the parameter until later. These special tokens are often called "escapes", because they allow the character to "escape" from its normal meaning. 
 
 %STARTINCLUDE%     | =$n= or =$n()= | New line. Use =$n()= if followed by alphanumeric character, e.g. write =Foo$n()Bar= instead of =Foo$nBar= |
      | =$nop= or =$nop()= | Is a "no operation". This variable gets removed; useful for nested search |
-     | =$quot= | Double quote (="=) (\" also works) |
+     | =$quot= or =\"= | Double quote (="=) |
      | =$percnt= | Percent sign (=%=) |
      | =$dollar= | Dollar sign (=$=) |
      | =$lt= | Less than sign (=&lt;=) |
