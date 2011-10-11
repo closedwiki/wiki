@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1318351277" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1318351722" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %STARTINCLUDE%
 ---+ TWiki Formatted Search
@@ -83,10 +83,10 @@ Variables that can be used in the format string:
 #EvaluationOrder
 ---++ Evaluation order of variables
 
-By default, variables embedded in the format parameter are evaluated _before_ the =%<nop>SEARCH{}%=. This is OK for variables that do not change, such as =%<nop>SCRIPTURLPATH%=. Variables that should be evaluated once per search hit _must be escaped_. For example, to escape a conditional:
+By default, variables embedded in the format parameter of =%<nop>SEARCH{}%= are evaluated once _before_ the search. This is OK for variables that do not change, such as =%<nop>SCRIPTURLPATH%=. Variables that should be evaluated once per search hit _must be escaped_. For example, to escape a conditional:
 <br /> =&nbsp; &nbsp; %<nop>IF{ "..." then="..." else="..." }%=
 <br /> write this:
-<br /> =&nbsp; &nbsp; format="$percntIF{ \"...\" then=\"...\" else=\"...\" }$percnt=
+<br /> =&nbsp; &nbsp; format="$percntIF{ \"...\" then=\"...\" else=\"...\" }$percnt"=
 
 ---++ Examples
 
