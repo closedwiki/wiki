@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1265789704" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1318351277" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %STARTINCLUDE%
 ---+ TWiki Formatted Search
@@ -11,7 +11,7 @@ The default output format of a =[[VarSEARCH][%<nop>SEARCH{...}%]]= is a table co
 
 ---++ Syntax
 
-Two parameters can be used to specify a customized search result:
+Three parameters can be used to customize a search result:
 
 ---+++ 1. =header="..."= parameter
 
@@ -34,7 +34,6 @@ Variables that can be used in the footer string:
 | =$ntopics= | Number of topics found in current web |
 | =$nhits= | Number of hits if =multiple="on"=. Cumulative across all topics in current web. Identical to =$ntopics= unless =multiple="on"= |
 %INCLUDE{FormatTokens}%
-
 
 ---+++ 3. =format="..."= parameter
 
@@ -80,6 +79,14 @@ Variables that can be used in the format string:
 | =$ntopics= | Number of topics found in current web. This is the current topic count, not the total number of topics |
 | =$nhits= | Number of hits if =multiple="on"=. Cumulative across all topics in current web. Identical to =$ntopics= unless =multiple="on"= |
 %INCLUDE{FormatTokens}%
+
+#EvaluationOrder
+---++ Evaluation order of variables
+
+By default, variables embedded in the format parameter are evaluated _before_ the =%<nop>SEARCH{}%=. This is OK for variables that do not change, such as =%<nop>SCRIPTURLPATH%=. Variables that should be evaluated once per search hit _must be escaped_. For example, to escape a conditional:
+<br /> =&nbsp; &nbsp; %<nop>IF{ "..." then="..." else="..." }%=
+<br /> write this:
+<br /> =&nbsp; &nbsp; format="$percntIF{ \"...\" then=\"...\" else=\"...\" }$percnt=
 
 ---++ Examples
 
