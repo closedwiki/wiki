@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293784768" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1318876477" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -108,10 +108,16 @@ This is <latex color="red" size="large">\cal A</latex> new inline test.
       * [[http://sourceforge.net/projects/dvipng/][dvipng]] and
       * [[http://www.imagemagick.org/][ImageMagick]]
    * Make sure they are installed and check the paths to the programs =latex=, =dvipng= and =convert= in the latex2img shiped with this plugin
-   * Edit the file =&lt;path-to-twiki>/pub/%SYSTEMWEB%/%TOPIC%/latex2img= accordingly
+   * Edit the file =&lt;path-to-twiki>/pub/%SYSTEMWEB%/%TOPIC%/latex2img= accordingly and set execute permission for your webserver on it
    * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
+---++ Troubleshooting
+
+   * If you get error like ="fmtutil: [some-dir]/latex.fmt does not exist"=, run =fmtutil-sys --all= on your server to recreate all latex formatstyles.
+   * If your generated image of the latex formula does not show up, then you probably have encoding issues. Look into the source of the &lt;img&gt;-tag in your page's source code. Non-ASCII characters in file names might cause troubles. Check the localization in the TWiki configure page.
+
 ---++ Configuration
+
 There are a set of configuration variables that an be set in different places. All of the below variables can be set in your =LocalSite.cfg= file like this:
 <verbatim>
 $TWiki::cfg{MathModePlugin}{<Name>} = <value>;
@@ -148,11 +154,12 @@ Some of the below variables can _only_ be set this way, some of the may be overr
    * Set SHORTDESCRIPTION = Add math formulas to TWiki topics using <nop>LaTeX markup language
 -->
 |  Plugin Author: | TWiki:Main.GraemeLufkin, TWiki:Main.MichaelDaum |
-|  Copyright: | &copy; 2002 Graeme Lufkin gwl@u.washington.edu; <br /> &copy; 2006-2007 Michael Daum http://wikiring.de; <br /> &copy; 2007-2010 TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2002 Graeme Lufkin gwl@u.washington.edu; <br /> &copy; 2006-2007 Michael Daum http://wikiring.de; <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2.97 |
+|  Plugin Version: | 2.98 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-04-25 | TWikibug:Item6433 - doc improvements |
+|  2011-10-17 | TWikibug:Item6799: Add troubleshoot info -- TWiki:Main.MatthiasRella |
+|  2010-04-25 | TWikibug:Item6433: Doc improvements -- TWiki:Main.PeterThoeny |
 |  07 Dec 2007: | replaced =templfile= with =mktemp= in the latex2img helper script |
 |  13 Nov 2007: | fixed plugin on 4.2 |
 |  18 Dec 2006: | only use one bgcolor |
