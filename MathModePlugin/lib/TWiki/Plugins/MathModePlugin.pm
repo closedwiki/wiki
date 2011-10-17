@@ -1,5 +1,6 @@
 # MathModePlugin.pm
 #
+# Copyright (C) 2007-2011 TWiki:TWiki.TWikiContributor
 # Copyright (C) 2006-2007 Michael Daum http://wikiring.de
 # Copyright (C) 2002 Graeme Lufkin, gwl@u.washington.edu
 #
@@ -29,7 +30,7 @@ use vars qw(
   $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
 );
 $VERSION = '$Rev$';
-$RELEASE = '2.97';
+$RELEASE = '2.98';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Add math formulas to TWiki topics using <nop>LaTeX markup language';
 $TWikiCompatibility{endRenderingHandler} = 1.1;

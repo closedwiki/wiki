@@ -1,5 +1,6 @@
 # MathModePlugin/Core.pm
 #
+# Copyright (C) 2007-2011 TWiki:TWiki.TWikiContributor
 # Copyright (C) 2006 MichaelDaum@WikiRing.com
 # Copyright (C) 2002 Graeme Lufkin, gwl@u.washington.edu
 #
