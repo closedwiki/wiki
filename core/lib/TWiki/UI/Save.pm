@@ -252,6 +252,7 @@ sub buildNewTopic {
 
         # add all fields of form
         foreach my $fieldDef ( @{$formDef->getFields()} ) {
+            next unless( $fieldDef->{name} );
             $newMeta->putKeyed( 'FIELD',
                                 { name => $fieldDef->{name},
                                   attributes => $fieldDef->{attributes}, 
