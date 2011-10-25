@@ -144,7 +144,9 @@ sub search {
         'template'      => scalar $query->param( 'template' ),
         'header'        => scalar $query->param( 'header' ),
         'format'        => scalar $query->param( 'format' ),
+        'footer'        => scalar $query->param( 'footer' ),
         'multiple'      => scalar $query->param( 'multiple' ),
+        'default'       => scalar $query->param( 'default' ),
         'separator'     => scalar $query->param( 'separator' ),
         'subweb'     => scalar $query->param( 'subweb' )
     );
