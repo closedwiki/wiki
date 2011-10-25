@@ -381,6 +381,7 @@ sub searchWeb {
     my $headingoffset = $params{headingoffset} || 0;
     $headingoffset    =~ s/.*?([-+]?[0-9]).*/$1/ || 0;
     my $footer        = $params{footer};
+    my $default       = $params{default};
     my $inline        = $params{inline};
     my $limit         = $params{limit} || '';
     my $doMultiple    = TWiki::isTrue( $params{multiple} );
@@ -764,16 +765,6 @@ sub searchWeb {
             }
         }
 
-        if( defined $footer ) {
-            $afterText = TWiki::expandStandardEscapes($footer);
-            $afterText =~ s/\$web/$web/gos;    # expand name of web
-            if( defined($separator) ) {
-                $afterText .= $separator;
-            } else {
-                $afterText =~ s/([^\n])$/$1\n/os; # add new line at end if needed
-            }
-        }
-
         # output the list of topics in $web
         my $ntopics    = 0; # number of topics in current web
         my $nhits      = 0; # number of hits (if multiple=on) in current web
@@ -1020,14 +1011,21 @@ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
             last if( $ntopics >= $limit );
         }    # end topic loop
 
-        # output footer only if hits in web
-        if( $ntopics ) {
+        # output footer only if hits in web, else output default if defined
+        if( $ntopics || $default ) {
 
-            # output footer of $web
+            $afterText = $footer if( defined $footer );
+            $afterText = $default if( ! $ntopics && $default );
+            $afterText = TWiki::expandStandardEscapes( $afterText );
+            $afterText =~ s/\$web/$web/gos;    # expand name of web
             $afterText =~ s/\$ntopics/$ntopics/gs;
             $afterText =~ s/\$nhits/$nhits/gs;
-            $afterText =
-            $session->handleCommonTags( $afterText, $web, $homeTopic );
+            $afterText = $session->handleCommonTags( $afterText, $web, $homeTopic );
+            if( defined( $separator ) ) {
+                $afterText .= $separator;
+            } else {
+                $afterText =~ s/([^\n])$/$1\n/os; # add new line at end if needed
+            }
 
             if( defined $callback ) {
                 $afterText = $renderer->getRenderedVersion( $afterText, $web, $homeTopic );
