@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1319581508" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1319581820" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %STARTINCLUDE%
 ---+ TWiki Formatted Search
@@ -126,7 +126,6 @@ To get this:
 | *Topic:* | *OperatingSystem* | *OsVersion* |
 | [[%TOPIC%][IncorrectDllVersionW32PTH10DLL]] | [[%TOPIC%][OsWin]] | 95/98 |
 | [[%TOPIC%][WinDoze95Crash]] | [[%TOPIC%][OsWin]] | 95 |
-</table>
 
 
 ---+++ Extract some text from a topic using regular expression
