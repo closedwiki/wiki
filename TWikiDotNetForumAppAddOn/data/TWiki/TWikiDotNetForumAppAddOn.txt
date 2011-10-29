@@ -1,10 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1319863068" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1319869037" format="1.1" version="$Rev$"}%
 ---+ Twiki Inc Discussion Forum Application Add-On
 
 This discussion forum application is contributed by [[http://www.twiki.net/][<img src="%ATTACHURLPATH%/twiki-logo-80x30-t.gif" alt="Twiki Inc" title="Twiki Inc" width="80" height="30" border="0" />]], a company cultivating, nurturing and advancing TWiki as the leading open source enterprise wiki.
 
    * The discussion forum application is hosted in a dedicated Forum.WebHome web
-   * Members of the %MAINWEB%.TWikiAdminGroup can create new forums
+   * Members of the %USERSWEB%.TWikiAdminGroup can create new forums
    * Anyone can create a new discussion topic in a forum
    * Anyone can add a new comment to an existing discussion topic
 
@@ -18,8 +18,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Add-on topic |
-     | ==pub/TWiki/%TOPIC%/*.png== | Documentation images |
      | ==data/Forum/*.txt== | Forum web with discussion forum application |
+     | ==pub/TWiki/%TOPIC%/screen_forums_s.png== | Screenshot |
+     | ==pub/TWiki/%TOPIC%/twiki-logo-80x30-t.gif== | Twiki Inc logo |
    * Test if the installation was successful:
       * Go to the Forum.%HOMETOPIC% web and create a new discussion topic in the Sandbox forum
 
@@ -32,7 +33,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) and [[http://twiki.net/licenses.html#TWikiDotNetSoftwareLicense][Twiki Inc Software License]] (dual license) |
 |  Add-on Version: | 2011-10-28 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-10-28: | Rebranding of Twiki Inc |
+|  2011-10-28: | Change TWIKIWEB to SYSTEMWEB; rebranding to Twiki Inc name |
 |  11 Apr 2008: | Allow INCLUDE of forum in another web; minor UI tweaks |
 |  19 Oct 2007: | Validate Title field |
 |  15 Oct 2007: | Initial version |
@@ -43,7 +44,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+__Related Topic:__ %SYSTEMWEB%.TWikiAddOns
 
 %META:FILEATTACHMENT{name="screen_forums_s.png" attachment="screen_forums_s.png" attr="h" comment="Screenshot of forums table and forum topics table" date="1192413134" path="screen_forums_s.png" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="twiki-logo-80x30-t.gif" attachment="twiki-logo-80x30-t.gif" attr="h" comment="" date="1319861987" path="twiki-logo-80x30-t.gif" size="1536" user="TWikiContributor" version="1"}%
