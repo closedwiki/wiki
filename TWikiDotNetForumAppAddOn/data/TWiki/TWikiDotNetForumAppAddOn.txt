@@ -1,5 +1,14 @@
-%META:TOPICINFO{author="TWikiContributor" date="1319869037" format="1.1" version="$Rev$"}%
----+ Twiki Inc Discussion Forum Application Add-On
+%META:TOPICINFO{author="TWikiContributor" date="1319870190" format="1.1" version="$Rev$"}%
+---+!! Twiki Inc Discussion Forum Application Add-On
+<!--
+   Contributions to this add-on are appreciated. Please update the add-on page at
+   http://twiki.org/cgi-bin/view/Plugins/TWikiDotNetForumAppAddOn or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TWikiDotNetForumAppAddOnDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
 
 This discussion forum application is contributed by [[http://www.twiki.net/][<img src="%ATTACHURLPATH%/twiki-logo-80x30-t.gif" alt="Twiki Inc" title="Twiki Inc" width="80" height="30" border="0" />]], a company cultivating, nurturing and advancing TWiki as the leading open source enterprise wiki.
 
@@ -33,11 +42,11 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) and [[http://twiki.net/licenses.html#TWikiDotNetSoftwareLicense][Twiki Inc Software License]] (dual license) |
 |  Add-on Version: | 2011-10-28 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-10-28: | Change TWIKIWEB to SYSTEMWEB; rebranding to Twiki Inc name |
-|  11 Apr 2008: | Allow INCLUDE of forum in another web; minor UI tweaks |
-|  19 Oct 2007: | Validate Title field |
-|  15 Oct 2007: | Initial version |
-|  TWiki Dependency: | TWiki 4.0 |
+|  2011-10-28: | Add method="post" to HTML forms for TWiki-5.x compatibility; change TWIKIWEB to SYSTEMWEB; rebranding to Twiki Inc name |
+|  2008-04-11: | Allow INCLUDE of forum in another web; minor UI tweaks |
+|  2007-10-19: | Validate Title field |
+|  2007-10-15: | Initial version |
+|  TWiki Dependency: | TWiki-4.0 |
 |  Other Dependencies: | none |
 |  Perl Version: | N/A |
 |  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
