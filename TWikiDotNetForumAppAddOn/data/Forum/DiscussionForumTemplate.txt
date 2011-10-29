@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="PeterThoeny" date="1207959907" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1319868996" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="DiscussionForumForm"}%
 %INCLUDE{DiscussionForumBody}%
 <!--
-   * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+   * Set ALLOWTOPICCHANGE = %USERSWEB%.TWikiAdminGroup
 -->
 
 %META:FORM{name="DiscussionForumForm"}%

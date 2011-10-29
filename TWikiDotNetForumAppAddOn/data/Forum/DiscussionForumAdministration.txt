@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1207960765" format="1.1" version="1.5"}%
+%META:TOPICINFO{author="TWikiContributor" date="1319868996" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+ Discussion Forum Administration
 
@@ -33,12 +33,12 @@ return 'Forum' + sOut.substring(0,3);
       * DiscussionTopicForm
       * DiscussionTopicTemplate
       * DiscussionTopicHeader
-   * %TWIKIWEB%.TWikiDotNetForumAppAddOn documentation
+   * %SYSTEMWEB%.TWikiDotNetForumAppAddOn documentation
 
 ---++ Access Control
 
-   * Set ALLOWTOPICVIEW = %MAINWEB%.TWikiAdminGroup
+   * Set ALLOWTOPICVIEW = %USERSWEB%.TWikiAdminGroup
 
-__Note:__ This Discussion Forum TWiki Application is &copy; 2007 [[http://www.twiki.net][TWIKI.NET]]
+__Note:__ This Discussion Forum TWiki Application is &copy; 2007-%SERVERTIME{$year}% [[http://www.twiki.net/][Twiki Inc]]
 
--- TWiki:Main.PeterThoeny - 28 Jul 2007
+-- TWiki:Main.PeterThoeny
