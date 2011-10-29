@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1319868996" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1319869556" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+ Discussion Forum Administration
 
@@ -12,7 +12,7 @@ var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.length; i++ ) { var
 return 'Forum' + sOut.substring(0,3);
 }
 //--></script>
-<form name="new" action="%SCRIPTURL{save}%/%WEB%/">
+<form name="new" action="%SCRIPTURL{save}%/%WEB%/" method="post">
 |  Forum name: | <input type="text" name="Name" size="20" value="" onblur="form.topic.value=fixString(this.value);" /> (short name shown in breadcrumb; may contain spaces) |
 |  Topic name: | <input type="text" name="topic" size="20" value="" /> (short; in URL; no spaces; format: =ForumABC=) |
 |  Description: | <input type="text" name="Description" size="72" value="" /> |

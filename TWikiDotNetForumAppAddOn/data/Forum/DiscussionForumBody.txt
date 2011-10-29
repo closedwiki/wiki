@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1319868996" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1319869560" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="DiscussionForumTemplate"}%
 ---+ Discussion Forum Body
 
@@ -11,7 +11,7 @@ h1 { margin:0 0 0.1em 0; }
 [[DiscussionForum][Discussion Forum]] &#187;
 ---+ %FORMFIELD{ "Name" topic="%INCLUDINGTOPIC%" }%
 <nop>%TABLE{ sort="off" }%
-<form name="new" action="%SCRIPTURL{save}%/%WEB%/" onsubmit="if( this.Title.value == '' ) { alert('Please enter a title'); this.Title.focus(); return false; } else { return true; }">
+<form name="new" action="%SCRIPTURL{save}%/%WEB%/" method="post" onsubmit="if( this.Title.value == '' ) { alert('Please enter a title'); this.Title.focus(); return false; } else { return true; }">
 | *%FORMFIELD{ "Name" topic="%INCLUDINGTOPIC%" }% topics* | *Last post* |
 %SEARCH{ "META:FORM.*[D]iscussionTopicForm;META:FIELD.*Forum.*value=.%INCLUDINGTOPIC%" type="regex" excludetopic="DiscussionTopicTemplate" web="%WEB%" order="created" reverse="on" nonoise="on" format="| %ICONURL{bubble}% <a href=\"%SCRIPTURL{view}%/$web/$topic\" title=\"$summary\">$formfield(Title)</a> <span style=\"font-size: 70%; color: #808080\"> by <nop>$createwikiname </span> | $date by $wikiusername |" }%
 |  %ICONURL{newtopic}% Title: <input type="text" name="Title" size="40" value="" /> | <input type="submit" name="send" id="send" class="twikiSubmit" value=" Create new topic " /> |
