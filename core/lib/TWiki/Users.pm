@@ -1169,8 +1169,8 @@ sub _userManagerEditUser {
 
 sub _renderUserDataField {
     my( $this, $field ) = @_;
-    my $cell1 = $field->{title};
-    $cell1   .= ':' if( $field->{title} );
+    my $cell1 = '';
+    $cell1    = $field->{title} . ':' if( $field->{title} );
     my $cell2 = $field->{value};
     if( $field->{type} =~ /^(text|password)$/ ) {
         $cell2 = '<input type="' . $field->{type}
