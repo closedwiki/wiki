@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1319581820" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1320261028" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %STARTINCLUDE%
 ---+ TWiki Formatted Search
@@ -35,7 +35,7 @@ Variables that can be used in the format string:
 | =$topic= | Topic name |
 | =$topic(<i>20</i>)= | Topic name, "<tt>- </tt>" hyphenated each 20 characters |
 | =$topic(<i>30, -&lt;br /&gt;</i>)= | Topic name, hyphenated each 30 characters with separator "<tt>-&lt;br /&gt;</tt>" |
-| =$topic(<i>40, ...</i>)= | Topic name, shortended to 40 characters with "<tt>...</tt>" indication |
+| =$topic(<i>40, ...</i>)= | Topic name, shortened to 40 characters with "<tt>...</tt>" indication |
 | =$parent= | Name of parent topic; empty if not set |
 | =$parent(<i>20</i>)= | Name of parent topic, same hyphenation/shortening like =$topic()= |
 | =$text= | Formatted topic text. In case of a =multiple="on"= search, it is the line found for each search hit. |
@@ -60,7 +60,7 @@ Variables that can be used in the format string:
 | =$formfield(<i>name</i>)= | The field value of a form field; for example, =$formfield(<nop>TopicClassification)= would get expanded to =PublicFAQ=. This applies only to topics that have a [[TWikiForms][TWikiForm]] |
 | =$formfield(<i>name, 10</i>)= | Form field value, "<tt>- </tt>" hyphenated each 10 characters |
 | =$formfield(<i>name, 20, -&lt;br /&gt;</i>)= | Form field value, hyphenated each 20 characters with separator "<tt>-&lt;br /&gt;</tt>" |
-| =$formfield(<i>name, 30, ...</i>)= | Form field value, shortended to 30 characters with "<tt>...</tt>" indication |
+| =$formfield(<i>name, 30, ...</i>)= | Form field value, shortened to 30 characters with "<tt>...</tt>" indication |
 | =$query(<i>query-syntax</i>)= | Access topic meta data using SQL-like QuerySearch syntax. Example: %BB% =$query(attachments.arraysize)= returns the number of files attached to the current topic %BB% =$query(attachments[name~'*.gif'].size)= returns an array with size of all =.gif= attachments, such as =848, 1425, 923= %BB% =$query(parent.name)= is equivalent to =$parent= |
 | =$pattern(<i>reg-exp</i>)= | A regular expression pattern to extract some text from a topic (does not search meta data; use =$formfield= instead). In case of a =multiple="on"= search, the pattern is applied to the line found in each search hit.%BB% Specify a RegularExpression that covers the whole text (topic or line), which typically starts with =.*=, and must end in =.*= %BB% Put text you want to keep in parenthesis, like =$pattern(.*?(from here.*?to here).*)= %BB% Example: =$pattern(.*?\*.*?Email\:\s*([^\n\r]+).*)= extracts the e-mail address from a bullet of format =* Email: ...= %BB% This example has non-greedy =.*?= patterns to scan for the first occurance of the Email bullet; use greedy =.*= patterns to scan for the last occurance %BB% Limitation: Do not use =.*)= inside the pattern, e.g. =$pattern(.*foo(.*)bar.*)= does not work, but =$pattern(.*foo(.*?)bar.*)= does %BB% Note: Make sure that the integrity of a web page is not compromised; for example, if you include an HTML table make sure to include everything including the table end tag |
 | =$count(<i>reg-exp</i>)= | Count of number of times a regular expression pattern appears in the text of a topic (does not search meta data). Follows guidelines for use and limitations outlined above under =$pattern(reg-exp)=. Example: =$count(.*?(---[+][+][+][+]) .*)= counts the number of &lt;H4&gt; headers in a page. |
