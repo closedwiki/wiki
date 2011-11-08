@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310175589" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1320727391" format="1.1" version="$Rev$"}%
 ---+!! Mailer Contrib
 <!--
    Contributions to this TWiki extension are appreciated. Please update the page at
@@ -40,7 +40,7 @@ _three spaces_ =*= _subscriber_ [ =:= _topics_ ]
 
 Where _subscriber_ can be a [[%SYSTEMWEB%.WikiName][WikiName]], an E-mail address, or a
 group name. If _subscriber_ contains any characters that are not legal in
-an email address, then it must be enclosed in 'single' or "double" quotes.
+an email address, then it must be enclosed in 'single' or "double" quotes. Please note that the guest user !TWikiGuest does not have an email address mapped to it, and will never receive email regardless of the configuration of that user. 
 
 _topics_ is an optional space-separated list of topics:
 
@@ -91,7 +91,7 @@ A user may be listed many times in the <nop>%NOTIFYTOPIC% topic. Where a user ha
 
 If a _group_ is listed for notification, the group will be recursively expanded to the e-mail addresses of all members.
 
-__%X% Warning:__ Because an email address is not linked to a user name, there is no way for TWiki to check access controls for subscribers identified by email addresses. A subscriber identified by an email address alone will only be sent change notifications if the topic they are subscribed to is readable by guest users. You can limit what email addresses can be used in %<nop>NOTIFYTOPIC%, or even block use of emails altogther, using the ={MailerContrib}{EmailFilterIn} setting in =configure=.
+__%X% Warning:__ Because an email address is not linked to a user name, there is no way for TWiki to check access controls for subscribers identified by email addresses. A subscriber identified by an email address alone will only be sent change notifications if the topic they are subscribed to is readable by guest users. You can limit what email addresses can be used in %<nop>NOTIFYTOPIC%, or even block use of emails altogether, using the ={MailerContrib}{EmailFilterIn} setting in =configure=.
 
 __%T% Tip:__ List names in alphabetical order to make it easier to find the names.
 %STOPINCLUDE%
@@ -166,16 +166,17 @@ Many thanks to the following sponsors for supporting this work:
    * [[http://wikigardens.com][WikiGardens]]
 
 |  Author: | TWiki:Main.CrawfordCurrie (http://c-dot.co.uk) |
-|  Copyright: | &copy; 2004, Wind River Systems;%BR% &copy; 2008, http://WikiRing.com%BR% &copy; 2004-2010 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2004, Wind River Systems;%BR% &copy; 2008, http://WikiRing.com%BR% &copy; 2004-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2011-11-07: | TWikibug:Item6799: Doc & typo fixes |
 |  2011-07-08: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
-|  2010-07-09: | TWikibug:Item6518 - Fix for notification e-mail showing %MAKETEXT{"Web"} in subject |
-|  2010-06-12: | TWikibug:Item6489 - Separate WIKITOOLNAME from WEB name; escape WEB name to avoid auto-linking in case web is !WikiWord |
-|  2010-05-26: | TWikibug:Item6474 - Fix for mailnotify failing due to non-existing _alert method |
-|  2010-05-21: | TWikibug:Item6433 - more doc fixes |
-|  2010-04-25: | TWikibug:Item6433 - doc fixes, no code changes |
+|  2010-07-09: | TWikibug:Item6518: Fix for notification e-mail showing %MAKETEXT{"Web"} in subject |
+|  2010-06-12: | TWikibug:Item6489: Separate WIKITOOLNAME from WEB name; escape WEB name to avoid auto-linking in case web is !WikiWord |
+|  2010-05-26: | TWikibug:Item6474: Fix for mailnotify failing due to non-existing _alert method |
+|  2010-05-21: | TWikibug:Item6433: More doc fixes |
+|  2010-04-25: | TWikibug:Item6433: Doc fixes, no code changes |
 |  15 Oct 2008 | TWikibug:Item: generalised code to enable TWiki:Codev.SubscribePlugin to delegate parsing to %TOPIC% - TWiki:Main.SvenDowideit |
 |  14 Oct 2008 | TWikibug:Item6066: fixed issue for user mappings where cuid != login  - TWiki:Main.SvenDowideit |
 |  27 Aug 2008 | TWikibug:Item5949: fixed problem with unsubscribe that should result in an empty subscription |
