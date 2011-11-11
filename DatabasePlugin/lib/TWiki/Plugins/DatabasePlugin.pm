@@ -24,7 +24,7 @@ use vars qw( $VERSION $RELEASE $dbinfo $SHORTDESCRIPTION );
 use TWiki::Plugins::DatabasePlugin::Connection;
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-05-14';
+$RELEASE = '2011-11-11';
 $SHORTDESCRIPTION = 'Provide access to data in a SQL database';
 
 sub initPlugin {
