@@ -54,7 +54,7 @@ use TWiki::Plugins::WysiwygPlugin::Constants;
 our $SHORTDESCRIPTION = 'Translator framework for Wysiwyg editors';
 our $NO_PREFS_IN_TOPIC = 1;
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-07-10';
+our $RELEASE = '2011-11-11';
 
 our $SECRET_ID = 'WYSIWYG content - do not remove this comment, and never use this identical text in your topics';
 
