@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305424073" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1321053292" format="1.1" version="$Rev$"}%
 ---+!! Database Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -105,6 +105,7 @@ Or let's say you wanted to display the next two upcoming scheduled events in the
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-11-11: | TWikibug:Item6800: Fix for using qw(...) as parentheses, which is deprecated in Perl 5.14 -- TWiki:Main.PeterThoeny |
 |  2011-05-14: | TWikibug:Item6701: Small fix in Config.spec -- TWiki:Main.PeterThoeny |
 |  2011-02-19: | TWikibug:Item6638: Doc improvements; changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  17 Sep 2007 | Bugs:Item4343 Minor corrections to Config.spec - TWiki:Main.CrawfordCurrie |
