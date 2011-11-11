@@ -325,7 +325,7 @@ sub rootGenerate {
         $text .= $tml;
     }
     # Collapse adjacent tags
-    foreach my $tag qw(noautolink verbatim literal) {
+    foreach my $tag ( qw(noautolink verbatim literal) ) {
         $text =~ s#</$tag>(\s*)<$tag>#$1#gs;
     }
     # Top and tail, and terminate with a single newline
@@ -532,7 +532,7 @@ sub _htmlParams {
         if( $k eq 'class' ) {
             # if cleaning aggressively, remove class attributes completely
             next if ($options & $WC::VERY_CLEAN);
-            foreach my $c qw(WYSIWYG_PROTECTED WYSIWYG_STICKY TMLverbatim WYSIWYG_LINK) {
+            foreach my $c ( qw(WYSIWYG_PROTECTED WYSIWYG_STICKY TMLverbatim WYSIWYG_LINK) ) {
                 $v =~ s/\b$c\b//;
             }
             $v =~ s/\s+/ /;
@@ -1021,13 +1021,13 @@ sub cleanNode {
     my $a;
 
     # Always delete these attrs
-    foreach $a qw( lang _moz_dirty ) {
+    foreach $a ( qw( lang _moz_dirty ) ) {
         delete $this->{attrs}->{$a}
           if( defined( $this->{attrs}->{$a} ));
     }
 
     # Delete these attrs if their value is empty
-    foreach $a qw( class style ) {
+    foreach $a ( qw( class style ) ) {
         if( defined( $this->{attrs}->{$a} ) &&
               $this->{attrs}->{$a} !~ /\S/ ) {
             delete $this->{attrs}->{$a};
