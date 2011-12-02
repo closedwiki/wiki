@@ -6,7 +6,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=%CHARSET%
 Content-Transfer-Encoding: 8bit
 
-%MAKETEXT{"Thank you for registering in the [_1] collaboration platform. Your verification code is [_2]." args="%WIKITOOLNAME%, %VERIFICATIONCODE%"}%
+%MAKETEXT{"Thank you for registering in the [_1] collaboration platform. Your verification code is:" args="%WIKITOOLNAME%"}% %VERIFICATIONCODE%
 
 %MAKETEXT{"You now need to verify your e-mail address. You can do so by entering [_1] in the form presented to you when this e-mail was sent, or by visiting [_2]" args="'%VERIFICATIONCODE%', %SCRIPTURL{"oops"}%/%USERSWEB%/%HOMETOPIC%?template=oopsattention;def=confirm;code=%VERIFICATIONCODE%;param1=%EMAILADDRESS%"}%
 
