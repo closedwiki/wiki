@@ -2686,8 +2686,8 @@ msgid "Thank you for registering in the %1 collaboration platform. Please save t
 msgstr "謝謝您註冊 %1 協作平臺，請保存這個郵件以備未來參考。"
 
 #: ../core/templates/registerconfirm.tmpl:9
-msgid "Thank you for registering in the %1 collaboration platform. Your verification code is %2."
-msgstr "謝謝您註冊%1協作平臺. 您的校驗碼為%2."
+msgid "Thank you for registering in the %1 collaboration platform. Your verification code is:"
+msgstr "謝謝您註冊%1協作平臺. 您的校驗碼為:"
 
 #: ../core/templates/messages.tmpl:554
 msgid "That user has already been activated "

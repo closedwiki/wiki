@@ -2969,9 +2969,9 @@ msgstr "Dziękujemy za zarejestrowanie się w %1. Prosimy zachować ten list."
 #: ../core/templates/registerconfirm.tmpl:9
 msgid ""
 "Thank you for registering in the %1 collaboration platform. Your "
-"verification code is %2."
+"verification code is:"
 msgstr ""
-"Dziękujemy za zarejestrowanie się w %1. Kod dostępu jest następujący: %2."
+"Dziękujemy za zarejestrowanie się w %1. Kod dostępu jest następujący:"
 
 #: ../core/templates/messages.tmpl:554
 msgid "That user has already been activated "

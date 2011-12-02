@@ -3043,10 +3043,10 @@ msgstr ""
 #: ../core/templates/registerconfirm.tmpl:9
 msgid ""
 "Thank you for registering in the %1 collaboration platform. Your "
-"verification code is %2."
+"verification code is:"
 msgstr ""
 "Спасибі, що Ви реєструвалися на інформаційному ресурсі %1, платформі для "
-"спільної творчості та роботи. Ваш код підтвердження %2."
+"спільної творчості та роботи. Ваш код підтвердження:"
 
 #: ../core/templates/messages.tmpl:554
 msgid "That user has already been activated "

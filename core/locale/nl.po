@@ -2994,10 +2994,10 @@ msgstr ""
 #: ../core/templates/registerconfirm.tmpl:9
 msgid ""
 "Thank you for registering in the %1 collaboration platform. Your "
-"verification code is %2."
+"verification code is:"
 msgstr ""
 "Bedankt voor je registratie in het %1 samenwerkingsplatform. Je "
-"verificatiecode is %2."
+"verificatiecode is:"
 
 #: ../core/templates/messages.tmpl:554
 msgid "That user has already been activated "

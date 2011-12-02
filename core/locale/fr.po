@@ -2684,8 +2684,8 @@ msgid "Thank you for registering in the %1 collaboration platform. Please save t
 msgstr "Merci de vous être inscrit·e sur la plate-forme collaborative %1. Veuillez conserver ce message, il peut vous être utile ultérieurement."
 
 #: ../core/templates/registerconfirm.tmpl:9
-msgid "Thank you for registering in the %1 collaboration platform. Your verification code is %2."
-msgstr "Merci de vous être inscrit·e sur la plate-forme collaborative %1. Votre code de vérification est %2."
+msgid "Thank you for registering in the %1 collaboration platform. Your verification code is:"
+msgstr "Merci de vous être inscrit·e sur la plate-forme collaborative %1. Votre code de vérification est:"
 
 #: ../core/templates/messages.tmpl:554
 msgid "That user has already been activated "

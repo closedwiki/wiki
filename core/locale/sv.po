@@ -2685,8 +2685,8 @@ msgid "Thank you for registering in the %1 collaboration platform. Please save t
 msgstr "Tack för att du registrerade dig på samarbetsplattformen '%1'. Spara detta brev för framtida referens."
 
 #: ../core/templates/registerconfirm.tmpl:9
-msgid "Thank you for registering in the %1 collaboration platform. Your verification code is %2."
-msgstr "Tack för att du registrerade dig på samarbetsplattformen '%1'. Din aktiveringskod är '%2'."
+msgid "Thank you for registering in the %1 collaboration platform. Your verification code is:"
+msgstr "Tack för att du registrerade dig på samarbetsplattformen '%1'. Din aktiveringskod är:"
 
 #: ../core/templates/messages.tmpl:554
 msgid "That user has already been activated "
