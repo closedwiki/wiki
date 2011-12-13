@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1304531073" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1323738993" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -161,6 +161,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{person}% | =%<nop>ICON{person}%= | Person | gif | 16x16 |  |
 | %ICON{persons}% | =%<nop>ICON{persons}%= | Persons | gif | 16x16 |  |
 | %ICON{group}% | =%<nop>ICON{group}%= | Group | gif | 16x16 |  |
+| %ICON{useradd}% | =%<nop>ICON{useradd}%= | Add user | gif | 16x16 |  |
 | %ICON{useractive}% | =%<nop>ICON{useractive}%= | Active user | gif | 16x16 |  |
 | %ICON{userinactive}% | =%<nop>ICON{userinactive}%= | Inactive user | gif | 16x16 |  |
 | %ICON{building}% | =%<nop>ICON{building}%= | Building | gif | 16x16 |  |
@@ -816,6 +817,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="up.gif" attr="h" comment="" date="1169565034" path="up.gif" size="199" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="updated.gif" attr="h" comment="" date="1169565034" path="updated.gif" size="401" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="useractive.gif" attr="h" comment="" date="1193349525" path="useractive.gif" size="158" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="useradd.gif" attr="h" comment="" date="1323738875" path="useradd.gif" size="241" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="userinactive.gif" attr="h" comment="" date="1193349525" path="userinactive.gif" size="158" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="uweb-bo.gif" attr="h" comment="" date="1193349525" path="uweb-bo.gif" size="158" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="uweb-bo12.gif" attr="h" comment="" date="1193349525" path="uweb-bo12.gif" size="890" user="TWikiContributor" version=""}%
