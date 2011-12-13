@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1323738993" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1323750390" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -670,7 +670,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="lockfoldergray.gif" attr="h" comment="" date="1169565034" path="lockfoldergray.gif" size="156" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="locktopic.gif" attr="h" comment="" date="1169565034" path="locktopic.gif" size="217" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="locktopicgray.gif" attr="h" comment="" date="1169565034" path="locktopicgray.gif" size="159" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="logout.gif" attr="h" comment="" date="1169565034" path="logout.gif" size="221" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="logout.gif" attr="h" comment="" date="1323750390" path="logout.gif" size="952" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="luggage.gif" attr="h" comment="" date="1236468594" path="luggage.gif" size="907" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="mail.gif" attr="h" comment="" date="1169565034" path="mail.gif" size="224" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="map.gif" attr="h" comment="" date="1181928995" path="map.gif" size="932" user="TWikiContributor" version=""}%
