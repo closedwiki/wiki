@@ -1,8 +1,24 @@
-%META:TOPICINFO{author="TWikiContributor" date="1123211354" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1323736980" format="1.1" version="$Rev$"}%
 ---+ The <nop>TWikiGuest User
 
-A guest of this TWiki web, not unlike yourself. You can leave your trace behind you, just add your name in [[%SYSTEMWEB%.TWikiRegistration][TWikiRegistration]] and create your own page.
+A guest of this TWiki site, or a user who is not logged in.
 
-__Related topics:__ [[%WIKIUSERSTOPIC%]], [[%SYSTEMWEB%.TWikiRegistration][TWikiRegistration]]
+%IF{
+ "$ LOGIN != '' AND NOT context authenticated"
+ then='   * %LOGIN% - if you already have an account.'
+}%
+   * [[%SYSTEMWEB%.TWikiRegistration][Register]] - create an account to participate in this TWiki site.
+
+__Starting points:__
+
+   * [[%SYSTEMWEB%.WelcomeGuest][Welcome Guest]] - look here first
+   * [[%SYSTEMWEB%.TWikiTutorial][Tutorial]] - 20 minutes TWiki tutorial
+   * [[%SYSTEMWEB%.TWikiUsersGuide][User's Guide]] - documentation for TWiki users
+   * [[%SYSTEMWEB%.TWikiFAQ][Frequently Asked Questions]] - about TWiki
+   * [[%SYSTEMWEB%.TWikiReferenceManual][Reference Manual]] - documentation for system administrators
+
+To learn more about the TWiki Enterprise Collaboration Platform visit http://twiki.org/.
+
+__Related topics:__ [[UserList]], [[%SYSTEMWEB%.TWikiRegistration][TWikiRegistration]]
 
 %META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="TWikiAdminGroup"}%
