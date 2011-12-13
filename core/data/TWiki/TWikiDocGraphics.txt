@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1323750390" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1323750910" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -166,6 +166,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{userinactive}% | =%<nop>ICON{userinactive}%= | Inactive user | gif | 16x16 |  |
 | %ICON{building}% | =%<nop>ICON{building}%= | Building | gif | 16x16 |  |
 | %ICON{buildings}% | =%<nop>ICON{buildings}%= | Buildings | gif | 16x16 |  |
+| %ICON{login}% | =%<nop>ICON{login}%= | Login | gif | 16x16 |  |
 | %ICON{logout}% | =%<nop>ICON{logout}%= | Log out | gif | 16x16 |  |
 | %ICON{key}% | =%<nop>ICON{key}%= | Key | gif | 16x16 |  |
 | %ICON{lock}% | =%<nop>ICON{lock}%= | Lock | gif | 16x16 |  |
@@ -670,6 +671,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="lockfoldergray.gif" attr="h" comment="" date="1169565034" path="lockfoldergray.gif" size="156" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="locktopic.gif" attr="h" comment="" date="1169565034" path="locktopic.gif" size="217" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="locktopicgray.gif" attr="h" comment="" date="1169565034" path="locktopicgray.gif" size="159" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="login.gif" attr="h" comment="" date="1323750910" path="login.gif" size="924" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="logout.gif" attr="h" comment="" date="1323750390" path="logout.gif" size="952" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="luggage.gif" attr="h" comment="" date="1236468594" path="luggage.gif" size="907" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="mail.gif" attr="h" comment="" date="1169565034" path="mail.gif" size="224" user="TWikiContributor" version=""}%
