@@ -109,7 +109,7 @@ sub expand {
         if (ref($_) eq 'HASH') {
             expand(\%$_);
         } else {
-            s/(\$TWiki::cfg{[[A-Za-z0-9{}]+})/eval $1||'undef'/ge;
+            s/(\$TWiki::cfg{[A-Za-z0-9{}]+})/eval $1||'undef'/ge;
         }
     }
 }
@@ -129,7 +129,7 @@ know whether you would want that.  The replacement is done in-place,
 =cut
 
 sub expandValue {
-    $_[0] =~ s/(\$TWiki::cfg{[[A-Za-z0-9{}]+})/eval $1||'undef'/ge;
+    $_[0] =~ s/(\$TWiki::cfg{[A-Za-z0-9{}]+})/eval $1||'undef'/ge;
 }
 
 =pod
