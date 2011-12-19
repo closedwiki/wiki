@@ -24,7 +24,7 @@ package TWiki::Plugins::GlobalReplacePlugin;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-08-02';
+our $RELEASE = '2011-12-19';
 
 my $web;
 my $topic;
