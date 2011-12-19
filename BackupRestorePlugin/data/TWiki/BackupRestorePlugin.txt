@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1315934026" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1324337849" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -119,7 +119,8 @@ This plugin starts a daemon (background process) when a backup is started. Statu
 #LimitationsAndToDo
 ---++ Limitations and To-Do
 
-   * A web-based backup is currently not supported on a native Windows installation of TWiki, however, the command line utility can be used on Windows.
+   * A web-based backup is currently not supported on a native Windows installation of TWiki. However, the command line utility can be used on Windows.
+   * Restore is currently not supported on a native Windows installation of TWiki. Follow the upgrade instructions at %SYSTEMWEB%.TWikiUpgradeGuide, section Copy your old webs to new TWiki.
    * Cancelling a backup or restore might leave some temporary files in the ={Plugins}{BackupRestorePlugin}{BackupDir}= directory.
 
    * To-do:
@@ -158,6 +159,8 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
         | ==lib/TWiki/Plugins/%TOPIC%/ProcDaemon.pm== | Perl module |
       * Set the ownership of the extracted directories and files to the webserver user.
 
+   * If the server has an OS other than Linux make sure to install the GNU zip utility. On Windows, install GNU Zip for Windows, http://gnuwin32.sourceforge.net/packages/zip.htm
+
    * Plugin __configuration and testing__:
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
       * Configure additional <nop>%TOPIC% settings in the __Extensions__ section. %BR% Alternatively, add the following to =twiki/lib/LocalSite.cfg= and customize as needed:<verbatim>
@@ -192,8 +195,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny <br /> &copy; 2011 TWiki:TWiki.TWikiContributor <br /> &copy; 2004, 2005 Simon Flack (for CPAN:IO::CaptureOutput) <br /> &copy; 2007, 2008 David Golden (for CPAN:IO::CaptureOutput) <br /> &copy; 1997-2011 by Earl Hood and Detlef Pilzecker (for CPAN:Proc::Daemon) |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-09-13 |
+|  Plugin Version: | 2011-12-19 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-12-19: | TWikibug:Item6799: Improved docs on GNU zip dependency |
 |  2011-09-13: | TWikibug:Item6796: Improved docs on command line use |
 |  2011-09-05: | TWikibug:Item6795: Add restore from backup functionality; upgrade old system topics on restore of old TWiki; describe how to upgrade TWiki |
 |  2011-08-17: | TWikibug:Item6793: Avoid or work around newer APIs to make plugin run on old TWiki-2001-09-01 (Athens Release) for backup |
