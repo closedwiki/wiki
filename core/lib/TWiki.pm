@@ -3523,7 +3523,7 @@ sub FORMFIELD {
     my ( $this, $params, $topic, $web ) = @_;    
     my $cgiQuery = $this->{request};
     my $cgiRev = $cgiQuery->param('rev') if( $cgiQuery );
-    $params->{rev} = $cgiRev;
+    $params->{rev} = $cgiRev unless( $params->{rev} );
     return $this->renderer->renderFORMFIELD( $params, $topic, $web );
 }
 
