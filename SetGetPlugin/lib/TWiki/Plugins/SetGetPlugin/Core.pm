@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2010-2011 Peter Thoeny, peter[at]thoeny.org
-# Copyright (C) 2010-2011 TWiki Contributors
+# Copyright (C) 2010-2012 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2010-2012 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ sub VarDUMP
     if( defined $params->{format} ) {
         $format = $params->{format};
     } else {
-        $format = "key: \$key, value: \$value <br>";
+        $format = "key: \$key, value: \$value <br />";
     }
 
     if( defined $params->{separator} ) {
