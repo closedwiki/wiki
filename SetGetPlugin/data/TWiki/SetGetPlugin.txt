@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310273804" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1325884249" format="1.1" reprev="1.1" version="1.1"}%
 ---+!! !SetGetPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -31,7 +31,7 @@ Alternatives to this plugin are:
 #RememberNotes
 %X% __Important notes when using the remember option:__
    * Use descriptive variable names: Keep in mind that the remember option sets a variable with TWiki-global scope, e.g. for all pages and all users. To avoid name clashes, use a descriptive variable name which might include web &amp; topic name and user or group name. For example, instead of variable named ="campaign"=, use a more descriptive name ="Marketing-Europe-%SERVERTIME{$year}%-Campaign"=.
-   * Do not store confidential content: The remembered variables are not aware of access control. If a user stores access controlled content in a variable, anyone who knows the variable name can read the content.
+   * Do not store confidential content: The remembered variables are not aware of access control. If a user stores access controlled content in a variable, anyone who knows the variable name or uses the SETGETDUMP variable can read the content.
    * Variables are not version controlled, e.g. you do not get the audit trail you have elsewhere in TWiki (topics, attachments, meta data, etc). Consider storing content in [[%SYSTEMWEB%.TWikiForms][TWiki form fields]] if you need an audit trail.
 
 %INCLUDE{"VarGET"}%
@@ -224,11 +224,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2010-2011 TWiki:Main.PeterThoeny <br /> &copy; 2010-2011 TWiki:TWiki.TWikiContributor |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Copyright: | &copy; 2010-2012 TWiki:Main.PeterThoeny <br /> &copy; 2010-2012 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public Licen:se]]) |
 |  Plugin Version: | 2012-01-06 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-01-06: | TWikibug:Item6828: Removing write to persistent if already exists, and adding data dump |
+|  2012-01-06: | TWikibug:Item6828: Removing write to persistent if already exists, and adding data dump -- TWiki:Main.AaronLWalker |
 |  2011-07-09: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2011-04-04: | TWikibug:Item6638: Small doc improvements |
 |  2011-03-26: | TWikibug:Item6670: Make variables persistent across topic invocations |

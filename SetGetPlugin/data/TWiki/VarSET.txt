@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301947470" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1325883859" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarSET
 ---+++ SET{"name" value="..."} -- set a variable
@@ -10,4 +10,4 @@
      | =value="..."= | Value of variable. Escape double quotes with backslash. | (required, may be empty) |
      | =remember="1"= | If set, the variable will be stored persistently so that it can be used later in any TWiki topic. [[SetGetPlugin#RememberNotes][See important notes]]. | ="0"= |
    * Example: =%<nop>SET{"lunch" value="Sushi"}%=%IF{"'%INCLUDINGTOPIC%'!='SetGetPlugin'" then=" - [[SetGetPlugin#SetGetExamples][see more examples]]." }%
-   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables' OR '%INCLUDINGTOPIC%'='SetGetPlugin'" then="#"}%VarGET][GET]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarIF][IF]], %IF{"'%INCLUDINGTOPIC%'!='SetGetPlugin'" then="SetGetPlugin, "}%SpreadSheetPlugin#FuncSET
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables' OR '%INCLUDINGTOPIC%'='SetGetPlugin'" then="#"}%VarGET][GET]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarIF][IF]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables' OR '%INCLUDINGTOPIC%'='SetGetPlugin'" then="#"}%VarSETGETDUMP][SETGETDUMP]], %IF{"'%INCLUDINGTOPIC%'!='SetGetPlugin'" then="SetGetPlugin, "}%SpreadSheetPlugin#FuncSET
