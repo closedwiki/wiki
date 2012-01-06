@@ -43,6 +43,41 @@ sub new {
 }
 
 # =========================
+sub VarDUMP
+{
+    my ( $this, $session, $params, $topic, $web ) = @_;
+    my $name  = _sanitizeName( $params->{_DEFAULT} );
+    TWiki::Func::writeDebug( "- SetGetPlugin DUMP ($name)" ) if $this->{Debug};
+    #return '' unless( $name );
+
+    my $value = '';
+    my $hold = '';
+    my $sep = '';
+
+    if( defined $params->{format} ) {
+        $format = $params->{format};
+    } else {
+        $format = "key: \$key, value: \$value <br>";
+    }
+
+    if( defined $params->{separator} ) {
+        $sep = $params->{separator};
+    } else {
+        $sep = "\n";
+    }
+
+    $sep =~ s/\$n/\n/g;
+    while( my ($k, $v) = each %{$this->{PersistentVars}} ) {
+        $hold = $format;
+        $hold =~ s/\$key/$k/g;
+        $hold =~ s/\$value/$v/g;
+        $value .= "$hold$sep";
+    }
+
+    return $value;
+}
+
+# =========================
 sub VarGET
 {
     my ( $this, $session, $params, $topic, $web ) = @_;
@@ -77,8 +112,12 @@ sub VarSET
 
     my $remember = $params->{remember} || 0;
     if( $remember && ! ( $remember =~ /^off$/i ) ) {
-        TWiki::Func::writeDebug( "-   set persistent -> $value" ) if $this->{Debug};
-        $this->_savePersistentVar( $name, $value );
+        if( defined $this->{PersistentVars}{$name} && $value eq $this->{PersistentVars}{$name} ) {
+                TWiki::Func::writeDebug( "-   eliding set persistent -> $value" ) if $this->{Debug};
+        } else {
+                $this->_savePersistentVar( $name, $value );
+        }
+
     } else {
         TWiki::Func::writeDebug( "-   set volatile -> $value" ) if $this->{Debug};
         $this->{VolatileVars}{$name} = $value;

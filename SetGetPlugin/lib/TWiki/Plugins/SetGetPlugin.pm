@@ -26,7 +26,7 @@ package TWiki::Plugins::SetGetPlugin;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-07-09';
+our $RELEASE = '2012-01-03';
 
 our $web;
 our $topic;
@@ -52,11 +52,25 @@ sub initPlugin
 
     TWiki::Func::registerTagHandler( 'GET',    \&_GET );
     TWiki::Func::registerTagHandler( 'SET',    \&_SET );
+    TWiki::Func::registerTagHandler( 'SETGETDUMP',    \&_DUMP );
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::SetGetPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
 
     return 1;
+}
+
+# =========================
+sub _DUMP
+{
+#   my ( $session, $params, $theTopic, $theWeb ) = @_;
+
+    # Lazy loading, e.g. compile core module only when required
+    unless( $core ) {
+        require TWiki::Plugins::SetGetPlugin::Core;
+        $core = new TWiki::Plugins::SetGetPlugin::Core( $debug );
+    }
+    return $core->VarDUMP( @_ );
 }
 
 # =========================
