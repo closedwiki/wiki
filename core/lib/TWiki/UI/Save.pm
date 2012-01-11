@@ -1,6 +1,6 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2011 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 1999-2012 Peter Thoeny, peter[at]thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -53,8 +53,8 @@ sub buildNewTopic {
     my $revision = $query->param( 'rev' ) || undef;
     my $reqmethod = $query->request_method();
 
-    if( $reqmethod !~ /^POST$/i ) {
-        # save can only be called via POST method
+    if( $reqmethod && $reqmethod !~ /^POST$/i ) {
+        # save can only be called via POST method or command line
         throw TWiki::OopsException(
             'attention',
             def => 'post_method_only',
