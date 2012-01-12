@@ -1,6 +1,6 @@
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2009-2011 TWiki Contributors.
+# Copyright (C) 2009-2012 TWiki Contributors.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
