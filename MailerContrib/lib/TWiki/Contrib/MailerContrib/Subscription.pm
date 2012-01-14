@@ -1,7 +1,7 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004 Wind River Systems Inc.
-# Copyright (C) 2004-2011 Peter Thoeny, peter[at]thoeny.org and
+# Copyright (C) 2004-2012 Peter Thoeny, peter[at]thoeny.org and
 # TWiki Contributors. All Rights Reserved. TWiki Contributors are
 # listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
