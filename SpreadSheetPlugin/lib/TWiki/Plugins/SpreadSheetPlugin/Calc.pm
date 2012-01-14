@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org and
+# Copyright (C) 2001-2012 Peter Thoeny, peter[at]thoeny.org and
 # TWiki Contributors.
 #
 # This program is free software; you can redistribute it and/or
@@ -288,6 +288,20 @@ sub _doFunc
         $result = _safeEvalPerl( $theAttr );
         unless( $result =~ /^ERROR/ ) {
             $result = int( _getNumber( $result ) ) if( $theFunc eq "INT" );
+        }
+
+    } elsif( $theFunc eq "FLOOR" ) {
+        $i = _getNumber( $theAttr );
+        $result = int( $i );
+        if( $i < 0 && $i != $result ) {
+            $result -= 1;
+        }
+
+    } elsif( $theFunc eq "CEILING" ) {
+        $i = _getNumber( $theAttr );
+        $result = int( $i );
+        if( $i > 0 && $i != $result ) {
+            $result += 1;
         }
 
     } elsif( $theFunc eq "ROUND" ) {

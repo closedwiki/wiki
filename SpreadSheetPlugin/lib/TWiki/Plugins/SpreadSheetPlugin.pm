@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org and
+# Copyright (C) 2001-2012 Peter Thoeny, peter[at]thoeny.org and
 # TWiki Contributors.
 #
 # This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ package TWiki::Plugins::SpreadSheetPlugin;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-09-07';
+our $RELEASE = '2012-01-13';
 
 our $web;
 our $topic;
