@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1316822719" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1326522634" format="1.1" version="$Rev$"}%
 ---+!! !TWikiUserMappingContrib
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -68,10 +68,11 @@ It's a part of the default distribution of the TWiki Core.
 ---++ Contrib Info
 
 |  Contrib Authors: | TWiki:Main.SvenDowideit, TWiki:Main.PeterThoeny, TWiki:TWiki.TWikiContributor |
-|  Copyright: | &copy; 2007 Sven Dowideit;%BR% &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2007 Sven Dowideit;%BR% &copy; 2007-2012 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Contrib Version: | 2011-09-23 |
+|  Contrib Version: | 2012-01-13 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-01-13: | TWikibug:Item6796: Fixing copyright year to 2012 |
 |  2011-09-23: | TWikibug:Item6796: Doc improvement on how to create custom user profile template |
 |  2011-09-23: | TWikibug:Item6814: Prevent excessive indexing of !UserProfileHeader by search engines |
 |  2011-08-20: | TWikibug:Item6711: Fix for !UserList topic was listed in table of users; show "edit group" button above settings -- TWiki:Main.PeterThoeny |
