@@ -1,6 +1,6 @@
 # Contrib for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2007-2011 TWiki Contributors. All Rights Reserved. 
+# Copyright (C) 2007-2012 TWiki Contributors. All Rights Reserved. 
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution. NOTE: Please extend that file, not this notice.
 #
@@ -20,6 +20,6 @@ package TWiki::Contrib::TWikiUserMappingContrib;
 use strict;
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-08-20';
+our $RELEASE = '2012-01-13';
 our $SHORTDESCRIPTION = 'Traditional TWiki topic based user management and user mapping';
 
