@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1314591069" format="1.1" version="$Rev$"}%
----+!! Release Notes of TWiki-5.1 (Istanbul), 2011-08-20
+%META:TOPICINFO{author="TWikiContributor" date="1326581938" format="1.1" version="$Rev$"}%
+---+!! Release Notes of TWiki-5.1.1 (Istanbul), 2012-01-14
 
 %TOC%
 
@@ -7,7 +7,9 @@
 
 TWiki is an enterprise collaboration platform and application platform. TWiki has been downloaded over half a million times and is used by many leading Fortune 500 businesses and government agencies as an intranet, extranet or a public internet website.
 
-TWiki Release 5.1 is a minor release that brings many usability enhancements (such as point and click user data management, more visual user profile pages with picture selector, and a backup feature that helps upgrade TWiki sites) and strengthens TWiki as an application platform (such as a new macro language with parameterized variables).
+TWiki-5.1.0 released on 2011-08-20 is a major release that brings many usability enhancements (such as point and click user data management, more visual user profile pages with picture selector, and a backup feature that helps upgrade TWiki sites) and strengthens TWiki as an application platform (such as a new macro language with parameterized variables).
+
+TWiki-5.1.1 released on 2012-01-14 is a patch release that adds some minor new features and fixes a number of bugs.
 
 ---++ New Features Highlights
 
@@ -30,7 +32,7 @@ TWiki Release 5.1 is a minor release that brings many usability enhancements (su
       * New BackupRestorePlugin to easily backup, restore and upgrade TWiki installations
       * New SetGetPlugin that can store variables persistently
       * New ColorPickerPlugin to pick a color in form fields
-      * SpreadSheetPlugin: New functions BITXOR(), HEXENCODE(), HEXDECODE(), XOR()
+      * SpreadSheetPlugin: New functions BITXOR(), HEXENCODE(), HEXDECODE(), XOR(); new functions FLOOR() and CEILING() added in TWiki-5.1.1
 
 See the full list of new features and bug fixes further below.
 
@@ -213,5 +215,39 @@ Total: 39
 | TWikibug:Item6792 | TWikiUserMappingContrib: Typo fix in registration page and change e-mail address page |
 </noautolink>
 Total: 21
+
+---++ TWiki-5.1.1 Patch Release - Details
+
+TWiki-5.1.1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x01 revision r22564 (2012-01-14)
+
+---+++ Enhancements
+
+<noautolink>
+| TWikibug:Item6796 | Documentation: Documentation work for TWiki-5.1.1 |
+| TWikibug:Item6797 | Documentation: New TWiki Doc Graphics icons for TWiki-5.1.1 |
+| TWikibug:Item6798 | Translation: Translation work for TWiki-5.1.1 |
+| TWikibug:Item6804 | SpreadSheetPlugin: New functions FLOOR() and CEILING() |
+| TWikibug:Item6828 | SetGetPlugin: Removing write to persistent if already exists, and adding data dump |
+</noautolink>
+Total: 5
+
+---+++ Fixes
+
+<noautolink>
+| TWikibug:Item6800 | Use of qw(...) as parentheses, which is deprecated in Perl 5.14 |
+| TWikibug:Item6802 | Disallow plus (+) character in topic name |
+| TWikibug:Item6803 | SpreadSheetPlugin: EVAL function bug with zeroes after decimal point |
+| TWikibug:Item6806 | Uninitialized value error in UI/Save.pm |
+| TWikibug:Item6811 | Check permissions in save access control settings |
+| TWikibug:Item6813 | TWiki::UI::Save::save ignores topic name changes when redirecting on save |
+| TWikibug:Item6814 | TWikiUserMappingContrib: Excessive indexing of UserProfileHeader by search engines |
+| TWikibug:Item6821 | Documentation: Font in list of similar topics in WebTopicViewTemplate gets progressively smaller in some browsers |
+| TWikibug:Item6823 | Use of uninitialized value in concatenation in Users.pm |
+| TWikibug:Item6824 | Confusing period in registration activation e-mail |
+| TWikibug:Item6825 | Configure: RE error in Load.pm |
+| TWikibug:Item6830 | Can't save topic on command line, results in uninitialized value error |
+| TWikibug:Item6832 | Attachments: Can't upload attachments in Chrome |
+</noautolink>
+Total: 13
 
 __Related Topics:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide, %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%
