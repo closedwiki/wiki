@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1311890923" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1326520010" format="1.1" version="$Rev$"}%
 ---+!! Pattern Skin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -89,14 +89,15 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 ---++ Skin Info
 
 |  Skin Author: | TWiki:Main.ArthurClemens, TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2004-2008 TWiki:Main.ArthurClemens <br /> &copy; 2008-2011 TWiki:Main.PeterThoeny <br /> &copy; 2004-2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2004-2008 TWiki:Main.ArthurClemens <br /> &copy; 2008-2012 TWiki:Main.PeterThoeny <br /> &copy; 2004-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Description: | TWiki's base skin; CSS based, flexible and <nop>W3C-compliant |
 |  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.png" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this skin]] |
 |  Base Name: | pattern |
-|  Skin Version: | 2011-10-03 |
+|  Skin Version: | 2012-01-13 |
 |  History: | <!-- specify latest version first -->&nbsp; |
+|  2012-01-13: | TWikibug:Item6832: Fix for can't upload attachments in Chrome |
 |  2011-10-03: | TWikibug:Item6819: Move change TWiki form from edit screen to "more" screen |
 |  2011-07-28: | TWikibug:Item6780: Usability: Link to !UserList topic instead of !TWikiUsers |
 |  2011-07-27: | TWikibug:Item6779: Fix for tables rendering too dark in Firefox 4 |
