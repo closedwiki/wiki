@@ -227,6 +227,7 @@ sub upload {
     # below - @upload_objs are array of TWiki::Request::Upload objects
 
     my @fileNames = grep { defined $query->{uploads}{$_} }
+      map { s/.*[\/\\]//; $_ }
       map { $query->param("filepath$_") } ( '', 1 .. 9 );
     my @upload_objs = @{ $query->{uploads} }{@fileNames};
 
