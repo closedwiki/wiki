@@ -62,6 +62,4 @@ test/unit/UTF8Tests.pm 0644
 test/unit/VariableTests.pm 0644
 test/unit/ViewParamSectionTests.pm 0755
 test/unit/ViewScriptTests.pm 0644
-pub/TWiki/UnitTestContrib/wikiringlogo20x20.png 0660
-pub/TWiki/UnitTestContrib/logo.gif 0660
 data/TWiki/UnitTestContrib.txt 0660
