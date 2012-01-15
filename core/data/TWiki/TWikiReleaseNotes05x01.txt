@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1326581938" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1326586881" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.1.1 (Istanbul), 2012-01-14
 
 %TOC%
@@ -223,21 +223,25 @@ TWiki-5.1.1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRele
 ---+++ Enhancements
 
 <noautolink>
+| TWikibug:Item6795 | BackupRestorePlugin: Add restore from backup feature |
 | TWikibug:Item6796 | Documentation: Documentation work for TWiki-5.1.1 |
 | TWikibug:Item6797 | Documentation: New TWiki Doc Graphics icons for TWiki-5.1.1 |
 | TWikibug:Item6798 | Translation: Translation work for TWiki-5.1.1 |
 | TWikibug:Item6804 | SpreadSheetPlugin: New functions FLOOR() and CEILING() |
 | TWikibug:Item6828 | SetGetPlugin: Removing write to persistent if already exists, and adding data dump |
 </noautolink>
-Total: 5
+Total: 6
 
 ---+++ Fixes
 
 <noautolink>
+| TWikibug:Item6725 | Plugins: Change global package variables from "use vars" to "our" |
 | TWikibug:Item6800 | Use of qw(...) as parentheses, which is deprecated in Perl 5.14 |
 | TWikibug:Item6802 | Disallow plus (+) character in topic name |
 | TWikibug:Item6803 | SpreadSheetPlugin: EVAL function bug with zeroes after decimal point |
 | TWikibug:Item6806 | Uninitialized value error in UI/Save.pm |
+| TWikibug:Item6807 | Configure: Configure: invalid html, restricted input control width |
+| TWikibug:Item6809 | Configure: Configure regexp checker broken |
 | TWikibug:Item6811 | Check permissions in save access control settings |
 | TWikibug:Item6813 | TWiki::UI::Save::save ignores topic name changes when redirecting on save |
 | TWikibug:Item6814 | TWikiUserMappingContrib: Excessive indexing of UserProfileHeader by search engines |
@@ -248,6 +252,6 @@ Total: 5
 | TWikibug:Item6830 | Can't save topic on command line, results in uninitialized value error |
 | TWikibug:Item6832 | Attachments: Can't upload attachments in Chrome |
 </noautolink>
-Total: 13
+Total: 16
 
 __Related Topics:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide, %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%
