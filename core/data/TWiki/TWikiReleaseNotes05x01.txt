@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1326586881" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1326587730" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.1.1 (Istanbul), 2012-01-14
 
 %TOC%
@@ -30,9 +30,11 @@ TWiki-5.1.1 released on 2012-01-14 is a patch release that adds some minor new f
       * S/Mime support for notification e-mails
    * *Plugin Enhancements*
       * New BackupRestorePlugin to easily backup, restore and upgrade TWiki installations
+      * BackupRestorePlugin: Add restore from backup feature - added in TWiki-5.1.1
       * New SetGetPlugin that can store variables persistently
       * New ColorPickerPlugin to pick a color in form fields
-      * SpreadSheetPlugin: New functions BITXOR(), HEXENCODE(), HEXDECODE(), XOR(); new functions FLOOR() and CEILING() added in TWiki-5.1.1
+      * SpreadSheetPlugin: New functions BITXOR(), HEXENCODE(), HEXDECODE(), XOR()
+      * SpreadSheetPlugin: New functions FLOOR() and CEILING() - added in TWiki-5.1.1
 
 See the full list of new features and bug fixes further below.
 
@@ -138,7 +140,7 @@ When upgrading user profile pages pay attention to the renamed and removed field
 
 Follow the TWikiUpgradeGuide to install TWiki and migrate data from your existing TWiki.
 
-Watch TWiki:Plugins.BackupRestorePlugin for an updated version. Once the web-based restore feature is implemented it will be easy to backup an old TWiki and restore content on a new TWiki.
+You can use the new BackupRestorePlugin to backup an old TWiki and then simply restore the content to a new TWiki.
 
 ---++ TWiki-5.1.0 Major Release - Details
 
