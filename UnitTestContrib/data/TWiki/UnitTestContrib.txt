@@ -1,9 +1,9 @@
+%META:TOPICINFO{author="TWikiContributor" date="1326590843" format="1.1" version="$Rev$"}%
 ---+!! !UnitTestContrib
 <!--
 One line description, required for extensions repository catalog.
    * Set SHORTDESCRIPTION = TWiki Unit-Test Framework
 -->
-<a href="http://wikiring.com"><img src="%ATTACHURL%/logo.gif" style="float:right" /></a>
 %SHORTDESCRIPTION%
 
 %TOC%
@@ -40,22 +40,16 @@ One test file, =SemiAutomaticTestCaseTests.pm=, reads the semi-automatic tests f
 
 ---++ Contrib Info
 
-Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
-
 |  Contrib Author(s): | Crawford Currie http://c-dot.co.uk and test authors |
-|  Copyright: | &copy; 2007 TWiki Contributors |
+|  Copyright: | &copy; 2007-2012 TWiki Contributors |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Contrib Version: | %$VERSION% |
+|  Contrib Version: | 2012-01-14 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  5 Sep 2007 | Added logging |
+|  2012-01-14: | TWikibug:Item6833: Fix RegisterTests to account for Item6824 changes |
+|  2007-09-05: | Added logging |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/UnitTestContrib |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/UnitTestContribDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/UnitTestContribAppraisal |
 
 __Related Topics:__ %SYSTEMWEB%.TWikiContribs, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
-
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
-
-%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
-%META:FILEATTACHMENT{name="logo.gif" attr="h" comment="" version="1"}%

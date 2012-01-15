@@ -497,7 +497,7 @@ sub registerVerifyOk {
     $this->assert_equals(1, scalar(@TWikiFnTestCase::mails));
     my $done = '';
     foreach my $mail ( @TWikiFnTestCase::mails ) {
-        if( $mail =~ /Your verification code is /m ) {
+        if( $mail =~ /Your verification code is:/m ) {
             $this->assert(!$done, $done."\n---------\n".$mail);
             $done = $mail;
         } else {
