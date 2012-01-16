@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1326587730" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1326606282" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.1.1 (Istanbul), 2012-01-14
 
 %TOC%
@@ -220,7 +220,7 @@ Total: 21
 
 ---++ TWiki-5.1.1 Patch Release - Details
 
-TWiki-5.1.1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x01 revision r22564 (2012-01-14)
+TWiki-5.1.1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x01 revision r22570 (2012-01-14)
 
 ---+++ Enhancements
 
