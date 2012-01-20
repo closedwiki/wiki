@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273968418" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1327035131" format="1.1" version="$Rev$"}%
 ---+!! !TWikiNetSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -63,14 +63,15 @@ This skin is based on PatternSkin, and the same rules for customization apply.
 
 <!-- Note on Screenshot: Please attach a 600x130 pixel screenshot and a full screen shot to the Skin topic, then update the href and img src to reflect the names -->
 |  Skin Author: | Implemented by TWiki:Main/ArthurClemens, design by [[http://www.linkedin.com/in/paulvanberkel][Paul van Berkel]] |
-|  Copyright: | &copy; 2007-2010, [[http://twiki.net][Twiki, Inc.]] |
+|  Copyright: | &copy; 2007-2012, [[http://twiki.net][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Description: | Certified TWiki skin |
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=twikinet,pattern][Preview with this topic]] |
 |  Base Name: | twikinet,pattern |
-|  Skin Version: | 2010-05-15 (v1.2) |
+|  Skin Version: | 2012-01-19 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2012-01-19: | TWikibug:Item6838: Add Perl logo next to TWiki logo in bottom bar |
 |  2010-05-15: | TWikibug:Item6433 - doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  01 Sep 2009: | Twiki, Inc. rebranding (v1.100) |
 |  16 Mar 2008: | Public release (v1.000) |
