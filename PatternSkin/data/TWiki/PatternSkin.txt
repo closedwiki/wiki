@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1326520010" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1327034561" format="1.1" version="$Rev$"}%
 ---+!! Pattern Skin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -95,8 +95,9 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 |  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.png" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this skin]] |
 |  Base Name: | pattern |
-|  Skin Version: | 2012-01-13 |
+|  Skin Version: | 2012-01-19 |
 |  History: | <!-- specify latest version first -->&nbsp; |
+|  2012-01-19: | TWikibug:Item6838: Add Perl logo next to TWiki logo in bottom bar |
 |  2012-01-13: | TWikibug:Item6832: Fix for can't upload attachments in Chrome |
 |  2011-10-03: | TWikibug:Item6819: Move change TWiki form from edit screen to "more" screen |
 |  2011-07-28: | TWikibug:Item6780: Usability: Link to !UserList topic instead of !TWikiUsers |
