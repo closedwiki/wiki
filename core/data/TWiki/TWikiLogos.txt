@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1291861099" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1327024819" format="1.1" version="$Rev$"}%
 ---+ TWiki Logos 
 
 The official TWiki logo is a big "T" in a speech bubble conveying "working together", and has a "collaborate with TWiki" tag line.
@@ -76,7 +76,7 @@ If you use the official TWiki.org artwork on your own site you can link back to 
 
 If you create your own TWiki skin you are encouraged to add the small 80x31 pixel TWiki logo at the bottom of your skin:
 
-=&lt;a href="http://twiki.org/"&gt;&lt;img src="%<nop>PUBURL%/%<nop>SYSTEMWEB%/TWikiLogos/T-logo-80x15.gif" alt="This site is powered by the TWiki Enterprise Collaboration Platform" width="80" height="15" title="This site is powered by the TWiki Enterprise Collaboration Platform" border="0" /&gt;&lt;/a&gt;=
+=&lt;a href="http://twiki.org/"&gt;&lt;img src="%<nop>PUBURL%/%<nop>SYSTEMWEB%/TWikiLogos/T-badge-88x31.gif" alt="This site is powered by the TWiki Enterprise Collaboration Platform" width="88" height="31" title="This site is powered by the TWiki Enterprise Collaboration Platform" border="0" /&gt;&lt;/a&gt;=
 
 ---++ Right to use Trademarked Artwork
 
@@ -92,6 +92,13 @@ TWiki<sup>&reg;</sup> is a registered trademarks of TWiki founder [[http://twiki
 ---++ Background and Feedback
 
 The logo was created by TWiki:Main.PeterThoeny and TWiki:Main.ArthurClemens in September 2005, based on a lot of feedback from the TWiki community. See history and provide feedback at TWiki:Codev.TWikiLogoDevelopment.
+
+---++ Perl Logo
+
+TWiki shows a small Perl logo next to the TWiki logo at the bottom of every page. This is to help raise the awareness of Perl. The Perl logo links to http://www.perl.org/. The Perl Foundation holds the [[http://www.perlfoundation.org/perl_trademark][trademark to the Perl logo]].
+
+=perl-logo-88x31.gif:= <br />
+     <img src="%ATTACHURLPATH%/perl-logo-88x31.gif" alt="Perl logo" width="88" height="31" border="0" />
 
 %STOPINCLUDE%
 -- __Contributors:__ TWiki:Main.ArthurClemens, TWiki:Main.PeterThoeny
