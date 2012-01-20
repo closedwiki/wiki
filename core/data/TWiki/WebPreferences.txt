@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1296622879" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1327024795" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WEB% Web Preferences
 
 <sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
@@ -33,7 +33,7 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
       * Set WEBFORMS = TWikiPreferencesForm
 
    * Copyright notice for the TWiki web.
-      * Set WEBCOPYRIGHT = <span class="twikiRight"> <a href="http://twiki.org/"><img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiLogos/T-badge-88x31.gif" alt="This site is powered by the TWiki collaboration platform" width="88" height="31" title="This site is powered by the TWiki collaboration platform" border="0" /></a></span>%MAKETEXT{"Copyright &&copy; [_1] by the contributing authors. All material on this collaboration platform is the property of the contributing authors." args="1999-%GMTIME{$year}%"}% <br /> %MAKETEXT{"Ideas, requests, problems regarding [_1]? <a href='[_2]'>Send feedback</a>" args="<nop>%WIKITOOLNAME%,mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%%20Feedback%20on%20%BASEWEB%.%BASETOPIC%"}% <br /> __Note:__ Please contribute updates to this topic on TWiki.org at <a href="http://twiki.org/cgi-bin/view/TWiki/%BASETOPIC%" target="twiki.org">TWiki:TWiki.%BASETOPIC%</a>.
+      * Set WEBCOPYRIGHT = %MAKETEXT{"Copyright &&copy; [_1] by the contributing authors. All material on this collaboration platform is the property of the contributing authors." args="1999-%GMTIME{$year}%"}% <br /> %MAKETEXT{"Ideas, requests, problems regarding [_1]? <a href='[_2]'>Send feedback</a>" args="<nop>%WIKITOOLNAME%,mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%%20Feedback%20on%20%BASEWEB%.%BASETOPIC%"}% <br /> __Note:__ Please contribute updates to this topic on TWiki.org at <a href="http://twiki.org/cgi-bin/view/TWiki/%BASETOPIC%" target="twiki.org">TWiki:TWiki.%BASETOPIC%</a>.
 
    * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %SYSTEMWEB%.TWikiAccessControl).
       * Set ALLOWWEBCHANGE = %USERSWEB%.TWikiAdminGroup
