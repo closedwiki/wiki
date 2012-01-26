@@ -2063,8 +2063,12 @@ sub _fixupIncludedTopic {
     my $fromWeb = $options->{web};
 
     unless( $options->{in_noautolink} ) {
+        # Prefix web name to WikiWord to make links work, such as:
         # 'TopicName' to 'Web.TopicName'
+        # TWikibug:Item6840: Exclude 'WikiWordWeb.TopicName' using translation token
+        $text =~ s/(?:^|(?<=[\s(]))($regex{webNameRegex}\.($regex{wikiWordRegex}|$regex{abbrevRegex}))/-$TranslationToken$1)/go;
         $text =~ s#(?:^|(?<=[\s(]))($regex{wikiWordRegex})#$fromWeb.$1#go;
+        $text =~ s/-$TranslationToken//go;
     }
 
     # Handle explicit [[]] everywhere
