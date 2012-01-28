@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1327787143" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1327787864" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -127,8 +127,9 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 <img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="20" height="1" />
 </td><td valign="top" class="profileBox" style="min-width: 200px;">
 <b>%MAKETEXT{"Tag Cloud of [_1]:" args="<nop>%FORMFIELD{ "FirstName" topic="%INCLUDINGTOPIC%" }%"}%</b>
-%BR%
-%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%SYSTEMWEB%/TagMeSearch?tag=$tag;by=%INCLUDINGTOPIC%\" style=\"font-size:$size%\">$tag</a>" separator="&nbsp; "  minsize="80" maxsize="120" by="%INCLUDINGTOPIC%" }%
+%BR%%BR%
+<strong><em>%MAKETEXT{"Note:"}%</em></strong>
+%MAKETEXT{"Tag topics to modify your tag cloud."}%
 </td></tr></table>
 </form>
 </div>
