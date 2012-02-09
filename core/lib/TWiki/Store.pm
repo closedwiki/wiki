@@ -1678,11 +1678,6 @@ sub createWeb {
     # copy topics from base web
     my @topicList = $this->getTopicNames( $baseWeb );
 
-    unless( $baseWeb =~ /^_/ ) {
-        # not a system web, so filter for only Web* topics
-        @topicList = grep { /^Web/ } @topicList;
-    }
-
     foreach my $topic ( @topicList ) {
         $this->copyTopic( $user, $baseWeb, $topic, $newWeb, $topic );
     }
