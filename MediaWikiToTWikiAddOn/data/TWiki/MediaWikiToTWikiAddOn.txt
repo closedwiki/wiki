@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1304146675" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1328826004" format="1.1" version="$Rev$"}%
 ---+!! !MediaWikiToTWikiAddOn
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -22,7 +22,7 @@ and thus does not need a database access once the dump was created.
 The conversion tool takes care of almost all peculiarities of <nop>MediaWiki
 and TWiki. It does _not_ map <nop>MediaWiki's category system onto TWiki
 as long as TWiki lacks a standard category system. There are however many
-ways to implement categories in TWiki, one of which is the upcomming
+ways to implement categories in TWiki, one of which is the upcoming
 <nop>ClassificationPlugin which implements true hierarchies and 
 semantic predicates to query categories and topics within. The mediawiki2twiki
 tool allows to map the <nop>MediaWiki categories onto any TWiki category
@@ -32,7 +32,7 @@ the conversion tool.
 One notion of caution: in general the conversion tool is able to
 convert the wiki markup dialects. However, the <nop>MediaWiki's template 
 mechanism, comparable to TWiki's parametrized =INCLUDE= statement does
-*not* match. The reason is burried in the different parsing priorities
+*not* match. The reason is buried in the different parsing priorities
 within both parsers: while <nop>MediaWiki parses left-to-right, TWiki
 does also parser inside-out, which means parameters to =INCLUDE= are
 evaluate _before_ making the inclusion. The opposite is the case
@@ -112,10 +112,11 @@ should test the conversion result by using the -debug, -dry and -max.
 Sponsored by <a href="http://www.schenck-rotec.net"><img src="%ATTACHURLPATH%/schenck_logo.gif" border="0" title="Schenck-RoTec"/></a>
 
 |  <nop>AddOn Author: | TWiki:Main.MichaelDaum |
-|  Copyright: | &copy; 2006-2007 Michael Daum http://wikiring.de <br /> &copy; 2006-2011 TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2006-2007 Michael Daum http://wikiring.de <br /> &copy; 2006-2012 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  <nop>AddOn Version: | v1.1 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-02-09: | TWikibug:Item6837: Doc improvements (typo fix) -- TWiki:Main.BobBagwill |
 |  2011-07-06: | TWikibug:Item6764: Doc improvements |
 |  2010-04-30: | TWikibug:Item6433: Doc improvements |
 |  20 Jul 2007 | initial release |
