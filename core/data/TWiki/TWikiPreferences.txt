@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1327024784" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1328754331" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -35,6 +35,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * Set SITEMAPLIST = on
       * Set SITEMAPWHAT = Describe what this web does
 
+#CopyrightNotice
    * Copyright notice:
       * Set WEBCOPYRIGHT = %MAKETEXT{"Copyright &&copy; [_1] by the contributing authors. All material on this collaboration platform is the property of the contributing authors." args="2008-%GMTIME{$year}%"}% <br /> %MAKETEXT{"Ideas, requests, problems regarding [_1]? <a href='[_2]'>Send feedback</a>" args="<nop>%WIKITOOLNAME%,mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%%20Feedback%20on%20%BASEWEB%.%BASETOPIC%"}%
 
@@ -43,15 +44,18 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
 
    * Exclude web from a =web="all"= search: (Set to =on= for hidden webs; is overwritten by web preferences) __Note__ it is much better to use TWikiAccessControls in individual webs to control who can and can't view the contents of a web. NOSEARCHALL is retained for compatibility, but you should avoid using it.
       * Set NOSEARCHALL = 
+
    * Prevent automatic linking of [[%SYSTEMWEB%.WikiWords][WikiWords]] and acronyms (if set to =on=); link <nop>WikiWords (if empty); can be overwritten by web preferences:
       * Set NOAUTOLINK = 
       * __Note:__ Use the =[<nop>[...][...]]= syntax to link topics in case you disabled <nop>WikiWord linking. The =&lt;noautolink&gt; ... &lt;/noautolink&gt;= syntax can be used to prevents links within a block of text.
+
    * If you use non !WikiWords for topic names (for example "Expenses" or "Mighty1") and if you use bracket notation to link to those topics, it is useful to *turn of all warnings* (like: "WARNING: This topic name is not recommended because it will not be linked automatically") and checkboxes ("Allow non !WikiWord for the new topic name"). Can be overwritten by web preferences. Set to =on= to activate:
       * Set HIDE_NON_WIKI_WORD_WARNINGS =
       
    * Warn if =%<nop>INCLUDE{}%= of topic fails: Fail silently if empty or =off=. Output warning message (defined in templates/oopsalerts.tmpl) if set to =on=. Otherwise output specific text (use =$topic= for topic). You can override this in web preferences, or by using a =warn="..."= parameter with =%<nop>INCLUDE{}%= :
       * Set INCLUDEWARNING = on
 
+#TableOfContents
    * Generated Table of Contents (TOC) settings
       * The first header level to appear in the TOC:
          * Set TOC_MIN_DEPTH =
@@ -72,6 +76,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
             * If not set: included TOC is shown
             * Possible values: =on= or nothing
 
+#DefaultUserSettings
 ---++ Default User Settings
 
 %X% *NOTE:* They are typically redefined in topics of individual %USERSWEB%.TWikiUsers
@@ -115,6 +120,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * Set ATTACHEDIMAGEFORMAT = \n   * $comment: <br />\n     <img src="%ATTACHURLPATH%/$name" alt="$name" $size />
 </verbatim>
 
+#TWikiPlatformSettings
 ---++ TWiki Platform Settings
 
    * TWiki site name:
@@ -136,6 +142,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
    * Maximum size of %SYSTEMWEB%.FileAttachments in KB, 0 for no limit:
       * Set ATTACHFILESIZELIMIT = 10000
 
+#BroadcastMessage
    * Broadcast message for skins supporting a %<nop>BROADCASTMESSAGE% at the top of the page: (IMPORTANT: Set to empty message if not used; #Comment out unused messages)
       * Set BROADCASTMESSAGE = 
       * #Set BROADCASTMESSAGE = *NOTE:* Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled <nop>%WIKITOOLNAME% maintenance.
@@ -143,6 +150,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
    * Users or groups allowed to [[%SYSTEMWEB%.ManagingWebs][create new top-level webs]]: (ex: %USERSWEB%.WebCreatorsGroup). If set to nothing, only administrators will be able to do this.
       * Set ALLOWROOTCHANGE = %USERSWEB%.TWikiAdminGroup
 
+#SearchSettings
 ---+++ Search Settings
 
    * Default type for search, one of: keyword (for search engine like syntax), regex (for RegularExpression search), or literal (for verbatim search)
@@ -152,6 +160,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
    * Stop words, e.g., common words and characters to exclude from a keyword search:
       * Set SEARCHSTOPWORDS = a, all, am, an, and, any, as, at, b, be, by, c, d, e, for, from, g, h, how, i, i'm, i.e., in, is, isn't, it, it's, its, j, k, l, m, n, o, of, on, or, p, q, r, s, t, that, that's, the, this, to, u, v, w, was, wasn't, what, what's, when, where, who, who's, will, with, x, y, z
 
+#EmailSettings
 ---+++ E-mail Settings
 
    * 'Mail this topic' mailto: link - can be included in topics, templates or skins
@@ -160,6 +169,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
    * 'Mail this topic' link text
       * Set MAILTHISTOPICTEXT = Send a link to this page
 
+#HttpEquivSettings
 ---+++ HTTP-<nop>EQUIV Settings
 
    * %T% *NOTE:* Changing cache behaviour with these settings should not be necessary and may cause cache-related problems (e.g. TWiki:Codev.BackFromPreviewLosesText or TWiki:Codev.RefreshEditPage). These settings do not affect proxy caches.
@@ -175,6 +185,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
    * ==http-equiv== meta tags for ==preview== script:
       * Set HTTP_EQUIV_ON_PREVIEW = 
 
+#SkinSettings
 ---++ Skin Settings
 
    * Skin overriding the default TWiki templates: (can be overwritten by WebPreferences and user preferences) 
@@ -182,9 +193,10 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
 
    * __Note:__ See TWikiSkinBrowser for currently installed skins
 
----+++ PatternSkin
+#PatternSkin
+---+++ Pattern Skin
 
-   * Default TWiki styles       
+   * Default TWiki styles of PatternSkin
       * Set TWIKILAYOUTURL = %PUBURLPATH%/%SYSTEMWEB%/PatternSkin/layout.css
       * Set TWIKISTYLEURL = %PUBURLPATH%/%SYSTEMWEB%/PatternSkin/style.css
       * Set TWIKICOLORSURL = %PUBURLPATH%/%SYSTEMWEB%/PatternSkin/colors.css
@@ -197,18 +209,21 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
    * *PatternSkin header settings*
       * Set WEBHEADERART = %PUBURLPATH%/%SYSTEMWEB%/PatternSkin/TWiki_header.gif
       * #Set WEBHEADERBGCOLOR = #faf8f0
-      
+
+#SkinIcons
 ---+++ Skin Icons
 
    * Topic containing the icon graphics library. Icons can easily be rendered with =%<nop>ICON{name}%=.
       * Set ICONTOPIC = %SYSTEMWEB%.TWikiDocGraphics, %USERSWEB%.SiteDocGraphics
 
+#LegacySupport
 ---+++ Legacy Support
 
    * Support for legacy "EDITTOPIC", used to be hard-coded, now replaced by TMPL:P conditional instantiation
       * Set EDITURL = %SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%
       * Set EDITTOPIC = <a href="%EDITURL%" title="Edit Topic - deprecated usage - please see release notes">Edit</a>
 
+#PluginsSettings
 ---++ Plugins Settings
 
    * You can enable/disable Plugins using the [[%SCRIPTURLPATH{"configure"}%][configure]] interface.
@@ -269,6 +284,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * Set X = <img src="%ICONURLPATH{warning}%" alt="ALERT!" title="ALERT!" width="16" height="16" border="0" />
       * Set Y = <img src="%ICONURLPATH{choice-yes}%" alt="DONE" title="DONE" width="16" height="16" border="0" />
 
+#ColoredText
    * Colored text: (see more StandardColors)
      | You type: | =%<nop>RED% red text %<nop>ENDCOLOR% and %<nop>GREEN% green text %<nop>ENDCOLOR%= |
      | You get: | %RED% red text %ENDCOLOR% and %GREEN% green text %ENDCOLOR% |
@@ -315,6 +331,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * Set ENDCOLOR = </span>
 </verbatim>
 
+#ColoredBackground
    * Colored background: (see more StandardColors)
      | You type: | =%<nop>REDBG% red background %<nop>ENDBG% | %<nop>GREENBG% green background %<nop>ENDBG%= |
      | You get: | %REDBG% red background %ENDBG% | %GREENBG% green background %ENDBG% |
@@ -361,6 +378,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * Set ENDBG = </div>
 </verbatim>
 
+#MiscellaneousSettings
 ---++ Miscellaneous Settings
 
    * Format of a NewWikiWord link:
@@ -381,6 +399,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
         then="TWiki is configured using <nop>ApacheLogin, please [[%LOGINURL%][login]] as a normal user first. Then the Admin Login will replace this text"
         else="[[%SCRIPTURL{login}%?sudo=sudo;origurl=%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%][internal admin login]] (use the username suggested and the password set in configure)."}%
 
+#SecuritySettings
 ---++ Security Settings
 
    * Only TWiki administrators are allowed to change this topic:
@@ -389,8 +408,9 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
    * Disable WYSIWYG editor for this preferences topic only:
       * Local TINYMCEPLUGIN_DISABLE = on
 
+#NewPreferences
 ---++ Creating New Preference Variables
- 
+
 You can introduce new VARIABLES and use them in your topics and templates. There is no need to change the TWiki engine (Perl scripts).
    * A preference is defined in a TWikiShorthand bullet item: ==[3 spaces] * [space] Set NAME = value== <br /> Example (as a nested bullet item, indented 6 spaces):
       * S<nop>et WEBBGCOLOR = #FFFFC0
@@ -400,6 +420,7 @@ You can introduce new VARIABLES and use them in your topics and templates. There
    * %X% The sequential order of the preference settings is significant. Define preferences that use other preferences FIRST. For example, set ==<nop>WEBCOPYRIGHT== before ==<nop>WIKIWEBMASTER== since the copyright notice uses the TWiki administrator e-mail address.
    * %X% In order to protect your custom variables from being overwritten when upgrading the [[%SYSTEMWEB%.%TOPIC%]] topic, it is recommended that custom variables are defined in [[%USERSWEB%.%TOPIC%]].
 
+#ProtectedSystemSettings
 ---++ Protected System Settings
 
 The following settings are declared final to protect them as read only. These are system variables that should 
@@ -407,6 +428,7 @@ never be attempted set or altered in any preference topic or topic settings.
 
    * Set FINALPREFERENCES = WEB, TOPIC
 
+#RelatedTopics
 ---++ Related Topics
 
    * %WEBPREFSTOPIC% has preferences of the <nop>%WEB% web.
