@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1316842390" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1328833226" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Managing Webs
 
@@ -20,11 +20,11 @@ The name of the web and topic is represented in the page URL. For example, =http
 #WebTemplate
 ---++ Choose Web Template
 
-There are two methods used to create a new web.  First you can use a specially designed TemplateWeb.  This is an invisible web that begins with an underscore &quot;_&quot; character (for example =_default=).  All topics in the template web will be copied into your new web.
+New webs are based on a web you specify. There are two types of webs you can use to create a new web:
+   * Use a specially designed TemplateWeb. This is an invisible web that begins with an underscore &quot;_&quot; character (for example =_default=).
+   * Use an existing web as a template web. This may be useful if you already have a web that you would like to use as a starting point.
 
-The second method is to use an existing web as a template web.  This may be useful if you already have a web that you would like to use as a starting point.  Only topics that have names beginning with *Web...* (like "%HOMETOPIC%", "%NOTIFYTOPIC%", etc.) are copied.
-
-In either case you will want to be sure to verify that your new web has all the custom modifications that you desire. Any TWikiVariables defined in the form below will automatically be set in the !WebPreferences of the new web.
+In either case all topics in the template web will be copied into the new web. Make sure to verify that your new web has all the custom modifications that you desire. Any settings defined in the form below will automatically be set in the !WebPreferences of the new web.
 
 #CreateNewWeb
 ---++ Adding a New Web
