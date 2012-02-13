@@ -37,7 +37,7 @@ use File::Spec qw(tmpdir);
 use File::Temp qw(tempfile);
 use File::Path qw(mkpath);
 
-use vars qw( $pluginName $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC $debug $mscGenCmd $sandbox %hashArray );
+use vars qw( $pluginName $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC $debug $mscGenCmd $mscScript $sandbox %hashArray );
 
 our $pluginName = 'MessageSequenceChartPlugin';
 our $VERSION = '$Rev$';
@@ -56,6 +56,8 @@ sub initPlugin {
 
     # read plugin settings
     $mscGenCmd = $TWiki::cfg{Plugins}{$pluginName}{mscGenCmd} || '/usr/bin/mscgen';
+    $mscScript = $TWiki::cfg{Plugins}{$pluginName}{mscScript}
+        || $TWiki::cfg{DataDir}.'/../tools/MessageSequenceChart.pl';
     $debug = $TWiki::cfg{Plugins}{$pluginName}{Debug} || 0;
 
     # Plugin correctly initialized
@@ -107,6 +109,9 @@ sub _handleMsc {
     my (undef, $tmpPngFile) = tempfile("tmp${pluginName}XXXXXXXX",
                                         DIR => $tmpDir,
                                         SUFFIX => '.png');
+    my (undef, $tmpErrFile) = tempfile("tmp${pluginName}XXXXXXXX",
+                                        DIR => $tmpDir,
+                                        SUFFIX => '.err');
 
     # Create topic directory "pub/$web/$topic" if needed
     my $dir = TWiki::Func::getPubDir() . "/$web/$topic";
@@ -134,20 +139,9 @@ sub _handleMsc {
 
         # Output the mscgen markup text into the tmp file
         open OUTFILE, ">$tmpTxtFile"
-            or return "<nop>$pluginName Error: could not create file";
+            or return "<nop>$pluginName Error: could not create file $tmpTxtFile: $!";
         print OUTFILE $text;
         close OUTFILE;
-
-        # Run the command and create the png
-        my $cmd =
-            $mscGenCmd .
-            ' -T png' .
-            ' -i %INFILE|F%' .
-            ' -o %OUTFILE|F%';
-
-        writeDebug("$pluginName: Command: $cmd");
-        writeDebug("$pluginName: Infile: $tmpTxtFile");
-        writeDebug("$pluginName: Outfile: $tmpPngFile");
 
         unless ( $sandbox ) {
             if ( $TWiki::Plugins::VERSION >= 1.1 ) {
@@ -161,18 +155,32 @@ sub _handleMsc {
             }
         }
 
+        # Run the command and create the png
+        my $cmd = "perl $mscScript $mscGenCmd %TYPE|S% %INFILE|F% %OUTFILE|F% %ERRFILE|F%";
+
+        writeDebug("$pluginName: Command:   $cmd");
+        writeDebug("$pluginName: TYPE:      png");
+        writeDebug("$pluginName: INFILE:    $tmpTxtFile");
+        writeDebug("$pluginName: OUTFILE:   $tmpPngFile");
+        writeDebug("$pluginName: ERRFILE:   $tmpErrFile");
+
         my ($output, $status) = $sandbox->sysCommand(
             $cmd,
-            INFILE => $tmpTxtFile,
-            OUTFILE => $tmpPngFile,
+            TYPE      => 'png',
+            INFILE    => $tmpTxtFile,
+            OUTFILE   => $tmpPngFile,
+            ERRFILE   => $tmpErrFile,
         );
 
-        writeDebug("$pluginName: Output: $output Status $status");
+        writeDebug("$pluginName: Output: $output");
+        writeDebug("$pluginName: Status: $status");
 
         if ($status) {
+            my $errorMsg = &_showError($status, $output, $text, $tmpErrFile);
             unlink $tmpTxtFile unless $debug;
             unlink $tmpPngFile unless $debug;
-            return &_showError($status, $output, $text);
+            unlink $tmpErrFile unless $debug;
+            return $errorMsg;
         }
 
         # Attach created png file to topic, but hide it pr. default.
@@ -188,9 +196,9 @@ sub _handleMsc {
             }
         );
 
-        # Clean up temporary files
         unlink $tmpTxtFile unless $debug;
         unlink $tmpPngFile unless $debug;
+        unlink $tmpErrFile unless $debug;
     }
 
     my $imgTag = "<img src=\"" .
@@ -258,13 +266,34 @@ sub _removeAttachment {
 }
 
 sub _showError {
-    my ( $status, $output, $text ) = @_;
+    my ( $status, $output, $text, $errFile ) = @_;
 
-    my $line = 1;
-    $text =~ s/\n/sprintf("\n%02d: ", $line++)/ges;
-    $output .= "<pre>$text\n</pre>";
-    return "<noautolink><span class='twikiAlert'><nop>$pluginName " .
-           "Error ($status): $output</span></noautolink>";
+    my $msg = "<noautolink><div class='twikiAlert'>";
+    $msg .= "<nop>$pluginName Error ($status):\n";
+    $msg .= "<verbatim>\n";
+
+    if (defined $errFile && $errFile && -s $errFile) {
+        open ERRFILE, $errFile;
+        while (<ERRFILE>) {
+            $msg .= $_;
+        }
+        close ERRFILE;
+        $msg .= "\n";
+    }
+
+    if (defined $text && $text) {
+        my $line = 1;
+	foreach (split(/\n/,$text)) {
+            $msg .= sprintf("%02d: ", $line++);
+            $msg .= $_;
+            $msg .= "\n";
+	}
+    }
+
+    $msg .= "</verbatim>\n";
+    $msg .= "</div></noautolink>\n";
+
+    return $msg;
 }
 
 sub writeDebug {

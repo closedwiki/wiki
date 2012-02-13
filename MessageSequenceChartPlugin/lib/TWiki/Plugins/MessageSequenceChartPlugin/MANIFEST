@@ -4,3 +4,4 @@ lib/TWiki/Plugins/MessageSequenceChartPlugin/Config.spec 0444
 pub/TWiki/MessageSequenceChartPlugin/example0.png 0444
 pub/TWiki/MessageSequenceChartPlugin/example1.png 0444
 pub/TWiki/MessageSequenceChartPlugin/example2.png 0444
+tools/MessageSequenceChart.pl 0555

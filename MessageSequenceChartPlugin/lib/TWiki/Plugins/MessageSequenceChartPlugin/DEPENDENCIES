@@ -1,0 +1,5 @@
+Digest::MD5,>=0,cpan,Required
+File::Path,>=0,cpan,Required
+File::Spec,>=0,cpan,Required
+File::Temp,>=0,cpan,Required
+mscgen,>=0,C,Required. Available from http://www.mcternan.me.uk/mscgen/.

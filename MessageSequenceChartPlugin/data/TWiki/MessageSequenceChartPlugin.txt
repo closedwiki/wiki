@@ -24,8 +24,8 @@ MSC is an interaction diagram from the SDL family very similar to UML's sequence
 <sticky>
 <table>
 <tr>
-<th>Input</th>
-<th>Output</th>
+<th>Input:</th>
+<th>Output:</th>
 </tr>
 <tr>
 <td>
@@ -33,6 +33,7 @@ MSC is an interaction diagram from the SDL family very similar to UML's sequence
 %MSC%
 msc {
     width="300";
+
     a [label="Alice"],b [label="Bob"];
 
     a=>b [label="INVITE"];
@@ -62,8 +63,14 @@ Enclose the description for your MSC within =%<nop>MSC%= and =%<nop>ENDMSC%= tag
 
 ---+++ Fictional process
 
-__You type:__
 <sticky>
+<table>
+<tr>
+<th>You type:</th>
+<th>You get:</th>
+</tr>
+<tr>
+<td>
 <verbatim>
 %MSC%
 msc {
@@ -86,37 +93,24 @@ msc {
 }
 %ENDMSC%
 </verbatim>
-<table><tr><td valign="top" width="50%">
-__You get: (simulated)__ %BR%
+</td>
+<td>
 <img src="%ATTACHURLPATH%/example0.png" alt="example0.png" width="600" height="448"  />
-</td><td valign="top" width="50%">
-__You get: (if installed)__ %BR%
-%MSC%
-msc {
-  a,b,c;
-
-  a->b [ label = "ab()" ] ;
-  b->c [ label = "bc(TRUE)"];
-  c=>c [ label = "process(1)" ];
-  c=>c [ label = "process(2)" ];
-  ...;
-  c=>c [ label = "process(n)" ];
-  c=>c [ label = "process(END)" ];
-  a<<=c [ label = "callback()"];
-  ---  [ label = "If more to run", ID="*" ];
-  a->a [ label = "next()"];
-  a->c [ label = "ac1()\nac2()"];
-  b<-c [ label = "cb(TRUE)"];
-  b->b [ label = "stalled(...)"];
-  a<-b [ label = "ab() = FALSE"];
-}
-%ENDMSC%
-</td></tr></table></sticky>
+</td>
+</tr>
+</table>
+</sticky>
 
 ---+++ Fictional client-server protocol
 
-__You type:__
 <sticky>
+<table>
+<tr>
+<th>You type:</th>
+<th>You get:</th>
+</tr>
+<tr>
+<td>
 <verbatim>
 %MSC%
 msc {
@@ -135,28 +129,13 @@ msc {
 }
 %ENDMSC%
 </verbatim>
-<table><tr><td valign="top" width="50%">
-__You get: (simulated)__ %BR%
+</td>
+<td>
 <img src="%ATTACHURLPATH%/example1.png" alt="example1.png" width="600" height="328" />
-</td><td valign="top" width="50%">
-__You get: (if installed)__ %BR%
-%MSC%
-msc {
- arcgradient = 8;
-
- a [label="Client"],b [label="Server"];
-
- a=>b [label="data1"];
- a-xb [label="data2"];
- a=>b [label="data3"];
- a<=b [label="ack1, nack2"];
- a=>b [label="data2", arcskip="1"];
- |||;
- a<=b [label="ack3"];
- |||;
-}
-%ENDMSC%
-</td></tr></table></sticky>
+</td>
+</tr>
+</table>
+</sticky>
 
 ---++ Plugin Installation & Configuration
 
@@ -184,7 +163,8 @@ Instructions and installation packages can be found from [[http://www.mcternan.m
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
       * Configure additional plugin settings in the __Extensions__ section if needed. All settings start with =$TWiki::cfg{Plugins}{MessageSequenceChartPlugin}=, and on many systems, these are optional.
 | *Setting* | *Description* |
-| ={mscGenCmd}= |  Path to [[http://www.mcternan.me.uk/mscgen/][mscgen]] executable on your system. Default value is =/usr/bin/mscgen=. |
+| ={mscGenCmd}= | Path to [[http://www.mcternan.me.uk/mscgen/][mscgen]] executable on your system. Default value is =/usr/bin/mscgen=. |
+| ={mscScript}= | Path to the <nop>MessageSequenceChart.pl script (should be in your tools directory). E.g. =/var/www/twiki/tools/MessageSequenceChart.pl=. |
 | ={Debug}= | Debug plugin. See output in data/debug.txt. |
       * Test if the installation was successful: See example above.
 
@@ -195,11 +175,11 @@ Instructions and installation packages can be found from [[http://www.mcternan.m
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-02-13: | Fixed error handling and reporting |
 |  2012-02-09: | Checked in to SVN |
 |  2012-02-08: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | none |
-|  Other Dependencies: | [[http://www.mcternan.me.uk/mscgen/][mscgen]] |
+|  Dependencies | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/MessageSequenceChartPlugin |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/MessageSequenceChartPluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/MessageSequenceChartPluginAppraisal |
