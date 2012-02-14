@@ -1,10 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274837347" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1329253021" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiInstallationGuide"}%
 ---+ Administrator Skills Assumptions
 
-__Note:__ If you aren't already fairly well-skilled in Linux/Unix/Windows system administration, Apache webserver configuration, and so on, consider using TWiki:Codev.TWikiVMDebianStable - this can be installed on Windows or Linux, and makes it possible to get a working TWiki system within 5 minutes (after a fairly big download), ready to use from your browser.  This is ideal for personal use or evaluations - if you decide to go for production use then these !AdminSkillsAssumptions apply to some degree, but you are starting from a working system.
+__Note:__ If you aren't already fairly well-skilled in Linux/Unix/Windows system administration, Apache webserver configuration, and so on, consider using TWiki:Codev.DownloadTWikiVM - this can be installed on Windows or Linux, and makes it possible to get a working TWiki system within 5 minutes (after a fairly big download), ready to use from your browser. For personal use on Windows see Codev.TWikiForWindowsPersonal.
 
-If you need to install TWiki you'll need to either have or learn the following skills (even with !TWikiVMDebianStable, you'll need these for upgrades).  For each of these, the requirement is either pre-existing knowledge/skill, or the willingness to spend significant time (i.e. from hours to days) learning them:
+If you need to install TWiki you'll need to either have or learn the following skills (even with !DownloadTWikiVM, you'll need these for upgrades).  For each of these, the requirement is either pre-existing knowledge/skill, or the willingness to spend significant time (i.e. from hours to days) learning them:
 
    * *Operating system administration:* Ability to use Unix/Linux command line tools (or equivalent Windows tools), including ability to move/copy/delete files, change permissions, view web server log files, set environment variables, use a text editor, etc.
    * *Web server administration:* Ability to do basic setup, e.g. ability to edit config files or use GUI configuration tools to enable CGI scripts on a directory.
@@ -17,7 +17,7 @@ Although the TWikiInstallationGuide is quite complete, there will on occasion be
 
 There are many excellent resources for learning how to administer your OS and web server, including books, web sites, web forums, IM and e-mail lists.
 
-To get started with Linux, visit [[http://linuxbasics.org/][LinuxBasics.org]]. !LinuxBasics.org offers Linux tutorials, a mailing-list and an IRC-channel to answer questions, and links to sites with information to install and use Linux. !LinuxBasics.org now also offers a downloadable Linux 'virtual machine' (LBox) that runs on Windows - you can use this as a completely safe learning environment, and feel free to make mistakes without any chance of damaging your Windows setup.
+To get started with Linux, visit [[http://www.howtoforge.com/][HowtoForge.org]]. !HowtoForge offers Linux tutorials, forums to ask questions, and links to sites with information to install and use Linux.
 
 Some resources if you need help, or want to get up and running quickly:
    * TWiki:Support/WebHome: Post a question in the TWiki.org support forum. This forum is mainly intended for _TWiki related_ issues, there are other forums if you need help in operating system and web server administration.
