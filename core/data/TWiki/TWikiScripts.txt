@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1308806780" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1329273494" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki CGI and Command Line Scripts
 
@@ -78,7 +78,7 @@ The =edit= script understands the following parameters, typically supplied by HT
 | =contenttype= | Optional parameter that defines the application type to write into the CGI header. Defaults to =text/html=. May be used to invoke alternative client applications | |
 | =anyname= | Any parameter can passed to the new topic; if the template topic contains =%<nop>URLPARAM{"anyname"}%=, it will be replaced by its value | |
 | =breaklock= | If set, any lease conflicts will be ignored, and the edit will proceed even if someone is already editing the topic. | |
-| =redirectto= | If the user continues from edit to save, and if the save (or cancels the edit) process is successful, save will redirect to this topic or URL. The parameter value can be a =TopicName=, a =Web.TopicName=, or a URL.%BR% __Note:__ Redirect to a URL only works if it is enabled in =configure= (Miscellaneous ={AllowRedirectUrl}=). | |
+| =redirectto= | If the user continues from edit to save, and if the save (or cancels the edit) process is successful, save will redirect to this topic or URL. The parameter value can be a =TopicName=, a =Web.TopicName=, or a URL.%BR% __Note:__ Redirect to a URL only works if it is enabled in =configure= (Security setup &gt; Miscellaneous ={AllowRedirectUrl}=). | |
 | =t= | Provide a unique URL each time a topic is edited, typically specifying parameter =t=%<nop>SERVERTIME{$epoch}%= in an edit link. This is done to prevent browsers from caching an edit session, which could result in editing outdated content. The parameter name and value is arbitrary, but must be unique each time. | |
 
 Form field values are passed in parameters named 'field' - for example, if I have a field =Status= the parameter name is =Status=.
@@ -131,7 +131,7 @@ No parameters
 | *Parameter* | *Description* | *Default* |
 | =text= | Text of the topic | '' |
 | =originalrev= | Revision that the edit started on | Most recent revision |
-| =redirectto= | If the savesettings process is successful, save will redirect to this topic or URL. The parameter value can be a =TopicName=, a =Web.TopicName=, or a URL.%BR% __Note:__ Redirect to a URL only works if it is enabled in =configure= (Miscellaneous ={AllowRedirectUrl}=). | 
+| =redirectto= | If the savesettings process is successful, save will redirect to this topic or URL. The parameter value can be a =TopicName=, a =Web.TopicName=, or a URL.%BR% __Note:__ Redirect to a URL only works if it is enabled in =configure= (Security setup &gt; Miscellaneous ={AllowRedirectUrl}=). | 
 All other parameters may be interpreted as form fields, depending on the current form definition in the topic.
 
 ---++++ =action=bulkRegister=
@@ -221,7 +221,7 @@ Used for renaming topics and attachments.
 | =confirm= | if defined, requires a second level of confirmation | |
 | =currentwebonly= | if defined, searches current web only for links to this topic | |
 | =nonwikiword= | if defined, a non-wikiword is acceptable for the new topic name | |
-| =redirectto= | If the rename process is successful, rename will redirect to this topic or URL. The parameter value can be a =TopicName=, a =Web.TopicName=, or a URL.%BR% __Note:__ Redirect to a URL only works if it is enabled in =configure= (Miscellaneous ={AllowRedirectUrl}=). | |
+| =redirectto= | If the rename process is successful, rename will redirect to this topic or URL. The parameter value can be a =TopicName=, a =Web.TopicName=, or a URL.%BR% __Note:__ Redirect to a URL only works if it is enabled in =configure= (Security setup &gt; Miscellaneous ={AllowRedirectUrl}=). | |
 
 __Note:__ The =rename= script can only be called via http POST method, not GET. Make sure you specify =method="post"= if you call the =rename= script via a form action.
 
@@ -281,7 +281,7 @@ The =save= script performs a range of save-related functions, as selected by the
 | =originalrev= | Revision on which the edit started. | |
 | =edit= | The script to use to edit the topic when action is =checkpoint= | =edit= |
 | =editparams= | The parameter string to use to edit the topic |  |
-| =redirectto= | The save process will redirect to this topic or URL if it is successful. (Typically this would be the URL that was being viewed when edit was invoked). The parameter value can be a =TopicName=, a =Web.TopicName=, or a URL.%BR% __Note:__ Redirect to a URL only works if it is enabled in =configure= (Miscellaneous ={AllowRedirectUrl}=). | view topic being edited |
+| =redirectto= | The save process will redirect to this topic or URL if it is successful. (Typically this would be the URL that was being viewed when edit was invoked). The parameter value can be a =TopicName=, a =Web.TopicName=, or a URL.%BR% __Note:__ Redirect to a URL only works if it is enabled in =configure= (Security setup &gt; Miscellaneous ={AllowRedirectUrl}=). | view topic being edited |
 
 Any errors will cause a redirect to an =oops= page.
 
