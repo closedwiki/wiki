@@ -548,6 +548,13 @@ sub _renameweb {
     my $query = $session->{request};
     my $cUID = $session->{user};
 
+    if ( $oldWeb eq $TWiki::cfg{SystemWebName} || $oldWeb eq $TWiki::cfg{UsersWebName} ) {
+        # can't rename the TWiki or Main web
+        throw TWiki::OopsException
+          ( 'attention', def => 'system_web_name',
+            params => [ $oldWeb ] );
+    }
+
     # If the user is not allowed to rename anything in the current web - stop here    
     TWiki::UI::checkAccess( $session, $oldWeb, undef,
                             'RENAME', $session->{user} );
