@@ -110,6 +110,11 @@
 %TMPL:DEF{"web_missing"}%
 ---+++ %MAKETEXT{"Name of new web is missing"}%
 %MAKETEXT{"Please go back in your browser and try again."}% %TMPL:END%
+%TMPL:DEF{"system_web_name"}%---+++ %MAKETEXT{"System web [_1] cannot be renamed or moved" args="\"%PARAM1%\""}%
+%MAKETEXT{"Sorry, system webs cannot be renamed, moved or deleted."}%
+
+%MAKETEXT{"Please go back and try a different web."}%
+%TMPL:END%
 %TMPL:DEF{"invalid_web_name"}%
 ---+++ %MAKETEXT{"[_1] is an invalid name for a new web" args="\"%PARAM1%\""}%
 %MAKETEXT{"You are recommended to choose short names, preferably less than 10 characters, starting with an upper-case alphabetic character and using only alphanumeric characters. If you want to create a template web (a web just used as a base to create new webs) choose a name that starts with an underscore and has only alphanumeric characters."}%
