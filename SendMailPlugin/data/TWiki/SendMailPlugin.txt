@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1329291979" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1329293031" format="1.1" version="$Rev$"}%
 ---+ Send Mail Plugin
 
 (placeholder)
+
+%SENDMAIL{}%
