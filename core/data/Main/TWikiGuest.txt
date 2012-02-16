@@ -1,12 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1323751698" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1329428141" format="1.1" version="$Rev$"}%
 ---+ The <nop>TWikiGuest User
 
 A guest of this TWiki site, or a user who is not logged in.
 
-%IF{
- "$ LOGIN != '' AND NOT context authenticated"
- then='%ICON{empty}% %ICON{login}% %LOGIN% - if you already have an account <br />'
-}%
+%IF{ "$ LOGIN != '' AND NOT context authenticated" then='%ICON{empty}% %ICON{login}% %LOGIN% - if you already have an account <br />' }%
 %ICON{empty}% %ICON{useradd}% [[%SYSTEMWEB%.TWikiRegistration][Register]] - create an account to participate in this TWiki site
 
 __Starting points:__
@@ -16,6 +13,7 @@ __Starting points:__
    * [[%SYSTEMWEB%.TWikiUsersGuide][User's Guide]] - documentation for TWiki users
    * [[%SYSTEMWEB%.TWikiFAQ][Frequently Asked Questions]] - about TWiki
    * [[%SYSTEMWEB%.TWikiReferenceManual][Reference Manual]] - documentation for system administrators
+   * [[%SYSTEMWEB%.SiteMap][Site Map]] - to navigate to content
 
 To learn more about the TWiki Enterprise Collaboration Platform visit http://twiki.org/.
 
