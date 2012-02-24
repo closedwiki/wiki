@@ -31,8 +31,8 @@ sub test_basic {
     $this->assert_str_equals(<<HUMPH, "$ui\n");
 | *Group* | *Members* |
 | <nop>AdminGroup | [[TemporaryGROUPSUsersWeb.AdminUser][AdminUser]] |
-| <nop>TWikiBaseGroup | [[TemporaryGROUPSUsersWeb.AdminUser][AdminUser]] [[TemporaryGROUPSUsersWeb.TWikiGuest][TWikiGuest]] [[TemporaryGROUPSUsersWeb.UnknownUser][UnknownUser]] [[TemporaryGROUPSUsersWeb.TWikiContributor][TWikiContributor]] [[TemporaryGROUPSUsersWeb.TWikiRegistrationAgent][TWikiRegistrationAgent]] |
-| [[TemporaryGROUPSUsersWeb.GropeGroup][GropeGroup]] | [[TemporaryGROUPSUsersWeb.ScumBag][ScumBag]] [[TemporaryGROUPSUsersWeb.TWikiGuest][TWikiGuest]] |
+| <nop>TWikiBaseGroup | [[TemporaryGROUPSUsersWeb.AdminUser][AdminUser]], [[TemporaryGROUPSUsersWeb.TWikiGuest][TWikiGuest]], [[TemporaryGROUPSUsersWeb.UnknownUser][UnknownUser]], [[TemporaryGROUPSUsersWeb.TWikiContributor][TWikiContributor]], [[TemporaryGROUPSUsersWeb.TWikiRegistrationAgent][TWikiRegistrationAgent]] |
+| [[TemporaryGROUPSUsersWeb.GropeGroup][GropeGroup]] | [[TemporaryGROUPSUsersWeb.ScumBag][ScumBag]], [[TemporaryGROUPSUsersWeb.TWikiGuest][TWikiGuest]] |
 HUMPH
 }
 
