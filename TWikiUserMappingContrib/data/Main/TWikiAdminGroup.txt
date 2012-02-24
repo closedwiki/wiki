@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313887862" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1330043796" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiGroups"}%
----+ TWiki Administrator Group
+---+ [[TWikiGroups]] &#187; TWiki Administrator Group
 
 This is a super user group that has access to all content, regardless of [[%SYSTEMWEB%.TWikiAccessControl][access control]]. This group has also access to the [[%SCRIPTURL{configure}%][configure]] script to do system level configuration.
 
