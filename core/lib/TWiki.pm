@@ -4559,15 +4559,16 @@ sub GROUPS {
         my $descr = "| $groupLink |";
         my $it = $this->{users}->eachGroupMember( $group );
         my $limit_output = 32;
+        my $i = 0;
         while( $it->hasNext() ) {
+            $descr .= ',' if( $i++ );
+            if( $i > $limit_output ) {
+                $descr .= ' ...';
+                last;
+            }
             my $user = $it->next();
             $descr .= ' [['.$this->{users}->webDotWikiName($user).']['.
               $this->{users}->getWikiName( $user ).']]';
-           if ($limit_output == 0) {
-               $descr .= '<div>%MAKETEXT{"user list truncated"}%</div>';
-               last;
-           }
-           $limit_output--;
         }
         push( @table, "$descr |");
     }
