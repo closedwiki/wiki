@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006-2011 Peter Thoeny, peter[at]thoeny.org
-# Copyright (C) 2008-2011 TWiki:TWiki.TWikiContributor
+# Copyright (C) 2006-2012 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2008-2012 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ use strict;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-07-23';
+our $RELEASE = '2012-02-25';
 
 my $pluginName = 'PublishWebPlugin';  # Name of this Plugin
 my $initialized = 0;
@@ -277,6 +277,7 @@ sub _handlePublishWeb
         if( $topicName eq "all" ) {
             my @topics = ();
             foreach( TWiki::Func::getTopicList( $publishWeb ) ) {
+                $topic = $_;
                 $topicName = $_;
                 if( publishTopic( $publishWeb, $topicName, undef, $session ) ) {
                     push( @topics, "[[$publishWeb.$topicName]]" );
@@ -286,6 +287,7 @@ sub _handlePublishWeb
             $text = "PUBLISHWEB: Published topics $done";
         } elsif( $topicName ) {
             if( TWiki::Func::topicExists( $publishWeb, $topicName ) ) {
+                $topic = $topicName;
                 if( publishTopic( $publishWeb, $topicName, undef, $session ) ) {
                     $text = "PUBLISHWEB: Published topic [[$publishWeb.$topicName]]";
                 } else {
