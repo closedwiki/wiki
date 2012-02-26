@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1315964453" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1330218083" format="1.1" version="$Rev$"}%
 ---+!! Publish Web Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -135,10 +135,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2006-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2006-2012 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] <br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-09-13 |
+|  Plugin Version: | 2012-02-25 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-02-25: | TWikibug:Item6851: Fix for re-publising a topic using !WebPublish uses !WebPublish for topic name instead of actual topic name |
 |  2011-07-23: | TWikibug:Item6808: Fix for incorrect BASETOPIC used when topics are re-published; use registerTagHandler for PUBLISHWEB variable; hide topics specified in EXCLUDETOPIC from picklist in !WebPublish |
 |  2011-07-23: | TWikibug:Item6773: Move config settings to =LocalSite.cfg=; support multiple skins; support template path outside TWiki file path; add view.website.tmpl as a publish skin for demo; possible to publish into sub-directory of html doc root indicated by {PublishUrlPath} setting; change global package variables from "use vars" to "our"; remove URL parameters in links of published page to make TOC and other TWiki internal links work |
 |  2006-02-15: | Added =%<nop>PUBLISHWEB{"publish" topic="Name"}%= |
