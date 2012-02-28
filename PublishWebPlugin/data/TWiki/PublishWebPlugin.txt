@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1330218083" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1330418885" format="1.1" version="$Rev$"}%
 ---+!! Publish Web Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -62,10 +62,10 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
       * Set DEBUG = 0
 
    * Web to publish:
-      * Set PUBLISHWEBNAME = Website
+      * Set PUBLISHWEBNAME = DemoWebsite
 
    * Skin to use to publish:
-      * Set PUBLISHSKIN = website
+      * Set PUBLISHSKIN = demo_website
       * __Note:__ It is also possible to specify a publish skin on a per page basis. Define a [[%SYSTEMWEB%.TWikiForms][TWiki Form]] with a form field called !PublishSkin. It can be of any type, but a select dropdown box is probably most convenient.
 
    * Exclude topics from publishing:
@@ -82,9 +82,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/Website/WebPublish.txt== | Publish page topic |
+     | ==data/DemoWebsite/*.txt== | Demo web for website publishing (topics) |
+     | ==pub/DemoWebsite/WebPreferences/== | Demo web for website publishing (attachments) |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-     | ==templates/view.website.tmpl== | Demo publish skin |
+     | ==templates/view.demo_website.tmpl== | Demo publish skin |
    * Configure and test the installated Plugin:
       * Run the [[%SCRIPTURL{configure}%][configure]] script to enable the Plugin
       * Configuration on shell level:
@@ -105,23 +106,17 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
               =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishUrlPath} = '';=
          * Create the directory indicated in the ={PublishPath}= setting if needed
          * Create the directory indicated in the ={AttachPath}= setting (relative to ={PublishPath}=)
-         * Change the permission of directories indicated by ={PublishPath}= and ={AttachPath}= to be writable by the cgi user (such as user =nobody= on !RedHat Linux)
-      * Create a new TWiki web for website publishing:
-         * Create a new =Website= web (name indicated by the =PUBLISHWEBNAME= Plugin setting)
-         * In !Website.WebPreferences of that web, set the =NOAUTOLINK= setting to =on=
-         * For convenience, add these links to !Website.WebTopMenu (or !Website.WebLeftBar if you use the PatternSkin):<verbatim>
-   * [[%BASEWEB%.WebHome][Publishing %ICON{menu-down}%]]
-      * [[%BASEWEB%.Index][Home page topic]]
-      * <a href="%PUBLISHWEB{"publishurlpath"}%/index.html">index.html</a>
-      * <a href="%PUBLISHWEB{"publishurlpath"}%/%PUBLISHWEB{topicurl}%">%PUBLISHWEB{topicurl}%</a>
-      * [[%SCRIPTURL{view}%/%BASEWEB%/WebPublish?action=publish;ptopic=%BASETOPIC%][Re-publish this topic]]
-      * [[%SYSTEMWEB%.PublishWebPlugin][PublishWebPlugin]]
-      </verbatim>
-         * Create a =Sandbox_page= topic in that web
-         * This should generate a =sandbox_page.html= page on topic save
-         * Create =Index= topic and other topics
-   * Publish skin:
-      * Create a new publish skin that matches the look of your website. The [[%SYSTEMWEB%.TWikiSkins][TWiki skin]] can be derived from any =twiki/templates/view.*.tmpl= skin file, or can be created from scratch. This plugin contains a bare bone demo skin called =website= located at =twiki/templates/view/website.tmpl=
+         * Change the permission of directories indicated by ={PublishPath}= and ={AttachPath}= to be writable by the webserver user (such as user =nobody= or =apache= on !RedHat Linux)
+      * Test publishing using the !DemoWebsite web:
+         * Go to DemoWebsite.WebHome web
+         * Edit and save the !Index topic
+         * Check if directory =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath}= has an =index.html=
+         * Point your browser to that location to look at the generated =index.html= file
+   * Create your own publish web:
+      * Create a new publish web based on the !DemoWebsite web, or rename the !DemoWebsite web to a memorable name
+      * If you create a new web, make sure to set these settings in !WebPreferences: Set the =NOAUTOLINK= setting to =on=, and set the =PUBLISHWEBPLUGIN_*= settings as in the !WebPreferences of the !DemoWebsite web
+   * Create your own publish skin:
+      * Create a skin that matches the look of your website. The [[%SYSTEMWEB%.TWikiSkins][TWiki skin]] can be derived from any =twiki/templates/view.*.tmpl= skin file, or can be created from scratch. This plugin contains a bare bone unstyled demo skin called =demo_website= located at =twiki/templates/view/demo_website.tmpl=
       * Omit any links to TWiki, such as edit and attach links
       * The skin can use Plugin specific settings =%<nop>PUBLISHWEB{"breadcrumb"}%= and =%<nop>PUBLISHWEB{"nicetopic"}%=
       * The skin can introduce skin specific !WebPreferences settings, such as =%<nop>PUBLISH_SITE%=, =%<nop>PUBLISH_LOGO%=, etc.
@@ -137,8 +132,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2006-2012 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] <br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-02-25 |
+|  Plugin Version: | 2012-02-28 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-02-28: | TWikibug:Item6853: Add sample publishing web called !DemoWebsite to plugin |
 |  2012-02-25: | TWikibug:Item6851: Fix for re-publising a topic using !WebPublish uses !WebPublish for topic name instead of actual topic name |
 |  2011-07-23: | TWikibug:Item6808: Fix for incorrect BASETOPIC used when topics are re-published; use registerTagHandler for PUBLISHWEB variable; hide topics specified in EXCLUDETOPIC from picklist in !WebPublish |
 |  2011-07-23: | TWikibug:Item6773: Move config settings to =LocalSite.cfg=; support multiple skins; support template path outside TWiki file path; add view.website.tmpl as a publish skin for demo; possible to publish into sub-directory of html doc root indicated by {PublishUrlPath} setting; change global package variables from "use vars" to "our"; remove URL parameters in links of published page to make TOC and other TWiki internal links work |
