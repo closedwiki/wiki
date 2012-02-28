@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="PeterThoeny" date="1330410065" format="1.1" version="1.1"}%
+%INCLUDE{WebPageHeader}%
+
+FIXME
+
+%STOPPUBLISH%
+---
+
+__NOTE:__ Content below the STOPPUBLISH variable is not published. Use this space as a scrap area.
+
+%META:FORM{name="WebForm"}%
+%META:FIELD{name="Title" attributes="M" title="Title" value="FIXME"}%
+%META:FIELD{name="Description" attributes="" title="Description" value=""}%
+%META:FIELD{name="Keywords" attributes="" title="Keywords" value=""}%

@@ -1,0 +1,19 @@
+%META:TOPICINFO{author="PeterThoeny" date="1330410747" format="1.1" reprev="1.2" version="1.2"}%
+%INCLUDE{TWiki.WebChangesRightBox}%
+---+!! Web-Authoring of <nop>%PUBLISHDOMAIN% Website
+
+This web holds all pages that make up the %PUBLISHPROTOCOL%://%PUBLISHDOMAIN% website. Pages in this web are automatically published each time a page is created or updated. See *[[WebPublishGuidelines]]*.
+
+---++ Publish pages
+   * [[Index]] - home page
+      * [[About]] - About us
+
+---++ System pages, published but not linked to
+   * [[Sandbox_page]]
+
+---++ Non-publish pages
+   * %CALC{$LISTMAP([[$item]], %PUBLISHWEBPLUGIN_EXCLUDETOPIC%)}%
+   * __Note:__ This list is defined by the in PUBLISHWEBPLUGIN_EXCLUDETOPIC setting in [[WebPreferences]]
+
+---++ Maintenance of the <nop>%WEB% Web
+%ICON{wrench}% [[WebMaintenance]]

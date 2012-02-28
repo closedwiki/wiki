@@ -1,0 +1,13 @@
+%META:TOPICINFO{author="PeterThoeny" date="1330410287" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICPARENT{name="WebTopicEditTemplate"}%
+---+!! Web Page Header
+
+The part between the horizontal rulers gets included by every publish topic in this web that has a =%<nop>INCLUDE{%TOPIC}%= at the top.
+
+-----
+%STARTINCLUDE%
+---+!! %FORMFIELD{ "Title" topic="%BASETOPIC%" }%
+%STOPINCLUDE%
+-----
+
+__Related Topics:__  [[WebForm]], [[WebTopicEditTemplate]], [[WebPublishGuidelines]]

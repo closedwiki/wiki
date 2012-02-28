@@ -1,0 +1,93 @@
+%META:TOPICINFO{author="PeterThoeny" date="1330414766" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICPARENT{name="WebMaintenance"}%
+---+!! Web Publishing Guidelines
+
+%TOC%
+
+---++ Overview
+
+This web is used to collaboratively maintain the website at %PUBLISHPROTOCOL%://%PUBLISHDOMAIN%. Publishing is done automatically: Whenever a page is saved, an HTML document is generated with the proper CSS to match the look of the website.
+
+---++ How to Create a New Page
+
+   * There are two types of pages:
+      * Publish pages that are published automatically.
+      * Support pages that are not published.
+
+   * __Publish pages:__
+      * By convention, publish page names are capitalized words connected by underscores, such as "Product_Overview".
+      * To create a new publish page:
+         * Edit [[WebHome]] and add a new bullet containing a new page name enclosed in double square brackets.
+         * Click on the red-link of the new page to create it.
+         * Fill in the Title, Description and Keyword in the form located at the bottom. This data will be used as meta in the generated HTML page. The Title is used as the page title (browser window title) and as the H1 heading at the top.
+         * Add content as desired.
+            * Content above the STOPPUBLISH variable gets published -- use space below as a scrap area.
+            * Remove the INCLUDE located at the top if you do not want the page Title to be shown.
+         * Add a link to the new page in the [[Index]] page and/or sub-page(s).
+         * Fix the topic parent if needed (see "More topic actions link") -- page hierarchy is shown in breadcrumb.
+
+   * __Support pages:__
+      * By convention, support page names start with "Web" and are WikiWords, such as this "WebPublishGuidelines" page.
+      * To create a new support page:
+         * Edit [[WebPreferences]] and add a new WikiWord to the PUBLISHWEBPLUGIN_EXCLUDETOPIC setting.
+         * Go to [[WebHome]] and click on the red-link of the new support page to create it.
+         * Remove form: In edit mode, click on the "Change form" link, select "none" in the list of forms.
+         * Replace default content with your content, no need to keep the INCLUDE on top.
+
+---++ Content Guidelines
+
+   * __Links:__
+      * To create a link to another publish page enter its name in double square brackets, such as =[<nop>[Product_Overview]]= -- this is case sensitive.
+      * To use a different link label, use syntax =[<nop>[Product_Overview][any link label]]=.
+      * To link to external websites write =[<nop>[http://google.com/]]= or =[<nop>[http://google.com/][Google]]=
+
+   * __Headings:__
+      * The H1 heading is reserved for the page title. It is added automatically by the =%<nop>INCLUDE{WebPageHeader}%= at the top of the page based on the Title field.
+      * Use H2 headings for page level headings, H3 and lower ones for sub headings.
+      * In WYSIWYG mode you can pick the heading. In raw edit write =---++ Some Text= for H2 heading, and =---+++ Some Text= for H3 heading.
+      * Use Capitalized Words in page Title and H2 headings.
+
+   * __Table of content:__
+      * The TOC is optional but recommended for midsize to large pages.
+      * Write =%<nop>TOC%= directly after the =%<nop>INCLUDE{WebPageHeader}%=. This generates a TOC based on the headings in the page. For options consult the [[%SYSTEMWEB%.VarTOC2][TOC documentation]].
+
+   * __Images:__
+      * Reside images before upload to the desired size. Although it is possible to resize images in the WYSIWYG editor you get a better result if images are displayed by browsers in actual size.
+      * Limit the width of images to 900 pixels.
+      * To attach an image:
+         * Attach image and check-mark both check boxes ("Create a link" and "Do not show attachment".)
+         * Edit page and move image from bottom to desired location.
+      * TWiki has hundreds of 16x16 pixels [[TWiki.TWikiDocGraphics][doc graphics images]] to spice up pages.
+
+---++ Publishing
+
+   * No special action is needed for publish pages. Each time you save a publish page, its HTML version is created or updated. The "Publishing" pulldown menu has a link to the generated HTML page.
+   * All pages need to be re-published if a skin change has been made that affects all pages:
+      * Select "Re-publish this page" in the "Publishing" pulldown menu, then select "all" to re-publish.
+
+---++ Technical Background
+
+This documents the overall setup, only needed by the maintainer of the system
+
+   * One-time setup for [[%SYSTEMWEB%.PublishWebPlugin][PublishWebPlugin]]:
+      * [[%SCRIPTURLPATH{configure}%][configure script]] settings for basic !PublishWebPlugin configuration, stored in =/path/to/twiki/lib/LocalSite.cfg=. Example:%BR%
+        =$TWiki::cfg{Plugins}{PublishWebPlugin}{TemplatePath} = '';= %BR%
+        =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath} = '/path/to/apache/html';= %BR%
+        =$TWiki::cfg{Plugins}{PublishWebPlugin}{AttachPath} = '_publish';= %BR%
+        =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishUrlPath} = '';=
+      * Follow installation instructions in [[%SYSTEMWEB%.PublishWebPlugin][PublishWebPlugin]].
+
+   * One-time setup for each publishing web:
+      * Plugin settings in WebPreferences:
+         * =PUBLISHWEBPLUGIN_PUBLISHWEBNAME = %WEB%= - name of web (this web)
+         * =PUBLISHWEBPLUGIN_PUBLISHSKIN = %PUBLISHWEBPLUGIN_PUBLISHSKIN%= - name of skin, defined in =/path/to/twiki/templates/view.%PUBLISHWEBPLUGIN_PUBLISHSKIN%.tmpl=
+         * =PUBLISHWEBPLUGIN_EXCLUDETOPIC = Web...= - topics to exclude from publishing
+      * Publish area:
+         * Directory defined in =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath}= configure settting
+         * Browser location: %PUBLISHPROTOCOL%://%PUBLISHDOMAIN%
+
+   * One-time publish skin creation:
+      * Skin & CSS: Defined by =/path/to/twiki/templates/view.%PUBLISHWEBPLUGIN_PUBLISHSKIN%.tmpl=
+         * This file is an html template, it has =%<nop>TEXT%= and other %-variables that get expanded based on topic content on each topic save.
+
+__Related:__ [[WebHome]], [[WebPublish]], [[WebPreferences]]

@@ -1,0 +1,26 @@
+%META:TOPICINFO{author="PeterThoeny" date="1330406636" format="1.1" reprev="1.1" version="1.1"}%
+---+ <nop>%WEB% Web Maintenance
+
+   * Publishing:
+      * [[WebPublishGuidelines]] - publishing guidelines
+      * [[WebForm]] - form for page meta data
+      * [[WebTopicEditTemplate]] - template for new publishing pages
+      * [[WebPageHeader]] - header of publishing pages
+      * [[WebPublish]] - re-publish single topic or all topics
+      * [[%SYSTEMWEB%.PublishWebPlugin]] - publishing plugin
+      * [[%SCRIPTURLPATH{configure}%][configure script]] - for basic !PublishWebPlugin configuration, example:%BR%
+        =$TWiki::cfg{Plugins}{PublishWebPlugin}{TemplatePath} = '';= %BR%
+        =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath} = '/path/to/apache/html';= %BR%
+        =$TWiki::cfg{Plugins}{PublishWebPlugin}{AttachPath} = '_publish';= %BR%
+        =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishUrlPath} = '';=
+
+   * General maintenance:
+      * [[WebSearch]] - simple search
+      * [[WebSearchAdvanced]] - advanced search
+      * [[WebTopicList]] - all topics in alphabetical order
+      * [[WebChanges]] - recent topic changes in this web
+      * [[WebNotify]] - subscribe to an e-mail alert sent when topics change
+      * [[WebRss]], [[WebAtom]] - RSS and ATOM news feeds of topic changes
+      * [[WebStatistics]] - listing popular topics and top contributors
+      * [[WebTopMenu]] - top menu definition
+      * [[WebPreferences]] - preferences of this web

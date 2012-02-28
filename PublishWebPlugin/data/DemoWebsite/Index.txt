@@ -1,0 +1,17 @@
+%META:TOPICINFO{author="PeterThoeny" date="1330412636" format="1.1" reprev="1.1" version="1.1"}%
+%INCLUDE{WebPageHeader}%
+
+Demo of the homepage
+
+   * [[About]]
+   * [[Contact]]
+
+%STOPPUBLISH%
+---
+
+__NOTE:__ Content below the STOPPUBLISH variable is not published. Use this space as a scrap area.
+
+%META:FORM{name="WebForm"}%
+%META:FIELD{name="Title" attributes="M" title="Title" value="Demo homepage"}%
+%META:FIELD{name="Description" attributes="" title="Description" value="Demo of a hompage published with the TWiki PublishWebPlugin"}%
+%META:FIELD{name="Keywords" attributes="" title="Keywords" value="publishing, web authoring"}%

@@ -1,0 +1,74 @@
+%META:TOPICINFO{author="PeterThoeny" date="1330414576" format="1.1" reprev="1.2" version="1.2"}%
+---+!! <nop>%WEB% Web Preferences
+
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{ title="Page contents" }%
+</div></sticky>
+The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences override the __site-level preferences__ in [[%SYSTEMWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, such as [[%USERSWEB%.%WIKINAME%][%WIKINAME%]] in the [[%USERSWEB%.%HOMETOPIC%][%USERSWEB%]] web). These web preferences can be overridden by __topic preferences__, e.g. preferences in individual topics.
+
+%EDITPREFERENCES{"%SYSTEMWEB%.TWikiPreferencesForm"}%
+
+---++ Publishing Settings
+
+   * [[%SYSTEMWEB%.PublishWebPlugin]] settings:
+      * Set PUBLISHWEBPLUGIN_PUBLISHWEBNAME = %WEB%
+      * Set PUBLISHWEBPLUGIN_PUBLISHSKIN = demo_website
+      * Set PUBLISHWEBPLUGIN_EXCLUDETOPIC = WebAtom, WebChanges, WebCreateNewTopic, WebForm, WebHome, WebIndex, WebLeftBar, WebMaintenance, WebNotify, WebPageHeader, WebPreferences, WebPublish, WebPublishGuidelines, WebRss, WebSearchAdvanced, WebSearch, WebStatistics, WebTopicList, WebTopMenu, WebTopicEditTemplate
+
+   * Publish settings:
+      * Set PUBLISHPROTOCOL = http
+      * Set PUBLISHDOMAIN = www.example.com
+      * Set PUBLISHLOGO = <img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiLogos/T-logo-124x35-t.gif" alt="" title="Home of Example, Inc." />
+      * Set PUBLISHTOPLINKS = [[Blog]] | [[About]] | [[Contact]]
+      * Set PUBLISHBOTTOMLINKS = [[About]] | [[Legal]] | [[Privacy]]
+      * Set PUBLISHCOPYRIGHT = Copyright %SERVERTIME{$year}% Example, Inc.
+
+   * [[TWiki.TablePlugin]] settings:
+      * Set TABLEPLUGIN_SORT = none
+
+   * Other overloaded settings:
+      * Set DISABLEDPLUGINS = HeadlinesPlugin
+
+---++ Web Preferences Settings
+
+These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiPreferences#DefaultWebPreferences][full list of defaults with explanation]].
+
+   * Web Settings used in [[%SYSTEMWEB%.SiteMap][SiteMap]], configured automatically when you create a web: <div style='background-color: %WEBBGCOLOR%;float: right'> &nbsp;%WEBBGCOLOR%&nbsp; </div>
+      * Set WEBBGCOLOR = #706edd
+      * Set SITEMAPWHAT = Demo publishing web for !PublishWebPlugin
+      * Set SITEMAPLIST = on
+
+   * Exclude web from a =web="all"= search: (Set to =on= for hidden webs, default is empty)
+      * Set NOSEARCHALL = 
+
+   * Prevent automatic linking of [[%SYSTEMWEB%.WikiWords][WikiWords]] and acronyms (if set to =on=); link <nop>WikiWords (if empty):
+      * Set NOAUTOLINK = on
+      * __Note:__ You can still use the =[<nop>[...][...]]= syntax to link topics if you disabled <nop>WikiWord linking.%BR% The =&lt;noautolink&gt; ... &lt;/noautolink&gt;= syntax can be used to prevents links within a block of text.
+
+   * Default template for *new topics* in this web:
+      * WebTopicEditTemplate: Default template for new topics in this web (if it exists, it overrides the site-level template)
+      * [[%USERSWEB%.WebTopicEditTemplate]]: Site-level default topic template (if it exists, it overides the system-level template)
+      * [[%SYSTEMWEB%.WebTopicEditTemplate]]: System-level default topic template (do not modify! Create a site-level template in the %USERS% web instead)
+
+   * Comma separated list of *forms* that can be attached to topics in this web. See [[%SYSTEMWEB%.TWikiForms][TWikiForms]] for more information.
+      * Set WEBFORMS = 
+---++ Access Control and Security
+
+   * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See [[%SYSTEMWEB%.TWikiAccessControl][TWikiAccessControl]]).
+      * Set DENYWEBVIEW = 
+      * Set ALLOWWEBVIEW = 
+      * Set DENYWEBCHANGE = 
+      * Set ALLOWWEBCHANGE = 
+      * Set DENYWEBRENAME = 
+      * Set ALLOWWEBRENAME = 
+
+   * Users or groups allowed to change or rename this <nop>%TOPIC% topic: (e.g., [[%USERSWEB%.TWikiAdminGroup][TWikiAdminGroup]])
+      * Set ALLOWTOPICCHANGE = %USERSWEB%.TWikiAdminGroup
+      * Set ALLOWTOPICRENAME = %USERSWEB%.NobodyGroup
+
+   * Web preferences that are *not* allowed to be overridden by sub-web, user or topic preferences:
+      * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
+
+%INCLUDE{%SYSTEMWEB%.WebPreferencesHelp}%
+
+%META:FILEATTACHMENT{name="favicon.ico" attachment="favicon.ico" attr="" comment="placeholder favicon" date="1100974473" path="favicon.ico" size="318" user="TWikiContributor" version="1.1"}%

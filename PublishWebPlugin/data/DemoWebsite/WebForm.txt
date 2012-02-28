@@ -1,0 +1,9 @@
+%META:TOPICINFO{author="PeterThoeny" date="1330409979" format="1.1" version="1.1"}%
+---+!! Page Attributes Form
+
+| *Name*  | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
+| Title | text | 60 | | Page title (window title) | M |
+| Description | text | 120 | | Description of this page, used by search engines |  |
+| Keywords | text | 120 | | Keywords meta data, used by search engines |  |
+
+__Related:__ [[WebTopicEditTemplate]], [[WebPageHeader]], [[WebPublishGuidelines]]
