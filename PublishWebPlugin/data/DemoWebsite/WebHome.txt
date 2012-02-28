@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1330410747" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1330418952" format="1.1" version="$Rev$"}%
 %INCLUDE{TWiki.WebChangesRightBox}%
 ---+!! Web-Authoring of <nop>%PUBLISHDOMAIN% Website
 
