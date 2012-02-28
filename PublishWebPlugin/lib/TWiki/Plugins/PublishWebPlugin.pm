@@ -25,7 +25,7 @@ use strict;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-02-25';
+our $RELEASE = '2012-02-28';
 
 my $pluginName = 'PublishWebPlugin';  # Name of this Plugin
 my $initialized = 0;
@@ -93,8 +93,10 @@ sub initialize
 
     # Get plugin preferences
     $publishWeb   = TWiki::Func::getPluginPreferencesValue( "PUBLISHWEBNAME" ) || "Website";
+    $publishWeb   = TWiki::Func::expandCommonVariables( $publishWeb, $topic, $web );
     $publishSkin  = TWiki::Func::getPluginPreferencesValue( "PUBLISHSKIN" ) || "print";
     $excludeTopic = TWiki::Func::getPluginPreferencesValue( "EXCLUDETOPIC" ) || "";
+    $excludeTopic = TWiki::Func::expandCommonVariables( $excludeTopic, $topic, $web );
     $excludeTopic =~ s/,\s*/\|/go;
     $excludeTopic = '(' . $excludeTopic . ')';
     $homeLabel    = TWiki::Func::getPluginPreferencesValue( "HOMELABEL" ) || "Home";
