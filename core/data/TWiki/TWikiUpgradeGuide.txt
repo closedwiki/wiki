@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1330450819" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1330499052" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Upgrade Guide
 
@@ -60,7 +60,7 @@ The main steps are:
 
 ---+++ Install Extensions
 
-   * From TWiki-4.1.0 on the [[%SCRIPTURLPATH{"configure"}%][configure]] script which you ran during installation supports installation of additional plugins.
+   * From TWiki-4.1.0 and on, the [[%SCRIPTURLPATH{"configure"}%][configure]] script which you ran during installation supports installation of additional plugins.
    * Manual installation is possible. Follow the instruction on the plugin page at twiki.org.
    * Check the plugin topics from your old TWiki installation. There may be plugin settings that you want to transfer to the new TWiki installation.
      %BR% __%H% Hint:__ For an easier upgrade later on, set the plugin preferences settings in the [[%LOCALSITEPREFS%]] topic, not in the plugin topic. To identify the plugin, prefix the name of the setting with the capitalized name of the plugin. For example, to change the =DEFAULT_TYPE= setting of the CommentPlugin, create a =COMMENTPLUGIN_DEFAULT_TYPE= setting in <nop>%LOCALSITEPREFS%.
