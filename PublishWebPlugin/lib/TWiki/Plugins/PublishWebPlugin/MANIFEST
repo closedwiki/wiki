@@ -23,4 +23,5 @@ data/DemoWebsite/WebTopicList.txt 0644
 data/DemoWebsite/WebTopMenu.txt 0644
 pub/DemoWebsite/WebPreferences/favicon.ico 0644
 lib/TWiki/Plugins/PublishWebPlugin.pm 0644
+lib/TWiki/Plugins/PublishWebPlugin/Config.spec 0644
 templates/view.demo_website.tmpl 0644
