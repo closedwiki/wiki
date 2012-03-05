@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1330928785" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1330938294" format="1.1" version="$Rev$"}%
 ---+!! Publish Web Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -101,8 +101,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
                * Must be relative to =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath}=, default is ='_publish'=
             * ={Plugins}{PublishWebPlugin}{PublishUrlPath}=: URL path that corresponds to ={PublishPath}= directory. Leave empty if it is the HTML document root.
             * Note that all path settings may include these variables:
-               * =%<nop>WEB%= to indicate the name of the publish web
-               * =%<nop>LCWEB%= to indicate the lower case name of the publish web (preferred over mixed case)
+               * =%<nop>WEB%= - name of the publish web
+               * =%<nop>LCWEB%= - lower case name of the publish web (preferred over mixed case)
+               * =%<nop>SKIN%= - name of the publish skin 
          * Manual setup: Instead of using the configure script you can add/customize these =twiki/lib/LocalSite.cfg= settings: %BR%
            =$TWiki::cfg{Plugins}{PublishWebPlugin}{TemplatePath} = '';= %BR%
            =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath} = '/path/to/apache/html';= %BR%
@@ -137,9 +138,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2006-2012 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] <br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-03-04 |
+|  Plugin Version: | 2012-03-05 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-03-04: | TWikibug:Item6856: Publish multiple webs feature, useful for virtual host publishing -- TWiki:Main.JohnVestrum |
+|  2012-03-05: | TWikibug:Item6856: Publish multiple webs feature, useful for virtual host publishing -- TWiki:Main.JohnVestrum |
 |  2012-02-28: | TWikibug:Item6853: Add demo publishing web called !DemoWebsite to plugin; add Config.spec for easier configuration |
 |  2012-02-25: | TWikibug:Item6851: Fix for re-publising a topic using !WebPublish uses !WebPublish for topic name instead of actual topic name |
 |  2011-07-23: | TWikibug:Item6808: Fix for incorrect BASETOPIC used when topics are re-published; use registerTagHandler for PUBLISHWEB variable; hide topics specified in EXCLUDETOPIC from picklist in !WebPublish |
