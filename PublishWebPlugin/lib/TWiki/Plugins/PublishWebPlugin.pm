@@ -72,27 +72,44 @@ sub initialize
 {
     return if( $initialized );
 
+    # Get plugin preferences
+    $publishWeb   = TWiki::Func::getPluginPreferencesValue( "PUBLISHWEBNAME" ) || "Website";
+    $publishWeb   = TWiki::Func::expandCommonVariables( $publishWeb, $topic, $web );
+    $publishSkin  = TWiki::Func::getPluginPreferencesValue( "PUBLISHSKIN" ) || "print";
+    $publishSkin  =~ s/[^A-Za-z0-9_\-\.]//go; # filter out dangerous chars
+    $excludeTopic = TWiki::Func::getPluginPreferencesValue( "EXCLUDETOPIC" ) || "";
+    $excludeTopic = TWiki::Func::expandCommonVariables( $excludeTopic, $topic, $web );
+    $excludeTopic =~ s/,\s*/\|/go;
+    $excludeTopic = '(' . $excludeTopic . ')';
+    $homeLabel    = TWiki::Func::getPluginPreferencesValue( "HOMELABEL" ) || "Home";
+    my $val       = TWiki::Func::getPluginPreferencesValue( "NICETOPICFILTER" ) || "";
+    %niceTopicFilter = split( /,\s*/, $val );
+
     my $lcWeb = lc( $web );
 
     # template path for skin file; empty for twiki/templates; must be absolute path if specified
     $templatePath = $TWiki::cfg{Plugins}{PublishWebPlugin}{TemplatePath} || "";
     $templatePath =~ s/%WEB%/$web/;
     $templatePath =~ s/%LCWEB%/$lcWeb/;
+    $templatePath =~ s/%SKIN%/$publishSkin/;
 
     # output file directory; can be absolute path or relative to twiki/pub
     $publishPath = $TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath} || "..";
     $publishPath =~ s/%WEB%/$web/;
     $publishPath =~ s/%LCWEB%/$lcWeb/;
+    $publishPath =~ s/%SKIN%/$publishSkin/;
 
     # attach dir; must be relative to $publishPath
     $attachPath  = $TWiki::cfg{Plugins}{PublishWebPlugin}{AttachPath} || "_publish";
     $attachPath =~ s/%WEB%/$web/;
     $attachPath =~ s/%LCWEB%/$lcWeb/;
+    $attachPath =~ s/%SKIN%/$publishSkin/;
 
     # URL path corresponding to $publishPath
     $publishUrlPath = $TWiki::cfg{Plugins}{PublishWebPlugin}{PublishUrlPath} || "";
     $publishUrlPath =~ s/%WEB%/$web/;
     $publishUrlPath =~ s/%LCWEB%/$lcWeb/;
+    $publishUrlPath =~ s/%SKIN%/$publishSkin/;
 
     # Initialization
     $publishDir = TWiki::Func::getPubDir( ) . '/' . $publishPath; # assume relative
@@ -101,17 +118,6 @@ sub initialize
     $attachDir  = $publishDir . '/' . $attachPath; # assume relative path
     $attachDir  = $attachPath if( $attachPath =~ /^\// ); # use absolute path if so
 
-    # Get plugin preferences
-    $publishWeb   = TWiki::Func::getPluginPreferencesValue( "PUBLISHWEBNAME" ) || "Website";
-    $publishWeb   = TWiki::Func::expandCommonVariables( $publishWeb, $topic, $web );
-    $publishSkin  = TWiki::Func::getPluginPreferencesValue( "PUBLISHSKIN" ) || "print";
-    $excludeTopic = TWiki::Func::getPluginPreferencesValue( "EXCLUDETOPIC" ) || "";
-    $excludeTopic = TWiki::Func::expandCommonVariables( $excludeTopic, $topic, $web );
-    $excludeTopic =~ s/,\s*/\|/go;
-    $excludeTopic = '(' . $excludeTopic . ')';
-    $homeLabel    = TWiki::Func::getPluginPreferencesValue( "HOMELABEL" ) || "Home";
-    my $val       = TWiki::Func::getPluginPreferencesValue( "NICETOPICFILTER" ) || "";
-    %niceTopicFilter = split( /,\s*/, $val );
     $initialized = 1;
 }
 
@@ -150,8 +156,9 @@ sub publishTopic
     unless( $text ) {
         $text = TWiki::Func::readTopicText( $theWeb, $theTopic );
     }
-    if( $text =~ /META\:FIELD{name=\"PublishSkin\".*?value=\"([^\"]*)\"/ ) {
-        $skin = $1 if( $1 );
+    if( $text =~ /META\:FIELD{name=\"PublishSkin\".*?value=\"([^\"]+)\"/ ) {
+        $skin = $1;
+        $skin =~ s/[^A-Za-z0-9_\-\.]//go; # filter out dangerous chars
     }
     $text =~ s/%META:[A-Z0-9]+\{[^\n\r]+[\n\r]*//gs;
     $text =~ s/.*?%STARTPUBLISH%[\n\r]*//s;
