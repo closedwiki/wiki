@@ -45,18 +45,6 @@ my $publishDir;
 my $attachDir;
 my $publishUrlPath;
 
-# template path for skin file; empty for twiki/templates; must be absolute path if specified
-$templatePath = $TWiki::cfg{Plugins}{PublishWebPlugin}{TemplatePath} || "";
-
-# output file directory; can be absolute path or relative to twiki/pub
-$publishPath = $TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath} || "..";
-
-# attach dir; must be relative to $publishPath
-$attachPath  = $TWiki::cfg{Plugins}{PublishWebPlugin}{AttachPath} || "_publish";
-
-# URL path corresponding to $publishPath
-$publishUrlPath = $TWiki::cfg{Plugins}{PublishWebPlugin}{PublishUrlPath} || "";
-
 # =========================
 sub initPlugin
 {
@@ -83,6 +71,28 @@ sub initPlugin
 sub initialize
 {
     return if( $initialized );
+
+    my $lcWeb = lc( $web );
+
+    # template path for skin file; empty for twiki/templates; must be absolute path if specified
+    $templatePath = $TWiki::cfg{Plugins}{PublishWebPlugin}{TemplatePath} || "";
+    $templatePath =~ s/%WEB%/$web/;
+    $templatePath =~ s/%LCWEB%/$lcWeb/;
+
+    # output file directory; can be absolute path or relative to twiki/pub
+    $publishPath = $TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath} || "..";
+    $publishPath =~ s/%WEB%/$web/;
+    $publishPath =~ s/%LCWEB%/$lcWeb/;
+
+    # attach dir; must be relative to $publishPath
+    $attachPath  = $TWiki::cfg{Plugins}{PublishWebPlugin}{AttachPath} || "_publish";
+    $attachPath =~ s/%WEB%/$web/;
+    $attachPath =~ s/%LCWEB%/$lcWeb/;
+
+    # URL path corresponding to $publishPath
+    $publishUrlPath = $TWiki::cfg{Plugins}{PublishWebPlugin}{PublishUrlPath} || "";
+    $publishUrlPath =~ s/%WEB%/$web/;
+    $publishUrlPath =~ s/%LCWEB%/$lcWeb/;
 
     # Initialization
     $publishDir = TWiki::Func::getPubDir( ) . '/' . $publishPath; # assume relative
@@ -202,7 +212,7 @@ sub publishTopic
     # fix links to attachments
     my $pubDir = TWiki::Func::getPubDir();
     my $pubUrl = TWiki::Func::getPubUrlPath();
-    $tmpl =~ s/($pubUrl)\/([^\)'" ]+)/&fixAndCopyAttachments($1, $2, $pubDir )/geo;
+    $tmpl =~ s/(https?:\/\/[^\/]*)?($pubUrl)\/([^\)'" ]+)/&fixAndCopyAttachments($2, $3, $pubDir )/geo;
     $tmpl =~ s/<\/?(nop|noautolink)\/?>\n?//gois;
     $tmpl =~ s|https?://[^/]*/$attachPath|/$attachPath|gois; # Cut protocol and host
 
