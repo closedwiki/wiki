@@ -25,7 +25,7 @@ use strict;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-02-28';
+our $RELEASE = '2012-03-04';
 
 my $pluginName = 'PublishWebPlugin';  # Name of this Plugin
 my $initialized = 0;

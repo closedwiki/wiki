@@ -1,5 +1,11 @@
 # ---+ Extensions
 # ---++ PublishWebPlugin
+# All path settings may include these variables:
+# <br />&#8226;
+# <code>%WEB%</code> to indicate the name of the publish web
+# <br />&#8226; 
+# <code>%LCWEB%</code> to indicate the lower case name of the publish
+# web (preferred over mixed case)
 # **PATH**
 # Template path where skin files are located:
 # <br />&#8226;
@@ -17,9 +23,13 @@
 $TWiki::cfg{Plugins}{PublishWebPlugin}{TemplatePath} = '';
 # **PATH M**
 # Path where the plugin places the generated html files. Specify
-# an absolute or relative path to the Apache HTML document root
+# an absolute or relative path.
+# <br />&#8226; 
 # If relative, path is relative to <code>twiki/pub</code>, such as
 # <code>'../../html'</code>.
+# <br />&#8226; 
+# Example to publish to multiple virtual hosts, one for each publish web:
+# <code>'/var/www/vhosts/%LCWEB%/html'</code>.
 $TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath} = '/path/to/apache/html';
 # **STRING 40**
 # Path where the plugin places images and other topic attachments.
