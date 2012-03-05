@@ -2,10 +2,12 @@
 # ---++ PublishWebPlugin
 # All path settings may include these variables:
 # <br />&#8226;
-# <code>%WEB%</code> to indicate the name of the publish web
+# <code>%WEB%</code> - name of the publish web
 # <br />&#8226; 
-# <code>%LCWEB%</code> to indicate the lower case name of the publish
+# <code>%LCWEB%</code> - lower case name of the publish
 # web (preferred over mixed case)
+# <br />&#8226;
+# <code>%SKIN%</code> - name of the publish skin
 # **PATH**
 # Template path where skin files are located:
 # <br />&#8226;
