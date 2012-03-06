@@ -42,4 +42,7 @@ $TWiki::cfg{Plugins}{PublishWebPlugin}{AttachPath} = '_publish';
 # URL path that corresponds to <code>{PublishPath}</code> directory. Leave
 # empty if it is the HTML document root.
 $TWiki::cfg{Plugins}{PublishWebPlugin}{PublishUrlPath} = '';
+# **BOOLEAN**
+# Debug flag - see output in <code>twiki/data/debug.txt</code>.
+$TWiki::cfg{Plugins}{PublishWebPlugin}{Debug} = 0;
 1;

@@ -25,11 +25,13 @@ use strict;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-03-04';
+our $RELEASE = '2012-03-06';
 
+our $SHORTDESCRIPTION = 'Maintain a static website collaboratively in a TWiki web';
+our $NO_PREFS_IN_TOPIC = 1;
 my $pluginName = 'PublishWebPlugin';  # Name of this Plugin
 my $initialized = 0;
-my $error = "";
+my $error = '';
 my $web;
 my $topic;
 my $debug;
@@ -59,7 +61,7 @@ sub initPlugin
     TWiki::Func::registerTagHandler( 'PUBLISHWEB', \&_handlePublishWeb );
 
     # Get plugin debug flag
-    $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
+    $debug = $TWiki::cfg{Plugins}{PublishWebPlugin}{Debug} || 0;
 
     writeDebug( "initPlugin( $web.$topic ) is OK" );
     $initialized = 0;
@@ -73,16 +75,19 @@ sub initialize
     return if( $initialized );
 
     # Get plugin preferences
-    $publishWeb   = TWiki::Func::getPluginPreferencesValue( "PUBLISHWEBNAME" ) || "Website";
+    $publishWeb   = TWiki::Func::getPreferencesValue( "PUBLISHWEBPLUGIN_PUBLISHWEBNAME" ) || "DemoWebsite";
     $publishWeb   = TWiki::Func::expandCommonVariables( $publishWeb, $topic, $web );
-    $publishSkin  = TWiki::Func::getPluginPreferencesValue( "PUBLISHSKIN" ) || "print";
+    $publishSkin  = TWiki::Func::getPreferencesValue( "PUBLISHWEBPLUGIN_PUBLISHSKIN" ) || "demo_website";
     $publishSkin  =~ s/[^A-Za-z0-9_\-\.]//go; # filter out dangerous chars
-    $excludeTopic = TWiki::Func::getPluginPreferencesValue( "EXCLUDETOPIC" ) || "";
+    $excludeTopic = TWiki::Func::getPreferencesValue( "PUBLISHWEBPLUGIN_EXCLUDETOPIC" ) ||
+      "WebAtom, WebChanges, WebCreateNewTopic, WebHome, WebIndex, WebLeftBar, WebNotify, " .
+      "WebPublish, WebPreferences, WebRss, WebSearchAdvanced, WebSearch, WebStatistics, " .
+      "WebTopicList, WebTopMenu, WebTopicCreator, WebTopicEditTemplate";
     $excludeTopic = TWiki::Func::expandCommonVariables( $excludeTopic, $topic, $web );
     $excludeTopic =~ s/,\s*/\|/go;
     $excludeTopic = '(' . $excludeTopic . ')';
-    $homeLabel    = TWiki::Func::getPluginPreferencesValue( "HOMELABEL" ) || "Home";
-    my $val       = TWiki::Func::getPluginPreferencesValue( "NICETOPICFILTER" ) || "";
+    $homeLabel    = TWiki::Func::getPreferencesValue( "PUBLISHWEBPLUGIN_HOMELABEL" ) || "Home";
+    my $val       = TWiki::Func::getPreferencesValue( "PUBLISHWEBPLUGIN_NICETOPICFILTER" ) || "";
     %niceTopicFilter = split( /,\s*/, $val );
 
     my $lcWeb = lc( $web );
@@ -94,7 +99,7 @@ sub initialize
     $templatePath =~ s/%SKIN%/$publishSkin/;
 
     # output file directory; can be absolute path or relative to twiki/pub
-    $publishPath = $TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath} || "..";
+    $publishPath = $TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath} || "../path/to/html";
     $publishPath =~ s/%WEB%/$web/;
     $publishPath =~ s/%LCWEB%/$lcWeb/;
     $publishPath =~ s/%SKIN%/$publishSkin/;
