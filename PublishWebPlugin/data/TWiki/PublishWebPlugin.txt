@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1330938294" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1331022911" format="1.1" version="$Rev$"}%
 ---+!! Publish Web Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -13,7 +13,7 @@ Utility to publish a TWiki web to static HTML pages. Useful to maintain a static
 
 ---++ Description and Syntax Rules
 
-One web (defined in the PUBLISHWEBNAME setting) serves as the master for the static HTML pages. The Plugin generates an HTML page every time a user saves a topic in the Publish web. The static HTML files are based on a TWiki skin of choice. All referred attachments (images etc) are copied to a publish directory.
+Topics in a publish web serve as the source of static HTML pages of an external website. A TWiki web is considered a publish web if a PUBLISHWEBPLUGIN_PUBLISHWEBNAME preferences setting is set to the name of the web. The plugin generates an HTML page every time a user saves a topic in a publish web. The static HTML files are based on a TWiki skin of choice. All referenced attachments (images etc) are copied to a publish directory.
 
 ---+++ Topics and Links
 
@@ -24,12 +24,13 @@ One web (defined in the PUBLISHWEBNAME setting) serves as the master for the sta
 #PublishProcess
 ---+++ Publish process
 
-   * A static HTML page is generated for every topic saved in the %PUBLISHWEBNAME% web (unless listed in the EXCLUDETOPIC setting)
+   * A static HTML page is generated for every topic saved in a publish web defined by the PUBLISHWEBPLUGIN_PUBLISHWEBNAME setting
+   * A topic is excluded from publishing if listed in the PUBLISHWEBPLUGIN_EXCLUDETOPIC setting
    * Topic names get converted to a lowercase filename, e.g. =Index= to =index.html=, =AboutUs= to =aboutus.html=, and =Customer_Support= to =customer_support.html=
    * Only text between =%<nop>STARTPUBLISH%= and =%<nop>STOPPUBLISH%= is used (the whole text if missing)
    * !WikiWord links are ignored, also across webs
-   * Page layout is based on the skin defined in the PUBLISHSKIN setting
-   * Visit %PUBLISHWEBNAME%.WebPublish to re-publish topics without an edit/save cycle
+   * Page layout is based on the skin defined in the PUBLISHWEBPLUGIN_PUBLISHSKIN setting
+   * Visit !WebPublish in a publish web to re-publish topics without an edit/save cycle
 
 ---+++ Variables
 
@@ -53,26 +54,20 @@ One web (defined in the PUBLISHWEBNAME setting) serves as the master for the sta
 
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>PUBLISHWEBPLUGIN_SHORTDESCRIPTION%==. Do not change settings here, but add settings in the publish web's !WebPreferences, such as =* Set PUBLISHSKIN = mypublish=
+Plugin settings are stored as preferences settings. Do __not__ change the settings here, they are here only for illustration purposes showing the default values. Define the settings in the publish web's !WebPreferences or in [[%LOCALSITEPREFS%]]. For example, to customize the =PUBLISHWEBPLUGIN_PUBLISHSKIN= setting, add a =* Set PUBLISHWEBPLUGIN_PUBLISHSKIN = mypublish= bullet in the preferences topic.
 
-   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Maintain a static website collaboratively in a TWiki web
+   * Web to publish, must be defined in each publish web:
+      * Set PUBLISHWEBPLUGIN_PUBLISHWEBNAME = DemoWebsite
 
-   * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 0
-
-   * Web to publish:
-      * Set PUBLISHWEBNAME = DemoWebsite
-
-   * Skin to use to publish:
-      * Set PUBLISHSKIN = demo_website
+   * Skin used for publishing:
+      * Set PUBLISHWEBPLUGIN_PUBLISHSKIN = demo_website
       * __Note:__ It is also possible to specify a publish skin on a per page basis. Define a [[%SYSTEMWEB%.TWikiForms][TWiki Form]] with a form field called !PublishSkin. It can be of any type, but a select dropdown box is probably most convenient.
 
    * Exclude topics from publishing:
-      * Set EXCLUDETOPIC = WebAtom, WebChanges, WebCreateNewTopic, WebHome, WebIndex, WebLeftBar, WebNotify, WebPublish, WebPreferences, WebRss, WebSearchAdvanced, WebSearch, WebStatistics, WebTopicList, WebTopMenu, WebTopicCreator, WebTopicEditTemplate
+      * Set PUBLISHWEBPLUGIN_EXCLUDETOPIC = WebAtom, WebChanges, WebCreateNewTopic, WebHome, WebIndex, WebLeftBar, WebNotify, WebPublish, WebPreferences, WebRss, WebSearchAdvanced, WebSearch, WebStatistics, WebTopicList, WebTopMenu, WebTopicCreator, WebTopicEditTemplate
 
-   * Home label, used in =%<nop>PUBLISHBREADCRUMB%=:
-      * Set HOMELABEL = Home
+   * Home label, used by =%<nop>PUBLISHWEB{"breadcrumb"}%=:
+      * Set PUBLISHWEBPLUGIN_HOMELABEL = Home
 
 ---++ Plugin Installation Instructions
 
@@ -122,12 +117,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Create a new publish web based on the !DemoWebsite web, or rename the !DemoWebsite web to a memorable name
       * If you create a new web, make sure to set these settings in !WebPreferences: Set the =NOAUTOLINK= setting to =on=, and set the =PUBLISHWEBPLUGIN_*= settings as in the !WebPreferences of the !DemoWebsite web
    * Create your own publish skin:
-      * Create a skin that matches the look of your website. The [[%SYSTEMWEB%.TWikiSkins][TWiki skin]] can be derived from any =twiki/templates/view.*.tmpl= skin file, or can be created from scratch. This plugin contains a bare bone unstyled demo skin called =demo_website= located at =twiki/templates/view/demo_website.tmpl=
+      * Create a skin that matches the look of your website. The [[%SYSTEMWEB%.TWikiSkins][TWiki skin]] can be derived from any =twiki/templates/view.*.tmpl= skin file, or can be created from scratch. This plugin contains a bare bone unstyled demo skin called =demo_website= located at =twiki/templates/view.demo_website.tmpl=
       * Omit any links to TWiki, such as edit and attach links
-      * The skin can use Plugin specific settings =%<nop>PUBLISHWEB{"breadcrumb"}%= and =%<nop>PUBLISHWEB{"nicetopic"}%=
+      * The skin can use plugin specific settings =%<nop>PUBLISHWEB{"breadcrumb"}%= and =%<nop>PUBLISHWEB{"nicetopic"}%=
       * The skin can introduce skin specific !WebPreferences settings, such as =%<nop>PUBLISH_SITE%=, =%<nop>PUBLISH_LOGO%=, etc.
       * Activate the new skin with a !WebPreferences settings, such as =* Set PUBLISHWEBPLUGIN_PUBLISHSKIN = mypublish=
-      * You can have multiple publish skins; see note in the PUBLISHSKIN plugin setting above.
+      * You can have multiple publish skins; see note in the PUBLISHWEBPLUGIN_PUBLISHSKIN plugin setting above.
 
 ---++ Limitations
 
@@ -135,11 +130,15 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
+   * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Maintain a static website collaboratively in a TWiki web
+
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2006-2012 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] <br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-03-05 |
+|  Plugin Version: | 2012-03-06 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-03-06: | TWikibug:Item6857: Remove topic preferences, use only configure settings and PUBLISHWEBPLUGIN_* settings | 
 |  2012-03-05: | TWikibug:Item6856: Publish multiple webs feature, useful for virtual host publishing -- TWiki:Main.JohnVestrum |
 |  2012-02-28: | TWikibug:Item6853: Add demo publishing web called !DemoWebsite to plugin; add Config.spec for easier configuration |
 |  2012-02-25: | TWikibug:Item6851: Fix for re-publising a topic using !WebPublish uses !WebPublish for topic name instead of actual topic name |
