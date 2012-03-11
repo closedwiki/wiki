@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1284957458" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1331508471" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Templates
 
@@ -59,6 +59,7 @@ They are used to support a limited form of "if" condition that you can use to se
 When the "inactive" context is set, then this will expand the "link_inactive" template; otherwise it will expand the "link_active" template.
 See IfStatements for details of supported context identifiers.
 
+#FindingTemplates
 ---+++ Finding Templates
 
 The master templates shipped with a twiki release are stored in the twiki/templates directory.
@@ -116,6 +117,7 @@ If these preferences are set locally (using _Local_ instead of _Set_) for a topi
 
 __%T% Tip:__ If you want to override existing templates, without having to worry that your changes will get overwritten by the next TWiki update, change the ={TemplatePath}= so that another directory, such as the =%<nop>USERSWEB%= appears at the front. You can then put your own templates into that directory or web and these will override the standard templates. (Note that such will increase the lookup time for templates by searching your directory first.)
 
+#TmplINCLUDE
 ---+++ TMPL:INCLUDE recursion for piecewise customisation, or mixing in new features
 
 If there is recursion in the TMPL:INCLUDE chain (eg twiki.classic.tmpl contains =%<nop>TMPL:INCLUDE{"twiki"}%=, the templating system will include the next twiki.SKIN in the skin path. 
@@ -128,6 +130,7 @@ and then set SKIN=yourlocal,pattern
 
 The default ={TemplatePath}= will not give you the desired result if you put these statements in the topic =Thisweb.YourlocalSkinViewTemplate=. The default ={TemplatePath}= will resolve the request to the =template/view.pattern.tmpl=, before it gets to the =Thisweb.YourlocalSkinViewTemplate= resolution. You can make it work by prefixing the ={TemplatePath}= with: =$web.YourlocalSkin$nameTemplate=. 
 
+#MasterTemplate
 ---+++ Default master template
 
 ==twiki.tmpl== is the default master template. It defines the following sections.
@@ -158,6 +161,7 @@ When you create a new topic using the =edit= script, TWiki locates a topic to us
    1 <nop>WebTopicEditTemplate in the %SYSTEMWEB% web
 
 #TemplateTopicsVars
+#VariableExpansion
 ---+++ Variable Expansion
 
 TWikiVariables located in template topics get expanded as follows when a new topic is created.
@@ -249,6 +253,7 @@ Example link to create a new topic:%BR%
 [[%SCRIPTURLPATH{edit}%/%WEB%/BugIDAUTOINC00001?templatetopic=BugTemplate;topicparent=%TOPIC%;t=%SERVERTIME{"$day$hour$min$sec"}%][Create new item]]
 </verbatim>
 
+#TemplateTopicExample
 ---+++ Template Topics in Action
 
 Here is an example for creating new topics (in the Sandbox web) based on a specific template topic and form:
@@ -288,6 +293,7 @@ __%X% Note:__ You can create a topic in one step, without going through the edit
 %T% *TIP:* You can use the =%<nop>WIKIUSERNAME%= and =%<nop>DATE%= variables in your topic templates to include the signature of the person creating a new topic. The variables are expanded into fixed text when a new topic is created. The standard signature is: <br />
 ==-- %<nop>WIKIUSERNAME% - %<nop>DATE%==
 
+#URLsInTemplates
 ---+++ Using Absolute vs Relative URLs in Templates
 
 When you use TWikiVariables such as %<nop>PUBURL% and %<nop>PUBURLPATH% in templates you should be aware that using %<nop>PUBURL% instead of %<nop>PUBURLPATH% puts absolute URLs in the produced HTML. This means that when a user saves a TWiki page in HTML and emails the file to someone outside a company firewall, the receiver has a severe problem viewing it. It is therefore recommended always to use the %<nop>PUBURLPATH% to refer to images, CSS, Javascript files etc so links become relative. This way browsers just give up right away and show a usable html file.
