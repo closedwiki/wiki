@@ -77,8 +77,8 @@ sub _SENDMAIL {
 
     my $email = "From: $from\n";
     $email   .= "To: $to\n";
-    $email   .= "CC: $cc\n"   if( $cc  && $cc  !~ /disable/i );
-    $email   .= "BCC: $bcc\n" if( $bcc && $bcc !~ /disable/i );
+    $email   .= "CC: $cc\n"   if( $cc  && $cc  !~ /^disable$/i );
+    $email   .= "BCC: $bcc\n" if( $bcc && $bcc !~ /^disable$/i );
     $email   .= "Subject: $subject\n\n";
     $email   .= "$text\n";
     if( $debug ) {
