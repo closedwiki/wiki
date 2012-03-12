@@ -1,0 +1,3 @@
+data/TWiki/SendMailPlugin.txt 0644
+lib/TWiki/Plugins/SendMailPlugin.pm 0644
+lib/TWiki/Plugins/SendMailPlugin/Config.spec 0644
