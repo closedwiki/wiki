@@ -1,5 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
+# Copyright (C) 2012 Hypertek lnc
 # Copyright (C) 2012 Peter Thoeny, peter[at]thoeny.org
 # Copyright (C) 2012 TWiki Contributors.
 # All Rights Reserved. TWiki Contributors are listed in the AUTHORS
@@ -26,7 +27,7 @@ require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-02-14';
+our $RELEASE = '2012-03-12';
 
 # One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
 our $SHORTDESCRIPTION = 'Send mail from TWiki topics, useful for workflow automation';
@@ -55,24 +56,61 @@ sub initPlugin {
 #=====================================================================
 sub _SENDMAIL {
     my($session, $params, $theTopic, $theWeb, $meta, $textRef) = @_;
-    # $session  - a reference to the TWiki session object (if you don't know
-    #             what this is, just ignore it)
-    # $params=  - a reference to a TWiki::Attrs object containing parameters.
-    #             This can be used as a simple hash that maps parameter names
-    #             to values, with _DEFAULT being the name for the default
-    #             parameter.
-    # $theTopic - name of the topic in the query
-    # $theWeb   - name of the web in the query
-    # $meta     - topic meta-data to use while expanding, can be undef (Since TWiki::Plugins::VERSION 1.4)
-    # $textRef  - reference to unexpanded topic text, can be undef (Since TWiki::Plugins::VERSION 1.4)
 
-    # Return: the result of processing the variable
+    my $action = $params->{action};
+    return '' unless( $action eq 'send' );
 
-    # For example, %EXAMPLEVAR{'existence' proof="thinking"}%
-    # $params->{_DEFAULT} will be 'existence'
-    # $params->{proof} will be 'thinking'
+    my $from    = expandEmail( $TWiki::cfg{Plugins}{SendMailPlugin}{From}
+                  || $params->{from} || '$webmastername <$webmasteremail>' );
+    my $to      = expandEmail( $TWiki::cfg{Plugins}{SendMailPlugin}{To}
+                  || $params->{to}   || '$webmastername <$webmasteremail>' );;
+    my $cc      = expandEmail( $TWiki::cfg{Plugins}{SendMailPlugin}{CC}
+                  || $params->{cc}   || '' );
+    my $bcc     = expandEmail( $TWiki::cfg{Plugins}{SendMailPlugin}{BCC}
+                  || $params->{bcc}  || '' );
+    my $subject = TWiki::Func::decodeFormatTokens( $params->{subject}
+                  || 'SendMailPlugin Note: For subject specify subject="..." parameter' );
+    my $text    = TWiki::Func::decodeFormatTokens( $params->{text}
+                  || 'SendMailPlugin Note: For e-mail body specify text="..." parameter' );
+    my $success = TWiki::Func::decodeFormatTokens( $params->{success} || '' );
+    my $error   = TWiki::Func::decodeFormatTokens( $params->{error}   || '$error' );
 
-    return 'To be coded.';
+    my $email = "From: $from\n";
+    $email   .= "To: $to\n";
+    $email   .= "CC: $cc\n"   if( $cc  && $cc  !~ /disable/i );
+    $email   .= "BCC: $bcc\n" if( $bcc && $bcc !~ /disable/i );
+    $email   .= "Subject: $subject\n\n";
+    $email   .= "$text\n";
+    if( $debug ) {
+        TWiki::Func::writeDebug( "TWiki::Plugins::SendMailPlugin e-mail:" );
+        TWiki::Func::writeDebug( "===( START )=============" );
+        TWiki::Func::writeDebug( "$email" );
+        TWiki::Func::writeDebug( "===(  END  )=============" );
+    }
+    my $sendErr = TWiki::Func::sendEmail( $email );
+    if( $sendErr ) {
+        $sendErr =~ s/[\n\r]/ /go;
+        if( $debug ) {
+            TWiki::Func::writeDebug( "TWiki::Plugins::SendMailPlugin e-mail error: $sendErr" );
+        }
+        $error =~ s/\$error/$sendErr/g;
+        return $error;
+    }
+    return $success;
+}
+
+#=====================================================================
+sub expandEmail {
+    my( $text ) = @_;
+
+    return '' unless( $text );
+    my $userEmail = join( ', ', TWiki::Func::wikinameToEmails() );
+    my $userWikiName = TWiki::Func::getWikiName();
+    $text =~ s/\$useremail/ join( ', ', TWiki::Func::wikinameToEmails() ) /geo;
+    $text =~ s/\$username/ TWiki::Func::getWikiName() /geo;
+    $text =~ s/\$webmasteremail/$TWiki::cfg{WebMasterEmail}/go;
+    $text =~ s/\$webmastername/$TWiki::cfg{WebMasterName}/go;
+    return $text;
 }
 
 #=====================================================================
