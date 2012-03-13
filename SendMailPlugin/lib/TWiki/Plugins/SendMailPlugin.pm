@@ -60,20 +60,20 @@ sub _SENDMAIL {
     my $action = $params->{action};
     return '' unless( $action eq 'send' );
 
-    my $from    = expandEmail( $TWiki::cfg{Plugins}{SendMailPlugin}{From}
-                  || $params->{from} || '$webmastername <$webmasteremail>' );
-    my $to      = expandEmail( $TWiki::cfg{Plugins}{SendMailPlugin}{To}
-                  || $params->{to}   || '$webmastername <$webmasteremail>' );;
-    my $cc      = expandEmail( $TWiki::cfg{Plugins}{SendMailPlugin}{CC}
-                  || $params->{cc}   || '' );
-    my $bcc     = expandEmail( $TWiki::cfg{Plugins}{SendMailPlugin}{BCC}
-                  || $params->{bcc}  || '' );
-    my $subject = TWiki::Func::decodeFormatTokens( $params->{subject}
-                  || 'SendMailPlugin Note: For subject specify subject="..." parameter' );
-    my $text    = TWiki::Func::decodeFormatTokens( $params->{text}
-                  || 'SendMailPlugin Note: For e-mail body specify text="..." parameter' );
-    my $success = TWiki::Func::decodeFormatTokens( $params->{success} || '' );
-    my $error   = TWiki::Func::decodeFormatTokens( $params->{error}   || '$error' );
+    my $from      = expandEmail( $TWiki::cfg{Plugins}{SendMailPlugin}{From}
+                    || $params->{from} || '$webmastername <$webmasteremail>' );
+    my $to        = expandEmail( $TWiki::cfg{Plugins}{SendMailPlugin}{To}
+                    || $params->{to}   || '$webmastername <$webmasteremail>' );;
+    my $cc        = expandEmail( $TWiki::cfg{Plugins}{SendMailPlugin}{CC}
+                    || $params->{cc}   || '' );
+    my $bcc       = expandEmail( $TWiki::cfg{Plugins}{SendMailPlugin}{BCC}
+                    || $params->{bcc}  || '' );
+    my $subject   = TWiki::Func::decodeFormatTokens( $params->{subject}
+                    || 'SendMailPlugin Note: For subject specify subject="..." parameter' );
+    my $text      = TWiki::Func::decodeFormatTokens( $params->{text}
+                    || 'SendMailPlugin Note: For e-mail body specify text="..." parameter' );
+    my $onSuccess = TWiki::Func::decodeFormatTokens( $params->{onsuccess} || '' );
+    my $onError   = TWiki::Func::decodeFormatTokens( $params->{onerror}   || '$error' );
 
     my $email = "From: $from\n";
     $email   .= "To: $to\n";
@@ -93,10 +93,10 @@ sub _SENDMAIL {
         if( $debug ) {
             TWiki::Func::writeDebug( "TWiki::Plugins::SendMailPlugin e-mail error: $sendErr" );
         }
-        $error =~ s/\$error/$sendErr/g;
-        return $error;
+        $onError =~ s/\$error/$sendErr/g;
+        return $onError;
     }
-    return $success;
+    return $onSuccess;
 }
 
 #=====================================================================

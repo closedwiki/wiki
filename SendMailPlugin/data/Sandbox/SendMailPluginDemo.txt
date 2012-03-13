@@ -1,6 +1,72 @@
-%META:TOPICINFO{author="TWikiContributor" date="1331517681" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1331628891" format="1.1" version="1.5"}%
 ---+ Demo of Send Mail Plugin
 
-(placeholder)
+---++ Votes
+| *Vote* | *By* | *On* |
+| Amsterdam | Main.PeterThoeny | 2012-03-12 - 01:49 |
+| Amsterdam | Main.JimmyNeutron | 2012-03-12 - 03:51 |
+| Rome | Main.JimmyNeutron | 2012-03-12 - 04:05 |
+| Bern | Main.PeterThoeny | 2012-03-13 - 04:54 |
+%COMMENT{ type="vote_mail_comment" templatetopic="SendMailPluginDemo" }%
 
-%SENDMAIL{}%
+---++ Comment Plugin Template
+
+<verbatim>
+%TMPL:DEF{PROMPT:vote_mail_comment}%
+<b>My favorite city:</b>
+<noautolink>
+<select name="vote">
+<option value="">Select...</option>
+<option>Amsterdam</option>
+<option>Bern</option>
+<option>London</option>
+<option>New York</option>
+<option>Rome</option>
+<option>San Francisco</option>
+<option>Tokyo</option>
+<option>Zurich</option>
+</select>
+</noautolink>
+<input %DISABLED% type="submit" value="%button|Vote%" class="twikiSubmit" />
+<input type="hidden" name="sendmailaction" value="send" />
+%TMPL:END%
+</verbatim>
+
+<verbatim>
+%TMPL:DEF{OUTPUT:vote_mail_comment}%%POS:BEFORE%| %URLPARAM{ "vote" encode="safe" }% | %WIKIUSERNAME% | %SERVERTIME% |
+%STARTSECTION{ type="expandvariables" }%%SENDMAIL{
+ action="%URLPARAM{sendmailaction}%"
+ from="$webmastername <$webmasteremail>"
+ to="$username <$useremail>"
+ cc="%WIKIWEBMASTER%"
+ subject="Your vote on %WIKITOOLNAME%"
+ text="Dear %WIKINAME%,
+
+Thank you for your vote!
+  * You selected: %URLPARAM{ "vote" encode="safe" }%
+
+Best regards,
+TWiki support team"
+ error="| $error |||$n"
+}%%ENDSECTION{ type="expandvariables" }%%TMPL:END%
+</verbatim>
+
+Note: The input template has a hidden field to enable the send e-mail action:
+<input type="hidden" name="sendmailaction" value="send" />
+
+I need to give some thought on how to protect the plugin against open relay abuse. This plugin could be used to send e-mail to anyone on public TWikis. Maybe I add an option to ignore the 'to' and 'cc' parameters and specify them with configure settings.
+
+
+Supported parameters for %<nop>SENDMAIL{}%:
+
+   * action="send" -- required parameter, no action if missing
+   * from="admin@example.com" -- e-mail addresses, defaults to TWiki admin's e-mail address
+   * to="tom@example.com, jerry@example.com" -- comma-space delimited list of e-mail addresses; =$username= and =$useremail= resolves to the !WikiName and e-mail address of the logged in user, respectively
+   * cc="jimmy@example.com" -- comma-space delimited list of e-mail addresses
+   * bcc="boss@example.com" -- comma-space delimited list of e-mail addresses
+   * subject="Any text" -- text may include variables such as %<nop>URLPARAM{subject}%; [[%SYSTEMWEB%.FormatTokens][format tokens]] such as =$n=, =$percnt= are expanded
+   * text="Any text" -- text may include variables such as %<nop>URLPARAM{vote}%; [[%SYSTEMWEB%.FormatTokens][format tokens]] are expanded
+   * success="..." -- text shown in place of the SENDMAIL variable on success, default is empty; [[%SYSTEMWEB%.FormatTokens][format tokens]] are expanded
+   * error="| $error |" -- error message shown in place of the SENDMAIL variable on error, if any, default is =$error=; [[%SYSTEMWEB%.FormatTokens][format tokens]] are expanded
+
+-- TWiki:Main.PeterThoeny

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1331628040" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1331629205" format="1.1" version="$Rev$"}%
 ---+!! !SendMailPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -27,8 +27,8 @@ FIXME
 | =bcc="boss@example.com"= | BCC list: Comma-space delimited list of e-mail addresses. Same tokens supported as in =from=""=. | =""= |
 | =subject="Any text"= | E-mail subject. Text may include %SYSTEMWEB%.TWikiVariables such as =%<nop>URLPARAM{subject}%=, and [[%SYSTEMWEB%.FormatTokens][format tokens]] such as =$n= and =$percnt=. | (help message) |
 | =text="Any text"= | E-mail body text. Text may include %SYSTEMWEB%.TWikiVariables and [[%SYSTEMWEB%.FormatTokens][format tokens]]. | (help message) |
-| =success="..."= | Text shown in place of the SENDMAIL variable on success, default is empty. Text may include %SYSTEMWEB%.TWikiVariables and [[%SYSTEMWEB%.FormatTokens][format tokens]]. | =""= |
-| =error="&#124; $error &#124;&#124;"= | Error message shown in place of the SENDMAIL variable on error, if any. Text may include %SYSTEMWEB%.TWikiVariables and [[%SYSTEMWEB%.FormatTokens][format tokens]]. Token =$error= expands to the error message. | ="$error"= |
+| =onsuccess="..."= | Text shown in place of the SENDMAIL variable on success, default is empty. Text may include %SYSTEMWEB%.TWikiVariables and [[%SYSTEMWEB%.FormatTokens][format tokens]]. | =""= |
+| =onerror="&#124; $error &#124;&#124;"= | Error message shown in place of the SENDMAIL variable on error, if any. Text may include %SYSTEMWEB%.TWikiVariables and [[%SYSTEMWEB%.FormatTokens][format tokens]]. Token =$error= expands to the error message. | ="$error"= |
 
 ---++ Examples
 
