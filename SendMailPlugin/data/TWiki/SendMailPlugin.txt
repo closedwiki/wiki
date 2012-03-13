@@ -1,6 +1,79 @@
-%META:TOPICINFO{author="TWikiContributor" date="1329293031" format="1.1" version="$Rev$"}%
----+ Send Mail Plugin
+%META:TOPICINFO{author="TWikiContributor" date="1331626629" format="1.1" version="$Rev$"}%
+---+!! !SendMailPlugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/SendMailPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/SendMailPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
 
-(placeholder)
+---++ Introduction
 
-%SENDMAIL{}%
+FIXME
+
+---++ Syntax Rules
+
+=%<nop>SENDMAIL{"..."}%=
+
+| *Parameter* | *Explanation* | *Default* |
+| =action=""= | Only =action="send"= is supported, it will send an e-mail | =""= (no action) |
+| =from="admin@example.com"= | E-mail address of sender. Defaults to TWiki administrator's e-mail address | ="$webmastername &lt;$webmasteremail&gt;"= |
+| =to="jom@example.com"= | To list: Comma-space delimited list of e-mail addresses of adressees. Tokens =$username= and =$useremail= resolve to the WikiName and e-mail address of the logged in user, respectively. Defaults to TWiki administrator's e-mail address | ="$webmastername &lt;$webmasteremail&gt;"= |
+| =cc="jimmy@example.com"= | CC list: Comma-space delimited list of e-mail addresses | =""= |
+| =bcc="boss@example.com"= | BCC list: Comma-space delimited list of e-mail addresses | =""= |
+| =subject="Any text"= | E-mail subject. Text may include variables such as =%<nop>URLPARAM{subject}%=. Format tokens such as =$n= and =$percnt= are expanded | (help message) |
+| =text="Any text"= | E-mail body text. Text may include variables such as =%<nop>URLPARAM{subject}%=. Format tokens such as =$n= and =$percnt= are expanded | (help message) |
+| =success="..."= | Text shown in place of the SENDMAIL variable on success, default is empty. Format tokens such as =$n= and =$percnt= are expanded | =""= |
+| =error="&#124; $error &#124;&#124;"= | Error message shown in place of the SENDMAIL variable on error, if any. Token =$error= is the error message. Format tokens such as =$n= and =$percnt= are expanded. | ="$error"= |
+
+---++ Examples
+
+FIXME
+
+---++ Plugin Installation &amp; Configuration
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+      * Install the dependencies (if any).
+
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Configure additional plugin settings in the __Extensions__ section.
+      * Test if the installation was successful: See example above.
+
+---++ Plugin Info
+
+   * Plugin sponsor: Hypertek lnc. and NIST
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Send e-mail from actions in TWiki topics, useful for workflow automation
+
+|  Plugin Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2012 Hypertek lnc. <br /> &copy; 2012 TWiki:Main.PeterThoeny <br /> &copy; 2012 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2012-03-13 (V1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-03-13: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/SendMailPlugin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/SendMailPluginDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/SendMailPluginAppraisal |
+
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
