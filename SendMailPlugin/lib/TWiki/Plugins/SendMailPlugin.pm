@@ -27,10 +27,10 @@ require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-03-12';
+our $RELEASE = '2012-03-13';
 
 # One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
-our $SHORTDESCRIPTION = 'Send mail from TWiki topics, useful for workflow automation';
+our $SHORTDESCRIPTION = 'Send e-mail from actions in TWiki topics, useful for workflow automation';
 
 our $NO_PREFS_IN_TOPIC = 1;
 our $debug;
