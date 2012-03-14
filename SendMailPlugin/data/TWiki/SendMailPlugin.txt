@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1331696250" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1331696721" format="1.1" version="$Rev$"}%
 ---+!! !SendMailPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -59,6 +59,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
         | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
         | ==data/Sandbox/SendMailPluginDemo.txt== | Demo topic |
         | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+        | ==lib/TWiki/Plugins/%TOPIC%/Config.spec == | Plugin configuration file }
       * Set the ownership of the extracted directories and files to the webserver user.
       * Install the dependencies (if any).
 
