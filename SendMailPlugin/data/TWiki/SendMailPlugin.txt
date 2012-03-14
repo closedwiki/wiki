@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1331630882" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1331696250" format="1.1" version="$Rev$"}%
 ---+!! !SendMailPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -13,7 +13,7 @@
 
 ---++ Introduction
 
-FIXME
+In some TWiki applications there is a need to send e-mails as part of the workflow. This plugin is a flexible solution to send e-mails when certain actions accure, such as submitting a form. The Sandbox.SendMailPluginDemo has a working example showing how to send an e-mail when a user submits a form to vote on his/her favorite city.
 
 ---++ Syntax Rules
 
@@ -57,6 +57,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
         | *File:* | *Description:* |
         | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==data/Sandbox/SendMailPluginDemo.txt== | Demo topic |
         | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
       * Set the ownership of the extracted directories and files to the webserver user.
       * Install the dependencies (if any).
@@ -64,6 +65,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    * Plugin __configuration and testing__:
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
       * Configure additional plugin settings in the __Extensions__ section.
+         * FIXME: Add configure settings
       * Test if the installation was successful: See example above.
 
 ---++ Plugin Info
@@ -88,4 +90,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/SendMailPluginDev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/SendMailPluginAppraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ Sandbox.SendMailPluginDemo, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
