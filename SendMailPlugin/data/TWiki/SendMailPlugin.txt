@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1331696721" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1331769124" format="1.1" version="$Rev$"}%
 ---+!! !SendMailPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -17,7 +17,7 @@ In some TWiki applications there is a need to send e-mails as part of the workfl
 
 ---++ Syntax Rules
 
-=%<nop>SENDMAIL{"..."}%=
+=%<nop>SENDMAIL{ action="send" ... }%=
 
 | *Parameter* | *Explanation* | *Default* |
 | =action=""= | Only =action="send"= is supported, it will send an e-mail | =""= (no action) |
@@ -79,9 +79,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2012 Hypertek lnc. <br /> &copy; 2012 TWiki:Main.PeterThoeny <br /> &copy; 2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-03-13 (V1.000) |
+|  Plugin Version: | 2012-03-14 (V1.000) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-03-13: | Initial version |
+|  2012-03-14: | TWikibug:Item6860: Add configure settings |
+|  2012-03-13: | TWikibug:Item6848: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
