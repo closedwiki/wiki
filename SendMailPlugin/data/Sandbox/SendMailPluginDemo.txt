@@ -1,15 +1,44 @@
-%META:TOPICINFO{author="PeterThoeny" date="1331628891" format="1.1" version="1.5"}%
+%META:TOPICINFO{author="TWikiContributor" date="1331695348" format="1.1" version="$Rev$"}%
 ---+ Demo of Send Mail Plugin
+
+This is a working example of using the %SYSTEMWEB%.SendMailPlugin to send an e-mail when a user submits a form to vote on his/her favorite city.
 
 ---++ Votes
 | *Vote* | *By* | *On* |
-| Amsterdam | Main.PeterThoeny | 2012-03-12 - 01:49 |
-| Amsterdam | Main.JimmyNeutron | 2012-03-12 - 03:51 |
-| Rome | Main.JimmyNeutron | 2012-03-12 - 04:05 |
-| Bern | Main.PeterThoeny | 2012-03-13 - 04:54 |
+| Amsterdam | %USERSWEB%.TWikiGuest | 2012-03-12 - 01:49 |
 %COMMENT{ type="vote_mail_comment" templatetopic="SendMailPluginDemo" }%
 
+---++ How This Works
+
+Voting is done with a custom %SYSTEMWEB%.CommentPlugin template defined below in this page. Two actions happen on form submit:
+
+   1. A new row is added to the voting table -- the output format is defined by the =%<nop>TMPL:DEF{OUTPUT:vote_mail_comment}%= comment plugin output template below.
+   2. Send an e-mail to the logged in user -- the e-mail is defined by the =%<nop>SENDMAIL{}%= variable, also located in the comment plugin output template below.
+
+__Some details:__
+
+   * The "send e-mail" action is triggered by =%<nop>SENDMAIL{ action="send" ... }%=. We can't hard-code =action="send"= in this page because this would send an e-mail each time somone views the page! We set the action to be triggered only on form submit. There are two parts to this:
+      1. The comment plugin _input_ template has a hidden input field to tell the output template to do the send e-mail action:%BR%
+        =&lt;input type="hidden" name="sendmailaction" value="send" /&gt;=
+      1. The comment plugin _output_ template has :%BR%
+        =%<nop>SENDMAIL{ action="%<nop>URLPARAM{sendmailaction}%" ... }%= %BR%
+        On form submit, the ="%<nop>URLPARAM{sendmailaction}%"= resolves the ="send"=, which initiates the send e-mail action.
+   * The !CommentPlugin is designed to expand the same variables as TWiki does on a new topic creation. Plugin variables are not expanded, so we need to tell TWiki explicitely to expand the SENDMAIL variable. [[%SYSTEMWEB%.TWikiTemplates#ControlOverVariableExpansion][As documented]], this can be done with a section of =type="expandvariables"= as follows: %BR%
+     =%<nop>STARTSECTION{ type="expandvariables" }%= %BR%
+     =%<nop>SENDMAIL{ ... }= %BR%
+     =%<nop>ENDSECTION{ type="expandvariables" }%=
+   * The =From=, =To= and =CC= are defined by the following SENDMAIL parameters: %BR%
+     =from="$webmastername <$webmasteremail>"= -- send e-mail as the TWiki administrator %BR%
+     =to="$username <$useremail>"= -- send to currently logged in user %BR%
+     =cc="%<nop>WIKIWEBMASTER%"= -- CC the TWiki administrator %BR%
+     __Note:__ Keep in mind that these parameters are ignored if defined in the ={Plugins}{SendMailPlugin}{...}= configure settings.
+   * The subject and e-mail body are defined in the =subject="..."= and =text=".."= parameters
+   * In case there is a send e-mail error, the error is recorded as a row in the voting table using the following parameter: %BR%
+     =onerror="| $error |||$n"=
+
 ---++ Comment Plugin Template
+
+Comment plugin _input_ template =vote_mail_comment= :
 
 <verbatim>
 %TMPL:DEF{PROMPT:vote_mail_comment}%
@@ -32,6 +61,8 @@
 %TMPL:END%
 </verbatim>
 
+Comment plugin _output_ template =vote_mail_comment= :
+
 <verbatim>
 %TMPL:DEF{OUTPUT:vote_mail_comment}%%POS:BEFORE%| %URLPARAM{ "vote" encode="safe" }% | %WIKIUSERNAME% | %SERVERTIME% |
 %STARTSECTION{ type="expandvariables" }%%SENDMAIL{
@@ -46,27 +77,11 @@ Thank you for your vote!
   * You selected: %URLPARAM{ "vote" encode="safe" }%
 
 Best regards,
-TWiki support team"
- error="| $error |||$n"
+TWiki administrator team"
+ onerror="| $error |||$n"
 }%%ENDSECTION{ type="expandvariables" }%%TMPL:END%
 </verbatim>
 
-Note: The input template has a hidden field to enable the send e-mail action:
-<input type="hidden" name="sendmailaction" value="send" />
-
-I need to give some thought on how to protect the plugin against open relay abuse. This plugin could be used to send e-mail to anyone on public TWikis. Maybe I add an option to ignore the 'to' and 'cc' parameters and specify them with configure settings.
-
-
-Supported parameters for %<nop>SENDMAIL{}%:
-
-   * action="send" -- required parameter, no action if missing
-   * from="admin@example.com" -- e-mail addresses, defaults to TWiki admin's e-mail address
-   * to="tom@example.com, jerry@example.com" -- comma-space delimited list of e-mail addresses; =$username= and =$useremail= resolves to the !WikiName and e-mail address of the logged in user, respectively
-   * cc="jimmy@example.com" -- comma-space delimited list of e-mail addresses
-   * bcc="boss@example.com" -- comma-space delimited list of e-mail addresses
-   * subject="Any text" -- text may include variables such as %<nop>URLPARAM{subject}%; [[%SYSTEMWEB%.FormatTokens][format tokens]] such as =$n=, =$percnt= are expanded
-   * text="Any text" -- text may include variables such as %<nop>URLPARAM{vote}%; [[%SYSTEMWEB%.FormatTokens][format tokens]] are expanded
-   * success="..." -- text shown in place of the SENDMAIL variable on success, default is empty; [[%SYSTEMWEB%.FormatTokens][format tokens]] are expanded
-   * error="| $error |" -- error message shown in place of the SENDMAIL variable on error, if any, default is =$error=; [[%SYSTEMWEB%.FormatTokens][format tokens]] are expanded
+__See Also:__ %SYSTEMWEB%.CommentPlugin, %SYSTEMWEB%.SendMailPlugin, %SYSTEMWEB%.TWikiTemplates
 
 -- TWiki:Main.PeterThoeny
