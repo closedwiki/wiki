@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1331775697" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1331780222" format="1.1" version="$Rev$"}%
 ---+!! !SendMailPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -21,17 +21,7 @@ The related TWiki:Plugins.SendEmailPlugin is a web form mailer, used for things 
 
 =%<nop>SENDMAIL{ action="send" ... }%=
 
-| *Parameter* | *Explanation* | *Default* |
-| =action=""= | Only =action="send"= is supported, it will send an e-mail | =""= (no action) |
-| =excludetopic="MyTemplate"= | Exclude action for named topic. Typically used in a template topic containing the SENDMAL variable to disable the action when viewing the topic. | =""= (no exclude) |
-| =from="admin@example.com"= | E-mail address of sender. Supported tokens: %BB% =$webmastername= - name of TWiki administrator. %BB% =$webmasteremail= - e-mail of TWiki administrator. %BB% =$username= - %SYSTEMWEB%.WikiName of logged in user. %BB% =$useremail= - e-mail address of the logged in user. %BR% Defaults to TWiki administrator. See note on [[#OpenMailRelay][open mail relay]]. | ="$webmastername &lt;$webmasteremail&gt;"= |
-| =to="jom@example.com"= | To list: Comma-space delimited list of e-mail addresses of adressees. Same tokens supported as in =from=""=. Defaults to TWiki administrator. | ="$webmastername &lt;$webmasteremail&gt;"= |
-| =cc="jimmy@example.com"= | CC list: Comma-space delimited list of e-mail addresses. Same tokens supported as in =from=""=. | =""= |
-| =bcc="boss@example.com"= | BCC list: Comma-space delimited list of e-mail addresses. Same tokens supported as in =from=""=. | =""= |
-| =subject="Any text"= | E-mail subject. Text may include %SYSTEMWEB%.TWikiVariables such as =%<nop>URLPARAM{subject}%=, and [[%SYSTEMWEB%.FormatTokens][format tokens]] such as =$n= and =$percnt=. | (help message) |
-| =text="Any text"= | E-mail body text. Text may include %SYSTEMWEB%.TWikiVariables and [[%SYSTEMWEB%.FormatTokens][format tokens]]. | (help message) |
-| =onsuccess="..."= | Text shown in place of the SENDMAIL variable on success, default is empty. Text may include %SYSTEMWEB%.TWikiVariables and [[%SYSTEMWEB%.FormatTokens][format tokens]]. | =""= |
-| =onerror="&#124; $error &#124;&#124;"= | Error message shown in place of the SENDMAIL variable on error, if any. Text may include %SYSTEMWEB%.TWikiVariables and [[%SYSTEMWEB%.FormatTokens][format tokens]]. Token =$error= expands to the error message. | ="$error"= |
+%INCLUDE{VarSENDMAIL}%
 
 #OpenMailRelay
 ---++ Security Note on Open Mail Relay
@@ -84,7 +74,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2012-03-14 (V1.000) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-03-14: | TWikibug:Item6860: Add configure settings; add =excludetopic= parameter |
+|  2012-03-14: | TWikibug:Item6860: Add configure settings; add =excludetopic= parameter; add VarSENDMAIL doc |
 |  2012-03-13: | TWikibug:Item6848: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
@@ -95,4 +85,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/SendMailPluginDev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/SendMailPluginAppraisal |
 
-__Related Topics:__ Sandbox.SendMailPluginDemo, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ VarSENDMAIL, Sandbox.SendMailPluginDemo, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
