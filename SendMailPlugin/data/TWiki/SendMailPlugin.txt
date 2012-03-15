@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1331773704" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1331775697" format="1.1" version="$Rev$"}%
 ---+!! !SendMailPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -13,7 +13,9 @@
 
 ---++ Introduction
 
-In some TWiki applications there is a need to send e-mails as part of the workflow. This plugin is a flexible solution to send e-mails when certain actions accure, such as submitting a form. The Sandbox.SendMailPluginDemo has a working example showing how to send an e-mail when a user submits a form to vote on his/her favorite city.
+In some TWiki applications there is a need to send e-mails as part of the workflow. This plugin is a flexible solution to send e-mails when certain actions occure, such as when submitting a form or when creating a topic. The Sandbox.SendMailPluginDemo has a working example showing how to send an e-mail when a user submits a form to vote on his/her favorite city.
+
+The related TWiki:Plugins.SendEmailPlugin is a web form mailer, used for things like "contact us" web forms.
 
 ---++ Syntax Rules
 
