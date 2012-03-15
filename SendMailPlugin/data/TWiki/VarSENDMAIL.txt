@@ -1,0 +1,21 @@
+%META:TOPICINFO{author="TWikiContributor" date="1331780222" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarSENDMAIL
+---+++ SENDMAIL{...} -- send e-mail from actions in TWiki topics, useful for workflow automation
+   * The =%<nop>SENDMAIL{}%= variable is handled by the SendMailPlugin.
+   * Syntax: =%<nop>SENDMAIL{ action="send" ... }%=
+   * Parameters:%STARTINCLUDE%
+     | *Parameter* | *Explanation* | *Default* |
+     | =action=""= | Only =action="send"= is supported, it will send an e-mail | =""= (no action) |
+     | =excludetopic="MyTemplate"= | Exclude action for named topic. Typically used in a template topic containing the SENDMAL variable to disable the action when viewing the topic. | =""= (no exclude) |
+     | =from="admin@example.com"= | E-mail address of sender. Supported tokens: %BB% =$webmastername= - name of TWiki administrator. %BB% =$webmasteremail= - e-mail of TWiki administrator. %BB% =$username= - %SYSTEMWEB%.WikiName of logged in user. %BB% =$useremail= - e-mail address of the logged in user. %BR% Defaults to TWiki administrator. See note on [[%IF{"'%INCLUDINGTOPIC%'='SendMailPlugin'" else="SendMailPlugin"}%#OpenMailRelay][open mail relay]]. | ="$webmastername &lt;$webmasteremail&gt;"= |
+     | =to="jom@example.com"= | To list: Comma-space delimited list of e-mail addresses of adressees. Same tokens supported as in =from=""=. Defaults to TWiki administrator. | ="$webmastername &lt;$webmasteremail&gt;"= |
+     | =cc="jimmy@example.com"= | CC list: Comma-space delimited list of e-mail addresses. Same tokens supported as in =from=""=. | =""= |
+     | =bcc="boss@example.com"= | BCC list: Comma-space delimited list of e-mail addresses. Same tokens supported as in =from=""=. | =""= |
+     | =subject="Any text"= | E-mail subject. Text may include %SYSTEMWEB%.TWikiVariables such as =%<nop>URLPARAM{subject}%=, and [[%SYSTEMWEB%.FormatTokens][format tokens]] such as =$n= and =$percnt=. | (help message) |
+     | =text="Any text"= | E-mail body text. Text may include %SYSTEMWEB%.TWikiVariables and [[%SYSTEMWEB%.FormatTokens][format tokens]]. | (help message) |
+     | =onsuccess="..."= | Text shown in place of the SENDMAIL variable on success, default is empty. Text may include %SYSTEMWEB%.TWikiVariables and [[%SYSTEMWEB%.FormatTokens][format tokens]]. | =""= |
+     | =onerror="&#124; $error &#124;&#124;"= | Error message shown in place of the SENDMAIL variable on error, if any. Text may include %SYSTEMWEB%.TWikiVariables and [[%SYSTEMWEB%.FormatTokens][format tokens]]. Token =$error= expands to the error message. | ="$error"= |%STOPINCLUDE%
+   * Security: See note on [[SendMailPlugin#OpenMailRelay][how to avoid an open mail relay]]
+   * Example:%BR% =%<nop>SENDMAIL{ action="send" to="$username &lt;$useremail&gt;" subject="Status change" text="Status changed to %<nop>FORMFIELD{Status}%" }%=
+   * Related: SendMailPlugin
