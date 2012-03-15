@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1331780222" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1331786420" format="1.1" version="$Rev$"}%
 ---+!! !SendMailPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -13,7 +13,7 @@
 
 ---++ Introduction
 
-In some TWiki applications there is a need to send e-mails as part of the workflow. This plugin is a flexible solution to send e-mails when certain actions occure, such as when submitting a form or when creating a topic. The Sandbox.SendMailPluginDemo has a working example showing how to send an e-mail when a user submits a form to vote on his/her favorite city.
+In some TWiki applications there is a need to send e-mails as part of the workflow. This plugin is a flexible solution to send e-mails when certain actions occure, such as when submitting a form or when creating a topic. The Sandbox.SendMailPluginDemo is a working example showing how to send an e-mail when a user submits a form to vote on his/her favorite city.
 
 The related TWiki:Plugins.SendEmailPlugin is a web form mailer, used for things like "contact us" web forms.
 
@@ -37,7 +37,65 @@ Setting these configure settings will disable the four corresponding =%<nop>SEND
 
 ---++ Examples
 
-FIXME
+This plugin has many use cases. Here are a few for inspiration.
+
+---+++ Send E-mail on Topic View
+
+An e-mail is sent on each topic view if the SENDMAIL variable is used in a TWiki topic with =action="send"=. This can be very noisy. Here is an example where an e-mail is sent only if user !JimmyNeutron views the topic:
+
+<verbatim>
+%SENDMAIL{
+ action="%IF{ "'%WIKINAME%'='JimmyNeutron'" then="send"}%"
+ subject="%TOPIC% Topic View, conditional"
+ to="$webmasteremail"
+ text="Viewed by %WIKINAME%"
+}%
+</verbatim>
+
+---+++ Send E-mail on Topic Creation
+
+It is possible to send an e-mail each time a topic is created. This example sends an e-mail when a user edits a new topic based on WebTopicEditTemplate that has the following content:
+
+<verbatim>
+%STARTSECTION{ type="expandvariables" }%%SENDMAIL{
+ action="send"
+ excludetopic="WebTopicEditTemplate"
+ to="$webmasteremail"
+ subject="Create new topic %TOPIC%"
+ text="User %WIKINAME% is editing new topic %WEB%.%TOPIC%"
+}%%ENDSECTION{ type="expandvariables" }%
+</verbatim>
+
+Keep in mind that the e-mail is sent when the user clicks on edit, not on save.
+
+The =excludetopic="WebTopicEditTemplate"= prevents the e-mail action on topic view.
+
+TWiki expands only the [[%SYSTEMWEB%.TWikiTemplates#DefaultVariableExpansion][default variables]] on topic creation. In order to have the SENDMAIL variable take action we can force it to expand by placing the variable in a section of =type="expandvariables"= as shown.
+
+---+++ Send E-mail from !CommentPlugin Form
+
+The CommentPlugin can be used to create custom forms and form actions. The Sandbox.SendMailPluginDemo is a working example showing how to send an e-mail when a user submits a form to vote on his/her favorite city.
+
+For reference, the CommentPlugin output template looks as follows:
+
+<verbatim>
+%TMPL:DEF{OUTPUT:vote_mail_comment}%%POS:BEFORE%| %URLPARAM{ "vote" encode="safe" }% | %WIKIUSERNAME% | %SERVERTIME% |
+%STARTSECTION{ type="expandvariables" }%%SENDMAIL{
+ action="%URLPARAM{sendmailaction}%"
+ from="$webmastername <$webmasteremail>"
+ to="$username <$useremail>"
+ cc="%WIKIWEBMASTER%"
+ subject="Your vote on %WIKITOOLNAME%"
+ text="Dear %WIKINAME%,
+
+Thank you for your vote!
+  * You selected: %URLPARAM{ "vote" encode="safe" }%
+
+Best regards,
+TWiki administrator team"
+ onerror="| $error |||$n"
+}%%ENDSECTION{ type="expandvariables" }%%TMPL:END%
+</verbatim>
 
 ---++ Plugin Installation &amp; Configuration
 
@@ -59,7 +117,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    * Plugin __configuration and testing__:
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
       * Configure additional plugin settings in the __Extensions__ section.
-         * FIXME: Add configure settings
       * Test if the installation was successful: See example above.
 
 ---++ Plugin Info
@@ -74,7 +131,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2012-03-14 (V1.000) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-03-14: | TWikibug:Item6860: Add configure settings; add =excludetopic= parameter; add VarSENDMAIL doc |
+|  2012-03-14: | TWikibug:Item6860: Add configure settings; add =excludetopic= parameter; add VarSENDMAIL doc; adding examples |
 |  2012-03-13: | TWikibug:Item6848: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
