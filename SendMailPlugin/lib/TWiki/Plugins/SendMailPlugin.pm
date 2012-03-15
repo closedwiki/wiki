@@ -60,6 +60,8 @@ sub _SENDMAIL {
     my $action = $params->{action};
     return '' unless( $action eq 'send' );
 
+    return '' if( $params->{excludetopic} =~ /^(on|$theTopic|$theWeb\.$theTopic)$/ );
+
     my $from      = expandEmail( $TWiki::cfg{Plugins}{SendMailPlugin}{From}
                     || $params->{from} || '$webmastername <$webmasteremail>' );
     my $to        = expandEmail( $TWiki::cfg{Plugins}{SendMailPlugin}{To}
