@@ -1348,11 +1348,12 @@ sub TML2PlainText {
     $text =~ s/[\[\]\*\|=_\&\<\>]/ /g;  # remove Wiki formatting chars
     $text =~ s/^\-\-\-+\+*\s*\!*/ /gm;  # remove heading formatting and hbar
     $text =~ s/[\+\-]+/ /g;             # remove special chars
+    $text =~ s/[\"\']/`/g;              # change quotes to not interfere if used in html tag attributes
     $text =~ s/^\s+//;                  # remove leading whitespace
     $text =~ s/\s+$//;                  # remove trailing whitespace
     $text =~ s/!(\w+)/$1/gs;            # remove all nop exclamation marks before words
     $text =~ s/[\r\n]+/\n/s;
-    $text =~ s/[ \t]+/ /s;
+    $text =~ s/[ \t]+/ /s;              # consolidate multiple spaces into one
 
     return $text;
 }
