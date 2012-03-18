@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1320261028" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1332054722" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %STARTINCLUDE%
 ---+ TWiki Formatted Search
@@ -50,9 +50,10 @@ Variables that can be used in the format string:
 | =$createusername= | Login name of topic revision 1, e.g. =jsmith= |
 | =$createwikiname= | Wiki user name of topic revision 1, e.g. =<nop>JohnSmith= |
 | =$createwikiusername= | Wiki user name of topic revision 1, e.g. =%USERSWEB%.<nop>JohnSmith= |
-| =$summary= | Topic summary, just the plain text, all formatting and line breaks removed; up to 162 characters |
+| =$summary= | Topic summary, just the plain text, all TWiki variables, formatting and line breaks removed; up to 162 characters |
 | =$summary(<i>50</i>)= | Topic summary, up to 50 characters shown |
 | =$summary(showvarnames)= | Topic summary, with =%<nop>ALLTWIKI{...}%= variables shown as =ALLTWIKI{...}= |
+| =$summary(expandvar)= | Topic summary, with =%<nop>ALLTWIKI{...}%= variables expanded |
 | =$summary(noheader)= | Topic summary, with leading =---+ headers= removed%BR% __Note:__ The tokens can be combined, for example =$summary(100, showvarnames, noheader)= |
 | =$changes= | Summary of changes between latest rev and previous rev |
 | =$changes(<i>n</i>)= | Summary of changes between latest rev and rev n |
