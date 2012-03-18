@@ -1314,7 +1314,8 @@ sub TML2PlainText {
         my $wtn = $this->{session}->{prefs}->getPreferencesValue( 'WIKITOOLNAME' ) || '';
         $text =~ s/%WIKITOOLNAME%/$wtn/g;
         if( $opts =~ /showvar/ ) {
-            $text =~ s/%(\w+({.*?}))%/$1/g; # defuse
+            $text =~ s/%(\w+{)/$1/g; # defuse %VARIABLE{ ...
+            $text =~ s/(})%/$1/g;    #        ... }%
         } else {
             $text =~ s/%$TWiki::regex{tagNameRegex}({.*?})?%//g;  # remove
         }
