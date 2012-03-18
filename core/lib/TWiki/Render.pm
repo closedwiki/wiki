@@ -1314,10 +1314,20 @@ sub TML2PlainText {
         my $wtn = $this->{session}->{prefs}->getPreferencesValue( 'WIKITOOLNAME' ) || '';
         $text =~ s/%WIKITOOLNAME%/$wtn/g;
         if( $opts =~ /showvar/ ) {
-            $text =~ s/%(\w+{)/$1/g; # defuse %VARIABLE{ ...
+            $text =~ s/%($TWiki::regex{tagNameRegex}\{)/$1/g; # defuse %VARIABLE{ ...
             $text =~ s/(})%/$1/g;    #        ... }%
         } else {
-            $text =~ s/%$TWiki::regex{tagNameRegex}({.*?})?%//g;  # remove
+            # Remove nested %VAR1{ ... %VAR2{...}% ...}% by
+            # first adding nesting level to parenthesis,
+            # e.g. "%A{%B{...}%}% ... %C{%D{...}%}%"
+            # gets "A-esc-1{B-esc-2{...-esc-2}-esc-1} ... C-esc-1{D-esc-2{...-esc-2}-esc-1}"
+            my $escToken = "\0-esc-\0";
+            my $level = 0;
+            $text =~ s/%$TWiki::regex{tagNameRegex}(\{)|(\})%/_addNestingLevel($1, $2, \$level, $escToken)/geo;
+            # then removing whole nested block non-greedily, one by one
+            $text =~ s/($escToken[0-9]+)\{.*?\1\}//gos;
+            # clean up unbalanced stuff:
+            $text =~ s/$escToken[0-9]+[\{\}]//go;
         }
     }
 
@@ -1345,6 +1355,22 @@ sub TML2PlainText {
     $text =~ s/[ \t]+/ /s;
 
     return $text;
+}
+
+# =========================
+sub _addNestingLevel
+{
+  my( $theOpen, $theClose, $theLevelRef, $escToken ) = @_;
+
+  my $result = "";
+  if( $theOpen ) {
+    $$theLevelRef++;
+    $result = "$escToken$$theLevelRef$theOpen";
+  } else {
+    $result = "$escToken$$theLevelRef$theClose";
+    $$theLevelRef--;
+  }
+  return $result;
 }
 
 =pod
