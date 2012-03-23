@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1308906146" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1332527963" format="1.1" version="$Rev$"}%
 ---+ Bookmarks Application Page
 
 This page contains several parts that are used by user bookmark pages. Bookmark pages reside in the %USERSWEB% web and are named &lt;wikiname&gt;Bookmarks, such as !JimmyNeutronBookmarks.
@@ -6,11 +6,19 @@ This page contains several parts that are used by user bookmark pages. Bookmark 
 ---++ Bookmarks Preview in Account Pulldown Menu
 
 %STARTINCLUDE%<div style="float: right; width: 300px;">
+<style type="text/css" media="all">
+  #userBookmarksMenu ul li a
+  {
+    text-decoration: none;
+    color: #333333;
+    border: 0 none;
+  }
+</style>
 <table><tr><td valign="top" style="white-space: nowrap">
 &nbsp; *Preview:* &nbsp;
 </td><td valign="top">
 %IF{ "' %SKIN% ' ~ '*topmenu*'" then="<nop>" else="$percntINCLUDE{%SYSTEMWEB%.TopMenuSkin}$percnt"}%
-<div class="twTopMenuTab">
+<div class="twTopMenuTab" id="userBookmarksMenu">
    * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
    * [[%WIKIUSERNAME%][ %ICON{"person"}% %MAKETEXT{"Account"}% %ICON{menu-down}%]]
 %IF{
