@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1323750910" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1332549989" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -712,7 +712,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="ppt.gif" attr="h" comment="" date="1169565034" path="ppt.gif" size="373" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="presentation.gif" attr="h" comment="" date="1196729838" path="presentation.gif" size="892" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="printtopic.gif" attr="h" comment="" date="1169565034" path="printtopic.gif" size="221" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="process.gif" attr="h" comment="" date="1258790911" path="process.gif" size="891" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="process.gif" attr="h" comment="" date="1332549895" path="process.gif" size="127" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="processing-32-bg.gif" attr="h" comment="" date="1237421717" path="processing-32-bg.gif" size="2193" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="processing-32.gif" attr="h" comment="" date="1237421717" path="processing-32.gif" size="1918" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="processing-bar.gif" attr="h" comment="" date="1293859439" path="processing-bar.gif" size="1754" user="TWikiContributor" version=""}%
