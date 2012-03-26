@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1332549989" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1332749444" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -78,6 +78,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{presentation}% | =%<nop>ICON{presentation}%= | Presentation | gif | 16x16 |  |
 | %ICON{process}% | =%<nop>ICON{process}%= | Process | gif | 16x16 |  |
 | %ICON{profile}% | =%<nop>ICON{profile}%= | Profile | gif | 16x16 |  |
+| %ICON{project}% | =%<nop>ICON{project}%= | Project | gif | 16x16 |  |
 | %ICON{puzzle}% | =%<nop>ICON{puzzle}%= | Puzzle | gif | 16x16 |  |
 | %ICON{qrcode}% | =%<nop>ICON{qrcode}%= | QR Code | gif | 16x16 |  |
 | %ICON{question}% | =%<nop>ICON{question}%= | Question | gif | 16x16 |  |
@@ -104,6 +105,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{target-green}% | =%<nop>ICON{target-green}%= | Target - green | gif | 16x16 |  |
 | %ICON{target-orange}% | =%<nop>ICON{target-orange}%= | Target - orange | gif | 16x16 |  |
 | %ICON{target-red}% | =%<nop>ICON{target-red}%= | Target - red | gif | 16x16 |  |
+| %ICON{tasks}% | =%<nop>ICON{tasks}%= | Tasks | gif | 16x16 |  |
 | %ICON{thumbs-down}% | =%<nop>ICON{thumbs-down}%= | Thumbs-down | gif | 16x16 |  |
 | %ICON{thumbs-up}% | =%<nop>ICON{thumbs-up}%= | Thumbs-up | gif | 16x16 |  |
 | %ICON{tip}% | =%<nop>ICON{tip}%=, =%<nop>T%= | Tip, idea | gif | 16x16 |  |
@@ -720,6 +722,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="processing-bg.gif" attr="h" comment="" date="1237421717" path="processing-bg.gif" size="1661" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="processing.gif" attr="h" comment="" date="1229216814" path="processing.gif" size="2537" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="profile.gif" attr="h" comment="" date="1258790911" path="profile.gif" size="980" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="project.gif" attr="h" comment="" date="1300514078" path="project.gif" size="211" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="proportional.gif" attr="h" comment="" date="1169565034" path="proportional.gif" size="137" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="ps.gif" attr="h" comment="" date="1169565034" path="ps.gif" size="362" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="psd.gif" attr="h" comment="" date="1169565034" path="psd.gif" size="369" user="TWikiContributor" version=""}%
@@ -785,6 +788,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="target-green.gif" attr="h" comment="" date="1222843435" path="target-green.gif" size="978" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="target-orange.gif" attr="h" comment="" date="1222843419" path="target-orange.gif" size="963" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="target-red.gif" attr="h" comment="" date="1169565034" path="target-red.gif" size="261" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="tasks.gif" attr="h" comment="" date="1332748920" path="tasks.gif" size="960" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="technorati.gif" attr="h" comment="" date="1262417730" path="technorati.gif" size="363" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="thumbs-down.gif" attr="h" comment="" date="1260656213" path="thumbs-down.gif" size="995" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="thumbs-up.gif" attr="h" comment="" date="1260656213" path="thumbs-up.gif" size="991" user="TWikiContributor" version=""}%
