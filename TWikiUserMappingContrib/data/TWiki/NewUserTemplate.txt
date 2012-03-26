@@ -7,8 +7,6 @@
    * [[%SYSTEMWEB%.TWikiUsersGuide][TWikiUsersGuide]] - complete TWiki documentation, Quick Start to Reference
    * [[Sandbox.%HOMETOPIC%][%HOMETOPIC%]] - try out TWiki on your own
    * [[Sandbox.%TOPIC%Sandbox][%TOPIC%Sandbox]] - just for me
-   * 
-   * 
 
 ---++ My Personal Preferences
 %ENDSECTION{ type="expandvariables" }%
@@ -63,8 +61,6 @@ Text for multilingual wiki community, copy from here to %<nop>ENDSECTION{type="t
    * %MAKETEXT{"[_1] - complete TWiki documentation, Quick Start to Reference" args="[[%SYSTEMWEB%.TWikiUsersGuide][TWikiUsersGuide]]"}%
    * %MAKETEXT{"[_1] - try out TWiki on your own" args="[[Sandbox.%HOMETOPIC%][%HOMETOPIC%]]"}%
    * %MAKETEXT{"[_1] - just for me" args="[[Sandbox.%TOPIC%Sandbox][%TOPIC%Sandbox]]"}%
-   * 
-   * 
 
 ---++ %MAKETEXT{"Personal Preferences"}%
 
