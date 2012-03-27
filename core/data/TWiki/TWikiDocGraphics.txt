@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1332749444" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1332824662" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -255,6 +255,17 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{led-box-purple}% | =%<nop>ICON{led-box-purple}%= | Purple led | gif | 16x16 |  |
 | %ICON{led-box-red}% | =%<nop>ICON{led-box-red}%= | Red led | gif | 16x16 |  |
 | %ICON{led-box-yellow}% | =%<nop>ICON{led-box-yellow}%= | Yellow led | gif | 16x16 |  |
+| %ICON{led-cup-aqua}% | =%<nop>ICON{led-cup-aqua}%= | Aqua LED | gif | 16x16 |  |
+| %ICON{led-cup-blue}% | =%<nop>ICON{led-cup-blue}%= | Blue LED | gif | 16x16 |  |
+| %ICON{led-cup-gray}% | =%<nop>ICON{led-cup-gray}%= | Gray LED | gif | 16x16 |  |
+| %ICON{led-cup-green}% | =%<nop>ICON{led-cup-green}%= | Green LED | gif | 16x16 |  |
+| %ICON{led-cup-green-plus}% | =%<nop>ICON{led-cup-green-plus}%= | Green plus LED | gif | 16x16 |  |
+| %ICON{led-cup-orange}% | =%<nop>ICON{led-cup-orange}%= | Orange LED | gif | 16x16 |  |
+| %ICON{led-cup-purple}% | =%<nop>ICON{led-cup-purple}%= | Purple LED | gif | 16x16 |  |
+| %ICON{led-cup-red}% | =%<nop>ICON{led-cup-red}%= | Red LED | gif | 16x16 |  |
+| %ICON{led-cup-red-close}% | =%<nop>ICON{led-cup-red-close}%= | Red close LED | gif | 16x16 |  |
+| %ICON{led-cup-yellow}% | =%<nop>ICON{led-cup-yellow}%= | Yellow LED | gif | 16x16 |  |
+| %ICON{led-cup-yellow-minus}% | =%<nop>ICON{led-cup-yellow-minus}%= | Yellow minus LED | gif | 16x16 |  |
 | %ICON{tag}% | =%<nop>ICON{tag}%= | Tag | gif | 16x16 |  |
 | %ICON{tag-blue}% | =%<nop>ICON{tag-blue}%= | Blue tag | gif | 16x16 |  |
 | %ICON{tag-brown}% | =%<nop>ICON{tag-brown}%= | Brown tag | gif | 16x16 |  |
@@ -646,6 +657,17 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="led-box-purple.gif" attr="h" comment="" date="1169565034" path="led-box-purple.gif" size="393" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="led-box-red.gif" attr="h" comment="" date="1169565034" path="led-box-red.gif" size="393" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="led-box-yellow.gif" attr="h" comment="" date="1169565034" path="led-box-yellow.gif" size="393" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="led-cup-aqua.gif" attr="h" comment="" date="1332822782" path="led-cup-aqua.gif" size="1025" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="led-cup-blue.gif" attr="h" comment="" date="1332822782" path="led-cup-blue.gif" size="1025" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="led-cup-gray.gif" attr="h" comment="" date="1332822782" path="led-cup-gray.gif" size="1023" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="led-cup-green-plus.gif" attr="h" comment="" date="1332822782" path="led-cup-green-plus.gif" size="1017" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="led-cup-green.gif" attr="h" comment="" date="1332803430" path="led-cup-green.gif" size="1025" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="led-cup-orange.gif" attr="h" comment="" date="1332803430" path="led-cup-orange.gif" size="1025" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="led-cup-purple.gif" attr="h" comment="" date="1332803460" path="led-cup-purple.gif" size="1023" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="led-cup-red-close.gif" attr="h" comment="" date="1332822782" path="led-cup-red-close.gif" size="1019" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="led-cup-red.gif" attr="h" comment="" date="1332803460" path="led-cup-red.gif" size="1023" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="led-cup-yellow-minus.gif" attr="h" comment="" date="1332822782" path="led-cup-yellow-minus.gif" size="1015" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="led-cup-yellow.gif" attr="h" comment="" date="1332803460" path="led-cup-yellow.gif" size="1025" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="led-gray.gif" attr="h" comment="" date="1169565034" path="led-gray.gif" size="935" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="led-green.gif" attr="h" comment="" date="1169565034" path="led-green.gif" size="944" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="led-orange.gif" attr="h" comment="" date="1169565034" path="led-orange.gif" size="951" user="TWikiContributor" version=""}%
