@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277358325" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1333063462" format="1.1" version="$Rev$"}%
 ---+ TWiki Site
 
 ---++ TWiki is a Web-based collaboration platform
@@ -12,7 +12,7 @@
 ---++ TWiki is an UNUSUAL Web-based collaboration platform
 
    * There's no doubt that, to most people, TWiki at first seems almost the opposite of how the Web and online communications "normally" work. Why?
-      * TWiki operates like a whiteboard for the Web - it lets you and all other users write, place pictures and post links, anywhere on any page.
+      * TWiki operates like a whiteboard for the Web - it lets you and all other users write, place pictures, and post links, anywhere on any page.
       * Not only that, everyone can EDIT anything, anywhere on a page.
       * At first, this may seem "too" open - it soon becomes second-nature, allowing you the freedom to edit and update the way you want to.
 
