@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1311913285" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1333063943" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ 20-Minute TWiki Tutorial
 
@@ -41,7 +41,7 @@ The buttons at the top and the color-coded control strip at the bottom of the pa
    * ==Print version== - goes to a stripped down version of the page, good for printing
    * ==History== - topics are under revision control - =History= shows you the complete change history of the topic, for example, who changed what and when
    * ==r3 &gt; r2 &gt; r1== - view a previous version of the topic or the difference between two versions
-   * ==More topic actions== - additional controls, such as rename/move, version control and setting the topic's parent.
+   * ==More topic actions== - additional controls, such as rename/move, version control, and setting the topic's parent.
 
 ---++ 6. Create a topic, modify a topic, and link to a topic...
 
@@ -52,8 +52,8 @@ Go to the [[Sandbox.%HOMETOPIC%][Sandbox]]. This is the sandbox web, where you c
       1. In edit mode, enter a new text with a WikiWord, for example:%BR%
          =This is <nop>%WIKINAME%Sandbox topic.=
       1. Save the topic. The name appears highlighted with a red-link. This means that the topic doesn't exist yet.
-      1. Click on the red-link. Now you're in edit mode of the new topic.
-      1. Type some text. You can add headings, bullets, tables and more, use the controls of the WYSIWYG editor.
+      1. Click on the red-link. Now you're in edit mode for the new topic.
+      1. Type some text. You can add headings, bullets, tables and more using the controls of the WYSIWYG editor.
       1. A signature with your name is already entered by default. Keep it at the bottom.%BR%
          __Note:__ The =%USERSWEB%.= in front of your name is a web prefix. It means that you have a link from the current web to your personal topic located in the %USERSWEB% web.
       1. Save the topic...
@@ -65,7 +65,7 @@ Go to the [[Sandbox.%HOMETOPIC%][Sandbox]]. This is the sandbox web, where you c
       1. You can also create a nice looking link without a !BumpyWord. Enter for example:%BR%
          =[<nop>[WebSearch][This is a link to search]].=
    * Learn about ==Raw Edit== (for advanced/technical users)
-      1. Topics can be modified in WYSIWYG mode (default) and in ==Raw Edit== mode. The raw mode shows text in !TWikiShorthand, a very simple markup language. Follow the TWikiShorthand link to see how, then:
+      1. Topics can be modified in WYSIWYG mode (default) and in ==Raw Edit== mode. Raw mode shows text in !TWikiShorthand, a very simple markup language. Follow the TWikiShorthand link to see how, then:
       1. Go back to your own sandbox topic and ==Raw Edit== it.
       2. Enter some text in TWikiShorthand: *bold* text, _italic_ text, __bold italic__ text, a bullet list, tables, paragraphs, etc.%BR%
        __Hint:__ If you need help, click on the [[TextFormattingRules][Edit help]] link located above the text edit box.
@@ -79,7 +79,7 @@ You can attach _any_ type of file to a topic - documents, images, programs, what
       1. Go back to your sandbox topic and click on ==Attach==.
       1. Click ==[Browse]== to find a file on your machine that you'd like to attach; enter an optional comment; leave everything else unchecked.
       1. Click ==[Upload file]==, then scroll to the end of the page to see the new attachment listing.
-   * Do this again - this time, upload a =.gif=, =.png= or =.jpg= image file.
+   * Do this again - this time, upload a =.gif=, =.png=, or =.jpg= image file.
       * Check the =Link= box to _create a link to the attached file at the end of the topic_. The image will show up at the bottom of the topic. 
       * Edit the topic to move/resize the image.
    * If you have an image of yourself, your cat, your sprawling family estate...why not upload it now to personalize your TWiki profile page %WIKIUSERNAME%?
