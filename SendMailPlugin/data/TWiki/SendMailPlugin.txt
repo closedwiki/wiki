@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1331786420" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1333353307" format="1.1" version="$Rev$"}%
 ---+!! !SendMailPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -13,6 +13,9 @@
 
 ---++ Introduction
 
+<sticky><div style="float:right; padding: 0 10px 0 10px;">
+<img src="%ATTACHURLPATH%/email-workflow-200.png" alt="" width="200" height="113" />
+</div></sticky>
 In some TWiki applications there is a need to send e-mails as part of the workflow. This plugin is a flexible solution to send e-mails when certain actions occure, such as when submitting a form or when creating a topic. The Sandbox.SendMailPluginDemo is a working example showing how to send an e-mail when a user submits a form to vote on his/her favorite city.
 
 The related TWiki:Plugins.SendEmailPlugin is a web form mailer, used for things like "contact us" web forms.
@@ -129,8 +132,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2012 Hypertek lnc. <br /> &copy; 2012 TWiki:Main.PeterThoeny <br /> &copy; 2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-03-14 (V1.000) |
+|  Plugin Version: | 2012-04-02 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-04-02: | TWikibug:Item6837: Add image |
 |  2012-03-14: | TWikibug:Item6860: Add configure settings; add =excludetopic= parameter; add VarSENDMAIL doc; adding examples |
 |  2012-03-13: | TWikibug:Item6848: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
@@ -143,3 +147,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/SendMailPluginAppraisal |
 
 __Related Topics:__ VarSENDMAIL, Sandbox.SendMailPluginDemo, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+
+%META:FILEATTACHMENT{name="email-workflow-400.png" attachment="email-workflow-400.png" attr="h" comment="" date="1333351305" path="email-workflow-400.png" size="59125" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="email-workflow-200.png" attachment="email-workflow-200.png" attr="h" comment="" date="1333351305" path="email-workflow-200.png" size="19594" user="TWikiContributor" version="1"}%
