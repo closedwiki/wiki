@@ -1,5 +1,7 @@
 data/TWiki/SendMailPlugin.txt 0644
 data/TWiki/VarSENDMAIL.txt 0644
 data/Sandbox/SendMailPluginDemo.txt 0644
+pub/TWiki/SendMailPlugin/email-workflow-200.png 0644
+pub/TWiki/SendMailPlugin/email-workflow-400.png 0644
 lib/TWiki/Plugins/SendMailPlugin.pm 0644
 lib/TWiki/Plugins/SendMailPlugin/Config.spec 0644
