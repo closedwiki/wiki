@@ -2244,6 +2244,11 @@ sub _TOC {
         }
         my $meta;
         ( $meta, $text ) = $this->{store}->readTopic( $this->{user}, $web, $topic );
+
+        # Item6864: 2012-03-29 TWiki:Main.GertjanVanOosten gertjan at west dot nl:
+        #   Handle common tags, as the text may contain variables etc. that need
+        #   to be expanded before generating the TOC for another topic.
+        $text = $this->handleCommonTags( $text, $web, $topic, $meta );
     }
 
     my $insidePre = 0;
