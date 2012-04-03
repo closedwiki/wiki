@@ -87,11 +87,11 @@ sub forceAuthentication {
         # the path info, and the query string.  All three query
         # variables are in the list of the canonical request meta
         # variables in CGI 1.1 (also provided by TWiki::Request).
-        my $url = $twiki->getScriptUrl(1, $scriptName);
+        my $url = $twiki->getScriptUrl(1, $scriptName, $twiki->{webName}, $twiki->{topicName});
         if( $url && $url =~ m!(.*/$scriptName)([^?]*)! ) {
             # $url should not contain query string as it gets appended
             # in TWiki::redirect. Script gets 'auth' appended.
-            $url = "$twiki->{urlHost}${1}auth$2";
+            $url = "${1}auth$2";
         } else {
             if( $twiki->{request}->action !~ /auth$/ ) {
                 $url = $twiki->{urlHost}.'/'.$twiki->{request}->action . 'auth';
