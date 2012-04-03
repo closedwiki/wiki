@@ -671,6 +671,7 @@ locale/sv.po 0444
 locale/zh-cn.po 0444
 locale/zh-tw.po 0444
 pub-htaccess.txt 0444
+pub/Main/TWikiGuest/twiki-guest.gif 0644
 pub/Main/WebPreferences/favicon.ico 0644
 pub/Main/WebPreferences/logo.gif 0644
 pub/Sandbox/WebPreferences/favicon.ico 0644
