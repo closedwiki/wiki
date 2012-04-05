@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1333601974" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1333602363" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -881,6 +881,7 @@ __Note:__ This plugin is pre-installed. TWiki administrators can upgrade it as n
         | *File:* | *Description:* |
         | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
         | ==data/TWiki/VarCALC.txt== | Documentation of the CALC variable |
+        | ==data/TWiki/VarCALCULATE.txt== | Documentation of the CALCULATE variable |
         | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
         | ==lib/TWiki/Plugins/%TOPIC%/Calc.pm== | Plugin core module |
       * Set the ownership of the extracted directories and files to the webserver user.
@@ -968,4 +969,4 @@ __Note:__ This plugin is pre-installed. TWiki administrators can upgrade it as n
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.VarCALC, %SYSTEMWEB%.VarIF
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.VarCALC, %SYSTEMWEB%.VarCALCULATE, %SYSTEMWEB%.VarIF
