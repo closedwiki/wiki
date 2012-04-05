@@ -25,7 +25,7 @@ package TWiki::Plugins::SpreadSheetPlugin;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-01-13';
+our $RELEASE = '2012-04-04';
 
 our $web;
 our $topic;
@@ -52,10 +52,27 @@ sub initPlugin
     # Flag to skip calc if in include
     $skipInclude = TWiki::Func::getPreferencesFlag( "SPREADSHEETPLUGIN_SKIPINCLUDE" );
 
+    TWiki::Func::registerTagHandler( 'CALCULATE', \&_CALCULATE );
+
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::SpreadSheetPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
     $doInit = 1;
     return 1;
+}
+
+# =========================
+sub _CALCULATE {
+    my( $session, $params, $theTopic, $theWeb, $meta, $textRef, $stackTop ) = @_;
+
+    TWiki::Func::writeDebug( "- SpreadSheetPlugin::_CALCULATE( $_[3].$_[2] )" ) if $debug;
+
+    require TWiki::Plugins::SpreadSheetPlugin::Calc;
+
+    if( $doInit ) {
+        $doInit = 0;
+        TWiki::Plugins::SpreadSheetPlugin::Calc::init( $web, $topic, $debug );
+    }
+    TWiki::Plugins::SpreadSheetPlugin::Calc::doCalc( $params->{_DEFAULT} );
 }
 
 # =========================

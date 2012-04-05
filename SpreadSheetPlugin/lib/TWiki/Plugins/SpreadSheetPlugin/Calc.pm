@@ -37,8 +37,8 @@ my $topic;
 my $debug;
 my $renderingWeb;
 my @tableMatrix;
-my $cPos;
-my $rPos;
+my $cPos = -1;
+my $rPos = -1;
 my $escToken = "\0";
 my %varStore = ();
 my $dontSpaceRE = "";
@@ -114,7 +114,7 @@ sub CALC
                 $line = "$before";
                 for( $cPos = 0; $cPos < @row; $cPos++ ) {
                     $cell = $row[$cPos];
-                    $cell =~ s/%CALC\{(.*?)\}%/_doCalc($1)/geo;
+                    $cell =~ s/%CALC\{(.*?)\}%/doCalc($1)/geo;
                     $line .= "$cell|";
                 }
                 s/.*/$line/o;
@@ -124,7 +124,7 @@ sub CALC
                 if( $insideTABLE ) {
                     $insideTABLE = 0;
                 }
-                s/%CALC\{(.*?)\}%/_doCalc($1)/geo;
+                s/%CALC\{(.*?)\}%/doCalc($1)/geo;
             }
         }
         push( @result, $_ );
@@ -133,7 +133,7 @@ sub CALC
 }
 
 # =========================
-sub _doCalc
+sub doCalc
 {
     my( $theAttributes ) = @_;
     my $text = &TWiki::Func::extractNameValuePair( $theAttributes );
