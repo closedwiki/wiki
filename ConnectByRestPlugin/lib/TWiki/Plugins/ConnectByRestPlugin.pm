@@ -906,7 +906,7 @@ sub _restUpdatetopic {
 
 #TODO   check if metastring was provided - if not read from current topic
 #
-    my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
+    ($meta, $text) = TWiki::Func::readTopic($web, $topic);
 
 
     $error = TWiki::Func::saveTopic( $web, $topic, $newmetatext, $newtext, { forcenewrevision => 1 } );
@@ -956,7 +956,7 @@ sub _restUpdatemeta {
 
 #TODO   check if metastring was provided - if not read from current topic
 #
-    my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
+    ($meta, $text) = TWiki::Func::readTopic($web, $topic);
 
 
     $error = TWiki::Func::saveTopic( $web, $topic, $newmetatext, $text, { forcenewrevision => 1 } );
