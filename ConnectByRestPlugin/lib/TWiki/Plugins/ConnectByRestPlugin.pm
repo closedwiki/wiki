@@ -62,7 +62,7 @@ the text had been included from another topic.
 
 =cut
 
-# change the package name and $pluginName!!!
+
 package TWiki::Plugins::ConnectByRestPlugin;
 
 # Always use strict to enforce variable scoping
@@ -84,7 +84,7 @@ $VERSION = '$Rev: 1 (05 May 2010) $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'TWiki-4.2';
+$RELEASE = 'TWiki-5.1';
 
 # Short description of this plugin
 # One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
@@ -161,11 +161,9 @@ sub initPlugin {
 
     # Allow a sub to be called from the REST interface 
     # using the provided alias
-    TWiki::Func::registerRESTHandler('createtopic', \&_restCreatetopic);
-    TWiki::Func::registerRESTHandler('updatetopic', \&_restUpdatetopic);
-    TWiki::Func::registerRESTHandler('updatemeta', \&_restUpdatemeta);
-    TWiki::Func::registerRESTHandler('getmetastring', \&_restGetmetastring);
-    TWiki::Func::registerRESTHandler('updateformfield', \&_restUpdateformfield);
+    TWiki::Func::registerRESTHandler('savetopic', \&restSavetopic);
+    TWiki::Func::registerRESTHandler('getmetastring', \&restGetmetastring);
+    TWiki::Func::registerRESTHandler('updateformfield', \&restUpdateformfield);
 
     # Plugin correctly initialized
     return 1;
@@ -597,7 +595,7 @@ sub DISABLE_afterAttachmentSaveHandler {
     TWiki::Func::writeDebug( "- ${pluginName}::afterAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
 }
 
-=begin twiki
+=pod
 
 ---++ beforeMergeHandler( $text, $currRev, $currText, $origRev, $origText, $web, $topic )
    * =$text= - the new text of the topic
@@ -800,7 +798,7 @@ sub DISABLE_completePageHandler {
 
    * =$session= - The TWiki object associated to this session.
    * =$web=     - name of the target web
-   * =$topic=   - Name of the topic file to be created
+   * =$topic=   - Name of the topic file to be saved/created
    * =$text=	- Topic content
    * =$metatext= - Meta data to be added to the topic as plain text in a string
 
@@ -809,7 +807,9 @@ it to the specified web.
 
 =cut
 
-sub _restCreatetopic {
+sub restSavetopic {
+
+   require TWiki::Meta;
 
    my ($session) = @_;
    my $topic = TWiki::Func::getCgiQuery()->param('topic');
@@ -829,17 +829,30 @@ sub _restCreatetopic {
 
 #  check if topic already exists
    if ( TWiki::Func::topicExists( $web, $topic )) {
-     return "Topic $topic already exists in web $web \n";
+        #  check accessrights in topic
+        unless (TWiki::Func::checkAccessPermission(
+                'CHANGE', TWiki::Func::getWikiName(),
+                undef, $topic, $web)) {
+                $error = "Access to topic $topic denied";
+                print CGI::header(-status => 401);
+                print $error;
+                print STDERR $error;
+                return undef;
+        }
+
+        my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
+        my $metastring = $meta->stringify();
+        $metatext = $metastring;
+        print STDERR $metatext;
     }
+
+ 
 
 
 #  create meta instance
-   require TWiki::Meta;
    my $newmeta = new TWiki::Meta( $session, $web, $topic, $metatext );
-
-
-    $error = TWiki::Func::saveTopic( $web, $topic, $newmeta, $ptext, { forcenewrevision => 1 } );
-
+   $error = TWiki::Func::saveTopic( $web, $topic, $newmeta, $ptext, { forcenewrevision => 1 } );
+   print STDERR 
 
 #  save new topic
 #    $error = TWiki::Func::saveTopic( $web, $topic, $meta, $text, { forcenewrevision => 1 } );
@@ -863,113 +876,6 @@ sub _restCreatetopic {
 
 =pod
 
----++ restUpdatetopic($session) -> $text
-
-   * =$session= - The TWiki object associated to this session.
-   * =$web=     - name of the target web
-   * =$topic=   - Name of the topic file to be updated
-   * =$text=	- Topic content
-   * =$metatext= - Meta data to be added to the topic as plain text in a string (optional)
-
-The function picks up a specified text file (topic, TML content) and moves
-it to the specified web.
-
-=cut
-
-sub _restUpdatetopic {
-
-   require TWiki::Meta;
-
-   my ($session) = @_;
-   my $topic = TWiki::Func::getCgiQuery()->param('topic');
-#   my $web = TWiki::Func::getCgiQuery()->param('web');
-   my $web;
-   my $newtext = TWiki::Func::getCgiQuery()->param('text');
-   my $newmetatext = TWiki::Func::getCgiQuery()->param('metatext');
-   my $options;
-   my $error;
-   my $meta;
-   my $text;
-
-   ($web, $topic) = TWiki::Func::normalizeWebTopicName(undef, $topic);
-
-
-   unless ( TWiki::Func::webExists ( $web )) {
-     return "Invalid Web $web \n";
-   }
-
-#  check if topic already exists
-   unless ( TWiki::Func::topicExists( $web, $topic )) {
-     return "Topic $topic does not exist in web $web \n";
-    }
-
-
-#TODO   check if metastring was provided - if not read from current topic
-#
-    ($meta, $text) = TWiki::Func::readTopic($web, $topic);
-
-
-    $error = TWiki::Func::saveTopic( $web, $topic, $newmetatext, $newtext, { forcenewrevision => 1 } );
-
-    unless ($error){
-	return $error;
-    }
-    return undef;
-
-}
-
-=pod
-
----++ restUpdatemeta($session) -> $text
-
-   * =$session= - The TWiki object associated to this session.
-   * =$web=     - name of the target web
-   * =$topic=   - Name of the topic file to be updated
-   * =$metatext= - Meta data to be added to the topic as plain text in a string (optional)
-
-=cut
-
-sub _restUpdatemeta {
-
-   my ($session) = @_;
-   my $topic = TWiki::Func::getCgiQuery()->param('topic');
-#   my $web = TWiki::Func::getCgiQuery()->param('web');
-   my $web;
-   my $newmetatext = TWiki::Func::getCgiQuery()->param('metatext');
-   my $options;
-   my $error;
-   my $meta;
-   my $text;
-
-   ($web, $topic) = TWiki::Func::normalizeWebTopicName(undef, $topic);
-
-
-   unless ( TWiki::Func::webExists ( $web )) {
-     return "Invalid Web $web \n";
-   }
-
-#  check if topic already exists
-   unless ( TWiki::Func::topicExists( $web, $topic )) {
-     return "Topic $topic does not exist in web $web \n";
-    }
-
-
-#TODO   check if metastring was provided - if not read from current topic
-#
-    ($meta, $text) = TWiki::Func::readTopic($web, $topic);
-
-
-    $error = TWiki::Func::saveTopic( $web, $topic, $newmetatext, $text, { forcenewrevision => 1 } );
-
-    unless ($error){
-	return $error;
-    }
-    return undef;
-
-}
-
-=pod
-
 ---++ restGetmetastring($session) -> $text
 
    * =$session= - The TWiki object associated to this session.
@@ -979,7 +885,7 @@ sub _restUpdatemeta {
 The function reads the given topic and returns all META data in a string.
 
 =cut
-sub _restGetmetastring {
+sub restGetmetastring {
 
    my ($session) = @_;
    my $web;
@@ -1021,7 +927,7 @@ sub _restGetmetastring {
 
 =pod
 
----++ _restUpdateformfield
+---++ restUpdateformfield
 
 This REST function is used to update a single form field of a specified topic. 
 
@@ -1034,7 +940,7 @@ The function checks for edit autharization on the topic, so username and passwor
 
 =cut
 
-sub _restUpdateformfield {
+sub restUpdateformfield {
 
    my ($session) = @_;
    my $web;
