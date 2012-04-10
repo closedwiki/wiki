@@ -27,7 +27,7 @@ require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-04-02';
+our $RELEASE = '2012-04-10';
 
 # One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
 our $SHORTDESCRIPTION = 'Send e-mail from actions in TWiki topics, useful for workflow automation';
@@ -60,7 +60,8 @@ sub _SENDMAIL {
     my $action = $params->{action};
     return '' unless( $action eq 'send' );
 
-    return '' if( $params->{excludetopic} =~ /^(on|$theTopic|$theWeb\.$theTopic)$/ );
+    return '' if( $params->{excludetopic} &&
+                  $params->{excludetopic} =~ /^(on|$theTopic|$theWeb\.$theTopic)$/ );
 
     my $from      = expandEmail( $TWiki::cfg{Plugins}{SendMailPlugin}{From}
                     || $params->{from} || '$webmastername <$webmasteremail>' );
