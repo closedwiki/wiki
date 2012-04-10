@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1333353307" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1334099872" format="1.1" version="$Rev$"}%
 ---+!! !SendMailPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -132,8 +132,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2012 Hypertek lnc. <br /> &copy; 2012 TWiki:Main.PeterThoeny <br /> &copy; 2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-04-02 |
+|  Plugin Version: | 2012-04-10 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-04-10: | TWikibug:Item6867: Fix for no e-mail sent if =excludetopic= parameter is missing |
 |  2012-04-02: | TWikibug:Item6837: Add image |
 |  2012-03-14: | TWikibug:Item6860: Add configure settings; add =excludetopic= parameter; add VarSENDMAIL doc; adding examples |
 |  2012-03-13: | TWikibug:Item6848: Initial version |
