@@ -249,7 +249,7 @@ sub _saveSet {
             my $val = '';
             foreach my $item ( $query->param( $name ) ) {
                 if( defined $item && $item ne '' ) {
-                    $val .= ', ' if( $val );
+                    $val .= ', ' if( $val ne '' );
                     $val .= $item;
                 }
             }
