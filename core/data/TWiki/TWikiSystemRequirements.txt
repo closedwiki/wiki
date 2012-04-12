@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1334247507" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1334248927" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki System Requirements
 
@@ -44,7 +44,7 @@ The following Perl <a href="http://cpan.perl.org/" target="_top">CPAN</a> module
 | =File::Copy= | &gt;=2.06 | |
 | =File::Find= | &gt;=1.05 | |
 | =File::Spec= | &gt;=3.05 | |
-| =File::Temp= | &gt;=0.18 | This version included in Perl 5.9.5 and later; File::Temp needs to be updated on !RedHat 5 and !CentOS 5 |
+| =File::Temp= | &gt;=0.18 | This version included in Perl 5.9.5. File::Temp needs to be updated on !RedHat 5 and !CentOS 5. |
 | =FileHandle= | &gt;=2.01 | |
 | =HTML::Parser= | &gt;=3.28 | Needed by the WysiwygPlugin for WYSIWYG editing |
 | =HTML::Entities= | &gt;=1.25 | Needed by the WysiwygPlugin for WYSIWYG editing |
