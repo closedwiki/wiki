@@ -712,7 +712,7 @@ sub _pushCookie {
         require TWiki::Time;
         my $exp = TWiki::Time::formatTime(
             time() + $TWiki::cfg{Sessions}{ExpireCookiesAfter},
-            '$dow, $day-$month-$ye $hours:$minutes:$seconds GMT');
+            '$wday, $day-$month-$ye $hours:$minutes:$seconds GMT');
 
         $cookie->expires($exp);
     }
