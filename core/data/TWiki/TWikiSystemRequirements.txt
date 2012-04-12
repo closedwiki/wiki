@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313275868" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1334247507" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki System Requirements
 
@@ -15,7 +15,7 @@ TWiki is written in Perl 5, uses a number of shell commands, and requires [[http
 
 | *Resource* | *Required Server Environment *<nop>* |
 | Perl | 5.8.0 or higher (5.8.4 or higher is recommended) |
-| RCS | 5.7 or higher (including GNU =diff=) %BR% Optional, TWiki includes a pure perl implementation of RCS that can be used instead (although it's slower) |
+| RCS | 5.7 or higher (including GNU =diff=) %BR% Optional, TWiki includes a pure Perl implementation of RCS that can be used instead (although it's slower) |
 | GNU =diff= | GNU =diff= 2.7 or higher is required when not using the all-Perl <nop>RcsLite.  %BR% Install on PATH if not included with RCS (check version with =diff -v=)  %BR% Must be the version used by RCS, to avoid problems with binary attachments - RCS may have hard-coded path to =diff= |
 | GNU =df= | Used by the site statistics to record disk usage statistics, optional. The df command is pre-installed on Linux and OS-X. On Windows install the <a href="http://gnuwin32.sourceforge.net/packages/coreutils.htm">CoreUtils for Windows</a>. |
 | GNU =patch= | For upgrades only: GNU =patch= is required when using the TWiki:Codev.UpgradeTWiki script |
@@ -44,7 +44,7 @@ The following Perl <a href="http://cpan.perl.org/" target="_top">CPAN</a> module
 | =File::Copy= | &gt;=2.06 | |
 | =File::Find= | &gt;=1.05 | |
 | =File::Spec= | &gt;=3.05 | |
-| =File::Temp= | &gt;=0.18 | Included with perl 5.6 and later |
+| =File::Temp= | &gt;=0.18 | This version included in Perl 5.9.5 and later; File::Temp needs to be updated on !RedHat 5 and !CentOS 5 |
 | =FileHandle= | &gt;=2.01 | |
 | =HTML::Parser= | &gt;=3.28 | Needed by the WysiwygPlugin for WYSIWYG editing |
 | =HTML::Entities= | &gt;=1.25 | Needed by the WysiwygPlugin for WYSIWYG editing |
@@ -99,6 +99,6 @@ You can easily select a balance of browser capability versus look and feel. Try 
 ---++ Important note about TWiki Plugins
 
    * Plugins can require just about anything -  browser-specific functions, stylesheets (CSS), Java applets, cookies, specific Perl modules,... - check the individual Plugin specs.
-%STOPSECTION{"requirements"}%
+%ENDSECTION{"requirements"}%
 
 __Related Topics:__ AdminDocumentationCategory
