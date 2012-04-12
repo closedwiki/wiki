@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005-2011  TWiki Contributors.
+# Copyright (C) 2005-2012  TWiki Contributors.
 # All Rights Reserved. TWiki Contributors are listed in the
 # AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -29,7 +29,7 @@ require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-08-20';
+our $RELEASE = '2012-04-12';
 
 my @shelter;
 my $MARKER = "\007";
@@ -245,18 +245,12 @@ sub _saveSet {
     if( $formDef ) {
         my $fieldDef = _getField( $formDef, $name );
         my $type = $fieldDef->{type} || '';
-        if( $type && $type =~ /^checkbox/ ) {
+        if( $type && $type =~ /^(checkbox|select\+multi)/ ) {
             my $val = '';
-            my $vals = $fieldDef->{value};
-            foreach my $item ( @$vals ) {
-                my $cvalue = $query->param( $name.$item );
-                if( defined( $cvalue ) ) {
-                    if( ! $val ) {
-                        $val = '';
-                    } else {
-                        $val .= ', ' if( $cvalue );
-                    }
-                    $val .= $item if( $cvalue );
+            foreach my $item ( $query->param( $name ) ) {
+                if( defined $item && $item ne '' ) {
+                    $val .= ', ' if( $val );
+                    $val .= $item;
                 }
             }
             $newValue = $val;
