@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1269905879" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1334272120" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 #TWikiMetaData
 ---+ TWiki Meta Data
@@ -11,7 +11,7 @@ _Additional topic data, program-generated or from TWikiForms, is stored embedded
 
 By default, TWiki stores topics in files on disk, in a really simple and obvious directory structure. The big advantage of this approach is that it makes it really easy to manipulate topics from outside TWiki, and is also very safe; there are no complex binary indexes to maintain, and moving a topic from one TWiki to another is as simple as copying a couple of text files.
 
-To keep eveything together in one place, TWiki uses a simple method for embedding additional data (program-generated or from TWikiForms) in topics. It does this using =META:= tags.
+To keep everything together in one place, TWiki uses a simple method for embedding additional data (program-generated or from TWikiForms) in topics. It does this using =META:= tags.
 
 =META:= data includes program-generated info like FileAttachment and topic movement data, and user-defined TWikiForms info.
 
@@ -157,4 +157,3 @@ Current support covers:
 __Note:__ SEARCH can also be used to render meta data, see examples in FormattedSearch and SearchPatternCookbook.
 
 __Related Topics:__ DeveloperDocumentationCategory, UserDocumentationCategory
-
