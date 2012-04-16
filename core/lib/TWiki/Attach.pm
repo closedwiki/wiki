@@ -246,7 +246,8 @@ sub _expandAttrs {
         return "[[".$users->webDotWikiName($cUID)."][".$users->getWikiName($cUID)."]]";
     }
     elsif ( $attr eq 'HISTORY' ) {
-	my $rev = $info->{version} // '';
+	my $rev = $info->{version};
+	$rev = '' unless ( defined($rev) );
 	return '' if ( $rev eq '' );
 	my $border = $rev - $TWiki::cfg{NumberOfRevisions};
 	my $hist = "r$rev";
