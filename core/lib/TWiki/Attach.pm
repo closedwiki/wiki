@@ -245,6 +245,26 @@ sub _expandAttrs {
 
         return "[[".$users->webDotWikiName($cUID)."][".$users->getWikiName($cUID)."]]";
     }
+    elsif ( $attr eq 'HISTORY' ) {
+	my $rev = $info->{version};
+	my $border = $rev - $TWiki::cfg{NumberOfRevisions};
+	my $hist = "r$rev";
+	while ( --$rev > 0 ) {
+	    last if ( $rev < $border );
+	    $hist .= ' ' .
+		CGI::a({
+			href=>$this->{session}->getScriptUrl( 0,
+							      'viewfile',
+							      $web,
+							      $topic,
+							      filename => $file,
+							      rev => $rev ),
+			rel => 'nofollow'
+		       },
+		       "r$rev" );
+	}
+	return $hist;
+    }
     else {
         return $TWiki::TranslationToken.'A_'.$attr.$TWiki::TranslationToken;
     }
