@@ -213,19 +213,19 @@ sub TOPICPERMISSIONS {
             $isGroup = ($user =~ /Group$/);
         }
         if ( $acls->{$user}->{CHANGE} ) {
-            $topicEditors .= '<OPTION>'.$user.'</OPTION>'
+            $topicEditors .= '<option>'.$user.'</option>'
               unless $isGroup;
-            $topicEditorGroups .= '<OPTION>'.$user.'</OPTION>'
+            $topicEditorGroups .= '<option>'.$user.'</option>'
               if $isGroup;
         } elsif ( $acls->{$user}->{VIEW} ) {
-            $topicViewers .= '<OPTION>'.$user.'</OPTION>'
+            $topicViewers .= '<option>'.$user.'</option>'
               unless $isGroup;
-            $topicViewerGroups .= '<OPTION>'.$user.'</OPTION>'
+            $topicViewerGroups .= '<option>'.$user.'</option>'
               if $isGroup;
         } else {
-            $unselectedUsers .= '<OPTION>'.$user.'</OPTION>'
+            $unselectedUsers .= '<option>'.$user.'</option>'
               unless $isGroup;
-            $unselectedGroups .= '<OPTION>'.$user.'</OPTION>'
+            $unselectedGroups .= '<option>'.$user.'</option>'
               if $isGroup;
         }
     }
