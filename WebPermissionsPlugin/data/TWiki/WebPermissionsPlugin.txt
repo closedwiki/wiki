@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299474780" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1334642199" format="1.1" version="$Rev$"}%
 ---+ Web Permissions Plugin
 <!--
     Contributions to this plugin are appreciated. Please update the plugin page at
@@ -182,10 +182,11 @@ Many thanks to the following sponsors for supporting this work:
    * Further work supported by [[http://www.spanlink.com/][Spanlink Communications]]
 
 |  Plugin Author: | TWiki:Main.CrawfordCurrie & TWiki:Main.SvenDowideit, http://wikiring.com |
-|  Copyright: | &copy; 2006, Evolved Media, Spanlink Communications and !WikiRing;%BR% &copy; 2006-2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2006, Evolved Media, Spanlink Communications and !WikiRing;%BR% &copy; 2006-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | %$VERSION% |
+|  Plugin Version: | 2012-04-16 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-04-16 | TWikibug:Item6868: Fix for error saving Topic ACLs; XHTML fixes; fix warnings -- TWiki:Main.PeterThoeny |
 |  2011-03-06 | TWikibug:Item6655: XHTML fixes; Placing checkboxes before checkbox label to be compliant with web standards; better images for %ATTACHURL%/VIEW.gif VIEW.gif and %ATTACHURL%/CHANGE.gif CHANGE.gif -- TWiki:Main.PeterThoeny |
 |  2011-03-06 | TWikibug:Item6655: Fix for TWiki-5.0 -- TWiki:Main.SzymonSobczyk |
 |  2010-05-26 | TWikibug:Item6433: Doc improvements -- TWiki:Main.PeterThoeny |
