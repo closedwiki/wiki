@@ -247,8 +247,8 @@ sub beforeSaveHandler {
         throw Error::Simple( 'cancel permissions action' );
     }
 
-    return if ($TWiki::Plugins::WebPermissionsPlugin::antiBeforeSaveRecursion == 1);
-    $TWiki::Plugins::WebPermissionsPlugin::antiBeforeSaveRecursion = 1;
+    return if ($TWiki::Plugins::WebPermissionsPlugin::preventSaveRecursion == 1);
+    $TWiki::Plugins::WebPermissionsPlugin::preventSaveRecursion = 1;
 
     #these lists only contain selected users (by using javascript to select the changed ones in save onclick)
     my @topicEditors = $query->param('topiceditors');

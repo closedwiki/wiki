@@ -29,7 +29,7 @@ package TWiki::Plugins::WebPermissionsPlugin;
 
 use strict;
 
-use vars qw( $VERSION $RELEASE $pluginName $antiBeforeSaveRecursion);
+use vars qw( $VERSION $RELEASE $pluginName $preventSaveRecursion);
 
 use TWiki::Func;
 use CGI qw( :all );
@@ -52,10 +52,9 @@ sub initPlugin {
 
     TWiki::Func::registerTagHandler( 'WEBPERMISSIONS', \&_WEBPERMISSIONS );
     TWiki::Func::registerTagHandler( 'TOPICPERMISSIONS', \&_TOPICPERMISSIONS );
-    # SMELL: need to disable this if the USERSLIST code is ever moved into the
-    # core.
+    # SMELL: need to disable this if the USERSLIST code is ever moved into the core.
     TWiki::Func::registerTagHandler( 'USERSLIST', \&_USERSLIST );
-    $antiBeforeSaveRecursion = 0;
+    $preventSaveRecursion = 0;
 
     return 1;
 }
