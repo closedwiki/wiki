@@ -279,7 +279,8 @@ sub _updateContent {
         #TODO: what exactly happens on error?
         _setACLs( \@modes, $acls, $web, $topic );
 
-        TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $web, $topic ) );
+        TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $web, $topic ) .
+                                               '#topicpermissionsform' );
     }
 }
 
