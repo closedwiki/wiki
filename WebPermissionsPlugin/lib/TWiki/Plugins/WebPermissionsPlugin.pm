@@ -80,10 +80,4 @@ sub _USERSLIST {
     return TWiki::Plugins::WebPermissionsPlugin::Core::USERSLIST(@_);
 }
 
-#TODO: rejig this so it works for the WEBPERMS too
-sub beforeSaveHandler {
-    require TWiki::Plugins::WebPermissionsPlugin::Core;
-    return TWiki::Plugins::WebPermissionsPlugin::Core::beforeSaveHandler(@_);
-}
-
 1;

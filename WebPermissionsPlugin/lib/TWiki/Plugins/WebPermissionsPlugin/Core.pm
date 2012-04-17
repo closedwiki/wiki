@@ -41,7 +41,7 @@ use strict;
 # =====================================================================
 sub WEBPERMISSIONS {
     my( $session, $params, $topic, $web ) = @_;
-    my $query = $session->{request} || $session->{cgiQuery};
+    my $query = TWiki::Func::getCgiQuery();
     my $action = $query->param( 'web_permissions_action' );
     my $editing = $action && $action eq 'Edit';
     my $saving =  $action && $action eq 'Save';
@@ -151,7 +151,7 @@ sub WEBPERMISSIONS {
     }
     my $page = CGI::start_form(
         -method => 'POST',
-        -action => TWiki::Func::getScriptUrl( $web, $topic, 'view').
+        -action => TWiki::Func::getScriptUrl( $web, $topic, 'viewauth').
           '#webpermissions_matrix' );
     $page .= CGI::a({ name => 'webpermissions_matrix'});
     if( defined $chosenWebs ) {
@@ -168,17 +168,18 @@ sub WEBPERMISSIONS {
 # =====================================================================
 sub TOPICPERMISSIONS {
     my( $session, $params, $topic, $web ) = @_;
-
+    my $query = TWiki::Func::getCgiQuery();
+    my $action = $query->param( 'web_permissions_action' ) || '';
+    #print STDERR "WebPermissionsPlugin::Core::TOPICPERMISSIONS, action: $action\n";
     #this is to redirect to the "no access" page if this tag is used in a non-view template.
-    TWiki::UI::checkAccess( $session, $web, $topic,
-                                'view', $session->{user} );
+    TWiki::UI::checkAccess( $session, $web, $topic, 'view', $session->{user} );
 
-   my $disableSave = 'Disabled';
-   $disableSave = '' if TWiki::Func::checkAccessPermission( 'CHANGE', 
-                    TWiki::Func::getWikiUserName(), undef, $topic, $web );
+    my $disableSave = 'Disabled';
+    $disableSave = '' if TWiki::Func::checkAccessPermission( 'CHANGE', 
+                     TWiki::Func::getWikiUserName(), undef, $topic, $web );
 
-   my $pluginPubUrl = TWiki::Func::getPubUrlPath().'/'.
-            TWiki::Func::getTwikiWebname().'/WebPermissionsPlugin';
+    my $pluginPubUrl = TWiki::Func::getPubUrlPath().'/'.
+             TWiki::Func::getTwikiWebname().'/WebPermissionsPlugin';
 
     #add the JavaScript
     my $jscript = TWiki::Func::readTemplate ( 'webpermissionsplugin', 'topicjavascript' );
@@ -186,8 +187,14 @@ sub TOPICPERMISSIONS {
     TWiki::Func::addToHEAD('WebPermissionsPlugin', $jscript);
 
     my $templateText = TWiki::Func::readTemplate ( 'webpermissionsplugin', 'topichtml' );
-    $templateText =~ s/%SCRIPT%/%SCRIPTURL{save}%/g if ($disableSave eq '');
-    $templateText =~ s/%SCRIPT%/%SCRIPTURL{view}%/g unless ($disableSave eq '');
+    if( $disableSave ) {
+        $templateText =~ s/%SCRIPT%/%SCRIPTURL{view}%/g;
+    } else {
+        $templateText =~ s/%SCRIPT%/%SCRIPTURL{viewauth}%/g;
+        if ( $action eq 'updateTopicPermissions' ) {
+            _updateContent( $query, $topic, $web );
+        }
+    }
     $templateText = TWiki::Func::expandCommonVariables( $templateText, $topic, $web );
 
     my $topicViewerGroups = '';
@@ -235,17 +242,9 @@ sub TOPICPERMISSIONS {
 }
 
 # =====================================================================
-sub beforeSaveHandler {
-    my ( $text, $topic, $web, $meta ) = @_;
-    my $query = TWiki::Func::getCgiQuery();
-    my $action = $query->param('topic_permissions_action');
-    return unless (defined($action));#nothing to do with this plugin
-
-    if ($action ne 'Save') {
-        #SMELL: canceling out from, or just stoping a save seems to be quite difficult
-        TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $web, $topic ) );
-        throw Error::Simple( 'cancel permissions action' );
-    }
+sub _updateContent {
+    my ( $query, $topic, $web ) = @_;
+    #print STDERR "WebPermissionsPlugin::Core::_updateContent( $topic, $web ) \n";
 
     return if ($TWiki::Plugins::WebPermissionsPlugin::preventSaveRecursion == 1);
     $TWiki::Plugins::WebPermissionsPlugin::preventSaveRecursion = 1;
@@ -254,8 +253,11 @@ sub beforeSaveHandler {
     my @topicEditors = $query->param('topiceditors');
     my @topicViewers = $query->param('topicviewers');
     my @disallowedUsers = $query->param('disallowedusers');
+    #print STDERR "  ==== topicEditors: ". join(', ', @topicEditors) ."\n";
+    #print STDERR "  ==== topicViewers: ". join(', ', @topicViewers) ."\n";
+    #print STDERR "  ==== disallowedUsers: ". join(', ', @disallowedUsers) ."\n";
 
-   if ((@topicEditors || @topicViewers || @disallowedUsers)) {
+    if ((@topicEditors || @topicViewers || @disallowedUsers)) {
         #TODO: change this to get modes from params
         my @modes = split(/[\s,]+/,$TWiki::cfg{Plugins}{WebPermissionsPlugin}{modes} ||
                            'VIEW,CHANGE' );
@@ -277,15 +279,8 @@ sub beforeSaveHandler {
         #TODO: what exactly happens on error?
         _setACLs( \@modes, $acls, $web, $topic );
 
-        #read in what setACLs just saved, (don't grok why redirect looses the save)
-        ($_[3], $_[0]) = TWiki::Func::readTopic($_[2],$_[1]);
-
-        #SMELL: canceling out from, or just stoping a save seems to be quite difficult
-        #return a redirect to view..
         TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $web, $topic ) );
-        throw Error::Simple( 'permissions action saved' );
-
-   }
+    }
 }
 
 # Filter a list of strings based on the filter expression passed in
@@ -510,12 +505,14 @@ sub _getACLs {
             } else {
                 $users = $TWiki::Plugins::SESSION->{prefs}->getTopicPreferencesValue(
                     $perm.$context.$mode, $web, $topic );
-               unless(defined($users)) { #as we did not find any settings in the topic, we have to look in the web prefs
 
-                       #print STDERR "$perm$context$mode ($web, $topic) is not defined\n";
-                       $users = getUsersByWebPreferenceValue($mode, $web, $topic,$perm);
+                unless( defined($users) ) {
+                    #as we did not find any settings in the topic, we have to look in the web prefs
 
-                       #print STDERR $perm."WEB".$mode." ($web, $topic) is not defined\n" unless defined($users);
+                    #print STDERR "$perm$context$mode ($web, $topic) is not defined\n";
+                    $users = getUsersByWebPreferenceValue($mode, $web, $topic,$perm);
+
+                    #print STDERR $perm."WEB".$mode." ($web, $topic) is not defined\n" unless defined($users);
                };
             }
             next unless defined($users);
