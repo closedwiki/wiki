@@ -2,7 +2,7 @@
 #
 # Copyright (C) Evolved Media Network 2005
 # Copyright (C) Spanlink Communications 2006
-# Copyright (C) 2006-2011 TWiki:TWiki.TWikiContributor
+# Copyright (C) 2006-2012 TWiki:TWiki.TWikiContributor
 # All Rights Reserved. TWiki Contributors are listed in the
 # AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -38,6 +38,7 @@ use strict;
 # especially as we don't want to continue to presume that ACLs are topic based
 # the advantage with save, is that it will re-direct to view on success (and
 # resolve permissions issues)
+# =====================================================================
 sub WEBPERMISSIONS {
     my( $session, $params, $topic, $web ) = @_;
     my $query = $session->{request} || $session->{cgiQuery};
@@ -126,7 +127,7 @@ sub WEBPERMISSIONS {
         $repeater--;
         $row = CGI::th( "$user " );
         foreach $web ( sort @webs ) {
-            my $cell;
+            my $cell = '';
             foreach my $op ( @modes ) {
                 if( $editing ) {
                     my %attrs = ( type => 'checkbox', name => $user.':'.$web.':'.$op );
@@ -163,6 +164,8 @@ sub WEBPERMISSIONS {
     $page .= $tab . CGI::end_form();
     return $page;
 }
+
+# =====================================================================
 sub TOPICPERMISSIONS {
     my( $session, $params, $topic, $web ) = @_;
 
@@ -231,6 +234,7 @@ sub TOPICPERMISSIONS {
     return $templateText;
 }
 
+# =====================================================================
 sub beforeSaveHandler {
     my ( $text, $topic, $web, $meta ) = @_;
     my $query = TWiki::Func::getCgiQuery();
@@ -246,7 +250,7 @@ sub beforeSaveHandler {
     return if ($TWiki::Plugins::WebPermissionsPlugin::antiBeforeSaveRecursion == 1);
     $TWiki::Plugins::WebPermissionsPlugin::antiBeforeSaveRecursion = 1;
 
-    #these lists only contain seelcted users (by using javascript to select the changed ones in save onclick)
+    #these lists only contain selected users (by using javascript to select the changed ones in save onclick)
     my @topicEditors = $query->param('topiceditors');
     my @topicViewers = $query->param('topicviewers');
     my @disallowedUsers = $query->param('disallowedusers');
@@ -285,6 +289,7 @@ sub beforeSaveHandler {
 }
 
 # Filter a list of strings based on the filter expression passed in
+# =====================================================================
 sub _filterList {
     my $filter = shift;
     my %included;
@@ -307,6 +312,7 @@ sub _filterList {
     return keys %included;
 }
 
+# =====================================================================
 sub USERSLIST {
     my( $this, $params ) = @_;
     my $format = $params->{_DEFAULT} || $params->{'format'} || '$wikiname';
@@ -339,6 +345,7 @@ sub USERSLIST {
 }
 
 # Get a list of all registered users
+# =====================================================================
 sub _getListOfUsers {
     my @list;
     if (defined(&TWiki::Func::eachUser)) {
@@ -372,6 +379,7 @@ sub _getListOfUsers {
 }
 
 # Get a list of all groups
+# =====================================================================
 sub _getListOfGroups {
     my @list;
     if (defined(&TWiki::Func::eachGroup)) {
@@ -419,8 +427,10 @@ sub _getListOfGroups {
     return @list;
 }
 
-# Gets all users which have access to the given topic. This functions respects hierchical webs and climbs up the ladder
-# if a web does not set any access permissions
+# Gets all users which have access to the given topic. This functions 
+# respects hierchical webs and climbs up the ladder if a web does not
+# set any access permissions
+# =====================================================================
 sub getUsersByWebPreferenceValue {
     my( $mode, $web, $topic, $perm ) = @_;
     if($TWiki::cfg{EnableHierarchicalWebs}) {
@@ -468,6 +478,7 @@ sub getUsersByWebPreferenceValue {
 # *WARNING* when you use =setACLs= to set the ACLs of a web or topic, the change is not committed to the database until the current session exits. After =setACLs= has been called on a web or topic, the results of =getACLS= for that web/topic are *undefined* within the same session.
 #
 
+# =====================================================================
 sub _getACLs {
     my( $modes, $web, $topic ) = @_;
 
@@ -584,6 +595,7 @@ sub _getACLs {
 # 
 # *WARNING* when you use =setACLs= to set the ACLs of a web or topic, the change is not committed to the database until the current session exist. After =setACLs= has been called on a web or topic, the results of =getACLS= for that web/topic are *undefined*.
 
+# =====================================================================
 sub _setACLs {
     my( $modes, $acls, $web, $topic, $plainText ) = @_;
 
@@ -641,4 +653,5 @@ sub _setACLs {
                             $meta, $text, { minor => 1 } );
 }
 
+# =====================================================================
 1;
