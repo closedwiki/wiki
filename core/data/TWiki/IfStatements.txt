@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301947230" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1334781390" format="1.1" version="$Rev$"}%
 ---+ IF Statements
 
 The =%<nop>IF%= construct gives TWiki the power to include content in topics based on the value of simple expressions.
@@ -88,9 +88,9 @@ You %IF{"'%USERNAME%' ingroup 'TWikiAdminGroup'" then="are an admin" else="are a
 expands to: %BR%
 You %IF{"'%USERNAME%' ingroup 'TWikiAdminGroup'" then="are an admin" else="are a normal user"}% 
 
-11. Hide section of text conditionally using CSS visibility
+11. Hide section of text conditionally using CSS display
 <verbatim>
-<div style="visibility: %IF{"'%USERNAME%' ingroup 'TWikiAdminGroup'" then="visible" else="hidden"}%">
+<div style="display: %IF{"'%USERNAME%' ingroup 'TWikiAdminGroup'" then="block" else="none"}%">
    * Conditional text enclosed in div tags here...
    * ...can be as long as needed
 </div>
