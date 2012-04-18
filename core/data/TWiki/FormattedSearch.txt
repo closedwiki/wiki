@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1332054722" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1334783033" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %STARTINCLUDE%
 ---+ TWiki Formatted Search
@@ -184,12 +184,12 @@ A regular expression search is flexible, but there are limitations. For example,
    1. If needed, format and output the result
    1. Else supress the search hit
 
-This requires the TWiki:Plugins.SpreadSheetPlugin. The following example shows all topics that are up to exactly one week old.
+This requires the TWiki:Plugins.SpreadSheetPlugin. The following example shows all topics in the %USERSWEB% web that have been updated in the last 7 days.
 
 *Write this:*
 
 =%<nop>CALC{$SET(weekold, $TIMEADD($TIME(), -7, day))}%= %BR%
-=%<nop>SEARCH{ "." scope="topic" type="regex" nosearch="on" nototal="on" order="modified" reverse="on" format="$percntCALC{$IF($TIME($date) &lt; $GET(weekold), &lt;nop&gt;, | [<nop>[$topic]] | $wikiusername | $date | $rev |)}$percnt" limit="100" }%=
+=%<nop>SEARCH{ "." scope="topic" type="regex" web="%USERSWEB%" nonoise="on" order="modified" reverse="on" format="$percntCALC{$IF($TIME($date) &lt; $GET(weekold), &lt;nop&gt;, | [<nop>[$web.$topic][$topic]] | $wikiusername | $date | $rev |)}$percnt" limit="100" }%=
 
    * The first line sets the =weekold= variable to the serialized date of exactly one week ago
    * The SEARCH has a deferred CALC. The =$percnt= makes sure that the CALC gets executed once for each search hit
@@ -200,7 +200,21 @@ This requires the TWiki:Plugins.SpreadSheetPlugin. The following example shows a
 *To get this:*
 
 %CALC{$SET(weekold, $TIMEADD($TIME(), -7, day))}%
-%SEARCH{ "." scope="topic" type="regex" nosearch="on" nototal="on" order="modified" reverse="on" format="$percntCALC{$IF($TIME($date) < $GET(weekold), <nop>, | [[$topic]] | $wikiusername | $date | $rev |)}$percnt" limit="100" }%
+%SEARCH{ "." scope="topic" type="regex" web="%USERSWEB%" nonoise="on" order="modified" reverse="on" format="$percntCALC{$IF($TIME($date) < $GET(weekold), <nop>, | [[$web.$topic][$topic]] | $wikiusername | $date | $rev |)}$percnt" limit="100" }%
+
+The condition can be anything you like. To restrict search based on a date range it is easier to use the =date=""= parameter as shown in the next example.
+
+---+++ Restrict search based on a date range
+
+A search can be restricted based on a [[TimeSpecifications][date range]]. The following example is identical to the previous one, showing all topics in the %USERSWEB% web that have been updated in the last 7 days.
+
+*Write this:*
+
+=%<nop>SEARCH{ "." scope="topic" type="regex" web="%USERSWEB%" nonoise="on" order="modified" reverse="on" format="| [<nop>[$web.$topic][$topic]] | $wikiusername | $date | $rev |" limit="100" date="P1w/$today" }%=
+
+*To get this:*
+
+%SEARCH{ "." scope="topic" type="regex" web="%USERSWEB%" nonoise="on" order="modified" reverse="on" format="| [[$web.$topic][$topic]] | $wikiusername | $date | $rev |" limit="100" date="P1w/$today" }%
 
 ---+++ Embedding search forms to return a formatted result
 
