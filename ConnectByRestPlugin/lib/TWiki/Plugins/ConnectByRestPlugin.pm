@@ -161,6 +161,7 @@ sub initPlugin {
 
     # Allow a sub to be called from the REST interface 
     # using the provided alias
+    TWiki::Func::registerRESTHandler('readtopic', \&restReadtopic);
     TWiki::Func::registerRESTHandler('savetopic', \&restSavetopic);
     TWiki::Func::registerRESTHandler('getmetastring', \&restGetmetastring);
     TWiki::Func::registerRESTHandler('updateformfield', \&restUpdateformfield);
@@ -794,6 +795,61 @@ sub DISABLE_completePageHandler {
 
 =pod
 
+---++ restReadtopic($session) -> $text
+
+   * =$session= - The TWiki object associated to this session.
+   * =$web=     - name of the target web
+   * =$topic=   - Name of the topic file to be saved/created
+Return:
+   * =$text=	- Topic content
+
+ 
+
+
+The function reads the given topic and returns the topic text and metadata as string.
+
+=cut
+
+sub restReadtopic {
+
+   require TWiki::Meta;
+
+   my ($session) = @_;
+   my $topic = TWiki::Func::getCgiQuery()->param('topic');
+   my $web;
+   my $error;
+
+   ($web, $topic) = TWiki::Func::normalizeWebTopicName(undef, $topic);
+
+
+   unless ( TWiki::Func::webExists ( $web )) {
+     return "Invalid Web $web \n";
+   }
+
+#  check if topic exists
+   if ( TWiki::Func::topicExists( $web, $topic )) {
+        #  check accessrights in topic
+        unless (TWiki::Func::checkAccessPermission(
+                'VIEW', TWiki::Func::getWikiName(),
+                undef, $topic, $web)) {
+                $error = "Access to topic $topic denied";
+                print CGI::header(-status => 401);
+                print $error;
+                print STDERR $error;
+                return undef;
+        }
+
+        my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
+#        my $metastring = $meta->stringify();
+	return $text;	
+        
+    }
+
+    return undef;
+
+}
+
+=pod
 ---++ restCreatetopic($session) -> $text
 
    * =$session= - The TWiki object associated to this session.
@@ -853,22 +909,6 @@ sub restSavetopic {
    my $newmeta = new TWiki::Meta( $session, $web, $topic, $metatext );
    $error = TWiki::Func::saveTopic( $web, $topic, $newmeta, $ptext, { forcenewrevision => 1 } );
    print STDERR 
-
-#  save new topic
-#    $error = TWiki::Func::saveTopic( $web, $topic, $meta, $text, { forcenewrevision => 1 } );
-#   unless (TWiki::Func::saveTopic( $web, $topic, $meta, $text, $options )){
-#	my $error = "Fehler beim Anlegen von Topic $topic,\n $text \n";
-#        print CGI::header(-status => 401);
-#        print $error;
-#        print STDERR $error;
-#        return undef;
-#   }
-#    $error = TWiki::Func::saveTopic( $web, $topic, $meta, $textold, { forcenewrevision => 1 } );
-#   unless ($error){
-#     return $error;
-#   }
-#   return undef;
-#    TWiki::Func::saveTopic( $web, $topic, $meta, $text,{ comment => 'uif save' } );
 
     return undef;
 

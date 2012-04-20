@@ -1,17 +1,38 @@
-%META:TOPICINFO{author="MichaelGulitz" date="1315256734" format="1.1" reprev="1.4" version="1.4"}%
+%META:TOPICINFO{author="MichaelGulitz" date="1334959730" format="1.1" version="1.4"}%
 ---+!! <nop>%TOPIC%
 
-This plugin wraps function from the TWiki API in REST functions. The intention is to offer external applications access to TWiki by implementing a REST interface.
+This plugin wraps functions from the TWiki API in REST functions. The intention is to offer external applications access to TWiki by implementing a REST interface.
 
-These functions of this plugin include:
-   * create new topics
-   * update existing topics
+The functions of this plugin include:
+   * create and update topics
    * read topics and meta data
    * read and update form fields of a topic
 
 %TOC%
 
 ---++ REST Functions
+
+---+++ Function Readtopic
+
+*Description*
+
+This function returns the content of a topic as a string.
+It reads the topic that was specified in the parameter _topic_ and returns the topic text as a string.
+
+*Parameters*
+
+| *Parameter* | *Direction* | *Type* | *Description* |
+| username | in | string | |
+| password | in | string | |
+| topic | in | string | use full topic name: _web.topic_ |
+| text | out | string | topic text |
+
+*Security*
+
+   * The function checks if the given user has read access to the topic.
+
+
+
 ---+++ Function Getmetastring
 
 *Description*
@@ -50,15 +71,11 @@ The function updates a single form field attached to a topic.
 
    * The functions checks if the given user has write access to the topic.
 
----+++ Function Readtopic
-
----+++ Function Updatetopic
-
----+++ Function Createtopic
+---+++ Function Savetopic
 
 *Description*
 
-The function creates a new topic in the specified web. An existing topic cannot be changed using this function!
+The function creates a new topic or updates an existing topic in the specified web.
 
 *Parameters*
 
@@ -71,7 +88,7 @@ The function creates a new topic in the specified web. An existing topic cannot 
 
 *Security*
 
-   * The functions checks if the given user has write access to the web and if a topic with the same name already exists (that would lead to an error) .
+   * The functions checks if the given user has write access to the web.
 
 ---++ Syntax Rules
 
