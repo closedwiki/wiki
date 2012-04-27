@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004-2011 Peter Thoeny, peter[at]thoeny.org, Twiki Inc.
-# Copyright (C) 2008-2011 TWiki Contributors
+# Copyright (C) 2004-2012 Peter Thoeny, peter[at]thoeny.org, Twiki Inc.
+# Copyright (C) 2008-2012 TWiki Contributors
 #
 # For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ use strict;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-05-24';
+our $RELEASE = '2012-04-26';
 
 # =========================
 our $SHORTDESCRIPTION = 'Cache TWiki variables in selected topics for faster page rendering';
@@ -34,6 +34,7 @@ our $topic;
 our $user;
 our $installWeb;
 our $debug;
+our $escVarCacheToken = '-ESC-VARCACHE-';
 
 # =========================
 sub initPlugin
@@ -65,6 +66,11 @@ sub beforeCommonTagsHandler
 
     $_[0] =~ s/%VARCACHE(?:{(.*?)})?%/_handleVarCache( $_[2], $_[1], $1 )/ge;
 
+    # if "save cache", escape %VARIABLES{}% enclosed in <varcache_exclude> tag
+    if( $_[0] =~ /%--VARCACHE\:save\001/ ) {
+        $_[0] =~ s/<varcache_exclude>(.*?)<\/varcache_exclude>/_escapeExcludes( $1 )/geos;
+    }
+
     # if "read cache", replace all text with marker, to be filled in afterCommonTagsHandler
     $_[0] =~ s/^.*(%--VARCACHE\:read\:.*?--%).*$/$1/os;
 }
@@ -75,6 +81,8 @@ sub afterCommonTagsHandler
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
     TWiki::Func::writeDebug( "- ${pluginName}::afterCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
+
+    $_[0] =~ s/<\/?varcache_exclude>//gos;
 
     return unless( $_[0] =~ /%--VARCACHE\:/ );
 
@@ -89,6 +97,9 @@ sub afterCommonTagsHandler
             TWiki::Func::saveFile( $cacheFilename, $_[0] );
             my $msg = _formatMsg( $_[2], $_[1], $tag );
             $_[0] =~ s/%--VARCACHE\:.*?--%/$msg/go;
+            if( $_[0] =~ /$escVarCacheToken/ ) {
+                $_[0] = TWiki::Func::expandCommonVariables( _unescapeExcludes( $_[0] ), $_[1], $_[2] );
+            }
 
             # cache addToHEAD info
             # FIXME: Enhance the TWiki::Func API to get the head info cleanly
@@ -105,11 +116,13 @@ sub afterCommonTagsHandler
 
         } else {
             # read cache
-            my $text = TWiki::Func::readFile( $cacheFilename );
+            $_[0] = TWiki::Func::readFile( $cacheFilename );
+            if( $_[0] =~ /$escVarCacheToken/ ) {
+                $_[0] = TWiki::Func::expandCommonVariables( _unescapeExcludes( $_[0] ), $_[1], $_[2] );
+            }
             my $msg = _formatMsg( $_[2], $_[1], $tag );
             $msg =~ s/\$age/_formatAge($age)/geo;
-            $text =~ s/%--VARCACHE.*?--%/$msg/go;
-            $_[0] = $text;
+            $_[0] =~ s/%--VARCACHE.*?--%/$msg/go;
 
             # restore addToHEAD info from cache
             $cacheFilename = _cacheFileName( $_[2], $_[1], 0, 1 );
@@ -161,6 +174,24 @@ sub _formatAge
 }
 
 # =========================
+sub _escapeExcludes
+{
+    my ( $theText ) = @_;
+    $theText =~ s/\%([A-Za-z])/\%$escVarCacheToken$1/go;
+    $theText =~ s/}\%/}$escVarCacheToken\%/go;
+    return $theText;
+}
+
+# =========================
+sub _unescapeExcludes
+{
+    my ( $theText ) = @_;
+    $theText =~ s/}$escVarCacheToken\%/}\%/go;
+    $theText =~ s/\%$escVarCacheToken([A-Za-z])/\%$1/go;
+    return $theText;
+}
+
+# =========================
 sub _handleVarCache
 {
     my ( $theWeb, $theTopic, $theArgs ) = @_;
@@ -207,7 +238,6 @@ sub _handleVarCache
         my $paramMsg = TWiki::Func::extractNameValuePair( $theArgs, "updatemsg" )
                     || TWiki::Func::getPreferencesValue( "\U$pluginName\E_UPDATEMSG" )
                     || 'This topic is now cached ([[$link][refresh]])';
-        
         return "%--VARCACHE\:save\001$paramMsg\001--%";
     }
 
