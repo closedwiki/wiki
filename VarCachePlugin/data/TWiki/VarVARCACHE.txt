@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1270067368" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1335487442" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarVARCACHE
 ---+++ VARCACHE{ _attributes_ } -- cache TWiki variables in selected topics for faster page rendering
@@ -9,5 +9,6 @@
      | ="..."= or%BR% =refresh="..."= | Cache refresh period in hours (maximum age of cache) | =REFRESH= setting |
      | =cachemsg="..."= | Message shown when looking at a cached topic. Use =$age= to indicate the age of cache, =$link= to indicate the refresh URL | =CACHEMSG= setting |
      | =updatemsg="..."= | Message shown after a cache refresh. Use =$link= to indicate the refresh URL | =UPDATEMSG= setting |
+   * Use =&lt;varcache_exclude&gt; ... &lt;/varcache_exclude&gt;= to exclude sections of a page from getting cached
    * Example: =%<nop>VARCACHE{"168"}%= caches the current page for 7 days
    * Related: VarCachePlugin, VarCachePluginTest

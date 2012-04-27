@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1306382349" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1335487257" format="1.1" version="$Rev$"}%
 ---+!! Variable Cache Plugin 
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -41,8 +41,17 @@ The rendering of TWiki markup to HTML is not cached. That is, user specific HTML
    * The topic is rendered dynamically without caching when:
       * the topic has URL parameters other than =varcache= (e.g. to show dynamic content properly, such as table sorting, filtering, searching)
       * the topic is previewed after editing
-   * Limitations:
+   * Limitation:
       * The cache is not user specific. For example, all users see the expanded =%<nop>WIKIUSERNAME%= of the person who refreshed the cache (on demand or by looking at a topic with an expired cache)
+   * Control over what gets cached:
+      * Use =&lt;varcache_exclude&gt; ... &lt;/varcache_exclude&gt;= to exclude sections of a page from getting cached.
+      * Example:
+        %BR% =%<nop>VARCACHE{"24"}%=
+        %BR% =Cached: %<nop>SEARCH{ "." nonoise="on" format="$topic" separator=", " limit="10" }%=
+        %BR% =&lt;varcache_exclude&gt;=
+        %BR% =Not cached: %<nop>SEARCH{ "%<nop>WIKINAME%" nonoise="on" format="$topic" separator=", " limit="10" }%=
+        %BR% =&lt;/varcache_exclude&gt;=
+        %BR% =Cached: %<nop>WEBLIST{}%=
 
 ---++ Plugin Settings
 
@@ -83,10 +92,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Set SHORTDESCRIPTION = Cache TWiki variables in selected topics for faster page rendering
 
 |  Plugin Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2004-2011, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2004-2012, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] <br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-05-25 |
+|  Plugin Version: | 2012-04-26 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2011-04-26: | TWikibug:Item6871: new =&lt;varcache_exclude&gt;= tag to exclude parts of page from getting cached |
 |  2011-05-25: | TWikibug:Item6701: Small code refactor; adding $SHORTDESCRIPTION that was missing in previous release |
 |  2011-05-24: | TWikibug:Item6730: Move cache data from pub directory to working directory; Use proper umask for directories created; Fix to make it better run under mod_perl; Support abbreviated %<nop>VARCACHE% syntax; Possible to specify a refresh of 0 (meaning infinite) -- TWiki:Main.TimotheLitt |
 |  2011-05-01: | TWikibug:Item6701: Doc improvements |
