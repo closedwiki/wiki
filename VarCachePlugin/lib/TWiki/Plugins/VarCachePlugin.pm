@@ -23,7 +23,7 @@ use strict;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-04-26';
+our $RELEASE = '2012-04-27';
 
 # =========================
 our $SHORTDESCRIPTION = 'Cache TWiki variables in selected topics for faster page rendering';
@@ -117,12 +117,12 @@ sub afterCommonTagsHandler
         } else {
             # read cache
             $_[0] = TWiki::Func::readFile( $cacheFilename );
-            if( $_[0] =~ /$escVarCacheToken/ ) {
-                $_[0] = TWiki::Func::expandCommonVariables( _unescapeExcludes( $_[0] ), $_[1], $_[2] );
-            }
             my $msg = _formatMsg( $_[2], $_[1], $tag );
             $msg =~ s/\$age/_formatAge($age)/geo;
             $_[0] =~ s/%--VARCACHE.*?--%/$msg/go;
+            if( $_[0] =~ /$escVarCacheToken/ ) {
+                $_[0] = TWiki::Func::expandCommonVariables( _unescapeExcludes( $_[0] ), $_[1], $_[2] );
+            }
 
             # restore addToHEAD info from cache
             $cacheFilename = _cacheFileName( $_[2], $_[1], 0, 1 );
