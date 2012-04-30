@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1335726884" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1335761331" format="1.1" version="$Rev$"}%
 ---+ User List sorted by name
 
 %INCLUDE{"UserListHeader"}%
@@ -98,6 +98,7 @@ Filter:
 <noautolink>
 %SEARCH{
  "META:FORM.*[U]serForm;%URLPARAM{"search" encode="quote"}%"
+ limit="%IF{ "defined 'search'" then="all" else="200"}%"
  type="regex"
  nosearch="on"
  excludetopic="UserList"
