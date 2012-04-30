@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1335770634" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1335770831" format="1.1" version="$Rev$"}%
 ---+ User List sorted by name
 
 %INCLUDE{"UserListHeader"}%
@@ -138,8 +138,8 @@ Filter:
 <div class=\"userBoxImage\">
 <div class=\"userBoxImageVAlign\">
 <span></span>
-<img src=\"$percntIF{ \"'$formfield(Image)'!=''\" then='%PUBURLPATH%/$web/$topic/$formfield(Image)' else='%PUBURLPATH%/%WEB%/UserProfileHeader/default-user-profile.jpg'
- }$percnt\" width=\"124\" alt=\"\" style=\"\" />
+<a href=\"%SCRIPTURLPATH{view}%/$web/$topic\"><img src=\"$percntIF{ \"'$formfield(Image)'!=''\" then='%PUBURLPATH%/$web/$topic/$formfield(Image)' else='%PUBURLPATH%/%WEB%/UserProfileHeader/default-user-profile.jpg'
+ }$percnt\" width=\"124\" alt=\"\" style=\"\" /></a>
 </div>
 </div>
 <div class=\"userBoxImgMask\">
