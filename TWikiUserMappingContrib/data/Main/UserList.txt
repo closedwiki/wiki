@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1335762412" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1335768078" format="1.1" version="$Rev$"}%
 ---+ User List sorted by name
 
 %INCLUDE{"UserListHeader"}%
@@ -42,6 +42,34 @@
  z-index: 0;
  overflow: hidden;
 }
+/* we have do go through bloody hoops to support IE7+ to vertical align an image */
+.userBoxImageVAlign {
+ display: table-cell;
+ text-align: center;
+ vertical-align: middle;
+ height: 124px;
+}
+.userBoxImageV * {
+ vertical-align: middle;
+}
+/*\*//*/
+.userBoxImageV {
+ display: block;
+}
+.userBoxImageV span {
+ display: inline-block;
+ height: 100%;
+ width: 1px;
+}
+/**/
+</style>
+<!--[if lt IE 8]><style>
+.userBoxImageV span {
+ display: inline-block;
+ height: 100%;
+}
+</style><![endif]-->
+<style>
 .userBoxImgMask {
  position: absolute;
  width: 130px;
@@ -104,8 +132,12 @@ Filter:
  excludetopic="UserList"
  format="<div class=\"userBoxOuter\">
 <div class=\"userBoxContainer\">
-<div class=\"userBoxImage\" style=\"background: #f0f0f8 url($percntIF{ \"'$formfield(Image)'!=''\" then='%PUBURLPATH%/$web/$topic/$formfield(Image)' else='%PUBURLPATH%/%WEB%/UserProfileHeader/default-user-profile.jpg'
- }$percnt) no-repeat center center; background-size: 124px;\">
+<div class=\"userBoxImage\">
+<div class=\"userBoxImageVAlign\">
+<span></span>
+<img src=\"$percntIF{ \"'$formfield(Image)'!=''\" then='%PUBURLPATH%/$web/$topic/$formfield(Image)' else='%PUBURLPATH%/%WEB%/UserProfileHeader/default-user-profile.jpg'
+ }$percnt\" width=\"124\" alt=\"\" style=\"\" />
+</div>
 </div>
 <div class=\"userBoxImgMask\">
 </div>
