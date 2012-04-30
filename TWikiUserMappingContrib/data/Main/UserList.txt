@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1335768078" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1335770634" format="1.1" reprev="1.1" version="1.1"}%
 ---+ User List sorted by name
 
 %INCLUDE{"UserListHeader"}%
@@ -26,8 +26,11 @@
  width: 100%;
  height: 100%;
  padding: 0;
+ margin: 0;
+ border: 0 none;
 }
 .userBoxContainer :hover {
+ margin: 0;
  border: 0 none;
 }
 .userBoxImage {
