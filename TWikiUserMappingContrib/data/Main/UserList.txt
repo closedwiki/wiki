@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1335770831" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1335854737" format="1.1" version="$Rev$"}%
 ---+ User List sorted by name
 
 %INCLUDE{"UserListHeader"}%
@@ -132,7 +132,7 @@ Filter:
  limit="%IF{ "defined 'search'" then="all" else="200"}%"
  type="regex"
  nonoise="on"
- excludetopic="UserList"
+ excludetopic="UserList*, *Template"
  format="<div class=\"userBoxOuter\">
 <div class=\"userBoxContainer\">
 <div class=\"userBoxImage\">
