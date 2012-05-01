@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1335857071" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1335862726" format="1.1" version="$Rev$"}%
 ---+ <nop>%WIKITOOLNAME% User List
 
 %INCLUDE{"UserListHeader"}%
 
-<style>
+<style type="text/css">
 .userBoxOuter {
  float: left;
  width: 410px;
@@ -16,7 +16,6 @@
  background-color: #fff;
 }
 .userBoxOuter :hover {
- margin: -2px 0 0 -2px;
  border: solid 1px #707078;
  border-right-color: #303038;
  border-bottom-color: #303038;
@@ -30,7 +29,6 @@
  border: 0 none;
 }
 .userBoxContainer :hover {
- margin: 0;
  border: 0 none;
 }
 .userBoxImage {
@@ -45,34 +43,36 @@
  z-index: 0;
  overflow: hidden;
 }
-/* we have do go through bloody hoops to support IE7+ to vertical align an image */
-.userBoxImageVAlign {
+.userBoxImageH {
+ height: 324px;
+ display: table;
+ width: 100%;
+ margin: -100px 0;
+}
+.userBoxImageP {
  display: table-cell;
+ vertical-align: middle;
+ width: 100%;
  text-align: center;
- vertical-align: middle;
- height: 124px;
 }
-.userBoxImageV * {
- vertical-align: middle;
-}
-/*\*//*/
-.userBoxImageV {
- display: block;
-}
-.userBoxImageV span {
- display: inline-block;
- height: 100%;
- width: 1px;
-}
-/**/
 </style>
-<!--[if lt IE 8]><style>
-.userBoxImageV span {
- display: inline-block;
- height: 100%;
+<!--[if IE]><style type="text/css">
+.userBoxImageH {
+ position: relative;
+}
+.userBoxImageP {
+ position: absolute;
+ top: 50%;
+}
+.userBoxImageC {
+ position: relative;
+ top: -50%;
+}
+.userBoxImage :hover {
+ border: solid 1px #d0d0d8;
 }
 </style><![endif]-->
-<style>
+<style type="text/css">
 .userBoxImgMask {
  position: absolute;
  width: 130px;
@@ -136,10 +136,13 @@ Filter:
  format="<div class=\"userBoxOuter\">
 <div class=\"userBoxContainer\">
 <div class=\"userBoxImage\">
-<div class=\"userBoxImageVAlign\">
-<span></span>
+<div class=\"userBoxImageH\">
+<div class=\"userBoxImageP\">
+<div class=\"userBoxImageC\">
 <a href=\"%SCRIPTURLPATH{view}%/$web/$topic\"><img src=\"$percntIF{ \"'$formfield(Image)'!=''\" then='%PUBURLPATH%/$web/$topic/$formfield(Image)' else='%PUBURLPATH%/%WEB%/UserProfileHeader/default-user-profile.jpg'
- }$percnt\" width=\"124\" alt=\"\" style=\"\" /></a>
+ }$percnt\" width=\"124\" alt=\"\" /></a>
+</div>
+</div>
 </div>
 </div>
 <div class=\"userBoxImgMask\">
