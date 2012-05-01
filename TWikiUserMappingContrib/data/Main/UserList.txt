@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1335854737" format="1.1" version="$Rev$"}%
----+ User List sorted by name
+%META:TOPICINFO{author="TWikiContributor" date="1335857071" format="1.1" version="$Rev$"}%
+---+ <nop>%WIKITOOLNAME% User List
 
 %INCLUDE{"UserListHeader"}%
 
