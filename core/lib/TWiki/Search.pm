@@ -1021,19 +1021,20 @@ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
             $afterText =~ s/\$ntopics/$ntopics/gs;
             $afterText =~ s/\$nhits/$nhits/gs;
             $afterText = $session->handleCommonTags( $afterText, $web, $homeTopic );
-            if( defined( $separator ) ) {
-                $afterText .= $separator;
-            } else {
-                $afterText =~ s/([^\n])$/$1\n/os; # add new line at end if needed
-            }
+            if( $afterText && $afterText ne '' ) {
+                if( defined( $separator ) ) {
+                    $afterText .= $separator;
+                } else {
+                    $afterText =~ s/([^\n])$/$1\n/os; # add new line at end if needed
+                }
 
-            if( defined $callback ) {
-                $afterText = $renderer->getRenderedVersion( $afterText, $web, $homeTopic );
-                $afterText =~ s|</*nop/*>||goi;    # remove <nop> tag
-                &$callback( $cbdata, $afterText );
-            }
-            else {
-                $searchResult .= $afterText;
+                if( defined $callback ) {
+                    $afterText = $renderer->getRenderedVersion( $afterText, $web, $homeTopic );
+                    $afterText =~ s|</*nop/*>||goi;    # remove <nop> tag
+                    &$callback( $cbdata, $afterText );
+                } else {
+                    $searchResult .= $afterText;
+                }
             }
         }
 
