@@ -964,7 +964,7 @@ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
                 unless( $headerDone ) {
                     $headerDone = 1;
                     my $prefs = $session->{prefs};
-                    my $thisWebBGColor = $prefs->getWebPreferencesValue( 'WEBBGCOLOR', $web ) || '\#FF00FF';
+                    my $thisWebBGColor = $prefs->getWebPreferencesValue( 'WEBBGCOLOR', $web ) || '#FF00FF';
                     $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/go;
                     $beforeText =~ s/%WEB%/$web/go;
                     $beforeText =~ s/\$ntopics/0/gs;
