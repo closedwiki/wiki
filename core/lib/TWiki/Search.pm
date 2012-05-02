@@ -921,8 +921,7 @@ sub searchWeb {
                     # FIXME: What about meta data rendering?
                     $out =~ s/%TEXTHEAD%/$text/go;
 
-                }
-                elsif( $format ) {
+                } elsif( $format ) {
                     $out =~
 s/\$summary(?:\(([^\)]*)\))?/$renderer->makeTopicSummary( $text, $topic, $web, $1 )/ges;
                     $out =~
@@ -943,24 +942,17 @@ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
                     $out =~ s/\r?\n/$newLine/gos if( $newLine );
                     if( defined($separator) ) {
                         $out .= $separator;
-                    }
-                    else {
-
+                    } else {
                         # add new line at end if needed
-                        # SMELL: why?
                         $out =~ s/([^\n])$/$1\n/s;
                     }
-
                     $out = TWiki::expandStandardEscapes( $out );
 
-                }
-                elsif( $noSummary ) {
+                } elsif( $noSummary ) {
                     $out =~ s/%TEXTHEAD%//go;
                     $out =~ s/&nbsp;//go;
 
-                }
-                else {
-
+                } else {
                     # regular search view
                     ( $meta, $text ) = _getTextAndMeta( $this, $topicInfo, $web, $topic )
                       unless $text;
@@ -972,8 +964,7 @@ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
                 unless( $headerDone ) {
                     $headerDone = 1;
                     my $prefs = $session->{prefs};
-                    my $thisWebBGColor =
-                      $prefs->getWebPreferencesValue( 'WEBBGCOLOR', $web ) || '\#FF00FF';
+                    my $thisWebBGColor = $prefs->getWebPreferencesValue( 'WEBBGCOLOR', $web ) || '\#FF00FF';
                     $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/go;
                     $beforeText =~ s/%WEB%/$web/go;
                     $beforeText =~ s/\$ntopics/0/gs;
@@ -989,7 +980,7 @@ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
                     }
                 }
 
-             #don't expand if a format is specified - it breaks tables and stuff
+                #don't expand if a format is specified - it breaks tables and stuff
                 unless( $format ) {
                     $out = $renderer->getRenderedVersion( $out, $web, $topic );
                 }
@@ -1009,7 +1000,8 @@ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
             undef $topicInfo->{$topic};
 
             last if( $ntopics >= $limit );
-        }    # end topic loop
+
+        } # end topic loop
 
         # output footer only if hits in web, else output default if defined
         if( $ntopics || $default ) {
