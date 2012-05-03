@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1297377834" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1336004563" format="1.1" version="$Rev$"}%
 ---+!! Scroll Box Add-on
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -48,7 +48,7 @@ There are two options to create scroll boxes:
    * Using INCLUDE
    * Using HTML &amp; CSS
 
----+++ Using INCLUDE
+---+++ Scroll Box Using INCLUDE
 
 Create scroll boxes in TWiki pages by including two named sections defined in the !ScrollBoxAddOn topic, called ="scroll_box_engine"= and ="scroll_box"=, respectively. Example:
 <verbatim>
@@ -66,17 +66,18 @@ Create scroll boxes in TWiki pages by including two named sections defined in th
 
 The ="scroll_box_engine"= section defines the CSS and !JavaScript. It must be included once per page.
 
-The ="scroll_box"= section generates a scroll box. It can be included more than once to create multiple scroll boxes. This section expects the following include parameters:
+The ="scroll_box"= section generates a scroll box. It can be included more than once on a page to create multiple scroll boxes. Parameters of "scroll_box" section:
 
-   * =name=: Name of the box. Must be unique per page. Use only alphanumeric characters and underscore!
-   * =title=: Title of the box.
-   * =content=: Content of the box. Can be of any form, such as TML, HTML, images. Make sure to escape double quotes with a backslash, such as =&lt;br clear=\"all\"&gt;=.
-   * =delay=: Delay between scrolls, in milliseconds.
-   * =vstep=: Vertical step taken per scroll, in pixels.
-   * =width=: Box width, in pixels.
-   * =height=: Box height of scrollable area, in pixels.
+| *Parameter* | *Description* | *Default* |
+| =name= | Name of the box. Must be unique per page. Use only alphanumeric characters and underscore! | (none) |
+| =title= | Title of the box. | (no title) |
+| =content= | Content of the box. Can be of any form, such as TML, HTML, images. Make sure to escape double quotes with a backslash, such as =&lt;br clear=\"all\"&gt;=. | (none) |
+| =delay= | Delay between scrolls, in milliseconds. | ="1000"= |
+| =vstep= | Vertical step taken per scroll, in pixels. | (container height) |
+| =width= | Box width, in pixels. | ="300"= |
+| =height= | Box height of scrollable area, in pixels. | ="40"= |
 
----+++ Using HTML &amp; CSS
+---+++ Scroll Box Using HTML &amp; CSS
 
 You can define your own style and create your own scroll box. Example:
 
@@ -94,14 +95,83 @@ You can define your own style and create your own scroll box. Example:
 
 The first parameter of =initScrollBox()= is the ID of the div that contains the scroll box. The numeric parameters are =delay=, =vstep=, =width= and =height=, respectively.
 
+---+++ Static Box Using INCLUDE
+
+Create static boxes in TWiki pages by including two named sections defined in the !ScrollBoxAddOn topic, called ="scroll_box_engine"= and ="static_box"=, respectively. Example:
+<verbatim>
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="scroll_box_engine" }%
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box"
+  title="Nice box"
+  content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, 
+sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  width="400"
+  height="225"
+}%
+</verbatim>
+
+The ="scroll_box_engine"= section defines the CSS and !JavaScript. It must be included once per page.
+
+The ="static_box"= section generates a static box. It can be included more than once on a page to create multiple boxes. Parameters of "static_box" section:
+
+| *Parameter* | *Description* | *Default* |
+| =title= | Title of the box. | (no title) |
+| =content= | Content of the box. Can be of any form, such as TML, HTML, images. Make sure to escape double quotes with a backslash, such as =&lt;br clear=\"all\"&gt;=. | (none) |
+| =width= | Box width, in pixels. | ="300"= |
+| =height= | Height of content, in pixels. | (auto) |
+
+---+++ Static Box Using 2 INCLUDEs
+
+This is an alternative to the previous example. The box is split up into two INCLUDEs with a "static_box_start" section, the box content, and a "static_box_end" section. Example:
+<verbatim>
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="scroll_box_engine" }%
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_start"
+  title="Nice box"
+  width="400"
+  height="225"
+}%
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
+eiusmod tempor incididunt ut labore et dolore magna aliqua.
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_start" }%
+</verbatim>
+
+The ="scroll_box_engine"= section defines the CSS and !JavaScript. It must be included once per page.
+
+The ="static_box_start"= section generates the start of a static box. Parameters of "static_box_start" section:
+
+| *Parameter* | *Description* | *Default* |
+| =title= | Title of the box. | (no title) |
+| =width= | Box width, in pixels. | ="300"= |
+| =height= | Height of content, in pixels. | (auto) |
+
+The ="static_box_end"= section generates the end of the static box. Pairs of ="static_box_start"= and ="static_box_end"= section INCLUDEs can be done on a page to create multiple boxes.
+
 ---++ Named sections
 
-This section defines the ="scroll_box_engine"= and the ="scroll_box"= section. View the [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][raw text]] of this topic to look under the hood.
+This section defines the named sections ="scroll_box_engine"=, ="scroll_box"=, ="static_box"=, ="static_box_start"= and ="static_box_end"=. View the [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][raw text]] of this topic to look under the hood.
+<!--=====================================
+%STARTSECTION{ "static_box_start" }%<div class="scrollBoxOuter" style="%IF{ "defined 'width'" then="width: %width%px;" }%">
+%IF{ "defined 'title'" then="<div class=\"scrollBoxTitle\"> %title% </div>" else="<nop>" }%
+ <div class="scrollBoxContainer" style="%IF{ "defined 'height'" then="height: %height%px;" else="height: auto;" }%">
+  <div class="scrollBoxContent">%ENDSECTION{ "static_box_start" }%
+=========================================-->
+<!--=====================================
+%STARTSECTION{ "static_box_end" }%</div>
+ </div>
+</div>%ENDSECTION{ "static_box_end" }%
+=========================================-->
+<!--=====================================
+%STARTSECTION{ "static_box" }%<div class="scrollBoxOuter" style="%IF{ "defined 'width'" then="width: %width%px;" }%">
+%IF{ "defined 'title'" then="<div class=\"scrollBoxTitle\"> %title% </div>" else="<nop>" }%
+ <div class="scrollBoxContainer" style="%IF{ "defined 'height'" then="height: %height%px;" else="height: auto;" }%">
+  <div class="scrollBoxContent">
+%content%
+  </div>
+ </div>
+</div>%ENDSECTION{ "static_box" }%
+=========================================-->
 <!--=====================================
 %STARTSECTION{ "scroll_box" }%<div id="%name%Box" class="scrollBoxOuter">
- <div class="scrollBoxTitle">
-%title%
- </div>
+%IF{ "defined 'title'" then="<div class=\"scrollBoxTitle\"> %title% </div>" else="<nop>" }%
  <div id="%name%Container" class="scrollBoxContainer">
   <div id="%name%Content" class="scrollBoxContent">
 %content%
@@ -185,7 +255,6 @@ This section defines the ="scroll_box_engine"= and the ="scroll_box"= section. V
   position: relative;
   top: 0px;
   padding: 0px;
-  background-color: #ffffff;
   text-align: justify;
  }
  .scrollBoxContent img {
@@ -220,7 +289,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
   height="150"
 }%
 
-</td><td>&nbsp;</td><td valign="top">
+</td><td>&nbsp;&nbsp;&nbsp;</td><td valign="top">
 __Raw text:__
 <verbatim>
 %INCLUDE{
@@ -285,7 +354,7 @@ __Rendered logo roll:__
   height="30"
 }%
 
-</td><td>&nbsp;</td><td valign="top">
+</td><td>&nbsp;&nbsp;&nbsp;</td><td valign="top">
 __Raw text:__
 <verbatim>
 %INCLUDE{
@@ -329,7 +398,7 @@ __Rendered image box:__
   height="225"
 }%
 
-</td><td>&nbsp;</td><td valign="top">
+</td><td>&nbsp;&nbsp;&nbsp;</td><td valign="top">
 __Raw text:__
 <verbatim>
 %INCLUDE{
@@ -349,6 +418,62 @@ __Raw text:__
 </verbatim>
 </td></tr></table>
 
+---+++ Static box demo
+
+<table><tr><td valign="top">
+__Rendered static box:__
+
+%INCLUDE{
+  "%SYSTEMWEB%.ScrollBoxAddOn"
+  section="static_box"
+  title="Nice box"
+  content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
+eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
+veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea 
+commodo consequat."
+  width="300"
+  height="225"
+}%
+
+</td><td>&nbsp;&nbsp;&nbsp;</td><td valign="top">
+__Raw text:__
+<verbatim>
+%INCLUDE{
+  "%SYSTEMWEB%.ScrollBoxAddOn"
+  section="static_box"
+  title="Nice box"
+  content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
+eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
+veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea 
+commodo consequat."
+  width="300"
+  height="225"
+}%
+</verbatim>
+</td></tr><tr><td valign="top">
+__Same static box, alternative syntax:__
+
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_start"
+  title="Nice box" width="300" }%
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
+veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea 
+commodo consequat.
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_end" }%
+
+</td><td>&nbsp;&nbsp;&nbsp;</td><td valign="top">
+__Raw text:__
+<verbatim>
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_start"
+  title="Nice box" width="300" }%
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
+veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea 
+commodo consequat.
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_end" }%
+</verbatim>
+</td></tr></table>
+
 ---++ Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
@@ -363,13 +488,14 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 
 ---++ Add-On Info
 
-   * Set SHORTDESCRIPTION = Add scroll boxes and image rotation to TWiki pages
+   * Set SHORTDESCRIPTION = Add scroll boxes, image rotation and static boxes to TWiki pages
 
 |  Add-on Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2010, TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2012, TWiki:Main.PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2011-02-10 (V1.3) |
+|  Add-on Version: | 2012-05-02 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-05-02: | TWikibug:Item6837: Add non-scrolling box feature with "static_box*" sections |
 |  2011-02-10: | TWikibug:Item6638: Avoid &lt;p /&gt; tag when including scroll box engine |
 |  2011-01-25: | TWikibug:Item6638: Small style change: More padding below title |
 |  2010-12-23: | TWikibug:Item6623: Doc improvements; changing function initScrollContent to initScrollBox |
