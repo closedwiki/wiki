@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1336009780" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1336010598" format="1.1" version="$Rev$"}%
 ---+!! Scroll Box Add-on
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -115,10 +115,11 @@ The ="static_box"= section generates a static box. It can be included more than 
 
 | *Parameter* | *Description* | *Default* |
 | =title= | Title of the box. | (no title) |
-| =content= | Content of the box. Can be of any form, such as TML, HTML, images. Make sure to escape double quotes with a backslash, such as =&lt;br clear=\"all\"&gt;=. | (none) |
+| =content= | Content of the box. Can be of any form, such as TML, HTML, images.%BR% Make sure to escape double quotes with a backslash, such as =&lt;br clear=\"all\"&gt;=. | (none) |
 | =width= | Box width, in pixels. | ="300"= |
 | =height= | Height of content, in pixels. | (auto) |
-| =boxcss= | CSS of outer box. | ="border: solid #dddddd 1px; padding: 15px;"= |
+| =boxcss= | CSS of outer box. | ="border: solid #dddddd 1px;%BR% padding: 15px;"= |
+| =titlecss= | CSS of title. | ="text-align:center;%BR% font-size:19px;%BR% font-weight:bold;%BR% color: #333335;%BR% padding:0 0 12px 0;%BR% white-space: nowrap;%BR% overflow: hidden;"= |
 | =contentcss= | CSS of content. | (none) |
 
 ---+++ Static Box Using 2 INCLUDEs
@@ -144,7 +145,8 @@ The ="static_box_start"= section generates the start of a static box. Parameters
 | =title= | Title of the box. | (no title) |
 | =width= | Box width, in pixels. | ="300"= |
 | =height= | Height of content, in pixels. | (auto) |
-| =boxcss= | CSS of outer box. | ="border: solid #dddddd 1px; padding: 15px;"= |
+| =boxcss= | CSS of outer box. | ="border: solid #dddddd 1px;%BR% padding: 15px;"= |
+| =titlecss= | CSS of title. | ="text-align:center;%BR% font-size:19px;%BR% font-weight:bold;%BR% color: #333335;%BR% padding:0 0 12px 0;%BR% white-space: nowrap;%BR% overflow: hidden;"= |
 | =contentcss= | CSS of content. | (none) |
 
 The ="static_box_end"= section generates the end of the static box. Pairs of ="static_box_start"= and ="static_box_end"= section INCLUDEs can be done on a page to create multiple boxes.
@@ -152,24 +154,21 @@ The ="static_box_end"= section generates the end of the static box. Pairs of ="s
 ---++ Named sections
 
 This section defines the named sections ="scroll_box_engine"=, ="scroll_box"=, ="static_box"=, ="static_box_start"= and ="static_box_end"=. View the [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][raw text]] of this topic to look under the hood.
-<!--=====================================
+<!--=========================================================
 %STARTSECTION{ "static_box_start" }%<div class="scrollBoxOuter" style="%IF{ "defined 'width'" then="width: %width%px; " }%%IF{ "defined 'boxcss'" then="%boxcss%" }%">
-%IF{ "defined 'title'" then="<div class=\"scrollBoxTitle\"> %title% </div>" else="<nop>" }%
+%IF{ "defined 'title'" then="<div class=\"scrollBoxTitle\" style=\"%IF{ "defined 'titlecss'" then="%titlecss%" }%\"> %title% </div>" else="<nop>" }%
  <div class="scrollBoxContainer" style="%IF{ "defined 'height'" then="height: %height%px" else="height: auto" }%; %IF{ "defined 'contentcss'" then="%contentcss%" }%">%ENDSECTION{ "static_box_start" }%
-=========================================-->
-<!--=====================================
+=============================================================
 %STARTSECTION{ "static_box_end" }%</div>
 </div>%ENDSECTION{ "static_box_end" }%
-=========================================-->
-<!--=====================================
+=============================================================
 %STARTSECTION{ "static_box" }%<div class="scrollBoxOuter" style="%IF{ "defined 'width'" then="width: %width%px; " }%%IF{ "defined 'boxcss'" then="%boxcss%" }%">
-%IF{ "defined 'title'" then="<div class=\"scrollBoxTitle\"> %title% </div>" else="<nop>" }%
+%IF{ "defined 'title'" then="<div class=\"scrollBoxTitle\" style=\"%IF{ "defined 'titlecss'" then="%titlecss%" }%\"> %title% </div>" else="<nop>" }%
  <div class="scrollBoxContainer" style="%IF{ "defined 'height'" then="height: %height%px" else="height: auto" }%; %IF{ "defined 'contentcss'" then="%contentcss%" }%">
 %content%
  </div>
 </div>%ENDSECTION{ "static_box" }%
-=========================================-->
-<!--=====================================
+=============================================================
 %STARTSECTION{ "scroll_box" }%<div id="%name%Box" class="scrollBoxOuter">
 %IF{ "defined 'title'" then="<div class=\"scrollBoxTitle\"> %title% </div>" else="<nop>" }%
  <div id="%name%Container" class="scrollBoxContainer">
@@ -181,8 +180,7 @@ This section defines the named sections ="scroll_box_engine"=, ="scroll_box"=, =
 <script type="text/javascript">
  initScrollBox( '%name%Container', %delay%, %vstep%, %width%, %height% );
 </script>%ENDSECTION{ "scroll_box" }%
-=========================================-->
-<!--=====================================
+=============================================================
 %STARTSECTION{ "scroll_box_engine" }%%ADDTOHEAD{
  "scroll_box_engine"
  text="<script type='text/javascript'>
@@ -263,7 +261,7 @@ This section defines the named sections ="scroll_box_engine"=, ="scroll_box"=, =
  }
  </style>"
 }%<nop>%ENDSECTION{ "scroll_box_engine" }%
-=========================================-->
+==========================================================-->
 
 ---++ Examples
 
