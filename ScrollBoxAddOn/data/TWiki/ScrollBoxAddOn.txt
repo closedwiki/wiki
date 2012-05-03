@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1336007360" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1336009780" format="1.1" version="$Rev$"}%
 ---+!! Scroll Box Add-on
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -118,6 +118,8 @@ The ="static_box"= section generates a static box. It can be included more than 
 | =content= | Content of the box. Can be of any form, such as TML, HTML, images. Make sure to escape double quotes with a backslash, such as =&lt;br clear=\"all\"&gt;=. | (none) |
 | =width= | Box width, in pixels. | ="300"= |
 | =height= | Height of content, in pixels. | (auto) |
+| =boxcss= | CSS of outer box. | ="border: solid #dddddd 1px; padding: 15px;"= |
+| =contentcss= | CSS of content. | (none) |
 
 ---+++ Static Box Using 2 INCLUDEs
 
@@ -142,6 +144,8 @@ The ="static_box_start"= section generates the start of a static box. Parameters
 | =title= | Title of the box. | (no title) |
 | =width= | Box width, in pixels. | ="300"= |
 | =height= | Height of content, in pixels. | (auto) |
+| =boxcss= | CSS of outer box. | ="border: solid #dddddd 1px; padding: 15px;"= |
+| =contentcss= | CSS of content. | (none) |
 
 The ="static_box_end"= section generates the end of the static box. Pairs of ="static_box_start"= and ="static_box_end"= section INCLUDEs can be done on a page to create multiple boxes.
 
@@ -149,23 +153,19 @@ The ="static_box_end"= section generates the end of the static box. Pairs of ="s
 
 This section defines the named sections ="scroll_box_engine"=, ="scroll_box"=, ="static_box"=, ="static_box_start"= and ="static_box_end"=. View the [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][raw text]] of this topic to look under the hood.
 <!--=====================================
-%STARTSECTION{ "static_box_start" }%<div class="scrollBoxOuter" style="%IF{ "defined 'width'" then="width: %width%px;" }%">
+%STARTSECTION{ "static_box_start" }%<div class="scrollBoxOuter" style="%IF{ "defined 'width'" then="width: %width%px; " }%%IF{ "defined 'boxcss'" then="%boxcss%" }%">
 %IF{ "defined 'title'" then="<div class=\"scrollBoxTitle\"> %title% </div>" else="<nop>" }%
- <div class="scrollBoxContainer" style="%IF{ "defined 'height'" then="height: %height%px;" else="height: auto;" }%">
-  <div class="scrollBoxContent">%ENDSECTION{ "static_box_start" }%
+ <div class="scrollBoxContainer" style="%IF{ "defined 'height'" then="height: %height%px" else="height: auto" }%; %IF{ "defined 'contentcss'" then="%contentcss%" }%">%ENDSECTION{ "static_box_start" }%
 =========================================-->
 <!--=====================================
 %STARTSECTION{ "static_box_end" }%</div>
- </div>
 </div>%ENDSECTION{ "static_box_end" }%
 =========================================-->
 <!--=====================================
-%STARTSECTION{ "static_box" }%<div class="scrollBoxOuter" style="%IF{ "defined 'width'" then="width: %width%px;" }%">
+%STARTSECTION{ "static_box" }%<div class="scrollBoxOuter" style="%IF{ "defined 'width'" then="width: %width%px; " }%%IF{ "defined 'boxcss'" then="%boxcss%" }%">
 %IF{ "defined 'title'" then="<div class=\"scrollBoxTitle\"> %title% </div>" else="<nop>" }%
- <div class="scrollBoxContainer" style="%IF{ "defined 'height'" then="height: %height%px;" else="height: auto;" }%">
-  <div class="scrollBoxContent">
+ <div class="scrollBoxContainer" style="%IF{ "defined 'height'" then="height: %height%px" else="height: auto" }%; %IF{ "defined 'contentcss'" then="%contentcss%" }%">
 %content%
-  </div>
  </div>
 </div>%ENDSECTION{ "static_box" }%
 =========================================-->
@@ -495,7 +495,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Add-on Version: | 2012-05-02 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-05-02: | TWikibug:Item6837: Add non-scrolling box feature with "static_box*" sections; change padding from 10px to 15px |
+|  2012-05-02: | TWikibug:Item6837: Add non-scrolling box feature with "static_box*" sections; change padding from 10px to 15px; add boxcss and contentcss parameters |
 |  2011-02-10: | TWikibug:Item6638: Avoid &lt;p /&gt; tag when including scroll box engine |
 |  2011-01-25: | TWikibug:Item6638: Small style change: More padding below title |
 |  2010-12-23: | TWikibug:Item6623: Doc improvements; changing function initScrollContent to initScrollBox |
