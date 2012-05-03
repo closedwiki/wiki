@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1336011336" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1336014643" format="1.1" version="$Rev$"}%
 ---+!! Scroll Box Add-on
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -76,9 +76,9 @@ The ="scroll_box"= section generates a scroll box. It can be included more than 
 | =vstep= | Vertical step taken per scroll, in pixels. | (container height) |
 | =width= | Box width, in pixels. | ="300"= |
 | =height= | Box height of scrollable area, in pixels. | ="40"= |
-| =boxcss= | CSS of outer box. | ="border: solid #dddddd 1px;%BR% padding: 15px;"= |
-| =titlecss= | CSS of title. | ="text-align:center;%BR% font-size:19px;%BR% font-weight:bold;%BR% color: #333335;%BR% padding:0 0 12px 0;%BR% white-space: nowrap;%BR% overflow: hidden;"= |
-| =contentcss= | CSS of content. | ="text-align: justify;"= |
+| =boxstyle= | CSS of outer box. | ="border: solid #dddddd 1px;%BR% padding: 15px;"= |
+| =titlestyle= | CSS of title. | ="text-align:center;%BR% font-size:19px;%BR% font-weight:bold;%BR% color: #333335;%BR% padding:0 0 12px 0;%BR% white-space: nowrap;%BR% overflow: hidden;"= |
+| =contentstyle= | CSS of content. | ="text-align: justify;"= |
 
 ---+++ Scroll Box Using HTML &amp; CSS
 
@@ -121,9 +121,9 @@ The ="static_box"= section generates a static box. It can be included more than 
 | =content= | Content of the box. Can be of any form, such as TML, HTML, images.%BR% Make sure to escape double quotes with a backslash, such as =&lt;br clear=\"all\"&gt;=. | (none) |
 | =width= | Box width, in pixels. | ="300"= |
 | =height= | Height of content, in pixels. | (auto) |
-| =boxcss= | CSS of outer box. | ="border: solid #dddddd 1px;%BR% padding: 15px;"= |
-| =titlecss= | CSS of title. | ="text-align:center;%BR% font-size:19px;%BR% font-weight:bold;%BR% color: #333335;%BR% padding:0 0 12px 0;%BR% white-space: nowrap;%BR% overflow: hidden;"= |
-| =contentcss= | CSS of content. | (none) |
+| =boxstyle= | CSS of outer box. | ="border: solid #dddddd 1px;%BR% padding: 15px;"= |
+| =titlestyle= | CSS of title. | ="text-align:center;%BR% font-size:19px;%BR% font-weight:bold;%BR% color: #333335;%BR% padding:0 0 12px 0;%BR% white-space: nowrap;%BR% overflow: hidden;"= |
+| =contentstyle= | CSS of content. | (none) |
 
 ---+++ Static Box Using 2 INCLUDEs
 
@@ -148,9 +148,9 @@ The ="static_box_start"= section generates the start of a static box. Parameters
 | =title= | Title of the box. | (no title) |
 | =width= | Box width, in pixels. | ="300"= |
 | =height= | Height of content, in pixels. | (auto) |
-| =boxcss= | CSS of outer box. | ="border: solid #dddddd 1px;%BR% padding: 15px;"= |
-| =titlecss= | CSS of title. | ="text-align:center;%BR% font-size:19px;%BR% font-weight:bold;%BR% color: #333335;%BR% padding:0 0 12px 0;%BR% white-space: nowrap;%BR% overflow: hidden;"= |
-| =contentcss= | CSS of content. | (none) |
+| =boxstyle= | CSS of outer box. | ="border: solid #dddddd 1px;%BR% padding: 15px;"= |
+| =titlestyle= | CSS of title. | ="text-align:center;%BR% font-size:19px;%BR% font-weight:bold;%BR% color: #333335;%BR% padding:0 0 12px 0;%BR% white-space: nowrap;%BR% overflow: hidden;"= |
+| =contentstyle= | CSS of content. | (none) |
 
 The ="static_box_end"= section generates the end of the static box. Pairs of ="static_box_start"= and ="static_box_end"= section INCLUDEs can be done on a page to create multiple boxes.
 
@@ -158,24 +158,24 @@ The ="static_box_end"= section generates the end of the static box. Pairs of ="s
 
 This section defines the named sections ="scroll_box_engine"=, ="scroll_box"=, ="static_box"=, ="static_box_start"= and ="static_box_end"=. View the [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][raw text]] of this topic to look under the hood.
 <!--=========================================================
-%STARTSECTION{ "static_box_start" }%<div class="scrollBoxOuter" style="%IF{ "defined 'width'" then="width: %width%px; " }%%IF{ "defined 'boxcss'" then="%boxcss%" }%">
-%IF{ "defined 'title'" then="<div class=\"scrollBoxTitle\" style=\"%IF{ "defined 'titlecss'" then="%titlecss%" }%\"> %title% </div>" else="<nop>" }%
- <div class="scrollBoxContainer" style="%IF{ "defined 'height'" then="height: %height%px" else="height: auto" }%; %IF{ "defined 'contentcss'" then="%contentcss%" }%">%ENDSECTION{ "static_box_start" }%
+%STARTSECTION{ "static_box_start" }%<div class="scrollBoxOuter" style="%IF{ "defined 'width'" then="width: %width%px; " }%%IF{ "defined 'boxstyle'" then="%boxstyle%" }%">
+%IF{ "defined 'title'" then="<div class=\"scrollBoxTitle\" style=\"%IF{ "defined 'titlestyle'" then="%titlestyle%" }%\"> %title% </div>" else="<nop>" }%
+ <div class="scrollBoxContainer" style="%IF{ "defined 'height'" then="height: %height%px" else="height: auto" }%; %IF{ "defined 'contentstyle'" then="%contentstyle%" }%">%ENDSECTION{ "static_box_start" }%
 =============================================================
 %STARTSECTION{ "static_box_end" }%</div>
 </div>%ENDSECTION{ "static_box_end" }%
 =============================================================
-%STARTSECTION{ "static_box" }%<div class="scrollBoxOuter" style="%IF{ "defined 'width'" then="width: %width%px; " }%%IF{ "defined 'boxcss'" then="%boxcss%" }%">
-%IF{ "defined 'title'" then="<div class=\"scrollBoxTitle\" style=\"%IF{ "defined 'titlecss'" then="%titlecss%" }%\"> %title% </div>" else="<nop>" }%
- <div class="scrollBoxContainer" style="%IF{ "defined 'height'" then="height: %height%px" else="height: auto" }%; %IF{ "defined 'contentcss'" then="%contentcss%" }%">
+%STARTSECTION{ "static_box" }%<div class="scrollBoxOuter" style="%IF{ "defined 'width'" then="width: %width%px; " }%%IF{ "defined 'boxstyle'" then="%boxstyle%" }%">
+%IF{ "defined 'title'" then="<div class=\"scrollBoxTitle\" style=\"%IF{ "defined 'titlestyle'" then="%titlestyle%" }%\"> %title% </div>" else="<nop>" }%
+ <div class="scrollBoxContainer" style="%IF{ "defined 'height'" then="height: %height%px" else="height: auto" }%; %IF{ "defined 'contentstyle'" then="%contentstyle%" }%">
 %content%
  </div>
 </div>%ENDSECTION{ "static_box" }%
 =============================================================
-%STARTSECTION{ "scroll_box" }%<div id="%name%Box" class="scrollBoxOuter" style="%IF{ "defined 'boxcss'" then="%boxcss%" }%">
-%IF{ "defined 'title'" then="<div class=\"scrollBoxTitle\" style=\"%IF{ "defined 'titlecss'" then="%titlecss%" }%\"> %title% </div>" else="<nop>" }%
+%STARTSECTION{ "scroll_box" }%<div id="%name%Box" class="scrollBoxOuter" style="%IF{ "defined 'boxstyle'" then="%boxstyle%" }%">
+%IF{ "defined 'title'" then="<div class=\"scrollBoxTitle\" style=\"%IF{ "defined 'titlestyle'" then="%titlestyle%" }%\"> %title% </div>" else="<nop>" }%
  <div id="%name%Container" class="scrollBoxContainer">
-  <div id="%name%Content" class="scrollBoxContent" style="%IF{ "defined 'contentcss'" then="%contentcss%" }%">
+  <div id="%name%Content" class="scrollBoxContent" style="%IF{ "defined 'contentstyle'" then="%contentstyle%" }%">
 %content%
   </div>
  </div>
@@ -433,7 +433,7 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
 veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea 
 commodo consequat."
   width="300"
-  contentcss="text-align: justify;"
+  contentstyle="text-align: justify;"
 }%
 
 </td><td>&nbsp;&nbsp;&nbsp;</td><td valign="top">
@@ -448,14 +448,14 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
 veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea 
 commodo consequat."
   width="300"
-  contentcss="text-align: justify;"
+  contentstyle="text-align: justify;"
 }%
 </verbatim>
 </td></tr><tr><td valign="top">
 __Same static box, alternative syntax:__
 
 %INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_start"
-  title="Nice box" width="300" contentcss="text-align: justify;" }%
+  title="Nice box" width="300" contentstyle="text-align: justify;" }%
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
 veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea 
@@ -466,7 +466,7 @@ commodo consequat.
 __Raw text:__
 <verbatim>
 %INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_start"
-  title="Nice box" width="300" contentcss="text-align: justify;" }%
+  title="Nice box" width="300" contentstyle="text-align: justify;" }%
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
 veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea 
@@ -496,7 +496,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Add-on Version: | 2012-05-02 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-05-02: | TWikibug:Item6837: Add non-scrolling box feature with "static_box*" sections; change padding from 10px to 15px; add boxcss, titlecss and contentcss parameters |
+|  2012-05-02: | TWikibug:Item6837: Add non-scrolling box feature with "static_box*" sections; change padding from 10px to 15px; add boxstyle, titlestyle and contentstyle parameters |
 |  2011-02-10: | TWikibug:Item6638: Avoid &lt;p /&gt; tag when including scroll box engine |
 |  2011-01-25: | TWikibug:Item6638: Small style change: More padding below title |
 |  2010-12-23: | TWikibug:Item6623: Doc improvements; changing function initScrollContent to initScrollBox |
