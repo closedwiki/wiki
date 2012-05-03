@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1336014643" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1336024827" format="1.1" version="$Rev$"}%
 ---+!! Scroll Box Add-on
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -137,7 +137,7 @@ This is an alternative to the previous example. The box is split up into two INC
 }%
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
 eiusmod tempor incididunt ut labore et dolore magna aliqua.
-%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_start" }%
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_end" }%
 </verbatim>
 
 The ="scroll_box_engine"= section defines the CSS and !JavaScript. It must be included once per page.
