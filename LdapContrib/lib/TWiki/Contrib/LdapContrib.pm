@@ -1,6 +1,7 @@
 # Module of TWiki Enterprisez Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2006-2010 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2006-2012 TWiki Contributors.
 # Portions Copyright (C) 2006 Spanlink Communications
 #
 # This program is free software; you can redistribute it and/or
@@ -29,7 +30,7 @@ use TWiki::Plugins ();
 use vars qw($VERSION $RELEASE %sharedLdapContrib);
 
 $VERSION = '$Rev: 10335 (2011-03-31) $';
-$RELEASE = '4.30';
+$RELEASE = '4.31';
 
 =pod
 
@@ -309,8 +310,8 @@ by calling this method. The methods below will do that automatically when needed
 sub connect {
   my ($this, $dn, $passwd) = @_;
 
-  #writeDebug("called connect");
-  #writeDebug("dn=$dn", 2) if $dn;
+  writeDebug("called connect");
+  writeDebug("dn=$dn", 2) if $dn;
   #writeDebug("passwd=***", 2) if $passwd;
 
   require Net::LDAP;
@@ -364,7 +365,7 @@ sub connect {
       $msg = $this->{ldap}->bind($this->{bindDN}, sasl=>$sasl, version=>$this->{version} );
     } else {
       # simple bind
-      writeDebug("proxy bind");
+      writeDebug("proxy bind using ".$this->{bindDN});
       $msg = $this->{ldap}->bind($this->{bindDN},password=>$this->{bindPassword});
     }
   }
@@ -376,7 +377,7 @@ sub connect {
   }
 
   $this->{isConnected} = ($this->checkError($msg) == LDAP_SUCCESS)?1:0;
-  writeDebug("failed to bind") unless $this->{isConnected};
+  writeDebug("failed to bind, error: " . $this->checkError($msg)) unless $this->{isConnected};
   return $this->{isConnected};
 }
 
@@ -394,7 +395,7 @@ sub disconnect {
 
   return unless defined($this->{ldap}) && $this->{isConnected};
 
-  #writeDebug("called disconnect()");
+  writeDebug("called disconnect()");
   $this->{ldap}->unbind();
   $this->{ldap} = undef;
   $this->{isConnected} = 0;
