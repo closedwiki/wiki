@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1304831036" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1336180940" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this extension are appreciated. Please update the extension page at
@@ -32,7 +32,7 @@ the "Refresh Cache" button below. Read the documentation of =MaxCacheAge= in the
 "Performance Settings" in <a href="%SCRIPTURLPATH{"configure"}%">configure</a>.
 
 %STARTSECTION{"refreshbutton"}%<!-- -->
-%BUTTON{
+%JQBUTTON{
   "%MAKETEXT{"%IF{
     "defined label" 
     then="%label%" 
@@ -41,7 +41,7 @@ the "Refresh Cache" button below. Read the documentation of =MaxCacheAge= in the
   icon="arrow_refresh" 
   href="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?refreshldap=on"
 }%
-%CLEAR%
+%JQCLEAR%
 <!-- -->%ENDSECTION{"refreshbutton"}%
 
 Tip: You can add this button on any page by adding
@@ -1147,11 +1147,12 @@ This work was partly sponsored by
    * [[http://www.testo.de][Testo]]
 
 |  Author: | Mateusz Ples, Michael Daum |
-|  Copyright&nbsp;&copy;: | 2006-2010 Michael Daum http://michaeldaumconsulting.com |
+|  Copyright: | &copy; 2006-2010 Michael Daum http://michaeldaumconsulting.com <br /> &copy; 2007-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Release: | 4.30 |
-|  Version: | 2011-05-07 |
+|  Release: | 4.31 |
+|  Version: | 2012-05-04 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-05-04: | TWikibug:Item6837: Fix broken refresh button; better error and debug reporting; doc improvements -- TWiki:Main.PeterThoeny |
 |  2011-05-07: | TWikibug:Item6701: Doc improvements -- TWiki:Main.PeterThoeny |
 |  16 Dec 2010: | implemented new =expand= feature of =GROUPINFO= found in newer TWikis |
 |  02 Dec 2010: | fixed glitch where IDs weren't extracted from the cache db |
