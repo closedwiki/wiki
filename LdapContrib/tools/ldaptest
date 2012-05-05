@@ -9,7 +9,7 @@
 
 use Net::LDAP;
 
-# usage: ldaptet 'ldap-query'
+# usage: ldaptest 'ldap-query'
 
 ## PLEASE MODIFIY #############################################
 
