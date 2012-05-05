@@ -1,6 +1,7 @@
-# Module of TWiki - The Free and Open Source Wiki, http://twiki.org/
+# Module for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2007-2010 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2007-2012 TWiki Contributors.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License

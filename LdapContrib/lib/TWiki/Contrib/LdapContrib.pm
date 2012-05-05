@@ -1,4 +1,4 @@
-# Module of TWiki Enterprisez Collaboration Platform, http://TWiki.org/
+# Module for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2006-2010 Michael Daum http://michaeldaumconsulting.com
 # Copyright (C) 2006-2012 TWiki Contributors.
