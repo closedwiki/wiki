@@ -1,4 +1,12 @@
 #!/usr/bin/perl -w
+#
+# TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2006-2012 TWiki Contributors.
+# All Rights Reserved. TWiki Contributors are listed in
+# the AUTHORS file in the root of this distribution.
+# NOTE: Please extend that file, not this notice.
+
 use Net::LDAP;
 
 # usage: ldaptet 'ldap-query'
@@ -34,7 +42,7 @@ if ($bindUser) {
   $mesg = $ldap->bind();
 }
 my $code = $mesg->code;
-$code && die "$code: ".$mesg->error;
+$code && die "Bind error, code $code, message: ".$mesg->error;
 $mesg = $ldap->search(
   filter=>$filter,
   base=>$baseDN,
@@ -42,7 +50,7 @@ $mesg = $ldap->search(
 );
 $code = $mesg->code;
 if ($code && $code != 4) {
-  die "$code: ".$mesg->error;
+  die "Search error, code: $code, message: ".$mesg->error;
 }
 
 my @entries = $mesg->entries;
