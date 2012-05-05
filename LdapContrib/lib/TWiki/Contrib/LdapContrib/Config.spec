@@ -266,4 +266,4 @@ $TWiki::cfg{Ldap}{PageSize} = 500;
 
 # **STRING 50**
 # Prevent certain names from being looked up in LDAP
-$TWiki::cfg{Ldap}{Exclude} = 'WikiGuest, ProjectContributor, RegistrationAgent, UnknownUser, AdminGroup, NobodyGroup, AdminUser, admin, guest';
+$TWiki::cfg{Ldap}{Exclude} = 'TWikiGuest, TWikiContributor, RegistrationAgent, UnknownUser, TWikiAdminGroup, NobodyGroup, TWikiAdminUser, admin, guest';
