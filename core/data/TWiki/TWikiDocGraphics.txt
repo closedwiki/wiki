@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1332824662" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1336521272" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -51,6 +51,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{food}% | =%<nop>ICON{food}%= | Food | gif | 16x16 |  |
 | %ICON{gear}% | =%<nop>ICON{gear}%= | Gear | gif | 16x16 |  |
 | %ICON{globe}% | =%<nop>ICON{globe}%= | Globe | gif | 16x16 |  |
+| %ICON{goal}% | =%<nop>ICON{goal}%= | Goal | gif | 16x16 |  |
 | %ICON{graduation}% | =%<nop>ICON{graduation}%= | Graduation | gif | 16x16 |  |
 | %ICON{hand}% | =%<nop>ICON{hand}%= | Pointing hand | gif | 16x16 |  |
 | %ICON{heart}% | =%<nop>ICON{heart}%= | Heart | gif | 16x16 |  |
@@ -64,6 +65,8 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{mechanics}% | =%<nop>ICON{mechanics}%= | Mechanics | gif | 16x16 |  |
 | %ICON{megaphone}% | =%<nop>ICON{megaphone}%= | Megaphone | gif | 16x16 |  |
 | %ICON{meeting}% | =%<nop>ICON{meeting}%= | Meeting | gif | 16x16 |  |
+| %ICON{milestone}% | =%<nop>ICON{milestone}%= | Milestone | gif | 16x16 |  |
+| %ICON{mission}% | =%<nop>ICON{mission}%= | Mission | gif | 16x16 |  |
 | %ICON{mobile}% | =%<nop>ICON{mobile}%= | Mobile | gif | 16x16 |  |
 | %ICON{more}% | =%<nop>ICON{more}%= | Read more | gif | 16x16 |  |
 | %ICON{more-small}% | =%<nop>ICON{more-small}%= | Read more | gif | 13x13 |  |
@@ -79,6 +82,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{process}% | =%<nop>ICON{process}%= | Process | gif | 16x16 |  |
 | %ICON{profile}% | =%<nop>ICON{profile}%= | Profile | gif | 16x16 |  |
 | %ICON{project}% | =%<nop>ICON{project}%= | Project | gif | 16x16 |  |
+| %ICON{project-plan}% | =%<nop>ICON{project-plan}%= | Project plan | gif | 16x16 |  |
 | %ICON{puzzle}% | =%<nop>ICON{puzzle}%= | Puzzle | gif | 16x16 |  |
 | %ICON{qrcode}% | =%<nop>ICON{qrcode}%= | QR Code | gif | 16x16 |  |
 | %ICON{question}% | =%<nop>ICON{question}%= | Question | gif | 16x16 |  |
@@ -97,6 +101,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{star-none}% | =%<nop>ICON{star-none}%= | Star (none) | gif | 16x16 |  |
 | %ICON{statistics}% | =%<nop>ICON{statistics}%= | Statistics | gif | 16x16 |  |
 | %ICON{stop}% | =%<nop>ICON{stop}%= | Stop | gif | 16x16 |  |
+| %ICON{strategy}% | =%<nop>ICON{strategy}%= | Strategy | gif | 16x16 |  |
 | %ICON{support}% | =%<nop>ICON{support}%= | Support | gif | 16x16 |  |
 | %ICON{switch}% | =%<nop>ICON{switch}%= | Switch | gif | 16x16 |  |
 | %ICON{target}% | =%<nop>ICON{target}%= | Target | gif | 16x16 |  |
@@ -115,6 +120,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{traffic-light}% | =%<nop>ICON{traffic-light}%= | Traffic light | gif | 16x16 |  |
 | %ICON{vcard}% | =%<nop>ICON{vcard}%= | VCard | gif | 16x16 |  |
 | %ICON{video}% | =%<nop>ICON{video}%= | Video | gif | 13x10 |  |
+| %ICON{vision}% | =%<nop>ICON{vision}%= | Vision | gif | 16x16 |  |
 | %ICON{warning}% | =%<nop>ICON{warning}%=, =%<nop>X%= | Warning, important | gif | 16x16 |  |
 | %ICON{watch}% | =%<nop>ICON{watch}%= | Watch | gif | 16x16 |  |
 | %ICON{wip}% | =%<nop>ICON{wip}%= | Work in progress, under construction | gif | 16x16 |  |
@@ -529,6 +535,7 @@ __Related Topics:__ VarICON, %CALC{$GET(icontopics)}%, TWikiDocGraphicsTemplate,
 
 __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 
+
 %META:FILEATTACHMENT{name="addon.gif" attr="h" comment="" date="1169565034" path="addon.gif" size="370" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="air.gif" attr="h" comment="" date="1169565034" path="air.gif" size="356" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="airplane.gif" attr="h" comment="" date="1236468594" path="airplane.gif" size="919" user="TWikiContributor" version=""}%
@@ -622,6 +629,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="gear.gif" attr="h" comment="" date="1169565034" path="gear.gif" size="596" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="gif.gif" attr="h" comment="" date="1169565034" path="gif.gif" size="374" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="globe.gif" attr="h" comment="" date="1169565034" path="globe.gif" size="601" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="goal.gif" attr="h" comment="" date="1336520496" path="goal.gif" size="999" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="go_back.gif" attr="h" comment="" date="1169565034" path="go_back.gif" size="235" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="go_end.gif" attr="h" comment="" date="1169565034" path="go_end.gif" size="240" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="go_fb.gif" attr="h" comment="" date="1169565034" path="go_fb.gif" size="242" user="TWikiContributor" version=""}%
@@ -706,7 +714,9 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="megaphone.gif" attr="h" comment="" date="1196729838" path="megaphone.gif" size="995" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="menu-down.gif" attr="h" comment="" date="1274419106" path="menu-down.gif" size="113" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="menu-right.gif" attr="h" comment="" date="1274419106" path="menu-right.gif" size="110" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="milestone.gif" attr="h" comment="" date="1336520496" path="milestone.gif" size="984" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="minus.gif" attr="h" comment="" date="1169565034" path="minus.gif" size="83" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="mission.gif" attr="h" comment="" date="1336520496" path="mission.gif" size="959" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="mobile.gif" attr="h" comment="" date="1193349525" path="mobile.gif" size="333" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="monospace.gif" attr="h" comment="" date="1169565034" path="monospace.gif" size="145" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="more-small.gif" attr="h" comment="" date="1169565034" path="more-small.gif" size="84" user="TWikiContributor" version=""}%
@@ -744,7 +754,8 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="processing-bg.gif" attr="h" comment="" date="1237421717" path="processing-bg.gif" size="1661" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="processing.gif" attr="h" comment="" date="1229216814" path="processing.gif" size="2537" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="profile.gif" attr="h" comment="" date="1258790911" path="profile.gif" size="980" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="project.gif" attr="h" comment="" date="1300514078" path="project.gif" size="211" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="project.gif" attr="h" comment="" date="1336520496" path="project.gif" size="998" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="project-plan.gif" attr="h" comment="" date="1336520496" path="project-plan.gif" size="211" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="proportional.gif" attr="h" comment="" date="1169565034" path="proportional.gif" size="137" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="ps.gif" attr="h" comment="" date="1169565034" path="ps.gif" size="362" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="psd.gif" attr="h" comment="" date="1169565034" path="psd.gif" size="369" user="TWikiContributor" version=""}%
@@ -785,6 +796,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="star-none.gif" attr="h" comment="" date="1260656213" path="star-none.gif" size="1003" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="statistics.gif" attr="h" comment="" date="1169565034" path="statistics.gif" size="118" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="stop.gif" attr="h" comment="" date="1169565034" path="stop.gif" size="159" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="strategy.gif" attr="h" comment="" date="1336520496" path="strategy.gif" size="998" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="stumbleupon.gif" attr="h" comment="" date="1262417730" path="stumbleupon.gif" size="380" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="support.gif" attr="h" comment="" date="1260335693" path="support.gif" size="1035" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="svg.gif" attr="h" comment="" date="1239336511" path="svg.gif" size="406" user="TWikiContributor" version=""}%
@@ -861,6 +873,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="vector.gif" attr="h" comment="" date="1239336511" path="vector.gif" size="365" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="video.gif" attr="h" comment="" date="1169565034" path="video.gif" size="329" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="viewtopic.gif" attr="h" comment="" date="1169565034" path="viewtopic.gif" size="118" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="vision.gif" attr="h" comment="" date="1336520496" path="vision.gif" size="988" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="vsd.gif" attr="h" comment="" date="1169565034" path="vsd.gif" size="373" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="warning.gif" attr="h" comment="" date="1169565034" path="warning.gif" size="215" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="watch.gif" attr="h" comment="" date="1169565034" path="watch.gif" size="237" user="TWikiContributor" version=""}%
