@@ -520,9 +520,10 @@ sub _linkToolTipInfo {
     $text =~ s/\$topic/<nop>$theTopic/g;
     $text =~ s/\$rev/1.$rev/g;
     $text =~ s/\$date/TWiki::Time::formatTime( $date )/ge;
-    $text =~ s/\$username/$users->getLoginName($user)/ge;       # 'jsmith'
-    $text =~ s/\$wikiname/$users->getWikiName($user)/ge;  # 'JohnSmith'
-    $text =~ s/\$wikiusername/$users->webDotWikiName($user)/ge; # 'Main.JohnSmith'
+    $text =~ s/\$username/$users->getLoginName($user)||'unknown'/ge;    # 'jsmith'
+    $text =~ s/\$wikiname/$users->getWikiName($user)||'UnknownUser'/ge;     # 'JohnSmith'
+    $text =~ s/\$wikiusername/$users->webDotWikiName($user)||$TWiki::cfg{UsersWebName}.'UnknownUser'/ge;
+                                                                            # 'Main.JohnSmith'
     if( $text =~ /\$summary/ ) {
         my $summary = $store->readTopicRaw( undef, $theWeb, $theTopic, undef );
         $summary = $this->makeTopicSummary( $summary, $theTopic, $theWeb );
