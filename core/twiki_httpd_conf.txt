@@ -1,12 +1,15 @@
-# Example httpd.conf file for TWiki.
+# Example twiki.conf file to configure Apache for TWiki.
 #
-# You are recommended to take a copy of this file and edit
-# the paths to match your installation. Then add:
-# include "/home/httpd/twiki/twiki_httpd.conf"
-# to the end of your main httpd.conf file.
-#
-# See also http://twiki.org/cgi-bin/view/TWiki/ApacheConfigGenerator
-# that helps you configure Apache
+# You can base your Apache configuration for TWiki on this example
+# file, but you are invited to use the Apache config generator at
+# http://twiki.org/cgi-bin/view/TWiki/ApacheConfigGenerator
+# to easily create an Apache conf file specific to your needs.
+# Copy the generated content into a twiki.conf file and put it into
+# the shared conf directory, typically at /etc/httpd/conf.d or
+# /etc/apache2/conf.d.
+
+# NOTE: If you use Apache 2.4 or later make sure to enable mod_cgid
+# in the primary apache configuration file.
 
 # The first parameter will be part of the URL to your installation e.g.
 # http://example.com/twiki/bin/view/...
@@ -50,6 +53,7 @@ BrowserMatchNoCase ^$ blockAccess
 #### Change the path to match your local installation
 <Directory "/home/httpd/twiki/bin">
 	AllowOverride None
+# NOTE: For Apache 2.4 and later use "Require all granted" instead of the next two lines:
 	Order Allow,Deny
 	Allow from all
 	Deny from env=blockAccess
@@ -71,21 +75,6 @@ BrowserMatchNoCase ^$ blockAccess
 	# Alternatively if your users are all known to be registered you may want
 	# to redirect them to the ResetPassword page.
 	# ErrorDocument 401 /twiki/bin/view/TWiki/ResetPassword
-
-# Limit access to configure to specific IP addresses and or users.
-# Make sure configure is not open to the general public.
-# The configure script is designed for administrators only.
-# The script itself and the information it reveals can be abused by
-# attackers if not properly protected against public access.
-# Replace JohnDoe with the login name of the administrator
-<FilesMatch "^configure.*">
-	SetHandler cgi-script
-	Order Deny,Allow
-	Deny from all
-	Allow from 127.0.0.1 192.168.1.10
-	Require user JohnDoe
-	Satisfy Any
-</FilesMatch>
 
 # When using Apache type login the following defines the TWiki scripts
 # that makes Apache ask the browser to authenticate. It is correct that
@@ -114,6 +103,8 @@ BrowserMatchNoCase ^$ blockAccess
     #Options FollowSymLinks
 	Options None
 	AllowOverride Limit
+# NOTE: For Apache 2.4 and later use "Require all granted" instead of the next two lines:
+	Order Allow,Deny
 	Allow from all
 	
 	# If you have PHP4 or PHP5 installed as Apache module make sure the directive below is enabled
