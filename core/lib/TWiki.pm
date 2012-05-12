@@ -258,6 +258,7 @@ BEGIN {
         'TMPL:P'          => \&TMPLP,
         TOPIC             => \&TOPIC,
         TOPICLIST         => \&TOPICLIST,
+        TOPICTITLE        => \&TOPICTITLE,
         URLENCODE         => \&ENCODE,
         URLPARAM          => \&URLPARAM,
         LANGUAGE          => \&LANGUAGE,
@@ -3526,6 +3527,21 @@ sub _handleWebTag {
         $theWeb =~ s/\$current/$current/go;  
     }
     return $theWeb;
+}
+
+sub TOPICTITLE {
+    my ( $this, $params, $topic, $web ) = @_;
+    # optional $params->{topic} can be "TopicName" or "Web.TopicName"
+    $topic = $params->{topic} if( $params->{topic} );
+    # normalize web and topic name
+    ( $web, $topic ) = $this->normalizeWebTopicName( $web, $topic );
+    my $text = $topic;
+    if( $this->{store}->topicExists( $web, $topic )) {
+        $text = $this->renderer->renderFORMFIELD( { _DEFAULT => "Title" }, $topic, $web )
+             || $this->{prefs}->getTopicPreferencesValue( "TITLE", $web, $topic )
+             || $topic;
+    }
+    return $text;
 }
 
 sub FORMFIELD {
