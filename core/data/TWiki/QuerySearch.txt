@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301947230" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1336883753" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %STARTINCLUDE%
 ---+ Query Search
@@ -20,6 +20,7 @@ in.
 All meta-data in a topic is referenced according to a simple plan.
  
    * =name= - name of the topic
+   * =topictitle= - title of the topic
    * =web= - name of the web the topic is within
    * =text= - the body text of the topic
    * =META:FILEATTACHMENT=
