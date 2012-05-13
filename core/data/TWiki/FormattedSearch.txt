@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1334783033" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1336874600" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %STARTINCLUDE%
 ---+ TWiki Formatted Search
@@ -36,6 +36,7 @@ Variables that can be used in the format string:
 | =$topic(<i>20</i>)= | Topic name, "<tt>- </tt>" hyphenated each 20 characters |
 | =$topic(<i>30, -&lt;br /&gt;</i>)= | Topic name, hyphenated each 30 characters with separator "<tt>-&lt;br /&gt;</tt>" |
 | =$topic(<i>40, ...</i>)= | Topic name, shortened to 40 characters with "<tt>...</tt>" indication |
+| =$topictitle= | Topic title, in order of sequence defined by: Form field named "Title", topic preference setting named TITLE, topic name |
 | =$parent= | Name of parent topic; empty if not set |
 | =$parent(<i>20</i>)= | Name of parent topic, same hyphenation/shortening like =$topic()= |
 | =$text= | Formatted topic text. In case of a =multiple="on"= search, it is the line found for each search hit. |
