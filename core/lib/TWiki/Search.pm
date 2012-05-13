@@ -852,7 +852,7 @@ sub searchWeb {
                 if( $format ) {
                     $out = $format;
                     $out =~ s/\$web/$web/gs;
-                    $out =~ s/\$topictitle/_getTopicTitle($this, $web, $topic)/ges;
+                    $out =~ s/\$topictitle/$meta->topicTitle()/ges;
                     $out =~ s/\$topic\(([^\)]*)\)/TWiki::Render::breakName( $topic, $1 )/ges;
                     $out =~ s/\$topic/$topic/gs;
                     $out =~ s/\$date/$revDate/gs;
@@ -1271,13 +1271,6 @@ sub displayFormField {
 
     return $meta->renderFormFieldForDisplay(
         $name, '$value', { break => $breakArgs, protectdollar => 1, showhidden => 1} );
-}
-
-# Returns the topic title
-sub _getTopicTitle {
-    my ( $this, $web, $topic ) = @_;
-    my $text = $this->{session}->TOPICTITLE( {}, $topic, $web );
-    return $text;
 }
 
 # Returns the topic revision info of the base version,
