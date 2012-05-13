@@ -161,7 +161,24 @@ Form field named "Title", topic preference setting named TITLE, topic name.
 sub topicTitle {
     my ($this, $val) = @_;
     if( defined($val) ) {
-        # FIXME: Set "Title" form field if exist, else set TITLE pref setting
+        my $field = $this->get( 'FIELD', 'Title' );
+        if( $field ) { 
+            $field->{value} = $val;
+            $this->putKeyed( 'FIELD', $field );
+        } else {
+            my $pref = $this->get( 'PREFERENCE', 'TITLE' );
+            if( defined($pref) ) {
+                $pref->{value} = $val;
+            } else {
+                $pref = {
+                    name =>  'TITLE',
+                    title => 'TITLE',
+                    value => $val,
+                    type =>  'Set'
+                };
+            }
+            $this->putKeyed( 'PREFERENCE', $pref );
+        }
     }
     my $title = $this->{_topic};
     my $field = $this->get( 'FIELD', 'Title' );
