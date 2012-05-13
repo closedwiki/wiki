@@ -151,6 +151,33 @@ sub topic {
 
 =pod
 
+---++ ObjectMethod topicTitle()
+
+Get/set the topic title. In order of sequence, the topic title is defined by:
+Form field named "Title", topic preference setting named TITLE, topic name.
+
+=cut
+
+sub topicTitle {
+    my ($this, $val) = @_;
+    if( defined($val) ) {
+        # FIXME: Set "Title" form field if exist, else set TITLE pref setting
+    }
+    my $title = $this->{_topic};
+    my $field = $this->get( 'FIELD', 'Title' );
+    if( $field ) {
+        $title = $field->{value};
+    } else {
+        my $pref = $this->get( 'PREFERENCE', 'TITLE' );
+        if( $pref ) { 
+            $title = $pref->{value};
+        }
+    }
+    return $title;
+}
+
+=pod
+
 ---++ ObjectMethod text([$text]) -> $text
 
 Get/set the topic body text. If $text is undef, gets the value, if it is

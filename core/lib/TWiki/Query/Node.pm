@@ -101,6 +101,10 @@ sub _getField {
             # Special accessor to compensate for lack of a topic
             # name anywhere in the saved fields of meta
             return $data->topic();
+        } elsif ($realField eq 'topictitle') {
+            # Special accessor to compensate for lack of a topic
+            # name anywhere in the saved fields of meta
+            return $data->topicTitle();
         } elsif ($realField eq 'text') {
             # Special accessor to compensate for lack of the topic text
             # name anywhere in the saved fields of meta
