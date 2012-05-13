@@ -3541,6 +3541,9 @@ sub TOPICTITLE {
              || $this->{prefs}->getTopicPreferencesValue( "TITLE", $web, $topic )
              || $topic;
     }
+    if( $params->{encode} ) {
+        $text = $this->ENCODE( { _DEFAULT => $text, type => $params->{encode} } );
+    }
     return $text;
 }
 
