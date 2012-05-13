@@ -3537,9 +3537,22 @@ sub TOPICTITLE {
     ( $web, $topic ) = $this->normalizeWebTopicName( $web, $topic );
     my $text = $topic;
     if( $this->{store}->topicExists( $web, $topic )) {
-        $text = $this->renderer->renderFORMFIELD( { _DEFAULT => "Title" }, $topic, $web )
-             || $this->{prefs}->getTopicPreferencesValue( "TITLE", $web, $topic )
-             || $topic;
+        my $meta = $this->inContext( 'can_render_meta' );
+        if( $meta && $web eq $this->{SESSION_TAGS}{BASEWEB} &&
+                $topic eq $this->{SESSION_TAGS}{BASETOPIC} ) {
+            # use meta data of base topic
+            $text = $meta->topicTitle();
+        } else {
+            # not base topic, need to read meta data to get topic title
+            try {
+                my $dummyText;
+                ( $meta, $dummyText ) = $this->{store}->readTopic(
+                      $this->{session}->{user}, $web, $topic );
+                $text = $meta->topicTitle() if( $meta );
+            } catch TWiki::AccessControlException with {
+                # Ignore access exceptions
+            };
+        }
     }
     if( $params->{encode} ) {
         $text = $this->ENCODE( { _DEFAULT => $text, type => $params->{encode} } );
