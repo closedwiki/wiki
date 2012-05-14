@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelGulitz" date="1334959730" format="1.1" version="1.4"}%
+%META:TOPICINFO{author="MichaelGulitz" date="1336640319" format="1.1" reprev="1.2" version="1.2"}%
 ---+!! <nop>%TOPIC%
 
 This plugin wraps functions from the TWiki API in REST functions. The intention is to offer external applications access to TWiki by implementing a REST interface.
@@ -7,6 +7,13 @@ The functions of this plugin include:
    * create and update topics
    * read topics and meta data
    * read and update form fields of a topic
+
+The intention is to enable other web based applications to connect to TWiki. By calling the REST functions of this plugins applications can read, change or create topics in TWiki.
+
+Topic content sent to the plugin for update or creation has to obey TWiki syntax - especially when providing special meta data like form fields, permissions, etc.
+
+Calling the REST functions always requires successful authorization.
+
 
 %TOC%
 
@@ -83,8 +90,8 @@ The function creates a new topic or updates an existing topic in the specified w
 | username | in | string | |
 | password | in | string | |
 | topic | in | string | name of the new topic; use full topic name: _web.topic_ |
-| text | in | string | topic content |
-| metatext | in | string | topic meta data |
+| text | in | string | topic content, including meta data |
+
 
 *Security*
 
@@ -133,10 +140,13 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
+   * One line description
+      * Set SHORTDESCRIPTION = Call TWiki API functions via TWiki REST functions.
+
 |  Plugin Author: | TWiki:Main/MichaelGulitz |
-|  Copyright: | © 2010, TWiki:Main/MichaelGulitz |
+|  Copyright: | © 2011, TWiki:Main/MichaelGulitz |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-05-05 (V1.000) |
+|  Plugin Version: | 2012-05-10 (V1.000) |
 |  Change History: | <!-- versions below in reverse order --> |
 |  2010-05-05: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |

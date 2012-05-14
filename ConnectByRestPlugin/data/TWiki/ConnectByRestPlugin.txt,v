@@ -1,27 +1,17 @@
-head	1.4;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
 
-1.4
-date	2011.09.05.21.05.34;	author MichaelGulitz;	state Exp;
-branches;
-next	1.3;
-
-1.3
-date	2010.12.23.08.16.59;	author MichaelGulitz;	state Exp;
-branches;
-next	1.2;
-
 1.2
-date	2010.11.05.15.48.55;	author MichaelGulitz;	state Exp;
+date	2012.05.10.08.58.39;	author MichaelGulitz;	state Exp;
 branches;
 next	1.1;
 
 1.1
-date	2010.11.05.15.48.55;	author MichaelGulitz;	state Exp;
+date	2012.05.10.08.34.19;	author MichaelGulitz;	state Exp;
 branches;
 next	;
 
@@ -31,25 +21,53 @@ desc
 @
 
 
-1.4
+1.2
 log
 @none
 @
 text
-@%META:TOPICINFO{author="MichaelGulitz" date="1315256734" format="1.1" reprev="1.4" version="1.4"}%
+@%META:TOPICINFO{author="MichaelGulitz" date="1336640319" format="1.1" reprev="1.2" version="1.2"}%
 ---+!! <nop>%TOPIC%
 
-This plugin wraps function from the TWiki API in REST functions. The intention is to offer external applications access to TWiki by implementing a REST interface.
+This plugin wraps functions from the TWiki API in REST functions. The intention is to offer external applications access to TWiki by implementing a REST interface.
 
-These functions of this plugin include:
-   * create new topics
-   * update existing topics
+The functions of this plugin include:
+   * create and update topics
    * read topics and meta data
    * read and update form fields of a topic
+
+The intention is to enable other web based applications to connect to TWiki. By calling the REST functions of this plugins applications can read, change or create topics in TWiki.
+
+Topic content sent to the plugin for update or creation has to obey TWiki syntax - especially when providing special meta data like form fields, permissions, etc.
+
+Calling the REST functions always requires successful authorization.
+
 
 %TOC%
 
 ---++ REST Functions
+
+---+++ Function Readtopic
+
+*Description*
+
+This function returns the content of a topic as a string.
+It reads the topic that was specified in the parameter _topic_ and returns the topic text as a string.
+
+*Parameters*
+
+| *Parameter* | *Direction* | *Type* | *Description* |
+| username | in | string | |
+| password | in | string | |
+| topic | in | string | use full topic name: _web.topic_ |
+| text | out | string | topic text |
+
+*Security*
+
+   * The function checks if the given user has read access to the topic.
+
+
+
 ---+++ Function Getmetastring
 
 *Description*
@@ -88,15 +106,11 @@ The function updates a single form field attached to a topic.
 
    * The functions checks if the given user has write access to the topic.
 
----+++ Function Readtopic
-
----+++ Function Updatetopic
-
----+++ Function Createtopic
+---+++ Function Savetopic
 
 *Description*
 
-The function creates a new topic in the specified web. An existing topic cannot be changed using this function!
+The function creates a new topic or updates an existing topic in the specified web.
 
 *Parameters*
 
@@ -104,12 +118,12 @@ The function creates a new topic in the specified web. An existing topic cannot 
 | username | in | string | |
 | password | in | string | |
 | topic | in | string | name of the new topic; use full topic name: _web.topic_ |
-| text | in | string | topic content |
-| metatext | in | string | topic meta data |
+| text | in | string | topic content, including meta data |
+
 
 *Security*
 
-   * The functions checks if the given user has write access to the web and if a topic with the same name already exists (that would lead to an error) .
+   * The functions checks if the given user has write access to the web.
 
 ---++ Syntax Rules
 
@@ -154,10 +168,13 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
+   * One line description
+      * Set SHORTDESCRIPTION = Call TWiki API functions via TWiki REST functions.
+
 |  Plugin Author: | TWiki:Main/MichaelGulitz |
-|  Copyright: | © 2010, TWiki:Main/MichaelGulitz |
+|  Copyright: | © 2011, TWiki:Main/MichaelGulitz |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-05-05 (V1.000) |
+|  Plugin Version: | 2012-05-10 (V1.000) |
 |  Change History: | <!-- versions below in reverse order --> |
 |  2010-05-05: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
@@ -173,50 +190,24 @@ __Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentation
 @
 
 
-1.3
-log
-@none
-@
-text
-@d1 1
-a1 1
-%META:TOPICINFO{author="MichaelGulitz" date="1293092219" format="1.1" reprev="1.3" version="1.3"}%
-d16 1
-d18 1
-d31 1
-d35 18
-d54 1
-d56 1
-d59 16
-d91 1
-a91 1
-      * Set SHORTDESCRIPTION = _one line description here_
-d109 2
-@
-
-
-1.2
-log
-@none
-@
-text
-@d1 1
-a1 1
-%META:TOPICINFO{author="MichaelGulitz" date="1288972135" format="1.1" version="1.2"}%
-d4 7
-a10 1
-Short description here
-d14 23
-@
-
-
 1.1
 log
 @none
 @
 text
 @d1 1
-a1 2
-%META:TOPICINFO{author="BaseUserMapping_333" date="1273053395" format="1.1" version="1.1"}%
-
+a1 1
+%META:TOPICINFO{author="MichaelGulitz" date="1334959730" format="1.1" version="1.4"}%
+d11 7
+d93 2
+a94 2
+| text | in | string | topic content |
+| metatext | in | string | topic meta data |
+d143 3
+d147 1
+a147 1
+|  Copyright: | © 2010, TWiki:Main/MichaelGulitz |
+d149 1
+a149 1
+|  Plugin Version: | 2010-05-05 (V1.000) |
 @
