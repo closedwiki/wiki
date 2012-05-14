@@ -104,8 +104,7 @@ The function creates a new topic or updates an existing topic in the specified w
 
 ---++ Examples
 
-   * 
-   * 
+   * See Sandbox.ConnectByRestPluginTest
 
 ---++ Plugin Settings
 
