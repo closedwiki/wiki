@@ -1,10 +1,8 @@
----++!! Tests for TWiki.ConnectByRestPlugin
+---+!! Tests for TWiki.ConnectByRestPlugin
 
-%I% _This Topic serves for Testing the REST Function of TWiki.ConnectByRestPlugin.
-You can also copy the HTML forms to any Webpage for testin from outside TWiki._
+%I% __This Topic serves for Testing the REST Functions of TWiki.ConnectByRestPlugin. You can also copy the HTML forms to any Webpage for testing from outside TWiki.__
 
 <literal>
-		<h1>Call REST Handler in TWiki</h1>
 		<h2>Using REST Fuctions from ConnectByRestPlugin</h2>
 		<p>
 			<b>Notice:</b>
@@ -71,7 +69,7 @@ You can also copy the HTML forms to any Webpage for testin from outside TWiki._
 									<tr><td>Topic </td><td><input name="topic" size="40" type="text"></td></tr>
 									<tr><td>Text </td><td><textarea name="text" cols="80" rows="10"></textarea></td></tr>
 									<tr><td>Meta String</td><td><input name="metatext" size="60" type="text"></td></tr>
-									<tr><td colspan="2"><input name="submit3" value="Call REST: create topic" type="submit"></td></tr>
+									<tr><td colspan="2"><input name="submit3" value="Call REST: Savetopic" type="submit"></td></tr>
 								</tbody>
 							</table>
 						</form>
