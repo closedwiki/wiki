@@ -1,0 +1,82 @@
+---++!! Tests for TWiki.ConnectByRestPlugin
+
+%I% _This Topic serves for Testing the REST Function of TWiki.ConnectByRestPlugin.
+You can also copy the HTML forms to any Webpage for testin from outside TWiki._
+
+<literal>
+		<h1>Call REST Handler in TWiki</h1>
+		<h2>Using REST Fuctions from ConnectByRestPlugin</h2>
+		<p>
+			<b>Notice:</b>
+		</p>
+		<ul>
+			 <li>Always use full topic names like <i>web.topic</i>!</li>
+			<li>TWiki target server of this example page is localhost! Customize this page to your needs.</li>
+		</ul>
+		<table cellpadding="5" cellspacing="1" width="80%" border="1">
+			<tbody>
+				<tr>
+					<td style="background-color: rgb(208, 208, 208);" valign="top">
+						<h3>Change a single form field of a topic</h3>
+						<form name="formupadate" action="http://localhost/twiki/bin/rest/ConnectByRestPlugin/updateformfield" method="post">
+							<table>
+								<tbody>
+									<tr><td>TWiki User</td><td><input name="username" size="40" type="text"></td></tr>
+									<tr><td>Password</td><td> <input name="password" size="40" type="password"></td></tr>
+									<tr><td>Topic</td><td> <input name="topic" size="40" type="text"></td></tr>
+									<tr><td>Formfield</td><td> <input name="fieldname" size="40" type="text"></td></tr>
+									<tr><td>New Value</td><td> <input name="newval" size="40" type="text"></td></tr>
+									<tr><td colspan="2"><input name="submit1" value="Call REST: Updateformfield" type="submit"></td></tr>
+								</tbody>
+							</table>
+						</form>
+					</td>
+					<td style="background-color: rgb(208, 208, 208);" valign="top">
+						<h3>Read Metastring</h3>
+						<form name="metastring" action="http://localhost/twiki/bin/rest/ConnectByRestPlugin/getmetastring" method="post">
+							<table>
+								<tbody>
+									<tr><td>TWiki User</td><td> <input name="username" value="MichaelGulitz" size="40" type="text"></td></tr>
+									<tr><td>Password</td><td> <input name="password" size="40" type="password"></td></tr>
+									<tr><td>Topic</td><td> <input name="topic" size="40" type="text"></td></tr>
+									<tr><td colspan="2"><input name="submit2" value="Call REST: Getmetastring" type="submit"></td></tr>
+								</tbody>
+							</table>
+						</form>
+					</td>
+				</tr>
+				<tr>
+					<td style="background-color: rgb(208, 208, 208);" colspan="2" valign="top">
+						<h3>Read topic text</h3>
+						<form name="metastring" action="http://localhost/twiki/bin/rest/ConnectByRestPlugin/readtopic" method="post">
+							<table>
+								<tbody>
+									<tr><td>TWiki User</td><td> <input name="username" value="MichaelGulitz" size="40" type="text"></td></tr>
+									<tr><td>Password</td><td> <input name="password" size="40" type="password"></td></tr>
+									<tr><td>Topic</td><td> <input name="topic" size="40" type="text"></td></tr>
+									<tr><td colspan="2"><input name="submit4" value="Call REST: Readtopic" type="submit"></td></tr>
+								</tbody>
+							</table>
+						</form>
+					</td>
+				</tr>
+				<tr>
+					<td style="background-color: rgb(208, 208, 208);" colspan="2" valign="top">
+						<h3>Create or update topic</h3>
+						<form name="topiccreate" action="http://localhost/twiki/bin/rest/ConnectByRestPlugin/savetopic" method="post">
+							<table>
+								<tbody>
+									<tr><td>TWiki User </td><td><input name="username" value="MichaelGulitz" size="40" type="text"></td></tr>
+									<tr><td>Password </td><td><input name="password" size="40" type="password"></td></tr>
+									<tr><td>Topic </td><td><input name="topic" size="40" type="text"></td></tr>
+									<tr><td>Text </td><td><textarea name="text" cols="80" rows="10"></textarea></td></tr>
+									<tr><td>Meta String</td><td><input name="metatext" size="60" type="text"></td></tr>
+									<tr><td colspan="2"><input name="submit3" value="Call REST: create topic" type="submit"></td></tr>
+								</tbody>
+							</table>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+</literal>
