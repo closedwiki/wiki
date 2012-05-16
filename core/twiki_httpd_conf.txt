@@ -8,8 +8,8 @@
 # the shared conf directory, typically at /etc/httpd/conf.d or
 # /etc/apache2/conf.d.
 
-# NOTE: If you use Apache 2.4 or later make sure to enable mod_cgid
-# in the primary apache configuration file.
+# NOTE: If you use Apache 2.4 or later make sure to enable CGI
+# in the primary apache configuration file (mod_cgi or mod_cgid).
 
 # The first parameter will be part of the URL to your installation e.g.
 # http://example.com/twiki/bin/view/...
