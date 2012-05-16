@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1329273494" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1337146694" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki CGI and Command Line Scripts
 
@@ -20,7 +20,7 @@ In the CGI environment parameters are passed to the scripts via the URL and URL 
 
 ---++++ Command-line
 
-You *must* be have the =twiki/bin= directory on the perl path to run the scripts from the command line. To avoid issues with file permissions, run the scripts as the web server user such as =nobody= or =www=.
+You *must* have the =twiki/bin= directory on the perl path to run the scripts from the command line. To avoid issues with file permissions, run the scripts as the web server user such as =nobody= or =www=.
 
 Parameters are passed on the command line using '-name' - for example,
 <verbatim>
