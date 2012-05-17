@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1331508471" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1337281397" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Templates
 
@@ -241,12 +241,19 @@ See TWikiScripts for information about all the other parameters to =edit=.
 #AutomaticallyGeneratedTopicname
 ---+++ Automatically Generated Topic Names
 
-For TWiki applications it is useful to be able to automatically generate unique topicnames, such as !BugID0001, !BugID0002, etc. You can add =AUTOINC&lt;n&gt;= to the topic name in the edit and save scripts, and it will be replaced with an auto-incremented number on topic save. =&lt;n&gt;= is a number starting from 0, and may include leading zeros. Leading zeros are used to zero-pad numbers so that auto-incremented topic names can sort properly. Deleted topics are not re-used to ensure uniqueness of topic names. That is, the auto-incremented number is always higher than the existing ones, even if there are gaps in the number sequence.
+For TWiki applications it is useful to be able to automatically generate unique topic names, such as !BugID0001, !BugID0002, etc. You can add =AUTOINC&lt;n&gt;= to the topic name in the edit and save scripts, and it will be replaced with an auto-incremented number on topic save. =&lt;n&gt;= is a number starting from 0, and may include leading zeros. Leading zeros are used to zero-pad numbers so that auto-incremented topic names can sort properly. Deleted topics are not re-used to ensure uniqueness of topic names. That is, the auto-incremented number is always higher than the existing ones, even if there are gaps in the number sequence.
 
 *Examples:*
    * =BugAUTOINC0= - creates topic names =Bug0=, =Bug1=, =Bug2=, ... (does not sort properly)
    * =ItemAUTOINC0000= - creates topic names =Item0000=, =Item0001=, =Item0002=, ... (sorts properly up to 9999)
    * =DocIDAUTOINC10001= - start with =DocID10001=, =DocID10002=, ... (sorts properly up to 99999; auto-links)
+
+Characters after =AUTOINC&lt;n&gt;= are preserved, but are not taken into account when calculating the next increment. Use this to create topic names that have a unique identifier (serial number) and a descriptive text.
+
+*Example:*
+   * =BlogAUTOINC0001-my-first-blog= - creates topic name =Blog0001-my-first-blog=
+   * =BlogAUTOINC0001-my-crazy-cats= - creates topic name =Blog0002-my-crazy-cats=
+   * =BlogAUTOINC0001-fondue-recipe= - creates topic name =Blog0003-fondue-recipe=
 
 Example link to create a new topic:%BR%
 <verbatim>
