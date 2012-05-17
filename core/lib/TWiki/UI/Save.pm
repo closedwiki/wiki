@@ -405,11 +405,11 @@ sub save {
         my $baseTopic = $topic;
         $store->clearLease( $web, $baseTopic );
         my $nameFilter = $topic;
-        $nameFilter =~ s/AUTOINC([0-9]+)/([0-9]+)/;
+        $nameFilter =~ s/AUTOINC([0-9]+).*/([0-9]+)/;
         my @list =
           sort{ $a <=> $b }
-            map{ s/^$nameFilter$/$1/; s/^0*([0-9])/$1/; $_ }
-              grep{ /^$nameFilter$/ }
+            map{ s/^$nameFilter.*/$1/; s/^0*([0-9])/$1/; $_ }
+              grep{ /^$nameFilter/ }
                 $store->getTopicNames( $web );
         if( scalar @list ) {
             # find last one, and increment by one
