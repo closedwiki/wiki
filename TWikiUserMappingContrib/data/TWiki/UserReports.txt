@@ -1,8 +1,41 @@
-%META:TOPICINFO{author="PeterThoeny" date="1338520015" format="1.1" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1338521120" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
-WORK IN PROGRESS.
+This page is for TWiki application developers. It contains sections with user reports that can be included by TWiki applications.
+
+%TOC%
+
+---++ user_list
+
+This section shows a simple list of registered users. The output is a comma-space delimited list of WikiWords of users (without web prefix), which can be used for other reports on this page.
+
+Usage:
+<pre>
+%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="user_list" limit="5" }%
+</pre>
+
+The =limit= parameter is optional; all users are returned if missing.
+
+Example:%BR%
+<noautolink>
+%INCLUDE{ "%SYSTEMWEB%.UserReports" section="user_list" limit="5" }%
+</noautolink>
+
+<div style="display:none;">
+<!--==============================================-->
+%STARTSECTION{user_list}%%SEARCH{
+ "META:FORM.*[U]serForm"
+ web="%USERSWEB%"
+ limit="%IF{ "defined 'limit'" then="%limit%" }%"
+ type="regex"
+ nonoise="on"
+ excludetopic="UserList*, *Template"
+ format="$topic"
+ separator=", "
+}%%ENDSECTION{user_list}%
+<!--==============================================-->
+</div>
 
 %INCLUDE{%USERSWEB%.UserListHeader}%
 
