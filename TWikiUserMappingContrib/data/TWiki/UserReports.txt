@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1338521120" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1338527505" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -6,18 +6,18 @@ This page is for TWiki application developers. It contains sections with user re
 
 %TOC%
 
----++ user_list
+---++ user_list section
 
 This section shows a simple list of registered users. The output is a comma-space delimited list of WikiWords of users (without web prefix), which can be used for other reports on this page.
 
-Usage:
+*Usage:*
 <pre>
 %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="user_list" limit="5" }%
 </pre>
 
-The =limit= parameter is optional; all users are returned if missing.
+   * The =limit= parameter is optional; all users are returned if missing.
 
-Example:%BR%
+*Example:* %BR%
 <noautolink>
 %INCLUDE{ "%SYSTEMWEB%.UserReports" section="user_list" limit="5" }%
 </noautolink>
@@ -37,6 +37,193 @@ Example:%BR%
 <!--==============================================-->
 </div>
 
+---++ business_card section
+
+This section shows a users in business card format.
+
+*Usage:*
+<pre>
+&lt;!-- include "business_card_css" once per page --&gt;
+%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_css" }%
+&lt;!-- multiple "business_card_start" ... "business_card_end" per page possible --&gt;
+%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_start" style="background-color: #f0f0e8;" }%
+  &lt;!-- show a user; multiple "business_card" per start...end blocks possible --&gt;
+  %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card" user="%WIKINAME%" }%
+  &lt;!-- show user list; include "business_card_list" for multiple users --&gt;
+  %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_list" users="UserOne, UserTwo, UserThree" }%
+%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_end" }%
+</pre>
+
+   * The =style= parameter of section ="business_card_start"= is optional.
+   * Specify the !WikiWord of a single user in =user= parameter of section ="business_card"=.
+   * Specify a list of !WikiWords of user in =users= parameter of section ="business_card_list"=.
+
+*Example:*
+%INCLUDE{ "%SYSTEMWEB%.UserReports" section="business_card_css" }%
+%INCLUDE{ "%SYSTEMWEB%.UserReports" section="business_card_start" style="background-color: #f0f0e8;" }%
+%INCLUDE{ "%SYSTEMWEB%.UserReports" section="business_card_list" users="%INCLUDE{ "%SYSTEMWEB%.UserReports" section="user_list" limit="2" }%" }%
+%INCLUDE{ "%SYSTEMWEB%.UserReports" section="business_card_end" }%
+
+<div style="display:none;">
+<!--==============================================-->
+%STARTSECTION{business_card_css}%<style type="text/css">
+.userBoxOuter {
+ float: left;
+ width: 410px;
+ height: 150px;
+ padding: 0;
+ margin: 0px 15px 15px 0px;
+ border: solid 1px #d0d0d8;
+ border-right-color: #707078;
+ border-bottom-color: #707078;
+ background-color: #fff;
+}
+.userBoxOuter :hover {
+ border: solid 1px #707078;
+ border-right-color: #303038;
+ border-bottom-color: #303038;
+}
+.userBoxContainer {
+ position: relative;
+ width: 100%;
+ height: 100%;
+ padding: 0;
+ margin: 0;
+ border: 0 none;
+}
+.userBoxContainer :hover {
+ border: 0 none;
+}
+.userBoxImage {
+ position: absolute;
+ width: 124px;
+ height: 124px;
+ top: 10px;
+ left: 10px;
+ padding: 3px;
+ background-color: #f0f0f8;
+ border: solid 1px #d0d0d8;
+ z-index: 0;
+ overflow: hidden;
+}
+.userBoxImageH {
+ height: 324px;
+ display: table;
+ width: 100%;
+ margin: -100px 0;
+}
+.userBoxImageP {
+ display: table-cell;
+ vertical-align: middle;
+ width: 100%;
+ text-align: center;
+}
+</style>
+<!--[if IE]><style type="text/css">
+.userBoxImageH {
+ position: relative;
+}
+.userBoxImageP {
+ position: absolute;
+ top: 50%;
+}
+.userBoxImageC {
+ position: relative;
+ top: -50%;
+}
+.userBoxImage :hover {
+ border: solid 1px #d0d0d8;
+}
+</style><![endif]-->
+<style type="text/css">
+.userBoxImgMask {
+ position: absolute;
+ width: 130px;
+ height: 3px;
+ top: 11px;
+ left: 11px;
+ background-color: #f0f0f8;
+ border: 0 none;
+ z-index: 0;
+}
+.userBoxInfo {
+ position: absolute;
+ width: 236px;
+ height: 130px;
+ top: 10px;
+ left: 160px;
+ margin: 0;
+ z-index: 0;
+ white-space: nowrap;
+ color: #333;
+ overflow: hidden;
+}
+.userBoxName {
+ font-weight: 600;
+ font-size: 120%;
+ color: #000;
+}
+.userBoxLinkC {
+ position: absolute;
+ width: 100%;
+ height: 100%;
+ top: 0;
+ left: 0;
+ padding: 0;
+ margin: 0;
+ z-index: 0;
+}
+.userBoxLink {
+ position: absolute;
+ width: 100%;
+ height: 100%;
+ top: 0;
+ left: 0;
+ z-index: 10;
+}
+</style>%ENDSECTION{business_card_css}%
+<!--==============================================-->
+%STARTSECTION{business_card_start}%<div style="padding:10px 15px 1px 15px; background-color:#f0f0f4; %IF{ "defined 'style'" then="%style%" }%">%ENDSECTION{business_card_start}%
+<!--==============================================-->
+%STARTSECTION{business_card_end}%<div style="clear:left;"></div></div>%ENDSECTION{business_card_end}%
+<!--==============================================-->
+%STARTSECTION{business_card_list}%%CALC{$LISTJOIN($sp, $LISTMAP($NOP(%)INCLUDE{ "%SYSTEMWEB%.UserReports" section="business_card" user="$item" }$NOP(%), %users%))}%%ENDSECTION{business_card_list}%
+<!--==============================================-->
+%STARTSECTION{business_card}%<noautolink>
+<div class="userBoxOuter">
+<div class="userBoxContainer">
+<div class="userBoxImage">
+<div class="userBoxImageH">
+<div class="userBoxImageP">
+<div class="userBoxImageC">
+<a href="%SCRIPTURLPATH{view}%/%USERSWEB%/%USER%"><img src="%IF{ "'%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%'!=''" then='%PUBURLPATH%/%USERSWEB%/%user%/%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%' else='%PUBURLPATH%/%USERSWEB%/UserProfileHeader/default-user-profile.jpg' }%" width="124" alt="" /></a>
+</div>
+</div>
+</div>
+</div>
+<div class="userBoxImgMask">
+</div>
+<div class="userBoxImgMask" style="top: 138px;">
+</div>
+<div class="userBoxInfo">
+<span class="userBoxName">%FORMFIELD{ "FirstName" topic="%USERSWEB%.%user%" }% %FORMFIELD{ "LastName" topic="%USERSWEB%.%user%" }%</span>
+%BR%
+%FORMFIELD{ "Titles" topic="%USERSWEB%.%user%" }%%IF{ "'%FORMFIELD{ "Titles" topic="%USERSWEB%.%user%" }%'!='' AND '%FORMFIELD{ "Department" topic="%USERSWEB%.%user%" }%'!=''" then=', '}% %FORMFIELD{ "Department" topic="%USERSWEB%.%user%" }%
+%BR%
+%FORMFIELD{ "Organization" topic="%USERSWEB%.%user%" }%, %FORMFIELD{ "Location" topic="%USERSWEB%.%user%" }%, %FORMFIELD{ "Country" topic="%USERSWEB%.%user%" }%
+%BR%
+%ICON{mail}% <nop>%FORMFIELD{ "Email" topic="%USERSWEB%.%user%" }% %IF{ "'%FORMFIELD{ "Telephone" topic="%USERSWEB%.%user%" }%'!=''" then='%BR% %ICON{phone}% %FORMFIELD{ "Telephone" topic="%USERSWEB%.%user%" }%' }% %IF{ "'%FORMFIELD{ "Mobile" topic="%USERSWEB%.%user%" }%'!=''" then='%BR% %ICON{mobile}% %FORMFIELD{ "Mobile" topic="%USERSWEB%.%user%" }%'
+ }%
+</div>
+<div class="userBoxLinkC">
+<a href="%SCRIPTURLPATH{view}%/%USERSWEB%/%user%"><span class="userBoxLink"></span></a>
+</div>
+</div>
+</div>
+</noautolink>%ENDSECTION{business_card}%
+<!--==============================================-->
+</div>
+
 %INCLUDE{%USERSWEB%.UserListHeader}%
 
--- TWiki:Main.PeterThoeny - 2012-05-31
+-- TWiki:Main.PeterThoeny - 2012-06-01
