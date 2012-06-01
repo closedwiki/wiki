@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1302769282" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1338535194" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarINCLUDE
 ---+++ INCLUDE{"page"} -- include other topic or web page
@@ -17,9 +17,10 @@
      | =literal="on"= | While using the =raw= option will indeed include the raw content, the included content will still be processed and rendered like regular topic content. To disable parsing of the included content, set the =literal= option to ="on"=. | disabled |
      | =disableremoveheaders="on"= | Bypass stripping headers from included HTML (everything until first =&lt;/head&gt;= tag) | disabled |
      | =disableremovescript="on"= | Bypass stripping all =&lt;script&gt;= tags from included HTML | disabled |
-     | =disableremovebody="on"= | Bypass stripping the =&lt;/body&gt;= tag and everything around over and below it| disabled |
+     | =disableremovebody="on"= | Bypass stripping the =&lt;/body&gt;= tag and everything around over and below it | disabled |
      | =disablecompresstags="on"= | Bypass replacing newlines in HTML tags with spaces. This compression step rewrites unmatched &lt;'s into =&amp;lt;= entities unless bypassed | disabled |
      | =disablerewriteurls="on"= | Bypass rewriting relative URLs into absolute ones | disabled |
+     | =disablefixlinks="on"= | Bypass fixing !WikiWord links if include is done across webs. Fixing links in included text such as from !SomeLink to !Otherweb.SomeLink is usually desirable so that links in included text still point to the same target | disabled |
      | =warn="off"= | Warn if topic include fails: Fail silently (if =off=); output default warning (if set to =on=); else, output specific text (use =$topic= for topic name) | =%<nop>INCLUDEWARNING%= [[TWikiPreferences][preferences]] setting |
      | =section="name"= | Includes only the specified named section, as defined in the included topic by the [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSTARTSECTION][STARTSECTION]] and [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENDSECTION][ENDSECTION]] variables. Nothing is shown if the named section does not exists. =section=""= is equivalent to not specifying a section | |
      | =PARAMONE="val 1"<br />PARAMTWO="val 2"= | Any other parameter will be defined as a variable within the scope of the included topic. The example parameters on the left will result in =%<nop>PARAMONE%= and =%<nop>PARAMTWO%= being defined within the included topic. A default value for a variable can be specified in the included topic in case the corresponding parameter is not specified, such as =%<nop>PARAMONE{ default="..." }%= | |
