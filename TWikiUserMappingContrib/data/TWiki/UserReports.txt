@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1338527505" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1338535767" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -24,7 +24,7 @@ This section shows a simple list of registered users. The output is a comma-spac
 
 <div style="display:none;">
 <!--==============================================-->
-%STARTSECTION{user_list}%%SEARCH{
+%STARTSECTION{"user_list" disablefixlinks="on"}%%SEARCH{
  "META:FORM.*[U]serForm"
  web="%USERSWEB%"
  limit="%IF{ "defined 'limit'" then="%limit%" }%"
@@ -187,7 +187,7 @@ This section shows a users in business card format.
 <!--==============================================-->
 %STARTSECTION{business_card_end}%<div style="clear:left;"></div></div>%ENDSECTION{business_card_end}%
 <!--==============================================-->
-%STARTSECTION{business_card_list}%%CALC{$LISTJOIN($sp, $LISTMAP($NOP(%)INCLUDE{ "%SYSTEMWEB%.UserReports" section="business_card" user="$item" }$NOP(%), %users%))}%%ENDSECTION{business_card_list}%
+%STARTSECTION{business_card_list}%%CALCULATE{$LISTJOIN($sp, $LISTMAP($NOP(%)INCLUDE{ "%SYSTEMWEB%.UserReports" section="business_card" user="$item" }$NOP(%), %users%))}%%ENDSECTION{business_card_list}%
 <!--==============================================-->
 %STARTSECTION{business_card}%<noautolink>
 <div class="userBoxOuter">
