@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1335862726" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1338538564" format="1.1" version="$Rev$"}%
 ---+ <nop>%WIKITOOLNAME% User List
 
 %INCLUDE{"UserListHeader"}%
@@ -14,11 +14,13 @@
  border-right-color: #707078;
  border-bottom-color: #707078;
  background-color: #fff;
+ box-shadow: 3px 3px 6px #bbb;
 }
 .userBoxOuter :hover {
  border: solid 1px #707078;
  border-right-color: #303038;
  border-bottom-color: #303038;
+ box-shadow: 3px 3px 6px #999;
 }
 .userBoxContainer {
  position: relative;
