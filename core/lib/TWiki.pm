@@ -3667,6 +3667,7 @@ sub INCLUDE {
       || isTrue( $this->{prefs}->getPreferencesValue( 'TOC_HIDE_IF_INCLUDED' ) );
     my $rev = $params->remove('rev');
     my $section = $params->remove('section');
+    my $dontFixLinks = $params->remove('dontfixlinks') || '';
 
     # no sense in considering an empty string as an unfindable section:
     undef $section if (defined($section) && $section eq '');
@@ -3765,9 +3766,9 @@ sub INCLUDE {
         # Rebuild the text from the interesting sections
         $text = '';
         foreach my $s ( @$sections ) {
-            if( $section && $s->{type} eq 'section' &&
-                  $s->{name} eq $section) {
+            if( $section && $s->{type} eq 'section' && $s->{name} eq $section) {
                 $text .= substr( $ntext, $s->{start}, $s->{end}-$s->{start} );
+                $dontFixLinks = 1 if( $s->{dontfixlinks} );
                 $interesting = 1;
                 last;
             } elsif( $s->{type} eq 'include' && !$section ) {
@@ -3819,7 +3820,7 @@ sub INCLUDE {
 
     # If needed, fix all 'TopicNames' to 'Web.TopicNames' to get the
     # right context so that links continue to work properly
-    if( $includedWeb ne $includingWeb ) {
+    if( $includedWeb ne $includingWeb && !$dontFixLinks ) {
         my $removed = {};
 
         $text = $this->renderer->forEachLine(
