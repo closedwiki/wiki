@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1338538414" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1338678743" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -6,16 +6,16 @@ This page is for TWiki application developers. It contains sections with user re
 
 %TOC%
 
----++ user_list section
+---++ Section user_list
 
-This section shows a simple list of registered users. The output is a comma-space delimited list of WikiWords of users (without web prefix), which can be used for other reports on this page.
+This section shows a simple list of registered users. The output is a comma-space delimited sorted list of WikiWords of users (without web prefix), which can be used for other reports on this page.
 
 *Usage:*
 <pre>
 %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="user_list" limit="5" }%
 </pre>
 
-   * The =limit= parameter is optional; all users are returned if missing.
+   * The optional =limit= parameter limits the number of users returned; all users are returned if missing.
 
 *Example:* %BR%
 <noautolink>
@@ -37,26 +37,35 @@ This section shows a simple list of registered users. The output is a comma-spac
 <!--==============================================-->
 </div>
 
----++ business_card section
+---++ Section business_card
 
-This section shows a users in business card format.
+<div style="float:right; width:439px; margin:0 0 10px 20px;">
+<img src="%ATTACHURLPATH%/business-card-example.png" alt="Business card example" width="439" height="174" />
+</div>
+Shows users in business card format. Several sections are provided:
 
-*Usage:*
+   * Section "business_card_css": Defines the style sheets of the business cards. Include it once per page
+   * Section "business_card_start": Defines the start of a set of business cards.
+      * Parameter =style=: Optional, overrides the css of the container div of business cards.
+   * Section "business_card": Shows a single business card.
+      * Parameter =user=: Specify the !WikiWord of a single user.
+   * Section "business_card_list": Shows a set of business cards.
+      * Parameter =users=: Specify a list of !WikiWords of users users. The list may be provided by including the "user_list" section.
+   * Section "business_card_end": Defines the end of a set of business cards.
+
+*Usage examples:*
 <pre>
-&lt;!-- include "business_card_css" once per page --&gt;
 %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_css" }%
-&lt;!-- multiple "business_card_start" ... "business_card_end" per page possible --&gt;
-%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_start" style="background-color: #f0f0e8;" }%
-  &lt;!-- show a user; multiple "business_card" per start...end blocks possible --&gt;
+
+%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_start" }%
   %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card" user="%WIKINAME%" }%
-  &lt;!-- show user list; include "business_card_list" for multiple users --&gt;
+  %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card" user="JaneSmith" }%
+%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_end" }%
+
+%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_start" style="background-color: #f0f0e8;" }%
   %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_list" users="UserOne, UserTwo, UserThree" }%
 %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_end" }%
 </pre>
-
-   * The =style= parameter of section ="business_card_start"= is optional.
-   * Specify the !WikiWord of a single user in =user= parameter of section ="business_card"=.
-   * Specify a list of !WikiWords of user in =users= parameter of section ="business_card_list"=.
 
 *Example:*
 %INCLUDE{ "%SYSTEMWEB%.UserReports" section="business_card_css" }%
@@ -229,3 +238,5 @@ This section shows a users in business card format.
 %INCLUDE{%USERSWEB%.UserListHeader}%
 
 -- TWiki:Main.PeterThoeny - 2012-06-01
+
+%META:FILEATTACHMENT{name="business-card-example.png" attachment="business-card-example.png" attr="h" comment="" date="1338678337" path="business-card-example.png" size="42890" user="TWikiContributor" version="1"}%
