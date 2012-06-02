@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1338678743" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1338679665" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -8,16 +8,18 @@ This page is for TWiki application developers. It contains sections with user re
 
 ---++ Section user_list
 
-This section shows a simple list of registered users. The output is a comma-space delimited sorted list of WikiWords of users (without web prefix), which can be used for other reports on this page.
+Show a simple list of registered users. The output is a comma-space delimited sorted list of WikiWords of users (without web prefix), which can be used as input for other reports on this page.
 
-*Usage:*
+   * Section "user_list": Show a list of users as comma-space delimited list of !WikiWords.
+      * Parameter =search=: Apply filter by searching all form fields, but not the main topic text. Optional; all users are returned if missing.
+      * Parameter =limit=: Limits the number of users returned. Optional; all users are returned if missing.
+
+*Usage example:*
 <pre>
-%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="user_list" limit="5" }%
+%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="user_list" search="jane" limit="5" }%
 </pre>
 
-   * The optional =limit= parameter limits the number of users returned; all users are returned if missing.
-
-*Example:* %BR%
+*Sample output:* %BR%
 <noautolink>
 %INCLUDE{ "%SYSTEMWEB%.UserReports" section="user_list" limit="5" }%
 </noautolink>
@@ -25,7 +27,7 @@ This section shows a simple list of registered users. The output is a comma-spac
 <div style="display:none;">
 <!--==============================================-->
 %STARTSECTION{"user_list" disablefixlinks="on"}%%SEARCH{
- "META:FORM.*[U]serForm"
+ "META:FORM.*[U]serForm%IF{ "defined 'search'" then=";META:FIELD.*value=.*$percntsearch$percnt" }%"
  web="%USERSWEB%"
  limit="%IF{ "defined 'limit'" then="%limit%" }%"
  type="regex"
@@ -67,7 +69,7 @@ Shows users in business card format. Several sections are provided:
 %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_end" }%
 </pre>
 
-*Example:*
+*Sample output:*
 %INCLUDE{ "%SYSTEMWEB%.UserReports" section="business_card_css" }%
 %INCLUDE{ "%SYSTEMWEB%.UserReports" section="business_card_start" style="background-color: #f0f0e8;" }%
 %INCLUDE{ "%SYSTEMWEB%.UserReports" section="business_card_list" users="%INCLUDE{ "%SYSTEMWEB%.UserReports" section="user_list" limit="2" }%" }%
