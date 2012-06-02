@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1333170525" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1338627098" format="1.1" version="$Rev$"}%
 ---+!! !TWikiUserMappingContrib
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -26,27 +26,29 @@ It includes the topics that are used when registering and managing users and gro
 
 It includes:
 
-   * Registration and user management topics
+   * Registration and user management topics:
       * %SYSTEMWEB%.TWikiRegistration
       * %SYSTEMWEB%.ResetPassword
       * %SYSTEMWEB%.ChangePassword
       * %SYSTEMWEB%.ChangeEmailAddress
       * %SYSTEMWEB%.BulkRegistration
       * %SYSTEMWEB%.BulkResetPassword
-   * Documentation topics
+   * Documentation topics:
       * %SYSTEMWEB%.ManagingUsers
       * %SYSTEMWEB%.UserToolsCategory
       * %SYSTEMWEB%.LoginName
-   * default groups and user
+   * User reports for TWiki applications:
+      * %SYSTEMWEB%.UserReports
+   * Default groups and user:
       * %USERSWEB%.NobodyGroup
       * %USERSWEB%.TWikiAdminGroup
       * %USERSWEB%.TWikiRegistrationAgent
-   * User lists
+   * User lists:
       * %USERSWEB%.UserList
       * %USERSWEB%.UserListHeader
       * %USERSWEB%.UserListByDateJoined
       * %USERSWEB%.UserListByLocation
-   * User and Group template files
+   * User and Group template files:
       * %SYSTEMWEB%.NewUserTemplate
       * %SYSTEMWEB%.UserForm
       * %SYSTEMWEB%.TWikiUsersTemplate
@@ -68,14 +70,16 @@ It's a part of the default distribution of the TWiki Core.
 ---++ Contrib Info
 
 |  Contrib Authors: | TWiki:Main.SvenDowideit, TWiki:Main.PeterThoeny, TWiki:TWiki.TWikiContributor |
-|  Copyright: | &copy; 2007 Sven Dowideit;%BR% &copy; 2007-2012 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2007 Sven Dowideit %BR% &copy; 2007-2012 TWiki:TWiki.PeterThoeny %BR% &copy; 2007-2012 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Contrib Version: | 2012-03-30 |
+|  Contrib Version: | 2012-06-02 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-03-30: | TWikibug:Item6863: Limit size of tag cloud in profile pages |
-|  2012-01-13: | TWikibug:Item6796: Fixing copyright year to 2012 |
-|  2011-09-23: | TWikibug:Item6796: Doc improvement on how to create custom user profile template |
-|  2011-09-23: | TWikibug:Item6814: Prevent excessive indexing of !UserProfileHeader by search engines |
+|  2012-06-02: | TWikibug:Item6879: Custom UserReports for TWiki applications -- TWiki:Main.PeterThoeny |
+|  2012-05-01: | TWikibug:Item6872: Show users as a list of business cards in %USERSWEB%.UserList -- TWiki:Main.PeterThoeny |
+|  2012-03-30: | TWikibug:Item6863: Limit size of tag cloud in profile pages -- TWiki:Main.PeterThoeny |
+|  2012-01-13: | TWikibug:Item6796: Fixing copyright year to 2012 -- TWiki:Main.PeterThoeny |
+|  2011-09-23: | TWikibug:Item6796: Doc improvement on how to create custom user profile template -- TWiki:Main.PeterThoeny |
+|  2011-09-23: | TWikibug:Item6814: Prevent excessive indexing of !UserProfileHeader by search engines -- TWiki:Main.PeterThoeny |
 |  2011-08-20: | TWikibug:Item6711: Fix for !UserList topic was listed in table of users; show "edit group" button above settings -- TWiki:Main.PeterThoeny |
 |  2011-08-12: | TWikibug:Item6792: Usability: Typo fix in registration page and change e-mail address page -- TWiki:Main.TorstenEriksson |
 |  2011-08-01: | TWikibug:Item6782: Usability: Add search filter to !UserList -- TWiki:Main.PeterThoeny |
@@ -96,4 +100,4 @@ It's a part of the default distribution of the TWiki Core.
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/TWikiUserMappingContribAppraisal |
 
 __Related topics:__ %SYSTEMWEB%.TWikiRegistration, %SYSTEMWEB%.ResetPassword, %SYSTEMWEB%.ChangePassword, %SYSTEMWEB%.ChangeEmailAddress, %SYSTEMWEB%.BulkRegistration, 
-%SYSTEMWEB%.BulkResetPassword, %SYSTEMWEB%.ManagingUsers, %SYSTEMWEB%.UserToolsCategory, %SYSTEMWEB%.LoginName, %USERSWEB%.NobodyGroup, %USERSWEB%.TWikiAdminGroup, %USERSWEB%.TWikiRegistrationAgent, %USERSWEB%.UserList, %USERSWEB%.UserListHeader, %USERSWEB%.UserListByDateJoined, %USERSWEB%.UserListByLocation, %SYSTEMWEB%.NewUserTemplate, %SYSTEMWEB%.UserForm, %SYSTEMWEB%.TWikiUsersTemplate, %SYSTEMWEB%.TWikiUserSetting, %USERSWEB%.ChangeProfilePicture, %USERSWEB%.TWikiGroupTemplate, %USERSWEB%.UserProfileHeader, %SYSTEMWEB%.TWikiContribs
+%SYSTEMWEB%.BulkResetPassword, %SYSTEMWEB%.ManagingUsers, %SYSTEMWEB%.UserToolsCategory, %SYSTEMWEB%.UserReports, %SYSTEMWEB%.LoginName, %USERSWEB%.NobodyGroup, %USERSWEB%.TWikiAdminGroup, %USERSWEB%.TWikiRegistrationAgent, %USERSWEB%.UserList, %USERSWEB%.UserListHeader, %USERSWEB%.UserListByDateJoined, %USERSWEB%.UserListByLocation, %SYSTEMWEB%.NewUserTemplate, %SYSTEMWEB%.UserForm, %SYSTEMWEB%.TWikiUsersTemplate, %SYSTEMWEB%.TWikiUserSetting, %USERSWEB%.ChangeProfilePicture, %USERSWEB%.TWikiGroupTemplate, %USERSWEB%.UserProfileHeader, %SYSTEMWEB%.TWikiContribs
