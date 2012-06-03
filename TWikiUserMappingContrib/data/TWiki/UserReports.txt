@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1338682970" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1338683822" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -6,7 +6,7 @@ This page is for TWiki application developers. It contains sections with user re
 
 %TOC%
 
----++ Section user_list
+---++ Section: user_list
 
 Show a simple list of registered users. The output is a comma-space delimited sorted list of WikiWords of users (without web prefix), which can be used as input for other reports on this page.
 
@@ -40,14 +40,14 @@ Show a simple list of registered users. The output is a comma-space delimited so
 <!--==============================================-->
 </div>
 
----++ Section profile_picture
+---++ Section: profile_picture
 
 Show the profile picture image of a user. A default image is returned in case the image is not defined in the Image form field of the user. The output is an =&lt;img /&gt;= tag that can be embedded in other tags such as links.
 
    * Section "profile_picture": Show the profile picture image of a user.
       * Parameter =user=: !WikiWord of user, required.
       * Parameter =width=: Width of image, optional.
-      * Parameter =height=: Height of image, optional. If width and height are missing, a height of 100 is used.
+      * Parameter =height=: Height of image, optional. The aspect ratio is preserved unless width and height are specified. If width and height are missing, a height of 100 is used.
       * Parameter =title=: Title parameter of img tag, optional.
 
 *Usage example:*
@@ -67,7 +67,7 @@ Show the profile picture image of a user. A default image is returned in case th
 <!--==============================================-->
 </div>
 
----++ Section business_card
+---++ Section: business_card
 
 <div style="float:right; width:439px; margin:0 0 10px 20px;">
 <img src="%ATTACHURLPATH%/business-card-example.png" alt="Business card example" width="439" height="174" />
