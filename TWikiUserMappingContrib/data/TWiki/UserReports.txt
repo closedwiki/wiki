@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1338679665" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1338682970" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -21,7 +21,8 @@ Show a simple list of registered users. The output is a comma-space delimited so
 
 *Sample output:* %BR%
 <noautolink>
-%INCLUDE{ "%SYSTEMWEB%.UserReports" section="user_list" limit="5" }%
+%SET{ "5users" value="%INCLUDE{ "%SYSTEMWEB%.UserReports" section="user_list" limit="5" }%" }%
+%GET{ "5users" }%
 </noautolink>
 
 <div style="display:none;">
@@ -36,6 +37,33 @@ Show a simple list of registered users. The output is a comma-space delimited so
  format="$topic"
  separator=", "
 }%%ENDSECTION{user_list}%
+<!--==============================================-->
+</div>
+
+---++ Section profile_picture
+
+Show the profile picture image of a user. A default image is returned in case the image is not defined in the Image form field of the user. The output is an =&lt;img /&gt;= tag that can be embedded in other tags such as links.
+
+   * Section "profile_picture": Show the profile picture image of a user.
+      * Parameter =user=: !WikiWord of user, required.
+      * Parameter =width=: Width of image, optional.
+      * Parameter =height=: Height of image, optional. If width and height are missing, a height of 100 is used.
+      * Parameter =title=: Title parameter of img tag, optional.
+
+*Usage example:*
+<pre>
+%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="profile_picture" user="%WIKINAME%" height="40" title="%WIKINAME%" }%
+</pre>
+
+*Sample output:* %BR%
+<noautolink>
+%INCLUDE{ "%SYSTEMWEB%.UserReports" section="profile_picture" user="%WIKINAME%" height="40" title="%WIKINAME%" }%
+%CALCULATE{$LISTJOIN($sp, $LISTMAP($NOP(%)INCLUDE{ "%SYSTEMWEB%.UserReports" section="profile_picture" user="$item" height="40" title="$item" }$NOP(%), %GET{ "5users" }%))}%
+</noautolink>
+
+<div style="display:none;">
+<!--==============================================-->
+%STARTSECTION{"profile_picture"}%<img src="%IF{ "'%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%'!=''" then='%PUBURLPATH%/%USERSWEB%/%user%/%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%' else='%PUBURLPATH%/%USERSWEB%/UserProfileHeader/default-user-profile.jpg' }%" %IF{ "defined 'width'" then="width=\"%width%\" " }%%IF{ "defined 'height'" then="height=\"%height%\" " }%%IF{ "NOT defined 'width' AND NOT defined 'height'" then="height=\"100\" " }%alt="%user%" title="%IF{ "defined 'title'" then="%title%" }%" border="0" />%ENDSECTION{"profile_picture"}%
 <!--==============================================-->
 </div>
 
@@ -209,7 +237,7 @@ Shows users in business card format. Several sections are provided:
 <div class="userBoxImageH">
 <div class="userBoxImageP">
 <div class="userBoxImageC">
-<a href="%SCRIPTURLPATH{view}%/%USERSWEB%/%USER%"><img src="%IF{ "'%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%'!=''" then='%PUBURLPATH%/%USERSWEB%/%user%/%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%' else='%PUBURLPATH%/%USERSWEB%/UserProfileHeader/default-user-profile.jpg' }%" width="124" alt="" /></a>
+<a href="%SCRIPTURLPATH{view}%/%USERSWEB%/%USER%"><img src="%IF{ "'%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%'!=''" then='%PUBURLPATH%/%USERSWEB%/%user%/%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%' else='%PUBURLPATH%/%USERSWEB%/UserProfileHeader/default-user-profile.jpg' }%" width="124" alt="" border="0" /></a>
 </div>
 </div>
 </div>
