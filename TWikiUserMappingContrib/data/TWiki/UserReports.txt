@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1338703555" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1338704058" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -70,7 +70,7 @@ Show the profile picture image of a user. A default image is returned in case th
 ---++ Section: small_box
 
 <div style="float:right; width:439px; margin:0 0 10px 20px;">
-<img src="%ATTACHURLPATH%/box-small-example.png" alt="Small box example" width="439" height="113" />
+<img src="%ATTACHURLPATH%/small-box-example.png" alt="Small box example" width="439" height="113" />
 </div>
 Shows small user boxes. Several sections are provided:
 
@@ -319,4 +319,4 @@ Shows users in business card format. Several sections are provided:
 -- TWiki:Main.PeterThoeny - 2012-06-02
 
 %META:FILEATTACHMENT{name="business-card-example.png" attachment="business-card-example.png" attr="h" comment="" date="1338678337" path="business-card-example.png" size="42890" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="box-small-example.png" attachment="box-small-example.png" attr="h" comment="" date="1338702962" path="box-small-example.png" size="28472" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="small-box-example.png" attachment="small-box-example.png" attr="h" comment="" date="1338702962" path="small-box-example.png" size="28472" user="TWikiContributor" version="1"}%
