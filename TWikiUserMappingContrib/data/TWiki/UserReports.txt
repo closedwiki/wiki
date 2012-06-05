@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1338866766" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1338870395" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -338,13 +338,13 @@ Show a selector to pick a user, for use in HTML forms.
 
 <div style="display:none;">
 <!--==============================================-->
-%STARTSECTION{select_one_user}%<select name="%name%"> <option></option> %CALCULATE{$SET(selected_sp, $LISTJOIN($sp, %selected%))$LISTJOIN($sp, $LISTMAP(<option value='$item' $IF($FIND($item, $GET(selected_sp)), selected='selected')>$PROPERSPACE($item)</option>, %IF{ "defined 'users'" then="%users%" else="$percntINCLUDE{ \"%SYSTEMWEB%.UserReports\" section=\"user_list\" }$percnt" }%))}% </select>%ENDSECTION{select_one_user}%
+%STARTSECTION{select_one_user}%<select name="%name%"> <option></option> %CALCULATE{$SET(selected_sp, $LISTJOIN($sp, %selected%))$LISTJOIN($sp, $LISTMAP(<option value='$item' $IF($FIND($item, $GET(selected_sp)), selected='selected')>$PROPERSPACE($item)</option>, %IF{ "defined 'users'" then="%users%" else="%IF{ "'%GET{UserReports_all_users}%'=''" then="$percntSET{ \"UserReports_all_users\" value=\"$percntINCLUDE{ $quot%SYSTEMWEB%.UserReports$quot section=$quotuser_list$quot }$percnt\" }$percnt" }%%GET{UserReports_all_users}%" }%))}% </select>%ENDSECTION{select_one_user}%
 <!--==============================================-->
 </div>
 
 %INCLUDE{%USERSWEB%.UserListHeader}%
 
--- TWiki:Main.PeterThoeny - 2012-06-02
+-- TWiki:Main.PeterThoeny - 2012-06-04
 
 %META:FILEATTACHMENT{name="business-card-example.png" attachment="business-card-example.png" attr="h" comment="" date="1338678337" path="business-card-example.png" size="42890" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="small-box-example.png" attachment="small-box-example.png" attr="h" comment="" date="1338702962" path="small-box-example.png" size="28472" user="TWikiContributor" version="1"}%
