@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1338855812" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1338866766" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -322,17 +322,12 @@ Show a selector to pick a user, for use in HTML forms.
    * Section "select_one_user": Selector to pick a user.
       * Parameter =name=: Name of form field, required.
       * Parameter =selected=: !WikiWord name of a user, optional.
-      * Parameter =users=: Specify a list of !WikiWords of users, required. The list may be provided by including the "user_list" section.
+      * Parameter =users=: Specify a list of !WikiWords of users, optional. The list may be provided by including the "user_list" section. All registered users are shown if the parameter is missing.
 
 *Usage example:*
 <pre>
 &lt;form&gt;
-%<nop>INCLUDE{
- "%<nop>SYSTEMWEB%.UserReports" section="select_one_user"
- selected="%WIKINAME%"
- name="Owner"
- users="%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="user_list" }%"
-}%
+%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="select_one_user" name="Owner" selected="%WIKINAME%" }%
 &lt;/form&gt;
 </pre>
 
@@ -343,7 +338,7 @@ Show a selector to pick a user, for use in HTML forms.
 
 <div style="display:none;">
 <!--==============================================-->
-%STARTSECTION{select_one_user}%<select name="%name%"> <option></option> %CALC{$SET(selected_sp, $LISTJOIN($sp, %selected%))$LISTJOIN($sp, $LISTMAP(<option value='$item' $IF($FIND($item, $GET(selected_sp)), selected='selected')>$PROPERSPACE($item)</option>, %users%))}% </select>%ENDSECTION{select_one_user}%
+%STARTSECTION{select_one_user}%<select name="%name%"> <option></option> %CALCULATE{$SET(selected_sp, $LISTJOIN($sp, %selected%))$LISTJOIN($sp, $LISTMAP(<option value='$item' $IF($FIND($item, $GET(selected_sp)), selected='selected')>$PROPERSPACE($item)</option>, %IF{ "defined 'users'" then="%users%" else="$percntINCLUDE{ \"%SYSTEMWEB%.UserReports\" section=\"user_list\" }$percnt" }%))}% </select>%ENDSECTION{select_one_user}%
 <!--==============================================-->
 </div>
 
