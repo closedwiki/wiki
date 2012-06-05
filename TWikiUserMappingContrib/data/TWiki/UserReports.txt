@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1338704058" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1338855812" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -21,8 +21,9 @@ Show a simple list of registered users. The output is a comma-space delimited so
 
 *Sample output:* %BR%
 <noautolink>
-%SET{ "5users" value="%INCLUDE{ "%SYSTEMWEB%.UserReports" section="user_list" limit="5" }%" }%
-%GET{ "5users" }%
+%SET{ "500_users" value="%INCLUDE{ "%SYSTEMWEB%.UserReports" section="user_list" limit="500" }%" }%
+%SET{ "5_users" value="%INCLUDE{ "%SYSTEMWEB%.UserReports" section="user_list" limit="5" }%" }%
+%GET{ "5_users" }%
 </noautolink>
 
 <div style="display:none;">
@@ -58,7 +59,7 @@ Show the profile picture image of a user. A default image is returned in case th
 *Sample output:* %BR%
 <noautolink>
 %INCLUDE{ "%SYSTEMWEB%.UserReports" section="profile_picture" user="%WIKINAME%" height="40" title="%WIKINAME%" }%
-%CALCULATE{$LISTJOIN($sp, $LISTMAP($NOP(%)INCLUDE{ "%SYSTEMWEB%.UserReports" section="profile_picture" user="$item" height="40" title="$item" }$NOP(%), %GET{ "5users" }%))}%
+%CALCULATE{$LISTJOIN($sp, $LISTMAP($NOP(%)INCLUDE{ "%SYSTEMWEB%.UserReports" section="profile_picture" user="$item" height="40" title="$item" }$NOP(%), %GET{ "5_users" }%))}%
 </noautolink>
 
 <div style="display:none;">
@@ -100,7 +101,7 @@ Shows small user boxes. Several sections are provided:
 %INCLUDE{ "%SYSTEMWEB%.UserReports" section="small_box_css" }%
 %INCLUDE{ "%SYSTEMWEB%.UserReports" section="small_box_start" }%
 %INCLUDE{ "%SYSTEMWEB%.UserReports" section="small_box" user="%WIKINAME%" }%
-%INCLUDE{ "%SYSTEMWEB%.UserReports" section="small_box_list" users="%GET{ "5users" }%" }%
+%INCLUDE{ "%SYSTEMWEB%.UserReports" section="small_box_list" users="%GET{ "5_users" }%" }%
 %INCLUDE{ "%SYSTEMWEB%.UserReports" section="small_box_end" }%
 </noautolink>
 
@@ -131,7 +132,7 @@ Shows users in business card format. Several sections are provided:
    * Section "business_card": Shows a single business card.
       * Parameter =user=: Specify the !WikiWord of a single user.
    * Section "business_card_list": Shows a set of business cards.
-      * Parameter =users=: Specify a list of !WikiWords of users users. The list may be provided by including the "user_list" section.
+      * Parameter =users=: Specify a list of !WikiWords of users. The list may be provided by including the "user_list" section.
    * Section "business_card_end": Defines the end of a set of business cards.
 
 *Usage examples:*
@@ -311,6 +312,38 @@ Shows users in business card format. Several sections are provided:
 </div>
 </div>
 </noautolink>%ENDSECTION{business_card}%
+<!--==============================================-->
+</div>
+
+---++ Section: select_one_user
+
+Show a selector to pick a user, for use in HTML forms.
+
+   * Section "select_one_user": Selector to pick a user.
+      * Parameter =name=: Name of form field, required.
+      * Parameter =selected=: !WikiWord name of a user, optional.
+      * Parameter =users=: Specify a list of !WikiWords of users, required. The list may be provided by including the "user_list" section.
+
+*Usage example:*
+<pre>
+&lt;form&gt;
+%<nop>INCLUDE{
+ "%<nop>SYSTEMWEB%.UserReports" section="select_one_user"
+ selected="%WIKINAME%"
+ name="Owner"
+ users="%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="user_list" }%"
+}%
+&lt;/form&gt;
+</pre>
+
+*Sample output:* %BR%
+<form>
+%INCLUDE{ "%SYSTEMWEB%.UserReports" section="select_one_user" name="Owner" selected="%WIKINAME%" users="%GET{ "500_users" }%" }%
+</form>
+
+<div style="display:none;">
+<!--==============================================-->
+%STARTSECTION{select_one_user}%<select name="%name%"> <option></option> %CALC{$SET(selected_sp, $LISTJOIN($sp, %selected%))$LISTJOIN($sp, $LISTMAP(<option value='$item' $IF($FIND($item, $GET(selected_sp)), selected='selected')>$PROPERSPACE($item)</option>, %users%))}% </select>%ENDSECTION{select_one_user}%
 <!--==============================================-->
 </div>
 
