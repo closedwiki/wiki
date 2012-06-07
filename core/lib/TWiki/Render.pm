@@ -919,6 +919,7 @@ sub renderFORMFIELD {
 
                 if (length $value) {
                     $text = $format;
+                    $text =~ s/\$value\(\s*([^\)]*)\s*\)/breakName( $value, $1 )/ges;
                     $text =~ s/\$value/$value/go;
                 } elsif ( defined $default ) {
                     $text = $default;
