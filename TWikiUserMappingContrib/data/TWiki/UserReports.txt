@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1338870395" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1339050587" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -22,7 +22,7 @@ Show a simple list of registered users. The output is a comma-space delimited so
 *Sample output:* %BR%
 <noautolink>
 %SET{ "500_users" value="%INCLUDE{ "%SYSTEMWEB%.UserReports" section="user_list" limit="500" }%" }%
-%SET{ "5_users" value="%INCLUDE{ "%SYSTEMWEB%.UserReports" section="user_list" limit="5" }%" }%
+%SET{ "5_users" value="%CALCULATE{$LISTTRUNCATE(5, %GET{500_users}%)}%" }%
 %GET{ "5_users" }%
 </noautolink>
 
@@ -344,7 +344,7 @@ Show a selector to pick a user, for use in HTML forms.
 
 %INCLUDE{%USERSWEB%.UserListHeader}%
 
--- TWiki:Main.PeterThoeny - 2012-06-04
+-- TWiki:Main.PeterThoeny - 2012-06-06
 
 %META:FILEATTACHMENT{name="business-card-example.png" attachment="business-card-example.png" attr="h" comment="" date="1338678337" path="business-card-example.png" size="42890" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="small-box-example.png" attachment="small-box-example.png" attr="h" comment="" date="1338702962" path="small-box-example.png" size="28472" user="TWikiContributor" version="1"}%
