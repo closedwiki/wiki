@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="AaronWalker" date="1339092395" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarPING
+---+++ PING{ host="..." } -- ping a host
+   * Syntax: =%<nop>PING{ host="www.google.com" }%=
+   * Supported attributes:
+     | *Attribute* | *Comment* | *Default* |
+     | =host="..."= | Host name or IP address | (required) |
+     | =wait="..."= | Time, in seconds, to wait for a ping response  | ="5"= |
+     | =format="..."= | Format of output.  Use the variables =$host= for the host and $result for the result (*1* for success, *0* for failure)  | For success: ="%<nop>GREEN%<i>host</i>%<nop>ENDCOLOR%"= %BR% For failure: ="%<nop>RED%<i>host</i>%<nop>ENDCOLOR%"= |
+   * Example: =%<nop>PING{ host="www.google.com" wait="2" format}%=

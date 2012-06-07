@@ -41,59 +41,55 @@ sub new {
 # =========================
 sub VarPING
 {
-    my ( $this, $session, $params, $topic, $web ) = @_;
-    TWiki::Func::writeDebug( "- PingPlugin enter VarPING" ) if $this->{Debug};
+	my ( $this, $session, $params, $topic, $web ) = @_;
+	TWiki::Func::writeDebug( "- PingPlugin enter VarPING" ) if $this->{Debug};
 
-    my $ret = '';
-    my $format = '';
-    my $hold = '';
-    my $host = $params->{host};
-    &TWiki::Func::writeDebug( "- ${pluginName}::VarPING() host: $host" ) if $this->{Debug};
-    return '' unless( $host );
-    my $wait = $params->{wait} || 5;
-    &TWiki::Func::writeDebug( "- ${pluginName}::VarPING() wait: $wait" ) if $this->{Debug};
+	my $ret = '';
+	my $format = '';
+	my $hold = '';
+	my $host = $params->{host};
+	&TWiki::Func::writeDebug( "- ${pluginName}::VarPING() host: $host" ) if $this->{Debug};
+	return '' unless( $host );
+	my $wait = $params->{wait} || 5;
+	&TWiki::Func::writeDebug( "- ${pluginName}::VarPING() wait: $wait" ) if $this->{Debug};
 
-    if( defined $params->{format} ) {
-        $format = $params->{format};
-    } else {
-        $format = "%\$color%\$host%ENDCOLOR%";
-    }
-    &TWiki::Func::writeDebug( "- ${pluginName}::VarPING() format: $format" ) if $this->{Debug};
+	if( defined $params->{format} ) {
+		$format = $params->{format};
+	} else {
+		$format = "%\$ppdefcolorvar%\$host%ENDCOLOR%";
+	}
+	&TWiki::Func::writeDebug( "- ${pluginName}::VarPING() format: $format" ) if $this->{Debug};
 
-    unless ($wait =~ /^-?[0-9]+$/)
-    {
-        return qq(%RED% PING{host="$host" wait="$wait"} : Wait value not a number %ENDCOLOR%);
-    }
+	unless ($wait =~ /^-?[0-9]+$/)
+	{
+		return qq(%RED% PING{host="$host" wait="$wait"} : Wait value not a number %ENDCOLOR%);
+	}
 
-    # PING CODE
-    $p = Net::Ping->new();
-    if ( $p->ping($host, $wait) )
-    {
-	$result = "1";
-        $color = "GREEN";
-        $hold = $format;
-        $hold =~ s/\$color/$color/g;
-        $hold =~ s/\$host/$host/g;
-        $hold =~ s/\$result/$result/g;
-        $ret = "$hold";
-    }
-    else
-    {
-	$result = "0";
-        $color = "RED";
-        $hold = $format;
-        $hold =~ s/\$color/$color/g;
-        $hold =~ s/\$host/$host/g;
-        $hold =~ s/\$result/$result/g;
-        $ret = "$hold";
-    }
+	# PING CODE
+	$p = Net::Ping->new();
+	if ( $p->ping($host, $wait) )
+	{
+		$result = "1";
+		$ppdefcolorvar = "GREEN";
+	} else {
+		$result = "0";
+		$ppdefcolorvar = "RED";
+	}
 
-    $p->close();
+	$hold = $format;
+	$hold =~ s/\$ppdefcolorvar/$ppdefcolorvar/g;
+	$hold =~ s/\$host/$host/g;
+	$hold =~ s/\$result/$result/g;
+	$hold =~ s/\$percnt/%/g;
+	$hold =~ s/\$dollar/\$/g;
+	$ret = "$hold";
 
-    #$ret = TWiki::Func::expandCommonVariables($ret, $topic, $web);
-    $ret = &TWiki::Func::expandCommonVariables($ret);
+	$p->close();
 
-    return $ret;
+	#$ret = TWiki::Func::expandCommonVariables($ret, $topic, $web);
+	$ret = &TWiki::Func::expandCommonVariables($ret);
+
+	return $ret;
 }
 
 # =========================

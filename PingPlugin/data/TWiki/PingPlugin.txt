@@ -1,35 +1,75 @@
----+!! !PingPlugin
-<!--
-One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = Ping a host and get a response
--->
-%SHORTDESCRIPTION%
+%META:TOPICINFO{author="AaronWalker" date="1339092093" format="1.1" reprev="1.3" version="1.3"}%
+%META:TOPICPARENT{name="Sandbox.PluginDevelopment"}%
+---+!! <nop>%TOPIC%
+
+This plugin provides ability to ping hostnames and IP addresses.
 
 %TOC%
 
----++ Usage
+------
 
----++ Examples
+---++ Syntax Rules
 
----++ Installation Instructions
+%INCLUDE{"VarPING"}%
 
-%$INSTALL_INSTRUCTIONS%
+---++ =PING= Examples
+
+---+++!! Basic Usage
+<verbatim>
+%PING{ host="www.google.com" wait="1" }%
+</verbatim>
+%PING{ host="www.google.com" wait="1" }%
+
+<verbatim>
+%PING{ host="irs.gov" wait="1" }%
+</verbatim>
+%PING{ host="irs.gov" wait="1" }%
+
+<verbatim>
+%PING{ host="www.yahoo.com" wait="1" format="$host result is $result" }%
+</verbatim>
+%PING{ host="www.yahoo.com" wait="1" format="$host result is $result" }%
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Loop over successive elements of a list, or a range of numbers.
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 1
+
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Test if the installation was successful:
+      * _enter samples here_
 
 ---++ Plugin Info
 
-Many thanks to the following sponsors for supporting this work:
-   * Acknowledge any sponsors here
-
-|  Plugin Author(s): | |
-|  Copyright: | &copy; |
-|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Plugin Version: | %$VERSION% |
+|  Plugin Author: | TWiki:Main.MagnusLewisSmith |
+|  Plugin Version: | 28 Sep 2005 (V1.000) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  Dependencies: | %$DEPENDENCIES% |
-|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/PingPlugin |
-|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/PingPluginDev |
-|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/PingPluginAppraisal |
+|  28 Sep 2005: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
+-- TWiki:Main.MagnusLewisSmith - 28 Sep 2005
