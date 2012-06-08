@@ -127,6 +127,10 @@ $TWiki::cfg{Ldap}{NormalizeWikiNames} = 1;
 # Enable/disable normalization of login names
 $TWiki::cfg{Ldap}{NormalizeLoginNames} = 0;
 
+# **BOOLEAN**
+# Make login case sensitive
+$TWiki::cfg{Ldap}{CaseSensitiveLogin} = 0;
+
 # **STRING**
 # Alias old !WikiNames to new account. This is a comma separated list of
 # "OldName=NewName" values.
