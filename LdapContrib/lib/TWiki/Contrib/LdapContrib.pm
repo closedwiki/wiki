@@ -30,7 +30,7 @@ use TWiki::Plugins ();
 use vars qw($VERSION $RELEASE %sharedLdapContrib);
 
 $VERSION = '$Rev: 10335 (2012-05-05) $';
-$RELEASE = '4.32';
+$RELEASE = '4.33';
 
 =pod
 
@@ -175,6 +175,7 @@ sub new {
     normalizeWikiName=>$TWiki::cfg{Ldap}{NormalizeWikiNames},
     normalizeLoginName=>$TWiki::cfg{Ldap}{NormalizeLoginNames},
     normalizeGroupName=>$TWiki::cfg{Ldap}{NormalizeGroupNames},
+    caseSensitiveLogin=>$TWiki::cfg{Ldap}{CaseSensitiveLogin},
 
     loginFilter=>$TWiki::cfg{Ldap}{LoginFilter} || 'objectClass=posixAccount',
 
@@ -251,6 +252,8 @@ sub new {
     unless defined $this->{normalizeLoginName};
   $this->{normalizeGroupName} = $TWiki::cfg{Ldap}{NormalizeGroupName} 
     unless defined $this->{normalizeGroupName};
+  $this->{caseSensitiveLogin} = $TWiki::cfg{Ldap}{CaseSensitiveLogin}
+    unless defined $this->{caseSensitiveLogin};
 
   @{$this->{wikiNameAttributes}} = split(/\s*,\s*/, $this->{wikiNameAttribute});
 
@@ -1066,6 +1069,7 @@ sub cacheUserFromEntry {
 
   # 2. normalize
   $loginName = $this->normalizeLoginName($loginName) if $this->{normalizeLoginName};
+  $loginName = lc( $loginName ) unless $this->{caseSensitiveLogin};
   return 0 if $this->{excludeMap}{$loginName};
 
   # construct the wikiName
@@ -1735,6 +1739,8 @@ sub getWikiNameOfLogin {
 
   #writeDebug("called getWikiNameOfLogin($loginName)");
 
+  $loginName = lc( $loginName ) unless $this->{caseSensitiveLogin};
+
   $data ||= $this->{data};
 
   unless ($this->{preCache}) {
@@ -1817,6 +1823,7 @@ sub getDnOfLogin {
   my ($this, $loginName, $data) = @_;
 
   return unless $loginName;
+  $loginName = lc( $loginName ) unless $this->{caseSensitiveLogin};
 
   $data ||= $this->{data};
 
@@ -1918,6 +1925,7 @@ sub checkCacheForLoginName {
   my %unknownNames = ();
   
   return 0 unless($loginName);
+  $loginName = lc( $loginName ) unless $this->{caseSensitiveLogin};
 
   #writeDebug("called checkCacheForLoginName($loginName)");
 
