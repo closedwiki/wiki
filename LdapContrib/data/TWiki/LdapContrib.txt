@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1338339982" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1339144558" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this extension are appreciated. Please update the extension page at
@@ -1149,7 +1149,7 @@ This work was partly sponsored by
 |  Release: | 4.33 |
 |  Version: | 2012-06-07 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2011-06-07: | TWikibug:Item6878: Add {Ldap}{CaseSensitiveLogin} setting and logic -- TWiki:Main.PeterThoeny |
+|  2012-06-07: | TWikibug:Item6878: Add {Ldap}{CaseSensitiveLogin} setting and logic -- TWiki:Main.PeterThoeny |
 |  2012-05-05: | TWikibug:Item6837: Add new ldapdump utility; fix broken refresh button; better error and debug reporting; fix {Ldap}{Exclude} list; doc improvements -- TWiki:Main.PeterThoeny |
 |  2011-05-07: | TWikibug:Item6701: Doc improvements -- TWiki:Main.PeterThoeny |
 |  16 Dec 2010: | implemented new =expand= feature of =GROUPINFO= found in newer TWikis |
