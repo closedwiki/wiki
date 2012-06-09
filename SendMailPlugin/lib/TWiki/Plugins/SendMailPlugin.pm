@@ -73,8 +73,8 @@ sub _SENDMAIL {
                     || $params->{bcc}  || '' );
     my $subject   = TWiki::Func::decodeFormatTokens( $params->{subject}
                     || 'SendMailPlugin Note: For subject specify subject="..." parameter' );
-    my $text      = TWiki::Func::decodeFormatTokens( $params->{text}
-                    || 'SendMailPlugin Note: For e-mail body specify text="..." parameter' );
+    my $plain     = TWiki::Func::decodeFormatTokens( $params->{plaintext} || $params->{text} || '' );
+    my $html      = TWiki::Func::decodeFormatTokens( $params->{htmltext}  || '' );
     my $onSuccess = TWiki::Func::decodeFormatTokens( $params->{onsuccess} || '' );
     my $onError   = TWiki::Func::decodeFormatTokens( $params->{onerror}   || '$error' );
 
@@ -82,8 +82,48 @@ sub _SENDMAIL {
     $email   .= "To: $to\n";
     $email   .= "CC: $cc\n"   if( $cc  && $cc  !~ /^disable$/i );
     $email   .= "BCC: $bcc\n" if( $bcc && $bcc !~ /^disable$/i );
-    $email   .= "Subject: $subject\n\n";
-    $email   .= "$text\n";
+    $email   .= "Subject: $subject\n";
+    if( $plain && $html ) {
+        # MIME multi-part e-mail
+        $email .=
+            "MIME-Version: 1.0\n"
+          . "Content-Type: multipart/alternative; boundary=\"_=_TWiki_MuIti_Part_B0undary\"\n"
+          . "\n"
+          . "This is a multi-part message in MIME format.\n"
+          . "--_=_TWiki_MuIti_Part_B0undary\n"
+          . "Content-Type: text/plain; charset=iso-8859-1; format=flowed\n"
+          . "Content-Transfer-Encoding: 8bit\n"
+          . "\n"
+          . "$plain\n"
+          . "--_=_TWiki_MuIti_Part_B0undary\n"
+          . "Content-Type: text/html; charset=iso-8859-1\n"
+          . "Content-Transfer-Encoding: 8bit\n"
+          . "\n"
+          . "$html\n"
+          . "--_=_TWiki_MuIti_Part_B0undary--\n";
+    } elsif( $html ) {
+        # html only e-mail
+        $email .=
+            "Content-Type: text/html; charset=iso-8859-1\n"
+          . "Content-Transfer-Encoding: 8bit\n"
+          . "\n"
+          . "$html\n";
+    } elsif( $plain ) {
+        # plain text e-mail
+        $email .=
+            "Content-Type: text/plain; charset=iso-8859-1; format=flowed\n"
+          . "Content-Transfer-Encoding: 8bit\n"
+          . "\n"
+          . "$plain\n";
+    } else {
+        # help message in plain text
+        $email .=
+            "Content-Type: text/plain; charset=iso-8859-1; format=flowed\n"
+          . "Content-Transfer-Encoding: 8bit\n"
+          . "\n"
+          . 'SendMailPlugin Note: For e-mail body specify a text="..." parameter, '
+          . 'and possibly a htmltext="..." parameter with HTML message.' . "\n";
+    }
     if( $debug ) {
         TWiki::Func::writeDebug( "TWiki::Plugins::SendMailPlugin e-mail:" );
         TWiki::Func::writeDebug( "===( START )=============" );
