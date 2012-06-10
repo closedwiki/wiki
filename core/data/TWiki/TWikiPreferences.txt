@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1328754331" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1339314078" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -243,6 +243,14 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
    * Default template type:
       * Set COMMENTPLUGIN_DEFAULT_TYPE = above
 -->
+
+#ParameterizedVariables
+---++ Parameterized Variables
+
+ParameterizedVariables for global use are defined here.
+
+   * UserReports variable, documented in VarUSERREPORT:
+      * Set USERREPORT = %INCLUDE{ "%SYSTEMWEB%.UserReports" section="%action%" %IF{ "'%limit{ default="" }%'!=''" then="limit=\"%limit%\"" }% %IF{ "'%user{ default="" }%'!=''" then="user=\"%user%\"" }% %IF{ "'%users{ default="" }%'!=''" then="users=\"%users%\"" }% %IF{ "'%selected{ default="" }%'!=''" then="selected=\"%selected%\"" }% %IF{ "'%height{ default="" }%'!=''" then="height=\"%height%\"" }% %IF{ "'%width{ default="" }%'!=''" then="width=\"%width%\"" }% %IF{ "'%ENCODE{ "%title{ default="" }%" type="entity" }%'!=''" then="title=\"%title%\"" }% %IF{ "'%name{ default="" }%'!=''" then="name=\"%name%\"" }% %IF{ "'%ENCODE{ "%style{ default="" }%" type="entity" }%'!=''" then="style=\"%style%\"" }% }%
 
 #RenderingShortcuts
 ---++ Rendering Shortcuts Settings
