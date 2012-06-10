@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1339050587" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1339314435" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -16,12 +16,12 @@ Show a simple list of registered users. The output is a comma-space delimited so
 
 *Usage example:*
 <pre>
-%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="user_list" search="jane" limit="5" }%
+%<nop>USERREPORT{ action="user_list" search="jane" limit="5" }%
 </pre>
 
 *Sample output:* %BR%
 <noautolink>
-%SET{ "500_users" value="%INCLUDE{ "%SYSTEMWEB%.UserReports" section="user_list" limit="500" }%" }%
+%SET{ "500_users" value="%USERREPORT{ action="user_list" limit="500" }%" }%
 %SET{ "5_users" value="%CALCULATE{$LISTTRUNCATE(5, %GET{500_users}%)}%" }%
 %GET{ "5_users" }%
 </noautolink>
@@ -53,12 +53,12 @@ Show the profile picture image of a user. A default image is returned in case th
 
 *Usage example:*
 <pre>
-%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="profile_picture" user="%WIKINAME%" height="40" title="%WIKINAME%" }%
+%<nop>USERREPORT{ action="profile_picture" user="%WIKINAME%" height="40" title="%WIKINAME%" }%
 </pre>
 
 *Sample output:* %BR%
 <noautolink>
-%INCLUDE{ "%SYSTEMWEB%.UserReports" section="profile_picture" user="%WIKINAME%" height="40" title="%WIKINAME%" }%
+%USERREPORT{ action="profile_picture" user="%WIKINAME%" height="40" title="%WIKINAME%" }%
 %CALCULATE{$LISTJOIN($sp, $LISTMAP($NOP(%)INCLUDE{ "%SYSTEMWEB%.UserReports" section="profile_picture" user="$item" height="40" title="$item" }$NOP(%), %GET{ "5_users" }%))}%
 </noautolink>
 
@@ -86,23 +86,23 @@ Shows small user boxes. Several sections are provided:
 
 *Usage example:*
 <pre>
-%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="small_box_css" }%
-%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="small_box_start" }%
-  %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="small_box" user="%WIKINAME%" }%
-  %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="small_box" user="JaneSmith" }%
-%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="small_box_end" }%
-%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="small_box_start" style="background-color: #f0f0e8;" }%
-  %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="small_box_list" users="UserOne, UserTwo, UserThree" }%
-%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="small_box_end" }%
+%<nop>USERREPORT{ action="small_box_css" }%
+%<nop>USERREPORT{ action="small_box_start" }%
+  %<nop>USERREPORT{ action="small_box" user="%WIKINAME%" }%
+  %<nop>USERREPORT{ action="small_box" user="JaneSmith" }%
+%<nop>USERREPORT{ action="small_box_end" }%
+%<nop>USERREPORT{ action="small_box_start" style="background-color: #f0f0e8;" }%
+  %<nop>USERREPORT{ action="small_box_list" users="UserOne, UserTwo, UserThree" }%
+%<nop>USERREPORT{ action="small_box_end" }%
 </pre>
 
 *Sample output:* %BR%
 <noautolink>
-%INCLUDE{ "%SYSTEMWEB%.UserReports" section="small_box_css" }%
-%INCLUDE{ "%SYSTEMWEB%.UserReports" section="small_box_start" }%
-%INCLUDE{ "%SYSTEMWEB%.UserReports" section="small_box" user="%WIKINAME%" }%
-%INCLUDE{ "%SYSTEMWEB%.UserReports" section="small_box_list" users="%GET{ "5_users" }%" }%
-%INCLUDE{ "%SYSTEMWEB%.UserReports" section="small_box_end" }%
+%USERREPORT{ action="small_box_css" }%
+%USERREPORT{ action="small_box_start" }%
+%USERREPORT{ action="small_box" user="%WIKINAME%" }%
+%USERREPORT{ action="small_box_list" users="%GET{ "5_users" }%" }%
+%USERREPORT{ action="small_box_end" }%
 </noautolink>
 
 <div style="display:none;">
@@ -137,21 +137,21 @@ Shows users in business card format. Several sections are provided:
 
 *Usage examples:*
 <pre>
-%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_css" }%
-%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_start" }%
-  %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card" user="%WIKINAME%" }%
-  %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card" user="JaneSmith" }%
-%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_end" }%
-%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_start" style="background-color: #f0f0e8;" }%
-  %<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_list" users="UserOne, UserTwo, UserThree" }%
-%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="business_card_end" }%
+%<nop>USERREPORT{ action="business_card_css" }%
+%<nop>USERREPORT{ action="business_card_start" }%
+  %<nop>USERREPORT{ action="business_card" user="%WIKINAME%" }%
+  %<nop>USERREPORT{ action="business_card" user="JaneSmith" }%
+%<nop>USERREPORT{ action="business_card_end" }%
+%<nop>USERREPORT{ action="business_card_start" style="background-color: #f0f0e8;" }%
+  %<nop>USERREPORT{ action="business_card_list" users="UserOne, UserTwo, UserThree" }%
+%<nop>USERREPORT{ action="business_card_end" }%
 </pre>
 
 *Sample output:*
-%INCLUDE{ "%SYSTEMWEB%.UserReports" section="business_card_css" }%
-%INCLUDE{ "%SYSTEMWEB%.UserReports" section="business_card_start" style="background-color: #f0f0e8;" }%
-%INCLUDE{ "%SYSTEMWEB%.UserReports" section="business_card_list" users="%INCLUDE{ "%SYSTEMWEB%.UserReports" section="user_list" limit="2" }%" }%
-%INCLUDE{ "%SYSTEMWEB%.UserReports" section="business_card_end" }%
+%USERREPORT{ action="business_card_css" }%
+%USERREPORT{ action="business_card_start" style="background-color: #f0f0e8;" }%
+%USERREPORT{ action="business_card_list" users="%USERREPORT{ action="user_list" limit="2" }%" }%
+%USERREPORT{ action="business_card_end" }%
 
 <div style="display:none;">
 <!--==============================================-->
@@ -327,13 +327,13 @@ Show a selector to pick a user, for use in HTML forms.
 *Usage example:*
 <pre>
 &lt;form&gt;
-%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="select_one_user" name="Owner" selected="%WIKINAME%" }%
+%<nop>USERREPORT{ action="select_one_user" name="Owner" selected="%WIKINAME%" }%
 &lt;/form&gt;
 </pre>
 
 *Sample output:* %BR%
 <form>
-%INCLUDE{ "%SYSTEMWEB%.UserReports" section="select_one_user" name="Owner" selected="%WIKINAME%" users="%GET{ "500_users" }%" }%
+%USERREPORT{ action="select_one_user" name="Owner" selected="%WIKINAME%" users="%GET{ "500_users" }%" }%
 </form>
 
 <div style="display:none;">
