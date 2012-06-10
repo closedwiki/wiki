@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1339314435" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1339315075" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -341,6 +341,12 @@ Show a selector to pick a user, for use in HTML forms.
 %STARTSECTION{select_one_user}%<select name="%name%"> <option></option> %CALCULATE{$SET(selected_sp, $LISTJOIN($sp, %selected%))$LISTJOIN($sp, $LISTMAP(<option value='$item' $IF($FIND($item, $GET(selected_sp)), selected='selected')>$PROPERSPACE($item)</option>, %IF{ "defined 'users'" then="%users%" else="%IF{ "'%GET{UserReports_all_users}%'=''" then="$percntSET{ \"UserReports_all_users\" value=\"$percntINCLUDE{ $quot%SYSTEMWEB%.UserReports$quot section=$quotuser_list$quot }$percnt\" }$percnt" }%%GET{UserReports_all_users}%" }%))}% </select>%ENDSECTION{select_one_user}%
 <!--==============================================-->
 </div>
+
+__Note to Maintainer:__
+
+   * This topic has user report sections, which can be used by TWiki application developers.
+   * This topic uses more user friendly ParameterizedVariables =%<nop>USERREPORT{ action="..." ... }%= instead of the more verbose parameterized include =%<nop>INCLUDE{ "%<nop>SYSTEMWEB%.UserReports" section="..." ... }%=.
+   * If you add a section to this topic, or add a parameter to a section, make sure to keep the parameterized variables settings in TWikiPreferences#ParameterizedVariables in sync.
 
 %INCLUDE{%USERSWEB%.UserListHeader}%
 
