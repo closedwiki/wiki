@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1331022911" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1339533348" format="1.1" version="$Rev$"}%
 ---+!! Publish Web Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -100,10 +100,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
                * =%<nop>LCWEB%= - lower case name of the publish web (preferred over mixed case)
                * =%<nop>SKIN%= - name of the publish skin 
          * Manual setup: Instead of using the configure script you can add/customize these =twiki/lib/LocalSite.cfg= settings: %BR%
+           =$TWiki::cfg{Plugins}{PublishWebPlugin}{Enabled} = 1;= %BR%
            =$TWiki::cfg{Plugins}{PublishWebPlugin}{TemplatePath} = '';= %BR%
            =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishPath} = '/path/to/apache/html';= %BR%
            =$TWiki::cfg{Plugins}{PublishWebPlugin}{AttachPath} = '_publish';= %BR%
-           =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishUrlPath} = '';=
+           =$TWiki::cfg{Plugins}{PublishWebPlugin}{PublishUrlPath} = '';= %BR%
+           =$TWiki::cfg{Plugins}{PublishWebPlugin}{Debug} = 0;=
       * Configuration on shell level:
          * Create the directory indicated in the ={PublishPath}= setting if needed
          * Create the directory indicated in the ={AttachPath}= setting (relative to ={PublishPath}=)
@@ -134,10 +136,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Set SHORTDESCRIPTION = Maintain a static website collaboratively in a TWiki web
 
 |  Plugin Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2006-2012 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] <br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2006-2012 Peter Thoeny, Twiki, Inc. <br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-03-06 |
+|  Plugin Version: | 2012-06-12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-06-12: | TWikibug:Item6837: Small doc fix in configure settings -- TWiki:Main.RayMikkelson | 
 |  2012-03-06: | TWikibug:Item6857: Remove topic preferences, use only configure settings and PUBLISHWEBPLUGIN_* settings | 
 |  2012-03-05: | TWikibug:Item6856: Publish multiple webs feature, useful for virtual host publishing -- TWiki:Main.JohnVestrum |
 |  2012-02-28: | TWikibug:Item6853: Add demo publishing web called !DemoWebsite to plugin; add Config.spec for easier configuration |

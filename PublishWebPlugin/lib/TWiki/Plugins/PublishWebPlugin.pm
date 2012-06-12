@@ -25,7 +25,7 @@ use strict;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-03-06';
+our $RELEASE = '2012-06-12';
 
 our $SHORTDESCRIPTION = 'Maintain a static website collaboratively in a TWiki web';
 our $NO_PREFS_IN_TOPIC = 1;
