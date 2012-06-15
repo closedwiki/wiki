@@ -230,6 +230,7 @@ BEGIN {
         INTURLENCODE      => \&INTURLENCODE_deprecated,
         LANGUAGES         => \&LANGUAGES,
         MAKETEXT          => \&MAKETEXT,
+	MDREPO            => \&MDREPO,
         META              => \&META,
         METASEARCH        => \&METASEARCH,
         NOP               => \&NOP,
@@ -1571,6 +1572,11 @@ sub new {
     $this->{users} = new TWiki::Users( $this );
     $this->{remoteUser} = $this->{users}->{remoteUser};
 
+    if( $TWiki::cfg{MdrepoStore} && $TWiki::cfg{MdrepoDir} && $TWiki::cfg{MdrepoTables} ) {
+	require TWiki::Mdrepo;
+	$this->{mdrepo} = new TWiki::Mdrepo( $this );
+    }
+
     # Make %ENV safer, preventing hijack of the search path
     # SMELL: can this be done in a BEGIN block? Or is the environment
     # set per-query?
@@ -1887,6 +1893,7 @@ sub finish {
     $this->{renderer}->finish() if $this->{renderer};
     $this->{net}->finish() if $this->{net};
     $this->{store}->finish() if $this->{store};
+    $this->{mdrepo}->finish() if $this->{mdrepo};
     $this->{search}->finish() if $this->{search};
     $this->{attach}->finish() if $this->{attach};
     $this->{security}->finish() if $this->{security};
@@ -4617,6 +4624,56 @@ sub GROUPS {
 sub CRYPTTOKEN {
     my ($this ) = @_;
     return $this->{users}->{loginManager}->createCryptToken();
+}
+
+sub _getMdrepoField {
+    my ($rec, $recId, $fieldName) = @_;
+    if ( $fieldName eq "_" ) {
+	return $recId;
+    }
+    elsif ( $fieldName eq "__" ) {
+	return join(" ", map { "$_=$rec->{$_}" } sort keys %$rec);
+    }
+    return $rec->{$fieldName} || "";
+}
+
+sub MDREPO {
+    my ( $this, $params ) = @_;
+    my $mdrepo = $this->{mdrepo};
+    return '' unless ( $mdrepo );
+    my $table = $params->{_DEFAULT} || $params->{table} || '';
+    my $filter = $params->{filter} || '';
+    my $format = $params->{format} || '| $_ | $__ |';
+    my $separator = $params->{separator};
+    if ( defined($separator) ) {
+	$separator = expandStandardEscapes($separator);
+    }
+    else {
+	$separator = "\n";
+    }
+    my $exclude = $params->{exclude} || '';
+    my $selection = $params->{selection} || '';
+    my $marker = $params->{marker} || 'selected';
+    my %isExcluded;
+    if ( $exclude ) {
+	%isExcluded = map { $_ => 1 } split(/,\s*/, $exclude);
+    }
+    my @recIds = $mdrepo->getList($table);
+    if ( $filter ) {
+	@recIds = grep { $_ =~ /$filter/i } @recIds;
+    }
+    my @ents;
+    for my $i ( sort { lc $a cmp lc $b } @recIds ) {
+	next if ( $isExcluded{$i} );
+	my $rec = $mdrepo->getRec($table, $i);
+	my $m = $i eq $selection ? $marker : '';
+	my $ent = $format;
+	$ent =~ s/\?(\w+)(.)(.*?)\2/$rec->{$1} ? $3 : ''/ge;
+	$ent =~ s/\$marker(\(\))?/$m/g;
+	$ent =~ s/\$(\w+)(\(\))?/_getMdrepoField($rec, $i, $1)/ge;
+	push(@ents, $ent);
+    }
+    join($separator, @ents);
 }
 
 1;

@@ -1,0 +1,29 @@
+%META:TOPICINFO{author="HideyoImazu" date="1339738011" format="1.1" reprev="1.2" version="1.2"}%
+#VarMEREPO
+---+++ MDREPO -- retrieve data from metadata repository
+   * __Attention:__ This variable works only if metadata repository is in use. Otherwise, it it always return a zero length string.
+   * This retrieves data from the specified metadata repository table.
+   * Syntax: =%<nop>MDREPO{ "table" ...}%=
+   * Parameters:
+     %TABLE{columnwidths=",,100px"}%
+     | *Parameter* | *Description* | *Default* |
+     | ="..."= | Specify the table to retrieve | This or below is required |
+     | =table="..."= | (Alternative to above) | This or above is required |
+     | =separator="..."= | The separator string of records | ="$n"= (new line) |
+     | =format="..."= | Format of one record. It may contain the following items.\
+       <table>\
+       <tr><td width="144px"> *Item* </td><td> *Description* </td></tr>\
+       <tr><td> =$_= or =$_()= </td><td> the record ID </td></tr>\
+       <tr><td> =$__= or =$__()= </td> <td> The record value in the following format:%BR% <i>FIELD_NAME</i>=<i>FIELD_VALUE</i> <i>FIELD_NAME</i>=<i>FIELD_VALUE</i> ... </td></tr>\
+       <tr><td> =$marker= or =$marker()= </td><td> Expands to =marker= for the item matching =selection= only </td></tr>\
+       <tr><td> =$FILED_NAME= or =$FIELD_NAME()= </td><td> The value of the specified field. If the specified field does not exist in the record, it's evaluated as a zero width string. </td></tr>\
+       <tr><td> =?FIELD_NAME?IF_TRUE?= </td><td> If the specified field has value and it's neither 0 nor a zero width string, it's evaluated as IF_TRUE. Otherwise, it's evaluated as a zero width string. This is like q/.../ in Perl. Whatever non word character following =?FIELD_NAME= becomes the terminator; i.e. you can write:<br/> =?FIELD_NAME:IF_TRUE:= </td></tr>\
+       </table>\
+       | ="&#124; $_ &#124; $__ &#124;"= |
+     | =selection="..."= | The record ID to be regarded as the selected. It affects how =$marker= in the format is evaluated. | _none_ |
+     | =marker="..."= | Text for =$marker= in the format if the item matches =selection= | ="selected"= |
+     | =filter="..."= | The regular expression of record IDs to filter records. Matching is case-insensitive | _none_ |
+     | =exclude="..."= | Comma separated list of record IDs to be excluded | _none_ |
+   * Example: <code>%<nop>MDREPO{"webs" filter="^A" format="| $_ | $admin | $site |"}%</code> %BR%
+     This would show the metadata of webs whose names start with A.
+   * See: MetadataRepository

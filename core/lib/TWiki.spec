@@ -353,7 +353,7 @@ $TWiki::cfg{UsersTopicName} = 'TWikiUsers';
 # TWiki Permissions to control access. Users wishing to make changes will
 # have to log in by clicking a "log in" link instead of being automatically
 # redirected when they try to edit.
-$TWiki::cfg{AuthScripts} = 'attach,edit,manage,rename,save,upload,viewauth,rdiffauth,rest';
+$TWiki::cfg{AuthScripts} = 'attach,edit,manage,rename,save,upload,viewauth,rdiffauth,rest,mdrepo';
 
 # **STRING 80 EXPERT**
 # Authentication realm. This is
@@ -1290,6 +1290,22 @@ $TWiki::cfg{Operators}{Query} = [ 'TWiki::Query::OP_and', 'TWiki::Query::OP_eq',
 # Each operator is implemented by a class. Not visible in the
 # configure UI.
 $TWiki::cfg{Operators}{If} = [ 'TWiki::If::OP_allows', 'TWiki::If::OP_defined', 'TWiki::If::OP_isempty','TWiki::If::OP_ingroup', 'TWiki::If::OP_isweb', 'TWiki::If::OP_context', 'TWiki::If::OP_dollar', 'TWiki::If::OP_istopic' ];
+
+#---+ Metadata repository
+# All of the following three settings need to be made to use the metadata repository
+#
+# **STRING 120 EXPERT**
+# The name of the Perl class tie-able.
+# $TWiki::cfg{MdrepoStorage} = 'DB_File';
+#
+# **PATH EXPERT**
+# The path to the directory where the key-value store files are located.
+# $TWiki::cfg{MdrepoDir} = '/var/twiki/mdrepo';
+#
+# **PERL H**
+# Table names are to be listed. A table name may be followed by : and options.
+# Currently 'b' is the only recognized option, which means the table can be updated from browser.
+# $TWiki::cfg{MdrepoTables} = [qw(sites webs:b)];
 
 #---+ Plugins
 # *PLUGINS* Marker used by bin/configure script - do not remove!

@@ -83,6 +83,8 @@ BEGIN {
       [ 'TWiki::UI::View',       'viewfile',      { viewfile    => 1 } ];
     $TWiki::cfg{SwitchBoard}{view} =
       [ 'TWiki::UI::View',       'view',          { view        => 1 } ];
+    $TWiki::cfg{SwitchBoard}{mdrepo} =
+      [ 'TWiki::UI::MdrepoUI',    'mdrepo',       { mdrepo      => 1 } ];
 }
 
 use Error qw(:try);
