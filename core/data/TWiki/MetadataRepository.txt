@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="HideyoImazu" date="1339737431" format="1.1" reprev="1.6" version="1.6"}%
+%META:TOPICINFO{author="TWikiContributor" date="1339737431" format="1.1" version="$Rev$"}%
 ---+!! Metadata Repository
 %TOC%
 
@@ -265,4 +265,4 @@ As the table above suggests, =updt=, =del=, and =rset= commands put multiple log
 | 2012-06-15 - 13:16 | guest | mdrepo | TemporaryTestWeb.TestTopic | updt sites am datadir=/d/twiki/dat pubdir=/d/twiki/pu server=strawma |  |
 </verbatim>
 
-%META:FILEATTACHMENT{name="site-mirroring.png" attachment="site-mirroring.png" attr="" comment="" date="1339638656" path="site-mirroring.png" size="16575" user="HideyoImazu" version="1"}%
+%META:FILEATTACHMENT{name="site-mirroring.png" attachment="site-mirroring.png" attr="" comment="" date="1339638656" path="site-mirroring.png" size="16575" user="TWikiContributor" version="1"}%
