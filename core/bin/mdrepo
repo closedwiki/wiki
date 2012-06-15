@@ -1,4 +1,4 @@
-#!/ms/dist/perl5/bin/perl5.8 -wT
+#!/usr/bin/perl -wT
 #
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
