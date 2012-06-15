@@ -2,7 +2,7 @@
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarMEREPO
 ---+++ MDREPO -- retrieve data from metadata repository
-   * __Attention:__ This variable works only if metadata repository is in use. Otherwise, it it always return a zero length string.
+   * __Attention:__ This variable works only if MetadataRepository is in use. Otherwise, it always returns a zero length string.
    * This retrieves data from the specified metadata repository table.
    * Syntax: =%<nop>MDREPO{ "table" ...}%=
    * Parameters:
