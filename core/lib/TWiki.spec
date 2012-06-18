@@ -546,7 +546,7 @@ $TWiki::cfg{UploadFilter} = qr/^(\.htaccess|.*\.(?i)(?:php[0-9s]?(\..*)?|[sp]htm
 # and skin names. This is a filter <b>out</b>, so if any of the
 # characters matched by this expression are seen in names, they will be
 # removed.
-$TWiki::cfg{NameFilter} = qr/[\s\*?~^\$@%`"'&;|<>\[\]\+\x00-\x1f]/;
+$TWiki::cfg{NameFilter} = qr/[\s\*?~^\$\\#@%`"'&;|<>\[\]\+\x00-\x1f]/;
 
 # **BOOLEAN EXPERT**
 # If this is set, the the search module will use more relaxed
