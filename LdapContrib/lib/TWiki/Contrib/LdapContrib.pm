@@ -372,6 +372,15 @@ sub connect {
       $msg = $this->{ldap}->bind($this->{bindDN},password=>$this->{bindPassword});
     }
   }
+
+  elsif ($this->{useSASL} && $this->{saslMechanism} eq 'GSSAPI') {
+    writeDebug("proxy bind using GSSAPI");
+    my $sasl = Authen::SASL->new(
+      mechanism => 'GSSAPI',
+      user      => $TWiki::cfg{Ldap}{GSSAPIuser},
+    );
+    $msg = $this->{ldap}->bind('', sasl => $sasl);
+  }
   
   # anonymous bind
   else {

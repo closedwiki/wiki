@@ -46,6 +46,11 @@ $TWiki::cfg{Ldap}{UseSASL} = 0;
 # EXTERNAL ANONYMOUS'
 $TWiki::cfg{Ldap}{SASLMechanism} = 'PLAIN CRAM-MD5 EXTERNAL ANONYMOUS';
 
+# **STRING**
+# If you use 'GSSAPI' mechanism for SASL authentication, you need to specify
+# a user name with which you are authenticated.
+# $TWiki::cfg{Ldap}{GSSAPIuser} = 'xyz';
+
 # **BOOLEAN**
 # Use Transort Layer Security (TLS) to encrypt the connection to the LDAP server.
 # You will need to specify the servers CA File using the TLSCAFile option
