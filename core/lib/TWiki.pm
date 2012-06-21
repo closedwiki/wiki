@@ -4160,14 +4160,16 @@ sub QUERYPARAMS {
         # clean parameter names of illegal characters
         $name =~ s/['"<>].*//;
         # Issues multi-valued parameters as separate hiddens
-        my $value = $this->{request}->param( $name );
-        if ($encoding) {
-            $value = _encode($encoding, $value);
+        if( $name ) {
+            foreach my $value ( $this->{request}->param( $name ) ) {
+                $value = '' unless defined $value;
+                $value = _encode( $encoding, $value ) if( $encoding );
+                my $entry = $format;
+                $entry =~ s/\$name/$name/g;
+                $entry =~ s/\$value/$value/;
+                push( @list, $entry );
+            }
         }
-        my $entry = $format;
-        $entry =~ s/\$name/$name/g;
-        $entry =~ s/\$value/$value/;
-        push(@list, $entry);
     }
     return expandStandardEscapes(join($separator, @list));
 }
