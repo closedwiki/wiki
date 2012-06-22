@@ -1693,11 +1693,9 @@ sub renderRevisionInfo {
     my $wn = '';
     my $un = '';
     if( $user ) {
-        # $user is likely to be a cUID but with a topic saved in the past,
-	# it might be a login or wikiname
+        # $user is likely to be a cUID but with a topic saved before the
+	# introduction of cUID, it might be a login or wikiname
         my $users = $this->{session}{users};
-	my $cUID;
-	# Check if $user is recognized as a cUID.
 	# | *Mapping*         | *cUID*     | *login*   | *wikiname* |
 	# | TWikiUserMapping  | JoeSchmoe  | JoeSchmoe | JoeSchmoe  |
 	# | CustomUserMapping | CM_jschmoe | jschmoe   | JoeSchmoe  |
@@ -1709,7 +1707,8 @@ sub renderRevisionInfo {
 	#   $users->getLoginName('NotExist')  -> undef
 	#   $users->getLoginName('CM_jschmoe')-> 'jschmoe'
 	#   $users->getLoginName('jschmoe')   -> undef
-	$cUID = $users->getLoginName($user) ?
+	# Given this, getLoginName() is used to check if $user is cUID
+	my $cUID; = $users->getLoginName($user) ?
 	    $user : $users->getCanonicalUserID( $user );
 	if( $cUID ) {
 	    $wun = $users->webDotWikiName($cUID);
