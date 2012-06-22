@@ -1708,7 +1708,7 @@ sub renderRevisionInfo {
 	#   $users->getLoginName('CM_jschmoe')-> 'jschmoe'
 	#   $users->getLoginName('jschmoe')   -> undef
 	# Given this, getLoginName() is used to check if $user is cUID
-	my $cUID; = $users->getLoginName($user) ?
+	my $cUID = $users->getLoginName($user) ?
 	    $user : $users->getCanonicalUserID( $user );
 	if( $cUID ) {
 	    $wun = $users->webDotWikiName($cUID);
