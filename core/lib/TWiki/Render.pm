@@ -1693,11 +1693,29 @@ sub renderRevisionInfo {
     my $wn = '';
     my $un = '';
     if( $user ) {
-        # $user has cUID
-        my $users = $this->{session}->{users};
-	$wun = $users->webDotWikiName($user);
-	$wn = $users->getWikiName( $user );
-	$un = $users->getLoginName($user);
+        # $user is likely to be a cUID but with a topic saved in the past,
+	# it might be a login or wikiname
+        my $users = $this->{session}{users};
+	my $cUID;
+	# Check if $user is recognized as a cUID.
+	# | *Mapping*         | *cUID*     | *login*   | *wikiname* |
+	# | TWikiUserMapping  | JoeSchmoe  | JoeSchmoe | JoeSchmoe  |
+	# | CustomUserMapping | CM_jschmoe | jschmoe   | JoeSchmoe  |
+        # TWikiUserMapping:
+	#   $users->getLoginName('JoeSchmoe') -> 'JoeSchmoe'
+	#   $users->getLoginName('NotExist')  -> undef
+	# CustomUsrMapping:
+	#   $users->getLoginName('JoeSchmoe') -> undef
+	#   $users->getLoginName('NotExist')  -> undef
+	#   $users->getLoginName('CM_jschmoe')-> 'jschmoe'
+	#   $users->getLoginName('jschmoe')   -> undef
+	$cUID = $users->getLoginName($user) ?
+	    $user : $users->getCanonicalUserID( $user );
+	if( $cUID ) {
+	    $wun = $users->webDotWikiName($cUID);
+	    $wn = $users->getWikiName( $cUID );
+	    $un = $users->getLoginName($cUID);
+	}
         # If we are still unsure, then use whatever is saved in the meta.
         # But obscure it if the RenderLoggedInButUnknownUsers is enabled.
         $user = 'unknown' if $TWiki::cfg{RenderLoggedInButUnknownUsers};
