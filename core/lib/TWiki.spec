@@ -868,6 +868,16 @@ $TWiki::cfg{RCS}{dirPermission}= 0755;
 $TWiki::cfg{RCS}{filePermission}= 0644;
 
 # **BOOLEAN EXPERT**
+# Attachment behavior when a user clicks on the "manage" link of an existing
+# attachment, and attaches a new file.
+# <ul><li> If the flag is not set, a new attachment entry is created in case
+# the name is different from the existing attachment.
+# </li><li> If the flag is set, the newly attached file is renamed to the
+# name of the existing attachment if it is of the same type. An error is shown
+# in case the file type differs. </li></ul>
+$TWiki::cfg{AttachWithSameName} = $FALSE;
+
+# **BOOLEAN EXPERT**
 # Some file-based Store implementations (RcsWrap and RcsLite for
 # example) store attachment meta-data separately from the actual attachments.
 # This means that it is possible to have a file in an attachment directory
