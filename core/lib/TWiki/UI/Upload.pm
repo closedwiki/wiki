@@ -239,6 +239,28 @@ sub upload {
     my @tmpFilePath = ();
 
     unless ($doPropsOnly) {
+
+        # Item6887: Configurable attachment behavior if file name differs
+        my $existingFileName = $query->param('filename') || '';
+        if( $existingFileName && $TWiki::cfg{AttachWithSameName} ) {
+            if( $existingFileName =~ /(\.[^\.\/\\]+)$/ ) {
+                my $existingType = lc( $1 );
+                if( $fileNames[0] =~ /(\.[^\.\/\\]+)$/ ) {
+                    my $newType = lc( $1 );
+                    if( $newType ne $existingType ) {
+                        throw TWiki::OopsException(
+                            'attention',
+                            def    => 'file_type_differs_upload',
+                            web    => $webName,
+                            topic  => $topic,
+                            params => [ $newType, $existingType ]
+                        );
+                    }
+                }
+            }
+            $fileNames[0] = $existingFileName;
+        }
+
         my $i = 0;
         my $j = 0;
 
