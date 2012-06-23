@@ -383,6 +383,15 @@ __%MAKETEXT{"Note:"}%__
 
 %TMPL:P{"oktopicaction"}%
 %TMPL:END%
+%TMPL:DEF{"file_type_differs_upload"}%
+---+++ %MAKETEXT{"File type is different"}%
+%MAKETEXT{"Uploaded file type [_1] differs from the existing type [_2]. They must be of the same type when updating an existing attachment." args="<code>%PARAM1%</code>,<code>%PARAM2%</code>"}%
+
+%MAKETEXT{"Please go back in your browser and check again."}%
+
+*[[%WEB%.%TOPIC%][%MAKETEXT{"OK"}%]]*
+
+%TMPL:END%
 %TMPL:DEF{"zero_size_upload"}%
 ---+++ %MAKETEXT{"Either you did not specify a file name, or the file you are trying to upload [_1] has no content. You may not upload an empty file." args="<code>%PARAM1%</code>"}%
 %MAKETEXT{"Please go back in your browser and check again."}%
