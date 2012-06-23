@@ -113,7 +113,7 @@ if (!$response->is_error() && $response->isa('HTTP::Response')) {
 =cut
 
 sub getExternalResource {
-    my ($this, $url) = @_;
+    my ( $this, $url, @headers ) = @_;
 
     my $protocol;
     if( $url =~ m!^([a-z]+):! ) {
@@ -125,7 +125,7 @@ sub getExternalResource {
 
     eval "use LWP";
     unless( $@ ) {
-       return _GETUsingLWP( $this, $url );
+       return _GETUsingLWP( $this, $url, @headers );
     }
 
     # Fallback mechanism
@@ -195,6 +195,12 @@ sub getExternalResource {
         my $revstr=$1;
 
         $req .= 'User-Agent: TWiki::Net/'.$revstr."\r\n";
+        if( @headers ) {
+            while( my $key = shift @headers ) {
+                my $val = shift( @headers );
+                $req .= "$key: $val\r\n" if( defined $val );
+            }
+        }
         $req .= "\r\n\r\n";
 
         my ( $iaddr, $paddr, $proto );
@@ -238,7 +244,7 @@ sub getExternalResource {
 
 # =======================================
 sub _GETUsingLWP {
-    my( $this, $url ) = @_;
+    my( $this, $url, @headers ) = @_;
 
     my ( $user, $pass );
     if( $url =~ s!([^/\@:]+)(?::([^/\@:]+))?@!! ) {
@@ -254,7 +260,9 @@ sub _GETUsingLWP {
 
     '$Rev$'=~/([0-9]+)/;
     my $revstr=$1;
-    $request->header( 'User-Agent' => 'TWiki::Net/'.$revstr." libwww-perl/$LWP::VERSION" );
+    my @allHeaders = ( 'User-Agent' => 'TWiki::Net/'.$revstr." libwww-perl/$LWP::VERSION" );
+    push( @allHeaders, @headers ) if( @headers );
+    $request->header( @allHeaders );
     require TWiki::Net::UserCredAgent;
     my $ua = new TWiki::Net::UserCredAgent( $user, $pass, $url );
     my $response = $ua->request( $request );

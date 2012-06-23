@@ -244,11 +244,11 @@ if (!$response->is_error() && $response->isa('HTTP::Response')) {
 =cut
 
 sub getExternalResource {
-    my( $url ) = @_;
+    my( $url, @headers ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     ASSERT(defined $url) if DEBUG;
 
-    return $TWiki::Plugins::SESSION->net->getExternalResource( $url );
+    return $TWiki::Plugins::SESSION->net->getExternalResource( $url, @headers );
 }
 
 =pod
