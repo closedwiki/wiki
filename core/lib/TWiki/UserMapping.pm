@@ -345,7 +345,6 @@ sub isInGroup {
     my( $this, $cUID, $group, $scanning ) = @_;
     ASSERT($cUID) if DEBUG;
     $scanning ||= {}; # Recursion block
-    my @users;
     my $it = $this->eachGroupMember($group);
     while ($it->hasNext()) {
         my $u = $it->next();
