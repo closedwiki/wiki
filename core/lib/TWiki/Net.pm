@@ -65,14 +65,17 @@ sub finish {
 
 =pod
 
----+++ getExternalResource( $url ) -> $response
+---+++ getExternalResource( $url, @headers ) -> $response
 
 Get whatever is at the other end of a URL (using an HTTP GET request). Will
 only work for encrypted protocols such as =https= if the =LWP= CPAN module is
 installed.
 
 Note that the =$url= may have an optional user and password, as specified by
-the relevant RFC. Any proxy set in =configure= is honoured.
+the relevant RFC. Any proxy set in =configure= is honored.
+
+Optional headers may be supplied of form 'name1', 'value1', 'name2', 'value2'.
+Do not add a User-Agent header, it will be added.
 
 The =$response= is an object that is known to implement the following subset of
 the methods of =LWP::Response=. It may in fact be an =LWP::Response= object,
@@ -104,9 +107,10 @@ as follows:
 <verbatim>
 my $response = TWiki::Func::getExternalResource($url);
 if (!$response->is_error() && $response->isa('HTTP::Response')) {
-    ... other methods of HTTP::Response may be called
+    $text = $response->content();
+    # ... other methods of HTTP::Response may be called
 } else {
-    ... only the methods listed above may be called
+    # ... only the methods listed above may be called
 }
 </verbatim>
 
