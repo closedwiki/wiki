@@ -1,0 +1,4 @@
+data/TWiki/SsoLoginContrib.txt 0644
+lib/TWiki/LoginManager/SsoLogin.pm 0644
+lib/TWiki/Contrib/SsoLoginContrib/Config.spec 0644
+lib/TWiki/Contrib/SsoLoginContrib.pm 0644
