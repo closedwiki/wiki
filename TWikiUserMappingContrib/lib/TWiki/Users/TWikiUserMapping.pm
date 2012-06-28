@@ -452,6 +452,7 @@ sub getWikiName {
         if ($wikiname) {
             # sanitise the generated WikiName
             $wikiname =~ s/$TWiki::cfg{NameFilter}//go;
+            $wikiname =~ s/\.//go;
         }
     }
 	
