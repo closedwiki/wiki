@@ -1,0 +1,213 @@
+%META:TOPICINFO{author="TWikiContributor" date="1340920609" format="1.1" version="$Rev$"}%
+---+!! SSO LOGIN Contrib Package
+<!--
+   Contributions to this contrib are appreciated. Please update the contrib page at
+   http://twiki.org/cgi-bin/view/Plugins/SsoLoginContrib or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/SsoLoginContribDev.
+   If you are a TWiki contributor please update the contrib in the SVN repository.
+-->
+%SHORTDESCRIPTION%
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC%
+</div>
+</sticky>
+
+---++ Introduction
+
+The !SsoLoginContrib is a login manager for TWiki that handles SSO ([[Wikipedia:Single_sign-on][Single-Sign On]]). This requires a SSO service on the same domain.
+
+---++ Detailed Documentation
+
+   * A user logs in to the example.com domain; a domain-level cookie named =x-example-authtoken= is set; the value of the cookie is an auth token, such as =auth:1234-5678-9abcd=.
+   * The user visits twiki.example.com; because the =x-example-authtoken= cookie is a domain level cookie, the browser will send that cookie to all requests on that site.
+   * The !SsoLoginContrib looks for the presence of =x-example-authtoken= and, if present, will pass its value to an SSO API on example.com for verification.
+   * The actual SSO API is something like =https://example.com/api/auth/&lt;authtoken&gt;=, where =&lt;authtoken&gt;= is replaced by the cookie value.
+   * Some SSO APIs require to pass an API key as an HTTP header as part of that API call; such as: %BR%
+     =x-example-key: abcd-ef01-2345-6789=
+   * The SSO API call returns either:
+      * A 403 error code, which means it's either a bad/expired auth token or the API key is not valid/present/has-been-denied-access
+      * A 200 code with JSON in the response body
+   * The JSON response depends on the SSO API, and may look something like the following: %BR%
+     ={"type":"named", "displayName":"Jimmy Neutron", "loginName":"jimmy@example.com"}=
+   * The !SsoLoginContrib sets the authenticated user, e.g. login name to the value specified in the JSON response.
+
+   * If the user is not logged in, TWiki will show a "login" link that points to the SSO service to login, else a "logout" link is shown that points to the SSO service to log out.
+
+   * Users do not need to register in TWiki, but they can if they want to have their own TWiki profile page, or if their !WikiName needs to be added to %USERSWEB%.TWikiGroups.
+      * Unregistered users will have a "WikiName" built by stripping out non-ASCII characters from the login name. For example, =jimmy@example.com= becomes =Jimmyexamplecom=, and user signatures point to =%USERSWEB%.Jimmyexamplecom=.
+      * Registered users will have profile page with their !WikiName as the name. The mapping from login name to !WikiName is done in the %USERSWEB%.TWikiUsers page - fix entries there in case login names change.
+
+---++ Configuration
+
+Run the [[%SCRIPTURL{configure}%][configure]] script and set the following settings. Alternatively, edit the =lib/LocalSite.cfg= configure file directly. Settings:
+
+<blockquote><verbatim>
+# ---+ Security setup section
+
+# ---++ Authentication
+
+# enable SSO login:
+$TWiki::cfg{LoginManager} = 'TWiki::LoginManager::SsoLogin';
+
+# remove the "@" character from the login name filter in case users login with an e-mail address:
+$TWiki::cfg{LoginNameFilterIn} = '^[^\\s\\*?~^\\$%`"\'&;|<>\\x00-\\x1f]+$';
+
+# ---++ Registration
+
+# allow login name, and don't ask for password in registration page:
+$TWiki::cfg{Register}{AllowLoginName} = 1;
+
+# ---++ Passwords
+
+# no password manager:
+$TWiki::cfg{PasswordManager} = 'none';
+
+# ---+ Extensions section
+
+# name of auth token cookie:
+$TWiki::cfg{SsoLoginContrib}{AuthTokenName} = 'x-authtoken-cookie-name';
+
+# URL of SSO API to verify an auth token; %AUTHTOKEN% is set to the cookie value of the auth token
+$TWiki::cfg{SsoLoginContrib}{VerifyAuthTokenUrl} = 'https://example.com/api/auth/%AUTHTOKEN%';
+
+# Some SSO APIs require to pass a key in the header of the http request; use comma-space delimited list:
+$TWiki::cfg{SsoLoginContrib}{VerifyAuthTokenHeader} = 'x-sso-api-key, API key value';
+
+# regular expression to extract the login name from the JSON response:
+$TWiki::cfg{SsoLoginContrib}{VerifyResponseLoginRE} = '"loginName":"([^"]*)';
+
+# login URL; %ORIGURL% is set to the original URL where the user is sent after login:
+$TWiki::cfg{SsoLoginContrib}{LoginUrl} = 'https://example.com/login?redirect=%ORIGURL%';
+
+# logout URL; %ORIGURL% is set to the original URL where the user is sent after logout:
+$TWiki::cfg{SsoLoginContrib}{LogoutUrl} = 'https://example.com/logout?redirect=%ORIGURL%';
+</verbatim></blockquote>
+
+If you use TWiki-5.1.1 and earlier you need to patch two TWiki modules:
+   * =lib/TWiki/Users/TWikiUserMapping.pm= - patch required to show a proper %SYSTEMWEB%.WikiName for unregistered users
+   * =lib/TWiki/Net.pm= - patch is only needed if a custom header is required to verify an auth token with the SSO API service
+%TWISTY{ mode="div" showlink="Show patch..." }%
+
+*Patch for =lib/TWiki/Users/TWikiUserMapping.pm=:*
+<verbatim>
+--- lib/TWiki/Users/TWikiUserMapping.pm.save1	2012-04-02 16:19:48.414434038 +0000
++++ lib/TWiki/Users/TWikiUserMapping.pm	2012-06-28 00:21:05.202658103 +0000
+@@ -452,6 +452,7 @@
+         if ($wikiname) {
+             # sanitise the generated WikiName
+             $wikiname =~ s/$TWiki::cfg{NameFilter}//go;
++            $wikiname =~ s/\.//go;
+         }
+     }
+</verbatim>
+
+*patch for =lib/TWiki/Net.pm=:*
+<verbatim>
+--- lib/TWiki/Net.pm.save1	2012-04-02 16:19:46.360395747 +0000
++++ lib/TWiki/Net.pm	2012-06-23 05:02:03.952195847 +0000
+@@ -104,16 +107,17 @@
+ <verbatim>
+ my $response = TWiki::Func::getExternalResource($url);
+ if (!$response->is_error() && $response->isa('HTTP::Response')) {
+-    ... other methods of HTTP::Response may be called
++    $text = $response->content();
++    # ... other methods of HTTP::Response may be called
+ } else {
+-    ... only the methods listed above may be called
++    # ... only the methods listed above may be called
+ }
+ </verbatim>
+ 
+ =cut
+ 
+ sub getExternalResource {
+-    my ($this, $url) = @_;
++    my ( $this, $url, @headers ) = @_;
+ 
+     my $protocol;
+     if( $url =~ m!^([a-z]+):! ) {
+@@ -125,7 +129,7 @@
+ 
+     eval "use LWP";
+     unless( $@ ) {
+-       return _GETUsingLWP( $this, $url );
++       return _GETUsingLWP( $this, $url, @headers );
+     }
+ 
+     # Fallback mechanism
+@@ -195,6 +199,12 @@
+         my $revstr=$1;
+ 
+         $req .= 'User-Agent: TWiki::Net/'.$revstr."\r\n";
++        if( @headers ) {
++            while( my $key = shift @headers ) {
++                my $val = shift( @headers );
++                $req .= "$key: $val\r\n" if( defined $val );
++            }
++        }
+         $req .= "\r\n\r\n";
+ 
+         my ( $iaddr, $paddr, $proto );
+@@ -238,7 +248,7 @@
+ 
+ # =======================================
+ sub _GETUsingLWP {
+-    my( $this, $url ) = @_;
++    my( $this, $url, @headers ) = @_;
+ 
+     my ( $user, $pass );
+     if( $url =~ s!([^/\@:]+)(?::([^/\@:]+))?@!! ) {
+@@ -254,7 +264,9 @@
+ 
+     '$Rev: 22570 (2012-01-14) $'=~/([0-9]+)/;
+     my $revstr=$1;
+-    $request->header( 'User-Agent' => 'TWiki::Net/'.$revstr." libwww-perl/$LWP::VERSION" );
++    my @allHeaders = ( 'User-Agent' => 'TWiki::Net/'.$revstr." libwww-perl/$LWP::VERSION" );
++    push( @allHeaders, @headers ) if( @headers );
++    $request->header( @allHeaders );
+     require TWiki::Net::UserCredAgent;
+     my $ua = new TWiki::Net::UserCredAgent( $user, $pass, $url );
+     my $response = $ua->request( $request );
+</verbatim>
+%ENDTWISTY%
+
+---++ Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this contrib package. The following instructions are for the administrator who installs the package on the server where TWiki is running.
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==SsoLoginContrib.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/SsoLoginContrib.txt== | Documentation topic |
+        | ==lib/TWiki/Contrib/SsoLoginContrib.pm== | Contrib Perl module |
+        | ==lib/TWiki/Contrib/SsoLoginContrib/Config.spec== | Configure spec file |
+        | ==lib/TWiki/LoginManager/SsoLogin.pm== | SSO Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+
+   * Contrib module __configuration__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and set the ={SsoLoginContrib}{...)= settings in the Extensions section as described above.
+
+---++ Contrib Info
+
+This contrib is sponsored by:
+   * [[http://www.wave.com/][Wave Systems Corp.]]
+
+Short description:
+   * Set SHORTDESCRIPTION = Generic SSO (Single Sign-on) module for TWiki
+
+|  Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2012 Wave Systems Corp. <br /> &copy; 2012 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Dependencies: | CPAN:LWP in case SSL is used to verify the auth token |
+|  Version: | 2012-06-28 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-06-28: | Initial version |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %SYSTEMWEB%.TWikiContribs, %SYSTEMWEB%.TWikiUserAuthentication
