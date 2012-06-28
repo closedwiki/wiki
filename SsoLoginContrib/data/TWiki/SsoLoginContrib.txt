@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1340920609" format="1.1" version="$Rev$"}%
----+!! SSO LOGIN Contrib Package
+%META:TOPICINFO{author="TWikiContributor" date="1340925838" format="1.1" version="$Rev$"}%
+---+!! SSO Login Contrib Package
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
    http://twiki.org/cgi-bin/view/Plugins/SsoLoginContrib or provide feedback at
@@ -15,7 +15,9 @@
 
 ---++ Introduction
 
-The !SsoLoginContrib is a login manager for TWiki that handles SSO ([[Wikipedia:Single_sign-on][Single-Sign On]]). This requires a SSO service on the same domain.
+[[Wikipedia:Single_sign-on][Single sign-on]] (SSO) is a property of access control of multiple related, but independent software systems. With this property a user logs in once and gains access to all systems without being prompted to log in again at each of them. Conversely, Single sign-off is the property whereby a single action of signing out terminates access to multiple software systems.
+
+The !SsoLoginContrib is a login manager for TWiki that handles cookie based SSO authentication. This requires a SSO authentication service on the same domain.
 
 ---++ Detailed Documentation
 
@@ -23,20 +25,23 @@ The !SsoLoginContrib is a login manager for TWiki that handles SSO ([[Wikipedia:
    * The user visits twiki.example.com; because the =x-example-authtoken= cookie is a domain level cookie, the browser will send that cookie to all requests on that site.
    * The !SsoLoginContrib looks for the presence of =x-example-authtoken= and, if present, will pass its value to an SSO API on example.com for verification.
    * The actual SSO API is something like =https://example.com/api/auth/&lt;authtoken&gt;=, where =&lt;authtoken&gt;= is replaced by the cookie value.
-   * Some SSO APIs require to pass an API key as an HTTP header as part of that API call; such as: %BR%
+   * Some SSO APIs require to pass an API key in the HTTP header as part of that API call; such as: %BR%
      =x-example-key: abcd-ef01-2345-6789=
    * The SSO API call returns either:
       * A 403 error code, which means it's either a bad/expired auth token or the API key is not valid/present/has-been-denied-access
       * A 200 code with JSON in the response body
    * The JSON response depends on the SSO API, and may look something like the following: %BR%
      ={"type":"named", "displayName":"Jimmy Neutron", "loginName":"jimmy@example.com"}=
-   * The !SsoLoginContrib sets the authenticated user, e.g. login name to the value specified in the JSON response.
+   * The !SsoLoginContrib uses the login name found in the JSON response to set the authenticated user in TWiki. TWiki has three representations for authenticated users:
+      * USERNAME (login name), example =jimmy@example.com=, you are <nop>%USERNAME%
+      * Canonical User ID, example =jimmy_40example_2ecom=, this is built from the login name
+      * WIKINAMENAME, example =Jimmyexamplecom= or =JimmyNeutron=, you are <nop>%WIKINAME%
 
    * If the user is not logged in, TWiki will show a "login" link that points to the SSO service to login, else a "logout" link is shown that points to the SSO service to log out.
 
    * Users do not need to register in TWiki, but they can if they want to have their own TWiki profile page, or if their !WikiName needs to be added to %USERSWEB%.TWikiGroups.
       * Unregistered users will have a "WikiName" built by stripping out non-ASCII characters from the login name. For example, =jimmy@example.com= becomes =Jimmyexamplecom=, and user signatures point to =%USERSWEB%.Jimmyexamplecom=.
-      * Registered users will have profile page with their !WikiName as the name. The mapping from login name to !WikiName is done in the %USERSWEB%.TWikiUsers page - fix entries there in case login names change.
+      * Registered users will have profile page with their %SYSTEMWEB%.WikiName as the page name, such as =JimmyNeutron=. The mapping from login name to !WikiName is done in the %USERSWEB%.TWikiUsers page - fix entries there in case login names change.
 
 ---++ Configuration
 
