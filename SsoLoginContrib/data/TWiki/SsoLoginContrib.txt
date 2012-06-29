@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1340925838" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1340931162" format="1.1" version="$Rev$"}%
 ---+!! SSO Login Contrib Package
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -20,6 +20,9 @@
 The !SsoLoginContrib is a login manager for TWiki that handles cookie based SSO authentication. This requires a SSO authentication service on the same domain.
 
 ---++ Detailed Documentation
+<sticky>
+<img src="%ATTACHURLPATH%/sso-diagram.png" alt="SSO diagram" width="452" height="330" style="float: right; padding: 0 0 10px 20px; width: 452px" />
+</sticky>
 
    * A user logs in to the example.com domain; a domain-level cookie named =x-example-authtoken= is set; the value of the cookie is an auth token, such as =auth:1234-5678-9abcd=.
    * The user visits twiki.example.com; because the =x-example-authtoken= cookie is a domain level cookie, the browser will send that cookie to all requests on that site.
@@ -216,3 +219,5 @@ Short description:
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %SYSTEMWEB%.TWikiContribs, %SYSTEMWEB%.TWikiUserAuthentication
+
+%META:FILEATTACHMENT{name="sso-diagram.png" attachment="sso-diagram.png" attr="h" comment="" date="1340931005" path="sso-diagram.png" size="72095" user="TWikiContributor" version="1"}%
