@@ -372,7 +372,7 @@ sub view {
         if( $raw ) {
             if ($text) {
                 my $p = $session->{prefs};
-		CGI::charset($TWiki::cfg{Site}{CharSet});
+                CGI::charset($TWiki::cfg{Site}{CharSet});
                 $page .=
                   CGI::textarea(
                       -readonly => 'readonly',
