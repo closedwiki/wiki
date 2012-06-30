@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1341076714" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1341077892" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -7,7 +7,16 @@
    If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
 
-This plugin adds spreadsheet capabilities to TWiki topics. Functions such as ==%<nop>CALC{$INT(7/3)}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this plugin provides general function evaluation capability, not just classic spreadsheet functions.
+This plugin adds spreadsheet capabilities to TWiki topics. Functions such as ==%<nop>CALC{$INT(7/3)}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this plugin provides general function evaluation capability, not just classic spreadsheet functions. The plugin currently has
+<!-- %SEARCH{
+ "^#Func" topic="%TOPIC%"
+ type="regex"
+ nonoise="on"
+ multiple="on"
+ format="$percntCALCULATE{$SETM(nFunctions, +1)}$percnt"
+ separator=" "
+}% -->
+%CALCULATE{$GET(nFunctions)}% functions.
 
 <table><tr><td valign="top">
 __Example:__
@@ -66,7 +75,7 @@ This plugin handles the ==%<nop>CALC{...}%== and ==%<nop>CALCULATE{...}%== varia
 
 ---++ Built-in Spreadsheet Plugin Functions
 
-Conventions for Syntax:
+The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for parameters:
    * Required parameters are indicated in ==( bold )==
    * Optional parameters are indicated in ==( _bold italic_ )==
 
