@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1341078236" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1341091033" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -215,6 +215,19 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Syntax: ==$EXP( num )==
    * Example: ==%<nop>CALC{$EXP(1)}%== returns ==2.71828182845905==
    * Related: =[[#FuncLN][$LN()]]=, =[[#FuncLOG][$LOG()]]=
+
+#FuncFILTER
+---+++ FILTER( expression, text ) -- filter out characters from text
+   * Remove characters from a =text= string. The filter is applied multiple times.
+   * The =expression= can be a sequence of characters or a %SYSTEMWEB%.RegularExpression. Use tokens in the =expression= if needed: =$comma= for comma, =$sp= for space. The =text= may contain commas.
+   * Syntax: ==$FILTER( chars, text )==
+   * Example: ==%<nop>CALC{$FILTER(f, fluffy)}%== returns ==luy== - filter out a character multiple times
+   * Example: ==%<nop>CALC{$FILTER(an Franc, San Francisco)}%== returns ==Sisco== - cut a string
+   * Example: ==%<nop>CALC{$FILTER($sp, Cat and Mouse)}%== returns ==CatandMouse== - remove all spaces
+   * Example: ==%<nop>CALC{$FILTER([^0-9], Project-ID-1234)}%== returns ==1234== - filter in digits, e.g. keep only digits
+   * Example: ==%<nop>CALC{$FILTER([^a-zA-Z0-9 ], Stupid mistake*%@^! Fixed)}%== returns ==Stupid mistake Fixed== - keep only alphanumeric characters and spaces
+   * Example: ==%<nop>CALC{$FILTER([^a-zA-Z0-9], $PROPER(an EXELLENT idea.))}%== returns ==AnExcellentIdea== - turn a string into a %SYSTEMWEB%.WikiWord topic name
+   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncFIND
 ---+++ FIND( string, text, start ) -- find one string within another string
