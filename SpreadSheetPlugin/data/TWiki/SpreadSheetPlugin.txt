@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1333602363" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1341019893" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -64,7 +64,7 @@ This plugin handles the ==%<nop>CALC{"..."}%== and ==%<nop>CALCULATE{"..."}%== v
 %ICON{indexlist}% *Use =%<nop>CALCULATE{"..."}%= _outside_ tables:*
 %BR% The CALCULATE variable is handled inside-out &amp; left-to-right like ordinary TWiki variables, but it does __not__ support functions that refer to table cells, such as =$LEFT()= or =$T()=.
 
----++ Built-in Functions
+---++ Built-in Spreadsheet Plugin Functions
 
 Conventions for Syntax:
    * Required parameters are indicated in ==( bold )==
@@ -80,7 +80,7 @@ Conventions for Syntax:
 ---+++ ABS( num ) -- absolute value of a number
    * Syntax: ==$ABS( num )==
    * Example: ==%<nop>CALC{"$ABS(-12.5)"}%== returns ==12.5==
-   * Related: =[[#FuncSIGN][$SIGN()]]=, =[[#FuncEVEN][$EVEN()]]=, =[[#FuncODD][$ODD()]]=
+   * Related: =[[#FuncSIGN][$SIGN()]]=, =[[#FuncEVEN][$EVEN()]]=, =[[#FuncISDIGIT][$ISDIGIT()]]=, =[[#FuncODD][$ODD()]]=
 
 #FuncAND
 ---+++ AND( list ) -- logical AND of a list
@@ -159,7 +159,7 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$EMPTY(foo)"}%== returns ==0==
    * Example: ==%<nop>CALC{"$EMPTY()"}%== returns ==1==
    * Example: ==%<nop>CALC{"$EMPTY($TRIM( ))"}%== returns ==1==
-   * Related: =[[#FuncEXACT][$EXACT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncTRIM][$TRIM()]]=, =[[#FuncWHILE][$WHILE()]]=
+   * Related: =[[#FuncEXACT][$EXACT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncISDIGIT][$ISDIGIT()]]=, =[[#FuncISLOWER][$ISLOWER()]]=, =[[#FuncISUPPER][$ISUPPER()]]=, =[[#FuncISWIKIWORD][$ISWIKIWORD()]]=, =[[#FuncTRIM][$TRIM()]]=, =[[#FuncWHILE][$WHILE()]]=
 
 #FuncEVAL
 ---+++ EVAL( formula ) -- evaluate a simple mathematical formula
@@ -173,7 +173,7 @@ Conventions for Syntax:
 ---+++ EVEN( num ) -- test for even number
    * Syntax: ==$EVEN( num )==
    * Example: ==%<nop>CALC{"$EVEN(2)"}%== returns ==1==
-   * Related: =[[#FuncABS][$ABS()]]=, =[[#FuncMOD][$MOD()]]=, =[[#FuncODD][$ODD()]]=, =[[#FuncSIGN][$SIGN()]]=
+   * Related: =[[#FuncABS][$ABS()]]=, =[[#FuncISDIGIT][$ISDIGIT()]]=, =[[#FuncMOD][$MOD()]]=, =[[#FuncODD][$ODD()]]=, =[[#FuncSIGN][$SIGN()]]=
 
 #FuncEXACT
 ---+++ EXACT( text1, text2 ) -- compare two text strings
@@ -181,7 +181,7 @@ Conventions for Syntax:
    * Syntax: ==$EXACT( text1, _text2_ )==
    * Example: ==%<nop>CALC{"$EXACT(foo, Foo)"}%== returns ==0==
    * Example: ==%<nop>CALC{"$EXACT(foo, $LOWER(Foo))"}%== returns ==1==
-   * Related: =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncTRIM][$TRIM()]]=
+   * Related: =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncISDIGIT][$ISDIGIT()]]=, =[[#FuncISLOWER][$ISLOWER()]]=, =[[#FuncISUPPER][$ISUPPER()]]=, =[[#FuncISWIKIWORD][$ISWIKIWORD()]]=, =[[#FuncTRIM][$TRIM()]]=
 
 #FuncEXEC
 ---+++ EXEC( formula ) -- execute a spreadsheet formula
@@ -198,7 +198,7 @@ Conventions for Syntax:
    * Syntax: ==$EXISTS( topic )==
    * Example: ==%<nop>CALC{"$EXISTS(<nop>%HOMETOPIC%)"}%== returns ==1==
    * Example: ==%<nop>CALC{"$EXISTS(<nop>ThisDoesNotExist)"}%== returns ==0==
-   * Related: =[[#FuncEXACT][$EXACT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncTRIM][$TRIM()]]=
+   * Related: =[[#FuncEXACT][$EXACT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncISWIKIWORD][$ISWIKIWORD()]]=, =[[#FuncTRIM][$TRIM()]]=
 
 #FuncEXP
 ---+++ EXP( num ) -- exponent (e) raised to the power of a number
@@ -324,7 +324,7 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$IF($T(R1:C5) > 1000, Over Budget, OK)"}%== returns ==Over Budget== if value in R1:C5 is over 1000, ==OK== if not
    * Example: ==%<nop>CALC{"$IF($EXACT($T(R1:C2),), empty, $T(R1:C2))"}%== returns the content of R1:C2 or ==empty== if empty
    * Example: ==%<nop>CALC{"$SET(val, $IF($T(R1:C2) == 0, zero, $T(R1:C2)))"}%== sets a variable conditionally
-   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncOR][$OR()]]=, =[[#FuncWHILE][$WHILE()]]=
+   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncISDIGIT][$ISDIGIT()]]=, =[[#FuncISLOWER][$ISLOWER()]]=, =[[#FuncISUPPER][$ISUPPER()]]=, =[[#FuncISWIKIWORD][$ISWIKIWORD()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncOR][$OR()]]=, =[[#FuncWHILE][$WHILE()]]=
 
 #FuncINSERTSTRING
 ---+++ INSERTSTRING( text, start, new ) -- insert a string into a text string
@@ -343,6 +343,40 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$INT(10 / 4)"}%== returns ==2==
    * Example: ==%<nop>CALC{"$INT($VALUE(09))"}%== returns ==9==
    * Related: =[[#FuncCEILING][$CEILING()]]=, =[[#FuncEVAL][$EVAL()]]=, =[[#FuncFLOOR][$FLOOR()]]=, =[[#FuncROUND][$ROUND()]]=, =[[#FuncVALUE][$VALUE()]]=
+
+#FuncISDIGIT
+---+++ ISDIGIT( text ) -- test for digits
+   * Test for one or more digits (0...9)
+   * Syntax: ==$ISDIGIT( text )==
+   * Example: ==%<nop>CALC{"$ISDIGIT(123)"}%== returns ==1==
+   * Example: ==%<nop>CALC{"$ISDIGIT(-7)"}%== returns ==0==
+   * Related: =[[#FuncABS][$ABS()]]=, =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEVEN][$EVEN()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncISDIGIT][$ISDIGIT()]]=, =[[#FuncMOD][$MOD()]]=, =[[#FuncODD][$ODD()]]=, =[[#FuncSIGN][$SIGN()]]=, =[[#FuncVALUE][$VALUE()]]=
+
+#FuncISLOWER
+---+++ ISLOWER( text ) -- test for lower case text
+   * Syntax: ==$ISLOWER( text )==
+   * Example: ==%<nop>CALC{"$ISLOWER(apple)"}%== returns ==1==
+   * Example: ==%<nop>CALC{"$ISUPPER(apple tree)"}%== returns ==0== (text contains a space character)
+   * Example: ==%<nop>CALC{"$ISLOWER(ORANGE)"}%== returns ==0==
+   * Related: =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncLOWER][$LOWER()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncISDIGIT][$ISDIGIT()]]=, =[[#FuncISUPPER][$ISUPPER()]]=, =[[#FuncISWIKIWORD][$ISWIKIWORD()]]=, =[[#FuncUPPER][$UPPER()]]=
+
+#FuncISUPPER
+---+++ ISUPPER( text ) -- test for upper case text
+   * Can be used to test for ACRONYMS
+   * Syntax: ==$ISUPPER( text )==
+   * Example: ==%<nop>CALC{"$ISUPPER(apple)"}%== returns ==0==
+   * Example: ==%<nop>CALC{"$ISUPPER(ORANGE)"}%== returns ==1==
+   * Example: ==%<nop>CALC{"$ISUPPER(ORANGE GARDEN)"}%== returns ==0== (text contains a space character)
+   * Related: =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncLOWER][$LOWER()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncISDIGIT][$ISDIGIT()]]=, =[[#FuncISLOWER][$ISLOWER()]]=, =[[#FuncISWIKIWORD][$ISWIKIWORD()]]=, =[[#FuncUPPER][$UPPER()]]=
+
+#FuncISWIKIWORD
+---+++ ISWIKIWORD( text ) -- test for !WikiWord
+   * A %SYSTEMWEB%.WikiWord has a sequence of UPPER, lower/digit, UPPER, optional mixed case alphanumeric characters
+   * Can be used together with =$ISUPPER()= to test for valid topic names
+   * Syntax: ==$ISWIKIWORD( text )==
+   * Example: ==%<nop>CALC{"$ISWIKIWORD(<nop>GoldenGate)"}%== returns ==1==
+   * Example: ==%<nop>CALC{"$ISWIKIWORD(whiteRafting)"}%== returns ==0==
+   * Related: =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXISTS][$EXISTS()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncISDIGIT][$ISDIGIT()]]=, =[[#FuncISLOWER][$ISLOWER()]]=, =[[#FuncISUPPER][$ISUPPER()]]=, =[[#FuncPROPER][$PROPER()]]=, =[[#FuncPROPERSPACE][$PROPERSPACE()]]=
 
 #FuncLEFT
 ---+++ LEFT( ) -- address range of cells to the left of the current cell
@@ -472,7 +506,7 @@ Conventions for Syntax:
 ---+++ LOWER( text ) -- lower case string of a text
    * Syntax: ==$LOWER(text)==
    * Example: ==%<nop>CALC{"$LOWER( $T(R1:C5) )"}%== returns the lower case string of the text in cell ==R1:C5==
-   * Related: =[[#FuncPROPER][$PROPER()]]=, =[[#FuncPROPERSPACE][$PROPERSPACE()]]=, =[[#FuncTRIM][$TRIM()]]=, =[[#FuncUPPER][$UPPER()]]=
+   * Related: =[[#FuncISLOWER][$ISLOWER()]]=, =[[#FuncPROPER][$PROPER()]]=, =[[#FuncPROPERSPACE][$PROPERSPACE()]]=, =[[#FuncTRIM][$TRIM()]]=, =[[#FuncUPPER][$UPPER()]]=
 
 #FuncMAX
 ---+++ MAX( list ) - biggest value of a list or range of cells
@@ -496,7 +530,7 @@ Conventions for Syntax:
 ---+++ MOD( num, divisor ) -- reminder after dividing ==num== by ==divisor==
    * Syntax: ==$MOD( num, divisor )==
    * Example: ==%<nop>CALC{"$MOD(7, 3)"}%== returns ==1==
-   * Related: =[[#FuncEVAL][$EVAL()]]=
+   * Related: =[[#FuncEVAL][$EVAL()]]=, =[[#FuncEVEN][$EVEN()]]=, =[[#FuncISDIGIT][$ISDIGIT()]]=, =[[#FuncODD][$ODD()]]=, =[[#FuncSIGN][$SIGN()]]=
 
 #FuncNOEXEC
 ---+++ NOEXEC( formula ) -- do not execute a spreadsheet formula
@@ -521,7 +555,7 @@ Conventions for Syntax:
 ---+++ ODD( num ) -- test for odd number
    * Syntax: ==$ODD( num )==
    * Example: ==%<nop>CALC{"$ODD(2)"}%== returns ==0==
-   * Related: =[[#FuncABS][$ABS()]]=, =[[#FuncEVEN][$EVEN()]]=, =[[#FuncMOD][$MOD()]]=, =[[#FuncSIGN][$SIGN()]]=
+   * Related: =[[#FuncABS][$ABS()]]=, =[[#FuncEVEN][$EVEN()]]=, =[[#FuncISDIGIT][$ISDIGIT()]]=, =[[#FuncMOD][$MOD()]]=, =[[#FuncSIGN][$SIGN()]]=
 
 #FuncOR
 ---+++ OR( list ) -- logical OR of a list
@@ -553,14 +587,14 @@ Conventions for Syntax:
    * Syntax: ==$PROPER( text )==
    * Example: ==%<nop>CALC{"$PROPER(a small STEP)"}%== returns ==A Small Step==
    * Example: ==%<nop>CALC{"$PROPER(f1 (formula-1))"}%== returns ==F1 (Formula-1)==
-   * Related: =[[#FuncLOWER][$LOWER()]]=, =[[#FuncPROPERSPACE][$PROPERSPACE()]]=, =[[#FuncTRIM][$TRIM()]]=, =[[#FuncUPPER][$UPPER()]]=
+   * Related: =[[#FuncISWIKIWORD][$ISWIKIWORD()]]=, =[[#FuncLOWER][$LOWER()]]=, =[[#FuncPROPERSPACE][$PROPERSPACE()]]=, =[[#FuncTRIM][$TRIM()]]=, =[[#FuncUPPER][$UPPER()]]=
 
 #FuncPROPERSPACE
 ---+++ PROPERSPACE( text ) -- properly space out <nop>WikiWords
    * Properly spaces out %SYSTEMWEB%.WikiWords preceeded by white space, parenthesis, or ==][==. Words listed in the DONTSPACE %SYSTEMWEB%.%WIKIPREFSTOPIC% variable or DONTSPACE plugins setting are excluded
    * Syntax: ==$PROPERSPACE( text )==
    * Example: Assuming DONTSPACE contains <nop>MacDonald: ==%<nop>CALC{"$PROPERSPACE(Old <nop>MacDonald had a <nop>ServerFarm, <nop>EeEyeEeEyeOh)"}%== returns ==Old <nop>MacDonald had a Server Farm, Ee Eye Ee Eye Oh==
-   * Related: =[[#FuncLOWER][$LOWER()]]=, =[[#FuncPROPER][$PROPER()]]=, =[[#FuncTRIM][$TRIM()]]=, =[[#FuncUPPER][$UPPER()]]=
+   * Related: =[[#FuncISWIKIWORD][$ISWIKIWORD()]]=, =[[#FuncLOWER][$LOWER()]]=, =[[#FuncPROPER][$PROPER()]]=, =[[#FuncTRIM][$TRIM()]]=, =[[#FuncUPPER][$UPPER()]]=
 
 #FuncRAND
 ---+++ RAND( max ) -- random number
@@ -647,7 +681,7 @@ Conventions for Syntax:
    * Returns -1 if ==num== is negative, 0 if zero, or 1 if positive
    * Syntax: ==$SIGN( num )==
    * Example: ==%<nop>CALC{"$SIGN(-12.5)"}%== returns ==-1==
-   * Related: =[[#FuncABS][$ABS()]]=, =[[#FuncEVAL][$EVAL()]]=, =[[#FuncEVEN][$EVEN()]]=, =[[#FuncINT][$INT()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncODD][$ODD()]]=
+   * Related: =[[#FuncABS][$ABS()]]=, =[[#FuncEVAL][$EVAL()]]=, =[[#FuncEVEN][$EVEN()]]=, =[[#FuncINT][$INT()]]=, =[[#FuncISDIGIT][$ISDIGIT()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncODD][$ODD()]]=
 
 #FuncSPLIT
 ---+++ SPLIT( separator, text ) -- split a string into a list
@@ -749,13 +783,13 @@ Conventions for Syntax:
    * Removes all spaces from text except for single spaces between words
    * Syntax: ==$TRIM( text )==
    * Example: ==%<nop>CALC{"$TRIM( eat  spaces  )"}%== returns ==eat spaces==
-   * Related: =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncPROPERSPACE][$PROPERSPACE()]]=
+   * Related: =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncISWIKIWORD][$ISWIKIWORD()]]=, =[[#FuncPROPER][$PROPER()]]=, =[[#FuncPROPERSPACE][$PROPERSPACE()]]=
 
 #FuncUPPER
 ---+++ UPPER( text ) -- upper case string of a text
    * Syntax: ==$UPPER( text )==
    * Example: ==%<nop>CALC{"$UPPER($T(R1:C5))"}%== returns the upper case string of the text in cell ==R1:C5==
-   * Related: =[[#FuncLOWER][$LOWER()]]=, =[[#FuncPROPER][$PROPER()]]=, =[[#FuncPROPERSPACE][$PROPERSPACE()]]=, =[[#FuncTRIM][$TRIM()]]=
+   * Related: =[[#FuncISLOWER][$ISLOWER()]]=, =[[#FuncISUPPER][$ISUPPER()]]=, =[[#FuncLOWER][$LOWER()]]=, =[[#FuncPROPER][$PROPER()]]=, =[[#FuncPROPERSPACE][$PROPERSPACE()]]=, =[[#FuncTRIM][$TRIM()]]=
 
 #FuncVALUE
 ---+++ VALUE( text ) -- convert text to number
@@ -764,7 +798,7 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$VALUE(US$1,200)"}%== returns ==1200==
    * Example: ==%<nop>CALC{"$VALUE(<nop>PrjNotebook1234)"}%== returns ==1234==
    * Example: ==%<nop>CALC{"$VALUE(Total: -12.5)"}%== returns ==-12.5==
-   * Related: =[[#FuncCEILING][$CEILING()]]=, =[[#FuncEVAL][$EVAL()]]=, =[[#FuncFLOOR][$FLOOR()]]=, =[[#FuncINT][$INT()]]=, =[[#FuncROUND][$ROUND()]]=
+   * Related: =[[#FuncCEILING][$CEILING()]]=, =[[#FuncEVAL][$EVAL()]]=, =[[#FuncFLOOR][$FLOOR()]]=, =[[#FuncINT][$INT()]]=, =[[#FuncISDIGIT][$ISDIGIT()]]=, =[[#FuncROUND][$ROUND()]]=
 
 #FuncWHILE
 ---+++ WHILE( condition, do ) -- do something while a condition is true
@@ -893,10 +927,11 @@ __Note:__ This plugin is pre-installed. TWiki administrators can upgrade it as n
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2001-2012 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]<br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2001-2012 Peter Thoeny, [[http://twiki.org/][TWiki.org]]<br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-04-04 |
+|  Plugin Version: | 2012-06-29 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2012-06-29: | TWikibug:Item6897: Added $ISDIGIT(), $ISLOWER(), $ISUPPER(), $ISWIKIWORD() |
 |  2012-04-04: | TWikibug:Item6866: Added CALCULATE variable using register tag handler to support proper inside-out, left-to-right eval order like ordinary TWiki variables |
 |  2012-01-13: | TWikibug:Item6804: Added $FLOOR() and $CEILING() |
 |  2011-09-07: | TWikibug:Item6803: Fix for EVAL function bug with zeroes after decimal point |
