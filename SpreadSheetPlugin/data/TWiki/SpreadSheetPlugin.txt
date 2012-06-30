@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1341077892" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1341078236" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -464,17 +464,17 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Example: ==%<nop>CALC{$LISTREVERSE(Apple, Orange, Apple, Kiwi)}%== returns ==Kiwi, Apple, Orange, Apple==
    * Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSUM][$SUM()]]=
 
-#FuncLISTSIZE
----+++ LISTSIZE( list ) -- number of elements in a list
-   * Syntax: ==$LISTSIZE( list )==
-   * Example: ==%<nop>CALC{$LISTSIZE(Apple, Orange, Apple, Kiwi)}%== returns ==4==
-   * Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTJOIN][$LISTJOIN()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTTRUNCATE][$LISTTRUNCATE()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSPLIT][$SPLIT()]]=, =[[#FuncSUM][$SUM()]]=
-
 #FuncLISTSHUFFLE
 ---+++ LISTSHUFFLE( list ) -- shuffle element of a list in random order
    * Syntax: ==$LISTSHUFFLE( list )==
    * Example: ==%<nop>CALC{$LISTSHUFFLE(Apple, Orange, Apple, Kiwi)}%== returns the four elements in random order
    * Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTRAND][$LISTRAND()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncRAND][$RAND()]]=, =[[#FuncSUM][$SUM()]]=
+
+#FuncLISTSIZE
+---+++ LISTSIZE( list ) -- number of elements in a list
+   * Syntax: ==$LISTSIZE( list )==
+   * Example: ==%<nop>CALC{$LISTSIZE(Apple, Orange, Apple, Kiwi)}%== returns ==4==
+   * Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTJOIN][$LISTJOIN()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTTRUNCATE][$LISTTRUNCATE()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSPLIT][$SPLIT()]]=, =[[#FuncSUM][$SUM()]]=
 
 #FuncLISTSORT
 ---+++ LISTSORT( list ) -- sort a list
@@ -749,14 +749,6 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Example: ==%<nop>CALC{$T(R1:C5)}%== returns the text in cell ==R1:C5==
    * Related: =[[#FuncCOLUMN][$COLUMN()]]=, =[[#FuncROW][$ROW()]]=
 
-#FuncTRANSLATE
----+++ TRANSLATE( text, from, to ) -- translate text from one set of characters to another
-   * The translation is done =from= a set =to= a set, one character by one. The =text= may contain commas; all three parameters are required. In the =from= and =to= parameters you can add token =$comma= for comma, =$sp= for space, and =$n= for newline
-   * Syntax: ==$TRANSLATE( text, from, to )==
-   * Example: ==%<nop>CALC{$TRANSLATE(boom,bm,cl)}%== returns ==cool==
-   * Example: ==%<nop>CALC{$TRANSLATE(one, two,$comma,;)}%== returns ==one; two==
-   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncHEXDECODE][$HEXDECODE()]]=, =[[#FuncHEXENCODE][$HEXENCODE()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=
-
 #FuncTIME
 ---+++ TIME( text ) -- convert a date string into a serialized date number
    * Serialized date is seconds since the Epoch, e.g. midnight, 01 Jan 1970. Current time is taken if the date string is empty. Supported date formats: =31 Dec 2009=; =31 Dec 2009 GMT=; =31 Dec 09=; =31-Dec-2009=; =31/Dec/2009=; =31 Dec 2003 - 23:59=; =31 Dec 2003 - 23:59:59=; =2009/12/31=; =2009-12-31=; =2009/12/31=; =2009/12/31 23:59=; =2009/12/31 - 23:59=; =2009-12-31-23-59=; =2009/12/31 - 23:59:59=; =2009.12.31.23.59.59=. DOY (Day of Year) formats: =DOY2003.365=, =DOY2003.365.23.59=, =DOY2003.365.23.59.59=. Date is assumed to be server time; add =GMT= to indicate Greenwich time zone
@@ -786,6 +778,14 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Syntax: ==$TODAY( )==
    * Example: ==%<nop>CALC{$TODAY()}%== returns the number of seconds since Epoch
    * Related: =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=
+
+#FuncTRANSLATE
+---+++ TRANSLATE( text, from, to ) -- translate text from one set of characters to another
+   * The translation is done =from= a set =to= a set, one character by one. The =text= may contain commas; all three parameters are required. In the =from= and =to= parameters you can add token =$comma= for comma, =$sp= for space, and =$n= for newline
+   * Syntax: ==$TRANSLATE( text, from, to )==
+   * Example: ==%<nop>CALC{$TRANSLATE(boom,bm,cl)}%== returns ==cool==
+   * Example: ==%<nop>CALC{$TRANSLATE(one, two,$comma,;)}%== returns ==one; two==
+   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncHEXDECODE][$HEXDECODE()]]=, =[[#FuncHEXENCODE][$HEXENCODE()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=
 
 #FuncTRIM
 ---+++ TRIM( text ) -- trim spaces from text
