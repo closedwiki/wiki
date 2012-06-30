@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1341093126" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1341094633" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -951,8 +951,9 @@ __Note:__ This plugin is pre-installed. TWiki administrators can upgrade it as n
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2001-2012 Peter Thoeny, [[http://twiki.org/][TWiki.org]]<br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-06-29 |
+|  Plugin Version: | 2012-06-30 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2012-06-30: | TWikibug:Item6898: Added $FILTER() |
 |  2012-06-29: | TWikibug:Item6897: Added $ISDIGIT(), $ISLOWER(), $ISUPPER(), $ISWIKIWORD() |
 |  2012-04-04: | TWikibug:Item6866: Added CALCULATE variable using register tag handler to support proper inside-out, left-to-right eval order like ordinary TWiki variables |
 |  2012-01-13: | TWikibug:Item6804: Added $FLOOR() and $CEILING() |
