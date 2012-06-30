@@ -453,6 +453,23 @@ sub _doFunc
             $result .= $res;
         }
 
+    } elsif( $theFunc eq "ISUPPER" ) {
+        my $regex = ($TWiki::regex{upperAlpha}) ? qr/[$TWiki::regex{upperAlpha}]+/o : '[[:upper:]]+';
+        $result = ( $theAttr =~ m/^$regex$/o ) ? 1 : 0;
+
+    } elsif( $theFunc eq "ISLOWER" ) {
+        my $regex = ($TWiki::regex{lowerAlpha}) ? qr/[$TWiki::regex{lowerAlpha}]+/o : '[[:lower:]]+';
+        $result = ( $theAttr =~ m/^$regex$/o ) ? 1 : 0;
+
+    } elsif( $theFunc eq "ISDIGIT" ) {
+        my $regex = ($TWiki::regex{numeric}) ? qr/[$TWiki::regex{numeric}]+/o : '[[:digit:]]+';
+        $result = ( $theAttr =~ m/^$regex$/o ) ? 1 : 0;
+
+    } elsif( $theFunc eq "ISWIKIWORD" ) {
+        my $regex = ($TWiki::regex{wikiWordRegex}) ? $TWiki::regex{wikiWordRegex} :
+                    '[[:upper:]]+[[:lower:][:digit:]]+[[:upper:]]+[[:alpha:][:digit:]]*';
+        $result = ( $theAttr =~ m/^$regex$/o ) ? 1 : 0;
+
     } elsif( $theFunc eq "UPPER" ) {
         $result = uc( $theAttr );
 
