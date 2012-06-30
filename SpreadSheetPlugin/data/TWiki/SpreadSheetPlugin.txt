@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1341091033" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1341093126" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -227,7 +227,7 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Example: ==%<nop>CALC{$FILTER([^0-9], Project-ID-1234)}%== returns ==1234== - filter in digits, e.g. keep only digits
    * Example: ==%<nop>CALC{$FILTER([^a-zA-Z0-9 ], Stupid mistake*%@^! Fixed)}%== returns ==Stupid mistake Fixed== - keep only alphanumeric characters and spaces
    * Example: ==%<nop>CALC{$FILTER([^a-zA-Z0-9], $PROPER(an EXELLENT idea.))}%== returns ==AnExcellentIdea== - turn a string into a %SYSTEMWEB%.WikiWord topic name
-   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncPROPER][$PROPER()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=, =[[#FuncTRIM][$TRIM()]]=
 
 #FuncFIND
 ---+++ FIND( string, text, start ) -- find one string within another string
@@ -236,7 +236,7 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Example: ==%<nop>CALC{$FIND(f, fluffy)}%== returns ==1==
    * Example: ==%<nop>CALC{$FIND(f, fluffy, 2)}%== returns ==4==
    * Example: ==%<nop>CALC{$FIND(@, fluffy, 1)}%== returns ==0==
-   * Related: =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=
+   * Related: =[[#FuncFILTER][$FILTER()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=
 
 #FuncFLOOR
 ---+++ FLOOR( num ) -- return the largest integer preceding a number
@@ -354,7 +354,7 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Syntax: ==$INSERTSTRING( text, start, new )==
    * Example: ==%<nop>CALC{$INSERTSTRING(abcdefg, 2, XYZ)}%== returns ==abXYZcdefg==
    * Example: ==%<nop>CALC{$INSERTSTRING(abcdefg, -2, XYZ)}%== returns ==abcdeXYZfg==
-   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+   * Related: =[[#FuncFILTER][$FILTER()]]=, =[[#FuncFIND][$FIND()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncINT
 ---+++ INT( formula ) -- evaluate formula and return integer truncated towards 0
@@ -412,7 +412,7 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Syntax: ==$LEFTSTRING( text, _num_ )==
    * Example: ==%<nop>CALC{$LEFTSTRING(abcdefg)}%== returns ==a==
    * Example: ==%<nop>CALC{$LEFTSTRING(abcdefg, 5)}%== returns ==abcde==
-   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncFILTER][$FILTER()]]=, =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncLENGTH
 ---+++ LENGTH( text ) -- length of text in bytes
@@ -609,7 +609,7 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Syntax: ==$PROPER( text )==
    * Example: ==%<nop>CALC{$PROPER(a small STEP)}%== returns ==A Small Step==
    * Example: ==%<nop>CALC{$PROPER(f1 (formula-1))}%== returns ==F1 (Formula-1)==
-   * Related: =[[#FuncISWIKIWORD][$ISWIKIWORD()]]=, =[[#FuncLOWER][$LOWER()]]=, =[[#FuncPROPERSPACE][$PROPERSPACE()]]=, =[[#FuncTRIM][$TRIM()]]=, =[[#FuncUPPER][$UPPER()]]=
+   * Related: =[[#FuncFILTER][$FILTER()]]=, =[[#FuncISWIKIWORD][$ISWIKIWORD()]]=, =[[#FuncLOWER][$LOWER()]]=, =[[#FuncPROPERSPACE][$PROPERSPACE()]]=, =[[#FuncTRIM][$TRIM()]]=, =[[#FuncUPPER][$UPPER()]]=
 
 #FuncPROPERSPACE
 ---+++ PROPERSPACE( text ) -- properly space out <nop>WikiWords
@@ -635,7 +635,7 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Replace =num= number of characters of text string =text=, starting at =start=, with new text =new=. Starting position is 1; use a negative =start= to count from the end of the text
    * Syntax: ==$REPLACE( text, start, num, new )==
    * Example: ==%<nop>CALC{$REPLACE(abcdefghijk, 6, 5, *)}%== returns ==abcde*k==
-   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncFILTER][$FILTER()]]=, =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncRIGHT
 ---+++ RIGHT( ) -- address range of cells to the right of the current cell
@@ -649,7 +649,7 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Syntax: ==$RIGHTSTRING( text, _num_ )==
    * Example: ==%<nop>CALC{$RIGHTSTRING(abcdefg)}%== returns ==g==
    * Example: ==%<nop>CALC{$RIGHTSTRING(abcdefg, 5)}%== returns ==cdefg==
-   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncFILTER][$FILTER()]]=, =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncROUND
 ---+++ ROUND( formula, digits ) -- round a number
@@ -675,7 +675,7 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Example: ==%<nop>CALC{$SEARCH([uy], fluffy)}%== returns ==3==
    * Example: ==%<nop>CALC{$SEARCH([uy], fluffy, 3)}%== returns ==6==
    * Example: ==%<nop>CALC{$SEARCH([abc], fluffy,)}%== returns ==0==
-   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=
+   * Related: =[[#FuncFILTER][$FILTER()]]=, =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=
 
 #FuncSET
 ---+++ SET( name, value ) -- set a variable for later use
@@ -728,14 +728,14 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Example: ==%<nop>CALC{$SUBSTITUTE(Q2-2002, 2, 3)}%== returns ==Q3-3003==
    * Example: ==%<nop>CALC{$SUBSTITUTE(Q2-2002,2, 3, 3)}%== returns ==Q2-2003==
    * Example: ==%<nop>CALC{$SUBSTITUTE(abc123def, [0-9], 9, , r)}%== returns ==abc999def==
-   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncHEXDECODE][$HEXDECODE()]]=, =[[#FuncHEXENCODE][$HEXENCODE()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncFILTER][$FILTER()]]=, =[[#FuncHEXDECODE][$HEXDECODE()]]=, =[[#FuncHEXENCODE][$HEXENCODE()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncSUBSTRING
 ---+++ SUBSTRING( text, start, num ) -- extract a substring out of a text string
    * Extract =num= number of characters of text string =text=, starting at =start=. Starting position is 1; use a negative =start= to count from the end of the text
    * Syntax: ==$SUBSTRING( text, start, num )==
    * Example: ==%<nop>CALC{$SUBSTRING(abcdefghijk, 3, 5)}%== returns ==cdefg==
-   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+   * Related: =[[#FuncFILTER][$FILTER()]]=, =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncSUM
 ---+++ SUM( list ) -- sum of a list or range of cells
@@ -798,14 +798,14 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Syntax: ==$TRANSLATE( text, from, to )==
    * Example: ==%<nop>CALC{$TRANSLATE(boom,bm,cl)}%== returns ==cool==
    * Example: ==%<nop>CALC{$TRANSLATE(one, two,$comma,;)}%== returns ==one; two==
-   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncHEXDECODE][$HEXDECODE()]]=, =[[#FuncHEXENCODE][$HEXENCODE()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=
+   * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncFILTER][$FILTER()]]=, =[[#FuncHEXDECODE][$HEXDECODE()]]=, =[[#FuncHEXENCODE][$HEXENCODE()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=
 
 #FuncTRIM
 ---+++ TRIM( text ) -- trim spaces from text
    * Removes all spaces from text except for single spaces between words
    * Syntax: ==$TRIM( text )==
    * Example: ==%<nop>CALC{$TRIM( eat  spaces  )}%== returns ==eat spaces==
-   * Related: =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncISWIKIWORD][$ISWIKIWORD()]]=, =[[#FuncPROPER][$PROPER()]]=, =[[#FuncPROPERSPACE][$PROPERSPACE()]]=
+   * Related: =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncFILTER][$FILTER()]]=, =[[#FuncISWIKIWORD][$ISWIKIWORD()]]=, =[[#FuncPROPER][$PROPER()]]=, =[[#FuncPROPERSPACE][$PROPERSPACE()]]=
 
 #FuncUPPER
 ---+++ UPPER( text ) -- upper case string of a text
