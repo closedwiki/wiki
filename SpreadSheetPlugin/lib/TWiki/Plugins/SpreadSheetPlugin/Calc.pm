@@ -758,6 +758,15 @@ sub _doFunc
         eval 'substr( $string, $start, 0, $new )';
         $result = $string;
 
+    } elsif( $theFunc eq "FILTER" ) {
+        my( $filter, $string ) = split ( /,\s*/, $theAttr, 2 );
+        if( defined $string ) {
+          $filter =~ s/\$comma/,/g;
+          $filter =~ s/\$sp/ /g;
+          eval '$string =~ s/$filter//go';
+          $result = $string;
+        }
+
     } elsif( $theFunc eq "TRANSLATE" ) {
         $result = $theAttr;
         # greedy match for comma separated parameters (in case first parameter has embedded commas)
