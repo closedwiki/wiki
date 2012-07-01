@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1341094633" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1341183609" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -34,14 +34,14 @@ __Interactive example:__
 
 <form name="interactive" action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="get">
 <noautolink>
-Formula:
-<code>%<nop>CALC{</code><input type="text" name="func" size="40" value="%URLPARAM{ "func" default="$PROPERSPACE(%WIKINAME%)" encode="entity" }%" class="twikiInputField" /><code>}%</code>
+Formula:%BR%
+<code>&nbsp;%<nop>CALC{</code><input type="text" name="func" size="50" value="%URLPARAM{ "func" default="$PROPERSPACE(%WIKINAME%)" encode="entity" }%" class="twikiInputField" /><code>}%</code>
 <input type="submit" value="Evaluate" class="twikiSubmit" /><br />
-Result: &nbsp; &nbsp; %CALC{%URLPARAM{ "func" default="$PROPERSPACE(%WIKINAME%)" }%}%
+Result: &nbsp; %CALC{%URLPARAM{ "func" default="$PROPERSPACE(%WIKINAME%)" }%}%
 </noautolink>
 </form>
 </td></tr><tr><td colspan="3">
-The formula next to "Total" is ==%<nop>CALC{$SUM( $ABOVE() )}%==. <br /> (you see the formula instead of the sum in case the plugin is not installed or not enabled.)
+The formula next to "Total" is ==%<nop>CALC{$SUM( $ABOVE() )}%==. <br /> (you see the formula instead of the sum in case the plugin is not installed or is not enabled.)
 </td></tr></table>
 
 %TOC%
