@@ -16,11 +16,19 @@ use base qw(TWikiTestCase);
 use strict;
 
 use TWiki;
+my $twiki;
 
 sub set_up {
+    my $this = shift;
+    $this->SUPER::set_up();
+    my $query = Unit::Request->new('');
+    $twiki = new TWiki(undef, $query);    
 }
 
 sub tear_down {
+    my $this = shift;
+    eval { $twiki->finish() };
+    $this->SUPER::tear_down();
 }
 
 sub DISABLEtest_urlEncodeDecode {
@@ -323,7 +331,7 @@ sub segfaulting_urlDecode {
     $text =~ s/%([\da-f]{2})/chr(hex($1))/gei;
     $text =~ s/%u([\da-f]{4})/chr(hex($1))/gei; 
 
-    my $t = TWiki::UTF82SiteCharSet( $text ); 
+    my $t = $twiki->UTF82SiteCharSet( $text ); 
 
     $text = $t if ( $t ); 
 
