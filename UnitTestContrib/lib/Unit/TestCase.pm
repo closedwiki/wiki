@@ -63,7 +63,7 @@ sub list_tests {
     my @tests;
     my @verifies;
     my $clz = new Devel::Symdump($suite);
-    for my $i ($clz->functions()) {
+    for my $i (sort $clz->functions()) {
         if ($i =~ /^$suite\:\:test/) {
             push(@tests, $i);
         } elsif ($i =~ /^$suite\:\:(verify.*$)/) {
