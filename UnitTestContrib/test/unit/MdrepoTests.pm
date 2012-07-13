@@ -23,7 +23,6 @@ my $twiki; # TWiki instance
 
 sub set_up {
     my $this = shift; # the Test::Unit::TestCase object
-    $this->SUPER::set_up();
 
     # Settings for mdrepo
     $TWiki::cfg{MdrepoStore} = 'DB_File';
@@ -33,25 +32,30 @@ sub set_up {
     mkdir($mdrepoDir, 0770) unless ( -d $mdrepoDir );
     $TWiki::cfg{MdrepoDir} = $mdrepoDir;
     $TWiki::cfg{MdrepoTables} = [qw(webs sites)];
-
     $TWiki::cfg{LogFileName} = "$rootDir/logTEST.txt";
+
+    $this->SUPER::set_up();
 
     my $query = Unit::Request->new('');
     $query->path_info("/$testWeb/$testTopic");
-    $twiki = new TWiki(undef, $query);    
+    $this->{twiki} = new TWiki(undef, $query);    
     my $response = Unit::Response->new();
     $response->charset("utf8");
 }
 
 sub tear_down {
     my $this = shift;
-    eval { $twiki->finish() };
-    system("/bin/rm -rf $TWiki::cfg{MdrepoDir}");
+    $this->{twiki}->finish();
     $this->SUPER::tear_down();
+    system("/bin/rm -rf $TWiki::cfg{MdrepoDir}");
+    # to prevent mdrepo use without MdrepoDir directory
+    delete $TWiki::cfg{MdrepoDir};
+    delete $TWiki::cfg{MdrepoTables};
 }
 
 sub var_test {
     my ($this, $var, $expected) = @_;
+    my $twiki = $this->{twiki};
     my $expanded =
         $twiki->handleCommonTags($var, $twiki->{webName}, $twiki->{topicName});
     $this->assert_equals($expected, $expanded);
@@ -80,7 +84,7 @@ my %webTable = (
 
 sub load_sites {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     # putting and getting data to/from the sites table
     for my $i ( keys %siteTable ) {
@@ -90,7 +94,7 @@ sub load_sites {
 
 sub load_webs {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     # putting and getting data to/from the webs table
     for my $i ( keys %webTable ) {
@@ -100,7 +104,7 @@ sub load_webs {
 
 sub test_010_webs_empty {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     # new empty table is expected to be created
     my @webs = $mdrepo->getList('webs');
@@ -109,7 +113,7 @@ sub test_010_webs_empty {
 
 sub test_020_webs_nonexistent_record {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     # retrieving nonexistent record
     my $rec = $mdrepo->getRec('webs', 'foo');
@@ -118,7 +122,7 @@ sub test_020_webs_nonexistent_record {
 
 sub test_030_sites_empty {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     # another new empty table is expected to be created
     my @sites = $mdrepo->getList('sites');
@@ -127,7 +131,7 @@ sub test_030_sites_empty {
 
 sub test_040_nonexistent_table {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     my @nonexistent = $mdrepo->getList('nonexistent');
     $this->assert_equals(0, scalar(@nonexistent));
@@ -137,7 +141,7 @@ sub test_040_nonexistent_table {
 
 sub test_050_reset_table {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     # nothing should break by resetting empty and nonexistent tables
     $mdrepo->resetTable('webs');
@@ -146,7 +150,7 @@ sub test_050_reset_table {
 
 sub test_060_put_sites_rec {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     # putting and getting data to/from the sites table
     $this->load_sites();
@@ -178,7 +182,7 @@ sub test_075_MDREPO_sites_custom {
 
 sub test_080_put_webs_rec {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     # putting and getting data to/from the webs table
     $this->load_webs();
@@ -190,7 +194,7 @@ sub test_080_put_webs_rec {
 
 sub test_090_MDREPO_webs {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     $this->load_webs();
     $this->var_test('%MDREPO{"webs"}%',
@@ -201,7 +205,7 @@ sub test_090_MDREPO_webs {
 
 sub test_100_put_nonexistent_table {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     # confirming nothing breaks by putting a record to a nonexistent table
     $mdrepo->putRec('nonexistent', 'foo', {bar => 123});
@@ -211,7 +215,7 @@ sub test_100_put_nonexistent_table {
 
 sub test_110_del_webs_rec {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     $this->load_webs();
     $mdrepo->delRec('webs', 'WebThree');
@@ -223,7 +227,7 @@ sub test_110_del_webs_rec {
 
 sub test_120_del_sites_rec {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     $this->load_sites();
     $mdrepo->delRec('sites', 'as');
@@ -235,7 +239,7 @@ sub test_120_del_sites_rec {
 
 sub test_130_updt_sites_rec {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     $this->load_sites();
     my $siteAm1 = {
@@ -250,7 +254,7 @@ sub test_130_updt_sites_rec {
 
 sub test_140_updt_webs_rec {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     $this->load_webs();
     my $webTwo1 = {
@@ -264,7 +268,7 @@ sub test_140_updt_webs_rec {
 
 sub test_150_reset_webs_again {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     $this->load_webs();
     $mdrepo->resetTable('webs');
@@ -275,7 +279,7 @@ sub test_150_reset_webs_again {
 
 sub test_160_reset_sites_again {
     my $this = shift;
-    my $mdrepo = $twiki->{mdrepo};
+    my $mdrepo = $this->{twiki}{mdrepo};
 
     $this->load_sites();
     $mdrepo->resetTable('sites');

@@ -102,6 +102,9 @@ sub tear_down {
     my $this = shift;
     $this->SUPER::tear_down();
     system("/bin/rm -rf $TWiki::cfg{MdrepoDir}");
+    # to prevent mdrepo use without MdrepoDir directory
+    delete $TWiki::cfg{MdrepoDir};
+    delete $TWiki::cfg{MdrepoTables};
 }
 
 sub mdrepo_cli_test {
