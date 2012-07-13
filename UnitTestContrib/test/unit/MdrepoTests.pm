@@ -19,7 +19,6 @@ my $testWeb = 'TemporaryTestWeb'; # name of the test web
 my $testTopic = 'TestTopic';      # name of a topic
 my $testUsersWeb = 'TemporaryTestUsersUsersWeb';
  # Name of a %USERSWEB% for our test users
-my $twiki; # TWiki instance
 
 sub set_up {
     my $this = shift; # the Test::Unit::TestCase object
