@@ -85,9 +85,24 @@ EOF
 | Comment | textarea | 50x6 | | |
 EOF
 
-        $this->{twiki}->{store}->createWeb($this->{twiki}->{user},
-                                     $systemWeb,
-                                     $TWiki::cfg{SystemWebName});
+#        $this->{twiki}->{store}->createWeb($this->{twiki}->{user},
+#                                     $systemWeb,
+#                                     $TWiki::cfg{SystemWebName});
+# The commented out lines above is replaced by the following block.
+# There were two problems with the code above.
+#   * it fails to copy an attachment directory having a directory
+#   * it takes too long to complete
+#   * because of the number of attachment files, tear_down() takes long.
+# Since this module is for various handlers instead of actual plug-ins,
+# there is no need for the templorary systemWeb to have all topics and
+# attachments. As such, the following lines are sufficient and much faster.
+        mkdir("$TWiki::cfg{DataDir}/$systemWeb");
+        system("/bin/cp " .
+               "$TWiki::cfg{DataDir}/$TWiki::cfg{SystemWebName}/" .
+               "{WebPreferences,TWikiPreferences}.txt " .
+               "$TWiki::cfg{DataDir}/$systemWeb");
+        mkdir("$TWiki::cfg{PubDir}/$systemWeb");
+
         $TWiki::cfg{SystemWebName} = $systemWeb;
         $TWiki::cfg{EnableEmail} = 1;
 

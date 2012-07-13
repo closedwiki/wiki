@@ -41,11 +41,22 @@ sub set_up {
             $twiki->{user}, $this->{users_web}, $TWiki::cfg{SuperAdminGroup},
             '   * Set GROUP = '.
               $twiki->{users}->getWikiName($twiki->{user})."\n");
-        $twiki->{store}->createWeb($twiki->{user}, $testSysWeb, $original);
 
-        $twiki->{store}->copyTopic(
-            $twiki->{user}, $original, $TWiki::cfg{SitePrefsTopicName},
-            $testSysWeb, $TWiki::cfg{SitePrefsTopicName} );
+#        $twiki->{store}->createWeb($twiki->{user}, $testSysWeb, $original);
+#        $twiki->{store}->copyTopic(
+#            $twiki->{user}, $original, $TWiki::cfg{SitePrefsTopicName},
+#            $testSysWeb, $TWiki::cfg{SitePrefsTopicName} );
+# The following section replaces the commented out lines above.
+# The above lines was failing because some TWiki web topics (e.g. JQueryPlugin)
+# have directories in their attachment directories.
+
+        mkdir("$TWiki::cfg{DataDir}/$testSysWeb");
+        system("/bin/cp " .
+               "$TWiki::cfg{DataDir}/$original/" .
+               "{WebPreferences,TWikiPreferences}.txt " .
+               "$TWiki::cfg{DataDir}/$testSysWeb");
+        mkdir("$TWiki::cfg{PubDir}/$testSysWeb");
+
 
     } catch TWiki::AccessControlException with {
         $this->assert(0,shift->stringify());
