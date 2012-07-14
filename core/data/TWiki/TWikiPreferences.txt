@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1339314078" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1342251887" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -111,13 +111,13 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==\t== to tab (3 spaces for bullets).
 <!-- verbatim tag required to prevent error in Apache log; does not suppress Set -->
 <verbatim>
-      * Set ATTACHEDFILELINKFORMAT = \n   * [[%ATTACHURL%/$name][$name]]: $comment
+      * Set ATTACHEDFILELINKFORMAT = \n   * [[%PUBURLPATH%/%WEB%/%TOPIC%/$name][$name]]: $comment
 </verbatim>
 
    * Format of images when the __link__ check box is checked:
       * %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==$width== to width of image; ==$height== to height of image; ==$size== to ==width="..." height="..."== attribute of ==img== tag; ==\t== to tab and ==\n== to linefeed. Use 3 leading spaces for bullets.
 <verbatim>
-      * Set ATTACHEDIMAGEFORMAT = \n   * $comment: <br />\n     <img src="%ATTACHURLPATH%/$name" alt="$name" $size />
+      * Set ATTACHEDIMAGEFORMAT = \n   * $comment: <br />\n     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/$name" alt="$name" $size />
 </verbatim>
 
 #TWikiPlatformSettings
