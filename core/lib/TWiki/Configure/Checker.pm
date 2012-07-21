@@ -299,9 +299,10 @@ sub checkRCSProgram {
         $err .= $key.' is not set';
     } else {
         my $version = `$prog -V` || '';
-        if ( $version =~ /(\d+(\.\d+)+)/ ) {
+        if ( $version !~ /Can't exec/ && $version =~ /(\d+(\.\d+)+)/ ) {
             $version = $1;
         } else {
+            $version = '';
             $err .= $this->ERROR($prog.' did not return a version number (or might not exist..)');
         }
         if( $version =~ /^\d/ && $version < $rcsverRequired ) {
