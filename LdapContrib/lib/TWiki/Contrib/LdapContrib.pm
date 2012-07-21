@@ -30,7 +30,7 @@ use TWiki::Plugins ();
 use vars qw($VERSION $RELEASE %sharedLdapContrib);
 
 $VERSION = '$Rev: 10335 (2012-05-05) $';
-$RELEASE = '4.33';
+$RELEASE = '4.34';
 
 =pod
 
