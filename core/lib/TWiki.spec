@@ -1306,7 +1306,7 @@ $TWiki::cfg{Operators}{If} = [ 'TWiki::If::OP_allows', 'TWiki::If::OP_defined', 
 #
 # **STRING 120 EXPERT**
 # The name of the Perl class tie-able.
-# $TWiki::cfg{MdrepoStorage} = 'DB_File';
+# $TWiki::cfg{MdrepoStore} = 'DB_File';
 #
 # **PATH EXPERT**
 # The path to the directory where the key-value store files are located.

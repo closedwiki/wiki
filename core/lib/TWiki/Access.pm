@@ -102,7 +102,7 @@ sub checkAccessPermission {
     print STDERR "Check $mode access $user to ". ($web||'undef'). '.'. ($topic||'undef')."\n" if MONITOR;
 
     # super admin is always allowed
-    if( $this->{session}->{users}->isAdmin( $user ) ) {
+    if( $this->{session}->{users}->isAdmin( $user, $topic, $web ) ) {
         print STDERR "$user - ADMIN\n" if MONITOR;
         return 1;
     }
@@ -131,7 +131,7 @@ sub checkAccessPermission {
     # Check DENYTOPIC
     if( defined( $denyText )) {
         if( $denyText =~ /\S$/ ) {
-            if( $this->{session}->{users}->isInList( $user, $denyText )) {
+            if( $this->{session}->{users}->isInList( $user, $denyText, $topic, $web )) {
                 $this->{failure} = $this->{session}->i18n->maketext('access denied on topic');
                 print STDERR $this->{failure}." ($denyText)\n" if MONITOR;
                 return 0;
@@ -145,7 +145,7 @@ sub checkAccessPermission {
 
     # Check ALLOWTOPIC. If this is defined the user _must_ be in it
     if( defined( $allowText ) && $allowText =~ /\S/ ) {
-        if( $this->{session}->{users}->isInList( $user, $allowText )) {
+        if( $this->{session}->{users}->isInList( $user, $allowText, $topic, $web )) {
             print STDERR "in ALLOWTOPIC\n" if MONITOR;
             return 1;
         }
@@ -160,7 +160,7 @@ sub checkAccessPermission {
         $denyText =
           $prefs->getWebPreferencesValue( 'DENYWEB'.$mode, $web );
         if( defined( $denyText ) &&
-              $this->{session}->{users}->isInList( $user, $denyText )) {
+              $this->{session}->{users}->isInList( $user, $denyText, $topic, $web )) {
             $this->{failure} = $this->{session}->i18n->maketext('access denied on web');
             print STDERR $this->{failure}."\n" if MONITOR;
             return 0;
@@ -172,7 +172,7 @@ sub checkAccessPermission {
     $allowText = $prefs->getWebPreferencesValue( 'ALLOWWEB'.$mode, $web );
 
     if( defined( $allowText ) && $allowText =~ /\S/ ) {
-        unless( $this->{session}->{users}->isInList( $user, $allowText )) {
+        unless( $this->{session}->{users}->isInList( $user, $allowText, $topic, $web )) {
             $this->{failure} = $this->{session}->i18n->maketext('access not allowed on web');
             print STDERR $this->{failure}."\n" if MONITOR;
             return 0;
@@ -184,7 +184,7 @@ sub checkAccessPermission {
         $denyText =
           $prefs->getPreferencesValue( 'DENYROOT'.$mode, $web );
         if( defined( $denyText ) &&
-              $this->{session}->{users}->isInList( $user, $denyText )) {
+              $this->{session}->{users}->isInList( $user, $denyText, $topic, $web )) {
             $this->{failure} = $this->{session}->i18n->maketext('access denied on root');
             print STDERR $this->{failure}."\n" if MONITOR;
             return 0;
@@ -193,7 +193,7 @@ sub checkAccessPermission {
         $allowText = $prefs->getPreferencesValue( 'ALLOWROOT'.$mode, $web );
 
         if( defined( $allowText ) && $allowText =~ /\S/ ) {
-            unless( $this->{session}->{users}->isInList( $user, $allowText )) {
+            unless( $this->{session}->{users}->isInList( $user, $allowText, $topic, $web )) {
                 $this->{failure} = $this->{session}->i18n->maketext('access not allowed on root');
                 print STDERR $this->{failure}."\n" if MONITOR;
                 return 0;

@@ -606,7 +606,7 @@ sub setUserData {
 
 =pod
 
----++ ObjectMethod isAdmin( $cUID ) -> $boolean
+---++ ObjectMethod isAdmin( $cUID, $topic, $web ) -> $boolean
 
 True if the user is an admin
    * is $TWiki::cfg{SuperAdminGroup}
@@ -615,12 +615,13 @@ True if the user is an admin
 =cut
 
 sub isAdmin {
-    my ( $this, $cUID ) = @_;
+    my ( $this, $cUID, $topic, $web ) = @_;
 
     return 0 unless defined $cUID;
 
-    return $this->{isAdmin}->{$cUID}
-      if ( defined( $this->{isAdmin}->{$cUID} ) );
+    my $webTopic = defined($web) && defined($topic) ? "$web.$topic" : '';
+    my $cached = $this->{isAdmin}->{$cUID}{$webTopic};
+    return $cached if ( defined( $cached ) );
 
     my $mapping = $this->_getMapping( $cUID );
     my $otherMapping =
@@ -629,12 +630,12 @@ sub isAdmin {
       : $this->{basemapping};
 
     if ( $mapping eq $otherMapping ) {
-        return $mapping->isAdmin( $cUID );
+        return $this->{isAdmin}->{$cUID}{$webTopic} =
+            $mapping->isAdmin( $cUID, $topic, $web );
     }
-    $this->{isAdmin}->{$cUID} =
-      ( $mapping->isAdmin( $cUID ) || $otherMapping->isAdmin( $cUID ) );
-
-    return $this->{isAdmin}->{$cUID};
+    return $this->{isAdmin}->{$cUID}{$webTopic} =
+      ( $mapping->isAdmin( $cUID, $topic, $web ) ||
+        $otherMapping->isAdmin( $cUID, $topic, $web ) );
 }
 
 =pod
@@ -648,7 +649,7 @@ The list may contain the conventional web specifiers (which are ignored).
 =cut
 
 sub isInList {
-    my ( $this, $cUID, $userlist ) = @_;
+    my ( $this, $cUID, $userlist, $topic, $web ) = @_;
 
     return 0 unless $userlist;
 
@@ -665,13 +666,25 @@ sub isInList {
         next unless $ident;
         my $identCUID = $this->getCanonicalUserID( $ident );
         if ( defined $identCUID ) {
-            return 1 if ( $identCUID eq $cUID );
+            return 1 if ( $this->isEquivalentCUIDs($cUID, $identCUID,
+                                                   $topic, $web ) );
         }
         if ( $this->isGroup( $ident ) ) {
-            return 1 if ( $this->isInGroup( $cUID, $ident ) );
+            return 1 if ( $this->isInGroup( $cUID, $ident, $topic, $web ) );
         }
     }
     return 0;
+}
+
+sub isEquivalentCUIDs {
+    my ( $this, $cUID, $identCUID, $topic, $web ) = @_;
+    my $mapping = $this->_getMapping($cUID);
+    if ( $mapping && $mapping->can( 'isEquivalentCUIDs' ) ) {
+        return $mapping->isEquivalentCUIDs($cUID, $identCUID, $topic, $web);
+    }
+    else {
+        return $cUID eq $identCUID;
+    }
 }
 
 =pod
@@ -855,14 +868,17 @@ sub isGroup {
 
 =pod
 
----++ ObjectMethod isInGroup( $cUID, $group ) -> $boolean
+---++ ObjectMethod isInGroup( $cUID, $group, $topic, $web ) -> $boolean
 
 Test if the user identified by $cUID is in the given group.
+That is determined in the context of $topic and $web,
+which matters in context dependent user masquerading a user mapping
+handler may do.
 
 =cut
 
 sub isInGroup {
-    my ( $this, $cUID, $group ) = @_;
+    my ( $this, $cUID, $group, $topic, $web ) = @_;
     return unless ( defined( $cUID ) );
 
     my $mapping = $this->_getMapping( $cUID );
@@ -870,9 +886,9 @@ sub isInGroup {
       ( $mapping eq $this->{basemapping} )
       ? $this->{mapping}
       : $this->{basemapping};
-    return 1 if( $mapping->isInGroup( $cUID, $group ) );
+    return 1 if( $mapping->isInGroup( $cUID, $group, undef, $topic, $web ) );
 
-    return $otherMapping->isInGroup( $cUID, $group )
+    return $otherMapping->isInGroup( $cUID, $group, undef, $topic, $web )
       if ( $otherMapping ne $mapping );
 }
 
