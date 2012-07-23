@@ -335,7 +335,7 @@ sub view {
     } elsif( $skin =~ /\bxml/ ) {
         $contentType = 'text/xml';
         $minimalist = 1;
-    } elsif( $raw eq 'text' || $raw eq 'all' ) {
+    } elsif( $raw eq 'text' || $raw eq 'all' || $raw eq 'expandvariables' ) {
         $contentType = 'text/plain';
     } else {
         $contentType = 'text/html'
@@ -358,7 +358,9 @@ sub view {
     # we do _not_ want to create a textarea.
     # raw=on&skin=text is deprecated; use raw=text instead.
     Monitor::MARK('Ready to render');
-    if( $raw eq 'text' || $raw eq 'all' || ( $raw && $skin eq 'text' )) {
+    if ( $raw eq 'expandvariables' ) {
+        $page = $session->handleCommonTags( $text, $webName, $topicName, $meta );
+    } elsif( $raw eq 'text' || $raw eq 'all' || ( $raw && $skin eq 'text' )) {
         # use raw text
         $page = $text;
     } else {

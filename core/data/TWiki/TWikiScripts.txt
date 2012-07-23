@@ -387,6 +387,7 @@ Used for viewing topics.
 | =raw=on= | Shows the text of the topic in a scrollable textarea | |
 | =raw=debug= | As =raw=on=, but also shows the metadata (forms etc) associated with the topic. | |
 | =raw=text= | Shows only the source of the topic, as plain text (Content-type: text/plain). Only shows the body text, *not* the form or other meta-data. |
+| =raw=expandvariables= | Similar to =raw=text= but TWiki variables are expanded. | |
 | =raw=all= | Shows only the source of the topic, as plain text (Content-type: text/plain), *with embedded meta-data*. This may be useful if you want to extract the source of a topic to a local file on disc. | |
 | =section= | Allows to view only a part of the topic delimited by a named section (see %SYSTEMWEB%.VarSTARTSECTION). If the given section is not present, no topic content is displayed. | |
 | =contenttype= | Allows you to specify a different *Content-Type:* (e.g. =contenttype=text/plain=) | |
