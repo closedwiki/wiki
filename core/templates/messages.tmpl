@@ -123,6 +123,10 @@
 
 %MAKETEXT{"Please go back in your browser and try again."}%
 %TMPL:END%
+%TMPL:DEF{"no_web_metadata"}%
+---+++ %MAKETEXT{"The [_1] web missing metada" args="\"%PARAM1%\""}%
+%MAKETEXT{"This TWiki employs TWiki.MetadataRepository and requires every web to have its metadata registered. But currently the metadata is missing for the [_1] web to be created. Please register the metadata and try again."  args="\"%PARAM1%\""}%
+%TMPL:END%
 %TMPL:DEF{"web_exists"}%
 ---+++ %MAKETEXT{"Cannot create web [_1] because it already exists" args="\"%PARAM1%\""}%
 %MAKETEXT{"Please go back in your browser and try again."}%

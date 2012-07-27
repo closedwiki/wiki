@@ -271,6 +271,16 @@ sub _createWeb {
     }
     $newWeb = TWiki::Sandbox::untaintUnchecked( $newWeb );
 
+    # check metadata if it's required
+    if ( $TWiki::cfg{Mdrepo}{WebRecordRequired} &&
+         $session->{mdrepo} &&
+         !$session->{mdrepo}->getRec('webs', TWiki::topLevelWeb($newWeb))
+    ) {
+        throw TWiki::OopsException(
+            'attention',
+            def =>'no_web_metadata', params => [ $newWeb ] );
+    }
+
     # check permission, user authorized to create web here?
     my $parent = undef; # default is root if no parent web
     if( $newWeb =~ m|^(.*)[./](.*?)$| ) {

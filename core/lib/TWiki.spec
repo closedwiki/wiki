@@ -1306,16 +1306,24 @@ $TWiki::cfg{Operators}{If} = [ 'TWiki::If::OP_allows', 'TWiki::If::OP_defined', 
 #
 # **STRING 120 EXPERT**
 # The name of the Perl class tie-able.
-# $TWiki::cfg{MdrepoStore} = 'DB_File';
+# $TWiki::cfg{Mdrepo}{Store} = 'DB_File';
 #
 # **PATH EXPERT**
 # The path to the directory where the key-value store files are located.
-# $TWiki::cfg{MdrepoDir} = '/var/twiki/mdrepo';
+# $TWiki::cfg{Mdrepo}{Dir} = '/var/twiki/mdrepo';
 #
 # **PERL H**
 # Table names are to be listed. A table name may be followed by : and options.
-# Currently 'b' is the only recognized option, which means the table can be updated from browser.
-# $TWiki::cfg{MdrepoTables} = [qw(sites webs:b)];
+# Currently 'b' is the only recognized option, which means the table can be
+#  updated from browser.
+# $TWiki::cfg{Mdrepo}{Tables} = [qw(sites webs:b)];
+#
+# **BOOLEAN EXPERT**
+# If set, each web requires its metadata record in the 'webs' file.
+# This is desirable for web managemement for a large site.
+# %WEBLIST{...}% gets faster referring to web metadata instead of traversing
+# directories.
+# $TWiki::cfg{Mdrepo}{WebRecordRequired} = 1;
 
 #---+ Plugins
 # *PLUGINS* Marker used by bin/configure script - do not remove!

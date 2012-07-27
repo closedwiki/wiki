@@ -37,9 +37,9 @@ use Storable qw(nfreeze thaw);
 Construct a Mdrepo module.
 
 It's a caller's responsibility to guarantee all of the followings defined:
-   * $TWiki::cfg{MdrepoStore} - 'DB_File' or other module name
-   * $TWiki::cfg{MdrepoDir} - absolute path to the directory where files are located
-   * $TWiki::cfg{MdrepoTables} - [qw(sites webs:b)]
+   * $TWiki::cfg{Mdrepo}{Store} - 'DB_File' or other module name
+   * $TWiki::cfg{Mdrepo}{Dir} - absolute path to the directory where files are located
+   * $TWiki::cfg{Mdrepo}{Tables} - [qw(sites webs:b)]
       * Each table name can be followed by : and option letters. Currently only 'b' is valid.
       'b' is for browser, meaning the table can be updated from browser through the mdrepo script.
       By default, tables are updatable only from command line.
@@ -55,8 +55,8 @@ sub tieIt {
     }
     $openOpt |= $writing ? O_RDWR : O_RDONLY;
     my $file = "$this->{dir}/$table";
-    tie(my %hash, $TWiki::cfg{MdrepoStore}, $file, $openOpt, 0666) or
-	die "tying $file as $TWiki::cfg{MdrepoStore} failed: $!\n";
+    tie(my %hash, $TWiki::cfg{Mdrepo}{Store}, $file, $openOpt, 0666) or
+	die "tying $file as $TWiki::cfg{Mdrepo}{Store} failed: $!\n";
     $this->{cont}{$table} = \%hash;
 }
 
@@ -64,15 +64,15 @@ sub new {
     my ( $class, $session ) = @_;
     my $this = bless( { session => $session }, $class );
 
-    my $store = $TWiki::cfg{MdrepoStore};
+    my $store = $TWiki::cfg{Mdrepo}{Store};
     eval 'require '.$store;
     if( $@ ) {
         die "$store: compile failed $@";
     }
-    $this->{dir} = $TWiki::cfg{MdrepoDir};
+    $this->{dir} = $TWiki::cfg{Mdrepo}{Dir};
     $this->{cont} = {};
     my %opts;
-    for my $i ( @{$TWiki::cfg{MdrepoTables}} ) {
+    for my $i ( @{$TWiki::cfg{Mdrepo}{Tables}} ) {
 	my ($table, $opt) = split(/:/, $i, 2);
 	$opt = '' unless ( defined($opt) );
 	$this->tieIt($table);

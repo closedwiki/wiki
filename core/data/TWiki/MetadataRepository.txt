@@ -244,13 +244,27 @@ If =redirectto= URL parameter is provided, the script returns HTTP redirect to t
 ---++ Configuration
 To turn on the metadata repository, you need to have the following three settings.
 <verbatim>
-$TWiki::cfg{MdrepoStore} = 'DB_File';
-$TWiki::cfg{MdrepoDir} = '/var/twiki/mdrepo';
-$TWiki::cfg{MdrepoTables} = [qw(sites webs:b)];
+$TWiki::cfg{Mdrepo}{Store} = 'DB_File';
+$TWiki::cfg{Mdrepo}{Dir} = '/var/twiki/mdrepo';
+$TWiki::cfg{Mdrepo}{Tables} = [qw(sites webs:b)];
 </verbatim>
-   $ !MdrepoStore: Specifies a tie-able Perl class.
-   $ !MdrepoDir: Specifies a path to a directory where the !MdrepoStore class have files.
-   $ !MdrepoTables: Specifies the names of the tables used. A table name may be followed by a colon and options. "b" is currently the only option recognized, which means the table can be updated from browser.
+   $ {Mdrepo}{Store: Specifies a tie-able Perl class.
+   $ {Mdrepo}{Dir: Specifies a path to a directory where the !MdrepoStore class have files.
+   $ {Mdrepo}{Tables: Specifies the names of the tables used. A table name may be followed by a colon and options. "b" is currently the only option recognized, which means the table can be updated from browser.
+
+By the following setting, each web required to have its metadata record.
+<verbatim>
+$TWiki::cfg{Mdrepo}{WebRecordRequired} = 1;
+</verbatim>
+For a large site having thousands of webs, this is handy for site management.
+Specifically this brings the following behaviors.
+   * A web not having a web metadata record regarded as nonexistent.
+   Existence of a directory under $TWiki::cfg{DataDir} isn't enough.
+   * A web creation by %SYSTEMWEB%.ManagingWebs is rejected if the corresponding
+   web metadata is not present.
+   * %<nop>WEBLIST{...}% gets faster referring to web metadata rather than traversing a directory hiearchy.
+   For practicality, only top level webs are listed except with the current web --
+   the current web's ancestors and decendants are listed.
 
 ---++ Audit trail
 When the =mdrepo= script is used either from command line or browser, if the command is either =add=, =updt=, =del=, or =rset=, it's recorded on the log file in the same manner as other scripts. Specifically, the activity is put on the 5th column.

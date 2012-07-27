@@ -1572,7 +1572,9 @@ sub new {
     $this->{users} = new TWiki::Users( $this );
     $this->{remoteUser} = $this->{users}->{remoteUser};
 
-    if( $TWiki::cfg{MdrepoStore} && $TWiki::cfg{MdrepoDir} && $TWiki::cfg{MdrepoTables} ) {
+    if( $TWiki::cfg{Mdrepo}{Store} && $TWiki::cfg{Mdrepo}{Dir} &&
+        $TWiki::cfg{Mdrepo}{Tables}
+    ) {
 	require TWiki::Mdrepo;
 	$this->{mdrepo} = new TWiki::Mdrepo( $this );
     }
@@ -2757,6 +2759,22 @@ sub isTrue {
     $value =~ s/no//gi;
     $value =~ s/false//gi;
     return ( $value ) ? 1 : 0;
+}
+
+=pod
+
+---++ StaticMethod topLevelWeb( $web ) -> top level web of $web
+
+If $web is a top level web, it returns $web.
+If $web is a subweb, it returns the top level web of $web.
+
+=cut
+
+sub topLevelWeb {
+    my( $web ) = @_;
+    return '' if ( !defined($web) );
+    $web =~ /^(\w*)/;
+    return $1;
 }
 
 =pod

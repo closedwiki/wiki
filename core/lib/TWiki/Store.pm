@@ -1337,6 +1337,11 @@ sub webExists {
     $web =~ s#\.#/#go;
 
     return 0 unless defined $web;
+    if ( $TWiki::cfg{Mdrepo}{WebRecordRequired} && $this->{session}{mdrepo} ) {
+        return 0 unless (
+            $this->{session}{mdrepo}->getRec('webs',
+                                             TWiki::topLevelWeb($web)) );
+    }
     my $handler = _getHandler( $this, $web, $TWiki::cfg{WebPrefsTopicName} );
     return $handler->storedDataExists();
 }
@@ -1588,6 +1593,12 @@ sub getListOfWebs {
         @webList = grep { /(?:^_|\/_)/, } @webList;
     }
 
+    if ( $TWiki::cfg{Mdrepo}{WebRecordRequired} && $this->{session}{mdrepo} ) {
+        # skipping public and allowed check because it may take too much
+        # time with thousands of webs
+        return sort @webList;
+    }
+
     my $user = $this->{session}->{user};
     if( $filter =~ /\bpublic\b/ &&
           !$this->{session}->{users}->isAdmin( $user )) {
@@ -1619,6 +1630,19 @@ sub getListOfWebs {
 sub _getSubWebs {
     my( $this, $web ) = @_ ;
 
+    if ( $web eq '' && $TWiki::cfg{Mdrepo}{WebRecordRequired} &&
+         $this->{session}{mdrepo}
+    ) {
+        # speed optimization for a site having thousands of webs
+        my @list;
+        @list = $this->{session}{mdrepo}->getList('webs');
+        # only subwebs of the current webs are listed.
+        # finding all subwebs defeats the purpose of thise speed optimization.
+        push(@list,
+             _getSubWebs($this,
+                         TWiki::topLevelWeb($this->{session}{webName})));
+        return @list;
+    }
     my $handler = _getHandler( $this, $web );
     my @webList = $handler->getWebNames();
     if( $web ) {
