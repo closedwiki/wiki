@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1339315075" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1343433039" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -68,6 +68,57 @@ Show the profile picture image of a user. A default image is returned in case th
 <!--==============================================-->
 </div>
 
+---++ Section: narrow_box
+
+<div style="float:right; width:297px; margin:0 0 10px 20px;">
+<img src="%ATTACHURLPATH%/narrow-box-example.png" alt="Narrow box example" width="297" height="108" />
+</div>
+Shows narrow user boxes. Several sections are provided:
+
+   * Section "narrow_box_css": Defines the style sheets of the narrow boxes. Include it once per page.
+   * Section "narrow_box_start": Defines the start of a set of narrow boxes.
+      * Parameter =style=: Optional, overrides the css of the container div of narrow boxes. Default: =padding:0 5px 0 5px; background-color:#f0f0f4;=.
+   * Section "narrow_box": Shows a single narrow box.
+      * Parameter =user=: Specify the !WikiWord of a single user.
+   * Section "narrow_box_list": Shows a set of narrow boxes.
+      * Parameter =users=: Specify a list of !WikiWords of users users. The list may be provided by including the "user_list" section.
+   * Section "narrow_box_end": Defines the end of a set of narrow boxes.
+
+*Usage example:*
+<pre>
+%<nop>USERREPORT{ action="narrow_box_css" }%
+%<nop>USERREPORT{ action="narrow_box_start" }%
+  %<nop>USERREPORT{ action="narrow_box" user="%WIKINAME%" }%
+  %<nop>USERREPORT{ action="narrow_box" user="JaneSmith" }%
+%<nop>USERREPORT{ action="narrow_box_end" }%
+%<nop>USERREPORT{ action="narrow_box_start" style="background-color: #f0f0e8;" }%
+  %<nop>USERREPORT{ action="narrow_box_list" users="UserOne, UserTwo, UserThree" }%
+%<nop>USERREPORT{ action="narrow_box_end" }%
+</pre>
+
+*Sample output:* %BR%
+<noautolink>
+%USERREPORT{ action="narrow_box_css" }%
+%USERREPORT{ action="narrow_box_start" }%
+%USERREPORT{ action="narrow_box" user="%WIKINAME%" }%
+%USERREPORT{ action="narrow_box_list" users="%GET{ "5_users" }%" }%
+%USERREPORT{ action="narrow_box_end" }%
+</noautolink>
+
+<div style="display:none;">
+<!--==============================================-->
+%STARTSECTION{narrow_box_css}%<style> .userBoxNarrow { float: left; width: 130px; height: 18px; border: solid 1px #d0d0d8; background-color: #f8f8fb; display: inline-block; padding: 3px 3px 3px 3px; margin: 5px 9px 5px 0; text-align: center; overflow: hidden; font-size: 14px; white-space: nowrap; box-shadow: 2px 2px 4px #bbb; } </style>%ENDSECTION{narrow_box_css}%
+<!--==============================================-->
+%STARTSECTION{narrow_box_start}%<div style="padding:0 5px 0 5px; background-color:#f0f0f4; %IF{ "defined 'style'" then="%style%" }%">%ENDSECTION{narrow_box_start}%
+<!--==============================================-->
+%STARTSECTION{narrow_box_end}%<div style="clear:left;"></div></div>%ENDSECTION{narrow_box_end}%
+<!--==============================================-->
+%STARTSECTION{narrow_box_list}%%CALCULATE{$LISTJOIN($sp, $LISTMAP($NOP(%)INCLUDE{ "%SYSTEMWEB%.UserReports" section="narrow_box" user="$item" }$NOP(%), %users%))}%%ENDSECTION{narrow_box_list}%
+<!--==============================================-->
+%STARTSECTION{narrow_box}%<div class='userBoxNarrow'><a href='%SCRIPTURLPATH{view}%/%USERSWEB%/%user%' style="border: 0 none;"><img src='%IF{ "'%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%'!=''" then='%PUBURLPATH%/%USERSWEB%/%user%/%FORMFIELD{ "Image" topic="%USERSWEB%.%user%"}%' else='%PUBURLPATH%/%USERSWEB%/UserProfileHeader/default-user-profile.jpg' }%' alt='%user%' title='' height='18' align='left' style='margin: 0 3px 0 0;' /> %SPACEOUT{%user%}%</a></div>%ENDSECTION{narrow_box}%
+<!--==============================================-->
+</div>
+
 ---++ Section: small_box
 
 <div style="float:right; width:439px; margin:0 0 10px 20px;">
@@ -115,7 +166,7 @@ Shows small user boxes. Several sections are provided:
 <!--==============================================-->
 %STARTSECTION{small_box_list}%%CALCULATE{$LISTJOIN($sp, $LISTMAP($NOP(%)INCLUDE{ "%SYSTEMWEB%.UserReports" section="small_box" user="$item" }$NOP(%), %users%))}%%ENDSECTION{small_box_list}%
 <!--==============================================-->
-%STARTSECTION{small_box}%<div class='userBox130'><a href='%SCRIPTURLPATH{view}%/%USERSWEB%/%user%'><img src='%IF{ "'%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%'!=''" then='%PUBURLPATH%/%USERSWEB%/%user%/%FORMFIELD{ "Image" topic="%USERSWEB%.%user%"}%' else='%PUBURLPATH%/%USERSWEB%/UserProfileHeader/default-user-profile.jpg' }%' alt='%user%' title='' height='38' align='left' style='margin: 0 3px 0 0;' /> %SPACEOUT{%user%}%</a></div>%ENDSECTION{small_box}%
+%STARTSECTION{small_box}%<div class='userBox130'><a href='%SCRIPTURLPATH{view}%/%USERSWEB%/%user%' style="border: 0 none;"><img src='%IF{ "'%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%'!=''" then='%PUBURLPATH%/%USERSWEB%/%user%/%FORMFIELD{ "Image" topic="%USERSWEB%.%user%"}%' else='%PUBURLPATH%/%USERSWEB%/UserProfileHeader/default-user-profile.jpg' }%' alt='%user%' title='' height='38' align='left' style='margin: 0 3px 0 0;' /> %SPACEOUT{%user%}%</a></div>%ENDSECTION{small_box}%
 <!--==============================================-->
 </div>
 
@@ -354,3 +405,4 @@ __Note to Maintainer:__
 
 %META:FILEATTACHMENT{name="business-card-example.png" attachment="business-card-example.png" attr="h" comment="" date="1338678337" path="business-card-example.png" size="42890" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="small-box-example.png" attachment="small-box-example.png" attr="h" comment="" date="1338702962" path="small-box-example.png" size="28472" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="narrow-box-example.png" attachment="narrow-box-example.png" attr="h" comment="" date="1343432567" path="narrow-box-example.png" size="16868" user="TWikiContributor" version="1"}%
