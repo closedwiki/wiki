@@ -24,13 +24,13 @@ sub set_up {
     my $this = shift; # the Test::Unit::TestCase object
 
     # Settings for mdrepo
-    $TWiki::cfg{MdrepoStore} = 'DB_File';
+    $TWiki::cfg{Mdrepo}{Store} = 'DB_File';
     my $rootDir = $TWiki::cfg{DataDir};
     $rootDir =~ s:/[^/]+$::;
     my $mdrepoDir = "$rootDir/mdrepo_test";
     mkdir($mdrepoDir, 0770) unless ( -d $mdrepoDir );
-    $TWiki::cfg{MdrepoDir} = $mdrepoDir;
-    $TWiki::cfg{MdrepoTables} = [qw(webs sites)];
+    $TWiki::cfg{Mdrepo}{Dir} = $mdrepoDir;
+    $TWiki::cfg{Mdrepo}{Tables} = [qw(webs sites)];
     $TWiki::cfg{LogFileName} = "$rootDir/logTEST.txt";
 
     $this->SUPER::set_up();
@@ -46,10 +46,10 @@ sub tear_down {
     my $this = shift;
     $this->{twiki}->finish();
     $this->SUPER::tear_down();
-    system("/bin/rm -rf $TWiki::cfg{MdrepoDir}");
+    system("/bin/rm -rf $TWiki::cfg{Mdrepo}{Dir}");
     # to prevent mdrepo use without MdrepoDir directory
-    delete $TWiki::cfg{MdrepoDir};
-    delete $TWiki::cfg{MdrepoTables};
+    delete $TWiki::cfg{Mdrepo}{Dir};
+    delete $TWiki::cfg{Mdrepo}{Tables};
 }
 
 sub var_test {
