@@ -14,6 +14,7 @@ data/Main/UserListByLocation.txt 0644
 data/Main/UserListHeader.txt 0644
 data/Main/UserList.txt 0644
 data/Main/UserProfileHeader.txt 0644
+data/Main/UserReports.txt 0644
 data/Main/UserViewTemplate.txt 0644
 
 data/TWiki/BulkRegistration.txt 0644
@@ -38,6 +39,8 @@ pub/Main/UserProfileHeader/default-user-profile.jpg 0644
 pub/Main/UserProfileHeader/gradient-title.png 0644
 pub/Main/UserProfileHeader/spacer.gif 0644
 pub/TWiki/UserReports/business-card-example.png 0644
+pub/TWiki/UserReports/select-users-example.png 0644
+pub/TWiki/UserReports/slim-box-example.png 0644
 pub/TWiki/UserReports/small-box-example.png 0644
 
 tools/upgrade_emails.pl 0444 Upgrade emails in topics to password database
