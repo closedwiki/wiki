@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1343440078" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1343449309" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -21,8 +21,8 @@ Show a simple list of registered users. The output is a comma-space delimited so
 
 *Sample output:* %BR%
 <noautolink>
-%SET{ "500_users" value="%USERREPORT{ action="user_list" limit="500" }%" }%
-%SET{ "5_users" value="%CALCULATE{$LISTTRUNCATE(5, %GET{500_users}%)}%" }%
+%SET{ "100_users" value="%USERREPORT{ action="user_list" limit="100" }%" }%
+%SET{ "5_users" value="%CALCULATE{$LISTTRUNCATE(5, %GET{100_users}%)}%" }%
 %GET{ "5_users" }%
 </noautolink>
 
@@ -385,12 +385,44 @@ Show a selector to pick a user, for use in HTML forms.
 
 *Sample output:* %BR%
 <form>
-%USERREPORT{ action="select_one_user" name="Owner" selected="%WIKINAME%" users="%GET{ "500_users" }%" }%
+%USERREPORT{ action="select_one_user" name="Owner" selected="%WIKINAME%" users="%GET{ "100_users" }%" }%
 </form>
 
 <div style="display:none;">
 <!--==============================================-->
 %STARTSECTION{select_one_user}%<select name="%name%"> <option></option> %CALCULATE{$SET(selected_sp, $LISTJOIN($sp, %selected%))$LISTJOIN($sp, $LISTMAP(<option value='$item' $IF($FIND($item, $GET(selected_sp)), selected='selected')>$PROPERSPACE($item)</option>, %IF{ "defined 'users'" then="%users%" else="%IF{ "'%GET{UserReports_all_users}%'=''" then="$percntSET{ \"UserReports_all_users\" value=\"$percntINCLUDE{ $quot%SYSTEMWEB%.UserReports$quot section=$quotuser_list$quot }$percnt\" }$percnt" }%%GET{UserReports_all_users}%" }%))}% </select>%ENDSECTION{select_one_user}%
+<!--==============================================-->
+</div>
+
+---++ Section: select_users
+
+<div style="float:right; width:410px; margin:0 0 10px 20px;">
+<img src="%PUBURLPATH%/%WEB%/%TOPIC%/select-users-example.png" alt="Select users example" width="410" height="216" />
+</div>
+Show rows of checkboxes to select users, for use in HTML forms.
+
+   * Section "select_users": Set of checkboxes to select users.
+      * Parameter =name=: Name of form field, required.
+      * Parameter =selected=: List of !WikiWord names indicating the selected users, optional.
+      * Parameter =users=: Specify a list of !WikiWords of users, optional. The list may be provided by including the "user_list" section. All registered users are shown if the parameter is missing.
+      * Parameter =colums=: Define number of columns, optional. Default: =5=
+      * Parameter =style=: Set the css of the container div, optional. Default: =margin: 0; border: 1px solid transparent;=
+
+*Usage example:*
+<pre>
+&lt;form&gt;
+%<nop>USERREPORT{ action="select_users" name="Members" selected="%WIKINAME%, AmandaBoris" }%
+&lt;/form&gt;
+</pre>
+
+*Sample output:* %BR%
+<form>
+%USERREPORT{ action="select_users" name="Members" selected="%WIKINAME%, AmandaBoris" users="%GET{ "100_users" }%" style="background-color: #f0f0f4;" }%
+</form>
+
+<div style="display:none;">
+<!--==============================================-->
+%STARTSECTION{select_users}%<style> .selectUsersTable { border: 0 none; padding: 0; } .selectUsersTable td { border: 0 none; padding: 0 1em 0 0; } </style> %IF{ "defined 'users'" then="$percntSET{ \"UserReports_the_users\" value=\"%users%\" }$percnt" else="%IF{ "'%GET{UserReports_all_users}%'=''" then="$percntSET{ \"UserReports_all_users\" value=\"$percntINCLUDE{ $quot%SYSTEMWEB%.UserReports$quot section=$quotuser_list$quot }$percnt\" }$percnt" }%$percntSET{ \"UserReports_the_users\" value=\"%GET{UserReports_all_users}%\" }$percnt" }%<div style="margin: 0; border: 1px solid transparent; %IF{ "defined 'style'" then="%style%" }%"><div style="margin: -1.5em 0 0 0; overflow: hidden;"><table border="0" cellpadding="0" callspacing="0" class="selectUsersTable"><tr><td valign='top'>%CALCULATE{$SET(selected_sp, $LISTJOIN($sp, %selected%))$SET(rows, $INT($EVAL(0.99999+$MAX(1, $LISTSIZE(%GET{UserReports_the_users}%))/%IF{ "defined 'columns'" then="%columns%" else="5" }%))) $LISTJOIN($sp, $LISTMAP(<br /><label style='white-space: nowrap'><input type='checkbox' name='%name%' value='$item' $IF($FIND($item, $GET(selected_sp)), checked='checked') class='twikiEditFormCheckboxField' /> $PROPERSPACE($item) </label>$IF($MOD($index, $GET(rows)), , </td><td valign='top'>), %GET{UserReports_the_users}%))}% </td></tr></table><input type="hidden" name="%name%" value="" /></div></div>%ENDSECTION{select_users}%
 <!--==============================================-->
 </div>
 
@@ -407,3 +439,4 @@ __Note to Maintainer:__
 %META:FILEATTACHMENT{name="business-card-example.png" attachment="business-card-example.png" attr="h" comment="" date="1338678337" path="business-card-example.png" size="42890" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="small-box-example.png" attachment="small-box-example.png" attr="h" comment="" date="1343433327" path="small-box-example.png" size="28290" user="TWikiContributor" version="2"}%
 %META:FILEATTACHMENT{name="slim-box-example.png" attachment="slim-box-example.png" attr="h" comment="" date="1343432567" path="slim-box-example.png" size="16868" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="select-users-example.png" attachment="select-users-example.png" attr="h" comment="" date="1343446655" path="select-users-example.png" size="30862" user="TWikiContributor" version="1"}%
