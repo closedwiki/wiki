@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1343439587" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1343440078" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -54,12 +54,13 @@ Show the profile picture image of a user. A default image is returned in case th
 *Usage example:*
 <pre>
 %<nop>USERREPORT{ action="profile_picture" user="%WIKINAME%" height="40" title="%WIKINAME%" }%
+%<nop>USERREPORT{ action="profile_picture" user="AmandaBoris" height="40" title="AmandaBoris" }%
 </pre>
 
 *Sample output:* %BR%
 <noautolink>
 %USERREPORT{ action="profile_picture" user="%WIKINAME%" height="40" title="%WIKINAME%" }%
-%CALCULATE{$LISTJOIN($sp, $LISTMAP($NOP(%)INCLUDE{ "%SYSTEMWEB%.UserReports" section="profile_picture" user="$item" height="40" title="$item" }$NOP(%), %GET{ "5_users" }%))}%
+%CALCULATE{$LISTJOIN($sp, $LISTMAP(&nbsp; $NOP(%)INCLUDE{ "%SYSTEMWEB%.UserReports" section="profile_picture" user="$item" height="40" title="$item" }$NOP(%), %GET{ "5_users" }%))}%
 </noautolink>
 
 <div style="display:none;">
