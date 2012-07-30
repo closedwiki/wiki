@@ -390,6 +390,27 @@ sub _makeAnchorHeading {
 
 =pod
 
+---++ StaticMethod chompUtf8Fragment($str) -> $str
+
+String truncation may happen in the middle of a UTF-8 byte sequence.
+This function gets rid of the truncated fragment.
+
+=cut
+
+sub chompUtf8Fragment {
+    my $str = shift;
+    $str =~ /^((?:
+        [\x00-\x7e] |
+        [\xc2-\xdf][\x80-\xbf] |
+        [\xe0-\xef][\x80-\xbf]{2} |
+        [\xf0-\xf7][\x80-\xbf]{3}
+    )+)/x;
+    $str = $1;
+    return defined($str) ? $str : '_';
+}
+
+=pod
+
 ---++ ObjectMethod makeAnchorName($anchorName, $compatibilityMode) -> $anchorName
 
    * =$anchorName= - the unprocessed anchor name
@@ -438,7 +459,12 @@ sub makeAnchorName {
     if ( !$compatibilityMode ) {
         $anchorName =~ s/^[\s#_]+//;  # no leading space nor '#', '_'
     }
-    $anchorName =~ s/^(.{32})(.*)$/$1/; # limit to 32 chars - FIXME: Use Unicode chars before truncate
+    $anchorName =~ s/^(.{32})(.*)$/$1/; # limit to 32 chars
+    if ( defined($TWiki::cfg{Site}{CharSet}) &&
+         $TWiki::cfg{Site}{CharSet} =~ /^utf.*8/i
+    ) {
+        $anchorName = chompUtf8Fragment($anchorName);
+    }
     if ( !$compatibilityMode ) {
         $anchorName =~ s/[\s_]+$//;    # no trailing space, nor '_'
     }
@@ -484,6 +510,12 @@ sub makeUniqueAnchorName {
         $suffix = '_AN' . $cnt++;
         # limit resulting name to 32 chars
         $anchorName = substr($anchorName, 0, 32 - length($suffix));
+        # a UTF-8 character sequence might be truncated in the middle
+        if ( defined($TWiki::cfg{Site}{CharSet}) &&
+             $TWiki::cfg{Site}{CharSet} =~ /^utf.*8/i
+        ) {
+            $anchorName = chompUtf8Fragment($anchorName);
+        }
         # this is only needed because '__' would not be 'compatible'
         $anchorName =~ s/_+$//g;
     }
