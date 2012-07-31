@@ -235,12 +235,9 @@ sub _expandAttrs {
         my $user = $info->{user} || 'UnknownUser';
         my $cUID;
         if( $user ) {
-            $cUID = $users->getCanonicalUserID( $user );
-            if (!$cUID) {
-                # Not a login name or a wiki name. Is it a valid cUID?
-                my $ln = $users->getLoginName($user);
-                $cUID = $user if defined $ln && $ln ne 'unknown';
-            }
+            my $ln = $users->getLoginName($user);
+            $cUID = defined($ln) && $ln ne 'unknown' ?
+                $user : $users->getCanonicalUserID( $user );
         }
 
         return "[[".$users->webDotWikiName($cUID)."][".$users->getWikiName($cUID)."]]";

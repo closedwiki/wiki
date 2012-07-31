@@ -1740,13 +1740,14 @@ sub renderRevisionInfo {
 	#   $users->getLoginName('CM_jschmoe')-> 'jschmoe'
 	#   $users->getLoginName('jschmoe')   -> undef
 	# Given this, getLoginName() is used to check if $user is cUID
-	my $cUID = $users->getLoginName($user) ?
-	    $user : $users->getCanonicalUserID( $user );
-	if( $cUID ) {
-	    $wun = $users->webDotWikiName($cUID);
-	    $wn = $users->getWikiName( $cUID );
-	    $un = $users->getLoginName($cUID);
-	}
+        my $ln = $users->getLoginName($user);
+        my $cUID = defined($ln) && $ln ne 'unknown' ?
+            $user : $users->getCanonicalUserID( $user );
+        if( $cUID ) {
+            $wun = $users->webDotWikiName($cUID);
+            $wn = $users->getWikiName( $cUID );
+            $un = $users->getLoginName($cUID);
+        }
         # If we are still unsure, then use whatever is saved in the meta.
         # But obscure it if the RenderLoggedInButUnknownUsers is enabled.
         $user = 'unknown' if $TWiki::cfg{RenderLoggedInButUnknownUsers};
