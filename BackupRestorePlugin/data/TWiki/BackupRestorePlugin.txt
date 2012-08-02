@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1326521345" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1343888772" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -119,6 +119,7 @@ This plugin starts a daemon (background process) when a backup is started. Statu
 #LimitationsAndToDo
 ---++ Limitations and To-Do
 
+   * The zip utility on most platforms has a limitation of 4GB. Follow the manual upgrade instructions at %SYSTEMWEB%.TWikiUpgradeGuide if you have more data.
    * A web-based backup is currently not supported on a native Windows installation of TWiki. However, the command line utility can be used on Windows.
    * Restore is currently not supported on a native Windows installation of TWiki. Follow the upgrade instructions at %SYSTEMWEB%.TWikiUpgradeGuide, section Copy your old webs to new TWiki.
    * Cancelling a backup or restore might leave some temporary files in the ={Plugins}{BackupRestorePlugin}{BackupDir}= directory.
@@ -195,8 +196,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  Copyright: | &copy; 2011-2012 TWiki:Main.PeterThoeny <br /> &copy; 2011-2012 TWiki:TWiki.TWikiContributor <br /> &copy; 2004, 2005 Simon Flack (for CPAN:IO::CaptureOutput) <br /> &copy; 2007, 2008 David Golden (for CPAN:IO::CaptureOutput) <br /> &copy; 1997-2011 by Earl Hood and Detlef Pilzecker (for CPAN:Proc::Daemon) |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-01-13 |
+|  Plugin Version: | 2012-08-01 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-08-01: | TWikibug:Item6837: Doc update with zip utility limitation of 4GB |
 |  2012-01-13: | TWikibug:Item6796: Fixing copyright year to 2012 |
 |  2011-12-19: | TWikibug:Item6799: Improved docs on GNU zip dependency |
 |  2011-09-13: | TWikibug:Item6796: Improved docs on command line use |

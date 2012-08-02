@@ -26,7 +26,7 @@ require TWiki::Plugins; # For the API version
 
 #==================================================================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-01-13';
+our $RELEASE = '2012-08-01';
 our $SHORTDESCRIPTION = 'Administrator utility to backup, restore and upgrade a TWiki site';
 our $NO_PREFS_IN_TOPIC = 1;
 
