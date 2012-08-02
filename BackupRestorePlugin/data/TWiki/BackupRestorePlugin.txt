@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1343888772" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1343890127" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -119,9 +119,13 @@ This plugin starts a daemon (background process) when a backup is started. Statu
 #LimitationsAndToDo
 ---++ Limitations and To-Do
 
-   * The zip utility on most platforms has a limitation of 4GB. Follow the manual upgrade instructions at %SYSTEMWEB%.TWikiUpgradeGuide if you have more data.
-   * A web-based backup is currently not supported on a native Windows installation of TWiki. However, the command line utility can be used on Windows.
-   * Restore is currently not supported on a native Windows installation of TWiki. Follow the upgrade instructions at %SYSTEMWEB%.TWikiUpgradeGuide, section Copy your old webs to new TWiki.
+   * The zip utility on most platforms has a limitation of 4GB.
+      * Fix: Install the latest zip and unzip utility from [[http://sourceforge.net/projects/infozip/files/][infozip project]] on !SourceForge.
+      * Workaround: Follow the manual upgrade instructions at %SYSTEMWEB%.TWikiUpgradeGuide if you have more data.
+   * A web-based backup is currently not supported on a native Windows installation of TWiki.
+      * Workaround: Use command line utility on Windows.
+   * Restore is currently not supported on a native Windows installation of TWiki.
+      * Workaround: Follow the upgrade instructions at %SYSTEMWEB%.TWikiUpgradeGuide, section Copy your old webs to new TWiki.
    * Cancelling a backup or restore might leave some temporary files in the ={Plugins}{BackupRestorePlugin}{BackupDir}= directory.
 
    * To-do:
