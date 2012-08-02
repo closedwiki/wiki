@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1343890127" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1343890443" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -120,7 +120,7 @@ This plugin starts a daemon (background process) when a backup is started. Statu
 ---++ Limitations and To-Do
 
    * The zip utility on most platforms has a limitation of 4GB.
-      * Fix: Install the latest zip and unzip utility from [[http://sourceforge.net/projects/infozip/files/][infozip project]] on !SourceForge.
+      * Fix: Install the latest zip 3.x and unzip 6.x utilities from [[http://sourceforge.net/projects/infozip/files/][infozip project]] on !SourceForge.
       * Workaround: Follow the manual upgrade instructions at %SYSTEMWEB%.TWikiUpgradeGuide if you have more data.
    * A web-based backup is currently not supported on a native Windows installation of TWiki.
       * Workaround: Use command line utility on Windows.
