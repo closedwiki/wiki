@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1344366704" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1344366980" format="1.1" version="$Rev$"}%
 ---+ IF Statements
 
 The =%<nop>IF%= construct gives TWiki the power to include content in topics based on the value of simple expressions.
@@ -153,4 +153,4 @@ Above text is only shown to users who are in the !TWikiAdminGroup.
 
 __Related Topics:__ QuerySearch, VarIF, VarGET, VarSET, VarSEARCH, FormattedSearch, FormatTokens, SpreadSheetPlugin, TWikiScripts
 
--- __Contributors:__ TWiki:Main.ArthurClemens, TWiki:Main.CrawfordCurrie, TWiki:Main.PeterThoeny, TWiki:Main.SopanShewale, TWiki:Main.SvenDowideit, TWiki:Main.WillNorris - 2011-08-07
+-- __Contributors:__ TWiki:Main.ArthurClemens, TWiki:Main.CrawfordCurrie, TWiki:Main.PeterThoeny, TWiki:Main.SopanShewale, TWiki:Main.SvenDowideit, TWiki:Main.WillNorris - 2012-08-07
