@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1342850440" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1344382348" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this extension are appreciated. Please update the extension page at
@@ -1146,9 +1146,10 @@ This work was partly sponsored by
 |  Author: | Mateusz Ples, Michael Daum |
 |  Copyright: | &copy; 2006-2010 Michael Daum http://michaeldaumconsulting.com <br /> &copy; 2007-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Release: | 4.34 |
-|  Version: | 2012-06-21 |
+|  Release: | 4.35 |
+|  Version: | 2012-08-07 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-08-07: | TWikibug:Item6910: Support transliteration of Croatian charaters -- TWiki:Main.GoranJakovljevic |
 |  2012-06-21: | TWikibug:Item6891: Support GSSAPI mechanism for SASL authentication -- TWiki:Main.HideyoImazu |
 |  2012-06-07: | TWikibug:Item6878: Add {Ldap}{CaseSensitiveLogin} setting and logic -- TWiki:Main.PeterThoeny |
 |  2012-05-05: | TWikibug:Item6837: Add new ldapdump utility; fix broken refresh button; better error and debug reporting; fix {Ldap}{Exclude} list; doc improvements -- TWiki:Main.PeterThoeny |
