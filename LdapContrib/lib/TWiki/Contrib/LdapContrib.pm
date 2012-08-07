@@ -30,7 +30,7 @@ use TWiki::Plugins ();
 use vars qw($VERSION $RELEASE %sharedLdapContrib);
 
 $VERSION = '$Rev: 10335 (2012-05-05) $';
-$RELEASE = '4.34';
+$RELEASE = '4.35';
 
 =pod
 
@@ -1512,6 +1512,19 @@ sub transliterate {
     $string =~ s/\xc5\xb9/Z/go; # Z acute
     $string =~ s/\xc5\xbc/z/go; # z dot
     $string =~ s/\xc5\xbb/Z/go; # Z dot
+
+    #OptimIT addons - Croatian specific
+    $string =~ s/\xc5\xa1/s/go; # s caron
+    $string =~ s/\xc5\xa0/S/go; # S caron
+    $string =~ s/\xc4\x91/d/go; # d stroke
+    $string =~ s/\xc4\x90/D/go; # D stroke
+    $string =~ s/\xc4\x8d/c/go; # c caron
+    $string =~ s/\xc4\x8c/C/go; # C caron
+    $string =~ s/\xc4\x87/c/go; # c acute
+    $string =~ s/\xc4\x86/C/go; # C acute
+    $string =~ s/\xc5\xbe/z/go; # z caron
+    $string =~ s/\xc5\xbd/Z/go; # Z caron
+
   } else {
     $string =~ s/\xe0/a/go; # a grave
     $string =~ s/\xe1/a/go; # a acute
@@ -1593,6 +1606,19 @@ sub transliterate {
     $string =~ s/\x01\x79/Z/go; # Z acute
     $string =~ s/\x01\x7c/z/go; # z dot
     $string =~ s/\x01\x7b/Z/go; # Z dot
+
+
+    #OptimIT addons - Croatian specific
+    $string =~ s/\x01\x61/s/go; # s caron
+    $string =~ s/\x01\x60/S/go; # S caron
+    $string =~ s/\x01\x11/d/go; # d stroke
+    $string =~ s/\x01\x10/D/go; # D stroke
+    $string =~ s/\x01\x0d/c/go; # c caron
+    $string =~ s/\x01\x0c/C/go; # C caron
+    $string =~ s/\x01\x07/c/go; # c acute
+    $string =~ s/\x01\x06/C/go; # C acute
+    $string =~ s/\x01\x7e/z/go; # z caron
+    $string =~ s/\x01\x7d/Z/go; # Z caron
   }
 
   return $string;
