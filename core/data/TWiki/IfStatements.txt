@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1334781390" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1344364725" format="1.1" version="$Rev$"}%
 ---+ IF Statements
 
 The =%<nop>IF%= construct gives TWiki the power to include content in topics based on the value of simple expressions.
@@ -7,7 +7,7 @@ The =%<nop>IF%= construct gives TWiki the power to include content in topics bas
 
 In the example above, if CONDITION evaluates to TRUE, then THEN will be included in the topic; otherwise ELSE will be included.
 
-Note that because of the way TWiki evaluates, then whatever is in the THEN and ELSE parameters will already have been expanded by the time the condition is actually evaluated. The standard FormatTokens can be used in the THEN and ELSE parameters when you need to delay evaluation of (for example) a TWiki variable.
+Note that because of the way TWiki evaluates, then whatever is in the THEN and ELSE parameters will already have been expanded by the time the condition is actually evaluated. The standard FormatTokens such as =$percnt= for =%= can be used in the THEN and ELSE parameters when you need to delay evaluation of (for example) a TWiki variable.
 
 The basic syntax of a condition is the same as [[QuerySearch][the syntax used for queries]], with operators <code>=</code>, <code>!=</code>, <code>~</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>NOT</code>, <code>AND</code>, <code>OR</code>, <code>()</code>, and functions <code>lc()</code>, <code>uc()</code>, <code>d2n()</code>. In addition, the following special operators are supported:
 
@@ -21,74 +21,80 @@ The basic syntax of a condition is the same as [[QuerySearch][the syntax used fo
 | =$= | expands a URL parameter or [[TWikiVariables][TWikiVariable]] name. Plugin handlers *are not called*. Built-in variables and user-defined preferences are supported. You can pass a limited subset of parameters to TWiki variables by enclosing the variable name in single quotes; for example, =$ 'VARIABLE{value}'=. The ='VARIABLE{value}'= string may *not* contain quotes (' or "). |
 | ={X}= | expands to the value of the configuration variable {X} - for example, ={ScriptUrlPath}= |
 
-__Examples:__
+---++ Examples
 
-1. TWiki variable defined or not
+__1. TWiki variable defined or not__
 <verbatim>
 %IF{"defined 'WIKINAME'" then="WIKINAME is defined" else="WIKINAME is not defined"}%
 </verbatim>
 
-2. Compare TWiki variable
+__2. Compare TWiki variable__
 <verbatim>
 You are %IF{ "$ WIKINAME='TWikiGuest' and not defined 'OPEN_DAY'" then="not" }% allowed to
 %IF{ "context view" then="view" else="edit"}% this TWiki today.
 </verbatim>
 
-3. URL parameter
+__3. URL parameter__
 <verbatim>
 %IF{ "defined 'search'" then="Search: $percntURLPARAM{search}$percnt" else="No search passed in"}%
 </verbatim>
 
-4. Range test on URL parameter
+__4. Range test on URL parameter__
 <verbatim>
 url param t is %IF{ "0 < $ t and $ t < 1000" then="in" else="out of"}% range.
 </verbatim>
 
-5. Text comparison of URL parameter
+__5. Text comparison of URL parameter__
 <verbatim>
 %IF{ "$'URLPARAM{scope}'='text'" then="Plain text search" }% 
 </verbatim>
 
-6. Configuration item set or not
+__6. Configuration item set or not__
 <verbatim>
 %IF{ "{AntiSpam}{HideUserDetails}" then="User details are hidden" }%
 </verbatim>
 
-7. Plugin enabled test
+__7. Plugin enabled test__
 <verbatim>
 TablePlugin is %IF{ "context TablePluginEnabled" then="enabled" else="disabled" }%.
 </verbatim>
 expands to: %BR%
 TablePlugin is %IF{ "context TablePluginEnabled" then="enabled" else="disabled" }%.
 
-8. Check access permissions
+__8. Check access permissions__
 <verbatim>
 You %IF{"'%TOPIC%' allows 'change'" then="can" else="cannot"}% change this topic.
 You %IF{"'Sandbox.TestTopic' allows 'change'" then="can" else="cannot"}% change Sandbox.TestTopic.
 You %IF{"'Sandbox' allows 'change'" then="can" else="cannot"}% change Sandbox web
 </verbatim>
 expands to: %BR%
-You %IF{"'%TOPIC%' allows 'change'" then="can" else="cannot"}% change this topic.
-You %IF{"'Sandbox.TestTopic' allows 'change'" then="can" else="cannot"}% change Sandbox.TestTopic.
+You %IF{"'%TOPIC%' allows 'change'" then="can" else="cannot"}% change this topic. %BR%
+You %IF{"'Sandbox.TestTopic' allows 'change'" then="can" else="cannot"}% change Sandbox.TestTopic. %BR%
 You %IF{"'Sandbox' allows 'change'" then="can" else="cannot"}% change Sandbox web
 
-9. Check topic existance
+__9. Check topic existence__
 <verbatim>
 Topic Sandbox.TestTopic %IF{"istopic 'Sandbox.TestTopic'" then="exists" else="does not exist"}%
-Web Sandbox.TestTopic %IF{"isweb 'Sandbox'" then="exists" else="does not exist"}%
+Web Sandbox.WebHome %IF{"isweb 'Sandbox'" then="exists" else="does not exist"}%
 </verbatim>
 expands to: %BR%
-Topic Sandbox.TestTopic %IF{"istopic 'Sandbox.TestTopic'" then="exists" else="does not exist"}%
-Web Sandbox.TestTopic %IF{"isweb 'Sandbox'" then="exists" else="does not exist"}%
+Topic Sandbox.TestTopic %IF{"istopic 'Sandbox.TestTopic'" then="exists" else="does not exist"}% %BR%
+Web Sandbox.WebHome %IF{"isweb 'Sandbox'" then="exists" else="does not exist"}%
 
-10. Group membership
+__10. Group membership__
 <verbatim>
 You %IF{"'%USERNAME%' ingroup 'TWikiAdminGroup'" then="are an admin" else="are a normal user"}% 
 </verbatim>
 expands to: %BR%
 You %IF{"'%USERNAME%' ingroup 'TWikiAdminGroup'" then="are an admin" else="are a normal user"}% 
 
-11. Hide section of text conditionally using CSS display
+__11. Conditional include__
+<verbatim>
+%IF{"'%USERNAME%' ingroup 'ExecutiveGroup'" then="$percntINCLUDE{ExecutiveReport}$percnt"}% 
+</verbatim>
+The !ExecutiveReport topic is only included if the user is in the !ExecutiveGroup.
+
+__12. Hide section of text conditionally using CSS display__
 <verbatim>
 <div style="display: %IF{"'%USERNAME%' ingroup 'TWikiAdminGroup'" then="block" else="none"}%">
    * Conditional text enclosed in div tags here...
