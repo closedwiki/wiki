@@ -446,6 +446,7 @@ sub viewfile {
     my @path = split( '/', $query->path_info() );
     shift( @path )unless $path[0];
     my $fileName;
+    my $retrofit = 0;
     if( defined( $query->param( 'filename' ))) {
         $fileName = $query->param( 'filename' );
     } else {
@@ -474,6 +475,7 @@ sub viewfile {
             $webName =~ s/$topic$//o;
             $webName =~ s/\/$//o;
         }
+        $retrofit = 1;
     }
 
 
@@ -505,6 +507,12 @@ sub viewfile {
         $session->writeLog( 'viewfile', $webName.'.'.$topic, $logEntry );
     }
 
+    # Retrofit $session->{webName} and $session->{topicName} when filename
+    # parameter is not supplied. This is a bit ugly though.
+    if ( $retrofit ) {
+        $session->{webName} = $webName;
+        $session->{topicName} = $topic;
+    }
 
 # TSA SMELL: Maybe could be less memory hungry if get a file handle
 # and set response body to it. This way engines could send data the
