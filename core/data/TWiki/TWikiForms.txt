@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1317499718" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1344639783" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Forms - Foundation of TWiki Applications
 
@@ -134,35 +134,23 @@ Forms have to be enabled for each individual web. The ==WEBFORMS== variable in W
 
 A Form Template specifies the fields in a form. A Form Template is simply a page containing a TWiki table, where each row of the table specifies one form field.
 
-Each *column* of the table is one element of an entry field: ==Name==, ==Type==, ==Size==, ==Values==, ==Tooltip message==, and ==Attributes==.
+Each *row* of the table defines one element of an input field:
 
-The =Name=, =Type= and =Size= columns are required. Other columns are optional. The form *must* have a header row (e.g. =| <nop>*Name* | <nop>*Type* | <nop>*Size* |=).
+%TABLE{sort="off"}%
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
 
-*Name column:* ==Name== is the name of the form field.
+The =Name=, =Type= and =Size= columns are required. Other columns are optional. The form template *must* have a header row, e.g. at least =| <nop>*Name* | <nop>*Type* | <nop>*Size* |= is required. Columns:
 
-*Type, Size, Value columns:* ==Type==, ==Size== and ==Value== describe the type, size and initial value for this field:
+   * *Name column:* ==Name== is the name of the form field.
 
-| *Type* | *Description* | *Size* | *Value* |
-| =text= | One-line text field | Text box width in number of characters | Initial (default) content |
-| =textarea= | Multi-line text box | Columns x rows, such as =80x6=; default is =40x5= | Initial (default) content |
-| =label= | Read-only text label | | Text of the label |
-| =checkbox= | One or more checkboxes that can be toggled individually | Number of checkboxes shown per line | Comma-space-separated list of item labels - can be a dynamic SEARCH |
-| =checkbox+buttons= | Like =checkbox=, adding *[Set]* and *[Clear]* buttons |||
-| =radio= | Radio buttons, mutually exclusive; only one can be selected | Number of radio buttons shown per line | Comma-space-separated list of item labels - can be a dynamic SEARCH |
-| =select= | Select box, rendered as a picklist or a multi-row selector box depending on the size value | %BULLET% =1=: Show a picklist %BB% Number &gt; 1: Multi-row selector box of specified size %BB% Range e.g. =3..10=: Multi-row selector box with variable size - the box will never be smaller than 3 items, never larger than 10, and will be 5 high if there are only 5 options | Comma-space-separated list of options of the select box - can be a dynamic SEARCH |
-| =select+multi= | Like =select=, turning multi-select on, to allow Shift+Click and Ctrl+Click to select (or deselect) multiple items |||
-| =select+values= | Like =select=, allowing definition of values that are different to the displayed text. For example:%BR% =&#124; Field 9 &#124; select+values &#124; 3 &#124; One, Two=2, Three=III &#124; Various values formats &#124;= %BR% shows <form><select size="3"><option>One</option><option>Two</option><option>Three</option></select></form> but the values of options =Two= and =Three= are =2= and =III=, respectively. |||
-| =select+multi+values= | Combination of =select+multi= and =select+values= |||
-%SEARCH{ "\| *=[a-z0-9\+\-]+= * \|.*%IF.*%TOPIC%" type="regex" topic="*Contrib, *Plugin" nonoise="on" multiple="on" format="$text" }%
+   * *Type, Size, Value columns:* ==Type==, ==Size== and ==Value== describe the type, size and initial value of this form field. Type ==text==, ==checkbox==, ==select== and more are described in the [[#FormFieldTypes][Form Field Types]] section below.
 
-*Tooltip message column:* The ==Tooltip message== will be displayed when the cursor is hovered over the field in =edit= view.
+   * *Tooltip message column:* The ==Tooltip message== will be displayed when the cursor is hovered over the field in =edit= view.
 
-*Attributes column:* ==Attributes== specifies special attributes for the field. Multiple attributes can be entered, separated by spaces.
-
-   * An attribute =H= indicates that this field is hidden, e.g. not shown in view mode. However, the field is available for editing and storing information.
+   * *Attributes column:* ==Attributes== specifies special attributes for the field. Multiple attributes can be entered, separated by spaces.
+      * An attribute =H= indicates that this field is *hidden*, e.g. not shown in view mode. However, the field is available for editing and storing information.
      %BR% %T% __Tip:__ The TWiki form header is suppressed in view mode if all fields of the form are hidden. For better usability it is good to hide the whole form if the display and interaction of all form fields is done externally. For example, the display and modification of form field values can be done in a header topic that is included in each page.
-
-   * An attribute =M= indicates that this field is mandatory. The topic cannot be saved unless a value is provided for this field. If the field is found empty during topic save, an error is raised and the user is redirected to an =oops= page. Mandatory fields are indicated by an asterisks next to the field name.
+      * An attribute =M= indicates that this field is *mandatory*. The topic cannot be saved unless a value is provided for this field. If the field is found empty during topic save, an error is raised and the user is redirected to an =oops= page. Mandatory fields are indicated by an asterisks next to the field name.
 
 For example, a simple form just supporting entry of a name and a date would look as follows:
 <verbatim>
@@ -194,6 +182,29 @@ For example, a simple form just supporting entry of a name and a date would look
 
    * The topic definition is not read when a topic is viewed.
    * Form definition topics can be protected in the usual manner, using  TWikiAccessControl, to limit who can change the form template and/or individual value lists. Note that view access is required to be able to edit topics that use the form definition, though view access to the form definition is _not_ required to view a topic where the form has been used.
+
+#FormFieldTypes
+---++ Form Field Types
+
+Each table row of a form template defines one element of an input field:
+
+%TABLE{sort="off"}%
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
+
+Many types of form fields are available. Some are TWiki internal, some are provided by extensions. [[TWiki:Plugins.TWikiFormFieldExtensions][Find more TWiki form field extensions]] on TWiki.org. The ==Size== and ==Value== depend on the ==Type== used. Form field types:
+
+| *Type* | *Description* | *Size* | *Value* |
+| =text= | One-line text field | Text box width in number of characters | Initial (default) content |
+| =textarea= | Multi-line text box | Columns x rows, such as =80x6=; default is =40x5= | Initial (default) content |
+| =label= | Read-only text label | | Text of the label |
+| =checkbox= | One or more checkboxes that can be toggled individually | Number of checkboxes shown per line | Comma-space-separated list of item labels - can be a dynamic SEARCH |
+| =checkbox+buttons= | Like =checkbox=, adding *[Set]* and *[Clear]* buttons |||
+| =radio= | Radio buttons, mutually exclusive; only one can be selected | Number of radio buttons shown per line | Comma-space-separated list of item labels - can be a dynamic SEARCH |
+| =select= | Select box, rendered as a picklist or a multi-row selector box depending on the size value | %BULLET% =1=: Show a picklist %BB% Number &gt; 1: Multi-row selector box of specified size %BB% Range e.g. =3..10=: Multi-row selector box with variable size - the box will never be smaller than 3 items, never larger than 10, and will be 5 high if there are only 5 options | Comma-space-separated list of options of the select box - can be a dynamic SEARCH |
+| =select+multi= | Like =select=, turning multi-select on, to allow Shift+Click and Ctrl+Click to select (or deselect) multiple items |||
+| =select+values= | Like =select=, allowing definition of values that are different to the displayed text. For example:%BR% =&#124; Field 9 &#124; select+values &#124; 3 &#124; One, Two=2, Three=III &#124; Various values formats &#124;= %BR% shows <form><select size="3"><option>One</option><option>Two</option><option>Three</option></select></form> but the values of options =Two= and =Three= are =2= and =III=, respectively. |||
+| =select+multi+values= | Combination of =select+multi= and =select+values= |||
+%SEARCH{ "\| *=[a-z0-9\+\-]+= * \|.*%IF.*%TOPIC%" type="regex" web="%SYSTEMWEB%" topic="*Contrib, *Plugin" nonoise="on" multiple="on" format="$text" }%
 
 ---+++ Values in Other Topics
 
