@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1344583993" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1344584041" format="1.1" version="$Rev$"}%
 ---+!! TWiki Developer Environment
 <!--
    Contributions to this TWiki extension are appreciated. Please update the page
