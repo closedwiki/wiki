@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1315766776" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1344583993" format="1.1" version="1.2"}%
 ---+!! TWiki Developer Environment
 <!--
    Contributions to this TWiki extension are appreciated. Please update the page
@@ -307,15 +307,16 @@ You are strongly recommended to use this Contrib to help split your code develop
 ---++ Contrib Info
 
 |  Authors: | TWiki:Main.CrawfordCurrie, TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2004-2008, Crawford Currie http://wikiring.com, %BR% &copy; 2004-2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2004-2008, Crawford Currie http://wikiring.com, %BR% &copy; 2004-2012 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2012-08-10: | TWikibug:Item6913: Better installation instructions; conditional text for plugin enabling in case extension is a plugin -- TWiki:Main.PeterThoeny |
 |  2011-09-11: | TWikibug:Item6800: Fix for using qw(...) as parentheses, which is deprecated in Perl 5.14 -- TWiki:Main.PeterThoeny |
 |  2010-05-15: | TWikibug:Item6433: Doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  2010-04-25: | TWikibug:Item6434: Use ISO dates for builds; doc fixes |
 |  31 Aug 2008 | TWikibug:Item5971 BuildContrib broken upload on 4.2.2 with template login. Also adding query to optionally skip topic attachment upload. |
-|  22 Apr 2008 | TWikibug:Item5556 BuildContrib defaults all unspecified permissions to 664 && TWikibug:Item5455  	 BuildContrib doesn't cope with larger numbers of files - TWiki:Main.SvenDowideit|
+|  22 Apr 2008 | TWikibug:Item5556 BuildContrib defaults all unspecified permissions to 664 && TWikibug:Item5455 BuildContrib doesn't cope with larger numbers of files - TWiki:Main.SvenDowideit|
 |  31 Jan 2008 | TWikibug:Item4751 support spaces in MANIFEST TWikibug:Item4990 removed dependency on external md5sum program TWikibug:Item5309 added tidy target |
 |  10 Sep 2007 | TWikibug:Item4600 upload !VarXXX topics to Plugins web, to support pluggable documentation architecture. Minor doc improvements. TWikibug:Item3839 add build script at the root to help with building several plugins in one session TWikibug:Item4601 remove duplicate installer script (.pl) |
 |  13599 | TWikibug:Item2006 fixed default permissions to allow group write, and rewrote the main (this) doc to be more useful. TWikibug:Item3624 added a pause between uploads (20s) |

@@ -1,7 +1,7 @@
 # Module for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004-2008 C-Dot Consultants - All rights reserved
-# Copyright (C) 2004-2011 TWiki:TWiki.TWikiContributor
+# Copyright (C) 2004-2012 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ our $buildpldir;
 our $libpath;
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2010-05-15';
+our $RELEASE = '2012-08-10';
 
 our $SHORTDESCRIPTION =
   'Automate build process for Plugins, Add-ons and Contrib modules';
@@ -283,7 +283,27 @@ sub new {
     $this->{MODULE} = $this->{project};
 
     local $/;
-    $this->{INSTALL_INSTRUCTIONS} = <DATA>;
+    $this->{INSTALL_INSTRUCTIONS} = <<HERE;
+__Note:__ You do not need to install anything on the browser to use this extension. The following instructions are for the administrator who installs the extension on the TWiki server.
+
+   * For an __automated installation__, run the [[\%SCRIPTURL{configure}\%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+      * See the [[http://twiki.org/cgi-bin/view/Plugins/BuildContribInstallationSupplement][installation supplement]] on TWiki.org for more information.
+
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the extension home on twiki.org (see below).
+      * Unzip ==%\TOPIC\%.zip== in your twiki installation directory.
+      * Set the ownership of the extracted directories and files to the webserver user.
+      * Install the dependencies (if any).
+HERE
+    if( $this->{project} =~ /Plugin$/ ) {
+        $this->{INSTALL_INSTRUCTIONS} .= <<HERE;
+
+   * Plugin __configuration and testing__: 
+      * Run the [[\%SCRIPTURL{configure}\%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Configure additional plugin settings in the __Extensions__ section if needed.
+      * Test if the installation was successful using the examples provided.
+HERE
+    }
 
     my $config = $this->_loadConfig();
     my $rep    = $config->{repositories}->{ $this->{project} };
@@ -2036,22 +2056,3 @@ sub _addDep {
 }
 
 1;
-__DATA__
-You do not need to install anything in the browser to use this extension. The following instructions are for the administrator who installs the extension on the server where TWiki is running.
-
-Like many other TWiki extensions, this module is shipped with a fully
-automatic installer script written using the Build<nop>Contrib.
-   * If you have TWiki 4.2 or later, you can install from the =configure= interface (Go to Plugins->Find More Extensions)
-      * See the [[http://twiki.org/cgi-bin/view/Plugins/BuildContribInstallationSupplement][installation supplement]] on TWiki.org for more information.
-   * If you have any problems, then you can still install manually from the command-line:
-      1 Download one of the =.zip= or =.tgz= archives
-      1 Unpack the archive in the root directory of your TWiki installation.
-      1 Run the installer script ( =perl &lt;module&gt;_installer= )
-      1 Run =configure= and enable the module, if it is a plugin.
-      1 Repeat for any missing dependencies.
-   * If you are *still* having problems, then instead of running the installer script:
-      1 Make sure that the file permissions allow the webserver user to access all files.
-      1 Check in any installed files that have existing =,v= files in your existing install (take care *not* to lock the files when you check in)
-      1 Manually edit !LocalSite.cfg to set any configuration variables.
-
-%IF{"defined 'SYSTEMWEB'" else="<div class='twikiAlert'>%X% WARNING: SYSTEMWEB is not defined in this TWiki. Please add these definitions to your %MAINWEB%.TWikiPreferences, if they are not already there:<br><pre>   * <nop>Set SYSTEMWEB = %<nop>TWIKIWEB%<br>   * <nop>Set USERSWEB = %<nop>MAINWEB%</pre></div>"}%
