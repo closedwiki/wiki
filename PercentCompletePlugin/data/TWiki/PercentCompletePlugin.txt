@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1344576505" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1344584326" format="1.1" version="$Rev$"}%
 ---+!! Percent Complete Plugin
 <!--
    Contributions to this plugin package are appreciated. Please update this page at
@@ -52,8 +52,6 @@ Test: (this only works if the !PercentCompletePlugin is installed and enabled)
 
 %$INSTALL_INSTRUCTIONS%
 
-%IF{"defined 'SYSTEMWEB'" else="<div class='twikiAlert'>%X% WARNING: SYSTEMWEB is not defined in this TWiki. Please add these definitions to your %MAINWEB%.TWikiPreferences, if they are not already there:<br><pre>   * <nop>Set SYSTEMWEB = %<nop>TWIKIWEB%<br>   * <nop>Set USERSWEB = %<nop>MAINWEB%</pre></div>"}%
-
 ---++ Plugin Info
 
    * Set SHORTDESCRIPTION = Percent complete selector, for use in TWiki forms and TWiki applications
@@ -62,9 +60,9 @@ Test: (this only works if the !PercentCompletePlugin is installed and enabled)
 |  Copyright: | &copy; 2012 TWiki:Main.PeterThoeny; %BR% &copy; 2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
-|  Version: | 2012-08-09 |
+|  Version: | 2012-08-10 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-08-09: | TWikibug:Item6907: Initial version of !PercentCompletePlugin |
+|  2012-08-10: | TWikibug:Item6907: Initial version of !PercentCompletePlugin |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |

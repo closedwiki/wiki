@@ -32,7 +32,7 @@ require TWiki::Func;    # The plugins API
 
 # ========================================================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-08-09';
+our $RELEASE = '2011-08-10';
 our $SHORTDESCRIPTION = "Percent complete selector, for use in TWiki forms and TWiki applications";
 our $NO_PREFS_IN_TOPIC = 1;
 our $headerDone;
