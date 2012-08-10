@@ -78,9 +78,21 @@ sub handlePercentComplete  {
 }
 
 # ========================================================
+sub sanitizeValue {
+    my ( $value ) = @_;
+    $value = 0 unless( $value );
+    $value = 0 unless( $value =~ s/^.*?(-?[0-9]+).*$/$1/ );
+    $value = 0 if( !$value || $value < 0);
+    $value = 100 if( $value > 100);
+    $value = 10 * int( $value / 10 + .49999999 );
+    return $value;
+}
+
+# ========================================================
 sub renderForDisplay {
     my ( $value ) = @_;
 
+    $value = sanitizeValue( $value );
     my $text = '<span style="white-space: nowrap;">'
       . '<img src="%PUBURL%/%SYSTEMWEB%/PercentCompletePlugin/complete'
       . "$value.png\" width=\"100\" height=\"16\" alt=\"\" title=\"$value%\" />"
@@ -98,6 +110,7 @@ sub renderForEdit {
         $headerDone = 1;
     }
 
+    $value = sanitizeValue( $value );
     my $selectID = "percentCompleteSelect_$name";
     my $imgID = "percentCompleteImg_$name";
     my $text = '<span style="white-space: nowrap"> '
