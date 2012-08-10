@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1344584326" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1344638711" format="1.1" version="$Rev$"}%
 ---+!! Percent Complete Plugin
 <!--
    Contributions to this plugin package are appreciated. Please update this page at
@@ -18,14 +18,14 @@
 
 ---++ Introduction
 
-This TWiki plugin package adds a percent complete selector to TWiki forms and TWiki applications.
+This TWiki plugin package adds a percent complete selector to TWiki forms and TWiki applications. The percentage can be set by clicking on the indicator bar, or by picking a value from the pick list. Percent values are in range 0% to 100%, and rounded to nearest 10% if needed.
 
 ---++ Use percent selector in !TWikiForms
 
 This package adds a =percent= type to %SYSTEMWEB%.TWikiForms:
 
 | *Type* | *Description* | *Size* | *Value* |
-| =percent= | %IF{ "'%BASETOPIC%'='TWikiForms'" then="<img src='%PUBURLPATH%/%WEB%/PercentCompletePlugin/screenshot-small.png' alt='screenshot-small' width='179' height='25' align='right' />" else="<nop>" }% Percent complete indicator and pick list. The percentage can be set by clicking on the percent complete indicator bar, or by picking a value from the pick list. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[PercentCompletePlugin][See details]]." }% | N/A | Initial (default) percentage value |
+| =percent= | <img src="%PUBURLPATH%/%WEB%/PercentCompletePlugin/screenshot-small.png" alt="screenshot-small" width="179" height="25" align="right" style="margin-left:20px;" /> Percent complete indicator and pick list. The percentage can be set by clicking on the percent complete indicator bar, or by picking a value from the pick list. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[PercentCompletePlugin][See details]]." }% | N/A | Initial (default) percentage value |
 
 Example form definition:
 
