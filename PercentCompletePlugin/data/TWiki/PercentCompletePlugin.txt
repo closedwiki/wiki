@@ -1,7 +1,75 @@
-%META:TOPICINFO{author="PeterThoeny" date="1344566394" format="1.1" version="1.3"}%
-To be documented
-
+%META:TOPICINFO{author="TWikiContributor" date="1344576505" format="1.1" version="$Rev$"}%
+---+!! Percent Complete Plugin
+<!--
+   Contributions to this plugin package are appreciated. Please update this page at
+   http://twiki.org/cgi-bin/view/Plugins/PercentCompletePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/PercentCompletePluginDev.
+   If you are a TWiki contributor please update the extension in the SVN repository.
+-->
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+<div style="float:right; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 <img src="%PUBURLPATH%/%WEB%/%TOPIC%/percent-complete-screenshot.png" alt="Percent complete screenshot" width="264" height="167" />
+</div>
+</sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
+
+This TWiki plugin package adds a percent complete selector to TWiki forms and TWiki applications.
+
+---++ Use percent selector in !TWikiForms
+
+This package adds a =percent= type to %SYSTEMWEB%.TWikiForms:
+
+| *Type* | *Description* | *Size* | *Value* |
+| =percent= | %IF{ "'%BASETOPIC%'='TWikiForms'" then="<img src='%PUBURLPATH%/%WEB%/PercentCompletePlugin/screenshot-small.png' alt='screenshot-small' width='179' height='25' align='right' />" else="<nop>" }% Percent complete indicator and pick list. The percentage can be set by clicking on the percent complete indicator bar, or by picking a value from the pick list. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[PercentCompletePlugin][See details]]." }% | N/A | Initial (default) percentage value |
+
+Example form definition:
+
+| *Name:* | *Type:* | *Size* | *Values:* | *Tooltip message:* |
+| Progress | percent | | | Select percent complete |
+
+---++ Use percent selector in an HTML form
+
+You can also use the percent complete selector directly in your HTML forms, without having to write any code. Just include this in the topic text:
+<verbatim>
+<form action="...">
+%PERCENTCOMPLETE{ name="Progress" value="60" }%
+<form>
+</verbatim>
+This will show an HTML selector named "Progress" and a percent complete indicator bar tied to it. The =value= parameter is optional.
+
+Test: (this only works if the !PercentCompletePlugin is installed and enabled)
+
+<form>
+%PERCENTCOMPLETE{ name="Progress" value="60" }%
+</form>
+
+---++ Installation Instructions
+
+%$INSTALL_INSTRUCTIONS%
+
+%IF{"defined 'SYSTEMWEB'" else="<div class='twikiAlert'>%X% WARNING: SYSTEMWEB is not defined in this TWiki. Please add these definitions to your %MAINWEB%.TWikiPreferences, if they are not already there:<br><pre>   * <nop>Set SYSTEMWEB = %<nop>TWIKIWEB%<br>   * <nop>Set USERSWEB = %<nop>MAINWEB%</pre></div>"}%
+
+---++ Plugin Info
+
+   * Set SHORTDESCRIPTION = Percent complete selector, for use in TWiki forms and TWiki applications
+
+|  Author: | TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]] |
+|  Copyright: | &copy; 2012 TWiki:Main.PeterThoeny; %BR% &copy; 2012 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Version: | 2012-08-09 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-08-09: | TWikibug:Item6907: Initial version of !PercentCompletePlugin |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.TWikiPlugins
 
 
 %META:FILEATTACHMENT{name="complete0.png" attachment="complete0.png" attr="h" comment="" date="1344565519" path="complete0.png" size="1112" user="TWikiContributor" version="1"}%
@@ -27,3 +95,4 @@ To be documented
 %META:FILEATTACHMENT{name="complete100.png" attachment="complete100.png" attr="h" comment="" date="1344565519" path="complete100.png" size="1100" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="complete.png" attachment="complete.png" attr="h" comment="" date="1344565519" path="complete.png" size="1112" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="percent-complete-screenshot.png" attachment="percent-complete-screenshot.png" attr="h" comment="" date="1344565519" path="percent-complete-screenshot.png" size="16969" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="screenshot-small.png" attachment="screenshot-small.png" attr="h" comment="" date="1344575289" path="screenshot-small.png" size="6539" user="TWikiContributor" version="1"}%
