@@ -1,1 +1,29 @@
+%META:TOPICINFO{author="PeterThoeny" date="1344566394" format="1.1" version="1.3"}%
 To be documented
+
+<img src="%PUBURLPATH%/%WEB%/%TOPIC%/percent-complete-screenshot.png" alt="Percent complete screenshot" width="264" height="167" />
+
+
+%META:FILEATTACHMENT{name="complete0.png" attachment="complete0.png" attr="h" comment="" date="1344565519" path="complete0.png" size="1112" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete5.png" attachment="complete5.png" attr="h" comment="" date="1344565519" path="complete5.png" size="1197" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete10.png" attachment="complete10.png" attr="h" comment="" date="1344565519" path="complete10.png" size="1176" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete15.png" attachment="complete15.png" attr="h" comment="" date="1344565519" path="complete15.png" size="1223" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete20.png" attachment="complete20.png" attr="h" comment="" date="1344565519" path="complete20.png" size="1189" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete25.png" attachment="complete25.png" attr="h" comment="" date="1344565519" path="complete25.png" size="1230" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete30.png" attachment="complete30.png" attr="h" comment="" date="1344565519" path="complete30.png" size="1190" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete35.png" attachment="complete35.png" attr="h" comment="" date="1344565519" path="complete35.png" size="1231" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete40.png" attachment="complete40.png" attr="h" comment="" date="1344565519" path="complete40.png" size="1190" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete45.png" attachment="complete45.png" attr="h" comment="" date="1344565519" path="complete45.png" size="1230" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete50.png" attachment="complete50.png" attr="h" comment="" date="1344565519" path="complete50.png" size="1187" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete55.png" attachment="complete55.png" attr="h" comment="" date="1344565519" path="complete55.png" size="1233" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete60.png" attachment="complete60.png" attr="h" comment="" date="1344565519" path="complete60.png" size="1190" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete65.png" attachment="complete65.png" attr="h" comment="" date="1344565519" path="complete65.png" size="1233" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete70.png" attachment="complete70.png" attr="h" comment="" date="1344565519" path="complete70.png" size="1191" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete75.png" attachment="complete75.png" attr="h" comment="" date="1344565519" path="complete75.png" size="1231" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete80.png" attachment="complete80.png" attr="h" comment="" date="1344565519" path="complete80.png" size="1192" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete85.png" attachment="complete85.png" attr="h" comment="" date="1344565519" path="complete85.png" size="1234" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete90.png" attachment="complete90.png" attr="h" comment="" date="1344565519" path="complete90.png" size="1182" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete95.png" attachment="complete95.png" attr="h" comment="" date="1344565519" path="complete95.png" size="1165" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete100.png" attachment="complete100.png" attr="h" comment="" date="1344565519" path="complete100.png" size="1100" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="complete.png" attachment="complete.png" attr="h" comment="" date="1344565519" path="complete.png" size="1112" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="percent-complete-screenshot.png" attachment="percent-complete-screenshot.png" attr="h" comment="" date="1344565519" path="percent-complete-screenshot.png" size="16969" user="TWikiContributor" version="1"}%
