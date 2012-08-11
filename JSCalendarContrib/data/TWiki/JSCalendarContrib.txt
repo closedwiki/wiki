@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310175141" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1344725105" format="1.1" version="$Rev$"}%
 ---+!! JS Calendar Contrib
 <!--
    Contributions to this contrib package are appreciated. Please update this page at
@@ -23,7 +23,7 @@ This module packages the [[http://www.dynarch.com/projects/calendar/][Mishoo JSC
 This package adds a =date= type to %SYSTEMWEB%.TWikiForms:
 
 | *Type* | *Description* | *Size* | *Value* |
-| =date= | %IF{ "'%BASETOPIC%'='TWikiForms'" then="<img src='%PUBURLPATH%/%WEB%/JSCalendarContrib/screenshot-small.png' alt='screenshot-small' width='150' height='139' align='right' />" else="<nop>" }% Single-line text box and a button next to it to pick a date from a popup calendar. The date can also be typed into the text box. The date format can be customized. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[JSCalendarContrib][See details]]." }% | Text box width in number of characters | Initial (default) date |
+| =date= | %IF{ "'%BASETOPIC%'!='%TOPIC%'" then="<img src='%PUBURLPATH%/%WEB%/JSCalendarContrib/screenshot-small.png' alt='screenshot-small' width='150' height='139' align='right' /> "}%Single-line text box and a button next to it to pick a date from a popup calendar. The date can also be typed into the text box. The date format can be customized. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[JSCalendarContrib][See details]]." }% | Text box width in number of characters | Initial (default) date |
 
 Example form definition:
 
@@ -66,11 +66,12 @@ If the contrib is installed, you will see such a field here:
    * Set SHORTDESCRIPTION = Mishoo JSCalendar: A pop-up calendar for use in TWiki forms and TWiki applications
 
 |  Author: | TWiki:Main.CrawfordCurrie http://c-dot.co.uk |
-|  Copyright: | &copy; See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] for Mishoo JSCalendar %BR% &copy; 2007-2011 TWiki:TWiki.TWikiContributor for TWiki !JSCalendarContrib |
+|  Copyright: | &copy; See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] for Mishoo JSCalendar %BR% &copy; 2007-2012 TWiki:TWiki.TWikiContributor for TWiki !JSCalendarContrib |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
-|  Version: | %$VERSION% |
+|  Version: | 2012-08-11 |
 | Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-08-11: | TWikibug:Item6837: Doc fixes; updated installation instructions -- TWiki:Main.PeterThoeny |
 |  2011-07-08: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2010-12-03: | TWikibug:Item6609: In %SYSTEMWEB%.TWikiForms type table, automatically list the =date= form field type defined in this contrib -- TWiki:Main.PeterThoeny |
 |  2010-11-17: | TWikibug:Item6530: Doc fixes: Changing TWIKIWEB to SYSTEMWEB |
