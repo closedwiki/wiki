@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310777500" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1345074628" format="1.1" version="$Rev$"}%
 ---+ TWiki Access Control
 
 _Restricting read and write access to topics and webs, by Users and groups_
@@ -150,24 +150,21 @@ See "How TWiki evaluates ALLOW/DENY settings" below for more on how ALLOW and DE
 
 By default, TWiki does not secure file attachments. Without making the following changes to the twiki.conf file, it is possible for anyone who has access to the server to gain access to an attachment if they know the attachment's fully qualified path, even though access to the topic associated with the attachment is secured. This is because attachments are referred to directly by Apache, and are not by default delivered via TWiki scripts. This means that the above instructions for controlling to topics do __not__ apply to attachments unless you make the changes as described below.
 
-An effective way to secure attachments is to apply the same access control settings to attachments as those applied to topics. This security enhancement can be accomplished by instructing the webserver via Apache's =mod_rewrite= module to redirect accesses to attachments via  the TWiki =viewfile= script, which honors the TWiki access controls settings to topics.
+An effective way to secure attachments is to apply the same access control settings to attachments as those applied to topics. This security enhancement can be accomplished by instructing the webserver to redirect accesses to attachments via the TWiki =viewfile= script, which honors the TWiki access controls settings to topics. See the notes below for implications.
 
 The preferred method to secure attachments is by editing the =twiki.conf= file to include:
 
 <verbatim>
-    ScriptAlias /twiki/bin/ /filesystem/path/to/twiki/bin/
-    Alias /twiki/pub/       /filesystem/path/to/twiki/pub/
-
-    RewriteEngine on
-    RewriteCond %{REQUEST_URI} !^/+twiki/+pub/+(TWiki|Sandbox)/+.+
-    RewriteRule ^/+twiki/+pub/+(.*)$  /twiki/bin/viewfile/$1 [L,PT]
+    ScriptAlias /do          /filesystem/path/to/twiki/bin
+    Alias       /pub/TWiki   /filesystem/path/to/twiki/pub/TWiki
+    Alias       /pub/Sandbox /filesystem/path/to/twiki/pub/Sandbox
+    ScriptAlias /pub         /filesystem/path/to/twiki/bin/viewfile
 </verbatim>
 
 __Notes:__
-   * You can use TWiki:TWiki/ApacheConfigGenerator to generate the Apache config file for TWiki.
+   * It is recommended to use TWiki:TWiki/ApacheConfigGenerator to generate the Apache config file for your TWiki.
    * You will need to restart your Apache server after this change.
    * Images embedded in topics will load slower since attached images will also be delivered by the =viewfile= script. The TWiki web and Sandbox web are excluded for performance reasons.
-   * As an alternative to editing the =twiki.conf= file used by Apache, you can make the same change directly to the =.htaccess= file in the =/twiki/bin= directory.
    * The =viewfile= script sets the mime type based upon file name suffix. Unknown types are served as text/plain which can result in corrupt files. 
 
 #RootWebs
