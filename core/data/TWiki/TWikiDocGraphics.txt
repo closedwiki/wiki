@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1336626099" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1345160198" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -27,6 +27,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 
 %TABLE{headeralign="left" databg="#ffffff,#ffffff" databgsorted="#f5f5f5"}%
 | *&nbsp;* | *Variable* | *Description* | *Type* | *Size* | *Alias* |
+| %ICON{action-item}% | =%<nop>ICON{action-item}%= | Action item | gif | 16x16 |  |
 | %ICON{airplane}% | =%<nop>ICON{airplane}%= | Airplane | gif | 16x16 |  |
 | %ICON{award}% | =%<nop>ICON{award}%= | Award | gif | 16x16 |  |
 | %ICON{barcode}% | =%<nop>ICON{barcode}%= | Barcode | gif | 16x16 |  |
@@ -537,6 +538,7 @@ __Related Topics:__ VarICON, %CALC{$GET(icontopics)}%, TWikiDocGraphicsTemplate,
 
 __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 
+%META:FILEATTACHMENT{name="action-item.gif" attr="h" comment="" date="1345160035" path="action-item.gif" size="562" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="addon.gif" attr="h" comment="" date="1169565034" path="addon.gif" size="370" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="air.gif" attr="h" comment="" date="1169565034" path="air.gif" size="356" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="airplane.gif" attr="h" comment="" date="1236468594" path="airplane.gif" size="919" user="TWikiContributor" version=""}%
