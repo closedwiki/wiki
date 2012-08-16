@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313276171" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1345075603" format="1.1" version="1.2"}%
 %STARTINCLUDE%
 ---+ TWiki Installation Guide
 
-*The following is installation instructions for the TWiki 5.0 production release on an Apache web server on Linux.* Visit TWiki:TWiki.InstallingTWiki for the latest updates to this guide and supplemental information for installing or upgrading TWiki, including notes on installing TWiki on different platforms, environments and web hosting sites.
+*The following is installation instructions for the TWiki 5.1 production release on an Apache web server on Linux.* Visit TWiki:TWiki.InstallingTWiki for the latest updates to this guide and supplemental information for installing or upgrading TWiki, including notes on installing TWiki on different platforms, environments and web hosting sites.
 
 If you are upgrading from a previous version of TWiki, you probably want to read TWikiUpgradeGuide instead.
 
@@ -27,8 +27,8 @@ If you need help, ask a question in the TWiki:Support.WebHome web or on TWiki:Co
 #StandardInstallation
 ---++ Basic Installation
 
-   1 *Download* the TWiki distribution from http://TWiki.org/. (Example - download =TWiki-5.0.0.tgz= for Linux)
-   1  Copy the downloaded package into the directory where you want to install TWiki (Example: /home/httpd ). *Unpack the distribution* in it (Example: tar xvfz TWiki-5.0.0.tgz). The unpack will create a directory called ==twiki== which contains the TWiki package. In the rest of this document we assume this directory is called =twiki=.
+   1 *Download* the TWiki distribution from http://TWiki.org/. (Example - download =TWiki-5.1.1.tgz= for Linux)
+   1  Copy the downloaded package into the directory where you want to install TWiki (Example: /home/httpd ). *Unpack the distribution* in it (Example: tar xvfz TWiki-5.1.1.tgz). The unpack will create a directory called ==twiki== which contains the TWiki package. In the rest of this document we assume this directory is called =twiki=.
       * __Note:__ TWiki does not allow spaces in the directory names. Especially on Windows make sure to use a directory path without spaces.
    1 *Setup access file and directory rights* to enable the webserver user (the user Apache runs the CGI scripts as) to read and write inside the twiki directory.
       * __Warning:__ Do not just just run a =chmod -R 770 twiki=. The access rules have different meaning for files and directories. This is the most common mistake installers make.
@@ -84,7 +84,7 @@ The TWiki:TWiki.ApacheConfigGenerator as well as the example =twiki_httpd_conf.t
 
 ---++ Next Steps
 
-Once you have TWiki installed and running, you might consider the following optional steps for setting up and customizing your TWiki site. Many of the references below refer to topics within your TWiki installation. For example, =TWiki.TWikiSkins= refers to the =TWikiSkins= topic in your TWiki web. Easy way to jump directly to view the pages is to open your own TWiki in your browser and write =TWiki.TWikiSkins= in the Jump test box to the right in the top bar and hit Enter. You can find these topics in the on-line reference copy at the official TWiki website: [[TWiki:TWiki05x00.WebHome][TWiki Release 5.0]]
+Once you have TWiki installed and running, you might consider the following optional steps for setting up and customizing your TWiki site. Many of the references below refer to topics within your TWiki installation. For example, =TWiki.TWikiSkins= refers to the =TWikiSkins= topic in your TWiki web. Easy way to jump directly to view the pages is to open your own TWiki in your browser and write =TWiki.TWikiSkins= in the Jump test box to the right in the top bar and hit Enter. You can find these topics in the on-line reference copy at the official TWiki website: [[TWiki:TWiki05x01.WebHome][TWiki Release 5.1]].
 
 #AuthenticationOfUsers
 ---++ Enable Authentication of Users
