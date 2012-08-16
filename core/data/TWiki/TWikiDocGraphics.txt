@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1345160198" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1345161022" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -189,6 +189,8 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 
 ---+++ %ICON{facebook}% Social networking, %ICON{stumbleupon}% bookmarks
 
+%TABLE{headeralign="left" databg="#ffffff,#ffffff" databgsorted="#f5f5f5"}%
+| *&nbsp;* | *Variable* | *Description* | *Type* | *Size* | *Alias* |
 | %ICON{bitly}% | =%<nop>ICON{bitly}%= | Bit.ly | gif | 16x16 |  |
 | %ICON{blogger}% | =%<nop>ICON{blogger}%= | Blogger | gif | 16x16 |  |
 | %ICON{delicious}% | =%<nop>ICON{delicious}%= | Delicious | gif | 16x16 |  |
