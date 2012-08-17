@@ -1,2 +1,3 @@
 data/TWiki/RequireRegistrationPlugin.txt 0644
 lib/TWiki/Plugins/RequireRegistrationPlugin.pm 0644
+lib/TWiki/Plugins/RequireRegistrationPlugin/Config.spec 0644
