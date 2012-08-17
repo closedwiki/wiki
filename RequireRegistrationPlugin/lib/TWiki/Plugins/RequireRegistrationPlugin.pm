@@ -1,7 +1,8 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2012      W. van Engen, wvengen+twiki@nikhef.nl
+# Copyright (C) 2001-2012 Peter Thoeny, peter[at]thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -46,6 +47,10 @@ use strict;
 our $VERSION = '1.3 - $Rev$';
 our $RELEASE = '2011-08-02';
 
+our $VERSION = '1.4';
+our $RELEASE = '2012-08-17';
+our $NO_PREFS_IN_TOPIC = 1;
+
 my $refresh;
 my $debug;
 my $pluginName = 'RequireRegistrationPlugin';
@@ -61,22 +66,27 @@ sub initPlugin {
     }
 
     # this doesn't really have any meaning if we aren't being called as a CGI
-    my $query = &TWiki::Func::getCgiQuery();
+    my $query = TWiki::Func::getCgiQuery();
     return 0 unless $query;
 
     # Get refresh
-    $refresh = int( &TWiki::Func::getPreferencesValue("\U$pluginName\E_REFRESH") ) || 0;
+    $refresh = $TWiki::cfg{Plugins}{$pluginName}{Refresh} || 0;
 
     # Get plugin debug flag
-    $debug = &TWiki::Func::getPreferencesFlag("\U$pluginName\E_DEBUG") || 0;
+    $debug = $TWiki::cfg{Plugins}{$pluginName}{Debug} || 0;
 
     my $regPage = 'TWikiRegistration';
     my $twikiWeb = TWiki::Func::getTwikiWebname( );
     my $url = TWiki::Func::getViewUrl( $twikiWeb, $regPage );
+    my $action = $query->action();
+    my @actionsOnly = split(',', $TWiki::cfg{Plugins}{$pluginName}{Actions} || '');
 
-    if (($web ne $twikiWeb || $topic ne $regPage) && (! TWiki::Func::isValidWikiWord( TWiki::Func::getWikiName( ) ))) {
+    if (($action ne 'register') && 
+        ($web ne $twikiWeb || $topic ne $regPage) &&
+        (scalar(@actionsOnly)>0 && grep(/^$action$/, @actionsOnly)>0) &&
+        (! TWiki::Func::isValidWikiWord( TWiki::Func::getWikiName( ) ))) {
 
-      &TWiki::Func::writeDebug( "- TWiki::Plugins::$pluginName Sending $user to $url with refresh $refresh" )
+      TWiki::Func::writeDebug( "- TWiki::Plugins::$pluginName Sending $user to $url with refresh $refresh" )
         if $debug;
 
       if( $refresh < 0 ) {
