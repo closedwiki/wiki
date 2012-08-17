@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1345161022" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1345168953" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -197,12 +197,14 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{digg}% | =%<nop>ICON{digg}%= | Digg | gif | 16x16 |  |
 | %ICON{facebook}% | =%<nop>ICON{facebook}%= | Facebook | gif | 16x16 |  |
 | %ICON{google}% | =%<nop>ICON{google}%= | Google | gif | 16x16 |  |
+| %ICON{google-plus}% | =%<nop>ICON{google-plus}%= | Google Plus | gif | 16x16 |  |
 | %ICON{linkedin}% | =%<nop>ICON{linkedin}%= | LinkedIn | gif | 16x16 |  |
 | %ICON{reddit}% | =%<nop>ICON{reddit}%= | Reddit | gif | 16x16 |  |
 | %ICON{stumbleupon}% | =%<nop>ICON{stumbleupon}%= | Stumbleupon | gif | 16x16 |  |
 | %ICON{technorati}% | =%<nop>ICON{technorati}%= | Technorati | gif | 16x16 |  |
 | %ICON{twitter}% | =%<nop>ICON{twitter}%= | Twitter | gif | 16x16 |  |
 | %ICON{windows}% | =%<nop>ICON{windows}%= | Windows | gif | 16x16 |  |
+| %ICON{youtube}% | =%<nop>ICON{youtube}%= | YouTube | gif | 16x16 |  |
 
 ---+++ %ICON{changes}% Changes, %ICON{notify}% notification icons
 
@@ -540,7 +542,7 @@ __Related Topics:__ VarICON, %CALC{$GET(icontopics)}%, TWikiDocGraphicsTemplate,
 
 __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 
-%META:FILEATTACHMENT{name="action-item.gif" attr="h" comment="" date="1345160035" path="action-item.gif" size="562" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="action-item.gif" attr="h" comment="" date="1345160035" path="action-item.gif" size="562" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="addon.gif" attr="h" comment="" date="1169565034" path="addon.gif" size="370" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="air.gif" attr="h" comment="" date="1169565034" path="air.gif" size="356" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="airplane.gif" attr="h" comment="" date="1236468594" path="airplane.gif" size="919" user="TWikiContributor" version=""}%
@@ -642,6 +644,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="go_forward.gif" attr="h" comment="" date="1169565034" path="go_forward.gif" size="234" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="go_start.gif" attr="h" comment="" date="1169565034" path="go_start.gif" size="236" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="google.gif" attr="h" comment="" date="1262417730" path="google.gif" size="617" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="google-plus.gif" attr="h" comment="" date="1345166355" path="google-plus.gif" size="623" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="graduation.gif" attr="h" comment="" date="1233298661" path="graduation.gif" size="967" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="group.gif" attr="h" comment="" date="1169565034" path="group.gif" size="182" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="h.gif" attr="h" comment="" date="1169565034" path="h.gif" size="375" user="TWikiContributor" version=""}%
@@ -897,4 +900,5 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="xml.gif" attr="h" comment="" date="1169565034" path="xml.gif" size="376" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="xsl.gif" attr="h" comment="" date="1169565034" path="xsl.gif" size="375" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="ying-yang.gif" attr="h" comment="" date="1260656213" path="ying-yang.gif" size="1040" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="youtube.gif" attr="h" comment="" date="1345168834" path="youtube.gif" size="939" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="zip.gif" attr="h" comment="" date="1169565034" path="zip.gif" size="383" user="TWikiContributor" version=""}%
