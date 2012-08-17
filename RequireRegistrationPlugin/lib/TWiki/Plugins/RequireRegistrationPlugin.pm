@@ -79,7 +79,7 @@ sub initPlugin {
     my $twikiWeb = TWiki::Func::getTwikiWebname( );
     my $url = TWiki::Func::getViewUrl( $twikiWeb, $regPage );
     my $action = $query->action();
-    my @actionsOnly = split(',', $TWiki::cfg{Plugins}{$pluginName}{Actions} || '');
+    my @actionsOnly = split( /, */, $TWiki::cfg{Plugins}{$pluginName}{Actions} || '' );
 
     if (($action ne 'register') && 
         ($web ne $twikiWeb || $topic ne $regPage) &&
