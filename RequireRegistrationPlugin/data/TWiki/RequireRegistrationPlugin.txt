@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1312327638" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1345190405" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -17,31 +17,13 @@ This plugin will redirect a user to the %SYSTEMWEB%.TWikiRegistration topic if t
 
 Use this if you have setup single sign-on (SSO) and want to force externally authenticated users to register their %SYSTEMWEB%.WikiName before accessing any wiki content.
 
-The condition for when to redirect can very easily be enhanced to only force users to register when they try to:
-
-   * access a protected web
-   * edit a page
-
 ---++ Syntax Rules
 
-   * None, just install it. Modifications currently must be made in the Perl code. 
+   * None, just install and configure it.
 
 ---++ Examples
 
    * None. It just works.
-
----++ Plugin Settings
-
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>REQUIREREGISTRATIONPLUGIN_SHORTDESCRIPTION%==
-
-   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Force externally authenticated users to register a <nop>WikiName
-
-   * Refresh time in seconds to do a meta refresh redirect to the registration page. Specify -1 to use an immediate redirect CGI query:
-      * Set REFRESH = -1
-
-   * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
@@ -52,19 +34,27 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==lib/TWiki/Plugins/%TOPIC%/Config.spec== | Spec file for configure |
    * Configure the Plugin:
-      * Run the [[%SCRIPTURL{configure}%][configure]] script to enable the plugin
-      * Change the plugin settings as needed
+      * Run the [[%SCRIPTURL{configure}%][configure]] script
+      * Enable the plugin in the Plugins section
+      * Find the !RequireRegistrationPlugin in the Extensions section and change these settings as needed:
+         * ={Plugins}{RequireRegistrationPlugin}{Actions}= - comma-separated list of actions that this plugin should work on. If not defined, it will work on all actions. Example actions: =attach, edit, login=.
+         * ={Plugins}{RequireRegistrationPlugin}{Refresh}= - refresh time in seconds to do a meta refresh redirect to the registration page. Specify -1 to use an immediate redirect CGI query.
    * Test if the installation was successful:
-      * Log in as a user without a %SYSTEMWEB%.WikiName
+      * Log in as a user without a %SYSTEMWEB%.WikiName and edit a page
 
 ---++ Plugin Info
 
+   * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Force externally authenticated users to register in case they do not have a TWiki account
+
 |  Plugin Author: | TWiki:Main.ByronIgoe |
-|  Copyright: | &copy; 2007 TWiki:Main.ByronIgoe <br /> &copy; 2009-2011 TWiki:Main.PeterThoeny <br /> &copy; 2008-2011 TWiki:Main.TWikiContributors |
+|  Copyright: | &copy; 2007 TWiki:Main.ByronIgoe <br /> &copy; 2012 TWiki:Main.WillemEngen <br /> &copy; 2009-2012 TWiki:Main.PeterThoeny <br /> &copy; 2008-2012 TWiki:Main.TWikiContributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-08-02 (v1.3) |
+|  Plugin Version: | 2014-08-17 (v1.4) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-08-17: | TWikibug:Item6915: Move settings to configure; add {Plugins}{$pluginName}{Actions} setting -- TWiki:Main.WillemEngen |
 |  2011-08-02: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2010-10-29: | Doc fixes -- Peter Thoeny |
 |  2008-03-04: | Fix bug in addToHEAD, made redirect method and refresh time configurable -- Peter Thoeny |
