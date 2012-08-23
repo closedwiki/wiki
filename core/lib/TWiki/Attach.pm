@@ -246,6 +246,7 @@ sub _expandAttrs {
 	my $rev = $info->{version};
 	$rev = '' unless ( defined($rev) );
 	return '' if ( $rev eq '' );
+        $rev =~ s/^1\.//;
 	my $border = $rev - $TWiki::cfg{NumberOfRevisions};
 	my $hist = "r$rev";
 	while ( --$rev > 0 ) {
