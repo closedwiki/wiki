@@ -156,7 +156,7 @@ eu
     server=woodenman
 </verbatim>
 
----+++ mdrepo add <i>TABLE</i> <i>RECORD_ID</i> <i>FILE_NAME</i>=<i>VALUE</i> ...
+---+++ mdrepo add <i>TABLE</i> <i>RECORD_ID</i> <i>FIELD_NAME</i>=<i>VALUE</i> ...
 Adds a new record. It returns nothing. If the specified record already exists, it complains.
 
 Example:
@@ -164,7 +164,7 @@ Example:
 $ ./mdrepo add webs WebFour admin=HofstadterGroup master=am 
 </verbatim>
 
----+++ mdrepo updt <i>TABLE</i> <i>RECORD_ID</i> <i>FILE_NAME</i>=<i>VALUE</i> ...
+---+++ mdrepo updt <i>TABLE</i> <i>RECORD_ID</i> <i>FIELD_NAME</i>=<i>VALUE</i> ...
 Update an existing record. It returns nothing. If the specified record does not exist, it complains.
 
 Example:
