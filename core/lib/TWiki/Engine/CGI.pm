@@ -41,7 +41,8 @@ use TWiki::Response;
 use Assert;
 
 sub run { 
-    my $this = shift;
+    my ($this, $cgi) = @_;
+    $this->{cgi} = $cgi if ( $cgi );
     my $req = $this->prepare;
     if ( UNIVERSAL::isa($req, 'TWiki::Request') ) {
         my $res = TWiki::UI::handleRequest($req);
@@ -145,6 +146,7 @@ sub preparePath {
 sub prepareBody {
     my ( $this, $req ) = @_;
    
+    return if ( $this->{cgi} );
     return unless $ENV{CONTENT_LENGTH};
     my $cgi = new CGI();
     my $err = $cgi->cgi_error;
