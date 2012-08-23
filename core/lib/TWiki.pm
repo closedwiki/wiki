@@ -230,6 +230,7 @@ BEGIN {
         INTURLENCODE      => \&INTURLENCODE_deprecated,
         LANGUAGES         => \&LANGUAGES,
         MAKETEXT          => \&MAKETEXT,
+        MASTERWEBSCRIPTURL=> \&MASTERWEBSCRIPTURL,
 	MDREPO            => \&MDREPO,
         META              => \&META,
         METASEARCH        => \&METASEARCH,
@@ -1017,39 +1018,105 @@ sub isValidWebName {
 
 =pod
 
----++ ObjectMethod readOnlyMirrorWeb( $theWeb ) -> ( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote )
+---++ ObjectMethod modeAndMaster( $web )
+it returns the following hash reference such as this:
+('master', undef)
 
-If this is a mirrored web, return information about the mirror. The info
-is returned in a quadruple:
+and this:
+('slave', { # master site data
+    siteName         => 'na',
+    webScriptUrlTmpl => 'http://twiki.example.com/cgi-bin//Web',
+    scriptSuffix     => '',
+    webViewUrl       => 'http://twiki.example.com/Web',
+})
 
-| site name | URL | link | note |
-
+The first value is the mode of the web: either 'local', 'master', 'slave',
+or 'read-only'. The second value is defined Only when the mode is 'slave'.
 =cut
 
-sub readOnlyMirrorWeb {
-    my( $this, $theWeb ) = @_;
-
-    my @mirrorInfo = ( '', '', '', '' );
-    if( $TWiki::cfg{SiteWebTopicName} ) {
-        my $mirrorSiteName =
-          $this->{prefs}->getWebPreferencesValue( 'MIRRORSITENAME', $theWeb );
-        if( $mirrorSiteName && $mirrorSiteName ne $TWiki::cfg{SiteWebTopicName} ) {
-            my $mirrorViewURL  =
-              $this->{prefs}->getWebPreferencesValue( 'MIRRORVIEWURL', $theWeb );
-            my $mirrorLink = $this->templates->readTemplate( 'mirrorlink' );
-            $mirrorLink =~ s/%MIRRORSITENAME%/$mirrorSiteName/g;
-            $mirrorLink =~ s/%MIRRORVIEWURL%/$mirrorViewURL/g;
-            $mirrorLink =~ s/\s*$//g;
-            my $mirrorNote = $this->templates->readTemplate( 'mirrornote' );
-            $mirrorNote =~ s/%MIRRORSITENAME%/$mirrorSiteName/g;
-            $mirrorNote =~ s/%MIRRORVIEWURL%/$mirrorViewURL/g;
-            $mirrorNote = $this->renderer->getRenderedVersion
-              ( $mirrorNote, $theWeb, $TWiki::cfg{HomeTopic} );
-            $mirrorNote =~ s/\s*$//g;
-            @mirrorInfo = ( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote );
+sub modeAndMaster {
+    my ($this, $web) = @_;
+    my $mode = 'local'; # by default a web is local
+    if ( !$TWiki::cfg{SiteName} ) {
+        return ($mode, undef);
+    }
+    my $cache = $this->{modeAndMaster} ||= {};
+    if ( my $cached = $cache->{$web} ) {
+        return @$cached
+    }
+    my $cacheHereToo;
+    my %master;
+    if ( my $mdrepo = $this->{mdrepo} ) {
+        my $tlweb = topLevelWeb($web);
+        if ( my $cached = $cache->{$tlweb} ) {
+            $cache->{$web} = $cached if ( $tlweb ne $web );
+            return @$cached;
+        }
+        $cacheHereToo = $tlweb ne $web ? $tlweb : '';
+        my $webRec = $mdrepo->getRec('webs', topLevelWeb($web));
+        if ( $webRec ) {
+            my $masterSite = $webRec->{master};
+            if ( $masterSite ) {
+                $master{siteName} = $masterSite;
+                if ( $masterSite eq $TWiki::cfg{SiteName} ) {
+                    $mode = 'master';
+                }
+                else {
+                    my $siteRec = $mdrepo->getRec('sites', $masterSite);
+                    if ( $siteRec && $siteRec->{scripturl} ) {
+                        $mode = 'slave';
+                        $master{webScriptUrlTmpl} =
+                            $siteRec->{scripturl} . '//' . $web;
+                        $master{scriptSuffix} = $siteRec->{scriptsuffix};
+                        $master{webViewUrl} = $siteRec->{viewurl} . '/' . $web
+                            if ( $siteRec->{viewurl} );
+                    }
+                    else {
+                        $mode = 'read-only';
+                    }
+                }
+            }
+        }
+        # If the metadata repository is in use and the web's record
+        # doesn't exist or doesn't have the master field, then the web
+        # is regarded as 'local'.
+        # No fall back to the none metadata repository situation processed
+        # below.
+    }
+    else {
+        my $prefs = $this->{prefs};
+        my $masterSite = $prefs->getWebPreferencesValue('MASTERSITENAME', $web);
+        if ( $masterSite ) {
+            $master{siteName} = $masterSite;
+            if ( $masterSite eq $TWiki::cfg{SiteName} ) {
+                $mode = 'master';
+            }
+            else {
+                my $webScriptUrlTmpl =  $master{webScriptUrlTmpl} =
+                    $prefs->getWebPreferencesValue(
+                        'MASTERWEBSCRIPTURLTMPL', $web
+                    );
+                if ( $webScriptUrlTmpl ) {
+                    $mode = 'slave';
+                    $master{scriptSuffix} =
+                        $prefs->getWebPreferencesValue(
+                            'MASTERSCRIPTSUFFIX', $web
+                        );
+                    $master{webViewUrl} =
+                        $prefs->getWebPreferencesValue(
+                            'MASTERWEBVIEWURL', $web
+                        );
+                }
+                else {
+                    $mode = 'read-only'
+                }
+            }
         }
     }
-    return @mirrorInfo;
+    my $result = $cache->{$web} = 
+        [$mode, ($mode eq 'slave' && %master) ? \%master : undef];
+    $cache->{$cacheHereToo} = $result if ( $cacheHereToo );
+    return @$result;
 }
 
 =pod
@@ -1740,6 +1807,16 @@ sub new {
     # SMELL: Every place should localize it before use, so it's not necessary here.
     $TWiki::Plugins::SESSION = $this;
 
+    my ($mode, $master) = $this->modeAndMaster($this->{webName});
+    $this->{contentMode} = $mode;
+    $this->{SESSION_TAGS}{READONLYWEB} = $mode eq 'read-only' ? 'on' : '';
+    if ( $master ) {
+        $this->{master} = $master;
+        if ( $this->{mdrepo} ) {
+            $this->{SESSION_TAGS}{MASTERSITENAME} = $master->{siteName};
+        }
+    }
+
     Monitor::MARK("TWiki session created");
 
     return $this;
@@ -1918,6 +1995,9 @@ sub finish {
     undef $this->{_INCLUDES};
     undef $this->{response};
     undef $this->{evaluating_if};
+    undef $this->{contentMode};
+    undef $this->{master};
+    undef $this->{modeAndMaster};
 }
 
 =pod
@@ -4098,6 +4178,8 @@ sub WEBLIST {
     foreach my $aweb ( @webslist ) {
         if( $aweb eq 'public' ) {
             push( @list, $this->{store}->getListOfWebs( 'user,public,allowed', $showWeb ) );
+        } elsif ( $aweb eq 'canmoveto' ) {
+            push( @list, $this->{store}->getListOfWebs( 'user,public,allowed,canmoveto', $showWeb ) );
         } elsif( $aweb eq 'webtemplate' ) {
             push( @list, $this->{store}->getListOfWebs( 'template,allowed', $showWeb ));
         } else {
@@ -4437,6 +4519,20 @@ sub PUBURL {
 sub PUBURLPATH {
     my $this = shift;
     return $this->getPubUrl(0);
+}
+
+sub MASTERWEBSCRIPTURL {
+    my ( $this, $params, $topic, $web ) = @_;
+    my $master = $this->{master};
+    return '' unless ( $master );
+    my $url    = $master->{webScriptUrlTmpl};
+    return '' unless ( $url );
+    my $script = $params->{_DEFAULT} || 'view';
+    return $master->{webViewUrl}
+        if ( $script eq 'view' && $master->{webViewUrl} );
+    my $suffix = $master->{scriptSuffix} || '';
+    $url =~ s:^(.*)//:$1/$script$suffix/:;
+    return $url;
 }
 
 sub ALLVARIABLES {

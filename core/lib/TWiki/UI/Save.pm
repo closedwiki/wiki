@@ -92,7 +92,7 @@ sub buildNewTopic {
             params => [ $script ]);
     }
 
-    TWiki::UI::checkMirror( $session, $webName, $topic );
+    TWiki::UI::checkWritable( $session );
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'save' );
 
     my $topicExists  = $store->topicExists( $webName, $topic );

@@ -98,7 +98,7 @@ sub init_edit {
     my $store = $session->{store};
 
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'edit' );
-    TWiki::UI::checkMirror( $session, $webName, $topic );
+    TWiki::UI::checkWritable( $session );
 
     my $tmpl = '';
     my $text = '';

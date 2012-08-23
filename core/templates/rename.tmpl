@@ -14,7 +14,7 @@
 %TMPL:P{"nonwikiword"}%%TMPL:END%
 
 
-%TMPL:DEF{"newweb"}%<select name="newweb" class="twikiSelect">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%NEW_WEB%,public" selection="%NEW_WEB%" separator=" "}%</select>%TMPL:END%
+%TMPL:DEF{"newweb"}%<select name="newweb" class="twikiSelect">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%NEW_WEB%,canmoveto" selection="%NEW_WEB%" separator=" "}%</select>%TMPL:END%
 
 
 %TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Rename/Move"}%' /> %MAKETEXT{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%

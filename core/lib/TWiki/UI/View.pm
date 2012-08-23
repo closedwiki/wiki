@@ -178,13 +178,11 @@ sub view {
         $session->writeLog( 'view', $webName.'.'.$topicName, $logEntry );
     }
 
-    my( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote ) =
-      $session->readOnlyMirrorWeb( $webName );
-
     # Note; must enter all contexts before the template is read, as
     # TMPL:P is expanded on the fly in the template reader. :-(
     my( $revTitle, $revArg ) = ( '', '' );
-    if( $mirrorSiteName ) {
+    my $mode = $session->{contentMode};
+    if( $mode eq 'read-only' ) {
         $session->enterContext( 'inactive' );
         unless( $topicExists ) {
             $text = '';
@@ -194,6 +192,11 @@ sub view {
         # disable edit of previous revisions
         $revTitle = '(r'.$rev.')';
         $revArg = '&rev='.$rev;
+    }
+    if( $mode eq 'slave' ) {
+        $session->enterContext( 'content_slave' );
+    } elsif( $mode eq 'master' ) {
+        $session->enterContext( 'content_master' );
     }
 
     my $template = $query->param( 'template' ) ||
@@ -218,7 +221,6 @@ sub view {
                                     params => [ $template, 'VIEW_TEMPLATE' ] );
     }
 
-    $tmpl =~ s/%REVINFO%/%REVINFO%$mirrorNote/go;
     $tmpl =~ s/%REVTITLE%/$revTitle/g;
     $tmpl =~ s/%REVARG%/$revArg/g;
 

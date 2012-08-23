@@ -1562,6 +1562,18 @@ sub getTopicNames {
     return $handler->getTopicNames();
 }
 
+# filter out webs to which you cannot move the current web to
+sub _filterCanMoveTo {
+    my ($session, $webListRef) = @_;
+    my @result;
+    for my $i ( @$webListRef ) {
+        my $mode = ($session->modeAndMaster($i))[0];
+        push(@result, $i)
+            if ( $mode eq 'local' || $mode eq 'master' );
+    }
+    return @result;
+}
+
 =pod
 
 ---++ ObjectMethod getListOfWebs( $filter ) -> @webNames
@@ -1593,13 +1605,17 @@ sub getListOfWebs {
         @webList = grep { /(?:^_|\/_)/, } @webList;
     }
 
+    my $session = $this->{session};
     if ( $TWiki::cfg{Mdrepo}{WebRecordRequired} && $this->{session}{mdrepo} ) {
         # skipping public and allowed check because it may take too much
         # time with thousands of webs
+        if ( $filter =~ /\bcanmoveto\b/ ) {
+            @webList = _filterCanMoveTo($session, \@webList);
+        }
         return sort @webList;
     }
 
-    my $user = $this->{session}->{user};
+    my $user = $session->{user};
     if( $filter =~ /\bpublic\b/ &&
           !$this->{session}->{users}->isAdmin( $user )) {
         my $prefs = $this->{session}->{prefs};
@@ -1618,6 +1634,10 @@ sub getListOfWebs {
               $security->checkAccessPermission(
                   'VIEW', $user, undef, undef, undef, $_ )
           } @webList;
+    }
+
+    if( $filter =~ /\bcanmoveto\b/ ) {
+        @webList = _filterCanMoveTo($session, \@webList);
     }
 
     # Only return webs that really exist

@@ -586,3 +586,8 @@ A TWiki administrator can enable/disable the crypt token based CSRF protection w
 %MAKETEXT{"To save your changes, press the browser back button, copy all content into the clipboard, cancel edit, edit again, and replace content with clipboard content. Whew ... nothing lost!"}%
 %TMPL:END%
 
+%TMPL:DEF{"not_writable"}%
+%MAKETEXT{"The [_1] web is not writable on this site" args="<nop>%WEB%"}%.
+
+%MAKETEXT{"Contact [_1] if you have any questions." args="<a href=\"mailto:%WIKIWEBMASTER%?subject=%ENCODE{"%WEB% is not writable'"}%\">%WIKIWEBMASTER%</a>"}%
+%TMPL:END%

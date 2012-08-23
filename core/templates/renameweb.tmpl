@@ -10,7 +10,7 @@
 %TMPL:DEF{"newweb"}%<p><input class="twikiInputField" value="%NEW_SUBWEB%" name="newsubweb" size="20" /><input type="hidden" name="action" value="renameweb" /><input type="hidden" name="confirm" value="getlock" /></p>%TMPL:END%
 
 
-%TMPL:DEF{"newparentweb"}%<p><select class="twikiSelect" name="newparentweb"><option value=""></option>%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%NEW_PARENTWEB%" separator=" "}%</select></p>%TMPL:END%
+%TMPL:DEF{"newparentweb"}%<p><select class="twikiSelect" name="newparentweb"><option value=""></option>%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,canmoveto" selection="%NEW_PARENTWEB%" separator=" "}%</select></p>%TMPL:END%
 
 
 

@@ -1598,8 +1598,7 @@ sub saveTopicText {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
     my $session = $TWiki::Plugins::SESSION;
-    my( $mirrorSite, $mirrorViewURL ) = $session->readOnlyMirrorWeb( $web );
-    throw Error::Simple('Cannot save on a mirror site') if( $mirrorSite );
+    TWiki::UI::checkWritable($session, $web);
 
     # check access permission
     unless( $ignorePermissions ||

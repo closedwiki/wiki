@@ -334,24 +334,33 @@ sub checkTopicExists {
 
 =pod twiki
 
----++ StaticMethod checkMirror( $session, $web, $topic )
+---++ StaticMethod checkWritable( $session )
 
-Checks if this web is a mirror web, throwing an OopsException
-if it is.
+Checks if this web is writable on this site, Throwing an exception
+if it is not.
 
 =cut
 
-sub checkMirror {
-    my ( $session, $webName, $topic ) = @_;
+sub checkWritable {
+    my ( $session, $web ) = @_;
     ASSERT($session->isa( 'TWiki')) if DEBUG;
 
-    my( $mirrorSiteName, $mirrorViewURL ) =
-      $session->readOnlyMirrorWeb( $webName );
-
-    return unless ( $mirrorSiteName );
-
-    throw Error::Simple(
-        "This is a mirror site $mirrorSiteName, $mirrorViewURL" );
+    my $mode;
+    if ( $web && $web ne $session->{webName} ) {
+        my $dummy;
+        ($mode, $dummy) = $session->modeAndMaster($web);
+    }
+    else {
+        $web = $session->{webName};
+        $mode = $session->{contentMode};
+    }
+    if ( $mode eq 'slave' || $mode eq 'read-only' ) {
+        throw TWiki::OopsException( 'accessdenied',
+                                    def => 'not_writable',
+                                    web => $web,
+            );
+    }
+    return;
 }
 
 =pod twiki

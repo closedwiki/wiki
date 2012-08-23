@@ -1,0 +1,107 @@
+%META:TOPICINFO{author="TWikiContributor" date="1345617845" format="1.1" version="$Rev$"}%
+---+!! Read only and mirror web support
+
+---++ Scope
+
+This topic describes how to set up read-only webs.
+A read-only web can be mirrored from another site.
+But how to mirror a web from another site is out of scope.
+
+---++ Motivation
+
+There are cases where read-only webs are useful.
+   * %<nop>SYSTEMWEB% web being a part of installation rather than a content, it may reside in read-only storage. In that case, It's better for TWiki to recognize as such and not to allow update operations rather than update operations causing errors. Even if you don't see an edit or attach link, users may enter an edit or attach URL manually. In that case, the edit and attach scripts should display "operation not allowed" kind of message.
+   * You may want to run a federation of TWiki sites, in which member sites have read-only mirror of other sites' webs. Read-only mirror webs are not so useful for tight collaboration because of the time lag of mirroring, which typically happens once a day. But it's useful for a web viewed by many users geographically distributed.
+
+---++ Master and slave
+
+Let's assume a federated TWiki sites depicted on MetadataRepository#Federation_of_sites.
+Each web has one master site and the other sites are slave.
+On such a web, updates happen only on the master site and the slaves get those changes when they mirror the web.
+
+---++ Local webs
+
+Each site in a federation needs to have some webs locally without sharing them with other federation members - definitely with the Trash web.
+It's not critical but the Sandbox web should not be mirrored hence should be local to each site.
+
+If this feature is not turned on, all webs are regarded local.
+
+---++ Content modes
+
+Given the explanation so far, a web is either of the following content modes.
+| *Mode name* | *Description* | *Context* |
+| local       | editable locally and not shared with other sites | |
+| master      | editable locally and mirrored to other sites | content_master |
+| slave       | not editable locally and mirrored from the master site | content_slave |
+| read-only   | cannot be edited | inactive |
+
+In case you need to know which mode a web is in, the contentMode attribute of the session object has a mode name.
+In a skin, you can use the context each mode provides.
+
+---++ Setting up
+
+Setting the site's identifier (a few character long alpha-numeric string) to $TWiki::cfg{SiteName} enables you to use this feature.
+
+There are two ways to set read-only and mirroring related information.
+One is to use MetadataRepository and the other is setting preferences on !WebPreferences.
+
+For a site federation having hundreds or thousands of webs, MetadataRepository should be the only practical option.
+But just to make %<nop>SYSTEMWEB% read-only, that's too much.
+So you can accomplish that without introducing MetadataReporisory.
+That should be handy if you want to try it out before diving into it.
+
+---+++ !WebPreferences
+If you are not using MetadataRepository, you can make a web read-only by setting MASTERSITENAME on !WebPreferences to 'ro' (or 'readonly' or anhything different from $TWiki::cfg{SiteName} value.
+
+If it's a mirror site copied from another site which is accessible, you need to set MASTERWEBSCRIPTURLTMPL to e.g. http:<nop>//twiki.example.com/cgi-bin//WebName.
+If the master site needs a file name extension such as .cgi for CGI programs, you need to set MASTERSCRIPTSUFFIX.
+
+There are cases where the view URL format is different from URLs for other operations. For example, view URLs may be http:<nop>/twiki.example.com/Web/Topic.
+In such cases, you should set MASTERWEBVIEWURL to e.g. http:<nop>/twiki.example.com/Web.
+Because this is not the norm, MASTERWEBVIEWURL is optional.
+
+---+++ Metadata Repository
+If you use MetadataRepository, read-only and mirroring related information comes only from MetadataRepository (except with $TWiki::cfg{SiteName}) and preferences on !WebPreferences don't matter.
+
+The web's 'master' field specifies the master site.
+If it's the same as $TWiki::cfg{SiteName}, then the web's content mode is 'master'.
+Otherwise, the sites table is referred to get information of the master site.
+
+If the sites table doesn't have the record for the master site, the web is regarded as 'read-only'. Even if there is a record, if the record doesn't have the 'scripturl' field, the web is still regarded as 'read-only'
+
+If the 'scripturl' field is present, the web is regarded as 'slave' and the 'scripturl' value is used to make the 'webScriptUrlTmpl' value of the web.
+In addition, the 'scriptsuffix' and 'viewurl' fields of the site record are examined.
+
+---+++ Site-wide preference
+A master web is to have a link to mirror the web to all slave sites.
+The link destination needs to be set to MIRRORTOALLURL.
+
+---++ How read-only and mirror webs affect TWiki's behavior
+
+Besides contexts mentioned [[#Content_modes][above]], read-only and mirror webs affect TWiki's behavior as shown below.
+
+---+++ Skin
+A topic on a read-only web is displayed in the same manner as a topic of a prior revision - Edit, Attach, and More actions links are disabled.
+
+A topic on a master web is almost as usual.
+The only difference from a local web is to have a "Mirror to all" link on the bottom tool bar.
+
+%ATTACHURL%/bottom-toolbar-w-mirror-to-all.png
+
+A topic on a slave web looks similar but Edit and Attach links are pointing to the master site. More actions link is disabled.
+And "View master" link is added on the bottom tool bar.
+
+%ATTACHURL%/bottom-toolbar-w-view-master.png
+
+These changes are made on template/viewtopicactionbuttons.tmpl, which is supposed to be included by all skins. 
+If you make your skin in a proper manner, those behaviors are automatically implemented.
+
+---+++ Variables
+   $ %<nop>READONLYWEB% : Becomes 'on' in 'read-only' mode. Otherwise '' (zero width string).
+   $ %<nop>MASTERWEBSCRIPTURL{script}% : On a 'slave' web, it returns the URL of the specified script of the web on the master site. If the view URL format is different from other scripts, %<nop>MASTERWEBSCRIPTURL{"view"}% returns the proper URL. %BR%
+   On a non-slave web, it returns a zero width string.
+   $ $<nop>WEBLIST{...}% : You can specify webs="canmoveto" parameter, in which case webs to which a topic of the current web cannot be moved to are excluded.
+   When the read-only and mirror web feature is not in effect, web="canmoveto" is identical to webs="public" because all webs are local in that case.
+
+%META:FILEATTACHMENT{name="bottom-toolbar-w-view-master.png" attachment="bottom-toolbar-w-view-master.png" attr="" comment="" date="1345617845" path="bottom-toolbar-w-view-master.png" size="9790" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bottom-toolbar-w-mirror-to-all.png" attachment="bottom-toolbar-w-mirror-to-all.png" attr="" comment="" date="1345617845" path="bottom-toolbar-w-mirror-to-all.png" size="9067" user="TWikiContributor" version=""}%
