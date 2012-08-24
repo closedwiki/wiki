@@ -248,9 +248,9 @@ $TWiki::cfg{Mdrepo}{Store} = 'DB_File';
 $TWiki::cfg{Mdrepo}{Dir} = '/var/twiki/mdrepo';
 $TWiki::cfg{Mdrepo}{Tables} = [qw(sites webs:b)];
 </verbatim>
-   $ {Mdrepo}{Store: Specifies a tie-able Perl class.
-   $ {Mdrepo}{Dir: Specifies a path to a directory where the !MdrepoStore class have files.
-   $ {Mdrepo}{Tables: Specifies the names of the tables used. A table name may be followed by a colon and options. "b" is currently the only option recognized, which means the table can be updated from browser.
+   $ $TWiki::cfg{Mdrepo}{Store}: Specifies a tie-able Perl class.
+   $ $TWiki::cfg{Mdrepo}{Dir}: Specifies a path to a directory where the !MdrepoStore class have files.
+   $ $TWiki::cfg{Mdrepo}{Tables}: Specifies the names of the tables used. A table name may be followed by a colon and options. "b" is currently the only option recognized, which means the table can be updated from browser.
 
 By the following setting, each web required to have its metadata record.
 <verbatim>
@@ -279,5 +279,11 @@ As the table above suggests, =updt=, =del=, and =rset= commands put multiple log
 | 2012-06-15 - 13:16 | guest | mdrepo | TemporaryTestWeb.TestTopic | cur sites am datadir=/d/twiki/data pubdir=/d/twiki/pub server=strawman |  |
 | 2012-06-15 - 13:16 | guest | mdrepo | TemporaryTestWeb.TestTopic | updt sites am datadir=/d/twiki/dat pubdir=/d/twiki/pu server=strawma |  |
 </verbatim>
+
+---++ Only for top level webs
+For practicality, web metadata is only for top level webs.
+More accurately, a subweb has the same web metadata as its parent.
+
+The reason is that site administration gets complicated if subwebs can have different web metadata.
 
 %META:FILEATTACHMENT{name="site-mirroring.png" attachment="site-mirroring.png" attr="" comment="" date="1339638656" path="site-mirroring.png" size="16575" user="TWikiContributor" version="1"}%
