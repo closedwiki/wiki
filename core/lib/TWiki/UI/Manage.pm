@@ -272,8 +272,7 @@ sub _createWeb {
     $newWeb = TWiki::Sandbox::untaintUnchecked( $newWeb );
 
     # check metadata if it's required
-    if ( $TWiki::cfg{Mdrepo}{WebRecordRequired} &&
-         $session->{mdrepo} &&
+    if ( $TWiki::cfg{Mdrepo}{WebRecordRequired} && $session->{mdrepo} &&
          !$session->{mdrepo}->getRec('webs', TWiki::topLevelWeb($newWeb))
     ) {
         throw TWiki::OopsException(
@@ -1147,6 +1146,14 @@ sub _moveWeb {
     $newWeb =~ s/\./\//go;
 
     my $cUID = $session->{user};
+
+    if( $TWiki::cfg{Mdrepo}{WebRecordRequired} && $session->{mdrepo} &&
+        !$session->{mdrepo}->getRec('webs', TWiki::topLevelWeb($newWeb))
+     ) {
+        throw TWiki::OopsException(
+            'attention',
+            def => 'no_web_metadata', params => [ $newWeb ] );
+    }
 
     if( $store->webExists( $newWeb )) {
         throw TWiki::OopsException( 'attention',

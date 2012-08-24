@@ -262,6 +262,7 @@ Specifically this brings the following behaviors.
    Existence of a directory under $TWiki::cfg{DataDir} isn't enough.
    * A web creation by %SYSTEMWEB%.ManagingWebs is rejected if the corresponding
    web metadata is not present.
+   Similarly, a web cannot be renamed to a web whose top level web doesn't have its web metadata record.
    * %<nop>WEBLIST{...}% gets faster referring to web metadata rather than traversing a directory hiearchy.
    For practicality, only top level webs are listed except with the current web --
    the current web's ancestors and decendants are listed.
