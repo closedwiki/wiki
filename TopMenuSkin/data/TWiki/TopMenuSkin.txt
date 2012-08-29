@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1311890722" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346221083" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -64,10 +64,6 @@ Example !WebTopBar menu structure with additional "Bugs" pulldown menu:
       * [[FixedBugs][Fixed bugs]]
 </verbatim>
 
----++ Read-Only Skin Mode
-
-This skin and the PatternSkin support a read-only mode. This is mainly useful if you have TWiki application pages or dashboards where you do not want regular users to change content. The read-only mode is enabled with a READONLYSKINMODE preferences setting set to 1. Details in %SYSTEMWEB%.PatternSkinCustomization#ReadOnlySkinMode.
-
 ---++ Use Menu-Bars in Topics
 
 A menu-bar can be added anywhere in a topic:
@@ -102,6 +98,11 @@ Renders as:
 </div>
 
 __NOTE:__ The pulldown menus only work if the TWiki:Plugins/JQueryPlugin is installed and enabled.
+
+#ReadOnlySkinMode
+---++ Read-Only Skin Mode
+
+This skin and the PatternSkin support a read-only mode. This is mainly useful if you have TWiki application pages or dashboards where you do not want regular users to change content. The read-only mode is enabled with a READONLYSKINMODE preferences setting set to 1. Details in %SYSTEMWEB%.PatternSkinCustomization#ReadOnlySkinMode.
 
 ---++ CSS and !JavaScript
 
@@ -204,6 +205,21 @@ document.onclick = twTopMenuClose;
 </style>"
 }%<nop>%STOPINCLUDE%
 
+---++ Create Your Own Look
+
+This skin is based on PatternSkin, and the same rules for customization apply.
+
+The !TopMenuSkin disables the sidebar and activates a different top bar in =twiki/templates/view.topmenu.tmpl=. Details in PatternSkinCustomization and PatternSkinCssCookbook.
+
+The top bar TopMenuSkinTopBar (with menu bar, logo and search boxes) can be cloned using same topic name and customized per web.
+
+#WebLeftBar
+---++ Add a Sidebar
+
+If you want a sidebar in addition to the top bar, define a WEBLEFTBAR setting with the name of the topic to include as the sidebar. This can be done in a !WebPreferences for the whole web or in a topic. Example:
+
+   * <nop>Set WEBLEFTBAR = WebLeftBar
+
 ---++ Installation
 
 *Note:* You do not need to install anything on the browser to use this skin. The following instructions are for the administrator who installs the skin on the server where TWiki is running.
@@ -225,27 +241,20 @@ document.onclick = twTopMenuClose;
       * Attach %ATTACHURL%/twiki-gray.gif to %SYSTEMWEB%.TWikiDocGraphics.
       * If you have more than 30 webs, apply TWikibug:Item6429 to limit the number of webs shown in the "Home" menu.
 
----++ Creating your own look
-
-This skin is based on PatternSkin, and the same rules for customization apply.
-
-The !TopMenuSkin disables the sidebar and activates a different top bar in =twiki/templates/view.topmenu.tmpl=. Details in PatternSkinCustomization and PatternSkinCssCookbook.
-
-The top bar TopMenuSkinTopBar (with menu bar, logo and search boxes) can be cloned using same topic name and customized per web.
-
 ---++ Skin Info
 
    * Set SHORTDESCRIPTION = Skin with pulldown menus in top bar
 
 |  Skin Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2010-2011, TWiki:Main.PeterThoeny, [[http://twiki.net][Twiki, Inc.]] <br /> &copy; 2010-2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2010-2012, TWiki:Main.PeterThoeny, [[http://twiki.org/][Twiki.org]] <br /> &copy; 2010-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Description: | Top-menu skin |
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Screenshot" title="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2011-07-28 |
+|  Skin Version: | 2012-08-28 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2012-08-28: | TWikibug:Item6918: New WEBLEFTBAR setting to show a sidebar |
 |  2011-07-28: | TWikibug:Item6780: Usability: Link to !UserList topic instead of !TWikiUsers |
 |  2011-07-10: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2011-07-01: | TWikibug:Item6763: Fix for WYSIWYG editor corrupting system pages |
