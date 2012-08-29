@@ -73,5 +73,22 @@
 %TMPL:END%
 
 %TMPL:DEF{"top"}%%TMPL:END%
-%TMPL:DEF{"leftbar"}%%TMPL:END%
-%TMPL:DEF{"leftbardimensions"}%%TMPL:END%
+%TMPL:DEF{"leftbar"}%%IF{
+ "defined WEBLEFTBAR"
+ then="<div id=\"patternLeftBar\"><div id=\"patternClearHeaderLeft\"></div>
+<div id=\"patternLeftBarContents\">
+$percntINCLUDE{%WEBLEFTBAR%}$percnt
+</div><!-- /patternLeftBarContents--></div><!-- /patternLeftBar-->"
+ else=""
+}%%TMPL:END%
+%TMPL:DEF{"leftbardimensions"}%%IF{
+ "defined WEBLEFTBAR"
+ then="#patternOuter {
+        margin-left:14em;
+}
+#patternLeftBar {
+        width:14em;
+        margin-left:-14em;
+}"
+ else=""
+}%%TMPL:END%
