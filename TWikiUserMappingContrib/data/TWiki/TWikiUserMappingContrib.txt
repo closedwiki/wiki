@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1343453977" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346275946" format="1.1" version="$Rev$"}%
 ---+!! !TWikiUserMappingContrib
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -72,8 +72,9 @@ It's a part of the default distribution of the TWiki Core.
 |  Contrib Authors: | TWiki:Main.SvenDowideit, TWiki:Main.PeterThoeny, TWiki:TWiki.TWikiContributor |
 |  Copyright: | &copy; 2007 Sven Dowideit %BR% &copy; 2007-2012 TWiki:TWiki.PeterThoeny %BR% &copy; 2007-2012 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Contrib Version: | 2012-07-27 |
-|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Contrib Version: | 2012-08-29 |
+|  <span style="white-space: nowrap;">Change History:</span> | <!-- versions below in reverse order -->&nbsp; |
+|  2012-08-29: | TWikibug:Item6919: Show better topic summary with expanded variables in %SYSTEMWEB%.UserToolsCategory -- TWiki:Main.PeterThoeny |
 |  2012-07-27: | TWikibug:Item6879: Custom UserReports: Adding "slim_box" and "select_users" sections -- TWiki:Main.PeterThoeny |
 |  2012-06-27: | TWikibug:Item6894: Fix for WikiName cannot contain dots -- TWiki:Main.PeterThoeny |
 |  2012-06-02: | TWikibug:Item6879: Custom UserReports for TWiki applications -- TWiki:Main.PeterThoeny |
