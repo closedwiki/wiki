@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1343890443" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346745683" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -197,12 +197,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Administrator utility to backup, restore and upgrade a TWiki site
 
-|  Plugin Author: | TWiki:Main.PeterThoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
+|  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]] |
 |  Copyright: | &copy; 2011-2012 TWiki:Main.PeterThoeny <br /> &copy; 2011-2012 TWiki:TWiki.TWikiContributor <br /> &copy; 2004, 2005 Simon Flack (for CPAN:IO::CaptureOutput) <br /> &copy; 2007, 2008 David Golden (for CPAN:IO::CaptureOutput) <br /> &copy; 1997-2011 by Earl Hood and Detlef Pilzecker (for CPAN:Proc::Daemon) |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-08-01 |
+|  Plugin Version: | 2012-09-03 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-08-01: | TWikibug:Item6837: Doc update with zip utility limitation of 4GB |
+|  2012-09-03: | TWikibug:Item6837: Doc update with zip utility limitation of 4GB |
 |  2012-01-13: | TWikibug:Item6796: Fixing copyright year to 2012 |
 |  2011-12-19: | TWikibug:Item6799: Improved docs on GNU zip dependency |
 |  2011-09-13: | TWikibug:Item6796: Improved docs on command line use |
