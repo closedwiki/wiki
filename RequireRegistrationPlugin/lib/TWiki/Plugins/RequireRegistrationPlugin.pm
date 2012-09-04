@@ -44,11 +44,8 @@ package TWiki::Plugins::RequireRegistrationPlugin;
 use strict;
 
 # =========================
-our $VERSION = '1.3 - $Rev$';
-our $RELEASE = '2011-08-02';
-
 our $VERSION = '1.4';
-our $RELEASE = '2012-08-17';
+our $RELEASE = '2012-09-03';
 our $NO_PREFS_IN_TOPIC = 1;
 
 my $refresh;

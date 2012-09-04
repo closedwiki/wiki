@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1345190405" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346741290" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -52,9 +52,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.ByronIgoe |
 |  Copyright: | &copy; 2007 TWiki:Main.ByronIgoe <br /> &copy; 2012 TWiki:Main.WillemEngen <br /> &copy; 2009-2012 TWiki:Main.PeterThoeny <br /> &copy; 2008-2012 TWiki:Main.TWikiContributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2014-08-17 (v1.4) |
+|  Plugin Version: | 2012-09-03 (v1.4) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-08-17: | TWikibug:Item6915: Move settings to configure; add {Plugins}{$pluginName}{Actions} setting -- TWiki:Main.WillemEngen |
+|  2012-09-03: | TWikibug:Item6915: Move settings to configure; add {Plugins}{$pluginName}{Actions} setting -- TWiki:Main.WillemEngen |
 |  2011-08-02: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2010-10-29: | Doc fixes -- Peter Thoeny |
 |  2008-03-04: | Fix bug in addToHEAD, made redirect method and refresh time configurable -- Peter Thoeny |
