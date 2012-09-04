@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1346793879" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346794876" format="1.1" version="$Rev$"}%
 ---+!! Tag-me Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -407,7 +407,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2012-08-04 (v1.9) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-09-04: | TWikibug:Item6837: Doc fixes |
+|  2012-09-04: | TWikibug:Item6923: Nicer reporting pages with gray gradient tabs |
 |  2011-07-12: | TWikibug:Item6768: Allow login name or !WikiWord name for =by=""= tag queries; user specific "no tag yet" message if =by= user is not logged in user |
 |  2011-05-25: | TWikibug:Item6732: Fix for administrator not able to delete tag if Main web is renamed to User web |
 |  2010-06-12: | TWikibug:Item6490: Fixing hardcoded link to TWiki web |
