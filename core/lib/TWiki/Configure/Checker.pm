@@ -299,7 +299,7 @@ sub checkRCSProgram {
         $err .= $key.' is not set';
     } else {
         my $version = `$prog -V` || '';
-        if ( $version !~ /Can't exec/ && $version =~ /(\d+(\.\d+)+)/ ) {
+        if ( $version !~ /Can't exec/ && $version =~ /\s(\d+\.\d+)((:?\.\d+)*)/ ) {
             $version = $1;
         } else {
             $version = '';
