@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="PeterThoeny" date="1346735197" format="1.1" version="1.2"}%
 LinkAtStart
 <!-- /actual -->
 <!-- expected expand LINKATSTART -->
@@ -193,11 +194,11 @@ class CatAnimal {
 ---+++ Expected
 <!-- expected OL -->
 <ol><li> Sushi</li></ol><p />
-<ol><li type="A"> Sushi</li></ol><p />
-<ol><li type="i"> Sushi</li></ol><p />
+<ol><li style="list-style-type: upper-alpha;"> Sushi</li></ol><p />
+<ol><li style="list-style-type: lower-roman;"> Sushi</li></ol><p />
 <ol><li> Sushi</li>
-<li type="A"> Sushi</li>
-<li type="i"> Sushi</li></ol>
+<li style="list-style-type: upper-alpha;"> Sushi</li>
+<li style="list-style-type: lower-roman;"> Sushi</li></ol>
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->
