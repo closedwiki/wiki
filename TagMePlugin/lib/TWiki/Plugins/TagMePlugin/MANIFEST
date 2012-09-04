@@ -10,6 +10,8 @@ data/TWiki/TagMeDeleteTag.txt 0644
 data/TWiki/TagMeChangeRequests.txt 0644
 lib/TWiki/Plugins/TagMePlugin.pm 0444
 pub/TWiki/TagMePlugin/alltagcloud.gif 0644
+pub/TWiki/TagMePlugin/gray-gradient-1.png 0644
+pub/TWiki/TagMePlugin/gray-gradient-2.png 0644
 pub/TWiki/TagMePlugin/tag_add.gif 0644
 pub/TWiki/TagMePlugin/tag_addnew.gif 0644
 pub/TWiki/TagMePlugin/tag_remove.gif 0644

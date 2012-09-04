@@ -1,11 +1,11 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (c) 2006-2011 Peter Thoeny, peter[at]thoeny.org
+# Copyright (c) 2006-2012 Peter Thoeny, peter[at]thoeny.org
 # Copyright (c) 2006 Fred Morris, m3047-twiki@inwa.net
 # Copyright (c) 2007 Crawford Currie, http://c-dot.co.uk
 # Copyright (c) 2007 Sven Dowideit, SvenDowideit@DistributedINFORMATION.com
 # Copyright (c) 2007 Arthur Clemens, arthur@visiblearea.com
-# Copyright (c) 2006-2011 TWiki Contributor
+# Copyright (c) 2006-2012 TWiki Contributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ use strict;
 
 # =========================
 our $VERSION    = '1.9';
-our $RELEASE    = '2011-07-12';
+our $RELEASE    = '2012-09-04';
 
 # =========================
 our $pluginName = 'TagMePlugin';    # Name of this Plugin
