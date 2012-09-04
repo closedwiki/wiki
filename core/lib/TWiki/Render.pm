@@ -1138,6 +1138,7 @@ sub getRenderedVersion {
     my $tableRow = 0;
     my @result;
     my $isFirst = 1;
+    my $olStyle = { 'A' => 'upper-alpha', 'a' => 'lower-alpha', 'I' => 'upper-roman', 'i' => 'lower-roman' };
 
     foreach my $line ( split( /\r?\n/, $text )) {
         # Table: | cell | cell |
@@ -1185,8 +1186,8 @@ sub getRenderedVersion {
                 # Numbered list
                 my $ot = $3;
                 $ot =~ s/^(.).*/$1/;
-                if( $ot !~ /^\d$/ ) {
-                    $ot = ' type="'.$ot.'"';
+                if( $olStyle->{$ot} ) {
+                    $ot = ' style="list-style-type: '.$olStyle->{$ot}.';"';
                 } else {
                     $ot = '';
                 }
