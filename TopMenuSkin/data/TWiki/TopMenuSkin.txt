@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1346221083" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346743337" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -18,11 +18,6 @@ The !TopMenuSkin adds pulldown menus to the PatternSkin.
 %SEARCH{ "%TOPIC%" scope="topic" nosearch="on" nototal="on" format="$pattern(.*\| *Screenshot\:[^\|]*\|([^\|]*).*)" }%
 
 ---++ Tob Bar and Menu Structure
-
-<div style="float:right; text-align: center; padding:10px; width:150px; background-color:#EBEEF0">
-This skin is%BR% sponsored by:%BR%
-[[http://twiki.net/?ref=twiki.org/topmenuskin.logo][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" alt="Twiki, Inc." title="Twiki, Inc." />]]
-</div>
 
    * TopMenuSkinTopBar - top bar with menu bar, logo and search boxes (replacing WebTopBar), can be cloned and customized per web
    * WebTopMenu - bullet list defining menu bar for %WEB% web
@@ -244,6 +239,7 @@ If you want a sidebar in addition to the top bar, define a WEBLEFTBAR setting wi
 ---++ Skin Info
 
    * Set SHORTDESCRIPTION = Skin with pulldown menus in top bar
+   * Sponsor: [[http://twiki.net/][Twiki, Inc.]]
 
 |  Skin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2010-2012, TWiki:Main.PeterThoeny, [[http://twiki.org/][Twiki.org]] <br /> &copy; 2010-2012 TWiki:TWiki.TWikiContributor |
@@ -252,9 +248,9 @@ If you want a sidebar in addition to the top bar, define a WEBLEFTBAR setting wi
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Screenshot" title="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2012-08-28 |
+|  Skin Version: | 2012-09-04 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2012-08-28: | TWikibug:Item6918: New WEBLEFTBAR setting to show a sidebar |
+|  2012-09-04: | TWikibug:Item6918: New WEBLEFTBAR setting to show a sidebar |
 |  2011-07-28: | TWikibug:Item6780: Usability: Link to !UserList topic instead of !TWikiUsers |
 |  2011-07-10: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2011-07-01: | TWikibug:Item6763: Fix for WYSIWYG editor corrupting system pages |
