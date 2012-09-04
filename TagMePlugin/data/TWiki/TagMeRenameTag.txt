@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310940250" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346793879" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TagMePlugin"}%
 ---+!! Tag-me: Rename Tag
 
@@ -6,14 +6,14 @@
 %STARTINCLUDE%
 <table class="tagmeNavigation" border="0" cellpadding="3" cellspacing="0"><tr>
 <td>&nbsp; &nbsp;</td>
-<td bgcolor="#F6F4EB">&nbsp; [[TagMeCreateNewTag][Create New Tag]] &nbsp;</td>
+<td bgcolor="#eef0f8" style="background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TagMePlugin/gray-gradient-2.png); border: solid 1px #d7dced;">&nbsp; [[TagMeCreateNewTag][Create New Tag]] &nbsp;</td>
 <td>&nbsp;</td>
-<td bgcolor="#EAE9DE">&nbsp; *Rename Tag* &nbsp;</td>
+<td bgcolor="#d7dced" style="background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TagMePlugin/gray-gradient-1.png); border: solid 1px #d7dced;">&nbsp; *Rename Tag* &nbsp;</td>
 <td>&nbsp;</td>
-<td bgcolor="#F6F4EB">&nbsp; [[TagMeDeleteTag][Delete Tag]] &nbsp;</td>
+<td bgcolor="#eef0f8" style="background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TagMePlugin/gray-gradient-2.png); border: solid 1px #d7dced;">&nbsp; [[TagMeDeleteTag][Delete Tag]] &nbsp;</td>
 </tr></table>
 <table border="0" cellpadding="5" cellspacing="0" style="width:100%;">
-<tr bgcolor="#EAE9DE"><td style="width:100%;"></td></tr>
+<tr bgcolor="#d7dced"><td style="width:100%;"></td></tr>
 </table>
 %STARTSECTION{"create"}%
 <noautolink><form name="renametag" action="%SCRIPTURL{viewauth}%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return cleanTag(this.newtag.value);">%TAGME{ tpaction="%URLPARAM{"renameaction" default="renametaginit"}%" oldtag="%URLPARAM{oldtag}%" newtag="%URLPARAM{newtag}%" note="%URLPARAM{renametagnote}%" }%

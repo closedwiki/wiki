@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310533884" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346793879" format="1.1" version="$Rev$"}%
 ---+!! Tag-me Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -186,7 +186,6 @@ The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions. 
      | *Parameter* | *Comment* | *Default* |
      | =tag="..."= | Name of tag. Accepts alphanumeric and underscore characters only (unless =NORMALIZE_TAG_INPUT= is set to 0 to allow any user input) | (required) |
 
-
    * =%<nop>TAGME{ tpaction="remove" ... }%= - remove my tag vote on existing tag
      | *Parameter* | *Comment* | *Default* |
      | =tag="..."= | Name of tag | (required) |
@@ -331,7 +330,6 @@ CSS styles:
 }
 </verbatim>
 
-
 #PluginSettings
 ---++ Plugin Settings
 
@@ -405,10 +403,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens |
-|  Copyright: | &copy; 2006-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc]]; <br /> &copy; 2006-2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2006-2012 Peter Thoeny, [[http://twiki.org/][TWiki.org]]; <br /> &copy; 2006-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-07-12 (v1.9) |
+|  Plugin Version: | 2012-08-04 (v1.9) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-09-04: | TWikibug:Item6837: Doc fixes |
 |  2011-07-12: | TWikibug:Item6768: Allow login name or !WikiWord name for =by=""= tag queries; user specific "no tag yet" message if =by= user is not logged in user |
 |  2011-05-25: | TWikibug:Item6732: Fix for administrator not able to delete tag if Main web is renamed to User web |
 |  2010-06-12: | TWikibug:Item6490: Fixing hardcoded link to TWiki web |
@@ -458,12 +457,14 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %SYSTEMWEB%.TagMeViewAllTags, %SYSTEMWEB%.TagMeViewMyTags, %SYSTEMWEB%.TagMeSearch, %SYSTEMWEB%.TagMeDebugViewTags, %SYSTEMWEB%.TagMeDebugSearch, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
-%META:FILEATTACHMENT{name="tag_add.gif" attr="h" comment="Button: add tag" date="1141691885" path="tag_add.gif" size="857" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="tag_remove.gif" attr="h" comment="Button: remove tag" date="1141697484" path="tag_remove.gif" size="862" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="alltagcloud.gif" attr="h" comment="Screenshot of view all tags tag cloud" date="1141693726" path="alltagcloud.gif" size="8087" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="topictags.gif" attr="h" comment="Screenshot of tags on a topic" date="1141696674" path="topictags.gif" size="1945" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="topictags_styleblog.gif" attr="h" comment="Screenshot of tags on a topic, closed" date="1219868858" path="topictags_styleblog.gif" size="12712" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="topictags_styleblog_open.gif" attr="h" comment="Screenshot of tags on a topic, opened" date="1219868858" path="topictags_styleblog_open.gif" size="22259" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="tag_addnew.gif" attr="h" comment="" date="1141696362" path="tag_addnew.gif" size="852" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="tagme.css" attr="h" comment="CSS styles" date="1141696362" path="tagme.css" size="1349" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="buttons_gradient.psd" attr="h" comment="Buttons design document (Photoshop format)" date="1141696362" path="buttons_gradient.psd" size="41686" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="tag_add.gif" attr="h" comment="Button: add tag" date="1141691885" path="tag_add.gif" size="857" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="tag_remove.gif" attr="h" comment="Button: remove tag" date="1141697484" path="tag_remove.gif" size="862" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="alltagcloud.gif" attr="h" comment="Screenshot of view all tags tag cloud" date="1141693726" path="alltagcloud.gif" size="8087" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="topictags.gif" attr="h" comment="Screenshot of tags on a topic" date="1141696674" path="topictags.gif" size="1945" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="topictags_styleblog.gif" attr="h" comment="Screenshot of tags on a topic, closed" date="1219868858" path="topictags_styleblog.gif" size="12712" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="topictags_styleblog_open.gif" attr="h" comment="Screenshot of tags on a topic, opened" date="1219868858" path="topictags_styleblog_open.gif" size="22259" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="tag_addnew.gif" attr="h" comment="" date="1141696362" path="tag_addnew.gif" size="852" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="tagme.css" attr="h" comment="CSS styles" date="1141696362" path="tagme.css" size="1349" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="buttons_gradient.psd" attr="h" comment="Buttons design document (Photoshop format)" date="1141696362" path="buttons_gradient.psd" size="41686" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="gray-gradient-1.png" attachment="gray-gradient-1.png" attr="h" comment="" date="1346791909" path="gray-gradient-1.png" size="339" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="gray-gradient-2.png" attr="h" comment="" date="1346791204" path="gray-gradient-2.png" size="353" user="TWikiContributor" version="1"}%

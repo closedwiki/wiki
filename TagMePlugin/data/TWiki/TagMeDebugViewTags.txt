@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310940602" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346793879" format="1.1" version="$Rev$"}%
 ---+ Tag-me: Debug View Tags
 
 <noautolink>
@@ -11,7 +11,7 @@
 |  maxsize: | <input name="qmax" value="%URLPARAM{ "qmax" encode="entity" }%" size="80" /> |
 |  format: | <input name="qformat" value="%URLPARAM{ "qformat" encode="entity" }%" size="80" />%BR% =&lt;a href=\"%<nop>SCRIPTURL{view}%/%<nop>WEB%/TagMeSearch?tag=$tag\" style=\"font-size:$size%\"&gt;$tag&lt;/a&gt;= |
 |  separator: | <input name="qseparator" value="%URLPARAM{ "qseparator" encode="entity" }%" size="80" /> |
-|	| <input type="submit" /> |
+|   | <input type="submit" class="twikiSubmit" /> |
 </form>
 </noautolink>
 

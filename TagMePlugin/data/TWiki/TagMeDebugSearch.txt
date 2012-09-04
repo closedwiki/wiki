@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310940318" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346793879" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TagMeDebugViewTags"}%
 ---+ Tag-me: Debug Tag Search
 
@@ -15,7 +15,7 @@
 |  maxsize: | <input name="qmax" value="%URLPARAM{ "qmax" encode="entity" }%" size="80" /> |
 |  format: | <input name="qformat" value="%URLPARAM{ "qformat" encode="entity" }%" size="80" />%BR% =&lt;span style='font-size:$size%;'&gt; [<nop>[$web.$topic][$topic]] $votecount&lt;/span&gt;= |
 |  separator: | <input name="qseparator" value="%URLPARAM{ "qseparator" encode="entity" }%" size="80" /> |
-|	| <input type="submit" /> |
+|   | <input type="submit" class="twikiSubmit" /> |
 </form>
 </noautolink>
 
