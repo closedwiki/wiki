@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310077213" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346825756" format="1.1" version="$Rev$"}%
 ---+!! Tips Contrib Package
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -48,11 +48,12 @@ __Note:__ You do not need to install anything on the browser to use this contrib
 ---++ Contrib Info
 
 |  Author: | TWiki:Main.PeterThoeny, TWiki:Main.PaulineCheung |
-|  Copyright: | &copy; 2005-2011, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]%BR% &copy; 2005-2010 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2005-2012, Peter Thoeny, [[http://twiki.org/][TWiki.org]]%BR% &copy; 2005-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | TWiki:Plugins.SpreadSheetPlugin |
-|  Version: | 2011-07-07 |
+|  Version: | 2012-09-04 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-09-04: | TWikibug:Item6837: Doc fixes |
 |  2011-07-07: | TWikibug:Item6711: Change "user homepage" to "profile page" |
 |  2010-06-27: | TWikibug:Item6479: More doc improvements |
 |  2010-05-15: | TWikibug:Item6433: Doc improvements; replacing TWIKIWEB with SYSTEMWEB |
