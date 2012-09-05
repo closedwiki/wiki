@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1191133809" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346885457" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarSLIDESHOWSTART
 ---+++ SLIDESHOWSTART -- convert a topic with headings into a slideshow
@@ -14,4 +14,4 @@
      =&nbsp;   * Bullet 1= %BR%
      =&nbsp;   * Bullet 2= %BR%
      =%<nop>SLIDESHOWEND%=
-   * Related: [[#VarSLIDESHOWEND][SLIDESHOWEND]], SlideShowPlugin
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSLIDESHOWEND][SLIDESHOWEND]], SlideShowPlugin
