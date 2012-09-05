@@ -1,8 +1,8 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org
-# Copyright (C) 2008-2011 TWiki Contributor
+# Copyright (C) 2001-2012 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2008-2012 TWiki Contributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -44,10 +44,10 @@ require TWiki::Plugins; # For the API version
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-06-06';
+our $RELEASE = '2012-09-05';
 
 # =========================
-our $SHORTDESCRIPTION = 'Link ==ExternalSite:Page== text to external sites based on aliases defined in a rules topic';
+our $SHORTDESCRIPTION = 'Text ==ExternalSite:Page== links to external sites based on aliases defined in a rules topic';
 our $NO_PREFS_IN_TOPIC = 1;
 our $interWeb;
 our $interLinkFormat;
