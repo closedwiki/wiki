@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277704923" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346825773" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiTipsOfTheDay"}%
 ---+ <nop>RSS news feed of topic changes
 
@@ -10,7 +10,7 @@ For the <nop>%USERSWEB% web, point your RSS news reader to:
 
 For other TWiki webs, replace =/%USERSWEB%/= with the name of the web:
 
-%WEBLIST{ format="   * <code> %SCRIPTURL{view}%/$name/WebRss </code>" }%
+%WEBLIST{ format="   * <code> %SCRIPTURL{view}%/$name/WebRss </code>" limit="20" }%
 
 __See also:__
    * WebRssBase - help on TWiki RSS news feeds
