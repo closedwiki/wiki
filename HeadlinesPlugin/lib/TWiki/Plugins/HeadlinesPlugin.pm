@@ -1,8 +1,8 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2002-2011 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2002-2012 Peter Thoeny, peter[at]thoeny.org
 # Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
-# Copyright (C) 2005-2011 TWiki Contributors
+# Copyright (C) 2005-2012 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ use strict;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-07-17';
+our $RELEASE = '2012-09-05';
 our $NO_PREFS_IN_TOPIC = 1;
 our $SHORTDESCRIPTION = 'Show headline news in TWiki pages based on RSS and ATOM news feeds from external sites';
 our $isInitialized = 0;

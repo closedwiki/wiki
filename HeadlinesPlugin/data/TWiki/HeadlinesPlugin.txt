@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310942503" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346830739" format="1.1" version="$Rev$"}%
 ---+!! Headlines Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -15,7 +15,11 @@
 
 This plugin displays RSS and ATOM feeds from news sites. Use it to build news portals that show headline news.
 
-__Note:__ Syndic8.com ( http://www.syndic8.com/ ) lists many RSS and ATOM feeds.
+__Notes:__
+
+   * [[Wikipedia:RSS][RSS]] (Rich Site Summary) is an XML standard used to publish frequently updated works such as blog entries, news headlines and audio.
+   * [[Wikipedia:Atom_%28standard%29][Atom]] is an XML syndication format used for web feeds.
+   * Syndic8.com at http://www.syndic8.com/ lists many RSS and ATOM feeds.
 
 #SyntaxRules
 ---++ Syntax Rules
@@ -191,10 +195,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Set SHORTDESCRIPTION = Show headline news in TWiki pages based on RSS and ATOM news feeds from external sites
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.MichaelDaum |
-|  Copyright: | &copy; 2002-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]%BR% &copy; 2005-2007 Michael Daum http://wikiring.de |
+|  Copyright: | &copy; 2002-2012 Peter Thoeny, [[http://twiki.org/][TWiki.org]]%BR% &copy; 2005-2007 Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-07-17 |
+|  Plugin Version: | 2012-09-05 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2012-09-05: | TWikibug:Item6837: Doc fixes |
 |  2011-07-17: | TWikibug:Item6764: Add VarHEADLINES variable documentation; doc improvements; setting NO_PREFS_IN_TOPIC |
 |  2011-07-08: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2010-05-16: | TWikibug:Item6433: More doc improvements |
