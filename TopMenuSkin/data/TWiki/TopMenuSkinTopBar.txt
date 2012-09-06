@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1346743605" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346913941" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkin"}%
 ---+ Top Bar of !TopMenuSkin
 
@@ -56,6 +56,8 @@ Top bar of TopMenuSkin, replacing WebTopBar.
  nonoise="on"
  format="      * [[$pattern(\| *<\!\-\-BOOKMARK\-\-> *\| *(.*?) *\|.*)][$pattern(\| *<\!\-\-BOOKMARK\-\-> *\|[^\|]*\| *(.*?) *\|.*)]]"
 }%<nop>
+</div></td><td><div class="twTopMenuTab">
+   * [[%SYSTEMWEB%.%HOMETOPIC%][<img src="%ICONURLPATH{twiki-help}%" width="16" height="16" border="0" alt="Help" title="%MAKETEXT{"TWiki help"}%" style="margin: 1px;" />]]
 </div></td>
 <td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="1" alt="" /></td>
 </tr>
