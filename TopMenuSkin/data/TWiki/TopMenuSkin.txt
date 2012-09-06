@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1346914912" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346915574" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -281,5 +281,5 @@ If you want a sidebar in addition to the top bar, define a WEBLEFTBAR setting wi
 
 __Related topics:__ TopMenuSkinDefaultWebTopMenu, TopMenuSkinHomeMenu, TopMenuSkinTopBar, TopMenuSkinTopicMenu, WebTopMenu, [[_default.WebTopMenu]], [[%USERSWEB%.WebTopMenu]], [[Sandbox.WebTopMenu]], [[Trash.WebTopMenu]], %SYSTEMWEB%.TWikiSkins, %SYSTEMWEB%.TWikiSkinBrowser, %SYSTEMWEB%.UserDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory
 
-%META:FILEATTACHMENT{name="fullscreen.png" attachment="fullscreen.png" attr="h" comment="" date="1271719988" path="fullscreen.png" size="36985" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1271719875" path="screenshot.png" size="15762" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="fullscreen.png" attachment="fullscreen.png" attr="h" comment="" date="1346915516" path="fullscreen.png" size="109194" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1346915517" path="screenshot.png" size="30309" user="TWikiContributor" version="1"}%
