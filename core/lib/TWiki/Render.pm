@@ -1352,6 +1352,8 @@ sub TML2PlainText {
             $text =~ s/%($TWiki::regex{tagNameRegex}\{)/$1/g; # defuse %VARIABLE{ ...
             $text =~ s/(})%/$1/g;    #        ... }%
         } else {
+            # Remove %MAKETEXT{"..."}% but preserve text:
+            $text =~ s/%MAKETEXT{ *"?([^"}]*).*?}%/$1/go; # FIXME: Properly resolve params
             # Remove nested %VAR1{ ... %VAR2{...}% ...}% by
             # first adding nesting level to parenthesis,
             # e.g. "%A{%B{...}%}% ... %C{%D{...}%}%"
@@ -1365,6 +1367,8 @@ sub TML2PlainText {
             $text =~ s/$escToken[0-9]+[\{\}]//go;
             # Remove all simple %VARIABLES% that don't have parameters:
             $text =~ s/%$TWiki::regex{tagNameRegex}%//go;
+            # Replace escape of %<nop>VARIABLE{}% with a space:
+            $text =~ s/%<nop>($TWiki::regex{tagNameRegex})/% $1/go;
         }
     }
 
