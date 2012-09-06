@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1346743337" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346914912" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -13,7 +13,7 @@
 </sticky>
 The !TopMenuSkin adds pulldown menus to the PatternSkin.
 
----++ Screen Shot
+---++ Screenshot
 
 %SEARCH{ "%TOPIC%" scope="topic" nosearch="on" nototal="on" format="$pattern(.*\| *Screenshot\:[^\|]*\|([^\|]*).*)" }%
 
@@ -227,7 +227,9 @@ If you want a sidebar in addition to the top bar, define a WEBLEFTBAR setting wi
    * [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Test if installed]]
    * *Note* on upgrading existing TWiki:
       * See [[#WebSpecific][Web-specific Menu-Bars]] above on how to retrofit and customize menu-bars.
-   * *Note* on using this skin on TWiki 4.2 and 4.3:
+   * *Note* on using this skin on TWiki-5.1.1 and older:
+      * Attach %ATTACHURL%/twiki-help.gif to %SYSTEMWEB%.TWikiDocGraphics.
+   * *Note* on using this skin on TWiki-4.2 and 4.3:
       * This skin depends on TWiki 5.0 specific feature =%<nop>WEB{format="$current"}%= to show the current web in the Web menu. To use this skin on TWiki 4.2 or 4.3, remove the parameter from the WEB variable (to show only =%<nop>WEB%=), or apply patch TWikibug:Item6424 (to add the format parameter feature).
       * This skin depends on TWiki 5.0 specific feature =%<nop>ADDTOHEAD{}%= to add style sheets to the HTML head section. Apply patch TWiki:Support.SID-01117 to inline style sheets.
       * Apply patch TWikibug:Item6430 so that Edit and Attach buttons point to the current topic instead of !TopMenuSkinTopBar.
@@ -248,8 +250,9 @@ If you want a sidebar in addition to the top bar, define a WEBLEFTBAR setting wi
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Screenshot" title="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2012-09-04 |
-|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  Skin Version: | 2012-09-06 |
+|  <span style="white-space: nowrap;">Change History:</span> | <!-- specify latest version first -->&nbsp; |
+|  2012-09-06: | TWikibug:Item6925: Show TWiki help link [[%SYSTEMWEB%.%HOMETOPIC%][ %ATTACHURL%/twiki-help.gif ]] in top-menu bar  |
 |  2012-09-04: | TWikibug:Item6918: New WEBLEFTBAR setting to show a sidebar |
 |  2011-07-28: | TWikibug:Item6780: Usability: Link to !UserList topic instead of !TWikiUsers |
 |  2011-07-10: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
