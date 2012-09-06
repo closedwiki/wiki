@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1345168953" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346901402" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -357,7 +357,8 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{twiki}% | =%<nop>ICON{twiki}%= | TWiki logo | gif | 16x16 |  |
 | %ICON{twiki-alert}% | =%<nop>ICON{twiki-alert}%= | TWiki Alert | gif | 16x16 |  |
 | %ICON{twiki-gray}% | =%<nop>ICON{twiki-gray}%= | TWiki logo, gray scale | gif | 16x16 |  |
-| %ICON{twiki-irc}% | =%<nop>ICON{twiki-irc}%= | TWiki Internet Relay Chat logo | gif | 16x16 |  |
+| %ICON{twiki-help}% | =%<nop>ICON{twiki-help}%= | TWiki help | gif | 16x16 |  |
+| %ICON{twiki-irc}% | =%<nop>ICON{twiki-irc}%= | TWiki Internet Relay Chat | gif | 16x16 |  |
 
 ---+++ %ICON{line_ur}% Block graphics
 
@@ -858,6 +859,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="twiki.gif" attr="h" comment="" date="1169565034" path="twiki.gif" size="585" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="twiki-alert.gif" attr="h" comment="" date="1258790911" path="twiki-alert.gif" size="1021" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="twiki-gray.gif" attr="h" comment="" date="1286139742" path="twiki-gray.gif" size="969" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="twiki-help.gif" attr="h" comment="" date="1346901402" path="twiki-help.gif" size="971" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="twiki-irc.gif" attr="h" comment="" date="1239225587" path="twiki-irc.gif" size="948" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="twitter.gif" attr="h" comment="" date="1289350229" path="twitter.gif" size="358" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="txt.gif" attr="h" comment="" date="1169565034" path="txt.gif" size="375" user="TWikiContributor" version=""}%
