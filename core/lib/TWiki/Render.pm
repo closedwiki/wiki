@@ -1363,8 +1363,13 @@ sub TML2PlainText {
             $text =~ s/($escToken[0-9]+)\{.*?\1\}//gos;
             # clean up unbalanced stuff:
             $text =~ s/$escToken[0-9]+[\{\}]//go;
+            # Remove all simple %VARIABLES% that don't have parameters:
+            $text =~ s/%$TWiki::regex{tagNameRegex}%//go;
         }
     }
+
+    # Remove #AnchorNames at the beginning of lines:
+    $text =~ s/^#$TWiki::regex{wikiWordRegex}//gom;
 
     # Format e-mail to add spam padding (HTML tags removed later)
     $text =~ s/$STARTWW((mailto\:)?[a-zA-Z0-9-_.+]+@[a-zA-Z0-9-_.]+\.[a-zA-Z0-9-_]+)$ENDWW/_mailLink( $this, $1 )/gem;
