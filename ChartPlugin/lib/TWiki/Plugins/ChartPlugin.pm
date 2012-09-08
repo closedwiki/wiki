@@ -1,7 +1,7 @@
 # ChartPlugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2002-2011 Peter Thoeny, Peter[at]Thoeny.org
-# Copyright (C) 2008-2011 TWiki Contributors
+# Copyright (C) 2002-2012 Peter Thoeny, Peter[at]Thoeny.org
+# Copyright (C) 2008-2012 TWiki Contributors
 # Plugin written by http://TWiki.org/cgi-bin/view/Main/TaitCyrus
 #
 # For licensing info read LICENSE file in the TWiki root.
@@ -40,7 +40,7 @@ use strict;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-08-02';
+our $RELEASE = '2012-09-08';
 
 my $pluginInitialized = 0;
 my $initError         = '';

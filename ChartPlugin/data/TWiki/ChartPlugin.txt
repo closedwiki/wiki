@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1315887316" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347087190" format="1.1" version="$Rev$"}%
 ---+!! Chart Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
@@ -214,10 +214,10 @@ Assuming the following three TWiki tables. The first shows the data oriented in 
 | scatter | Multiple scatter %BR%%BR% =%<nop>CHART{%scatter1%}%= | <img alt="" src="%ATTACHURLPATH%/scatter1.png" /> | %CHART{%scatter1%}% |
 | combo | Combo with area, pline, point, & line %BR%%BR% =%<nop>CHART{%combo1%}%= | <img alt="" src="%ATTACHURLPATH%/combo1.png" /> | %CHART{%combo1%}% |
 | combo | Combo with bar, pline, point, & line %BR%%BR% =%<nop>CHART{%combo2%}%= | <img alt="" src="%ATTACHURLPATH%/combo2.png" /> | %CHART{%combo2%}% |
-| sparkline | sparkline %BR%%BR% =%<nop>CHART{%sparkline%}%= | <img alt="" src="%ATTACHURLPATH%/sparklineexample.png" /> | %CHART{%sparkline%}% |
-| sparkbar | sparkbar %BR%%BR% =%<nop>CHART{%sparkbar1%}%= | <img alt="" src="%ATTACHURLPATH%/sparkbarexample1.png" /> | %CHART{%sparkbar1%}% |
-| sparkbar | sparkbar (=width="0"= so the width will be auto sized) %BR%%BR% =%<nop>CHART{%sparkbar2%}%= | <img alt="" src="%ATTACHURLPATH%/sparkbarexample2.png" /> | %CHART{%sparkbar2%}% |
-| sparkarea | sparkarea %BR%%BR% =%<nop>CHART{%sparkarea%}%= | <img alt="" src="%ATTACHURLPATH%/sparkareaexample.png" /> | %CHART{%sparkarea%}% |
+| sparkline | sparkline %BR%%BR% =%<nop>CHART{%sparkline%}%= | %BR%<img alt="" src="%ATTACHURLPATH%/sparklineexample.png" /> | %BR%%CHART{%sparkline%}% |
+| sparkbar | sparkbar %BR%%BR% =%<nop>CHART{%sparkbar1%}%= | %BR%<img alt="" src="%ATTACHURLPATH%/sparkbarexample1.png" /> | %BR%%CHART{%sparkbar1%}% |
+| sparkbar | sparkbar (=width="0"= so the width will be auto sized) %BR%%BR% =%<nop>CHART{%sparkbar2%}%= | %BR%<img alt="" src="%ATTACHURLPATH%/sparkbarexample2.png" /> | %BR%%CHART{%sparkbar2%}% |
+| sparkarea | sparkarea %BR%%BR% =%<nop>CHART{%sparkarea%}%= | %BR%<img alt="" src="%ATTACHURLPATH%/sparkareaexample.png" /> | %BR%%CHART{%sparkarea%}% |
 
 The "if installed" column shows images instead of variables in case the plugin is installed correctly.
 
@@ -284,10 +284,11 @@ If the required parameters are not defined, then an error message is returned or
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.TaitCyrus |
-|  Copyright: | &copy; 2002-2011 Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]]  <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2002-2012 Peter Thoeny, [[http://twiki.org/][TWiki.org]]  <br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-09-12 (v%$VERSION%) |
+|  Plugin Version: | 2012-09-08 |
 |  Change History: | <!-- specify latest version first --> |
+|  2012-09-08: | TWikibug:Item6837: Doc fixes |
 |  2011-09-12: | TWikibug:Item6800: Fix for using qw(...) as parentheses, which is deprecated in Perl 5.14 -- TWiki:Main.PeterThoeny |
 |  2011-08-23: | TWikibug:Item6791: Added new ChartPlugin default setting CACHE that allows users to either allow topic page caching or not -- TWiki:Main.TaitCyrus |
 |  2011-08-02: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
