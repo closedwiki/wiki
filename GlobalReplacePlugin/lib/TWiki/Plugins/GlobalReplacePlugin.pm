@@ -1,8 +1,8 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004-2006 Wind River
-# Copyright (C) 2007-2011 Peter Thoeny, Twiki, Inc.
-# Copyright (C) 2007-2011 TWiki Contributors. All Rights Reserved.
+# Copyright (C) 2007-2012 Peter Thoeny, TWiki.org.
+# Copyright (C) 2007-2012 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution. NOTE: Please extend that file, not this notice.
 #
@@ -24,7 +24,7 @@ package TWiki::Plugins::GlobalReplacePlugin;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-12-19';
+our $RELEASE = '2012-09-08';
 
 my $web;
 my $topic;
