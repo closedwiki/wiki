@@ -2,4 +2,3 @@ data/TWiki/ModalBoxAddOn.txt 0644 Documentation
 lib/TWiki/Contrib/ModalBoxAddOn.pm 0644 Perl module
 pub/TWiki/ModalBoxAddOn/screenshot.png 0644 Image
 pub/TWiki/ModalBoxAddOn/screenshot-small.png 0644 Image
-pub/TWiki/ModalBoxAddOn/twiki-logo-80x40-t.gif 0644 Image

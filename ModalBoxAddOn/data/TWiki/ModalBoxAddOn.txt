@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301368331" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347156326" format="1.1" version="$Rev$"}%
 ---+!! !ModalBoxAddOn
 <!--
    Contributions to this add-on are appreciated. Please update the contrib page at
@@ -8,10 +8,6 @@
 -->
 <sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
-</div>
-<div style="float:right; background-color:#F0F0F0; margin:0 0 20px 20px; padding: 10px 10px 10px 10px; text-align:center">
-This plugin is%BR% sponsored by:%BR%
-[[http://twiki.net/][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" alt="Twiki, Inc." title="Twiki, Inc." />]]
 </div></sticky>
 %SHORTDESCRIPTION%
 
@@ -59,6 +55,7 @@ The =INCLUDE= defines the modal box. More than one box can be defined per page. 
    * =position= - postion of dialog box. Optional.
    * =resizable= - true or false. Optional, default ="true"=
    * =showbutton= - text of button that opens the dialog box. Optional.
+   * =buttonstyle= - style of button that opens the dialog box; works only if showbutton is specified. Optional.
    * =options= - additional options not listed here. Optional.
 
 [[http://jqueryui.com/demos/dialog/#option-buttons][See details of options]] of jQuery Dialog widget.
@@ -245,12 +242,17 @@ $(document).ready(function() {
 </td></tr></table>
 
 ---++ Modal Box Engine
+<style>
+.ui-widget { font-size: 100%; }
+.ui-widget .ui-widget { font-size: 100%; }
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-size: 100%; }
+</style>
 
 This section defines the modal box so that it can be called with a simple INCLUDE. View the [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][raw text]] of this topic to look under the hood.
 <!--=====================================
 %STARTINCLUDE%<script type='text/javascript'>
 $(document).ready(function() {
- var $dialog = $('<div></div>')
+ var $dialog = $('<div style="text-align: left;"></div>')
   .html("%content%")
   .dialog({
    autoOpen: false,
@@ -269,7 +271,7 @@ $(document).ready(function() {
  });
 });
 </script>
-%IF{ "defined 'showbutton'" then="<button id='%id%' class='twikiButton'>%showbutton%</button>" else="<nop>" }%%STOPINCLUDE%
+%IF{ "defined 'showbutton'" then="<button id='%id%' class='twikiButton' %IF{ "defined 'buttonstyle'" then="'%buttonstyle%'" }%>%showbutton%</button>" else="<nop>" }%%STOPINCLUDE%
 =========================================-->
 
 ---++ Installation Instructions
@@ -289,12 +291,14 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 ---++ Add-On Info
 
    * Set SHORTDESCRIPTION = Show modal boxes with TWiki page content disabled and grayed out
+   * Sponsor: [[http://twiki.net/][Twiki, Inc.]]
 
 |  Add-on Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] <br /> &copy; 2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2012 TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]] <br /> &copy; 2013 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2011-03-28 |
+|  Add-on Version: | 2012-09-08 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-09-08: | TWikibug:Item6837: Adding buttonstyle; Doc fixes |
 |  2011-03-28: | TWikibug:Item6651: Small fix in Ajax dialog box example |
 |  2011-03-05: | TWikibug:Item6651: Adding Ajax dialog box example |
 |  2011-03-02: | TWikibug:Item6651: Initial version |
@@ -308,6 +312,5 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 
 __Related Topic:__ %SYSTEMWEB%.TWikiAddOns, JQueryPlugin
 
-%META:FILEATTACHMENT{name="twiki-logo-80x40-t.gif" attachment="twiki-logo-80x40-t.gif" attr="h" comment="" date="1298714824" path="twiki-logo-80x40-t.gif" size="1999" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1299055098" path="screenshot.png" size="67287" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="screenshot-small.png" attachment="screenshot-small.png" attr="h" comment="" date="1299055098" path="screenshot-small.png" size="37147" user="TWikiContributor" version="1"}%
