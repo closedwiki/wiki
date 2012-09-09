@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1295740679" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347155242" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="GlobalReplacePlugin"}%
 ---+ Global Search and Replace
 <form name="search" action="%SCRIPTURLPATH{view}%/%WEB%/%TOPIC%" method="post">
@@ -8,7 +8,7 @@
 | <b>What:</b> |  Replace Search String: | <input type="text" size="64" name="rSearchString" value="%URLPARAM{"rSearchString" encode="entity"}%" /> |
 |^| Replace String: | <input type="text" size="64" name="rString" value="%URLPARAM{"rString" encode="entity"}%" /> |
 |^|  Case Sensitive Search: | <select name="caseSensitive" size="1"><option>%URLPARAM{"caseSensitive" default="yes"}%<option>yes</option><option>no</option></select> |
-| | | <input type="submit" value="Search" class="twikiSubmit" />&nbsp;&nbsp;[[%TOPIC%][Start over]]&nbsp;&nbsp;[[%TOPIC%Help][Help]] |
+| | | <input type="submit" value="Search" class="twikiSubmit" /> &nbsp;&nbsp;&nbsp; [[%TOPIC%][Start over]] &nbsp;&nbsp;&nbsp; %ICON{help}% *[[%TOPIC%Help][Help]]* |
 <input type="hidden" name="hideHeaderStart" value="|" />
 <input type="hidden" name="hideHeaderEnd" value="|" />
 <input type="hidden" name="hideButtonsStart" value="  ">
