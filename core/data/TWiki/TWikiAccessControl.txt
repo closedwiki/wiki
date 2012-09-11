@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1345074628" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347405466" format="1.1" version="$Rev$"}%
 ---+ TWiki Access Control
 
 _Restricting read and write access to topics and webs, by Users and groups_
@@ -210,9 +210,32 @@ Examples: Topic A includes topic B
 #QuickRecipes
 ---++ Access Control quick recipes
 
+#RestrictWholeTWikiSite
 ---+++ Restrict Access to Whole TWiki Site
 
-For a firewalled TWiki, e.g. an intranet wiki or extranet wiki, you want to allow only invited people to access your TWiki. In this case, enable [[TWikiUserAuthentication#ApacheLogin][user authentication with ApacheLogin]] and lock down access to the whole =twiki/bin= and =twiki/pub= directories to all but valid users. In the Apache =.htaccess= file or the appropriate =.conf= file, replace the =&lt;FilesMatch "(attach|edit|...= section with this:
+In a firewalled TWiki, e.g. an intranet wiki or extranet wiki, you want to allow only invited people to access your TWiki. There are three options:
+
+__1. Install TWiki Behind Firewall:__
+
+The firewall takes care of giving access to TWiki to authorized people only. This is a typical setup for a company wiki. As for TWiki configuration, no special setup is needed.
+
+__2. Extranet TWiki Using Template Login:__
+
+All TWiki content (pages and attachments) need to be access controlled. The Template Login allows users to login and logout. Only logged in users can access TWiki content.
+
+__Configuration:__ Follow the default setup, then change these configure settings:
+
+   * Secure attachments [[#SecuringAttachments][as documented]]. The TWiki:TWiki.ApacheConfigGenerator is useful to get the setting right.
+   * Require authentication for all TWiki scripts except =backuprestore=, =configure=, =login=, =logon= and =resetpasswd= with the following configure setting:
+     %BR% =$TWiki::cfg{AuthScripts} = 'attach, changes, edit, manage, oops, preview, rdiff, rdiffauth, register, rename, rest, save, search, twiki_cgi, upload, statistics, view, viewauth, viewfile';=
+   * When you install additional plugins make sure to add scripts they might introduce also to =twiki/bin= also to the ={AuthScripts}= configure setting.
+     %BR% __Attention:__ Some scripts of additional plugins might not be aware of TWiki's template login. Test all new scripts with a non-authenticated user!
+
+__3. Extranet TWiki Using Apache Login:__
+
+All TWiki content (pages and attachments) need to be access controlled. The Apache Login does not offer a logout; typically the browser needs to be restarted to logout. Only logged in users can access TWiki content.
+
+__Configuration:__ Enable [[TWikiUserAuthentication#ApacheLogin][user authentication with ApacheLogin]] and lock down access to the whole =twiki/bin= and =twiki/pub= directories to all but valid users. In the Apache config file for TWiki (=twiki.conf= or =.htaccess=), replace the =&lt;FilesMatch "(attach|edit|...= section with this:
 
 <verbatim>
 <FilesMatch ".*">
@@ -220,20 +243,10 @@ For a firewalled TWiki, e.g. an intranet wiki or extranet wiki, you want to allo
 </FilesMatch>
 </verbatim>
 
-If needed, you can further restrict access to selected webs with ALLOWWEBVIEW and other access control settings.
+__Notes:__
 
-__Note:__ With this configuration, someone with access to the site needs to register new users.
-
----+++ Authenticate all Webs and Restrict Selected Webs
-
-Use the following setup to authenticate users for topic viewing in all webs and to restrict access to selected webs. Requires TWikiUserAuthentication to be enabled.
-
-   1. Set =require valid-user= on your =view= script in .htaccess or the appropriate Apache .conf file. As of 4.x, this looks like: =FilesMatch "(attach|edit|manage|rename|save|view|upload|mail|logon|.*auth).*"= (normally =view= is not in that list).
-   1. *Restrict* view access to selected Users and Groups. Set one or both of these variables in its %WEBPREFSTOPIC% topic:
-      * ==Set <nop>DENYWEBVIEW = &lt; list of Users and Groups &gt;==
-      * ==Set <nop>ALLOWWEBVIEW = &lt; list of Users and Groups &gt;==
-      * __Note:__ =DENYWEBVIEW= is evaluated before =ALLOWWEBVIEW=. Access is denied if the authenticated person is in the =DENYWEBVIEW= list, or not in the =ALLOWWEBVIEW= list. Access is granted if =DENYWEBVIEW= and =ALLOWWEBVIEW= are not defined.
-   1. If you still want public users to be able to register automatically follow TWiki:TWiki.RegisterOnViewRestrictedSite.
+   * In all three options, content can be restricted selectively with ALLOWWEBVIEW and other access control settings documented above. See also the next quick recipe.
+   * In the extranet setup, someone with access to the site needs to register new users. If you still want public users to be able to register automatically follow TWiki:TWiki.RegisterOnViewRestrictedSite.
 
 ---+++ Authenticate and Restrict Selected Webs Only
 
@@ -255,7 +268,6 @@ Alternatively, place them in HTML comment markers, but this exposes the access s
 ==&nbsp;  * Set <nop>DENYTOPICCHANGE = %USERSWEB%.<nop>SomeGroup== <br />
 ==--&gt;==
 </blockquote>
-
 
 ---+++ Obfuscating Webs
 
