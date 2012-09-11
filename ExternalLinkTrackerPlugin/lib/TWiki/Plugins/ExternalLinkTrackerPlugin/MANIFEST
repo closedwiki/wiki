@@ -1,3 +1,4 @@
+data/TWiki/ExternalLinkTrackerDefinitionTemplate.txt 0664
 data/TWiki/ExternalLinkTrackerPlugin.txt 0664
 data/TWiki/VarEXLINK.txt 0664
 lib/TWiki/Plugins/ExternalLinkTrackerPlugin.pm 0444

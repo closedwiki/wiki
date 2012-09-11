@@ -1,3 +1,8 @@
+%META:TOPICINFO{author="TWikiContributor" date="1347327909" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
 #VarEXLINK
 ---+++ EXLINK{ID} -- add an external link to get link tracking data
 
+   * Work in progress
+
+   * Related: ExternalLinkTrackerPlugin
