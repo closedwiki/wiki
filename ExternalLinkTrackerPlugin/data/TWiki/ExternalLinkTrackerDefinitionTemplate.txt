@@ -1,3 +1,27 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347327747" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347333392" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="ExternalLinkTrackerPlugin"}%
--- Main.PeterThoeny - 2012-09-11
+---+ External Link Tracker Definition
+%STARTSECTION{type="templateonly"}%
+%YELLOWBG%
+__NOTE:__ This is a template topic, do not edit.
+Instead, modify %STARTINCLUDE%%IF{
+ "istopic '%USERSWEB%.ExternalLinkTrackerDefinition'"
+ then="%USERSWEB%.ExternalLinkTrackerDefinition"
+ else="<a href='%SCRIPTURLPATH{edit}%/%USERSWEB%/ExternalLinkTrackerDefinition?templatetopic=%SYSTEMWEB%.%TOPIC%'>ExternalLinkTrackerDefinition</a>"
+}%%STOPINCLUDE%
+in the <nop>%USERSWEB% web to define the external links.
+%ENDBG%%ENDSECTION{type="templateonly"}%
+
+This table defines the external links handled by the [[%SYSTEMWEB%.VarEXLINK][%<nop>EXLINK{}%]] variable of the %SYSTEMWEB%.ExternalLinkTrackerPlugin.
+
+%EDITTABLE{format="| text, 16 | text, 25 | text, 25 | text, 30 |"}%
+| *ID* | *Name* | *URL* | *Comment* |
+| Google | Google | http://www.google.com/ | |
+| TWiki | TWiki.org | http://twiki.org/ | |
+
+__Help:__
+   * *ID:* Site identifier used in %<nop>EXLINK{}%]] variable - use only alphanumeric characters, dashes (=-=), underscores (=_=) and periods (=.=)
+   * *Name:* Display name, e.g. link label. Example: =%<nop>EXLINK{TWiki}%= renders as [[http://twiki.org/][TWiki.org%ICON{external}%]]
+   * *URL:* Uniform resource locator of external link, e.g. link target
+
+__Related:__ %SYSTEMWEB%.ExternalLinkTrackerPlugin, %SYSTEMWEB%.VarEXLINK
