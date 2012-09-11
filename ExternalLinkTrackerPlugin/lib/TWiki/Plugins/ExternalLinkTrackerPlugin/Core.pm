@@ -58,10 +58,9 @@ sub _loadLinkDefinition {
 
 #==================================================================
 sub EXLINK {
-    my( $this, $params ) = @_;
+    my( $this, $params, $topic, $web ) = @_;
 
     my $action = $params->{action} || '';
-    my $id     = $params->{id} || '';
     my $text = '';
 
     if( ! $action ) {
@@ -69,23 +68,33 @@ sub EXLINK {
         if( $this->{Def}{$id} ) {
             # Link to redirect URL
             $text = '[[%SCRIPTURL{viewauth}%/%SYSTEMWEB%/ExternalLinkTrackerPlugin?'
-                  . 'exlinkaction=redirect;'
-                  . "id=$id"
+                  . 'exlink_action=redirect;'
+                  . "exlink_id=$id;"
+                  . "exlink_web=$web;"
+                  . "exlink_topic=$topic"
                   . ']['
                   . $this->{Def}{$id}{Name}
                   . ']]';
+            $this->_writeDebug( " Link changed to '$text'" );
+
         } else {
             $text = '(EXLINK: ID "' . $id . '" not found)';
+            $this->_writeDebug($text );
         }
 
     } elsif( $action eq 'redirect' ) {
+        my $id     = $params->{exlink_id} || '';
         $this->_writeDebug( "action: 'redirect', id: '$id'" );
 
-        if( $this->{Def}{$id} ) {
-            # TODO: record link action and
+        if( $id && $this->{Def}{$id} ) {
+            # TODO: record link action
 
             # Redirect to link target
-            TWiki::Func::redirectCgiQuery( undef, $this->{Def}{$id}{URL} );
+            $text = "DEBUG: Redirect to '" . $this->{Def}{$id}{URL} . "'";
+            $this->_writeDebug( $text );
+            unless( $this->{Debug} ) {
+                TWiki::Func::redirectCgiQuery( undef, $this->{Def}{$id}{URL} );
+            }
         } else {
             $text = "EXLINK: id '$id' not found for action 'redirect'";
         }

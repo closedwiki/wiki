@@ -45,7 +45,7 @@ sub initPlugin {
 
 #==================================================================
 sub _EXLINK {
-    my( $session, $params ) = @_;
+    my( $session, $params, $topic, $web ) = @_;
 
     # delay loading core module until run-time
     unless( $core ) {
@@ -61,7 +61,14 @@ sub _EXLINK {
         };
         $core = new TWiki::Plugins::ExternalLinkTrackerPlugin::Core( $cfg );
     }
-    return $core->EXLINK( $params );
+    my $query = TWiki::Func::getCgiQuery();
+    if( $query ) {
+        foreach my $key ( $query->param ) {
+            next if( defined $params->{$key} );
+            $params->{$key} = $query->param( $key );
+        }
+    }
+    return $core->EXLINK( $params, $topic, $web );
 }
 
 #==================================================================
