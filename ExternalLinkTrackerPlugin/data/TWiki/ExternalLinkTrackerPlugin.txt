@@ -1,6 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347336164" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347343718" format="1.1" version="$Rev$"}%
 ---+ External Link Tracker Plugin
 
 Work in progress
+
+Install:
+   * =$TWiki::cfg{AllowRedirectUrl} = 1;=
+
+%EXLINK{ action="%URLPARAM{ "exlinkaction" default="undefined" }%" id="%URLPARAM{id}%" }%
 
 __Related Topics:__ VarEXLINK, %INCLUDE{ExternalLinkTrackerDefinitionTemplate}%, ExternalLinkTrackerDefinitionTemplate, %SYSTEMWEB%.TWikiPlugins

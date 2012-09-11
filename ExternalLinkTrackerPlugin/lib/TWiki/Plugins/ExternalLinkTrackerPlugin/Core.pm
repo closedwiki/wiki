@@ -52,7 +52,7 @@ sub _loadLinkDefinition {
     }
     if( $this->{Debug} ) {
         require Data::Dumper;
-        $this->_writeDebug( Data::Dumper::Dumper( $this->{Def} ) );
+        $this->_writeDebug( 'Link definition: ' . Data::Dumper::Dumper( $this->{Def} ) );
     }
 }
 
@@ -61,25 +61,34 @@ sub EXLINK {
     my( $this, $params ) = @_;
 
     my $action = $params->{action} || '';
-    $this->{Debug} = 1 if( $action eq 'debug' );
+    my $id     = $params->{id} || '';
     my $text = '';
 
     if( ! $action ) {
         my $id = lc( $params->{_DEFAULT} );
         if( $this->{Def}{$id} ) {
-            # TODO: Link to redirect URL
-            $text = '[['
-                  . $this->{Def}{$id}{URL}
+            # Link to redirect URL
+            $text = '[[%SCRIPTURL{viewauth}%/%SYSTEMWEB%/ExternalLinkTrackerPlugin?'
+                  . 'exlinkaction=redirect;'
+                  . "id=$id"
                   . ']['
                   . $this->{Def}{$id}{Name}
                   . ']]';
         } else {
-            $text = '(Link ID not found)';
+            $text = '(EXLINK: ID "' . $id . '" not found)';
         }
 
-    } elsif( $action = 'redirect' ) {
-        # TODO: record link action and redirect to link target
-        return '';
+    } elsif( $action eq 'redirect' ) {
+        $this->_writeDebug( "action: 'redirect', id: '$id'" );
+
+        if( $this->{Def}{$id} ) {
+            # TODO: record link action and
+
+            # Redirect to link target
+            TWiki::Func::redirectCgiQuery( undef, $this->{Def}{$id}{URL} );
+        } else {
+            $text = "EXLINK: id '$id' not found for action 'redirect'";
+        }
     }
     return $text;
 }
