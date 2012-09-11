@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347327747" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347336164" format="1.1" version="$Rev$"}%
 ---+ External Link Tracker Plugin
 
 Work in progress
 
-__Related Topics:__ VarEXLINK, ExternalLinkTrackerDefinitionTemplate, %SYSTEMWEB%.TWikiPlugins
+__Related Topics:__ VarEXLINK, %INCLUDE{ExternalLinkTrackerDefinitionTemplate}%, ExternalLinkTrackerDefinitionTemplate, %SYSTEMWEB%.TWikiPlugins
