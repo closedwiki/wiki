@@ -33,6 +33,7 @@ sub new {
     bless( $this, $class );
 
     $this->_loadLinkDefinition();
+    $this->{LogDir} = TWiki::Func::getWorkArea( 'ExternalLinkTrackerPlugin' );
     $this->_writeDebug( "constructor" );
 
     return $this;
@@ -87,8 +88,9 @@ sub EXLINK {
         $this->_writeDebug( "action: 'redirect', id: '$id'" );
 
         if( $id && $this->{Def}{$id} ) {
-            # TODO: record link action
-
+            # Record link action
+            $this->_writeClickLog( $params->{exlink_web}, $params->{exlink_topic},
+              $id, $this->{Def}{$id}{URL} );
             # Redirect to link target
             $text = "DEBUG: Redirect to '" . $this->{Def}{$id}{URL} . "'";
             $this->_writeDebug( $text );
@@ -100,6 +102,28 @@ sub EXLINK {
         }
     }
     return $text;
+}
+
+#==================================================================
+sub _writeClickLog {
+    my( $this, $web, $topic, $id, $url ) = @_;
+    my( $sec, $min, $hour, $day, $mon, $year ) = localtime( time() );
+    my $date = sprintf( "%.4u", $year + 1900 ) . '-'
+             . sprintf( "%.2u", $mon + 1 );
+    my $user = TWiki::Func::getWikiName();
+    my $text = "$date-$day, $user, $web, $topic, $id, $url\n";
+    my $file = $this->{LogDir} . "/log-$date.txt";
+    if( open( FILE, ">>$file" ) ) {
+        print FILE $text;
+        close( FILE );
+    } else {
+        $this->_writeDebug( "Can't write to $file" );
+    }
+}
+
+#==================================================================
+sub _readClickLog {
+    my( $this ) = @_;
 }
 
 #==================================================================
