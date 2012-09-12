@@ -36,6 +36,12 @@ my $core;
 #==================================================================
 sub initPlugin {
 
+    # check for Plugins.pm versions
+    if( $TWiki::Plugins::VERSION < 1.2 ) {
+        TWiki::Func::writeWarning( "Version mismatch between ExternalLinkTrackerPlugin and Plugins.pm" );
+        return 0;
+    }
+
     $core = undef;
     TWiki::Func::registerTagHandler( 'EXLINK', \&_EXLINK );
 
