@@ -30,6 +30,7 @@ sub new {
 
     $this->{Debug} = $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{Debug} || 0;
     $this->{ExternalIcon} = $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{ExternalIcon} || 0;;
+    $this->{ForceAuth} = $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{ForceAuth} || 0;
 
     bless( $this, $class );
 
@@ -71,7 +72,9 @@ sub EXLINK {
         my $id = lc( $params->{_DEFAULT} );
         if( $this->{Def}{$id} ) {
             # Link to redirect URL
-            $text = '[[%SCRIPTURL{viewauth}%/%SYSTEMWEB%/ExternalLinkTrackerPlugin?'
+            $text = '[[%SCRIPTURL{view';              # view script
+            $text .= 'auth' if( $this->{ForceAuth} ); # viewauth script
+            $text .= '}%/%SYSTEMWEB%/ExternalLinkTrackerPlugin?'
                   . 'exlink_action=redirect;'
                   . "exlink_id=$id;"
                   . "exlink_web=$web;"
