@@ -65,6 +65,8 @@ sub EXLINK {
     my $text = '';
 
     if( ! $action ) {
+        # Create redirect link based on ID
+
         my $id = lc( $params->{_DEFAULT} );
         if( $this->{Def}{$id} ) {
             # Link to redirect URL
@@ -84,7 +86,9 @@ sub EXLINK {
         }
 
     } elsif( $action eq 'redirect' ) {
-        my $id     = $params->{exlink_id} || '';
+        # Record link action and redirect to external site
+
+        my $id = $params->{exlink_id} || '';
         $this->_writeDebug( "action: 'redirect', id: '$id'" );
 
         if( $id && $this->{Def}{$id} ) {
@@ -99,6 +103,16 @@ sub EXLINK {
             }
         } else {
             $text = "EXLINK: id '$id' not found for action 'redirect'";
+        }
+
+    } elsif( $action eq 'statistics' ) {
+        # Show link action statistics
+
+        my $period = $params->{period} || '';
+        if( $period =~ /^2[0-9]{3}(-[0-1][0-9])?$/ ) {
+
+        } else {
+            $text = "EXLINK: Period must be of format YYYY-MM or just YYYY";
         }
     }
     return $text;

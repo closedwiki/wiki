@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347410686" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347412100" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="ExternalLinkTrackerPlugin"}%
 ---+ External Link Tracker Statistics
 
 <form action="%SCRIPTURLPATH{viewauth}%/%WEB%/%TOPIC%">
-| Period: | <input type="text" name="exlink_period" size="8" value="%SERVERTIME{$year-$mo}%" class="twikiInputField" /> <input type="hidden" name="exlink_action" value="statistics" /> <input type="submit" value="Submit" class="twikiSubmit" /> &nbsp; %GRAY% Specify month such as =%SERVERTIME{$year-$mo}%= or full year such as =%SERVERTIME{$year}%= %ENDCOLOR% |
+| Period: | <input type="text" name="period" size="8" value="%URLPARAM{ "period" default="%SERVERTIME{$year-$mo}%" encode="quote" }%" class="twikiInputField" /> <input type="hidden" name="exlink_action" value="statistics" /> <input type="submit" value="Show" class="twikiSubmit" /> &nbsp; %GRAY% Specify a month like =%SERVERTIME{$year-$mo}%=, or a full year like =%SERVERTIME{$year}%= %ENDCOLOR% |
 </form>
 
 %EXLINK{ action="%URLPARAM{ "exlink_action" default="undefined" }%" }%
