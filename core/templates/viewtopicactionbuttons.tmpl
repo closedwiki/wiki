@@ -91,13 +91,11 @@
 
 %TMPL:DEF{"action_mirror"}%%TMPL:P{context="content_master" then="action_master"}%%TMPL:P{context="content_slave" then="action_slave"}%%TMPL:END%
 
-%TMPL:DEF{"action_master"}%%TMPL:P{"mirror_to_all_link"}%%TMPL:P{"sep"}%%TMPL:END%
+%TMPL:DEF{"action_master"}%%TMPL:END%
 
 %TMPL:DEF{"action_slave"}%%TMPL:P{"view_master_link"}%%TMPL:P{"sep"}%%TMPL:END%
 
 %TMPL:DEF{"view_master_link"}%<span><a href='%MASTERWEBSCRIPTURL{"view"}%/%BASETOPIC%?%ENCODE{%QUERYPARAMSTRING%}%%REVARG%' rel='nofollow' %MAKETEXT{"title='View topic on the master site'>View master"}%</a></span>%TMPL:END%
-
-%TMPL:DEF{"mirror_to_all_link"}%<span><a href='%MIRRORTOALLURL%' rel='nofollow' %MAKETEXT{"title='Mirror this web to all slave sites'>Mirror to all"}%</a></span>%TMPL:END%
 
 
 %TMPL:DEF{"action_backlinks"}%%TMPL:P{"backlinks"}%%TMPL:P{"sep"}%%TMPL:END%

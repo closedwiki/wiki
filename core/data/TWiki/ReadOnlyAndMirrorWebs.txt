@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1345617845" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347434258" format="1.1" version="$Rev$"}%
 ---+!! Read only and mirror web support
 
 ---++ Scope
@@ -72,9 +72,24 @@ If the sites table doesn't have the record for the master site, the web is regar
 If the 'scripturl' field is present, the web is regarded as 'slave' and the 'scripturl' value is used to make the 'webScriptUrlTmpl' value of the web.
 In addition, the 'scriptsuffix' and 'viewurl' fields of the site record are examined.
 
----+++ Site-wide preference
+---+++ Tool bar link for mirroring
 A master web is to have a link to mirror the web to all slave sites.
-The link destination needs to be set to MIRRORTOALLURL.
+The link is to be defined by the "action_master" template,
+which is null by default.
+If you provide a mechanism to manually mirror a master web to the other sites,
+you are supposed to have =viewtopicactionbuttons.mirror.tmpl= defining "action_master".
+Here's an example:
+<verbatim>
+%TMPL:INCLUDE{"viewtopicactionbuttons"}%
+%TMPL:DEF{"action_master"}%%TMPL:P{"mirror_to_all_link"}%%TMPL:P{"sep"}%%TMPL:END%
+%TMPL:DEF{"mirror_to_all_link"}%<span>
+<a href='%SCRIPTURL{"mirror"}%?webs=%WEB%;push=1' rel='nofollow' onClick='return confirm("%MAKETEXT{"Do you really want to mirror to all slave sites now?\nIt may take a while to complete."}%");' %MAKETEXT{"title='Mirror this web to all slave sites'>Mirror to all"}%</a>
+</span>%TMPL:END%
+</verbatim>
+Then you would define SKIN as follows.
+<pre>
+   * <nop>Set SKIN = mirror, tagme, topmenu, pattern
+</pre>
 
 ---++ How read-only and mirror webs affect TWiki's behavior
 
@@ -84,7 +99,7 @@ Besides contexts mentioned [[#Content_modes][above]], read-only and mirror webs 
 A topic on a read-only web is displayed in the same manner as a topic of a prior revision - Edit, Attach, and More actions links are disabled.
 
 A topic on a master web is almost as usual.
-The only difference from a local web is to have a "Mirror to all" link on the bottom tool bar.
+The only difference from a local web is to have a "Mirror to all" link on the bottom tool bar assuming a manual mirroring is provided.
 
 %ATTACHURL%/bottom-toolbar-w-mirror-to-all.png
 
