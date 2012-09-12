@@ -77,7 +77,7 @@ sub EXLINK {
                   . "exlink_topic=$topic"
                   . ']['
                   . $this->{Def}{$id}{Name}
-                  . ']]';
+                  . '%ICON{external}%]]';
             $this->_writeDebug( " Link changed to '$text'" );
 
         } else {
