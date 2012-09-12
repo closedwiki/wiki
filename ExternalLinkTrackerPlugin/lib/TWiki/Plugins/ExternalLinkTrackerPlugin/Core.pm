@@ -28,9 +28,10 @@ our $defTopic = 'ExternalLinkTrackerDefinition';
 sub new {
     my ( $class, $this ) = @_;
 
-    $this->{Debug} = $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{Debug} || 0;
+    $this->{Debug}        = $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{Debug} || 0;
     $this->{ExternalIcon} = $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{ExternalIcon} || 0;;
-    $this->{ForceAuth} = $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{ForceAuth} || 0;
+    $this->{ForceAuth}    = $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{ForceAuth} || 0;
+    $this->{AdminGroup}   = $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{AdminGroup} || '';
 
     bless( $this, $class );
 
@@ -113,15 +114,26 @@ sub EXLINK {
     } elsif( $action eq 'statistics' ) {
         # Show link action statistics
 
-        my $period = $params->{period} || '';
-        if( $period =~ /^2[0-9]{3}(-[0-1][0-9])?$/ ) {
-            my $stats = $this->_readClickLog( $period );
-            $text = $stats->{Msg};
-            if( ! $stats->{Msg} || $this->{Debug} ) {
-                $text .= $this->_formatStats( $stats );
+        my $hasGroup = $this->{AdminGroup} && TWiki::Func::isGroup( $this->{AdminGroup} );
+
+        if( ( $hasGroup && TWiki::Func::isGroupMember( $this->{AdminGroup} ) )
+            || ! $hasGroup
+            || TWiki::Func::isAnAdmin() ) {
+
+            my $period = $params->{period} || '';
+            if( $period =~ /^2[0-9]{3}(-[0-1][0-9])?$/ ) {
+                my $stats = $this->_readClickLog( $period );
+                $text = $stats->{Msg};
+                if( ! $stats->{Msg} || $this->{Debug} ) {
+                    $text .= $this->_formatStats( $stats );
+                }
+            } else {
+                $text = "EXLINK: Period must be of format YYYY-MM or just YYYY";
             }
         } else {
-            $text = "EXLINK: Period must be of format YYYY-MM or just YYYY";
+                $text = "EXLINK: Only members of the "
+                      . $TWiki::cfg{UsersWebName} . '.' . $this->{AdminGroup}
+                      . " can view the external link statistics.";
         }
     }
     return $text;
