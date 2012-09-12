@@ -29,6 +29,7 @@ sub new {
     my ( $class, $this ) = @_;
 
     $this->{Debug} = $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{Debug} || 0;
+    $this->{ExternalIcon} = $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{ExternalIcon} || 0;;
 
     bless( $this, $class );
 
@@ -76,8 +77,9 @@ sub EXLINK {
                   . "exlink_web=$web;"
                   . "exlink_topic=$topic"
                   . ']['
-                  . $this->{Def}{$id}{Name}
-                  . '%ICON{external}%]]';
+                  . $this->{Def}{$id}{Name};
+            $text .= '%ICON{external}%' if( $this->{ExternalIcon} );
+            $text .= ']]';
             $this->_writeDebug( " Link changed to '$text'" );
 
         } else {
