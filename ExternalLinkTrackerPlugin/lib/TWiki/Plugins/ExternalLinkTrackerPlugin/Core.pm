@@ -110,7 +110,11 @@ sub EXLINK {
 
         my $period = $params->{period} || '';
         if( $period =~ /^2[0-9]{3}(-[0-1][0-9])?$/ ) {
-
+            my $stats = $this->_readClickLog( $period );
+            $text = $stats->{Msg};
+            if( ! $stats->{Msg} || $this->{Debug} ) {
+                $text .= $this->_formatStats( $stats );
+            }
         } else {
             $text = "EXLINK: Period must be of format YYYY-MM or just YYYY";
         }
@@ -137,7 +141,83 @@ sub _writeClickLog {
 
 #==================================================================
 sub _readClickLog {
-    my( $this ) = @_;
+    my( $this, $period ) = @_;
+
+    my $stats;
+    $stats->{Msg} = '';
+
+    unless( opendir( DIR, $this->{LogDir} ) ) {
+        $this->_writeDebug( "Can't open log directory - $!" );
+        $stats->{Msg} = "EXLINK: Can't open log directory - $!";
+        return $stats;
+    }
+    my @files =
+      sort
+      grep{ /log-$period/ }
+      grep{ /log-[0-9]{4}-[0-9]{2}\.txt/ }
+      readdir( DIR );
+    closedir( DIR );
+
+    unless( @files ) {
+        $stats->{Msg} = "EXLINK: No logs found for period $period.";
+        return $stats;
+    }
+
+    foreach my $name ( @files ) {
+        my $file = $this->{LogDir} . "/$name";
+        unless( open( IN_FILE, "<$file" ) ) {
+            $stats->{Msg} = "EXLINK: Can't open log file $name.";
+            return $stats;
+        }
+        foreach my $line ( <IN_FILE> ) {
+            # line format: date, user, web, topic, id, url
+            # Example: 2012-09-11, PeterThoeny, TWiki, ExternalLinkTrackerPlugin, twiki, http://twiki.org/
+            my @items = split( /, */, $line );
+            if( $items[5] ) {
+                 my $user = $TWiki::cfg{UsersWebName} . '.' . $items[1];
+                 my $webTopic = $items[2] . '.' . $items[3];
+                 my $url = $items[5];
+                 $url =~ s/[ \n\r]//gs;
+                 $stats->{Users}{$user}{$url}{Count} += 1;
+                 $stats->{Users}{$user}{$url}{Topics}{$webTopic} += 1;
+                 $stats->{Users}{$user}{$url}{Access} = $items[0];
+                 $stats->{Links}{$url}{Count} += 1;
+                 $stats->{Links}{$url}{Users}{$user} += 1;
+                 $stats->{Links}{$url}{Access} = $items[0];
+                 $stats->{Msg} .= "$line <br />\n" if( $this->{Debug} );
+            }
+        }
+        close( IN_FILE );
+    }
+    # $this->_writeDebug( 'Stats: ' . Data::Dumper::Dumper( $stats ) );
+    return $stats;
+}
+
+#==================================================================
+sub _formatStats {
+    my( $this, $stats ) = @_;
+
+    my $text = "__Statistics by Users:__\n";
+    $text .= "| *User* | *External Link* | *In Topic* | *&#8470;* | *Last Access* |\n";
+    foreach my $user ( sort keys %{$stats->{Users}} ) {
+        foreach my $url ( sort keys %{$stats->{Users}{$user}} ) {
+            $text .= "| $user | $url";
+            $text .= " | " . join( ', ', sort keys %{$stats->{Users}{$user}{$url}{Topics}} );
+            $text .= " |  " . $stats->{Users}{$user}{$url}{Count};
+            $text .= " | " . $stats->{Users}{$user}{$url}{Access} . " |\n";
+        }
+    }
+
+    $text .= "\n__Statistics by External Links:__\n";
+    $text .= "| *External Link* | *Users* | *&#8470;* | *Last Access* |\n";
+    foreach my $url ( sort keys %{$stats->{Links}} ) {
+        $text .= "| $url";
+        $text .= " | " . join( ', ', sort keys %{$stats->{Links}{$url}{Users}} );
+        $text .= " |  " . $stats->{Links}{$url}{Count};
+        $text .= " | " . $stats->{Links}{$url}{Access} . " |\n";
+    }
+
+    return $text;
 }
 
 #==================================================================
