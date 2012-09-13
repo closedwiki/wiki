@@ -2082,9 +2082,9 @@ sub _writeReport {
     if ( $log ) {
         require TWiki::Time;
         my $time =
-          TWiki::Time::formatTime( time(), '$year$mo', 'servertime');
+          TWiki::Time::formatTime( time(), '$year$mo', 'gmtime');
         $log =~ s/%DATE%/$time/go;
-        $time = TWiki::Time::formatTime( time(), undef, 'servertime' );
+        $time = TWiki::Time::formatTime( time(), undef, 'gmtime' );
 
         if( open( FILE, ">>$log" ) ) {
             print FILE "| $time | $message\n";

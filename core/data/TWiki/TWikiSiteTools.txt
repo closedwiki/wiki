@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313271802" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347501410" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Site Tools
 
@@ -98,9 +98,9 @@ TWiki generates monthly log files which are used by the statistics script
    * The file name is =log&lt;year&gt;&lt;month&gt;.txt=
    * Example path name: =twiki/logs/log%SERVERTIME{$year$mo}%.txt=
    * Each access gets logged as: %BR%
-     =| &lt;time&gt; | &lt;wikiusername&gt; | &lt;action&gt; | &lt;web&gt;.&lt;topic&gt; | &lt;extra info&gt; | &lt;IP address&gt; |=
+     =| &lt;time in GMT&gt; | &lt;wikiusername&gt; | &lt;action&gt; | &lt;web&gt;.&lt;topic&gt; | &lt;extra info&gt; | &lt;IP address&gt; |=
    * Example log entry: %BR%
-     =| %SERVERTIME{$day $mon $year - $hour:$min}% | %USERSWEB%.TWikiGuest | view | %SYSTEMWEB%.WebRss |  | 66.124.232.02 |=
+     =| %SERVERTIME{$day $mon $year - $hour:$min}% | <nop>%USERSWEB%.TWikiGuest | view | <nop>%SYSTEMWEB%.WebRss |  | 66.124.232.02 |=
    * Actions are logged if enabled in [[%SCRIPTURLPATH{"configure"}%][configure]] by the *{Log}{<i>action</i>}* flags
    * Logged actions:
      | *Script* | *Action name* | *Extra info* |
@@ -109,6 +109,7 @@ TWiki generates monthly log files which are used by the statistics script
      | edit | =edit= | when editing non-existing topic: =(not exist)= |
      | login, logon,%BR% attach, edit,%BR% register, rest,%BR% view, vewfile | =sudologin=, %BR% =sudologout= | Login name of administrator user who is logging in or out |
      | manage | =changepasswd= | Login name of user who's password is changed |
+     | mdrepo | =mdrepo= | operation and its arguments |
      | rdiff | =rdiff= | higher and lower revision numbers: =4 3= |
      | register | =regstart= | !WikiUserName, e-Mail address, LoginName: =user attempts to register= |
      | register | =register= | E-mail address: =user successfully registers= |
