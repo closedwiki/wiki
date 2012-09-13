@@ -1,11 +1,99 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347410048" format="1.1" version="$Rev$"}%
----+ External Link Tracker Plugin
+%META:TOPICINFO{author="TWikiContributor" date="1347506359" format="1.1" version="$Rev$"}%
+---+!! External Link Tracker Plugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/ExternalLinkTrackerPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/ExternalLinkTrackerPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
 
-Work in progress
+%SHORTDESCRIPTION%
 
-Install:
-   * =$TWiki::cfg{AllowRedirectUrl} = 1;=
+---++ Introduction
 
+The goal of this plugin is to track users clicking on external links, and to report on external link tracking statistics. Links are obfuscated and identified only by link IDs, e.g. users can't see the destination link in view mode and edit mode.
+
+An external link is written as =%<nop>EXLINK{ID}%=, with =ID= representing the link identifier. For example, =%<nop>EXLINK{TWiki}%= renders as [[http://twiki.org/][TWiki.org%ICON{external}%]].
+
+The external links with IDs are defined in a table in *[[%INCLUDE{ExternalLinkTrackerDefinitionTemplate}%]]*. Example - for illustration only:
+
+| *ID* | *Name* | *URL* | *Comment* |
+| TWiki | TWiki.org | http://twiki.org/ | |
+
+The *[[ExternalLinkTrackerStatistics]]* topic shows external link tracking statistics. The statistics are typically restricted to members of the %USERSWEB%.ExternalLinkAdminGroup.
+
+---++ Syntax Rules
+
+=%<nop>EXLINK{ID}%= - the =ID= identifies the external link.
+
+---++ Examples
+
+   * =%<nop>EXLINK{Google}%= expands to: %EXLINK{Google}%
+   * =%<nop>EXLINK{TWiki}%= expands to: %EXLINK{TWiki}%
+
+<!-- DO NOT REMOVE, this is needed for the external link redirect logic:
 %EXLINK{ action="%URLPARAM{ "exlink_action" default="undefined" }%" }%
+-->
 
-__Related Topics:__ ExternalLinkTrackerStatistics, %INCLUDE{ExternalLinkTrackerDefinitionTemplate}%, ExternalLinkTrackerDefinitionTemplate, VarEXLINK, %SYSTEMWEB%.TWikiPlugins
+---++ Plugin Installation & Configuration
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section. 
+      * See the [[http://twiki.org/cgi-bin/view/Plugins/BuildContribInstallationSupplement][installation supplement]] on TWiki.org for more information.
+
+   * Or, follow these __manual installation__ steps: 
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/ExternalLinkTrackerPlugin.txt== | Plugin topic |
+        | ==data/TWiki/ExternalLinkTrackerDefinitionTemplate.txt== | External link tracker definition template |
+        | ==data/TWiki/ExternalLinkTrackerStatistics.txt== | External link tracker statistics topic |
+        | ==data/TWiki/VarEXLINK.txt== | EXLINK variable documentation topic |
+        | ==lib/TWiki/Plugins/ExternalLinkTrackerPlugin.pm== | Plugin Perl module |
+        | ==lib/TWiki/Plugins/ExternalLinkTrackerPlugin/Config.spec== | Configure spec file |
+        | ==lib/TWiki/Plugins/ExternalLinkTrackerPlugin/Core.pm== | Plugin core module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+
+   * Plugin __configuration and testing__: 
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Make sure the ={AllowRedirectUrl}= configure setting is checked in the __Security setup__ section (this is an expert setting).
+      * Configure additional plugin settings in the __Extensions__ section:
+         * ={Plugins}{ExternalLinkTrackerPlugin}{ExternalIcon}= - Flag to show a small external icon next to external links.
+         * ={Plugins}{ExternalLinkTrackerPlugin}{ForceAuth}= - Force authentication before redirecting to external links. If not set and if a non-authenticated user follows an external link, he/she will be recorded as %USERSWEB%.TWikiGuest. It does not need to be set if users are authenticated at all times on the TWiki site.
+         * ={Plugins}{ExternalLinkTrackerPlugin}{AdminGroup}= - Group that defines who can see the external link tracker statistics. Set to empty value to open it up to all. Default: <tt>ExternalLinkAdminGroup</tt>
+         * ={Plugins}{ExternalLinkTrackerPlugin}{Debug}= - Debug plugin flag. See output in data/debug.txt
+      * Define the external links with IDs:
+         * Create %INCLUDE{ExternalLinkTrackerDefinitionTemplate}% and modify the table that defines the external links.
+      * If you want to restrict access to the statistics page:
+         1. Create a group in %USERSWEB%.TWikiGroups called =ExternalLinkAdminGroup=; add members as needed
+         1. Edit %INCLUDE{ExternalLinkTrackerDefinitionTemplate}% and enable the access restriction by uncommenting the two access control settings, e.g. remove the =#= characters from =#Set ALLOWTOPIC...=
+      * Test if the installation was successful using the example above.
+
+---++ Plugin Info
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic: 
+      * Set SHORTDESCRIPTION = Track and report on users clicking on external links
+
+   * Plugin sponsor:
+      * [[http://nuclearconst.net/][Nuclearconst.net]]
+
+|  Plugin Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2012 Nuclearconst.net <br /> &copy; 2012 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2012-09-13 |
+|  Change History: | <!-- versions below in reverse order --> |
+|  2012-09-13: | TWikibug:Item6926: Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.2 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/ExternalLinkTrackerPlugin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/ExternalLinkTrackerPluginDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/ExternalLinkTrackerPluginAppraisal |
+
+__Related Topics:__ ExternalLinkTrackerStatistics, %INCLUDE{ExternalLinkTrackerDefinitionTemplate}%, ExternalLinkTrackerDefinitionTemplate, VarEXLINK, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.AdminDocumentationCategory

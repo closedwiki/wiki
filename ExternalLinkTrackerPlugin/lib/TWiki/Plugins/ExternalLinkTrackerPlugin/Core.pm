@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2012 FIXME
+# Copyright (C) 2012 Nuclearconst.net, http://nuclearconst.net/
 # Copyright (C) 2012 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root
 # of this distribution.

@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2012 FIXME
+# Copyright (C) 2012 Nuclearconst.net, http://nuclearconst.net/
 # Copyright (C) 2012 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root
 # of this distribution.
@@ -27,7 +27,7 @@ require TWiki::Plugins; # For the API version
 
 #==================================================================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-09-11';
+our $RELEASE = '2012-09-13';
 our $SHORTDESCRIPTION = 'Track and report on users clicking on external links';
 our $NO_PREFS_IN_TOPIC = 1;
 
