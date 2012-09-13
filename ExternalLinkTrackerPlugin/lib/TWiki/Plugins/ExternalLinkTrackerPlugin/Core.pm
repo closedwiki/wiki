@@ -215,7 +215,7 @@ sub _formatStats {
     my( $this, $stats ) = @_;
 
     my $text = "__Statistics by Users:__\n";
-    $text .= "| *User* | *External Link* | *In Topic* | *&#8470;* | *Last Access* |\n";
+    $text .= "| *User* | *External Link* | *In Topic* | *&#8470;* | *<span style='white-space: nowrap;'>Last Access</span>* |\n";
     foreach my $user ( sort keys %{$stats->{Users}} ) {
         foreach my $url ( sort keys %{$stats->{Users}{$user}} ) {
             $text .= "| $user | $url";
@@ -226,7 +226,7 @@ sub _formatStats {
     }
 
     $text .= "\n__Statistics by External Links:__\n";
-    $text .= "| *External Link* | *Users* | *&#8470;* | *Last Access* |\n";
+    $text .= "| *External Link* | *Users* | *&#8470;* | *<span style='white-space: nowrap;'>Last Access</span>* |\n";
     foreach my $url ( sort keys %{$stats->{Links}} ) {
         $text .= "| $url";
         $text .= " | " . join( ', ', sort keys %{$stats->{Links}{$url}{Users}} );
