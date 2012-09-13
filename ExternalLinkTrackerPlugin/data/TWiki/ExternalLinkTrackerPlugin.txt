@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347511911" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347560973" format="1.1" version="$Rev$"}%
 ---+!! External Link Tracker Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -96,7 +96,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle 100%, %SYSTEMWEB%.FormattedSearch 100%, %TOPIC% 98% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/ExternalLinkTrackerPlugin |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/ExternalLinkTrackerPluginDev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/ExternalLinkTrackerPluginAppraisal |
