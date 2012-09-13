@@ -2,6 +2,9 @@ data/TWiki/ExternalLinkTrackerDefinitionTemplate.txt 0664
 data/TWiki/ExternalLinkTrackerPlugin.txt 0664
 data/TWiki/ExternalLinkTrackerStatistics.txt 0664
 data/TWiki/VarEXLINK.txt 0664
+pub/TWiki/ExternalLinkTrackerPlugin/link-statistics.png 0664
+pub/TWiki/ExternalLinkTrackerPlugin/link-statistics-200.png 0664
+pub/TWiki/ExternalLinkTrackerPlugin/link-statistics-400.png 0664
 lib/TWiki/Plugins/ExternalLinkTrackerPlugin.pm 0444
 lib/TWiki/Plugins/ExternalLinkTrackerPlugin/Config.spec 0664
 lib/TWiki/Plugins/ExternalLinkTrackerPlugin/Core.pm 0444
