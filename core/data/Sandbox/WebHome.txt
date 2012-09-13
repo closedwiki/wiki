@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1304669133" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347495734" format="1.1" version="$Rev$"}%
 %INCLUDE{%SYSTEMWEB%.WebChangesRightBox}%
 ---+!! %MAKETEXT{"Welcome to the [_1] web" args="<nop>%WEB%"}%
 
@@ -11,11 +11,13 @@
 <input class="twikiInputField" type="text" name="topic" size="32" />&nbsp;<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Create by Name"}%' />
 <input type="hidden" name="onlywikiname" value="on" />
 <input type="hidden" name="onlynewtopic" value="on" />
+<input type="hidden" name="nowysiwyg" value="%IF{"$ EDITMETHOD='wysiwyg'" then="0" else="1"}%" />
 </form>
 
 <form action='%SCRIPTURLPATH{"edit"}%/%BASEWEB%/TestTopicAUTOINC0' name="createNewTestTopic">
 %ICON{"newtopic"}% %MAKETEXT{"Create a new auto-numbered test topic:"}%
 <input type="hidden" name="t" value="%SERVERTIME{$hou$min$sec}%" />
+<input type="hidden" name="nowysiwyg" value="%IF{"$ EDITMETHOD='wysiwyg'" then="0" else="1"}%" />
 <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Create <nop>TestTopic###"}%' />
 </form>
 
