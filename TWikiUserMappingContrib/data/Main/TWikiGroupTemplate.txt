@@ -1,12 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1330043901" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347518214" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiGroups"}%
 ---+!! [[TWikiGroups]] &#187; <nop>%URLPARAM{"topic"}%
 
 Use this group for [[%SYSTEMWEB%.TWikiAccessControl][access control]] of webs and topics.
 
-<noautolink>
-%EDITPREFERENCES{ "%SYSTEMWEB%.TWikiPreferencesForm" editbutton="Edit %TOPIC% settings" }%
-</noautolink>
+%EDITPREFERENCES{ "%SYSTEMWEB%.TWikiPreferencesForm" editbutton="Edit Group Settings" }%
 
    * Member list:
       * Set GROUP = %WIKINAME%
