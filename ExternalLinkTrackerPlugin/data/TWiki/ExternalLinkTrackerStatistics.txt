@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347412100" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347559376" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="ExternalLinkTrackerPlugin"}%
 ---+ External Link Tracker Statistics
 
@@ -6,6 +6,9 @@
 | Period: | <input type="text" name="period" size="8" value="%URLPARAM{ "period" default="%SERVERTIME{$year-$mo}%" encode="quote" }%" class="twikiInputField" /> <input type="hidden" name="exlink_action" value="statistics" /> <input type="submit" value="Show" class="twikiSubmit" /> &nbsp; %GRAY% Specify a month like =%SERVERTIME{$year-$mo}%=, or a full year like =%SERVERTIME{$year}%= %ENDCOLOR% |
 </form>
 
-%EXLINK{ action="%URLPARAM{ "exlink_action" default="undefined" }%" }%
+%EXLINK{
+ action="%URLPARAM{ "exlink_action" default="statistics" }%"
+ period="%URLPARAM{ "period" default="%SERVERTIME{$year-$mo}%" encode="quote" }%"
+}%
 
 __Related Topics:__ ExternalLinkTrackerPlugin, %INCLUDE{ExternalLinkTrackerDefinitionTemplate}%
