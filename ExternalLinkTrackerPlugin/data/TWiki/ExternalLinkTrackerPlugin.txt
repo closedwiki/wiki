@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347506359" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347511911" format="1.1" version="$Rev$"}%
 ---+!! External Link Tracker Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -22,6 +22,11 @@ The external links with IDs are defined in a table in *[[%INCLUDE{ExternalLinkTr
 
 | *ID* | *Name* | *URL* | *Comment* |
 | TWiki | TWiki.org | http://twiki.org/ | |
+
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 10px 10px;">
+[[ExternalLinkTrackerStatistics][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/link-statistics-400.png" alt="External link statistics" width="400" height="325" border="0" />]]
+</div></sticky>
+---++ External Link Tracker Statistics
 
 The *[[ExternalLinkTrackerStatistics]]* topic shows external link tracking statistics. The statistics are typically restricted to members of the %USERSWEB%.ExternalLinkAdminGroup.
 
@@ -97,3 +102,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/ExternalLinkTrackerPluginAppraisal |
 
 __Related Topics:__ ExternalLinkTrackerStatistics, %INCLUDE{ExternalLinkTrackerDefinitionTemplate}%, ExternalLinkTrackerDefinitionTemplate, VarEXLINK, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.AdminDocumentationCategory
+
+%META:FILEATTACHMENT{name="link-statistics.png" attachment="link-statistics.png" attr="h" comment="" date="1347511006" path="link-statistics.png" size="102612" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="link-statistics-400.png" attachment="link-statistics-400.png" attr="h" comment="" date="1347511372" path="link-statistics-400.png" size="112921" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="link-statistics-200.png" attachment="link-statistics-200.png" attr="h" comment="" date="1347511004" path="link-statistics-200.png" size="45404" user="TWikiContributor" version="1"}%
