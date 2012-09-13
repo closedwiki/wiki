@@ -106,6 +106,7 @@ sub finish {
 
 sub writeLog {
     my ($this, $msg) = @_;
+    return unless $TWiki::cfg{Log}{mdrepo};
     my $session = $this->{session};
     $session->writeLog('mdrepo', "$session->{webName}.$session->{topicName}", $msg);
 }

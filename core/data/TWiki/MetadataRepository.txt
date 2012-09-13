@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1339737431" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347510769" format="1.1" version="$Rev$"}%
 ---+!! Metadata Repository
 %TOC%
 
@@ -279,6 +279,10 @@ As the table above suggests, =updt=, =del=, and =rset= commands put multiple log
 | 2012-06-15 - 13:16 | guest | mdrepo | TemporaryTestWeb.TestTopic | cur sites am datadir=/d/twiki/data pubdir=/d/twiki/pub server=strawman |  |
 | 2012-06-15 - 13:16 | guest | mdrepo | TemporaryTestWeb.TestTopic | updt sites am datadir=/d/twiki/dat pubdir=/d/twiki/pu server=strawma |  |
 </verbatim>
+When the =mdrepo= script is used from a command line, the topic name on the log is always <nop>%USERSWEB%.%HOMETOPIC%.
+
+Audit trail is there by default.
+In case you want to suppress it, you can do it by setting a false value to $TWiki::cfg{Log}{mdrepo} configuration preference.
 
 ---++ Only for top level webs
 For practicality, web metadata is only for top level webs.

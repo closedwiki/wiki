@@ -661,6 +661,8 @@ $TWiki::cfg{Log}{attach}   = $TRUE;
 $TWiki::cfg{Log}{rename}   = $TRUE; # when a topic or attachment is renamed
 # **BOOLEAN EXPERT**
 $TWiki::cfg{Log}{register} = $TRUE; # rare, when a new user registers
+# **BOOLEAN EXPERT**
+$TWiki::cfg{Log}{mdrepo}   = $TRUE;
 
 # Names of the various log files. You can use %DATE% (which gets expanded
 # to YYYYMM e.g. 200501) in the pathnames to cause the file to be renewed

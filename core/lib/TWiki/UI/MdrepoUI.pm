@@ -195,6 +195,12 @@ sub mdrepo {
 	$output = "Metadata repository is not in use.\n";
     }
     elsif ( $session->inContext( 'command_line' ) ) {
+        # At this point, TWiki::Engine::* has determined the web and topic
+        # names, which might be weird if the script is invoked from a command
+        # line.
+        # The following 2 lines are to replace those with something innocuous.
+        $session->{webName} = $TWiki::cfg{UsersWebName};
+        $session->{topicName} = $TWiki::cfg{HomeTopicName};
 	my @argv = @ARGV;
 	$cmdName = shift @argv || '';
 	$table = shift @argv || '';
