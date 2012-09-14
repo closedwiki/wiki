@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310357838" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347660988" format="1.1" version="$Rev$"}%
 ---+!! Gauge Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -126,10 +126,11 @@ __Note:__ You do not need to install anything on your browser to use this plugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.TaitCyrus |
-|  Copyright: | &copy; 2002-2011, TWiki:Main.PeterThoeny; <br /> &copy; 2008-2011, TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2002-2012, TWiki:Main.PeterThoeny; <br /> &copy; 2008-2012, TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-07-10 |
+|  Plugin Version: | 2012-09-14 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2012-09-14: | TWikibug:Item6933: Fix for generated img tag of tambar showing unsupported _RAW parameter -- TWiki:Main.PeterThoeny |
 |  2011-07-10: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2011-05-20: | <ul><li> TWikibug:Item6726 - Add new =type="simple"= which creates a gauge only using HTML &lt;table&gt; instead of creating a PNG image. This allows this plugin to be run without having to install the gd library </li><li> TWikibug:Item6728 - Add new option of =access= which defaults to =file=, but allows =access="inline"= to embed the image in HTML (no image needs to be created).</li><li>TWikibug:Item6729 - Fix bug with =umask= not getting reset after use.</li></ul> -- TWiki:Main/TaitCyrus |
 |  2011-05-13: | <ul><li> TWikibug:Item6722 - Add ability to control scale height (from 0% to 100% of the gauge)</li><li> TWikibug:Item6723 - Fix data parsing issues that limited the use of very small values (like 0.01)</li></ul> -- TWiki:Main/TaitCyrus |
