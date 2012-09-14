@@ -455,6 +455,9 @@ sub makeAnchorName {
           $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?/i ) {
         $anchorName =~ s/[^$TWiki::regex{mixedAlphaNum}]+/_/g;
     }
+    elsif ( $TWiki::cfg{Site}{CharSet} =~ /^utf.*8$|euc/i ) {
+        $anchorName =~ s/[\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/_/g;
+    }
     $anchorName =~ s/__+/_/g;           # remove excessive '_' chars
     if ( !$compatibilityMode ) {
         $anchorName =~ s/^[\s#_]+//;  # no leading space nor '#', '_'
