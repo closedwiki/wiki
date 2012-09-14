@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2002-2011 Peter Thoeny, peter[at]thoeny.org
-# Copyright (C) 2008-2011 TWiki:TWiki/TWikiContributor
+# Copyright (C) 2002-2012 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2008-2012 TWiki:TWiki/TWikiContributor
 #
 # For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ use MIME::Base64 qw(encode_base64);
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-05-23';
+our $RELEASE = '2012-09-14';
 
 my $installWeb;
 my $debug;
@@ -406,6 +406,7 @@ sub _make_gauge {
     my ($session, $params, $topic, $web) = @_;
     _init_defaults() if( !$pluginInitialized );
     my $parameters = new TWiki::Attrs($params->{_RAW}, 1);
+    delete $parameters->{_RAW};
     my $type = _get_parameter( 'type', 'word', $defaultType, $parameters );
     return _makeSimpleGauge($topic, $web, $parameters) if($type eq "simple");
     return _make_trend_gauge($topic, $web, $parameters) if($type eq "trend");
