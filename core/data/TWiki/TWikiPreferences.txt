@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1344364604" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347779723" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -81,13 +81,16 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
 
 %X% *NOTE:* They are typically redefined in topics of individual %USERSWEB%.TWikiUsers
 
-   * Show tool-tip topic info on mouse-over of WikiWord links. Setting can be on, off, or customized. An empty setting or off setting disables the tool-tips (for better performance). The setting can contain $summary to show the topic summary, $date for the last change date, $rev for the revision, $username for the login name of the last editor, $wikiname for the <nop>WikiName, $wikiusername for <nop>%USERSWEB%.WikiName, $topic for the topic name, and $web for the web name
-      * Set LINKTOOLTIPINFO = off
-      * #Set LINKTOOLTIPINFO = $username - $date - $rev: $summary
-
    * Preference for the editor, default is the WYSIWYG editor. The options are raw, wysiwyg:
       * Set EDITMETHOD = wysiwyg
       * #Set EDITMETHOD = raw
+
+   * Fixed [[%SYSTEMWEB%.TopMenuSkin#FixedTopMenu][pulldown menu-bar]], on or off. If on, the menu-bar is always visible at the top, regardless of the window scroll position. If off, the menu-bar hides when scrolled, and can be shown by hovering over the gray TWiki icon.
+      * Set FIXEDTOPMENU = off
+
+   * Show tool-tip topic info on mouse-over of WikiWord links. Setting can be on, off, or customized. An empty setting or off setting disables the tool-tips (for better performance). The setting can contain $summary to show the topic summary, $date for the last change date, $rev for the revision, $username for the login name of the last editor, $wikiname for the <nop>WikiName, $wikiusername for <nop>%USERSWEB%.WikiName, $topic for the topic name, and $web for the web name
+      * Set LINKTOOLTIPINFO = off
+      * #Set LINKTOOLTIPINFO = $username - $date - $rev: $summary
 
    * Horizontal size of text edit box:
       * Set EDITBOXWIDTH = 70
