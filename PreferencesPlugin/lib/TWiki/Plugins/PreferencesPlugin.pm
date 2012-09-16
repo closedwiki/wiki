@@ -29,7 +29,7 @@ require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-04-12';
+our $RELEASE = '2012-09-16';
 
 my @shelter;
 my $MARKER = "\007";
