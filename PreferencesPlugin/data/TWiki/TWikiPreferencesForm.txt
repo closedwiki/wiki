@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313896905" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347778832" format="1.1" version="$Rev$"}%
 ---+ TWiki Preferences Form
 
 |*Name*|*Type*|*Size*|*Value*|*Tooltip message* |*Attributes*|
@@ -15,6 +15,7 @@
 | EDITBOXHEIGHT | text | 30 | 15 | Vertical size of text edit box. | S |
 | EDITBOXSTYLE | text | 30 | width: 99% | CSS style | S |
 | EDITMETHOD | select | 1 | wysiwyg, raw | Edit in WYSIWYG mode or in raw mode | S |
+| FIXEDTOPMENU | select | 1 | off, on | Show top menu-bar fixed at the window top | S |
 | PREVIEWBGIMAGE | text | 80 | %PUBURLPATH%/%SYSTEMWEB%/PreviewBackground/preview2bg.gif | Image URL | S |
 | FORCENEWREVISIONCHECKBOX | select | 1 | , checked="checked" | Select checked to enable | S |
 | DONTNOTIFYCHECKBOX | select | 1 | ,checked="checked" | Select checked to enable | S |
