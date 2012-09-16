@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1334249936" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347779039" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page
@@ -51,8 +51,9 @@ In edit mode, the edit button is replaced by Save and Cancel buttons, with their
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
 |  Copyright: | &copy; 2005 TWiki:Main.ThomasWeigert, %BR% &copy; 2005-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-04-12 |
+|  Plugin Version: | 2012-09-16 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-09-16: | TWikibug:Item6934: Option for auto-hidden or fixed top menu-bar with FIXEDTOPMENU preferences setting -- TWiki:Main.PeterThoeny |
 |  2012-04-12: | TWikibug:Item6711: Fix for broken checkbox and select+multi input types -- TWiki:Main.PeterThoeny |
 |  2011-08-20: | TWikibug:Item6711: Fix topic meta timestamp (needed for proper build) -- TWiki:Main.PeterThoeny |
 |  2011-07-27: | TWikibug:Item6777: Scroll to preferences section on edit; adding EDITMETHOD; changing LINKTOOLTIPINFO to select -- TWiki:Main.PeterThoeny |
