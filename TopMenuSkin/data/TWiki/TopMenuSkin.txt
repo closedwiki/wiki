@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1346915574" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347773044" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -215,6 +215,12 @@ If you want a sidebar in addition to the top bar, define a WEBLEFTBAR setting wi
 
    * <nop>Set WEBLEFTBAR = WebLeftBar
 
+#FixedTopMenu
+---++ Fixed Menu-Bar
+
+The FIXEDTOPMENU preferences setting determines if the menu-bar is fixed or auto-hidden. If set to on, the menu-bar is always visible at the top, regardless of the window scroll position. If off, the menu-bar hides when scrolled, and can be shown by hovering over %ATTACHURL%/menu-start.png - the gray TWiki icon.
+   * <nop>Set FIXEDTOPMENU = off
+
 ---++ Installation
 
 *Note:* You do not need to install anything on the browser to use this skin. The following instructions are for the administrator who installs the skin on the server where TWiki is running.
@@ -250,8 +256,9 @@ If you want a sidebar in addition to the top bar, define a WEBLEFTBAR setting wi
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Screenshot" title="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2012-09-06 |
+|  Skin Version: | 2012-09-15 |
 |  <span style="white-space: nowrap;">Change History:</span> | <!-- specify latest version first -->&nbsp; |
+|  2012-09-15: | TWikibug:Item6934: Option for auto-hidden or fixed top menu-bar with FIXEDTOPMENU preferences setting |
 |  2012-09-06: | TWikibug:Item6925: Show TWiki help link [[%SYSTEMWEB%.%HOMETOPIC%][ %ATTACHURL%/twiki-help.gif ]] in top-menu bar  |
 |  2012-09-04: | TWikibug:Item6918: New WEBLEFTBAR setting to show a sidebar |
 |  2011-07-28: | TWikibug:Item6780: Usability: Link to !UserList topic instead of !TWikiUsers |
