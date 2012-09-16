@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1346913941" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1347771183" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkin"}%
 ---+ Top Bar of !TopMenuSkin
 
@@ -7,9 +7,11 @@ Top bar of TopMenuSkin, replacing WebTopBar.
 -----
 %STARTINCLUDE%%INCLUDE{%SYSTEMWEB%.TopMenuSkin}%
 <div style="position: absolute; margin-left: 212px; margin-top: 30px; z-index: 1"><a href="http://twiki.org/?ref=twiki.org/topmenuskin.topbar" style="display: block; width: 100px; height: 48px;"><span></span></a></div>
+<div style="position: fixed; min-width: 35px; height: 22px; background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/menu-start.png); background-repeat: no-repeat;" id="topmenu-start">
+<div style="position: fixed; width: 100%; height: 22px; background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/menu-gray-bg.png); background-repeat: repeat-x; display: block;" id="topmenu-bar">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr style="background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/menu-gray-bg.png); background-repeat: repeat-x;">
-<td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="1" alt="" /></td>
+<td width="35"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/menu-start.png" width="35" height="22" alt="" /></td>
 <td width="80%">
 <div class="twTopMenuTab">%IF{
  "istopic '%BASEWEB%.WebTopMenu'"
@@ -62,6 +64,9 @@ Top bar of TopMenuSkin, replacing WebTopBar.
 <td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="1" alt="" /></td>
 </tr>
 </table>
+</div>
+</div>
+<div style="height: 22px;"></div>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr style="background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/banner-bg.png); background-repeat: repeat-x;"><td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="58" alt="" /></td>
 <td width="30">
@@ -84,7 +89,31 @@ Top bar of TopMenuSkin, replacing WebTopBar.
 %IF{ "defined 'READONLYSKINMODE' AND ($ READONLYSKINMODE > 0)" then="-->" else="<nop>" }%
 <td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="1" alt="" /></td>
 </tr>
-</table>%STOPINCLUDE%
+</table>
+<script type="text/javascript">
+function toggleTopMenuBar( isHover ) {
+  if( '%FIXEDTOPMENU%' == 'on' || '%FIXEDTOPMENU%' == '1' ) {
+    return;
+  }
+  var displayState = 'none';
+  if( $(window).scrollTop() < 22 || isHover ) {
+     displayState = 'block';
+  }
+  if( $('#topmenu-bar').css('display') != displayState ) {
+    $('#topmenu-bar').css('display', displayState);
+  }
+};
+$(document).ready(function () {
+  toggleTopMenuBar(0);
+});
+$(window).scroll(function () {  
+  toggleTopMenuBar(0);
+});
+$('#topmenu-start').hover(
+  function () { toggleTopMenuBar(1); }, 
+  function () { toggleTopMenuBar(0); }
+);
+</script>%STOPINCLUDE%
 -----
 
    * Disable WYSIWYG editor for this page:
