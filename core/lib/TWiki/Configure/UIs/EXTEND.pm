@@ -167,7 +167,6 @@ MESS
         print "<pre>\n";
         eval {
             no warnings 'redefine';
-            unshift(@INC, '.'); # needed to find tools/extender.pl
             do $installScript;
             use warnings 'redefine';
             die $@ if $@; # propagate
@@ -248,7 +247,7 @@ sub _listDir {
             # a filename which, when passed to File::Copy, does something
             # evil. Check and untaint the filenames here.
             # SMELL: potential problem with unicode chars in file names?
-            $f =~ /([\w.]+)/; $f = $1;
+            $f =~ /([\w\-\.]+)/; $f = $1;
             if (-d "$dir$path/$f") {
                 push(@names, "$path$f/");
                 push(@names, _listDir($dir, "$path$f/"));
