@@ -6,6 +6,10 @@
 $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{ExternalIcon} = 1;
 
 # **BOOLEAN**
+# Open up external link in a new window or tab.
+$TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{NewWindow} = 1;
+
+# **BOOLEAN**
 # Force authentication before redirecting to external links.
 # If not set and if a non-authenticated user follows an external link,
 # he/she will be recorded as TWikiGuest. It does not need to be set if
