@@ -31,6 +31,7 @@ sub new {
     $this->{Debug}        = $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{Debug} || 0;
     $this->{ExternalIcon} = $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{ExternalIcon} || 0;;
     $this->{ForceAuth}    = $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{ForceAuth} || 0;
+    $this->{NewWindow}    = $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{NewWindow} || 0;
     $this->{AdminGroup}   = $TWiki::cfg{Plugins}{ExternalLinkTrackerPlugin}{AdminGroup} || '';
 
     bless( $this, $class );
@@ -73,17 +74,18 @@ sub EXLINK {
         my $id = lc( $params->{_DEFAULT} );
         if( $this->{Def}{$id} ) {
             # Link to redirect URL
-            $text = '[[%SCRIPTURL{view';              # view script
+            $text = '<a href="%SCRIPTURL{view';              # view script
             $text .= 'auth' if( $this->{ForceAuth} ); # viewauth script
             $text .= '}%/%SYSTEMWEB%/ExternalLinkTrackerPlugin?'
                   . 'exlink_action=redirect;'
                   . "exlink_id=$id;"
                   . "exlink_web=$web;"
-                  . "exlink_topic=$topic"
-                  . ']['
+                  . "exlink_topic=$topic";
+            $text .= '" target="_blank' if( $this->{NewWindow} );
+            $text .= '">'
                   . $this->{Def}{$id}{Name};
             $text .= '%ICON{external}%' if( $this->{ExternalIcon} );
-            $text .= ']]';
+            $text .= '</a>';
             $this->_writeDebug( " Link changed to '$text'" );
 
         } else {
