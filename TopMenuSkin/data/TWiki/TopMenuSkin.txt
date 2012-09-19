@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1348007906" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1348014955" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -259,7 +259,7 @@ The FIXEDTOPMENU preferences setting determines if the menu-bar is fixed or auto
 |  Skin Version: | 2012-09-18 |
 |  <span style="white-space: nowrap;">Change History:</span> | <!-- specify latest version first -->&nbsp; |
 |  2012-09-18: | TWikibug:Item6936: Pulldown menu closes too early on hover if more than one menu on page |
-|  2012-09-15: | TWikibug:Item6934: Option for auto-hidden or fixed top menu-bar with FIXEDTOPMENU preferences setting |
+|  2012-09-18: | TWikibug:Item6934: Option for auto-hidden or fixed top menu-bar with FIXEDTOPMENU preferences setting |
 |  2012-09-06: | TWikibug:Item6925: Show TWiki help link [[%SYSTEMWEB%.%HOMETOPIC%][ %ATTACHURL%/twiki-help.gif ]] in top-menu bar  |
 |  2012-09-04: | TWikibug:Item6918: New WEBLEFTBAR setting to show a sidebar |
 |  2011-07-28: | TWikibug:Item6780: Usability: Link to !UserList topic instead of !TWikiUsers |
