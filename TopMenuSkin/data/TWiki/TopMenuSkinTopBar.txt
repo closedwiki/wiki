@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347771183" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1348014512" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkin"}%
 ---+ Top Bar of !TopMenuSkin
 
@@ -91,27 +91,38 @@ Top bar of TopMenuSkin, replacing WebTopBar.
 </tr>
 </table>
 <script type="text/javascript">
-function toggleTopMenuBar( isHover ) {
+var twTopMenuBarCloseTimer = null;
+var twTopMenuBarTimerMsec = 1000;
+function twToggleTopMenuBar( isHover ) {
   if( '%FIXEDTOPMENU%' == 'on' || '%FIXEDTOPMENU%' == '1' ) {
     return;
   }
   var displayState = 'none';
-  if( $(window).scrollTop() < 22 || isHover ) {
+  if( $(window).scrollTop()<22 || isHover>0 ) {
      displayState = 'block';
+     if(twTopMenuBarCloseTimer) { window.clearTimeout(twTopMenuBarCloseTimer); twTopMenuBarCloseTimer = null; } 
+  } else {
+    if(!twTopMenuBarCloseTimer && isHover>=0 ) {
+      twTopMenuBarCloseTimer = window.setTimeout(twCloseTopMenuBar, twTopMenuBarTimerMsec);
+      return;
+    }
   }
   if( $('#topmenu-bar').css('display') != displayState ) {
     $('#topmenu-bar').css('display', displayState);
   }
 };
+function twCloseTopMenuBar() {
+  twToggleTopMenuBar(-1);
+}
 $(document).ready(function () {
-  toggleTopMenuBar(0);
+  twToggleTopMenuBar(0);
 });
 $(window).scroll(function () {  
-  toggleTopMenuBar(0);
+  twToggleTopMenuBar(0);
 });
 $('#topmenu-start').hover(
-  function () { toggleTopMenuBar(1); }, 
-  function () { toggleTopMenuBar(0); }
+  function () { twToggleTopMenuBar(1); }, 
+  function () { twToggleTopMenuBar(0); }
 );
 </script>%STOPINCLUDE%
 -----
