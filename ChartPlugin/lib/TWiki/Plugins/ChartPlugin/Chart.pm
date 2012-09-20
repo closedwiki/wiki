@@ -833,7 +833,12 @@ sub makeError {
     my $dir      = $this->getFileDir();
     my $filename = $this->getFileName();
     umask(002);
-    open(IMAGE, ">$dir/$filename") or return "Can't create file '$dir/$filename: $!";
+#   open(IMAGE, ">$dir/$filename") or return "Can't create file '$dir/$filename: $!";
+    open(IMAGE, ">$dir/$filename") or do {
+	my $err = $!;
+	return undef if ( -s "$dir/$filename" > 0 );
+	return "Can't create file $dir/$filename: $err";
+    };
     binmode IMAGE;
     if ($GD::VERSION > 1.19) {
         print IMAGE $im->png;
@@ -1939,7 +1944,12 @@ sub makeChart {
     my $dir      = $this->getFileDir();
     my $filename = $this->getFileName();
     umask(002);
-    open(IMAGE, ">$dir/$filename") or return "Can't create file '$dir/$filename: $!";
+#   open(IMAGE, ">$dir/$filename") or return "Can't create file '$dir/$filename: $!";
+    open(IMAGE, ">$dir/$filename") or do {
+        my $err = $!;
+        return undef if ( -s "$dir/$filename" > 0 );
+        return "Can't create file $dir/$filename: $err";
+    };
     binmode IMAGE;
     if ($GD::VERSION > 1.19) {
         print IMAGE $im->png;

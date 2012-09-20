@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347087190" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1348130808" format="1.1" version="$Rev$"}%
 ---+!! Chart Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
@@ -288,6 +288,7 @@ If the required parameters are not defined, then an error message is returned or
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2012-09-08 |
 |  Change History: | <!-- specify latest version first --> |
+|  2012-09-20: | TWikibug:Item6939: Use existing image file after "makeChart" subroutine fails to write. |
 |  2012-09-08: | TWikibug:Item6837: Doc fixes |
 |  2011-09-12: | TWikibug:Item6800: Fix for using qw(...) as parentheses, which is deprecated in Perl 5.14 -- TWiki:Main.PeterThoeny |
 |  2011-08-23: | TWikibug:Item6791: Added new ChartPlugin default setting CACHE that allows users to either allow topic page caching or not -- TWiki:Main.TaitCyrus |
