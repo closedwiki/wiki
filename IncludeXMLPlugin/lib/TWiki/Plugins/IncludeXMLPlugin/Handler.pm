@@ -637,14 +637,14 @@ sub _getHTTP {
 
     my $resText = \$res->decoded_content;
     my $resCtype = $res->content_type;
-    my $resCharset = 'iso-8859-1';
+    my $resCharset = 'utf8';
     $resCharset = $1 if $resCtype =~ /;\s*charset=([\-\w]+)/i;
 
     if ($resCharset =~ /^utf-?8$/i) {
         $resText = \Encode::encode_utf8($$resText);
         # to turn off the UTF-8 flag
     } else {
-        Encode::from_to($$resText, $resCharset, 'utf-8');
+        $$resText = Encode::encode('utf8', Encode::decode($resCharset, $$resText));
         # to turn off the UTF-8 flag
     }
 

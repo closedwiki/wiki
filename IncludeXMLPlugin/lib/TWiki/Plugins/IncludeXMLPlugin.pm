@@ -121,7 +121,6 @@ sub postRenderingHandler {
 sub completePageHandler {
     $completePageHandlerSupported = 1;
     $handlerClass->clearCache() if $handlerLoaded;
-    TWiki::Func::writeDebug("completePageHandler");
 }
 
 sub _INCLUDEXML {
