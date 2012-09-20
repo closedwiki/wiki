@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1348124928" format="1.1" %version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1348126820" format="1.1" version="$Rev$"}%
 ---+!! Redirect Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
