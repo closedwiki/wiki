@@ -1,0 +1,8 @@
+---+ Running tests for INCLUDEXML plugin
+
+<verbatim>
+export TWIKIHOME=/twiki/installation/dir
+prove t
+</verbatim>
+
+where =TWIKIHOME= is the directory containing the =bin= subdirectory.

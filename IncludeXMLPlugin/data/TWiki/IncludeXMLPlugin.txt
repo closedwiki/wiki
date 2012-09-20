@@ -1,0 +1,211 @@
+%META:TOPICINFO{author="TWikiContributor" date="1347889343" format="1.1" version="$Rev: 12445 $"}%
+---+!! INCLUDEXML Plugin
+
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/IncludeXMLPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/IncludeXMLPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+
+%SHORTDESCRIPTION%
+
+%TOC{title="Page contents"}%
+
+---++ Introduction
+
+Many XML documents represent a series of records, and thus are affinitive to table representations.
+
+This plugin reinterprets the XML document by records and fields (rows and columns) and constructs a table, or optionally generates any other form by specifying a =format= of each row.
+
+---++ Examples
+
+Below are examples to display an RSS feed:
+
+<verbatim>
+<rss version="2.0">
+  <channel>
+    ...
+    <item>
+      <title>Star City</title>
+      <link>http://liftoff.msfc.nasa.gov/news/2003/news-starcity.asp</link>
+      <description>How do Americans get ready to work with Russians aboard the
+        International Space Station? They take a crash course in culture, language
+        and protocol at Russia's Star City.</description>
+      <pubDate>Tue, 03 Jun 2003 09:39:21 GMT</pubDate>
+      <guid>http://liftoff.msfc.nasa.gov/2003/06/03.html#item573</guid>
+    </item>
+    <item>
+      <title>Space Exploration</title>
+      <link>http://liftoff.msfc.nasa.gov/</link>
+      <description>Sky watchers in Europe, Asia, and parts of Alaska and Canada
+        will experience a partial eclipse of the Sun on Saturday, May 31st.</description>
+      <pubDate>Fri, 30 May 2003 11:06:42 GMT</pubDate>
+      <guid>http://liftoff.msfc.nasa.gov/2003/05/30.html#item572</guid>
+    </item>
+    <item>
+      <title>The Engine That Does More</title>
+      <link>http://liftoff.msfc.nasa.gov/news/2003/news-VASIMR.asp</link>
+      <description>Before man travels to Mars, NASA hopes to design new engines
+        that will let us fly through the Solar System more quickly.  The proposed
+        VASIMR engine would do that.</description>
+      <pubDate>Tue, 27 May 2003 08:37:32 GMT</pubDate>
+      <guid>http://liftoff.msfc.nasa.gov/2003/05/27.html#item571</guid>
+    </item>
+  </channel>
+</rss>
+</verbatim>
+
+The sample RSS document consists of three =&lt;item&gt;= tags, each of which contains =&lt;title&gt;=, =&lt;link&gt;=, =&lt;description&gt;=, =&lt;pubDate&gt;=, and =&lt;guid&gt;= tags.
+
+---+++ Example #1 - specifying records and fields
+
+This example specifies the URL of the sample RSS (not a really existing URL), =records="item"=, and =fields="fields to display"=.
+
+---++++!! Source
+<verbatim>
+%INCLUDEXML{
+  "http://example.com/sample.rss"
+  records="item"
+  fields="title, description, pubDate"
+}%
+</verbatim>
+
+---++++!! Result
+| *title* | *description* | *pubDate* |
+| Star City | How do Americans get ready to work with Russians aboard the International Space Station? They take a crash course in culture, language and protocol at Russia's Star City. | Tue, 03 Jun 2003 09:39:21 GMT |
+| Space Exploration | Sky watchers in Europe, Asia, and parts of Alaska and Canada will experience a partial eclipse of the Sun on Saturday, May 31st. | Fri, 30 May 2003 11:06:42 GMT |
+| The Engine That Does More | Before man travels to Mars, NASA hopes to design new engines that will let us fly through the Solar System more quickly.  The proposed VASIMR engine would do that. | Tue, 27 May 2003 08:37:32 GMT |
+
+---+++ Example #2 - using format
+
+In addition to the above example, the next example uses the =format= parameter to specify each record format.
+When each record is displayed, =$link=, =$title=, =$description=, and =$pubDate= will be replaced by the respective field values.
+
+As special variables, each $n will be replaced by a line break, and each =$percnt= will be replace by a percent sign (%), and thus =$percntGREEN$percnt= will yield =%<nop>GREEN%=.
+
+---++++!! Source
+<verbatim>
+%INCLUDEXML{
+  "http://example.com/sample.rss"
+  records="item"
+  fields="link, title, description, pubDate"
+  format="[[$link][$title]] $n $description $n $percntGREEN$percnt $pubDate $percntENDCOLOR$percnt $n $n"
+}%
+</verbatim>
+
+---++++!! Result
+[[http://liftoff.msfc.nasa.gov/news/2003/news-starcity.asp][Star City]] <br/>
+How do Americans get ready to work with Russians aboard the International Space Station? They take a crash course in culture, language and protocol at Russia's Star City. <br/>
+%GREEN% Tue, 03 Jun 2003 09:39:21 GMT %ENDCOLOR% <br/>
+<br/>
+[[http://liftoff.msfc.nasa.gov/][Space Exploration]] <br/>
+Sky watchers in Europe, Asia, and parts of Alaska and Canada will experience a partial eclipse of the Sun on Saturday, May 31st. <br/>
+%GREEN% Fri, 30 May 2003 11:06:42 GMT %ENDCOLOR% <br/>
+<br/>
+[[http://liftoff.msfc.nasa.gov/news/2003/news-VASIMR.asp][The Engine That Does More]] <br/>
+Before man travels to Mars, NASA hopes to design new engines that will let us fly through the Solar System more quickly.  The proposed VASIMR engine would do that. <br/>
+%GREEN% Tue, 27 May 2003 08:37:32 GMT %ENDCOLOR% <br/>
+<br/>
+
+---++ Synopsis
+
+---+++ Basic parameters
+| *Parameter* | *Sample values* | *Description* |
+| (default) | ="http://example.com/sample.rss"= <br/> ="TopicName"= <br/> ="%<nop>ATTACHURL%/sample.xml"= <br/> ="&lt;xml&gt;...&lt;/xml&gt;"= | Specifies the location of the source XML. It can be HTTP URL or a TWiki topic name. It can also be a literal XML for testing purpose. |
+| =records= | ="item"= <br/> ="//channel/item[position()<3]"= | Selects nodes that represent records. It can be an XPath, and if it does not start with a slash (/), a leading double slash (//) will be implied. |
+| =fields= | ="title, description, pubDate"= <br/> <nobr> ="@id, foo[@num < 100], ./ex:bar"= </nobr> | Selects nodes that represent each field value. It can be XPath values (comma separated) relative to each record node, and if each value does not start with a slash (/), a leading dot followed by a double slash (.//) will be implied. |
+| =xmlns_*= | =xmlns_ex="http://example.com/xmlns/ex"= | Specifies the XML namespace for the XPaths used in =records= and =fields=. If =xmlns_ex= is specified, for example, the prefix ="ex:"= can be used in the XPaths. Note: prefixes that appear in XPaths will never match until the xmlns is properly specified. |
+
+Although it is recommended to specify both =records= and =fields= for the best results, either of them can be omitted.
+
+If =records= is specified but =fields= is not specified, all the attributes and direct child nodes of each record element will be used as fields.
+
+If =fields= is specified but =records= is not specified, each field will be filled in from the top with the matched values.
+
+---+++ Display format parameters
+| *Parameter* | *Examples* | *Description* |
+| =format= | <nobr> ="%VBAR% $title %VBAR% $description %VBAR% $pubDate %VBAR%"= </nobr> | Specifies a format of each record. See below for more details. |
+| =header= | <nobr> ="%VBAR% !*Title* %VBAR% !*Description* %VBAR% !*Date* %VBAR%"= </nobr> | Specifies the header. If =format= is not specified, =header= defaults to a standard table header consisting of the =fields=. |
+| =footer= |  | Specifies the footer. It is empty by default. |
+| =separator= | ="$n"= | Specifies a separator between each row. The default value is ="$n"= unless =format= ends with ="$n"=; otherwise the default is =""=. |
+| =itemsep= | =", "= <br/> ="&lt;br/&gt;"= | Specifies a separator in case a field value in a record has multiple matches by =fields= xpath. |
+| =offset= | ="3"=, ="-5"= | Skip as many records as the specified number. If the number is positive, it is counted from the beginning, and if negative, it is counted backward from the end. |
+| =limit= | ="3"= | Limit the number of records to the specified number. |
+| =reverse= | ="on"= (default: ="off"=) | If it is set to ="on"=, the order of records is reversed. |
+| =html= | ="off"= (default: ="on"=) | If it is ="on"= (by default), the result text can be HTML. If it is set to ="off"=, the text is considered as a pre-formated text with HTML special characters escaped. |
+| =tml= | ="on"= (default: ="off"=) | If it is set to ="on"=, the result text can contain !TWiki markups (TML) such as %<nop>VARIABLE% and formatting syntax (excluding any line-oriented syntax that would break the table notations), which will be further converted by !TWiki. By default it is ="off"=, and all the TML notations will be escaped so that the text itself will be displayed. |
+| =raw= | ="on"=, ="xml"= (default: ="off"=) | If it is set to ="on"=, the raw text retrieved from XML will be yielded without any extra processing. This is useful when the value from XML has line-oriented !TWiki syntax such as tables and headers. (Default = ="off"=)<br/>As a special case, if it is set to ="xml"=, the raw text will be yielded exactly as it looks like in the XML document itself, including any nested child elements inside the selected nodes. |
+| =warn= | ="off"= (default: ="on"=) | If it is set to ="on"=, warning messages will not be displayed even when there are any errors. |
+
+The =format= parameter can be used to change the format of each record. Inside the format, any dollar sign followed by a name (such as =$varname=) will be considered as variables that will be replaced with the values matched by the =fields= parameter.
+
+For each item in =fields=, the last *word* that is outside any brackets =[...]= or parentheses =(...)= can be used as the variable names. For example, if the =fields= parameter is set to ="@id, foo/bar, abc/def[ghi='jkl']"=, variable names will be =$id=, =$bar=, =$def=, respectively.
+
+Optionally, explicit variable names can be annotated to each item in =fields= by adding prefixes as ="$varname :="=. E.g. <code>fields="$foo := field[name='foo bar']/value, $baz := field[name='baz']/value, $xyz := *[name='xyz']/value"</code>.
+
+When a name collides for multiple items, explicitly annotated names have the highest precedence, and the first matched item (from the left) will have the next precedence.
+
+For backward compatibility, =$1=, =$2=, =$3=, ... can also be used as the variables for the =fields= items in the corresponding order.
+
+As Example #2 above shows, the percent sign (%) should not be used in the format value; instead use =$percnt= for each percent sign.
+
+---+++ Parameters related to request sent to the server
+| *Parameter* | *Examples* | *Description* |
+| =request= | ="&lt;GetValueRequest&gt;<br/>&nbsp;&nbsp;&lt;Parameter&gt;100&lt;/Parameter&gt;<br/>&lt;/GetValueRequest&gt;"= | Specifies the request data sent to the server. |
+| =contenttype= | ="text/xml"= | Specifies the Content-Type header field in the HTTP request. If it is not explicitly specified, the content type will be automatically configured to be either ="text/xml"=, ="application/soap+xml"=, or ="multipart/form-data"=. |
+| =requestheader= | ="Cache-Control: max-age=0"= | Adds extra request header(s). Try the cache-control header if there is a problem that a response from the server is not refreshed (as this could be because of proxy cache). |
+| =soap= | ="on"= / ="off"= | Indicates whether the data exchanged with the server is SOAP or not. This parameter is simply for convenience. If it is ="on"=, the content-type default value will be ="application/soap+xml"=. In addition, if =request= does not have the envelope and body tags, the request value will automatically be enclosed by appropriate tags. |
+| =timeout= | ="10"= | Sets the timeout in seconds (default = 5 sec) for retrieving the XML data from the server. |
+
+---+++ Global parameters
+
+If the =INCLUDEXML_PARAMS= preference value is set (as below), it is interpreted as a common set of parameters applied to all the occurrences of =%<nop>INCLUDEXML{...}%=. If it is set in the WebPreferences page of the site, all the =%<nop>INCLUDEXML{...}%= tags within the web are affected.
+
+<verbatim>
+   * Set INCLUDEXML_PARAMS = limit="5" tml="on"
+</verbatim>
+
+---++ Plugin Installation & Configuration
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section. 
+      * See the [[http://twiki.org/cgi-bin/view/Plugins/BuildContribInstallationSupplement][installation supplement]] on TWiki.org for more information.
+
+   * Or, follow these __manual installation__ steps: 
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+| *File:* | *Description:* |
+| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * 
+      * Set the ownership of the extracted directories and files to the webserver user.
+      * Install the dependencies (if any).
+
+   * Plugin __configuration and testing__: 
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Configure additional plugin settings in the __Extensions__ section if needed.
+      * Test if the installation was successful using the example above.
+
+---++ Plugin Info
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic: 
+      * Set SHORTDESCRIPTION = Display an XML document in a tabular format
+
+|  Plugin Author: | TWiki:Main.MahiroAndo |
+|  Copyright: | (c) 2012 TWiki:Main.MahiroAndo <br /> (c) 2012 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 0.1 (2012-09-20) |
+|  Change History: | <!-- versions below in reverse order --> |
+|  2012-09-20: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | XML::LibXML, HTML::Entities, LWP::UserAgent (optionally for testing: Test::More, Test::Base) |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 99%, %TOPIC% 99% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/IncludeXMLPlugin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/IncludeXMLPluginDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/IncludeXMLPluginAppraisal |
+
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences

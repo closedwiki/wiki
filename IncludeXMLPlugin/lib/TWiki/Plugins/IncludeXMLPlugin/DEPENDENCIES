@@ -1,0 +1,10 @@
+# Dependencies for IncludeXMLPlugin
+# Example:
+# Time::ParseDate,>=2003.0211,cpan,Required.
+# TWiki::Plugins,>=1.15,perl,TWiki 4.1 release.
+XML::LibXML,>=1.90,cpan,Required
+HTML::Entities,>=3.68,cpan,Required
+LWP::UserAgent,>=6.02,cpan,Required
+Test::More,>=0.98,cpan,Optional
+Test::Base,>=0.58,cpan,Optional
+

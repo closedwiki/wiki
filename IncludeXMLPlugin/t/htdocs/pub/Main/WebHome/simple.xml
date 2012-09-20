@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simple>
+  <record id="1">
+    <field1>Value 1.1</field1>
+    <field2>Value 1.2</field2>
+  </record>
+  <record id="2">
+    <field1>Value 2.1</field1>
+    <field2>Value 2.2</field2>
+  </record>
+</simple>
