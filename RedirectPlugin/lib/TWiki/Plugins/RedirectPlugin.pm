@@ -106,7 +106,7 @@ sub REDIRECT {
         # else: "topic" or "web.topic" notation
         # get the components and check if the topic exists
         my $topicLocation = "";
-        if ( $dest =~ /^((.*?)\.)*(.*?)(\#.*|\?.*|$)$/ ) {
+        if ( $dest =~ /^((.*)\.)?([^.?#]+)([?#].*)?$/ ) {
             $newWeb = $2 || $web || '';
             $newTopic = $3 || '';
 
