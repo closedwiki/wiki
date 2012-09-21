@@ -1,0 +1,17 @@
+# Release manifest for JiraPlugin
+data/TWiki/JiraPlugin.txt 0644 Documentation
+pub/TWiki/JiraPlugin/bug.gif 0644 Image
+pub/TWiki/JiraPlugin/genericissue.gif 0644 Image
+pub/TWiki/JiraPlugin/improvement.gif 0644 Image
+pub/TWiki/JiraPlugin/newfeature.gif 0644 Image
+pub/TWiki/JiraPlugin/priority_major.gif 0644 Image
+pub/TWiki/JiraPlugin/priority_minor.gif 0644 Image
+pub/TWiki/JiraPlugin/status_closed.gif 0644 Image
+pub/TWiki/JiraPlugin/status_inprogress.gif 0644 Image
+pub/TWiki/JiraPlugin/status_open.gif 0644 Image
+pub/TWiki/JiraPlugin/status_resolved.gif 0644 Image
+lib/TWiki/Plugins/JiraPlugin.pm 0644 Perl module
+lib/TWiki/Plugins/JiraPlugin/Client.pm 0644 Perl module
+lib/TWiki/Plugins/JiraPlugin/Field.pm 0644 Perl module
+lib/TWiki/Plugins/JiraPlugin/Handler.pm 0644 Perl module
+

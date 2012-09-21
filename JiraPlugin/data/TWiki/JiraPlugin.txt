@@ -1,0 +1,353 @@
+%META:TOPICINFO{author="TWikiContributor" date="1348219125" format="1.1" version="$Rev$"}%
+---+!! JIRA Plugin
+
+<!--
+One line description, required for extensions repository catalog.
+   * Set SHORTDESCRIPTION = Display JIRA issues by JQL search
+   * Set STAR = %RED%*%ENDCOLOR%
+--> 
+
+JIRA issues can be displayed as a !TWiki table, based on a [[http://confluence.atlassian.com/display/JIRA/Advanced+Searching][JQL]] (JIRA Query Language).
+
+%TOC{title="Page contents"}%
+
+---++ Introduction
+
+JQL is JIRA Query Language for advanced search, which "allows you to use structured queries to search for JIRA issues."
+See the [[http://confluence.atlassian.com/display/JIRA/Advanced+Searching][documentation]] at the Atlassian's website for details.
+
+With this plugin, you can specify any JQL and display the issues found by the search.
+
+---++ Example
+
+<verbatim>
+%JIRA{
+  "http://my-jira-server/jira"
+  jql="project = xyz and status in (resolved, closed)"
+}%
+</verbatim>
+
+The specified URL should be the common prefix of all the contents in your JIRA server. For example, if a project's "browse" URL is =http://server/path/to/jira/browse/XYZ=, the common URL is likely to be =http://server/path/to/jira=.
+
+The above example will generate a table of issues found by the JQL:
+
+| *Type* | *Key* | *Assignee* | *Summary* | *Status* | *Priority* |
+| <nobr><img src="%ATTACHURL%/bug.gif"/> Bug</nobr> | <a href="#">XYZ-3</a> | abcdef | A bug reported by a user | <nobr><img src="%ATTACHURL%/status_resolved.gif"/> Resolved</nobr> | <nobr><img src="%ATTACHURL%/priority_major.gif"/> Major</nobr> |
+| <nobr><img src="%ATTACHURL%/genericissue.gif"/> Issue</nobr> | <a href="#">XYZ-2</a> | abcdef | A minor issue | <nobr><img src="%ATTACHURL%/status_closed.gif"/> Closed</nobr> | <nobr><img src="%ATTACHURL%/priority_minor.gif"/> Minor</nobr> |
+| <nobr><img src="%ATTACHURL%/newfeature.gif"/> New Feature</nobr> | <a href="#">XYZ-1</a> | ghijkl | A new feature | <nobr><img src="%ATTACHURL%/status_resolved.gif"/> Resolved</nobr> | <nobr><img src="%ATTACHURL%/priority_minor.gif"/> Minor</nobr> |
+
+---++ Fields
+
+The columns to display can be selected by =fields= parameter.
+
+<verbatim>
+%JIRA{
+  "%JIRAURL%"
+  jql="project = xyz and status in (resolved, closed)"
+  fields="key, summary, updated"
+}%
+</verbatim>
+
+| *Key* | *Summary* | *Updated* |
+| <a href="#">XYZ-3</a> | A bug reported by a user | 17/Oct/2011 |
+| <a href="#">XYZ-2</a> | A minor issue | 12/Oct/2011 |
+| <a href="#">XYZ-1</a> | A new feature | 30/Sep/2011 |
+
+The =fields= parameter accepts comma-separated list of the available fields below:
+
+<table>
+<tr>
+<td valign="top">
+| *Name* | *Type* |
+| =priority= | Icon+Text |
+| =status= | Icon+Text |
+| =project= | !LinkedText |
+| =components= | List |
+| =attachmentNames= | List |
+| =reporter= | !UserName |
+| =key= | !LinkedText |
+| =assignee= | !UserName |
+| =summary= | Text |
+| =updated= | Date |
+</td>
+<td width="15">&nbsp;</td>
+<td valign="top">
+| *Name* | *Type* |
+| =id= | Integer |
+| =votes= | Integer |
+| =fixVersions= | List |
+| =affectsVersions= | List |
+| =description= | Text |
+| =environment= | Text |
+| =created= | Date |
+| =resolution= | Text |
+| =type= | Icon+Text |
+| =duedate= | Date |
+</td>
+<td width="15">&nbsp;</td>
+<td valign="top">
+| *Name* | *Type* |
+| =timeEstimate= | Text |
+| =timeOriginalEstimate= | Text |
+| =timeSpent= | Text |
+| =aggregateTimeEstimate= | Text |
+| =aggregateTimeOriginalEstimate= | Text |
+| =aggregateTimeSpent= | Text |
+</td>
+</tr>
+</table>
+
+%I% Custom fields such as ="customfield_12345"= can also be used as field names.
+
+%I% ="all"= can be used as a field name to indicate all the fields including custom fields. This is useful to temporarily display the table to see all the available fields. If ="all"= is used together with any other fields (e.g. =fields="id, status, all"=), the ="all"= portion indicates all the _other_ fields than the explicitly specified fields.
+
+---++ Field options
+Each field name can be followed by an option to control the display format. For example, the =type= field is displayed as both icon and text like "<nobr><img src="%ATTACHURL%/bug.gif"/> Bug</nobr>" by default, and it can be written as =type_icon= to display only the icon, or =type_text= to display only the text.
+
+Below are all the available field options. In addition to these, for any of the fields, =_raw= or =_id= can be specified to use the raw value provided by the server.
+
+<table>
+<tr>
+<td valign="top">
+---+++ Icon+Text
+| *Option* | *Description* |
+| =_mixed= (default) | Icon + Text |
+| =_icon= | Icon only |
+| =_text= | Text only |
+| =_id= or =_raw= | Integer ID |
+</td>
+<td>&nbsp;</td>
+<td valign="top">
+---+++ !LinkedText
+| *Option* | *Description* |
+| =_mixed= (default) | ![[URL][Text]] |
+| =_url= or =_href= | URL only |
+| =_text= | Text only |
+</td>
+<td>&nbsp;</td>
+<td valign="top">
+---+++ !UserName
+| *Option* | *Description* |
+| =_mixed= (default) | ![[URL][FullName]] |
+| =_url= or =_href= | URL only |
+| =_text= | !FullName only |
+| =_id= or =_raw= | !UserName only |
+</td>
+</tr>
+</table>
+
+---+++ Date
+| *Option* | *Description* |
+| =_date= (default) | DD/MMM/YYYY (e.g. 05/May/2011) |
+| =_long= | YYYY-MM-DD HH:mm 'ZZZ' |
+| =_full= | YYYY-MM-DD HH:mm:ss 'ZZZ' |
+| =_ts= | Integer timestamp |
+| =_id= or =_raw= | YYYY-MM-DD'T'HH:mm:ss.uuu'Z' (e.g. 2011-09-21T03:58:35.000Z), based on GMT |
+
+For the fields of the =Date= type, =dateformat= parameter can also be used to control how the dates are displayed (unless the explicit options such as =_date=, =_full=, etc. are used).
+
+The date format follows the rule of [[http://www.google.com/search?q=strftime][strftime]]. In addition, since the percent sign (%) tends to collide with the TWiki syntax, the dollar sign ($) can also be used instead of each percent sign. (For example, =dateformat="$Y-$m-$d $H:$M:$S"= or =dateformat="$F $T"=)
+
+%I% The timezone is based on the JIRA server, so that all the dates look the same as what are displayed in the JIRA pages.
+
+---++ Format
+
+The way each JIRA issue is displayed can be customized by =header=, =format=, and =footer= parameters. The =format= parameter will be applied for each JIRA issue one by one.
+
+In the parameters, a dollar sign ($) followed by a field name (such as =$varname=; see above for field names) can be used as a variable that will be replaced by the actual value of the field. The format options such as =_icon= and =_mixed= can also be used.
+
+<verbatim>
+%JIRA{
+  "%JIRAURL%"
+  jql="project = xyz and status in (resolved, closed)"
+  format="---++++ $type_icon $key $n   * $summary $n   * $status $n"
+}%
+</verbatim>
+
+%I% You can omit =fields= parameter because the variables in =format= tell the plugin which fields you need.
+
+The generated format will look as below:
+
+---++++!! <img src="%ATTACHURL%/bug.gif"/> <a href="#">XYZ-3</a>
+   * A bug reported by a user
+   * <nobr><img src="%ATTACHURL%/status_resolved.gif"/> Resolved</nobr>
+---++++!! <img src="%ATTACHURL%/genericissue.gif"/> <a href="#">XYZ-2</a>
+   * A minor issue
+   * <nobr><img src="%ATTACHURL%/status_closed.gif"/> Resolved</nobr>
+---++++!! <img src="%ATTACHURL%/newfeature.gif"/> <a href="#">XYZ-1</a>
+   * A new feature
+   * <nobr><img src="%ATTACHURL%/status_resolved.gif"/> Resolved</nobr>
+
+---+++ Special variables
+
+In addition to the field variables, special variables are available:
+
+| *Context* | *Variable* | *Description* |
+| <nobr>Anywhere</nobr> | =$header= | Represents a table header based on the =fields= (such as =%VBAR% !*Type* %VBAR% !*Key* %VBAR% ... %VBAR%=, _not_ including the line break) |
+| <nobr>Each issue</nobr> | =$row= | Represents a table row that would be generated by default (such as =%VBAR% ... %VBAR% ... %VBAR%=, _not_ including the line break) |
+| <nobr>Each issue</nobr> | =$all= | Represents a table row corresponding to the special field name ="all"= (see the previous section for details). Any fields excluded from the field ="all"= (because they are explicitly specified next to ="all"=) will also be excluded from =$all=. |
+| <nobr>Each issue</nobr> | =$url= | URL for browsing the issue |
+| <nobr>Anywhere</nobr> | =$n= | A line break |
+| <nobr>Anywhere</nobr> | =$dollar= | A dollar sign ($) |
+| <nobr>Anywhere</nobr> | =$percnt= | A percent sign (%) |
+
+---++ Grouping issues by a field
+
+The JIRA issues found by JQL can be classified into multiple groups with =groupby= parameter. This parameter takes one field name, followed by an optional keyword ="asc"= or ="desc"= to specify the order (ascending or descending, respectively). If the ordering keyword is not specified, the result is based on the order of occurrence in the JQL result.
+
+If the =groupby= parameter is specified, custom format can be specified by =groupheader= and =groupfooter= parameters, similarly to =header= and =footer= parameters.
+
+In each of the group formatting parameters, the variable name for the =groupby= field can be used. For example (below), the variable =$status= can be used in the =groupheader= parameter because =groupby= is set to ="status"=. The field options such as =_icon= and =_text= are also available in the group formatting parameters.
+
+Any issues that do not have the =groupby= field value will be excluded. In order to include those issues, =groupdefault= parameter can be specified as the default value (e.g. =groupby="version"= =groupdefault="(no version)"=).
+
+<verbatim>
+%JIRA{
+  "%JIRAURL%"
+  jql="project = xyz"
+  fields="type_icon, key, summary, priority"
+  groupby="status asc"
+  groupheader="---++++ $status $n $header $n"
+}%
+</verbatim>
+
+---++++!! <nobr><img src="%ATTACHURL%/status_inprogress.gif"/> In Progress</nobr>
+| *Type* | *Key* | *Summary* | *Priority* |
+| <img src="%ATTACHURL%/improvement.gif"/> | <a href="#">XYZ-4</a> | An improvement | <nobr><img src="%ATTACHURL%/priority_major.gif"/> Major</nobr> |
+---++++!! <nobr><img src="%ATTACHURL%/status_resolved.gif"/> Resolved</nobr>
+| *Type* | *Key* | *Summary* | *Priority* |
+| <img src="%ATTACHURL%/bug.gif"/> | <a href="#">XYZ-3</a> | A bug reported by a user | <nobr><img src="%ATTACHURL%/priority_major.gif"/> Major</nobr> |
+| <img src="%ATTACHURL%/newfeature.gif"/> | <a href="#">XYZ-1</a> | A new feature | <nobr><img src="%ATTACHURL%/priority_minor.gif"/> Minor</nobr> |
+---++++!! <nobr><img src="%ATTACHURL%/status_closed.gif"/> Closed</nobr>
+| *Type* | *Key* | *Summary* | *Priority* |
+| <img src="%ATTACHURL%/genericissue.gif"/> | <a href="#">XYZ-2</a> | A minor issue | <nobr><img src="%ATTACHURL%/priority_minor.gif"/> Minor</nobr> |
+
+---++ Troubleshooting
+
+---+++ General troubles
+
+If you encounter any troubles with your JQL query (e.g. if you see %RED%400 Bad Request%ENDCOLOR%), please try visiting your JIRA site and pasting the query in the __advanced search.__ It might show you some useful error message.
+
+The search form is found if you navigate from _Issues_ -> _Search for Issues_, and then click on "advanced searching" (if you are in the "simple searching" mode).
+
+---+++ Issues are not found
+
+Sometimes, JQL may not seem to work with something simple like =type = Bug= and =status in (Resolved, Completed)=. It is probably because your JIRA instance uses custom values, such as "Task Completed", "Intermittent Bug", etc., which may _seem_ to be the same things as =Completed=, =Bug=, etc. but are not the same.
+
+When you have difficulty, try using the =fields="all"= to dump the matched results temporarily in your TWiki page. Alternatively, visit your JIRA site and paste the query in the advanced search, as it is likely you can find more information there (see above on how to try the advanced search).
+
+As documented in the Atlassian's website, <u>the safest way is to use an integer value</u> (no matter how it looks cryptic). If you think your custom values will not change that often, you can use the text value in full, but remember that, if somebody ever modifies the custom value on the JIRA side, then your JQL query will stop working all of a sudden.
+
+---+++ Double quotes cannot be used inside JQL
+
+Although the "advanced search" may suggest to use double quotes for multi-word values, TWiki does not allow you to use it inside the =jql="..."= parameter.
+
+Please either escape the double quotes, or use single quotes instead:
+
+<verbatim>
+%JIRA{... jql="status = \"blah blah blah\""}%
+%JIRA{... jql="status = 'blah blah blah'"}%
+</verbatim>
+
+---+++ !WikiName breaks a hyperlink
+
+If any of the value contains a !WikiName (such as "<nop>ReOpened"), it may be converted in an unintended way:
+
+| *Status* |
+| <nobr><img src="%ATTACHURL%/status_open.gif" title="0 - [[NonExistingTopic][ReOpened]]"/> 0 - [[NonExistingTopic][ReOpened]]</nobr> |
+
+In this case, please use the &lt;noautolink&gt; tag:
+
+<verbatim>
+<noautolink>
+%JIRA{
+  ...
+}%
+</noautolink>
+</verbatim>
+
+---++ Parameter Reference
+
+---+++ Query parameters
+
+| *Name* | *Description* |
+| <nobr>(default) %RED%*%ENDCOLOR%</nobr> | Common URL prefix for the JIRA server. The above example demonstrates how to specify the correct URL. |
+| <nobr> =jql= %RED%*%ENDCOLOR%</nobr> | JQL query (see [[http://confluence.atlassian.com/display/JIRA/Advanced+Searching][Advanced Searching]] for details) |
+| =limit= | Limit the number of JIRA issues found by the JQL. (default = ="10"=)  |
+| =timeout= | Timeout in seconds for retrieving the results from the JIRA server. (default = ="20"=) |
+
+%RED%*%ENDCOLOR% denotes required fields.
+
+---+++ Formatting parameters
+
+| *Name* | *Description* |
+| =fields= | Comma-separated list of field names to specify columns (default = ="type, key, assignee, summary, status, priority"=) |
+| =header= | Header format. (default = ="$header"= unless format is provided) |
+| =format= | Record format, applied for each row of a JIRA issue |
+| =footer= | Footer format. |
+| =separator= | Separator between each row. (default = ="$n"= unless =format= ends with ="$n"=; otherwise default = =""=) |
+| =dateformat= | Date format ([[http://www.google.com/search?q=strftime][strftime]]), where the dollar sign ($) can also be used instead of each percent sign (%) |
+| =icons= | Specify ="off"= to turn off icons unless =_icon= or =_mixed= options are explicitly used. (default = ="on"=) |
+
+---+++ Grouping parameters
+
+| *Name* | *Description* |
+| =groupby= | Comma-separated list of field names to group the results by |
+| =grouplimit= | Limit the number of issues in each group. (default = no limit; i.e. limit is only based on the =limit= parameter) |
+| =groupheader= | Header format for each group |
+| =groupfooter= | Footer format for each group |
+| =groupseparator= | Separator between each group of rows |
+| =groupdefault= | Default value for the field given for =groupby=, so as not to exclude issues that do not have the values |
+
+---++ Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section. 
+      * See the [[http://twiki.org/cgi-bin/view/Plugins/BuildContribInstallationSupplement][installation supplement]] on TWiki.org for more information.
+
+   * Or, follow these __manual installation__ steps: 
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+| *File:* | *Description:* |
+| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * 
+      * Set the ownership of the extracted directories and files to the webserver user.
+      * Install the dependencies (if any).
+
+   * Plugin __configuration and testing__: 
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Configure additional plugin settings in the __Extensions__ section if needed.
+      * Test if the installation was successful using the example above.
+
+---++ Plugin Info
+
+Many thanks to the following sponsors for supporting this work:
+   * Acknowledge any sponsors here
+
+|  Plugin Author(s): | TWiki:Main.MahiroAndo |
+|  Copyright: | (c) 2012 TWiki:Main.MahiroAndo <br /> (c) 2012 TWiki:TWiki.TWikiContributor |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Plugin Version: | 2012-09-14 (V1.000) |
+|  Change History: | <!-- versions below in reverse order --> |
+|  2012-09-21: | Initial version |
+|  Dependencies: | Date::Parse, !DateTime, LWP::UserAgent, Sort::Versions, XML::LibXML |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/JiraPlugin |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/JiraPluginDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/JiraPluginAppraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
+
+%META:FILEATTACHMENT{name="bug.gif" attachment="bug.gif" attr="" comment="" date="1348215857" path="bug.gif" size="369" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="genericissue.gif" attachment="genericissue.gif" attr="" comment="" date="1348215857" path="genericissue.gif" size="365" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="improvement.gif" attachment="improvement.gif" attr="" comment="" date="1348215857" path="improvement.gif" size="254" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="newfeature.gif" attachment="newfeature.gif" attr="" comment="" date="1348215857" path="newfeature.gif" size="365" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="priority_major.gif" attachment="priority_major.gif" attr="" comment="" date="1348215857" path="priority_major.gif" size="137" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="priority_minor.gif" attachment="priority_minor.gif" attr="" comment="" date="1348215857" path="priority_minor.gif" size="137" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="status_closed.gif" attachment="status_closed.gif" attr="" comment="" date="1348215857" path="status_closed.gif" size="551" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="status_inprogress.gif" attachment="status_inprogress.gif" attr="" comment="" date="1348215857" path="status_inprogress.gif" size="573" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="status_resolved.gif" attachment="status_resolved.gif" attr="" comment="" date="1348215857" path="status_resolved.gif" size="553" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="status_open.gif" attachment="status_open.gif" attr="" comment="" date="1348216814" path="status_open.gif" size="564" user="TWikiContributor" version="1"}%
