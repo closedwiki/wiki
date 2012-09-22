@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347434258" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1348304683" format="1.1" version="$Rev$"}%
 ---+!! Read only and mirror web support
 
 ---++ Scope
@@ -47,7 +47,7 @@ One is to use MetadataRepository and the other is setting preferences on !WebPre
 
 For a site federation having hundreds or thousands of webs, MetadataRepository should be the only practical option.
 But just to make %<nop>SYSTEMWEB% read-only, that's too much.
-So you can accomplish that without introducing MetadataReporisory.
+So you can accomplish that without introducing MetadataRepository.
 That should be handy if you want to try it out before diving into it.
 
 ---+++ !WebPreferences
