@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1339737431" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1348458558" format="1.1" version="$Rev$"}%
 ---+!! User Masquerading
 %TOC%
 
@@ -83,5 +83,7 @@ The isEquivalentCUIDs method determines the equivalency of $cUID and $identCUID 
 On the TWiki log, each entry has a user's login name.
 In the scenario described so far, while masquerading, the user's login name is in the joeschmoe/janedoe format.
 Consequently, login names for that format are put in the log file.
+
+__Related Topics:__ AdminDocumentationCategory, TWikiAccessControl
 
 As mentioned above, initializeUserHandler() determines if the user is entitled to masquerading. If the user is not entitled, even if TWIKI_ON_BEHALF_OF cookie has a value, user masquerading doesn't take effect and the log doesn't get the trace of masquerading.
