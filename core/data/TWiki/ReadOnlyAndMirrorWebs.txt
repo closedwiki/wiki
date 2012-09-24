@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1348304683" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1348451982" format="1.1" version="$Rev$"}%
 ---+!! Read only and mirror web support
 
 ---++ Scope
@@ -117,6 +117,8 @@ If you make your skin in a proper manner, those behaviors are automatically impl
    On a non-slave web, it returns a zero width string.
    $ $<nop>WEBLIST{...}% : You can specify webs="canmoveto" parameter, in which case webs to which a topic of the current web cannot be moved to are excluded.
    When the read-only and mirror web feature is not in effect, web="canmoveto" is identical to webs="public" because all webs are local in that case.
+
+__Related Topics:__ AdminDocumentationCategory, MetadataRepository
 
 %META:FILEATTACHMENT{name="bottom-toolbar-w-view-master.png" attachment="bottom-toolbar-w-view-master.png" attr="" comment="" date="1345617845" path="bottom-toolbar-w-view-master.png" size="9790" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="bottom-toolbar-w-mirror-to-all.png" attachment="bottom-toolbar-w-mirror-to-all.png" attr="" comment="" date="1345617845" path="bottom-toolbar-w-mirror-to-all.png" size="9067" user="TWikiContributor" version=""}%
