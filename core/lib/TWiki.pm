@@ -2259,6 +2259,44 @@ sub applyPatternToIncludedText {
     return $theText;
 }
 
+# This is actually for encoding conversion rather than chararacter set.
+# But following the usual terminology, 'charset' is used.
+sub _convertCharsets {
+    my ($this, $srcCharset, $dstCharset, $textRef) = @_;
+    if ( $] >= 5.008 ) { # Perl 5.8 or later
+        require Encode;
+        my $srcCanonical = Encode::resolve_alias($srcCharset);
+        my $dstCanonical = Encode::resolve_alias($dstCharset);
+        if ( $srcCanonical && $dstCanonical ) {
+            if ( $srcCanonical ne $dstCanonical ) {
+                $$textRef = Encode::encode($dstCanonical,
+                                    Encode::decode($srcCanonical, $$textRef));
+            }
+        }
+        else {
+            $this->writeWarning(
+                ($srcCanonical ? '' : "charset $srcCharset not supported. ") .
+                ($dstCanonical ? '' : "charset $dstCharset not supported. "));
+        }
+    }
+    else { # Pre-5.8 Perl versions
+        require Unicode::MapUTF8;
+        my $srcOK = Unicode::MapUTF8::utf8_supported_charset($srcCharset);
+        my $dstOK = Unicode::MapUTF8::utf8_supported_charset($dstCharset);
+        if ( $srcOK && $dstOK ) {
+            my $text = Unicode::MapUTF8::to_utf8(
+                {-string => $$textRef, -charset => $srcCharset});
+            $$textRef = Unicode::MapUTF8::from_utf8(
+                {-string => $text, -charset => $dstCharset});
+        }
+        else {
+            $this->writeWarning(
+                ($srcOK ? '' : "charset $srcCharset not supported. ") .
+                ($dstOK ? '' : "charset $dstCharset not supported. "));
+        }
+    }
+}
+
 # Fetch content from a URL for inclusion by an INCLUDE
 sub _includeUrl {
     my( $this, $url, $pattern, $web, $topic, $raw, $options, $warn ) = @_;
@@ -2310,6 +2348,21 @@ sub _includeUrl {
     if( !$response->is_error()) {
         my $contentType = $response->header('content-type');
         $text = $response->content();
+        # converting character encodings
+        my $siteCharset = $TWiki::cfg{Site}{CharSet} || 'iso-8859-1';
+        my $includedCharset = '';
+        if ( $contentType =~ /charset=([\w-]+)/i ) {
+            $includedCharset = $1;
+        }
+        elsif ( $text =~
+                /<meta\s+http-equiv=[^>]+content-type[^>]+charset=([-\w]+)/i
+        ) {
+            $includedCharset = $1;
+        }
+        else {
+            $includedCharset = 'iso-8859-1';
+        }
+        $this->_convertCharsets($includedCharset, $siteCharset, \$text);
         if( $contentType =~ /^text\/html/ ) {
             if (!$raw) {
                 $url =~ m!^([a-z]+:/*[^/]*)(/[^#?]*)!;
