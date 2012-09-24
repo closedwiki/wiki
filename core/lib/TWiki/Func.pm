@@ -3218,7 +3218,7 @@ This function violates store encapsulation and is therefore *deprecated*.
 =cut
 
 sub getDataDir {
-    return $TWiki::cfg{DataDir};
+    return $TWiki::Plugins::SESSION->getDataDir($_[0]);
 }
 
 =pod
@@ -3241,7 +3241,7 @@ Use =readAttachment= and =saveAttachment= instead.
 =cut
 
 sub getPubDir {
-    return $TWiki::cfg{PubDir};
+    return $TWiki::Plugins::SESSION->getPubDir($_[0]);
 }
 
 =pod

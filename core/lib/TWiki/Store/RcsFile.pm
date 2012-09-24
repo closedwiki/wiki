@@ -49,6 +49,84 @@ require TWiki::Sandbox;
 
 =pod
 
+---++  ObjectMethod getDiskInfo([$web], [$site]) -> ($dataDir, $pubDir, $diskID)
+
+=cut
+
+sub getDiskInfo {
+    my ($this, $web, $site) = @_;
+    $web = ($this->{web} || '') if ( !defined($web) );
+    $site = ($TWiki::cfg{SiteName} || '') if ( !defined($site) );
+    my $session = $this->{session};
+    my $cache = $session->{diskInfoCache} ||= {};
+    my $cached = $cache->{"$site:$web"};
+    if ( $cached ) {
+        return @$cached;
+    }
+    my $dataDir = '';
+    my $pubDir = '';
+    my $diskID = '';
+    if ( my $mdrepo = $session->{mdrepo} ) {
+        if ( my $webRec = $mdrepo->getRec('webs', TWiki::topLevelWeb($web)) ) {
+            $diskID = $webRec->{disk} || '';
+            $diskID =~ /^(\d*)/; # limiting to digits
+            $diskID = $1;
+            my $siteRec;
+            if ( $site && ($siteRec = $mdrepo->getRec('sites', $site)) ) {
+                $dataDir = TWiki::Sandbox::untaintUnchecked(
+                               $siteRec->{"datadir$diskID"} || '');
+                $pubDir = TWiki::Sandbox::untaintUnchecked(
+                               $siteRec->{"pubdir$diskID"} || '');
+            }
+            $dataDir ||= $TWiki::cfg{"DataDir$diskID"};
+            $pubDir ||= $TWiki::cfg{"PubDir$diskID"};
+        }
+    }
+    $dataDir ||= $TWiki::cfg{DataDir};
+    $pubDir ||= $TWiki::cfg{PubDir};
+    $cache->{"$site:$web"} = [$dataDir, $pubDir, $diskID];
+    return ($dataDir, $pubDir, $diskID);
+}
+
+=pod
+
+---++ ObjectMethod getDiskList() -> ('', 1, ...)
+
+=cut
+
+sub getDiskList {
+    my ($this) = @_;
+    my $session = $this->{session};
+    my $cache = $session->{diskInfoCache} ||= {};
+    my $cached = $cache->{'_:_'};
+    return @$cached if ( $cached );
+    my @list = ('');
+    if ( my $mdrepo = $session->{mdrepo} ) {
+        if ( my $siteRec =
+             $mdrepo->getRec('sites', $TWiki::cfg{SiteName} || '')
+        ) {
+            my $diskID = 1;
+            for (;;) {
+                last unless ( $siteRec->{"datadir$diskID"} );
+                push(@list, $diskID);
+                $diskID++;
+            }
+        }
+    }
+    if ( @list == 1 ) {
+        my $diskID = 1;
+        for (;;) {
+            last unless ( $TWiki::cfg{"DataDir$diskID"} );
+            push(@list, $diskID);
+            $diskID++;
+        }
+    }
+    $cache->{'_:_'} = [@list];
+    return @list;
+}
+
+=pod
+
 ---++ ClassMethod new($session, $web, $topic, $attachment)
 
 Constructor. There is one object per stored file.
@@ -63,6 +141,19 @@ sub new {
 
     $this->{web} = $web;
 
+    my ($dataDir, $pubDir, $diskID);
+    if ( $TWiki::cfg{MultipleDisks} ) {
+        ($dataDir, $pubDir, $diskID) = $this->getDiskInfo();
+    }
+    else {
+        $dataDir = $TWiki::cfg{DataDir};
+        $pubDir = $TWiki::cfg{PubDir};
+        $diskID = '';
+    }
+    $this->{dataDir} = $dataDir;
+    $this->{pubDir} = $pubDir;
+    $this->{diskID} = $diskID;
+
     if( $topic ) {
 
         $this->{topic} = $topic;
@@ -70,12 +161,12 @@ sub new {
         if( $attachment ) {
             $this->{attachment} = $attachment;
 
-            $this->{file} = $TWiki::cfg{PubDir} . '/' . $web .
+            $this->{file} = $pubDir . '/' . $web .
               '/' . $topic . '/' . $attachment;
             $this->{rcsFile} = $this->{file} . ',v';
 
         } else {
-            $this->{file} = $TWiki::cfg{DataDir} . '/' . $web .
+            $this->{file} = $dataDir . '/' . $web .
               '/' . $topic . '.txt';
             $this->{rcsFile} = $this->{file} . ',v';
         }
@@ -255,7 +346,7 @@ Return a topic list, e.g. =( 'WebChanges',  'WebHome', 'WebIndex', 'WebNotify' )
 sub getTopicNames {
     my $this = shift;
 
-    opendir my $DIR, $TWiki::cfg{DataDir}.'/'.$this->{web};
+    opendir my $DIR, $this->{dataDir}.'/'.$this->{web};
     # the name filter is used to ensure we don't return filenames
     # that contain illegal characters as topic names.
     my @topicList =
@@ -277,7 +368,14 @@ Gets a list of names of subwebs in the current web
 
 sub getWebNames {
     my $this = shift;
-    my $dir = $TWiki::cfg{DataDir}.'/'.$this->{web};
+    my $dataDir;
+    if ( $TWiki::cfg{MultipleDisks} ) {
+        $dataDir = ($this->getDiskInfo())[0];
+    }
+    else {
+        $dataDir = $TWiki::cfg{DataDir};
+    }
+    my $dir = $dataDir.'/'.$this->{web};
     if( opendir( my $DIR, $dir ) ) {
         my @tmpList =
           sort
@@ -321,7 +419,7 @@ match per topic, and will not return matching lines).
 sub searchInWebContent {
     my( $this, $searchString, $topics, $options ) = @_;
     ASSERT(defined $options) if DEBUG;
-    my $sDir = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/';
+    my $sDir = $this->{dataDir}.'/'.$this->{web}.'/';
 
     unless ($this->{searchFn}) {
         eval "require $TWiki::cfg{RCS}{SearchAlgorithm}";
@@ -376,11 +474,11 @@ Move a web.
 
 sub moveWeb {
     my( $this, $newWeb ) = @_;
-    _moveFile( $TWiki::cfg{DataDir}.'/'.$this->{web},
-               $TWiki::cfg{DataDir}.'/'.$newWeb );
-    if( -d $TWiki::cfg{PubDir}.'/'.$this->{web} ) {
-        _moveFile( $TWiki::cfg{PubDir}.'/'.$this->{web},
-                   $TWiki::cfg{PubDir}.'/'.$newWeb );
+    _moveFile( $this->{dataDir}.'/'.$this->{web},
+               $this->{dataDir}.'/'.$newWeb );
+    if( -d $this->{pubDir}.'/'.$this->{web} ) {
+        _moveFile( $this->{pubDir}.'/'.$this->{web},
+                   $this->{pubDir}.'/'.$newWeb );
     }
     
     return;
@@ -478,8 +576,8 @@ sub removeWeb {
     # Just make sure of the context
     ASSERT(!$this->{topic}) if DEBUG;
 
-    _rmtree( $TWiki::cfg{DataDir}.'/'.$this->{web} );
-    _rmtree( $TWiki::cfg{PubDir}.'/'.$this->{web} );
+    _rmtree( $this->{dataDir}.'/'.$this->{web} );
+    _rmtree( $this->{pubDir}.'/'.$this->{web} );
     
     return;
 }
@@ -510,9 +608,9 @@ sub moveTopic {
     }
 
     # Move attachments
-    my $from = $TWiki::cfg{PubDir}.'/'.$this->{web}.'/'.$this->{topic};
+    my $from = $this->{pubDir}.'/'.$this->{web}.'/'.$this->{topic};
     if( -e $from ) {
-        my $to = $TWiki::cfg{PubDir}.'/'.$newWeb.'/'.$newTopic;
+        my $to = $this->{pubDir}.'/'.$newWeb.'/'.$newTopic;
         _moveFile( $from, $to );
     }
     
@@ -541,7 +639,7 @@ sub copyTopic {
         _copyFile( $this->{rcsFile}, $new->{rcsFile} );
     }
 
-    if( opendir(my $DIR, $TWiki::cfg{PubDir}.'/'.$this->{web}.'/'.
+    if( opendir(my $DIR, $this->{pubDir}.'/'.$this->{web}.'/'.
                   $this->{topic} )) {
         for my $att ( grep { !/^\./ } readdir $DIR ) {
             $att = TWiki::Sandbox::untaintUnchecked( $att );
@@ -723,7 +821,7 @@ some store implementations when a topic is created, but never saved.
 
 sub removeSpuriousLeases {
     my( $this ) = @_;
-    my $web = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/';
+    my $web = $this->{dataDir}.'/'.$this->{web}.'/';
     my $W;
     if (opendir($W, $web)) {
         foreach my $f (readdir($W)) {
@@ -1054,7 +1152,7 @@ sub getAttachmentAttributes {
 	my( $this, $web, $topic, $attachment ) = @_;
     ASSERT(defined $attachment) if DEBUG;
 	
-	my $dir = dirForTopicAttachments($web, $topic);
+	my $dir = $this->dirForTopicAttachments($web, $topic);
    	my @stat = stat ($dir."/".$attachment);
 
 	return @stat;
@@ -1096,7 +1194,7 @@ Ignores files starting with _ or ending with ,v
 
 sub getAttachmentList {
     my( $this, $web, $topic ) = @_;
-    my $dir = dirForTopicAttachments($web, $topic);
+    my $dir = $this->dirForTopicAttachments($web, $topic);
 		
     my %attachmentList = ();
     if (opendir(my $DIR, $dir)) {
@@ -1112,8 +1210,10 @@ sub getAttachmentList {
 }
 
 sub dirForTopicAttachments {
-    my ($web, $topic ) = @_;
-    return $TWiki::cfg{PubDir}.'/'.$web.'/'.$topic;
+    my ($this, $web, $topic ) = @_;
+    my $pubDir = $TWiki::cfg{MultipleDisks} ? ($this->getDiskInfo($web))[1]
+                                            : $TWiki::cfg{PubDir};
+    return $pubDir.'/'.$web.'/'.$topic;
 }
 
 =pod
@@ -1157,7 +1257,7 @@ sub recordChange {
     # Store wikiname in the change log
     $user = $this->{session}->{users}->getWikiName( $user );
 
-    my $file = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/.changes';
+    my $file = $this->{dataDir}.'/'.$this->{web}.'/.changes';
     return unless( !-e $file || -w $file ); # no point if we can't write it
 
     my @changes =
@@ -1190,7 +1290,7 @@ Return iterator over changes - see Store for details
 
 sub eachChange {
     my( $this, $since ) = @_;
-    my $file = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/.changes';
+    my $file = $this->{dataDir}.'/'.$this->{web}.'/.changes';
     require TWiki::ListIterator;
 
     if( -r $file ) {

@@ -210,6 +210,7 @@ BEGIN {
         BASEWEB           => \&BASEWEB,
         CRYPTTOKEN        => \&CRYPTTOKEN,
         DATE              => \&DATE,
+        DISKID            => \&DISKID,
         DISPLAYTIME       => \&DISPLAYTIME,
         ENCODE            => \&ENCODE,
         ENV               => \&ENV,
@@ -261,6 +262,7 @@ BEGIN {
         TOPIC             => \&TOPIC,
         TOPICLIST         => \&TOPICLIST,
         TOPICTITLE        => \&TOPICTITLE,
+        TRASHWEB          => \&TRASHWEB,
         URLENCODE         => \&ENCODE,
         URLPARAM          => \&URLPARAM,
         LANGUAGE          => \&LANGUAGE,
@@ -336,7 +338,7 @@ BEGIN {
     $functionTags{SCRIPTSUFFIX}    = sub { $TWiki::cfg{ScriptSuffix} };
     $functionTags{STATISTICSTOPIC} = sub { $TWiki::cfg{Stats}{TopicName} };
     $functionTags{SYSTEMWEB}       = sub { $TWiki::cfg{SystemWebName} };
-    $functionTags{TRASHWEB}        = sub { $TWiki::cfg{TrashWebName} };
+    # $functionTags{TRASHWEB}        = sub { $TWiki::cfg{TrashWebName} };
     $functionTags{TWIKIADMINLOGIN} = sub { $TWiki::cfg{AdminUserLogin} };
     $functionTags{USERSWEB}        = sub { $TWiki::cfg{UsersWebName} };
     $functionTags{WEBPREFSTOPIC}   = sub { $TWiki::cfg{WebPrefsTopicName} };
@@ -1243,6 +1245,54 @@ sub _make_params {
     }
     $url .= $anchor;
     return $url;
+}
+
+=pod
+
+---++ ObjectMethod getDiskInfo([$web], [$site]) -> ($dataDir, $pubDir, $diskID)
+
+=cut
+
+sub getDiskInfo {
+    my( $this, $web, $site ) = @_;
+    $web ||= $this->{webName};
+    $site ||= $TWiki::cfg{SiteName} || '';
+    return $this->{store}->getDiskInfo($web, $site);
+}
+
+=pod
+
+---++ ObjectMethod getDiskList() -> ('', 1, 2, ...)
+
+=cut
+
+sub getDiskList {
+    # my( $this ) = @_;
+    return $_[0]->{store}->getDiskList();
+}
+
+=pod
+
+---++ ObjectMethod getDataDir() -> $dataDir
+
+=cut
+
+sub getDataDir {
+    # my( $this, $web ) = @_;
+    return $TWiki::cfg{MultipleDisks} ? (getDiskInfo($_[0], $_[1]))[0]
+                                      : $TWiki::cfg{DataDir};
+}
+
+=pod
+
+---++ ObjectMethod getPubDir() -> $pubDir
+
+=cut
+
+sub getPubDir {
+    # my( $this, $web ) = @_;
+    return $TWiki::cfg{MultipleDisks} ? (getDiskInfo($_[0], $_[1]))[1]
+                                      : $TWiki::cfg{PubDir};
 }
 
 =pod
@@ -3499,7 +3549,7 @@ sub initialize {
     $TWiki::Plugins::SESSION = $twiki;
 
     return ( $twiki->{topicName}, $twiki->{webName}, $twiki->{scriptUrlPath},
-             $twiki->{userName}, $TWiki::cfg{DataDir} );
+             $twiki->{userName}, $twiki->getDatadir );
 }
 
 =pod
@@ -4790,6 +4840,35 @@ sub MDREPO {
 	push(@ents, $ent);
     }
     join($separator, @ents);
+}
+
+sub DISKID {
+    my ( $this, $params ) = @_;
+    my $web = $params->{web} || $this->{webName};
+    return ($this->getStorageInfo($web))[2];
+}
+
+sub trashWebName {
+    my ( $this, %param ) = @_;
+    if ( !$TWiki::cfg{MultipleDisks} ) {
+        return $TWiki::cfg{TrashWebName};
+    }
+    my $diskID;
+    if ( defined($param{disk}) ) {
+	$diskID = $param{disk};
+    }
+    else {
+	$diskID = ($this->getDiskInfo($param{web}))[2];
+    }
+    my $name = $TWiki::cfg{TrashWebName};
+    $name .= 'x' . $diskID . 'x' if ( $diskID );
+    return $name;
+}
+
+sub TRASHWEB {
+    my ( $this, $params, $topic, $web ) = @_;
+    my $w = $params->{web} || $web;
+    return $this->trashWebName(web => $w);
 }
 
 1;

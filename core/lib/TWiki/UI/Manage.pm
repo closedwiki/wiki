@@ -508,8 +508,9 @@ sub rename {
           $attachment, $refs );
 
     my $new_url;
-    if ( $newWeb eq $TWiki::cfg{TrashWebName} &&
-         $oldWeb ne $TWiki::cfg{TrashWebName} ) {
+    my $trashWebName = $session->trashWebName(web => $oldWeb);
+    if ( $newWeb eq $trashWebName &&
+         $oldWeb ne $trashWebName ) {
 
         # deleting something
 
@@ -844,8 +845,9 @@ sub _renameweb {
     }
 
     my $new_url = '';
-    if( $newWeb =~ /^$TWiki::cfg{TrashWebName}\b/ &&
-           $oldWeb !~ /^$TWiki::cfg{TrashWebName}\b/ ) {
+    my $trashWebName = $session->trashWebName(web => $oldWeb);
+    if( $newWeb =~ /^$trashWebName\b/ &&
+           $oldWeb !~ /^$trashWebName\b/ ) {
 
         # redirect to parent
         if( $oldParentWeb ) {
@@ -1035,20 +1037,21 @@ sub _newTopicScreen {
     my $nonWikiWordFlag = '';
     $nonWikiWordFlag = 'checked="checked"' if( $doAllowNonWikiWord );
 
+    my $trashWebName = $session->trashWebName(web => $oldWeb);
     if( $attachment ) {
         $tmpl = $session->templates->readTemplate(
             $tmplname || 'moveattachment', $skin );
         $tmpl =~ s/%FILENAME%/$attachment/go;
     } elsif( $confirm ) {
         $tmpl = $session->templates->readTemplate( 'renameconfirm', $skin );
-    } elsif( $newWeb eq $TWiki::cfg{TrashWebName} &&
-               $oldWeb ne $TWiki::cfg{TrashWebName}) {
+    } elsif( $newWeb eq $trashWebName &&
+               $oldWeb ne $trashWebName) {
         $tmpl = $session->templates->readTemplate( 'renamedelete', $skin );
     } else {
         $tmpl = $session->templates->readTemplate( 'rename', $skin );
     }
 
-    if( !$attachment && $newWeb eq $TWiki::cfg{TrashWebName} ) {
+    if( !$attachment && $newWeb eq $trashWebName ) {
         # Trashing a topic; look for a non-conflicting name
         my $base = $oldWeb;
         $base =~ s/[\/\.]//go; #remove separator between sub-webs
@@ -1200,17 +1203,18 @@ sub _newWebScreen {
     my $accessCheckTopic = $TWiki::cfg{WebPrefsTopicName};
     my $templates = $session->templates;
 
+    my $trashWebName = $session->trashWebName(web => $oldWeb);
     if( $confirm eq 'getlock' ) {
         $tmpl = $templates->readTemplate( 'renamewebconfirm' );
-    } elsif( $newWeb eq $TWiki::cfg{TrashWebName} ) {
+    } elsif( $newWeb eq $trashWebName ) {
         $tmpl = $templates->readTemplate( 'renamewebdelete' );
     } else {
         $tmpl = $templates->readTemplate( 'renameweb' );
     }
 
     # Trashing a web; look for a non-conflicting name
-    if( $newWeb eq $TWiki::cfg{TrashWebName} ) {
-        $newWeb = "$TWiki::cfg{TrashWebName}/$oldWeb";
+    if( $newWeb eq $trashWebName ) {
+        $newWeb = "$trashWebName/$oldWeb";
         my $n = 1;
         my $base = $newWeb;
         while( $session->{store}->webExists( $newWeb )) {

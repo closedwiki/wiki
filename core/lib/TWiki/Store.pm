@@ -1564,12 +1564,25 @@ sub getTopicNames {
 
 # filter out webs to which you cannot move the current web to
 sub _filterCanMoveTo {
-    my ($session, $webListRef) = @_;
+    my ($this, $webListRef) = @_;
     my @result;
+    my $theDiskID;
+    if ( $TWiki::cfg{MultipleDisks} ) {
+        $theDiskID = ($this->getDiskInfo($this->{session}{webName}))[2];
+    }
     for my $i ( @$webListRef ) {
-        my $mode = ($session->modeAndMaster($i))[0];
-        push(@result, $i)
-            if ( $mode eq 'local' || $mode eq 'master' );
+        my $mode = ($this->{session}->modeAndMaster($i))[0];
+        if ( $mode eq 'local' || $mode eq 'master' ) {
+            if ( $TWiki::cfg{MultipleDisks} ) {
+                my $id = ($this->getDiskInfo($i))[2];
+                if ( $id eq $theDiskID ) {
+                    push(@result, $i);
+                }
+            }
+            else {
+                push(@result, $i);
+            }
+        }
     }
     return @result;
 }
@@ -1610,7 +1623,7 @@ sub getListOfWebs {
         # skipping public and allowed check because it may take too much
         # time with thousands of webs
         if ( $filter =~ /\bcanmoveto\b/ ) {
-            @webList = _filterCanMoveTo($session, \@webList);
+            @webList = $this->_filterCanMoveTo(\@webList);
         }
         return sort @webList;
     }
@@ -1637,7 +1650,7 @@ sub getListOfWebs {
     }
 
     if( $filter =~ /\bcanmoveto\b/ ) {
-        @webList = _filterCanMoveTo($session, \@webList);
+        @webList = $this->_filterCanMoveTo(\@webList);
     }
 
     # Only return webs that really exist
@@ -2076,6 +2089,53 @@ sub removeSpuriousLeases {
     my( $this, $web ) = @_;
     my $handler = _getHandler( $this, $web );
     $handler->removeSpuriousLeases();
+}
+
+=pod
+
+---++ ObjectMethod getDiskInfo($web, $site) -> ($dataDir, $pubDir, $diskID)
+
+Called only if $TWiki::cfg{MultipleDisks} is true.
+
+=cut
+
+sub getDiskInfo {
+    my( $this, $web, $site ) = @_;
+    my $handler = $this->_getHandler( $web );
+    if ( $site eq ($TWiki::cfg{SiteName} || '') &&
+         defined($handler->{diskID})
+    ) {
+        # shortcut
+        return ($handler->{dataDir}, $handler->{pubDir}, $handler->{diskID});
+    }
+    if ( $handler->can('getDiskInfo') ) {
+	return $handler->getDiskInfo($web, $site);
+    }
+    else {
+	return ($TWiki::cfg{DataDir}, $TWiki::cfg{PubDir}, '');
+    }
+}
+
+=pod
+
+---++ ObjectMethod getDiskList() -> ('', 1, 2, ...)
+
+=cut
+
+sub getDiskList {
+    my( $this ) = @_;
+    unless ( $TWiki::cfg{MultipleDisks} ) {
+	return ('');
+    }
+    my $handler = $this->_getHandler( $this->{session}{webName} );
+    my @list;
+    eval { @list = $handler->getDiskList(); };
+    if ( $? ) {
+	return ('');
+    }
+    else {
+	return @list;
+    }
 }
 
 1;
