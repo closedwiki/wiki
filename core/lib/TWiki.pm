@@ -4626,7 +4626,16 @@ sub PUBURLPATH {
 
 sub MASTERWEBSCRIPTURL {
     my ( $this, $params, $topic, $web ) = @_;
-    my $master = $this->{master};
+    if ( $params->{web} ) {
+        $web = $params->{web};
+    }
+    my $master;
+    if ( $web eq $this->{webName} ) {
+        $master = $this->{master};
+    }
+    else {
+        $master = ($this->modeAndMaster($web))[1];
+    }
     return '' unless ( $master );
     my $url    = $master->{webScriptUrlTmpl};
     return '' unless ( $url );

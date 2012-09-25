@@ -80,6 +80,7 @@ use Assert;
 
 require TWiki;
 require TWiki::Plugins;
+require TWiki::UI;
 
 =pod
 
@@ -2657,6 +2658,58 @@ sub saveFile {
     }
     print FILE $text;
     close( FILE);
+}
+
+=pod
+
+#ReadOnlyAndMirrorWebs
+---++ Read-only and Mirror Webs
+
+The following functions are for ReadOnlyAndMirrorWebs.
+
+=cut
+
+=pod
+
+#GetContentMode
+---+++ getContentMode( $web ) -> $contentMode
+
+Returns the content mode of the specified $web.
+
+=cut
+
+sub getContentMode {
+    my $web = shift;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
+    my $session = $TWiki::Plugins::SESSION;
+    if ( $web eq $session->{webName} ) {
+        return $session->{contentMode};
+    }
+    else {
+        return ($session->modeAndMaster($web))[0];
+    }
+}
+
+=pod
+
+#GetMasterWebScriptUrl
+---+++ getMasterWebScriptUrl( $web, $topic, $script ) -> $url
+
+This is equivalent of %<nop>MASTERWEBSCRIPTURL{script}%.
+It returns the URL of the specified script on the master site of the $web
+processing the $topic.
+
+=cut
+
+sub getMasterWebScriptUrl {
+    my $web = shift;
+    my $topic = shift;
+    my $script = shift;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
+    return $TWiki::Plugins::SESSION->MASTERWEBSCRIPTURL({_DEFAULT => $script},
+                                                        $topic, $web );
 }
 
 =pod

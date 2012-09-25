@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1348451982" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1348551222" format="1.1" version="$Rev$"}%
 ---+!! Read only and mirror web support
 
 ---++ Scope
@@ -97,26 +97,41 @@ Besides contexts mentioned [[#Content_modes][above]], read-only and mirror webs 
 
 ---+++ Skin
 A topic on a read-only web is displayed in the same manner as a topic of a prior revision - Edit, Attach, and More actions links are disabled.
+This is a natural consequence of a read-only web causing the inactive context, which is like a non-current version of a topic causes the inactive context.
+There no special care taken in skin template files.
 
-A topic on a master web is almost as usual.
-The only difference from a local web is to have a "Mirror to all" link on the bottom tool bar assuming a manual mirroring is provided.
-
-%ATTACHURL%/bottom-toolbar-w-mirror-to-all.png
-
-A topic on a slave web looks similar but Edit and Attach links are pointing to the master site. More actions link is disabled.
+A topic on a slave web looks similar but Edit and Attach links are pointing to the master site. The "More actions..." link is disabled.
 And "View master" link is added on the bottom tool bar.
 
 %ATTACHURL%/bottom-toolbar-w-view-master.png
 
-These changes are made on template/viewtopicactionbuttons.tmpl, which is supposed to be included by all skins. 
-If you make your skin in a proper manner, those behaviors are automatically implemented.
+The =viewtopicactionbuttons.tmpl= template file, which is supposed to be used by all properly made skins, is enhanced for this behavior.
+
+If you have a [[MetadataRepository#Federation_of_sites][federation of sites]],
+you may provide a manual mirroring feature.
+That feature would show the "Mirror to all" button on a master web as follows.
+
+%ATTACHURL%/bottom-toolbar-w-mirror-to-all.png
+
+For this, aforementioned =viewtopicactionbuttons.tmpl= has been enhanced to refer to the =mirror_to_all_link= template block, which is a null string by default.
+
+You would provide =viewtopicactionbuttons.mirror.tmpl= defining the =mirror_to_all_link= displaying the "Mirror to all" link.
+And then you would set SKIN to e.g. =mirror, topmenu, pattern=.
 
 ---+++ Variables
-   $ %<nop>READONLYWEB% : Becomes 'on' in 'read-only' mode. Otherwise '' (zero width string).
-   $ %<nop>MASTERWEBSCRIPTURL{script}% : On a 'slave' web, it returns the URL of the specified script of the web on the master site. If the view URL format is different from other scripts, %<nop>MASTERWEBSCRIPTURL{"view"}% returns the proper URL. %BR%
-   On a non-slave web, it returns a zero width string.
-   $ $<nop>WEBLIST{...}% : You can specify webs="canmoveto" parameter, in which case webs to which a topic of the current web cannot be moved to are excluded.
+   $ %<nop>READONLYWEB% : Becomes 'on' in 'read-only' mode. Otherwise a null string ("").
+   $ %<nop>MASTERWEBSCRIPTURL{"script" [web="WEB"]}% : On a 'slave' web, it returns the URL of the specified script of the web on the master site.
+   On a non-slave web, it returns a null string.%BR%
+   The view URL may be in a different format from the other scripts.
+   Even in that case, this variable returns the proper view URL.
+   $ %<nop>WEBLIST{...}% : You can specify webs="canmoveto" parameter, in which case webs to which a topic of the current web cannot be moved to are excluded.
    When the read-only and mirror web feature is not in effect, web="canmoveto" is identical to webs="public" because all webs are local in that case.
+
+---+++ In plug-in code
+TWiki::Func::getMasterWebScriptUrl($web, $topic, $script) returns the script URL on the master web if this site is a mirror with the web.
+Otherwise, the function returns a null string ("").
+
+TWiki::Func::getContentMode($web) returns the [[#Content_modes][content mode]] of the specified web.
 
 __Related Topics:__ AdminDocumentationCategory, MetadataRepository
 
