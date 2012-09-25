@@ -347,8 +347,7 @@ sub checkWritable {
 
     my $mode;
     if ( $web && $web ne $session->{webName} ) {
-        my $dummy;
-        ($mode, $dummy) = $session->modeAndMaster($web);
+        $mode = ($session->modeAndMaster($web))[0];
     }
     else {
         $web = $session->{webName};
