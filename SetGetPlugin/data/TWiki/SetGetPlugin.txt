@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1325884249" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1348641690" format="1.1" version="$Rev$"}%
 ---+!! !SetGetPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -188,6 +188,34 @@ Change my mood: <select name="mood">
 </form>
 </td></tr></table>
 
+#RestInterface
+---++ REST Interface
+
+Variables can also be set and retrieved by invoking a REST (REpresentational State Transfer) request on the TWiki server using the [[%SYSTEMWEB%.TWikiScripts#rest][rest script]]. To persistently remember the state of interactive browser-based !JavaScript applications, you can set and get variables using this REST interface via Ajax calls.
+
+The rest script requires authentication, e.g. the user agent is prompted to authenticate if needed.
+
+#RestSet
+---+++ rest/SetGetPlugin/set -- set a variable
+
+To set a variable call =%<nop>SCRIPTURL{rest}%/SetGetPlugin/set=. It accepts the following URL parameters:
+   * =name= - name of variable (required)
+   * =value= - value of variable (required, may be empty)
+   * =remember= - persistently remember if set to 1 (optional)
+
+__Example:__
+%BR% %SCRIPTURL{rest}%/SetGetPlugin/set?name=rest-test;value=This+is+REST;remember=1
+
+#RestGet
+---+++ rest/SetGetPlugin/get -- get a variable
+
+To get a variable call =%<nop>SCRIPTURL{rest}%/SetGetPlugin/get=. It accepts the following URL parameters:
+   * =name= - name of variable (required)
+   * =default= - default returned if variable is not found (optional)
+
+__Example:__
+%BR% %SCRIPTURL{rest}%/SetGetPlugin/get?name=rest-test;default=rest-test+variable+not+found
+
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
@@ -218,7 +246,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
    * Plugin __configuration and testing__:
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
-      * Test if the installation was successful: The next bullet should show: =Result: Yes, it works!= %SET{ "test" value="Yes, it works!" }%
+      * Test if the installation was successful: The next bullet should show: =Result: TWiki rocks!= %SET{ "test" value="TWiki rocks!" }%
          * Result: %GET{ "test" }%
 
 ---++ Plugin Info
@@ -226,8 +254,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2010-2012 TWiki:Main.PeterThoeny <br /> &copy; 2010-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public Licen:se]]) |
-|  Plugin Version: | 2012-01-06 |
+|  Plugin Version: | 2012-09-25 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-09-25: | TWikibug:Item6943: Add REST interface |
 |  2012-01-06: | TWikibug:Item6828: Removing write to persistent if already exists, and adding data dump -- TWiki:Main.AaronLWalker |
 |  2011-07-09: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2011-04-04: | TWikibug:Item6638: Small doc improvements |
