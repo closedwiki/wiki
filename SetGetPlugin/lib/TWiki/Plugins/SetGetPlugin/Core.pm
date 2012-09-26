@@ -45,7 +45,7 @@ sub new {
 # =========================
 sub VarDUMP
 {
-    my ( $this, $session, $params, $topic, $web ) = @_;
+    my ( $this, $params ) = @_;
     my $name  = _sanitizeName( $params->{_DEFAULT} );
     TWiki::Func::writeDebug( "- SetGetPlugin DUMP ($name)" ) if $this->{Debug};
     #return '' unless( $name );
@@ -80,7 +80,7 @@ sub VarDUMP
 # =========================
 sub VarGET
 {
-    my ( $this, $session, $params, $topic, $web ) = @_;
+    my ( $this, $params ) = @_;
     my $name  = _sanitizeName( $params->{_DEFAULT} );
     TWiki::Func::writeDebug( "- SetGetPlugin GET ($name)" ) if $this->{Debug};
     return '' unless( $name );
@@ -103,7 +103,7 @@ sub VarGET
 # =========================
 sub VarSET
 {
-    my ( $this, $session, $params, $topic, $web ) = @_;
+    my ( $this, $params ) = @_;
     my $name  = _sanitizeName( $params->{_DEFAULT} );
     TWiki::Func::writeDebug( "- SetGetPlugin SET ($name)" ) if $this->{Debug};
     return '' unless( $name );

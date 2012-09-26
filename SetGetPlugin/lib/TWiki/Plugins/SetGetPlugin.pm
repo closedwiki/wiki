@@ -26,7 +26,7 @@ package TWiki::Plugins::SetGetPlugin;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-01-06';
+our $RELEASE = '2012-09-25';
 
 our $web;
 our $topic;
@@ -53,6 +53,8 @@ sub initPlugin
     TWiki::Func::registerTagHandler( 'GET',    \&_GET );
     TWiki::Func::registerTagHandler( 'SET',    \&_SET );
     TWiki::Func::registerTagHandler( 'SETGETDUMP',    \&_DUMP );
+    TWiki::Func::registerRESTHandler( 'get', \&_restGet);
+    TWiki::Func::registerRESTHandler( 'set', \&_restSet);
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::SetGetPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -63,40 +65,69 @@ sub initPlugin
 # =========================
 sub _DUMP
 {
-#   my ( $session, $params, $theTopic, $theWeb ) = @_;
+    my ( $session, $params ) = @_;
 
     # Lazy loading, e.g. compile core module only when required
     unless( $core ) {
         require TWiki::Plugins::SetGetPlugin::Core;
         $core = new TWiki::Plugins::SetGetPlugin::Core( $debug );
     }
-    return $core->VarDUMP( @_ );
+    return $core->VarDUMP( $params );
 }
 
 # =========================
 sub _GET
 {
-#   my ( $session, $params, $theTopic, $theWeb ) = @_;
+    my ( $session, $params ) = @_;
 
     # Lazy loading, e.g. compile core module only when required
     unless( $core ) {
         require TWiki::Plugins::SetGetPlugin::Core;
         $core = new TWiki::Plugins::SetGetPlugin::Core( $debug );
     }
-    return $core->VarGET( @_ );
+    return $core->VarGET( $params );
 }
 
 # =========================
 sub _SET
 {
-#   my ( $session, $params, $theTopic, $theWeb ) = @_;
+    my ( $session, $params ) = @_;
 
     # Lazy loading, e.g. compile core module only when required
     unless( $core ) {
         require TWiki::Plugins::SetGetPlugin::Core;
         $core = new TWiki::Plugins::SetGetPlugin::Core( $debug );
     }
-    return $core->VarSET( @_ );
+    return $core->VarSET( $params );
+}
+
+# =========================
+sub _restGet {
+#   my ($session) = @_;
+    my $query = TWiki::Func::getCgiQuery();
+    my $params;
+    $params->{_DEFAULT} = $query->param('name') if( defined $query->param('name') );
+    $params->{default}  = $query->param('default') if( defined $query->param('default') );
+    unless( $core ) {
+        require TWiki::Plugins::SetGetPlugin::Core;
+        $core = new TWiki::Plugins::SetGetPlugin::Core( $debug );
+    }
+    return $core->VarGET( $params );
+}
+
+# =========================
+sub _restSet {
+#   my ($session) = @_;
+    my $query = TWiki::Func::getCgiQuery();
+    my $params;
+    $params->{_DEFAULT}  = $query->param('name')     if( defined $query->param('name') );
+    $params->{value}     = $query->param('value')    if( defined $query->param('value') );
+    $params->{remember}  = $query->param('remember') if( defined $query->param('remember') );
+    unless( $core ) {
+        require TWiki::Plugins::SetGetPlugin::Core;
+        $core = new TWiki::Plugins::SetGetPlugin::Core( $debug );
+    }
+    return $core->VarSET( $params );
 }
 
 # =========================
