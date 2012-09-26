@@ -40,8 +40,7 @@ sub save {
     #my ( $text, $topic, $web ) = @_;
 
     my $wikiName = TWiki::Func::getWikiName();
-    if( ! TWiki::Func::checkAccessPermission( 'change', $wikiName, '',
-											  $_[1], $_[2] ) ) {
+    if( ! TWiki::Func::checkAccessPermission( 'change', $wikiName, '', $_[1], $_[2] ) ) {
         # user has no permission to change the topic
         throw TWiki::OopsException( 'accessdenied',
                                     def => 'topic_access',
@@ -111,6 +110,7 @@ sub _handleInput {
     my $default = $attrs->remove( 'default' );
     my $attrtemplatetopic = $attrs->remove( 'templatetopic' ) || '';
     my $templatetopic = _getTemplateLocation( $attrtemplatetopic, $web );
+    my $emailto = $attrs->remove( 'emailto' );
 
     $message ||= $default || '';
     $message ||= $default || '';
@@ -145,10 +145,8 @@ sub _handleInput {
         }
     }
 
-    my $url = '';
-    if ( $disable eq '' ) {
-        $url = TWiki::Func::getScriptUrl( $web, $topic, 'save' );
-    }
+    my $url = TWiki::Func::getMasterWebScriptUrl($web, $topic, 'save') ||
+        TWiki::Func::getScriptUrl( $web, $topic, 'save' );
 
     my $noform = $attrs->remove('noform') || '';
     if ( $input !~ m/^%RED%/ ) {
@@ -187,6 +185,10 @@ sub _handleInput {
             if( $remove ) {
                 $hiddenFields .= "\n".CGI::hidden(
                     -name=>'comment_remove', -value=>$$pidx );
+            }
+            if ( $emailto ) {
+                $hiddenFields .= "\n".CGI::hidden(
+                    -name=>'comment_emailto', -value=>$emailto );
             }
             $input .= $hiddenFields;
         }
@@ -289,6 +291,41 @@ sub _buildNewTopic {
     # the topic. The text is automatically defaulted to the existing topic
     # text if the =text= parameter isn't specified - which for comments,
     # it isn't.
+
+    my $emailTo = $query->param( 'comment_emailto' ) || '';
+    my @addrs = grep { !/^\s*$/ } split(/\s*,\s*/, $emailTo);
+    if ( @addrs && $output ne '' ) {
+	my $emailRe = TWiki::Func::getRegularExpression('emailAddrRegex');
+	for my $i ( @addrs ) {
+	    if ( $i !~ /$emailRe/ ) {
+		$i = TWiki::Func::wikiToEmail($i);
+	    }
+	}
+        my $emailTmpl =
+	    _getTemplate( "EMAIL:$type", $topic, $web, $templatetopic, 'off' );
+	$emailTmpl ||= <<'END';
+From: %EMAIL_FROM%
+To: %EMAIL_TO%
+Subject: New comment posted on %WEB%.%TOPIC%
+MIME-Version: 1.0
+Content-Type: text/html; charset=%CHARSET%
+Content-Transfer-Encoding: 8bit
+
+<html><body>
+%EMAIL_OUTPUT%
+</body></html>
+END
+	my $email = TWiki::Func::expandCommonVariables($emailTmpl);
+	my $from = TWiki::Func::wikiToEmail(TWiki::Func::getWikiName());
+	$email =~ s/%EMAIL_FROM%/$from/g;
+	my $to = join(', ', @addrs);
+	$email =~ s/%EMAIL_TO%/$to/g;
+	my $emailOutput = TWiki::Func::renderText(
+	    TWiki::Func::expandCommonVariables($output));
+	$email =~ s/%EMAIL_OUTPUT%/$emailOutput/g;
+	TWiki::Func::sendEmail($email);
+    }
+
     my $premeta = '';
     my $postmeta = '';
     my $inpost = 0;
