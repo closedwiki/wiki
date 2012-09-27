@@ -638,6 +638,11 @@ sub _renderWikiWord {
     my ($this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLinkToMissingPages, $doKeepWeb) = @_;
     my $store = $this->{session}->{store};
     my $topicExists = $store->topicExists( $theWeb, $theTopic );
+    if ( !$topicExists && $store->webExists( $theWeb.'/'.$theTopic ) ) {
+        $theWeb .= '/'.$theTopic;
+        $theTopic = $TWiki::cfg{HomeTopicName};
+        $topicExists = $store->topicExists( $theWeb, $theTopic );
+    }
 
     my $singular = '';
     unless( $topicExists ) {

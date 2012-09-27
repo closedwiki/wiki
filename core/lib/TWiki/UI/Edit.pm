@@ -99,6 +99,13 @@ sub init_edit {
 
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'edit' );
     TWiki::UI::checkWritable( $session );
+    if ( $store->webExists( $webName.'/'.$topic ) ) {
+        throw TWiki::OopsException(
+            'attention',
+            def => 'web_exists_topic_edit',
+            web => $webName,
+            topic => $topic );
+    }
 
     my $tmpl = '';
     my $text = '';

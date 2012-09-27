@@ -282,8 +282,10 @@ sub _createWeb {
 
     # check permission, user authorized to create web here?
     my $parent = undef; # default is root if no parent web
+    my $child;
     if( $newWeb =~ m|^(.*)[./](.*?)$| ) {
         $parent = $1;
+        $child = $2;
     }
     TWiki::UI::checkAccess( $session, $parent, undef,
                             'CHANGE', $session->{user} );
@@ -303,6 +305,15 @@ sub _createWeb {
     if( $session->{store}->webExists( $newWeb )) {
         throw TWiki::OopsException(
             'attention', def => 'web_exists', params => [ $newWeb ] );
+    }
+
+    # check a topic-web name conflict
+    if ( $parent ) {
+	if ( $session->{store}->topicExists($parent, $child) ) {
+	    throw TWiki::OopsException
+		( 'attention', def => 'topic_exists_new_web',
+		  params => [$newWeb, $parent, $child] );
+	}
     }
 
     my $webBGColor = $query->param( 'WEBBGCOLOR' ) || '';
@@ -478,6 +489,13 @@ sub rename {
                                         topic => $oldTopic,
                                         params => [ $newWeb, $newTopic ] );
         }
+        if( $store->webExists( $newWeb . '/' . $newTopic ) ) {
+	    throw TWiki::OopsException( 'attention',
+                                        def => 'web_exists_topic_rename',
+                                        web => $oldWeb,
+                                        topic => $oldTopic,
+                                        params => [$newWeb, $newTopic] );
+        }
     }
 
     TWiki::UI::checkAccess( $session, $oldWeb, $oldTopic,
@@ -633,6 +651,18 @@ sub _renameweb {
                 web => $oldWeb,
                 topic => $TWiki::cfg{WebPrefsTopicName},
                 params => [ $newWeb, $TWiki::cfg{WebPrefsTopicName} ] );
+        }
+
+        if ( $newWeb =~ m|^(.*)[./](.*?)$| ) {
+            my ($parent, $child) = ($1, $2);
+            if ( $store->topicExists($parent, $child) ) {
+                throw TWiki::OopsException(
+                    'attention',
+                    def => 'topic_exists_web_rename',
+                    web => $oldWeb,
+                    topic => $TWiki::cfg{WebPrefsTopicName},
+                    params => [ $newWeb, $parent, $child ] );
+            }
         }
 
         # Check if we have change permission in the new parent

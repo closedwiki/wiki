@@ -94,6 +94,13 @@ sub buildNewTopic {
 
     TWiki::UI::checkWritable( $session );
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'save' );
+    if ( $store->webExists( $webName.'/'.$topic ) ) {
+        throw TWiki::OopsException(
+            'attention',
+            def => 'web_exists_topic_save',
+            web => $webName,
+            topic => $topic );
+    }
 
     my $topicExists  = $store->topicExists( $webName, $topic );
 

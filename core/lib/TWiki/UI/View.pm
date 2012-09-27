@@ -87,6 +87,17 @@ sub view {
 
     my $topicExists =
       $store->topicExists( $webName, $topicName );
+    if ( !$topicExists && $store->webExists( "$webName/$topicName" ) ) {
+        # If the topic does not exist but the subweb exists, redirect to
+        # the subweb.
+        # It would be nice if we could avoid redirection.
+        # But at this point, $session initialization completed and it's
+        # cumbersome and not so safe to ammend it.
+        $session->redirect(
+            $session->getScriptUrl(1, "view", "$webName/$topicName",
+                                   $TWiki::cfg{HomeTopicName}), 1);
+        return;
+    }
 
     # text and meta of the _latest_ rev of the topic
     my( $currText, $currMeta );
