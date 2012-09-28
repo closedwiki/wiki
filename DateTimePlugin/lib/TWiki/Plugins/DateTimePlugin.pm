@@ -148,8 +148,13 @@ sub _formatDateTime {
     if ( defined $dateStr ) {
 
         # try to match long month names
-        $dateStr =~ s/($monthLongNamesReStr)/$fullMonth2IsoMonth{$1}/g;
-        $secondsSince1970 = TWiki::Time::parseTime($dateStr);
+	if ( $dateStr =~ /^\d+$/ ) {
+	    $secondsSince1970 = $dateStr;
+	}
+	else {
+	    $dateStr =~ s/($monthLongNamesReStr)/$fullMonth2IsoMonth{$1}/g;
+	    $secondsSince1970 = TWiki::Time::parseTime($dateStr);
+	}
     }
     else {
 

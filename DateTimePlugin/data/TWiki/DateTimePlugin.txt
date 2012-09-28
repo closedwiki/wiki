@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305426190" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1348819808" format="1.1" version="$Rev$"}%
 ---+!! <nop>DateTimePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -50,6 +50,8 @@ ISO dates may have a timezone specifier, either Z or a signed difference in hh:m
 &nbsp;&nbsp;&nbsp; =2001-12-31T23:59:59+01:00= %BR% \
 &nbsp;&nbsp;&nbsp; =2001-12-31T23:59Z= %BR% \
 The local timezone will be assumed. %BR%%BR% \
+Timestamp (seconds from the epoch) %BR% \
+&nbsp;&nbsp;&nbsp; =1009843199= %BR%%BR% \
 *Note: will not handle dates before 1970!* | =%<nop>DATETIME{date="2001/12/31"}%= |
 | =incdays="..."= | Increase the date by any number of days (may be a negative number) | =%<nop>DATETIME{date="31 Dec 2001" incdays="1"}%= |
 | =inchours="..."= | Increase the date by any number of hours (may be a negative number) | =%<nop>DATETIME{date="31 Dec 2001 - 07:00" format="$hours" inchours="-1"}%= |
