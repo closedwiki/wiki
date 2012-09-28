@@ -2682,13 +2682,7 @@ sub getContentMode {
     my $web = shift;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    my $session = $TWiki::Plugins::SESSION;
-    if ( $web eq $session->{webName} ) {
-        return $session->{contentMode};
-    }
-    else {
-        return ($session->modeAndMaster($web))[0];
-    }
+    $TWiki::Plugins::SESSION->getContentMode($web);
 }
 
 =pod

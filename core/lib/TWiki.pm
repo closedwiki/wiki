@@ -1021,19 +1021,24 @@ sub isValidWebName {
 =pod
 
 ---++ ObjectMethod modeAndMaster( $web )
-it returns the following hash reference such as this:
-('master', undef)
+Returns the following hash reference such as this:
+<verbatim>
+('', undef)
+</verbatim>
 
 and this:
+<verbatim>
 ('slave', { # master site data
     siteName         => 'na',
     webScriptUrlTmpl => 'http://twiki.example.com/cgi-bin//Web',
     scriptSuffix     => '',
     webViewUrl       => 'http://twiki.example.com/Web',
 })
+</verbatim>
 
 The first value is the mode of the web: either 'local', 'master', 'slave',
-or 'read-only'. The second value is defined Only when the mode is 'slave'.
+or 'read-only'. The second value is defined only when the master site is
+defined for the web.
 =cut
 
 sub modeAndMaster {
@@ -1047,6 +1052,7 @@ sub modeAndMaster {
         return @$cached
     }
     my $cacheHereToo;
+    my $masterSite;
     my %master;
     if ( my $mdrepo = $this->{mdrepo} ) {
         my $tlweb = topLevelWeb($web);
@@ -1057,25 +1063,15 @@ sub modeAndMaster {
         $cacheHereToo = $tlweb ne $web ? $tlweb : '';
         my $webRec = $mdrepo->getRec('webs', topLevelWeb($web));
         if ( $webRec ) {
-            my $masterSite = $webRec->{master};
-            if ( $masterSite ) {
+            if ( $masterSite = $webRec->{master} ) {
                 $master{siteName} = $masterSite;
-                if ( $masterSite eq $TWiki::cfg{SiteName} ) {
-                    $mode = 'master';
-                }
-                else {
-                    my $siteRec = $mdrepo->getRec('sites', $masterSite);
-                    if ( $siteRec && $siteRec->{scripturl} ) {
-                        $mode = 'slave';
-                        $master{webScriptUrlTmpl} =
-                            $siteRec->{scripturl} . '//' . $web;
-                        $master{scriptSuffix} = $siteRec->{scriptsuffix};
-                        $master{webViewUrl} = $siteRec->{viewurl} . '/' . $web
-                            if ( $siteRec->{viewurl} );
-                    }
-                    else {
-                        $mode = 'read-only';
-                    }
+                my $siteRec = $mdrepo->getRec('sites', $masterSite);
+                if ( $siteRec && $siteRec->{scripturl} ) {
+                    $master{webScriptUrlTmpl} =
+                        $siteRec->{scripturl} . '//' . $web;
+                    $master{scriptSuffix} = $siteRec->{scriptsuffix};
+                    $master{webViewUrl} = $siteRec->{viewurl} . '/' . $web
+                        if ( $siteRec->{viewurl} );
                 }
             }
         }
@@ -1087,36 +1083,31 @@ sub modeAndMaster {
     }
     else {
         my $prefs = $this->{prefs};
-        my $masterSite = $prefs->getWebPreferencesValue('MASTERSITENAME', $web);
+        $masterSite = $prefs->getWebPreferencesValue('MASTERSITENAME', $web);
         if ( $masterSite ) {
             $master{siteName} = $masterSite;
-            if ( $masterSite eq $TWiki::cfg{SiteName} ) {
-                $mode = 'master';
+            $master{webScriptUrlTmpl} =
+                $prefs->getWebPreferencesValue('MASTERWEBSCRIPTURLTMPL', $web);
+            $master{scriptSuffix} =
+                $prefs->getWebPreferencesValue('MASTERSCRIPTSUFFIX', $web);
+            $master{webViewUrl} =
+                $prefs->getWebPreferencesValue('MASTERWEBVIEWURL', $web);
+        }
+    }
+    if ( $masterSite ) {
+        if ( $masterSite eq $TWiki::cfg{SiteName} ) {
+            $mode = 'master';
+        }
+        else {
+            if ( $master{webScriptUrlTmpl} ) {
+                $mode = 'slave';
             }
             else {
-                my $webScriptUrlTmpl =  $master{webScriptUrlTmpl} =
-                    $prefs->getWebPreferencesValue(
-                        'MASTERWEBSCRIPTURLTMPL', $web
-                    );
-                if ( $webScriptUrlTmpl ) {
-                    $mode = 'slave';
-                    $master{scriptSuffix} =
-                        $prefs->getWebPreferencesValue(
-                            'MASTERSCRIPTSUFFIX', $web
-                        );
-                    $master{webViewUrl} =
-                        $prefs->getWebPreferencesValue(
-                            'MASTERWEBVIEWURL', $web
-                        );
-                }
-                else {
-                    $mode = 'read-only'
-                }
+                $mode = 'read-only'
             }
         }
     }
-    my $result = $cache->{$web} = 
-        [$mode, ($mode eq 'slave' && %master) ? \%master : undef];
+    my $result = $cache->{$web} = [$mode, %master ? \%master : undef];
     $cache->{$cacheHereToo} = $result if ( $cacheHereToo );
     return @$result;
 }
@@ -1859,7 +1850,6 @@ sub new {
 
     my ($mode, $master) = $this->modeAndMaster($this->{webName});
     $this->{contentMode} = $mode;
-    $this->{SESSION_TAGS}{READONLYWEB} = $mode eq 'read-only' ? 'on' : '';
     if ( $master ) {
         $this->{master} = $master;
         if ( $this->{mdrepo} ) {
@@ -4645,6 +4635,21 @@ sub MASTERWEBSCRIPTURL {
     my $suffix = $master->{scriptSuffix} || '';
     $url =~ s:^(.*)//:$1/$script$suffix/:;
     return $url;
+}
+
+sub getContentMode {
+    my ( $this, $web ) = @_;
+    if ( !defined($web) || $web eq '' || $web eq $this->{webName} ) {
+        return $this->{contentMode};
+    }
+    else {
+        return ($this->modeAndMaster($web))[0];
+    }
+}
+
+sub CONTENTMODE {
+    #my ( $this, $params ) = @_;
+    return $_[0]->getContentMode($_[1]->{web});
 }
 
 sub ALLVARIABLES {
