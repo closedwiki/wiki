@@ -11,8 +11,8 @@
      | ="..."= | Specify the table to retrieve | This or below is required |
      | =table="..."= | (Alternative to above) | This or above is required |
      | =separator="..."= | The separator string of records | ="$n"= (new line) |
-     | =format="..."= | Format of one record. It may contain the following items.\
-       <table>\
+     | =format="..."= | Format of one record. It may contain [[FormatTokens][the standard special tokens]] and the following items.\
+       <table class="twikiTable">\
        <tr><td width="144px"> *Item* </td><td> *Description* </td></tr>\
        <tr><td> =$_= or =$_()= </td><td> the record ID </td></tr>\
        <tr><td> =$__= or =$__()= </td> <td> The record value in the following format:%BR% <i>FIELD_NAME</i>=<i>FIELD_VALUE</i> <i>FIELD_NAME</i>=<i>FIELD_VALUE</i> ... </td></tr>\
@@ -24,7 +24,7 @@
      | =selection="..."= | The record ID to be regarded as the selected. It affects how =$marker= in the format is evaluated. | _none_ |
      | =marker="..."= | Text for =$marker= in the format if the item matches =selection= | ="selected"= |
      | =filter="..."= | The regular expression of record IDs to filter records. Matching is case-insensitive | _none_ |
-     | =exclude="..."= | Comma separated list of record IDs to be excluded | _none_ |
+     | =exclude="..."= | Comma separated list of record IDs to be excluded. You can use regular expression. If you specify Trash\d*, then Trash, Trash1, Trash2, ... are exluded but !LightTrash and !TrashBag are not excluded | _none_ |
    * Example: <code>%<nop>MDREPO{"webs" filter="^A" format="| $_ | $admin | $site |"}%</code> %BR%
      This would show the metadata of webs whose names start with A.
    * See: MetadataRepository

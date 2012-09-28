@@ -4876,35 +4876,40 @@ sub MDREPO {
     return '' unless ( $mdrepo );
     my $table = $params->{_DEFAULT} || $params->{table} || '';
     my $filter = $params->{filter} || '';
-    my $format = $params->{format} || '| $_ | $__ |';
+    my $format = expandStandardEscapes($params->{format} || '| $_ | $__ |');
     my $separator = $params->{separator};
     if ( defined($separator) ) {
-	$separator = expandStandardEscapes($separator);
+        $separator = expandStandardEscapes($separator);
     }
     else {
-	$separator = "\n";
+        $separator = "\n";
     }
     my $exclude = $params->{exclude} || '';
     my $selection = $params->{selection} || '';
     my $marker = $params->{marker} || 'selected';
-    my %isExcluded;
+    my @excludes;
     if ( $exclude ) {
-	%isExcluded = map { $_ => 1 } split(/,\s*/, $exclude);
+        for my $i ( split(/,\s*/, $exclude) ) {
+            push(@excludes, qr/^$i$/);
+        }
     }
     my @recIds = $mdrepo->getList($table);
     if ( $filter ) {
-	@recIds = grep { $_ =~ /$filter/i } @recIds;
+        @recIds = grep { $_ =~ /$filter/i } @recIds;
     }
     my @ents;
+  RECID_LOOP:
     for my $i ( sort { lc $a cmp lc $b } @recIds ) {
-	next if ( $isExcluded{$i} );
-	my $rec = $mdrepo->getRec($table, $i);
-	my $m = $i eq $selection ? $marker : '';
-	my $ent = $format;
-	$ent =~ s/\?(\w+)(.)(.*?)\2/$rec->{$1} ? $3 : ''/ge;
-	$ent =~ s/\$marker(\(\))?/$m/g;
-	$ent =~ s/\$(\w+)(\(\))?/_getMdrepoField($rec, $i, $1)/ge;
-	push(@ents, $ent);
+        for my $e ( @excludes ) {
+            next RECID_LOOP if ( $i =~ $e );
+        }
+        my $rec = $mdrepo->getRec($table, $i);
+        my $m = $i eq $selection ? $marker : '';
+        my $ent = $format;
+        $ent =~ s/\?(\w+)(.)(.*?)\2/$rec->{$1} ? $3 : ''/ge;
+        $ent =~ s/\$marker(\(\))?/$m/g;
+        $ent =~ s/\$(\w+)(\(\))?/_getMdrepoField($rec, $i, $1)/ge;
+        push(@ents, $ent);
     }
     join($separator, @ents);
 }
