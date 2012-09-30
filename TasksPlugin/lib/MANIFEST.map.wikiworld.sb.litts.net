@@ -91,6 +91,9 @@ our %selinuxTypeMap = (
     # Installation script executed by admin at installation
     wiki_install_script_t => 'bin_t:s0',
 
+    # Script used for debugging the daemon or tasks
+    wiki_debug_script_t => 'admin_home_t:s0',
+
     # SeLinux policy module definitions
     wiki_selinux_policy_t => 'admin_home_t:s0',
 
