@@ -1,0 +1,135 @@
+%META:TOPICINFO{author="X509_2fC_3dUS_2fST_3dMassachusetts_2fL_3dSouthborough_2fO_3dlitts_2enet_2fOU_3dLitt_20family_2fOU_3dNetwork_20Administration_2fCN_3dTimothe_20Litt_2femailAddress_3dtimothe_40litts_2enet" date="1348594517" format="1.1" reprev="1.3" version="1.3"}%
+%META:TOPICPARENT{name="InstalledPlugins"}%
+---+!! !IpPlugin
+
+IP Address information for TWiki
+
+%TOC%
+
+This plugin provides functions for obtaining information about IP addresses.  It is useful when you want to identify a user by IP address. 
+
+For example, you may change content if a user is on your internal network. Or you may want to display a special icon if the user is using an IPV6 address. 
+
+It will also translate host names to addresses (and vice-versa when that's possible).  Both IPV4 and IPV6 addresses are supported.
+
+---++ Syntax Rules
+
+=%<nop>IP{ address="192.0.2.100" get="attribute" range="192.0.2/24" noerror="1" numeric="1" }%=
+
+__address__ is the default argument, so __address=__ may be omitted
+
+The default __address__ is the address of the TWiki client (REMOTE_ADDR).
+
+The default attribute is __type__.
+
+All attributes return a meaningful value for both IPV4 and IPV6 addresses. 
+
+__range__ can be a comma-separated list of IPV6 address/prefixes andIPV4 address/prefixes, in any combination.  It (currently) only applies to the __is_in__ and __not_in__ attributes.
+
+By default, the __class__, __is_in__ and __not_in__ attributes return text strings.  If you are using them in !%IF or !%CALC expressions, __numeric="1"__ will return numeric codes that are easier to test.
+
+By default any errors in arguments or name resolution are returned as a %RED%red%ENDCOLOR% text string.
+
+__noerror__ can be set true if you want errors ignored.  In this case, the query is returned unmodified when errors are detected.    
+This behavior may be desirable if you'd rather display an unresolvable hostname as its IP address rather than an error string.
+But you should always test your page without __noerror__ first, so that any errors in the arguments can be fixed.
+
+Attributes:
+| *Attribute* || # |Definition     ||
+| __class__ |  |  ||Returns the class of an address       ||
+| | *IPV4* | 0 | PUBLIC |Unique, globally routable address      |
+| |^ | 1 | PRIVATE |Private networks: 0/8, 10/8, 127/8, 172.16/12, 192.168/16      |
+| |^| 2 | RESERVED | Special use addresses: 169.254/16, 192.0.2/24, 224/4, 240/5, 248/5      |
+| | *IPV6* | 3 | GLOBAL-UNICAST | Unique, globally routable host address      |
+| |^| 4 | UNIQUE-LOCAL-UNICAST | Unique, local-only routable host address      |
+| |^| 5 | LINK-LOCAL-UNICAST | Link-local, non-routable host address      |
+| |^| 6 | MULTICAST | Multicast      |
+| |^| 7 | !IPV4COMP | IPV4 compatible space ::/96      |
+| |^| 8 | !IPV4MAP | IPV4 mapped addresses ::FFFF:0:0/96      |
+| |^| 9 | LOOPBACK | Loopback address ::1/128      |
+| |^| 2 | RESERVED | Everything else      |
+| __display__ ||| Returns the address in display format. IPV6 :: notation     ||
+| __expand__ ||| Returns the expanded address. IPV6 no ::     ||
+| __hostaddress__ ||| Returns the address(es) corresponding to a hostname. Use __hostame__ instead of __address__ to specify the input if you prefer clarity.     ||
+| __hostname__ ||| Returns the hostname corresponding to the address, or the address if name unknown     ||
+| __is_in__ ||| Returns "TRUE" or "1" if __address__ is in __range__; otherwise "FALSE" or "0"     ||
+| __not_in__ ||| Returns "TRUE" or "1" if __address__ is not in __range__; otherwise "FALSE" or "0"     ||
+| __reverse__ ||| Returns the reverse zone name of an address (_in-addr.arpa_ or _ip6.arpa_)     ||
+| __type__ ||| Returns the type of address: 4 or 6 for IPV4 or IPV6 respectively     ||
+
+__is_in__ and _not_in__ are only meaningful when specified with a range.  The __address__ is compared to each item in the range to see if the item contains the __address__.  IPV4 and IPV6 addresses are considered disjoint in these comparisons; an IPV4 address will never match an IPV6 range, and vice-versa.  This is true even if the IPV6 item is !IPV4MAP or !IPV4COMP.  To check an IPV4 address against all possible aliases, the __range__ selector must have elements for IPV4 native, !IPV4MAP and !IPV4COMP.
+
+---++ Examples
+
+This table shows the results of sample uses of the %<nop>IP% variable.  The results are simulated so that they will display correctly even if you do not have the IpPlugin installed when viewing this page.
+
+| Macro call | Result | Remarks |
+| %<nop>IP% _equivalent to_ <br />%<nop>IP{ address="%<nop>REMOTE_ADDR%" get="type" }% | 6 | Your IP address is 2001:db8::444 |
+| %<nop>IP{ "192.0.2.100" get="class" }% | RESERVED  |  |
+| %<nop>IP{ "2001:DB8:0::100" get="display"}%  | 2001:db8::100 | Normalized IPV6 display |
+| %<nop>IP{ "2001:DB8::100" get="expand"}%  | 2001:0db8:0000:0000:0000:0000:0000:0100   | Expanded IPV6 address |
+| %<nop>IP{ "www.twiki.org" get="hostaddress" }% | 66.220.11.188  | IP address of www.twiki.org |
+| %<nop>IP{ "18.9.22.169" get="hostname" }% | WWW.MIT.EDU | Hostname from an IP address |
+|%<nop>IP{ "192.0.2.100" get="is_in" range="192.0.2/24" }% | TRUE | Address is in range |
+|%<nop>IP{ "2001:DB8:0::100" get="not_in" range="2001:db8::0/32" }% | FALSE | Address *is* in range |
+|%<nop>IP{ "192.0.2.100" get="reverse" }% | 100.2.0.192.in-addr.arpa. | Reverse address zone |
+|%<nop>IP{ "2001:DB8:0::100" get="reverse" }% | 0.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.||
+| <sticky>%<nop>IF{"%<nop>IP{get="is_in" range="10/8, 2001:db8::/32" numeric="1"}%=1" then="In the office" else="At home"}% </sticky> | In the office | |
+| <sticky>%<nop>IF{"%<nop>IP% = 4" then="&lt;img alt=\"IPV4 Icon\" src=\"%<nop>ATTACHURL%/IPv4-gray.png\"/>" else="&lt;img alt=\"IPV6 Icon\" src=\"%<nop>ATTACHURL%/IPv6-green.png\"/>"}%</sticky> \
+| <sticky><img alt="IPV6 Icon" src="%ATTACHURL%/IPv6-green.png"/></sticky> | Your connection type |
+
+---++ Test
+
+%IF{ "$ 'PLUGINVERSION{IpPlugin}'=\"0\"" then="---+++!! !IpPlugin is not installed and active on this wiki
+The table below will not be correct" else="---+++!! !IpPlugin plugin is installed and enabled on this wiki
+You should see your web browser's IP address and connection type below: " }%
+
+<sticky>
+| *Your IP address* | *Connection type* | *Icon* |
+| %IP{ get="display"}% | IPV%IP% | %IF{"$ IP = 4" then="<img alt=\"IPV4 Icon\" src=\"%ATTACHURL%/IPv4-gray.png\"/>"
+                                                                                else="%IF{"$ IP = 6" then="<img alt='IPV6 Ion' src='%ATTACHURL%/IPv6-green.png'/>" else='None' }%"}% |
+</sticky>
+
+---++ Plugin Settings
+
+   * Set SHORTDESCRIPTION = IP Address functions
+   * There are no other settings for this plugin. 
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * Make sure you have an up-to-date Socket (get the latest from cpan) You may need a patch - see [[https://rt.cpan.org/Public/Bug/Display.html?id=79557][This bug report]]
+   * Download the ZIP file from the Plugin Home (see below)
+   * Unzip *%TOPIC%.zip* in your twiki installation directory. Content:
+ | *File:* | *Description:* |
+ | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+ | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+ | ==pub/TWiki/%TOPIC%/IPv4-gray.png== | Sample graphic |
+ | ==pub/TWiki/%TOPIC%/IPv6-green.png== | Sample graphic |
+ | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Set the ownership of the extracted directories and files to the webserver user.
+   * Configure the Plugin: 
+      * Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+   * Test the plugin by viewing the [[TWiki.IpPlugin#Test][IpPlugin]] topic on your system and verify that the [[#Test][Test]] section indicates that !IpPlugin is installed and active.
+
+---++ Plugin Info
+
+| Plugin Author: | TWiki:Main.TimotheLitt |
+| Copyright: | © 2012, TWiki:Main.TimotheLitt |
+| License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+| Plugin Version: | 21 Dec 2012 (V1.000) |
+| Change History: | <!-- versions below in reverse order --> |
+| 24 Sep 2012: | Initial version |
+| TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+| CPAN Dependencies: | CPAN:Socket, CPAN:Net::IP |
+| Other Dependencies: | none |
+| Perl Version: | 5.8.8 |
+| [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+| Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+| Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+| Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+-- Main.TimotheLitt - 25 Sep 2012
