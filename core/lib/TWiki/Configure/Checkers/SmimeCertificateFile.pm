@@ -17,21 +17,6 @@ package TWiki::Configure::Checkers::SmimeCertificateFile;
 
 use strict;
 
-use base 'TWiki::Configure::Checker';
-
-use TWiki::Configure::Checker;
-use TWiki::Configure::Load;
-
-sub check {
-    my $this = shift;
-
-    my $certFile = $TWiki::cfg{SmimeCertificateFile} || "";
-    $certFile =~ s/%DATE%/DATE/;
-    TWiki::Configure::Load::expandValue($certFile);
-    return undef unless( $certFile );
-    my $e = !-r ( $certFile ) && "Can\'t read cert file $certFile";
-    $e = $this->ERROR($e) if $e;
-    return $e;
-}
+use base 'TWiki::Configure::Checkers::Certificate::EmailChecker';
 
 1;

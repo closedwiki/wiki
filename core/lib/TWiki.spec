@@ -1052,8 +1052,7 @@ $TWiki::cfg{WebMasterName} = 'TWiki Administrator';
 # **PATH**
 # Secure email certificate.  If you want e-mail sent by TWiki to be signed,
 # specify the filename of the administrator's X.509 certificate here, such
-# as /etc/pki/tls/certs/cert.pem.  It must be in PEM format.  You must also
-# use a mail program (not Net::SMTP) in the following settings. <em>If you
+# as /etc/pki/tls/certs/cert.pem.  It must be in PEM format.  <em>If you
 # do not want signed e-mail, leave this field blank. </em>
 $TWiki::cfg{SmimeCertificateFile} = '';
 
@@ -1062,10 +1061,16 @@ $TWiki::cfg{SmimeCertificateFile} = '';
 # specify the filename of the administrator's X.509 private key here, such
 # as /etc/pki/tls/private/key.pem.  It must be in PEM format.  <em>Be sure
 # that this file is only readable by the TWiki software; it must NOT be
-# readable by users!</em> You must also use a mail program (not Net::SMTP)
-# in the following settings. <em>If you do not want signed e-mail,
+# readable by users!  If you do not want signed e-mail,
 # leave this field blank. </em>
 $TWiki::cfg{SmimeKeyFile} = '';
+
+# **PASSWORD 30**
+# Password for secure email certificate key.  Required if the key is encrypted
+# with DES3 encryption.  Leave blank otherwise.  (Other encryption formats are not currently supported,
+# and can be converted with 
+# <i>openssl rsa -in keyfile.pem -out keyfile.pem -des3</i>
+$TWiki::cfg{SmimeKeyPassword} = '';
 
 # **COMMAND**
 # Mail program. If Net::SMTP is installed, it will be used in preference. 

@@ -13,25 +13,19 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # As per the GPL, removal of this notice is prohibited.
+
 package TWiki::Configure::Checkers::SmimeKeyFile;
 
 use strict;
 
-use base 'TWiki::Configure::Checker';
+use base 'TWiki::Configure::Checkers::Certificate::KeyChecker';
 
 use TWiki::Configure::Checker;
-use TWiki::Configure::Load;
 
 sub check {
     my $this = shift;
 
-    my $keyFile = $TWiki::cfg{SmimeKeyFile} || "";
-    $keyFile =~ s/%DATE%/DATE/;
-    TWiki::Configure::Load::expandValue($keyFile);
-    return undef unless( $keyFile );
-    my $e = !-r ( $keyFile ) && "Can\'t read key file $keyFile";
-    $e = $this->ERROR($e) if $e;
-    return $e;
+    return $this->SUPER::check( @_, '{SmimeKeyPassword}' );
 }
 
 1;

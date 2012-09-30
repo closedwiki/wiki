@@ -440,6 +440,12 @@ lib/TWiki/Configure/CSS.pm 0444
 lib/TWiki/Configure/Checker.pm 0444
 lib/TWiki/Configure/Checkers/AuthScripts.pm 0444
 lib/TWiki/Configure/Checkers/BasicSanity.pm 0444
+lib/TWiki/Configure/Checkers/Certificate.pm 0444
+lib/TWiki/Configure/Checkers/Certificate/ClientChecker.pm 0444
+lib/TWiki/Configure/Checkers/Certificate/ClientServerChecker.pm 0444
+lib/TWiki/Configure/Checkers/Certificate/EmailChecker.pm 0444
+lib/TWiki/Configure/Checkers/Certificate/KeyChecker.pm 0444
+lib/TWiki/Configure/Checkers/Certificate/ServerChecker.pm 0444
 lib/TWiki/Configure/Checkers/CGISetup.pm 0444
 lib/TWiki/Configure/Checkers/ConfigurationLogName.pm 0444
 lib/TWiki/Configure/Checkers/DataDir.pm 0444
@@ -1220,7 +1226,9 @@ templates/viewtopicactionbuttons.tmpl 0444
 tools/extender.pl 0444
 tools/geturl.pl 0555
 tools/rewriteshbang.pl 0555
+tools/runstatistics 0555
 tools/tick_twiki.pl 0555
+tools/twiki_maintenance 0555
 twiki_httpd_conf.txt 0444
 working/tmp/README 0444
 working/registration_approvals/README 0444

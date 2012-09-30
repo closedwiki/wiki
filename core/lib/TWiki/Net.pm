@@ -414,6 +414,53 @@ sub _slurpFile( $ ) {
 }
 
 # =======================================
+sub _smimeSignMessage {
+    my $this = shift;
+
+    if( $TWiki::cfg{SmimeCertificateFile} && $TWiki::cfg{SmimeKeyFile} ) {
+	require Crypt::SMIME;
+
+	my $smime = Crypt::SMIME->new();
+
+        my $key = _slurpFile( $TWiki::cfg{SmimeKeyFile} );
+        if( exists $TWiki::cfg{SmimeKeyPassword} &&
+            length $TWiki::cfg{SmimeKeyPassword} &&
+            $key =~ /^-----BEGIN RSA PRIVATE KEY-----\n(?:(.*?\n)\n)?/s ) {
+            my %h = map { split( /:\s*/, $_, 2 ) } split( /\n/, $1 ) if( defined $1 );
+            if( $h{'Proc-Type'} && $h{'Proc-Type'} eq '4,ENCRYPTED' &&
+                $h{'DEK-Info'} && $h{'DEK-Info'} =~ /^DES-EDE3-CBC,/ ) {
+
+                require Convert::PEM;
+                my $pem = Convert::PEM->new( Name => 'RSA PRIVATE KEY',
+                                             ASN  => qq(
+                   RSAPrivateKey SEQUENCE {
+                      version INTEGER, n INTEGER, e INTEGER, d INTEGER,
+                      p INTEGER, q INTEGER, dp INTEGER, dq INTEGER,
+                      iqmp INTEGER
+                   }                                   ) );
+                $key = $pem->decode( Content => $key,
+                                     Password => $TWiki::cfg{SmimeKeyPassword});
+                unless( $key ) {
+                    $this->{session}->writeWarning( "ERROR: Unable to decrypt " .
+                         $TWiki::cfg{SmimeKeyFile} . ": " . $pem->errstr . "\n" )
+                      if ($this->{session});
+                    return;
+                }
+                $key = $pem->encode( Content => $key );
+            }
+        }
+        eval {
+            $smime->setPrivateKey( $key, _slurpFile( $TWiki::cfg{SmimeCertificateFile} ) );
+        }; if( $@ ) {
+            $@ =~ /^(.*?\n).*\z/s; # Any useful error information is on the first line.
+             $this->{session}->writeWarning( "Key or Certificate problem sending email: " . ($1 || $@ . "\n") )
+               if ($this->{session});
+            return;
+        }
+	$_[0] = $smime->sign( $_[0] );
+    }
+}
+# =======================================
 sub _sendEmailBySendmail {
     my( $this, $text ) = @_;
 
@@ -422,14 +469,8 @@ sub _sendEmailBySendmail {
     $header =~ s/([\n\r])(From|To|CC|BCC)(\:\s*)([^\n\r]*)/$1.$2.$3._fixLineLength($4)/geois;
     $text = "$header\n\n$body";   # rebuild message
 
-    if( $TWiki::cfg{SmimeCertificateFile} && $TWiki::cfg{SmimeKeyFile} ) {
-	require Crypt::SMIME;
+    $this->_smimeSignMessage( $text );
 
-	my $smime = Crypt::SMIME->new();
-
-	$smime->setPrivateKey( _slurpFile( $TWiki::cfg{SmimeKeyFile} ), _slurpFile( $TWiki::cfg{SmimeCertificateFile} ) );
-	$text = $smime->sign( $text );
-    }
     open( MAIL, '|'.$TWiki::cfg{MailProgram} ) ||
       die "ERROR: Can't send mail using TWiki::cfg{MailProgram}";
     print MAIL $text;
@@ -449,6 +490,8 @@ sub _sendEmailByNetSMTP {
     $header =~ s/\nBCC\:[^\n]*//os;  #remove BCC line from header
     $header =~ s/([\n\r])(From|To|CC|BCC)(\:\s*)([^\n\r]*)/$1 . $2 . $3 . _fixLineLength( $4 )/geois;
     $text = "$header\n\n$body";   # rebuild message
+
+    $this->_smimeSignMessage( $text );
 
     # extract 'From:'
     my @arr = grep( /^From: /i, @headerlines );
