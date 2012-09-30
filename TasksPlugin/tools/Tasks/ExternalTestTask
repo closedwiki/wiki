@@ -1,0 +1,125 @@
+#!/usr/bin/perl -d
+# -*- mode: CPerl; -*-
+# Copyright (c) Tmothe Litt <litt at acm dot org>
+
+# To debug, include -d in the #! string
+# Requires Daemon to be configured for task debugging.
+
+use strict;
+use warnings;
+
+# Sample external task that uses the daemon API
+
+# It is advisable to use a unique package name since task names are always
+# qualified by the package that create them.
+
+package MyExternalTask;
+
+use TWiki::Tasks::Api;
+
+# Any output on STDOUT and STDERR will be e-mailed.
+# They both go to the same file, so if you care about order, you
+# may want to set autoflush.
+
+select STDERR; $| = 1;
+select STDOUT; $| = 1;
+
+# For full tracebacks on API exceptions, enable verbose Carping
+# Recommended only for debugging.
+#use Carp qw/verbose/;
+
+use Data::Dumper;
+$Data::Dumper::Sortkeys = 1;
+print Dumper(\%INC);
+# Show arguments:
+
+print "Invokation: $0 ", join( ' ', @ARGV ), "\n\n";
+
+# Test warn's output (to STDERR) - Note that the debugger will normally trap WARN output
+# and display it on the debugger's terminal.
+
+warn "WARN: Sample warning string, called";
+
+# Get a handle on this task - e.g. to cancel or interrogate
+
+my $self = TWiki::Func::getTaskHandle( $ARGV[0] );
+
+# Say a little about ourself - testing various aspects of the API mechanisms.
+
+my $trigger = $self->trigger;
+print "Running as a $trigger-triggered task in the ", $self->queue, " queue\n";
+if( $trigger eq 'config' ) {
+    print "Items are: ", join( ', ', $self->items ), "\n";
+} elsif( $trigger eq 'schedule' ) {
+    print "Schedule is: ", $self->schedule, "\n", 
+          "Next runtime is: ", scalar( localtime $self->nextRuntime ), "\n";
+} elsif( $trigger =~ /^(?:directory|file)$/ ) {
+    print ucfirst($trigger), ": ", $self->file, ", Events: ", join( ', ', $self->monitor ), "\n";
+} elsif( $trigger eq 'time' ){
+    print "Runtime is: ", scalar( localtime $self->nextRuntime ), " (one-time)\n";
+} else {
+    print "And I have nothing to add\n";
+}
+
+# Create a new task - note that the sub will run (as a fork) in the Daemon,
+# so any 'require'd files in this task will NOT be present (unless by accident.)
+
+my $newtask = TWiki::Func::newTask( 
+				   name => "ExternalTask0",
+				   trigger => 'time',
+				   runin => 90,
+				   sub => sub {
+				       print "[O] External time task 0a ran\n";
+				       print STDERR "[E] External time task 0a ran\n";
+				       return 0;
+				   },
+				   queue => 'External_Queue', );
+
+eval {
+    my $newtask2 = TWiki::Func::newTask( 
+					name => "ExternalTask0",
+					trigger => 'time',
+					runin => 90,
+					sub => sub {
+					    print "[O] External time task 0b ran, but should not have\n";
+					    print STDERR "[E] External time task 0b ran, but should not have\n";
+					    return 0;
+					},
+					queue => 'External_Queue', );
+};
+if( $@ ) {
+    print "NewTask2: Got expected fault: $@";
+} else {
+    print "NewTask2: Duplicate task name creation succeeded, but should not have!\n";
+}
+
+# Show the task handle and test STDERR output
+
+print STDERR Dumper( $newtask );
+
+# Test an inherited  method call and getting a handle from a (short) name
+
+my $handle = TWiki::Func::getTaskHandle( $newtask->name );
+
+# Return the class of the *real* object
+
+my $class = $newtask->class;
+
+# Test an instance method call unique to time-based objects
+
+my $nextrun = $handle->nextRuntime;
+
+# Test the  call to return all tasks
+
+my @tasks = TWiki::Func::getTaskList( owner => '*' );
+my $tasknum = TWiki::Func::getTaskList( owner => '*' );
+
+# Print results to STDOUT
+
+print Dumper( $newtask, $handle, $class, scalar( localtime $nextrun), $tasknum, \@tasks, \%INC );
+
+# Note: if anything 'die'd, exit status will be 255
+
+exit 0;
+
+__END__

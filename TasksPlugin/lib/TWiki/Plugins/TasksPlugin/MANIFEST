@@ -1,0 +1,179 @@
+# Copyright (C) 2011 Timothe Litt <litt at acm dot org>
+# License is at end of file.  
+# Removal of Copyright and/or License prohibited.
+
+# *** Edit only the MANIFEST.master file; all other version are auto-generated ***
+#
+
+# DEVELOP_ONLY: This copy of MANIFEST is a developer's copy, which includes files used for development.
+# DEVELOP_ONLY: Use Install.pl genkit -M to extract a local copy of MANIFEST to use with pseudo-install when this file is edited.
+# DEVELOP_ONLY: This will include the DEVELOP_ONLY files.
+# The LOCAL__ONLY files will be included as well.
+
+# Release and install manifest for TasksPlugin
+# This file controls both the kit build for release and the Install.pl
+# post-installation setup utility.
+#
+# The ##x lines are interpreted by Install.pl
+# ##S establishes the SeLinux context label (mapped before application) for subsequent files.
+#     '-' will leave the label unchanged.  Ignored if SeLinux is inactive.
+# ##U establishes the user.grop (again, mapped before application) owner for subsequent files.
+# ##D Defines directories (same fields as regular files)
+#
+# Lines contain 3 fields:  filepath (relative to wiki root), permissions, description
+# Only filepath is required.  permissions default based on filename, and may be modified by
+# the Install.pl script.  See Install.pl --help for details.
+#
+# It should NOT be necessary to modify this file locally; Install.pl provides options
+# for applying machine, site and distribution-specific policies.  Please report any oversights.
+
+# Lines marked DEVELOP_ONLY (including this one) and files so-tagged are removed from the copy of this file stored in the kit.
+
+# LOCAL__ONLY is for local policy specific to a given developer's system, and won't be included in the Developer's kit.
+# These files need to be listed in the MANIFEST for pseudo-install to work.
+
+##U webserverUser.webserverGroup
+
+##S -
+##D tools/Tasks 0775 
+
+##S wiki_selinux_policy_t
+##U rootUser.rootGroup
+tools/Tasks/localWiki.fc 0640 Selinux policy file
+tools/Tasks/localWiki.if 0640 Selinux policy file
+tools/Tasks/localWiki.te 0640 Selinux policy file
+
+##U webserverUser.webserverGroup
+
+##S wiki_topic_t
+data/TWiki/TasksPlugin.txt 0664 Documentation
+
+##S wiki_perlmod_t
+lib/MANIFEST.map.wikiworld.sb.litts.net 0444 Mapping of MANIFEST permissions to wikiworld's policy
+lib/TWiki/Configure/Checkers/CleanupSchedule.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Certificate.pm 0444 Perl module
+
+##D lib/TWiki/Configure/Checkers/Certificate 0775 
+lib/TWiki/Configure/Checkers/Certificate/ClientChecker.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Certificate/EmailChecker.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Certificate/KeyChecker.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Certificate/ServerChecker.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Certificate/ClientServerChecker.pm 0444 Perl module
+
+##D lib/TWiki/Configure/Checkers/Tasks 0775 
+lib/TWiki/Configure/Checkers/Tasks/AdministratorEmail.pm 044 Perl module
+lib/TWiki/Configure/Checkers/Tasks/DaemonClientCertificate.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/DaemonClientKeyPassword.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/DaemonClientKey.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/DebugTrustedHost.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/FileMonitor.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/RegExpChecker.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/ScheduleChecker.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/StatusServerCAFile.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/StatusServerCAPath.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/StatusServerCertificate.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/StatusServerCheckCRL.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/StatusServerCiphers.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/StatusServerClientIssuer.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/StatusServerClientSubject.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/StatusServerCrlFile.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/StatusServerKeyPassword.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/StatusServerKey.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/StatusServerProtocol.pm 0444 Perl module
+lib/TWiki/Configure/Checkers/Tasks/StatusServerVerifyClient.pm 0444 Perl module
+
+lib/TWiki/Configure/TASKS.pm 0444 Perl module
+lib/TWiki/Configure/Types/SCHEDULE.pm 0444 Perl module
+
+# ####################################################################################
+# Required patches - part of TWiki 5.1.0 and available from
+#  http://twiki.org/p/pub/Codev/ConfigureSupportForTaskFramework/tfwconfigure.patch
+#
+#lib/TWiki/Configure/UI.pm 0444 Patched core module
+#lib/TWiki/Configure/Valuer.pm 0444 Patched core module
+#
+# ####################################################################################
+
+lib/TWiki/Configure/UIs/TASKS.pm 0444 Perl module
+
+lib/TWiki/Tasks.pm 0444 Perl module
+
+##D lib/TWiki/Tasks 0775 
+lib/TWiki/Tasks/Api.pm 0444 Perl module
+lib/TWiki/Tasks/CGI.pm 0444 Perl module
+lib/TWiki/Tasks/ConfigTrigger.pm 0444 Perl module
+# Daemon below to simplify selinux
+lib/TWiki/Tasks/DebugServer.pm 0444 Perl module
+lib/TWiki/Tasks/Execute.pm 0444 Perl module
+
+##D lib/TWiki/Tasks/Execute 0775 
+lib/TWiki/Tasks/Execute/ApiServer.pm 0444 Perl module
+lib/TWiki/Tasks/Execute/Rpc.pm 0444 Perl module
+lib/TWiki/Tasks/Execute/RpcHandle.pm 0444 Perl module
+
+lib/TWiki/Tasks/GenericCx.pm 0444 Perl module
+lib/TWiki/Tasks/GenericServer.pm 0444 Perl module
+lib/TWiki/Tasks/HttpCx.pm 0444 Perl module
+lib/TWiki/Tasks/Globals.pm 0444 Perl module
+lib/TWiki/Tasks/HttpServer.pm 0444 Perl module
+lib/TWiki/Tasks/HttpsServer.pm 0444 Perl module
+lib/TWiki/Tasks/Internal.pm 0444 Perl module
+lib/TWiki/Tasks/Logging.pm 0444 Perl module
+lib/TWiki/Tasks/Param.pm 0444 Perl module
+lib/TWiki/Tasks/StatusServer.pm 0444 Perl module
+lib/TWiki/Tasks/Startup.pm 0444 Perl module
+lib/TWiki/Tasks/Schedule.pm 0444 Perl module
+lib/TWiki/Tasks/ScheduleTrigger.pm 0444 Perl module
+lib/TWiki/Tasks/TimeTrigger.pm 0444 Perl module
+lib/TWiki/Tasks/Watchfile.pm 0444 Perl module
+
+##D lib/TWiki/Tasks/Watchfile 0775 
+lib/TWiki/Tasks/Watchfile/Inotify.pm 0444 Perl module
+lib/TWiki/Tasks/Watchfile/Polled.pm 0444 Perl module
+
+##D lib/TWiki/Tasks/Tasks 0775 Plugin task drivers
+lib/TWiki/Tasks/Tasks/EmptyTask.pm 0444 Perl module
+lib/TWiki/Tasks/Tasks/EmptyTask.spec 0644 Configuration data
+
+lib/TWiki/Tasks/Tasks/FrobulatorTask.spec 0644 Configuration data DEVELOP_ONLY
+lib/TWiki/Tasks/Tasks/TestTask.pm 0444 Test task DEVELOP_ONLY
+
+lib/TWiki/Tasks/TelnetCx.pm 0444 Perl module
+lib/TWiki/Tasks/TelnetServer.pm 0444 Perl module
+
+lib/TWiki/Plugins/TasksPlugin.pm 0444 Perl module
+
+##D lib/TWiki/Plugins/TasksPlugin 0775 
+lib/TWiki/Plugins/TasksPlugin/Config.spec 0644 Configuration data
+lib/TWiki/Plugins/TasksPlugin/DEPENDENCIES 0444 List of all files in distribution
+lib/TWiki/Plugins/TasksPlugin/MANIFEST 0444 List of all files in distribution
+lib/TWiki/Plugins/TasksPlugin/MANIFEST.map.fedora 0444 Mapping of MANIFEST permissions to the fedora distribution
+lib/TWiki/Plugins/TasksPlugin/README 0444 Installation instructions
+
+lib/TWiki/Plugins/TasksPlugin/build.pl 0554 Standard build script
+
+##S wiki_unconfined_script_t
+lib/TWiki/Tasks/Daemon 0555 Perl module
+
+##S wiki_install_script_t
+tools/Tasks/Install.pl 0554 Installation script
+
+##S wiki_perlmod_t
+tools/Tasks/ExternalTestTask 0554 Perl module DEVELOP_ONLY
+
+# ###############################################################
+#                  End of manifest                              #
+# ###############################################################
+
+# This is an original work by Timothe Litt.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at
+# http://www.gnu.org/copyleft/gpl.html

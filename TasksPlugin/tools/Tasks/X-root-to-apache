@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "Authorizing apache to use root's X display"
+echo "Also, be sure to sudo -u apache to run the daemon itself under the debugger."
+echo "Otherwise it will fork before the debugger gets control"
+
+chcon -t xauth_home_t ~apache/.Xauthority
+chcon -t user_home_t ~apache
+chown apache:apache ~apache 
+xauth -f ~apache/.Xauthority merge ~root/.Xauthority
+chown root:root ~apache
+chcon -t httpd_sys_content_t ~apache ~apache/.Xauthority
+chown root:apache /var/www/.Xauthority
+chmod g+r /var/www/.Xauthority
+exit

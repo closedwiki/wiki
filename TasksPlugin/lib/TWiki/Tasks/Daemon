@@ -1,0 +1,972 @@
+#!/usr/bin/perl 
+#-wd
+# -*- mode: CPerl; -*-
+#*/usr/bin/perl -wd
+#
+# TWiki off-line task management framework addon for the TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+my $COPYRIGHT = "Copyright (C) 2011 Timothe litt <litt at acm dot org>";
+#
+# License is at end of module and can be displayed with the LICENSE command..
+# Removal of Copyright and/or License prohibited.
+
+our $VERSION = '4.0-656';
+
+=pod
+
+---+ Task managment daemon, startup and CGI base
+
+This file provides the task management daemon, its startup script, CGI and command line management interface.
+
+   * As a daemon, it runs detached and schedules off-line tasks.
+   * As a startup script, it starts a copy of itself at boot time, and provides the usual daemon management commands.
+   * As a CGI script, it provides web-based startup and status to TWiki administrators.  This allows any TWiki administrator
+  to (re) start the daemon without installing it as a system startup script (and without system administrator privileges.
+   * Additional command line options allow some control of task scheduling and status, primarily for scripted system
+  management tools.
+
+Because of these multiple personalities, this file is primarily a shell that establishes the necessary environment, dynamically
+loading most modules on demand.  Note that this file must be executable, may not be owned by or in the root group, and will
+run under the UID/GID that owns it (setuid not required).
+
+User documentation is available as a TWiki page in the distribution.
+
+Debugging the daemon can be tricky, especially because it may re-exec itself to run under the required UID/GID.
+A recommended command to start in the debugger is =sudo -u apache perl -d core/bin/TaskDaemon -dfv0 start=
+
+=cut
+
+# Structured "comments" defining startup script requirements
+
+### BEGIN INIT INFO
+# Provides: TWikiTaskDaemon
+# Required-Start: $local_fs $network $named $portmap $remote_fs $syslog $time
+# Should-Start: httpd
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: TWiki daemon controlling off-line tasks
+# Description: TWiki tasks daemon manages TWiki activities that \
+#              run independently of the webserver, such as \
+#              periodic file maintenance and cleanup.
+### END INIT INFO
+
+# ###
+# chkconfig: 2345 90 10
+# description: TWiki daemon controlling off-line tasks
+# ###
+
+use warnings;
+use strict;
+
+use Cwd qw/getcwd realpath/;
+use Errno;
+use FindBin;
+use Getopt::Std;
+   $Getopt::Std::STANDARD_HELP_VERSION = 1;
+use File::Basename;
+use File::Spec;
+
+=for debugging
+
+N.B. Debugging this code is extremely tricky, as it involves the guts of X and selinux.
+The best magic known is to first run the following script to update your X-windows magic cookie.
+Then, run the daemon with -d in the #! line, and be sure to run it sudo -u apache.
+
+#!/bin/bash
+
+echo "Authorizing apache to use root's X display"
+echo "Doesn't work and I don't have the energy to fix"
+echo "Also, be sure to sudo -u apache to run the daemon itself under the debugger.
+
+chcon -t xauth_home_t ~apache/.Xauthority
+chcon -t user_home_t ~apache
+chown apache:apache ~apache
+xauth -f ~apache/.Xauthority merge ~root/.Xauthority
+chown root:root ~apache
+chcon -t httpd_sys_content_t ~apache ~apache/.Xauthority
+
+exit
+
+=cut
+
+# ---++ StaticMethod diagnosePathAndDie( $msg, $fileaccess, $path, $realpath )
+#
+# Inspects a path that has failed a service (e.g. chdir) and if the cause was EACCES attempts to determine
+# which path element caused the fault.
+#
+#   * =$msg= - Base error message string (no \n)
+#   * =$fileaccess= - Attempted access: false for directory, 'r' or 'x' if file specified
+#   * =$path= - Path that failed
+#   * =$realpath= = realpath() of failing path (optional unless no longer accessible due to priv. drop)
+#
+# exit()s - does not return
+
+sub diagnosePathAndDie {
+    my $msg = shift;
+    my $fileaccess = shift;
+    my $path = shift;
+    my $realpath = shift;
+
+    $msg .= ": $!\n";
+    die $msg unless( $!{EACCES} );
+
+    # Because we may have changed user/group and relative paths are used, permissions problems can be a bit confusing.
+    # Try to diagnose where things are broken.
+
+    my $user = getpwuid( $> ) || $>;
+    my $group = getgrgid( $) || $) );
+
+    my $found;
+
+    my @paths = $path;
+    $realpath = realpath( $path ) unless( defined $realpath );
+    push @paths, $realpath if( $realpath && $realpath ne $path );
+
+PATH:
+    foreach my $lpath (@paths) {
+        my( $vol, $dir, $file ) = File::Spec->splitpath( File::Spec->rel2abs( $lpath ), !$fileaccess );
+
+        # Walk the path components, stopping at the first problem
+
+        if( $vol && !-x $vol ) {
+            $msg .= "Volume $vol is not executable by $user.$group\n";
+        } elsif( $dir ) {
+            my @dirs;
+            foreach my $dir ( File::Spec->splitdir( $dir )) {
+                push @dirs, $dir;
+                my $thisdir = File::Spec->catdir( $vol, File::Spec->catdir( @dirs ) );
+                unless( -x $thisdir ) {
+                    $msg .= "Directory $thisdir is not executable by $user.$group\n";
+                    $found = 1;
+                    next PATH;
+                }
+                $msg .= "Directory $thisdir is OK\n" if( $ENV{TWIKI_DEBUG} );
+            }
+        }
+        if( $fileaccess ) {
+            if( $fileaccess eq 'r' && !-r $lpath ) {
+                $msg .= "File $lpath is not readable\n";
+                $found = 1;
+                next PATH;
+            } elsif( $fileaccess eq 'x' && !-x $lpath ) {
+                $msg .= "File $lpath is not executable\n";
+                $found = 1;
+                next PATH;
+            }
+            $msg .= "File $lpath is OK\n" if( $ENV{TWIKI_DEBUG} );
+        }
+    }
+    $msg .= "Unable to determine cause\n" unless( $found );
+
+    die $msg;
+}
+
+# **********************************
+#
+# *** Note: no TWiki:: modules can be required until after the following BEGIN block, which modifies @INC
+#
+# **********************************
+
+# Initialization
+
+my( $wd, $bindir, $script );
+
+BEGIN {
+    # Security before reading any configuration file
+
+    # Security enforcement for system startup
+    # Assume owning uid, gid of script is webserver user
+    #
+    # These will fail if we are an unprivileged user
+
+    # Find this script's location
+    $script = File::Spec->catfile( $FindBin::Bin, $FindBin::Script );
+
+    if( $> == 0 || $< == 0 ) {
+	# Make sure we are running under the specified user and group.
+
+        # Evaluate realpath before dropping privs in case of permissions problems.
+
+        my $scriptRP = realpath( $script ) || $script;
+
+	# Drop ability to raise privs
+	#
+	# Get webserver user and group
+	my( $uid,$gid ) = (stat $scriptRP)[4,5];
+	die "$script  owner or group is root\n" unless( $uid && $gid );
+
+        # Get group name for PTY access; allow it.
+        my $ttyGroup = $TWiki::cfg{Tasks}{DebugTtyGroup};
+        if( defined $ttyGroup && length $ttyGroup ) {
+            $ttyGroup = getgrnam( $ttyGroup );
+        }
+        if( defined $ttyGroup && length $ttyGroup ) {
+            $ttyGroup = " $ttyGroup";
+        } else {
+            $ttyGroup = '';
+        }
+	$! = 0;
+	# Raise privs so we can modify
+	$> = $<;
+	die "Can't set user $<: $!" if( $! );
+	# Set real to server
+	$( = $gid;
+	die "Can't set group $gid: $!" if( $! );
+	# Drop extra groups
+	$) = "$gid $gid$ttyGroup";
+	die "Can't set group $gid$ttyGroup: $!" if( $! );
+	# Set real to server
+	$< = $uid;
+	die "Can't set user $uid: $!" if( $! );
+	# Finally, set effective to server
+	$> = $uid;
+	die "Can't set user $uid: $!" if( $! );
+
+	# re-exec ourself as unpriv'd user to avoid implict taint mode
+        no warnings 'exec';
+	{ exec $script ($0, @ARGV); }
+	diagnosePathAndDie "Can't exec $script", 'x', $script, $scriptRP;
+    }
+
+    die "Must not run under root - check $script ownership?\n"
+      if( $> == 0 || $< == 0 || $(+0 == 0 || $)+0 == 0 );
+
+    # Obtain configuration - avoid using yet another file
+    #
+    # Required for running as an init script
+
+    eval {
+	# Find the desired twiki libraries
+	# This also supports sites that run multiple version under one webserver
+	#
+	# Setup:
+	#  This script may be the target of a softlink (e.g. from /etc/init.d)
+	#  A soflink of <$0>_bin points to the location of setlib.cfg
+	#
+	# For a second wiki:
+	#  hardlink from this script to another name - e.g. TaskDaemon2
+	#  Add another softlink from /etc/init.d/ to the alternate name e.g. TaskDaemon2
+	#  Add softlink from the alternate name to the alternate setlib.cfg directory
+	#
+	# Note the *HARD* link prevents the need to make another copy of this script.
+	# You can't use a softlink.  (If your system doesn't support hard links, make a copy.)
+	#
+	# Repeat as desired - or reqired.  This is all handled for you if you use the Install.pl script.
+
+	# But first, by request, check cwd for setlib.cfg.  If it's there, just use it.
+	# This is compatible with the old tick_twiki.pl approach, but it won't work for
+	# startup without a wrapper script.  C'est la guerre.
+
+	if( -r './setlib.cfg' ) {
+	    $bindir = File::Spec->rel2abs( '.' );
+	} else {
+	    # Find the directory containing setlib.cfg
+	    # Try to follow scriptname_bin in case we are a startup script
+	    # Then try SVN/checkout's path to main directory
+	    # Then try scriptdir ../bin - usual installed layout.
+	    my $scd = $FindBin::RealBin;
+	    my $scr = File::Spec->catfile( "$scd", $FindBin::RealScript );
+	    $bindir = -d "${scr}_bin" && realpath( "${scr}_bin" ) || 
+		      -e "$scd/../../../../core/bin/setlib.cfg" &&
+			 "$scd/../../../../core/bin" ||
+	              -e "$scd/../bin/setlib.cfg" && "$scd/../bin" ||
+			die "Can't find setlib.cfg, please install a softlink from ${scr}_bin to your installation's " .
+                            "twiki/bin directory\n" ;
+	    # Now find the root directory = 1 above the bindir
+	    my $rootdir = File::Spec->abs2rel( dirname( $bindir ) );
+
+	    $rootdir =~ /^(.*)$/;
+	    $rootdir = $1;
+
+	    $script = File::Spec->rel2abs( $script );
+	    $bindir = File::Spec->rel2abs( $bindir );
+	    chdir( $rootdir ) or
+                diagnosePathAndDie( "Can't chdir to $rootdir", 0, $rootdir );
+	    $script = File::Spec->abs2rel( $script );
+	    $bindir = File::Spec->abs2rel( $bindir );
+
+	    unshift @INC, basename( $bindir ) ;
+	}
+    }; if( $@ ) {
+	die "Init: $@\n";
+    }
+    $bindir =~ m/^(.*)$/;
+    $bindir = $1;
+
+    $wd = getcwd;
+
+       # **** Original TWiki code ****
+    unshift @INC, '.';
+    require "$bindir/setlib.cfg";
+    # **** End original TWiki code ****
+}
+
+use TWiki::Tasks::Globals qw/:main/;
+$cwd = $wd;                         # Unable to require Globals until after $cwd determined.
+
+$forkedTask = 1;                     # Ensure that all cli commands know they're not in the Daemon
+
+use TWiki::Func;
+
+sub HELP_MESSAGE;
+
+$ENV{PATH} = $TWiki::cfg{SafeEnvPath};
+
+$startTime = time;
+
+my $umask = $TWiki::cfg{Tasks}{Umask};
+$umask = 007 unless( defined $umask );
+umask( $umask );
+
+# Setup some environment symbols that forked processes may need, including debuggers.
+# Normally setup by a shell, they may not be present under a webserver (or init)
+# Or they may have changed if a uid change occured.  Simplest is to always setup.
+
+my @user = getpwuid( $> );
+if( @user ) {
+    @ENV{'USER','USERNAME','LOGNAME'} = ($user[0]) x 3;
+    $ENV{HOME} = $user[7];
+} else {
+    die "Unable to get user information for $>: $!\n";
+}
+
+# ##################################################
+#
+# Command line processing - startup, status, etc
+#
+# ##################################################
+
+
+# Save options in case of restart
+
+my @restartARGV = @ARGV;
+
+my $sws = 'dv:flxgr:R:p:q';
+getopts( $sws, \%cliOptions );
+    # -d enable debugging
+    #  -v Verbose - loglevel
+    # -f Run in foreground even if not debugging.
+    # -l Don't run login cleanup
+    # -x Don't run expired lease cleanup
+    # -g Don't run plugin cleanup
+    # -p: pidfile spec
+    # -r server was restarted (internal flag)
+    # -R restart reply type (internal flag)
+
+# Daemon can be started with 'restart', 'condrestart', etc.
+# Self-restart expects to resume with a 'start' command.  getopts has left @ARGV with just the commands.
+
+@restartARGV = ( @restartARGV[0 .. ($#restartARGV - @ARGV)], 'start' );
+
+
+$debug = 0;
+
+$cliOptions{v} = 1 unless( exists $cliOptions{v} ); # 1 = WARN, but don't want to use Logging just for that.
+
+if( $cliOptions{d} ) {
+    $debug = 1;
+}
+$cliOptions{p} ||= ( $TWiki::cfg{WorkingDir} . '/' || 'working/' ) . 'TaskDaemon.pid';
+
+@restartFds = split( ',', $cliOptions{r} ) if( $cliOptions{r} );
+
+
+# ##################################################
+#
+# See if running as a CGI script - Web-based startup & control
+#
+# ##################################################
+
+if( exists $ENV{GATEWAY_INTERFACE} ) {
+    require TWiki::Tasks::CGI;
+
+    exit TWiki::Tasks::CGI::dispatch( $script) ;
+}
+
+# ##################################################
+#
+# CLI management commands (/etc/init.d ... )
+#
+# ##################################################
+
+if( -t STDOUT && !$cliOptions{q} ) {
+    print "$COPYRIGHT\nFor license terms use the $FindBin::Script LICENSE command.\n\n";
+}
+
+# Dispatch commands
+
+my $cmd = $ARGV[0];
+
+if( !$cmd || $cmd eq 'condstart' ) {
+    exit start() unless( daeok() );
+    exit 0;
+} elsif( $cmd eq 'status' ) {
+    exit status( @ARGV[1..$#ARGV] );
+} elsif( $cmd eq 'start' ) {
+    exit start();
+} elsif( $cmd eq 'stop' ) {
+    exit stop( @ARGV[1..$#ARGV] );
+} elsif( $cmd eq 'restart' ) {
+    exit restart( @ARGV[1..$#ARGV] );
+} elsif( $cmd =~ m/^(?:suspend|resume)$/ ) {
+    exit schedule( $cmd, @ARGV[1..$#ARGV] );
+} elsif( $cmd =~ m/^(?:condrestart|try-restart)$/ ) {
+    exit 1 unless( daeok() );
+    exit stop() || start();
+} elsif( $cmd eq 'help' ) {
+    print "Use --help for help\n";
+    exit 0;
+} elsif( $cmd eq 'version' ) {
+    print "Version $VERSION\n";
+    exit 0;
+} elsif( $cmd =~ /^license$/i ) {
+    exit license();
+} else {
+    print "Unrecognized command, use --help for assistance\n";
+    exit 3;
+}
+exit 99;
+
+# **************** End of main program ***************
+
+# ---++ StaticMethod status( @qualifiers ) -> $status
+# Process status command
+#
+# Report status, optionally requesting detail from daemon
+#
+# Standard startup script command
+#
+# argument = 'list' or 'debug' for extended daemon status
+#
+# Returns standard exit status
+
+sub status {
+    my @args = @_;
+
+    if( (my $pid = daeok()) || $debug ) {
+	$pid ||= 'debug';
+	print "Daemon is running ($pid)\n";
+	if( @args && $args[0] =~ /^(brief|list|debug)$/i ) {
+	    print statusListing( ($ENV{TWIKI_TASKS_CGICMD}? 'text' : (-t STDOUT? 'text' : 'html')), $1 );
+	}
+	return 0;
+    } else {
+	print "Daemon is stopped\n";
+	return 1;
+    }
+}
+
+# ---++ StaticMethod start() -> $status
+# Process start command
+#
+# Start daemon process
+#
+# May be run as a command (from a shell)
+# Or as an init script at boot time
+# Or under a webserver (management form's 'start' button)
+#
+# Standard startup script command
+#
+# arguments none
+#
+# Returns standard exit status
+
+sub start {
+    if( !@restartFds && (my $pid = daeok()) && !$debug ) {
+	$pid ||= 'debug';
+	print "Daemon is already running ($pid)\n";
+	return 0;
+    }
+
+    $forkedTask = 0;
+
+    require TWiki::Tasks::Startup;
+
+    return TWiki::Tasks::Startup::startCmd();
+}
+
+# ---++ StaticMethod stop( @qualifiers ) -> $status
+# Process stop command
+#
+# stop daemon process
+#
+# Standard startup script command
+#
+# argument = 'abort' do not wait for running tasks to exit (sends SIGTERM)
+# argument = 'debug' provide daemon status for debugging
+#
+# Returns standard exit status
+
+sub stop {
+    my @args = @_;
+
+    if( (my $pid = daeok()) || $debug ) {
+	my $rsp = daemonCmd( 'post', '/control?text=1', Submit => 'stop', map { lc($_) => 1 } @args );
+	print $rsp;
+	if( $rsp =~ /^ERROR:/ && !$debug ) {
+	    if(  kill( 'TERM', $pid ) ) {
+		print "Stopped daemon ($pid)\n";
+		return 0;
+	    }
+	    print "Failed to signal daemon ($pid)\n";
+	    return 1;
+	}
+	return 0;
+    } else {
+	print "Daemon is already stopped\n";
+	return 0;
+    }
+}
+
+# ---++ StaticMethod restart( @qualifiers) -> $status
+# Process restart command
+#
+# restart daemon process
+#
+# Standard startup script command
+#
+# argument = 'abort' do not wait for running tasks to exit (sends SIGTERM)
+# argument = 'debug' provide daemon status for debugging (on daemon's controlling TTY, if any)
+#
+# Returns standard exit status
+
+sub restart {
+    my @args = @_;
+
+    if( (my $pid = daeok()) || $debug ) {
+	my $rsp = daemonCmd( 'post', '/control?text=1', Submit => 'restart', map { lc($_) => 1 }  ( @args, 'summary' ) );
+	print $rsp;
+	if( $rsp =~ /^ERROR:/ && !$debug ) {
+	    return stop(@args) && start(@args);
+	}
+	return 0;
+    } else {
+	print "Daemon is not running, starting\n";
+	return start(@args);
+    }
+}
+
+# ---++ StaticMethod schedule( $cmd, @qualifiers ) -> $status
+# Process suspend and resume commands
+#
+# Controls daemon's task scheduler.
+#  suspend will prevent tasks from being scheduled (running tasks continue)
+#  resume will resume normal scheduling
+#
+# Extended command
+#
+# argument = 'debug' provide daemon status for debugging
+#
+# Returns standard exit status
+
+sub schedule {
+    my $cmd = shift;
+    my @args = @_;
+
+    if( (my $pid = daeok()) || $debug ) {
+	$pid ||= 'debug';
+	my $rsp = daemonCmd( 'post', '/control?text=1', Submit => $cmd, map { lc($_) => 1 } @args );
+	print $rsp;
+	if( $rsp =~ /^ERROR:/ ) {
+	    print "Failed to signal daemon ($pid)\n";
+	    return 1;
+	}
+	return 0;
+    } else {
+	print "Daemon is stopped\n";
+	return 7;
+    }
+}
+
+# ---++ StaticMethod license() -> $status
+# Process license command
+#
+# Display daemon's copyright and license statements
+#
+# Extended command
+#
+# Returns standard exit status
+
+sub license {
+    if( !-t STDOUT || $cliOptions{q}) {
+        print "$COPYRIGHT\n";
+    }
+
+    require Fcntl;
+    Fcntl->import (qw/SEEK_SET/);
+
+    my $start = tell( DATA );
+    while(<DATA>) {
+        print;
+    }
+    seek( DATA, $start, SEEK_SET() );
+
+   return 0;
+}
+
+# ##################################################
+#
+# Command line support routines
+#
+# ##################################################
+
+# ---++ StaticMethod daeok() -> $status
+# Return pid if daemon running or 0 if not
+#
+
+sub daeok {
+    my $pid = daepid();
+
+    return $pid if( $pid && $pid > 0 );
+
+    return 0;
+}
+
+# ---++ StaticMethod daepid() -> $pid
+# Obtain pid from pidfile and return running status
+#
+# Returns:
+#  undef if pidfile can't be opened
+#  -1 if kill says daemon isn't alive
+#  pid if daemon confirmed alive
+
+sub daepid {
+    open( my $fh, '<', $cliOptions{p} ) or return undef;
+
+    my $pid = <$fh>;
+
+    close $fh;
+
+    return undef unless( $pid && length $pid ); # In case pid file is corrupt
+
+    $pid =~ m/^(\d+)$/;
+    $pid = $1;
+
+    return -1 unless( kill( 0, $pid ) );
+
+    return $pid;
+}
+
+# ##################################################
+#
+# Restart support
+#
+# ##################################################
+
+=pod
+
+---++ StaticMethod scheduleExit( $restarting, $abort)
+Scheduler callout to manage daemon restart and stop.
+   * =$restarting= True if daemon is restarting, false if exiting
+   * =$abort= Abort active (forked) tasks
+
+ Polls network connections to ensure that writes produced by exit/restart command complete
+ before shutdown.
+
+ Returns to scheduler if pending activity.
+
+ exits or restarts when activity complete
+
+=cut
+
+sub scheduleExit {
+    my( $restarting, $abort ) = @_;
+
+    # Wait for forks unless aborting
+
+    return if( !$abort && TWiki::Tasks::Schedule::schedulerForksBusy() );
+
+    # Poll network connections & return if any are busy
+
+    return if( grep { $_ && $_->close( $restarting? 2 : 1 ) } @serverRegistry );
+
+    @serverRegistry = () unless( $restarting );
+
+    # Kill any remaing forks
+
+    TWiki::Tasks::Schedule::schedulerKillForks();
+
+    if( $restarting ) {
+        # Socket and other file handle inheritenance is handled by fnctl( ...  FD_CLOEXEC )
+        # However, non-file handle fds need to decide whether to close as some (Inotify2 among them) don't set
+        # FD_CLOEXEC and seemingly can't...  Notify the registered code routines and let them decide whether to close.
+
+        foreach my $fd (keys %parentFds) {
+            my $fh = $parentFds{$fd};
+            if( ref( $fh ) eq 'CODE' ) {
+                &$fh( $fd, 1 );
+            }
+        }
+    } else {
+	unlink( $cliOptions{p} );
+	exit(0);
+    }
+
+    { exec $script $script, @restartARGV; };
+
+    die "Failed to exec $script: $!\n";
+}
+
+=pod
+
+---++ StaticMethod listRestartCxs( $cx, $responseFmt )
+Server callout to preserve connection state across restart
+   * =$cx= - Connection object that issued restart command
+   * =$responseFmt= - Code definining response restarted daemon is to generate.
+
+Passes connection lists to new instance using private command options.
+
+Each network server's =preserve= method is called to provide its list of fds to be preserved.
+The connection list is added to the saved copy of the initial @ARGV in the correct order.
+
+=cut
+
+sub listRestartCxs {
+    my $cx = shift;
+    my $responseFmt = shift;
+
+    @restartARGV = grep { !/^(?:-r[\d,]+|-R[sSth])$/ } @restartARGV;
+    unshift @restartARGV, "-R$responseFmt";
+
+    my @rlist;
+    for( my $i = 0; $i < @serverRegistry; $i++ ) {
+	my @pre = $serverRegistry[$i]->preserve( $cx );
+        my $server = $cx->server or next;
+	if( $i == $server->number ) { #This srv is commanding
+	    unshift @rlist, $i, (scalar @pre), @pre;
+	} else {
+	    next unless( @pre );
+	    push @rlist, $i, (scalar @pre), @pre;
+	}
+    }
+    unshift @restartARGV, '-r' . join( ',', @rlist );
+
+    return;
+}
+
+# ---++ StaticMethod statusListing( $format, $detail ) -> $text
+# Obtain daemon status for display
+#   * =$format= - desired format: 'text' for text, 'embedded-html' for html within another page; default is full page html.
+#   * =$detail= - 'list' standard status; 'debug' extended status for debug.
+#
+# Returns string
+
+sub statusListing {
+    my $format = shift;
+    my $detail = shift;
+
+    $detail = lc( $detail || '' );
+    return scalar daemonCmd ( 'get', '/status', [ $detail ], (($format eq 'text')? ( 'text' ) :
+                                                              ($format eq 'embedded-html')? ( 'embed' ) : ()) );
+}
+
+=pod
+
+---++ StaticMethod daemonCmd( $cmd, $uri, ... )
+Sends a command to the daemon's status server.
+   * =$cmd= HTTP command: 'get' or 'post'
+   * =$uri= uri to access
+
+   * =...= - =post= formkey => value list
+   * =...= - =get= arrayref of PATH_INFO components to add to URI (optional), query parameters
+
+Returns string in scalar context and forwadable HTTP response in array context
+
+=cut
+
+sub daemonCmd {
+    my $cmd = lc( shift );  # 'get' or 'post'
+    my $uri = shift;
+    my @args = ();
+    if( @_ ) {
+	if( $cmd eq 'post' ) {
+	    push @args, [ @_ ];  # formkey => value, ...
+	} else {
+	    if( @_ && ref( $_[0] ) eq 'ARRAY' ) {  # Add to path
+		$uri .= '/' . join( '/', @{$_[0]} );
+		shift;
+	    }
+	    if( @_ ) { # Add parameters to query
+		$uri .= '?' . join( '&', @_ );
+	    }
+	}
+    }
+
+    # Communicate with the daemon to get status.  Similar to code in TasksPlugin.pm, but with cookie/redirect support and
+    # different formatting.  Authentication logic must be kept in synch.
+
+    my $address = $TWiki::cfg{Tasks}{StatusAddr} || '';
+    return wantarray? ('500 Misconfigured', <<"EOM" ) : "ERROR:Daemon is not available" unless( $address );
+Content-Type: text/plain
+
+Daemon is not available
+EOM
+
+    my $protocol = $TWiki::cfg{Tasks}{StatusServerProtocol};
+
+    require Digest::MD5;
+    require LWP::UserAgent;
+    use HTTP::Status qw/HTTP_UNAUTHORIZED/;
+
+    # Kludge to get LWP to use IPV6
+    {
+        package Net::HTTP;
+        use vars qw/$SOCKET_CLASS/;
+        die "Daemon IPV6 must initialize first\n" if( defined $SOCKET_CLASS && $SOCKET_CLASS ne 'IO::Socket::IP' );
+       require IO::Socket::IP;
+        $SOCKET_CLASS = 'IO::Socket::IP';
+        require IO::Socket::SSL;
+        IO::Socket::SSL->import; # ( qw/debug3/ );
+    }
+    my $ua = LWP::UserAgent->new( (
+				   agent => "TWikiControl/1.0",
+				  ) );
+    push @{ $ua->requests_redirectable }, 'POST';
+
+    # If client verification is enabled, send our certificate (note: Requires LWP::Protocol::https)
+    if( $protocol eq 'https' ) {
+        $ua->ssl_opts( SSL_Cipher_list => $TWiki::cfg{Tasks}{StatusServerCiphers} )
+              if( $TWiki::cfg{Tasks}{StatusServerCiphers} );
+        if( $TWiki::cfg{Tasks}{StatusServerVerifyClient} ) {
+            $ua->ssl_opts( SSL_cert_file => $TWiki::cfg{Tasks}{DaemonClientCertificate},
+                           SSL_key_file => $TWiki::cfg{Tasks}{DaemonClientKey},
+                           SSL_passwd_cb => sub { return $TWiki::cfg{Tasks}{DaemonClientKeyPassword} },
+                         );
+            # LWP will attempt to verify server hostname, which is unlikely to succeed if it is localhost or a loopback address
+            $ua->ssl_opts( verify_hostname => undef )
+              if( $address =~ /^(?:localhost|::1|127\.\d{1,3}\.\d{1,3}\.\d{1,3})(:\d+)?$/i );
+        }
+    }
+
+    $ua->cookie_jar( {} );
+
+    my $rsp = $ua->$cmd(  "$protocol://$address$uri", @args );
+    if( $rsp->code == HTTP_UNAUTHORIZED ) {
+	my $nonce = $rsp->header('X-TWiki-Authenticator' );
+	if( $nonce ) {
+	    my $realm;
+	    ($realm, $nonce) = split( /\s*,\s*/, $nonce );
+
+	    $ua->credentials( $address, $realm, $TWiki::cfg{AdminUserLogin},
+			      Digest::MD5::md5_hex( $nonce, "$realm:$TWiki::cfg{AdminUserLogin}:$TWiki::cfg{Password}" ) );
+
+	    $rsp = $ua->$cmd(  "$protocol://$address$uri", @args, 'X-TWiki-Authenticator', $nonce );
+	}
+    }
+
+    my $text = $rsp->content unless( $rsp->is_error &&
+                                     $rsp->header( 'Client-Warning' ) &&
+                                     $rsp->header( 'Client-Warning' ) eq 'Internal response' );
+    $text = '' unless( defined $text );
+
+    if( $rsp->is_error ) {
+	return wantarray? ($rsp->status_line, $rsp->as_string ) : 
+                          "ERROR: Failed to access daemon: " . $rsp->code . ' ' . $rsp->message . "\n" . $text;
+    }
+
+    return wantarray? ($rsp->status_line, $rsp->as_string ) : $text;
+}
+
+# ---++ StaticMethod HELP_MESSAGE( $ofh, $optpkg, $optver, $sws )
+# Interface to getopts() - see =perldoc Getopt::Std= for documentation.
+#
+# Provides usage
+
+sub HELP_MESSAGE {
+    my( $ofh, $optpkg, $optver, $sws ) = @_;
+
+    my $pname = $FindBin::Script;
+    my $pidhlp = $cliOptions{p} || ( $TWiki::cfg{WorkingDir} . '/' || 'working/' ) . 'TaskDaemon.pid';
+    my $inihlp = File::Spec->catfile( $FindBin::RealBin, $FindBin::RealScript . '_init' );
+
+    print $ofh <<"USAGE" ;
+$pname runs off-line event processing for the TWiki subsystem.
+
+Usage:
+  $pname options command
+
+Options:
+  --help    - print usage summary
+  -d        - enable debugging messages
+  -v:n      - Logging level: -1 very verbose, 0 debug, 1 warning (Default), 2 error only
+  -f        - Run in foreground
+  -l        - don't run login cleanup
+  -x        - don't run expired lease cleanup
+  -p:file   - write pid to specified file, normally working directory
+  -q        - Do not display copyright notice at startup
+
+In normal use, no options are required; these are primarily for debugging.
+
+$pname can be linked as a startup script, enabling the daemon
+to startup (and shut down) automatically with the system.
+
+$pname can also be run as a cron job, which simply does a condstart.
+
+Note that the cronjob is exactly compatible with the former tick_twiki
+script; previously existing crontabs do not need to be modified, and would
+serve as a watchdog monitor for the daemon.
+
+Commands:
+  condrestart - Stop and re-start the daemon only if it is running
+  condstart   - Start the daemon if it is not already running.
+                This is the default command.
+  license     - Show license
+  restart     - Stop and re-start the daemon (assumed running)
+  resume      - Resume task scheduling
+  start       - Start the daemon
+  status      - Display the daemon status.
+  status list - Display detailed status
+  stop        - Stop the daemon
+  suspend     - Suspend task scheduling
+  version     - Display daemon's version
+
+Files:
+  /etc/init.d/$pname is a softlink to this script
+  $0_bin is a softlink to the TWiki binary directory ($bindir)
+  $inihlp is a softlink to the init script
+  $bindir/setlib.cfg  Defines twiki environment
+  $TWiki::cfg{DataDir} contains standard log files
+  $pidhlp ( or -p )
+              pid of daemon
+
+  The easiest way to setup the links correctly is to use the tools/Install.pl script.
+
+Special considerations:
+
+If you want to handle startup some other way, you can avoid the links;
+./setlib.cfg will be used if it exists.  Some seem to like that.
+
+If you run multiple TWikis from the same webserver, you need multiple daemons and links in the filesystem.
+To set this up, use the tools/Install.pl script.
+USAGE
+
+    return 1;
+}
+
+# DATA is license statement
+
+__DATA__
+
+This is an original work by Timothe Litt.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 3
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details, published at
+http://www.gnu.org/copyleft/gpl.html
+
+Approximately 27 lines of code are from
+  the TWiki Collaboration Platform, http://TWiki.org/
+
+and are Copyright (C) 2005-2007 TWiki Contributors.
+These are clearly marked in the source and are licensed under GPL.
+
+The routine getDebugTTY is adapted from xterm_get_fork_TTY and
+macosx_get_fork_TTY routines in the perl5db.pl file of the Perl
+v5.12.4 distribution.  perl5db.pl is Copyright 1987-2010, Larry Wall
+and is licensed under GPL.

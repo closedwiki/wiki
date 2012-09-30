@@ -1,0 +1,94 @@
+README for the off-line task management framework.
+
+Copyright (C) 2011, 2012 Timothe Litt <litt at acm dot org>
+Removal of Copyright and/or License prohibited.
+
+This is licensed software - see below.
+
+Although distributed as a "plugin", the off-line task management framework is a complete operating environment for
+off-line processing of TWiki tasks.
+
+Beyond the standard installation, the following steps are required.
+
+If you are running a TWiki release prior to V5.1.0, you need to apply the patch found at
+ http://twiki.org/p/pub/Codev/ConfigureSupportForTaskFramework/tfwconfigure.patch
+
+After un-taring the kit from the wiki root:
+
+Run "tools/Tasks/Install.pl install" to setup permissions, links and system startup.
+
+Install has lots of options, but the defaults should work for most standard installations.
+There are options for various non-standard situations; see --help.
+
+-v will list every action.
+-n will prevent making any changes; use with -v if you want to see
+   what will happen before commiting.
+
+In configure, {AuthScripts} needs to include TaskDaemon.  This is an EXPERT setting
+under Security Setup -> Authentication.
+
+In httpd/conf.d/twiki.conf, add TaskDaemon to the FilesMatch requiring authentication:
+
+<FilesMatch "(attach|edit|manage|rename|save|upload|mail|logon|rest|TaskDaemon|.*auth).*">
+   require valid-user
+</FilesMatch>
+
+SeLinux - policy changes required - see tools/Tasks/localWiki.{te,if,fc}, plus:
+
+semanage -i - <<EOF
+boolean -1 httpd_can_network_connect
+boolean -1 httpd_can_sendmail
+boolean -1 httpd_enable_homedirs
+boolean -1 httpd_read_user_content
+boolean -1 httpd_unified
+EOF
+
+If your attempt to run from a svn repository or other home directory, many more
+policy changes are required.  Contact the author for the latest information.
+
+Also, if not running under fedora, create a mapfile for permissions (see Install --help).
+Please submit your file so that it can be distributed in future releases.
+
+Mapfile may also be helpful if you use permissions/file owners other than the default.
+
+Review and adjust configure settings under Off-line Tasks, as well as enabling the TasksPlugin.
+
+Versions of this software are maintained for both TWiki & Foswiki.  A developer's kit contains
+some modules used only for manual testing that are omitted from the standard distribution and
+file(s) used when building from a common platform repository.
+
+This software is pure perl, although it relies on CPAN modules that aren't.  It was
+developed on Linux (Fedora) and should be reasonably portable to other Unix environments.
+
+There are some known issues with CPAN modules that may impact some users.  All have work-arounds/proposed patches in the bug trackers.  See:
+ IPV6:
+ o https://rt.cpan.org/Public/Bug/Display.html?id=79557
+ o https://rt.cpan.org/Public/Bug/Display.html?id=79916
+
+ Encrypted Private key files (use DES3 as a work-around)
+ o https://rt.cpan.org/Public/Bug/Display.html?id=79927
+
+The software has not been tested on Windows or VMS - there are probably some filename issues on the
+latter.  Patches are welcome, but of course subject to review.
+
+Feedback is welcome, as are contributions.  Please note that the plugin/driver APIs will
+(hopefully) be used by many other developers.  Any changes require careful review for
+compatibility and security.
+
+LICENSE:
+
+This is an original work by Timothe Litt.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 3
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details, published at
+http://www.gnu.org/copyleft/gpl.html
+
+A small amount of code is licensed from other sources, but is also GPL.
+For details, see the individual modules.

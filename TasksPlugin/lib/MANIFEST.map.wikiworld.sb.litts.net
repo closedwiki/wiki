@@ -1,0 +1,143 @@
+# -*- mode: CPerl; -*-
+#
+# Copyright (C) 2011 Timothe Litt <litt at acm dot org>
+# License is at end of module.  
+# Removal of Copyright and/or License prohibited.
+
+# Host-specific policy for wikiworld.
+
+# fedora-specific mappings for selinux types, file permissions and file owners
+#
+# If you have a different host-specific policy, you can copy this file to
+# lib/MANIFEST.map.<hostname>, where <hostname> is the name of the host as
+# returned by perl -MSys::Hostname -e'print hostname'.  This file will
+# completely override any other MANIFEST.map file in your environment.
+#
+# If you have a different site policy, you can copy this file to
+# lib/MANIFEST.map.LocalSite and adjust as desired.  lib/MANIFEST.map.LocalSite
+# will override any other MANIFEST.map file in your environment, except a
+# lib/MANIFEST.map.<hostname>.
+
+
+use warnings;
+use strict;
+
+# This hash defines mapping from wiki-generic user and group names to the fedora distribution's users and groups
+#
+# Another common value for webserverUser is 'nobody'
+
+our %userGroupMap = (
+    webserverUser => 'apache',
+    webserverGroup => 'apache',
+    rootUser => 'root',
+    rootGroup => 'root',
+		    );
+
+# These hashes define the mapping from the octal permissions in the MANIFEST to the installed permissions.
+# You can also override the permissions for a specific file or directory by entering its
+# name (root-relative, as in MANIFEST) in the map.  No umask is applied in this case.
+#
+# Note that this mapping is applied BEFORE any file or directory umask.  
+# Defaults to the identity mapping if no entry in hash.
+#
+# This would normally be a site policy rather than distribution-specific.
+# For example, a site that accesses files by group rather than owner might swap the user and group digits.  
+# Or a site might want to add the setgid bit to directory permissions
+#
+# A site can also specify default file and directory umasks here to avoid having to specify them on the command line.
+
+# Files
+
+our %filePermMap = (
+    0444 => 0640,
+    0554 => 0754,
+    0555 => 0755,
+
+#    'lib/TWiki/Tasks/Install.pl' => 0500,
+		   );
+our $fileUmask = 007;
+
+# Directories
+
+our %dirPermMap = (
+    0755 => 02755,
+    0775 => 02775,
+#   'lib/tools/Tasks' => 02711
+		  );
+our $dirUmask = 006;
+
+# For SeLinux, we normally leave the user field of the security context alone.  Setting $selinuxUser will force it to be set,
+
+our $selinuxUser = 'system_u';
+
+# This hash defines mapping from wiki-generic SeLinux type to
+# the fedora distribution's type name.  Range may also be specifed as type:range (e.g. httpd_sys_content_t:s0)
+#
+# (Distributions not supporting SeLinux can leave this empty.)
+
+our %selinuxTypeMap = (
+    # Perl modules - read as data, never written
+    wiki_perlmod_t => 'httpd_sys_script_ro_t:s0',
+
+    # Wiki topics - read and written by CGI scripts
+    wiki_topic_t => 'httpd_sys_script_rw_t:s0',
+
+    # Wiki script exempt from selinux enforcement - used when rules too complex to sort out (undesirable, but real life)
+    wiki_unconfined_script_t => 'httpd_unconfined_script_exec_t:s0',
+
+    # Wiki script executed under webserver (e.g. as CGI)
+    wiki_executable_script_t => 'httpd_sys_script_exec_t:s0',
+
+    # Installation script executed by admin at installation
+    wiki_install_script_t => 'bin_t:s0',
+
+    # SeLinux policy module definitions
+    wiki_selinux_policy_t => 'admin_home_t:s0',
+
+		      );
+
+# Other relevant available types, not currently used:
+
+=begin futureuse
+
+     # Note that most wiki content is read/written by cgi scripts and so is not webserver content as defined by selinux policy
+
+     # Directly-served web content, read-only
+     wiki_ro_web_content_t => 'httpd_sys_content_t:s0',
+
+     # Directly-served web content, writable
+     wiki_rw_web_content_t => 'httpd_sys_rw_content_t:s0',
+
+     # Directly-served web content, append only
+     wiki_ra_web_content_t => 'httpd_sys_ra_content_t:s0',
+
+httpd_unconfined_script_t
+httpd_sys_htaccess_t
+httpd_sys_content_t
+httpd_var_lib_t
+httpd_var_run_t
+httpd_config_t
+httpd_exec_t
+httpd_initrc_exec_t
+httpd_log_t
+httpd_lock_t
+
+=end futureuse
+
+=cut
+
+1;
+__END__
+
+This is an original work by Timothe Litt.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 3
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details, published at
+http://www.gnu.org/copyleft/gpl.html

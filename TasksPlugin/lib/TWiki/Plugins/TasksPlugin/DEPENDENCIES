@@ -1,0 +1,75 @@
+# Copyright (C) 2011 Timothe Litt <litt at acm dot org>
+# License is at end of file.  
+# Removal of Copyright and/or License prohibited.
+
+# Dependencies for Tasks Framework
+#
+# Version numbers listed here aren't necessarily strictly required, but they ARE what the code was tested with.
+# Some modules DO have strict dependencies on the versions listed.  I've tried to note them here, but
+# could easily have missed some.  It's easy enough to get the current versions from CPAN, so to avoid problems, please do.
+
+Archive::Tar,>=1.78,cpan,Optional,Used only to create distribution kits
+Carp,>=1.17,cpan,Required
+CGI,>=3.55,cpan,Required
+CGI::Session::ID::sha256,>=1.01,cpan,Required,Authentication
+Clone,>=0.31,cpan,Required
+#Config,>=0,cpan,Required
+Convert::PEM, >=0.08, Required
+Crypt::X509,0.51,cpan,Required
+Cwd,>=3.33,cpan,Required
+Data::Dumper,>=2.131,cpan,Required
+Date::Manip,>=5.0,cpan,Required,Version 6 is prefered for timezone support, but requires Perl V5.10
+Digest::MD5,>=2.51,cpan,Required
+Errno,>=1.0901,cpan,Required
+Fcntl,>=1.06,cpan,Required
+File::Basename,>=2.78,cpan,Required
+File::Find,>=1.15,cpan,Optional,Used only to create distribution kits
+File::Spec,>=3.33,cpan,Required
+File::Temp,>=0.22,cpan,Required
+FindBin,>=1.47,cpan,Required
+Getopt::Std,>=1.05,cpan,Required
+HTTP::Date,>=6.00,cpan,Required
+HTTP::Status,>=6.00,cpan,Required
+IO::CaptureOutput,>=1.1102,cpan,Required
+IO::File,>=1.14,cpan,Required
+IO::Handle,>=1.28,cpan,Required
+IO::Socket,>=1.31,cpan,Required
+IO::Socket::INET,>=1.31,cpan,Required
+IO::Socket::IP,>=0.14,cpan,Required
+IO::Socket::SSL,>=1.23,cpan,Optional,Allows daemon status server to use https (SSL) rather than http.  Highly recommended for security.
+IO::Socket::UNIX,>=1.23,cpan,Required
+
+ONLYIF ($^O eq 'linux')
+Linux::Distribution,>=0.20,cpan,required,Determines which linux distribution is in use for installation.  V 0.20 requires the patch at https://rt.cpan.org/Public/Bug/Display.html?id=69671 when used on recent fedora releases.
+
+ONLYIF ($^O eq 'linux')
+Linux::Inotify2,>= 1.22,cpan,Optional,Makes file monitoring more efficient and more timely.
+
+LWP,>=6.02,cpan,Required
+LWP::UserAgent,>=6.02,cpan,Required
+LWP::Protocol::https,>=6.02,cpan,Optional,Required if daemon validates client certificates
+MIME::Base64,>=3.13
+POSIX,>=1.09,cpan,Required
+Scalar::Util,>=1.23,cpan,Required
+Schedule::Cron,>=1.01,cpan,Required,Previous versions will NOT work.  1.01_3 was the first workable version - note it was EARLIER than 1.01.
+SelectSaver,>=1.02,cpan,Required
+Socket,>=1.78,cpan,Required
+Storable,>=2.22,cpan,Required
+Sys::Hostname,>=1.11,cpan,Required
+Text::ParseWords,>=3.27,
+#TWiki
+TWiki::Func,>=1.2,perl,TWiki 4.2.3 Release
+TWiki::Plugins,>=1.2,perl,TWiki 4.2.3 Release
+
+# This is an original work by Timothe Litt.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at
+# http://www.gnu.org/copyleft/gpl.html

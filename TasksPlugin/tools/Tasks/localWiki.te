@@ -1,0 +1,74 @@
+# TWiki off-line task management framework addon for the TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2011 Timothe Litt <litt at acm dot org>
+# License is at end of module.
+# Removal of Copyright and/or License prohibited.
+
+policy_module(localWiki, 0.2.0)
+#
+# SeLinux type enforcement module for TWiki with off-line tasks framework
+#
+
+require {
+        type devpts_t;
+	type httpd_t;
+        type httpd_sys_rw_content_t;
+        type httpd_sys_script_t;
+	type httpd_sys_script_exec_t;
+	type httpd_sys_script_rw_t;
+        type initrc_var_run_t;
+        type ptmx_t;
+	type sendmail_t;
+	type system_mail_t;
+	type port_t;
+	type unreserved_port_t;
+        type user_devpts_t;
+	type var_t;
+        type wtmp_t;
+        class chr_file { open getattr ioctl read write setattr };
+        class file { getattr read write open lock };
+	class lnk_file { read getattr };
+        class process { siginh noatsecure rlimitinh };
+	class tcp_socket { name_bind };
+}
+
+# Follow symlinks to Daemon
+allow httpd_t httpd_sys_script_exec_t:lnk_file { read getattr };
+
+# Ensure signal state is inherited by forks to avoid registration races
+allow httpd_t httpd_sys_script_t:process { siginh noatsecure rlimitinh };
+
+# Web-started Daemon port listeners
+allow httpd_t port_t:tcp_socket name_bind;
+allow httpd_t unreserved_port_t:tcp_socket name_bind;
+
+# Web-started Daemon write /var/run
+allow httpd_t initrc_var_run_t:file { lock open read write };
+allow httpd_t var_t:file getattr;
+
+# Allow mail to access task output files
+allow system_mail_t httpd_sys_script_rw_t:file { read write };
+allow system_mail_t httpd_sys_rw_content_t:file { getattr open read };
+allow sendmail_t httpd_sys_rw_content_t:file { read write };
+
+# Allow Daemon to open xterm PTY for perl debugging
+allow httpd_t devpts_t:chr_file { getattr ioctl open read setattr write };
+allow httpd_t ptmx_t:chr_file { ioctl getattr open read write };
+allow httpd_t user_devpts_t:chr_file setattr;
+# PTY library considers open a login...
+allow httpd_t wtmp_t:file { open write };
+
+# #######################################################################
+#
+# This is an original work by Timothe Litt.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at
+# http://www.gnu.org/copyleft/gpl.html
