@@ -55,7 +55,12 @@ my %decryptable = ( # Header code     decoder sub
 sub decryptCPEM {
     my( $format, $pem, $encryption, $iv, $passkey, $password ) = @_;
 
-    require Convert::PEM;
+    eval {
+        require Convert::PEM;
+    }; if( $@ ) {
+        return status => [ WARNING => "Unable to verify password $passkey: Please install Convert::PEM from CPAN.\n" ];
+    }
+
     my $cvt = Convert::PEM->new( @{$keyFormats{$format}} );
 
     my $key = $cvt->decode( Content => $pem,
