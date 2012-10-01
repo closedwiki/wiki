@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347889343" format="1.1" version="$Rev: 12445 $"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349086580" format="1.1" version="$Rev$"}%
 ---+!! INCLUDEXML Plugin
 
 <!--

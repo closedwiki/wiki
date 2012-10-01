@@ -1,0 +1,8 @@
+%META:TOPICINFO{author="TWikiContributor" date="1349086507" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarINCLUDEXML
+---+++ INCLUDEXML -- display any XML document in table format
+   * This variable is handled by the IncludeXMLPlugin. For details, see [[%SYSTEMWEB%.IncludeXMLPlugin][IncludeXMLPlugin]]
+   * Syntax: =%<nop>INCLUDEXML{"URL or Topic" records="xpath" fields="xpaths"}%=
+   * Example: =%<nop>INCLUDEXML{"http://example.com/rss" records="item" fields="link, title, description, pubDate"}%=
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarINCLUDE][INCLUDE]]
