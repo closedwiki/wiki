@@ -1,0 +1,7 @@
+%META:TOPICINFO{author="TWikiContributor" date="1349096587" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarDATETIME
+---+++ DATETIME -- Display date and time with formatting options and localized dates
+   * This variable is handled by the DateTimePlugin.
+   * Syntax: =%<nop>DATETIME{[format=]"format"}%=
+   * Example: =%<nop>DATETIME{"$wday"}%=, =<nop>DATETIME{"$day $month $year" incdays="-1"}=

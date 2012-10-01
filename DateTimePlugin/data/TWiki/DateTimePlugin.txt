@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1348819808" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349096241" format="1.1" version="$Rev$"}%
 ---+!! <nop>DateTimePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -162,6 +162,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-09-28: | TWikibug:Item6947: Support unix timestamp for the input -- TWiki:Main.MahiroAndo |
 |  2011-05-14: | TWikibug:Item6701: Small fix in Config.spec -- TWiki:Main.PeterThoeny |
 |  28 Feb 2008 | 1.0 Arthur Clemens: Major rewrite to make this plugin compatible with (and use from) =TWiki::Time=. Localized language strings are now read from configure. |
 |  27 Jul 2004 | 0.90 Aurelio A Heckert: First release |
