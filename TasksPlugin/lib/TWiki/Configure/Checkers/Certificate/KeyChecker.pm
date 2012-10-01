@@ -178,6 +178,8 @@ sub check {
 
     TWiki::Configure::Load::expandValue($value);
 
+    return '' unless( defined $value && length $value );
+
     ((stat $value)[2] || 0) & 007 and return $this->ERROR( "File permissions allow world access" );
 
     my $password;
