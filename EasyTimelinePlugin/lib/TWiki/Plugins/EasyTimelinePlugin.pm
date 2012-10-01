@@ -33,7 +33,7 @@ use Digest::MD5 qw( md5_hex );
 use File::Path;
 
 our $VERSION = '$Rev$';
-our $RELEASE = '1.3';
+our $RELEASE = '1.4';
 our $SHORTDESCRIPTION = 'Generate graphical timeline diagrams from markup text';
 our $NO_PREFS_IN_TOPIC = 1;
 our $pluginName = 'EasyTimelinePlugin';
@@ -74,11 +74,17 @@ sub commonTagsHandler {
     TWiki::Func::writeDebug("- ${pluginName}::commonTagsHandler( $_[2].$_[1] )")
       if $TWiki::cfg{Plugins}{$pluginName}{Debug};
 
-    # Old syntax, using <easytimeline>.....</easytimeline>
-    #$_[0] =~ s/<easytimeline>(.*?)<\/easytimeline>/&handleTimeline($1, $_[2], $_[1])/giseo;
-    
-    # New syntax, using %TIMELINE%.....%ENDTIMELINE%
-    $_[0] =~ s/%TIMELINE%\s*(.*?)%ENDTIMELINE%/&handleTimeline($1, $_[2], $_[1])/egs;
+    unless ($TWiki::cfg{Plugins}{$pluginName}{LegacyTag}) {
+        # Old syntax, using <easytimeline>.....</easytimeline>
+        #$_[0] =~ s/<easytimeline>(.*?)<\/easytimeline>/&handleTimeline($1, $_[2], $_[1])/giseo;
+
+        # New syntax, using %TIMELINE%.....%ENDTIMELINE%
+        $_[0] =~ s/%TIMELINE%\s*(.*?)%ENDTIMELINE%/&handleTimeline($1, $_[2], $_[1])/egs;
+    } else {
+        # To support existing legacy sytanx together
+        $_[0] =~ s/(?:%TIMELINE%|<easytimeline>)\s*(.*?)(?:%ENDTIMELINE%|<\/easytimeline>)/
+            &handleTimeline($1, $_[2], $_[1])/egs;
+    }
 }
 
 # =========================
@@ -129,9 +135,12 @@ sub handleTimeline {
         print OUTFILE $text;
         close OUTFILE;
 
+        use Config;
+
         # run the command and create the png
         my $cmd =
-            'perl ' .
+#            'perl ' .
+            $Config{perlpath}.' '.
             $TWiki::cfg{Plugins}{$pluginName}{EasyTimelineScript} . # /var/www/twiki/tools/EasyTimeline.pl
             ' -i %INFILE|F% -m -P ' .
             $TWiki::cfg{Plugins}{$pluginName}{PloticusCmd} . # /usr/local/bin/pl

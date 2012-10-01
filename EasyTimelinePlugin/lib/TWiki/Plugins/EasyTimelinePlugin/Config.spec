@@ -9,4 +9,7 @@ $TWiki::cfg{Plugins}{EasyTimelinePlugin}{EasyTimelineScript} = '$TWiki::cfg{Data
 # **BOOLEAN**
 # Debug flag
 $TWiki::cfg{Plugins}{EasyTimelinePlugin}{Debug} = 0;
+# **BOOLEAN**
+# Debug flag
+$TWiki::cfg{Plugins}{EasyTimelinePlugin}{LegacyTag} = 0;
 1;
