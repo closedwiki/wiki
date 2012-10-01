@@ -421,7 +421,8 @@ sub _smimeSignMessage {
         eval {
             require Crypt::SMIME;
         };if( $@ ) {
-            $this->{session}->writeWarning( "Cypt::SMIME is not installed: $@.  Mail will be sent unsigned.\n" )
+            $@ =~ /^(.*?\n).*\z/s; # Any useful error information is on the first line.
+            $this->{session}->writeWarning( "ERROR: Cypt::SMIME is not available: " . ($1 || $@) . ".  Mail will be sent unsigned.\n" )
                if ($this->{session});
             return;
         }
@@ -458,7 +459,7 @@ sub _smimeSignMessage {
             $smime->setPrivateKey( $key, _slurpFile( $TWiki::cfg{SmimeCertificateFile} ) );
         }; if( $@ ) {
             $@ =~ /^(.*?\n).*\z/s; # Any useful error information is on the first line.
-             $this->{session}->writeWarning( "Key or Certificate problem sending email: " . ($1 || $@ . ". Mail will be sent unsigned.\n") )
+             $this->{session}->writeWarning( "ERROR: Key or Certificate problem sending email: " . ($1 || $@) . ". Mail will be sent unsigned.\n" )
                if ($this->{session});
             return;
         }
