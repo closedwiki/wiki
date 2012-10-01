@@ -19,4 +19,18 @@ use strict;
 
 use base 'TWiki::Configure::Checkers::Certificate::EmailChecker';
 
+sub check {
+    my $this = shift;
+
+    return '' unless( defined $TWiki::cfg{SmimeCertificateFile} && length $TWiki::cfg{SmimeCertificateFile} );
+
+    eval {
+        require Crypt::SMIME;
+    }; if( $@ ) {
+        $TWiki::cfg{SmimeCertificateFile} = '';
+        $TWiki::cfg{SmimeKeyFile} = '';
+        return $this->ERROR( "Unable to activate secure email: Please install Crypt::SMIME from CPAN.\n" );
+    }
+    return $this->SUPER::check( @_ );
+}
 1;
