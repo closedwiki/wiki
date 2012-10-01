@@ -27,7 +27,6 @@ use base 'TWiki::Configure::Checker';
 use TWiki::Configure::Load;
 
 use MIME::Base64;
-use Crypt::X509;
 
 # Private methods
 
@@ -103,11 +102,19 @@ sub checkUsage {
 
     TWiki::Configure::Load::expandValue($value);
 
+    return '' unless( defined $value && length $value );
+
     my( $errors, @certs ) = loadCert( $value );
 
     return $this->ERROR( "No certificate in file: " . $certs[0] ) if( $errors );
 
     ((stat $value)[2] || 0) & 002 and return $this->ERROR( "File permissions allow world write" );
+
+    eval {
+        require Crypt::X509;
+    }; if( $@ ) {
+        return $this->WARN( "Unable to verify certificate: Please install Crypt::X509 from CPAN" );
+    }
 
     my $x = Crypt::X509->new( cert => shift @certs );
     return $this->ERROR( "Invalid certificate: " . $x->error ) if( $x->error );
