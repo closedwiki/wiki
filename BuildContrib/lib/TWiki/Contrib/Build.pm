@@ -291,7 +291,7 @@ __Note:__ You do not need to install anything on the browser to use this extensi
 
    * Or, follow these __manual installation__ steps:
       * Download the ZIP file from the extension home on twiki.org (see below).
-      * Unzip ==%\TOPIC\%.zip== in your twiki installation directory.
+      * Unzip ==\%TOPIC\%.zip== in your twiki installation directory.
       * Set the ownership of the extracted directories and files to the webserver user.
       * Install the dependencies (if any).
 HERE

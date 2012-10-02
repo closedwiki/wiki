@@ -1,0 +1,4 @@
+data/TWiki/IpPlugin.txt 0664 Documentation
+pub/TWiki/IpPlugin/IPv4-gray.png 0444 Graphic
+pub/TWiki/IpPlugin/IPv6-green.png 0444 Graphic
+lib/TWiki/Plugins/IpPlugin.pm 0444 Perl module
