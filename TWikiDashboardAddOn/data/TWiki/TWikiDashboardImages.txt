@@ -1,1 +1,35 @@
-FIXME
+%META:TOPICINFO{author="TWikiContributor" date="1349158213" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiDashboardAddOn"}%
+---+!! <span style="font-size: 60%"> TWikiDashboardAddOn &#187;</span> TWiki Dashboard Banner Images
+
+This topic contains images you can use as banners for your own dashboards. If you use your own image, attach it directly to your dashboard topic, not here.
+
+These images have a size of 1026 x 150 pixels, for use in standard three column dashboard layout with 300 pixels wide boxes. To use, specify this parameter in the =DASHBOARD= variable:%BR%
+=&nbsp; bannerimage="%<nop>PUBURL%/%<nop>SYSTEMWEB/TWikiDashboardImages/&lt;name&gt;"=
+
+Name: =marin-headlands-morning-fog-by-david-yu.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/marin-headlands-morning-fog-by-david-yu.jpg" alt="" width="1026" height="150" />
+
+Name: =golden-gate-sunset-by-peter-thoeny.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/golden-gate-sunset-by-peter-thoeny.jpg" alt="" width="1026" height="150" />
+
+Name: =venetian-macau-by-peter-thoeny.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/venetian-macau-by-peter-thoeny.jpg" alt="" width="1026" height="150" />
+
+Name: =nasa-ames-shed-cyan-by-peter-thoeny.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/nasa-ames-shed-cyan-by-peter-thoeny.jpg" alt="" width="1026" height="150" />
+
+Name: =nasa-ames-shed-orange-by-peter-thoeny.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/nasa-ames-shed-orange-by-peter-thoeny.jpg" alt="" width="1026" height="150" />
+
+Name: =hakone-garden-saratoga-by-peter-thoeny.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/hakone-garden-saratoga-by-peter-thoeny.jpg" alt="" width="1026" height="150" />
+
+__Related:__ TWikiDashboardAddOn
+
+%META:FILEATTACHMENT{name="marin-headlands-morning-fog-by-david-yu.jpg" attachment="marin-headlands-morning-fog-by-david-yu.jpg" attr="h" comment="Image copyright 2012, David Yu" date="1349156457" path="marin-headlands-morning-fog-by-david-yu.jpg" size="34304" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="golden-gate-sunset-by-peter-thoeny.jpg" attachment="golden-gate-sunset-by-peter-thoeny.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156456" path="golden-gate-sunset-by-peter-thoeny.jpg" size="36489" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="venetian-macau-by-peter-thoeny.jpg" attachment="venetian-macau-by-peter-thoeny.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156456" path="venetian-macau-by-peter-thoeny.jpg" size="65434" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="nasa-ames-shed-cyan-by-peter-thoeny.jpg" attachment="nasa-ames-shed-cyan-by-peter-thoeny.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156455" path="nasa-ames-shed-cyan-by-peter-thoeny.jpg" size="104232" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="nasa-ames-shed-orange-by-peter-thoeny.jpg" attachment="nasa-ames-shed-orange-by-peter-thoeny.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156455" path="nasa-ames-shed-orange-by-peter-thoeny.jpg" size="103835" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="hakone-garden-saratoga-by-peter-thoeny.jpg" attachment="hakone-garden-saratoga-by-peter-thoeny.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156454" path="hakone-garden-saratoga-by-peter-thoeny.jpg" size="82948" user="TWikiContributor" version="1"}%
