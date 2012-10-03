@@ -1821,6 +1821,7 @@ sub new {
     $this->{SESSION_TAGS}{BASETOPIC}      = $this->{topicName};
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $this->{topicName};
     $this->{SESSION_TAGS}{INCLUDINGWEB}   = $this->{webName};
+    $this->{SESSION_TAGS}{SITENAME}       = $TWiki::cfg{SiteName} || '';
 
     # Push plugin settings
     $this->{plugins}->settings();
@@ -1852,9 +1853,6 @@ sub new {
     $this->{contentMode} = $mode;
     if ( $master ) {
         $this->{master} = $master;
-        if ( $this->{mdrepo} ) {
-            $this->{SESSION_TAGS}{MASTERSITENAME} = $master->{siteName};
-        }
     }
 
     Monitor::MARK("TWiki session created");

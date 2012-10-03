@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1348835374" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349257899" format="1.1" version="$Rev$"}%
 ---+!! Read only and mirror web support
 
 ---++ Scope
@@ -119,6 +119,7 @@ You would provide =viewtopicactionbuttons.mirror.tmpl= defining the =mirror_to_a
 And then you would set SKIN to e.g. =mirror, topmenu, pattern=.
 
 ---+++ Variables and context
+   $ %<nop>SITENAME% : Returns the current site name defined by $TWiki::cfg{SiteName} if it's defined. Otherwise, it returns the null string.
    $ %<nop>CONTENTMODE{[web="WEB"]}% : Returns [[#Content_modes][the content mode]] of the specified web.
    $ %<nop>MASTERWEBSCRIPTURL{"script" [web="WEB"]}% : Returns the URL of the specified script of the specified web on the master site if it's 'master' or 'slave'. If the web is neither 'master' nor 'slave', there is no master web, hence this variable returns a null string ("").
    $ %<nop>WEBLIST{...}% : You can specify webs="canmoveto" parameter, in which case webs to which a topic of the current web cannot be moved to are excluded.
@@ -126,6 +127,7 @@ And then you would set SKIN to e.g. =mirror, topmenu, pattern=.
    $ context : As mentioned in the [[#Content_modes][Content modes]] section, the content mode of the curent web provides either 'content_master', 'content_slave', or 'inactive' context so that you can have =%<nop>IF{"context content_slave" ...}%= and =%<nop>TMPL:P{context="content_master" then="..." else="..."}%=.
 
 ---+++ In plug-in code
+   $ TWiki::Func::getSiteName() : Returns the current site name if it's defined. Otherwise it returns the null string.
    $ TWiki::Func::getContentMode($web) : Returns the [[#Content_modes][content mode]] of the specified web.
    $ TWiki::Func::getMasterWebScriptUrl($web, $topic, $script) : Returns the script URL on the master web with 'master' or 'slave' webs.
    Otherwise, the function returns a null string ("").

@@ -2671,6 +2671,23 @@ The following functions are for ReadOnlyAndMirrorWebs.
 
 =pod
 
+#GetSiteName
+---+++ getSiteName() -> $siteName
+
+Returns the current site name if it's defined. Otherwise returns the null
+string.
+=cut
+
+sub getSiteName {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
+    return $TWiki::cfg{SiteName} || '';
+}
+
+
+
+=pod
+
 #GetContentMode
 ---+++ getContentMode( $web ) -> $contentMode
 

@@ -1,0 +1,8 @@
+%META:TOPICINFO{author="TWikiContributor" date="1349258692" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarSITENAME
+---+++ SITENAME -- the current site name
+   * Syntax: =%<nop>SITENAME%=
+   * Supported parameters: none
+   * Returns the current site name defined by {SiteName} if defined. Returns the null string if not.
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarCONTENTMODE][CONTENTMODE]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarMASTERWEBSCRIPTURL][MASTERWEBSCRIPTURL]], ReadOnlyAndMirrorWebs
