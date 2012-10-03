@@ -1,6 +1,106 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349157735" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349237005" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
+<!--
+   Contributions to this add-on are appreciated. Please update the add-on page at
+   http://twiki.org/cgi-bin/view/Plugins/TWikiDashboardAddOn or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TWikiDashboardAddOnDev.
+   If you are a TWiki contributor please update the add-on in the SVN repository.
+-->
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+</sticky>
+%SHORTDESCRIPTION%
+
+---++ Introduction
 
 FIXME
 
-__Related:__ TWikiDashboardImages
+---++ Usage
+
+FIXME
+
+---++ Example
+
+This example shows a simple dashboard. Write this:
+<verbatim>
+%DASHBOARD{
+ bannerimage="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/golden-gate-sunset-by-peter-thoeny.jpg"
+ bannertitle="Dashboard for %WIKIUSERNAME%"
+ button1label="Help"
+ button1link="%SYSTEMWEB.WebHome"
+ box1title="Welcome"
+ box1content="WelcomeText"
+}%
+</verbatim>
+
+To get this dashboard:
+
+%DASHBOARD{
+ bannerimage="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/golden-gate-sunset-by-peter-thoeny.jpg"
+ bannertitle="Dashboard for %WIKIUSERNAME%"
+ button1label="Help"
+ button1link="%SYSTEMWEB.WebHome"
+ box1title="Welcome"
+ box1content="WelcomeText"
+}%
+
+---++ Dashboard Logic
+
+FIXME
+
+This section defines the actual dashboard. View the [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][raw text]] of this topic to look under the hood.
+<!--=========================================================
+%STARTSECTION{ "dashboard" }%<div class="" style="%IF{ "defined 'width'" then="width: %width%px; " }%">
+%bannerimage%
+%BR%
+%bannertitle%
+FIXME Dashboard
+</div>%ENDSECTION{ "dashboard" }%
+=========================================================-->
+
+---++ Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add=on on the TWiki server.
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Add-on topic |
+        | ==data/TWiki/TWikiDashboardImages.txt== | Topic with dashboard banner images |
+        | ==lib/TWiki/Contrib/%TOPIC%.pm== | Add-on Perl module |
+        | ==pub/TWiki/TWikiDashboardImages/*== | Sample dashboard banner images |
+      * Set the ownership of the extracted directories and files to the webserver user.
+
+   * Add-on __configuration__:
+      * If you use TWiki-5.1 or below add this bullet to %SYSTEMWEB%.TWikiPreferences:
+<verbatim>
+      * Set DASHBOARD = %INCLUDE{ "%SYSTEMWEB%.TWikiDashboardAddOn" section="dashboard" %IF{ "'%height{ default="" }%'!=''" then="height=\"%height%\"" }% %IF{ "'%width{ default="" }%'!=''" then="width=\"%width%\"" }% %IF{ "'%ENCODE{ "%bannerimage{ default="" }%" type="entity" }%'!=''" then="bannerimage=\"%bannerimage%\"" }% %IF{ "'%ENCODE{ "%bannertitle{ default="" }%" type="entity" }%'!=''" then="bannertitle=\"%bannertitle%\"" }% %IF{ "'%ENCODE{ "%style{ default="" }%" type="entity" }%'!=''" then="style=\"%style%\"" }% }%
+</verbatim>
+
+   * __Test__ if the installation was successful:
+      * See if example above work
+
+---++ Add-On Info
+
+   * Set SHORTDESCRIPTION = Create professional dashboards for intranet home, teams, knowledge bases and more
+
+|  Add-on Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2012, TWiki:Main.PeterThoeny |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Add-on Version: | 2012-10-02 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-10-02: | TWikibug:Item6954: Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 5.0)%BR% TWiki:Plugins.ScrollBoxAddOn %BR% TWiki:Plugins.SpreadSheetPlugin |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/TWikiDashboardAddOn |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/TWikiDashboardAddOnDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/TWikiDashboardAddOnAppraisal |
+
+__Related Topics:__ TWikiDashboardImages, ScrollBoxAddOn, %SYSTEMWEB%.TWikiAddOns
