@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1336981209" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349339588" format="1.1" version="$Rev$"}%
 ---+!! Scroll Box Add-on
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -231,7 +231,12 @@ This section defines the named sections ="scroll_box_engine"=, ="scroll_box"=, =
 </script>
 <style type='text/css' media='all'>
  .scrollBoxOuter {
-  border: solid #dddddd 1px;
+  border: solid #d0d0d0 1px;
+  -moz-box-shadow: 2px 2px 3px #e8e8e8;
+  -webkit-box-shadow: 2px 2px 3px #e8e8e8;
+  box-shadow: 2px 2px 3px #e8e8e8;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
   width: 300px;
   padding: 15px;
   background-image: url(%PUBURLPATH%/%WEB%/%TOPIC%/gradient-title.png);
@@ -243,7 +248,8 @@ This section defines the named sections ="scroll_box_engine"=, ="scroll_box"=, =
   font-size:19px;
   font-weight:bold;
   color: #333335;
-  padding:0 0 12px 0;
+  margin: -5px 0 0 0;
+  padding: 0 0 12px 0;
   white-space: nowrap;
   overflow: hidden;
  }
@@ -499,8 +505,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2012, TWiki:Main.PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2012-05-14 |
+|  Add-on Version: | 2012-10-04 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-10-04: | TWikibug:Item6956: CSS based box shadow and rounded corners |
 |  2012-05-14: | TWikibug:Item6837: Add non-scrolling box feature with "static_box*" sections; change padding from 10px to 15px; add boxstyle, titlestyle and contentstyle parameters |
 |  2011-02-10: | TWikibug:Item6638: Avoid &lt;p /&gt; tag when including scroll box engine |
 |  2011-01-25: | TWikibug:Item6638: Small style change: More padding below title |
