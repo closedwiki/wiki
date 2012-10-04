@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349237005" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349328831" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -25,39 +25,185 @@ FIXME
 
 This example shows a simple dashboard. Write this:
 <verbatim>
-%DASHBOARD{
- bannerimage="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/golden-gate-sunset-by-peter-thoeny.jpg"
- bannertitle="Dashboard for %WIKIUSERNAME%"
- button1label="Help"
- button1link="%SYSTEMWEB.WebHome"
- box1title="Welcome"
- box1content="WelcomeText"
+%DASHBOARD{ section="dashboard_start" }%
+%DASHBOARD{ section="banner"
+ image="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/marin-headlands.jpg"
+ title="Dashboard for %WIKIUSERNAME%"
+ buttons="Help: %SYSTEMWEB%.WebHome, Plugins: %SYSTEMWEB%.TWikiPlugins"
 }%
+%DASHBOARD{ section="box_start" title="Box 1 title" }%
+Box 1 content
+%DASHBOARD{ section="box_end" }%
+%DASHBOARD{ section="box_start" title="Box 2 title" }%
+Box 2 content
+%DASHBOARD{ section="box_end" }%
+%DASHBOARD{ section="box_start" title="Box 3 title" }%
+Box 3 content
+%DASHBOARD{ section="box_end" }%
+%DASHBOARD{ section="box_start" title="Box 3 title" }%
+Box 4 content
+%DASHBOARD{ section="box_end" }%
+%DASHBOARD{ section="dashboard_end" }%
 </verbatim>
 
 To get this dashboard:
 
-%DASHBOARD{
- bannerimage="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/golden-gate-sunset-by-peter-thoeny.jpg"
- bannertitle="Dashboard for %WIKIUSERNAME%"
- button1label="Help"
- button1link="%SYSTEMWEB.WebHome"
- box1title="Welcome"
- box1content="WelcomeText"
+---+++ USING %<nop>INCLUDE:
+%INCLUDE{ "TWikiDashboardAddOn" section="dashboard_start" }%
+%INCLUDE{ "TWikiDashboardAddOn" section="banner"
+ image="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/marin-headlands.jpg"
+ title="Dashboard for %WIKIUSERNAME%"
+ buttons="Help: %SYSTEMWEB%.WebHome, Plugins: %SYSTEMWEB%.TWikiPlugins"
 }%
+%INCLUDE{ "TWikiDashboardAddOn" section="box_start" title="Box 1 title" }%
+Box 1 content
+%INCLUDE{ "TWikiDashboardAddOn" section="box_end" }%
+%INCLUDE{ "TWikiDashboardAddOn" section="box_start" title="Box 2 title" }%
+Box 2 content
+%INCLUDE{ "TWikiDashboardAddOn" section="box_end" }%
+%INCLUDE{ "TWikiDashboardAddOn" section="box_start" title="Box 3 title" }%
+Box 3 content
+%INCLUDE{ "TWikiDashboardAddOn" section="box_end" }%
+%INCLUDE{ "TWikiDashboardAddOn" section="box_start" title="Box 3 title" }%
+Box 4 content
+%INCLUDE{ "TWikiDashboardAddOn" section="box_end" }%
+%INCLUDE{ "TWikiDashboardAddOn" section="dashboard_end" }%
+
+---+++ USING %<nop>INCLUDE with default (no params):
+%INCLUDE{ "TWikiDashboardAddOn" section="dashboard" }%
+%INCLUDE{ "TWikiDashboardAddOn" section="dashboard_start" }%
+%INCLUDE{ "TWikiDashboardAddOn" section="banner" }%
+%INCLUDE{ "TWikiDashboardAddOn" section="box_start" title="Box 1 title" }%
+Box 1 content
+%INCLUDE{ "TWikiDashboardAddOn" section="box_end" }%
+%INCLUDE{ "TWikiDashboardAddOn" section="box_start" }%
+Box 2 content (no title)
+%INCLUDE{ "TWikiDashboardAddOn" section="box_end" }%
+%INCLUDE{ "TWikiDashboardAddOn" section="dashboard_end" }%
+
+---+++ USING %<nop>DASHBOARD:
+%DASHBOARD{ section="dashboard_start" }%
+%DASHBOARD{ section="banner"
+ image="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/marin-headlands.jpg"
+ title="Dashboard for %WIKIUSERNAME%"
+ buttons="Help: %SYSTEMWEB%.WebHome, Plugins: %SYSTEMWEB%.TWikiPlugins"
+}%
+%DASHBOARD{ section="box_start" title="Box 1 title" }%
+Box 1 content
+%DASHBOARD{ section="box_end" }%
+%DASHBOARD{ section="box_start" title="Box 2 title" }%
+Box 2 content
+%DASHBOARD{ section="box_end" }%
+%DASHBOARD{ section="box_start" title="Box 3 title" }%
+Box 3 content
+%DASHBOARD{ section="box_end" }%
+%DASHBOARD{ section="box_start" title="Box 3 title" }%
+Box 4 content
+%DASHBOARD{ section="box_end" }%
+%DASHBOARD{ section="dashboard_end" }%
+
+---+++ USING %<nop>DASHBOARD with default (no params):
+%DASHBOARD{ section="dashboard_start" }%
+%DASHBOARD{ section="banner" }%
+%DASHBOARD{ section="box_start" title="Box 1 title" }%
+Box 1 content
+%DASHBOARD{ section="box_end" }%
+%DASHBOARD{ section="box_start" }%
+Box 2 content (no title)
+%DASHBOARD{ section="box_end" }%
+%DASHBOARD{ section="dashboard_end" }%
 
 ---++ Dashboard Logic
 
-FIXME
+FIXME: Work in progress
 
 This section defines the actual dashboard. View the [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][raw text]] of this topic to look under the hood.
 <!--=========================================================
-%STARTSECTION{ "dashboard" }%<div class="" style="%IF{ "defined 'width'" then="width: %width%px; " }%">
-%bannerimage%
-%BR%
-%bannertitle%
-FIXME Dashboard
-</div>%ENDSECTION{ "dashboard" }%
+%STARTSECTION{ "dashboard_start" }%<style>
+.twDashboardOuter {
+ margin: 0;
+ padding: 0;
+ width: 1040px; /* = 1024 + 2*7 margin + 2 extra */
+}
+.twDashboardBanner {
+ position: relative;
+ margin: 0 7px 7px 7px;
+ padding: 0;
+ width: 1024px; /* = 3 * (300w+2*15p+2*1b) + 2*2*7m */
+ height: 150px;
+ background-color: #dddddd;
+ background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TWikiDashboardImages/golden-gate-sunset.jpg);
+}
+.twDashboardBannerTitle {
+ position: absolute;
+ margin: 10px 15px;
+ padding: 0;
+ font-size: 20px;
+ font-weight: 600;
+ color: #333333;
+}
+.twDashboardBannerButtonRow {
+ position: absolute;
+ bottom: 0;
+ right: 0;
+ margin: 0;
+ padding: 10px 10px;
+ color: #333333;
+}
+.twDashboardBannerButton {
+ float:right;
+}
+.twDashboardBannerButton a {
+ display: inline-block;
+ margin: 5px 10px;
+ padding: 3px 8px;
+}
+.twDashboardBox{
+ float: left;
+ padding: 7px;
+}
+</style>
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="scroll_box_engine" }%<nop>
+<div class="twDashboardOuter">
+<nop>%ENDSECTION{ "dashboard_start" }%
+=========================================================-->
+
+<!--=========================================================
+%STARTSECTION{ "banner" }%<div class="twDashboardBanner" style="%IF{ "defined 'width'" then="width: %width%px; " }%%IF{ "defined 'image'" then="background-image: url(<nop>%image%); " }%">
+<div class="twDashboardBannerTitle">
+%IF{ "defined 'title'" then="$percnttitle$percnt" }%
+</div>
+<div class="twDashboardBannerButtonRow">
+%IF{ "defined 'buttons'" then="%CALCULATE{$LISTJOIN($sp, $LISTMAP(<div class='twDashboardBannerButton'>[[$LISTITEM(2, $SPLIT(: *, $item))][$LISTITEM(1, $SPLIT(: *, $item))]]</div>, %buttons%))}%" }%
+</div>
+</div>
+<script>
+$(".twDashboardBannerButton a").addClass("twikiButton");
+</script>
+<div style="clear: both;"></div>
+<nop>%ENDSECTION{ "banner" }%
+=========================================================-->
+
+<!--=========================================================
+%STARTSECTION{ "box_start" }%<div class="twDashboardBox">
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_start"
+  %IF{ "defined 'title'" then="title=\"%title%\" titlestyle=\"margin: -6px 0 0 0\"" else="<nop>" }%
+  width="300"
+  height="200"
+  contentstyle="overflow:auto;"
+}%
+<nop>%ENDSECTION{ "box_start" }%
+=========================================================-->
+
+<!--=========================================================
+%STARTSECTION{ "box_end" }%<nop>
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_end" }%
+</div>%ENDSECTION{ "box_end" }%
+=========================================================-->
+
+<!--=========================================================
+%STARTSECTION{ "dashboard_end" }%<div style="clear: both;"></div>
+</div>%ENDSECTION{ "dashboard_end" }%
 =========================================================-->
 
 ---++ Installation Instructions
@@ -79,7 +225,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
    * Add-on __configuration__:
       * If you use TWiki-5.1 or below add this bullet to %SYSTEMWEB%.TWikiPreferences:
 <verbatim>
-      * Set DASHBOARD = %INCLUDE{ "%SYSTEMWEB%.TWikiDashboardAddOn" section="dashboard" %IF{ "'%height{ default="" }%'!=''" then="height=\"%height%\"" }% %IF{ "'%width{ default="" }%'!=''" then="width=\"%width%\"" }% %IF{ "'%ENCODE{ "%bannerimage{ default="" }%" type="entity" }%'!=''" then="bannerimage=\"%bannerimage%\"" }% %IF{ "'%ENCODE{ "%bannertitle{ default="" }%" type="entity" }%'!=''" then="bannertitle=\"%bannertitle%\"" }% %IF{ "'%ENCODE{ "%style{ default="" }%" type="entity" }%'!=''" then="style=\"%style%\"" }% }%
+      * Set DASHBOARD = %INCLUDE{ "%SYSTEMWEB%.TWikiDashboardAddOn" section="%section%" %IF{ "'%height{ default="" }%'!=''" then="height=\"%height%\"" }% %IF{ "'%width{ default="" }%'!=''" then="width=\"%width%\"" }% %IF{ "'%ENCODE{ "%image{ default="" }%" type="entity" }%'!=''" then="image=\"%ENCODE{ "%image%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%title{ default="" }%" type="entity" }%'!=''" then="title=\"%ENCODE{ "%title%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%buttons{ default="" }%" type="entity" }%'!=''" then="buttons=\"%ENCODE{ "%buttons%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%style{ default="" }%" type="entity" }%'!=''" then="style=\"%style%\"" }% }%
 </verbatim>
 
    * __Test__ if the installation was successful:
@@ -92,9 +238,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2012, TWiki:Main.PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2012-10-02 |
+|  Add-on Version: | 2012-10-03 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-10-02: | TWikibug:Item6954: Initial version |
+|  2010-10-03: | TWikibug:Item6954: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 5.0)%BR% TWiki:Plugins.ScrollBoxAddOn %BR% TWiki:Plugins.SpreadSheetPlugin |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
