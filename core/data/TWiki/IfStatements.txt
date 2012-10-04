@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1344366980" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349308669" format="1.1" version="$Rev$"}%
 ---+ IF Statements
 
 The =%<nop>IF%= construct gives TWiki the power to include content in topics based on the value of simple expressions.
@@ -35,15 +35,16 @@ You can test if a *context identifier* is set or not, using conditions such as =
 | =can_login= | current environment supports login |
 | =changes= | in changes script (see TWikiScripts) |
 | =command_line= | the running script was run from the command line, and not from CGI |
+| =content_master= | with the current web, this site is the master of the federated sites (see ReadOnlyAndMirrorWebs) |
+| =content_slave= | with the current web, this site is a slave and another site in the federation is the master (see ReadOnlyAndMirrorWebs) |
 | =diff= | in rdiff script (see TWikiScripts) |
 | =edit= | in edit script (see TWikiScripts) |
 | =footer_text= | when the footer text is being processed in a view (useful in plugin handlers) |
 | =header_text= | when the header text is being processed in a view (useful in plugin handlers) |
 | =i18n_enabled= | when user interface <nop>I18N support is enabled (i.e., user can choose the language for UI) |
-| =inactive= | if active links such as 'edit' and 'attach' should be disabled |
+| =inactive= | if active links such as 'edit' and 'attach' should be disabled; a read-only web puts all topics in this context (see ReadOnlyAndMirrorWebs) |
 | =login= &amp; =logon= | in login / logon script (see TWikiScripts) |
 | =manage= | in manage script (see TWikiScripts) |
-| =mirror= | if this is a mirror |
 | =new_topic= | if the topic doesn't already exist |
 | =oops= | in oops script (see TWikiScripts) |
 | =preview= | in preview script (see TWikiScripts) |
