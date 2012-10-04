@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349328831" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349339331" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -37,7 +37,7 @@ Box 1 content
 %DASHBOARD{ section="box_start" title="Box 2 title" }%
 Box 2 content
 %DASHBOARD{ section="box_end" }%
-%DASHBOARD{ section="box_start" title="Box 3 title" }%
+%DASHBOARD{ section="box_start" title="Box 2 title" }%
 Box 3 content
 %DASHBOARD{ section="box_end" }%
 %DASHBOARD{ section="box_start" title="Box 3 title" }%
@@ -119,7 +119,9 @@ FIXME: Work in progress
 
 This section defines the actual dashboard. View the [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][raw text]] of this topic to look under the hood.
 <!--=========================================================
-%STARTSECTION{ "dashboard_start" }%<style>
+%STARTSECTION{ "dashboard_start" }%%ADDTOHEAD{
+ "twiki_dashboard_addon"
+ text="<style type='text/css' media='all'>
 .twDashboardOuter {
  margin: 0;
  padding: 0;
@@ -131,6 +133,11 @@ This section defines the actual dashboard. View the [[%SCRIPTURL{view}%/%WEB%/%T
  padding: 0;
  width: 1024px; /* = 3 * (300w+2*15p+2*1b) + 2*2*7m */
  height: 150px;
+ -moz-box-shadow: 2px 2px 3px #e8e8e8;
+ -webkit-box-shadow: 2px 2px 3px #e8e8e8;
+ box-shadow: 2px 2px 3px #e8e8e8;
+ -moz-border-radius: 4px;
+ border-radius: 4px;
  background-color: #dddddd;
  background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TWikiDashboardImages/golden-gate-sunset.jpg);
 }
@@ -162,7 +169,8 @@ This section defines the actual dashboard. View the [[%SCRIPTURL{view}%/%WEB%/%T
  float: left;
  padding: 7px;
 }
-</style>
+</style>"
+}%<nop>
 %INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="scroll_box_engine" }%<nop>
 <div class="twDashboardOuter">
 <nop>%ENDSECTION{ "dashboard_start" }%
@@ -174,12 +182,13 @@ This section defines the actual dashboard. View the [[%SCRIPTURL{view}%/%WEB%/%T
 %IF{ "defined 'title'" then="$percnttitle$percnt" }%
 </div>
 <div class="twDashboardBannerButtonRow">
-%IF{ "defined 'buttons'" then="%CALCULATE{$LISTJOIN($sp, $LISTMAP(<div class='twDashboardBannerButton'>[[$LISTITEM(2, $SPLIT(: *, $item))][$LISTITEM(1, $SPLIT(: *, $item))]]</div>, %buttons%))}%" }%
+%IF{
+ "defined 'buttons'"
+ then="%CALCULATE{$LISTJOIN($sp, $LISTMAP(<div class='twDashboardBannerButton'>[[$LISTITEM(2, $SPLIT(: *, $item))][$LISTITEM(1, $SPLIT(: *, $item))]]</div>, %buttons%))}% <script> $('.twDashboardBannerButton a').addClass('twikiButton'); </script>"
+ else="<nop>"
+}%
 </div>
 </div>
-<script>
-$(".twDashboardBannerButton a").addClass("twikiButton");
-</script>
 <div style="clear: both;"></div>
 <nop>%ENDSECTION{ "banner" }%
 =========================================================-->
@@ -187,8 +196,7 @@ $(".twDashboardBannerButton a").addClass("twikiButton");
 <!--=========================================================
 %STARTSECTION{ "box_start" }%<div class="twDashboardBox">
 %INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_start"
-  %IF{ "defined 'title'" then="title=\"%title%\" titlestyle=\"margin: -6px 0 0 0\"" else="<nop>" }%
-  width="300"
+  %IF{ "defined 'title'" then="title=\"%title%\"" }% width="300"
   height="200"
   contentstyle="overflow:auto;"
 }%
@@ -223,7 +231,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
       * Set the ownership of the extracted directories and files to the webserver user.
 
    * Add-on __configuration__:
-      * If you use TWiki-5.1 or below add this bullet to %SYSTEMWEB%.TWikiPreferences:
+      * If you use TWiki-5.1 or below add the following setting to %SYSTEMWEB%.TWikiPreferences:
 <verbatim>
       * Set DASHBOARD = %INCLUDE{ "%SYSTEMWEB%.TWikiDashboardAddOn" section="%section%" %IF{ "'%height{ default="" }%'!=''" then="height=\"%height%\"" }% %IF{ "'%width{ default="" }%'!=''" then="width=\"%width%\"" }% %IF{ "'%ENCODE{ "%image{ default="" }%" type="entity" }%'!=''" then="image=\"%ENCODE{ "%image%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%title{ default="" }%" type="entity" }%'!=''" then="title=\"%ENCODE{ "%title%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%buttons{ default="" }%" type="entity" }%'!=''" then="buttons=\"%ENCODE{ "%buttons%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%style{ default="" }%" type="entity" }%'!=''" then="style=\"%style%\"" }% }%
 </verbatim>
@@ -241,7 +249,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Version: | 2012-10-03 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  2010-10-03: | TWikibug:Item6954: Initial version |
-|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 5.0)%BR% TWiki:Plugins.ScrollBoxAddOn %BR% TWiki:Plugins.SpreadSheetPlugin |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 5.0)%BR% TWiki:Plugins.ScrollBoxAddOn %BR% TWiki:Plugins.SpreadSheetPlugin version 2012-04-04 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
