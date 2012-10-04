@@ -4868,6 +4868,16 @@ sub _getMdrepoField {
     return $rec->{$fieldName} || "";
 }
 
+sub _mdrepoFieldCond {
+    my ($neg, $val, $ifMet) = @_;
+    if ( $neg ) {
+        return $val ? '' : $ifMet;
+    }
+    else {
+        return $val ? $ifMet : '';
+    }
+}
+
 sub MDREPO {
     my ( $this, $params ) = @_;
     my $mdrepo = $this->{mdrepo};
@@ -4904,7 +4914,7 @@ sub MDREPO {
         my $rec = $mdrepo->getRec($table, $i);
         my $m = $i eq $selection ? $marker : '';
         my $ent = $format;
-        $ent =~ s/\?(\w+)(.)(.*?)\2/$rec->{$1} ? $3 : ''/ge;
+        $ent =~ s/\?(!?)(\w+)([!#%'\/:?@^`|~])(.*?)\3/_mdrepoFieldCond($1, $rec->{$2}, $4)/ge;
         $ent =~ s/\$marker(\(\))?/$m/g;
         $ent =~ s/\$(\w+)(\(\))?/_getMdrepoField($rec, $i, $1)/ge;
         push(@ents, $ent);

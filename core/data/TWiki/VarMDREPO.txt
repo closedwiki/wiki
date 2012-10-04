@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1339738011" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349324322" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarMEREPO
 ---+++ MDREPO -- retrieve data from metadata repository
@@ -18,7 +18,8 @@
        <tr><td> =$__= or =$__()= </td> <td> The record value in the following format:%BR% <i>FIELD_NAME</i>=<i>FIELD_VALUE</i> <i>FIELD_NAME</i>=<i>FIELD_VALUE</i> ... </td></tr>\
        <tr><td> =$marker= or =$marker()= </td><td> Expands to =marker= for the item matching =selection= only </td></tr>\
        <tr><td> =$FILED_NAME= or =$FIELD_NAME()= </td><td> The value of the specified field. If the specified field does not exist in the record, it's evaluated as a zero width string. </td></tr>\
-       <tr><td> =?FIELD_NAME?IF_TRUE?= </td><td> If the specified field has value and it's neither 0 nor a zero width string, it's evaluated as IF_TRUE. Otherwise, it's evaluated as a zero width string. This is like q/.../ in Perl. Whatever non word character following =?FIELD_NAME= becomes the terminator; i.e. you can write:<br/> =?FIELD_NAME:IF_TRUE:= </td></tr>\
+       <tr><td> =?FIELD_NAME?IF_FIELD_HAS_VALUE?= </td><td> If the specified field has value and it's neither 0 nor the null string (""), it's evaluated as IF_FIELD_HAS_VALUE. Otherwise, it's evaluated as the null string. This is like q/.../ in Perl. A non-word character following =?FIELD_NAME= becomes the terminator; i.e. you can write: =?FIELD_NAME:IF_TRUE:= <br/> Specifically, the following characters can be used as the delimiter: <br/> ! # % ' / : ? @  ^ ` &#124; ~ </td></tr>\
+       <tr><td> =?!FIELD_NAME?IF_FIELD_HAS_NO_VALUE?= </td><td> Similar to above but it's opposite. If the field has value, it's evaluated as the null string. Otherwise, it's evaluated as IF_FIELD_HAS_NO_VALUE. </td></tr>\
        </table>\
        | ="&#124; $_ &#124; $__ &#124;"= |
      | =selection="..."= | The record ID to be regarded as the selected. It affects how =$marker= in the format is evaluated. | _none_ |
