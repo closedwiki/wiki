@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349339588" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349373446" format="1.1" version="$Rev$"}%
 ---+!! Scroll Box Add-on
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -523,7 +523,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 
 __Related Topic:__ %SYSTEMWEB%.TWikiAddOns
 
-%META:FILEATTACHMENT{name="gradient-title.png" attachment="gradient-title.png" attr="h" comment="" date="1293056285" path="gradient-title.png" size="207" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="gradient-title.png" attachment="gradient-title.png" attr="h" comment="" date="1349373319" path="gradient-title.png" size="249" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="com-cisco.png" attachment="com-cisco.png" attr="h" comment="" date="1293056897" path="com-cisco.png" size="2873" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="com-fedex.png" attachment="com-fedex.png" attr="h" comment="" date="1293056897" path="com-fedex.png" size="7147" user="TWikiContributory" version="1"}%
 %META:FILEATTACHMENT{name="com-google.png" attachment="com-google.png" attr="h" comment="" date="1293056897" path="com-google.png" size="7014" user="TWikiContributor" version="1"}%
