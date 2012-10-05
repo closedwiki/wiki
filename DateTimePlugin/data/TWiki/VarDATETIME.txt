@@ -1,7 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349096587" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349480669" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarDATETIME
----+++ DATETIME -- Display date and time with formatting options and localized dates
-   * This variable is handled by the DateTimePlugin.
-   * Syntax: =%<nop>DATETIME{[format=]"format"}%=
-   * Example: =%<nop>DATETIME{"$wday"}%=, =<nop>DATETIME{"$day $month $year" incdays="-1"}=
+---+++ DATETIME{"format"} -- date and time formatting and calculation
+   * Calculate date and time in the past or future, and format date and time. This variable is handled by the DateTimePlugin.
+   * Syntax: =%<nop>DATETIME{"format"}%=
+   * Examples:
+      * =%<nop>DATETIME{"$wday"}%= returns the current weekday
+      * =%<nop>DATETIME{"$year-$mo-$day" incdays="-7"}%= returns the date of a week ago
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarCALC][CALC]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarGMTIME][GMTIME]], DateTimePlugin

@@ -4,7 +4,7 @@
 # For DateTimePlugin.pm:
 # Copyright (C) 2004 Aurélio A. Heckert, aurelio@im.ufba.br
 # Copyright (C) 2008 Arthur Clemens, arthur@visiblearea.com
-# Copyright (C) 2004-2011 TWiki Contributors
+# Copyright (C) 2004-2012 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-05-14';
+$RELEASE = '2012-10-05';
 
 $pluginName = 'DateTimePlugin';    # Name of this Plugin
 
