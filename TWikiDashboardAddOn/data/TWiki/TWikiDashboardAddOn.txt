@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349400974" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349407859" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -23,17 +23,27 @@ The add-on defines several section that can be included to create a dashboard. P
 
    * =section="dashboard_start"= -- start a dashboard
       * =width=""= -- width of dashboard in pixels, should match banner width, optional, default: 1024
+
    * =section="banner"= - dashboard banner
       * =image=""= -- banner image URL, optional
       * =title=""= -- banner title, optional, default no title
       * =width=""= -- banner width in pixels, should match dashboard width and image width, optional, default: 1024
       * =height=""= -- banner height in pixels, optional, default: 150
       * =buttons=""= -- banner buttons, optional. Format: =label1: link1, label2: link2, ...= Link can be a !Web.TopicName or a URL
+      * =style=""= -- CSS of banner box, optional, default: ="border: solid #d0d0d0 1px; padding: 15px;"=
+      * =titlestyle=""= -- CSS of banner title, optional, default: ="text-align:center; font-size:19px; font-weight:bold; color: #333335; padding:0 0 12px 0; white-space: nowrap; overflow: hidden;"=
+      * =contentstyle=""= -- CSS of buttons, optional, default: =""=
+
    * =section="box_start"= -- start a box
       * =title=""= -- box title, optional, default no title
       * =width=""= -- box width in pixels, optional, default: 300. Note: This is the usable width of the box content, it does not include 32 pixel of box border and padding
       * =height=""= -- box height in pixels, optional, default: 200
+      * =style=""= -- CSS of outer box, optional, default: ="border: solid #d0d0d0 1px; padding: 15px;"=
+      * =titlestyle=""= -- CSS of title, optional, default: ="text-align:center; font-size:19px; font-weight:bold; color: #333335; padding:0 0 12px 0; white-space: nowrap; overflow: hidden;"=
+      * =contentstyle=""= -- CSS of content, optional, default: ="overflow:auto; "=
+
    * =section="box_end"= -- end a box
+
    * =section="dashboard_end"= -- end a dashboard
 
 ---++ Example
@@ -198,11 +208,11 @@ This section defines the actual dashboard. View the [[%SCRIPTURL{view}%/%WEB%/%T
 =========================================================-->
 
 <!--=========================================================
-%STARTSECTION{ "banner" }%<div class="twDashboardBanner" style="%IF{ "defined 'width'" then="width: %width%px; " }%%IF{ "defined 'height'" then="height: %height%px; " }%%IF{ "defined 'image'" then="background-image: url(<nop>%image%); " }%">
-<div class="twDashboardBannerTitle">
+%STARTSECTION{ "banner" }%<div class="twDashboardBanner" style="%IF{ "defined 'width'" then="width: %width%px; " }%%IF{ "defined 'height'" then="height: %height%px; " }%%IF{ "defined 'image'" then="background-image: url(<nop>%image%); " }%%IF{ "defined 'style'" then="%style%; " }%">
+<div class="twDashboardBannerTitle" %IF{ "defined 'titlestyle'" then="style=\"%titlestyle%\"" }%>
 %IF{ "defined 'title'" then="$percnttitle$percnt" }%
 </div>
-<div class="twDashboardBannerButtonRow">
+<div class="twDashboardBannerButtonRow" %IF{ "defined 'contentstyle'" then="style=\"%contentstyle%\"" }%>
 %IF{
  "defined 'buttons'"
  then="%CALCULATE{$LISTJOIN($sp, $LISTMAP(<div class='twDashboardBannerButton'>[[$LISTITEM(2, $SPLIT(: *, $item))][$LISTITEM(1, $SPLIT(: *, $item))]]</div>, %buttons%))}% <script> $('.twDashboardBannerButton a').addClass('twikiButton'); </script>"
@@ -216,9 +226,7 @@ This section defines the actual dashboard. View the [[%SCRIPTURL{view}%/%WEB%/%T
 
 <!--=========================================================
 %STARTSECTION{ "box_start" }%<div class="twDashboardBox">
-%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_start"
-  %IF{ "defined 'title'" then="title=\"%title%\"" }% %IF{ "defined 'width'" then="width=\"%width%\"" else="width=\"300\"" }% %IF{ "defined 'height'" then="height=\"%height%\"" else="height=\"200\"" }% contentstyle="overflow:auto;"
-}%
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_start" %IF{ "defined 'title'" then="title=\"%title%\"" }% %IF{ "defined 'width'" then="width=\"%width%\"" else="width=\"300\"" }% %IF{ "defined 'height'" then="height=\"%height%\"" else="height=\"200\"" }% %IF{ "defined 'style'" then="boxstyle=\"%style%\"" }% %IF{ "defined 'titlestyle'" then="titlestyle=\"%titlestyle%\"" }% contentstyle="overflow:auto; %IF{ "defined 'contentstyle'" then="%contentstyle%;" }%" }%
 <nop>%ENDSECTION{ "box_start" }%
 =========================================================-->
 
@@ -252,7 +260,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
    * Add-on __configuration__:
       * If you use TWiki-5.1 or below add the following setting to %SYSTEMWEB%.TWikiPreferences:
 <verbatim>
-      * Set DASHBOARD = %INCLUDE{ "%SYSTEMWEB%.TWikiDashboardAddOn" section="%section%" %IF{ "'%height{ default="" }%'!=''" then="height=\"%height%\"" }% %IF{ "'%width{ default="" }%'!=''" then="width=\"%width%\"" }% %IF{ "'%ENCODE{ "%image{ default="" }%" type="entity" }%'!=''" then="image=\"%ENCODE{ "%image%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%title{ default="" }%" type="entity" }%'!=''" then="title=\"%ENCODE{ "%title%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%buttons{ default="" }%" type="entity" }%'!=''" then="buttons=\"%ENCODE{ "%buttons%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%style{ default="" }%" type="entity" }%'!=''" then="style=\"%style%\"" }% }%
+      * Set DASHBOARD = %INCLUDE{ "%SYSTEMWEB%.TWikiDashboardAddOn" section="%section%" %IF{ "'%height{ default="" }%'!=''" then="height=\"%height%\"" }% %IF{ "'%width{ default="" }%'!=''" then="width=\"%width%\"" }% %IF{ "'%ENCODE{ "%image{ default="" }%" type="entity" }%'!=''" then="image=\"%ENCODE{ "%image%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%title{ default="" }%" type="entity" }%'!=''" then="title=\"%ENCODE{ "%title%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%buttons{ default="" }%" type="entity" }%'!=''" then="buttons=\"%ENCODE{ "%buttons%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%style{ default="" }%" type="entity" }%'!=''" then="style=\"%style%\"" }% %IF{ "'%ENCODE{ "%titlestyle{ default="" }%" type="entity" }%'!=''" then="titlestyle=\"%titlestyle%\"" }% %IF{ "'%ENCODE{ "%contentstyle{ default="" }%" type="entity" }%'!=''" then="contentstyle=\"%contentstyle%\"" }% }%
 </verbatim>
 
    * __Test__ if the installation was successful:
