@@ -38,6 +38,7 @@ HERE
     $this->assert_html_equals(<<HTML, $result);
 <form method="post" action="$viewUrl" enctype="multipart/form-data" name="editpreferences">
  <span style="font-weight:bold;" class="twikiAlert">FLEEGLE = SHELTER\0070</span>
+#EditPreferences
  <input type="submit" name="prefsaction" value="Save new settings" accesskey="s" class="twikiSubmit" />
  &nbsp;
  <input type="submit" name="prefsaction" value="Cancel" accesskey="c" class="twikiButton" />
@@ -72,6 +73,7 @@ HERE
     $this->assert_html_equals(<<HTML, $result);
 <!-- Comment should be outside form -->
 Normal text outside form
+#EditPreferences
 <form method="post" action="$viewUrl" enctype="multipart/form-data" name="editpreferences">
  <input type="submit" name="prefsaction" value="Save new settings" accesskey="s" class="twikiSubmit" />
  &nbsp;
@@ -92,6 +94,7 @@ sub test_save {
             prefsaction => [ 'save' ],
             FLEEGLE => [ 'flurb' ],
         });
+    $query->request_method('POST');
     my $input = <<HERE;
    * Set FLEEGLE = floon
 %EDITPREFERENCES%
@@ -139,7 +142,7 @@ HERE
     my $viewUrl = TWiki::Func::getScriptUrl(
         $this->{test_web}, $this->{test_topic}, 'viewauth');
     $this->assert_html_equals(<<HTML, $result);
-<form method="post" action="$viewUrl" enctype="multipart/form-data" name="editpreferences">
+<form method="post" action="$viewUrl#EditPreferences" enctype="multipart/form-data" name="editpreferences">
  <input type="hidden" name="prefsaction" value="edit"  />
  <input type="submit" name="edit" value="Edit Preferences" class="twikiButton" />
 </form>

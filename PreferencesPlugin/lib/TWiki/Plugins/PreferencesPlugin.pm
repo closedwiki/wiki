@@ -181,7 +181,10 @@ sub _generateEditField {
             }
         }
     }
-    unless( $html ) {
+    if ( $html ) {
+        $html =~ s/(<table)\b/$1 style='display: inline' /i;
+    }
+    else {
         # No form definition, default to text field.
         $html = CGI::textfield( -class=>'twikiEditFormError twikiInputField',
                                 -name => $name,
