@@ -182,7 +182,7 @@ sub _generateEditField {
         }
     }
     if ( $html ) {
-        $html =~ s/(<table)\b/$1 style='display: inline' /i;
+        $html =~ s/(<(table|div))\b/$1 style='display: inline' /i;
     }
     else {
         # No form definition, default to text field.
