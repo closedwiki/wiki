@@ -36,7 +36,7 @@ IO::Handle,>=1.28,cpan,Required
 IO::Socket,>=1.31,cpan,Required
 IO::Socket::INET,>=1.31,cpan,Required
 IO::Socket::IP,>=0.14,cpan,Required
-IO::Socket::SSL,>=1.23,cpan,Optional,Allows daemon status server to use https (SSL) rather than http.  Highly recommended for security.
+IO::Socket::SSL,>=1.77,cpan,Required
 IO::Socket::UNIX,>=1.23,cpan,Required
 
 ONLYIF ($^O eq 'linux')
@@ -47,7 +47,7 @@ Linux::Inotify2,>= 1.22,cpan,Optional,Makes file monitoring more efficient and m
 
 LWP,>=6.02,cpan,Required
 LWP::UserAgent,>=6.02,cpan,Required
-LWP::Protocol::https,>=6.02,cpan,Optional,Required if daemon validates client certificates
+LWP::Protocol::https,>=6.02,cpan,Required
 MIME::Base64,>=3.13
 POSIX,>=1.09,cpan,Required
 Scalar::Util,>=1.23,cpan,Required

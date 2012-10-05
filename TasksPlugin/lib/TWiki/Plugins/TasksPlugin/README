@@ -63,7 +63,6 @@ developed on Linux (Fedora) and should be reasonably portable to other Unix envi
 There are some known issues with CPAN modules that may impact some users.  All have work-arounds/proposed patches in the bug trackers.  See:
  IPV6:
  o https://rt.cpan.org/Public/Bug/Display.html?id=79557
- o https://rt.cpan.org/Public/Bug/Display.html?id=79916
 
  Encrypted Private key files (use DES3 as a work-around)
  o https://rt.cpan.org/Public/Bug/Display.html?id=79927
