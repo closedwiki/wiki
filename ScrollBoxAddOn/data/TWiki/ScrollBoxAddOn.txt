@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349373446" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349400758" format="1.1" version="$Rev$"}%
 ---+!! Scroll Box Add-on
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -76,7 +76,7 @@ The ="scroll_box"= section generates a scroll box. It can be included more than 
 | =vstep= | Vertical step taken per scroll, in pixels. | (container height) |
 | =width= | Box width, in pixels. | ="300"= |
 | =height= | Box height of scrollable area, in pixels. | ="40"= |
-| =boxstyle= | CSS of outer box. | ="border: solid #dddddd 1px;%BR% padding: 15px;"= |
+| =boxstyle= | CSS of outer box. | ="border: solid #d0d0d0 1px;%BR% padding: 15px;"= |
 | =titlestyle= | CSS of title. | ="text-align:center;%BR% font-size:19px;%BR% font-weight:bold;%BR% color: #333335;%BR% padding:0 0 12px 0;%BR% white-space: nowrap;%BR% overflow: hidden;"= |
 | =contentstyle= | CSS of content. | ="text-align: justify;"= |
 
@@ -121,7 +121,7 @@ The ="static_box"= section generates a static box. It can be included more than 
 | =content= | Content of the box. Can be of any form, such as TML, HTML, images.%BR% Make sure to escape double quotes with a backslash, such as =&lt;br clear=\"all\"&gt;=. | (none) |
 | =width= | Box width, in pixels. | ="300"= |
 | =height= | Height of content, in pixels. | (auto) |
-| =boxstyle= | CSS of outer box. | ="border: solid #dddddd 1px;%BR% padding: 15px;"= |
+| =boxstyle= | CSS of outer box. | ="border: solid #d0d0d0 1px;%BR% padding: 15px;"= |
 | =titlestyle= | CSS of title. | ="text-align:center;%BR% font-size:19px;%BR% font-weight:bold;%BR% color: #333335;%BR% padding:0 0 12px 0;%BR% white-space: nowrap;%BR% overflow: hidden;"= |
 | =contentstyle= | CSS of content. | (none) |
 
@@ -148,7 +148,7 @@ The ="static_box_start"= section generates the start of a static box. Parameters
 | =title= | Title of the box. | (no title) |
 | =width= | Box width, in pixels. | ="300"= |
 | =height= | Height of content, in pixels. | (auto) |
-| =boxstyle= | CSS of outer box. | ="border: solid #dddddd 1px;%BR% padding: 15px;"= |
+| =boxstyle= | CSS of outer box. | ="border: solid #d0d0d0 1px;%BR% padding: 15px;"= |
 | =titlestyle= | CSS of title. | ="text-align:center;%BR% font-size:19px;%BR% font-weight:bold;%BR% color: #333335;%BR% padding:0 0 12px 0;%BR% white-space: nowrap;%BR% overflow: hidden;"= |
 | =contentstyle= | CSS of content. | (none) |
 
