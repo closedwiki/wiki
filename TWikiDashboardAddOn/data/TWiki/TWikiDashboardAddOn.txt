@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349339331" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349400974" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -19,7 +19,22 @@ FIXME
 
 ---++ Usage
 
-FIXME
+The add-on defines several section that can be included to create a dashboard. Parameters specify the content of the dashboard:
+
+   * =section="dashboard_start"= -- start a dashboard
+      * =width=""= -- width of dashboard in pixels, should match banner width, optional, default: 1024
+   * =section="banner"= - dashboard banner
+      * =image=""= -- banner image URL, optional
+      * =title=""= -- banner title, optional, default no title
+      * =width=""= -- banner width in pixels, should match dashboard width and image width, optional, default: 1024
+      * =height=""= -- banner height in pixels, optional, default: 150
+      * =buttons=""= -- banner buttons, optional. Format: =label1: link1, label2: link2, ...= Link can be a !Web.TopicName or a URL
+   * =section="box_start"= -- start a box
+      * =title=""= -- box title, optional, default no title
+      * =width=""= -- box width in pixels, optional, default: 300. Note: This is the usable width of the box content, it does not include 32 pixel of box border and padding
+      * =height=""= -- box height in pixels, optional, default: 200
+   * =section="box_end"= -- end a box
+   * =section="dashboard_end"= -- end a dashboard
 
 ---++ Example
 
@@ -37,10 +52,12 @@ Box 1 content
 %DASHBOARD{ section="box_start" title="Box 2 title" }%
 Box 2 content
 %DASHBOARD{ section="box_end" }%
-%DASHBOARD{ section="box_start" title="Box 2 title" }%
+%DASHBOARD{ section="box_start" title="Box 3 title" }%
 Box 3 content
 %DASHBOARD{ section="box_end" }%
-%DASHBOARD{ section="box_start" title="Box 3 title" }%
+%DASHBOARD{ section="box_start" title="Box 4 title" 
+ width="992" height="100"
+}%
 Box 4 content
 %DASHBOARD{ section="box_end" }%
 %DASHBOARD{ section="dashboard_end" }%
@@ -64,7 +81,9 @@ Box 2 content
 %INCLUDE{ "TWikiDashboardAddOn" section="box_start" title="Box 3 title" }%
 Box 3 content
 %INCLUDE{ "TWikiDashboardAddOn" section="box_end" }%
-%INCLUDE{ "TWikiDashboardAddOn" section="box_start" title="Box 3 title" }%
+%INCLUDE{ "TWikiDashboardAddOn" section="box_start" title="Box 4 title" 
+ width="992" height="100"
+}%
 Box 4 content
 %INCLUDE{ "TWikiDashboardAddOn" section="box_end" }%
 %INCLUDE{ "TWikiDashboardAddOn" section="dashboard_end" }%
@@ -97,7 +116,9 @@ Box 2 content
 %DASHBOARD{ section="box_start" title="Box 3 title" }%
 Box 3 content
 %DASHBOARD{ section="box_end" }%
-%DASHBOARD{ section="box_start" title="Box 3 title" }%
+%DASHBOARD{ section="box_start" title="Box 4 title" 
+ width="992" height="100"
+}%
 Box 4 content
 %DASHBOARD{ section="box_end" }%
 %DASHBOARD{ section="dashboard_end" }%
@@ -145,7 +166,7 @@ This section defines the actual dashboard. View the [[%SCRIPTURL{view}%/%WEB%/%T
  position: absolute;
  margin: 10px 15px;
  padding: 0;
- font-size: 20px;
+ font-size: 18pt;
  font-weight: 600;
  color: #333333;
 }
@@ -172,12 +193,12 @@ This section defines the actual dashboard. View the [[%SCRIPTURL{view}%/%WEB%/%T
 </style>"
 }%<nop>
 %INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="scroll_box_engine" }%<nop>
-<div class="twDashboardOuter">
+<div class="twDashboardOuter" %IF{ "defined 'width'" then="style=\"width: %CALCULATE{$INT(%width%+2*7+2)}%px;\"" }%>
 <nop>%ENDSECTION{ "dashboard_start" }%
 =========================================================-->
 
 <!--=========================================================
-%STARTSECTION{ "banner" }%<div class="twDashboardBanner" style="%IF{ "defined 'width'" then="width: %width%px; " }%%IF{ "defined 'image'" then="background-image: url(<nop>%image%); " }%">
+%STARTSECTION{ "banner" }%<div class="twDashboardBanner" style="%IF{ "defined 'width'" then="width: %width%px; " }%%IF{ "defined 'height'" then="height: %height%px; " }%%IF{ "defined 'image'" then="background-image: url(<nop>%image%); " }%">
 <div class="twDashboardBannerTitle">
 %IF{ "defined 'title'" then="$percnttitle$percnt" }%
 </div>
@@ -196,9 +217,7 @@ This section defines the actual dashboard. View the [[%SCRIPTURL{view}%/%WEB%/%T
 <!--=========================================================
 %STARTSECTION{ "box_start" }%<div class="twDashboardBox">
 %INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_start"
-  %IF{ "defined 'title'" then="title=\"%title%\"" }% width="300"
-  height="200"
-  contentstyle="overflow:auto;"
+  %IF{ "defined 'title'" then="title=\"%title%\"" }% %IF{ "defined 'width'" then="width=\"%width%\"" else="width=\"300\"" }% %IF{ "defined 'height'" then="height=\"%height%\"" else="height=\"200\"" }% contentstyle="overflow:auto;"
 }%
 <nop>%ENDSECTION{ "box_start" }%
 =========================================================-->
@@ -246,9 +265,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2012, TWiki:Main.PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2012-10-03 |
+|  Add-on Version: | 2012-10-04 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-10-03: | TWikibug:Item6954: Initial version |
+|  2010-10-04: | TWikibug:Item6954: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 5.0)%BR% TWiki:Plugins.ScrollBoxAddOn %BR% TWiki:Plugins.SpreadSheetPlugin version 2012-04-04 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
