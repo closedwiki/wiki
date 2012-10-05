@@ -1,4 +1,4 @@
 package TWiki::Contrib::TWikiDashboardAddOn;
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-10-04';
+our $RELEASE = '2012-10-05';
 1;
