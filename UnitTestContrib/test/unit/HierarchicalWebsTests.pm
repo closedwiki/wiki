@@ -354,6 +354,28 @@ sub test_WEBLIST_all {
     }
 }
 
+sub test_WEBLIST_listindent {
+    my $this = shift;
+
+    my $query = new Unit::Request("");
+    $query->path_info("/$testWeb/WebHome");
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+
+    my $text = '%WEBLIST{format="$listindent()   * $name().WebHome"}%';
+    $text = $this->{twiki}->handleCommonTags($text, $testWeb, 'WebHome');
+    $this->assert_equals(<<END, $text . "\n");
+   * HierarchicalWebsTestsTestWeb.WebHome
+      * HierarchicalWebsTestsTestWeb/SubWeb.WebHome
+   * Jupiter.WebHome
+   * Main.WebHome
+   * Sandbox.WebHome
+   * TWiki.WebHome
+   * TestCases.WebHome
+   * Venus.WebHome
+END
+}
+
 sub test_WEBLIST_relative {
     my $this = shift;
 
@@ -365,6 +387,19 @@ sub test_WEBLIST_relative {
     my $text = ' %WEBLIST{format="$name" separator=", " subwebs="'.$testWeb.'"}% ';
     $text = $this->{twiki}->handleCommonTags($text, $testWeb, 'WebHome');
     $this->assert_matches(qr! $testWebSubWebPath !, $text);
+}
+
+sub test_WEBLIST_relative_listindent {
+    my $this = shift;
+
+    my $query = new Unit::Request("");
+    $query->path_info("/$testWeb/WebHome");
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+
+    my $text = '%WEBLIST{format="$listindent   * $name.WebHome" subwebs="'.$testWeb.'"}%';
+    $text = $this->{twiki}->handleCommonTags($text, $testWeb, 'WebHome');
+    $this->assert_equals("   * $testWebSubWebPath.WebHome", $text);
 }
 
 sub test_WEBLIST_end {
