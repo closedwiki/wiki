@@ -174,7 +174,7 @@ sub test_075_MDREPO_sites_custom {
 
     $this->load_sites();
     $this->var_test(
-        '%MDREPO{"sites" format="?pubdir?$_=$server()?" separator=", "}%',
+        '%MDREPO{"sites" format="?pubdir?$_=$_server()?" separator=", "}%',
         'am=strawman, as=tinman, eu=woodenman'
     );
 }
