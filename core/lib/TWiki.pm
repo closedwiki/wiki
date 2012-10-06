@@ -4250,9 +4250,7 @@ sub SEARCH {
 sub WEBLIST {
     my( $this, $params ) = @_;
     my $format    = $params->{_DEFAULT} || $params->{'format'} || '$name';
-    $format ||= '$name';
-    my $separator = $params->{separator} || "\n";
-    $separator =~ s/\$n/\n/;
+    my $separator = expandStandardEscapes($params->{separator} || "\n");
     my $web       = $params->{web} || '';
     my $webs      = $params->{webs} || 'public';
     my $selection = $params->{selection} || '';
@@ -4296,6 +4294,7 @@ sub WEBLIST {
         $line =~ s/\$indentedname/$indenteditem/g;
         my $mark = ( $selection =~ / \Q$item\E / ) ? $marker : '';
         $line =~ s/\$marker/$mark/g;
+        $line = expandStandardEscapes($line);
         push( @items, $line );
     }
     return join( $separator, @items);
