@@ -1,15 +1,19 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349087802" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349483452" format="1.1" version="$Rev$"}%
 ---+!! JIRA Plugin
-
 <!--
-One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = Display JIRA issues by JQL search
-   * Set STAR = %RED%*%ENDCOLOR%
---> 
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/JiraPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/JiraPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+</sticky>
+%SHORTDESCRIPTION%
 
 JIRA issues can be displayed as a !TWiki table, based on a [[http://confluence.atlassian.com/display/JIRA/Advanced+Searching][JQL]] (JIRA Query Language).
-
-%TOC{title="Page contents"}%
 
 ---++ Introduction
 
@@ -102,6 +106,7 @@ The =fields= parameter accepts comma-separated list of the available fields belo
 %I% ="all"= can be used as a field name to indicate all the fields including custom fields. This is useful to temporarily display the table to see all the available fields. If ="all"= is used together with any other fields (e.g. =fields="id, status, all"=), the ="all"= portion indicates all the _other_ fields than the explicitly specified fields.
 
 ---++ Field options
+
 Each field name can be followed by an option to control the display format. For example, the =type= field is displayed as both icon and text like "<nobr><img src="%ATTACHURL%/bug.gif"/> Bug</nobr>" by default, and it can be written as =type_icon= to display only the icon, or =type_text= to display only the text.
 
 Below are all the available field options. In addition to these, for any of the fields, =_raw= or =_id= can be specified to use the raw value provided by the server.
@@ -137,6 +142,7 @@ Below are all the available field options. In addition to these, for any of the 
 </table>
 
 ---+++ Date
+
 | *Option* | *Description* |
 | =_date= (default) | DD/MMM/YYYY (e.g. 05/May/2011) |
 | =_long= | YYYY-MM-DD HH:mm 'ZZZ' |
@@ -238,7 +244,7 @@ When you have difficulty, try using the =fields="all"= to dump the matched resul
 
 As documented in the Atlassian's website, <u>the safest way is to use an integer value</u> (no matter how it looks cryptic). If you think your custom values will not change that often, you can use the text value in full, but remember that, if somebody ever modifies the custom value on the JIRA side, then your JQL query will stop working all of a sudden.
 
----+++ Double quotes cannot be used inside JQL
+---+++ Double quotes in JQL
 
 Although the "advanced search" may suggest to use double quotes for multi-word values, TWiki does not allow you to use it inside the =jql="..."= parameter.
 
@@ -309,12 +315,16 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    * Or, follow these __manual installation__ steps: 
       * Download the ZIP file from the Plugins home (see below).
       * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-| *File:* | *Description:* |
-| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * 
+        | *File:* | *Description:* |
+        | ==data/TWiki/JiraPlugin.txt== | Plugin topic |
+        | ==data/TWiki/VarJIRA.txt== | JIRA variable documentation topic |
+        | ==lib/TWiki/Plugins/JiraPlugin.pm== | Plugin Perl module |
+        | ==lib/TWiki/Plugins/JiraPlugin/Handler.pm== | Perl module |
+        | ==lib/TWiki/Plugins/JiraPlugin/Client.pm== | Perl module |
+        | ==lib/TWiki/Plugins/JiraPlugin/Field.pm== | Perl module |
+        | ==pub/TWiki/JiraPlugin/*gif== | Image files | 
       * Set the ownership of the extracted directories and files to the webserver user.
-      * Install the dependencies (if any).
+      * Install the dependencies.
 
    * Plugin __configuration and testing__: 
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
@@ -323,31 +333,37 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-Many thanks to the following sponsors for supporting this work:
-   * Acknowledge any sponsors here
+One line description for extensions repository catalog:
+   * Set SHORTDESCRIPTION = Display JIRA issues using JQL search
+<!--
+   * Set STAR = %RED%*%ENDCOLOR%
+--> 
 
-|  Plugin Author(s): | TWiki:Main.MahiroAndo |
-|  Copyright: | (c) 2012 TWiki:Main.MahiroAndo <br /> (c) 2012 TWiki:TWiki.TWikiContributor |
+Many thanks to the following sponsors for supporting this work:
+   * [[http://www.morganstanley.com/][Morgan Stanley]]
+
+|  Plugin Author: | TWiki:Main.MahiroAndo |
+|  Copyright: | &copy; 2012 TWiki:Main.MahiroAndo %BR% &copy; 2012 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Plugin Version: | 2012-09-14 (V1.000) |
-|  Change History: | <!-- versions below in reverse order --> |
-|  2012-09-21: | Initial version |
-|  Dependencies: | Date::Parse, !DateTime, LWP::UserAgent, Sort::Versions, XML::LibXML |
+|  Plugin Version: | 2012-10-05 (V1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-10-05: | TWikibug:Item6953: Add VarJIRA |
+|  2012-09-21: | TWikibug:Item6940: Initial version |
+|  Dependencies: | CPAN:Date::Parse, CPAN:DateTime, CPAN:LWP::UserAgent, CPAN:Sort::Versions, CPAN:XML::LibXML |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/JiraPlugin |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/JiraPluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/JiraPluginAppraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ VarJIRA, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
 
-%META:FILEATTACHMENT{name="bug.gif" attachment="bug.gif" attr="" comment="" date="1348215857" path="bug.gif" size="369" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="genericissue.gif" attachment="genericissue.gif" attr="" comment="" date="1348215857" path="genericissue.gif" size="365" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="improvement.gif" attachment="improvement.gif" attr="" comment="" date="1348215857" path="improvement.gif" size="254" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="newfeature.gif" attachment="newfeature.gif" attr="" comment="" date="1348215857" path="newfeature.gif" size="365" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="priority_major.gif" attachment="priority_major.gif" attr="" comment="" date="1348215857" path="priority_major.gif" size="137" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="priority_minor.gif" attachment="priority_minor.gif" attr="" comment="" date="1348215857" path="priority_minor.gif" size="137" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="status_closed.gif" attachment="status_closed.gif" attr="" comment="" date="1348215857" path="status_closed.gif" size="551" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="status_inprogress.gif" attachment="status_inprogress.gif" attr="" comment="" date="1348215857" path="status_inprogress.gif" size="573" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="status_resolved.gif" attachment="status_resolved.gif" attr="" comment="" date="1348215857" path="status_resolved.gif" size="553" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="status_open.gif" attachment="status_open.gif" attr="" comment="" date="1348216814" path="status_open.gif" size="564" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="bug.gif" attachment="bug.gif" attr="h" comment="" date="1348215857" path="bug.gif" size="369" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="genericissue.gif" attachment="genericissue.gif" attr="h" comment="" date="1348215857" path="genericissue.gif" size="365" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="improvement.gif" attachment="improvement.gif" attr="h" comment="" date="1348215857" path="improvement.gif" size="254" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="newfeature.gif" attachment="newfeature.gif" attr="h" comment="" date="1348215857" path="newfeature.gif" size="365" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="priority_major.gif" attachment="priority_major.gif" attr="h" comment="" date="1348215857" path="priority_major.gif" size="137" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="priority_minor.gif" attachment="priority_minor.gif" attr="h" comment="" date="1348215857" path="priority_minor.gif" size="137" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="status_closed.gif" attachment="status_closed.gif" attr="h" comment="" date="1348215857" path="status_closed.gif" size="551" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="status_inprogress.gif" attachment="status_inprogress.gif" attr="h" comment="" date="1348215857" path="status_inprogress.gif" size="573" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="status_resolved.gif" attachment="status_resolved.gif" attr="h" comment="" date="1348215857" path="status_resolved.gif" size="553" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="status_open.gif" attachment="status_open.gif" attr="h" comment="" date="1348216814" path="status_open.gif" size="564" user="TWikiContributor" version="1"}%
