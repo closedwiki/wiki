@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1341183609" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349488837" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -32,7 +32,7 @@ __Example:__
 </td><td>&nbsp; &nbsp; &nbsp;</td><td valign="top">
 __Interactive example:__
 
-<form name="interactive" action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="get">
+<form name="interactive" action="%SCRIPTURL{view}%/%WEB%/%TOPIC%" method="get">
 <noautolink>
 Formula:%BR%
 <code>&nbsp;%<nop>CALC{</code><input type="text" name="func" size="50" value="%URLPARAM{ "func" default="$PROPERSPACE(%WIKINAME%)" encode="entity" }%" class="twikiInputField" /><code>}%</code>
@@ -951,8 +951,9 @@ __Note:__ This plugin is pre-installed. TWiki administrators can upgrade it as n
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2001-2012 Peter Thoeny, [[http://twiki.org/][TWiki.org]]<br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-06-30 |
+|  Plugin Version: | 2012-10-06 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2012-10-06: | TWikibug:Item6960: Interactive evaluation feature on this page was suboptimal, which is fixed. |
 |  2012-06-30: | TWikibug:Item6898: Added $FILTER() |
 |  2012-06-29: | TWikibug:Item6897: Added $ISDIGIT(), $ISLOWER(), $ISUPPER(), $ISWIKIWORD() |
 |  2012-04-04: | TWikibug:Item6866: Added CALCULATE variable using register tag handler to support proper inside-out, left-to-right eval order like ordinary TWiki variables |
