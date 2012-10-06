@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349422266" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349504373" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -48,6 +48,12 @@ The add-on defines several section that can be included to create a dashboard. P
    * =section="box_end"= -- end a box
 
    * =section="dashboard_end"= -- end a dashboard
+
+---++ Dashboard Dimensions
+
+The default dashboard is 1024 pixels wide, which is just about the right size for laptop screens. The TWikiDashboardImages are designed for this width. The boxes are 300 pixels wide and 200 pixels high by default for a 3 column layout. The following screenshot shows the dimensions.
+
+<img src="%PUBURLPATH%/%WEB%/%TOPIC%/dashboard-dimensions.png" alt="dashboard dimensions" width="1035" height="477" />
 
 ---++ Example
 
@@ -292,3 +298,5 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/TWikiDashboardAddOnAppraisal |
 
 __Related Topics:__ TWikiDashboardImages, ScrollBoxAddOn, %SYSTEMWEB%.TWikiAddOns
+
+%META:FILEATTACHMENT{name="dashboard-dimensions.png" attachment="dashboard-dimensions.png" attr="h" comment="" date="1349501922" path="dashboard-dimensions.png" size="171778" user="TWikiContributor" version="1"}%
