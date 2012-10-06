@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349509643" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349510509" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -19,7 +19,7 @@ A dashboard comes into play when users need to get an overview of their work and
 
 ---++ Usage
 
-The add-on defines several sections that can be used to create a dashboard. This can be done either via [[VarDASHBOARD][DASHBOARD]] or [[%SYSTEMWEB%.VarINCLUDE][INCLUDE]] variables. A dashboard is constructed using the following sections:
+The add-on defines several sections that are used to create dashboards. This can be done either via [[VarDASHBOARD][DASHBOARD]] or [[%SYSTEMWEB%.VarINCLUDE][INCLUDE]] variables. A dashboard is constructed using the following sections:
 
    * section ="dashboard_start"=
       * section ="banner"=
@@ -116,13 +116,13 @@ When designing custom dimensions keep in mind that banner(s) and boxes are arran
 
 ---++ Example
 
-This example shows a simple dashboard. Write this:
+This example defines a simple dashboard. Write this:
 <verbatim>
 %DASHBOARD{ section="dashboard_start" }%
 %DASHBOARD{ section="banner"
  image="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/marin-headlands.jpg"
  title="Dashboard for %WIKIUSERNAME%"
- buttons="TWiki Help|%SYSTEMWEB%.WebHome; Popup Demo|Modal Popup Demo|This requires the TWiki:Plugins.ModalBoxAddOn"
+ buttons="TWiki Help|%SYSTEMWEB%.WebHome; Popup Demo|Modal Popup Demo|This requires the TWiki:Plugins.ModalBoxAddOn|600"
 }%
 %DASHBOARD{ section="box_start" title="Box 1 title" }%
 Box 1 content
@@ -133,52 +133,16 @@ Box 2 content
 %DASHBOARD{ section="box_start" title="Box 3 title" }%
 Box 3 content
 %DASHBOARD{ section="box_end" }%
-%DASHBOARD{ section="box_start" title="Box 4 title" 
- width="992" height="100"
-}%
+%DASHBOARD{ section="box_start" title="Box 4 title" width="992" height="100" }%
 Box 4 content
 %DASHBOARD{ section="box_end" }%
 %DASHBOARD{ section="dashboard_end" }%
 </verbatim>
 
-To get this dashboard:
+As documented earlier, an alternate syntax for =%<nop>DASHBOARD{ section="..." ... }%= is =%<nop>INCLUDE{ "TWikiDashboardAddOn" section="..." ... }%=.
 
----+++ USING %<nop>INCLUDE:
-%INCLUDE{ "TWikiDashboardAddOn" section="dashboard_start" }%
-%INCLUDE{ "TWikiDashboardAddOn" section="banner"
- image="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/marin-headlands.jpg"
- title="Dashboard for %WIKIUSERNAME%"
- buttons="TWiki Help|%SYSTEMWEB%.WebHome; Popup Demo|Modal Popup Demo|This requires the TWiki:Plugins.ModalBoxAddOn|600"
-}%
-%INCLUDE{ "TWikiDashboardAddOn" section="box_start" title="Box 1 title" }%
-Box 1 content
-%INCLUDE{ "TWikiDashboardAddOn" section="box_end" }%
-%INCLUDE{ "TWikiDashboardAddOn" section="box_start" title="Box 2 title" }%
-Box 2 content
-%INCLUDE{ "TWikiDashboardAddOn" section="box_end" }%
-%INCLUDE{ "TWikiDashboardAddOn" section="box_start" title="Box 3 title" }%
-Box 3 content
-%INCLUDE{ "TWikiDashboardAddOn" section="box_end" }%
-%INCLUDE{ "TWikiDashboardAddOn" section="box_start" title="Box 4 title" 
- width="992" height="100"
-}%
-Box 4 content
-%INCLUDE{ "TWikiDashboardAddOn" section="box_end" }%
-%INCLUDE{ "TWikiDashboardAddOn" section="dashboard_end" }%
+This example generates the following dashboard:
 
----+++ USING %<nop>INCLUDE with default (no params):
-%INCLUDE{ "TWikiDashboardAddOn" section="dashboard" }%
-%INCLUDE{ "TWikiDashboardAddOn" section="dashboard_start" }%
-%INCLUDE{ "TWikiDashboardAddOn" section="banner" }%
-%INCLUDE{ "TWikiDashboardAddOn" section="box_start" title="Box 1 title" }%
-Box 1 content
-%INCLUDE{ "TWikiDashboardAddOn" section="box_end" }%
-%INCLUDE{ "TWikiDashboardAddOn" section="box_start" }%
-Box 2 content (no title)
-%INCLUDE{ "TWikiDashboardAddOn" section="box_end" }%
-%INCLUDE{ "TWikiDashboardAddOn" section="dashboard_end" }%
-
----+++ USING %<nop>DASHBOARD:
 %DASHBOARD{ section="dashboard_start" }%
 %DASHBOARD{ section="banner"
  image="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/marin-headlands.jpg"
@@ -194,27 +158,12 @@ Box 2 content
 %DASHBOARD{ section="box_start" title="Box 3 title" }%
 Box 3 content
 %DASHBOARD{ section="box_end" }%
-%DASHBOARD{ section="box_start" title="Box 4 title" 
- width="992" height="100"
-}%
+%DASHBOARD{ section="box_start" title="Box 4 title" width="992" height="100" }%
 Box 4 content
 %DASHBOARD{ section="box_end" }%
 %DASHBOARD{ section="dashboard_end" }%
 
----+++ USING %<nop>DASHBOARD with default (no params):
-%DASHBOARD{ section="dashboard_start" }%
-%DASHBOARD{ section="banner" }%
-%DASHBOARD{ section="box_start" title="Box 1 title" }%
-Box 1 content
-%DASHBOARD{ section="box_end" }%
-%DASHBOARD{ section="box_start" }%
-Box 2 content (no title)
-%DASHBOARD{ section="box_end" }%
-%DASHBOARD{ section="dashboard_end" }%
-
 ---++ Dashboard Logic
-
-FIXME: Work in progress
 
 This section defines the actual dashboard. View the [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][raw text]] of this topic to look under the hood.
 <!--=========================================================
