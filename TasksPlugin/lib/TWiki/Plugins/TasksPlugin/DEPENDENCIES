@@ -33,6 +33,7 @@ HTTP::Status,>=6.00,cpan,Required
 IO::CaptureOutput,>=1.1102,cpan,Required
 IO::File,>=1.14,cpan,Required
 IO::Handle,>=1.28,cpan,Required
+Hash::Merge,>=0.12,cpan,Required
 IO::Socket,>=1.31,cpan,Required
 IO::Socket::INET,>=1.31,cpan,Required
 IO::Socket::IP,>=0.14,cpan,Required
