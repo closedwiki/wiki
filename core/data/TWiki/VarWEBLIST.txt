@@ -6,7 +6,18 @@
    * Syntax: =%<nop>WEBLIST{"format" ...}%=
    * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* |
-     | ="format"= | Format of one line, may include =$name= (the name of the web), $qname (the name of the web in double quotes), =$indentedname= (the name of the web with parent web names replaced by indents, for use in indented lists), and =$marker= (which expands to =marker= for the item matching =selection= only) In addition, [[FormatTokens][the standard special tokens]] are handled accordingly. | ="$name"=. |
+     | ="format"= | Format of one line, may include following items. In addtion, [[FormatTokens][the standard special tokens]] are handled accordingly.\
+     <table class="twikiTable">\
+     <tr><td> *Item* </td><td> *Description* </td></tr>\
+     <tr><td> =$name= </td><td> the name of the web </td></tr>\
+     <tr><td> =$qname= </td><td> the name of the web in double quotes </td></tr>\
+     <tr><td>  =$indentedname= </td><td> the name of the web with parent web names replaced by indents, for use in indented lists </td></tr>\
+     <tr><td> =$listindent= </td><td> expands to multiple-of-3 spaces for bullet (*) and numberd (1., a., etc.) lists. It's relative to the depth of the web specified by the =subwebs= parameter. See an example below. </td></tr>\
+     <tr><td> =$marker= </td><td> expands to =marker= for the item matching =selection= only </td></tr>\
+     <tr><td> =$web= </td><td> expands to the value specified by the =web= parameter </td></tr>\
+     </table>\
+     If you need to have a letter immediately after an item listed above, use =$nop()=, one of [[FormatTokens]].  e.g. =$name$nop()a= \
+     | ="$name"= |
      | =format="format"= | (Alternative to above) | ="$name"= |
      | =separator=", "= | Line separator | ="$n"= (new line) |
      | =web=""= | if you specify =$web= in format, it will be replaced with this  | =""= |
@@ -16,6 +27,6 @@
      | =subwebs="Sandbox"= | Show webs that are a sub-web of this one (recursivly) | =""= |
      | =limit="30"= | Limit number of webs to show | =""= (all) |
      | =overlimit="..."= | Message shown if over limit, such as: =overlimit="   * [<nop>[%<nop>SYSTEMWEB%.SiteMap][More...]]"= | =""= |
-   * Example: =%<nop>WEBLIST{"   * [<nop>[$name.%HOMETOPIC%]]"}%= - creates a bullet list of all webs.
+   * Example: =%<nop>WEBLIST{"$listindent   * [<nop>[$name.%HOMETOPIC%]]"}%= - creates a indented bullet list of all webs.
    * Example: =&lt;form&gt;&lt;select name="web"&gt; %<nop>WEBLIST{"&lt;option $marker value=$qname&gt;$name&lt;/option&gt;" webs="Trash, public" selection="%<nop>WEB%" separator=" "}% &lt;/select&gt;&lt;/form&gt;= - creates a dropdown of all public webs + Trash web, with the current web highlighted.
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarTOPICLIST][TOPICLIST]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSEARCH][SEARCH]], MetadataRepository, ReadOnlyAndMirrorWebs, UsingMultipleDisks

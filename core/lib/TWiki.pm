@@ -4287,13 +4287,18 @@ sub WEBLIST {
         my $line = $format;
         $line =~ s/\$web\b/$web/g;
         $line =~ s/\$name\b/$item/g;
-        $line =~ s/\$qname/"$item"/g;
+        $line =~ s/\$qname\b/"$item"/g;
         my $indenteditem = $item;
         $indenteditem =~ s#/$##g;
         $indenteditem =~ s#\w+/#$indent#g;
-        $line =~ s/\$indentedname/$indenteditem/g;
+        $line =~ s/\$indentedname\b/$indenteditem/g;
+        my $listindent = '   ' x
+            (($item =~ tr:/::) -
+             ($showWeb eq '' ? 0 : ($showWeb =~ tr:/::) + 1));
+            # $s =~ tr:/:: doesn't modify $s
+        $line =~ s/\$listindent\b/$listindent/g;
         my $mark = ( $selection =~ / \Q$item\E / ) ? $marker : '';
-        $line =~ s/\$marker/$mark/g;
+        $line =~ s/\$marker\b/$mark/g;
         $line = expandStandardEscapes($line);
         push( @items, $line );
     }
