@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# -*- mode: CPerl; -*-
 
 # Copyright (C) 2012 Timothe Litt <litt at acm dot org>
 # License is at end of file.  
@@ -8,41 +9,120 @@
 # Recursively processes .pl/.pm files for require/use d modules and extracts
 # their VERSION.  Generates DEPENDENCIES format output.
 #
-# Run from Component directory under trunk of an SVN checkout
-# Arg is module prefix to exclude (e.g. because known not to be versioned/interesting
+# Run from Component directory under trunk of an SVN checkout, or specify
+# a base directory to scan and a TWiki core library to consult.
 #
-# Check output carefully.
+# --exclude is module prefix list to exclude (e.g. because known not to be versioned/interesting
+# --Include is a list of other perl libraries to search
+# --lib is the location of the TWiki core library.  Defaults to ../core/lib.
+# --manifest is the location of the TWiki core MANIFEST; '-' to ignore.  Defaults to --lib/TWiki/Contrib/core/MANIFEST.
+# --who lists modules that create each dependency
+#
+# Check output carefully; this script is clever, but not perfect.
+# Notably, it assumes everything comes from CPAN and that everything is Required.
 
 
 use warnings;
 use strict;
 
+use Cwd qw/realpath/;
 use File::Basename;
 use File::Find;
+use Getopt::Long;
 use Module::Extract::VERSION;
-my $lib = `readlink -f ../core/lib`;
+use Perl::Version;
+
+my( $lib, @Include, $twikiMANIFEST, $who, @exclude );
+
+GetOptions(
+           "exclude=s" =>\@exclude,
+           "Include=s", =>\@Include,
+           "lib=s" => \$lib,
+           "who-requires" => \$who,
+          ) or exit (1 );
+
+$lib = realpath( '../core/lib' ) unless( defined $lib );
 chomp $lib;
 unshift @INC, $lib;
 
-$ARGV[0] = 'TWiki::Tasks' if( `readlink -f .` =~ /TasksPlugin$/ && !@ARGV );
+$exclude[0] = 'TWiki::Tasks' if( !@exclude && realpath( '.' ) =~ /TasksPlugin$/ );
 
-find( { wanted => \&handle, no_chdir => 1, },  '.' );
+unshift @INC, @Include;
+
+my %twikikit;
+my %who;
+
+$twikiMANIFEST = "$lib/TWiki/Contrib/core/MANIFEST" unless( defined $twikiMANIFEST );
+
+# Modules shipped with TWiki:
+
+unless( $twikiMANIFEST eq '-' ) {
+    if( open( my $tman, '<', $twikiMANIFEST ) ) {
+        while( <$tman> ) {
+            chomp;
+            s/[!#].*$//;
+            s/^\s+//;
+            s/\s+$//;
+            next if( /^\s*$/ );
+            my $tv;
+            if( m,^\s*lib/CPAN/lib/(\S+\.pm), ) {
+                $tv = $1;
+                $twikikit{$tv}{file} = "$lib/CPAN/lib/$1";
+                $twikikit{$tv}{ver} = Module::Extract::VERSION->parse_version_safely("$lib/CPAN/lib/$tv") || '0.0';
+            } elsif( m,^\s*lib/(\S+\.pm), ) {
+                $tv = $1;
+                $twikikit{$tv}{file} = "$lib/$tv";
+                $twikikit{$tv}{ver} = Module::Extract::VERSION->parse_version_safely("$lib/$tv") || '0.0';
+            }
+            if( defined $tv && $twikikit{$tv}{ver} eq '$Rev$' ) {
+                my $r = realpath( $twikikit{$tv}{file} );
+                $r = `svnversion $r`;
+                if( $r && $r =~ /^(\d+)[MSP]?$/ ) {
+                    $twikikit{$tv}{ver} = $1;
+                }
+            }
+        }
+        close $tman;
+    } else {
+        print( "Unable to read $twikiMANIFEST: $!.  Including all modules.\n" );
+    }
+}
+
+# Modules from this component: traverse directory tree
+
+$ARGV[0] = '.' unless( @ARGV );
+
+find( { wanted => \&handle, no_chdir => 1, },  @ARGV );
 
 my( %vers, %found );
 
 sub handle {
-    process( $File::Find::name );
+    process( $File::Find::name, $File::Find::name );
 }
 
+# Recursive analysis:
+
 sub process {
+    my $parent = shift;
     $_ = shift;
 
-    return unless( /\.p[lm]$/ );
+    return if( /~$/ );
+
+    return unless( -f $_ && ( /\.p[lm]$/ || -x $_ ) );
 
     my $fn = $_;
     $_ = basename $_;
 
-    open( my $fh, '<', $fn ) or die "can't open $fn: $!\n";
+    open( my $fh, '<', $fn ) or die "can't open $fn for $parent: $!\n";
+
+    if( -x $fn ) {
+        my $bang = <$fh>;
+        unless( $bang && $bang =~ /#!.*perl\b/ ) {
+            close $fh;
+            return;
+        }
+    }
+
     my $pod;
     while( <$fh> ) {
         chomp;
@@ -62,33 +142,74 @@ sub process {
         my $pm = "${_}.pm";
         $pm =~ s,::,/,g;
 
+        push @{$who{$_}}, $parent if( $who );
+
         next if( $found{$pm} );
 
-        for my $lib (@INC ) {
+        for my $lib (@INC ) { # doesn't include TWiki-shipped CPAN stuff.
             if( -f "$lib/$pm" ) {
                 $found{$pm} = "$lib/$pm";
                 last;
             }
         }
-        unless( $found{$pm} ) {
-            print "Can't locate $pm in ", join( ', ', @INC ), "\n";
+        unless( $found{$pm} || exists $twikikit{$pm} ) {
+            print "Can't locate $pm for $parent in ", join( ', ', @INC ), "\n";
             next;
         }
 
-        unless( /^$ARGV[0]/o ) { # Excluded
-            $vers{$_} = Module::Extract::VERSION->parse_version_safely($found{$pm}) || '';
-        }
+        # We found in twikikit, must be OK
 
+        next if( $found{$pm} && exists  $twikikit{$pm} && $found{$pm} eq "$lib/$pm" );
+
+        my $excluded;
+        for my $x (@exclude) {
+            next unless( /^$x/ ); 
+            $excluded = 1;
+            last;
+        }
+        unless( $excluded ) {
+            my $kv = Module::Extract::VERSION->parse_version_safely($found{$pm}) || '0.0';
+            if( $kv eq '$Rev$' ) {
+                my $r = realpath( $found{$pm} );
+                $r = `svnversion $r`;
+                if( $r && $r =~ /^(\d+)[MSP]?$/ ) {
+                    $kv = $1
+                }
+            }
+            $vers{$_} = $kv;
+
+            if( exists $twikikit{$pm} ) {
+                my $tv = $twikikit{$pm}{ver};
+                eval {
+                    $tv = Perl::Version->new( $tv ); # TWiki shipped
+                    $kv = Perl::Version->new( $kv ); # This kit uses
+                }; if( $@ ) {
+                    print "Unable to compare versions of $_ for $parent; check TWiki distribution vs. kit.\n";
+                    next;
+                }
+                if( ($tv <=> $kv) < 0 ) { # TWiki shipping old bits.
+                    print "TWiki ships version $tv of $_, but $kv is required in $parent\n";
+                }
+                next;
+            }
+        }
         $_ = $found{$pm};
         if( /^\./ ) {
-            process( $_ );
+            process( $fn, $_ );
         }
     }
     close $fh;
 }
 
 for (sort keys %vers) {
-    print "$_,>=,$vers{$_},cpan,Required\n" ;
+    my $base = "$_,>=,$vers{$_},cpan,Required" ;
+    if( $who ) {
+        $base .= " by ";
+        print $base, join( ",\n#" . (' ' x (length($base)-1)), 
+                           sort @{$who{$_}} ), "\n";
+    } else {
+        print "$base\n";
+    }
 }
 
 __END__
