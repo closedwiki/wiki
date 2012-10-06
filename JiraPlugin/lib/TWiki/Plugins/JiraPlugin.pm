@@ -1,10 +1,8 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2006 Peter Thoeny, peter@thoeny.org
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
+# Copyright (C) 2012 TWiki:Main.MahiroAndo
+# Copyright (C) 2012 TWiki Contributors
+# All Rights Reserved.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,7 +24,6 @@ Jira Plugin
 
 =cut
 
-# change the package name and $pluginName!!!
 package TWiki::Plugins::JiraPlugin;
 
 # Always use strict to enforce variable scoping
@@ -35,31 +32,14 @@ use strict;
 require TWiki::Func;
 require TWiki::Plugins;
 
-# $VERSION is referred to by TWiki, and is the only global variable that
-# *must* exist in this package.
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2012-10-05';
 
 # Short description of this plugin
 # One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-$SHORTDESCRIPTION = 'Display JIRA issues by JQL search';
-
-# You must set $NO_PREFS_IN_TOPIC to 0 if you want your plugin to use preferences
-# stored in the plugin topic. This default is required for compatibility with
-# older plugins, but imposes a significant performance penalty, and
-# is not recommended. Instead, use $TWiki::cfg entries set in LocalSite.cfg, or
-# if you want the users to be able to change settings, then use standard TWiki
-# preferences that can be defined in your Main.TWikiPreferences and overridden
-# at the web and topic level.
+$SHORTDESCRIPTION = 'Display JIRA issues using JQL search';
 $NO_PREFS_IN_TOPIC = 1;
 
 # Name of this Plugin, only used in this module

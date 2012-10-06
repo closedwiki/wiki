@@ -1,3 +1,21 @@
+# Module for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2012 TWiki:Main.MahiroAndo
+# Copyright (C) 2012 TWiki Contributors
+# All Rights Reserved.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# For licensing info read LICENSE file in the TWiki root.
+
 use strict;
 package TWiki::Plugins::JiraPlugin::Client;
 
