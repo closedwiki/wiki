@@ -83,7 +83,9 @@ my $OS = $TWiki::cfg{OS} || '';
 # lib or templates) you are opening up routes for possible hacking attempts.
 
 # **URL M**
-#  This is the root of all TWiki URLs e.g. http://myhost.com:123.
+# This is the root of all TWiki URLs, e.g. http://myhost.com:123. It must
+# contain the protocol (http:// or https://) and domain name or IP address.
+# Add port number if needed. Do not add a trailing slash.
 # $TWiki::cfg{DefaultUrlHost} = 'http://your.domain.com';
 
 # **STRING**
@@ -93,8 +95,9 @@ my $OS = $TWiki::cfg{OS} || '';
 # The security setting {AllowRedirectUrl} is per default disabled making redirecting to other
 # domains restricted to prevent TWiki from being used in phishing attacks to protect it from
 # middleman exploits. You can add additional URLs to this setting to enable redirects to
-# additional trusted sites. Enter as comma separated list of URLs or hostnames. The URL must 
-# be in the format http://your.domain.com.
+# additional trusted sites. Enter comma-space separated list of URLs. Each URL must be of
+# form http://your.domain.com, e.g. it must contain the protocol (http:// or https://) and
+# domain name or IP address. Add port number if needed. Do not add a trailing slash.
 $TWiki::cfg{PermittedRedirectHostUrls} = '';
 
 # **PATH M**
