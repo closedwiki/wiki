@@ -1,0 +1,107 @@
+#!/usr/bin/perl
+
+# Copyright (C) 2012 Timothe Litt <litt at acm dot org>
+# License is at end of file.  
+# Removal of Copyright and/or License prohibited.
+
+# Dependency extractor.
+# Recursively processes .pl/.pm files for require/use d modules and extracts
+# their VERSION.  Generates DEPENDENCIES format output.
+#
+# Run from Component directory under trunk of an SVN checkout
+# Arg is module prefix to exclude (e.g. because known not to be versioned/interesting
+#
+# Check output carefully.
+
+
+use warnings;
+use strict;
+
+use File::Basename;
+use File::Find;
+use Module::Extract::VERSION;
+my $lib = `readlink -f ../core/lib`;
+chomp $lib;
+unshift @INC, $lib;
+
+$ARGV[0] = 'TWiki::Tasks' if( `readlink -f .` =~ /TasksPlugin$/ && !@ARGV );
+
+find( { wanted => \&handle, no_chdir => 1, },  '.' );
+
+my( %vers, %found );
+
+sub handle {
+    process( $File::Find::name );
+}
+
+sub process {
+    $_ = shift;
+
+    return unless( /\.p[lm]$/ );
+
+    my $fn = $_;
+    $_ = basename $_;
+
+    open( my $fh, '<', $fn ) or die "can't open $fn: $!\n";
+    my $pod;
+    while( <$fh> ) {
+        chomp;
+
+        $pod = /^=(?!cut)/ ? 1 : /^=cut/ ? 0 : $pod;
+        next if $pod || /^\s*#/;
+
+        next unless( /^\s*(?:require|use)\s+[A-Za-z0-9_:]+/ );
+
+        s/\s*(?:use|require)\s+//;
+        s/^base\s+(?:qw.|["'])([A-Za-z0-9_:]+).*$/$1/;
+        s/^([A-Za-z0-9_:]+).*$/$1/;
+        /^(?:warnings|strict|attributes|autouse|blib|bytes|charnames|constant|diagnostics|fields|filetest|integer|less|lib|locale|open|overload|re|sigtrap|subs|vars)/ and next;
+
+        next if ( /^\d/ ); # use VERSION
+
+        my $pm = "${_}.pm";
+        $pm =~ s,::,/,g;
+
+        next if( $found{$pm} );
+
+        for my $lib (@INC ) {
+            if( -f "$lib/$pm" ) {
+                $found{$pm} = "$lib/$pm";
+                last;
+            }
+        }
+        unless( $found{$pm} ) {
+            print "Can't locate $pm in ", join( ', ', @INC ), "\n";
+            next;
+        }
+
+        unless( /^$ARGV[0]/o ) { # Excluded
+            $vers{$_} = Module::Extract::VERSION->parse_version_safely($found{$pm}) || '';
+        }
+
+        $_ = $found{$pm};
+        if( /^\./ ) {
+            process( $_ );
+        }
+    }
+    close $fh;
+}
+
+for (sort keys %vers) {
+    print "$_,>=,$vers{$_},cpan,Required\n" ;
+}
+
+__END__
+
+# This is an original work by Timothe Litt.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at
+# http://www.gnu.org/copyleft/gpl.html
