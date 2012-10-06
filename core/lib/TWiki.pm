@@ -4858,13 +4858,13 @@ sub CRYPTTOKEN {
 
 sub _getMdrepoField {
     my ($rec, $recId, $fieldName) = @_;
-    if ( $fieldName eq "_" ) {
+    if ( $fieldName eq '' ) {
 	return $recId;
     }
-    elsif ( $fieldName eq "__" ) {
+    elsif ( $fieldName eq '_' ) {
 	return join(" ", map { "$_=$rec->{$_}" } sort keys %$rec);
     }
-    return $rec->{$fieldName} || "";
+    return $rec->{$fieldName} || '';
 }
 
 sub _mdrepoFieldCond {
@@ -4883,7 +4883,7 @@ sub MDREPO {
     return '' unless ( $mdrepo );
     my $table = $params->{_DEFAULT} || $params->{table} || '';
     my $filter = $params->{filter} || '';
-    my $format = expandStandardEscapes($params->{format} || '| $_ | $__ |');
+    my $format = $params->{format} || '| $_ | $__ |';
     my $separator = $params->{separator};
     if ( defined($separator) ) {
         $separator = expandStandardEscapes($separator);
@@ -4915,7 +4915,10 @@ sub MDREPO {
         my $ent = $format;
         $ent =~ s/\?(!?)(\w+)([!#%'\/:?@^`|~])(.*?)\3/_mdrepoFieldCond($1, $rec->{$2}, $4)/ge;
         $ent =~ s/\$marker(\(\))?/$m/g;
-        $ent =~ s/\$(\w+)(\(\))?/_getMdrepoField($rec, $i, $1)/ge;
+        $ent =~ s/\$_(\w*)(\(\))?/_getMdrepoField($rec, $i, $1)/ge;
+        $ent =~ s/\$question\(\)/\?/g;
+        $ent =~ s/\$question\b/\?/g;
+        $ent = expandStandardEscapes($ent);
         push(@ents, $ent);
     }
     join($separator, @ents);
