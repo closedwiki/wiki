@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349510509" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349512536" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -20,6 +20,14 @@ A dashboard comes into play when users need to get an overview of their work and
 ---++ Usage
 
 The add-on defines several sections that are used to create dashboards. This can be done either via [[VarDASHBOARD][DASHBOARD]] or [[%SYSTEMWEB%.VarINCLUDE][INCLUDE]] variables. A dashboard is constructed using the following sections:
+<sticky>
+<div style="float: right; background-color: #EBEEF0; text-align: center; width: 300px; margin:0 0 20px 20px; padding: 2px 10px 10px 10px;">
+Dashboard screenshot (click to enlarge)%BR%
+<a href="%PUBURLPATH%/%WEB%/%TOPIC%/dashboard-example.png">
+<img src="%PUBURLPATH%/%WEB%/%TOPIC%/dashboard-example-300.png" alt="" width="300" height="165" />
+</a>
+</div>
+</sticky>
 
    * section ="dashboard_start"=
       * section ="banner"=
@@ -273,9 +281,11 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
       * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
         | *File:* | *Description:* |
         | ==data/TWiki/%TOPIC%.txt== | Add-on topic |
+        | ==data/TWiki/VarDASHBOARD.txt.txt== | DASHBOARD variable documentation topic |
         | ==data/TWiki/TWikiDashboardImages.txt== | Topic with dashboard banner images |
         | ==lib/TWiki/Contrib/%TOPIC%.pm== | Add-on Perl module |
-        | ==pub/TWiki/TWikiDashboardImages/*== | Sample dashboard banner images |
+        | ==pub/TWiki/TWikiDashboardAddOn/*.png== | Screenshots of dashboards |
+        | ==pub/TWiki/TWikiDashboardImages/*.png== | Dashboard banner images |
       * Set the ownership of the extracted directories and files to the webserver user.
 
    * Add-on __configuration__:
@@ -308,3 +318,5 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 __Related Topics:__ TWikiDashboardImages, ScrollBoxAddOn, %SYSTEMWEB%.TWikiAddOns
 
 %META:FILEATTACHMENT{name="dashboard-dimensions.png" attachment="dashboard-dimensions.png" attr="h" comment="" date="1349501922" path="dashboard-dimensions.png" size="171778" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="dashboard-example.png" attachment="dashboard-example.png" attr="h" comment="" date="1349511432" path="dashboard-example.png" size="249069" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="dashboard-example-300.png" attachment="dashboard-example-300.png" attr="h" comment="" date="1349511430" path="dashboard-example-300.png" size="38797" user="TWikiContributor" version="1"}%
