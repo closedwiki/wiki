@@ -18,6 +18,6 @@ use strict;
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 
 $VERSION = '$Rev$';
-$RELEASE = '';
-$SHORTDESCRIPTION = '';
+$RELEASE = '2012-10-06';
+$SHORTDESCRIPTION = 'TWiki Unit-Test Framework';
 
