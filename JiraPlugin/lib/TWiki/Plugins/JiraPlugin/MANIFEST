@@ -1,5 +1,6 @@
 # Release manifest for JiraPlugin
 data/TWiki/JiraPlugin.txt 0644 Documentation
+data/TWiki/VarJIRA.txt 0644 Documentation
 pub/TWiki/JiraPlugin/bug.gif 0644 Image
 pub/TWiki/JiraPlugin/genericissue.gif 0644 Image
 pub/TWiki/JiraPlugin/improvement.gif 0644 Image
@@ -14,4 +15,3 @@ lib/TWiki/Plugins/JiraPlugin.pm 0644 Perl module
 lib/TWiki/Plugins/JiraPlugin/Client.pm 0644 Perl module
 lib/TWiki/Plugins/JiraPlugin/Field.pm 0644 Perl module
 lib/TWiki/Plugins/JiraPlugin/Handler.pm 0644 Perl module
-
