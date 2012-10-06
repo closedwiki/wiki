@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349504373" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349509643" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -15,45 +15,104 @@
 
 ---++ Introduction
 
-FIXME
+A dashboard comes into play when users need to get an overview of their work and want to navigate quickly to relevant places. This TWiki application is designed to give administrators a tool to quickly create dashboards for intranet home, team homepages, project homepages and knowledge bases.
 
 ---++ Usage
 
-The add-on defines several section that can be included to create a dashboard. Parameters specify the content of the dashboard:
+The add-on defines several sections that can be used to create a dashboard. This can be done either via [[VarDASHBOARD][DASHBOARD]] or [[%SYSTEMWEB%.VarINCLUDE][INCLUDE]] variables. A dashboard is constructed using the following sections:
 
-   * =section="dashboard_start"= -- start a dashboard
-      * =width=""= -- width of dashboard in pixels, should match banner width, optional, default: 1024
+   * section ="dashboard_start"=
+      * section ="banner"=
+      * section ="box_start"=
+         * Box 1 content
+      * section ="box_end"=
+      * section ="box_start"=
+         * Box 2 content
+      * section ="box_end"=
+      * ...etc...
+   * section ="dashboard_end"=
 
-   * =section="banner"= - dashboard banner
-      * =image=""= -- banner image URL, optional
-      * =title=""= -- banner title, optional, default no title
-      * =width=""= -- banner width in pixels, should match dashboard width and image width, optional, default: 1024
-      * =height=""= -- banner height in pixels, optional, default: 150
-      * =buttons=""= -- banner buttons, optional.
-         * Format: =label1|link1; label2|link2, label3|modal box title 3|modal box content|modal box width...=
-         * Link can be a !Web.TopicName or a URL.
-         * A modal box is shown if four "|" separated tokens are found. Tokens: Button label, box title, box content, box width
-      * =style=""= -- CSS of banner box, optional, default: ="border: solid #d0d0d0 1px; padding: 15px;"=
-      * =titlestyle=""= -- CSS of banner title, optional, default: =" margin: 10px 15px; padding: 0; font-size: 18pt; font-weight: 600; color: #333333;"=
-      * =contentstyle=""= -- CSS of button container, optional, default: ="bottom: 0; right: 0; margin: 0; padding: 10px 10px; color: #333333;"=
+Banner(s) and boxes fill the dashboard width, and are arranged left to right, top to bottom.
 
-   * =section="box_start"= -- start a box
-      * =title=""= -- box title, optional, default no title
-      * =width=""= -- box width in pixels, optional, default: 300. Note: This is the usable width of the box content, it does not include 32 pixel of box border and padding
-      * =height=""= -- box height in pixels, optional, default: 200
-      * =style=""= -- CSS of outer box, optional, default: ="border: solid #d0d0d0 1px; padding: 15px;"=
-      * =titlestyle=""= -- CSS of title, optional, default: ="text-align:center; font-size:19px; font-weight:bold; color: #333335; padding:0 0 12px 0; white-space: nowrap; overflow: hidden;"=
-      * =contentstyle=""= -- CSS of content, optional, default: ="overflow:auto; "=
+<table><tr><td valign="top">
+---+++ Dashboard using DASHBOARD!! variable
+<verbatim>
+%DASHBOARD{ section="dashboard_start" }%
+%DASHBOARD{ section="banner" ... }%
+%DASHBOARD{ section="box_start" ... }%
+Box 1 content
+%DASHBOARD{ section="box_end" }%
+%DASHBOARD{ section="box_start" ... }%
+Box 2 content
+%DASHBOARD{ section="box_end" }%
+...etc...
+%DASHBOARD{ section="dashboard_end" }%
+</verbatim>
+</td><td>&nbsp; &nbsp; &nbsp;</td><td valign="top">
 
-   * =section="box_end"= -- end a box
+---+++ Dashboard using INCLUDE!! variable
+<verbatim>
+%INCLUDE{ "TWikiDashboardAddOn" section="dashboard_start" }%
+%INCLUDE{ "TWikiDashboardAddOn" section="banner" ... }%
+%INCLUDE{ "TWikiDashboardAddOn" section="box_start" ... }%
+Box 1 content
+%INCLUDE{ "TWikiDashboardAddOn" section="box_end" }%
+%INCLUDE{ "TWikiDashboardAddOn" section="box_start" ... }%
+Box 2 content
+%INCLUDE{ "TWikiDashboardAddOn" section="box_end" }%
+...etc...
+%INCLUDE{ "TWikiDashboardAddOn" section="dashboard_end" }%
+</verbatim>
+</td></tr></table>
 
-   * =section="dashboard_end"= -- end a dashboard
+---+++ Section ="dashboard_start"=
+
+The ="dashboard_start"= section starts a dashboard. It is the container of banners and boxes. A dashboard needs to be closed with a ="dashboard_end"= section. Parameter:
+
+| *Parameter* | *Description* | *Default* |
+| =width=""= | Width of dashboard in pixels, should match banner width, optional | ="1024"= |
+
+---+++ Section ="banner"=
+
+The ="banner"= section defines a banner with an image. All content is specified by parameters, e.g. there is no start and end banner section. Parameters:
+
+| *Parameter* | *Description* | *Default* |
+| =image=""= | Banner image URL, optional. Attach your own image, default 1024x150 pixels, or use one of the TWikiDashboardImages. Example:%BR% ="%<nop>ATTACHURL%/myteam.jpg"= | URL of =marin-headlands.jpg= image |
+| =title=""= | Banner title, optional | (no title) |
+| =width=""= | Banner width in pixels, optional.%BR% __Note:__ It should match the dashboard width and banner image width | ="1024"= |
+| =height=""= | Banner height in pixels, optional | ="150"= |
+| =buttons=""= | Banner buttons, optional. Buttons are separated by semicolon-space; each button has elements separated by the pipe symbol (="&#124;"=). A button can either link to another page, or popup a modal box. A popup is shown if the button has 4 elements. Popup button elements: Button label, box title, box content, box width in pixels. Link button elements: Button label, link. A link can be a !Web.TopicName or a URL. %BR% Example format: %BR% =Button label&#124;LinkTarget; TWiki Help&#124;TWiki.WebHome; Popup Demo&#124;Modal box demo title&#124;Modal box content&#124;600= | (none) |
+| =style=""= | CSS of banner box, optional | ="border: none 0;"= |
+| =titlestyle=""= | CSS of banner title, optional | ="margin: 10px 15px; padding: 0; font-size: 18pt; font-weight: 600; color: #333333;"= |
+| =contentstyle=""= | CSS of button container | ="bottom: 0; right: 0; margin: 0; padding: 10px 10px; color: #333333;"= |
+
+---+++ Section ="box_start"=
+
+The ="box_start"= section starts a box. A box needs to be closed with a ="box_end"= section. Parameters:
+
+| *Parameter* | *Description* | *Default* |
+| =title=""= | Box title, optional | (no title) |
+| =width=""= | Width of box in pixels, optional.%BR% __Note:__ This is the usable width of the box content, it does not include 32 pixel of box border and padding | ="300"= |
+| =height=""= | Box height in pixels, optional | ="200"= |
+| =style=""= | CSS of outer box, optional | ="border: solid #d0d0d0 1px; padding: 15px;"= |
+| =titlestyle=""= | CSS of title, optional | ="text-align:center; font-size:19px; font-weight:bold; color: #333335; padding:0 0 12px 0; white-space: nowrap; overflow: hidden;"= |
+| =contentstyle=""= | CSS of content | ="overflow:auto;"= |
+
+---+++ Section ="box_end"=
+
+The ="box_end"= section ends a box. It has no additional parameters.
+
+---+++ Section ="dashboard_end"=
+
+The ="dashboard_end"= section ends a dashboard. It has no additional parameters.
 
 ---++ Dashboard Dimensions
 
-The default dashboard is 1024 pixels wide, which is just about the right size for laptop screens. The TWikiDashboardImages are designed for this width. The boxes are 300 pixels wide and 200 pixels high by default for a 3 column layout. The following screenshot shows the dimensions.
+The default dashboard is 1024 pixels wide, which is just about the right size for laptop screens. The TWikiDashboardImages are designed for this width. By default, boxes are 300 pixels wide and 200 pixels high for a 3 column layout. The following screenshot shows the dimensions.
 
 <img src="%PUBURLPATH%/%WEB%/%TOPIC%/dashboard-dimensions.png" alt="dashboard dimensions" width="1035" height="477" />
+
+When designing custom dimensions keep in mind that banner(s) and boxes are arranged left to right, top to bottom.
 
 ---++ Example
 
@@ -286,9 +345,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2012, TWiki:Main.PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2012-10-05 |
+|  Add-on Version: | 2012-10-06 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-10-05: | TWikibug:Item6954: Initial version |
+|  2010-10-06: | TWikibug:Item6954: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 5.0)%BR% TWiki:Plugins.ScrollBoxAddOn %BR% TWiki:Plugins.SpreadSheetPlugin version 2012-04-04 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
