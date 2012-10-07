@@ -1,26 +1,16 @@
 #!/usr/bin/perl
 # -*- mode: CPerl; -*-
-
-# Copyright (C) 2012 Timothe Litt <litt at acm dot org>
-# License is at end of file.  
+#
+my $COPYRIGHT = "Copyright (C) 2012 Timothe Litt <litt at acm dot org>";
+#
+# License is at end of file.
 # Removal of Copyright and/or License prohibited.
+
+our $VERSION = '1.1';
 
 # Dependency extractor.
 # Recursively processes .pl/.pm files for require/use d modules and extracts
 # their VERSION.  Generates DEPENDENCIES format output.
-#
-# Run from Component directory under trunk of an SVN checkout, or specify
-# a base directory to scan and a TWiki core library to consult.
-#
-# --exclude is module prefix list to exclude (e.g. because known not to be versioned/interesting
-# --Include is a list of other perl libraries to search
-# --lib is the location of the TWiki core library.  Defaults to ../core/lib.
-# --manifest is the location of the TWiki core MANIFEST; '-' to ignore.  Defaults to --lib/TWiki/Contrib/core/MANIFEST.
-# --who lists modules that create each dependency
-#
-# Check output carefully; this script is clever, but not perfect.
-# Notably, it assumes everything comes from CPAN and that everything is Required.
-
 
 use warnings;
 use strict;
@@ -28,31 +18,53 @@ use strict;
 use Cwd qw/realpath/;
 use File::Basename;
 use File::Find;
+use FindBin;
 use Getopt::Long;
 use Module::Extract::VERSION;
 use Perl::Version;
+use Pod::Usage;
 
-my( $lib, @Include, $twikiMANIFEST, $who, @exclude );
+my( $lib, @Include, $quiet, $twikiMANIFEST, $who, @exclude, @notshipped, $notshipped );
+
+Getopt::Long::Configure( "auto_version", );
 
 GetOptions(
-           "exclude=s" =>\@exclude,
-           "Include=s", =>\@Include,
-           "lib=s" => \$lib,
+           "exclude=s"    =>\@exclude,
+           "help"         => sub { pod2usage( 1 ); },
+           "Include=s",   =>\@Include,
+           "lib=s"        => \$lib,
+           "license"      => \&license,
+           'man'          => sub { print "man page probably won't display because you are running as root.  See BUGS.\n" if( $> eq 0 );
+                                   pod2usage( -exitval => 0, -verbose => 2, ) },
+           'manifest|m=s'   => \$twikiMANIFEST,
+           'not-shipped:s'   => sub { my( $opt, $val ) = @_;
+                                      $notshipped = 1;
+                                      push @notshipped, $val if( defined $val && length $val ) },
+           "quiet"        => \$quiet,
            "who-requires" => \$who,
           ) or exit (1 );
 
+if( -t STDERR && !$quiet ) {
+    print STDERR "$COPYRIGHT\nFor license terms use the $FindBin::Script --license command.\n\n";
+}
+
 $lib = realpath( '../core/lib' ) unless( defined $lib );
-chomp $lib;
+chomp $lib if( defined $lib );
+unless( defined $lib && -d $lib ) {
+    print STDERR "Invalid library path specified (or defaulted)\n";
+    exit 1;
+}
 unshift @INC, $lib;
 
 $exclude[0] = 'TWiki::Tasks' if( !@exclude && realpath( '.' ) =~ /TasksPlugin$/ );
 
 unshift @INC, @Include;
 
-my %twikikit;
-my %who;
+my( %twikikit, %who, $incPrinted );
 
 $twikiMANIFEST = "$lib/TWiki/Contrib/core/MANIFEST" unless( defined $twikiMANIFEST );
+
+@notshipped = qw/ build.pl / unless( $notshipped );
 
 # Modules shipped with TWiki:
 
@@ -92,11 +104,26 @@ unless( $twikiMANIFEST eq '-' ) {
 
 $ARGV[0] = '.' unless( @ARGV );
 
+for (@ARGV) {
+    unless( -d $_ || -f $_ ) {
+        print STDERR "$_ is not a file or directory\n";
+        exit 1;
+    }
+}
+
 find( { wanted => \&handle, no_chdir => 1, },  @ARGV );
 
 my( %vers, %found );
 
 sub handle {
+    for my $ns  (@notshipped) {
+        if( $ns =~ m,^/,  ) {
+            return if( $ns eq $File::Find::name );
+        } else {
+            return if( $File::Find::name =~ /\Q$ns\E$/ );
+        }
+    }
+
     process( $File::Find::name, $File::Find::name );
 }
 
@@ -142,7 +169,7 @@ sub process {
         my $pm = "${_}.pm";
         $pm =~ s,::,/,g;
 
-        push @{$who{$_}}, $parent if( $who );
+        $who{$_}{$parent} = 1 if( $who );
 
         next if( $found{$pm} );
 
@@ -153,7 +180,12 @@ sub process {
             }
         }
         unless( $found{$pm} || exists $twikikit{$pm} ) {
-            print "Can't locate $pm for $parent in ", join( ', ', @INC ), "\n";
+            print "Can't locate $pm for $parent";
+            unless( $incPrinted ) {
+                print " in ", join( ', ', @INC );
+                $incPrinted = 1;
+            }
+            print "\n";
             next;
         }
 
@@ -189,13 +221,17 @@ sub process {
                 }
                 if( ($tv <=> $kv) < 0 ) { # TWiki shipping old bits.
                     print "TWiki ships version $tv of $_, but $kv is required in $parent\n";
+                    print STDERR "TWiki ships version $tv of $_, but $kv is required in $parent\n";
                 }
                 next;
             }
         }
         $_ = $found{$pm};
-        if( /^\./ ) {
-            process( $fn, $_ );
+        for my $a (@ARGV) {
+            if( /^\Q$a\E/ ) { # Recurse only from kit's tree
+                process( $fn, $_ );
+                last;
+            }
         }
     }
     close $fh;
@@ -206,10 +242,24 @@ for (sort keys %vers) {
     if( $who ) {
         $base .= " by ";
         print $base, join( ",\n#" . (' ' x (length($base)-1)), 
-                           sort @{$who{$_}} ), "\n";
+                           sort keys %{$who{$_}} ), "\n";
     } else {
         print "$base\n";
     }
+}
+
+# Display (copyright and) license
+
+sub license {
+    print "$COPYRIGHT\n";
+
+    while(<DATA>) {
+        last if( /^__DOC__/ );
+        s/^\s*#\s*//;
+        print;
+    }
+
+   exit 0;
 }
 
 __END__
@@ -226,3 +276,118 @@ __END__
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
+__DOC__
+
+=head1 NAME
+
+depgen -- generate module F<DEPENDENCIES> file from sources
+
+=head1 SYNOPSIS
+
+depgen [options] [ F<path> [ F<path> ...] ]
+
+Analyze the perl sources/executables specifed by paths into a single DEPENDENCIES file on STDOUT.
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<--exclude=I<module>>
+
+Exclude modules starting with I<module> from F<DEPENDENCIES>.  Use this if you have a family of sub-modules that aren't independently versioned.
+
+=item B<--help>
+
+Provide brief help message.
+
+=item B<--Include=F<libpath>>
+
+Add F<libpath> to library search list while resolving dependencies.  Use this if the libraries use or require modules from other than the TWiki library path.
+
+=item B<--lib=F<path>>
+
+Use I<path> as the TWiki library path.  Defaults to F<../core/lib>, which is usually what you want if your current directory is a Plugin directory under a branch of a svn tree.
+
+The TWiki library path is used to find the modules shipped with TWiki, which receive special handling.
+
+=item B<--man>
+
+Display the man page for depgen.
+
+=item B<--manifest=F<filename>> B<--m F<filename>>
+
+Use F<filename> as the F<MANIFEST> file that determines which files are shipped with TWiki.  Except in unusual circumstances, let this default to F<I<E<lt>--libE<gt>>/TWiki/Contrib/core/MANIFEST>.
+
+
+=item B<--not-shipped=F<filename>>
+
+Specify development tools not shipped to the end user with B<--not-shipped=F<filename>>.  These files will not be analyzed so that development tools' requirements won't propagate to the end user kit.
+
+The default F<filename> is F<build.pl>.  However, if any B<--not-shipped> option is specified, only the specified files will be treated as B<not-shipped>.  (That is, if you want to include F<build.pl> along with others in the list, you must specify it explicitly.
+
+If F<filename> is omitted, nothing is added to the list, but the default will not be used.
+
+If F<filename> begins with F</>, it must match the full path to the file in the source tree.  Othewise, it is matched with the rightmost part of the file in the source tree.  E.G> F<build.pl> will match a file named F<build.pl> in any subdirectory of the source tree, but F<tools/build.pl> will only match in any subdirectory ending in F<tools>.
+
+=item B<--quiet>
+
+Acknowledge that you have read and understand the license and copyright so they won't be displayed.
+
+=item B<--version>
+
+Display the version of B<depgen>, perl and the command parser.
+
+=item B<--who-requires>
+
+Lists the file(s) that create a dependency on each module.  Useful to track down surprises, or deprecated modules.
+
+=back
+
+=head1 DESCRIPTION
+
+B<depgen> is a developer's tool that simplifies the problem of creating and maintaining F<DEPENDENCIES> files.
+
+B<depgen> scans all F<.pm>, F<.pl> and I<perl> executable files in the specified path(s) for I<use> and I<require> statements.  The default F<path> is F<.>, the current directory.
+
+It lists each module encountered in these statements in the F<DEPENDENCIES> file, along with the module's version (if it can be determined).
+
+Modules that I<use> or I<require> other modules are recursively processed if they are found on any of the input F<path>s.
+
+Modules that are packaged with TWiki (including CPAN modules that TWiki re-distributes) are evaluated to determine if the kit is using the TWiki-supplied module or a newer version.  If the TWiki-supplied version is older than the one used by the module (in the development environment), a warning is issued.
+
+If you specify more than one F<path>, all files found contribute to a single F<DEPENDENCIES> file.
+
+For a standard plugin or contrib, the defaults should produce reasonable output.
+
+=head2 CONSIDERATIONS
+
+All modules found are assumed to be CPAN modules and are tagged B<Required> in the F<DEPENDENCIES> file.  B<depgen> does not know about modules supplied with the I<perl> distribution, so it can not properly label them.
+
+Do not blindly use the output.  It is important to review the generated F<DEPENDENCIES> output for correctness.  B<depgen> provides a baseline analysis, but human oversight and judgement are still required.
+
+Output is written to F<stdout>.
+
+=head2 EXAMPLE
+
+ cd trunk/IpPlugin
+ depgen -w -q
+ Net::IP,>=,1.25,cpan,Required by ./lib/TWiki/Plugins/IpPlugin.pm
+ Socket,>=,2.001,cpan,Required by ./lib/TWiki/Plugins/IpPlugin.pm
+
+
+=head1 LICENSE
+
+Please read C<depgen --license>.
+
+=head1 AUTHOR
+
+Timothe Litt E<lt>litt _at_ acm _dot_ orgE<gt>
+
+=head1 BUGS
+
+F<perldoc>, which generates this man page, generates it under user b<nobody> if you're running as b<root>.  This may cause it to generate no output if b<nobody> can't read this script.  Let's just say that it's a feature of F<perldoc>, and you really shouldn't be running as b<root> anyway.  If you insist on this unsafe practice, as a work-around you can C<sudo -u yourself depgen --man>.
+
+There probably are some others.  Please report them - and if you can fix them, supply a patch.
+
+=cut
+

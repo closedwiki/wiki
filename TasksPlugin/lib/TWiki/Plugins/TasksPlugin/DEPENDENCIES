@@ -54,6 +54,7 @@ LWP::Protocol::https,>=6.02,cpan,Required
 MIME::Base64,>=3.13
 Module::Extract::VERSION,>=1.01,cpan,Optional,Developers' tool
 Perl::Version,>=1.011,cpan,Optional,Developers' tool
+Pod::Usage,>=1.36,cpan,Optional, Developers' tool
 #POSIX,>=1.24,cpan,Required
 Scalar::Util,>=1.23,cpan,Required
 Schedule::Cron,>=1.01,cpan,Required,Previous versions will NOT work.  1.01_3 was the first workable version - note it was EARLIER than 1.01.
