@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349571551" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349573332" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -293,6 +293,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
    * Add-on __configuration__:
       * If you use TWiki-5.1 or below add the following setting to %SYSTEMWEB%.TWikiPreferences:
 <verbatim>
+   * %SYSTEMWEB%.TWikiDashboardAddOn variable, documented in %SYSTEMWEB%.VarDASHBOARD:
       * Set DASHBOARD = %INCLUDE{ "%SYSTEMWEB%.TWikiDashboardAddOn" section="%section%" %IF{ "'%height{ default="" }%'!=''" then="height=\"%height%\"" }% %IF{ "'%width{ default="" }%'!=''" then="width=\"%width%\"" }% %IF{ "'%ENCODE{ "%image{ default="" }%" type="entity" }%'!=''" then="image=\"%ENCODE{ "%image%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%title{ default="" }%" type="entity" }%'!=''" then="title=\"%ENCODE{ "%title%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%buttons{ default="" }%" type="entity" }%'!=''" then="buttons=\"%ENCODE{ "%buttons%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%style{ default="" }%" type="entity" }%'!=''" then="style=\"%style%\"" }% %IF{ "'%ENCODE{ "%titlestyle{ default="" }%" type="entity" }%'!=''" then="titlestyle=\"%titlestyle%\"" }% %IF{ "'%ENCODE{ "%contentstyle{ default="" }%" type="entity" }%'!=''" then="contentstyle=\"%contentstyle%\"" }% }%
 </verbatim>
 
