@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1326678004" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349585253" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
 %TOC%
 
 #IstanbulRelease
----++ TWiki Release 5.1 (Istanbul) released on 2011-08-20 &amp; 2012-01-14
+---++ TWiki Release 5.1 (Istanbul) released on 2011-08-20 &amp; 2012-10-06
 
 __New Features and Enhancements of TWiki Release 5.1__
 
@@ -16,6 +16,7 @@ __New Features and Enhancements of TWiki Release 5.1__
       * In-place editing of TWiki group settings using !PreferencesPlugin
       * Point and click bookmarks for better usability
       * Improved statistics showing overall site usage over time, such as total number of webs, topics, users, etc
+      * TopMenuSkin: Option for auto-hidden or fixed top menu-bar; in auto-hidden mode, menu is always accessible with stub - added in TWiki-5.1.2
    * *TWiki Application Platform Enhancements*
       * Macro language with parameterized variables
       * Ability to auto-create page on view if it does not exist
@@ -31,9 +32,13 @@ __New Features and Enhancements of TWiki Release 5.1__
       * New ColorPickerPlugin to pick a color in form fields
       * SpreadSheetPlugin: New functions BITXOR(), HEXENCODE(), HEXDECODE(), XOR()
       * SpreadSheetPlugin: New functions FLOOR() and CEILING() - added in TWiki-5.1.1
+      * SpreadSheetPlugin: New CALCULATE variable using the register tag handler for variable evaluation with proper inside-out, left-to-right eval order - added in TWiki-5.1.2
+      * SpreadSheetPlugin: New functions $ISDIGIT(), $ISLOWER(), $ISUPPER(), $ISWIKIWORD() and $FILTER() - added in TWiki-5.1.2
+      * SetGetPlugin: Add REST interface - added in TWiki-5.1.2
    * *Bug Fixes*
       * 21 bug fixes since TWiki-5.0.2
       * 17 bug fixes since TWiki-5.1.0 - fixed in TWiki-5.1.1
+      * 28 bug fixes since TWiki-5.1.1 - fixed in TWiki-5.1.2
 
 See the full list of new features and bug fixes in TWikiReleaseNotes05x01.
 
