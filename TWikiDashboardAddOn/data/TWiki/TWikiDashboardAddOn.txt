@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349512536" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349571551" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -89,10 +89,12 @@ The ="banner"= section defines a banner with an image. All content is specified 
 | =title=""= | Banner title, optional | (no title) |
 | =width=""= | Banner width in pixels, optional.%BR% __Note:__ It should match the dashboard width and banner image width | ="1024"= |
 | =height=""= | Banner height in pixels, optional | ="150"= |
-| =buttons=""= | Banner buttons, optional. Buttons are separated by semicolon-space; each button has elements separated by the pipe symbol (="&#124;"=). A button can either link to another page, or popup a modal box. A popup is shown if the button has 4 elements. Popup button elements: Button label, box title, box content, box width in pixels. Link button elements: Button label, link. A link can be a !Web.TopicName or a URL. %BR% Example format: %BR% =Button label&#124;LinkTarget; TWiki Help&#124;TWiki.WebHome; Popup Demo&#124;Modal box demo title&#124;Modal box content&#124;600= | (none) |
+| =buttons=""= | Banner buttons, optional. Buttons are separated by semicolon-space; each button has elements separated by the pipe symbol (="&#124;"=). A button can either link to another page, or popup a modal box. A popup is shown if the button has 4 elements. Popup button elements: Button label, box title, box content, box width in pixels. Link button elements: Button label, link. A link can be a !Web.TopicName or a URL. %BR% __Example:__ =buttons="Button label&#124;LinkTarget; TWiki Help&#124;TWiki.WebHome; Popup Demo&#124;Modal box demo title&#124;Modal box content&#124;600"= | (none) |
 | =style=""= | CSS of banner box, optional | ="border: none 0;"= |
 | =titlestyle=""= | CSS of banner title, optional | ="margin: 10px 15px; padding: 0; font-size: 18pt; font-weight: 600; color: #333333;"= |
 | =contentstyle=""= | CSS of button container | ="bottom: 0; right: 0; margin: 0; padding: 10px 10px; color: #333333;"= |
+
+__Note:__ The popup (modal dialog box) depends on the TWiki:Plugins.ModalBoxAddOn.
 
 ---+++ Section ="box_start"=
 
@@ -307,7 +309,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Version: | 2012-10-06 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  2010-10-06: | TWikibug:Item6954: Initial version |
-|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 5.0)%BR% TWiki:Plugins.ScrollBoxAddOn %BR% TWiki:Plugins.SpreadSheetPlugin version 2012-04-04 |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.3 (TWiki-5.0)%BR% TWiki:Plugins.ScrollBoxAddOn %BR% TWiki:Plugins.SpreadSheetPlugin version 2012-04-04 %BR% TWiki:Plugins.ModalBoxAddOn required if popup buttons are used |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
@@ -315,7 +317,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/TWikiDashboardAddOnDev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/TWikiDashboardAddOnAppraisal |
 
-__Related Topics:__ TWikiDashboardImages, ScrollBoxAddOn, %SYSTEMWEB%.TWikiAddOns
+__Related Topics:__ VarDASHBOARD, TWikiDashboardImages, ScrollBoxAddOn, %SYSTEMWEB%.TWikiAddOns
 
 %META:FILEATTACHMENT{name="dashboard-dimensions.png" attachment="dashboard-dimensions.png" attr="h" comment="" date="1349501922" path="dashboard-dimensions.png" size="171778" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="dashboard-example.png" attachment="dashboard-example.png" attr="h" comment="" date="1349511432" path="dashboard-example.png" size="249069" user="TWikiContributor" version="1"}%
