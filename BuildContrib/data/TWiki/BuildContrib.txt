@@ -311,7 +311,7 @@ You are strongly recommended to use this Contrib to help split your code develop
 |  License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2012-08-10: | TWikibug:Item6913: Better installation instructions; conditional text for plugin enabling in case extension is a plugin -- TWiki:Main.PeterThoeny |
+|  2012-10-06: | TWikibug:Item6913: Better installation instructions; conditional text for plugin enabling in case extension is a plugin -- TWiki:Main.PeterThoeny |
 |  2011-09-11: | TWikibug:Item6800: Fix for using qw(...) as parentheses, which is deprecated in Perl 5.14 -- TWiki:Main.PeterThoeny |
 |  2010-05-15: | TWikibug:Item6433: Doc improvements; replacing TWIKIWEB with SYSTEMWEB |
 |  2010-04-25: | TWikibug:Item6434: Use ISO dates for builds; doc fixes |
