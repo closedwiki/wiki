@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1345075769" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349582394" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Installation Guide
 
@@ -27,8 +27,8 @@ If you need help, ask a question in the TWiki:Support.WebHome web or on TWiki:Co
 #StandardInstallation
 ---++ Basic Installation
 
-   1 *Download* the TWiki distribution from http://TWiki.org/. (Example - download =TWiki-5.1.1.tgz= for Linux)
-   1  Copy the downloaded package into the directory where you want to install TWiki (Example: /home/httpd ). *Unpack the distribution* in it (Example: tar xvfz TWiki-5.1.1.tgz). The unpack will create a directory called ==twiki== which contains the TWiki package. In the rest of this document we assume this directory is called =twiki=.
+   1 *Download* the TWiki distribution from http://TWiki.org/. (Example - download =TWiki-5.1.2.tgz= for Linux)
+   1  Copy the downloaded package into the directory where you want to install TWiki (Example: /home/httpd ). *Unpack the distribution* in it (Example: tar xvfz TWiki-5.1.2.tgz). The unpack will create a directory called ==twiki== which contains the TWiki package. In the rest of this document we assume this directory is called =twiki=.
       * __Note:__ TWiki does not allow spaces in the directory names. Especially on Windows make sure to use a directory path without spaces.
    1 *Setup access file and directory rights* to enable the webserver user (the user Apache runs the CGI scripts as) to read and write inside the twiki directory.
       * __Warning:__ Do not just just run a =chmod -R 770 twiki=. The access rules have different meaning for files and directories. This is the most common mistake installers make.
