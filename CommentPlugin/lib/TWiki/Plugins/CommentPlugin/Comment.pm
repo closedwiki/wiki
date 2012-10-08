@@ -145,9 +145,17 @@ sub _handleInput {
         }
     }
 
-    my $url = $TWiki::Plugins::VERSION >= 1.4 && 
-	TWiki::Func::getMasterWebScriptUrl($web, $topic, 'save') ||
-        TWiki::Func::getScriptUrl( $web, $topic, 'save' );
+    my $url = '';
+    if ( $disable eq '' ) {
+	# if TWiki::Func::getContentMode() is defined, so is 
+	# TWiki::Func::getMasterWebScriptUrl()
+	if ( defined(&TWiki::Func::getContentMode) 
+	    && TWiki::Func::getContentMode($web) eq 'slave' ) {
+		$url = TWiki::Func::getMasterWebScriptUrl($web, $topic, 'save'); 
+	} else {
+	    $url = TWiki::Func::getScriptUrl( $web, $topic, 'save' ); 
+	}
+    }
 
     my $noform = $attrs->remove('noform') || '';
     if ( $input !~ m/^%RED%/ ) {
