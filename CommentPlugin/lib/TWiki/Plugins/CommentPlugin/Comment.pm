@@ -145,7 +145,8 @@ sub _handleInput {
         }
     }
 
-    my $url = TWiki::Func::getMasterWebScriptUrl($web, $topic, 'save') ||
+    my $url = $TWiki::Plugins::VERSION >= 1.4 && 
+	TWiki::Func::getMasterWebScriptUrl($web, $topic, 'save') ||
         TWiki::Func::getScriptUrl( $web, $topic, 'save' );
 
     my $noform = $attrs->remove('noform') || '';
