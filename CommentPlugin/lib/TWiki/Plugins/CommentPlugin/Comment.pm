@@ -303,7 +303,8 @@ sub _buildNewTopic {
 
     my $emailTo = $query->param( 'comment_emailto' ) || '';
     my @addrs = grep { !/^\s*$/ } split(/\s*,\s*/, $emailTo);
-    if ( @addrs && $output ne '' ) {
+    if ( $TWiki::cfg{Plugins}{CommentPlugin}{EmailEnabled} 
+	&& @addrs && $output ne '' ) {
 	my $emailRe = TWiki::Func::getRegularExpression('emailAddrRegex');
 	for my $i ( @addrs ) {
 	    if ( $i !~ /$emailRe/ ) {
