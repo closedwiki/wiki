@@ -26,7 +26,7 @@ require TWiki::Func;    # The plugins API
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-12-03';
+$RELEASE = '2012-10-09';
 $SHORTDESCRIPTION = 'Rating widget for TWiki forms using "line of stars" style input field';
 
 require CGI;
@@ -62,12 +62,14 @@ HEAD
         }, $hidden);
 
     if ($input_attrs) {
+	my $nameEsc = $name;
+	$nameEsc =~ s/\'/\\'/g;
         foreach my $i (1..$size) {
             my $attrs = {
                 style => 'width:'.($i * $blockWidth).
                   'px;z-index:'.($size - $i + 2) };
-            $attrs->{href} = "javascript:RatingClicked('rate_value_$name',".
-              "'rate_display_$name', $i, $blockWidth)";
+            $attrs->{href} = "javascript:RatingClicked('rate_value_$nameEsc',".
+              "'rate_display_$nameEsc', $i, $blockWidth)";
             $result .= CGI::a($attrs, $i);
         }
     }
