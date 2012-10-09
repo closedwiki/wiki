@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349593569" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349772854" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
@@ -52,7 +52,7 @@ Many people have been involved in creating TWiki 5.1. Special thanks go to the m
 
    * *Sponsor and facilitator:* TWiki:Main.PeterThoeny
    * *Spec and code:* TWiki:Main.PeterThoeny, TWiki:Main.SopanShewale, TWiki:Main.GeorgeTrubisky, TWiki:Main.PeterJones, TWiki:Main.ChrisLahti, TWiki:Main.TimotheLitt, TWiki:Main.ThomasWeigert, TWiki:Main.IanKluft
-   * *Testing and bug fixing:* TWiki:Main.GeorgeTrubisky, TWiki:Main.SopanShewale, TWiki:Main.PeterThoeny, TWiki:Main.TimotheLitt, TWiki:Main.StefanWalter, TWiki:Main.SpirosDenaxas
+   * *Testing and bug fixing:* TWiki:Main.GeorgeTrubisky, TWiki:Main.GertjanVanOosten, TWiki:Main.JohnWorsley, TWiki:Main.JosephZamzow, TWiki:Main.JulianCollins, Wiki:Main.PhillipHuang, TWiki:Main.SopanShewale, TWiki:Main.PaulMerchantJr, TWiki:Main.PeterThoeny, TWiki:Main.RolandOldenburg, TWiki:Main.StefanScherer, TWiki:Main.StefanWalter, TWiki:Main.SpirosDenaxas, TWiki:Main.ThomasWeigert, TWiki:Main.TimotheLitt, TWiki:Main.WillemEngen
    * *Documentation:* TWiki:Main.PeterThoeny, TWiki:Main.ThomasWeigert, TWiki:Main.ScottGutman, TWiki:Main.SebastianKlus, TWiki:Main.DavidWTucker, TWiki:Main.JonasThomsen, TWiki:Main.MichaelRoberts, TWiki:Main.TaitCyrus, TWiki:Main.TorstenEriksson
    * *Release package builds:* TWiki:Main.GeorgeTrubisky
    * *Usability:* TWiki:Main.PeterThoeny
