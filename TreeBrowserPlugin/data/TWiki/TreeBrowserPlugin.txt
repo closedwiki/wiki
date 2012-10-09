@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1295480523" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349766793" format="1.1" version="$Rev$"}%
 ---+!! Tree Browser Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -423,7 +423,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
       * Set EMAIL_THEME = icon, %ATTACHURL%/email.gif
       * Set TREND_THEME = icon, %ATTACHURL%/trend.gif
       * Set FILE_THEME = icon, %ATTACHURL%/empty.gif
-      * Set DIR_THEME = icon, %ATTACHURL%/empty.gif,%ATTACHURL%/empty.gif
+      * Set DIR_THEME = icon, %ATTACHURL%/empty.gif, %ATTACHURL%/empty.gif
       * Set FORUM_THEME = icon, group.gif, index.gif, indexlist.gif, indexlist.gif
 
 ---++ Plugin Installation Instructions
