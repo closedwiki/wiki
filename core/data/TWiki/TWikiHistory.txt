@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349585253" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349593569" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
 %TOC%
 
 #IstanbulRelease
----++ TWiki Release 5.1 (Istanbul) released on 2011-08-20 &amp; 2012-10-06
+---++ TWiki Release 5.1 (Istanbul) released on 2011-08-20 &amp; 2012-10-07
 
 __New Features and Enhancements of TWiki Release 5.1__
 
@@ -25,6 +25,9 @@ __New Features and Enhancements of TWiki Release 5.1__
    * *Security Enhancements*
       * Set a flag to force password change on next login
       * S/Mime support for notification e-mails
+   * *Miscellaneous Feature Enhancements*
+      * TWikiDocGraphics: Added 2 new icons, and updated 1 icon - added in TWiki-5.1.1
+      * TWikiDocGraphics: Added 25 new icons, and updated 2 icons - added in TWiki-5.1.2
    * *Plugin Enhancements*
       * New BackupRestorePlugin to easily backup, restore and upgrade TWiki installations
       * BackupRestorePlugin: Add restore from backup feature - added in TWiki-5.1.1
