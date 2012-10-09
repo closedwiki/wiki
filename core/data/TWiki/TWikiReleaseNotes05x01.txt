@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349585540" format="1.1" version="$Rev$"}%
----+!! Release Notes of TWiki-5.1.2 (Istanbul), 2012-10-06
+%META:TOPICINFO{author="TWikiContributor" date="1349595764" format="1.1" version="$Rev$"}%
+---+!! Release Notes of TWiki-5.1.2 (Istanbul), 2012-10-07
 
 %TOC%
 
@@ -11,7 +11,7 @@ TWiki-5.1.0 released on 2011-08-20 is a major release that brings many usability
 
 TWiki-5.1.1 released on 2012-01-14 is a patch release that adds some minor new features and fixes a number of bugs.
 
-TWiki-5.1.2 released on 2012-10-06 is a patch release that adds some minor new features and fixes a number of bugs.
+TWiki-5.1.2 released on 2012-10-07 is a patch release that adds some minor new features and fixes a number of bugs.
 
 ---++ New Features Highlights
 
@@ -31,6 +31,9 @@ TWiki-5.1.2 released on 2012-10-06 is a patch release that adds some minor new f
    * *Security Enhancements*
       * Set a flag to force password change on next login
       * S/Mime support for notification e-mails
+   * *Miscellaneous Feature Enhancements*
+      * TWikiDocGraphics: Added 2 new icons, and updated 1 icon - added in TWiki-5.1.1
+      * TWikiDocGraphics: Added 25 new icons, and updated 2 icons - added in TWiki-5.1.2
    * *Plugin Enhancements*
       * New BackupRestorePlugin to easily backup, restore and upgrade TWiki installations
       * BackupRestorePlugin: Add restore from backup feature - added in TWiki-5.1.1
@@ -263,7 +266,7 @@ Total: 16
 
 ---++ TWiki-5.1.2 Patch Release - Details
 
-TWiki-5.1.2 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x01 revision r23552 (2012-10-06)
+TWiki-5.1.2 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x01 revision r23565 (2012-10-07)
 
 ---+++ Enhancements
 
