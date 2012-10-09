@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347479503" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349762570" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -36,6 +36,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{blank-bg}% | =%<nop>ICON{blank-bg}%= | Blank box, transparent | gif | 16x16 |  |
 | %ICON{bomb}% | =%<nop>ICON{bomb}%= | Bomb | gif | 16x16 |  |
 | %ICON{book}% | =%<nop>ICON{book}%= | Book | gif | 16x16 |  |
+| %ICON{bridge}% | =%<nop>ICON{bridge}%= | Bridge | gif | 16x16 |  |
 | %ICON{bubble}% | =%<nop>ICON{bubble}%= | Speech bubble | gif | 16x16 |  |
 | %ICON{bug}% | =%<nop>ICON{bug}%= | Bug | gif | 16x16 |  |
 | %ICON{chart-bar}% | =%<nop>ICON{chart-bar}%= | Bar chart | gif | 16x16 |  |
@@ -571,6 +572,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="bmp.gif" attr="h" comment="" date="1169565034" path="bmp.gif" size="378" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="bomb.gif" attr="h" comment="" date="1260656213" path="bomb.gif" size="988" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="book.gif" attr="h" comment="" date="1169565034" path="book.gif" size="361" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bridge.gif" attr="h" comment="" date="1349762367" path="bridge.gif" size="939" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="bubble.gif" attr="h" comment="" date="1169565034" path="bubble.gif" size="342" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="bug.gif" attr="h" comment="" date="1260335693" path="bug.gif" size="966" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="building.gif" attr="h" comment="" date="1169565034" path="building.gif" size="133" user="TWikiContributor" version=""}%
