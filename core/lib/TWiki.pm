@@ -208,6 +208,7 @@ BEGIN {
         ATTACHURLPATH     => \&ATTACHURLPATH,
         BASETOPIC         => \&BASETOPIC,
         BASEWEB           => \&BASEWEB,
+        CONTENTMODE       => \&CONTENTMODE,
         CRYPTTOKEN        => \&CRYPTTOKEN,
         DATE              => \&DATE,
         DISKID            => \&DISKID,
