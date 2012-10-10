@@ -47,7 +47,9 @@ sub handleVote {
         $params->{$1} = $2 unless defined $params->{$1};
     }
 
-    my $id =       defined($params->{id}) ? $params->{id} : '_default';
+    my $id = defined($params->{id}) ? $params->{id} : '';
+    $id =~ s/\W//g;
+    $id = '_default' if ( $id eq '' );
     my $isGlobal = isTrue($params->{global}, 0);
     my $isOpen =   isTrue($params->{open}, 1);
     my $isSecret = isTrue($params->{secret}, 1);
@@ -55,6 +57,9 @@ sub handleVote {
     my $submit =   isTrue($params->{submit}, 1);
     my $saveto =   $params->{saveto};
     my $canReset = canReset($id);
+
+    my $ctx = TWiki::Func::getContext();
+    my $inactive = ref $ctx && ( $ctx->{inactive} || $ctx->{content_slave} );
 
     my @prompts = ();
 
@@ -86,7 +91,7 @@ sub handleVote {
         push(@prompts, {
             type => 'select',
             name => expandFormattingTokens($params->{select}),
-            format => $defaultSelectFormat,
+            'format' => $defaultSelectFormat,
             options =>
               [ map { expandFormattingTokens($_) }
                   split(/\s*,\s*/, $params->{options} || '') ]});
@@ -98,7 +103,7 @@ sub handleVote {
             push(@prompts, {
                 type => 'select',
                 name => expandFormattingTokens($params->{"select$n"}),
-                format => $params->{"format$n"} || $defaultSelectFormat,
+                'format' => $params->{"format$n"} || $defaultSelectFormat,
                 chart => $params->{"chart$n"} || $defaultChartFormat,
                 options =>
                   [ map { expandFormattingTokens($_) }
@@ -110,7 +115,7 @@ sub handleVote {
             push(@prompts, {
                 type => 'stars',
                 name => $params->{"stars$n"},
-                format => $params->{"format$n"} || $defaultStarsFormat,
+                'format' => $params->{"format$n"} || $defaultStarsFormat,
                 width => $params->{"width$n"} || 5 });
         } else {
             last;
@@ -263,6 +268,7 @@ sub handleVote {
             unless ($needSubmit) {
                 $o->{onchange} = 'javascript: submit()';
             }
+	    $o->{disabled} = undef if ( $inactive );
             my $select = $submit ? CGI::Select($o, $opts) : '';
 
             push(@rows, showSelect(
@@ -271,8 +277,28 @@ sub handleVote {
         }
     }
 
+    if ($canReset && !$inactive) {
+        if ($mess) {
+            $mess = CGI::span({class => 'twikiAlert'}, $mess);
+        } else {
+	    if ( !$needSubmit ) {
+		$mess = CGI::start_form(-name => 'resetForm',
+                                    -action => '',
+	      			    -style => 'display:inline');
+		$mess =~ s/\r?\n//g; # CGI::start_form adds unwanted \n's
+	    }
+	    else {
+		$mess = '';
+	    }
+            $mess .= CGI::submit({ name => 'Reset'.$id, value=>'Reset'});
+	    if ( !$needSubmit ) {
+		$mess .= '</form>';
+	    }
+	}
+    }
+
     my $result = join($separator, @rows);
-    if ($submit) {
+    if ($submit  && !$inactive) {
         my $hiddens = '';
         while (my ($k, $v) = each %hidden) {
             $hiddens .= CGI::input(
@@ -284,11 +310,19 @@ sub handleVote {
         $form =~ s/\r?\n//g; # CGI::start_form adds unwanted \n's
         $result = $form.$hiddens.$separator.$result;
         if ($needSubmit) {
-            $result .= $separator.CGI::submit(
-                { name=> 'OK', value=>'OK',
+	    $result .= $separator.CGI::submit(
+        	{ name=> 'OK', value=>'OK',
                   style=>'color:green'});
+	    if ( $canReset ) {
+		$result .= ' ' . $mess;
+	    }
         }
         $result .= $separator.CGI::end_form();
+    }
+
+
+    if (!$needSubmit && $canReset && !$inactive) {
+        $result .= "\n" . $mess;
     }
 
     if ($canReset) {
@@ -345,7 +379,7 @@ sub registerVote {
     my $query = TWiki::Func::getCgiQuery();
     my $id = $query->param('vote_register');
 
-    return unless defined $id;
+    return unless defined $id && $id ne '';
 
     my $web;
     my $topic = $query->param('vote_inTopic');
@@ -412,6 +446,11 @@ sub saveVotesData {
     } else {
         my $votesFile = getVotesFile($web, $topic, $id, $isGlobal);
         # open and lock the votes
+	my $dir = $votesFile;
+	$dir =~ s:[^/]*$::;
+	if ( ! -d $dir ) {
+	    mkdir $dir, 0755;
+	}
         open(VOTES, ">>$votesFile") || die "cannot append $votesFile";
         flock(VOTES, LOCK_EX); # wait for exclusive rights
         seek(VOTES, 0, 2); # seek EOF in case someone else appended
@@ -467,7 +506,9 @@ sub getVoteData {
 sub getVotesFile {
     my ($web, $topic, $id, $global) = @_;
 
-    my $path = TWiki::Func::getWorkArea('VotePlugin');
+    my $toplevweb = $web;
+    $toplevweb =~ s:/.*$::;
+    my $path = TWiki::Func::getPubDir($toplevweb) . "/$toplevweb/.votes";
     my $flatweb = $web;
     $flatweb =~ s/\//./g;
     my $votesFile = $path.'/'.
@@ -475,7 +516,8 @@ sub getVotesFile {
         ($id ? "_$id" : '');
     $votesFile = normalizeFileName($votesFile);
 
-    if (! -e $votesFile) {
+    if (! -e $votesFile 
+	&& $TWiki::cfg{Plugins}{VotePlugin}{OldVoteFileAutoConvert}) {
         my $attachPath = TWiki::Func::getPubDir()."/$web/$topic";
         my $oldVotesFile = "$attachPath/_Votes" . ($id?"_$id":"") . ".txt";
 
@@ -516,7 +558,7 @@ sub normalizeFileName {
 sub _getLocalDate {
     my( $sec, $min, $hour, $mday, $mon, $year) = localtime(time());
     $year = sprintf("%.4u", $year + 1900);  # Y2K fix
-    my $date = sprintf("%.2u-%.2u-%.2u", $year, $mon, $mday);
+    my $date = sprintf("%.2u-%.2u-%.2u", $year, $mon + 1, $mday);
     return $date;
 }
 

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1299041912" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349865975" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -31,6 +31,8 @@ Polls are either _local_ to the topic they are defined in, or are _global_ to th
 
 The result of a poll is displayed in the polling form.
 
+Vote plguin can covert old result file to a compatible format automatically, but this converting is not enabled by default. To turn on this auto-convert feature, please set $TWiki::cfg{Plugins}{VotePlugin}{OldVoteFileAutoConvert} = 1;
+
 ---++ Example
 
 You create a poll using the %VOTE twiki variable. For example,
@@ -48,6 +50,30 @@ and
 displays as
 
 %VOTE{id="Jazzers" stars1="Herbie Mann" stars2="Horace Silver" stars3="Thelonious Monk"}%
+
+---++ How it behaves on a mirror web and read-only web
+If you don't know what is a mirror web and read-only web, please read [[http://twiki.org/cgi-bin/view/Codev/ReadOnlyAndMirrorWebs][this]].
+ 
+This page is on a read-only web.
+As you can see above, selections for polls are disabled.
+And you don't see the "OK" buttons to submit your votes.
+This is the case on a mirror web as well.
+
+In short, you can view vote results on a mirror web, but cannot vote.
+This is primarily because vote parameters might be changed on the primary web.
+If so, voting based on a mirrored page would cause unexpected voting - e.g. voting to non existing candidate.
+
+So you may find it useful to have the following lines on a vote page.
+The message is displayed on on mirror webs.
+<verbatim>
+%IF{"'%CONTENTMODE%' = 'slave' or '%CONTENTMODE%' = 'read-only'"
+ then="You are on a read-only mirror of this web and you cannot vote here.
+ To vote, please go to [[%MASTERWEBSCRIPTURL%.%TOPIC%][here]]."}%
+</verbatim>
+
+---++ Who can vote
+If the =saveto= parameter is specified, only users who can change the topic specified by the parameter can vote.
+Otherwise, anybody who can read the page having a vote can vote.
 
 ---++ Syntax Rules
 
@@ -188,6 +214,8 @@ in Main.<nop>TWikiPreferences, and add =VOTEPLUGIN_RESETTERS= to =FINALPREFERENC
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-10-10: | TWikibug:Item6974: Introduce a new configure $TWiki::cfg{Plugins}{VotePlugin}{OldVoteFileAutoConvert} |
+|  2012-10-10: | TWikibug:Item6973: Disable submit button when current site mode is read-only or slave. |
 |  2011-03-01: | TWikibug:Item6638: Fix 0% bug -- TWiki:Main.UlfJastrow |
 |  2010-07-30: | TWikibug:Item6530: Doc fixes -- TWiki:Main.PeterThoeny |
 |  14 Oct 2008 | TWikibug:Item6070 works for hierarchical webs now.  - TWiki:Main/ColasNahaboo |

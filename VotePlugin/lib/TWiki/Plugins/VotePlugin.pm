@@ -27,7 +27,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-03-01';
+$RELEASE = '2012-10-10';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Simple way to count votes';
 
@@ -51,7 +51,9 @@ sub handleVote {
         # Register vote now so we only get it done once per topic. It doesn't
         # matter which %VOTE triggers this, as the query carries all the info
         # about where to save the data, the id etc.
-        TWiki::Plugins::VotePlugin::Core::registerVote();
+	my $ctx = TWiki::Func::getContext();
+	my $inactive = ref $ctx && ( $ctx->{inactive} || $ctx->{content_slave} );
+	TWiki::Plugins::VotePlugin::Core::registerVote() unless ( $inactive );
     }
 
     return TWiki::Plugins::VotePlugin::Core::handleVote(@_);
