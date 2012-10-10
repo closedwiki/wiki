@@ -29,7 +29,7 @@ require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-09-16';
+our $RELEASE = '2012-10-10';
 
 my @shelter;
 my $MARKER = "\007";
@@ -37,6 +37,10 @@ my $MARKER = "\007";
 # Markers used during form generation
 my $START_MARKER  = $MARKER.'STARTPREF'.$MARKER;
 my $END_MARKER    = $MARKER.'ENDPREF'.$MARKER;
+
+my $SET_REGEX     =
+    qr{^(((?:\t|   )+)\*\s+Set\s+)(\w+)\s*\=(.*$(\n(   |\t)+ *[^\s*].*$)*)}m;
+
 
 sub initPlugin {
     # check for Plugins.pm versions
@@ -88,8 +92,8 @@ sub beforeCommonTagsHandler {
             } elsif ( $token =~ /-->/ ) {
                 $insidecomment-- if ( $insidecomment > 0 );
             } elsif ( !$insidecomment ) {
-                $token =~ s(^((?:\t|   )+\*\sSet\s*)(\w+)\s*\=(.*$(\n[ \t]+[^\s*].*$)*))
-                           ($1._generateEditField($web, $topic, $2, $3, $formDef))gem;
+                $token =~ s{$SET_REGEX}
+                    {$1._generateEditField($web, $topic, $3, $4, $formDef)}ge;
             }
             $outtext .= $token;
         }
@@ -118,8 +122,8 @@ sub beforeCommonTagsHandler {
         # save can only be used with POST method, not GET
         unless( $query && $query->request_method() !~ /^POST$/i ) {
             my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
-            $text =~ s(^((?:\t|   )+\*\sSet\s)(\w+)\s\=\s(.*)$)
-              ($1._saveSet($query, $web, $topic, $2, $3, $formDef))mgeo;
+            $text =~ s{$SET_REGEX}
+                {$1._saveSet($query, $web, $topic, $3, $4, $formDef, $2)}ge;
             TWiki::Func::saveTopic( $web, $topic, $meta, $text );
         }
         TWiki::Func::setTopicEditLock( $web, $topic, 0 );
@@ -156,7 +160,8 @@ sub _getField {
 # extra edit types defined in other plugins.
 sub _generateEditField {
     my( $web, $topic, $name, $value, $formDef ) = @_;
-    $value =~ s/^\s*(.*?)\s*$/$1/ge;
+    $value =~ s/^\s*(.*?)\s*$/$1/gs;
+    $value =~ s/\n[ \t]+/\n/g;
 
     my ($extras, $html);
 
@@ -241,10 +246,12 @@ sub _generateControlButtons {
 # if there is a new value for the Set and generate a new
 # Set statement.
 sub _saveSet {
-    my( $query, $web, $topic, $name, $value, $formDef ) = @_;
+    my( $query, $web, $topic, $name, $value, $formDef, $indent ) = @_;
 
-    my $newValue = $query->param( $name ) || $value;
-
+    my $newValue = $query->param( $name );
+    $newValue = $value unless ( defined($newValue) );
+    $newValue =~ s/^\s*(.*?)\s*$/$1/s;
+    $newValue =~ s/\n/\n$indent/g;
     if( $formDef ) {
         my $fieldDef = _getField( $formDef, $name );
         my $type = $fieldDef->{type} || '';

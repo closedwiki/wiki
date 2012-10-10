@@ -51,8 +51,9 @@ In edit mode, the edit button is replaced by Save and Cancel buttons, with their
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
 |  Copyright: | &copy; 2005 TWiki:Main.ThomasWeigert, %BR% &copy; 2005-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-10-05 |
+|  Plugin Version: | 2012-10-10 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-10-10: | TWikibug:Item6969: The Edit Preferences button was picking up variable definitions incorrectly at times - e.g. " * SetVARIABLE =" (no space b/w Set and VARIABLE) was recognized as a variable definition while two spaces between "*" and "Set" prevented recognition. The save button sometimes misrecognized the following line a variable definition as value though it's a bullet point item. A value spanning multiple lines wasn't handled correctly. All of those problems were fixed. -- TWiki:Main.HideyoImazu |
 |  2012-10-05: | TWikibug:Item6957: radio buttons, checkboxes, and labels are now displayed on the same line as Set VAR =. All unit tests were failing due to test code problems. All of them were fixed. -- TWiki:Main.HideyoImazu |
 |  2012-09-16: | TWikibug:Item6934: Option for auto-hidden or fixed top menu-bar with FIXEDTOPMENU preferences setting -- TWiki:Main.PeterThoeny |
 |  2012-04-12: | TWikibug:Item6711: Fix for broken checkbox and select+multi input types -- TWiki:Main.PeterThoeny |
