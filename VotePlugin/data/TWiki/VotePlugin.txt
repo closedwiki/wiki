@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349865975" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349932771" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -31,7 +31,7 @@ Polls are either _local_ to the topic they are defined in, or are _global_ to th
 
 The result of a poll is displayed in the polling form.
 
-Vote plguin can covert old result file to a compatible format automatically, but this converting is not enabled by default. To turn on this auto-convert feature, please set $TWiki::cfg{Plugins}{VotePlugin}{OldVoteFileAutoConvert} = 1;
+Vote plguin can covert old result file to a compatible format automatically. If you don't have old vote result files, you can turn off this feature by setting "$TWiki::cfg{Plugins}{VotePlugin}{OldVoteFileAutoConvert} = 0" to save some performance.
 
 ---++ Example
 

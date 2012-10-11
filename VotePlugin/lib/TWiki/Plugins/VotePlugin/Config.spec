@@ -1,7 +1,6 @@
 # ---+ Extensions
-# ---++ CommentPlugin
-# **BOOLEAN**
-# Old vote result files are not supported by default.
-# Enable this setting to convert old vote file format automatically.
-$TWiki::cfg{Plugins}{VotePlugin}{OldVoteFileAutoConvert} = 0;
+# ---++ VotePlugin
+# **BOOLEAN EXPERT**
+# Enable this setting to convert old vote result file automatically.
+$TWiki::cfg{Plugins}{VotePlugin}{OldVoteFileAutoConvert} = 1;
 1;
