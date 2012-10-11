@@ -451,6 +451,39 @@ sub count {
     return 0;
 }
 
+sub _normalizeAuthor {
+    my ($this, $author) = @_;
+    # $author is likely to be a cUID but with a topic saved before the
+    # introduction of cUID, it might be a login or wikiname
+    #
+    # | *Mapping*         | *cUID*     | *login*   | *wikiname* |
+    # | TWikiUserMapping  | JoeSchmoe  | JoeSchmoe | JoeSchmoe  |
+    # | CustomUserMapping | CM_jschmoe | jschmoe   | JoeSchmoe  |
+    # TWikiUserMapping:
+    #   $users->getLoginName('JoeSchmoe') -> 'JoeSchmoe'
+    #   $users->getLoginName('NotExist')  -> undef
+    # CustomUsrMapping:
+    #   $users->getLoginName('JoeSchmoe') -> undef
+    #   $users->getLoginName('NotExist')  -> undef
+    #   $users->getLoginName('CM_jschmoe')-> 'jschmoe'
+    #   $users->getLoginName('jschmoe')   -> undef
+    # Given this, getLoginName() is used to check if $user is cUID
+    my $users = $this->{_session}{users};
+    my $ln = $users->getLoginName($author);
+    if ( defined($ln) && $ln ne 'unknown' ) {
+        # $author is already a cUID.
+        return $author;
+    }
+    my $cUID = $users->getCanonicalUserID($author);
+    if ( defined($cUID) && $cUID ne 'unkown' ) {
+        return $cUID;
+    }
+    # reaching here means $author is invalid. it might be helpful to indicate
+    # that the author is an invalid user someway. But that affects all
+    # downstream places, hence not done.
+    return $author;
+}
+
 =pod
 
 ---++ ObjectMethod getRevisionInfo($fromrev) -> ( $date, $author, $rev, $comment )
@@ -473,7 +506,7 @@ sub getRevisionInfo {
     my( $date, $author, $rev, $comment );
     if( $topicinfo ) {
         $date = $topicinfo->{date} ;
-        $author = $topicinfo->{author};
+        $author = $this->_normalizeAuthor($topicinfo->{author});
         $rev = $topicinfo->{version} || '1';
         $rev =~ s/^\$Rev(:\s*\d+)?\s*\$$/0/; # parse out SVN keywords in doc
         $rev =~ s/^\d+\.//;
@@ -485,7 +518,7 @@ sub getRevisionInfo {
     # Different rev, or no topic info, delegate to Store
     ( $date, $author, $rev, $comment ) =
       $store->getRevisionInfo( $this->{_web}, $this->{_topic}, $fromrev );
-    return( $date, $author, $rev, $comment );
+    return( $date, $this->_normalizeAuthor($author), $rev, $comment );
 }
 
 =pod

@@ -1743,30 +1743,17 @@ sub renderRevisionInfo {
     my $wn = '';
     my $un = '';
     if( $user ) {
-        # $user is likely to be a cUID but with a topic saved before the
-	# introduction of cUID, it might be a login or wikiname
-        my $users = $this->{session}{users};
-	# | *Mapping*         | *cUID*     | *login*   | *wikiname* |
-	# | TWikiUserMapping  | JoeSchmoe  | JoeSchmoe | JoeSchmoe  |
-	# | CustomUserMapping | CM_jschmoe | jschmoe   | JoeSchmoe  |
-        # TWikiUserMapping:
-	#   $users->getLoginName('JoeSchmoe') -> 'JoeSchmoe'
-	#   $users->getLoginName('NotExist')  -> undef
-	# CustomUsrMapping:
-	#   $users->getLoginName('JoeSchmoe') -> undef
-	#   $users->getLoginName('NotExist')  -> undef
-	#   $users->getLoginName('CM_jschmoe')-> 'jschmoe'
-	#   $users->getLoginName('jschmoe')   -> undef
-	# Given this, getLoginName() is used to check if $user is cUID
-        my $ln = $users->getLoginName($user);
-        my $cUID = defined($ln) && $ln ne 'unknown' ?
-            $user : $users->getCanonicalUserID( $user );
-        if( $cUID ) {
-            $wun = $users->webDotWikiName($cUID);
-            $wn = $users->getWikiName( $cUID );
-            $un = $users->getLoginName($cUID);
+        # $meta->getRevisionInfo() gets $user in cUID even for a topic
+        # saved in pre-cUID days as long as the $user is valid.
+        # However $user may be invalid.
+        my $users = $this->{session}->{users};
+        if ( defined($users->getLoginName($user)) ) {
+            # only if $user is a valid cUID
+            $wun = $users->webDotWikiName($user);
+            $wn = $users->getWikiName($user);
+            $un = $users->getLoginName($user);
         }
-        # If we are still unsure, then use whatever is saved in the meta.
+        # If $user is invalid, then use whatever is saved in the meta.
         # But obscure it if the RenderLoggedInButUnknownUsers is enabled.
         $user = 'unknown' if $TWiki::cfg{RenderLoggedInButUnknownUsers};
         $wun ||= $user;
