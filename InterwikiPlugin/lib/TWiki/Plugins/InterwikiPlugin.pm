@@ -87,18 +87,25 @@ sub initPlugin {
       TWiki::Func::getPreferencesValue( 'INTERWIKIPLUGIN_INTERLINKFORMAT' ) ||
       '<a href="$url" title="$tooltip" class="interwikiLink"><noautolink>$label</noautolink></a>';
 
-    my $interTopic =
+    my $interTopicList =
       TWiki::Func::getPreferencesValue( 'INTERWIKIPLUGIN_RULESTOPIC' ) || 'InterWikis';
-    ( $interWeb, $interTopic ) =
-      TWiki::Func::normalizeWebTopicName( $interWeb, $interTopic );
-    if( $interTopic =~ s/^(.*)\.// ) {
-        $interWeb = $1;
+
+    if ($interTopicList =~ /%/) {
+        $interTopicList =
+          TWiki::Func::expandCommonVariables($interTopicList, $topic, $web);
     }
 
-    my $text = TWiki::Func::readTopicText( $interWeb, $interTopic, undef, 1 );
+    for my $interTopic (split /[,\s]+/, $interTopicList) {
+        next if $interTopic eq '';
 
-    # '| alias | URL | ...' table and extract into 'alias', "URL" list
-    $text =~ s/^\|\s*$sitePattern\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|.*$/_map($1,$2,$3)/mego;
+        my( $eachWeb, $eachTopic ) =
+          TWiki::Func::normalizeWebTopicName( $interWeb, $interTopic );
+
+        my $text = TWiki::Func::readTopicText( $eachWeb, $eachTopic, undef, 1 );
+
+        # '| alias | URL | ...' table and extract into 'alias', "URL" list
+        $text =~ s/^\|\s*$sitePattern\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|.*$/_map($1,$2,$3)/mego;
+    }
 
     $sitePattern = "(" . join( "|", keys %interSiteTable ) . ")";
     return 1;
