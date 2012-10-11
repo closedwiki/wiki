@@ -149,6 +149,7 @@ sub _savePersistentVar
     # FIXME: Do atomic transaction to avoid race condition
     $this->_loadPersistentVars();            # re-load latest from disk in case updated
     $this->{PersistentVars}{$name} = $value; # set variable
+    require Data::Dumper;
     my $text = Data::Dumper->Dump([$this->{PersistentVars}], [qw(PersistentVars)]);
     TWiki::Func::saveFile( $this->{StoreFile}, $text ) ;
     $this->{StoreTimeStamp} = ( stat( $this->{StoreFile} ) )[9];
