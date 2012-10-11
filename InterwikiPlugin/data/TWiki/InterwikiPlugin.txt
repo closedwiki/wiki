@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1346831167" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349950135" format="1.1" version="$Rev$"}%
 ---+!! Interwiki Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -33,8 +33,8 @@ The <nop>%TOPIC% links ==ExternalSite:Page== text to external sites based on ali
 
 This plugin can be configured with preferences settings in [[%LOCALSITEPREFS%]] (site level), a WebPreferences (web level) or in a topic (page level). Do not change the settings here, they are here only to illustrate the default values. To overload, copy the settings to one of the aforementioned topics.
 
-   * Link rules topic name: (default is %SYSTEMWEB%.InterWikis)
-      * Set INTERWIKIPLUGIN_RULESTOPIC = InterWikis
+   * Link rules topic name: (default is [[%SYSTEMWEB%.InterWikis][%<nop>SYSTEMWEB%.InterWikis]])
+      * <nop>Set =INTERWIKIPLUGIN_RULESTOPIC= = [[%SYSTEMWEB%.InterWikis][%<nop>SYSTEMWEB%.InterWikis]], [[%WEB%.InterWikis][%<nop>WEB%.InterWikis]], [[AnotherWeb.CustomInterWikis][AnotherWeb.CustomInterWikis]]
 
    * Inter-link format, with variables:
      | $site | Site alias |
@@ -42,7 +42,7 @@ This plugin can be configured with preferences settings in [[%LOCALSITEPREFS%]] 
      | $url | Site URL (might contain $page) |
      | $label | Equal to $site:$page |
      | $tooltip | Tooltip message |
-      * Set INTERWIKIPLUGIN_INTERLINKFORMAT = <a href="$url" title="$tooltip" class="interwikiLink"><noautolink>$label</noautolink></a>
+      * <nop>Set =INTERWIKIPLUGIN_INTERLINKFORMAT= = &lt;a href="$url" title="$tooltip" class="interwikiLink"&gt;&lt;noautolink&gt;$label&lt;/noautolink&gt;&lt;/a&gt;
 
 ---++ Plugin Installation Instructions
 
@@ -66,6 +66,7 @@ __%X% Note:__ This plugin is included in the TWiki distribution package. You do 
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2012-09-05 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-10-11: | TWikibug:Item6979: Enhance INTERWIKIPLUGIN_RULESTOPIC to accept multiple topics and to deal with variable expansion -- TWiki:Main.MahiroAndo |
 |  2012-09-05: | TWikibug:Item6837: Doc fixes |
 |  2010-08-04: | TWikibug:Item6786: Fix for TWiki.org specific link fix no longer working as implemented in Item6731 - bug was introduced by Item6731 -- TWiki:Main.PeterThoeny |
 |  2010-06-06: | TWikibug:Item6701: Adding TWikisvn link rule -- TWiki:Main.PeterThoeny |
