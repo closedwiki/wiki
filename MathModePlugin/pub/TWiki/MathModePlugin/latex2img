@@ -1,14 +1,14 @@
 #!/bin/sh
 
-input="$1"
-shift
-bgcolor="$1"
-shift
+input="$1"; shift
+bgcolor="$1"; shift
+
+latex="$1"; shift
+dvipng="$1"; shift
+convert="$1"; shift
+
 dvipngargs="$*"
 
-latex=/usr/bin/latex
-dvipng=/usr/bin/dvipng
-convert=/usr/bin/convert
 grep=/bin/grep
 origpwd=`pwd`
 stderr=`mktemp`

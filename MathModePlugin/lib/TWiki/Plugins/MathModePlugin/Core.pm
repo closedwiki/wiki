@@ -57,38 +57,46 @@ sub new {
       # tiny, scriptsize, footnotesize, small, normalsize, large, Large, LARGE,
       # huge or Huge
 
-    hashCodeLength => $TWiki::cfg{MathModePlugin}{HashCodeLength} || 32,
+    hashCodeLength => getConf(HashCodeLength => 32),
       # length of the hash code. If you switch to a different
       # hash function, you will likely have to change this
 
-    imagePrefix => $TWiki::cfg{MathModePlugin}{ImagePrefix} || '_MathModePlugin_',
+    imagePrefix => getConf(ImagePrefix => '_MathModePlugin_'),
       # string to be prepended to any auto-generated image
 
-    latex2Img => $TWiki::cfg{MathModePlugin}{Latex2Img},
+    latex2Img => getConf('Latex2Img'),
       # the command to convert latex to a png or gif
 
-    scaleFactor => $TWiki::cfg{MathModePlugin}{ScaleFactor} || 1.2,
+    scaleFactor => getConf(ScaleFactor => 1.2),
       # factor to scale images;
       # may be overridden by a LATEXSCALEFACTOR  TWiki preference variable
 
-    latexFGColor => $TWiki::cfg{MathModePlugin}{LatexFGColor} || 'black',
+    latexFGColor => getConf(LatexFGColor => 'black'),
       # default text color
 
-    latexBGColor => $TWiki::cfg{MathModePlugin}{LatexBGColor} || 'white',
+    latexBGColor => getConf(LatexBGColor => 'white'),
       # default background color
 
-    latexFontSize => $TWiki::cfg{MathModePlugin}{LatexFontSize} || 'normalsize',
+    latexFontSize => getConf(LatexFontSize => 'normalsize'),
       # default text color
 
-    latexPreamble => $TWiki::cfg{MathModePlugin}{Preamble} || 
-      '\usepackage{latexsym}',
+    latexPreamble => getConf(Preamble => '\usepackage{latexsym}'),
       # latex preamble, e.g. to include additional packages; may be 
       # overridden by a LATEXPREAMBLE preference variable;
       # Example: \usepackage{mathptmx} to change the math font
 
-    imageType => $TWiki::cfg{MathModePlugin}{ImageType} || 'png',
+    imageType => getConf(ImageType => 'png'),
       # extension of the image type;
       # may be overridden by a LATEXIMAGETYPE preference variable
+
+    latexCommandPath => getConf(LatexCommandPath => '/usr/bin/latex'),
+      # latex command path
+
+    dvipngCommandPath => getConf(DvipngCommandPath => '/usr/bin/dvipng'),
+      # dvipng command path
+
+    convertCommandPath => getConf(ConvertCommandPath => '/usr/bin/convert'),
+      # convert command path
 
     @_
   };
@@ -346,6 +354,9 @@ PREAMBLE
   # run latex2html on the latex file we generated
   my $latex2ImgCmd = $this->{latex2Img} . ' %FILENAME|F%';
   $latex2ImgCmd .= " $this->{bgColor}";
+  $latex2ImgCmd .= " $this->{latexCommandPath}";
+  $latex2ImgCmd .= " $this->{dvipngCommandPath}";
+  $latex2ImgCmd .= " $this->{convertCommandPath}";
   $latex2ImgCmd .= ' -D '.int(100)*$this->{scaleFactor};
   $latex2ImgCmd .= ' --'.$this->{imageType};
 
@@ -383,6 +394,15 @@ sub formatColorSpec {
   return "{$color}" if $color =~ /^[a-zA-Z]+$/; # named
   return "[HTML]{$color}" if $color =~ /^[a-fA-F0-9]{6}$/; # named
   return "$color";
+}
+
+###############################################################################
+# returns the config value
+sub getConf {
+  my ($name, $default) = @_;
+  return $TWiki::cfg{Plugins}{MathModePlugin}{$name} ||
+         $TWiki::cfg{MathModePlugin}{$name} || # for backward compatibility
+         $default;
 }
 
 1;
