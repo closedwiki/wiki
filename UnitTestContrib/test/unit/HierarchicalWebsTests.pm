@@ -362,18 +362,18 @@ sub test_WEBLIST_listindent {
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
-    my $text = '%WEBLIST{format="$listindent()   * $name().WebHome"}%';
+    my $text = '%WEBLIST{format="$listindent   * $name.WebHome"}%';
     $text = $this->{twiki}->handleCommonTags($text, $testWeb, 'WebHome');
-    $this->assert_equals(<<END, $text . "\n");
+    for my $i ( split(/\n/, <<'END') ) {
    * HierarchicalWebsTestsTestWeb.WebHome
       * HierarchicalWebsTestsTestWeb/SubWeb.WebHome
-   * Jupiter.WebHome
    * Main.WebHome
    * Sandbox.WebHome
    * TWiki.WebHome
-   * TestCases.WebHome
-   * Venus.WebHome
 END
+        $i =~ s/(\W)/\\$1/g;
+        $this->assert_matches(qr/^$i/, $text);
+    }
 }
 
 sub test_WEBLIST_relative {

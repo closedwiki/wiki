@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349565864" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1349919072" format="1.1" version="$Rev$"}%
 ---+!! !UnitTestContrib
 <!--
 One line description, required for extensions repository catalog.
@@ -43,8 +43,9 @@ One test file, =SemiAutomaticTestCaseTests.pm=, reads the semi-automatic tests f
 |  Contrib Author(s): | Crawford Currie http://c-dot.co.uk and test authors |
 |  Copyright: | &copy; 2007-2012 TWiki Contributors |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Contrib Version: | 2012-10-06 |
+|  Contrib Version: | 2012-10-11 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-10-11: | TWikibug:Item6963: HierarchicalWebsTests.pm enhanced to test the new WEBLIST format item $listindent -- TWiki:Main.HideyoImazu |
 |  2012-10-06: | TWikibug:Item6870: Fix for PluginHandlerTests.pm unit test failure -- TWiki:Main.HideyoImazu |
 |  2012-02-23: | TWikibug:Item6850: Nicer comma-space delimited display of TWiki Group members |
 |  2012-01-14: | TWikibug:Item6833: Fix RegisterTests to account for Item6824 changes |
