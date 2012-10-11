@@ -45,6 +45,7 @@ One test file, =SemiAutomaticTestCaseTests.pm=, reads the semi-automatic tests f
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Contrib Version: | 2012-10-11 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-10-11: | TWikibug:Item6976: RcsTests.pm now observes $TWiki::cfg{RCS}{coCmd} -- TWiki::Main.HideyoImazu |
 |  2012-10-11: | TWikibug:Item6963: HierarchicalWebsTests.pm enhanced to test the new WEBLIST format item $listindent -- TWiki:Main.HideyoImazu |
 |  2012-10-06: | TWikibug:Item6870: Fix for PluginHandlerTests.pm unit test failure -- TWiki:Main.HideyoImazu |
 |  2012-02-23: | TWikibug:Item6850: Nicer comma-space delimited display of TWiki Group members |

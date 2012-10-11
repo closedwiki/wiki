@@ -34,10 +34,22 @@ sub RcsWrap {
     $class = 'TWiki::Store::RcsWrap';
 }
 
+sub _coCmd {
+    my $coCmd;
+    if ( $coCmd = $TWiki::cfg{RCS}{coCmd} ) {
+        $coCmd =~ s/ .*$//;
+    }
+    else {
+        $coCmd = 'co';
+    }
+    return $coCmd;
+}
+
 sub fixture_groups {
     my $groups = [ 'RcsLite' ];
+    my $coCmd = _coCmd();
     eval {
-        `co -V`; # Check to see if we have co
+        `$coCmd -V`; # Check to see if we have co
     };
     if ($@ || $?) {
         print STDERR "*** CANNOT RUN RcsWrap TESTS - NO COMPATIBLE co: $@\n";
@@ -152,7 +164,8 @@ sub verify_RcsWrapOnly_ciLocked {
     $rcs->addRevisionFromText( "Shooby Dooby", "original", "BungditDin" );
     # hack the lock
     my $vfile = $rcs->{file}.",v";
-    `co -f -q -l $vfile`; # Only if we have co
+    my $coCmd = _coCmd();
+    `$coCmd -f -q -l $vfile`; # Only if we have co
     unlink("$topic.txt");
 
     # file is now locked by blocker_socker, save some new text
