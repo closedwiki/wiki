@@ -1,0 +1,38 @@
+%META:TOPICINFO{author="TWikiContributor" date="1349936325" format="1.1" version="$Rev$"}%
+---+!! Managing a Large Site
+There is no limitation with the number of webs a TWiki site can have.
+But there are several considerationgs needed to run a site having thousands of webs and tens of thousands of users.
+This topic discusses those.
+
+%TOC%
+
+---++ User Management
+The default user management scheme using !TWikiUserMappingContrib and TWiki::Users::HtPasswdUser is not suitable for tens of thousands of users because of the following factors.
+   * !TWikiUserMappingContrib maintains the list of users on the !TWiki.TWikiUsersTemplate topic
+   * TWiki::Users::HtPasswdUser stores user account data on a text file
+
+You need to use e.g. !LdapContrib for TWiki::Users::LdapUserMapping and TWiki::LdapPasswdUser. Or you need to implement your own user mapping module which is scalalbe.
+If your environment provides intranet single sign-on and user directory (e.g. LDAP or !ActiveDirectory based), it's worth considering getting rid of user registration.
+
+---++ Web Management
+If you have thousands of webs, you face the following issues.
+   * Getting the list of all webs takes a long time due to directory traversal.
+   This happens e.g. when you move a topic.
+   * The frequency of administrator help requests increases. Each web should be made as self-service as possible.
+The first issue can be solved by MetadataRepository with <code>$TWiki::cfg{Mdrepo}{WebRecordRequired} = 1;</code>
+
+The second issue can be solved by a combination of MetadataRepository#Web_admins and a custom user mapping referring to the web admin data.
+The custom user mapping module would have its own isAdmin(), which would return true for the web admin members.
+
+---++ Multiple Disks
+A single disk may not be able to house all webs.
+UsingMultipleDisks provides a way to use multiple disks.
+
+---++ Eliminating Impractical Operations
+If you have thousands of webs the following operations would take too long and cases time out:
+   * "in all public webs" operations on the "More topic action"
+      * Setting NOINALLPUBLICWEBS to "on" suppresses the "in all public webs" links.
+   * !SiteChanges, the topic showing all recent changes across all webs, 
+      * This topic should be deleted on a large site.
+
+__Related Topics:__ AdminDocumentationCategory, MetadataRepository, UsingMultipleDisks
