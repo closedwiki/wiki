@@ -29,7 +29,7 @@ require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-10-10';
+our $RELEASE = '2012-10-12';
 
 my @shelter;
 my $MARKER = "\007";
@@ -101,8 +101,9 @@ sub beforeCommonTagsHandler {
           
         $_[0] =~ s/%EDITPREFERENCES({.*?})?%/
           _generateControlButtons($web, $topic)/ge;
-        my $viewUrl = TWiki::Func::getScriptUrl(
-            $web, $topic, 'viewauth' );
+        my $script = TWiki::Func::getContext()->{authenticated} ?
+            'view' : 'viewauth';
+        my $viewUrl = TWiki::Func::getScriptUrl( $web, $topic, $script );
         my $startForm = CGI::start_form(
             -name => 'editpreferences',
             -method => 'post',
@@ -208,8 +209,9 @@ sub _generateEditField {
 sub _generateEditButton {
     my( $web, $topic, $buttonLabel ) = @_;
 
-    my $viewUrl = TWiki::Func::getScriptUrl(
-        $web, $topic, 'viewauth' );
+    my $script = TWiki::Func::getContext()->{authenticated} ?
+        'view' : 'viewauth';
+    my $viewUrl = TWiki::Func::getScriptUrl( $web, $topic, $script );
     my $text = CGI::start_form(
         -name => 'editpreferences',
         -method => 'post',
