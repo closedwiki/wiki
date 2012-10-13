@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350109798" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350112553" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -307,8 +307,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2012, TWiki:Main.PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2012-10-12 |
+|  Add-on Version: | 2012-10-13 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-10-13: | TWikibug:Item6972: Add !TWikiDashboardAddOn to core distribution |
 |  2010-10-12: | TWikibug:Item6981: Adding 12 more dashboard banner images |
 |  2010-10-06: | TWikibug:Item6954: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.3 (TWiki-5.0)%BR% TWiki:Plugins.ScrollBoxAddOn %BR% TWiki:Plugins.SpreadSheetPlugin version 2012-04-04 %BR% TWiki:Plugins.ModalBoxAddOn required if popup buttons are used |
