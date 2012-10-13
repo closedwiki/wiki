@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350112553" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350166263" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -89,7 +89,7 @@ The ="banner"= section defines a banner with an image. All content is specified 
 | =title=""= | Banner title, optional | (no title) |
 | =width=""= | Banner width in pixels, optional.%BR% __Note:__ It should match the dashboard width and banner image width | ="1024"= |
 | =height=""= | Banner height in pixels, optional | ="150"= |
-| =buttons=""= | Banner buttons, optional. Buttons are separated by semicolon-space; each button has elements separated by the pipe symbol (="&#124;"=). A button can either link to another page, or popup a modal box. A popup is shown if the button has 4 elements. Popup button elements: Button label, box title, box content, box width in pixels. Link button elements: Button label, link. A link can be a !Web.TopicName or a URL. %BR% __Example:__ =buttons="Button label&#124;LinkTarget; TWiki Help&#124;TWiki.WebHome; Popup Demo&#124;Modal box demo title&#124;Modal box content&#124;600"= | (none) |
+| =button1=""= %BR% =button2=""= %BR% ... %BR% =button8=""= | Banner buttons, optional. Each button has elements separated by the pipe symbol (="&#124;"=). A button can either link to another page, or popup a modal box. A popup is shown if the button has 4 or more elements. Popup button elements: Button label, box title, box content, box width in pixels (optional, default 600), box height in pixels (optional, default 400). Link button elements: Button label, link. A link can be a !Web.TopicName or a URL. %BR% __Example:__ =button1="Button label&#124;LinkTarget" button2="TWiki Help&#124;%SYSTEMWEB%.WebHome" button3="Popup Demo&#124;Modal box demo title&#124;Modal box content&#124;600"= | (none) |
 | =style=""= | CSS of banner box, optional | ="border: none 0;"= |
 | =titlestyle=""= | CSS of banner title, optional | ="margin: 10px 15px; padding: 0; font-size: 18pt; font-weight: 600; color: #333333;"= |
 | =contentstyle=""= | CSS of button container | ="bottom: 0; right: 0; margin: 0; padding: 10px 10px; color: #333333;"= |
@@ -132,7 +132,9 @@ This example defines a simple dashboard. Write this:
 %DASHBOARD{ section="banner"
  image="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/marin-headlands.jpg"
  title="Dashboard for %WIKIUSERNAME%"
- buttons="TWiki Help|%SYSTEMWEB%.WebHome; Popup Demo|Modal Popup Demo|This requires the TWiki:Plugins.ModalBoxAddOn|600"
+ button1="TWiki Help|%SYSTEMWEB%.WebHome"
+ button2="TWiki Variables|%SYSTEMWEB%.TWikiVariables"
+ button3="Popup Demo|Modal Popup Demo|This requires the TWiki:Plugins.ModalBoxAddOn|400"
 }%
 %DASHBOARD{ section="box_start" title="Box 1 title" }%
 Box 1 content
@@ -157,7 +159,9 @@ This example generates the following dashboard:
 %DASHBOARD{ section="banner"
  image="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/marin-headlands.jpg"
  title="Dashboard for %WIKIUSERNAME%"
- buttons="TWiki Help|%SYSTEMWEB%.WebHome; Popup Demo|Modal Popup Demo|This requires the TWiki:Plugins.ModalBoxAddOn|600"
+ button1="TWiki Help|%SYSTEMWEB%.WebHome"
+ button2="TWiki Variables|%SYSTEMWEB%.TWikiVariables"
+ button3="Popup Demo|Modal Popup Demo|This requires the TWiki:Plugins.ModalBoxAddOn|400"
 }%
 %DASHBOARD{ section="box_start" title="Box 1 title" }%
 Box 1 content
@@ -243,12 +247,12 @@ This section defines the actual dashboard. View the [[%SCRIPTURL{view}%/%WEB%/%T
 %IF{ "defined 'title'" then="$percnttitle$percnt" }%
 </div>
 %IF{
- "defined 'buttons'"
- then="$percntCALCULATE{$SET(twDashboardBannerButtonDisplay, block)}$percnt $percntJQTHEME{smoothness}$percnt"
- else="$percntCALCULATE{$SET(twDashboardBannerButtonDisplay, none)}$percnt"
-}%<nop>
+ "defined 'button1' OR defined 'button2' OR defined 'button3' OR defined 'button4' OR defined 'button5' OR defined 'button6' OR defined 'button7' OR defined 'button8'"
+ then="$percntCALCULATE{$SET(twDashboardBannerButtonDisplay, block)}$percnt $percntJQTHEME{smoothness}$percnt<script> $(document).ready(function() { $('.twDashboardBannerButton a').addClass('twikiButton'); });</script>"
+ else="$percntCALCULATE{$SET(twDashboardBannerButtonDisplay, none)}$percnt<nop>"
+}%
 <div class="twDashboardBannerButtonRow" style="display: %CALCULATE{$GET(twDashboardBannerButtonDisplay)}%; %IF{ "defined 'contentstyle'" then="%contentstyle%;" }%">
-%CALCULATE{$SETM(x, +1)$SUBSTITUTE($LISTJOIN($sp, $LISTMAP(<div class='twDashboardBannerButton'>$SET(i, $SPLIT(\|, $item))$IF($LISTSIZE($GET(i))>3, $NOP(%)INCLUDE{ \"TWiki.ModalBoxAddOn\" id=\"twDashboardButton_$GET(x)_$index\" title=\"$LISTITEM(2, $GET(i))\" content=\"$LISTITEM(3, $GET(i))\" width=\"$LISTITEM(4, $GET(i))\" buttons=\"{}\" }$NOP(%) <a href='#' id='twDashboardButton_$GET(x)_$index'>$LISTITEM(1, $GET(i))</a>, [[$LISTITEM(2, $GET(i))][$LISTITEM(1, $GET(i))]])</div>, $LISTREVERSE($SPLIT(; *, $TRANSLATE(%buttons%, $comma", `'))))), `, &#44;)}% <script> $('.twDashboardBannerButton a').addClass('twikiButton'); </script>
+%CALCULATE{$SETM(x, +1)$SUBSTITUTE($LISTJOIN($sp, $LISTMAP(<div class='twDashboardBannerButton'>$SET(i, $SPLIT(\|, $item))$IF($LISTSIZE($GET(i))>=3, $NOP(%)INCLUDE{ \"%SYSTEMWEB%.ModalBoxAddOn\" warn=\"off\" id=\"twDashboardButton_$GET(x)_$index\" title=\"$LISTITEM(2, $GET(i))\" content=\"$LISTITEM(3, $GET(i))\" width=\"$IF($LISTSIZE($GET(i))>=4, $LISTITEM(4, $GET(i)), 600)\" height=\"$IF($LISTSIZE($GET(i))>=5, $LISTITEM(5, $GET(i)), 400)\" }$NOP(%) <a href='#' id='twDashboardButton_$GET(x)_$index'>$LISTITEM(1, $GET(i))</a>, $IF($LISTSIZE($GET(i))>1, [[$LISTITEM(2, $GET(i))][$LISTITEM(1, $GET(i))]]))</div>, $LISTREVERSE($SPLIT(; *, $TRANSLATE(%button1%, $comma", `'), $TRANSLATE(%button2%, $comma", `'), $TRANSLATE(%button3%, $comma", `'), $TRANSLATE(%button4%, $comma", `'), $TRANSLATE(%button5%, $comma", `'), $TRANSLATE(%button6%, $comma", `'), $TRANSLATE(%button7%, $comma", `'), $TRANSLATE(%button8%, $comma", `'))))), `, &#44;)}%
 </div>
 </div>
 <div style="clear: both;"></div>
@@ -294,7 +298,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
       * If you use TWiki-5.1 or below add the following setting to %SYSTEMWEB%.TWikiPreferences:
 <verbatim>
    * %SYSTEMWEB%.TWikiDashboardAddOn variable, documented in %SYSTEMWEB%.VarDASHBOARD:
-      * Set DASHBOARD = %INCLUDE{ "%SYSTEMWEB%.TWikiDashboardAddOn" section="%section%" %IF{ "'%height{ default="" }%'!=''" then="height=\"%height%\"" }% %IF{ "'%width{ default="" }%'!=''" then="width=\"%width%\"" }% %IF{ "'%ENCODE{ "%image{ default="" }%" type="entity" }%'!=''" then="image=\"%ENCODE{ "%image%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%title{ default="" }%" type="entity" }%'!=''" then="title=\"%ENCODE{ "%title%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%buttons{ default="" }%" type="entity" }%'!=''" then="buttons=\"%ENCODE{ "%buttons%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%style{ default="" }%" type="entity" }%'!=''" then="style=\"%style%\"" }% %IF{ "'%ENCODE{ "%titlestyle{ default="" }%" type="entity" }%'!=''" then="titlestyle=\"%titlestyle%\"" }% %IF{ "'%ENCODE{ "%contentstyle{ default="" }%" type="entity" }%'!=''" then="contentstyle=\"%contentstyle%\"" }% }%
+      * Set DASHBOARD = %INCLUDE{ "%SYSTEMWEB%.TWikiDashboardAddOn" section="%section%" %IF{ "'%height{ default="" }%'!=''" then="height=\"%height%\"" }% %IF{ "'%width{ default="" }%'!=''" then="width=\"%width%\"" }% %IF{ "'%ENCODE{ "%image{ default="" }%" type="entity" }%'!=''" then="image=\"%ENCODE{ "%image%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%title{ default="" }%" type="entity" }%'!=''" then="title=\"%ENCODE{ "%title%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%button1{ default="" }%" type="entity" }%'!=''" then="button1=\"%ENCODE{ "%button1%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%button2{ default="" }%" type="entity" }%'!=''" then="button2=\"%ENCODE{ "%button2%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%button3{ default="" }%" type="entity" }%'!=''" then="button3=\"%ENCODE{ "%button3%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%button4{ default="" }%" type="entity" }%'!=''" then="button4=\"%ENCODE{ "%button4%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%button5{ default="" }%" type="entity" }%'!=''" then="button5=\"%ENCODE{ "%button5%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%button6{ default="" }%" type="entity" }%'!=''" then="button6=\"%ENCODE{ "%button6%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%button7{ default="" }%" type="entity" }%'!=''" then="button7=\"%ENCODE{ "%button7%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%button8{ default="" }%" type="entity" }%'!=''" then="button8=\"%ENCODE{ "%button8%" type="quote" }%\"" }% %IF{ "'%ENCODE{ "%style{ default="" }%" type="entity" }%'!=''" then="style=\"%style%\"" }% %IF{ "'%ENCODE{ "%titlestyle{ default="" }%" type="entity" }%'!=''" then="titlestyle=\"%titlestyle%\"" }% %IF{ "'%ENCODE{ "%contentstyle{ default="" }%" type="entity" }%'!=''" then="contentstyle=\"%contentstyle%\"" }% }%
 </verbatim>
 
    * __Test__ if the installation was successful:
@@ -309,7 +313,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Add-on Version: | 2012-10-13 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-10-13: | TWikibug:Item6972: Add !TWikiDashboardAddOn to core distribution |
+|  2010-10-13: | TWikibug:Item6972: Add !TWikiDashboardAddOn to core distribution; multiple banner buttons with button1="" button2="" ... |
 |  2010-10-12: | TWikibug:Item6981: Adding 12 more dashboard banner images |
 |  2010-10-06: | TWikibug:Item6954: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.3 (TWiki-5.0)%BR% TWiki:Plugins.ScrollBoxAddOn %BR% TWiki:Plugins.SpreadSheetPlugin version 2012-04-04 %BR% TWiki:Plugins.ModalBoxAddOn required if popup buttons are used |
