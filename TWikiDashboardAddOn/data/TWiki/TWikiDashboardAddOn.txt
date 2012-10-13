@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350166263" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350169213" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -89,9 +89,9 @@ The ="banner"= section defines a banner with an image. All content is specified 
 | =title=""= | Banner title, optional | (no title) |
 | =width=""= | Banner width in pixels, optional.%BR% __Note:__ It should match the dashboard width and banner image width | ="1024"= |
 | =height=""= | Banner height in pixels, optional | ="150"= |
-| =button1=""= %BR% =button2=""= %BR% ... %BR% =button8=""= | Banner buttons, optional. Each button has elements separated by the pipe symbol (="&#124;"=). A button can either link to another page, or popup a modal box. A popup is shown if the button has 4 or more elements. Popup button elements: Button label, box title, box content, box width in pixels (optional, default 600), box height in pixels (optional, default 400). Link button elements: Button label, link. A link can be a !Web.TopicName or a URL. %BR% __Example:__ =button1="Button label&#124;LinkTarget" button2="TWiki Help&#124;%SYSTEMWEB%.WebHome" button3="Popup Demo&#124;Modal box demo title&#124;Modal box content&#124;600"= | (none) |
+| =button1=""= %BR% =button2=""= %BR% ... %BR% =button8=""= | Banner buttons, optional. Each button has elements separated by the pipe symbol (="&#124;"=). A button can either link to another page, or popup a modal box. A popup is shown if the button has 3 or more elements. Popup button elements: Button label, box title, box content, box width in pixels (optional, default 600), box height in pixels (optional, default 400). Link button elements: Button label, link. A link can be a !Web.TopicName or a URL. %BR% __Example:__ %BR% =button1="Button label&#124;LinkTarget" button2="TWiki Help&#124;%SYSTEMWEB%.WebHome" button3="Popup Demo&#124;Modal box demo title&#124;Modal box content&#124;600"= | (none) |
 | =style=""= | CSS of banner box, optional | ="border: none 0;"= |
-| =titlestyle=""= | CSS of banner title, optional | ="margin: 10px 15px; padding: 0; font-size: 18pt; font-weight: 600; color: #333333;"= |
+| =titlestyle=""= | CSS of banner title, optional. %BR% __Example:__ To show white title text for dark banner image:%BR% =titlestyle="color: white;"= | ="margin: 10px 15px; padding: 0; font-size: 18pt; font-weight: 600; color: #333333;"= |
 | =contentstyle=""= | CSS of button container | ="bottom: 0; right: 0; margin: 0; padding: 10px 10px; color: #333333;"= |
 
 __Note:__ The popup (modal dialog box) depends on the TWiki:Plugins.ModalBoxAddOn.
@@ -132,6 +132,7 @@ This example defines a simple dashboard. Write this:
 %DASHBOARD{ section="banner"
  image="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/marin-headlands.jpg"
  title="Dashboard for %WIKIUSERNAME%"
+ titlestyle="color:#800000;"
  button1="TWiki Help|%SYSTEMWEB%.WebHome"
  button2="TWiki Variables|%SYSTEMWEB%.TWikiVariables"
  button3="Popup Demo|Modal Popup Demo|This requires the TWiki:Plugins.ModalBoxAddOn|400"
@@ -159,6 +160,7 @@ This example generates the following dashboard:
 %DASHBOARD{ section="banner"
  image="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/marin-headlands.jpg"
  title="Dashboard for %WIKIUSERNAME%"
+ titlestyle="color:#800000;"
  button1="TWiki Help|%SYSTEMWEB%.WebHome"
  button2="TWiki Variables|%SYSTEMWEB%.TWikiVariables"
  button3="Popup Demo|Modal Popup Demo|This requires the TWiki:Plugins.ModalBoxAddOn|400"
