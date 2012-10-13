@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349250831" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350109317" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiDashboardAddOn"}%
 ---+!! <span style="font-size: 60%"> TWikiDashboardAddOn &#187;</span> TWiki Dashboard Banner Images
 
@@ -10,11 +10,26 @@ These images have a size of 1026 x 150 pixels, for use in standard 1024 pixels w
 Name: =marin-headlands.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/marin-headlands.jpg" alt="" width="1026" height="150" />
 
+Name: =golden-gate-dawn.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/golden-gate-dawn.jpg" alt="" width="1026" height="150" />
+
 Name: =golden-gate-sunset.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/golden-gate-sunset.jpg" alt="" width="1026" height="150" />
 
 Name: =venetian-macau.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/venetian-macau.jpg" alt="" width="1026" height="150" />
+
+Name: =above-silicon-valley.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/above-silicon-valley.jpg" alt="" width="1026" height="150" />
+
+Name: =wine-tasting.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/wine-tasting.jpg" alt="" width="1026" height="150" />
+
+Name: =saratoga-evening.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/saratoga-evening.jpg" alt="" width="1026" height="150" />
+
+Name: =nasa-airfield.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/nasa-airfield.jpg" alt="" width="1026" height="150" />
 
 Name: =nasa-shed-cyan.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/nasa-shed-cyan.jpg" alt="" width="1026" height="150" />
@@ -25,11 +40,44 @@ Name: =nasa-shed-orange.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.
 Name: =hakone-garden.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/hakone-garden.jpg" alt="" width="1026" height="150" />
 
+Name: =monterey-by-bike.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/monterey-by-bike.jpg" alt="" width="1026" height="150" />
+
+Name: =hong-kong-skyline.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/hong-kong-skyline.jpg" alt="" width="1026" height="150" />
+
+Name: =boreal-by-night.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/boreal-by-night.jpg" alt="" width="1026" height="150" />
+
+Name: =baergli-swiss-alps.jpg= &nbsp; &nbsp; - image copyright 2012, Burga Joos: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/baergli-swiss-alps.jpg" alt="" width="1026" height="150" />
+
+Name: =boeing-factory.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/boeing-factory.jpg" alt="" width="1026" height="150" />
+
+Name: =code-camp.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/code-camp.jpg" alt="" width="1026" height="150" />
+
+Name: =community-leaders.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/community-leaders.jpg" alt="" width="1026" height="150" />
+
 __Related:__ TWikiDashboardAddOn
 
-%META:FILEATTACHMENT{name="marin-headlands.jpg" attachment="marin-headlands.jpg" attr="h" comment="Image copyright 2012, David Yu" date="1349156457" path="marin-headlands.jpg" size="34304" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="above-silicon-valley.jpg" attachment="above-silicon-valley.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="above-silicon-valley.jpg" size="53618" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="baergli-swiss-alps.jpg" attachment="baergli-swiss-alps.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="baergli-swiss-alps.jpg" size="50943" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="boeing-factory.jpg" attachment="boeing-factory.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="boeing-factory.jpg" size="55166" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="boreal-by-night.jpg" attachment="boreal-by-night.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="boreal-by-night.jpg" size="38030" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="code-camp.jpg" attachment="code-camp.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="code-camp.jpg" size="124898" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="community-leaders.jpg" attachment="community-leaders.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="community-leaders.jpg" size="93107" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="golden-gate-dawn.jpg" attachment="golden-gate-dawn.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="golden-gate-dawn.jpg" size="57708" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="golden-gate-sunset.jpg" attachment="golden-gate-sunset.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156456" path="golden-gate-sunset.jpg" size="36489" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="venetian-macau.jpg" attachment="venetian-macau.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156456" path="venetian-macau.jpg" size="65434" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="hakone-garden.jpg" attachment="hakone-garden.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156454" path="hakone-garden.jpg" size="82948" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="hong-kong-skyline.jpg" attachment="hong-kong-skyline.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="hong-kong-skyline.jpg" size="74086" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="marin-headlands.jpg" attachment="marin-headlands.jpg" attr="h" comment="Image copyright 2012, David Yu" date="1349156457" path="marin-headlands.jpg" size="34304" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="monterey-by-bike.jpg" attachment="monterey-by-bike.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="monterey-by-bike.jpg" size="51252" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="nasa-airfield.jpg" attachment="nasa-airfield.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="nasa-airfield.jpg" size="65068" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="nasa-shed-cyan.jpg" attachment="nasa-shed-cyan.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156455" path="nasa-shed-cyan.jpg" size="104232" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="nasa-shed-orange.jpg" attachment="nasa-shed-orange.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156455" path="nasa-shed-orange.jpg" size="103835" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="hakone-garden.jpg" attachment="hakone-garden.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156454" path="hakone-garden.jpg" size="82948" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="saratoga-evening.jpg" attachment="saratoga-evening.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="saratoga-evening.jpg" size="49410" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="venetian-macau.jpg" attachment="venetian-macau.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156456" path="venetian-macau.jpg" size="65434" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="wine-tasting.jpg" attachment="wine-tasting.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="wine-tasting.jpg" size="68924" user="TWikiContributor" version="1"}%
