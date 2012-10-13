@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349400758" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350110935" format="1.1" version="$Rev$"}%
 ---+!! Scroll Box Add-on
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -505,8 +505,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2012, TWiki:Main.PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2012-10-04 |
+|  Add-on Version: | 2012-10-12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-10-12: | TWikibug:Item6971: Add !ScrollBoxAddOn to core distribution |
 |  2012-10-04: | TWikibug:Item6956: CSS based box shadow and rounded corners |
 |  2012-05-14: | TWikibug:Item6837: Add non-scrolling box feature with "static_box*" sections; change padding from 10px to 15px; add boxstyle, titlestyle and contentstyle parameters |
 |  2011-02-10: | TWikibug:Item6638: Avoid &lt;p /&gt; tag when including scroll box engine |
