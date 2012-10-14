@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350169213" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350176148" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -193,7 +193,7 @@ This section defines the actual dashboard. View the [[%SCRIPTURL{view}%/%WEB%/%T
 }
 .twDashboardBanner {
  position: relative;
- margin: 0 7px 7px 7px;
+ margin: 7px;
  padding: 0;
  width: 1024px; /* = 3 * (300w+2*15p+2*1b) + 2*2*7m */
  height: 150px;
@@ -250,13 +250,14 @@ This section defines the actual dashboard. View the [[%SCRIPTURL{view}%/%WEB%/%T
 </div>
 %IF{
  "defined 'button1' OR defined 'button2' OR defined 'button3' OR defined 'button4' OR defined 'button5' OR defined 'button6' OR defined 'button7' OR defined 'button8'"
- then="$percntCALCULATE{$SET(twDashboardBannerButtonDisplay, block)}$percnt $percntJQTHEME{smoothness}$percnt<script> $(document).ready(function() { $('.twDashboardBannerButton a').addClass('twikiButton'); });</script>"
- else="$percntCALCULATE{$SET(twDashboardBannerButtonDisplay, none)}$percnt<nop>"
-}%
+ then="$percntCALCULATE{$SET(twDashboardBannerButtonDisplay, block)}$percnt $percntJQTHEME{smoothness}$percnt"
+ else="$percntCALCULATE{$SET(twDashboardBannerButtonDisplay, none)}$percnt"
+}%<nop>
 <div class="twDashboardBannerButtonRow" style="display: %CALCULATE{$GET(twDashboardBannerButtonDisplay)}%; %IF{ "defined 'contentstyle'" then="%contentstyle%;" }%">
-%CALCULATE{$SETM(x, +1)$SUBSTITUTE($LISTJOIN($sp, $LISTMAP(<div class='twDashboardBannerButton'>$SET(i, $SPLIT(\|, $item))$IF($LISTSIZE($GET(i))>=3, $NOP(%)INCLUDE{ \"%SYSTEMWEB%.ModalBoxAddOn\" warn=\"off\" id=\"twDashboardButton_$GET(x)_$index\" title=\"$LISTITEM(2, $GET(i))\" content=\"$LISTITEM(3, $GET(i))\" width=\"$IF($LISTSIZE($GET(i))>=4, $LISTITEM(4, $GET(i)), 600)\" height=\"$IF($LISTSIZE($GET(i))>=5, $LISTITEM(5, $GET(i)), 400)\" }$NOP(%) <a href='#' id='twDashboardButton_$GET(x)_$index'>$LISTITEM(1, $GET(i))</a>, $IF($LISTSIZE($GET(i))>1, [[$LISTITEM(2, $GET(i))][$LISTITEM(1, $GET(i))]]))</div>, $LISTREVERSE($SPLIT(; *, $TRANSLATE(%button1%, $comma", `'), $TRANSLATE(%button2%, $comma", `'), $TRANSLATE(%button3%, $comma", `'), $TRANSLATE(%button4%, $comma", `'), $TRANSLATE(%button5%, $comma", `'), $TRANSLATE(%button6%, $comma", `'), $TRANSLATE(%button7%, $comma", `'), $TRANSLATE(%button8%, $comma", `'))))), `, &#44;)}%
+%CALCULATE{$SETM(x, +1)$SUBSTITUTE($LISTJOIN($sp, $LISTMAP($SET(i, $SPLIT(\|, $item))$IF($LISTSIZE($GET(i))>=3, <div class='twDashboardBannerButton'>$NOP(%)INCLUDE{ \"%SYSTEMWEB%.ModalBoxAddOn\" warn=\"off\" id=\"twDashboardButton_$GET(x)_$index\" title=\"$LISTITEM(2, $GET(i))\" content=\"$LISTITEM(3, $GET(i))\" width=\"$IF($LISTSIZE($GET(i))>=4, $LISTITEM(4, $GET(i)), 600)\" height=\"$IF($LISTSIZE($GET(i))>=5, $LISTITEM(5, $GET(i)), 400)\" }$NOP(%) <a href='#' id='twDashboardButton_$GET(x)_$index'>$LISTITEM(1, $GET(i))</a></div>, $IF($LISTSIZE($GET(i))>1, <div class='twDashboardBannerButton'>[[$LISTITEM(2, $GET(i))][$LISTITEM(1, $GET(i))]]</div>)), $LISTREVERSE($SPLIT(; *, $TRANSLATE(%button1%, $comma", `'), $TRANSLATE(%button2%, $comma", `'), $TRANSLATE(%button3%, $comma", `'), $TRANSLATE(%button4%, $comma", `'), $TRANSLATE(%button5%, $comma", `'), $TRANSLATE(%button6%, $comma", `'), $TRANSLATE(%button7%, $comma", `'), $TRANSLATE(%button8%, $comma", `'))))), `, &#44;)}%
 </div>
 </div>
+<script> $('.twDashboardBannerButton a').addClass('twikiButton');</script>
 <div style="clear: both;"></div>
 <nop>%ENDSECTION{ "banner" }%
 =========================================================-->
