@@ -1,45 +1,78 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310965824" format="1.1" version="$Rev$"}%
-<sticky>
-<div style="float:right;width:255px;padding:1em;text-align:center;">
-<a href="http://twiki.org"><img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiLogos/T-logo-235x67-t.gif" style="margin:.3em 0;" width="235" height="67" alt="Collaborate with TWiki -- visit TWiki.org" title="Collaborate with TWiki -- visit TWiki.org" border="0" /></a>
-<br />The official TWiki<sup>&reg;</sup> site is <a href="http://twiki.org"><span class="twikiLinkLabel">twiki.org</span></a>
-</div>
-</sticky>
----+!! Welcome to the TWiki Documentation Web
-
+%META:TOPICINFO{author="TWikiContributor" date="1350203324" format="1.1" version="$Rev$"}%
+%DASHBOARD{ section="dashboard_start" }%
+%DASHBOARD{ section="banner"
+ image="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/community-leaders.jpg"
+ title="TWiki<small><sup>&reg;</sup></small> Documentation Web <div style='float: right; width: 140px; margin: 10px 5px 0 0; padding: 5px 10px; background:rgba(255,255,255,0.6); -moz-border-radius: 4px; border-radius: 4px; text-align: center; font-size: 12pt;'><a href='http://twiki.org/'><img src='%PUBURLPATH%/%SYSTEMWEB%/TWikiLogos/T-logo-140x40-t.gif' style='margin:.3em 0;' width='140' height='40' alt='Collaborate with TWiki -- visit TWiki.org' title='Collaborate with TWiki -- visit TWiki.org' border='0' /></a><br /><a href='http://twiki.org/'><span class='twikiLinkLabel'>visit twiki.org</span></a></div>"
+ titlestyle="color:#800000; width: 994px; margin-top: 5px;"
+ button1="<img src='%ICONURL{help}%' width='16' height='16' border='0' alt='' /> Reference Manual|%SYSTEMWEB%.TWikiReferenceManual"
+ button2="<img src='%ICONURL{puzzle}%' width='16' height='16' border='0' alt='' /> TWiki Variables|%SYSTEMWEB%.TWikiVariables"
+ button3="<img src='%ICONURL{plugin}%' width='16' height='16' border='0' alt='' /> Installed Plugins|%SYSTEMWEB%.InstalledPlugins"
+}%
+<!--===== WELCOME ============================================-->
+%DASHBOARD{ section="box_start" title="Welcome to TWiki" }%
 _The place to learn about TWiki features and perform TWiki system maintenance._
 
-This site is running TWiki version *%WIKIVERSION%*, Plugin API version *%PLUGINVERSION{}%*
+TWiki<sup>&reg;</sup> is a flexible, powerful, secure, yet simple web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
 
-TWiki is a flexible, powerful, secure, yet simple web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
+%DASHBOARD{ section="box_end" }%
+<!--===== NEW USERS ============================================-->
+%DASHBOARD{ section="box_start" title="For New Users" }%
+   * [[WelcomeGuest][Welcome Guest - look here first]]
+   * [[TWikiTutorial][Tutorial - 20 minutes]]
+   * [[TWikiUsersGuide][TWiki User's Guide]]
+   * [[TWikiFAQ][Frequently Asked Questions]]
+   * [[TextFormattingRules][Text formatting rules - for raw edit]]
+%DASHBOARD{ section="box_end" }%
+<!--===== REFERENCE ============================================-->
+%DASHBOARD{ section="box_start" title="TWiki Reference" contentstyle="overflow: hidden;" }%
+   * [[TWikiReferenceManual][TWiki reference manual]]
+   * [[InstalledPlugins][Installed plugins]]: [[CommentPlugin][Comment]], [[EditTablePlugin][Edit Table]], [[SlideShowPlugin][Slideshow]], [[SpreadSheetPlugin][Spreadheet]], [[TablePlugin][Table]], [[TwistyPlugin][Twisty]]
+   * [[FileAttachment][File attachments]]: [[VarATTACHURL][ATTACHURL]], [[VarPUBURL][PUBURL]]
+   * [[TWikiDocGraphics][TWiki doc graphics]]: [[VarICON][ICON]]
+   * [[TWikiVariables][TWiki variables]]: [[VarIF][IF]], [[VarINCLUDE][INCLUDE]], [[VarSEARCH][SEARCH]], [[VarSET][SET]], [[VarURLPARAM][URLPARAM]]
+   * [[TWikiForms][TWiki Forms - for TWiki apps]]
+   * [[FormattedSearch][Formatted search]], [[QuerySearch][Query search]] and [[IfStatements][IF statements]]
 
----++ TWiki Documentation and Configuration
-<sticky>
-<div style="float:right;width:255px;padding:1em;">%INCLUDE{ "TWikiTipsOfTheDayInclude" warn="off" }%</div>
-</sticky>
-   * [[WelcomeGuest][Welcome Guest]] - look here first
-   * [[TWikiTutorial][Tutorial]] - 20 minutes TWiki tutorial
-   * [[TWikiUsersGuide][User's Guide]] - documentation for TWiki users
-   * [[TWikiFAQ][Frequently Asked Questions]] - about TWiki
-   * [[TWikiReferenceManual][Reference Manual]] - documentation for system administrators
-   * [[AdminToolsCategory][Admin Tools]] - manage the TWiki site
-   * [[TWikiReleaseNotes05x01][TWiki-5.1 Release Notes]] - describes what's new in this release
-
----++ <nop>%WEB% Web Utilities
-
+%DASHBOARD{ section="box_end" }%
+<!--===== TIP OF DAY ============================================-->
+%DASHBOARD{ section="box_start" title="Tip of Day" }%
+%INCLUDE{ "TWikiTipsOfTheDayInclude" warn="off" }%
+%DASHBOARD{ section="box_end" }%
+<!--===== TWIKI WEB UTILITIES ============================================-->
+%DASHBOARD{ section="box_start" title="TWiki Web Utilities" }%
    * [[WebSearch]] - simple search
    * [[WebSearchAdvanced]] - %MAKETEXT{"advanced search"}%
-   * [[WebTopicList]] - all topics in alphabetical order
-   * [[WebChanges]] - recent topic changes in this web
-   * [[WebNotify]] - subscribe to an e-mail alert sent when topics change
-   * [[WebRss]], [[WebAtom]] - RSS and ATOM news feeds of topic changes
-   * [[WebStatistics]] - listing popular topics and top contributors
-   * [[WebTopMenu]] - top menu definition
-   * [[WebPreferences]] - preferences of this web
+   * [[WebTopicList]] - all topics
+   * [[WebChanges]] - recent topic changes
+   * [[WebNotify]] - subscribe to e-mail alerts
+   * [[WebRss][RSS feed]], [[WebAtom][ATOM feed]] of topic changes
+   * [[WebStatistics][Web Statistics]]
+   * [[%WEBPREFSTOPIC%]] - preferences of this web
+%DASHBOARD{ section="box_end" }%
+<!--===== SYSTEM MAINTENANCE ============================================-->
+%DASHBOARD{ section="box_start" title="System Maintenance" contentstyle="overflow: hidden;" }%
+   * [[%SCRIPTURL{configure}%][TWiki configure]]
+   * [[AdminToolsCategory][Admin Tools to manage the TWiki site]]
+   * [[ManagingUsers][Managing Users]]
+   * [[ManagingWebs][Managing Webs]]
+   * [[TWikiSiteTools][TWiki Site Tools]]
+%IF{
+ "istopic '%USERSWEB%.SiteStatistics'"
+ then="   * [[%USERSWEB%.SiteStatistics][Site Statistics]]"
+ else="<nop>"
+}%
+   * [[%WIKIPREFSTOPIC%][TWikiPreferences]], [[%USERSWEB%.%WIKIPREFSTOPIC%][Site Preferences]]
+   * [[TWikiReleaseNotes05x01][TWiki-5.1 Release Notes]]
+   * Installed: %WIKIVERSION%, Plugin API version %PLUGINVERSION{}%
+%DASHBOARD{ section="box_end" }%
+%DASHBOARD{ section="dashboard_end" }%
 
 ---++ Disclaimer
 
-   * TWiki<sup>&reg;</sup> is a registered trademarks of TWiki founder [[http://twiki.org/cgi-bin/view/Main/PeterThoeny][Peter Thoeny]], [[http://www.twiki.net/][Twiki, Inc.]]. The [[TWikiLogos][TWiki logo]] and the "Collaborate with TWiki" tagline are trademarks of Peter Thoeny.
+   * TWiki<sup>&reg;</sup> is a registered trademarks of TWiki founder [[http://twiki.org/cgi-bin/view/Main/PeterThoeny][Peter Thoeny]]. The [[TWikiLogos][TWiki logo]] and the "Collaborate with TWiki" tagline are trademarks of Peter Thoeny.
    * Twiki (with a lower case "w") is a robot character from the _Buck Rogers&trade; in the 25th Century_ TV series. TWiki (with an upper case "W") is not affiliated with the Dille Family Trust, the registered trademark owner of the _Buck Rogers_ name.
    * TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]].
    * Get the latest TWiki release from [[http://TWiki.org/][TWiki.org]].
+<!-- Disable WYSIWYG editor for this page:
+   * Set EDITMETHOD = raw
+-->
