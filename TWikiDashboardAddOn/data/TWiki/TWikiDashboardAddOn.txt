@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350176148" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350184989" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -190,6 +190,9 @@ This section defines the actual dashboard. View the [[%SCRIPTURL{view}%/%WEB%/%T
  margin: 0;
  padding: 0;
  width: 1040px; /* = 1024 + 2*7 margin + 2 extra */
+}
+.twDashboardOuter div div div ul {
+ padding-left: 1.7em;
 }
 .twDashboardBanner {
  position: relative;
