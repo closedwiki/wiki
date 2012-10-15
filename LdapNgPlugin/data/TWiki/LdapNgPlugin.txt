@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1295067147" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350291928" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
     Contributions to this plugin are appreciated. Please update the plugin page
@@ -34,27 +34,27 @@ Parameters:
    * =format=: format string used to display a database record
    * =header=: header to prepend the output; default: '$dn'
    * =footer=: footer to appended to the output
-   * =sep=: separator between database records; default: '$n'
+   * =sep= or =separator=: separator between database records; default: '$n'
    * =sort=: name of attributes to sort the output
    * =reverse=: reverse the result set; possible values: on, off; default: off
    * =limit=: maximum number of records to return; default: 0 (unlimited)
    * =skip=: number of records in the hit set to skip before displaying them; default: 0 
+   * =required=: a comma separated list of LDAP record attributes. If specified, the LDAP query results not having all of the specified attributes are eliminated
    * =hidenull=: wether to hide any output on an empty hit set; possible values: on, off; default: off
+   * =ifnull=: when the LDAP query yields no results, the value of this parameter is returned as the search result instead of null. Naturally, if =hidenull= is on, =ifnull= doesn't have any effect
    * =clear=: comma separated list of attributes to be removed from the output if they are not resolved
 
 Cgi Parameters:
    * =refresh=: refresh the cache of blobs (i.e. jpegPhotos); possible values: on, off; default: off;
      (right now only the jpegPhoto attribute is recognized as a blob)
 
-The =header=, =format= and =footer= format strings may contain the following variables:
-   * $percnt: % sign
-   * $dollar: $ sign
-   * $n: newline
+The =header=, =format= and =footer= format strings may contain the following variables and [[FormatTokens][the standard special tokens]]:
    * $count: the number of hits
    * $index: the record number
    * $&lt;attr-name>: the value of the record attribute &lt;attr-name>
 
 ---+++ LDAPUSERS
+%IF{"{Plugins}{LdapNgPlugin}{DisableLDAPUSERS} > 0" then="<span style='color:red'> *This variable is disabled on this TWiki* </span>"}%
 
 <verbatim>
 %LDAPUSERS{ ... }%
@@ -72,10 +72,7 @@ Parameters:
    * =exclude=: regular expression a user's <nop>WikiName must not match
    * =hideunknown=: on/off, enable/disable filtering out users that did not log in yet and thus have no hometopic (e.g. created by TWiki:Plugins/NewUsersPlugin), defaults to 'on'
 
-The =format= string may contain the following variables:
-   * $percnt: % sign
-   * $dollar: $ sign
-   * $n: newline
+The =format= string may contain the following variables and [[FormatTokens][the standard special tokens]]:
    * $index: the record number
    * $wikiName: the user's <nop>WikiName
    * $loginName: the user's login name
@@ -83,7 +80,7 @@ The =format= string may contain the following variables:
    * $emails: the list of all known email addresses
  
 ---++ Examples
-
+<verbatim>
 %LDAP{"(objectClass=posixAccount)" 
   base="(ou=people)"
   limit="10" 
@@ -104,6 +101,7 @@ The =format= string may contain the following variables:
 }%
 
 %LDAPUSERS{limit="10"}%
+</verbatim>
 
 ---++ Plugin Settings
 
@@ -118,6 +116,51 @@ The %TOPIC% will use the default configuration of the LdapContrib in your =Local
    * $TWiki::cfg{Ldap}{SSL} (overridable per query)
    * $TWiki::cfg{Ldap}{BindDN}
    * $TWiki::cfg{Ldap}{BindPasswd}
+
+In addition, the following configuration items are there. All are optional and have no problem not setting.
+   $ $TWiki::cfg{Plugins}{LdapNgPlugin}{UseDefaultServer} : You may have only one LDAP server and there is no point in sepcifying a server in %<nop>LDAP{...}%. Besides, !LdapContrib might be used elsewhere. If both conditions are met, you should consider setting this preference true. If so, this plug-in always ignore =host=, =port=, =version=, =ssl= parameters and connects to the LDAP server specified by the !LdapContrib configuration. The goal is to share an LDAP connection with other TWiki features using it.
+   Please be noted the LDAP connection shared with others is not automatically destroyed. You need to make sure it's destroyed when a TWiki session is destroyed. Otherwise, if this plug-in is used in Fasc CGI or mod_perl, LDAP connections may accumulate.
+   $ $TWiki::cfg{Plugins}{LdapNgPlugin}{DisableLDAPUSERS} : If you have thousands of users and uses LDAP, you need to disable %<nop>LDAPUSER{...} because it would yield a large amount of data otherwise.
+   $ $TWiki::cfg{Plugins}{LdapNgPlugin}{Helper} : The class of helper functions. Please see #Helper_Class.
+   $ $TWiki::cfg{Plugins}{LdapNgPlugin}{CacheBlob} : If true, attributes whose name contain jpegPhoto are cached. This is introduced on 2012-10-15. Before that, jpegPhoto data was always cached. As such, to keep the old behavior, you need to set this true.
+
+---++ Helper Class
+%<nop>LDAP{...}% basically does a single LDAP query as specified.
+For practical use, that may be insufficient in two aspects.
+   * There might be a user who doesn't care enough and issues an inappropriate query posing too much load to the server.
+   * Some typical operations such as getting the list of the members of a group may be too cumbersome. For that, you need to nest two %<nop>LDAP{...}%s - the outer one gets the list of members while the inner one retrieves each member's attributes. It would be user friendly to do it by e.g. %<nop>LDAP{"group=GROUP_NAME" ...}%.
+
+To cope with these issues, you can have your !LdapNgPlugin helper class by having the following line on lib/LocalSite.cfg.
+<verbose>
+$TWiki::cfg{Plugins}{LdapNgPlugin}{Helper} = 'TWiki::Contrib::MyLdapNgPluginHelper';
+</verbose>
+A helper class would be defined as follows:
+<verbose>
+package TWiki::Contrib::MyLdapNgPluginHelper;
+
+sub lookupHelper {
+    my ($class, $ldap, $filter, $params) = @_;
+...
+</verbose>
+Currently =lookupHelper= is the only function expected in a !LdapNgPlugin helper class.
+---+++ Arguments of lookupHelper()
+$class gets the name of the class - "TWiki::Contrib::MyLdapNgPluginHelper" in this example.
+
+$filter gets the =filter= parameter of %<nop>LDAP{...}%.
+
+$params is a hash reference having values of the following parameters of %<nop>LDAP{...}%.
+| *Name* | *Type* | *Default* |
+| =scope= | string | =sub= |
+| =skip= | number | 0 |
+| =limit= | number | 0 |
+| =sort= | array reference | =[]= |
+] =reverse= | boolean | false |
+
+---+++ Return value of lookupHelper()
+It's supposed to return a string or an array reference depending on situation.
+   $ An error : When an error occurred (e.g. the filter is not appropriate), an error message starting with = is returned.
+   $ A filter string : it may return $filter as is or after transforming it.
+   $ Array reference : it may return a referenct to an array of an LDAP query result. The result of a group=xxx filter would be in this type.
 
 ---++ Plugin Installation Instructions
 
@@ -142,8 +185,9 @@ This work was partly funded by Spanlink Communications.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright: | &copy; 2006-2007 Michael Daum http://wikiring.de <br /> &copy; 2006-2010 TWiki:Main.TWikiContributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-01-14 |
+|  Plugin Version: | 2012-10-15 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-10-15: | TWikibug:Item6986: Enhancements and code clean-up |
 |  2011-01-14: | TWikibug:Item6530: Doc improvements |
 |  2010-04-25: | TWikibug:Item6433: Doc improvements |
 |  13 Nov 2007: | fixed $nop  |

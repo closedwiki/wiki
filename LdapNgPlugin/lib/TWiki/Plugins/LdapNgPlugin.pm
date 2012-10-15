@@ -31,7 +31,8 @@ sub initPlugin {
   $isInitialized = 0;
 
   TWiki::Func::registerTagHandler('LDAP', \&handleLdap);
-  TWiki::Func::registerTagHandler('LDAPUSERS', \&handleLdapUsers);
+  TWiki::Func::registerTagHandler('LDAPUSERS', \&handleLdapUsers)
+    unless ( $TWiki::cfg{Plugins}{LdapNgPlugin}{DisableLDAPUSERS} );
   return 1; 
 }
 
