@@ -154,7 +154,7 @@ $params is a hash reference having values of the following parameters of %<nop>L
 | =skip= | number | 0 |
 | =limit= | number | 0 |
 | =sort= | array reference | =[]= |
-] =reverse= | boolean | false |
+| =reverse= | boolean | false |
 
 ---+++ Return value of lookupHelper()
 It's supposed to return a string or an array reference depending on situation.
