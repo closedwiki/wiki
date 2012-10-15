@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350280515" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350280813" format="1.1" version="$Rev$"}%
 <div style="float:right; margin:0 0 20px 20px; padding: 10px 20px 10px 20px; border: solid #dddddd 1px; background-image: url(%PUBURLPATH%/%SYSTEMWEB%/WebChangesRightBox/gradient-title.png); background-repeat: repeat-x; background-color:#fbfbfd; color:#333333; font-size: 90%">
 *Recent changes in <nop>%BASEWEB{ format="$current" }% web:*
 %SEARCH{
@@ -24,6 +24,7 @@ To update existing webs, add the following at the very top of <nop>%HOMETOPIC%:
 %INCLUDE{%SYSTEMWEB%.WebChangesRightBox}%
 </verbatim>
 
+<div style="display: %IF{ "istopic 'TWikiDashboardAddOn'" then="block" else="none" }%">
 ---++ Web Changes in Dashboard Box
 
 To show a recent changes bullet list in a [[TWikiDashboardAddOn][dashboard box]], add the following box to the dashboard:
@@ -50,7 +51,7 @@ To show a recent changes bullet list in a [[TWikiDashboardAddOn][dashboard box]]
 }%
 <nop>%ENDSECTION{bullet_list}%
 -->
-
+</div>
 
 <br clear="all">
 -- __Contributors:__ Main.PeterThoeny - 2012-10-14
