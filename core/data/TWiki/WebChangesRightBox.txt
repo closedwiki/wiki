@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350277948" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350280515" format="1.1" version="$Rev$"}%
 <div style="float:right; margin:0 0 20px 20px; padding: 10px 20px 10px 20px; border: solid #dddddd 1px; background-image: url(%PUBURLPATH%/%SYSTEMWEB%/WebChangesRightBox/gradient-title.png); background-repeat: repeat-x; background-color:#fbfbfd; color:#333333; font-size: 90%">
 *Recent changes in <nop>%BASEWEB{ format="$current" }% web:*
 %SEARCH{
@@ -8,7 +8,7 @@
  scope="topic"
  nonoise="on"
  order="modified"
- limit="16"
+ limit="%IF{ "defined 'limit'" then="%limit%" else="16" }%"
  reverse="on"
  format="%BB% <a href=\"%SCRIPTURL{view}%/$web/$topic\" title=\"By <nop>$wikiname: $summary\">$percntSPACEOUT{$topic}$percnt</a>"
  separator=" "
@@ -26,7 +26,7 @@ To update existing webs, add the following at the very top of <nop>%HOMETOPIC%:
 
 ---++ Web Changes in Dashboard Box
 
-To show a recent changes bullet list in a [[TWikiDashboardAddOn][dashboard box]], add the following between the section ="box_start"= and ="box_end"=:
+To show a recent changes bullet list in a [[TWikiDashboardAddOn][dashboard box]], add the following box to the dashboard:
 <verbatim>
 %DASHBOARD{ section="box_start"
  title="Recent Changes in <nop>%WEB% Web"
@@ -44,7 +44,7 @@ To show a recent changes bullet list in a [[TWikiDashboardAddOn][dashboard box]]
  scope="topic"
  nonoise="on"
  order="modified"
- limit="32"
+ limit="%IF{ "defined 'limit'" then="%limit%" else="32" }%"
  reverse="on"
  format="   * <a href=\"%SCRIPTURL{view}%/$web/$topic\" title=\"By <nop>$wikiname: $summary\">$percntSPACEOUT{$topic}$percnt</a>"
 }%
