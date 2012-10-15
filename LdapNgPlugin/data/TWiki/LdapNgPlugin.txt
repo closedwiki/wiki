@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350291928" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350294385" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
     Contributions to this plugin are appreciated. Please update the plugin page
@@ -183,7 +183,7 @@ It's supposed to return a string or an array reference depending on situation.
 This work was partly funded by Spanlink Communications.
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright: | &copy; 2006-2007 Michael Daum http://wikiring.de <br /> &copy; 2006-2010 TWiki:Main.TWikiContributors |
+|  Copyright: | &copy; 2006-2007 Michael Daum http://wikiring.de <br /> &copy; 2006-2012 TWiki:Main.TWikiContributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2012-10-15 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
