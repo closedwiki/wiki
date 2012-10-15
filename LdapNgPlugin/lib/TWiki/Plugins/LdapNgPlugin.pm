@@ -22,7 +22,7 @@ use vars qw(
   );
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-01-14';
+$RELEASE = '2012-10-15';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Query and display data from an LDAP directory';
 
