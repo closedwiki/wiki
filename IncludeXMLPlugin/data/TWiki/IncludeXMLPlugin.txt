@@ -194,13 +194,13 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Set SHORTDESCRIPTION = Display an XML document in a tabular format
 
 |  Plugin Author: | TWiki:Main.MahiroAndo |
-|  Copyright: | (c) 2012 TWiki:Main.MahiroAndo <br /> (c) 2012 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2012 TWiki:Main.MahiroAndo %BR% &copy; 2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 0.1 (2012-09-20) |
 |  Change History: | <!-- versions below in reverse order --> |
-|  2012-09-20: | Initial version |
+|  2012-09-20: | TWikibug:Item6938: Initial version - TWiki:Main.MahiroAndo |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | XML::LibXML, HTML::Entities, LWP::UserAgent (optionally for testing: Test::More, Test::Base) |
+|  Dependencies: | CPAN:XML::LibXML, CPAN:HTML::Entities, CPAN:LWP::UserAgent (optionally for testing: CPAN:Test::More, CPAN:Test::Base) |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  TWiki:Plugins.Benchmark: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 99%, %TOPIC% 99% |
