@@ -287,8 +287,10 @@ sub _createWeb {
         $parent = $1;
         $child = $2;
     }
-    TWiki::UI::checkAccess( $session, $parent, undef,
-                            'CHANGE', $session->{user} );
+    unless ( $session->{users}->canCreateWeb($newWeb) ) {
+        TWiki::UI::checkAccess( $session, $parent, undef,
+                                'CHANGE', $session->{user} );
+    }
 
     my $baseWeb = $query->param( 'baseweb' ) || '';
     unless( $session->{store}->webExists( $baseWeb )) {

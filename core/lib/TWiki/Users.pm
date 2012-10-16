@@ -1217,4 +1217,20 @@ sub _renderUserDataField {
     return( "|  $cell1 | $cell2 |\n" );
 }
 
+=pod
+
+---++ ObjectMethod canCreateWeb($web) -> $boolean
+
+=cut
+
+sub canCreateWeb {
+    my( $this, $web ) = @_;
+    my $cUID = $this->{session}{user};
+    my $mapping = $this->_getMapping( $cUID );
+    if ( $mapping && $mapping->can( 'canCreateWeb' ) ) {
+        return $mapping->canCreateWeb($cUID, $web);
+    }
+    return 0;
+}
+
 1;
