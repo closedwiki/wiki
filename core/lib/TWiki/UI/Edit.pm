@@ -96,6 +96,7 @@ sub init_edit {
     my $ptext = $query->param( 'text' );
     my $revision = $query->param( 'rev' ) || undef;
     my $store = $session->{store};
+    my $metaPreferences = '';
 
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'edit' );
     TWiki::UI::checkWritable( $session );
@@ -260,6 +261,16 @@ sub init_edit {
             ( $meta, $text ) = TWiki::UI::readTemplateTopic( $session, 'WebTopicEditTemplate' );
         }
 
+        # save preferences meta data
+        my @fields = $meta->find( 'PREFERENCE' );
+        foreach my $field ( @fields ) {
+           my $name  = $field->{name};
+           my $value = $field->{value};
+           $metaPreferences .= '   * ' . (($field->{type} eq 'Local') ? 'Local' : 'Set').
+             ' '.$name.' = '.$value."\n";
+        }
+        $metaPreferences = TWiki::entityEncode( $metaPreferences, "\n" );
+
         $extra = "(not exist)";
 
         # If present, instantiate form
@@ -275,6 +286,7 @@ sub init_edit {
     }
     $tmpl =~ s/%TEMPLATETOPIC%/$templateTopic/;
     $tmpl =~ s/%REDIRECTTO%/$redirectTo/;
+    $tmpl =~ s/%METAPREFERENCES%/$metaPreferences/;
 
     # override with parameter if set
     $text = $ptext if defined $ptext;

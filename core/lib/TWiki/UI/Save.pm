@@ -224,6 +224,18 @@ sub buildNewTopic {
     }
     $newMeta->put( 'TOPICPARENT', $mum ) if $mum;
 
+    my $metaPreferences = $query->param( 'metapreferences' ) || '';
+    foreach my $line ( split(/[\n\r]+/, $metaPreferences) ) {
+        if( $line =~ /^ +\*\s+(Set|Local)\s+($TWiki::regex{tagNameRegex})\s*=\s(.*)$/ ) {
+            $newMeta->putKeyed( 'PREFERENCE',
+                                { name => $2,
+                                  title => $2,
+                                  type => $1,
+                                  value => $3
+                                } );
+        }
+    }
+
     my $formName = $query->param( 'formtemplate' );
     my $formDef;
     my $copyMeta;

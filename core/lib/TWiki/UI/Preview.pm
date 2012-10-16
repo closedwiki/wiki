@@ -78,6 +78,10 @@ sub preview {
     my $redirectTo = $query->param( 'redirectto' ) || '';
     $tmpl =~ s/%REDIRECTTO%/$redirectTo/go;
 
+    my $metaPreferences = $query->param( 'metapreferences' ) || '';
+    $metaPreferences = TWiki::entityEncode( $metaPreferences, "\n" );
+    $tmpl =~ s/%METAPREFERENCES%/$metaPreferences/go;
+
     $tmpl =~ s/%FORMTEMPLATE%/$form/g;
 
     my $parent = $meta->get('TOPICPARENT');
