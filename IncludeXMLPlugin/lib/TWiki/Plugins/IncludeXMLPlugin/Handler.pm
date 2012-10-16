@@ -573,14 +573,7 @@ sub _getHTTP {
     my $ctype   = $params->{contenttype} || '';
     my $timeout = $params->{timeout} || 5; # seconds
     my $charset = 'UTF-8';
-    my $basicauth;
     my $length = length($$request);
-
-    if ($url =~ s!^(https?://)([^/\@:]+):([^/\@:]+)\@!$1!) {
-        my ($user, $pass) = ($2, $3);
-        require MIME::Base64;
-        $basicauth = "Basic ".MIME::Base64::encode_base64("$user:$pass");
-    }
 
     my @extras = map {s/^\s+|\s+$//g; $_} split /([\r\n]|\$n)+/, $extras;
 
@@ -602,15 +595,22 @@ sub _getHTTP {
         # use eval for test environment
 
     # Set up request
-    my $ua = LWP::UserAgent->new(cookie_jar => mkCookieJar());
+    my $method = $$request eq '' ? 'GET' : 'POST';
+    my ($ua, $req);
+
+    if ($TWiki::Plugins::VERSION >= 1.5) {
+        ($ua, $req) = TWiki::Func::getLWPRequest($method => $url);
+    } else {
+        $ua = LWP::UserAgent->new();
+        $req = HTTP::Request->new($method => $url);
+    }
+
     $ua->timeout($timeout);
 
     if ($proxyHost && $proxyPort) {
         $ua->proxy("http", "$proxyHost:$proxyPort");
     }
 
-    my $method = $$request eq '' ? 'GET' : 'POST';
-    my $req = HTTP::Request->new($method => $url);
     $req->content($$request);
 
     if ($$request ne '') {
@@ -619,8 +619,6 @@ sub _getHTTP {
             'Content-Length' => $length
         );
     }
-
-    $req->header(Authorization => $basicauth) if $basicauth;
 
     for (@extras) {
         $req->header($1 => $2) if /^([^\s:]+)\s*:\s*(.*)$/;
@@ -649,20 +647,6 @@ sub _getHTTP {
     }
 
     return $resText;
-}
-
-sub mkCookieJar {
-    my $cookieJar;
-    if ( $TWiki::cfg{LocalDNSDomain} && $ENV{HTTP_COOKIE} ) {
-        require HTTP::Cookies;
-        $cookieJar = HTTP::Cookies->new();
-        for my $c ( split(/\s*;\s*/, $ENV{HTTP_COOKIE}) ) {
-            my ($name, $value) = split(/=/, $c, 2);
-            $cookieJar->set_cookie(undef, $name, $value, '/',
-                $TWiki::cfg{LocalDNSDomain});
-        }
-    }
-    return $cookieJar;
 }
 
 sub getInnerText {
