@@ -1158,6 +1158,12 @@ $TWiki::cfg{PROXY}{Password} = '';
 # <code>intra.example.com, bugs.example.com</code>
 $TWiki::cfg{PROXY}{SkipProxyForDomains} = '';
 
+# **STRING EXPERT**
+# Specifies a class name to hook setting up HTTP requests from TWiki to
+# external resources. It is mainly for single sign-on with INCLUDE. See
+# <a href="http://twiki.org/cgi-bin/view/Plugins/SingleSignOnPlugin">SingleSignOnPlugin</a>.
+ $TWiki::cfg{HTTPRequestHandler} = '';
+
 #---+ Miscellaneous settings
 
 # **NUMBER**

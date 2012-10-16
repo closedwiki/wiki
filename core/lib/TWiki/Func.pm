@@ -258,6 +258,51 @@ sub getExternalResource {
 
 =pod
 
+#GetLWPRequest
+---+++ getLWPRequest( $method, $url [, @extraHeaders] ) -> ( $ua, $request )
+
+Get a pair of =LWP::UserAgent= and =HTTP::Request= objects (=$ua= and
+=$request=), which are to make a HTTP request to an external resource with
+=$method= and =$url=.
+The returned objects are set up with any TWiki configurations and possibly
+hooked with =$cfg{HTTPRequestHandler}= class.
+
+This method must be called in a list context, so as to receive both =$ua= and
+=$request=. (Otherwise, it will die.)
+
+For example,
+<verbatim>
+my ($ua, $request) = TWiki::Func::getLWPRequest(GET => 'http://...');
+</verbatim>
+
+The =@extraHeaders= will be passed on to the =$request= object, and should be
+in the format of name value pairs: 'name1', 'value1', 'name2', 'value2', ...
+Do not add the 'User-Agent' header, as it will be added automatically.
+
+Once the =$ua= and =$request= are retrieved, you can invoke the request as below:
+<verbatim>
+my $response = $ua->request($request);
+</verbatim>
+
+*Since:* TWiki::Plugins::VERSION 1.5
+
+=cut
+
+sub getLWPRequest {
+    my( $method, $url, @headers ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    ASSERT(defined $url) if DEBUG;
+
+    unless (wantarray) {
+        die "You must call this method to receive both \$ua and \$request - ".
+            "E.g. my (\$ua, \$request) = TWiki::Func::getLWPRequest();";
+    };
+
+    return ( $TWiki::Plugins::SESSION->net->getLWPRequest( $method, $url, @headers ) );
+}
+
+=pod
+
 #GetCgiQuery
 ---+++ getCgiQuery( ) -> $query
 

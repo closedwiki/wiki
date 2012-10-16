@@ -41,6 +41,7 @@ sub new {
     my $this = bless( { session => $session }, $class );
 
     $this->{mailHandler} = undef;
+    $this->{httpHandler} = undef;
 
     return $this;
 }
@@ -60,6 +61,7 @@ sub finish {
     undef $this->{mailHandler};
     undef $this->{HELLO_HOST};
     undef $this->{MAIL_HOST};
+    undef $this->{httpHandler};
     undef $this->{session};
 }
 
@@ -249,14 +251,40 @@ sub getExternalResource {
 # =======================================
 sub _GETUsingLWP {
     my( $this, $url, @headers ) = @_;
+    my ($ua, $request) = $this->getLWPRequest( GET => $url, @headers );
+    my $response = $ua->request( $request );
+    return $response;
+}
+
+=pod
+
+---+++ ObjectMethod getLWPRequest( $method, $url [, @extraHeaders] ) -> ( $ua, $request )
+
+Get a pair of =LWP::UserAgent= and =HTTP::Request= objects (=$ua= and
+=$request=), which are to make a HTTP request to an external resource with
+=$method= and =$url=.
+The returned objects are set up with any TWiki configurations and possibly
+hooked with =$cfg{HTTPRequestHandler}= class.
+
+=cut
+
+sub getLWPRequest {
+    my ($this, $method, $url, @headers) = @_;
+
+    unless (defined $this->{httpHandler}) {
+        $this->_installHTTPHandler();
+    }
 
     my ( $user, $pass );
     if( $url =~ s!([^/\@:]+)(?::([^/\@:]+))?@!! ) {
         ( $user, $pass ) = ( $1, $2 );
     }
-    my $request;
+
+    require TWiki::Net::UserCredAgent;
+    my $ua = new TWiki::Net::UserCredAgent( $user, $pass, $url );
+
     require HTTP::Request;
-    $request = HTTP::Request->new( GET => $url );
+    my $request = HTTP::Request->new( $method => $url );
 
     if( $TWiki::cfg{PROXY}{Username} && $TWiki::cfg{PROXY}{Password} ) {
         $request->proxy_authorization_basic( $TWiki::cfg{PROXY}{Username}, $TWiki::cfg{PROXY}{Password} );
@@ -267,10 +295,29 @@ sub _GETUsingLWP {
     my @allHeaders = ( 'User-Agent' => 'TWiki::Net/'.$revstr." libwww-perl/$LWP::VERSION" );
     push( @allHeaders, @headers ) if( @headers );
     $request->header( @allHeaders );
-    require TWiki::Net::UserCredAgent;
-    my $ua = new TWiki::Net::UserCredAgent( $user, $pass, $url );
-    my $response = $ua->request( $request );
-    return $response;
+
+    if (my $handler = $this->{httpHandler}) {
+        if ($handler->can('handle')) {
+            $handler->handle($ua, $request);
+        }
+    }
+
+    return ($ua, $request);
+}
+
+# pick a default http handler
+# =======================================
+sub _installHTTPHandler {
+    my $this = shift;
+
+    if (my $class = $TWiki::cfg{HTTPRequestHandler}) {
+        eval "require $class";
+        die $@ if $@;
+        my $handler = $class->new($this);
+        $this->{httpHandler} = $handler;
+    } else {
+        $this->{httpHandler} = 0;
+    }
 }
 
 # pick a default mail handler
@@ -312,7 +359,7 @@ sub _installMailHandler {
 
 =pod
 
----++ setMailHandler( \&fn )
+---++ ObjectMethod setMailHandler( \&fn )
 
    * =\&fn= - reference to a function($) (see _sendEmailBySendmail for proto)
 Install a handler function to take over mail sending from the default
