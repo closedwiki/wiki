@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349086580" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350393733" format="1.1" version="$Rev$"}%
 ---+!! INCLUDEXML Plugin
 
 <!--
@@ -196,8 +196,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.MahiroAndo |
 |  Copyright: | &copy; 2012 TWiki:Main.MahiroAndo %BR% &copy; 2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 0.1 (2012-09-20) |
+|  Plugin Version: | 0.2 (2012-10-16) |
 |  Change History: | <!-- versions below in reverse order --> |
+|  2012-10-16: | TWikibug:Item6990: Leverage =TWiki::Func::getLWPRequest()= for single sign-on - TWiki:Main.MahiroAndo |
+|  2012-10-01: | TWikibug:Item6952: Added VarINCLUDEXML - TWiki:Main.MahiroAndo |
 |  2012-09-20: | TWikibug:Item6938: Initial version - TWiki:Main.MahiroAndo |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  Dependencies: | CPAN:XML::LibXML, CPAN:HTML::Entities, CPAN:LWP::UserAgent (optionally for testing: CPAN:Test::More, CPAN:Test::Base) |
