@@ -269,7 +269,7 @@ sub init_edit {
            $metaPreferences .= '   * ' . (($field->{type} eq 'Local') ? 'Local' : 'Set').
              ' '.$name.' = '.$value."\n";
         }
-        $metaPreferences = TWiki::entityEncode( $metaPreferences, "\n" );
+        $metaPreferences = TWiki::entityEncode( $metaPreferences, " \n" );
 
         $extra = "(not exist)";
 
