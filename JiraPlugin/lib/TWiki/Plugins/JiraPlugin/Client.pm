@@ -22,6 +22,7 @@ package TWiki::Plugins::JiraPlugin::Client;
 use TWiki::Plugins::JiraPlugin::Field;
 
 use Encode;
+use HTTP::Request;
 use LWP::UserAgent;
 use URI::Escape;
 use XML::LibXML;
@@ -81,11 +82,18 @@ sub getIssuesFromJqlSearch {
         $url .= join('', map {'&field='.uri_escape($_)} keys %urlparams);
     }
     
-    my $ua = LWP::UserAgent->new(
-        cookie_jar => mkCookieJar(), timeout => $timeout,
-    );
+    my ($ua, $req);
+
+    if ($TWiki::Plugins::VERSION >= 1.5) {
+        ($ua, $req) = TWiki::Func::getLWPRequest(GET => $url);
+    } else {
+        $ua = LWP::UserAgent->new();
+        $req = HTTP::Request->new(GET => $url);
+    }
     
-    my $res = $ua->get($url);
+    $ua->timeout($timeout);
+    
+    my $res = $ua->request($req);
     
     unless ($res->is_success) {
         die $res->message;
