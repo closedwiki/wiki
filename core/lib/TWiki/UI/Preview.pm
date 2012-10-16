@@ -120,8 +120,6 @@ sub preview {
     my $templatetopic = $query->param( 'templatetopic');
     #ASSERT($templatetopic ne '%TEMPLATETOPIC%') if DEBUG;
     $tmpl =~ s/%TEMPLATETOPIC%/$templatetopic/go;
-    #this one's worrying, its special, and not set much at all
-    #$tmpl =~ s/%SETTINGSTOPIC%/$settingstopic/go;
     my $newtopic = $query->param( 'newtopic' );
     #ASSERT($newtopic ne '%NEWTOPIC%') if DEBUG;
     $tmpl =~ s/%NEWTOPIC%/$newtopic/go;
