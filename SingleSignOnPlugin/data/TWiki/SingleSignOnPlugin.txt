@@ -1,0 +1,95 @@
+%META:TOPICINFO{author="TWikiContributor" date="1350389696" format="1.1" version="$Rev$"}%
+---+!! !SingleSignOnPlugin
+<!--
+One line description, required for extensions repository catalog.
+   * Set SHORTDESCRIPTION = Plugin to add single sign-on handler for external HTTP requests
+-->
+<sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+%X% %RED%The current production release (TWiki-5.1.2) has not yet supported =$cfg{HTTPRequestHandler}= hook, and thus this plugin works only in a development version. The feature is supposed to be included in a future release.%ENDCOLOR%
+
+---++ Usage
+
+On the intranet, users enjoy single sign-on for almost all the sites including locally installed TWiki. In order to use an intranet URL for =%<nop>INCLUDE{...}%=, the single sign-on token needs to be forwarded to the included URL.
+
+This plugin hooks any HTTP requests from TWiki to external resources inside the intranet, so that the credential token from the browser is forwarded to the destination.
+
+Currently, it only supports cookie forwarding from the browser when the target URL's domain matches the configured single sign-on domain.
+
+The administrator needs to configure the following values via the [[%SCRIPTURL{configure}%][configure]] script.
+   * =$cfg{Plugins}{SingleSignOnPlugin}{Domains}= (comma-separated)
+   * =$cfg{Plugins}{SingleSignOnPlugin}{ForwardedCookieNames}= (comma-separated)
+For troubleshooting, try turning on the =Debug= flag:
+   * =$cfg{Plugins}{SingleSignOnPlugin}{Domains} = 1;=
+
+---++ Examples
+
+Suppose your TWiki server is running at =http://twiki.example.com=. In the example.com intranet, there are many single sign-on sites, such as =http://abc.example.com=, =http://xyz.example.com=, and so on.
+
+Then the =Domains= configuration should be set to ".example.com" (notice: the leading dot), where any subdomains under =.example.com= are considered as intranet sites.
+
+%I% Note: If the =Domains= configuration is set without the leading dot, only the exactly matched domain is considered as the single sigin-on target. For example, if it is set to "example.com", the credential forwarding takes place for =http://example.com/...= but not for =http://abc.example.com/...=.
+
+When =%<nop>INCLUDE{"http://xyz.example.com/..."}%= is used, the credential token that comes from the browser to TWiki will be forwarded from TWiki to =xyz.example.com=.
+
+The name of the cookie values must also be configured properly. If your intranet uses !SiteMinder for example, the cookie name should be set to "SMSESSION".
+If you prefer to forward all the cookies that the browser sends to TWiki, set it to a single star (*), although it is not recommended.
+
+---++ Technical Information
+
+Once the plugin is installed, it automatically sets =$cfg{HTTPRequestHandler}= that hooks any HTTP requests to external resources.
+
+These are the expected targets that are affected by this plugin:
+   * =%<nop>INCLUDE{...}%=
+   * =TWiki::Func::getExternalResource()=
+   * =TWiki::Func::getLWPRequest()=
+   * Any extensions that utilize the above =TWiki::Func= methods.
+
+The plugin extracts the cookie value from the =HTTP_COOKIE= environment variable. It does not work if this environment variable is not visible from the TWiki script (due to Apache configs, modules, or any other factors).
+
+%I% If you see the error "This site does not allow %<nop>INCLUDE% of URLs", check =$cfg{INCLUDE}{AllowURLs}= to see if it is enabled (set to 1 in =lib/LocalSite.cfg=).
+
+---++ Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section. 
+      * See the [[http://twiki.org/cgi-bin/view/Plugins/BuildContribInstallationSupplement][installation supplement]] on TWiki.org for more information.
+
+   * Or, follow these __manual installation__ steps: 
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/SingleSignOnPlugin.txt== | Plugin topic |
+        | ==lib/TWiki/Plugins/SingleSignOnPlugin.pm== | Plugin Perl module |
+        | ==lib/TWiki/Plugins/SingleSignOnPlugin/HTTPRequestHandler.pm== | Perl module |
+      * Set the ownership of the extracted directories and files to the webserver user.
+      * Install the dependencies.
+
+   * Plugin __configuration and testing__: 
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Configure additional plugin settings in the __Extensions__ section if needed.
+      * Test if the installation was successful using the example above.
+
+---++ Plugin Info
+
+Many thanks to the following sponsors for supporting this work:
+   * Acknowledge any sponsors here
+
+|  Plugin Author(s): | TWiki:Main.MahiroAndo |
+|  Copyright: | &copy; 2012 TWiki:Main.MahiroAndo %BR% &copy; 2012 TWiki:TWiki.TWikiContributor |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Plugin Version: | 1.0 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-10-16: | TWikibug:Item6989: Initial release - TWiki:Main.MahiroAndo |
+|  Dependencies: | CPAN:HTTP::Cookies |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/SingleSignOnPlugin |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/SingleSignOnPluginDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/SingleSignOnPluginAppraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
