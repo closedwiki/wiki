@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349810942" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350443525" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -45,6 +45,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{color-wheel-bg}% | =%<nop>ICON{color-wheel-bg}%= | Color wheel, transparent | gif | 16x16 |  |
 | %ICON{comments}% | =%<nop>ICON{comments}%= | Comments | gif | 16x16 |  |
 | %ICON{connections}% | =%<nop>ICON{connections}%= | Connections | gif | 16x16 |  |
+| %ICON{dashboard}% | =%<nop>ICON{dashboard}%= | Dashboard | gif | 16x16 |  |
 | %ICON{database}% | =%<nop>ICON{database}%= | Database | gif | 16x16 |  |
 | %ICON{days}% | =%<nop>ICON{days}%= | Days, Calendar | gif | 16x16 |  |
 | %ICON{download}% | =%<nop>ICON{download}%= | Download | gif | 16x16 |  |
@@ -597,6 +598,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="comments.gif" attr="h" comment="" date="1258790911" path="comments.gif" size="924" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="connections.gif" attr="h" comment="" date="1258527559" path="connections.gif" size="957" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="css.gif" attr="h" comment="" date="1169565035" path="css.gif" size="374" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="dashboard.gif" attr="h" comment="" date="1350443429" path="dashboard.gif" size="135" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="database.gif" attr="h" comment="" date="1258527559" path="database.gif" size="1030" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="days.gif" attr="h" comment="" date="1169565034" path="days.gif" size="161" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="delicious.gif" attr="h" comment="" date="1262417730" path="delicious.gif" size="91" user="TWikiContributor" version=""}%
