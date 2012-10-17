@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350294385" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350457011" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
     Contributions to this plugin are appreciated. Please update the plugin page
@@ -41,7 +41,7 @@ Parameters:
    * =skip=: number of records in the hit set to skip before displaying them; default: 0 
    * =required=: a comma separated list of LDAP record attributes. If specified, the LDAP query results not having all of the specified attributes are eliminated
    * =hidenull=: wether to hide any output on an empty hit set; possible values: on, off; default: off
-   * =ifnull=: when the LDAP query yields no results, the value of this parameter is returned as the search result instead of null. Naturally, if =hidenull= is on, =ifnull= doesn't have any effect
+   * =default=: when the LDAP query yields no results, the value of this parameter is returned as the search result instead of null. Naturally, if =hidenull= is on, =default= doesn't have any effect
    * =clear=: comma separated list of attributes to be removed from the output if they are not resolved
 
 Cgi Parameters:
@@ -185,8 +185,9 @@ This work was partly funded by Spanlink Communications.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright: | &copy; 2006-2007 Michael Daum http://wikiring.de <br /> &copy; 2006-2012 TWiki:Main.TWikiContributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-10-15 |
+|  Plugin Version: | 2012-10-17 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-10-17: | TWikibug:Item6986: the =ifnull= parameter has been renamed to =default= |
 |  2012-10-15: | TWikibug:Item6986: Enhancements and code clean-up |
 |  2011-01-14: | TWikibug:Item6530: Doc improvements |
 |  2010-04-25: | TWikibug:Item6433: Doc improvements |

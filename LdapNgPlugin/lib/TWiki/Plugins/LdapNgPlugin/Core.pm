@@ -52,8 +52,8 @@ sub handleLdap {
   my $theHideNull = TWiki::Func::isTrue($params->{hidenull}, 0);
   my $theClear = $params->{clear} || '';
   my $theRefresh = TWiki::Func::isTrue($query->param('refresh'), 0);
-  my $theIfNull = $params->{ifnull};
-  $theIfNull = '' unless ( defined($theIfNull) );
+  my $theDefault = $params->{default};
+  $theDefault = '' unless ( defined($theDefault) );
   my $theRequired = $params->{required};
   $theRequired = '' unless ( defined($theRequired) );
 
@@ -107,7 +107,7 @@ sub handleLdap {
         }
       );
       if ( ref $helperResult ) {
-        return $theIfNull if ( @$helperResult == 0 && $theHideNull );
+        return $theDefault if ( @$helperResult == 0 && $theHideNull );
         $count = @entries = @$helperResult;
         $entriesSet = 1;
       }
@@ -134,7 +134,7 @@ sub handleLdap {
     }
 
     $count = $search->count();
-    return $theIfNull if ($count <= $theSkip) && $theHideNull;
+    return $theDefault if ($count <= $theSkip) && $theHideNull;
 
     @entries = $search->sorted(@theSort);
   }
@@ -173,7 +173,7 @@ sub handleLdap {
   }
   $ldap->finish()
       unless ( $TWiki::cfg{Plugins}{LdapNgPlugin}{UseDefaultServer} );
-  my $result = @results ? join($theSep, @results) : $theIfNull;
+  my $result = @results ? join($theSep, @results) : $theDefault;
 
   $theHeader = expandVars($theHeader,count=>$count) if $theHeader;
   $theFooter = expandVars($theFooter,count=>$count) if $theFooter;
