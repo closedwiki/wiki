@@ -82,6 +82,17 @@ The isEquivalentCUIDs method determines the equivalency of $cUID and $identCUID 
 
 As you've seen, isInGroup() and isEquivalentCUIDs() in the user mapping handler are the crux of user masquerading implmementation.
 
+---++ Who can masquerade
+Masquerading is a meta feature in the sense that it's something above topic access permission.
+It's a mechanism to skew the access control mechanism.
+It's similar to SuperWebAdmins but masquerading is even higher level than SuperWebAdmins because masquerading affects SuperWebAdmins while SuperWebAdmins doesn't affect masquerading.
+
+Putting the theoretical thought aside, the practical way is to allow the web super admins to masquerade in a web.
+Just like with SuperWebAdmins, MetadataRepository or some topics in the %SYSTEMWEB% web would be used to specify who can masquerade in a web.
+
+Along the same line as !TWikiAdminGroup, it's handy to have a set of users who can masquerade in any web.
+[[#Minimizing_exercise_of_privilege][To minimize exercise of privilege]], TWiki administrators need to be able to masquerade in any web.
+
 ---++ Logging while masquerading
 On the TWiki log, each entry has a user's login name.
 In the scenario described so far, while masquerading, the user's login name is in the joeschmoe/janedoe format.
@@ -111,4 +122,4 @@ Because of that, the user cannot see the part included from !WebEntitled.TopicIn
 
 A similar effect can be seen with %<nop>SEARCH{...}% and other mechanism reading other topics.
 
-__Related Topics:__ AdminDocumentationCategory, TWikiAccessControl, LargeSite
+__Related Topics:__ AdminDocumentationCategory, TWikiAccessControl, SuperWebAdmins, MetadataRepository, LargeSite
