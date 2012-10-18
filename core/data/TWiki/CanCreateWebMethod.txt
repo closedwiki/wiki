@@ -1,0 +1,45 @@
+%META:TOPICINFO{author="TWikiContributor" date="1350461294" format="1.1" version="$Rev$"}%
+---+!! canCreateWeb() Method of the User Mapping Manager
+
+---++ Motivation
+There are cases where ROOTCHANGE and ALLOWWEBCHANGE are not powerful enough to implement web creation permission you want.
+For example, you may want to allow a user to create a certain subweb of the web Foo while you don't want to allow to create topics on the web Foo.
+The way to achieve the goal efficiently is to have a method in the user mapping manager allowing web creation depending on the user and the name of the web to be create.
+
+---+++ A large TWiki site in a large organization employing UserSubwebs
+Let's assume:
+   * It's about a large organization having 50,000 users in its LDAP. User IDs, real names, email addresses, etc. are in the LDAP
+   * It has an intranet single sign-on mechanism leveraging the LDAP data
+   * Everybody in the organization may edit topics on a TWiki site having 5,000 webs
+   * The TWiki site authenticate users with the intranet single sign-on mechanism
+   * UserSubwebs is in use
+Implication:
+   * Requiring user registration on the TWiki site for editing doesn't make a lot of sense. Because all user account data is already in LDAP, which is supposed to be referred to if needed.
+   * Users need to be forbidden to create topics on the Main web. Otherwise, it accumulates a lot of clutters in the long run.
+   * Users need to be able to create/delete their personal web on their own
+      * *Here needs the capability*
+
+---+++ UsingMultipleDisks and /pub/... rewritten to /cgi-bin/viewfiles/...
+Let's assume:
+   * There is a TWiki site employing UsingMultipleDisks
+   * The HTTP server housing TWiki needs to rewrite /pub/... to /cgi-bin/viewfile/... so that all attachments are obtainable by /pub/... path without symbolic links 
+Implication:
+   * The rewriting rule doesn't rewrite /pub/TWiki/... and /pub/Public/... so that files there can be retrieved directly (=quickly) from the HTTP server without going through TWiki.
+   * For every top level web W, there can be Public/W subweb. The owner of the web W can create Public/W if they like.
+   Web owners must not be able to create topics in the Public web or a subweb different from the unrelated to web names the user owns
+      * *Here needs the capability*
+
+---++ How it works
+When a new web is created, the =canCreateWeb($cUID, $$web)= method of the user mapping manager is called if the method exists.
+If the method returns true, TWiki goes ahead and create the web without checking ROOTCHANGE (for a top level web) or ALLOWWEBCHANGE (of the parent of a subweb).
+If the method does not exist or the method returns false, web creation is permitted as usual based on ROOTCHANGE or ALLOWWEBCHANGE.
+
+Maybe needless to say, the method would be written as follows.
+<verbatim>
+sub canCreateWeb {
+    my( $this, $cUID, $web ) = @_;
+...
+}
+</verbatim>
+
+__Related Topics:__ AdminDocumentationCategory, UserSubwebs
