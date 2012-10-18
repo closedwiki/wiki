@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350443525" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350520971" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -172,6 +172,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 %TABLE{headeralign="left" databg="#ffffff,#ffffff" databgsorted="#f5f5f5"}%
 | *&nbsp;* | *Variable* | *Description* | *Type* | *Size* | *Alias* |
 | %ICON{person}% | =%<nop>ICON{person}%= | Person | gif | 16x16 |  |
+| %ICON{persona}% | =%<nop>ICON{persona}%= | Persona | gif | 16x16 |  |
 | %ICON{persons}% | =%<nop>ICON{persons}%= | Persons | gif | 16x16 |  |
 | %ICON{group}% | =%<nop>ICON{group}%= | Group | gif | 16x16 |  |
 | %ICON{useradd}% | =%<nop>ICON{useradd}%= | Add user | gif | 16x16 |  |
@@ -748,6 +749,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="pdf.gif" attr="h" comment="" date="1169565034" path="pdf.gif" size="375" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="pencil.gif" attr="h" comment="" date="1169565034" path="pencil.gif" size="539" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="person.gif" attr="h" comment="" date="1169565034" path="person.gif" size="166" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="persona.gif" attr="h" comment="" date="1350520592" path="persona.gif" size="979" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="persons.gif" attr="h" comment="" date="1169565034" path="persons.gif" size="172" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="phone.gif" attr="h" comment="" date="1193349525" path="phone.gif" size="116" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="photo.gif" attr="h" comment="" date="1169565034" path="photo.gif" size="328" user="TWikiContributor" version=""}%
