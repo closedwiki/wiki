@@ -347,6 +347,10 @@ BEGIN {
     $functionTags{WIKIUSERSTOPIC}  = sub { $TWiki::cfg{UsersTopicName} };
     $functionTags{WIKIWEBMASTER}   = sub { $TWiki::cfg{WebMasterEmail} };
     $functionTags{WIKIWEBMASTERNAME} = sub { $TWiki::cfg{WebMasterName} };
+    if ( $TWiki::cfg{EnableUserSubwebs} ) {
+        $TWiki::cfg{UserPrefsTopicName} ||= 'WebHome';
+        $functionTags{USERPREFSTOPIC} = sub { $TWiki::cfg{UserPrefsTopicName} };
+    }
 
     # Compatibility synonyms, deprecated in 4.2 but still used throughout
     # the documentation.
@@ -1834,7 +1838,19 @@ sub new {
     # which depends on the user mapper.
     my $wn = $this->{users}->getWikiName( $this->{user} );
     if( $wn ) {
-        $prefs->pushPreferences( $TWiki::cfg{UsersWebName}, $wn, 'USER ' . $wn );
+        my $userWeb = $TWiki::cfg{UsersWebName}.'/'.$wn;
+        if ( $TWiki::cfg{EnableUserSubwebs} &&
+             $this->{store}->topicExists($userWeb,
+                                         $TWiki::cfg{UserPrefsTopicName})
+        ) {
+            $prefs->pushPreferences( $userWeb,
+                                     $TWiki::cfg{UserPrefsTopicName},
+                                     'USER ' . $wn );
+        }
+        else {
+            $prefs->pushPreferences( $TWiki::cfg{UsersWebName}, $wn,
+                                     'USER ' . $wn );
+        }
     }
 
     $prefs->pushWebPreferences( $this->{webName} );
