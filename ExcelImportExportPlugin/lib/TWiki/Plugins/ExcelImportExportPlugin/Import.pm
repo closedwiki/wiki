@@ -29,10 +29,22 @@ sub excel2topics {
     my $session = shift;
     $TWiki::Plugins::SESSION = $session;
 
-    my $query   = $session->{cgiQuery};
+    my $query   = TWiki::Func::getCgiQuery();
     my $webName = $session->{webName};
     my $topic   = $session->{topicName};
     my $user    = $session->{user};
+
+    my $ctx = TWiki::Func::getContext();
+    my $inactive = ref $ctx && ( $ctx->{inactive} || $ctx->{content_slave} );
+    if ( $inactive ) {
+        throw TWiki::OopsException(
+            'attention',
+            def    => 'generic',
+            web    => $webName,
+            topic  => $topic,
+            params => [ "The specified web $webName is read-only.", '', '', '' ]
+        );
+    }
 
     my $log = '';
 
@@ -41,7 +53,7 @@ sub excel2topics {
         "DEBUG"           => 0,
         "TOPICCOLUMN"     => "TOPIC",
         "FORCCEOVERWRITE" => 0,
-        "UPLOADFILE"      => "$topic.xls",
+        "UPLOADFILE"      => $topic,
     );
 
     foreach my $key (
@@ -83,17 +95,19 @@ sub excel2topics {
         $log .= "  $key=" . ( $config{$key} || 'undef' ) . "\n";
     }
 
-    my $xlsfile = $TWiki::cfg{PubDir} . "/$webName/$topic/$config{UPLOADFILE}";
+    my $xlsfile = TWiki::Func::getPubDir($webName) .
+	"/$webName/$topic/$config{UPLOADFILE}.xls";
     $xlsfile = TWiki::Sandbox::untaintUnchecked($xlsfile);
+    my $fileExists = -f $xlsfile;
     $log .= "  attachment file=$webName/$topic/$config{UPLOADFILE}\n";
 
     my $Book = Spreadsheet::ParseExcel::Workbook->Parse($xlsfile);
-    if ( not defined $Book ) {
+    if ( !$fileExists || not defined $Book ) {
         throw TWiki::OopsException(
-            'alert',
+            'attention',
             def    => 'generic',
-            web    => $_[2],
-            topic  => $_[1],
+            web    => $webName,
+            topic  => $topic,
             params => [ 'Cannot read file ', $xlsfile, '', '' ]
         );
 
@@ -345,6 +359,8 @@ sub excel2table {
     $config{UPLOADTOPIC} = $params->{topic}      || $topic;
     $config{FORM}        = $params->{template}   || '';
     $config{DEBUG} = $TWiki::Plugins::ExcelImportExportPlugin::debug;
+    my $sheetNum = int($params->{sheetnum} || 0) || 1;
+	# to process sheetnum="0.1" as sheetnum="1"
 
     ( $config{UPLOADWEB}, $config{UPLOADTOPIC} ) =
       $TWiki::Plugins::SESSION->normalizeWebTopicName( $webName,
@@ -352,20 +368,24 @@ sub excel2table {
 
     my $log = '';
 
-    my $xlsfile = $TWiki::cfg{PubDir}
+    my $xlsfile = TWiki::Func::getPubDir($config{UPLOADWEB})
       . "/$config{UPLOADWEB}/$config{UPLOADTOPIC}/$config{UPLOADFILE}.xls";
+    my $fileExists = -f $xlsfile;
     $log .=
 "  attachment file=$config{UPLOADWEB}/$config{UPLOADTOPIC}/$config{UPLOADFILE}\n";
 
     my $Book = Spreadsheet::ParseExcel::Workbook->Parse($xlsfile);
-    if ( not defined $Book ) {
-        throw TWiki::OopsException(
-            'alert',
-            def    => 'generic',
-            web    => $_[2],
-            topic  => $_[1],
-            params => [ 'Cannot read file ', $xlsfile, '', '' ]
-        );
+    if ( !$fileExists || not defined $Book ) {
+	# If an exception is thrown, mailnotify may be aborted.
+	return
+ "<div class='twikiAlert'>Cannot read Excel file $config{UPLOADFILE}.xls</div>";
+#        throw TWiki::OopsException(
+#            'alerts',
+#            def    => 'generic',
+#            web    => $_[2],
+#            topic  => $_[1],
+#            params => [ 'Cannot read file ', $xlsfile, '', '' ]
+#        );
 
     }
 
@@ -378,7 +398,10 @@ sub excel2table {
     $table .= "\n";
 
     my %colname;
-    foreach my $WorkSheet ( @{ $Book->{Worksheet} } ) {
+    my $WorkSheet = $Book->{Worksheet}[$sheetNum - 1];
+    #foreach my $WorkSheet ( @{ $Book->{Worksheet} } ) {
+    ref $WorkSheet or
+	return "<div class='twikiAlert'>Sheet$sheetNum does not exist</div>";
         TWiki::Func::writeDebug(
             "--------- SHEET:" . $WorkSheet->{Name} . "\n" )
           if $config{DEBUG};
@@ -446,8 +469,8 @@ sub excel2table {
             $line  .= "\n";
             $table .= $line;
         }
-        last;                    # only the first sheet
-    }
+#        last;                    # only the first sheet
+#    }
 
     return $table;
 }
@@ -463,7 +486,7 @@ Generate a TWiki ML table from an Excel attachment.
 sub uploadexcel2table {
     my $session = shift;
     $TWiki::Plugins::SESSION = $session;
-    my $query     = $session->{cgiQuery};
+    my $query     = TWiki::Func::getCgiQuery();
     my $webName   = $session->{webName};
     my $topicName = $session->{topicName};
     my $userName  = $session->{user};
@@ -495,7 +518,7 @@ sub uploadexcel2table {
     my $Book = Spreadsheet::ParseExcel::Workbook->Parse($xlsfile);
     if ( not defined $Book ) {
         throw TWiki::OopsException(
-            'alert',
+            'alerts',
             def    => 'generic',
             web    => $_[2],
             topic  => $_[1],
@@ -644,8 +667,11 @@ sub doEnableEdit {
         "- ExcelImportExportPlugin::doEnableEdit( $theWeb, $theTopic )")
       if $TWiki::Plugins::ExcelImportExportPlugin::debug;
 
+    my $ctx = TWiki::Func::getContext();
+    my $inactive = ref $ctx && ( $ctx->{inactive} || $ctx->{content_slave} );
     my $wikiUserName = TWiki::Func::getWikiUserName();
     if (
+        $inactive ||
         !TWiki::Func::checkAccessPermission(
             'change', $wikiUserName, '', $theTopic, $theWeb
         )

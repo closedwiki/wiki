@@ -38,7 +38,7 @@ use TWiki::Meta;
 
 use vars qw( $VERSION $RELEASE $debug $pluginName );
 
-$VERSION = '$Rev: 0$';
+$VERSION = '$Rev$';
 
 $RELEASE = 'Dakar';
 
@@ -91,8 +91,12 @@ sub uploadexcel2table {
     # The topic at which we will put the table data
     my $uploadtopic = $params->{"_DEFAULT"} || $params->{topic} || $topic;
 
+    # Disable uploading when current site mode is readonly or slave
+    my $ctx = TWiki::Func::getContext();
+    my $disabled = ref $ctx && ( $ctx->{inactive} || $ctx->{content_slave} );
+
     return
-"<form name=\"main\" enctype=\"multipart/form-data\" action=\"%SCRIPTURLPATH{\"uploadexcel\"}%/%WEB%/%TOPIC%\" method=\"post\"><input class=\"twikiInputField\" type=\"file\" name=\"filepath\" value=\"%FILEPATH%\" size=\"30\" /><input type=\"hidden\" value=\"$template\" name=\"template\" /><input type=\"hidden\" value=\"$uploadtopic\" name=\"uploadtopic\" /><input type=\"hidden\" name=\"filename\" value=\"%FILENAME%\" /> &nbsp; <input type=\"submit\" value=\"Upload excel\" /></form>";
+"<form name=\"main\" enctype=\"multipart/form-data\" action=\"%SCRIPTURLPATH{\"uploadexcel\"}%/%WEB%/%TOPIC%\" method=\"post\"><input class=\"twikiInputField\" type=\"file\" name=\"filepath\" value=\"%FILEPATH%\" size=\"30\" /><input type=\"hidden\" value=\"$template\" name=\"template\" /><input type=\"hidden\" value=\"$uploadtopic\" name=\"uploadtopic\" /><input type=\"hidden\" name=\"filename\" value=\"%FILENAME%\" /> &nbsp; <input type=\"submit\" value=\"Upload excel\" $disabled/></form>";
 
 }
 
@@ -102,11 +106,22 @@ sub table2excel {
     my $uploadtopic = $params->{"_DEFAULT"} || $params->{topic} || $topic;
     my $mapping     = $params->{map}        || '';
     my $template    = $params->{template}   || '';
+    my $dynamic     = $params->{dynamic}    || '';
+    my $html2text   = $params->{html2text}  || '';
+    my $scale       = $params->{scale}      || '';
 
 ## SMELL: Parameter "topic" seems to serve no function
     return
-"<form action=\"%SCRIPTURLPATH{\"table2excel\"}%/%WEB%/%TOPIC%\"><input type=\"hidden\" value=\"$template\" name=\"template\" /><input type=\"hidden\" value=\"$uploadtopic\" name=\"uploadtopic\" /><input type=\"hidden\" value=\"$filename\" name=\"file\" /><input type=\"hidden\" value=\"$mapping\" name=\"map\" /><input type=\"submit\" value=\"Export table\" />
-</form>";
+"<form action=\"%SCRIPTURLPATH{\"table2excel\"}%/%WEB%/%TOPIC%\">".
+"<input type=\"hidden\" value=\"$template\" name=\"template\" />".
+"<input type=\"hidden\" value=\"$uploadtopic\" name=\"uploadtopic\" />".
+"<input type=\"hidden\" value=\"$filename\" name=\"file\" />".
+"<input type=\"hidden\" value=\"$mapping\" name=\"map\" />".
+"<input type=\"hidden\" value=\"$dynamic\" name=\"dynamic\" />".
+"<input type=\"hidden\" value=\"$html2text\" name=\"html2text\" />".
+"<input type=\"hidden\" value=\"$scale\" name=\"scale\" />".
+"<input type=\"submit\" value=\"Export table\" />".
+"</form>";
 
 }
 

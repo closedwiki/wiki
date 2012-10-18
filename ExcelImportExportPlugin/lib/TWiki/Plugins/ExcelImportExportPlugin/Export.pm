@@ -22,6 +22,33 @@ use TWiki::Func;
 use TWiki::Form;
 use Spreadsheet::WriteExcel;
 use Date::Manip;
+use Encode;
+
+sub htmlToText {
+    $_ = $_[0];
+    s:<br/?\s*>:\r\n:ig;
+    s:<p/?\s*>:\r\n\r\n:ig;
+    s/&quot;/\"/g;
+    s/&#39;/\'/g;
+    s/&#124;/\|/g;
+    return $_;
+}
+
+sub urlAndLabel {
+    my $arg = shift;
+    $arg = '' unless ( defined($arg) );
+    my ($url, $label);
+    if ( $arg =~ /\[\[([^\]]+)\]\[([^\]]+)\]\]/ ) {
+	$url = $1;
+	$label = $2;
+    }
+    else {
+	$url = $label = $arg;
+    }
+    $url =~ s/^\s+//;
+    $url =~ s/\s+$//;
+    return ($url, $label);
+}
 
 ## SMELL: Check which settings should be read from preferences.
 
@@ -30,7 +57,7 @@ sub topics2excel {
     my $session = shift;
     $TWiki::Plugins::SESSION = $session;
 
-    my $query = $session->{cgiQuery};
+    my $query = TWiki::Func::getCgiQuery();
 ## SMELL: The spreadsheet _must_ be attached to the same topic where the map is
     my $web       = $session->{webName};
     my $basetopic = $session->{topicName};
@@ -57,10 +84,11 @@ sub topics2excel {
         , # topic name ending that will be excluded e.g. BugTemplate or FeatureTemplate
         MAPPING => '',
         FORM    => '',
+        SCALE   => 100,
     );
 
     foreach my $key (
-        qw(FORM TOPICPARENT UPLOADFILE NEWTOPICTEMPLATE FORCCEOVERWRITE TOPICCOLUMN DEBUG DATETIMEFORMAT)
+        qw(FORM TOPICPARENT UPLOADFILE NEWTOPICTEMPLATE FORCCEOVERWRITE TOPICCOLUMN DEBUG DATETIMEFORMAT SCALE)
       )
     {
         my $value = &TWiki::Func::getPreferencesValue($key);
@@ -74,6 +102,7 @@ sub topics2excel {
 ## SMELL: Need to sort out the preferences between setting and parameters....
     $config{MAPPING} = $query->param('map')      || $config{MAPPING};
     $config{FORM}    = $query->param('template') || $config{FORM};
+    $config{SCALE}   = $query->param('scale')    || $config{SCALE};
     $config{DEBUG} = $TWiki::Plugins::ExcelImportExportPlugin::debug;
 
     if ( $config{FORM} eq '' ) {
@@ -85,7 +114,11 @@ sub topics2excel {
             &TWiki::Func::getScriptUrl( $web, $basetopic, "view" ) );
     }
 
-    my $xlsfile = "-";
+    my $xlsfile =
+	($TWiki::cfg{Plugins}{ExcelImportExportPlugin}{TmpDir} || '/tmp') .
+	'/twiki-excel' . time . "-$$.xls";
+
+    my $html2text = TWiki::Func::isTrue($query->param('html2text'));
 
     # Create a new Excel workbook
     my $workbook = Spreadsheet::WriteExcel->new($xlsfile)
@@ -101,10 +134,12 @@ sub topics2excel {
     $worksheet->freeze_panes( 1, 0 );
     $worksheet->set_margins(0);    #
                                    #$worksheet->set_margin_bottom(0.3);
-    $worksheet->set_footer( '&L&D &T &R&P of  &N', 0 );    # page N of M
+    $worksheet->set_margin_bottom(0.5);
+    $worksheet->set_footer( '&L&D &T &R&P of  &N', 0.25 );    # page N of M
     $worksheet->repeat_rows(0);    # Repeat the first row when printing
-    $worksheet->fit_to_pages( 1, 12 )
-      ;    # ToDo This should take into account how many issues are printed
+    # $worksheet->fit_to_pages( 1, 12 );    
+    # ToDo This should take into account how many issues are printed
+    $worksheet->set_print_scale($config{SCALE});
     $worksheet->set_landscape();
 
     #  Add and define a formats
@@ -164,10 +199,21 @@ sub topics2excel {
         if ( $type =~ m/date/ ) {
             $type{$name} = 'date';
         }
+        elsif ( $type =~ /^url$/i ) {
+            $type{$name} = 'url';
+        }
         else {
             $type{$name} = "text";
         }
 
+	# SIZE
+	my $size = $field->{size};
+	if ( $size ) {
+	    $size =~ s/^\s*//;
+	    $size =~ s/\s*$//;
+	    $size =~ s/[^\d+\.]//;
+	    $width{$name} = $size;
+	}
     }
     push( @sortorder, $config{TOPICTEXT} );
     push( @sortorder, $config{TOPICCOLUMN} );
@@ -351,13 +397,28 @@ sub topics2excel {
                         $worksheet->write_number( $row, $col, $value{$name},
                             $format{$name} );
                     }
+                    elsif ( $type{$name} eq 'url' ) {
+			my ($url, $label) = urlAndLabel($value{$name});
+			if ( $url =~ /^\w+:/ ) {
+			    $worksheet->write_url( $row, $col, $url,
+				decode('utf-8', $label), $format{$name} );
+			}
+			else {
+			    $worksheet->write_string( $row, $col,
+				decode('utf-8', $label), $format{$name} );
+			}
+                    }
                     elsif ( $type{$name} eq 'text' ) {
                         if (!defined($value{$name})) {
                             #print STDERR "value of $name undefined - defaulting to ''\n";
                             $value{$name} = '';
                         }
-                        $worksheet->write_string( $row, $col, $value{$name},
-                            $format{$name} );
+			my $str = $value{$name};
+			if ( $html2text ) {
+			    $str = htmlToText($str);
+			}
+                        $worksheet->write_string( $row, $col,
+			    decode('utf-8', $str), $format{$name} );
                     }
                     else {
                         $worksheet->write( $row, $col, $value{$name},
@@ -371,10 +432,10 @@ sub topics2excel {
         }
     }
 
-    print $query->header( -type => 'application/vnd.ms-excel',
-        -expire => 'now' );
+#    print $query->header( -type => 'application/vnd.ms-excel',
+#        -expire => 'now' );
+    print "Content-type: application/vnd.ms-excel\n\n";
 
- #print "Content-type: application/vnd.ms-excel\n";
  # The Content-Disposition will generate a prompt to save  the file. If you want
  # to stream the file to the browser, comment out the following line.
  #print "Content-Disposition: attachment; filename=$xlsfile\n";
@@ -382,7 +443,13 @@ sub topics2excel {
 
     # The contents of the Excel file is returned to STDOUT
     $workbook->close() or die "Error closing file: $!";
-
+    {
+	local $/;
+	open my $fh, "< $xlsfile" or die "Error re-opening Excel file: $!";
+	print <$fh>;
+	close $fh;
+    }
+    unlink $xlsfile;
 }
 
 sub table2excel {
@@ -390,7 +457,7 @@ sub table2excel {
     my $session = shift;
     $TWiki::Plugins::SESSION = $session;
 
-    my $query     = $session->{cgiQuery};
+    my $query     = TWiki::Func::getCgiQuery();
     my $web       = $session->{webName};
     my $basetopic = $session->{topicName};
     my $userName  = $session->{user};
@@ -418,10 +485,11 @@ sub table2excel {
         UPLOADTOPIC => $basetopic,
         MAPPING     => '',
         FORM        => '',
+        SCALE   => 100,
     );
 
     foreach my $key (
-        qw(FORM TOPICPARENT UPLOADFILE NEWTOPICTEMPLATE FORCCEOVERWRITE TOPICCOLUMN DEBUG DATETIMEFORMAT)
+        qw(FORM TOPICPARENT UPLOADFILE NEWTOPICTEMPLATE FORCCEOVERWRITE TOPICCOLUMN DEBUG DATETIMEFORMAT SCALE)
       )
     {
         my $value = &TWiki::Func::getPreferencesValue($key);
@@ -437,6 +505,7 @@ sub table2excel {
     $config{UPLOADTOPIC} = $query->param('uploadtopic') || $config{UPLOADTOPIC};
     $config{MAPPING}     = $query->param('map')         || $config{MAPPING};
     $config{FORM}        = $query->param('template')    || $config{FORM};
+    $config{SCALE}       = $query->param('scale')       || $config{SCALE};
     $config{DEBUG} = $TWiki::Plugins::ExcelImportExportPlugin::debug;
 
     ( $config{UPLOADWEB}, $config{UPLOADTOPIC} ) =
@@ -456,10 +525,14 @@ sub table2excel {
 
     }
 
-    my $xlsfile = "-";
+    my $xlsfile =
+	($TWiki::cfg{Plugins}{ExcelImportExportPlugin}{TmpDir} || '/tmp') .
+	'/twiki-excel' . time . "-$$.xls";
 
 #  my $xlsfile = $TWiki::cfg{PubDir}."/$config{UPLOADWEB}/$config{UPLOADTOPIC}/$config{UPLOADFILE}.xls";
 #  $xlsfile = TWiki::Sandbox::untaintUnchecked( $xlsfile );
+
+    my $html2text = TWiki::Func::isTrue($query->param('html2text'));
 
     # Create a new Excel workbook
     my $workbook = Spreadsheet::WriteExcel->new($xlsfile)
@@ -475,10 +548,12 @@ sub table2excel {
     $worksheet->freeze_panes( 1, 0 );
     $worksheet->set_margins(0);    #
                                    #$worksheet->set_margin_bottom(0.3);
-    $worksheet->set_footer( '&L&D &T &R&P of  &N', 0 );    # page N of M
+    $worksheet->set_margin_bottom(0.5);
+    $worksheet->set_footer( '&L&D &T &R&P of  &N', 0.25 );    # page N of M
     $worksheet->repeat_rows(0);    # Repeat the first row when printing
-    $worksheet->fit_to_pages( 1, 12 )
-      ;    # ToDo This should take into account how many issues are printed
+    # $worksheet->fit_to_pages( 1, 12 );
+    # ToDo This should take into account how many issues are printed
+    $worksheet->set_print_scale($config{SCALE});
     $worksheet->set_landscape();
 
     #  Add and define a formats
@@ -542,11 +617,22 @@ sub table2excel {
                 $type{$name}   = 'date';
                 $format{$name} = $dateformat;
             }
+	    elsif ( $type =~ /^url$/i ) {
+		$type{$name} = 'url';
+	    }
             else {
                 $type{$name}   = "text";
                 $format{$name} = $normalformat;
             }
 
+	    # SIZE
+	    my $size = $field->{size};
+	    if ( $size ) {
+		$size =~ s/^\s*//;
+		$size =~ s/\s*$//;
+		$size =~ s/[^\d+\.]//;
+		$width{$name} = $size;
+	    }
         }
     }
 
@@ -638,7 +724,7 @@ sub table2excel {
     my $col = 0;
     my $row = 0;
     foreach my $name (@sortorder) {
-        if ( $orientation{$name} eq 'v' ) {
+        if ( defined($orientation{$name}) && $orientation{$name} eq 'v' ) {
             $worksheet->write( $row, $col, $shortname{$name}, $headerformat90 );
             $worksheet->write_comment( $row, $col, $name, height => 10 );
             if ( defined( $width{$name} ) ) {
@@ -649,6 +735,7 @@ sub table2excel {
             }
         }
         else {
+            $orientation{$name} = 'h'; # a dirty hack by Hideyo, Imazu
             $worksheet->write( $row, $col, $shortname{$name}, $headerformat );
             $worksheet->write_comment( $row, $col, $name, height => 10 );
             if ( defined( $width{$name} ) ) {
@@ -673,11 +760,17 @@ sub table2excel {
     # Need to expand searches to handle tables generated from search.
     ## SMELL: Need to expand FormQueryPlugin based searches also...
     ## SMELL: What if there are tags in the search?
-    $text =~
-s/%SEARCH{(.*)}%/$session->_SEARCH( new TWiki::Attrs($1), $basetopic, $web )/geo;
+    my $isDynamic = TWiki::Func::isTrue($query->param('dynamic'));
+    if ( $isDynamic ) {
+      $text = TWiki::Func::expandCommonVariables($text, $basetopic, $web);
+    }
+    else {
+      $text =~
+s/(%SEARCH{(.*)}%)/TWiki::Func::expandCommonVariables( $1, $basetopic, $web )/geo;
+    }
 
     my $insideTable = 0;
-    my $beforeTable = 0;
+    my $beforeTable = $isDynamic ? 1 : 0;
     my @labels;
     foreach ( split( /\r?\n/, "$text\n<nop>\n" ) ) {
         if ( m/\%TABLE2EXCEL/o || m/table2excel/o ) {
@@ -756,13 +849,28 @@ s/%SEARCH{(.*)}%/$session->_SEARCH( new TWiki::Attrs($1), $basetopic, $web )/geo
                     $worksheet->write_number( $row, $col, $value{$name},
                         $format{$name} );
                 }
+                elsif ( $insideTable && ( $type{$name} eq 'url' ) ) {
+		    my ($url, $label) = urlAndLabel($value{$name});
+		    if ( $url =~ /^\w+:/ ) {
+			$worksheet->write_url( $row, $col, $url,
+			    decode('utf-8', $label), $format{$name} );
+		    }
+		    else {
+			$worksheet->write_string( $row, $col,
+			    decode('utf-8', $label), $format{$name} );
+		    }
+                }
                 elsif ( $type{$name} eq 'text' ) {
                     if (!defined($value{$name})) {
                         #print STDERR "value of $name undefined - defaulting to ''\n";
                         $value{$name} = '';
                     }
-                    $worksheet->write_string( $row, $col, $value{$name},
-                        $format{$name} );
+		    my $str = $value{$name};
+		    if ( $html2text ) {
+			$str = htmlToText($str);
+		    }
+                    $worksheet->write_string( $row, $col,
+			decode('utf-8', $str), $format{$name} );
                 }
                 else {
                     ## Should only happen for header row
@@ -785,8 +893,9 @@ s/%SEARCH{(.*)}%/$session->_SEARCH( new TWiki::Attrs($1), $basetopic, $web )/geo
     TWiki::Func::writeDebug( "Exported " . ( $row - 2 ) . " rows." )
       if $config{DEBUG};
 
-    print $query->header( -type => 'application/vnd.ms-excel',
-        -expire => 'now' );
+#    print $query->header( -type => 'application/vnd.ms-excel',
+#        -expire => 'now' );
+    print "Content-type: application/vnd.ms-excel\n\n";
 
  # The Content-Disposition will generate a prompt to save  the file. If you want
  # to stream the file to the browser, comment out the following line.
@@ -795,6 +904,13 @@ s/%SEARCH{(.*)}%/$session->_SEARCH( new TWiki::Attrs($1), $basetopic, $web )/geo
 
     # The contents of the Excel file
     $workbook->close() or die "Error closing file: $!";
+    {
+	local $/;
+	open my $fh, "< $xlsfile" or die "Error re-opening Excel file: $!";
+	print <$fh>;
+	close $fh;
+    }
+    unlink $xlsfile;
 
     ## If we store the file in pub, why not create an attachment?
 #  my $url = TWiki::Func::getScriptUrl( $web, $basetopic, "viewfile" ) . "?rev=;filename=$config{UPLOADFILE}.xls";
