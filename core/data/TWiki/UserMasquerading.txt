@@ -87,8 +87,28 @@ On the TWiki log, each entry has a user's login name.
 In the scenario described so far, while masquerading, the user's login name is in the joeschmoe/janedoe format.
 Consequently, login names for that format are put in the log file.
 
-As mentioned above, masquerading takes effect only if the user is entitled to.initializeUserHandler() determines if the user is entitled to masquerading.
-If the user is not entitled, even if TWIKI_ON_BEHALF_OF cookie has a value, user masquerading doesn't take effect and the log doesn't get the trace of masquerading.
+---++ Topic reading another topic
+Masquerading takes effect for a topic only if the user is entitled to.
+Let's take a closer look at how it works when a topic reads another topic.
+
+Here's the scenario:
+   * !UserU1 is entitled to masquerading in the !WebEntitled but not in !WebNot.
+   * !UserU1's TWIKI_ON_BEHALF_OF cookie has 'admin' - trying to masquerade as the TWiki Adminstrator user.
+   * !WebEntitled.TopicIncluding doesn't allow !UserU1 to view and has:
+   <verbatim>
+   %INCLUDE{WebNot.TopicIncluded}%</verbatim>
+      * !WebNot.TopicIncluded doesn't allow !UserU1 to view
+   * !WebNot.TopicIncluding can be viewed by !UserU1 and has:
+   <verbatim>
+   %INCLUDE{WebEntitled.TopicIncluded}%</verbatim>
+      * !WebEntitled.TopicIncluded doesn't allow !UserU1 to view
+
+Thanks to masquerading as admin, !UserU1 can view !WebEntitled.TopicIncluding.
+But the user cannot see the part included from !WebNot.TopicIncluded because the user cannot masquerade in !WebNot.
+
+!UserU1 can view !WebNot.TopicIncluding but masquerading doesn't take effect.
+Because of that, the user cannot see the part included from !WebEntitled.TopicIncluded even though the user can view !WebEntitled.TopicIncluded.
+
+A similar effect can be seen with %<nop>SEARCH{...}% and other mechanism reading other topics.
 
 __Related Topics:__ AdminDocumentationCategory, TWikiAccessControl, LargeSite
-
