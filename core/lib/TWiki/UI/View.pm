@@ -79,6 +79,49 @@ sub view {
     # is this view indexable by search engines? Default yes.
     my $indexableView = 1;
 
+    # bin/view/~jsmith support
+    if ( $session->{pathInfoWithTilde} &&
+         $session->{pathInfoWithTilde} =~ m:^/~([^/]*)(/.*)?$:
+    ) {
+        my ($head, $tail) = ($1, $2);
+        my $wikiName;
+        my $users = $session->{users};
+        if ( $head eq '' ) {
+            $wikiName = $users->getWikiName($session->{user});
+        }
+        else {
+            $wikiName = $users->getWikiName($users->getCanonicalUserID($head));
+        }
+        unless ( $tail ) {
+            if ( $TWiki::cfg{EnableUserSubwebs} ) {
+                # if user subwebs are enabled, check it first
+                my $store = $session->{store};
+                if ( $store->topicExists(
+                         $TWiki::cfg{UsersWebName}.'/'.$wikiName,
+                         $TWiki::cfg{HomeTopicName})
+                ) {
+                    $tail = '/';
+                }
+                elsif ( $store->topicExists($TWiki::cfg{UsersWebName},
+                                            $wikiName)
+                ) {
+                    $tail = '';
+                }
+                else {
+                    $tail = '/';
+                }
+            }
+            else {
+                $tail = '';
+            }
+        }
+        $session->redirect(
+            $session->getScriptUrl(1, "view").'/'.
+            $TWiki::cfg{UsersWebName}.'/'.$wikiName.$tail
+        );
+        return;
+    }
+
     TWiki::UI::checkWebExists( $session, $webName, $topicName, 'view' );
 
     my $skin = $session->getSkin();
@@ -95,7 +138,7 @@ sub view {
         # cumbersome and not so safe to ammend it.
         $session->redirect(
             $session->getScriptUrl(1, "view", "$webName/$topicName",
-                                   $TWiki::cfg{HomeTopicName}), 1);
+                                   $TWiki::cfg{HomeTopicName}));
         return;
     }
 

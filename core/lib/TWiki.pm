@@ -1760,6 +1760,13 @@ sub new {
 
     my $pathInfo = $query->path_info();
 
+    # Save the path info with tilde for a later process.
+    # A login name may contain dots hence the entire pathInfo needs to be saved
+    # before being processed.
+    if ( $pathInfo =~ m:^/~: ) {
+        $this->{pathInfoWithTilde} = $pathInfo;
+    }
+
     # Get the web and topic names from PATH_INFO
     if( $pathInfo =~ /\/((?:.*[\.\/])+)(.*)/ ) {
         # is 'bin/script/Webname/SomeTopic' or 'bin/script/Webname/'
