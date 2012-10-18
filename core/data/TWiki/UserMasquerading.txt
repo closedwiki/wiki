@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1348458558" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350518487" format="1.1" version="$Rev$"}%
 ---+!! User Masquerading
 %TOC%
 
@@ -7,9 +7,8 @@ This topic describe how to configure your TWiki site for user masquerading.
 
 There are cases where it's handy to access TWiki on behalf of somebody else with a trace of your real identity rather than completely becoming a different user TWiki-wise.
 This is called user masquerading here.
-Needless to say, there is no need to know somebody else's password.
 
-TWiki is flexible enough to provide user masquerading through a plug-in having a proper initialize user handler and a proper user mapping handler.
+TWiki is flexible enough to provide user masquerading through a combination of a plug-in having a proper initializeUserHandler() and a proper user mapping handler.
 
 For example, your login ID would be "REAL_ID/MASQUERADE_ID" while you are acting on behalf of MASQUERADE_ID.
 
@@ -44,12 +43,13 @@ Usually, it's cumbersome to confirm access control setting is working as expecte
 User masquerading makes it possible to test access control on your own.
 
 ---++ How to set up masquerading
-Now that you understand the concept well, how to set up initialize user handler and user mapping handler for user masquerading is described.
+Now that you understand the concept well, here's how to set up initialize user handler and user mapping handler for user masquerading.
 
 The requirements are:
    * While user masquerading is in effect, both the real identity and the masquerade identity need to be reflected in the user's identity.
    * Masquerading takes effect only on webs the user is entitled to.
    * Access checking is conducted taking user masquerading into account.
+      * A topic may read/include other topics by %<nop>SEARCH{...}% and %<nop>INCLUDE{...}% and other TWiki variables. The masquerading needs to be observed with topics read/included from the current topic as well.
 
 ---+++ Initialize user handler
 Let's say while a user joeschmoe (login name) is masquerading as janedoe, the user is identified as joeschmoe/janedoe.
@@ -59,31 +59,36 @@ This is because the login handler is called very early in a topic processing and
 
 One way to specify a masquerade destination is by an HTTP cookie - e.g. TWIKI_ON_BEHALF_OF.
 Assuming that, initializeUserHandler() returns the login name handed as it is if the TWIKI_ON_BEHALF_OF cookie does not exist.
-If its value is janedoe, then the handler determines whether joeschmoe is entitled to masquerading. If so it returns joeschmoe/janedoe. Otherwise it returns joeschmoe.
+If its value is janedoe, then the handler determines whether joeschmoe is entitled to masquerading.
+If so it returns joeschmoe/janedoe. Otherwise it returns joeschmoe.
 
 ---+++ User mapping handler
-Making the corresponding cUID for joeschmoe/janedoe login name shouldn't be an issue - the way !TWikiUserMapping employs for login to cUID mapping is fine.
+Making the corresponding cUID for joeschmoe/janedoe login name shouldn't be an issue - the way !TWikiUserMapping employs for login to cUID mapping is fine (coding a non-alphanumeric character to '_' followed by the hexadecimal number of the character code; '/' is coded to '_2f').
 And let's say the corresponding wiki name is !JoeSchmoeOnBeHalfOfJaneDoe.
 For that, the following methods of the user mapping handler need to be implemented accordingly.
    * getWikiName() (for cUID to wiki name mapping)
    * findUserByWikiName() (for wiki name to cUID mapping)
 
 The following methods of the user mapping handler need to take two extra arguments $topic and $web compared to those methods in !TWikiUserMapping.
-   $ isAdmin(): it's similar to !TWikiUserMapping's but when it calls isInGroup(), $topic and $web need to be passed, which is not the case with !TWikiUserMapping.
-   $ isInGroup(): it's similar to !TWikiUserMapping's but it takes masquerading into account. For that, it needs to take $topic and $web as its arguments.
+   $ isAdmin(): it's similar to !TWikiUserMapping's but when it calls isInGroup(), $topic and $web need to be passed so that user masquerading is taken into account.
+   $ isInGroup(): it's similar to !TWikiUserMapping's but it takes masquerading into account.
 
-In addition, the following new method needs to be implemented -
-$handler-&gt;isEquivalentCUIDs($cUID, $identCUID, $topic, $web)
-
-$cUID may be masquerading.
-$identCUID is not masquerading.
+In addition, the user mapping handler needs the following new object method -
+isEquivalentCUIDs($cUID, $identCUID, $topic, $web),
+which is called from TWiki::Users::isEquivalendCUIDS(), which is called from TWiki::Users::isInList().
+   * $cUID is the current the current; may be masquerading.
+   * $identCUID is a cUID of a wikiname in an access restriction setting; no masquerading.
 The isEquivalentCUIDs method determines the equivalency of $cUID and $identCUID taking user masquerading into consideration.
+
+As you've seen, isInGroup() and isEquivalentCUIDs() in the user mapping handler are the crux of user masquerading implmementation.
 
 ---++ Logging while masquerading
 On the TWiki log, each entry has a user's login name.
 In the scenario described so far, while masquerading, the user's login name is in the joeschmoe/janedoe format.
 Consequently, login names for that format are put in the log file.
 
-__Related Topics:__ AdminDocumentationCategory, TWikiAccessControl
+As mentioned above, masquerading takes effect only if the user is entitled to.initializeUserHandler() determines if the user is entitled to masquerading.
+If the user is not entitled, even if TWIKI_ON_BEHALF_OF cookie has a value, user masquerading doesn't take effect and the log doesn't get the trace of masquerading.
 
-As mentioned above, initializeUserHandler() determines if the user is entitled to masquerading. If the user is not entitled, even if TWIKI_ON_BEHALF_OF cookie has a value, user masquerading doesn't take effect and the log doesn't get the trace of masquerading.
+__Related Topics:__ AdminDocumentationCategory, TWikiAccessControl, LargeSite
+
