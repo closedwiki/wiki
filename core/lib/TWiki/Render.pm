@@ -1496,7 +1496,9 @@ sub makeTopicSummary {
         $nchar = $TMLTRUNC;
     }
     $nchar = $MINTRUNC if( $nchar < $MINTRUNC );
-    $htext =~ s/^(.{$nchar}.*?)($TWiki::regex{mixedAlphaNumRegex}).*$/$1$2 \.\.\./s;
+    if ( length($htext) > $nchar ) {
+        $htext = chompUtf8Fragment(substr($htext, 0, $nchar)) . ' ...';
+    }
 
     # We do not want the summary to contain any $variable that formatted
     # searches can interpret to anything (Item3489).
