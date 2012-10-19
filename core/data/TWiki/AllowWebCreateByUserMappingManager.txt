@@ -1,12 +1,14 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350461294" format="1.1" version="$Rev$"}%
----+!! canCreateWeb() Method of the User Mapping Manager
+%META:TOPICINFO{author="TWikiContributor" date="1350633267" format="1.1" version="$Rev$"}%
+---+!! Allowing Web Creation by the User Mapping Manager
 
 ---++ Motivation
-There are cases where ROOTCHANGE and ALLOWWEBCHANGE are not powerful enough to implement web creation permission you want.
+
+There are cases where DENYROOTCHANGE, ALLOWROOTCHANGE, DENYWEBCHANGE, and ALLOWWEBCHANGE are not capable enough to implement web creation permission you want.
 For example, you may want to allow a user to create a certain subweb of the web Foo while you don't want to allow to create topics on the web Foo.
-The way to achieve the goal efficiently is to have a method in the user mapping manager allowing web creation depending on the user and the name of the web to be create.
+To cope with such cases, a method in the user mapping manager is called to check the web creation is allowed before checking the access control variables.
 
 ---+++ A large TWiki site in a large organization employing UserSubwebs
+
 Let's assume:
    * It's about a large organization having 50,000 users in its LDAP. User IDs, real names, email addresses, etc. are in the LDAP
    * It has an intranet single sign-on mechanism leveraging the LDAP data
@@ -20,6 +22,7 @@ Implication:
       * *Here needs the capability*
 
 ---+++ UsingMultipleDisks and /pub/... rewritten to /cgi-bin/viewfiles/...
+
 Let's assume:
    * There is a TWiki site employing UsingMultipleDisks
    * The HTTP server housing TWiki needs to rewrite /pub/... to /cgi-bin/viewfile/... so that all attachments are obtainable by /pub/... path without symbolic links 
@@ -30,8 +33,9 @@ Implication:
       * *Here needs the capability*
 
 ---++ How it works
-When a new web is created, the =canCreateWeb($cUID, $$web)= method of the user mapping manager is called if the method exists.
-If the method returns true, TWiki goes ahead and create the web without checking ROOTCHANGE (for a top level web) or ALLOWWEBCHANGE (of the parent of a subweb).
+
+When a new web is created, the =canCreateWeb($cUID, $web)= method of the user mapping manager is called if the method exists.
+If the method returns true, TWiki goes ahead and create the web without checking DENYROOTCHANGE and ALLOWROOTCHANGE (for a top level web) or DENYWEBCHANGE and ALLOWWEBCHANGE (of the parent of a subweb).
 If the method does not exist or the method returns false, web creation is permitted as usual based on ROOTCHANGE or ALLOWWEBCHANGE.
 
 Maybe needless to say, the method would be written as follows.
@@ -42,4 +46,4 @@ sub canCreateWeb {
 }
 </verbatim>
 
-__Related Topics:__ AdminDocumentationCategory, UserSubwebs
+__Related Topics:__ AdminDocumentationCategory, TWikiAccessControl, UserSubwebs
