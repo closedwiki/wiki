@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350382978" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350633267" format="1.1" version="$Rev$"}%
 ---+!! User Subwebs
 TWiki provides each user with their own topic having their information and configuration.
 You may want to provide each user with a subweb Main/FirstLast having a topic having the user's information and configuration.
@@ -47,4 +47,4 @@ If all of the following are true, you need to have an appropriate [[CanCreateWeb
    * You lock down the %USERSWEB% web for tidyness
    * You want to have users create their subwebs on their own
 
-__Related Topics:__ AdminDocumentationCategory, SubwebAndTopicNames, CanCreateWebMethod, LargeSite
+__Related Topics:__ AdminDocumentationCategory, SubwebAndTopicNames, AllowWebCreateByUserMappingManager, LargeSite

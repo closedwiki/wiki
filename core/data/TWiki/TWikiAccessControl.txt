@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347405466" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350637018" format="1.1" version="$Rev$"}%
 ---+ TWiki Access Control
 
 _Restricting read and write access to topics and webs, by Users and groups_
@@ -198,6 +198,13 @@ When deciding whether to grant access, TWiki evaluates the following rules in or
       * everyone else will be *DENIED*
    1 If you got this far, access is *PERMITTED*
    
+---+++ Allowing web creation by user mapping manager
+
+There are cases where DENYROOTCHANGE, ALLOWROOTCHANGE, DENYWEBCHANGE, and ALLOWWEBCHANGE, and DENYWEBCHANGE are not capable enough to implement web creation permission you want.
+To cope with such cases, when a new web is created, the =canCreateWeb($cUID, $web)= method of the user mapping manager is called if the method exists.
+If it returns true, TWiki goes ahead and create the web without checking access control variables.
+Please read AllowWebCreateByUserMappingManager for more details.
+
 ---++ Access control and INCLUDE
 
 ALLOWTOPICVIEW and ALLOWTOPICCHANGE only applies to the topic in which the settings are defined. If a topic A includes another topic B, topic A does not inherit the access rights of the included topic B.
@@ -206,6 +213,13 @@ Examples: Topic A includes topic B
 
    * If the included topic B has ALLOWTOPICCHANGE set to block editing for a user, it does not prevent editing the including topic A.
    * If the included topic B has ALLOWTOPICVIEW set to block view for a user, the user can still view topic A but he cannot see the included topic B. He will see a message _No permission to view B_ 
+
+---++ User masquerading
+
+There are cases where it's handy to access TWiki on behalf of somebody else retaining a trace of your real identity rather than completely becoming a different user.
+We call it user masquerading.
+TWiki provides a framework to implement that.
+Please read UserMasquerading for more information.
 
 #QuickRecipes
 ---++ Access Control quick recipes
@@ -284,6 +298,6 @@ It is possible to turn the PatternSkin and TopMenuSkin into read-only mode by re
 
 %STOPINCLUDE%
 
-__Related Topics:__ AdminDocumentationCategory, TWikiUserAuthentication, TWiki:TWiki.TWikiAccessControlSupplement
+__Related Topics:__ AdminDocumentationCategory, TWikiUserAuthentication, AllowWebCreateByUserMappingManager, UserMasnqerading, TWiki:TWiki.TWikiAccessControlSupplement
 
 -- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.MikeMannix, TWiki:Main.CrawfordCurrie

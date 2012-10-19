@@ -1,21 +1,24 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350518487" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350639726" format="1.1" version="$Rev$"}%
 ---+!! User Masquerading
 %TOC%
 
 ---++ Preface
-This topic describe how to configure your TWiki site for user masquerading.
 
-There are cases where it's handy to access TWiki on behalf of somebody else with a trace of your real identity rather than completely becoming a different user TWiki-wise.
-This is called user masquerading here.
+This topic describes how to configure your TWiki site for user masquerading.
 
-TWiki is flexible enough to provide user masquerading through a combination of a plug-in having a proper initializeUserHandler() and a proper user mapping handler.
+There are cases where it's handy to access TWiki on behalf of somebody else retaining a trace of your real identity rather than completely becoming a different user.
+We call it user masquerading.
 
-For example, your login ID would be "REAL_ID/MASQUERADE_ID" while you are acting on behalf of MASQUERADE_ID.
+TWiki can provide user masquerading through a combination of a plug-in having a proper =initializeUserHandler()= and a proper user mapping manager.
+
+In an implementation, your login ID would be "REAL_ID/MASQUERADE_ID" while you are acting on behalf of MASQUERADE_ID.
 
 ---++ Benefits
+
 User masquerading discussed here provides the following benefits.
 
 ---+++ Minimizing exercise of privilege
+
 Usually, TWiki administrators are the members of !TWikiAdminGroup and can do anything on the TWiki site.
 This is like doing everything as root on Unix and doing everything as an administrator account on Windows, which is not regarded as a good practice now.
 TWiki Administrators are likely to be TWiki users and they shouldn't have privilege while they are *using* TWiki.
@@ -24,12 +27,14 @@ They should exercise their privilege only when they administer.
 For that, instead of putting TWiki administrators into !TWikiAdminGroup, allowing them to act on behalf of "admin" is desirable assuming "admin" is a !TWikiAdminGroup member.
 
 ---+++ Auditability
+
 Assuming the TWiki access log records both the real and masqueraded identities for individual operations, auditing of TWiki administrators is easier.
 
 You can see admin operations of joeschmoe by picking up joeschmoe/admin's entries in the log file.
 joeschmoe's ordinary use is supposed to be conducted as joeschmoe rather than joeschmoe/admin, you don't need to exclude non admin activities manually.
 
 ---+++ Web autonomy
+
 On a large TWiki installation having thousands of webs, webs need to be as autonomous as possible.
 To that end, it's handy to have a set of users guaranteed to have access to a web regardless of access control settings -- it's like !TWikiAdminGroup members but for the web only.
 
@@ -38,11 +43,13 @@ In case a web administrator kicks oneself out of the web due to access control m
 The administrator can also fix a problem on a topic the administrator usually cannot see by acting on behalf of admin.
 
 ---+++ Testing access control
+
 Usually, it's cumbersome to confirm access control setting is working as expected. Because you need to ask somebody else try.
 
 User masquerading makes it possible to test access control on your own.
 
 ---++ How to set up masquerading
+
 Now that you understand the concept well, here's how to set up initialize user handler and user mapping handler for user masquerading.
 
 The requirements are:
@@ -52,6 +59,7 @@ The requirements are:
       * A topic may read/include other topics by %<nop>SEARCH{...}% and %<nop>INCLUDE{...}% and other TWiki variables. The masquerading needs to be observed with topics read/included from the current topic as well.
 
 ---+++ Initialize user handler
+
 Let's say while a user joeschmoe (login name) is masquerading as janedoe, the user is identified as joeschmoe/janedoe.
 This should happen in initializeUserHandler() of a plug-in.
 You may think a login handler can have this feature, it's not practical to determine a user is allowed to masquerade or not in the login handler.
@@ -63,6 +71,7 @@ If its value is janedoe, then the handler determines whether joeschmoe is entitl
 If so it returns joeschmoe/janedoe. Otherwise it returns joeschmoe.
 
 ---+++ User mapping handler
+
 Making the corresponding cUID for joeschmoe/janedoe login name shouldn't be an issue - the way !TWikiUserMapping employs for login to cUID mapping is fine (coding a non-alphanumeric character to '_' followed by the hexadecimal number of the character code; '/' is coded to '_2f').
 And let's say the corresponding wiki name is !JoeSchmoeOnBeHalfOfJaneDoe.
 For that, the following methods of the user mapping handler need to be implemented accordingly.
@@ -74,15 +83,16 @@ The following methods of the user mapping handler need to take two extra argumen
    $ isInGroup(): it's similar to !TWikiUserMapping's but it takes masquerading into account.
 
 In addition, the user mapping handler needs the following new object method -
-isEquivalentCUIDs($cUID, $identCUID, $topic, $web),
+=isEquivalentCUIDs($cUID, $identCUID, $topic, $web)=,
 which is called from TWiki::Users::isEquivalendCUIDS(), which is called from TWiki::Users::isInList().
    * $cUID is the current the current; may be masquerading.
    * $identCUID is a cUID of a wikiname in an access restriction setting; no masquerading.
 The isEquivalentCUIDs method determines the equivalency of $cUID and $identCUID taking user masquerading into consideration.
 
-As you've seen, isInGroup() and isEquivalentCUIDs() in the user mapping handler are the crux of user masquerading implmementation.
+As you've seen, =isInGroup()= and =isEquivalentCUIDs()= in the user mapping handler are the crux of user masquerading implmementation.
 
 ---++ Who can masquerade
+
 Masquerading is a meta feature in the sense that it's something above topic access permission.
 It's a mechanism to skew the access control mechanism.
 It's similar to SuperWebAdmins but masquerading is even higher level than SuperWebAdmins because masquerading affects SuperWebAdmins while SuperWebAdmins doesn't affect masquerading.
@@ -94,11 +104,13 @@ Along the same line as !TWikiAdminGroup, it's handy to have a set of users who c
 [[#Minimizing_exercise_of_privilege][To minimize exercise of privilege]], TWiki administrators need to be able to masquerade in any web.
 
 ---++ Logging while masquerading
+
 On the TWiki log, each entry has a user's login name.
 In the scenario described so far, while masquerading, the user's login name is in the joeschmoe/janedoe format.
 Consequently, login names for that format are put in the log file.
 
 ---++ Topic reading another topic
+
 Masquerading takes effect for a topic only if the user is entitled to.
 Let's take a closer look at how it works when a topic reads another topic.
 

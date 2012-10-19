@@ -1,8 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350534059" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350641142" format="1.1" version="$Rev$"}%
 ---+!! Metadata Repository
 %TOC%
 
 ---++ Motivation
+
    * If you have hundreds or thousands of webs on a TWiki site, web metadata stored in a data repository is useful.
       * It can make things more efficient. For example, you can get the list of webs without traversing a directory hierarchy.
       * It can make things otherwise impossible possible. For example, you can have metadata of a web which is not suitable to put on !WebPreferences.
@@ -11,19 +12,24 @@
    * There are cases where other kinds of metadata needs to be handled.
 
 ---++ Basics
+
 ---+++ It's optional
+
 The repository being for a large site having hundreds or thousands of webs, its use is optional.
 It's activated only if the site owner explicitly turns on the metadata repository.
 
 ---+++ Structure
+
    * The repository houses data tables such as the site metadata table and the web metadata table.
    * A table consists of records which have unique names. A web metadata record is named by the web name.
    * A record consists of fields, each of which consists of a field name and a value. A field name is unique in a record and a field value is a string.
 
 ---++ Examples
+
 Here's how a metadata repository would be used by federated TWiki sites.
 
 ---+++ Federation of sites
+
 Let's assume the following federation of TWiki sites.
    * It consists of three TWiki sites - in Americas, Europe, and Asia.
    * All sites in the federation have the same set of webs.
@@ -39,11 +45,13 @@ Let's assume the following federation of TWiki sites.
 %ATTACHURL%/site-mirroring.png
 
 ---+++ Web admins
+
 If there are many webs, it may not be easy to get hold of people responsible for a web.
 So it's handy if all webs have their admins clearly defined.
 Given that, let's assume we define admins for each web and store as a part of web metadata.
 
 ---+++ Site metadata and web metadata fields
+
 The following fields are needed in a site metadata record to implement the federation shown above. 
    * server
    * data directory path on the server
@@ -64,6 +72,7 @@ The web metadata table is as follows.
 | !WebThree | !BachGroup | as |
 
 ---++ How to get and put data - overview
+
    * You can retrieve data from the metadata repository using [[VarMDREPO][%<nop>MDREPO{...}%]].
    * You can put data by the =mdrepo= script. It works from browser as well as command line.
 Using these, you can construct a web interface to display and manipulate the webs table as follows.
@@ -119,10 +128,12 @@ format="| [[$_.WebHome][$_]] | !$admin | $master | <a href=\"javascript:loadWebF
 </blockquote>
 
 ---++ mdrepo script from command line
+
 Go to the bin directory then you can use the =mdrepo= script in the following format: =./mdrepo COMMAND ARGUMENT ...=
 Arguments depend on the command.
 
 ---+++ mdrepo show <i>TABLE</i> <i>RECORD_ID</i>
+
 Shows the specified record of the specified table.
 
 Example: 
@@ -135,6 +146,7 @@ am
 </verbatim>
 
 ---+++ mdrepo list <i>TABLE</i>
+
 Shows all the records of the specified table.
 
 Example:
@@ -157,6 +169,7 @@ eu
 </verbatim>
 
 ---+++ mdrepo add <i>TABLE</i> <i>RECORD_ID</i> <i>FIELD_NAME</i>=<i>VALUE</i> ...
+
 Adds a new record. It returns nothing. If the specified record already exists, it complains.
 
 Example:
@@ -165,6 +178,7 @@ $ ./mdrepo add webs WebFour admin=HofstadterGroup master=am
 </verbatim>
 
 ---+++ mdrepo updt <i>TABLE</i> <i>RECORD_ID</i> <i>FIELD_NAME</i>=<i>VALUE</i> ...
+
 Update an existing record. It returns nothing. If the specified record does not exist, it complains.
 
 Example:
@@ -173,6 +187,7 @@ $ ./mdrepo updt webs WebFour admin=GardnerGroup master=am
 </verbatim>
 
 ---+++ mdrepo del <i>TABLE</i> <i>RECORD_ID</i>
+
 Deletes an existing record. It returns nothing. If the specified record does not exist, it complains.
 
 Example:
@@ -181,6 +196,7 @@ $ ./mdrepo del webs WebFour admin=GardnerGroup master=am
 </verbatim>
 
 ---+++ mdrep load <i>TABLE</i> <i>FILE</i>
+
 Loads records to the specified table from the specified file. The file content is in the same format as the list command's output.
 Nonexistent records are created.
 Existing records are updated.
@@ -191,6 +207,7 @@ $ ./mdrepo load /var/tmp/temp-webs
 </verbatim>
 
 ---+++ mdrepo rset <i>TABLE</i>
+
 Makes the specified table empty. It returns nothing.
 
 Example:
@@ -199,7 +216,9 @@ $ ./mdrepo rset sites
 </verbatim>
 
 ---++ mdrepo script from browser
+
 ---+++ Restrictions
+
 Compared with command line use, browser use of mdrepo script is restricted for risk mitigation.
    * Only the users having ALLOWROOTCHANGE permission can use it.
    * Only tables allowed to be modified from browser explicitly can be manipulated. See [[#Configuration][Configuration]] for detail.
@@ -209,6 +228,7 @@ Compared with command line use, browser use of mdrepo script is restricted for r
       * =load= and =rset= are rather dangerous.
 
 ---+++ URL parameters
+
 =mdrepo= script checks
    * if the =_add= parameter is true (a string other than "0" or "" (zero length string)
    * otherwise checks if the =_updt= parameter is true
@@ -235,6 +255,7 @@ $ ./mdrepo add webs WebFour admin=GardnerGroup master=am
 </verbatim>
 
 ---+++ Output
+
 By default, the script's output is in the text/plain MIME type.
 As long as the command succeeds, it returns nothing.
 When something goes wrong, an error message is returned.
@@ -242,6 +263,7 @@ When something goes wrong, an error message is returned.
 If =redirectto= URL parameter is provided, the script returns HTTP redirect to the specified URL.
 
 ---++ Configuration
+
 To turn on the metadata repository, you need to have the following three settings.
 <verbatim>
 $TWiki::cfg{Mdrepo}{Store} = 'DB_File';
@@ -268,6 +290,7 @@ Specifically this brings the following behaviors.
    the current web's ancestors and decendants are listed.
 
 ---++ Audit trail
+
 When the =mdrepo= script is used either from command line or browser, if the command is either =add=, =updt=, =del=, or =rset=, it's recorded on the log file in the same manner as other scripts. Specifically, the activity is put on the 5th column.
 | *Command* | *5th column format* |
 | =add= | <code>add <i>TABLE</i> <i>RECORD_ID</i> <i>FIELD_NAME=VALUE</i> ... </code> |
@@ -285,6 +308,7 @@ Audit trail is there by default.
 In case you want to suppress it, you can do it by setting a false value to $TWiki::cfg{Log}{mdrepo} configuration preference.
 
 ---++ Only for top level webs
+
 For practicality, web metadata is only for top level webs.
 More accurately, a subweb has the same web metadata as its parent.
 

@@ -95,6 +95,7 @@ data/Sandbox/WebSearch.txt 0644
 data/Sandbox/WebSearchAdvanced.txt 0644
 data/Sandbox/WebStatistics.txt 0644
 data/Sandbox/WebTopicList.txt 0644
+data/TWiki/AllowWebCreateByUserMappingManager.txt 0644
 data/TWiki/ATasteOfTWiki.txt 0644
 data/TWiki/AccessKeys.txt 0644
 data/TWiki/AdminDocumentationCategory.txt 0644
@@ -128,9 +129,11 @@ data/TWiki/InstalledPlugins.txt 0644
 data/TWiki/InstantEnhancements.txt 0644
 data/TWiki/JumpBox.txt 0644
 data/TWiki/LanguageSelector.txt 0644
+data/TWiki/LargeSite.txt 0644
 data/TWiki/MainFeatures.txt 0644
 data/TWiki/ManagingTopics.txt 0644
 data/TWiki/ManagingWebs.txt 0644
+data/TWiki/MetadataRepository.txt 0644
 data/TWiki/ObjectMethod.txt 0644
 data/TWiki/ParameterizedVariables.txt 0644
 data/TWiki/PeterThoeny.txt 0644
@@ -153,6 +156,7 @@ data/TWiki/SiteStatisticsTemplate.txt 0644
 data/TWiki/StandardColors.txt 0644
 data/TWiki/StartingPoints.txt 0644
 data/TWiki/StaticMethod.txt 0644
+data/TWiki/SuperWebAdmins.txt 0644
 data/TWiki/TWikiAccessControl.txt 0644
 data/TWiki/TWikiAddOns.txt 0644
 data/TWiki/TWikiContribs.txt 0644
@@ -206,6 +210,8 @@ data/TWiki/TextFormattingRules.txt 0644
 data/TWiki/TimBernersLee.txt 0644
 data/TWiki/TimeSpecifications.txt 0644
 data/TWiki/UserDocumentationCategory.txt 0644
+data/TWiki/UserMasquerading.txt 0644
+data/TWiki/UserSubwebs.txt 0644
 data/TWiki/UsingHTML.txt 0644
 data/TWiki/VarACTIVATEDPLUGINS.txt 0644
 data/TWiki/VarADDTOHEAD.txt 0644
@@ -348,6 +354,7 @@ data/TWiki/VarWIKIVERSION.txt 0644
 data/TWiki/VarX.txt 0644
 data/TWiki/VarY.txt 0644
 data/TWiki/VarYELLOW.txt 0644
+data/TWiki/ViewTildeJsmith.txt 0644
 data/TWiki/WabiSabi.txt 0644
 data/TWiki/WebAtom.txt 0644
 data/TWiki/WebAtomBase.txt 0644

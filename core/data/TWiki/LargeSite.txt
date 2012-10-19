@@ -1,5 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350468082" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350640803" format="1.1" version="$Rev$"}%
 ---+!! Managing a Large Site
+
 There is no limitation with the number of webs and users a TWiki site can have.
 But there are several considerationgs needed to run a site having thousands of webs and tens of thousands of users.
 This topic discusses those.
@@ -7,6 +8,7 @@ This topic discusses those.
 %TOC%
 
 ---++ User Management
+
 The default user management scheme using !TWikiUserMappingContrib and TWiki::Users::HtPasswdUser is not suitable for tens of thousands of users because of the following factors.
    * !TWikiUserMappingContrib maintains the list of users on the !TWiki.TWikiUsersTemplate topic
    * TWiki::Users::HtPasswdUser stores user account data on a text file
@@ -15,6 +17,7 @@ You need to use e.g. !LdapContrib for TWiki::Users::LdapUserMapping and TWiki::L
 If your environment provides intranet single sign-on and user directory (e.g. LDAP or !ActiveDirectory based), it's worth considering getting rid of user registration.
 
 ---++ Web Management
+
 If you have thousands of webs, you face the following issues.
    * Getting the list of all webs takes a long time due to directory traversal.
    This happens e.g. when you move a topic.
@@ -25,6 +28,7 @@ The second issue can be solved by a combination of MetadataRepository#Web_admins
 The custom user mapping manager would have its own isAdmin(), which would return true for the web admin members.
 
 ---++ Eliminating Impractical Operations
+
 If you have thousands of webs the following operations would take too long and cases time out:
    * "in all public webs" operations on the "More topic action"
       * Setting NOINALLPUBLICWEBS to "on" suppresses the "in all public webs" links.
@@ -32,21 +36,25 @@ If you have thousands of webs the following operations would take too long and c
       * This topic should be deleted on a large site.
 
 ---++ Multiple Disks
+
 A single disk may not be able to house all webs.
 UsingMultipleDisks provides a way to use multiple disks.
 
 ---++ Locking down the %USERSWEB% web
+
 If you have tens of thousand of users, to prevent unaccounted-for topics from accumulating in the %USERSWEB% web, you should lock it down.
 Specifically, you should allow users to have only !FirstLast, !FirstLastLeftBar, and !FirstLastBookmarks.
 This can be achieved by forbidding ordinary users CHANGE operation in the %USERWEB% web while customizing the isAdmin() method of the user mapping manager to make the user admin of their topics.
 
 ---++ User subwebs
+
 If you have many users, a good number of them may want to have a web for their own use rather than for a team use.
 In that case, providing them with their own subweb in the %USERSWEB% web might be a good idea.
 
 You can see how to do it at UserSubwebs.
 
 ---++ User Masquerading
+
 If you have thousands of webs, TWiki administrators (typically !TWikiAdminGroup members) have a big power.
 Their administrative operations may need to be audited.
 
