@@ -52,6 +52,14 @@ ol, ul {
 ol li, ul li {
 	line-height:1.4em; /*S1*/
 }
+ul .twikiIconBullet {
+	list-style: none; 
+	background-image: url(../TWikiDocGraphics/blank.gif);
+	background-repeat: no-repeat;
+	background-position: 0 .2em;
+	padding-left: 1.6em;
+	margin-left: -1.6em;
+}
 /* Form elements */
 form { 
 	display:inline;
