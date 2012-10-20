@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350716452" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350716926" format="1.1" version="$Rev$"}%
 ---+ TWiki Editing Shorthand
 
 _These instructions are for contributors who prefer to use the Raw Edit over the default WYSIWYG editor._
@@ -194,7 +194,7 @@ Multiple of three spaces, an asterisk, and another space.%BR%
 #IconList
  *Icon List:* %BR%
 Multiple of three spaces, an asterisk, text =icon:name= and another space.%BR%
-%H% The name of the icon can be any of the TWikiDocGraphics icons.
+%H% =name= can be the name of any TWikiDocGraphics icon.
 </td><td>
 <verbatim>
    * icon:tip Icon list
@@ -202,6 +202,7 @@ Multiple of three spaces, an asterisk, text =icon:name= and another space.%BR%
       * icon:led-green OK
    * icon:unchecked Item 1
    * icon:checked Item 2
+   * icon:empty No bullet
 </verbatim>
 </td><td>
 
@@ -210,6 +211,7 @@ Multiple of three spaces, an asterisk, text =icon:name= and another space.%BR%
       * icon:led-green OK
    * icon:unchecked Item 1
    * icon:checked Item 2
+   * icon:empty No bullet
 </td>
 </tr>
 <tr valign="top">
