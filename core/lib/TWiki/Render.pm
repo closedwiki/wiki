@@ -1185,8 +1185,13 @@ sub getRenderedVersion {
                 _addListItem( $this, \@result, 'dl', 'dd', $1 );
                 $isList = 1;
             }
+            elsif ( $line =~ s/^((\t|   )+)\* icon:([^ ]+) /'<li class="twikiIconBullet" style="background: url(' . $session->formatIcon( $3, '$urlpath', 'blank' ) . ') no-repeat 0 .2em;"> '/eo ) {
+                # Unordered list with bullet icon
+                _addListItem( $this, \@result, 'ul', 'li', $1 );
+                $isList = 1;
+            }
             elsif ( $line =~ s/^((\t|   )+)\* /<li> /o ) {
-                # Unnumbered list
+                # Unordered list
                 _addListItem( $this, \@result, 'ul', 'li', $1 );
                 $isList = 1;
             }
