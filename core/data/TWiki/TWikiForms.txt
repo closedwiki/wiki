@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350804678" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350862529" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Forms - Foundation of TWiki Applications
 
@@ -25,9 +25,10 @@ Typical steps to build an application based on TWiki forms:
 A Form Template specifies the fields in a form. A Form Template is simply a page containing a TWiki table, where each row of the table specifies one form field.
 
    1. Create a new topic with your form name: ==<nop>YourForm==, ==<nop>ExpenseReportForm==, ==<nop>InfoCategoryForm==, ==<nop>RecordReviewForm==, whatever you need.
+      %BR% %ICON{tip}% The name of a Form Template topic must end in Form.
    1. Create a TWiki table, with each column representing one element of an entry field: ==Name==, ==Type==, ==Size==, ==Values==, ==Tooltip message==, and ==Attributes== _(see sample below)_.
    1. For each field, fill in a new line; for the type of field, select from the list.
-   1. Save the topic _(you can later choose to [[#EnablingForms][enable/disable]] individual forms)_.
+   1. Save the topic
 
 <blockquote>
 *Example:* %BR%
@@ -79,19 +80,13 @@ Field values can also be set using the result of expanding other TWiki variables
 When used in the value field of the form definition, this will find all topic names in the Main web which end in "Office" and use them as the legal field values.
 
 #EnablingForms
----++ Enabling Forms by Web
-
-Forms have to be enabled for each individual web. The ==WEBFORMS== variable in WebPreferences is optional and defines a list of possible form templates.
-<blockquote>
-*Example:*
-   * <nop>Set WEBFORMS = <nop>BugForm, <nop>FeatureForm, Books.<nop>BookLoanForm
-</blockquote>
-   * With ==WEBFORMS== enabled, an extra button is added to the edit view. If the topic doesn't have a Form, an *Add Form* button appears at the end of the topic. If a Form is present, a *Change* button appears in the top row of the Form. The buttons open a screen that enables selection of a form specified in =WEBFORMS=, or the *No form* option.
-   * You have to list the available form topics explicitly. You cannot use a =SEARCH= to define =WEBFORMS=.
-
+#AddingForm
 ---++ Adding a Form to a Topic
 
-   * To add a Form, follow the "More topic actions" link at the bottom of a topic, select "Add or Replace Form", and select a Form. This is typically done to a [[TWikiTemplates#TemplateTopic][template topic]], either to the =WebTopicEditTemplate= topic in a web, or a new topic that serves as an application specific template topic. Initial Form values can be set there.
+   * To add a Form, follow the "More topic actions" link at the bottom of a topic, select "Add or Replace Form".
+      * Select a Form Template topic. These are topics with names ending in Form that contain a Form Template table.
+      * A Form is typically added to a [[TWikiTemplates#TemplateTopic][template topic]], either to the =WebTopicEditTemplate= topic in a web, or a new topic that serves as an application specific template topic.
+      * Modify the template topic to set the initial Form values.
 
    * Additionally a new topic can be given a Form using the =formtemplate= parameter in the (edit or save) URL.  Initial values can then be provided in the URLs or as form values:
       * other than checkboxes: ==name==, ex: ==?BugPriority=1==
@@ -105,19 +100,22 @@ Forms have to be enabled for each individual web. The ==WEBFORMS== variable in W
        <input type="submit" class="twikiSubmit" value="Create" />
     </form>
        </verbatim>
-   * __%X% Note:__ You can create a topic in one step, without going through the edit screen. To do that, specify the =save= script instead of the =edit= script in the form action. When you specify the =save= script you __have__ to use the "post" method. Example:
+   * icon:warning __Note:__ You can create a topic in one step, without going through the edit screen. To do that, specify the =save= script instead of the =edit= script in the form action. When you specify the =save= script you __have__ to use the "post" method. Example:
        <verbatim>
     <form name="newtopic" action="%SCRIPTURLPATH{"save"}%/%WEB%/" method="post">
        .....
     </form>
        </verbatim>
-   * %H% The =edit= and =save= scripts understand many more parameters, see TWikiScripts#edit and TWikiScripts#save for details.
+   * icon:help The =edit= and =save= scripts understand many more parameters, see TWikiScripts#edit and TWikiScripts#save for details.
 
-   * __%T% Tip:__ For TWiki applications you can [[TWikiTemplates#AutomaticallyGeneratedTopicname][automatically generate unique topicnames]].
+   * icon:tip __Tip:__ For TWiki applications you can [[TWikiTemplates#AutomaticallyGeneratedTopicname][automatically generate unique topicnames]].
 
-   * __%X% Note:__ Initial values will *not* be set in the form of a new topic if you _only_ use the formtemplate parameter.
+   * icon:warning __Note:__ Initial values will *not* be set in the form of a new topic if you _only_ use the formtemplate parameter.
 
----++ Changing a form
+#ChangingForm
+---++ Changing a Form
+
+   * To change a Form, follow the "More topic actions" link at the bottom of a topic, select "Add or Replace Form", and select a new Form.
 
    * You can change a form definition, and TWiki will try to make sure you don't lose any data from the topics that use that form. 
 
