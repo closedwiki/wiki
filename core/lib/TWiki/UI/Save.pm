@@ -243,7 +243,7 @@ sub buildNewTopic {
     if( $formName ) {
         # new form, default field values will be null
         $formName = '' if( $formName eq 'none' );
-        $copyMeta = $prevMeta if $prevMeta;;
+        $copyMeta = $prevMeta if $prevMeta;
     } elsif( $templateMeta ) {
         # populate the meta-data with field values from the template
         $formName = $templateMeta->get( 'FORM' );
@@ -284,11 +284,16 @@ sub buildNewTopic {
         # Copy existing fields into new form, filtering on the
         # known field names so we don't copy dead data. Though we
         # really should, of course. That comes later.
-        my $filter = join(
-            '|',
-            map { $_->{name} }
-              grep { $_->{name} } @{$formDef->getFields()} );
-        $newMeta->copyFrom( $copyMeta, 'FIELD', qr/^($filter)$/ );
+        my @keys = map { $_->{name} }
+                   grep { $_->{name} }
+                   @{$formDef->getFields()};
+        foreach my $key ( @keys ) {
+            my $field = $copyMeta->get( 'FIELD', $key );
+            if( $field ) {
+                $newMeta->remove( 'FIELD', $key );
+                $newMeta->putKeyed( 'FIELD', $field );
+            }
+        }
     }
     if( $formDef ) {
         # override with values from the query
