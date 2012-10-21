@@ -57,11 +57,8 @@ sub generate {
     }
     $formName = 'none' if( !$formName );
 
-    my $prefs = $session->{prefs};
-    my $legalForms = $prefs->getWebPreferencesValue( 'WEBFORMS', $web );
-    $legalForms =~ s/^\s*//;
-    $legalForms =~ s/\s*$//;
-    my @forms = split( /[,\s]+/, $legalForms );
+    require TWiki::Form;
+    my @forms = TWiki::Form::getListOfForms( $session, $web );
     unshift @forms, 'none';
 
     my $formList = '';

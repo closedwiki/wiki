@@ -139,6 +139,48 @@ sub finish {
 
 =pod
 
+---++ StaticMethod getListOfForms( $session, $web ) -> @topics
+
+Return a list of TWiki Form Templates found in a web. The name of Form Template
+topics ends in Form, and topics must contain a table heading like this:
+| *Name* | *Type* | *Size* | *Value* | *Tooltip message* | *Attributes* |
+followed by form field definitions.
+
+=cut
+
+sub getListOfForms {
+    my( $session, $web ) = @_;
+
+    # search all Form topics in web
+    my $params = {
+        search    => '^\s*\|.*Name[^|]*\|.*Type[^|]*\|.*Size[^|]*\|',
+        type      => 'regex',
+        web       => $web,
+        topic     => '*Form',
+        nonoise   => 'on',
+        format    => '$topic',
+        separator => ', ',
+    };
+    my $topics = $session->SEARCH( $params, 'WebHome', $web );
+
+    # Undocumented legacy support: Get topic names from WEBFORMS setting
+    my $prefs = $session->{prefs};
+    my $legalForms = $prefs->getWebPreferencesValue( 'WEBFORMS', $web );
+    $legalForms =~ s/^\s*//;
+    $legalForms =~ s/\s*$//;
+
+    # sort and make unique
+    my %seen;
+    my @formTopics =
+        grep { ! $seen{$_}++ }
+        sort
+        ( split( /[,\s]+/, $topics ), split( /[,\s]+/, $legalForms ) );
+
+    return @formTopics;
+}
+
+=pod
+
 ---++ StaticMethod fieldTitle2FieldName($title) -> $name
 Chop out all except A-Za-z0-9_. from a field name to create a
 valid "name" for storing in meta-data
@@ -167,7 +209,7 @@ sub _parseFormDefinition {
     $text =~ s/\r//g;
     $text =~ s/\\\n//g; # remove trailing '\' and join continuation lines
 
-    # | *Name:* | *Type:* | *Size:* | *Value:*  | *Tooltip message:* | *Attributes:* |
+    # | *Name* | *Type* | *Size* | *Value*  | *Tooltip message* | *Attributes* |
     # Tooltip and attributes are optional
     foreach my $line ( split( /\n/, $text ) ) {
         if( $line =~ /^\s*\|.*Name[^|]*\|.*Type[^|]*\|.*Size[^|]*\|/ ) {
