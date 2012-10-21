@@ -386,7 +386,6 @@ sub renderForEdit {
     my $tmpl = $session->templates->readTemplate( "form" );
     $tmpl = $session->handleCommonTags( $tmpl, $web, $topic, $meta );
 
-    # Note: if WEBFORMS preference is not set, can only delete form.
     $tmpl =~ s/%FORMTITLE%/_link( $this, $meta, $this->{web}.'.'.$this->{topic} )/ge;
     my( $text, $repeatTitledText, $repeatUntitledText, $afterText ) = split( /%REPEAT%/, $tmpl );
 
