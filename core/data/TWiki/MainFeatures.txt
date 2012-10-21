@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1275370406" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350800377" format="1.1" version="$Rev$"}%
 ---+ Main Features of TWiki
 
    * *Any web browser:* Edit existing pages or create new pages by using any web browser. There is no need to upload pages.
@@ -8,7 +8,7 @@
    * *Webs:* Pages are grouped into [[SiteMap][TWiki webs]] (or workspaces). This allows you to set up separate collaboration groups.
    * *Search:* [[WebSearch][Full text search]] with/without regular expressions. See a sample [[%SCRIPTURL{view}%/%WEB%/WebSearch?search=learn][search result]].
    * *E-mail notification:* Get [[WebChangesAlert][automatically notified]] when something has changed in a TWiki web.
-   * *Structured content:* Use TWikiForms to classify and categorize unstructured web pages and to create simple workflow applications.
+   * *Structured content:* Use TWikiForms to classify and categorize unstructured web pages, and to create simple to complex web applications.
    * *File attachments:* [[FileAttachment][Upload]] and download any file as an attachment to a page by using your browser. This is similar to file attachments in an e-mail, but it happens on web pages.
    * *Revision control:* All changes to pages and attachments are tracked. Retrieve previous page revisions; compare differences; find out who changed what and when.
    * *Access control:* Define groups and impose fine-grained read and write [[TWikiAccessControl][access restrictions]] based on groups and users.
