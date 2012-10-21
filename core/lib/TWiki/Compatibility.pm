@@ -143,11 +143,9 @@ sub upgradeCategoryTable {
                 push @items, ( [$catname, $catmod, $catvalue] );
             }
         }
-        my $prefs = $session->{prefs};
-        my $listForms = $prefs->getWebPreferencesValue( 'WEBFORMS', $web );
-        $listForms =~ s/^\s*//go;
-        $listForms =~ s/\s*$//go;
-        my @formTemplates = split( /\s*,\s*/, $listForms );
+        require TWiki::Form;
+        my @formTemplates = TWiki::Form::getListOfForms( $session, $web );
+
         my $defaultFormTemplate = '';
         $defaultFormTemplate = $formTemplates[0] if ( @formTemplates );
 
