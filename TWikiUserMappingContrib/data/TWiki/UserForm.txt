@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1316822616" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350803375" format="1.1" version="$Rev$"}%
 ---+ User Form
 
 __Note:__ This is a maintenance topic, used by the TWiki administrator.
@@ -11,7 +11,7 @@ user form, then:
    1 Take a copy of NewUserTemplate and save it to <nop>%USERSWEB%.NewUserTemplate
    1 In <nop>%USERSWEB%.NewUserTemplate, go to "More topic actions", select "Edit topic preference settings", and add a VIEW_TEMPLATE setting like this:
       * <nop>Local VIEW<nop>_TEMPLATE = <nop>UserView 
-   1 Edit <nop>%USERSWEB%.NewUserTemplate, click on the "Add form" button, and select your new user form - (if it does not show up, add =UserForm= to the WEBFORMS setting in <nop>%USERSWEB%.WebPreferences first)
+   1 In <nop>%USERSWEB%.NewUserTemplate, go to "More topic actions" again, select "Add or replace form on this topic", and select your new user form - (if it does not show up, add =UserForm= to the WEBFORMS setting in <nop>%USERSWEB%.WebPreferences first)
 
 |*Name*  |*Type*  |*Size*  |*Values*  |*Tooltip message*  |*Attributes*  |
 | First Name | text | 60 | | First name of person | |
