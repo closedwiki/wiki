@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350799753" format="1.1" version="$Rev$"}%
 ---+!! Instant TWiki Site Enhancements
 
 These quick enhancements are aimed at improving and customising your TWiki.  New TWiki site administrators are especially encouraged to review this document for ideas before deploying a new TWikiSite. The metaphor of building a house is useful.  The listed enhancements are some of the details possible when moving into a new office or home. These small changes can make a *big* differences for user satisfaction at your site. All modifications can be done through your Web browser, and they don't take more then in a couple of minutes.  No system administration expertise is required. Some of these enhancements are also mentioned in the reference manual and other topics.
@@ -167,7 +167,7 @@ If you'd like to have the same customised logo for all the webs, make these chan
 ----
 ---++ Customize Topic Classification Forms
 
-With a simple one or two-line default topic form available for every topic  - in *Edit* mode, click the ==[Add]== button, and select the form if it isn't already enabled. Then, click the title to get to the actual form, ==[Edit]==, and carefully change values, probably basic page classifications. You'll get some increased value, and hands-on experience with TWikiForms, without having to read up about them first. %X% __(add the corresponding search per category - copy a default and change)__
+With a simple one or two-line default topic form available for every topic  - in the "More topic actions" screen, follow the "Add or replace form on this topic" link, and select the form if it isn't already enabled. Then, edit the topic, and carefully change values, probably basic page classifications. You'll get some increased value, and hands-on experience with TWikiForms, without having to read up about them first. %X% __(add the corresponding search per category - copy a default and change)__
 
 
 ---
