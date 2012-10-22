@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273167157" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350870929" format="1.1" version="$Rev$"}%
 ---++ <nop>%WEB% Web Preferences
 
    * Set BROADCASTMESSAGE = NOTE: This is the <nop>TestCases web. You cannot edit any topic named "TestCase..." or "Web..." in this web, you can only create new topics. Any topics you _do_ create that are not checked into subversion may be deleted by anyone, at any time.
@@ -27,7 +27,6 @@ __Preferences:__
       * WebTopicEditTemplate: Default template for new topics in this web. (Site-level is used if topic does not exist)
       * [[%SYSTEMWEB%.WebTopicEditTemplate]]: Site-level default template
       * %SYSTEMWEB%.TWikiForms: How to enable form(s)
-      * Set WEBFORMS = ThisForm, FormattedSearchForm
 
    * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %SYSTEMWEB%.TWikiAccessControl)
       * #Set DENYWEBVIEW = 
@@ -67,4 +66,3 @@ __Related Topics:__
 
 __Tools:__
 %INCLUDE{"TWiki.RenameWeb"}%
-
