@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350941055" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350947044" format="1.1" version="$Rev$"}%
 %DASHBOARD{ section="dashboard_start" }%
 %DASHBOARD{ section="banner"
  image="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/golden-gate-dawn.jpg"
@@ -36,28 +36,13 @@ TWiki<sup>&reg;</sup> is a flexible, powerful, secure, yet simple web-based coll
  title="[[%BASEWEB%.UserList][TWiki Users]]"
  contentstyle="overflow: hidden; margin-right: -10px; margin-bottom: -10px; padding-bottom: 10px;"
 }%
-<sticky><div style="margin: -1px 0 3px 4px;">
-<form action="%SCRIPTURL{view}%/%WEB%/UserList">
-<input type="text" name="search" class="twikiInputField" size="16" value="" />
-&nbsp;<input type="submit" value="Search" class="twikiSubmit" />
+%INCLUDE{ "%USERSWEB%.UserList" section="search_box" size="16" }%
 &nbsp; [[%SYSTEMWEB%.TWikiRegistration][Register]]
-</form>
-</div></sticky>
 %USERREPORT{ action="slim_box_css" }%
 %USERREPORT{ action="slim_box_start" style="background-color: white;" }%
-%USERREPORT{ action="slim_box_list" users="%SEARCH{
- "META:FORM.*[U]serForm"
- type="regex"
- web="%USERSWEB%"
- excludetopic="*Template"
- order="modified"
- limit="10"
- reverse="on"
- nonoise="on"
- format="$topic"
- separator=", "
-}%" }%
+%USERREPORT{ action="slim_box_list" users="%USERREPORT{ action="user_list" limit="10" order="modified" reverse="on" }%" }%
 %USERREPORT{ action="slim_box_end" }%
+
 %DASHBOARD{ section="box_end" }%
 <!--===== SITE MAP ============================================-->
 %DASHBOARD{ section="box_start"
