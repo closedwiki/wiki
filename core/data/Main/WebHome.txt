@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350280971" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350941055" format="1.1" version="$Rev$"}%
 %DASHBOARD{ section="dashboard_start" }%
 %DASHBOARD{ section="banner"
  image="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/golden-gate-dawn.jpg"
@@ -20,16 +20,15 @@ TWiki<sup>&reg;</sup> is a flexible, powerful, secure, yet simple web-based coll
  title="Main Web Links"
  contentstyle="overflow: hidden;"
 }%
-   * [[%SYSTEMWEB%.WelcomeGuest][Welcome Guest - look here first]]
-   * [[TWikiGroups][TWiki Groups - for access control]]
-   * [[WebSearch][Web Search]] - simple search
-   * [[WebTopicList][Web Topic List]] - all topics
-   * [[WebNotify][Web Notify]] - subscribe to an e-mail alerts
-   * [[WebRss][RSS]] &amp; [[WebAtom][ATOM]] feeds of topic changes
-   * [[WebStatistics][Web Statistics]] %IF{ "istopic 'SiteStatistics'" then="&amp; [[SiteStatistics][Site Statistics]]" }%
-   * [[WebTopMenu][Web Top Menu]] - top menu definition
-   * [[WebPreferences][Web Preferences]] - preferences of this web
-   * [[%LOCALSITEPREFS%][TWiki Preferences]] - site level preferences
+   * icon:tip [[%SYSTEMWEB%.WelcomeGuest][Welcome Guest - look here first]]
+   * icon:persons [[TWikiGroups][TWiki Groups - for access control]]
+   * icon:searchtopic [[WebSearch][Web Search]]
+   * icon:index [[WebTopicList][Web Topic List]] - all topics
+   * icon:mail [[WebNotify][Web Notify]] - subscribe to e-mail alerts
+   * icon:rss [[WebRss][RSS]] &amp; [[WebAtom][ATOM]] feeds of topic changes
+   * icon:statistics [[WebStatistics][Web Statistics]] %IF{ "istopic 'SiteStatistics'" then="&amp; [[SiteStatistics][Site Statistics]]" }%
+   * icon:wrench [[WebPreferences][Web Preferences]] - preferences of this web
+   * icon:mechanics [[%LOCALSITEPREFS%][TWiki Preferences]] - site level preferences
 
 %DASHBOARD{ section="box_end" }%
 <!--===== TWIKI USERS ============================================-->
