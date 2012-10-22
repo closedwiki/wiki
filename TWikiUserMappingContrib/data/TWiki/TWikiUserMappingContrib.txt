@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1350944548" format="1.1" version="1.10"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350944781" format="1.1" version="$Rev$"}%
 ---+!! !TWikiUserMappingContrib
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -75,7 +75,7 @@ It's a part of the default distribution of the TWiki Core.
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Contrib Version: | 2012-10-22 |
 |  <span style="white-space: nowrap;">Change History:</span> | <!-- versions below in reverse order -->&nbsp; |
-|  2012-10-22: | TWikibug:Item6818: Remove obsolete WEBFORMS preferences setting; turn search form into a "search_box" section -- TWiki:Main.PeterThoeny |
+|  2012-10-22: | TWikibug:Item6818: Remove obsolete WEBFORMS preferences setting; turn !UserList search form into a "search_box" section -- TWiki:Main.PeterThoeny |
 |  2012-10-21: | TWikibug:Item6819: Move change TWiki form from edit screen to "more" screen -- TWiki:Main.PeterThoeny |
 |  2012-10-18: | TWikibug:Item6879: Custom UserReports: Adding VarUSERREPORT variable doc topic -- TWiki:Main.PeterThoeny |
 |  2012-09-15: | TWikibug:Item6934: Option for auto-hidden or fixed top menu-bar with FIXEDTOPMENU preferences setting -- TWiki:Main.PeterThoeny |
