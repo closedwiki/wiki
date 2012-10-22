@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1330499052" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350872110" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Upgrade Guide
 
@@ -20,7 +20,7 @@ TWiki-5.1 is a minor release introducing mostly usability enhancements, feature 
 
 ---++ Major Changes Compared to Earlier TWiki Releases
 
-See TWikiReleaseNotes04x00, TWikiReleaseNotes04x01, TWikiReleaseNotes04x02, TWikiReleaseNotes04x03, TWikiReleaseNotes05x00 and TWikiReleaseNotes05x01
+See %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" nonoise="on" format="$topic" separator=", " }%
 
 #BackupRestorePlugin
 ---++ New Upgrade Option with !BackupRestorePlugin
