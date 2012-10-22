@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350203324" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350871979" format="1.1" version="$Rev$"}%
 %DASHBOARD{ section="dashboard_start" }%
 %DASHBOARD{ section="banner"
  image="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/community-leaders.jpg"
@@ -62,7 +62,7 @@ TWiki<sup>&reg;</sup> is a flexible, powerful, secure, yet simple web-based coll
  else="<nop>"
 }%
    * [[%WIKIPREFSTOPIC%][TWikiPreferences]], [[%USERSWEB%.%WIKIPREFSTOPIC%][Site Preferences]]
-   * [[TWikiReleaseNotes05x01][TWiki-5.1 Release Notes]]
+   * [[TWikiReleaseNotes05x02][TWiki-5.2 Release Notes]]
    * Installed: %WIKIVERSION%, Plugin API version %PLUGINVERSION{}%
 %DASHBOARD{ section="box_end" }%
 %DASHBOARD{ section="dashboard_end" }%
