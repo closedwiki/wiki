@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1330418952" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350868258" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WEB% Web Preferences
 
 <sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
@@ -50,8 +50,6 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
       * [[%USERSWEB%.WebTopicEditTemplate]]: Site-level default topic template (if it exists, it overides the system-level template)
       * [[%SYSTEMWEB%.WebTopicEditTemplate]]: System-level default topic template (do not modify! Create a site-level template in the %USERS% web instead)
 
-   * Comma separated list of *forms* that can be attached to topics in this web. See [[%SYSTEMWEB%.TWikiForms][TWikiForms]] for more information.
-      * Set WEBFORMS = 
 ---++ Access Control and Security
 
    * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See [[%SYSTEMWEB%.TWikiAccessControl][TWikiAccessControl]]).
