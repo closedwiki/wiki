@@ -1,0 +1,47 @@
+%META:TOPICINFO{author="PeterThoeny" date="1350871667" format="1.1" version="1.1"}%
+---+!! Release Notes of TWiki-5.2.0 (Jerusalem), 2012-??-?? 
+
+FIXME: Placeholder topic
+
+%TOC%
+
+---++ Introduction
+
+FIXME
+
+---++ New Features Highlights
+
+FIXME
+
+---++ Pre-installed Extensions
+
+FIXME
+
+---++ Supported User Interface Languages
+
+FIXME
+
+---++ Deprecation Notices
+
+FIXME
+
+---++ Notes for TWiki Administrators and Wiki Champions
+
+FIXME:
+
+   * TWikiForms: Adding/changing/removing a TWiki Form has been moved from the edit screen to the "More topic actions" screen.
+   * TWikiForms: The WEBFORMS preferences setting has been removed. TWiki Forms Template topics are now detected automatically.
+
+---++ TWiki-5.2.0 Major Release - Details
+
+FIXME
+
+---+++ Enhancements
+
+FIXME
+
+---+++ Fixes
+
+FIXME
+
+__Related Topics:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide, %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%
