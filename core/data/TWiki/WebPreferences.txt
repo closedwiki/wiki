@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1327024795" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350867928" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WEB% Web Preferences
 
 <sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
@@ -29,11 +29,10 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
       * WebTopicEditTemplate: System-level default topic template (do not modify! Create a site-level template in the %USERS% web instead)
       * [[%USERSWEB%.WebTopicEditTemplate]]: Site-level default topic template (if it exists, it overides the system-level template for topics created in webs other than the %SYSTEMWEB% web)
 
-   * Comma separated list of *forms* that can be attached to topics in this web. See [[%SYSTEMWEB%.TWikiForms][TWikiForms]] for more information.
-      * Set WEBFORMS = TWikiPreferencesForm
-
    * Copyright notice for the TWiki web.
       * Set WEBCOPYRIGHT = %MAKETEXT{"Copyright &&copy; [_1] by the contributing authors. All material on this collaboration platform is the property of the contributing authors." args="1999-%GMTIME{$year}%"}% <br /> %MAKETEXT{"Ideas, requests, problems regarding [_1]? <a href='[_2]'>Send feedback</a>" args="<nop>%WIKITOOLNAME%,mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%%20Feedback%20on%20%BASEWEB%.%BASETOPIC%"}% <br /> __Note:__ Please contribute updates to this topic on TWiki.org at <a href="http://twiki.org/cgi-bin/view/TWiki/%BASETOPIC%" target="twiki.org">TWiki:TWiki.%BASETOPIC%</a>.
+
+---++ Access Control and Security
 
    * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %SYSTEMWEB%.TWikiAccessControl).
       * Set ALLOWWEBCHANGE = %USERSWEB%.TWikiAdminGroup
@@ -44,7 +43,7 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
       * Set ALLOWTOPICRENAME = %USERSWEB%.NobodyGroup
 
    * Web preferences that are *not* allowed to be overridden by sub-web, user or topic preferences:
-      * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, ALLOWWEBRENAME, DENYWEBRENAME
+      * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
 
 %INCLUDE{%SYSTEMWEB%.WebPreferencesHelp}%
 
