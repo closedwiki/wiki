@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350544598" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350946622" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -31,8 +31,10 @@ Show a simple list of registered users. The output is a comma-space delimited so
 %STARTSECTION{"user_list" disablefixlinks="on"}%%SEARCH{
  "META:FORM.*[U]serForm%IF{ "defined 'search'" then=";META:FIELD.*value=.*$percntsearch$percnt" }%"
  web="%USERSWEB%"
- limit="%IF{ "defined 'limit'" then="%limit%" }%"
  type="regex"
+ limit="%IF{   "defined 'limit'"   then="%limit%" }%"
+ order="%IF{   "defined 'order'"   then="%order%" }%"
+ reverse="%IF{ "defined 'reverse'" then="%reverse%" }%"
  nonoise="on"
  excludetopic="UserList*, *Template"
  format="$topic"
