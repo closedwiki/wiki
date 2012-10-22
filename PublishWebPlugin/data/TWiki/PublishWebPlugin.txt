@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1339533348" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350870340" format="1.1" version="$Rev$"}%
 ---+!! Publish Web Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -136,10 +136,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Set SHORTDESCRIPTION = Maintain a static website collaboratively in a TWiki web
 
 |  Plugin Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2006-2012 Peter Thoeny, Twiki, Inc. <br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2006-2012 Peter Thoeny, TWiki.org <br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-06-12 |
+|  Plugin Version: | 2012-10-21 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-10-21: | TWikibug:Item6818: Remove obsolete WEBFORMS preferences setting |
 |  2012-06-12: | TWikibug:Item6837: Small doc fix in configure settings -- TWiki:Main.RayMikkelson | 
 |  2012-03-06: | TWikibug:Item6857: Remove topic preferences, use only configure settings and PUBLISHWEBPLUGIN_* settings | 
 |  2012-03-05: | TWikibug:Item6856: Publish multiple webs feature, useful for virtual host publishing -- TWiki:Main.JohnVestrum |
