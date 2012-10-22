@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350863389" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1350940268" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WEB% Web Preferences
 
 <sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
@@ -14,7 +14,7 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
 
    * Web Settings:
       * Set WEBBGCOLOR = #B9DAFF
-      * Set SITEMAPWHAT = Sandbox web to experiment in an unrestricted hands-on area
+      * Set SITEMAPWHAT = Sandbox web to experiment in an open hands-on area
       * Set SITEMAPLIST = on
 
    * Default template for *new topics* in this web:
