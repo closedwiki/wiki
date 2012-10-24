@@ -18,16 +18,22 @@ use vars qw( $twikiLibPath $CPANBASE );
 #$ENV{TWIKI_ASSERTS} = 1;
 #$ENV{TWIKI_MONITOR} = 1;
 
-# -------------- Path to lib directory containing TWiki.pm. 
-#
-# REQUIRED
+# ------------++ Path to lib directory containing TWiki.pm. 
+# REQUIRED:
 # The absolute path to the 'lib' directory in your installation..
 
 $twikiLibPath = "/absolute/path/to/your/lib";
 
+# ------------++ Path to TWiki's CPAN base.
+# OPTIONAL:
+# TWiki ships with some CPAN modules, such as File::Temp. They load after
+# the default Perl libs. If you want to load them before the system libs,
+# uncomment the following line.
 
-# -------------- Extra path components to include in @INC
-# OPTIONAL
+# $CPANBASE = "$twikiLibPath/CPAN/lib/"; 
+
+# ------------++ Extra path components to include in @INC
+# OPTIONAL:
 # If you need to use perl modules that are not installed in the standard
 # directories (e.g. you have downloaded extra modules for use with plugins)
 # then you can add the absolute paths to those modules below. You can list
