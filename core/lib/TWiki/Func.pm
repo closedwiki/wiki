@@ -792,10 +792,32 @@ Return: =$wikiName= Wiki Name, e.g. ='JohnDoe'=
 sub getWikiName {
     my $user = shift;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    my $cUID = getCanonicalUserID( $user );
-    unless( defined $cUID ) {
-        my ($w, $u) = normalizeWebTopicName($TWiki::cfg{UsersWebName}, $user);
-        return $u;
+    # | *Mapping*         | *cUID*     | *login*   | *wikiname* |
+    # | TWikiUserMapping  | JoeSchmoe  | JoeSchmoe | JoeSchmoe  |
+    # | CustomUserMapping | CM_jschmoe | jschmoe   | JoeSchmoe  |
+    # TWikiUserMapping:
+    #   $users->getLoginName('JoeSchmoe') -> 'JoeSchmoe'
+    #   $users->getLoginName('NotExist')  -> undef
+    # CustomUsrMapping:
+    #   $users->getLoginName('JoeSchmoe') -> undef
+    #   $users->getLoginName('NotExist')  -> undef
+    #   $users->getLoginName('CM_jschmoe')-> 'jschmoe'
+    #   $users->getLoginName('jschmoe')   -> undef
+    # Given this, getLoginName() is used to check if $user is cUID
+    my $users = $TWiki::Plugins::SESSION->{users};
+    my $ln = $users->getLoginName($user);
+    my $cUID;
+    if ( defined($ln) && $ln ne 'unknown' ) {
+        # $user is a cUID
+        $cUID = $user;
+    }
+    else {
+        $cUID = getCanonicalUserID( $user );
+        unless( defined $cUID ) {
+            my ($w, $u) =
+                normalizeWebTopicName($TWiki::cfg{UsersWebName}, $user);
+            return $u;
+        }
     }
     return $TWiki::Plugins::SESSION->{users}->getWikiName( $cUID );
 }
