@@ -27,9 +27,10 @@ use strict;
 
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
+use Error qw(:try);
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-10-12';
+our $RELEASE = '2012-10-24';
 
 my @shelter;
 my $MARKER = "\007";
@@ -83,6 +84,22 @@ sub beforeCommonTagsHandler {
     if ( $action eq 'edit' ) {
         TWiki::Func::setTopicEditLock( $web, $topic, 1 );
         
+        # Item7008
+        TWiki::Func::addToHEAD('PreferencesPlugin', <<'END');
+<!--[if IE]>
+<style type='text/css'>
+.twikiPrefFieldTable {display: inline}
+.twikiPrefFieldDiv {display: inline}
+</style>
+<![endif]-->
+<!--[if !IE]> -->
+<style type='text/css'>
+.twikiPrefFieldTable {display: inline-table}
+.twikiPrefFieldDiv {display: inline}
+</style>
+<!-- <![endif]-->
+END
+
         # Replace setting values by form fields but not inside comments Item4816
         my $outtext = '';
         my $insidecomment = 0;
@@ -98,7 +115,7 @@ sub beforeCommonTagsHandler {
             $outtext .= $token;
         }
         $_[0] = $outtext;
-          
+
         $_[0] =~ s/%EDITPREFERENCES({.*?})?%/
           _generateControlButtons($web, $topic)/ge;
         my $script = TWiki::Func::getContext()->{authenticated} ?
@@ -156,6 +173,13 @@ sub _getField {
     return undef;
 }
 
+# Item7008
+sub _prefFieldClass {
+    return "class='" .
+        ($_[0] =~ /table/ ? 'twikiPrefFieldTable' : 'twikiPrefFieldDiv') .
+        "'";
+}
+
 # Generate a field suitable for editing this type. Use of the core
 # function 'renderFieldForEdit' ensures that we will pick up
 # extra edit types defined in other plugins.
@@ -188,7 +212,8 @@ sub _generateEditField {
         }
     }
     if ( $html ) {
-        $html =~ s/(<(table|div))\b/$1 style='display: inline' /i;
+        # Item7008
+        $html =~ s/(<(table|div))\b/"$1 " . _prefFieldClass($1)/ie;
     }
     else {
         # No form definition, default to text field.
