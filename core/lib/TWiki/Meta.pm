@@ -467,7 +467,7 @@ sub _normalizeAuthor {
     #   $users->getLoginName('NotExist')  -> undef
     #   $users->getLoginName('CM_jschmoe')-> 'jschmoe'
     #   $users->getLoginName('jschmoe')   -> undef
-    # Given this, getLoginName() is used to check if $user is cUID
+    # Given this, getLoginName() is used to check if $author is cUID
     my $users = $this->{_session}{users};
     my $ln = $users->getLoginName($author);
     if ( defined($ln) && $ln ne 'unknown' ) {
