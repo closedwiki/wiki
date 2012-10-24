@@ -82,6 +82,20 @@ sub beforeCommonTagsHandler {
     $action =~ s/\s.*$//;
 
     if ( $action eq 'edit' ) {
+        # Item7009
+        my $session = $TWiki::Plugins::SESSION;
+        my $wikiName = TWiki::Func::getWikiName($session->{user});
+        unless ( TWiki::Func::checkAccessPermission('CHANGE', $wikiName, undef,
+                                                    $topic, $web )
+        ) {
+            throw TWiki::OopsException(
+                'accessdenied',
+                def => 'topic_access',
+                web => $web,
+                topic => $topic,
+                params => [ 'CHANGE', $session->security->getReason() ]);
+        }
+
         TWiki::Func::setTopicEditLock( $web, $topic, 1 );
         
         # Item7008
