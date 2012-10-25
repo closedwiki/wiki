@@ -84,10 +84,6 @@ sub main() {
   # get attachments extension list
   my $extensions = TWiki::Func::getPreferencesValue( "PLUCENEINDEXEXTENSIONS" ) || "pdf, html, txt";
 
-      my $topicname = SplitTheTopicName($topic);
-         $topicname = $topic ." ". $topicname;
-
-
   my %indexextensions;
   foreach my $tmpextension ( split( /\,\s+/, $extensions ) ) {
     $indexextensions{$tmpextension} = 1;
@@ -158,7 +154,7 @@ sub main() {
 
       # processing the topic meta info
       my ( $date, $author, $rev ) = TWiki::Func::getRevisionInfo( $web, $topic );
-      $date = TWiki::Func::formatTime( $date );
+      $date = TWiki::Func::formatTime( $date || 0 );
       # the author can be used as a search criteria
       $doc->add(Plucene::Document::Field->Text("author","$author"));
       # version and date are stored as meta data in the doc
@@ -202,7 +198,7 @@ sub main() {
           if (($indexextensions{".$extension"})&&(!$skipattachments{"$web.$topic.$name"})) {
             $author = $attachment->{'user'};
             $rev = $attachment->{'version'};
-            $date = TWiki::Func::formatTime( $attachment->{'date'} );
+            $date = TWiki::Func::formatTime( $attachment->{'date'} || 0 );
             my $comment = $attachment->{'comment'};
             push( @attachmentList, [ $web, $topic, $name, $author, $comment, $rev, $date ] );
           } else {

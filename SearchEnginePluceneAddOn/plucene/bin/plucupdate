@@ -83,6 +83,7 @@ sub main()
   my @webList = TWiki::Func::getListOfWebs( "user" );
 
   # process each web
+  my $lastmodifyDir = TWiki::Func::getWorkArea("Plucene");
   foreach my $web (@webList) {
 
     # skip this web if it's in list of ones not to be indexed
@@ -96,16 +97,15 @@ sub main()
     $debug && print "Checking $web ...";
 
     # Get the last time we indexed this web
-    my $lastmodifyDir = TWiki::Func::getWorkArea("Plucene");
     my $prevLastmodify = 0;
-    if ( open(LAST, "<$lastmodifyDir/$web") ) {
-      my $prevLastmodifyTainted = <LAST>;
-      close LAST;
+    if ( open(my $last_timestamp_fh, '<', "$lastmodifyDir/$web") ) {
+      my $prevLastmodifyTainted = <$last_timestamp_fh>;
+      close $last_timestamp_fh;
       if( $prevLastmodifyTainted =~ /^(\d+)$/ ) {
         $prevLastmodify = $1;
       }
     }
-    my $currLastmodify = "";
+    my $currLastmodify = '';
 
     # do not process the same topic twice
     my %exclude;
@@ -118,24 +118,24 @@ sub main()
       $debug && print "-> changed topics since $time:\n";
       while( $changes->hasNext() ) {
         my $change = $changes->next();
-        my ($topicName, $userName, $changeTime, $revision) = @{change}{qw/
-       topic user time revision/};
+        my ($topicName, $userName, $changeTime, $revision)
+            = @{$change}{qw/topic user time revision/};
 
         $currLastmodify = $changeTime;
         next if defined $exclude{ $topicName };
-        $exclude{ $topicName } = "1";
+        $exclude{ $topicName } = 1;
         $debug && print "   * $topicName\n";
         push( @topicsToUpdate, [ $web, $topicName ] );
-        if ($topicName eq "WebPreferences") {
+        if ($topicName eq 'WebPreferences') {
           # maybe INDEXVARIABLES contents have changed, so update of WebHome topic is required
           # NOTE again, if the VARIABLES themselves have changes, a new index should be created!
-          push( @topicsToUpdate, [ $web, "WebHome" ] );
+          push( @topicsToUpdate, [ $web, 'WebHome' ] );
         }
       }
 
-      if ( open(LAST, ">$lastmodifyDir/$web") ) {
-        print LAST $currLastmodify;
-        close LAST;
+      if ( open(my $last_timestamp_fh, '>', "$lastmodifyDir/$web") ) {
+        print $last_timestamp_fh $currLastmodify;
+        close $last_timestamp_fh;
         $debug && print "$lastmodifyDir/$web saved\n";
       } else {
         warn "Couldn't update $lastmodifyDir/$web: $!";
@@ -288,7 +288,7 @@ sub addTopics()
 
     # processing the topic meta info
     my ( $date, $author, $rev ) = TWiki::Func::getRevisionInfo( $web, $topic );
-    $date = TWiki::Func::formatTime( $date );
+    $date = TWiki::Func::formatTime( $date || 0 );
     # the author can be used as a search criteria
     $doc->add(Plucene::Document::Field->Text("author","$author"));
     # version and date are stored as meta data in the doc
@@ -332,7 +332,7 @@ sub addTopics()
         if (($indexextensions{".$extension"})&&(!$skipattachments{"$web.$topic.$name"})) {
           $author = $attachment->{'user'};
           $rev = $attachment->{'version'};
-          $date = TWiki::Func::formatTime( $attachment->{'date'} );
+          $date = TWiki::Func::formatTime( $attachment->{'date'} || 0 );
           my $comment = $attachment->{'comment'};
           push( @attachmentList, [ $web, $topic, $name, $author, $comment, $rev, $date ] );
         } else {
@@ -475,5 +475,3 @@ sub SplitTheTopicName {
   }
   return  $finalstr;
 }
-
-# EOF
