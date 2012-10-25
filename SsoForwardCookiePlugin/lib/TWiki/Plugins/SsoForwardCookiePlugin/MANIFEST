@@ -1,0 +1,3 @@
+# Release manifest for SsoForwardCookiePlugin
+data/TWiki/SsoForwardCookiePlugin.txt 0644 Documentation
+lib/TWiki/Plugins/SsoForwardCookiePlugin.pm 0644 Perl module

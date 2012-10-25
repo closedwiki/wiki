@@ -1,4 +1,0 @@
-# Release manifest for SingleSignOnPlugin
-data/TWiki/SingleSignOnPlugin.txt 0644 Documentation
-lib/TWiki/Plugins/SingleSignOnPlugin.pm 0644 Perl module
-lib/TWiki/Plugins/SingleSignOnPlugin/HTTPRequestHandler.pm 0644 Perl module

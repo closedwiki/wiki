@@ -1,29 +1,25 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350389696" format="1.1" version="$Rev$"}%
----+!! !SingleSignOnPlugin
+%META:TOPICINFO{author="TWikiContributor" date="1351168785" format="1.1" version="$Rev$"}%
+---+!! !SsoForwardCookiePlugin
 <!--
 One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = Plugin to add single sign-on handler for external HTTP requests
+   * Set SHORTDESCRIPTION = Plugin to add credential cookie forwarding handler for external HTTP requests
 -->
 <sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
 </div></sticky>
 %SHORTDESCRIPTION%
 
-%X% %RED%The current production release (TWiki-5.1.2) has not yet supported =$cfg{HTTPRequestHandler}= hook, and thus this plugin works only in a development version. The feature is supposed to be included in a future release.%ENDCOLOR%
-
 ---++ Usage
 
 On the intranet, users enjoy single sign-on for almost all the sites including locally installed TWiki. In order to use an intranet URL for =%<nop>INCLUDE{...}%=, the single sign-on token needs to be forwarded to the included URL.
 
-This plugin hooks any HTTP requests from TWiki to external resources inside the intranet, so that the credential token from the browser is forwarded to the destination.
-
-Currently, it only supports cookie forwarding from the browser when the target URL's domain matches the configured single sign-on domain.
+This plugin hooks any HTTP requests from TWiki to external resources inside the intranet, so that the credential token in the cookie from the browser is forwarded to the destination.
 
 The administrator needs to configure the following values via the [[%SCRIPTURL{configure}%][configure]] script.
-   * =$cfg{Plugins}{SingleSignOnPlugin}{Domains}= (comma-separated)
-   * =$cfg{Plugins}{SingleSignOnPlugin}{ForwardedCookieNames}= (comma-separated)
+   * =$cfg{Plugins}{SsoForwardCookiePlugin}{Domains}= (comma-separated)
+   * =$cfg{Plugins}{SsoForwardCookiePlugin}{CookieNames}= (comma-separated)
 For troubleshooting, try turning on the =Debug= flag:
-   * =$cfg{Plugins}{SingleSignOnPlugin}{Domains} = 1;=
+   * =$cfg{Plugins}{SsoForwardCookiePlugin}{Debug} = 1;=
 
 ---++ Examples
 
@@ -40,13 +36,10 @@ If you prefer to forward all the cookies that the browser sends to TWiki, set it
 
 ---++ Technical Information
 
-Once the plugin is installed, it automatically sets =$cfg{HTTPRequestHandler}= that hooks any HTTP requests to external resources.
-
 These are the expected targets that are affected by this plugin:
    * =%<nop>INCLUDE{...}%=
    * =TWiki::Func::getExternalResource()=
-   * =TWiki::Func::getLWPRequest()=
-   * Any extensions that utilize the above =TWiki::Func= methods.
+   * =TWiki::Func::postExternalResource()=
 
 The plugin extracts the cookie value from the =HTTP_COOKIE= environment variable. It does not work if this environment variable is not visible from the TWiki script (due to Apache configs, modules, or any other factors).
 
@@ -63,9 +56,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Download the ZIP file from the Plugins home (see below).
       * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
         | *File:* | *Description:* |
-        | ==data/TWiki/SingleSignOnPlugin.txt== | Plugin topic |
-        | ==lib/TWiki/Plugins/SingleSignOnPlugin.pm== | Plugin Perl module |
-        | ==lib/TWiki/Plugins/SingleSignOnPlugin/HTTPRequestHandler.pm== | Perl module |
+        | ==data/TWiki/SsoForwardCookiePlugin.txt== | Plugin topic |
+        | ==lib/TWiki/Plugins/SsoForwardCookiePlugin.pm== | Plugin Perl module |
+        | ==lib/TWiki/Plugins/SsoForwardCookiePlugin/HTTPRequestHandler.pm== | Perl module |
       * Set the ownership of the extracted directories and files to the webserver user.
       * Install the dependencies.
 
@@ -84,11 +77,12 @@ Many thanks to the following sponsors for supporting this work:
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | 1.0 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-10-25: | TWikibug:Item7011: Renamed this plugin - TWiki:Main.MahiroAndo |
 |  2012-10-16: | TWikibug:Item6989: Initial release - TWiki:Main.MahiroAndo |
 |  Dependencies: | CPAN:HTTP::Cookies |
-|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/SingleSignOnPlugin |
-|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/SingleSignOnPluginDev |
-|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/SingleSignOnPluginAppraisal |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/SsoForwardCookiePlugin |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/SsoForwardCookiePluginDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/SsoForwardCookiePluginAppraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 

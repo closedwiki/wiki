@@ -5,7 +5,7 @@ BEGIN {
 use TWiki::Contrib::Build;
 
 # Create the build object
-$build = new TWiki::Contrib::Build('SingleSignOnPlugin');
+$build = new TWiki::Contrib::Build('SsoForwardCookiePlugin');
 
 # (Optional) Set the details of the repository for uploads.
 # This can be any web on any accessible TWiki installation.

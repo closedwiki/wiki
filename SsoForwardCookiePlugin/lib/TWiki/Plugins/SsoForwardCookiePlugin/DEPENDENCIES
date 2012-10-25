@@ -1,0 +1,6 @@
+# Dependencies for SsoForwardCookiePlugin
+# Example:
+# HTTP::Cookies,>=6.01,cpan,Required.
+# LWP::UserAgent,>=6.04,cpan,Required.
+# TWiki::Plugins,>=1.5,perl,TWiki 5.1 release.
+
