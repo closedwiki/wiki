@@ -13,7 +13,7 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
+# GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 
 # Set library paths in @INC, at compile time
@@ -37,7 +37,7 @@ use Plucene::SearchEngine::Index::File;
 
 my $debug = ! ( @ARGV && $ARGV[0] eq "-q" );
 
-# Log stuff: opening the log file 
+# Log stuff: opening the log file
 my $time = TWiki::Func::formatTime( time(), '$year$mo$day', 'servertime');
 my $logfile = "../logs/update-".$time.".log";
 
@@ -50,7 +50,7 @@ if (-f $logfile) {
 }
 # End of opening the LOG File ...
 
-# The main subroutine  
+# The main subroutine
 &main();
 
 # The job is done here
@@ -58,10 +58,10 @@ sub main()
 {
   # to call TWiki::Func subroutines, we need this
   $TWiki::Plugins::SESSION = new TWiki();
-  
+
   $debug && print "Plucene index files update\n";
   $debug && print "- to suppress all normal output: plucupdate -q\n";
-  my $logtime = TWiki::Func::formatTime( time(), '$rcs', 'servertime' ); 
+  my $logtime = TWiki::Func::formatTime( time(), '$rcs', 'servertime' );
   print LOGFILE  "| $logtime | Index update started | | |\n";
 
   # where the index data is located
@@ -98,7 +98,7 @@ sub main()
     my $changes= $TWiki::Plugins::SESSION->{store}->readMetaData( $web, 'changes' );
     my $prevLastmodify = $TWiki::Plugins::SESSION->{store}->readMetaData($web,'plucupdate') || "0";
     my $currLastmodify = "";
-    
+
     # do not process the same topic twice
     my %exclude;
 
@@ -107,7 +107,7 @@ sub main()
       # Parse lines from .changes:
       # <topic>	<user>		<change time>	<revision>
       my ($topicName, $userName, $changeTime, $revision) = split( /\t/);
-       
+
       if( ( ! %exclude ) || ( ! $exclude{ $topicName } ) ) {
         if( ! $currLastmodify ) {
           # newest entry
@@ -137,7 +137,7 @@ sub main()
 
     # NOTE violates store encapsulation, possible compatibility issue with future releases
     $TWiki::Plugins::SESSION->{store}->saveMetaData( $web, 'plucupdate', $currLastmodify );
-    $debug && print "$web .plucupdate saved\n";              
+    $debug && print "$web .plucupdate saved\n";
   }
 
   if (@topicsToUpdate > 0) {
@@ -157,8 +157,8 @@ sub main()
   }
 
   $debug && print "Updating index complete.\n";
-  $logtime = TWiki::Func::formatTime( time(), '$rcs', 'servertime' ); 
-  print LOGFILE  "| $logtime | Updating index finished | | |\n"; 
+  $logtime = TWiki::Func::formatTime( time(), '$rcs', 'servertime' );
+  print LOGFILE  "| $logtime | Updating index finished | | |\n";
   close(LOGFILE);
 }
 
@@ -189,11 +189,17 @@ sub removeTopics
     $to_delete{"$web.$topic"} = 1;
   }
 
+
+
+my $topicname = SplitTheTopicName($topic);
+   $topicname = $topic ." ". $topicname;
+
+
   # just one search to retrieve all the docs to be removed from index
   # (individual searches resulted in "too many files open" error)
   # if the web is heavily updated, time between index updates should be reduced
   # so the query can be executed in a reasonable time ...
-  my $query = $parser->parse("$condition"); 
+  my $query = $parser->parse("$condition");
   my @docs;
   my $hc = Plucene::Search::HitCollector->new(collect => sub {
            my ($self, $doc, $score)= @_;
@@ -214,8 +220,8 @@ sub removeTopics
   }
   undef $query; undef @docs; undef $hc;
 
-  $searcher->reader->close;    
-  undef $searcher; 
+  $searcher->reader->close;
+  undef $searcher;
 
   $debug && print "Removing of old topics finished\n";
   $logtime = TWiki::Func::formatTime( time(), '$rcs', 'servertime' );
@@ -360,7 +366,7 @@ sub addTopics()
 
   # open the index to process files
   my $indexer = Plucene::SearchEngine::Index->new(
-        dir => "$idxpath" 
+        dir => "$idxpath"
     );
 
   foreach my $attachDefP (@attachmentList) {
@@ -371,7 +377,7 @@ sub addTopics()
     print LOGFILE  "| $logtime | Reindexing attachment | $web.$topic | $name |\n";
 
     # process file
-    my @documents = map { $_->document } 
+    my @documents = map { $_->document }
       Plucene::SearchEngine::Index::File->examine("$pubpath/$web/$topic/$name");
     # for the Plucene document(s) associated to the file, assign
     # some attributes, so it can be easily recovered when searching
@@ -462,6 +468,6 @@ sub SplitTheTopicName {
     $finalstr = $finalstr. $str." ";
   }
   return  $finalstr;
-}	
+}
 
 # EOF

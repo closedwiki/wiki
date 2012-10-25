@@ -13,12 +13,12 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
+# GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 
 # Set library paths in @INC, at compile time
-BEGIN { unshift @INC, '.'; require '../../bin/setlib.cfg' } 
-                                                                                
+BEGIN { unshift @INC, '.'; require '../../bin/setlib.cfg' }
+
 use TWiki;
 
 use Time::Local;
@@ -36,7 +36,8 @@ use strict;
 
 my $debug = ! ( @ARGV && $ARGV[0] eq "-q" );
 
-# Log stuff: opening the log file 
+# Log stuff: opening the log file
+use TWiki::Func;
 my $time = TWiki::Func::formatTime( time(), '$year$mo$day', 'servertime');
 my $logfile = "../logs/index-".$time.".log";
 
@@ -49,7 +50,7 @@ if (-f $logfile) {
 }
 # End of opening the LOG File ...
 
-# The main subroutine  
+# The main subroutine
 &main();
 
 # The job is done here
@@ -57,10 +58,10 @@ sub main() {
 
   # to call TWiki::Func subroutines, we need this
   $TWiki::Plugins::SESSION = new TWiki();
-  
+
   $debug && print "Plucene index files init\n";
   $debug && print "- to suppress all normal output: plucindex -q\n";
-  my $logtime = TWiki::Func::formatTime( time(), '$rcs', 'servertime' ); 
+  my $logtime = TWiki::Func::formatTime( time(), '$rcs', 'servertime' );
   print LOGFILE  "| $logtime | Indexing started | | |\n";
 
   # where the index data is located
@@ -82,6 +83,11 @@ sub main() {
 
   # get attachments extension list
   my $extensions = TWiki::Func::getPreferencesValue( "PLUCENEINDEXEXTENSIONS" ) || "pdf, html, txt";
+
+      my $topicname = SplitTheTopicName($topic);
+         $topicname = $topic ." ". $topicname;
+
+
   my %indexextensions;
   foreach my $tmpextension ( split( /\,\s+/, $extensions ) ) {
     $indexextensions{$tmpextension} = 1;
@@ -115,11 +121,18 @@ sub main() {
     }
 
     $debug && print "Indexing $web topics\n";
-    $logtime = TWiki::Func::formatTime( time(), '$rcs', 'servertime' ); 
+    $logtime = TWiki::Func::formatTime( time(), '$rcs', 'servertime' );
     print LOGFILE  "| $logtime | Indexing web | $web | |\n";
 
-    # NOTE violates store encapsulation, possible compatibility issue with future releases
-    $TWiki::Plugins::SESSION->{store}->saveMetaData( $web, 'plucupdate', time() );
+    # Saves the last update run for this web
+    my $lastmodifyDir = TWiki::Func::getWorkArea("Plucene");
+    if ( open(LAST, ">$lastmodifyDir/$web") ) {
+      print LAST time();
+      close LAST;
+      $debug && print "$lastmodifyDir/$web saved\n";
+    } else {
+      warn "Couldn't update $lastmodifyDir/$web: $!";
+    }
 
     # get the list of topics
     my @topics = TWiki::Func::getTopicList( $web );
@@ -145,7 +158,7 @@ sub main() {
 
       # processing the topic meta info
       my ( $date, $author, $rev ) = TWiki::Func::getRevisionInfo( $web, $topic );
-      $date = TWiki::Func::formatTime( $date );
+      $date = TWiki::Func::formatTime( $date || 0 );
       # the author can be used as a search criteria
       $doc->add(Plucene::Document::Field->Text("author","$author"));
       # version and date are stored as meta data in the doc
@@ -189,7 +202,7 @@ sub main() {
           if (($indexextensions{".$extension"})&&(!$skipattachments{"$web.$topic.$name"})) {
             $author = $attachment->{'user'};
             $rev = $attachment->{'version'};
-            $date = TWiki::Func::formatTime( $attachment->{'date'} );
+            $date = TWiki::Func::formatTime( $attachment->{'date'} || 0 );
             my $comment = $attachment->{'comment'};
             push( @attachmentList, [ $web, $topic, $name, $author, $comment, $rev, $date ] );
           } else {
@@ -231,7 +244,7 @@ sub main() {
 
   # open the index to process files
   my $indexer = Plucene::SearchEngine::Index->new(
-        dir => "$idxpath" 
+        dir => "$idxpath"
     );
 
   foreach my $attachDefP (@attachmentList) {
@@ -242,13 +255,13 @@ sub main() {
     print LOGFILE  "| $logtime | Indexing attachment | $web.$topic | $name |\n";
 
     # process file
-    my @documents = map { $_->document } 
+    my @documents = map { $_->document }
       Plucene::SearchEngine::Index::File->examine("$pubpath/$web/$topic/$name");
     # for the Plucene document(s) associated to the file, assign
     # some attributes, so it can be easily recovered when searching
     foreach my $doc (@documents) {
       $doc->add(Plucene::Document::Field->Text("web",$web));
-      $doc->add(Plucene::Document::Field->Text("topic",$topic));
+      $doc->add(Plucene::Document::Field->Text("topic",$topicname));
       $doc->add(Plucene::Document::Field->Text("name",$name));
       $doc->add(Plucene::Document::Field->Text("author",$author));
       $doc->add(Plucene::Document::Field->Text("comment",$comment));
@@ -275,8 +288,8 @@ sub main() {
   undef $writer;
 
   $debug && print "Indexing complete.\n";
-  $logtime = TWiki::Func::formatTime( time(), '$rcs', 'servertime' ); 
-  print LOGFILE  "| $logtime | Indexing finished | | |\n"; 
+  $logtime = TWiki::Func::formatTime( time(), '$rcs', 'servertime' );
+  print LOGFILE  "| $logtime | Indexing finished | | |\n";
   close(LOGFILE);
 }
 
@@ -331,6 +344,4 @@ sub SplitTheTopicName {
     $finalstr = $finalstr. $str." ";
   }
   return  $finalstr;
-}	
-
-# EOF
+}

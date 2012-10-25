@@ -216,7 +216,11 @@ sub main
 
     $searcher->search_hc($plucquery, $hc);
     # @docs is now a list of Plucene::Document objects.
- 
+
+       ###For partial name search of topics
+      if($restopic =~ m/(\w+)/) { $restopic =~ s/$1 //; } ## Get hold of first part of the string...
+       $restopic =~ s/ //g;
+
     # first we need to build the hash for score
     my %topicScore = (); # keep only temporarily for sort
     foreach( @docs ) {
