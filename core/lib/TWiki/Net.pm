@@ -31,6 +31,8 @@ Object that brokers access to network resources.
 
 package TWiki::Net;
 
+our $TEST_SOCKET_HTTP = 0;
+
 use strict;
 use Assert;
 use Error qw( :try );
@@ -41,7 +43,7 @@ sub new {
     my $this = bless( { session => $session }, $class );
 
     $this->{mailHandler} = undef;
-    $this->{httpHandler} = undef;
+    $this->{httpHandlers} = [];
 
     return $this;
 }
@@ -61,67 +63,96 @@ sub finish {
     undef $this->{mailHandler};
     undef $this->{HELLO_HOST};
     undef $this->{MAIL_HOST};
-    undef $this->{httpHandler};
+    undef $this->{httpHandlers};
     undef $this->{session};
 }
 
 =pod
 
----+++ getExternalResource( $url, @headers ) -> $response
+---+++ ObjectMethod registerExternalHTTPHandler( \&fn )
 
-Get whatever is at the other end of a URL (using an HTTP GET request). Will
-only work for encrypted protocols such as =https= if the =LWP= CPAN module is
-installed.
+See TWikiFuncDotPm#RegisterExternalHTTPHandler
 
-Note that the =$url= may have an optional user and password, as specified by
-the relevant RFC. Any proxy set in =configure= is honored.
+=cut
 
-Optional headers may be supplied of form 'name1', 'value1', 'name2', 'value2'.
-Do not add a User-Agent header, it will be added.
-
-The =$response= is an object that is known to implement the following subset of
-the methods of =LWP::Response=. It may in fact be an =LWP::Response= object,
-but it may also not be if =LWP= is not available, so callers may only assume
-the following subset of methods is available:
-| =code()= |
-| =message()= |
-| =header($field)= |
-| =content()= |
-| =is_error()= |
-| =is_redirect()= |
-
-Note that if LWP is *not* available, this function:
-   1 can only really be trusted for HTTP/1.0 urls. If HTTP/1.1 or another
-     protocol is required, you are *strongly* recommended to =require LWP=.
-   1 Will not parse multipart content
-
-In the event of the server returning an error, then =is_error()= will return
-true, =code()= will return a valid HTTP status code
-as specified in RFC 2616 and RFC 2518, and =message()= will return the
-message that was received from
-the server. In the event of a client-side error (e.g. an unparseable URL)
-then =is_error()= will return true and =message()= will return an explanatory
-message. =code()= will return 400 (BAD REQUEST).
-
-Note: Callers can easily check the availability of other HTTP::Response methods
-as follows:
-
-<verbatim>
-my $response = TWiki::Func::getExternalResource($url);
-if (!$response->is_error() && $response->isa('HTTP::Response')) {
-    $text = $response->content();
-    # ... other methods of HTTP::Response may be called
-} else {
-    # ... only the methods listed above may be called
+sub registerExternalHTTPHandler {
+    my ($this, $function) = @_;
+    push @{$this->{httpHandlers}}, $function;
 }
-</verbatim>
+
+=pod
+
+---+++ ObjectMethod getExternalResource( $url, \@headers, \%params ) -> $response
+
+See TWikiFuncDotPm#GetExternalResource
 
 =cut
 
 sub getExternalResource {
-    my ( $this, $url, @headers ) = @_;
+    my ($this, $url, @options) = @_;
+    my ($headers, $params) = $this->_options(@options);
+    return $this->_requestHTTP(GET => $url, $headers, $params);
+}
 
+=pod
+
+---+++ ObjectMethod postExternalResource( $url, $content, \@headers, \%params ) -> $response
+
+See TWikiFuncDotPm#PostExternalResource
+
+=cut
+
+sub postExternalResource {
+    my ($this, $url, $content, @options) = @_;
+    my ($headers, $params) = $this->_options(@options);
+    return $this->_requestHTTP(POST => $url, $headers, $params, $content);
+}
+
+# =======================================
+sub _options {
+    my ($this, @options) = @_;
+    my ($headers, $params) = ([], {});
+
+    for my $opt (@options) {
+        if (ref $opt eq 'ARRAY') {
+            push @$headers, @$opt;
+        } elsif (ref $opt eq 'HASH') {
+            $params->{$_} = $opt->{$_} foreach keys %$opt;
+        } else {
+            $this->{session}->writeWarning("Unknown type to request external resource: ".
+                (ref($opt) || '(not ref)'));
+        }
+    }
+
+    return ($headers, $params);
+}
+
+# =======================================
+sub _requestHTTP {
+    my ( $this, $method, $url, $headers, $params, $content ) = @_;
+
+    # Run registered HTTP handlers
+    for my $handler ( @{$this->{httpHandlers}} ) {
+        my @moreOptions = $handler->( $this->{session}, $url );
+        my ($moreHeaders, $moreParams) = $this->_options(@moreOptions);
+
+        # Append all the additional headers
+        push @$headers, @$moreHeaders;
+
+        # Import all the additional params
+        foreach (keys %$moreParams) {
+            # but do not override params set by the caller of getExternalResource
+            unless (exists $params->{$_}) {
+                $params->{$_} = $moreParams->{$_};
+            }
+        }
+    }
+
+    $method = $params->{method} if defined $params->{method};
+
+    # Detect protocol
     my $protocol;
+
     if( $url =~ m!^([a-z]+):! ) {
         $protocol = $1;
     } else {
@@ -129,9 +160,12 @@ sub getExternalResource {
         return new TWiki::Net::HTTPResponse( "Bad URL: $url" );
     }
 
-    eval "use LWP";
-    unless( $@ ) {
-       return _GETUsingLWP( $this, $url, @headers );
+    # Attempt LWP
+    unless ($TEST_SOCKET_HTTP) {
+        eval "use LWP";
+        unless( $@ ) {
+            return $this->_requestUsingLWP( $method, $url, $headers, $params, $content );
+        }
     }
 
     # Fallback mechanism
@@ -157,7 +191,7 @@ sub getExternalResource {
         import Socket qw(:all);
 
         $url = '/' unless( $url );
-        my $req = "GET $url HTTP/1.0\r\n";
+        my $req = "$method $url HTTP/1.0\r\n";
 
         $req .= "Host: $host:$port\r\n";
         if( $user ) {
@@ -166,21 +200,29 @@ sub getExternalResource {
             require MIME::Base64;
             import MIME::Base64 ();
             my $base64 = encode_base64( "$user:$pass", "\r\n" );
-            $req .= "Authorization: Basic $base64";
+            $req .= "Authorization: Basic $base64\r\n";
         }
 
         my $useproxy = 1;
         if( defined( $TWiki::cfg{PROXY}{SkipProxyForDomains} ) ) { 
             my @skipdomains = split( /[\,\s]+/,  $TWiki::cfg{PROXY}{SkipProxyForDomains} );
             foreach my $domain ( @skipdomains ) {
-                if( $url =~ /$domain$/ ) {
-                    $useproxy = 0;
+                next if $domain =~ /^\s*$/;
+                if ($domain =~ /^\./) {
+                    $domain = quotemeta($domain);
+                    if ($host =~ /$domain$/i) {
+                        $useproxy = 0;
+                    }
+                } else {
+                    $domain = quotemeta($domain);
+                    if ($host =~ /(^|\.)$domain$/i) {
+                        $useproxy = 0;
+                    }
                 }
             }
-       }
+        }
  
         if ($useproxy) {
-
             # SMELL: Reference to TWiki variables used for compatibility
             my ($proxyHost, $proxyPort);
             if ($this->{session} && $this->{session}->{prefs}) {
@@ -191,7 +233,7 @@ sub getExternalResource {
             $proxyHost ||= $TWiki::cfg{PROXY}{HOST};
             $proxyPort ||= $TWiki::cfg{PROXY}{PORT};
             if( $proxyHost && $proxyPort ) {
-                $req = "GET http://$host:$port$url HTTP/1.0\r\n";
+                $req =~ s{^.*?\r\n}{$method http://$host:$port$url HTTP/1.0\r\n};
                 $host = $proxyHost;
                 $port = $proxyPort;
             }
@@ -201,35 +243,57 @@ sub getExternalResource {
         my $revstr=$1;
 
         $req .= 'User-Agent: TWiki::Net/'.$revstr."\r\n";
-        if( @headers ) {
-            while( my $key = shift @headers ) {
-                my $val = shift( @headers );
+        if( $headers ) {
+            while( my $key = shift @$headers ) {
+                my $val = shift( @$headers );
                 $req .= "$key: $val\r\n" if( defined $val );
             }
         }
-        $req .= "\r\n\r\n";
 
-        my ( $iaddr, $paddr, $proto );
-        $iaddr = inet_aton( $host );
-        die "Could not find IP address for $host" unless $iaddr;
+        if (defined $content && $content ne '') {
+            $req .= 'Content-Length: '.length($content)."\r\n";
+        }
 
-        $paddr = sockaddr_in( $port, $iaddr );
-        $proto = getprotobyname( 'tcp' );
-        unless( socket( *SOCK, &PF_INET, &SOCK_STREAM, $proto ) ) {
-            die "socket failed: $!";
+        $req .= "\r\n"; # End of HTTP Header
+
+        if (defined $content && $content ne '') {
+            $req .= $content;
         }
-        unless( connect( *SOCK, $paddr ) ) {
-            die "connect failed: $!";
-        }
-        select SOCK; $| = 1;
-        local $/ = undef;
-        print SOCK $req;
+
         my $result = '';
-        $result = <SOCK>;
-        unless( close( SOCK ) ) {
-            die "close faied: $!";
-        }
+        eval {
+            local $SIG{ALRM} = sub {die 'Timed out'};
+            alarm $params->{timeout} if $params->{timeout};
+
+            my ( $iaddr, $paddr, $proto );
+            $iaddr = inet_aton( $host );
+            die "Could not find IP address for $host" unless $iaddr;
+
+            $paddr = sockaddr_in( $port, $iaddr );
+            $proto = getprotobyname( 'tcp' );
+            unless( socket( *SOCK, &PF_INET, &SOCK_STREAM, $proto ) ) {
+                die "socket failed: $!";
+            }
+            unless( connect( *SOCK, $paddr ) ) {
+                die "connect failed: $!";
+            }
+            select SOCK; $| = 1;
+            local $/ = undef;
+            print SOCK $req;
+            $result = <SOCK>;
+            unless( close( SOCK ) ) {
+                die "close faied: $!";
+            }
+
+            alarm 0 if $params->{timeout};
+        };
+
+        alarm 0 if $params->{timeout};
         select STDOUT;
+
+        if ($@) {
+            $response = new TWiki::Net::HTTPResponse( $@ );
+        }
 
         # No LWP, but may have HTTP::Response which would make life easier
         # (it has a much more thorough parser)
@@ -249,42 +313,36 @@ sub getExternalResource {
 }
 
 # =======================================
-sub _GETUsingLWP {
-    my( $this, $url, @headers ) = @_;
-    my ($ua, $request) = $this->getLWPRequest( GET => $url, @headers );
-    my $response = $ua->request( $request );
-    return $response;
-}
-
-=pod
-
----+++ ObjectMethod getLWPRequest( $method, $url [, @extraHeaders] ) -> ( $ua, $request )
-
-Get a pair of =LWP::UserAgent= and =HTTP::Request= objects (=$ua= and
-=$request=), which are to make a HTTP request to an external resource with
-=$method= and =$url=.
-The returned objects are set up with any TWiki configurations and possibly
-hooked with =$cfg{HTTPRequestHandler}= class.
-
-=cut
-
-sub getLWPRequest {
-    my ($this, $method, $url, @headers) = @_;
-
-    unless (defined $this->{httpHandler}) {
-        $this->_installHTTPHandler();
-    }
+sub _requestUsingLWP {
+    my( $this, $method, $url, $headers, $params, $content ) = @_;
+    $headers ||= [];
+    $params ||= {};
 
     my ( $user, $pass );
     if( $url =~ s!([^/\@:]+)(?::([^/\@:]+))?@!! ) {
         ( $user, $pass ) = ( $1, $2 );
     }
 
+    my $initParams = {map {
+        $_ => $params->{$_}
+    } grep {exists $params->{$_}} qw(
+        cookie_jar load_address max_redirect max_size
+        parse_head requests_redirectable ssl_opts timeout
+    )};
+
     require TWiki::Net::UserCredAgent;
-    my $ua = new TWiki::Net::UserCredAgent( $user, $pass, $url );
+    my $ua = new TWiki::Net::UserCredAgent( $user, $pass, $url, $initParams );
+
+    $ua->credentials(@{$params->{credentials}}) if defined $params->{credentials};
+
+    if (defined $params->{handlers}) {
+        for my $phase (keys %{$params->{handlers}}) {
+            $ua->add_handler($phase => $params->{handlers}{$phase});
+        }
+    }
 
     require HTTP::Request;
-    my $request = HTTP::Request->new( $method => $url );
+    my $request = HTTP::Request->new( $method => $url, $headers, $content );
 
     if( $TWiki::cfg{PROXY}{Username} && $TWiki::cfg{PROXY}{Password} ) {
         $request->proxy_authorization_basic( $TWiki::cfg{PROXY}{Username}, $TWiki::cfg{PROXY}{Password} );
@@ -292,32 +350,9 @@ sub getLWPRequest {
 
     '$Rev$'=~/([0-9]+)/;
     my $revstr=$1;
-    my @allHeaders = ( 'User-Agent' => 'TWiki::Net/'.$revstr." libwww-perl/$LWP::VERSION" );
-    push( @allHeaders, @headers ) if( @headers );
-    $request->header( @allHeaders );
+    $request->header( 'User-Agent' => 'TWiki::Net/'.$revstr." libwww-perl/$LWP::VERSION" );
 
-    if (my $handler = $this->{httpHandler}) {
-        if ($handler->can('handle')) {
-            $handler->handle($ua, $request);
-        }
-    }
-
-    return ($ua, $request);
-}
-
-# pick a default http handler
-# =======================================
-sub _installHTTPHandler {
-    my $this = shift;
-
-    if (my $class = $TWiki::cfg{HTTPRequestHandler}) {
-        eval "require $class";
-        die $@ if $@;
-        my $handler = $class->new($this);
-        $this->{httpHandler} = $handler;
-    } else {
-        $this->{httpHandler} = 0;
-    }
+    return $ua->request($request);
 }
 
 # pick a default mail handler

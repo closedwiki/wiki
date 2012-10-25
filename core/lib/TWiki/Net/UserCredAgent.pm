@@ -23,15 +23,16 @@ package TWiki::Net::UserCredAgent;
 use base 'LWP::UserAgent';
 
 sub new {
-    my ($class, $user, $pass, $url) = @_;
-    my $this = $class->SUPER::new();
+    my ($class, $user, $pass, $url, $params) = @_;
+    $params ||= {};
+    my $this = $class->SUPER::new(ref $params eq 'HASH' ? %$params : @$params);
     $this->{user} = $user;
     $this->{pass} = $pass;
     
     if (defined ($TWiki::cfg{PROXY}{SkipProxyForDomains})) {
         my @skipdomains =  split( /[\,\s]+/, $TWiki::cfg{PROXY}{SkipProxyForDomains});
         $this->no_proxy(@skipdomains);
-     }
+    }
 
     if ($TWiki::cfg{PROXY}{HOST}) {
         my $proxyURL = $TWiki::cfg{PROXY}{HOST};

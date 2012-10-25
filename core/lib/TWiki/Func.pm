@@ -195,7 +195,7 @@ sub getPubUrlPath {
 =pod
 
 #GetExternalResource
----+++ getExternalResource( $url, @headers ) -> $response
+---+++ getExternalResource( $url, \@headers, \%params ) -> $response
 
 Get whatever is at the other end of a URL (using an HTTP GET request). Will
 only work for encrypted protocols such as =https= if the =LWP= CPAN module is
@@ -204,11 +204,37 @@ installed.
 Note that the =$url= may have an optional user and password, as specified by
 the relevant RFC. Any proxy set in =configure= is honored.
 
-Optional headers may be supplied of form 'name1', 'value1', 'name2', 'value2'.
-Do not add a User-Agent header, it will be added.
+Optional parameters may be supplied:
+   * =\@headers= (an array ref): Additional HTTP headers of form 'name1',
+     'value1', 'name2', 'value2'. Do not add a User-Agent header, it will be
+     added.
+   * =\%params= (a hash ref): Additional options.
+
+Below is the list of available =%params=. See CPAN:LWP::UserAgent for more
+details.
+| *Name* | *Usage* |
+| =cookie_jar= | =&#61;&gt; $cookies= |
+| =credentials= | =&#61;&gt; [$netloc, $realm, $uname, $pass]= |
+| =handlers= | =&#61;&gt; {$phase &#61;&gt; \&cb, ...}= \
+  Note: =%matchspec= is not available. |
+| =local_address= | =&#61;&gt; $address= |
+| =max_redirect= | =&#61;&gt; $n= |
+| =max_size= | =&#61;&gt; $bytes= |
+| =method= * | =&#61;&gt; $method= E.g. 'HEAD' |
+| =parse_head= | =&#61;&gt; $boolean= |
+| =requests_redirectable= | =&#61;&gt; \@requests= |
+| =ssl_opts= | =&#61;&gt; {$key &#61;&gt; $value, ...}= |
+| =timeout= * | =&#61;&gt; $secs= |
+The parameters with * do not require =LWP=.
+
+Example:
+<verbatim>
+my $response = getExternalResource($url,
+    ['Cache-Control' => 'max-age=0'], {timeout => 10});
+</verbatim>
 
 The =$response= is an object that is known to implement the following subset of
-the methods of =LWP::Response=. It may in fact be an =LWP::Response= object,
+the methods of =HTTP::Response=. It may in fact be an =HTTP::Response= object,
 but it may also not be if =LWP= is not available, so callers may only assume
 the following subset of methods is available:
 | =code()= |
@@ -246,59 +272,41 @@ if (!$response->is_error() && $response->isa('HTTP::Response')) {
 
 *Since:* TWiki::Plugins::VERSION 1.2
 
+Note: the optional headers and parameters were added in TWiki::Plugins::VERSION
+1.5
+
 =cut
 
 sub getExternalResource {
-    my( $url, @headers ) = @_;
+    my( $url, @options ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     ASSERT(defined $url) if DEBUG;
 
-    return $TWiki::Plugins::SESSION->net->getExternalResource( $url, @headers );
+    return $TWiki::Plugins::SESSION->net->getExternalResource( $url, @options );
 }
 
 =pod
 
-#GetLWPRequest
----+++ getLWPRequest( $method, $url [, @extraHeaders] ) -> ( $ua, $request )
+#PostExternalResource
+---+++ postExternalResource( $url, $text, \@headers, \%params ) -> $response
 
-Get a pair of =LWP::UserAgent= and =HTTP::Request= objects (=$ua= and
-=$request=), which are to make a HTTP request to an external resource with
-=$method= and =$url=.
-The returned objects are set up with any TWiki configurations and possibly
-hooked with =$cfg{HTTPRequestHandler}= class.
+This method is essentially the same as =getExternalResource()= except that it uses
+an HTTP POST method and that the additional =$text= parameter is required.
 
-This method must be called in a list context, so as to receive both =$ua= and
-=$request=. (Otherwise, it will die.)
+The =$text= is sent to the server as the body content of the HTTP request.
 
-For example,
-<verbatim>
-my ($ua, $request) = TWiki::Func::getLWPRequest(GET => 'http://...');
-</verbatim>
-
-The =@extraHeaders= will be passed on to the =$request= object, and should be
-in the format of name value pairs: 'name1', 'value1', 'name2', 'value2', ...
-Do not add the 'User-Agent' header, as it will be added automatically.
-
-Once the =$ua= and =$request= are retrieved, you can invoke the request as below:
-<verbatim>
-my $response = $ua->request($request);
-</verbatim>
+See =getExternalResource()= for more details.
 
 *Since:* TWiki::Plugins::VERSION 1.5
 
 =cut
 
-sub getLWPRequest {
-    my( $method, $url, @headers ) = @_;
+sub postExternalResource {
+    my( $url, $text, @options ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     ASSERT(defined $url) if DEBUG;
 
-    unless (wantarray) {
-        die "You must call this method to receive both \$ua and \$request - ".
-            "E.g. my (\$ua, \$request) = TWiki::Func::getLWPRequest();";
-    };
-
-    return ( $TWiki::Plugins::SESSION->net->getLWPRequest( $method, $url, @headers ) );
+    return $TWiki::Plugins::SESSION->net->postExternalResource( $url, $text, @options );
 }
 
 =pod
@@ -2558,6 +2566,44 @@ sub registerRESTHandler {
                                    return $result;
                                }
                              );
+}
+
+=pod
+
+#RegisterExternalHTTPHandler
+---+++ registerRESTHandler( \&fn )
+
+Should only be called from initPlugin.
+
+Adds a function to modify all the HTTP requests to any external resources.
+   * =\&fn= - Reference to the function.
+
+*Since:* TWiki::Plugins::VERSION 1.5
+
+The handler function must be of the form:
+<verbatim>
+sub handler(\%session, $url, \%options)
+</verbatim>
+where:
+   * =\%session= - a reference to the TWiki session object (may be ignored)
+   * =$url= - a URL being requested
+   * =\%options= - a reference to the request options
+
+=cut
+
+sub registerExternalHTTPHandler {
+    my($function) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
+    $TWiki::Plugins::SESSION->net->registerExternalHTTPHandler(
+        sub {
+            my $record = $TWiki::Plugins::SESSION;
+            $TWiki::Plugins::SESSION = $_[0];
+            my $result = &$function( @_ );
+            $TWiki::Plugins::SESSION = $record;
+            return $result;
+        },
+    );
 }
 
 =pod
