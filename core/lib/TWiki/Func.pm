@@ -2774,20 +2774,22 @@ sub getContentMode {
 #GetMasterWebScriptUrl
 ---+++ getMasterWebScriptUrl( $web, $topic, $script ) -> $url
 
-This is equivalent of %<nop>MASTERWEBSCRIPTURL{script}%.
+This is equivalent to getScriptUrl() about the master web.
 It returns the URL of the specified script on the master site of the $web
 processing the $topic.
+If $topic is undefined, it returns the master web's URL.
 
 =cut
 
 sub getMasterWebScriptUrl {
-    my $web = shift;
-    my $topic = shift;
-    my $script = shift;
+    my ($web, $topic, $script) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    return $TWiki::Plugins::SESSION->MASTERWEBSCRIPTURL({_DEFAULT => $script},
-                                                        $topic, $web );
+    my $session = $TWiki::Plugins::SESSION;
+    $web ||= $session->{webName}; # $web must be defined
+    my $url = $session->MASTERWEBSCRIPTURL({_DEFAULT => $script}, undef, $web );
+    $url .= '/' . $topic if ( defined($topic) );
+    return $url;
 }
 
 =pod
