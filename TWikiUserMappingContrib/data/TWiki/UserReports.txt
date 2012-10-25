@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350946622" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351129287" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -13,6 +13,8 @@ Show a simple list of registered users. The output is a comma-space delimited so
    * Section "user_list": Show a list of users as comma-space delimited list of !WikiWords.
       * Parameter =search=: Apply filter by searching all form fields, but not the main topic text. Optional; all users are returned if missing.
       * Parameter =limit=: Limits the number of users returned. Optional; all users are returned if missing.
+      * Parameter =order=: Sort the result by the topic name, topic creation date, last modified date, last editor, or named field of TWikiForms. For details see =order= parameter of [[VarSEARCH][SEARCH]].
+      * Parameter =reverse=: Reverse the direction of the search result
 
 *Usage example:*
 <pre>
