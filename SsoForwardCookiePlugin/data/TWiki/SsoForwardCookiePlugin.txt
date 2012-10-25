@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351168785" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351170741" format="1.1" version="$Rev$"}%
 ---+!! !SsoForwardCookiePlugin
 <!--
 One line description, required for extensions repository catalog.
@@ -58,7 +58,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
         | *File:* | *Description:* |
         | ==data/TWiki/SsoForwardCookiePlugin.txt== | Plugin topic |
         | ==lib/TWiki/Plugins/SsoForwardCookiePlugin.pm== | Plugin Perl module |
-        | ==lib/TWiki/Plugins/SsoForwardCookiePlugin/HTTPRequestHandler.pm== | Perl module |
       * Set the ownership of the extracted directories and files to the webserver user.
       * Install the dependencies.
 
