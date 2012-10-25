@@ -158,7 +158,7 @@ sub main() {
 
       # processing the topic meta info
       my ( $date, $author, $rev ) = TWiki::Func::getRevisionInfo( $web, $topic );
-      $date = TWiki::Func::formatTime( $date || 0 );
+      $date = TWiki::Func::formatTime( $date );
       # the author can be used as a search criteria
       $doc->add(Plucene::Document::Field->Text("author","$author"));
       # version and date are stored as meta data in the doc
@@ -202,7 +202,7 @@ sub main() {
           if (($indexextensions{".$extension"})&&(!$skipattachments{"$web.$topic.$name"})) {
             $author = $attachment->{'user'};
             $rev = $attachment->{'version'};
-            $date = TWiki::Func::formatTime( $attachment->{'date'} || 0 );
+            $date = TWiki::Func::formatTime( $attachment->{'date'} );
             my $comment = $attachment->{'comment'};
             push( @attachmentList, [ $web, $topic, $name, $author, $comment, $rev, $date ] );
           } else {

@@ -20,6 +20,7 @@
 BEGIN { unshift @INC, '.'; require '../../bin/setlib.cfg' }
 
 use TWiki;
+use TWiki::Func;
 
 use Time::Local;
 
@@ -94,36 +95,34 @@ sub main()
 
     $debug && print "Checking $web ...";
 
-    # NOTE violates store encapsulation, possible compatibility issue with future releases
-    my $changes= $TWiki::Plugins::SESSION->{store}->readMetaData( $web, 'changes' );
-    my $prevLastmodify = $TWiki::Plugins::SESSION->{store}->readMetaData($web,'plucupdate') || "0";
+    # Get the last time we indexed this web
+    my $lastmodifyDir = TWiki::Func::getWorkArea("Plucene");
+    my $prevLastmodify = 0;
+    if ( open(LAST, "<$lastmodifyDir/$web") ) {
+      my $prevLastmodifyTainted = <LAST>;
+      close LAST;
+      if( $prevLastmodifyTainted =~ /^(\d+)$/ ) {
+        $prevLastmodify = $1;
+      }
+    }
     my $currLastmodify = "";
 
     # do not process the same topic twice
     my %exclude;
 
+    my $changes = TWiki::Func::eachChangeSince( $web, $prevLastmodify );
     # process the web changes
-    foreach( reverse split( /\n/, $changes ) ) {
-      # Parse lines from .changes:
-      # <topic>	<user>		<change time>	<revision>
-      my ($topicName, $userName, $changeTime, $revision) = split( /\t/);
+    $time = &TWiki::Func::formatTime( $prevLastmodify );
+    if( $changes->hasNext() ) {
+      # We have some changes
+      $debug && print "-> changed topics since $time:\n";
+      while( $changes->hasNext() ) {
+        my $change = $changes->next();
+        my ($topicName, $userName, $changeTime, $revision) = @{change}{qw/
+       topic user time revision/};
 
-      if( ( ! %exclude ) || ( ! $exclude{ $topicName } ) ) {
-        if( ! $currLastmodify ) {
-          # newest entry
-          $time = &TWiki::Func::formatTime( $prevLastmodify );
-          $currLastmodify = $changeTime;
-          if( $prevLastmodify eq $changeTime ) {
-            # newest entry is same as at time of previous update
-            $debug && print "-> no topics new/changed since $time\n";
-            last;
-          }
-          $debug && print "-> changed topics since $time:\n";
-        }
-        if( $prevLastmodify >= $changeTime ) {
-          # found item of last update
-          last;
-        }
+        $currLastmodify = $changeTime;
+        next if defined $exclude{ $topicName };
         $exclude{ $topicName } = "1";
         $debug && print "   * $topicName\n";
         push( @topicsToUpdate, [ $web, $topicName ] );
@@ -133,11 +132,18 @@ sub main()
           push( @topicsToUpdate, [ $web, "WebHome" ] );
         }
       }
-    }
 
-    # NOTE violates store encapsulation, possible compatibility issue with future releases
-    $TWiki::Plugins::SESSION->{store}->saveMetaData( $web, 'plucupdate', $currLastmodify );
-    $debug && print "$web .plucupdate saved\n";
+      if ( open(LAST, ">$lastmodifyDir/$web") ) {
+        print LAST $currLastmodify;
+        close LAST;
+        $debug && print "$lastmodifyDir/$web saved\n";
+      } else {
+        warn "Couldn't update $lastmodifyDir/$web: $!";
+      }
+    } else { # No new changes
+      $debug && print "-> no topics new/changed since $time\n";
+      $currLastmodify = $time;
+    }
   }
 
   if (@topicsToUpdate > 0) {
