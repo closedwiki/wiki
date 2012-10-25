@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350005795" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351151940" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page
@@ -51,9 +51,9 @@ In edit mode, the edit button is replaced by Save and Cancel buttons, with their
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
 |  Copyright: | &copy; 2005 TWiki:Main.ThomasWeigert, %BR% &copy; 2005-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-10-24 |
+|  Plugin Version: | 2012-10-25 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-10-24: | TWikibug:Item7009: "Edit Preferences" button is to fail if the user does not have change permission -- TWiki:Main.HideyoImazu |
+|  2012-10-25: | TWikibug:Item7009: "Edit Preferences" button is to fail if the user does not have change permission -- TWiki:Main.HideyoImazu |
 |  2012-10-24: | TWikibug:Item7008: Radio buttons were not displayed inline on webkit browsers -- TWiki:Main.HideyoImazu |
 |  2012-10-12: | TWikibug:Item6969: Various edge cases were not handled properly. All of those problems were fixed and the unit test enhanced accordingly. -- TWiki:Main.HideyoImazu |
 |  2012-10-05: | TWikibug:Item6957: radio buttons, checkboxes, and labels are now displayed on the same line as Set VAR =. All unit tests were failing due to test code problems. All of them were fixed. -- TWiki:Main.HideyoImazu |

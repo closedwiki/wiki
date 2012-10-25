@@ -30,7 +30,7 @@ require TWiki::Plugins; # For the API version
 use Error qw(:try);
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-10-24';
+our $RELEASE = '2012-10-25';
 
 my @shelter;
 my $MARKER = "\007";
@@ -83,17 +83,17 @@ sub beforeCommonTagsHandler {
 
     if ( $action eq 'edit' ) {
         # Item7009
-        my $session = $TWiki::Plugins::SESSION;
-        my $wikiName = TWiki::Func::getWikiName($session->{user});
-        unless ( TWiki::Func::checkAccessPermission('CHANGE', $wikiName, undef,
-                                                    $topic, $web )
+        unless ( TWiki::Func::checkAccessPermission('CHANGE',
+                     TWiki::Func::getWikiName(), undef, $topic, $web )
         ) {
             throw TWiki::OopsException(
                 'accessdenied',
                 def => 'topic_access',
                 web => $web,
                 topic => $topic,
-                params => [ 'CHANGE', $session->security->getReason() ]);
+                params => [ 'CHANGE',
+                            $TWiki::Plugins::SESSION->security->getReason() ]
+            );
         }
 
         TWiki::Func::setTopicEditLock( $web, $topic, 1 );
