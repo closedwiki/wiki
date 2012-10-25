@@ -1,4 +1,47 @@
-%META:TOPICINFO{author="TWikiGuest" date="1142926767" format="1.1" version="1.5"}%
+head	1.5;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2006.03.21.07.39.27;	author TWikiGuest;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2006.03.20.08.54.04;	author TWikiGuest;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.03.02.11.35.28;	author TWikiGuest;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.03.02.09.06.08;	author TWikiGuest;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2004.11.18.10.27.00;	author jmv;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.5
+log
+@none
+@
+text
+@%META:TOPICINFO{author="TWikiGuest" date="1142926767" format="1.1" version="1.5"}%
 ---++ Search form
 <form action="%SCRIPTURLPATH%/plucsearch%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%/">
    <input type="text" name="search" size="32" /> <input type="submit" value="Search text" />
@@ -55,3 +98,92 @@ __See also:__ TWiki.SearchEnginePluceneAddOn
 
 -- TWiki:Main/JoanMVigo - 21 Mar 2006
 
+@
+
+
+1.4
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="TWikiGuest" date="1142844844" format="1.1" version="1.4"}%
+d54 1
+a54 1
+__See also:__ TWiki:Plugins/SearchEnginePluceneAddOn
+d56 1
+a56 1
+-- Main.JoanMVigo - 20 Mar 2006
+@
+
+
+1.3
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="TWikiGuest" date="1141299328" format="1.1" version="1.3"}%
+d54 3
+a56 1
+__See also:__ TWiki:Plugins/PluceneSearchEngineAddOn
+a57 1
+-- Main.JoanMVigo - 02 Mar 2006
+@
+
+
+1.2
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="TWikiGuest" date="1141290368" format="1.1" version="1.2"}%
+d4 1
+a4 2
+   <input type="text" name="search" size="32" /> <input type="submit" value="Search text" /><hr/>
+Note that you can redefine this form to suit your current needs, removing the options you don't want<hr/>
+d16 19
+a34 1
+---+++ Query syntax
+a56 1
+
+@
+
+
+1.1
+log
+@none
+@
+text
+@d1 40
+a40 25
+%META:TOPICINFO{author="jmv" date="1100773620" format="1.0" version="1.1"}%
+---++ Search form
+<form action="%SCRIPTURLPATH%/plucsearch%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%/">
+	<input type="text" name="search" size="32" />
+	<input type="submit" value="Search text" />
+</form>
+
+---+++ Query syntax
+	* you can use *and*, *or*
+	* if you want to search for some word, you should use the prefix ==text:==
+	* you can search for a sentence using quotes and prefixing with ==text:== as above
+	* if you want to search using some meta data, you should use the prefix ==field:== where _field_ is the meta data name
+	* if you want to search using some form field, you should use the prefix ==field:== where _field_ is the form's field name
+
+---+++ Query examples (just type it in your ==PluceneSearch== site topic)
+	* text:plucene
+	* text:"search engine"
+	* author:JoanMVigo
+	* form:WebFormName
+
+__Notes:__ current version of Plucene does not support wildcards.
+
+__See also:__ TWiki:Plugins/PluceneSearchEngineAddOn
+
+-- Main.JoanMVigo - 18 Nov 2004
+@

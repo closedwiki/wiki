@@ -1,8 +1,8 @@
 #!/usr/bin/perl -wT
 #
-# Copyright (C) 2004 Joan M Vigo, imnaoj@yahoo.es
+# Copyright (C) 2006 Joan M Vigo, imnaoj@yahoo.es
 #
-# For licensing info read license.txt file in the TWiki root.
+# For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -17,9 +17,8 @@
 # Set library paths in @INC, at compile time
 BEGIN { unshift @INC, '.'; require 'setlib.cfg'; }
 
-use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use TWiki;
+use TWiki::Func;
 use Plucene::QueryParser;
 use Plucene::Analysis::SimpleAnalyzer;
 use Plucene::Search::HitCollector;
@@ -30,33 +29,48 @@ use Plucene::Index::Writer;
 use Plucene::Analysis::SimpleAnalyzer;
 use Plucene::Document::DateSerializer;
 
-use strict;
+$Plucene::QueryParser::DefaultOperator='AND';
 
-my $idxpath = "";
 
 &main();
 
 sub main
 {
-    my $query = new CGI;
-    
-    my $thePathInfo = $query->path_info(); 
-    my $theRemoteUser = $query->remote_user();
-    my $theTopic = $query->param( 'topic' );
-    my $theUrl = $query->url;
+    # to call TWiki::Func subroutines, we need this
+    $TWiki::Plugins::SESSION = new TWiki();
 
-    my( $topic, $webName ) = 
-	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
-    
-    if( ! &TWiki::Store::webExists( $webName ) ) {
-        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoweb" );
-        TWiki::redirect( $query, $url );
+    # just for debug
+    my $debug = TWiki::Func::getPreferencesValue( "PLUCENEDEBUG" ) || 0;
+
+    my $mainWebname = TWiki::Func::getMainWebname();
+
+    # write log entry - should be used throughout this script
+    $debug && TWiki::Func::writeDebug( "plucsearch starting..." );
+
+    # TWiki::Func::getCgiQuery returns null, why?
+    # as we need the query-string to fetch the search and maybe other URL params,
+    # the solution is ...
+    my $query = new CGI;
+
+    # getting the web, the topic and the user from the SESSION object
+    my $webName = $TWiki::Plugins::SESSION->{webName};
+    my $topicName = $TWiki::Plugins::SESSION->{topicName};
+    my $remoteUser = $TWiki::Plugins::SESSION->{user}->{login};
+
+    # just for oops redirects
+    my $url = "";
+
+    # the current web is ok?
+    if( ! TWiki::Func::webExists( $webName ) ) {
+        $url = TWiki::Func::getOopsUrl( $webName, $topicName, "oopsnoweb" );
+        TWiki::Func::redirectCgiQuery( $query, $url );
         return;
     }
 
-    &TWiki::Prefs::initializePrefs( $webName );
-    $idxpath = &TWiki::Prefs::getPreferencesValue( "PLUCENEINDEXPATH" );
+    # get the plucene index path
+    my $idxpath = TWiki::Func::getPreferencesValue( "PLUCENEINDEXPATH" );
 
+    # The following lines are just 'reused' from the search script
     # Note that mod_perl/cgi appears to use ';' as separator, whereas plain cgi uses '&'
     my $websStr       = join ' ',
                         grep { s/^web=(.*)$/$1/ }
@@ -66,120 +80,120 @@ sub main
     $websStr =~ tr/+/ /;       # pluses become spaces
     $websStr =~ s/%([0-9a-fA-F]{2})/pack("c",hex($1))/ge;  # %20 becomes space
 
+    # getting some params - all params should be documented in PluceneSearch topic
     my $search        = $query->param( "search" ) || "";
-    my $scope         = $query->param( "scope" )  || "";
-    my $order         = $query->param( "order" )  || "";
-    my $revSort       = $query->param( "reverse" )  || "";
-    my $caseSensitive = $query->param( "casesensitive" ) || "";
-    my $regex         = $query->param( "regex" )  || "";
     my $limit         = $query->param( "limit" )  || "";
     my $nosummary     = $query->param( "nosummary" )  || "";
-    my $nosearch      = $query->param( "nosearch" )  || "";
     my $noheader      = $query->param( "noheader" )  || "";
     my $nototal       = $query->param( "nototal" ) || "";
-    my $bookView      = $query->param( "bookview" )  || ""; # PTh 20 Jul 2000
-    my $renameView    = $query->param( "renameview" )  || "";
     my $showlock      = $query->param( "showlock" ) || "";
-    my $noempty       = $query->param( "noempty" ) || "";
-    my $attrTemplate  = $query->param( "template" ) || "";  # undocumented
-    my $attrHeader    = $query->param( "header" ) || "";
-    my $attrFormat    = $query->param( "format" ) || "";
 
-    &TWiki::writeHeader( $query );
-    searchWeb( "0",
-        $websStr, $search, $scope, $order, $regex,
-        $limit, $revSort, $caseSensitive, $nosummary,
-        $nosearch, $noheader, $nototal, $bookView, $renameView,
-        $showlock, $noempty, $attrTemplate, $attrHeader, $attrFormat
-    );
-}
+    # let's start ...
+    TWiki::Func::writeHeader( $query );
 
-sub searchWeb
-{
-    my ( $doInline, $theWebName, $theSearchVal, $theScope, $theOrder,
-         $theRegex, $theLimit, $revSort, $caseSensitive, $noSummary,
-         $noSearch, $noHeader, $noTotal, $doBookView, $doRenameView,
-         $doShowLock, $noEmpty, $theTemplate, $theHeader, $theFormat,
-         @junk ) = @_;
-
-    my $originalSearch = $theSearchVal;
-
-    my $searchResult = ""; 
-
+    # some vars
+    my $originalSearch = $search;
     my $tempVal = "";
 
-    my $topic = $TWiki::mainTopicname;
+    # the topic generated by this script is
+    my $topic = "PluceneSearch";
 
-    if ($theLimit =~ /(^\d+$)/o) { # only digits, all else is the same as
-        $theLimit = $1;            # an empty string.  "+10" won't work.
+    # again, 'reused' from the search script
+    if ($limit =~ /(^\d+$)/o) { # only digits, all else is the same as
+        $limit = $1;            # an empty string.  "+10" won't work.
     } else {
-        $theLimit = 0;             # change "all" to 0, then to big number
+        $limit = 0;             # change "all" to 0, then to big number
     }
-    if (! $theLimit ) {            # PTh 03 Nov 2000:
-        $theLimit = 32000;         # Big number, needed for performance improvements
+    if (! $limit ) {            # PTh 03 Nov 2000:
+        $limit = 32000;         # Big number, needed for performance improvements
     }
+
+    # usersearch will be printed out
+    my $usersearch = $search;
+
+    # Google like search, example: soap +wsdl +"web service" -shampoo
+    $search =~ s/[\+\-]\s+//go;      # remove spaces between +/- and text: - shampoo => -shampoo
+    $search =~ s/\+/ and /go;      # substitute + for and
+    $search =~ s/\-/ and not /go; # substitute - for and not
+    $search =~ s/^\sand\s//go;       # if new search starts with and, it should be removed
 
     # A value of 'all' or 'on' by itself gets all webs,
     # otherwise ignored (unless there is a web called "All".)
-    my $searchAllFlag = ( $theWebName =~ /(^|[\,\s])(all|on)([\,\s]|$)/i );
+    my $searchAllFlag = ( $websStr =~ /(^|[\,\s])(all|on)([\,\s]|$)/i );
 
-    my $tmpl = &TWiki::Store::readTemplate( "plucsearch" );
+    # ok, if we have web parameters, just make them part of the Plucene query
+    # i.e. 'search=x&web=TWiki&web=Main', then query becomes 'x and (web:TWiki web:Main)'
+    if ((! $searchAllFlag ) && ($websStr)) {
+      my $searchStr = join ' web:',
+                 split(/[ ]+/, $websStr);
+      $search = "$search and (web:$searchStr)";
+    }
+
+    # load the template
+    my $tmpl = TWiki::Func::readTemplate( "plucsearch" );
     $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
 
+    # split the template into sections
     my( $tmplHead, $tmplSearch,
         $tmplTable, $tmplNumber, $tmplTail ) = split( /%SPLIT%/, $tmpl );
-    $tmplHead   = &TWiki::handleCommonTags( $tmplHead, $topic );
-    $tmplSearch = &TWiki::handleCommonTags( $tmplSearch, $topic );
-    $tmplNumber = &TWiki::handleCommonTags( $tmplNumber, $topic );
-    $tmplTail   = &TWiki::handleCommonTags( $tmplTail, $topic );
+    $tmplHead   = TWiki::Func::expandCommonVariables( $tmplHead, $topic );
+    $tmplSearch = TWiki::Func::expandCommonVariables( $tmplSearch, $topic );
+    $tmplNumber = TWiki::Func::expandCommonVariables( $tmplNumber, $topic );
+    $tmplTail   = TWiki::Func::expandCommonVariables( $tmplTail, $topic );
 
+    # do we have all the SPLIT parts?
     if( ! $tmplTail ) {
         print "<html><body>";
         print "<h1>TWiki Installation Error</h1>";
-        # Might not be search.tmpl FIXME
-        print "Incorrect format of search.tmpl (missing %SPLIT% parts)";
+        print "Incorrect format of searchpluc.tmpl (missing %SPLIT% parts)";
         print "</body></html>";
         return;
     }
 
-    # print first part of full HTML page
-    $tmplHead = &TWiki::Render::getRenderedVersion( $tmplHead );
+    # print page heading
+    $tmplHead = TWiki::Func::renderText( $tmplHead );
     $tmplHead =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
     print $tmplHead;
 
-    if( ! $noSearch ) {
-        # print "Search:" part
-        $tempVal = $theSearchVal;
-        $tempVal =~ s/&/&amp;/go;
-        $tempVal =~ s/</&lt;/go;
-        $tempVal =~ s/>/&gt;/go;
-        $tempVal =~ s/^\.\*$/Index/go;
-        $tmplSearch =~ s/%SEARCHSTRING%/$tempVal/go;
-        if( $doInline ) {
-            $searchResult .= $tmplSearch;
-        } else {
-            $tmplSearch = &TWiki::Render::getRenderedVersion( $tmplSearch );
-            $tmplSearch =~ s|</*nop/*>||goi;   # remove <nop> tag
-            print $tmplSearch;
-        }
+    # if configured, show only attachments option
+    my $searchAttachmentsOnly = TWiki::Func::getPreferencesValue( "PLUCENESEARCHATTACHMENTSONLY" ) || 0;
+    # if only attachments are displayed, even if configured, then the message is not shown
+    if (($searchAttachmentsOnly)&&($usersearch !~ "attachment:yes")) {
+      $tempVal = $usersearch;
+      $tempVal =~ s/\+/\%2B/go; # just for the above URL
+      $tempVal =~ s/\"/\%22/go; # just for the above URL
+      my $attachmentsOnlyLabel = TWiki::Func::getPreferencesValue( "PLUCENEATTACHMENTSONLYLABEL" ) || "Show only attachments";
+      $tmplSearch =~ s/%SEARCHATTACHMENTSONLY%/<a href="%SCRIPTURLPATH%\/plucsearch\/$webName\/?search=$tempVal\%20\%2Battachment:yes">$attachmentsOnlyLabel<\/a>/go;
+      $tmplSearch = TWiki::Func::expandCommonVariables ( $tmplSearch, $topicName );
     }
+    # just for cleaning if the preference isn't set, or already displaying only attachments
+    $tmplSearch =~ s/%SEARCHATTACHMENTSONLY%/ /go;
 
-    # write log entry
-    if( $TWiki::doLogTopicSearch ) {
-        &TWiki::Store::writeLog( "search", $searchAllFlag, $tempVal );
-    }
+    # print "Search:" part
+    $tempVal = $usersearch;
+    $tempVal =~ s/&/&amp;/go;
+    $tempVal =~ s/</&lt;/go;
+    $tempVal =~ s/>/&gt;/go;
+    $tempVal =~ s/^\.\*$/Index/go;
+    $tmplSearch =~ s/%SEARCHSTRING%/$tempVal/go;
+    $tmplSearch = &TWiki::Func::renderText( $tmplSearch );
+    $tmplSearch =~ s|</*nop/*>||goi;   # remove <nop> tag
+    print $tmplSearch;
 
-    # output header of $theWebName
+    # prepare for the result list
     my( $beforeText, $repeatText, $afterText ) = split( /%REPEAT%/, $tmplTable );
 
-    $beforeText =~ s/%WEBBGCOLOR%/#FF00FF/go;
-    $beforeText =~ s/%WEB%/lala/go;
-    $beforeText = &TWiki::handleCommonTags( $beforeText, $topic );
-    $afterText  = &TWiki::handleCommonTags( $afterText, $topic );
-    if( ! $noHeader ) {
-              $beforeText = &TWiki::Render::getRenderedVersion( $beforeText, $TWiki::webName );
-              $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
-              print $beforeText;
+    if( ! $noheader ) {
+       my $bgcolor = TWiki::Func::getPreferencesValue( "WEBBGCOLOR", $webName ) || "#FFFFFF";
+       $beforeText =~ s/%WEBBGCOLOR%/$bgcolor/go;
+       if ( $webName eq $websStr) {
+         $beforeText =~ s/%WEB%/$webName/go;
+       }
+       $beforeText =~ s/%WEB%/ /go;
+       $beforeText = TWiki::Func::expandCommonVariables( $beforeText, $topic );
+       $beforeText = TWiki::Func::renderText( $beforeText, $webName );
+       $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
+       print $beforeText;
      }
 
     # Plucene code
@@ -187,7 +201,11 @@ sub searchWeb
                   analyzer => Plucene::Analysis::SimpleAnalyzer->new(),
                   default  => "text" # Default field for non-specified queries
     });
-    my $query = $parser->parse("$theSearchVal"); 
+    
+    if (! $search ) {
+       $search="\"Something very unlikely to happen. Nothing to search for!\"";
+    }
+    my $plucquery = $parser->parse($search); 
     my $searcher = Plucene::Search::IndexSearcher->new($idxpath);
 
     my @docs;
@@ -196,7 +214,7 @@ sub searchWeb
               push @docs, [ ($searcher->doc($doc), $score) ];
     });
 
-    $searcher->search_hc($query, $hc);
+    $searcher->search_hc($plucquery, $hc);
     # @docs is now a list of Plucene::Document objects.
  
     # first we need to build the hash for score
@@ -211,114 +229,167 @@ sub searchWeb
             sort {$b->[0] <=> $a->[0] }
             map { [ $topicScore{$_}, $_ ] }
             @docs;
-                                                                                                                             
-                                                                                                                             
-    # output the list of topics
+
     my $ntopics = 0;
-    my $topic = "";
     my $head = "";
     my $revUser = "";
     my $revDate = "";
     my $revNum = "";
     my $locked = "";
+    my $lockinguser = "";
     my $name = "";
     my $icon = "";
+    my $comment = "";
 
+    # output the list of hits
     foreach my $vresultP (@docs) {
       my @vresult = @$vresultP;
       my ($result, $score) = @vresult;
 
       my $resweb = $result->get('web')->string;
       my $restopic = $result->get('topic')->string;
-       ###For partial name search of topics  
-      if($restopic =~ m/(\w+)/) { $restopic =~ s/$1 //; } ## Get hold of first part of the string...
-       $restopic =~ s/ //g;
 
+      # For partial name search of topics, just hold the first part of the string
+      if($restopic =~ m/(\w+)/) { $restopic =~ s/$1 //; }
+      $restopic =~ s/ //g;
 
-      next unless &TWiki::Store::topicExists( $resweb, $restopic );  # topics moved away maybe are still indexed
+      # topics moved away maybe are still indexed on old web
+      next unless &TWiki::Func::topicExists( $resweb, $restopic );
 
+      # is the hit an attachment ?
       my $fieldattachment = $result->get('attachment');
       if ( $fieldattachment ) {
         $name = $result->get('name')->string;
+        $comment = $result->get('comment')->string || ""; 
+        if ($comment) {
+          $comment = " - $comment";
+          $comment =~ s/([\x{80}-\x{FFFF}])/'.'/gse; # FIXME bt now just get rid of UTF8
+        }
       } else {
         $name = "";
       }
 
-      my( $meta, $text ) = &TWiki::Store::readTopic( $resweb, $restopic );
+      # read topic
+      my( $meta, $text ) = TWiki::Func::readTopic( $resweb, $restopic );
       $text =~ s/%WEB%/$resweb/gos;
       $text =~ s/%TOPIC%/$restopic/gos;
+
+      # recover data from the hit so it can be displayed
       if ( $result->get('author') ) {
-        $revUser = &TWiki::userToWikiName( $result->get('author')->string );
+        $revUser = $result->get('author')->string;
+        $revUser = TWiki::Func::userToWikiName($revUser);
+        if ($revUser !~ "$mainWebname.") { $revUser = "$mainWebname.$revUser"; }
         $revNum = $result->get('version')->string;
         $revDate = $result->get('date')->string;
-      } else {
-        ( $revDate, $revUser, $revNum ) = &TWiki::Store::getRevisionInfoFromMeta( $resweb, $restopic, $meta, 1 );
       }
 
-      my $allowView = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $restopic, $resweb );
-      # Check security
-      # FIXME - how deal with user login not available if coming from search script?
+      # security check - default mapping for user guest is TWikiGuest, so if web/topic
+      # does not allow this user to view the hit, it will be discarded
+      my $allowView = TWiki::Func::checkAccessPermission( "view", TWiki::Func::userToWikiName($remoteUser) , $text, $restopic, $resweb );
       if( ! $allowView ) {
         next;
       }
-
-      $tempVal = $repeatText;
-      $tempVal =~ s/%WEB%/$resweb/go;
-      $tempVal =~ s/%SCORE%//go; # score needs to be treated (quality of the hit, stars, percentage, ...)
-
-      # field $name only present if hit is an attachment
-      if ($name) {
-        $icon = &TWiki::Attach::filenameToIcon($name);
-        $tempVal =~ s/%MATCH%/<a href="%PUBURLPATH%\/$resweb\/$restopic\/$name">$name<\/a> - \[\[$resweb\.$restopic\]\]/go;
-      } else {
-        $icon = ""; # is there a topic icon? - maybe &TWiki::Attach::filenameToIcon("twiki.txt");
-        $tempVal =~ s/%MATCH%/\[\[$resweb\.$restopic\]\]/go;
-        $revNum = "1." . $revNum;
+      # another security check - is the web of the current result hidden ?
+      $allowView = TWiki::Func::getPreferencesValue( "NOSEARCHALL", $resweb ) || "";
+      if( $allowView eq "on" ) {
+        next;
       }
 
+      # the hit is viewable for the user, so start replacement of labels
+      $tempVal = $repeatText;
+      $tempVal =~ s/%WEB%/$resweb/go;
+
+      # score should be displayed in some manner (stars, %, ...) ...
+      # however, the Plucene documentation does not says nothing about its possible values
+      # if you want to display it, just uncomment the following line
+      ###       $tempVal =~ s/%SCORE%/$score/go;
+      $tempVal =~ s/%SCORE%//go;
+
+      # field $name only is present if the hit is an attachment
+      if ($name) {
+        # icon for attachment based on filename
+        $icon = $TWiki::Plugins::SESSION->mapToIconFileName($name);
+        $icon = "%ICON{\"$icon\"}%";
+        # URL for the file
+        $tempVal =~ s/%MATCH%/<a href="%PUBURLPATH%\/$resweb\/$restopic\/$name">$name<\/a>/go;
+        # no locking information for attachments
+        $locked = ""; $lockinguser = "";
+      } else {
+        # no icon for topics
+        $icon = "";
+        # URL for the topic
+        $tempVal =~ s/%MATCH%/\[\[$resweb\.$restopic\]\]/go;
+        # if locks are to be displayed, then find it out for each hit
+        if ($showlock) {
+          ($url, $lockinguser, $locked) = TWiki::Func::checkTopicEditLock($resweb, $restopic);
+          if ($lockinguser) { $lockinguser = TWiki::Func::userToWikiName( $lockinguser, "0" ); }
+        }
+      }
+      # NEW icon for new topics and revision number for old ones
+      if (($revNum eq "")||($revNum == 1)) {
+        $revNum = "%N%";
+      } else {
+        $revNum = "r$revNum";
+      }
+
+      # now, just replace the template elements with values and render
       $tempVal =~ s/%ICON%/$icon/go;
-      $tempVal =~ s/%LOCKED%/$locked/o;
+      if ($locked) {
+        $tempVal =~ s/%LOCKED%/$lockinguser ($locked)/o;
+      }
+      $tempVal =~ s/%LOCKED%/ /o;
       $tempVal =~ s/%TIME%/$revDate/o;
-      $tempVal =~ s/%REVISION%/r$revNum/o;
+      $tempVal =~ s/%TOPICNAME%/$restopic/o;
+      $tempVal =~ s/%REVISION%/$revNum/o;
       $tempVal =~ s/%AUTHOR%/$revUser/o;
-      $tempVal = &TWiki::handleCommonTags( $tempVal, $restopic );
-      $tempVal = &TWiki::Render::getRenderedVersion( $tempVal );
-           
-      if( $noSummary || $name) {
+      $tempVal = TWiki::Func::expandCommonVariables( $tempVal, $restopic, $resweb );
+      $tempVal = TWiki::Func::renderText( $tempVal, $resweb );
+
+      if( $nosummary ) {
+        # no summaries
         $tempVal =~ s/%TEXTHEAD%//go;
         $tempVal =~ s/&nbsp;//go;
       } else {
-        $head = &TWiki::makeTopicSummary( $text, $restopic, $resweb );
-        $tempVal =~ s/%TEXTHEAD%/$head/go;
+        if ($name) {
+          # summaries for attachments
+          $tempVal =~ s/%TEXTHEAD%/\[\[$resweb\.$restopic\]\]$comment/go;
+        } else {
+          # summaries for topics
+          $head = $TWiki::Plugins::SESSION->{renderer}->makeTopicSummary( $text, $restopic, $resweb, 180 );
+          $tempVal =~ s/%TEXTHEAD%/$head/go;
+        }
       }
-      $tempVal = &TWiki::Render::getRenderedVersion( $tempVal, $resweb );
+      $tempVal = TWiki::Func::renderText( $tempVal, $resweb );
       $tempVal =~ s|</*nop/*>||goi;   # remove <nop> tag
       print $tempVal;
 
+      # one more in the bag
       $ntopics += 1;
-      last if $ntopics >= $theLimit;
+      # just go for another if limit not reached
+      last if $ntopics >= $limit;
     }
     
-    $afterText = &TWiki::Render::getRenderedVersion( $afterText, $TWiki::webName );
+    # print footer
+    $afterText  = TWiki::Func::expandCommonVariables( $afterText, $topic );
+    $afterText = TWiki::Func::renderText( $afterText, $webName );
     $afterText =~ s|</*nop/*>||goi;   # remove <nop> tag
     print $afterText;
 
-    if( ! $noTotal ) {
-      # print "Number of topics:" part
+    # print "Number of topics:" part
+    if( ! $nototal ) {
       my $thisNumber = $tmplNumber;
       $thisNumber =~ s/%NTOPICS%/$ntopics/go;
-      $thisNumber = &TWiki::Render::getRenderedVersion( $thisNumber, $TWiki::webName );
+      $thisNumber = TWiki::Func::renderText( $thisNumber, $webName );
       $thisNumber =~ s|</*nop/*>||goi;   # remove <nop> tag
       print $thisNumber;
     }
 
-    # print last part of full HTML page
-    $tmplTail = &TWiki::Render::getRenderedVersion( $tmplTail );
+    # print last part of the HTML page
+    $tmplTail = TWiki::Func::renderText( $tmplTail );
     $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
     print $tmplTail;
 
-    return $searchResult;
-
+    return;
 }
 
 # EOF
