@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351238010" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351239885" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarENCODE
 ---+++ ENCODE{string} -- encode a string to URL or HTML entities
@@ -16,8 +16,11 @@
      | =type="moderate"= | Encode special characters into HTML entities for moderate cross-site scripting protection: ="<"=, =">"=, single quote (='=) and double quote (="=) are encoded. Useful to allow TWiki variables in comment boxes. | =type="url"= |
      | =type="safe"= | Encode special characters into HTML entities for cross-site scripting protection: ="<"=, =">"=, ="%"=, single quote (='=) and double quote (="=) are encoded. | =type="url"= |
      | =type="entity"= | Encode special characters into HTML entities, like a double quote into =&amp;#034;=. Does *not* encode newline (=\n=) or linefeed (=\r=). | =type="url"= |
+     | =type="entity"= %BR% =extra=" $n$r"= | For =type="entity"= only, use the =extra= parameter to encode additional characters to HTML numeric entities. [[FormatTokens][Formatting tokens]] can be used, such as ="$n"= for newline. Note that =type="entity" extra=" $n$r"= is equivalent to =type="html"=. | =type="url"= %BR% =extra=""= |
      | =type="html"= | Encode special characters into HTML entities. In addition to =type="entity"=, it also encodes space, =\n= and =\r=. Useful to encode text properly in HTML input fields. See equivalent [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENTITY][ENTITY]]. | =type="url"= |
-   * Example: =%<nop>ENCODE{"spaced name"}%= expands to =%ENCODE{"spaced name"}%=
+   * Examples:
+      * =%<nop>ENCODE{"spaced name"}%= expands to =%ENCODE{"spaced name"}%=
+      * =%<nop>ENCODE{"spaced name" type="entity" extra=" "}%= expands to =spaced&amp;#32;name=
    * __Notes:__
       * Values of HTML input fields should be encoded as ="html"=. A shorter =%<nop>ENTITY{any text}%= can be used instead of the more verbose =%<nop>ENCODE{ "any text" type="html" }%=. %BR% Example: =&lt;input type="text" name="address" value="%<nop>ENTITY{any text}%" /&gt;=
       * Double quotes in strings must be escaped when passed into other TWiki variables.%BR% Example: =%<nop>SEARCH{ "%<nop>ENCODE{ "string with "quotes"" type="quotes" }%" noheader="on" }%=
