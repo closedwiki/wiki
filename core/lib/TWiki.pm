@@ -197,7 +197,7 @@ BEGIN {
     # DO NOT CHANGE THE FORMAT OF $VERSION
     # The $VERSION is automatically expanded on checkin of this module
     $VERSION = '$Date$ $Rev$ ';
-    $RELEASE = 'TWiki-5.1.1-trunk';
+    $RELEASE = 'TWiki-5.1.3-trunk';
     $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$RELEASE, $1, build $2/;
 
     # Default handlers for different %TAGS%
@@ -214,6 +214,7 @@ BEGIN {
         DISKID            => \&DISKID,
         DISPLAYTIME       => \&DISPLAYTIME,
         ENCODE            => \&ENCODE,
+        ENTITY            => \&ENTITY,
         ENV               => \&ENV,
         FORMFIELD         => \&FORMFIELD,
         GMTIME            => \&GMTIME,
@@ -4189,8 +4190,15 @@ sub ENCODE {
     return _encode($type, $text);
 }
 
+sub ENTITY {
+    my( $this, $params ) = @_;
+    my $text = $params->{_DEFAULT};
+    $text = '' unless( defined $text && $text ne '' );
+    return _encode( 'html', $text );
+}
+
 sub _encode {
-    my ($type, $text) = @_;
+    my( $type, $text ) = @_;
 
     if ( $type =~ /^entit(y|ies)$/i ) {
         # entity encode
