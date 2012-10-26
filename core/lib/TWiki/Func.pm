@@ -2582,12 +2582,17 @@ Adds a function to modify all the HTTP requests to any external resources.
 
 The handler function must be of the form:
 <verbatim>
-sub handler(\%session, $url, \%options)
+sub handler(\%session, $url) -> (\@headers, \%params)
 </verbatim>
 where:
    * =\%session= - a reference to the TWiki session object (may be ignored)
    * =$url= - a URL being requested
-   * =\%options= - a reference to the request options
+
+The returned =\@headers= and =\%params= are added to the request in the same
+manner as =getExternalResource=, except that =\%params= will not override any
+entries given by the caller of =getExternalResource= or =postExternalResource=.
+
+*Since:* TWiki::Plugins::VERSION 1.5
 
 =cut
 
@@ -2599,9 +2604,9 @@ sub registerExternalHTTPHandler {
         sub {
             my $record = $TWiki::Plugins::SESSION;
             $TWiki::Plugins::SESSION = $_[0];
-            my $result = &$function( @_ );
+            my @result = &$function( @_ );
             $TWiki::Plugins::SESSION = $record;
-            return $result;
+            return @result;
         },
     );
 }
