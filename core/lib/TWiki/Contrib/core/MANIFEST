@@ -15,6 +15,7 @@
 #!include PatternSkin/lib/TWiki/Contrib/PatternSkin
 #!include PreferencesPlugin/lib/TWiki/Plugins/PreferencesPlugin
 #!include RenderListPlugin/lib/TWiki/Plugins/RenderListPlugin
+#!include ScrollBoxAddOn/lib/TWiki/Plugins/ScrollBoxAddOn
 #!include SetGetPlugin/lib/TWiki/Plugins/SetGetPlugin
 #!include SlideShowPlugin/lib/TWiki/Plugins/SlideShowPlugin
 #!include SmiliesPlugin/lib/TWiki/Plugins/SmiliesPlugin
@@ -24,9 +25,10 @@
 #!include TipsContrib/lib/TWiki/Contrib/TipsContrib
 #!include TinyMCEPlugin/lib/TWiki/Plugins/TinyMCEPlugin
 #!include TopMenuSkin/lib/TWiki/Contrib/TopMenuSkin
-#!include TWikiUserMappingContrib/lib/TWiki/Contrib/TWikiUserMappingContrib
+#!include TWikiDashboardAddOn/lib/TWiki/Contrib/TWikiDashboardAddOn
 #!include TWikiNetSkin/lib/TWiki/Contrib/TWikiNetSkin
 #!include TWikiNetSkinPlugin/lib/TWiki/Plugins/TWikiNetSkinPlugin
+#!include TWikiUserMappingContrib/lib/TWiki/Contrib/TWikiUserMappingContrib
 #!include TwistyContrib/lib/TWiki/Contrib/TwistyContrib
 #!include TwistyPlugin/lib/TWiki/Plugins/TwistyPlugin
 #!include WysiwygPlugin/lib/TWiki/Plugins/WysiwygPlugin
