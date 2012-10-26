@@ -2578,8 +2578,6 @@ Should only be called from initPlugin.
 Adds a function to modify all the HTTP requests to any external resources.
    * =\&fn= - Reference to the function.
 
-*Since:* TWiki::Plugins::VERSION 1.5
-
 The handler function must be of the form:
 <verbatim>
 sub handler(\%session, $url) -> (\@headers, \%params)
@@ -2590,7 +2588,29 @@ where:
 
 The returned =\@headers= and =\%params= are added to the request in the same
 manner as =getExternalResource=, except that =\%params= will not override any
-entries given by the caller of =getExternalResource= or =postExternalResource=.
+entries that have been set earlier.
+All the params explicitly given by the caller of =getExternalResource= or
+=postExternalResource= will have the highest precedence.
+
+Example:
+<verbatim>
+sub initPlugin {
+    TWiki::Func::registerExternalHTTPHandler( \&handleExternalHTTPRequest );
+}
+
+sub handleExternalHTTPRequest {
+    my ($session, $url) = @_;
+    my @headers;
+    my %params;
+
+    # Add any necessary @headers and %params
+    push @headers, 'X-Example-Header' => 'Value';
+    $params{timeout} = 5;
+
+    # Return refs to both
+    return (\@headers, \%params);
+}
+</verbatim>
 
 *Since:* TWiki::Plugins::VERSION 1.5
 
