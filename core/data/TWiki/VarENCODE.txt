@@ -1,8 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1308022908" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351238010" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarENCODE
----+++ ENCODE{"string"} -- encodes a string to HTML entities
-   * Encode "special" characters to HTML numeric entities. Encoded characters are:
+---+++ ENCODE{string} -- encode a string to URL or HTML entities
+   * Encode "special" characters to HTML numeric entities or to URL entities.
+   * Encoded characters:
       * all non-printable ASCII characters below space, except newline (="\n"=) and linefeed (="\r"=)
       * HTML special characters ="<"=, =">"=, ="&"=, single quote (='=) and double quote (="=)
       * TWiki special characters ="%"=, ="["=, ="]"=, ="@"=, ="_"=, ="*"=, ="="= and ="|"=
@@ -15,11 +16,10 @@
      | =type="moderate"= | Encode special characters into HTML entities for moderate cross-site scripting protection: ="<"=, =">"=, single quote (='=) and double quote (="=) are encoded. Useful to allow TWiki variables in comment boxes. | =type="url"= |
      | =type="safe"= | Encode special characters into HTML entities for cross-site scripting protection: ="<"=, =">"=, ="%"=, single quote (='=) and double quote (="=) are encoded. | =type="url"= |
      | =type="entity"= | Encode special characters into HTML entities, like a double quote into =&amp;#034;=. Does *not* encode newline (=\n=) or linefeed (=\r=). | =type="url"= |
-     | =type="html"= | Encode special characters into HTML entities. In addition to =type="entity"=, it also encodes space, =\n= and =\r=. Useful to encode text properly in HTML input fields. | =type="url"= |
+     | =type="html"= | Encode special characters into HTML entities. In addition to =type="entity"=, it also encodes space, =\n= and =\r=. Useful to encode text properly in HTML input fields. See equivalent [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENTITY][ENTITY]]. | =type="url"= |
    * Example: =%<nop>ENCODE{"spaced name"}%= expands to =%ENCODE{"spaced name"}%=
-   * __%X% Notes:__
-      * Values of HTML input fields should encoded as ="html"=.%BR% Example: =&lt;input type="text" name="address" value="%<nop>ENCODE{ "any text" type="html" }%" /&gt;=
+   * __Notes:__
+      * Values of HTML input fields should be encoded as ="html"=. A shorter =%<nop>ENTITY{any text}%= can be used instead of the more verbose =%<nop>ENCODE{ "any text" type="html" }%=. %BR% Example: =&lt;input type="text" name="address" value="%<nop>ENTITY{any text}%" /&gt;=
       * Double quotes in strings must be escaped when passed into other TWiki variables.%BR% Example: =%<nop>SEARCH{ "%<nop>ENCODE{ "string with "quotes"" type="quotes" }%" noheader="on" }%=
-      * Use =type="moderate"=, =type="safe"= or =type="entity"= to protect user input from URL parameters and external sources against [[http://en.wikipedia.org/wiki/Cross-site_scripting][cross-site scripting]] (XSS). =type="entity"= is the safest mode, but some TWiki applications might not work. =type="safe"= provides a safe middle ground, =type="moderate"= provides only moderate cross-site scripting protection.
-
-   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarFORMFIELD][FORMFIELD]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarQUERYPARAMS][QUERYPARAMS]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarURLPARAM][URLPARAM]]
+      * Use =type="moderate"=, =type="safe"=, =type="entity"= or =type="html"= to protect user input from URL parameters and external sources against [[http://en.wikipedia.org/wiki/Cross-site_scripting][cross-site scripting]] (XSS). =type="html"= is the safest mode, but some TWiki applications might not work. =type="safe"= provides a safe middle ground, =type="moderate"= provides only moderate cross-site scripting protection.
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENTITY][ENTITY]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarFORMFIELD][FORMFIELD]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarQUERYPARAMS][QUERYPARAMS]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarURLPARAM][URLPARAM]]
