@@ -241,6 +241,7 @@ data/TWiki/VarENCODE.txt 0644
 data/TWiki/VarENDBG.txt 0644
 data/TWiki/VarENDCOLOR.txt 0644
 data/TWiki/VarENDSECTION.txt 0644
+data/TWiki/VarENTITY.txt 0644
 data/TWiki/VarENV.txt 0644
 data/TWiki/VarFAILEDPLUGINS.txt 0644
 data/TWiki/VarFORMFIELD.txt 0644
