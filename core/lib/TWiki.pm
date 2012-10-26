@@ -4184,10 +4184,11 @@ sub REVARG {
 
 sub ENCODE {
     my( $this, $params ) = @_;
-    my $type = $params->{type} || 'url';
-    my $text = $params->{_DEFAULT};
+    my $type  = $params->{type}  || 'url';
+    my $extra = $params->{extra} || '';
+    my $text  = $params->{_DEFAULT};
     $text = '' unless( defined $text && $text ne '' );
-    return _encode($type, $text);
+    return _encode( $type, $text, expandStandardEscapes( $extra ) );
 }
 
 sub ENTITY {
@@ -4198,11 +4199,11 @@ sub ENTITY {
 }
 
 sub _encode {
-    my( $type, $text ) = @_;
+    my( $type, $text, $extra ) = @_;
 
     if ( $type =~ /^entit(y|ies)$/i ) {
         # entity encode
-        return entityEncode( $text );
+        return entityEncode( $text, $extra );
     } elsif ( $type =~ /^html$/i ) {
         # entity encode, encode also space, newline and linefeed
         return entityEncode( $text, " \n\r" );
