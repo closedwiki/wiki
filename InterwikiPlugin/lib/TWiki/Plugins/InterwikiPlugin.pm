@@ -44,10 +44,10 @@ require TWiki::Plugins; # For the API version
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-09-05';
+our $RELEASE = '2012-10-25';
 
 # =========================
-our $SHORTDESCRIPTION = 'Text ==ExternalSite:Page== links to external sites based on aliases defined in a rules topic';
+our $SHORTDESCRIPTION = 'Text ==ExternalSite:Page== links to a page on an external site based on aliases defined in a rules topic';
 our $NO_PREFS_IN_TOPIC = 1;
 our $interWeb;
 our $interLinkFormat;
