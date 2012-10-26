@@ -200,7 +200,7 @@ sub _requestHTTP {
             require MIME::Base64;
             import MIME::Base64 ();
             my $base64 = encode_base64( "$user:$pass", "\r\n" );
-            $req .= "Authorization: Basic $base64\r\n";
+            $req .= "Authorization: Basic $base64"; # "\r\n" added by encode_base64
         }
 
         my $useproxy = 1;
@@ -237,6 +237,7 @@ sub _requestHTTP {
                 $host = $proxyHost;
                 $port = $proxyPort;
             }
+            # TODO: Should we also add Proxy-Authorization as in _requestUsingLWP?
         }
 
         '$Rev$'=~/([0-9]+)/;
@@ -250,13 +251,13 @@ sub _requestHTTP {
             }
         }
 
-        if (defined $content && $content ne '') {
+        if (defined $content && $content ne '') { # '0' should not be excluded
             $req .= 'Content-Length: '.length($content)."\r\n";
         }
 
         $req .= "\r\n"; # End of HTTP Header
 
-        if (defined $content && $content ne '') {
+        if (defined $content && $content ne '') { # '0' should not be excluded
             $req .= $content;
         }
 
