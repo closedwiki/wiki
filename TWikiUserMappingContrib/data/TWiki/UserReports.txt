@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351488287" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351488713" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -438,7 +438,7 @@ __Note to Maintainer:__
 
 %INCLUDE{%USERSWEB%.UserListHeader}%, VarUSERREPORT
 
--- TWiki:Main.PeterThoeny - 2012-10-18
+-- TWiki:Main.PeterThoeny - 2012-10-28
 
 %META:FILEATTACHMENT{name="business-card-example.png" attachment="business-card-example.png" attr="h" comment="" date="1338678337" path="business-card-example.png" size="42890" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="small-box-example.png" attachment="small-box-example.png" attr="h" comment="" date="1343433327" path="small-box-example.png" size="28290" user="TWikiContributor" version="2"}%
