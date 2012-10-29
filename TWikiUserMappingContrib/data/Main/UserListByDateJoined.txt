@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1335855170" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351499480" format="1.1" version="$Rev$"}%
 ---+ User List sorted by date joined / updated
 
 %INCLUDE{"UserListHeader"}%
@@ -9,6 +9,6 @@
  type="query"
  excludetopic="UserList*, *Template"
  header="| *Date joined* | *Last updated* | *FirstName* | *LastName* | *Organization* | *Country* |"
- format="| $createdate | $date | [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(OrganisationName) | $formfield(Country) |"
+ format="| $createdate | $date | [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(Organization) | $formfield(Country) |"
  nosearch="on"
 }%

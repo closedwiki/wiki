@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1335855176" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351499489" format="1.1" version="$Rev$"}%
 ---+ User List sorted by location
 
 %INCLUDE{"UserListHeader"}%
@@ -8,8 +8,8 @@
  "form.name~'*UserForm'"
  type="query"
  excludetopic="UserList*, *Template"
- header="|*Country* | *State* | *FirstName* | *LastName* | *Organization* |"
- format="| $formfield(Country) | $formfield(State) | [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(OrganisationName) |"
+ header="|*Country* | *Location* | *FirstName* | *LastName* | *Organization* |"
+ format="| $formfield(Country) | $formfield(Location), $formfield(Region) | [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(Organization) |"
  nosearch="on"
  order="formfield(Country)"
 }%
