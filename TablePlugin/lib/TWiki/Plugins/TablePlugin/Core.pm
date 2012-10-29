@@ -558,19 +558,16 @@ sub _convertToNumberAndDate {
 
     if ( $text =~ m|^\s*([0-9]{4})[-\s/]0?([0-9]{1,2})[-\s/]0?([0-9]{1,2})| ) {
         # ISO date "2010-03-31", "2010/3/31"
-        $date = timegm( 0, 0, 0, $3, $2 - 1, $1 - 1900 );
+        $date = _timeGM( 0, 0, 0, $3, $2 - 1, $1 );
 
     } elsif ( $text =~ m|^\s*([0-9]{1,2})[-\s/]*([A-Z][a-z][a-z])[-\s/]*([0-9]{4})\s*-\s*([0-9][0-9]):([0-9][0-9])| ) {
         # "31 Dec 2003 - 23:59", "31-Dec-2003 - 23:59",
         # "31 Dec 2003 - 23:59 - any suffix"
-        $date = timegm( 0, $5, $4, $1, $mon2num{$2}, $3 - 1900 );
+        $date = _timeGM( 0, $5, $4, $1, $mon2num{$2}, $3 );
 
     } elsif ( $text =~ m|^\s*([0-9]{1,2})[-\s/]([A-Z][a-z][a-z])[-\s/]([0-9]{2,4})\s*$| ) {
         # "31 Dec 2003", "31 Dec 03", "31-Dec-2003", "31/Dec/2003"
-        my $year = $3;
-        $year += 1900 if ( length($year) == 2 && $year > 80 );
-        $year += 2000 if ( length($year) == 2 );
-        $date = timegm( 0, 0, 0, $1, $mon2num{$2}, $year - 1900 );
+        $date = _timeGM( 0, 0, 0, $1, $mon2num{$2}, $3 );
 
     } elsif ( $text =~ /^\s*(([\+\-]?[0-9]+)(\.([0-9]))?).*$/ ) {
         # for example for attachment sizes: 1.1 K
@@ -579,6 +576,25 @@ sub _convertToNumberAndDate {
     }
 
     return ( $num, $date );
+}
+
+sub _timeGM {
+    my ( $sec, $min, $hour, $mday, $mon, $year ) = @_;
+    if( length($year) == 2 ) {
+        # 2 digit date - round up or down to 4 digit date
+        if( $year > 50 ) {
+            $year += 1900;
+        } else {
+            $year += 2000;
+        }
+    } elsif( $] <= 5.012000 ) {
+        # Perl older than 5.12 can't handle dates far out
+        # http://perldoc.perl.org/Time/Local.html
+        return -2143220400 if( $year < 1902 );
+        return  2145848400 if( $year > 2037 );
+        # else fall through with acceptable range
+    }
+    return timegm( $sec, $min, $hour, $mday, $mon, $year );
 }
 
 sub _processTableRow {
