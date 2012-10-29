@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347053765" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351553931" format="1.1" version="$Rev$"}%
 ---+!! Table Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -152,8 +152,9 @@ __Note:__ This plugin is pre-installed with your TWiki release. You should not h
 |  Plugin Author: | TWiki:Main.JohnTalintyre, TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2001-2003 TWiki:Main.JohnTalintyre, %BR% &copy; 2001-2012 Peter[at]Thoeny.org, [[http://twiki.org/][TWiki.org]],%BR% &copy; 2005-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-09-07 |
+|  Plugin Version: | 2012-10-29 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2012-10-29: | TWikibug:Item7015: Fix for "Cannot handle date (0, 0, 0, 14, 2, 1100)" error on very early date |
 |  2012-09-07: | TWikibug:Item6837: Doc fixes |
 |  2011-07-27: | TWikibug:Item6779: Fix for tables rendering too dark in Firefox 4 |
 |  2011-07-15: | TWikibug:Item6764: Minor fix to remove warning message in error log |
