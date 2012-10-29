@@ -73,9 +73,9 @@ It's a part of the default distribution of the TWiki Core.
 |  Contrib Authors: | TWiki:Main.SvenDowideit, TWiki:Main.PeterThoeny, TWiki:TWiki.TWikiContributor |
 |  Copyright: | &copy; 2007 Sven Dowideit %BR% &copy; 2007-2012 TWiki:Main.PeterThoeny %BR% &copy; 2007-2012 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Contrib Version: | 2012-10-28 |
+|  Contrib Version: | 2012-10-29 |
 |  <span style="white-space: nowrap;">Change History:</span> | <!-- versions below in reverse order -->&nbsp; |
-|  2012-10-28: | TWikibug:Item7014: In UserReports, include css sections automatically if needed; in UserReports, add style parameter to sections slim_box, small_box and business_card; in UserReports, set a "UserReports_users" variable in "user_list" section; in %USERSWEB%.UserList, replace hardcoded business cards with business_card section of UserReports -- TWiki:Main.PeterThoeny |
+|  2012-10-29: | TWikibug:Item7014: In UserReports, include css sections automatically if needed; in UserReports, add style parameter to sections slim_box, small_box and business_card; in UserReports, set a "UserReports_users" variable in "user_list" section; in %USERSWEB%.UserList, replace hardcoded business cards with business_card section of UserReports -- TWiki:Main.PeterThoeny |
 |  2012-10-24: | TWikibug:Item6818: Remove obsolete WEBFORMS preferences setting; turn !UserList search form into a "search_box" section; add order="" and reverse="" parameters to "user_list" UserReports -- TWiki:Main.PeterThoeny |
 |  2012-10-21: | TWikibug:Item6819: Move change TWiki form from edit screen to "more" screen -- TWiki:Main.PeterThoeny |
 |  2012-10-18: | TWikibug:Item6879: Custom UserReports: Adding VarUSERREPORT variable doc topic -- TWiki:Main.PeterThoeny |
