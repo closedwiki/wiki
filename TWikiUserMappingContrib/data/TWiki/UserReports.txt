@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351129287" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351486460" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -80,7 +80,7 @@ Show the profile picture image of a user. A default image is returned in case th
 </div>
 Show slim, one line height user boxes. Several sections are provided:
 
-   * Section "slim_box_css": Defines the style sheets of the slim boxes. Include it once per page.
+   * Section "slim_box_css": Defines the style sheets of the slim boxes. Optionally include it once per page; it is done for you by the "slim_box_start" section if needed.
    * Section "slim_box_start": Defines the start of a set of slim boxes.
       * Parameter =style=: Optional, overrides the css of the container div of slim boxes. Default: =padding:0 5px 0 5px; background-color:#f0f0f4;=.
    * Section "slim_box": Show a single slim box.
@@ -91,7 +91,6 @@ Show slim, one line height user boxes. Several sections are provided:
 
 *Usage example:*
 <pre>
-%<nop>USERREPORT{ action="slim_box_css" }%
 %<nop>USERREPORT{ action="slim_box_start" }%
   %<nop>USERREPORT{ action="slim_box" user="%WIKINAME%" }%
   %<nop>USERREPORT{ action="slim_box" user="JaneSmith" }%
@@ -103,7 +102,6 @@ Show slim, one line height user boxes. Several sections are provided:
 
 *Sample output:* %BR%
 <noautolink>
-%USERREPORT{ action="slim_box_css" }%
 %USERREPORT{ action="slim_box_start" }%
 %USERREPORT{ action="slim_box" user="%WIKINAME%" }%
 %USERREPORT{ action="slim_box_list" users="%GET{ "5_users" }%" }%
@@ -112,15 +110,15 @@ Show slim, one line height user boxes. Several sections are provided:
 
 <div style="display:none;">
 <!--==============================================-->
-%STARTSECTION{slim_box_css}%<style> .userBoxSlim { float: left; width: 130px; height: 18px; border: solid 1px #d0d0d8; background-color: #f8f8fb; display: inline-block; padding: 3px 3px 3px 3px; margin: 5px 9px 5px 0; text-align: center; overflow: hidden; font-size: 14px; white-space: nowrap; box-shadow: 2px 2px 4px #bbb; } </style>%ENDSECTION{slim_box_css}%
+%STARTSECTION{slim_box_css}%<style> .userBoxSlim { float: left; width: 130px; height: 18px; border: solid 1px #d0d0d8; background-color: #f8f8fb; display: inline-block; padding: 3px 3px 3px 3px; margin: 5px 9px 5px 0; text-align: center; overflow: hidden; font-size: 14px; white-space: nowrap; box-shadow: 2px 2px 4px #bbb; } </style>%SET{ "UserReports_slim_box_css_set" value="1" }%%ENDSECTION{slim_box_css}%
 <!--==============================================-->
-%STARTSECTION{slim_box_start}%<div style="padding:0 5px 0 5px; background-color:#f0f0f4; %IF{ "defined 'style'" then="%style%" }%">%ENDSECTION{slim_box_start}%
+%STARTSECTION{slim_box_start}%%IF{ "'%GET{UserReports_slim_box_css_set}%'='1'" else="$percntINCLUDE{ \"%TOPIC%\" section=\"slim_box_css\" }$percnt" }%<div style="padding:0 5px 0 5px; background-color:#f0f0f4; %IF{ "defined 'style'" then="%style%" }%">%ENDSECTION{slim_box_start}%
 <!--==============================================-->
 %STARTSECTION{slim_box_end}%<div style="clear:left;"></div></div>%ENDSECTION{slim_box_end}%
 <!--==============================================-->
 %STARTSECTION{slim_box_list}%%CALCULATE{$LISTJOIN($sp, $LISTMAP($NOP(%)INCLUDE{ "%SYSTEMWEB%.UserReports" section="slim_box" user="$item" }$NOP(%), %users%))}%%ENDSECTION{slim_box_list}%
 <!--==============================================-->
-%STARTSECTION{slim_box}%<div class='userBoxSlim'><a href='%SCRIPTURLPATH{view}%/%USERSWEB%/%user%' style="border: 0 none;"><img src='%IF{ "'%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%'!=''" then='%PUBURLPATH%/%USERSWEB%/%user%/%FORMFIELD{ "Image" topic="%USERSWEB%.%user%"}%' else='%PUBURLPATH%/%USERSWEB%/UserProfileHeader/default-user-profile.jpg' }%' alt='%user%' title='' height='18' align='left' style='margin: 0 3px 0 0;' /> %SPACEOUT{%user%}%</a></div>%ENDSECTION{slim_box}%
+%STARTSECTION{slim_box}%<div class='userBoxSlim' %IF{ "defined 'style'" then="style=\"%style%\"" }%><a href='%SCRIPTURLPATH{view}%/%USERSWEB%/%user%' style="border: 0 none;"><img src='%IF{ "'%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%'!=''" then='%PUBURLPATH%/%USERSWEB%/%user%/%FORMFIELD{ "Image" topic="%USERSWEB%.%user%"}%' else='%PUBURLPATH%/%USERSWEB%/UserProfileHeader/default-user-profile.jpg' }%' alt='%user%' title='' height='18' align='left' style='margin: 0 3px 0 0;' /> %SPACEOUT{%user%}%</a></div>%ENDSECTION{slim_box}%
 <!--==============================================-->
 </div>
 
@@ -131,7 +129,7 @@ Show slim, one line height user boxes. Several sections are provided:
 </div>
 Show small, two line height user boxes. Several sections are provided:
 
-   * Section "small_box_css": Defines the style sheets of the small boxes. Include it once per page.
+   * Section "small_box_css": Defines the style sheets of the small boxes. Optionally include it once per page; it is done for you by the "small_box_start" section if needed.
    * Section "small_box_start": Defines the start of a set of small boxes.
       * Parameter =style=: Optional, overrides the css of the container div of small boxes. Default: =padding:0 5px 0 5px; background-color:#f0f0f4;=.
    * Section "small_box": Show a single small box.
@@ -142,7 +140,6 @@ Show small, two line height user boxes. Several sections are provided:
 
 *Usage example:*
 <pre>
-%<nop>USERREPORT{ action="small_box_css" }%
 %<nop>USERREPORT{ action="small_box_start" }%
   %<nop>USERREPORT{ action="small_box" user="%WIKINAME%" }%
   %<nop>USERREPORT{ action="small_box" user="JaneSmith" }%
@@ -154,7 +151,6 @@ Show small, two line height user boxes. Several sections are provided:
 
 *Sample output:* %BR%
 <noautolink>
-%USERREPORT{ action="small_box_css" }%
 %USERREPORT{ action="small_box_start" }%
 %USERREPORT{ action="small_box" user="%WIKINAME%" }%
 %USERREPORT{ action="small_box_list" users="%GET{ "5_users" }%" }%
@@ -163,9 +159,9 @@ Show small, two line height user boxes. Several sections are provided:
 
 <div style="display:none;">
 <!--==============================================-->
-%STARTSECTION{small_box_css}%<style> .userBox130 { float: left; width: 130px; height: 38px; border: solid 1px #d0d0d8; background-color: #f8f8fb; display: inline-block; padding: 3px 3px 3px 3px; margin: 5px 9px 5px 0; text-align: center; overflow: hidden; font-size: 14px; line-height: 18px; box-shadow: 2px 2px 4px #bbb; } </style>%ENDSECTION{small_box_css}%
+%STARTSECTION{small_box_css}%<style> .userBox130 { float: left; width: 130px; height: 38px; border: solid 1px #d0d0d8; background-color: #f8f8fb; display: inline-block; padding: 3px 3px 3px 3px; margin: 5px 9px 5px 0; text-align: center; overflow: hidden; font-size: 14px; line-height: 18px; box-shadow: 2px 2px 4px #bbb; } </style>%SET{ "UserReports_small_box_css_set" value="1" }%%ENDSECTION{small_box_css}%
 <!--==============================================-->
-%STARTSECTION{small_box_start}%<div style="padding:0 5px 0 5px; background-color:#f0f0f4; %IF{ "defined 'style'" then="%style%" }%">%ENDSECTION{small_box_start}%
+%STARTSECTION{small_box_start}%%IF{ "'%GET{UserReports_small_box_css_set}%'='1'" else="$percntINCLUDE{ \"%TOPIC%\" section=\"small_box_css\" }$percnt" }%<div style="padding:0 5px 0 5px; background-color:#f0f0f4; %IF{ "defined 'style'" then="%style%" }%">%ENDSECTION{small_box_start}%
 <!--==============================================-->
 %STARTSECTION{small_box_end}%<div style="clear:left;"></div></div>%ENDSECTION{small_box_end}%
 <!--==============================================-->
@@ -182,7 +178,7 @@ Show small, two line height user boxes. Several sections are provided:
 </div>
 Show users in business card format. Several sections are provided:
 
-   * Section "business_card_css": Defines the style sheets of the business cards. Include it once per page.
+   * Section "business_card_css": Defines the style sheets of the business cards. Optionally include it once per page; it is done for you by the "business_card_start" section if needed.
    * Section "business_card_start": Defines the start of a set of business cards.
       * Parameter =style=: Optional, overrides the css of the container div of business cards. Default: =padding:10px 15px 1px 15px; background-color:#f0f0f4;=.
    * Section "business_card": Show a single business card.
@@ -193,7 +189,6 @@ Show users in business card format. Several sections are provided:
 
 *Usage examples:*
 <pre>
-%<nop>USERREPORT{ action="business_card_css" }%
 %<nop>USERREPORT{ action="business_card_start" }%
   %<nop>USERREPORT{ action="business_card" user="%WIKINAME%" }%
   %<nop>USERREPORT{ action="business_card" user="JaneSmith" }%
@@ -204,7 +199,6 @@ Show users in business card format. Several sections are provided:
 </pre>
 
 *Sample output:*
-%USERREPORT{ action="business_card_css" }%
 %USERREPORT{ action="business_card_start" style="background-color: #f0f0e8;" }%
 %USERREPORT{ action="business_card_list" users="%USERREPORT{ action="user_list" limit="2" }%" }%
 %USERREPORT{ action="business_card_end" }%
@@ -328,9 +322,9 @@ Show users in business card format. Several sections are provided:
  left: 0;
  z-index: 10;
 }
-</style>%ENDSECTION{business_card_css}%
+</style>%SET{ "UserReports_business_card_css_set" value="1" }%%ENDSECTION{business_card_css}%
 <!--==============================================-->
-%STARTSECTION{business_card_start}%<div style="padding:10px 15px 1px 15px; background-color:#f0f0f4; %IF{ "defined 'style'" then="%style%" }%">%ENDSECTION{business_card_start}%
+%STARTSECTION{business_card_start}%%IF{ "'%GET{UserReports_business_card_css_set}%'='1'" else="$percntINCLUDE{ \"%TOPIC%\" section=\"business_card_css\" }$percnt" }%<div style="padding:10px 15px 1px 15px; background-color:#f0f0f4; %IF{ "defined 'style'" then="%style%" }%">%ENDSECTION{business_card_start}%
 <!--==============================================-->
 %STARTSECTION{business_card_end}%<div style="clear:left;"></div></div>%ENDSECTION{business_card_end}%
 <!--==============================================-->
