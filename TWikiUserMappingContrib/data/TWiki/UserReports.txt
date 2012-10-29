@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351488713" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351491982" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -16,6 +16,8 @@ Show a simple list of registered users. The output is a comma-space delimited so
       * Parameter =order=: Sort the result by the topic name, topic creation date, last modified date, last editor, or named field of TWikiForms. For details see =order= parameter of [[VarSEARCH][SEARCH]].
       * Parameter =reverse=: Reverse the direction of the search result
 
+This sections also sets a ="UserReports_users"= variable to the number of users found. To retrieve, write =%<nop>GET{UserReports_users}%=.
+
 *Usage example:*
 <pre>
 %<nop>USERREPORT{ action="user_list" search="jane" limit="5" }%
@@ -30,7 +32,7 @@ Show a simple list of registered users. The output is a comma-space delimited so
 
 <div style="display:none;">
 <!--==============================================-->
-%STARTSECTION{"user_list" disablefixlinks="on"}%%SEARCH{
+%STARTSECTION{"user_list" disablefixlinks="on"}%%SET{ "UserReports_users" value="0" }%%SEARCH{
  "META:FORM.*[U]serForm%IF{ "defined 'search'" then=";META:FIELD.*value=.*$percntsearch$percnt" }%"
  web="%USERSWEB%"
  type="regex"
@@ -41,6 +43,7 @@ Show a simple list of registered users. The output is a comma-space delimited so
  excludetopic="UserList*, *Template"
  format="$topic"
  separator=", "
+ footer="$percntSET{ \"UserReports_users\" value=\"$ntopics\" }$percnt"
 }%%ENDSECTION{user_list}%
 <!--==============================================-->
 </div>
