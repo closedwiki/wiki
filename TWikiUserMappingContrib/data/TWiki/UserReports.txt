@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351486460" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351488287" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -85,8 +85,10 @@ Show slim, one line height user boxes. Several sections are provided:
       * Parameter =style=: Optional, overrides the css of the container div of slim boxes. Default: =padding:0 5px 0 5px; background-color:#f0f0f4;=.
    * Section "slim_box": Show a single slim box.
       * Parameter =user=: Specify the !WikiWord of a single user.
+      * Parameter =style=: Optional, overrides the css of the slim box. Default: =float: left; width: 130px; border: solid 1px #d0d0d8; background-color: #f8f8fb;=.
    * Section "slim_box_list": Show a set of slim boxes.
       * Parameter =users=: Specify a list of !WikiWords of users. The list may be provided by including the "user_list" section.
+      * Parameter =style=: Optional, same as section "slim_box".
    * Section "slim_box_end": Defines the end of a set of slim boxes.
 
 *Usage example:*
@@ -118,7 +120,7 @@ Show slim, one line height user boxes. Several sections are provided:
 <!--==============================================-->
 %STARTSECTION{slim_box_list}%%CALCULATE{$LISTJOIN($sp, $LISTMAP($NOP(%)INCLUDE{ "%SYSTEMWEB%.UserReports" section="slim_box" user="$item" }$NOP(%), %users%))}%%ENDSECTION{slim_box_list}%
 <!--==============================================-->
-%STARTSECTION{slim_box}%<div class='userBoxSlim' %IF{ "defined 'style'" then="style=\"%style%\"" }%><a href='%SCRIPTURLPATH{view}%/%USERSWEB%/%user%' style="border: 0 none;"><img src='%IF{ "'%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%'!=''" then='%PUBURLPATH%/%USERSWEB%/%user%/%FORMFIELD{ "Image" topic="%USERSWEB%.%user%"}%' else='%PUBURLPATH%/%USERSWEB%/UserProfileHeader/default-user-profile.jpg' }%' alt='%user%' title='' height='18' align='left' style='margin: 0 3px 0 0;' /> %SPACEOUT{%user%}%</a></div>%ENDSECTION{slim_box}%
+%STARTSECTION{slim_box}%<div class='userBoxSlim'%IF{ "defined 'style'" then=" style='%style%'" }%><a href='%SCRIPTURLPATH{view}%/%USERSWEB%/%user%' style="border: 0 none;"><img src='%IF{ "'%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%'!=''" then='%PUBURLPATH%/%USERSWEB%/%user%/%FORMFIELD{ "Image" topic="%USERSWEB%.%user%"}%' else='%PUBURLPATH%/%USERSWEB%/UserProfileHeader/default-user-profile.jpg' }%' alt='%user%' title='' height='18' align='left' style='margin: 0 3px 0 0;' /> %SPACEOUT{%user%}%</a></div>%ENDSECTION{slim_box}%
 <!--==============================================-->
 </div>
 
@@ -134,8 +136,10 @@ Show small, two line height user boxes. Several sections are provided:
       * Parameter =style=: Optional, overrides the css of the container div of small boxes. Default: =padding:0 5px 0 5px; background-color:#f0f0f4;=.
    * Section "small_box": Show a single small box.
       * Parameter =user=: Specify the !WikiWord of a single user.
+      * Parameter =style=: Optional, overrides the css of the small box. Default: =float: left; width: 130px; border: solid 1px #d0d0d8; background-color: #f8f8fb;=.
    * Section "small_box_list": Show a set of small boxes.
       * Parameter =users=: Specify a list of !WikiWords of users. The list may be provided by including the "user_list" section.
+      * Parameter =style=: Optional, same as section "small_box".
    * Section "small_box_end": Defines the end of a set of small boxes.
 
 *Usage example:*
@@ -167,7 +171,7 @@ Show small, two line height user boxes. Several sections are provided:
 <!--==============================================-->
 %STARTSECTION{small_box_list}%%CALCULATE{$LISTJOIN($sp, $LISTMAP($NOP(%)INCLUDE{ "%SYSTEMWEB%.UserReports" section="small_box" user="$item" }$NOP(%), %users%))}%%ENDSECTION{small_box_list}%
 <!--==============================================-->
-%STARTSECTION{small_box}%<div class='userBox130'><a href='%SCRIPTURLPATH{view}%/%USERSWEB%/%user%' style="border: 0 none;"><img src='%IF{ "'%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%'!=''" then='%PUBURLPATH%/%USERSWEB%/%user%/%FORMFIELD{ "Image" topic="%USERSWEB%.%user%"}%' else='%PUBURLPATH%/%USERSWEB%/UserProfileHeader/default-user-profile.jpg' }%' alt='%user%' title='' height='38' align='left' style='margin: 0 3px 0 0;' /> %SPACEOUT{%user%}%</a></div>%ENDSECTION{small_box}%
+%STARTSECTION{small_box}%<div class='userBox130'%IF{ "defined 'style'" then=" style='%style%'" }%><a href='%SCRIPTURLPATH{view}%/%USERSWEB%/%user%' style="border: 0 none;"><img src='%IF{ "'%FORMFIELD{ "Image" topic="%USERSWEB%.%user%" }%'!=''" then='%PUBURLPATH%/%USERSWEB%/%user%/%FORMFIELD{ "Image" topic="%USERSWEB%.%user%"}%' else='%PUBURLPATH%/%USERSWEB%/UserProfileHeader/default-user-profile.jpg' }%' alt='%user%' title='' height='38' align='left' style='margin: 0 3px 0 0;' /> %SPACEOUT{%user%}%</a></div>%ENDSECTION{small_box}%
 <!--==============================================-->
 </div>
 
@@ -183,8 +187,10 @@ Show users in business card format. Several sections are provided:
       * Parameter =style=: Optional, overrides the css of the container div of business cards. Default: =padding:10px 15px 1px 15px; background-color:#f0f0f4;=.
    * Section "business_card": Show a single business card.
       * Parameter =user=: Specify the !WikiWord of a single user.
+      * Parameter =style=: Optional, overrides the css of the business card. Default: =float: left; width: 410px; border: solid 1px #d0d0d8; background-color: #fff;=.
    * Section "business_card_list": Show a set of business cards.
       * Parameter =users=: Specify a list of !WikiWords of users. The list may be provided by including the "user_list" section.
+      * Parameter =style=: Optional, same as section "business_card".
    * Section "business_card_end": Defines the end of a set of business cards.
 
 *Usage examples:*
@@ -331,7 +337,7 @@ Show users in business card format. Several sections are provided:
 %STARTSECTION{business_card_list}%%CALCULATE{$LISTJOIN($sp, $LISTMAP($NOP(%)INCLUDE{ "%SYSTEMWEB%.UserReports" section="business_card" user="$item" }$NOP(%), %users%))}%%ENDSECTION{business_card_list}%
 <!--==============================================-->
 %STARTSECTION{business_card}%<noautolink>
-<div class="userBoxOuter">
+<div class="userBoxOuter"%IF{ "defined 'style'" then=" style=\"%style%\"" }%>
 <div class="userBoxContainer">
 <div class="userBoxImage">
 <div class="userBoxImageH">
