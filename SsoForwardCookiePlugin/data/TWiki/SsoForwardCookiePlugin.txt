@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351170741" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351672869" format="1.1" version="$Rev$"}%
 ---+!! !SsoForwardCookiePlugin
 <!--
 One line description, required for extensions repository catalog.
@@ -16,8 +16,13 @@ On the intranet, users enjoy single sign-on for almost all the sites including l
 This plugin hooks any HTTP requests from TWiki to external resources inside the intranet, so that the credential token in the cookie from the browser is forwarded to the destination.
 
 The administrator needs to configure the following values via the [[%SCRIPTURL{configure}%][configure]] script.
-   * =$cfg{Plugins}{SsoForwardCookiePlugin}{Domains}= (comma-separated)
-   * =$cfg{Plugins}{SsoForwardCookiePlugin}{CookieNames}= (comma-separated)
+   * =$cfg{Plugins}{SsoForwardCookiePlugin}{Domains}= (required, separated by commas or spaces)
+      * List of domain names to match each requested URL to determine if cookies should be forwarded.
+      * If a specified domain starts with a dot (.), it matches any subdomains. Otherwise, only the exact domain is matched.
+      * Alternatively, file paths can be specified as =file:<i>FILE_PATH</i>= (e.g. =file:/var/www/twiki/etc/sso-cookie-domains=), where the file is expected to contain domain names separated by commas, spaces, or line breaks.
+   * =$cfg{Plugins}{SsoForwardCookiePlugin}{CookieNames}= (required, separated by commas or spaces)
+      * Names of cookies that are allowed to be forwarded. Specify a single star (*) to forward all the cookies, although it is not recommended.
+
 For troubleshooting, try turning on the =Debug= flag:
    * =$cfg{Plugins}{SsoForwardCookiePlugin}{Debug} = 1;=
 
