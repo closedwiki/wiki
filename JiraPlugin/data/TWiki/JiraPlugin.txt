@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350395548" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351679336" format="1.1" version="$Rev$"}%
 ---+!! JIRA Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -347,6 +347,7 @@ Many thanks to the following sponsors for supporting this work:
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | 2012-10-16 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-10-31: | TWikibug:Item6991: Use updated TWiki::Func::getExternalResource() instead - TWiki:Main.MahiroAndo |
 |  2012-10-16: | TWikibug:Item6991: Leverage TWiki::Func::getLWPRequest() - TWiki:Main.MahiroAndo |
 |  2012-10-05: | TWikibug:Item6953: Add VarJIRA |
 |  2012-09-21: | TWikibug:Item6940: Initial version |
