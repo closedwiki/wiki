@@ -570,62 +570,42 @@ sub _getHTTP {
     my $params = $self->{params};
 
     my $extras  = $params->{requestheader} || '';
-    my $ctype   = $params->{contenttype} || '';
     my $timeout = $params->{timeout} || 5; # seconds
     my $charset = 'UTF-8';
-    my $length = length($$request);
 
-    my @extras = map {s/^\s+|\s+$//g; $_} split /([\r\n]|\$n)+/, $extras;
+    my $httpHeaders = [map {
+        s/^\s+|\s+$//g;
+        split /\s*:\s*/, $_, 2
+    } split /([\r\n]|\$n)+/, $extras];
 
-    if ($ctype eq '') {
-        if ($isSoap) {
-            $ctype = 'application/soap+xml';
-        } elsif ($$request =~ /^\s*</) {
-            $ctype = 'text/xml';
-        } else {
-            $ctype = 'multipart/form-data';
+    my $httpParams = {
+        timeout => $params->{timeout} || 5,
+    };
+
+    my $res;
+
+    if ($$request eq '') {
+        $res = TWiki::Func::getExternalResource($url, $httpHeaders, $httpParams);
+    } else {
+        my $ctype = $params->{contenttype} || '';
+
+        if ($ctype eq '') {
+            if ($isSoap) {
+                $ctype = 'application/soap+xml';
+            } elsif ($$request =~ /^\s*</) {
+                $ctype = 'text/xml';
+            } else {
+                $ctype = 'multipart/form-data';
+            }
+
+            $charset = $1 if $$request =~ /\bencoding=["']?([^"']+)["']?/;
+            $ctype .= "; charset=$charset";
         }
 
-        $charset = $1 if $$request =~ /\bencoding=["']?([^"']+)["']?/;
-        $ctype .= "; charset=$charset";
+        push @$httpHeaders, 'Content-Type' => $ctype;
+        $res = TWiki::Func::postExternalResource($url, $$request, $httpHeaders, $httpParams);
     }
 
-    my $proxyHost = eval {TWiki::Func::getPreferencesValue('PROXYHOST')} || '';
-    my $proxyPort = eval {TWiki::Func::getPreferencesValue('PROXYPORT')} || '';
-        # use eval for test environment
-
-    # Set up request
-    my $method = $$request eq '' ? 'GET' : 'POST';
-    my ($ua, $req);
-
-    if ($TWiki::Plugins::VERSION >= 1.5) {
-        ($ua, $req) = TWiki::Func::getLWPRequest($method => $url);
-    } else {
-        $ua = LWP::UserAgent->new();
-        $req = HTTP::Request->new($method => $url);
-    }
-
-    $ua->timeout($timeout);
-
-    if ($proxyHost && $proxyPort) {
-        $ua->proxy("http", "$proxyHost:$proxyPort");
-    }
-
-    $req->content($$request);
-
-    if ($$request ne '') {
-        $req->header(
-            'Content-Type'   => $ctype,
-            'Content-Length' => $length
-        );
-    }
-
-    for (@extras) {
-        $req->header($1 => $2) if /^([^\s:]+)\s*:\s*(.*)$/;
-    }
-
-    # Send request and get response
-    my $res = $ua->request($req);
     my $status = $res->status_line;
 
     if ($status =~ /^[45]/) {
@@ -642,7 +622,7 @@ sub _getHTTP {
         $resText = \Encode::encode_utf8($$resText);
         # to turn off the UTF-8 flag
     } else {
-        $$resText = Encode::encode('utf8', Encode::decode($resCharset, $$resText));
+        $resText = \Encode::encode_utf8(Encode::decode($resCharset, $$resText));
         # to turn off the UTF-8 flag
     }
 
