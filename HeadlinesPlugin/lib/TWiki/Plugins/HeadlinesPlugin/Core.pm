@@ -42,7 +42,6 @@ my $useLWPUserAgent;
 my $isInitialized;
 my $userAgent;
 my $userAgentTimeout;
-my $userAgentName;
 my $doneHeader;
 my %entityHash = (
   160 => 'nbsp',
@@ -315,15 +314,8 @@ sub doInit {
     '<div class="headlinesChannel"><div class="headlinesLogo"><img src="$imageurl" alt="$imagetitle" border="0" />%BR%</div><div class="headlinesTitle">$n---+!! <a href="$link">$title</a></div><div class="headlinesDate">$date</div><div class="headlinesDescription">$description</div><div class="headlinesRight">$rights</div></div>';
   $defaultFormat  = TWiki::Func::getPreferencesValue('HEADLINESPLUGIN_FORMAT') ||
     '<div class="headlinesArticle"><div class="headlinesTitle"><a href="$link">$title</a></div>$n<span class="headlinesDate">$date</span> <span class="headlinesCreator"> $creator</span> <span class="headlinesSubject"> $subject </span>$n<div class="headlinesText"> $description</div></div>';
-  $useLWPUserAgent = TWiki::Func::getPreferencesValue('HEADLINESPLUGIN_USELWPUSERAGENT') 
-    || '1';
   $userAgentTimeout = TWiki::Func::getPreferencesValue("HEADLINESPLUGIN_USERAGENTTIMEOUT")
     || 20;
-  $userAgentName = TWiki::Func::getPreferencesValue("HEADLINESPLUGIN_USERAGENTNAME") ||
-    'TWikiHeadlinesPlugin/' . $TWiki::Plugins::HeadlinesPlugin::RELEASE;
-
-  $useLWPUserAgent =~ s/^\s*(.*?)\s*$/$1/go;
-  $useLWPUserAgent = ($useLWPUserAgent =~ /on|yes|1/)?1:0;
 
 }
 
@@ -375,8 +367,10 @@ sub readRssFeed
   }
   #writeDebug("url=$theUrl");
 
-  my ($text, $errorMsg) = $useLWPUserAgent?&getUrlLWP($theUrl):&getUrl($theUrl);
-  return ( undef, "ERROR: $errorMsg", $updated ) if $errorMsg;
+  my $res = TWiki::Func::getExternalResource($theUrl, [], {timeout => $userAgentTimeout});
+  return ( undef, "ERROR: ".$res->status_line, $updated ) if $res->is_error;
+
+  my $text = $res->content;
 
   if ($theRefresh) {    
     unless(-e $cacheDir) {
@@ -538,6 +532,7 @@ sub parseRssFeed {
   my $line = "";
   my $ok = 0;
   my $count = 0;
+  my $link = "";
   foreach (split(/<item[^>]*>/, $raw)) {
     next unless $_;
     #writeDebug("item='$_'");
@@ -549,9 +544,9 @@ sub parseRssFeed {
       $ok = 1;
     }
     if (/<link[^>]*>\s*(.*?)\s*<\/link>/) {
-      $val = $1;
+      $val = &recode($1);
       $val =~ s/^http:\/\/.*\*(http:\/\/.*)$/$1/gos; # yahoo fix
-      $line =~ s/\$(item)?link/$val/gos;
+      $link = $val;
       $ok = 1;
     }
     if (&parseCONTENT(\$_, \$line)) {
@@ -577,11 +572,18 @@ sub parseRssFeed {
       $line =~ s/\$(item)?category/$val/gos;
       $ok = 1;
     }
+    if (/<guid[^>]*>(.*?)<\/guid>/) {
+      $link ||= &recode($1);
+      $ok = 1;
+    }
     if (&parseDC(\$_, \$line)) {
       $ok = 1;
     }
     if (&parseIMAGE(\$_, \$line)) {
       $ok = 1;
+    }
+    if ( $link ) {
+      $line =~ s/\$(item)?link/$link/gos;
     }
     $line =~ s/\$title/Untitled/go;
     $line =~ s/\$(item)?(link|description|date|category)//go;
@@ -740,7 +742,6 @@ sub recode {
     $text =~ s/&quot;/"/go;
   }
 
-
   $text =~ s/&#xD;/\n/go;
 
   # TODO: partial utf8 support
@@ -762,6 +763,7 @@ sub recode {
 
   # map integer representations to html entities
   $text =~ s/&#(\d+);/($1<160)?chr($1):'&'.($entityHash{$1}||"#$1").';'/ge;
+  $text =~ s/%/&#37;/g;
 
   return $text;
 }
@@ -940,92 +942,6 @@ sub parseCONTENT {
 
   return $ok;
 }
-
-# =========================
-sub getUrlLWP {
-  my $theUrl = shift;
-
-  #writeDebug("called getUrlLWP($theUrl)");
-
-  unless ($userAgent) {
-    eval "use LWP::UserAgent";
-    die $@ if $@;
-
-    my $proxyHost = TWiki::Func::getPreferencesValue('PROXYHOST') || '';
-    my $proxyPort = TWiki::Func::getPreferencesValue('PROXYPORT') || '';
-    $proxyHost ||= $TWiki::cfg{PROXY}{HOST};
-    $proxyPort ||= $TWiki::cfg{PROXY}{PORT};
-    my $proxySkip = $TWiki::cfg{PROXY}{SkipProxyForDomains} || '';
-
-    $userAgent = LWP::UserAgent->new();
-    $userAgent->agent( $userAgentName ); 
-      # don't leave the LWP default string there as
-      # this is blocked by some sites, e.g. google news
-    $userAgent->timeout( $userAgentTimeout );
-    if( $proxyHost && $proxyPort ) {
-      my $proxyURL = "$proxyHost:$proxyPort/";
-      $proxyURL = 'http://' . $proxyURL unless( $proxyURL =~ /^https?:\/\// );
-      $userAgent->proxy( "http", $proxyURL );
-      my @skipDomains = split( /[\,\s]+/, $proxySkip );
-      $userAgent->no_proxy( @skipDomains );
-    }
-  }
-
-  my $request = HTTP::Request->new('GET', $theUrl);
-  $request->referer(TWiki::Func::getViewUrl($web, $topic));
-  my $response = $userAgent->request($request);
-  if ($response->is_error) {
-    return (undef, $response->status_line);
-  } else {
-    my $text = $response->content;
-    $text =~ s/\r\n?/ /gos;
-    $text =~ s/\n/ /gos;
-    #$text =~ s/ +/ /gos;
-    return ($text, undef);
-  }
-}
-
-# =========================
-sub getUrl {
-  my $theUrl = shift;
-
-  my $host = '';
-  my $port = 0;
-  my $path = '';
-  if ($theUrl =~ /https?\:\/\/(.*?)\:([0-9]+)(\/.*)/) {
-    $host = $1;
-    $port = $2;
-    $path = $3;
-  } elsif($theUrl =~ /https?\:\/\/(.*?)(\/.*)/) {
-    $host = $1;
-    $path = $2;
-  }
-  return (undef, "invalid format of the href parameter") unless $path;
-  
-  # figure out how to get to TWiki::Net which is wide open in Cairo and before,
-  # but Dakar uses the session object.  
-  my $text = $TWiki::Plugins::SESSION->{net}
-      ? $TWiki::Plugins::SESSION->{net}->getUrl( $host, $port, $path )
-      : TWiki::Net::getUrl( $host, $port, $path );
-
-  if ($text =~ /text\/plain\s*ERROR\: (.*)/s) {
-    my $msg = $1;
-    $msg =~ s/[\n\r]/ /gos;
-    return (undef, "Can't read $theUrl ($msg)");
-  }
-  if ($text =~ /HTTP\/[0-9\.]+\s*([0-9]+)\s*([^\n]*)/s) {
-    return (undef, "Can't read $theUrl ($1 $2)")
-      unless $1 == 200;
-  }
-  $text =~ s/^.*?\n\n(.*)/$1/os;  # strip header
-  $text =~ s/\r\n?/ /gos;
-  $text =~ s/\n/ /gos;
-  #$text =~ s/ +/ /gos;
-
-  return ($text, undef);
-}
-
-
 
 1;
 

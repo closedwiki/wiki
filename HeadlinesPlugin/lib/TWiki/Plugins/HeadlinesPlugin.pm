@@ -44,18 +44,18 @@ sub initPlugin {
 }
 
 # =========================
-sub commonTagsHandler {
-
-  $_[0] =~ s/([ \t]*)%HEADLINES{(.*?)}%/handleHeadlinesTag($_[2], $_[1], $1, $2)/geo;
-
-  unless ($doneHeader) {
-    my $link = 
+my $cssLink = 
       '<link rel="stylesheet" '.
       'href="%PUBURL%/%SYSTEMWEB%/HeadlinesPlugin/style.css" '.
       'type="text/css" media="all" />';
-    if($_[0] =~ s/<head>(.*?[\r\n]+)/<head>$1$link\n/o) {
-      $doneHeader = 1;
-    }
+sub commonTagsHandler {
+
+  my $r = ($_[0] =~
+    s/([ \t]*)%HEADLINES{(.*?)}%/handleHeadlinesTag($_[2], $_[1], $1, $2)/geo);
+
+  if ($r && !$doneHeader) {
+    TWiki::Func::addToHEAD('HEADLINESPLUGIN', $cssLink);
+    $doneHeader = 1;
   }
 }
 
