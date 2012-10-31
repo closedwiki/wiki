@@ -65,6 +65,7 @@ our $NO_PREFS_IN_TOPIC = 1;
 # Define other global package variables
 our $debug;
 
+my $handler;
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
@@ -75,6 +76,7 @@ sub initPlugin {
         return 0;
     }
 
+    $handler = __PACKAGE__->new();
     TWiki::Func::registerExternalHTTPHandler( \&handleExternalHTTPRequest );
 
     # Plugin correctly initialized
@@ -83,18 +85,18 @@ sub initPlugin {
 
 sub handleExternalHTTPRequest {
     my ($session, $url) = @_;
-    my $this = __PACKAGE__->new($session);
+    my $this = $handler;
 
     my $headers = [];
     my $params = {};
 
     $this->writeDebug("Begin hook: $url") if $this->debug;
 
-    if (defined(my $matchedDomain = $this->matchDomain($url, $this->{domains}))) {
+    if (defined(my $matchedDomain = $this->matchDomain($url))) {
         if (@{$this->{cookieNames}}) {
             if ($this->debug) {
                 my $names = join(', ', @{$this->{cookieNames}});
-                $this->writeDebug("Forwardable cookie names: $names");
+                $this->writeDebug("Forwardable cookie names = $names");
             }
 
             my $cookieJar = ($params->{cookie_jar} ||= do {
@@ -116,15 +118,11 @@ sub handleExternalHTTPRequest {
 }
 
 sub new {
-    my ($class, $session) = @_;
+    my ($class) = @_;
     my $cfg = $TWiki::cfg{Plugins}{SsoForwardCookiePlugin} || {};
 
     my @domains;
-
-    for my $domain (split /\s*,\s*/, ($cfg->{Domains} || '')) {
-        $domain =~ s/^\s+|\s+$//g;
-        push @domains, $domain if $domain ne '';
-    }
+    $class->parseDomains($cfg->{Domains} || '', \@domains);
 
     my @cookieNames;
 
@@ -133,13 +131,18 @@ sub new {
         push @cookieNames, $name if $name ne '';
     }
 
+    # RFC2965: Domain comparisons SHALL be case-insensitive
+    # RFC2109: x.y.com domain-matches .y.com but not y.com
+    my $domainPattern = join('|', map {
+        (/^\./ ? '' : '^').quotemeta($_).'$';
+    } @domains);
+
     my $this = bless {
-        session      => $session,
-        debug        => TWiki::isTrue($cfg->{Debug}),
-        domains      => \@domains,
-        cookieNames  => \@cookieNames,
-        cookieDomain => $cfg->{CookieDomain},
-        cookiePath   => $cfg->{CookiePath},
+        debug         => TWiki::isTrue($cfg->{Debug}),
+        domainPattern => (@domains ? qr{($domainPattern)}i : undef),
+        cookieNames   => \@cookieNames,
+        cookieDomain  => $cfg->{CookieDomain},
+        cookiePath    => $cfg->{CookiePath},
     }, $class;
 
     if ($this->debug) {
@@ -151,6 +154,34 @@ sub new {
     }
 
     return $this;
+}
+
+sub parseDomains {
+    my ($this, $input, $result, $seen) = @_;
+    $result ||= [];
+    $seen   ||= {};
+
+    for my $domain (split /\s*,\s*/, $input) {
+        $domain =~ s/^\s+|\s*#.*|\s+$//g;
+        next if $domain eq '';
+
+        if ($domain =~ m{^file:(.*)}i) {
+            my $file = $1;
+            next if $seen->{$file};
+            $seen->{$file} = 1; # avoid unintended recursion
+
+            if (open(my $in, $file)) {
+                $this->parseDomains($_, $result, $seen) while <$in>;
+                close $in;
+            } else {
+                $this->writeWarning("$!: $file");
+            }
+        } else {
+            push @$result, $domain;
+        }
+    }
+
+    return $result;
 }
 
 sub debug {
@@ -166,12 +197,20 @@ sub writeDebug {
     }
 }
 
+sub writeWarning {
+    my $this = shift;
+    TWiki::Func::writeWarning("SsoForwardCookiePlugin: $_") foreach @_;
+}
+
 sub matchDomain {
-    my ($this, $url, $domains) = @_;
+    my ($this, $url) = @_;
+    my $pattern = $this->{domainPattern};
 
-    $this->writeDebug("Matching URL with domains: ".join(', ', @$domains)) if $this->debug;
+    $this->writeDebug("Matching URL with domain pattern") if $this->debug;
 
-    if (@$domains == 0) {
+    if ($pattern) {
+        $this->writeDebug("Pattern = $pattern") if $this->debug;
+	} else {
         $this->writeDebug("No SSO domains are configured") if $this->debug;
         return undef;
     }
@@ -188,30 +227,17 @@ sub matchDomain {
     };
 
     return undef if !defined $host;
-    my $lc_host = lc $host; # RFC2965: Domain comparisons SHALL be case-insensitive
 
-    $this->writeDebug("Target host = $lc_host") if $this->debug;
+    $this->writeDebug("Target host = $host") if $this->debug;
 
-    for my $domain (@$domains) {
-        my $lc_domain = lc $domain;
-        $this->writeDebug("- Checking domain: $domain") if $this->debug;
-
-        # RFC2109: x.y.com domain-matches .y.com but not y.com
-        if ($lc_domain =~ /^\./) {
-            if (substr($lc_host, -length($lc_domain)) eq $lc_domain) {
-                $this->writeDebug("  - Matched domain: $domain") if $this->debug;
-                return $domain;
-            }
-        } else {
-            if ($lc_host eq $lc_domain) {
-                $this->writeDebug("  - Matched domain: $domain") if $this->debug;
-                return $domain;
-            }
-        }
+    if ($host =~ $pattern) {
+        my $matched = $1;
+        $this->writeDebug("Matched domain = $matched") if $this->debug;
+        return $matched;
+    } else {
+        $this->writeDebug("Did not match any domains") if $this->debug;
+        return undef;
     }
-
-    $this->writeDebug("Matched no domains") if $this->debug;
-    return undef;
 }
 
 sub addForwardedCookies {
