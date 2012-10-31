@@ -81,19 +81,11 @@ sub getIssuesFromJqlSearch {
     unless ($require_all) {
         $url .= join('', map {'&field='.uri_escape($_)} keys %urlparams);
     }
-    
-    my ($ua, $req);
 
-    if ($TWiki::Plugins::VERSION >= 1.5) {
-        ($ua, $req) = TWiki::Func::getLWPRequest(GET => $url);
-    } else {
-        $ua = LWP::UserAgent->new();
-        $req = HTTP::Request->new(GET => $url);
-    }
+    my $http_headers = [];
+    my $http_params = {timeout => $self->{timeout}};
     
-    $ua->timeout($timeout);
-    
-    my $res = $ua->request($req);
+    my $res = TWiki::Func::getExternalResource($url, $http_headers, $http_params);
     
     unless ($res->is_success) {
         die $res->message;
