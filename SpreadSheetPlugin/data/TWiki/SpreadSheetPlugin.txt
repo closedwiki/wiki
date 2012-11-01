@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349496258" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351747468" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -944,15 +944,16 @@ __Note:__ This plugin is pre-installed. TWiki administrators can upgrade it as n
 
    * Plugin __configuration and testing__:
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
-      * Test if the installation was successful: See example above.
+      * Test if the installation was successful: See example above. See %SYSTEMWEB%.SpreadSheetPluginTestCases
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2001-2012 Peter Thoeny, [[http://twiki.org/][TWiki.org]]<br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-10-06 |
+|  Plugin Version: | 2012-11-01 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2012-11-01: | TWikibug:Item7018: Added SpreadSheetPluginTestCases topic |
 |  2012-10-06: | TWikibug:Item6960: Fixed form action of interactive formula evaluation feature -- TWiki:Main.HideyoImazu |
 |  2012-06-30: | TWikibug:Item6898: Added $FILTER() |
 |  2012-06-29: | TWikibug:Item6897: Added $ISDIGIT(), $ISLOWER(), $ISUPPER(), $ISWIKIWORD() |
@@ -1028,4 +1029,4 @@ __Note:__ This plugin is pre-installed. TWiki administrators can upgrade it as n
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.VarCALC, %SYSTEMWEB%.VarCALCULATE, %SYSTEMWEB%.VarIF
+__Related Topics:__ %SYSTEMWEB%.SpreadSheetPluginTestCases, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.VarCALC, %SYSTEMWEB%.VarCALCULATE, %SYSTEMWEB%.VarIF
