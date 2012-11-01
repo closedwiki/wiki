@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351750280" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351755921" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -260,7 +260,7 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * The =precision= indicates the the number of digits after the dot
    * Syntax: ==$FORMAT( type, prec, number )==
    * Example: ==%<nop>CALC{$FORMAT(COMMA, 2, 12345.6789)}%== returns ==12,345.68==
-   * Example: ==%<nop>CALC{$FORMAT(DOLLAR, 2, 12345.67)}%== returns ==$12,345.68==
+   * Example: ==%<nop>CALC{$FORMAT(DOLLAR, 2, 12345.6789)}%== returns ==$12,345.68==
    * Example: ==%<nop>CALC{$FORMAT(KB, 2, 1234567)}%== returns ==1205.63 KB==
    * Example: ==%<nop>CALC{$FORMAT(MB, 2, 1234567)}%== returns ==1.18 MB==
    * Example: ==%<nop>CALC{$FORMAT(KBMB, 2, 1234567)}%== returns ==1.18 MB==
