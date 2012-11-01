@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351729729" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351744828" format="1.1" version="$Rev$"}%
 %INCLUDE{%SYSTEMWEB%.WebChangesRightBox}%
 ---+ !TestCases Web
 
@@ -26,11 +26,13 @@ Other topics may be created to provide test fixtures, but all checked-in topics 
 
 Automatic testcases may be run by clicking on the =run= link for the testcase in the table below. The testcases are run with _no plugins enabled_.
 
-%H% A good tip is to right-click each =run= link and open in a new tab (if your browser supports this; all good browsers do). That way you can run a whole bunch of testcases quickly without having to wait for each to finish loading.
+Plugins do not ship with test cases in the !TestCases web. It is possible to create a test case topic in the %SYSTEMWEB% web (and thus ship it with a plugin for manual testing), and include that in an !TestCases topic. For example the TestCaseAutoSpreadSheetPlugin topic includes the test cases from [[%SYSTEMWEB%.SpreadSheetPluginTestCases]].
+
+%H% A good tip is to right-click each =run= link and open in a new tab. That way you can run a whole bunch of testcases quickly without having to wait for each to finish loading.
 
 <!--
 %TABLE{}%
 -->
 |*Testcase* |*Description*  |*Tests*  |
-%SEARCH{"^TestCaseAuto" type="regex" scope="topic" nosearch="on" nototal="on" format="|$topic  |$pattern(.*Description:(.*?)\n.*)  |[[%SCRIPTURL{"view"}%/%WEB%/$topic?test=compare&debugenableplugins=TestFixturePlugin,CommentPlugin,InterwikiPlugin,DefaultPlugin&skin=pattern][run]]  |"}%
+%SEARCH{"^TestCaseAuto" type="regex" scope="topic" nosearch="on" nototal="on" format="|$topic  |$pattern(.*Description:(.*?)\n.*)  |[[%SCRIPTURL{"view"}%/%WEB%/$topic?test=compare&debugenableplugins=TestFixturePlugin,CommentPlugin,DefaultPlugin,InterwikiPlugin,SpreadSheetPlugin&skin=pattern][run]]  |"}%
 %SEARCH{"^TestCase(?!Auto)" type="regex" scope="topic" nosearch="on" nototal="on" format="|$topic  |$pattern(.*Description:(.*?)\n.*)  |manual  |"}%
