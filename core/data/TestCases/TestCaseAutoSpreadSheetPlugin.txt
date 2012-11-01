@@ -7,8 +7,8 @@ Designed by: Peter Thoeny
 
 [[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin,SpreadSheetPlugin&amp;skin=pattern][Run this test]]
 
----++ START !SpreadSheetPluginTesting
 %INCLUDE{ "%SYSTEMWEB%.SpreadSheetPluginTestCases" for="TestFixturePlugin" }%
----++ END !SpreadSheetPluginTesting
+
+__NOTE:__ Test cases are included from %SYSTEMWEB%.SpreadSheetPluginTestCases.
 
 -- TWiki:Main.PeterThoeny - 2012-11-01
