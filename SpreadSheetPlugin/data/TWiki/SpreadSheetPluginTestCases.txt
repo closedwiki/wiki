@@ -1,0 +1,103 @@
+%META:TOPICINFO{author="TWikiContributor" date="1351746991" format="1.1" version="$Rev$"}%
+---+ !SpreadSheetPlugin Testing
+
+Use this topic to verify proper operation of the SpreadSheetPlugin in your environment.
+
+For developers: This topic is included by TestCases.TestCaseAutoSpreadSheetPlugin for automated integration testing. This requires the TWiki:Plugins.TestFixturePlugin and a repository checkout.
+
+---++ CALC{} and CALCULATE{}
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected CALC_and_CALCULATE -->
+<ul>
+<li>CALC{$REPLACE(1234, 2, 1, X)}=|1X34|
+</li>
+<li>CALCULATE{$REPLACE(1234, 2, 1, X)}=|1X34|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * CALC{$REPLACE(1234, 2, 1, X)}=|%CALCULATE{$REPLACE(1234, 2, 1, X)}%|
+   * CALCULATE{$REPLACE(1234, 2, 1, X)}=|%CALCULATE{$REPLACE(1234, 2, 1, X)}%|
+<!-- /actual -->
+</td></tr></table>
+
+__NOTE:__ All functions that follow are tested via:
+   * CALC{} if reference is done to table cells
+   * CALCULATE{} otherwise
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncABOVE][ABOVE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected ABOVE -->
+<table cellspacing="0" cellpadding="0" class="twikiTable" border="1"><tbody>
+<tr>
+<td> A1 </td>
+<td> B1 </td>
+</tr>
+<tr>
+<td> A2 </td>
+<td> B2 </td>
+</tr>
+<tr>
+<td> $ABOVE()=R0:C1..R2:C1 </td>
+<td> $ABOVE()=R0:C2..R2:C2 </td>
+</tr></tbody></table>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+| A1 | B1 |
+| A2 | B2 |
+| $ABOVE()=%CALC{$ABOVE()}% | $ABOVE()=%CALC{$ABOVE()}% |
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncABS][ABS]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected ABS -->
+<ul>
+<li>$ABS(-2)=|2|
+</li>
+<li>$ABS(-0.5)=|0.5|
+</li>
+<li>$ABS(0)=|0|
+</li>
+<li>$ABS(0.5)=|0.5|
+</li>
+<li>$ABS(2)=|2|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $ABS(-2)=|%CALCULATE{$ABS(-2)}%|
+   * $ABS(-0.5)=|%CALCULATE{$ABS(-0.5)}%|
+   * $ABS(0)=|%CALCULATE{$ABS(0)}%|
+   * $ABS(0.5)=|%CALCULATE{$ABS(0.5)}%|
+   * $ABS(2)=|%CALCULATE{$ABS(2)}%|
+<!-- /actual -->
+</td></tr></table>
+
+FIXME: More functions
+
+
+<style>
+.testSideBySide {
+  margin-left: -10px;
+}
+.testSideBySide td {
+  padding: 0 10px;
+}
+.testSideBySide tr td h3 {
+  margin-top: 0;
+}
+</style>
+
+__Related Topics:__ SpreadSheetPlugin, VarCALC, VarCALCULATE
+
+-- TWiki:Main.PeterThoeny - 2012-11-01
