@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351752283" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351754275" format="1.1" version="$Rev$"}%
 ---+ !SpreadSheetPlugin Testing
 
 Use this topic to verify proper operation of the SpreadSheetPlugin in your environment.
@@ -320,6 +320,163 @@ __NOTE:__ All functions that follow are tested via:
    * $DEF(, , )=|%CALCULATE{$DEF(, , )}%|
 <!-- /actual -->
 </td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncEMPTY][EMPTY]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected EMPTY -->
+<ul>
+<li>$EMPTY()=|1|
+</li>
+<li>$EMPTY( )=|0|
+</li>
+<li>$EMPTY(foo)=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $EMPTY()=|%CALCULATE{$EMPTY()}%|
+   * $EMPTY( )=|%CALCULATE{$EMPTY( )}%|
+   * $EMPTY(foo)=|%CALCULATE{$EMPTY(foo)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncEVAL][EVAL]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected EVAL -->
+<ul>
+<li>$EVAL( (5 * 3) / 2 + 1.1 )=|8.6|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $EVAL( (5 * 3) / 2 + 1.1 )=|%CALCULATE{$EVAL( (5 * 3) / 2 + 1.1 )}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncEVEN][EVEN]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected EVEN -->
+<ul>
+<li>$EVEN()=|1|
+</li>
+<li>$EVEN(-1)=|0|
+</li>
+<li>$EVEN(0)=|1|
+</li>
+<li>$EVEN(1)=|0|
+</li>
+<li>$EVEN(2)=|1|
+</li>
+<li>$EVEN(3.4)=|0|
+</li>
+<li>$EVEN(4.4)=|1|
+</li>
+<li>$EVEN(4.6)=|1|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $EVEN()=|%CALCULATE{$EVEN()}%|
+   * $EVEN(-1)=|%CALCULATE{$EVEN(-1)}%|
+   * $EVEN(0)=|%CALCULATE{$EVEN(0)}%|
+   * $EVEN(1)=|%CALCULATE{$EVEN(1)}%|
+   * $EVEN(2)=|%CALCULATE{$EVEN(2)}%|
+   * $EVEN(3.4)=|%CALCULATE{$EVEN(3.4)}%|
+   * $EVEN(4.4)=|%CALCULATE{$EVEN(4.4)}%|
+   * $EVEN(4.6)=|%CALCULATE{$EVEN(4.6)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncEXACT][EXACT]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected EXACT -->
+<ul>
+<li>$EXACT(foo, Foo)=|0|
+</li>
+<li>$EXACT(foo, $LOWER(Foo))=|1|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $EXACT(foo, Foo)=|%CALCULATE{$EXACT(foo, Foo)}%|
+   * $EXACT(foo, $LOWER(Foo))=|%CALCULATE{$EXACT(foo, $LOWER(Foo))}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncEXEC][EXEC]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected EXEC -->
+<ul>
+<li>$SET(msg, $NOEXEC(Hi $GET(name)))=||
+</li>
+<li>$EXEC($SET(name, Tom) $EXEC($GET(msg)))=| Hi Tom|
+</li>
+<li>$EXEC($SET(name, Jerry) $EXEC($GET(msg)))=| Hi Jerry|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $SET(msg, $NOEXEC(Hi $GET(name)))=|%CALCULATE{$SET(msg, $NOEXEC(Hi $GET(name)))}%|
+   * $EXEC($SET(name, Tom) $EXEC($GET(msg)))=|%CALCULATE{$EXEC($SET(name, Tom) $EXEC($GET(msg)))}%|
+   * $EXEC($SET(name, Jerry) $EXEC($GET(msg)))=|%CALCULATE{$EXEC($SET(name, Jerry) $EXEC($GET(msg)))}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncEXISTS][EXISTS]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<noautolink>
+<!-- expected EXISTS -->
+<ul>
+<li>$EXISTS(WebHome)=|1|
+</li>
+<li>$EXISTS(ThisDoesNotExist)=|0|
+</li>
+</ul>
+<!-- /expected -->
+</noautolink>
+</td><td>
+---+++ Actual
+<noautolink>
+<!-- actual -->
+   * $EXISTS(WebHome)=|%CALCULATE{$EXISTS(WebHome)}%|
+   * $EXISTS(ThisDoesNotExist)=|%CALCULATE{$EXISTS(ThisDoesNotExist)}%|
+<!-- /actual -->
+</noautolink>
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncEXP][EXP]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected EXP -->
+<ul>
+<li>$EXP(1)=|2.71828182845905|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $EXP(1)=|%CALCULATE{$EXP(1)}%|
+<!-- /actual -->
+</td></tr></table>
+
+
 
 
 
