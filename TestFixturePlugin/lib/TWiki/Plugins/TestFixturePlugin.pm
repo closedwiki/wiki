@@ -1,6 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004 Crawford Currie, http://c-dot.co.uk
+# Copyright (C) 2008-2012 TWiki Contributors.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -50,15 +51,8 @@ use vars qw( %TWikiCompatibility );
 
 use CGI qw( :any );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2012-11-01';
 
 $pluginName = 'TestFixturePlugin';
 
@@ -210,14 +204,26 @@ sub insidePREHandler {
     $_[0] =~ s/%insidePreHandler(\d+)%/$iph++;"$1IPH${iph}_line1\n$1IPH${iph}_line2\n$1IPH${iph}_line3\n"/ge;
 }
 
+sub _includeTopic {
+    my( $param ) = @_;
+    my ($incWeb, $incTopic) = TWiki::Func::normalizeWebTopicName( '', $param );
+    my ( $meta, $text ) = TWiki::Func::readTopic( $incWeb, $incTopic );
+    return $text;
+}
+
 sub postRenderingHandler {
     my $q = TWiki::Func::getCgiQuery();
     my $t;
     $t = $q->param( 'test' ) if ( $q );
     $t = '' unless $t;
+    my $includeTrigger = 'for="TestFixturePlugin"';
 
-    if ( $t eq 'compare' && $_[0] =~ /<!--\s*actual\s*-->/ ) {
+    if ( $t eq 'compare' && $_[0] =~ /<!--\s*actual\s*-->|$includeTrigger/ ) {
         my ( $meta, $expected ) = TWiki::Func::readTopic( $web, $topic );
+
+        # Resolve INCLUDE variable, but only if include trigger found
+        $expected =~ s/\%INCLUDE{ *"([^"]*)" *$includeTrigger.*?}\%/_includeTopic($1)/geo;
+
         my $res = _compareExpectedWithActual( _parse( $expected, 'expected' ),
                                               _parse( $_[0], 'actual' ),
                                               $topic, $web);
