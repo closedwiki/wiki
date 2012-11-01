@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="TWikiContributor" date="1351745669" format="1.1" version="$Rev$"}%
+---+ Test Case Auto: !SpreadSheetPlugin
+
+Description: Test %SYSTEMWEB%.SpreadSheetPlugin functions
+
+Designed by: Peter Thoeny
+
+[[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin,SpreadSheetPlugin&amp;skin=pattern][Run this test]]
+
+---++ START !SpreadSheetPluginTesting
+%INCLUDE{ "%SYSTEMWEB%.SpreadSheetPluginTestCases" for="TestFixturePlugin" }%
+---++ END !SpreadSheetPluginTesting
+
+-- TWiki:Main.PeterThoeny - 2012-11-01
