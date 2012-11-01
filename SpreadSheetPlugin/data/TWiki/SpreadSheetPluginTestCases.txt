@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351754275" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351756457" format="1.1" version="$Rev$"}%
 ---+ !SpreadSheetPlugin Testing
 
 Use this topic to verify proper operation of the SpreadSheetPlugin in your environment.
@@ -476,9 +476,171 @@ __NOTE:__ All functions that follow are tested via:
 <!-- /actual -->
 </td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncFILTER][FILTER]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected FILTER -->
+<ul>
+<li>$FILTER(f, fluffy)=|luy|
+</li>
+<li>$FILTER(an Franc, San Francisco)=|Sisco|
+</li>
+<li>$FILTER($sp, Cat and Mouse)=|CatandMouse|
+</li>
+<li>$FILTER([^0-9], Project-ID-1234)=|1234|
+</li>
+<li>$FILTER([^a-zA-Z0-9 ], Stupid mistake*%@^! Fixed)=|Stupid mistake Fixed|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $FILTER(f, fluffy)=|%CALCULATE{$FILTER(f, fluffy)}%|
+   * $FILTER(an Franc, San Francisco)=|%CALCULATE{$FILTER(an Franc, San Francisco)}%|
+   * $FILTER($sp, Cat and Mouse)=|%CALCULATE{$FILTER($sp, Cat and Mouse)}%|
+   * $FILTER([^0-9], Project-ID-1234)=|%CALCULATE{$FILTER([^0-9], Project-ID-1234)}%|
+   * $FILTER([^a-zA-Z0-9 ], Stupid mistake*%@^! Fixed)=|%CALCULATE{$FILTER([^a-zA-Z0-9 ], Stupid mistake*%@^! Fixed)}%|
+<!-- /actual -->
+</td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncFIND][FIND]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected FIND -->
+<ul>
+<li>$FIND(f, fluffy)=|1|
+</li>
+<li>$FIND(f, fluffy, 2)=|4|
+</li>
+<li>$FIND(x, fluffy, 1)=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $FIND(f, fluffy)=|%CALCULATE{$FIND(f, fluffy)}%|
+   * $FIND(f, fluffy, 2)=|%CALCULATE{$FIND(f, fluffy, 2)}%|
+   * $FIND(x, fluffy, 1)=|%CALCULATE{$FIND(x, fluffy, 1)}%|
+<!-- /actual -->
+</td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncFLOOR][FLOOR]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected FLOOR -->
+<ul>
+<li>$FLOOR(5.4)=|5|
+</li>
+<li>$FLOOR(-5.4)=|-6|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $FLOOR(5.4)=|%CALCULATE{$FLOOR(5.4)}%|
+   * $FLOOR(-5.4)=|%CALCULATE{$FLOOR(-5.4)}%|
+<!-- /actual -->
+</td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncFORMAT][FORMAT]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected FORMAT -->
+<ul>
+<li>$FORMAT(COMMA, 2, 12345.6789)=|12,345.68|
+</li>
+<li>$FORMAT(DOLLAR, 2, 12345.6789)=|$12,345.68|
+</li>
+<li>$FORMAT(KB, 2, 1234567)=|1205.63 KB|
+</li>
+<li>$FORMAT(MB, 2, 1234567)=|1.18 MB|
+</li>
+<li>$FORMAT(KBMB, 2, 1234567)=|1.18 MB|
+</li>
+<li>$FORMAT(KBMB, 2, 1234567890)=|1.15 GB|
+</li>
+<li>$FORMAT(NUMBER, 1, 12345.67)=|12345.7|
+</li>
+<li>$FORMAT(PERCENT, 1, 0.1234567)=|12.3%|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $FORMAT(COMMA, 2, 12345.6789)=|%CALCULATE{$FORMAT(COMMA, 2, 12345.6789)}%|
+   * $FORMAT(DOLLAR, 2, 12345.6789)=|%CALCULATE{$FORMAT(DOLLAR, 2, 12345.6789)}%|
+   * $FORMAT(KB, 2, 1234567)=|%CALCULATE{$FORMAT(KB, 2, 1234567)}%|
+   * $FORMAT(MB, 2, 1234567)=|%CALCULATE{$FORMAT(MB, 2, 1234567)}%|
+   * $FORMAT(KBMB, 2, 1234567)=|%CALCULATE{$FORMAT(KBMB, 2, 1234567)}%|
+   * $FORMAT(KBMB, 2, 1234567890)=|%CALCULATE{$FORMAT(KBMB, 2, 1234567890)}%|
+   * $FORMAT(NUMBER, 1, 12345.67)=|%CALCULATE{$FORMAT(NUMBER, 1, 12345.67)}%|
+   * $FORMAT(PERCENT, 1, 0.1234567)=|%CALCULATE{$FORMAT(PERCENT, 1, 0.1234567)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncFORMATGMTIME][FORMATGMTIME]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected FORMATGMTIME -->
+<ul>
+<li>$FORMATGMTIME(1041379200, $day $mon $year)=|01 Jan 2003|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $FORMATGMTIME(1041379200, $day $mon $year)=|%CALCULATE{$FORMATGMTIME(1041379200, $day $mon $year)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncFORMATTIME][FORMATTIME]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected FORMATTIME -->
+<ul>
+<li>$FORMATTIME(0, $year/$month/$day GMT)=|1970/01/01 GMT|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $FORMATTIME(0, $year/$month/$day GMT)=|%CALCULATE{$FORMATTIME(0, $year/$month/$day GMT)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncFORMATTIMEDIFF][FORMATTIMEDIFF]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected FORMATTIMEDIFF -->
+<ul>
+<li>$FORMATTIMEDIFF(min, 1, 200)=|3 hours|
+</li>
+<li>$FORMATTIMEDIFF(min, 2, 200)=|3 hours and 20 minutes|
+</li>
+<li>$FORMATTIMEDIFF(min, 1, 1640)=|1 day|
+</li>
+<li>$FORMATTIMEDIFF(min, 2, 1640)=|1 day and 3 hours|
+</li>
+<li>$FORMATTIMEDIFF(min, 3, 1640)=|1 day, 3 hours and 20 minutes|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $FORMATTIMEDIFF(min, 1, 200)=|%CALCULATE{$FORMATTIMEDIFF(min, 1, 200)}%|
+   * $FORMATTIMEDIFF(min, 2, 200)=|%CALCULATE{$FORMATTIMEDIFF(min, 2, 200)}%|
+   * $FORMATTIMEDIFF(min, 1, 1640)=|%CALCULATE{$FORMATTIMEDIFF(min, 1, 1640)}%|
+   * $FORMATTIMEDIFF(min, 2, 1640)=|%CALCULATE{$FORMATTIMEDIFF(min, 2, 1640)}%|
+   * $FORMATTIMEDIFF(min, 3, 1640)=|%CALCULATE{$FORMATTIMEDIFF(min, 3, 1640)}%|
+<!-- /actual -->
+</td></tr></table>
 
 
 
