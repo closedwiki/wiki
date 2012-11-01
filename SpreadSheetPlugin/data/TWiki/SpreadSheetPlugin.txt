@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351747468" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351750280" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -107,7 +107,7 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
 ---+++ BITXOR( text ) -- bit-wise XOR of text
    * Each bit of each character of =text= is flipped, useful to obfuscate text. Bit-XORing text twice will restore the original text.
    * Syntax: ==$BITXOR( text )==
-   * Example: ==%<nop>CALC{$BITXOR(A123)}%== returns ==&Yuml;&Icirc;&Iacute;&Igrave;==
+   * Example: ==%<nop>CALC{$BITXOR(A123)}%== returns ==&#190;&Icirc;&Iacute;&Igrave;==
    * Example: ==%<nop>CALC{$BITXOR($BITXOR(anything))}%== returns ==anything==
    * Related: =[[#FuncHEXDECODE][$HEXDECODE()]]=, =[[#FuncHEXENCODE][$HEXENCODE()]]=, =[[#FuncLEFTTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=, =[[#FuncXOR][$XOR()]]=
 
