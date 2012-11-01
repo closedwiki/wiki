@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351746991" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351752283" format="1.1" version="$Rev$"}%
 ---+ !SpreadSheetPlugin Testing
 
 Use this topic to verify proper operation of the SpreadSheetPlugin in your environment.
@@ -83,8 +83,254 @@ __NOTE:__ All functions that follow are tested via:
 <!-- /actual -->
 </td></tr></table>
 
-FIXME: More functions
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncAND][AND]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected AND -->
+<ul>
+<li>$AND()=|0|
+</li>
+<li>$AND(0)=|0|
+</li>
+<li>$AND(1)=|1|
+</li>
+<li>$AND(0, 0)=|0|
+</li>
+<li>$AND(0, 1)=|0|
+</li>
+<li>$AND(1, 0)=|0|
+</li>
+<li>$AND(1, 1)=|1|
+</li>
+<li>$AND(0, 1, 2, 3)=|0|
+</li>
+<li>$AND(1, 2, 3, 4)=|1|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $AND()=|%CALCULATE{$AND(0)}%|
+   * $AND(0)=|%CALCULATE{$AND(0)}%|
+   * $AND(1)=|%CALCULATE{$AND(1)}%|
+   * $AND(0, 0)=|%CALCULATE{$AND(0, 0)}%|
+   * $AND(0, 1)=|%CALCULATE{$AND(0, 1)}%|
+   * $AND(1, 0)=|%CALCULATE{$AND(1, 0)}%|
+   * $AND(1, 1)=|%CALCULATE{$AND(1, 1)}%|
+   * $AND(0, 1, 2, 3)=|%CALCULATE{$AND(0, 1, 2, 3)}%|
+   * $AND(1, 2, 3, 4)=|%CALCULATE{$AND(1, 2, 3, 4)}%|
+<!-- /actual -->
+</td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncAVERAGE][AVERAGE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected AVERAGE -->
+<ul>
+<li>$AVERAGE()=|0|
+</li>
+<li>$AVERAGE(x)=|0|
+</li>
+<li>$AVERAGE(0)=|0|
+</li>
+<li>$AVERAGE(0, 1)=|0.5|
+</li>
+<li>$AVERAGE(0, 1, 2)=|1|
+</li>
+<li>$AVERAGE(1.5, 2, 2.5)=|2|
+</li>
+<li>$AVERAGE(-1.5, 2, 2.5)=|1|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $AVERAGE()=|%CALCULATE{$AVERAGE()}%|
+   * $AVERAGE(x)=|%CALCULATE{$AVERAGE(x)}%|
+   * $AVERAGE(0)=|%CALCULATE{$AVERAGE(0)}%|
+   * $AVERAGE(0, 1)=|%CALCULATE{$AVERAGE(0, 1)}%|
+   * $AVERAGE(0, 1, 2)=|%CALCULATE{$AVERAGE(0, 1, 2)}%|
+   * $AVERAGE(1.5, 2, 2.5)=|%CALCULATE{$AVERAGE(1.5, 2, 2.5)}%|
+   * $AVERAGE(-1.5, 2, 2.5)=|%CALCULATE{$AVERAGE(-1.5, 2, 2.5)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncBITXOR][BITXOR]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected BITXOR -->
+<ul>
+<li>$BITXOR()=||
+</li>
+<li>$BITXOR(A123)=|¾ÎÍÌ|
+</li>
+<li>$BITXOR($BITXOR(anything))=|anything|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $BITXOR()=|%CALCULATE{$BITXOR()}%|
+   * $BITXOR(A123)=|%CALCULATE{$BITXOR(A123)}%|
+   * $BITXOR($BITXOR(anything))=|%CALCULATE{$BITXOR($BITXOR(anything))}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncCEILING][CEILING]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected CEILING -->
+<ul>
+<li>$CEILING(5.4)=|6|
+</li>
+<li>$CEILING(-5.4)=|-5|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $CEILING(5.4)=|%CALCULATE{$CEILING(5.4)}%|
+   * $CEILING(-5.4)=|%CALCULATE{$CEILING(-5.4)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncCHAR][CHAR]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected CHAR -->
+<ul>
+<li>$CHAR(97)=|a|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $CHAR(97)=|%CALCULATE{$CHAR(97)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncCODE][CODE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected CODE -->
+<ul>
+<li>$CODE(abc)=|97|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $CODE(abc)=|%CALCULATE{$CODE(abc)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncCOLUMN][COLUMN]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected COLUMN -->
+<table cellspacing="0" cellpadding="0" class="twikiTable" border="1"><tbody>
+<tr>
+<td> $COLUMN()=1 </td>
+<td> $COLUMN()=2 </td>
+</tr>
+<tr>
+<td> $COLUMN()=1 </td>
+<td> $COLUMN()=2 </td>
+</tr>
+<tr>
+<td> $COLUMN()=1 </td>
+<td> $COLUMN()=2 </td>
+</tr></tbody></table>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+| $COLUMN()=%CALC{$COLUMN()}% | $COLUMN()=%CALC{$COLUMN()}% |
+| $COLUMN()=%CALC{$COLUMN()}% | $COLUMN()=%CALC{$COLUMN()}% |
+| $COLUMN()=%CALC{$COLUMN()}% | $COLUMN()=%CALC{$COLUMN()}% |
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncCOUNTITEMS][COUNTITEMS]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected COUNTITEMS -->
+<ul>
+<li> $COUNTITEMS(One)=|One: 1|
+</li> <li> $COUNTITEMS(One, Two)=|One: 1<br /> Two: 1|
+</li> <li> $COUNTITEMS(One, Two, One)=|One: 2<br /> Two: 1|
+</li>
+</ul> 
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $COUNTITEMS(One)=|%CALCULATE{$COUNTITEMS(One)}%|
+   * $COUNTITEMS(One, Two)=|%CALCULATE{$COUNTITEMS(One, Two)}%|
+   * $COUNTITEMS(One, Two, One)=|%CALCULATE{$COUNTITEMS(One, Two, One)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncCOUNTSTR][COUNTSTR]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected COUNTSTR -->
+<ul>
+<li>$COUNTSTR(Done, , Done, OK, )=|3|
+</li>
+<li>$COUNTSTR(Done, , Done, OK, Done)=|2|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $COUNTSTR(Done, , Done, OK, )=|%CALCULATE{$COUNTSTR(Done, , Done, OK, )}%|
+   * $COUNTSTR(Done, , Done, OK, Done)=|%CALCULATE{$COUNTSTR(Done, , Done, OK, Done)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncDEF][DEF]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected DEF -->
+<ul>
+<li>$DEF(One, Two, Three)=|One|
+</li>
+<li>$DEF(, Two, Three)=|Two|
+</li>
+<li>$DEF(, , Three)=|Three|
+</li>
+<li>$DEF(, , )=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $DEF(One, Two, Three)=|%CALCULATE{$DEF(One, Two, Three)}%|
+   * $DEF(, Two, Three)=|%CALCULATE{$DEF(, Two, Three)}%|
+   * $DEF(, , Three)=|%CALCULATE{$DEF(, , Three)}%|
+   * $DEF(, , )=|%CALCULATE{$DEF(, , )}%|
+<!-- /actual -->
+</td></tr></table>
+
+
+
+
+
+
+
+
+
+
+FIXME: More functions
 
 <style>
 .testSideBySide {
