@@ -546,14 +546,14 @@ sub _doFunc
                   grep { /./ }
                   grep { defined $_ }
                   _getListAsFloat( $theAttr );
-        $result = $arr[$#arr];
+        $result = $arr[$#arr] if( scalar @arr );
 
     } elsif( $theFunc eq "MIN" ) {
         my @arr = sort { $a <=> $b }
                   grep { /./ }
                   grep { defined $_ }
                   _getListAsFloat( $theAttr );
-        $result = $arr[0];
+        $result = $arr[0] if( scalar @arr );
 
     } elsif( $theFunc eq "SUM" ) {
         $result = 0;
