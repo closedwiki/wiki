@@ -713,8 +713,9 @@ sub _doFunc
 
     } elsif( $theFunc eq "REPLACE" ) {
         my( $string, $start, $num, $replace ) = split ( /,\s*/, $theAttr, 4 );
-        $result = $string;
-        $start-- unless ($start < 1);
+        $string = '' unless( defined $string );
+        $start = 0 unless( $start );
+        $start-- if( $start > 0 );
         $num = 0 unless( $num );
         $replace = "" unless( defined $replace );
         eval 'substr( $string, $start, $num, $replace )';
