@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351827706" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351833764" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiDashboardAddOn"}%
 ---+!! <span style="font-size: 60%"> TWikiDashboardAddOn &#187;</span> TWiki Dashboard Banner Images
 
@@ -46,6 +46,18 @@ Name: =hakone-garden.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.tho
 Name: =monterey-by-bike.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/monterey-by-bike.jpg" alt="" width="1026" height="150" />
 
+Name: =niagara-falls.jpg= &nbsp; &nbsp; - image copyright 2008, [[http://en.wikipedia.org/wiki/File:Niagara_falls_panorama.jpg][Koppi2]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/niagara-falls.jpg" alt="" width="1026" height="150" />
+
+Name: =rio-de-janeiro.jpg= &nbsp; &nbsp; - image copyright 2007, [[http://en.wikipedia.org/wiki/File:Panorama_from_Rio_de_Janeiro.jpg][Jens Hausherr]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/rio-de-janeiro.jpg" alt="" width="1026" height="150" />
+
+Name: =venice-grand-canal.jpg= &nbsp; &nbsp; - image copyright 2007, [[http://en.wikipedia.org/wiki/File:Venedig_Pano_AM.jpg][Sbittante]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/venice-grand-canal.jpg" alt="" width="1026" height="150" />
+
+Name: =sydney-harbour-bridge.jpg= &nbsp; &nbsp; - image copyright 2005, [[http://en.wikipedia.org/wiki/File:Sydney_Harbour_Bridge_night.jpg][Diliff]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/sydney-harbour-bridge.jpg" alt="" width="1026" height="150" />
+
 Name: =hong-kong-skyline.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/hong-kong-skyline.jpg" alt="" width="1026" height="150" />
 
@@ -81,7 +93,11 @@ __Related:__ TWikiDashboardAddOn
 %META:FILEATTACHMENT{name="nasa-airfield.jpg" attachment="nasa-airfield.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="nasa-airfield.jpg" size="65068" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="nasa-shed-cyan.jpg" attachment="nasa-shed-cyan.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156455" path="nasa-shed-cyan.jpg" size="104232" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="nasa-shed-orange.jpg" attachment="nasa-shed-orange.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156455" path="nasa-shed-orange.jpg" size="103835" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="niagara-falls.jpg" attachment="niagara-falls.jpg" attr="h" comment="Image copyright 2008, Koppi2" date="1351830764" path="niagara-falls.jpg" size="61423" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="rio-de-janeiro.jpg" attachment="rio-de-janeiro.jpg" attr="h" comment="Image copyright 2007, Jens Hausherr" date="1351832294" path="rio-de-janeiro.jpg" size="68059" user="PeterThoeny" version="1"}%
 %META:FILEATTACHMENT{name="san-francisco-cityscape.jpg" attachment="san-francisco-cityscape.jpg" attr="h" comment="Image copyright 2012, David Yu" date="1351827528" path="san-francisco-cityscape.jpg" size="50918" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="saratoga-evening.jpg" attachment="saratoga-evening.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="saratoga-evening.jpg" size="49410" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="sydney-harbour-bridge.jpg" attachment="sydney-harbour-bridge.jpg" attr="h" comment="Image copyright 2005, Diliff" date="1351831457" path="sydney-harbour-bridge.jpg" size="54322" user="PeterThoeny" version="1"}%
 %META:FILEATTACHMENT{name="venetian-macau.jpg" attachment="venetian-macau.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156456" path="venetian-macau.jpg" size="65434" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="venice-grand-canal.jpg" attachment="venice-grand-canal.jpg" attr="h" comment="Image copyright 2007, Sbittante" date="1351830193" path="venice-grand-canal.jpg" size="59440" user="PeterThoeny" version="1"}%
 %META:FILEATTACHMENT{name="wine-tasting.jpg" attachment="wine-tasting.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="wine-tasting.jpg" size="68924" user="TWikiContributor" version="1"}%
