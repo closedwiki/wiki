@@ -747,6 +747,7 @@ sub _doFunc
 
     } elsif( $theFunc =~ /^(LEFTSTRING|RIGHTSTRING)$/ ) {
         my( $string, $num ) = split ( /,\s*/, $theAttr, 2 );
+        $string = '' unless( defined $string );
         $num = 1 unless( $num );
         my $start = 0;
         $start = length( $string ) - $num if( $theFunc eq "RIGHTSTRING" );
