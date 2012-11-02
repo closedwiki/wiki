@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351842227" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351844249" format="1.1" version="$Rev$"}%
 ---+ !SpreadSheetPlugin Testing
 
 Use this topic to verify proper operation of the SpreadSheetPlugin in your environment.
@@ -1167,6 +1167,207 @@ $LISTJOIN($n, Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTJOIN($n, Apple, Orang
 <!-- /actual -->
 </td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLN][LN]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LN -->
+<ul>
+<li>$LN(10)=|2.30258509299405|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LN(10)=|%CALCULATE{$LN(10)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLOG][LOG]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LOG -->
+<ul>
+<li>$LOG(1000)=|3|
+</li>
+<li>$LOG(16, 2)=|4|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LOG(1000)=|%CALCULATE{$LOG(1000)}%|
+   * $LOG(16, 2)=|%CALCULATE{$LOG(16, 2)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLOWER][LOWER]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LOWER -->
+<ul>
+<li>$LOWER(this BECOMES a lower cASE String)=|this becomes a lower case string|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LOWER(this BECOMES a lower cASE String)=|%CALCULATE{$LOWER(this BECOMES a lower cASE String)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncMAX][MAX]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected MAX -->
+<ul>
+<li>$MAX(7, 99, 2, 5)=|99|
+</li>
+<li>$MAX(A, 99, 2, 5)=|99|
+</li>
+<li>$MAX(A, B)=||
+</li>
+<li>$MAX()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $MAX(7, 99, 2, 5)=|%CALCULATE{$MAX(7, 99, 2, 5)}%|
+   * $MAX(A, 99, 2, 5)=|%CALCULATE{$MAX(A, 99, 2, 5)}%|
+   * $MAX(A, B)=|%CALCULATE{$MAX(A, B)}%|
+   * $MAX()=|%CALCULATE{$MAX()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncMEDIAN][MEDIAN]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected MEDIAN -->
+<ul>
+<li>$MEDIAN(3, 9, 4, 5)=|4.5|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $MEDIAN(3, 9, 4, 5)=|%CALCULATE{$MEDIAN(3, 9, 4, 5)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncMIN][MIN]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected MIN -->
+<ul>
+<li>$MIN(7, 99, 2, 5)=|2|
+</li>
+<li>$MIN(A, 99, 2, 5)=|2|
+</li>
+<li>$MIN(A, B)=||
+</li>
+<li>$MIN()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $MIN(7, 99, 2, 5)=|%CALCULATE{$MIN(7, 99, 2, 5)}%|
+   * $MIN(A, 99, 2, 5)=|%CALCULATE{$MIN(A, 99, 2, 5)}%|
+   * $MIN(A, B)=|%CALCULATE{$MIN(A, B)}%|
+   * $MIN()=|%CALCULATE{$MIN()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncMOD][MOD]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected MOD -->
+<ul>
+<li>$MOD(7, 3)=|1|
+</li>
+<li>$MOD(7)=|0|
+</li>
+<li>$MOD()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $MOD(7, 3)=|%CALCULATE{$MOD(7, 3)}%|
+   * $MOD(7)=|%CALCULATE{$MOD(7)}%|
+   * $MOD()=|%CALCULATE{$MOD()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncNOEXEC][NOEXEC]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected NOEXEC -->
+<ul>
+<li>$SET(msg, $NOEXEC(Hi $GET(name)))=||
+</li>
+<li>$SET(name, Jane)$EXEC($GET(msg))=|Hi Jane|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $SET(msg, $NOEXEC(Hi $GET(name)))=|%CALCULATE{$SET(msg, $NOEXEC(Hi $GET(name)))}%|
+   * $SET(name, Jane)$EXEC($GET(msg))=|%CALCULATE{$SET(name, Jane)$EXEC($GET(msg))}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncNOP][NOP]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected NOP -->
+<ul>
+<li>$NOP(100$percnt $quotquoted$quot)=|100% "quoted"|
+</li>
+<li>$NOP()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $NOP(100$percnt $quotquoted$quot)=|%CALCULATE{$NOP(100$percnt $quotquoted$quot)}%|
+   * $NOP()=|%CALCULATE{$NOP()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncNOT][NOT]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected NOT -->
+<ul>
+<li>$NOT(1)=|0|
+</li>
+<li>$NOT(0)=|1|
+</li>
+<li>$NOT(1234)=|0|
+</li>
+<li>$NOT()=|1|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $NOT(1)=|%CALCULATE{$NOT(1)}%|
+   * $NOT(0)=|%CALCULATE{$NOT(0)}%|
+   * $NOT(1234)=|%CALCULATE{$NOT(1234)}%|
+   * $NOT()=|%CALCULATE{$NOT()}%|
+<!-- /actual -->
+</td></tr></table>
 
 
 
