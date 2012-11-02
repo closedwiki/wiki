@@ -635,6 +635,7 @@ sub _doFunc
 
     } elsif( $theFunc eq "PERCENTILE" ) {
         my( $percentile, $set ) = split( /,\s*/, $theAttr, 2 );
+        $set = '' unless( defined $set );
         my @arr = sort { $a <=> $b } grep { defined $_ } _getListAsFloat( $set );
         $result = 0;
 
