@@ -1157,6 +1157,7 @@ sub _getNumber
 sub _safeEvalPerl
 {
     my( $theText ) = @_;
+    $theText = '' unless( defined $theText );
     # Allow only simple math with operators - + * / % ( )
     $theText =~ s/\%\s*[^\-\+\*\/0-9\.\(\)]+//go; # defuse %hash but keep modulus
     # keep only numbers and operators (shh... don't tell anyone, we support comparison operators)
