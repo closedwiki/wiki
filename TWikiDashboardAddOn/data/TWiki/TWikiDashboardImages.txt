@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350171119" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351827706" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiDashboardAddOn"}%
 ---+!! <span style="font-size: 60%"> TWikiDashboardAddOn &#187;</span> TWiki Dashboard Banner Images
 
@@ -12,6 +12,9 @@ Name: =marin-headlands.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.p
 
 Name: =golden-gate-dawn.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/golden-gate-dawn.jpg" alt="" width="1026" height="150" />
+
+Name: =san-francisco-cityscape.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/san-francisco-cityscape.jpg" alt="" width="1026" height="150" />
 
 Name: =golden-gate-sunset.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/golden-gate-sunset.jpg" alt="" width="1026" height="150" />
@@ -78,6 +81,7 @@ __Related:__ TWikiDashboardAddOn
 %META:FILEATTACHMENT{name="nasa-airfield.jpg" attachment="nasa-airfield.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="nasa-airfield.jpg" size="65068" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="nasa-shed-cyan.jpg" attachment="nasa-shed-cyan.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156455" path="nasa-shed-cyan.jpg" size="104232" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="nasa-shed-orange.jpg" attachment="nasa-shed-orange.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156455" path="nasa-shed-orange.jpg" size="103835" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="san-francisco-cityscape.jpg" attachment="san-francisco-cityscape.jpg" attr="h" comment="Image copyright 2012, David Yu" date="1351827528" path="san-francisco-cityscape.jpg" size="50918" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="saratoga-evening.jpg" attachment="saratoga-evening.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="saratoga-evening.jpg" size="49410" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="venetian-macau.jpg" attachment="venetian-macau.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156456" path="venetian-macau.jpg" size="65434" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="wine-tasting.jpg" attachment="wine-tasting.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="wine-tasting.jpg" size="68924" user="TWikiContributor" version="1"}%
