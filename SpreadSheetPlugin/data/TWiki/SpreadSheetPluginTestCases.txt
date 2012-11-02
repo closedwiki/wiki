@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351844249" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351893931" format="1.1" version="$Rev$"}%
 ---+ !SpreadSheetPlugin Testing
 
 Use this topic to verify proper operation of the SpreadSheetPlugin in your environment.
@@ -1367,6 +1367,191 @@ $LISTJOIN($n, Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTJOIN($n, Apple, Orang
    * $NOT(1234)=|%CALCULATE{$NOT(1234)}%|
    * $NOT()=|%CALCULATE{$NOT()}%|
 <!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncODD][ODD]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected ODD -->
+<ul>
+<li>$ODD(2)=|0|
+</li>
+<li>$ODD(3)=|1|
+</li>
+<li>$ODD(3.5)=|1|
+</li>
+<li>$ODD(-4)=|0|
+</li>
+<li>$ODD()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $ODD(2)=|%CALCULATE{$ODD(2)}%|
+   * $ODD(3)=|%CALCULATE{$ODD(3)}%|
+   * $ODD(3.5)=|%CALCULATE{$ODD(3.5)}%|
+   * $ODD(-4)=|%CALCULATE{$ODD(-4)}%|
+   * $ODD()=|%CALCULATE{$ODD()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncOR][OR]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected OR -->
+<ul>
+<li>$OR()=|0|
+</li>
+<li>$OR(0)=|0|
+</li>
+<li>$OR(1)=|1|
+</li>
+<li>$OR(0, 0)=|0|
+</li>
+<li>$OR(0, 1)=|1|
+</li>
+<li>$OR(1, 0)=|1|
+</li>
+<li>$OR(1, 1)=|1|
+</li>
+<li>$OR(0, 1, 2, 3)=|1|
+</li>
+<li>$OR(1, 2, 3, 4)=|1|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $OR()=|%CALCULATE{$OR()}%|
+   * $OR(0)=|%CALCULATE{$OR(0)}%|
+   * $OR(1)=|%CALCULATE{$OR(1)}%|
+   * $OR(0, 0)=|%CALCULATE{$OR(0, 0)}%|
+   * $OR(0, 1)=|%CALCULATE{$OR(0, 1)}%|
+   * $OR(1, 0)=|%CALCULATE{$OR(1, 0)}%|
+   * $OR(1, 1)=|%CALCULATE{$OR(1, 1)}%|
+   * $OR(0, 1, 2, 3)=|%CALCULATE{$OR(0, 1, 2, 3)}%|
+   * $OR(1, 2, 3, 4)=|%CALCULATE{$OR(1, 2, 3, 4)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncPERCENTILE][PERCENTILE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected PERCENTILE -->
+<ul>
+<li>$PERCENTILE(75, 400, 200, 500, 100, 300)=|450|
+</li>
+<li>$PERCENTILE(60)=|0|
+</li>
+<li>$PERCENTILE()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $PERCENTILE(75, 400, 200, 500, 100, 300)=|%CALCULATE{$PERCENTILE(75, 400, 200, 500, 100, 300)}%|
+   * $PERCENTILE(60)=|%CALCULATE{$PERCENTILE(60)}%|
+   * $PERCENTILE()=|%CALCULATE{$PERCENTILE()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncPI][PI]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected PI -->
+<ul>
+<li>$PI()=|3.14159265358979|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $PI()=|%CALCULATE{$PI()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncPRODUCT][PRODUCT]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected PRODUCT -->
+<ul>
+<li>$PRODUCT(0,4)=|0|
+</li>
+<li>$PRODUCT(1,4)=|4|
+</li>
+<li>$PRODUCT(2,4)=|8|
+</li>
+<li>$PRODUCT(1,2,3,4)=|24|
+</li>
+<li>$PRODUCT(1)=|1|
+</li>
+<li>$PRODUCT(0)=|0|
+</li>
+<li>$PRODUCT()=|1|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $PRODUCT(0,4)=|%CALCULATE{$PRODUCT(0,4)}%|
+   * $PRODUCT(1,4)=|%CALCULATE{$PRODUCT(1,4)}%|
+   * $PRODUCT(2,4)=|%CALCULATE{$PRODUCT(2,4)}%|
+   * $PRODUCT(1,2,3,4)=|%CALCULATE{$PRODUCT(1,2,3,4)}%|
+   * $PRODUCT(1)=|%CALCULATE{$PRODUCT(1)}%|
+   * $PRODUCT(0)=|%CALCULATE{$PRODUCT(0)}%|
+   * $PRODUCT()=|%CALCULATE{$PRODUCT()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncPROPER][PROPER]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected PROPER -->
+<ul>
+<li>$PROPER(a small STEP)=|A Small Step|
+</li>
+<li>$PROPER(f1 (formula-1))=|F1 (Formula-1)|
+</li>
+<li>$PROPER()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $PROPER(a small STEP)=|%CALCULATE{$PROPER(a small STEP)}%|
+   * $PROPER(f1 (formula-1))=|%CALCULATE{$PROPER(f1 (formula-1))}%|
+   * $PROPER()=|%CALCULATE{$PROPER()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncPROPERSPACE][PROPERSPACE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<noautolink>
+<!-- expected PROPERSPACE -->
+<ul>
+<li>$PROPERSPACE(Old MacDonald had a ServerFarm, EeEyeEeEyeOh)=|Old MacDonald had a Server Farm, Ee Eye Ee Eye Oh|
+</li>
+<li>$PROPERSPACE()=||
+</li>
+</ul>
+<!-- /expected -->
+</noautolink>
+</td><td>
+---+++ Actual
+<noautolink>
+<!-- actual -->
+   * $PROPERSPACE(Old MacDonald had a ServerFarm, EeEyeEeEyeOh)=|%CALCULATE{$PROPERSPACE(Old MacDonald had a ServerFarm, EeEyeEeEyeOh)}%|
+   * $PROPERSPACE()=|%CALCULATE{$PROPERSPACE()}%|
+<!-- /actual -->
+</noautolink>
 </td></tr></table>
 
 
