@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351756457" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351837640" format="1.1" version="$Rev$"}%
 ---+ !SpreadSheetPlugin Testing
 
 Use this topic to verify proper operation of the SpreadSheetPlugin in your environment.
@@ -641,6 +641,93 @@ __NOTE:__ All functions that follow are tested via:
    * $FORMATTIMEDIFF(min, 3, 1640)=|%CALCULATE{$FORMATTIMEDIFF(min, 3, 1640)}%|
 <!-- /actual -->
 </td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncGET][GET]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected GET -->
+<ul>
+<li>$SET(test, 1234)=||
+</li>
+<li>$GET(test)=|1234|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $SET(test, 1234)=|%CALCULATE{$SET(test, 1234)}%|
+   * $GET(test)=|%CALCULATE{$GET(test)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncHEXDECODE][HEXDECODE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<literal>
+<!-- expected HEXDECODE -->
+<ul>
+<li>$HEXDECODE(687474703A2F2F7477696B692E6F72672F)=|http://twiki.org/|
+</li>
+</ul>
+<!-- /expected -->
+</literal>
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * <literal>$HEXDECODE(687474703A2F2F7477696B692E6F72672F)=|%CALCULATE{$HEXDECODE(687474703A2F2F7477696B692E6F72672F)}%|</literal>
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncHEXENCODE][HEXENCODE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<literal>
+<!-- expected HEXENCODE -->
+<ul>
+<li>$HEXENCODE(http://twiki.org/)=|687474703A2F2F7477696B692E6F72672F|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+</literal>
+---+++ Actual
+<!-- actual -->
+   * $<literal>HEXENCODE(http://twiki.org/)=|%CALCULATE{$HEXENCODE(http://twiki.org/)}%|</literal>
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncIF][IF]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected IF -->
+<ul>
+<li>$SET(test_number, 123)=||
+</li>
+<li>$IF($GET(test_number)&#62;100, greater)=|greater|
+</li>
+<li>$SET(test_string, San Francisco)=||
+</li>
+<li>$IF($EXACT($GET(test_string), Cupertino), equal, not equal)=|not equal|
+</li>
+<li>$SET(result, $IF($GET(test_number)==0, zero, $GET(test_number)))=||
+</li>
+<li>$GET(result)=|123|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $SET(test_number, 123)=|%CALCULATE{$SET(test_number, 123)}%|
+   * $IF($GET(test_number)&#62;100, greater)=|%CALCULATE{$IF($GET(test_number)>100, greater)}%|
+   * $SET(test_string, San Francisco)=|%CALCULATE{$SET(test_string, San Francisco)}%|
+   * $IF($EXACT($GET(test_string), Cupertino), equal, not equal)=|%CALCULATE{$IF($EXACT($GET(test_string), Cupertino), equal, not equal)}%|
+   * $SET(result, $IF($GET(test_number)==0, zero, $GET(test_number)))=|%CALCULATE{$SET(result, $IF($GET(test_number)==0, zero, $GET(test_number)))}%|
+   * $GET(result)=|%CALCULATE{$GET(result)}%|
+<!-- /actual -->
+</td></tr></table>
+
 
 
 
