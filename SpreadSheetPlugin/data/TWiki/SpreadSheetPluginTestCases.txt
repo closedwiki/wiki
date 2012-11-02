@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351893931" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351897455" format="1.1" version="$Rev$"}%
 ---+ !SpreadSheetPlugin Testing
 
 Use this topic to verify proper operation of the SpreadSheetPlugin in your environment.
@@ -1554,6 +1554,215 @@ $LISTJOIN($n, Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTJOIN($n, Apple, Orang
 </noautolink>
 </td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncRAND][RAND]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected RAND -->
+<ul>
+<li>$IF($RAND()&lt;=1, OK, not OK)=|OK|
+</li>
+</ul>
+<!-- /expected -->
+<ul>
+<li>Manual test: $RAND(10), $RAND(10), $RAND(10)=|%RED%(three random numbers between 0 and 10)%ENDCOLOR%|
+</li>
+<li>Manual test: $RAND(), $RAND(), $RAND()=|%RED%(three random numbers between 0 and 1)%ENDCOLOR%|
+</li>
+</ul>
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $IF($RAND()&lt;=1, OK, not OK)=|%CALCULATE{$IF($RAND()<=1, OK, not OK)}%|
+<!-- /actual -->
+   * Manual test: $RAND(10), $RAND(10), $RAND(10)=|%CALCULATE{$RAND(10), $RAND(10), $RAND(10)}%|
+   * Manual test: $RAND(), $RAND(), $RAND()=|%CALCULATE{$RAND(), $RAND(), $RAND()}%|
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncREPEAT][REPEAT]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected REPEAT -->
+<ul>
+<li>$REPEAT(/\, 10)=|/\/\/\/\/\/\/\/\/\/\|
+</li>
+<li>$REPEAT(x)=||
+</li>
+<li>$REPEAT()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $REPEAT(/\, 10)=|%CALCULATE{$REPEAT(/\, 10)}%|
+   * $REPEAT(x)=|%CALCULATE{$REPEAT(x)}%|
+   * $REPEAT()=|%CALCULATE{$REPEAT()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncREPLACE][REPLACE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected REPLACE -->
+<ul>
+<li>$REPLACE(abcd, 2, 1, X)=|aXcd|
+</li>
+<li>$REPLACE(1023, 2, 1, X)=|1X23|
+</li>
+<li>$REPLACE(z_1023, 4, 1, X)=|z_1X23|
+</li>
+<li>$REPLACE(abcd, 2, 1)=|acd|
+</li>
+<li>$REPLACE(abcd, 2, 0)=|abcd|
+</li>
+<li>$REPLACE(abcd, 1, 3)=|d|
+</li>
+<li>$REPLACE(abcd, 1, 4)=||
+</li>
+<li>$REPLACE(abcd, 1, 4, YYYY)=|YYYY|
+</li>
+<li>$REPLACE(abcd, 2, 4, YYYY)=|aYYYY|
+</li>
+<li>$REPLACE(abcdefghijk,6,5,*)=|abcde*k|
+</li>
+<li>$REPLACE(abcd)=|abcd|
+</li>
+<li>$REPLACE()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $REPLACE(abcd, 2, 1, X)=|%CALCULATE{$REPLACE(abcd, 2, 1, X)}%|
+   * $REPLACE(1023, 2, 1, X)=|%CALCULATE{$REPLACE(1023, 2, 1, X)}%|
+   * $REPLACE(z_1023, 4, 1, X)=|%CALCULATE{$REPLACE(z_1023, 4, 1, X)}%|
+   * $REPLACE(abcd, 2, 1)=|%CALCULATE{$REPLACE(abcd, 2, 1)}%|
+   * $REPLACE(abcd, 2, 0)=|%CALCULATE{$REPLACE(abcd, 2, 0)}%|
+   * $REPLACE(abcd, 1, 3)=|%CALCULATE{$REPLACE(abcd, 1, 3)}%|
+   * $REPLACE(abcd, 1, 4)=|%CALCULATE{$REPLACE(abcd, 1, 4)}%|
+   * $REPLACE(abcd, 1, 4, YYYY)=|%CALCULATE{$REPLACE(abcd, 1, 4, YYYY)}%|
+   * $REPLACE(abcd, 2, 4, YYYY)=|%CALCULATE{$REPLACE(abcd, 2, 4, YYYY)}%|
+   * $REPLACE(abcdefghijk,6,5,*)=|%CALCULATE{$REPLACE(abcdefghijk,6,5,*)}%|
+   * $REPLACE(abcd)=|%CALCULATE{$REPLACE(abcd)}%|
+   * $REPLACE()=|%CALCULATE{$REPLACE()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncRIGHT][RIGHT]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected RIGHT -->
+<table cellspacing="0" cellpadding="0" class="twikiTable" border="1"><tbody>
+<tr>
+<td> $SUM($RIGHT())=3 </td>
+<td> 1 </td>
+<td> 2 </td>
+</tr>
+<tr>
+<td> $SUM($RIGHT())=7 </td>
+<td> 3 </td>
+<td> 4 </td>
+</tr></tbody></table>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+| $SUM($RIGHT())=%CALC{$SUM($RIGHT())}% | 1 | 2 |
+| $SUM($RIGHT())=%CALC{$SUM($RIGHT())}% | 3 | 4 |
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncRIGHTSTRING][RIGHTSTRING]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected RIGHTSTRING -->
+<ul>
+<li>$RIGHTSTRING(abcdefg)=|g|
+</li>
+<li>$RIGHTSTRING(abcdefg, 0)=|g|
+</li>
+<li>$RIGHTSTRING(abcdefg, 1)=|g|
+</li>
+<li>$RIGHTSTRING(abcdefg, 2)=|fg|
+</li>
+<li>$RIGHTSTRING()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $RIGHTSTRING(abcdefg)=|%CALCULATE{$RIGHTSTRING(abcdefg)}%|
+   * $RIGHTSTRING(abcdefg, 0)=|%CALCULATE{$RIGHTSTRING(abcdefg, 0)}%|
+   * $RIGHTSTRING(abcdefg, 1)=|%CALCULATE{$RIGHTSTRING(abcdefg, 1)}%|
+   * $RIGHTSTRING(abcdefg, 2)=|%CALCULATE{$RIGHTSTRING(abcdefg, 2)}%|
+   * $RIGHTSTRING()=|%CALCULATE{$RIGHTSTRING()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncROUND][ROUND]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected ROUND -->
+<ul>
+<li>$ROUND(3.15, 1)=|3.2|
+</li>
+<li>$ROUND(3.149, 1)=|3.1|
+</li>
+<li>$ROUND(-2.475, 2)=|-2.48|
+</li>
+<li>$ROUND(34.9, -1)=|30|
+</li>
+<li>$ROUND(12.34)=|12|
+</li>
+<li>$ROUND(12.51)=|13|
+</li>
+<li>$ROUND()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $ROUND(3.15, 1)=|%CALCULATE{$ROUND(3.15, 1)}%|
+   * $ROUND(3.149, 1)=|%CALCULATE{$ROUND(3.149, 1)}%|
+   * $ROUND(-2.475, 2)=|%CALCULATE{$ROUND(-2.475, 2)}%|
+   * $ROUND(34.9, -1)=|%CALCULATE{$ROUND(34.9, -1)}%|
+   * $ROUND(12.34)=|%CALCULATE{$ROUND(12.34)}%|
+   * $ROUND(12.51)=|%CALCULATE{$ROUND(12.51)}%|
+   * $ROUND()=|%CALCULATE{$ROUND()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncROW][ROW]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected ROW -->
+
+
+<table cellspacing="0" cellpadding="0" class="twikiTable" border="1"><tbody>
+<tr>
+<td> $ROW()=1 </td>
+<td> $ROW()=1 </td>
+</tr>
+<tr>
+<td> $ROW()=2 </td>
+<td> $ROW(10)=12 </td>
+</tr>
+<tr>
+<td> $ROW()=3 </td>
+<td> $ROW(-10)=-7 </td>
+</tr></tbody></table>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+| $ROW()=%CALC{$ROW()}% | $ROW()=%CALC{$ROW()}% |
+| $ROW()=%CALC{$ROW()}% | $ROW(10)=%CALC{$ROW(10)}% |
+| $ROW()=%CALC{$ROW()}% | $ROW(-10)=%CALC{$ROW(-10)}% |
+<!-- /actual -->
+</td></tr></table>
 
 
 
