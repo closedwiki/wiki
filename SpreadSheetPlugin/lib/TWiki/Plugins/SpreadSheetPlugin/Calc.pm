@@ -701,6 +701,8 @@ sub _doFunc
 
     } elsif( $theFunc =~ /^(FIND|SEARCH)$/ ) {
         my( $searchString, $string, $pos ) = split( /,\s*/, $theAttr, 3 );
+        $searchString = '' unless( defined $searchString);
+        $string = '' unless( defined $string);
         $result = 0;
         $pos--;
         $pos = 0 if( $pos < 0 );
