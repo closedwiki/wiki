@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351840252" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351842227" format="1.1" version="$Rev$"}%
 ---+ !SpreadSheetPlugin Testing
 
 Use this topic to verify proper operation of the SpreadSheetPlugin in your environment.
@@ -913,6 +913,7 @@ __NOTE:__ All functions that follow are tested via:
 <!-- expected LENGTH -->
 <ul>
 <li>$LENGTH(abcd)=|4|
+</li>
 <li>$LENGTH()=|0|
 </li>
 </ul>
@@ -924,6 +925,251 @@ __NOTE:__ All functions that follow are tested via:
    * $LENGTH()=|%CALCULATE{$LENGTH()}%|
 <!-- /actual -->
 </td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLIST][LIST]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LENGTH -->
+<table cellspacing="0" cellpadding="0" class="twikiTable" border="1"><tbody>
+<tr>
+<td> Apple </td>
+<td> Banana </td>
+<td> Citrus </td>
+<td> $LIST($LEFT())=&#124;Apple, Banana, Citrus&#124; </td>
+</tr></tbody></table>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+| Apple | Banana | Citrus | $LIST($LEFT())=%VBAR%%CALC{$LIST($LEFT())}%%VBAR% |
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLISTIF][LISTIF]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LISTIF -->
+<ul>
+<li>$LISTIF($item &#62; 12, 14, 7, 25)=|14, 25|
+</li>
+<li>$LISTIF($NOT($EXACT($item,)), A, B, , E)=|A, B, E|
+</li>
+<li>$LISTIF($index &#62; 2, A, B, C, D)=|C, D|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LISTIF($item &#62; 12, 14, 7, 25)=|%CALCULATE{$LISTIF($item > 12, 14, 7, 25)}%|
+   * $LISTIF($NOT($EXACT($item,)), A, B, , E)=|%CALCULATE{$LISTIF($NOT($EXACT($item,)), A, B, , E)}%|
+   * $LISTIF($index &#62; 2, A, B, C, D)=|%CALCULATE{$LISTIF($index > 2, A, B, C, D)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLISTITEM][LISTITEM]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LISTITEM -->
+<ul>
+<li>$LISTITEM(2, Apple, Orange, Apple, Kiwi)=|Orange|
+</li>
+<li>$LISTITEM(-1, Apple, Orange, Apple, Kiwi)=|Kiwi|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LISTITEM(2, Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTITEM(2, Apple, Orange, Apple, Kiwi)}%|
+   * $LISTITEM(-1, Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTITEM(-1, Apple, Orange, Apple, Kiwi)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLISTJOIN][LISTJOIN]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LISTJOIN -->
+<ul>
+<li>$LISTJOIN(-, Apple, Orange, Apple, Kiwi)=|Apple-Orange-Apple-Kiwi|
+</li>
+<li>$LISTJOIN($empty, Apple, Orange, Apple, Kiwi)=|AppleOrangeAppleKiwi|
+</li>
+</ul>
+$LISTJOIN($n, Apple, Orange, Apple, Kiwi)=|Apple
+Orange
+Apple
+Kiwi|
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LISTJOIN(-, Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTJOIN(-, Apple, Orange, Apple, Kiwi)}%|
+   * $LISTJOIN($empty, Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTJOIN($empty, Apple, Orange, Apple, Kiwi)}%|
+$LISTJOIN($n, Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTJOIN($n, Apple, Orange, Apple, Kiwi)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLISTMAP][LISTMAP]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LISTMAP -->
+<ul>
+<li>$LISTMAP($index: $EVAL(2 * $item), 3, 5, 7, 11)=|1: 6, 2: 10, 3: 14, 4: 22|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LISTMAP($index: $EVAL(2 * $item), 3, 5, 7, 11)=|%CALCULATE{$LISTMAP($index: $EVAL(2 * $item), 3, 5, 7, 11)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLISTNONEMPTY][LISTNONEMPTY]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LISTNONEMPTY -->
+<ul>
+<li>$LISTNONEMPTY(, Apple, Orange, , Kiwi)=|Apple, Orange, Kiwi|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LISTNONEMPTY(, Apple, Orange, , Kiwi)=|%CALCULATE{$LISTNONEMPTY(, Apple, Orange, , Kiwi)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLISTRAND][LISTRAND]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LISTRAND -->
+<ul>
+<li>$LISTRAND(Apple, Apple, Apple)=|Apple|
+</li>
+</ul>
+<!-- /expected -->
+<ul>
+<li>Manual test: $LISTRAND(Apple, Orange, Apple, Kiwi)=|%RED%(one of the four)%ENDCOLOR%|
+</li>
+</ul>
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LISTRAND(Apple, Apple, Apple)=|%CALCULATE{$LISTRAND(Apple, Apple, Apple)}%|
+<!-- /actual -->
+   * Manual test: $LISTRAND(Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTRAND(Apple, Orange, Apple, Kiwi)}%|
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLISTREVERSE][LISTREVERSE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LISTREVERSE -->
+<ul>
+<li>$LISTREVERSE(Apple, Orange, Apple, Kiwi)=|Kiwi, Apple, Orange, Apple|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LISTREVERSE(Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTREVERSE(Apple, Orange, Apple, Kiwi)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLISTSHUFFLE][LISTSHUFFLE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LISTSHUFFLE -->
+<ul>
+<li>$LISTSHUFFLE(Apple, Apple, Apple)=|Apple, Apple, Apple|
+</li>
+</ul>
+<!-- /expected -->
+<ul>
+<li>Manual test: $LISTSHUFFLE(Apple, Orange, Apple, Kiwi)=|%RED%(4 shuffled items)%ENDCOLOR%|
+</li>
+</ul>
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LISTSHUFFLE(Apple, Apple, Apple)=|%CALCULATE{$LISTSHUFFLE(Apple, Apple, Apple)}%|
+<!-- /actual -->
+   * Manual test: $LISTSHUFFLE(Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTSHUFFLE(Apple, Orange, Apple, Kiwi)}%|
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLISTSIZE][LISTSIZE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LISTSIZE -->
+<ul>
+<li>$LISTSIZE(Apple, Orange, Apple, Kiwi)=|4|
+</li>
+<li>$LISTSIZE()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LISTSIZE(Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTSIZE(Apple, Orange, Apple, Kiwi)}%|
+   * $LISTSIZE()=|%CALCULATE{$LISTSIZE()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLISTSORT][LISTSORT]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LISTSORT -->
+<ul>
+<li>$LISTSORT(Apple, Orange, Apple, Kiwi)=|Apple, Apple, Kiwi, Orange|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LISTSORT(Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTSORT(Apple, Orange, Apple, Kiwi)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLISTTRUNCATE][LISTTRUNCATE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LISTTRUNCATE -->
+<ul>
+<li>$LISTTRUNCATE(2, Apple, Orange, Apple, Kiwi)=|Apple, Orange|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LISTTRUNCATE(2, Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTTRUNCATE(2, Apple, Orange, Apple, Kiwi)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLISTUNIQUE][LISTUNIQUE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LISTUNIQUE -->
+<ul>
+<li>$LISTUNIQUE(Apple, Orange, Apple, Kiwi)=|Apple, Orange, Kiwi|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LISTUNIQUE(Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTUNIQUE(Apple, Orange, Apple, Kiwi)}%|
+<!-- /actual -->
+</td></tr></table>
+
+
+
+
 
 
 
