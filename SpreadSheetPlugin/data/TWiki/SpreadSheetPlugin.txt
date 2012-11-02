@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351755921" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351838439" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -378,7 +378,7 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
 ---+++ ISLOWER( text ) -- test for lower case text
    * Syntax: ==$ISLOWER( text )==
    * Example: ==%<nop>CALC{$ISLOWER(apple)}%== returns ==1==
-   * Example: ==%<nop>CALC{$ISUPPER(apple tree)}%== returns ==0== (text contains a space character)
+   * Example: ==%<nop>CALC{$ISLOWER(apple tree)}%== returns ==0== (text contains a space character)
    * Example: ==%<nop>CALC{$ISLOWER(ORANGE)}%== returns ==0==
    * Related: =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncLOWER][$LOWER()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncISDIGIT][$ISDIGIT()]]=, =[[#FuncISUPPER][$ISUPPER()]]=, =[[#FuncISWIKIWORD][$ISWIKIWORD()]]=, =[[#FuncUPPER][$UPPER()]]=
 
