@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351838439" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351898207" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -673,7 +673,7 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Finds one text =string=, within another =text=, and returns the number of the starting position of =string=, from the first character of =text=. This search is a %SYSTEMWEB%.RegularExpression search; use =$FIND()= for non-regular expression searching. Starting position is 1; a 0 is returned if nothing is matched
    * Syntax: ==$SEARCH( string, text, _start_ )==
    * Example: ==%<nop>CALC{$SEARCH([uy], fluffy)}%== returns ==3==
-   * Example: ==%<nop>CALC{$SEARCH([uy], fluffy, 3)}%== returns ==6==
+   * Example: ==%<nop>CALC{$SEARCH([uy], fluffy, 4)}%== returns ==6==
    * Example: ==%<nop>CALC{$SEARCH([abc], fluffy,)}%== returns ==0==
    * Related: =[[#FuncFILTER][$FILTER()]]=, =[[#FuncFIND][$FIND()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=
 
@@ -951,9 +951,9 @@ __Note:__ This plugin is pre-installed. TWiki administrators can upgrade it as n
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2001-2012 Peter Thoeny, [[http://twiki.org/][TWiki.org]]<br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-11-01 |
+|  Plugin Version: | 2012-11-02 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2012-11-01: | TWikibug:Item7018: Added SpreadSheetPluginTestCases topic |
+|  2012-11-02: | TWikibug:Item7018: Added SpreadSheetPluginTestCases topic |
 |  2012-10-06: | TWikibug:Item6960: Fixed form action of interactive formula evaluation feature -- TWiki:Main.HideyoImazu |
 |  2012-06-30: | TWikibug:Item6898: Added $FILTER() |
 |  2012-06-29: | TWikibug:Item6897: Added $ISDIGIT(), $ISLOWER(), $ISUPPER(), $ISWIKIWORD() |
