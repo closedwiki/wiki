@@ -898,6 +898,7 @@ sub _doFunc
 
     } elsif( $theFunc eq "SET" ) {
        my( $name, $value ) = split( /,\s*/, $theAttr, 2 );
+       $name = '' unless( defined $name );
        $name =~ s/[^a-zA-Z0-9\_]//go;
        if( $name && defined( $value ) ) {
            $value =~ s/\s*$//o;
@@ -906,6 +907,8 @@ sub _doFunc
 
     } elsif( $theFunc eq "SETIFEMPTY" ) {
        my( $name, $value ) = split( /,\s*/, $theAttr, 2 );
+       $name = '' unless( defined $name );
+       $value = '' unless( defined $value );
        $name =~ s/[^a-zA-Z0-9\_]//go;
        if( $name && defined( $value ) && ! $varStore{ $name } ) {
            $value =~ s/\s*$//o;
@@ -914,6 +917,8 @@ sub _doFunc
 
     } elsif( $theFunc eq "SETM" ) {
        my( $name, $value ) = split( /,\s*/, $theAttr, 2 );
+       $name = '' unless( defined $name );
+       $value = '' unless( defined $value );
        $name =~ s/[^a-zA-Z0-9\_]//go;
        if( $name ) {
            my $old = $varStore{ $name };
