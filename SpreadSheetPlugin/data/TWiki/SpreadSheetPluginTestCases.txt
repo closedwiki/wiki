@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351837640" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351840252" format="1.1" version="$Rev$"}%
 ---+ !SpreadSheetPlugin Testing
 
 Use this topic to verify proper operation of the SpreadSheetPlugin in your environment.
@@ -728,7 +728,202 @@ __NOTE:__ All functions that follow are tested via:
 <!-- /actual -->
 </td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncINSERTSTRING][INSERTSTRING]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected INSERTSTRING -->
+<ul>
+<li>$INSERTSTRING(abcdefg, 2, XYZ)=|abXYZcdefg|
+</li>
+<li>$INSERTSTRING(abcdefg, -2, XYZ)=|abcdeXYZfg|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $INSERTSTRING(abcdefg, 2, XYZ)=|%CALCULATE{$INSERTSTRING(abcdefg, 2, XYZ)}%|
+   * $INSERTSTRING(abcdefg, -2, XYZ)=|%CALCULATE{$INSERTSTRING(abcdefg, -2, XYZ)}%|
+<!-- /actual -->
+</td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncINT][INT]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected INT -->
+<ul>
+<li>$INT(10 / 4)=|2|
+</li>
+<li>$INT($VALUE(09))=|9|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $INT(10 / 4)=|%CALCULATE{$INT(10 / 4)}%|
+   * $INT($VALUE(09))=|%CALCULATE{$INT($VALUE(09))}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncISDIGIT][ISDIGIT]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected ISDIGIT -->
+<ul>
+<li>$ISDIGIT(123)=|1|
+</li>
+<li>$ISDIGIT(-7)=|0|
+</li>
+<li>$ISDIGIT(abc123)=|0|
+</li>
+<li>$ISDIGIT()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $ISDIGIT(123)=|%CALCULATE{$ISDIGIT(123)}%|
+   * $ISDIGIT(-7)=|%CALCULATE{$ISDIGIT(-7)}%|
+   * $ISDIGIT(abc123)=|%CALCULATE{$ISDIGIT(abc123)}%|
+   * $ISDIGIT()=|%CALCULATE{$ISDIGIT()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncISLOWER][ISLOWER]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected ISLOWER -->
+<ul>
+<li>$ISLOWER(apple)=|1|
+</li>
+<li>$ISLOWER(apple tree)=|0|
+</li>
+<li>$ISLOWER(ORANGE)=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $ISLOWER(apple)=|%CALCULATE{$ISLOWER(apple)}%|
+   * $ISLOWER(apple tree)=|%CALCULATE{$ISLOWER(apple tree)}%|
+   * $ISLOWER(ORANGE)=|%CALCULATE{$ISLOWER(ORANGE)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncISUPPER][ISUPPER]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected ISUPPER -->
+<ul>
+<li>$ISUPPER(apple)=|0|
+</li>
+<li>$ISUPPER(ORANGE)=|1|
+</li>
+<li>$ISUPPER(ORANGE GARDEN)=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $ISUPPER(apple)=|%CALCULATE{$ISUPPER(apple)}%|
+   * $ISUPPER(ORANGE)=|%CALCULATE{$ISUPPER(ORANGE)}%|
+   * $ISUPPER(ORANGE GARDEN)=|%CALCULATE{$ISUPPER(ORANGE GARDEN)}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncISWIKIWORD][ISWIKIWORD]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<noautolink>
+<!-- expected ISWIKIWORD -->
+<ul>
+<li>$ISWIKIWORD(GoldenGate)=|1|
+</li>
+<li>$ISWIKIWORD(whiteRafting)=|0|
+</li>
+<li>$ISWIKIWORD()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</noautolink>
+</td><td>
+---+++ Actual
+<noautolink>
+<!-- actual -->
+   * $ISWIKIWORD(GoldenGate)=|%CALCULATE{$ISWIKIWORD(GoldenGate)}%|
+   * $ISWIKIWORD(whiteRafting)=|%CALCULATE{$ISWIKIWORD(whiteRafting)}%|
+   * $ISWIKIWORD()=|%CALCULATE{$ISWIKIWORD()}%|
+<!-- /actual -->
+</noautolink>
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLEFT][LEFT]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LEFT -->
+<table cellspacing="0" cellpadding="0" class="twikiTable" border="1"><tbody>
+<tr>
+<td> 1 </td>
+<td> 2 </td>
+<td> $SUM($LEFT())=3 </td>
+</tr>
+<tr>
+<td> 3 </td>
+<td> 4 </td>
+<td> $SUM($LEFT())=7 </td>
+</tr></tbody></table>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+| 1 | 2 | $SUM($LEFT())=%CALC{$SUM($LEFT())}% |
+| 3 | 4 | $SUM($LEFT())=%CALC{$SUM($LEFT())}% |
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLEFTSTRING][LEFTSTRING]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LEFTSTRING -->
+<ul>
+<li>$LEFTSTRING(abcdefg)=|a|
+</li>
+<li>$LEFTSTRING(abcdefg, 5)=|abcde|
+</li>
+<li>$LEFTSTRING()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LEFTSTRING(abcdefg)=|%CALCULATE{$LEFTSTRING(abcdefg)}%|
+   * $LEFTSTRING(abcdefg, 5)=|%CALCULATE{$LEFTSTRING(abcdefg, 5)}%|
+   * $LEFTSTRING()=|%CALCULATE{$LEFTSTRING()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncLENGTH][LENGTH]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected LENGTH -->
+<ul>
+<li>$LENGTH(abcd)=|4|
+<li>$LENGTH()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $LENGTH(abcd)=|%CALCULATE{$LENGTH(abcd)}%|
+   * $LENGTH()=|%CALCULATE{$LENGTH()}%|
+<!-- /actual -->
+</td></tr></table>
 
 
 
