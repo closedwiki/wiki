@@ -428,6 +428,8 @@ sub _doFunc
     } elsif( $theFunc eq "WHILE" ) {
         # WHILE(condition, do something)
         my( $condition, $str ) = _properSplit( $theAttr, 2 );
+        $condition = '' unless( defined $condition );
+        $str = '' unless( defined $str );
         my $i = 0;
         while( 1 ) {
             if( $i++ >= 32767 ) {
