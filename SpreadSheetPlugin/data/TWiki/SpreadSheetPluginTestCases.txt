@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351927127" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351930959" format="1.1" version="$Rev$"}%
 ---+ !SpreadSheetPlugin Testing
 
 Use this topic to verify proper operation of the SpreadSheetPlugin in your environment.
@@ -2156,10 +2156,270 @@ $LISTJOIN($n, Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTJOIN($n, Apple, Orang
 <!-- /actual -->
 </td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncTIME][TIME]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected TIME -->
+<ul>
+<li>$TIME(2012-12-31 GMT)=|1356912000|
+</li>
+</ul>
+<!-- /expected -->
+<ul>
+<li>Manual test: $TIME($FORMATTIME($TIME(), $year-$mo-$day))=|%RED%(today)%ENDCOLOR%|
+</li>
+</ul>
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $TIME(2012-12-31 GMT)=|%CALCULATE{$TIME(2012-12-31 GMT)}%|
+<!-- /actual -->
+   * Manual test: $TIME($FORMATTIME($TIME(), $year-$mo-$day))=|%CALCULATE{$FORMATTIME($TIME(), $year-$mo-$day)}%|
+</td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncTIMEADD][TIMEADD]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected TIMEADD -->
+<ul>
+<li>$FORMATTIME($TIMEADD($TIME(2012-12-31), 2, day), $year-$mo-$day)=|2013-01-02|
+</li>
+<li>$FORMATTIME($TIMEADD($TIME(2012-12-31), 2, year), $year-$mo-$day)=|2014-12-31|
+</li>
+<li>$TIMEADD($TIME(2012-12-31 GMT), 10)=|1356912010|
+</li>
+<li>$TIMEADD($TIME(2012-12-31 GMT), 10, sec)=|1356912010|
+</li>
+<li>$TIMEADD($TIME(2012-12-31 GMT), 2, min)=|1356912120|
+</li>
+<li>$TIMEADD()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $FORMATTIME($TIMEADD($TIME(2012-12-31), 2, day), $year-$mo-$day)=|%CALCULATE{$FORMATTIME($TIMEADD($TIME(2012-12-31), 2, day), $year-$mo-$day)}%|
+   * $FORMATTIME($TIMEADD($TIME(2012-12-31), 2, year), $year-$mo-$day)=|%CALCULATE{$FORMATTIME($TIMEADD($TIME(2012-12-31), 2, year), $year-$mo-$day)}%|
+   * $TIMEADD($TIME(2012-12-31 GMT), 10)=|%CALCULATE{$TIMEADD($TIME(2012-12-31 GMT), 10)}%|
+   * $TIMEADD($TIME(2012-12-31 GMT), 10, sec)=|%CALCULATE{$TIMEADD($TIME(2012-12-31 GMT), 10, sec)}%|
+   * $TIMEADD($TIME(2012-12-31 GMT), 2, min)=|%CALCULATE{$TIMEADD($TIME(2012-12-31 GMT), 2, min)}%|
+   * $TIMEADD()=|%CALCULATE{$TIMEADD()}%|
+<!-- /actual -->
+</td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncTIMEDIFF][TIMEDIFF]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected TIMEDIFF -->
+<ul>
+<li>$TIMEDIFF($TIME(), $EVAL($TIME()+90), minute)=|1.5|
+</li>
+<li>$TIMEDIFF($ROUND($TIMEDIFF($TIME(2012-12-06),$TIME(2012-12-13), day)))=|7|
+</li>
+<li>$TIMEDIFF()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $TIMEDIFF($TIME(), $EVAL($TIME()+90), minute)=|%CALCULATE{$TIMEDIFF($TIME(), $EVAL($TIME()+90), minute)}%|
+   * $TIMEDIFF($ROUND($TIMEDIFF($TIME(2012-12-06),$TIME(2012-12-13), day)))=|%CALCULATE{$ROUND($TIMEDIFF($TIME(2012-12-06),$TIME(2012-12-13), day))}%|
+   * $TIMEDIFF()=|%CALCULATE{$TIMEDIFF()}%|
+<!-- /actual -->
+</td></tr></table>
 
-FIXME: More functions
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncTODAY][TODAY]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected TODAY -->
+<ul>
+<li>(can't be tested automatically)
+</li>
+</ul>
+<!-- /expected -->
+<ul>
+<li>Manual test: $TIME($FORMATTIME($TODAY(), $year-$mo-$day $hour:$min:$sec GMT))=|%RED%(this morning midnight GMT)%ENDCOLOR%|
+</li>
+</ul>
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * (can't be tested automatically)
+<!-- /actual -->
+   * Manual test: $TIME($FORMATTIME($TODAY(), $year-$mo-$day $hour:$min:$sec GMT))=|%CALCULATE{$FORMATTIME($TODAY(), $year-$mo-$day $hour:$min:$sec GMT)}%|
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncTRANSLATE][TRANSLATE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected TRANSLATE -->
+<ul>
+<li>$TRANSLATE(boom,bm,cl)=|cool|
+</li>
+<li>$TRANSLATE(one, two,$comma,;)=|one; two|
+</li>
+<li>$TRANSLATE()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $TRANSLATE(boom,bm,cl)=|%CALCULATE{$TRANSLATE(boom,bm,cl)}%|
+   * $TRANSLATE(one, two,$comma,;)=|%CALCULATE{$TRANSLATE(one, two,$comma,;)}%|
+   * $TRANSLATE()=|%CALCULATE{$TRANSLATE()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncTRIM][TRIM]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected TRIM -->
+<ul>
+<li>$TRIM( eat  spaces  )=|eat spaces|
+</li>
+<li>$TRIM()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $TRIM( eat  spaces  )=|%CALCULATE{$TRIM( eat  spaces  )}%|
+   * $TRIM()=|%CALCULATE{$TRIM()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncUPPER][UPPER]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected UPPER -->
+<ul>
+<li>$UPPER(this beCOMES an UPPER cASE String)=|THIS BECOMES AN UPPER CASE STRING|
+</li>
+<li>$UPPER()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $UPPER(this beCOMES an UPPER cASE String)=|%CALCULATE{$UPPER(this beCOMES an UPPER cASE String)}%|
+   * $UPPER()=|%CALCULATE{$UPPER()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncVALUE][VALUE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<noautolink>
+<!-- expected VALUE -->
+<ul>
+<li>$VALUE(US$1,200)=|1200|
+</li>
+<li>$VALUE(PrjNotebook1234)=|1234|
+</li>
+<li>$VALUE(Total: -12.5)=|-12.5|
+</li>
+<li>$VALUE()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</noautolink>
+</td><td>
+---+++ Actual
+<noautolink>
+<!-- actual -->
+   * $VALUE(US$1,200)=|%CALCULATE{$VALUE(US$1,200)}%|
+   * $VALUE(PrjNotebook1234)=|%CALCULATE{$VALUE(PrjNotebook1234)}%|
+   * $VALUE(Total: -12.5)=|%CALCULATE{$VALUE(Total: -12.5)}%|
+   * $VALUE()=|%CALCULATE{$VALUE()}%|
+<!-- /actual -->
+</noautolink>
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncWHILE][WHILE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected WHILE -->
+<ul>
+<li>$WHILE($counter&lt;=10, $counter )=|1 2 3 4 5 6 7 8 9 10 |
+</li>
+<li>$SET(i, 0)$WHILE($GET(i)&lt;10, $SETM(i, +1) $EVAL($GET(i) * $GET(i)), )=| 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, |
+</li>
+<li>$WHILE()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $WHILE($counter&lt;=10, $counter )=|%CALCULATE{$WHILE($counter<=10, $counter )}%|
+   * $SET(i, 0)$WHILE($GET(i)&lt;10, $SETM(i, +1) $EVAL($GET(i) * $GET(i)), )=|%CALCULATE{$SET(i, 0)$WHILE($GET(i)<10, $SETM(i, +1) $EVAL($GET(i) * $GET(i)), )}%|
+   * $WHILE()=|%CALCULATE{$WHILE()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncWORKINGDAYS][WORKINGDAYS]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected WORKINGDAYS -->
+<ul>
+<li>$WORKINGDAYS($TIME(2012-07-15 GMT), $TIME(2012-08-03 GMT))=|14|
+</li>
+<li>$WORKINGDAYS()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $WORKINGDAYS($TIME(2012-07-15 GMT), $TIME(2012-08-03 GMT))=|%CALCULATE{$WORKINGDAYS($TIME(2012-07-15 GMT), $TIME(2012-08-03 GMT))}%|
+   * $WORKINGDAYS()=|%CALCULATE{$WORKINGDAYS()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncXOR][XOR]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected XOR -->
+<ul>
+<li>$XOR(0)=|0|
+</li>
+<li>$XOR(1)=|0|
+</li>
+<li>$XOR(0, 0)=|0|
+</li>
+<li>$XOR(0, 1)=|1|
+</li>
+<li>$XOR(1, 0)=|1|
+</li>
+<li>$XOR(1, 1)=|0|
+</li>
+<li>$XOR(0, 1, 2, 3)=|1|
+</li>
+<li>$XOR(1, 2, 3, 4)=|0|
+</li>
+<li>$XOR()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $XOR(0)=|%CALCULATE{$XOR(0)}%|
+   * $XOR(1)=|%CALCULATE{$XOR(1)}%|
+   * $XOR(0, 0)=|%CALCULATE{$XOR(0, 0)}%|
+   * $XOR(0, 1)=|%CALCULATE{$XOR(0, 1)}%|
+   * $XOR(1, 0)=|%CALCULATE{$XOR(1, 0)}%|
+   * $XOR(1, 1)=|%CALCULATE{$XOR(1, 1)}%|
+   * $XOR(0, 1, 2, 3)=|%CALCULATE{$XOR(0, 1, 2, 3)}%|
+   * $XOR(1, 2, 3, 4)=|%CALCULATE{$XOR(1, 2, 3, 4)}%|
+   * $XOR()=|%CALCULATE{$XOR()}%|
+<!-- /actual -->
+</td></tr></table>
 
 <style>
 .testSideBySide {
