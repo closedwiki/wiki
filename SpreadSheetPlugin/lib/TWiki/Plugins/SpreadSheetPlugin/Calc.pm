@@ -49,6 +49,7 @@ my %mon2num;
   my $count = 0;
   %mon2num = map { $_ => $count++ } @monArr;
 }
+my $funcRef;
 
 # =========================
 sub init
@@ -192,928 +193,1541 @@ sub _doFunc
     # in which case handling functions and cleaning up needs to be done later
 
     my $result = "";
-    my $i = 0;
-    if( $theFunc eq "MAIN" ) {
-        $result = $theAttr;
-
-    } elsif( $theFunc eq "EXEC" ) {
-        # add nesting level escapes
-        my $level = 0;
-        $result = $theAttr;
-        $result =~ s/([\(\)])/_addNestingLevel($1, \$level)/geo;
-        # execute functions in attribute recursively and clean up unbalanced parenthesis
-        _recurseFunc( $result );
-
-    } elsif( $theFunc eq "NOEXEC" ) {
-        $result = $theAttr;
-
-    } elsif( $theFunc eq "T" ) {
-        $result = "";
-        my @arr = _getTableRange( "$theAttr..$theAttr" );
-        if( @arr ) {
-            $result = $arr[0];
-        }
-
-    } elsif( $theFunc eq "TRIM" ) {
-        $result = $theAttr || "";
-        $result =~ s/^\s*//o;
-        $result =~ s/\s*$//o;
-        $result =~ s/\s+/ /go;
-
-    } elsif( $theFunc eq "FORMAT" ) {
-        # Format FORMAT(TYPE, precision, value) returns formatted value -- JimStraus - 05 Jan 2003
-        my( $format, $res, $value )  = split( /,\s*/, $theAttr );
-        $format =~ s/^\s*(.*?)\s*$/$1/; #Strip leading and trailing spaces
-        $res =~ s/^\s*(.*?)\s*$/$1/;
-        $value =~ s/^\s*(.*?)\s*$/$1/;
-        if( $format eq "DOLLAR" ) {
-            my $neg = 1 if $value < 0;
-            $value = abs($value);
-            $result = sprintf("%0.${res}f", $value);
-            my $temp = reverse $result;
-            $temp =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-            $result = "\$" . (scalar reverse $temp);
-            $result = "(".$result.")" if $neg;
-        } elsif( $format eq "COMMA" ) {
-            $result = sprintf("%0.${res}f", $value);
-            my $temp = reverse $result;
-            $temp =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-            $result = scalar reverse $temp;
-        } elsif( $format eq "PERCENT" ) {
-            $result = sprintf("%0.${res}f%%", $value * 100);
-        } elsif( $format eq "NUMBER" ) {
-            $result = sprintf("%0.${res}f", $value);
-        } elsif( $format eq "K" ) {
-            $result = sprintf("%0.${res}f K", $value / 1024);
-        } elsif( $format eq "KB" ) {
-            $result = sprintf("%0.${res}f KB", $value / 1024);
-        } elsif ($format eq "MB") {
-            $result = sprintf("%0.${res}f MB", $value / (1024 * 1024));
-        } elsif( $format =~ /^KBMB/ ) {
-            $value /= 1024;
-            my @lbls = ( "MB", "GB", "TB", "PB", "EB", "ZB" );
-            my $lbl = "KB";
-            while( $value >= 1024 && @lbls ) {
-                $value /= 1024;
-                $lbl = shift @lbls;
-            }
-            $result = sprintf("%0.${res}f", $value) . " $lbl";
-        } else {
-            # FORMAT not recognized, just return value
-            $result = $value;
-        }
-
-    } elsif( $theFunc eq "EMPTY" ) {
-        $result = 1;
-        $result = 0 if( length( $theAttr ) > 0 );
-
-    } elsif( $theFunc eq "EXACT" ) {
-        $result = 0;
-        my( $str1, $str2 ) = split( /,\s*/, $theAttr, 2 );
-        $str1 = "" unless( $str1 );
-        $str2 = "" unless( $str2 );
-        $str1 =~ s/^\s*(.*?)\s*$/$1/o; # cut leading and trailing spaces
-        $str2 =~ s/^\s*(.*?)\s*$/$1/o;
-        $result = 1 if( $str1 eq $str2 );
-
-    } elsif( $theFunc eq "RAND" ) {
-        my $max = _getNumber( $theAttr );
-        $max = 1 if( $max <= 0 );
-        $result = rand( $max );
-
-    } elsif( $theFunc eq "VALUE" ) {
-        $result = _getNumber( $theAttr );
-
-    } elsif( $theFunc =~ /^(EVAL|INT)$/ ) {
-        $result = _safeEvalPerl( $theAttr );
-        unless( $result =~ /^ERROR/ ) {
-            $result = int( _getNumber( $result ) ) if( $theFunc eq "INT" );
-        }
-
-    } elsif( $theFunc eq "FLOOR" ) {
-        $i = _getNumber( $theAttr );
-        $result = int( $i );
-        if( $i < 0 && $i != $result ) {
-            $result -= 1;
-        }
-
-    } elsif( $theFunc eq "CEILING" ) {
-        $i = _getNumber( $theAttr );
-        $result = int( $i );
-        if( $i > 0 && $i != $result ) {
-            $result += 1;
-        }
-
-    } elsif( $theFunc eq "ROUND" ) {
-        # ROUND(num, digits)
-        my( $num, $digits ) = split( /,\s*/, $theAttr, 2 );
-        $result = _safeEvalPerl( $num );
-        unless( $result =~ /^ERROR/ ) {
-            $result = _getNumber( $result );
-            if( ( $digits ) && ( $digits =~ s/^.*?(\-?[0-9]+).*$/$1/o ) && ( $digits ) ) {
-                my $factor = 10**$digits;
-                $result *= $factor;
-                ( $result >= 0 ) ? ( $result += 0.5 ) : ( $result -= 0.5 );
-                $result = int( $result );
-                $result /= $factor;
-            } else {
-                ( $result >= 0 ) ? ( $result += 0.5 ) : ( $result -= 0.5 );
-                $result = int( $result );
-            }
-        }
-
-    } elsif( $theFunc eq "MOD" ) {
-        $result = 0;
-        my( $num1, $num2 ) = split( /,\s*/, $theAttr, 2 );
-        $num1 = _getNumber( $num1 );
-        $num2 = _getNumber( $num2 );
-        if( $num1 && $num2 ) {
-            $result = $num1 % $num2;
-        }
-
-    } elsif( $theFunc eq "ODD" ) {
-        $result = _getNumber( $theAttr ) % 2;
-
-    } elsif( $theFunc eq "EVEN" ) {
-        $result = ( _getNumber( $theAttr ) + 1 ) % 2;
-
-    } elsif( $theFunc eq "AND" ) {
-        $result = 0;
-        my @arr = _getListAsInteger( $theAttr );
-        foreach $i( @arr ) {
-            unless( $i ) {
-                $result = 0;
-                last;
-            }
-            $result = 1;
-        }
-
-    } elsif( $theFunc eq "OR" ) {
-        $result = 0;
-        my @arr = _getListAsInteger( $theAttr );
-        foreach $i( @arr ) {
-            if( $i ) {
-                $result = 1;
-                last;
-            }
-        }
-
-    } elsif( $theFunc eq "XOR" ) {
-        my @arr = _getListAsInteger( $theAttr );
-        $result = shift( @arr );
-        if( scalar( @arr ) > 0 ) {
-            foreach $i ( @arr ) {
-                $result = ( $result xor $i );
-            }
-        } else {
-            $result = 0;
-        }
-        $result = $result ? 1 : 0;
-
-    } elsif( $theFunc eq "BITXOR" ) {
-        my $ff = chr(255) x length( $theAttr );
-        $result = $theAttr ^ $ff;
-
-    } elsif( $theFunc eq "NOT" ) {
-        $result = 1;
-        $result = 0 if( _getNumber( $theAttr ) );
-
-    } elsif( $theFunc eq "ABS" ) {
-        $result = abs( _getNumber( $theAttr ) );
-
-    } elsif( $theFunc eq "SIGN" ) {
-        $i = _getNumber( $theAttr );
-        $result =  0;
-        $result =  1 if( $i > 0 );
-        $result = -1 if( $i < 0 );
-
-    } elsif( $theFunc eq "LN" ) {
-        $result = log(_getNumber( $theAttr ) );
-
-    } elsif( $theFunc eq "LOG" ) {
-        my( $num, $base ) = split( /,\s*/, $theAttr, 2 );
-        $num = _getNumber( $num );
-        $base = _getNumber( $base );
-        $base = 10 if( $base <= 0 );
-        $result = log( $num ) / log( $base );
-
-    } elsif( $theFunc eq "EXP" ) {
-        $result = exp( _getNumber( $theAttr ) );
-
-    } elsif( $theFunc eq "PI" ) {
-        $result = 3.1415926535897932384;
-
-    } elsif( $theFunc eq "SQRT" ) {
-        $result = sqrt( _getNumber( $theAttr ) );
-
-    } elsif( $theFunc eq "IF" ) {
-        # IF(condition, value if true, value if false)
-        my( $condition, $str1, $str2 ) = _properSplit( $theAttr, 3 );
-        # with delay, handle functions in condition recursively and clean up unbalanced parenthesis
-        _recurseFunc( $condition );
-        $condition =~ s/^\s*(.*?)\s*$/$1/o;
-        $result = _safeEvalPerl( $condition );
-        unless( $result =~ /^ERROR/ ) {
-            if( $result ) {
-                $result = $str1;
-            } else {
-                $result = $str2;
-            }
-            $result = "" unless( defined( $result ) );
-            # with delay, handle functions in result recursively and clean up unbalanced parenthesis
-            _recurseFunc( $result );
-
-        } # else return error message
-
-    } elsif( $theFunc eq "WHILE" ) {
-        # WHILE(condition, do something)
-        my( $condition, $str ) = _properSplit( $theAttr, 2 );
-        $condition = '' unless( defined $condition );
-        $str = '' unless( defined $str );
-        my $i = 0;
-        while( 1 ) {
-            if( $i++ >= 32767 ) {
-                $result .= 'ERROR: Infinite loop (32767 cycles)';
-                last; # prevent infinite loop
-            }
-            # with delay, handle functions in condition recursively and clean up unbalanced parenthesis
-            my $cond = $condition;
-            $cond =~ s/\$counter/$i/go;
-            _recurseFunc( $cond );
-            $cond =~ s/^\s*(.*?)\s*$/$1/o;
-            my $res = _safeEvalPerl( $cond );
-            if( $res =~ /^ERROR/ ) {
-                $result .= $res;
-                last; # exit loop and return error
-            }
-            last unless( $res ); # proper loop exit
-            $res = $str;
-            $res = "" unless( defined( $res ) );
-            # with delay, handle functions in result recursively and clean up unbalanced parenthesis
-            $res =~ s/\$counter/$i/go;
-            _recurseFunc( $res );
-            $result .= $res;
-        }
-
-    } elsif( $theFunc eq "ISUPPER" ) {
-        my $regex = ($TWiki::regex{upperAlpha}) ? qr/[$TWiki::regex{upperAlpha}]+/o : '[[:upper:]]+';
-        $result = ( $theAttr =~ m/^$regex$/o ) ? 1 : 0;
-
-    } elsif( $theFunc eq "ISLOWER" ) {
-        my $regex = ($TWiki::regex{lowerAlpha}) ? qr/[$TWiki::regex{lowerAlpha}]+/o : '[[:lower:]]+';
-        $result = ( $theAttr =~ m/^$regex$/o ) ? 1 : 0;
-
-    } elsif( $theFunc eq "ISDIGIT" ) {
-        my $regex = ($TWiki::regex{numeric}) ? qr/[$TWiki::regex{numeric}]+/o : '[[:digit:]]+';
-        $result = ( $theAttr =~ m/^$regex$/o ) ? 1 : 0;
-
-    } elsif( $theFunc eq "ISWIKIWORD" ) {
-        my $regex = ($TWiki::regex{wikiWordRegex}) ? $TWiki::regex{wikiWordRegex} :
-                    '[[:upper:]]+[[:lower:][:digit:]]+[[:upper:]]+[[:alpha:][:digit:]]*';
-        $result = ( $theAttr =~ m/^$regex$/o ) ? 1 : 0;
-
-    } elsif( $theFunc eq "UPPER" ) {
-        $result = uc( $theAttr );
-
-    } elsif( $theFunc eq "LOWER" ) {
-        $result = lc( $theAttr );
-
-    } elsif( $theFunc eq "PROPER" ) {
-        # FIXME: I18N
-        $result = lc( $theAttr );
-        $result =~ s/(^|[^a-z])([a-z])/$1 . uc($2)/geo;
-
-    } elsif( $theFunc eq "PROPERSPACE" ) {
-        $result = _properSpace( $theAttr );
-
-    } elsif( $theFunc eq "CHAR" ) {
-        if( $theAttr =~ /([0-9]+)/ ) {
-            $i = $1;
-        } else {
-            $i = 0;
-        }
-        $i = 255 if $i > 255;
-        $i = 0 if $i < 0;
-        $result = chr( $i );
-
-    } elsif( $theFunc eq "REPEAT" ) {
-        my( $str, $num ) = split( /,\s*/, $theAttr, 2 );
-        $str = "" unless( defined( $str ) );
-        $num = _getNumber( $num );
-        $result = "$str" x $num;
-
-    } elsif( $theFunc eq "CODE" ) {
-        $result = ord( $theAttr );
-
-    } elsif( $theFunc eq "LENGTH" ) {
-        $result = length( $theAttr );
-
-    } elsif( $theFunc eq "ROW" ) {
-        $i = $theAttr || 0;
-        $result = $rPos + $i + 1;
-
-    } elsif( $theFunc eq "COLUMN" ) {
-        $i = $theAttr || 0;
-        $result = $cPos + $i + 1;
-
-    } elsif( $theFunc eq "LEFT" ) {
-        $i = $rPos + 1;
-        $result = "R$i:C0..R$i:C$cPos";
-
-    } elsif( $theFunc eq "ABOVE" ) {
-        $i = $cPos + 1;
-        $result = "R0:C$i..R$rPos:C$i";
-
-    } elsif( $theFunc eq "RIGHT" ) {
-        $i = $rPos + 1;
-        my $cStart = $cPos + 2;
-        $result = "R$i:C$cStart..R$i:C32000";
-
-    } elsif( $theFunc eq "DEF" ) {
-        # Format DEF(list) returns first defined cell
-        # Added by MF 26/3/2002, fixed by PeterThoeny
-        my @arr = _getList( $theAttr );
-        foreach my $cell ( @arr ) {
-            if( $cell ) {
-                $cell =~ s/^\s*(.*?)\s*$/$1/o;
-                if( $cell ) {
-                    $result = $cell;
-                    last;
-                }
-            }
-        }
-
-    } elsif( $theFunc eq "MAX" ) {
-        my @arr = sort { $a <=> $b }
-                  grep { /./ }
-                  grep { defined $_ }
-                  _getListAsFloat( $theAttr );
-        $result = $arr[$#arr] if( scalar @arr );
-
-    } elsif( $theFunc eq "MIN" ) {
-        my @arr = sort { $a <=> $b }
-                  grep { /./ }
-                  grep { defined $_ }
-                  _getListAsFloat( $theAttr );
-        $result = $arr[0] if( scalar @arr );
-
-    } elsif( $theFunc eq "SUM" ) {
-        $result = 0;
-        my @arr = _getListAsFloat( $theAttr );
-        foreach $i ( @arr ) {
-            $result += $i  if defined $i;
-        }
-
-    } elsif( $theFunc eq "SUMPRODUCT" ) {
-        $result = 0;
-        my @arr;
-        my @lol = split( /,\s*/, $theAttr );
-        my $size = 32000;
-        for $i (0 .. $#lol ) {
-            @arr = _getListAsFloat( $lol[$i] );
-            $lol[$i] = [ @arr ];                # store reference to array
-            $size = @arr if( @arr < $size );    # remember smallest array
-        }
-        if( ( $size > 0 ) && ( $size < 32000 ) ) {
-            my $y; my $prod; my $val;
-            $size--;
-            for $y (0 .. $size ) {
-                $prod = 1;
-                for $i (0 .. $#lol ) {
-                    $val = $lol[$i][$y];
-                    if( defined $val ) {
-                        $prod *= $val;
-                    } else {
-                        $prod = 0;   # don't count empty cells
-                    }
-                }
-                $result += $prod;
-            }
-        }
-
-    } elsif( $theFunc =~ /^(SUMDAYS|DURATION)$/ ) {
-        # DURATION is undocumented, is for SvenDowideit
-        # contributed by SvenDowideit - 07 Mar 2003; modified by PTh
-        $result = 0;
-        my @arr = _getListAsDays( $theAttr );
-        foreach $i ( @arr ) {
-            $result += $i  if defined $i;
-        }
-
-    } elsif( $theFunc eq "WORKINGDAYS" ) {
-        my( $num1, $num2 ) = split( /,\s*/, $theAttr, 2 );
-        $result = _workingDays( _getNumber( $num1 ), _getNumber( $num2 ) );
-
-    } elsif( $theFunc =~ /^(MULT|PRODUCT)$/ ) {   # MULT is deprecated (no not remove)
-        my @arr = _getListAsFloat( $theAttr );
-        $result = 1;
-        foreach $i ( @arr ) {
-            $result *= $i  if defined $i;
-        }
-
-    } elsif( $theFunc =~ /^(AVERAGE|MEAN)$/ ) {
-        $result = 0;
-        my $items = 0;
-        my @arr = _getListAsFloat( $theAttr );
-        foreach $i ( @arr ) {
-            if( defined $i ) {
-                $result += $i;
-                $items++;
-            }
-        }
-        if( $items > 0 ) {
-            $result = $result / $items;
-        }
-
-    } elsif( $theFunc eq "MEDIAN" ) {
-        my @arr = sort { $a <=> $b } grep { defined $_ } _getListAsFloat( $theAttr );
-        $i = @arr;
-        if( ( $i % 2 ) > 0 ) {
-            $result = $arr[$i/2];
-        } elsif( $i ) {
-            $i /= 2;
-            $result = ( $arr[$i] + $arr[$i-1] ) / 2;
-        }
-
-    } elsif( $theFunc eq "PERCENTILE" ) {
-        my( $percentile, $set ) = split( /,\s*/, $theAttr, 2 );
-        $set = '' unless( defined $set );
-        my @arr = sort { $a <=> $b } grep { defined $_ } _getListAsFloat( $set );
-        $result = 0;
-
-        my $size = scalar( @arr );
-        if( $size > 0 ) {
-            $i = $percentile / 100 * ( $size + 1 );
-            my $iInt = int( $i );
-            if( $i <= 1 ) {
-                $result = $arr[0];
-            } elsif( $i >= $size ) {
-                $result = $arr[$size-1];
-            } elsif( $i == $iInt ) {
-                $result = $arr[$i-1];
-            } else {
-                # interpolate beween neighbors # Example: $i = 7.25
-                my $r1 = $iInt + 1 - $i;       # 0.75 = 7 + 1 - 7.25
-                my $r2 = 1 - $r1;              # 0.25 = 1 - 0.75
-                my $x1 = $arr[$iInt-1];
-                my $x2 = $arr[$iInt];
-                $result = ($r1 * $x1) + ($r2 * $x2);
-            }
-        }
-
-    } elsif( $theFunc eq "COUNTSTR" ) {
-        $result = 0;  # count any string
-        $i = 0;       # count string equal second attr
-        my $list = $theAttr;
-        my $str = "";
-        if( $theAttr =~ /^(.*),\s*(.*?)$/ ) {  # greedy match for last comma
-            $list = $1;
-            $str = $2;
-        }
-        $str =~ s/\s*$//o;
-        my @arr = _getList( $list );
-        foreach my $cell ( @arr ) {
-            if( defined $cell ) {
-                $cell =~ s/^\s*(.*?)\s*$/$1/o;
-                $result++ if( $cell );
-                $i++ if( $cell eq $str );
-            }
-        }
-        $result = $i if( $str );
-
-    } elsif( $theFunc eq "COUNTITEMS" ) {
-        $result = "";
-        my @arr = _getList( $theAttr );
-        my %items = ();
-        my $key = "";
-        foreach $key ( @arr ) {
-            $key =~ s/^\s*(.*?)\s*$/$1/o if( $key );
-            if( $key ) {
-                if( exists( $items{ $key } ) ) {
-                    $items{ $key }++;
-                } else {
-                    $items{ $key } = 1;
-                }
-            }
-        }
-        foreach $key ( sort keys %items ) {
-            $result .= "$key: $items{ $key }<br /> ";
-        }
-        $result =~ s|<br /> $||o;
-
-    } elsif( $theFunc =~ /^(FIND|SEARCH)$/ ) {
-        my( $searchString, $string, $pos ) = split( /,\s*/, $theAttr, 3 );
-        $searchString = '' unless( defined $searchString);
-        $string = '' unless( defined $string);
-        $result = 0;
-        $pos--;
-        $pos = 0 if( $pos < 0 );
-        pos( $string ) = $pos if( $pos );
-        $searchString = quotemeta( $searchString ) if( $theFunc eq "FIND" );
-        # using zero width lookahead '(?=...)' to keep pos at the beginning of match
-        if( eval '$string =~ m/(?=$searchString)/g' && $string ) {
-            $result = pos( $string ) + 1;
-        }
-
-    } elsif( $theFunc eq "REPLACE" ) {
-        my( $string, $start, $num, $replace ) = split ( /,\s*/, $theAttr, 4 );
-        $string = '' unless( defined $string );
-        $start = 0 unless( $start );
-        $start-- if( $start > 0 );
-        $num = 0 unless( $num );
-        $replace = "" unless( defined $replace );
-        eval 'substr( $string, $start, $num, $replace )';
-        $result = $string;
-
-    } elsif( $theFunc eq "SUBSTITUTE" ) {
-        my( $string, $from, $to, $inst, $options ) = split( /,\s*/, $theAttr );
-        $string = '' unless( defined $string );
-        $from   = '' unless( defined $from );
-        $to     = '' unless( defined $to );
-        $result = $string;
-        $from = quotemeta( $from ) unless( $options && $options =~ /r/i);
-        if( $inst ) {
-            # replace Nth instance
-            my $count = 0;
-            if( eval '$string =~ s/($from)/if( ++$count == $inst ) { $to; } else { $1; }/gex;' && $string ) {
-                $result = $string;
-            }
-        } else {
-            # global replace
-            if( eval '$string =~ s/$from/$to/g' ) {
-                $result = $string;
-            }
-        }
-
-    } elsif( $theFunc =~ /^(MIDSTRING|SUBSTRING)$/ ) {
-        my( $string, $start, $num ) = split ( /,\s*/, $theAttr, 3 );
-        $result = '';
-        if( $start && $num ) {
-            $start-- unless ($start < 1);
-            eval '$result = substr( $string, $start, $num )';
-        }
-
-    } elsif( $theFunc =~ /^(LEFTSTRING|RIGHTSTRING)$/ ) {
-        my( $string, $num ) = split ( /,\s*/, $theAttr, 2 );
-        $string = '' unless( defined $string );
-        $num = 1 unless( $num );
-        my $start = 0;
-        $start = length( $string ) - $num if( $theFunc eq "RIGHTSTRING" );
-        eval '$result = substr( $string, $start, $num )';
-
-    } elsif( $theFunc eq "INSERTSTRING" ) {
-        my( $string, $start, $new ) = split ( /,\s*/, $theAttr, 3 );
-        $start = _getNumber( $start );
-        eval 'substr( $string, $start, 0, $new )';
-        $result = $string;
-
-    } elsif( $theFunc eq "FILTER" ) {
-        my( $filter, $string ) = split ( /,\s*/, $theAttr, 2 );
-        if( defined $string ) {
-          $filter =~ s/\$comma/,/g;
-          $filter =~ s/\$sp/ /g;
-          eval '$string =~ s/$filter//go';
-          $result = $string;
-        }
-
-    } elsif( $theFunc eq "TRANSLATE" ) {
-        $result = $theAttr;
-        # greedy match for comma separated parameters (in case first parameter has embedded commas)
-        if( $theAttr =~ /^(.*)\,\s*(.+)\,\s*(.+)$/ ) {
-            my $string = $1;
-            my $from = $2;
-            my $to   = $3;
-            $from =~ s/\$comma/,/g;      $to =~ s/\$comma/,/g;
-            $from =~ s/\$sp/ /g;         $to =~ s/\$sp/ /g;
-            $from =~ s/\$n/\n/g;         $to =~ s/\$n/\n/g; # the $from is silly, CALC can't be multi-line, yet
-            $from = quotemeta( $from );  $to = quotemeta( $to );
-            $from =~ s/([a-zA-Z0-9])\\\-([a-zA-Z0-9])/$1\-$2/g; # fix quotemeta (allow only ranges)
-            $to   =~ s/([a-zA-Z0-9])\\\-([a-zA-Z0-9])/$1\-$2/g;
-            $result = $string;
-            if( $string && eval "\$string =~ tr/$from/$to/" ) {
-                $result = $string;
-            }
-        }
-
-    } elsif ( $theFunc eq "TIME" ) {
-        $result = $theAttr;
-        $result =~ s/^\s+//o;
-        $result =~ s/\s+$//o;
-        if( $result ) {
-            $result = _date2serial( $result );
-        } else {
-            $result = time();
-        }
-
-    } elsif ( $theFunc eq "TODAY" ) {
-        $result = _date2serial( _serial2date( time(), '$year/$month/$day GMT', 1 ) );
-
-    } elsif( $theFunc =~ /^(FORMATTIME|FORMATGMTIME)$/ ) {
-        my( $time, $str ) = split( /,\s*/, $theAttr, 2 );
-        if( $time =~ /([0-9]+)/ ) {
-            $time = $1;
-        } else {
-            $time = time();
-        }
-        my $isGmt = 0;
-        $isGmt = 1 if( ( $str =~ m/ gmt/i ) || ( $theFunc eq "FORMATGMTIME" ) );
-        $result = _serial2date( $time, $str, $isGmt );
-
-    } elsif( $theFunc eq "FORMATTIMEDIFF" ) {
-        my( $scale, $prec, $time ) = split( /,\s*/, $theAttr, 3 );
-        $scale = "" unless( $scale );
-        $prec = int( _getNumber( $prec ) - 1 );
-        $prec = 0 if( $prec < 0 );
-        $time = _getNumber( $time );
-        $time = 0 if( $time < 0 );
-        my @unit  = ( 0, 0, 0, 0, 0, 0 ); # sec, min, hours, days, month, years
-        my @factor = ( 1, 60, 60, 24, 30.4166, 12 ); # sec, min, hours, days, month, years
-        my @singular = ( 'second',  'minute',  'hour',  'day',  'month', 'year' );
-        my @plural =   ( 'seconds', 'minutes', 'hours', 'days', 'month', 'years' );
-        my $min = 0;
-        my $max = $prec;
-        if( $scale =~ /^min/i ) {
-            $min = 1;
-            $unit[1] = $time;
-        } elsif( $scale =~ /^hou/i ) {
-            $min = 2;
-            $unit[2] = $time;
-        } elsif( $scale =~ /^day/i ) {
-            $min = 3;
-            $unit[3] = $time;
-        } elsif( $scale =~ /^mon/i ) {
-            $min = 4;
-            $unit[4] = $time;
-        } elsif( $scale =~ /^yea/i ) {
-            $min = 5;
-            $unit[5] = $time;
-        } else {
-            $unit[0] = $time;
-        }
-        my @arr = ();
-        my $i = 0;
-        my $val1 = 0;
-        my $val2 = 0;
-        for( $i = $min; $i < 5; $i++ ) {
-            $val1 = $unit[$i];
-            $val2 = $unit[$i+1] = int($val1 / $factor[$i+1]);
-            $val1 = $unit[$i] = $val1 - int($val2 * $factor[$i+1]);
-
-            push( @arr, "$val1 $singular[$i]" ) if( $val1 == 1 );
-            push( @arr, "$val1 $plural[$i]" )   if( $val1 > 1 );
-        }
-        push( @arr, "$val2 $singular[$i]" ) if( $val2 == 1 );
-        push( @arr, "$val2 $plural[$i]" )   if( $val2 > 1 );
-        push( @arr, "0 $plural[$min]" )   unless( @arr );
-        my @reverse = reverse( @arr );
-        $#reverse = $prec if( @reverse > $prec );
-        $result = join( ', ', @reverse );
-        $result =~ s/(.+)\, /$1 and /;
-
-    } elsif( $theFunc eq "TIMEADD" ) {
-       my( $time, $value, $scale ) = split( /,\s*/, $theAttr, 3 );
-       $time = 0 unless( $time );
-       $value = 0 unless( $value );
-       $scale = "" unless( $scale );
-       $time =~ s/.*?([0-9]+).*/$1/o || 0;
-       $value =~ s/.*?(\-?[0-9\.]+).*/$1/o || 0;
-       $value *= 60            if( $scale =~ /^min/i );
-       $value *= 3600          if( $scale =~ /^hou/i );
-       $value *= 3600*24       if( $scale =~ /^day/i );
-       $value *= 3600*24*7     if( $scale =~ /^week/i );
-       $value *= 3600*24*30.42 if( $scale =~ /^mon/i );  # FIXME: exact calc
-       $value *= 3600*24*365   if( $scale =~ /^year/i ); # FIXME: exact calc
-       $result = int( $time + $value );
-
-    } elsif( $theFunc eq "TIMEDIFF" ) {
-       my( $time1, $time2, $scale ) = split( /,\s*/, $theAttr, 3 );
-       $scale ||= '';
-       $time1 = 0 unless( $time1 );
-       $time2 = 0 unless( $time2 );
-       $time1 =~ s/.*?([0-9]+).*/$1/o || 0;
-       $time2 =~ s/.*?([0-9]+).*/$1/o || 0;
-       $result = $time2 - $time1;
-       $result /= 60            if( $scale =~ /^min/i );
-       $result /= 3600          if( $scale =~ /^hou/i );
-       $result /= 3600*24       if( $scale =~ /^day/i );
-       $result /= 3600*24*7     if( $scale =~ /^week/i );
-       $result /= 3600*24*30.42 if( $scale =~ /^mon/i );  # FIXME: exact calc
-       $result /= 3600*24*365   if( $scale =~ /^year/i ); # FIXME: exact calc
-
-    } elsif( $theFunc eq "SET" ) {
-       my( $name, $value ) = split( /,\s*/, $theAttr, 2 );
-       $name = '' unless( defined $name );
-       $name =~ s/[^a-zA-Z0-9\_]//go;
-       if( $name && defined( $value ) ) {
-           $value =~ s/\s*$//o;
-           $varStore{ $name } = $value;
-       }
-
-    } elsif( $theFunc eq "SETIFEMPTY" ) {
-       my( $name, $value ) = split( /,\s*/, $theAttr, 2 );
-       $name = '' unless( defined $name );
-       $value = '' unless( defined $value );
-       $name =~ s/[^a-zA-Z0-9\_]//go;
-       if( $name && defined( $value ) && ! $varStore{ $name } ) {
-           $value =~ s/\s*$//o;
-           $varStore{ $name } = $value;
-       }
-
-    } elsif( $theFunc eq "SETM" ) {
-       my( $name, $value ) = split( /,\s*/, $theAttr, 2 );
-       $name = '' unless( defined $name );
-       $value = '' unless( defined $value );
-       $name =~ s/[^a-zA-Z0-9\_]//go;
-       if( $name ) {
-           my $old = $varStore{ $name };
-           $old = "" unless( defined( $old ) );
-           $value = _safeEvalPerl( "$old $value" );
-           $varStore{ $name } = $value;
-       }
-
-    } elsif( $theFunc eq "GET" ) {
-       my $name = $theAttr;
-       $name =~ s/[^a-zA-Z0-9\_]//go;
-       $result = $varStore{ $name } if( $name );
-       $result = "" unless( defined( $result ) );
-
-    } elsif( $theFunc eq "SPLIT" ) {
-        my( $sep, $str ) = _properSplit( $theAttr, 2 );
-        $str = '' unless( defined $str );
-        $sep = "  *" if( !defined $sep || $sep eq '' );
-        $sep =~ s/\$comma/,/go;
-        $sep =~ s/\$sp/ /go;
-        $sep =~ s/\$(nop|empty)//go;
-        $result = _listToDelimitedString( split( $sep, $str ) );
-
-    } elsif( $theFunc eq "LIST" ) {
-        my @arr = _getList( $theAttr );
-        $result = _listToDelimitedString( @arr );
-
-    } elsif( $theFunc eq "LISTITEM" ) {
-        my( $index, $str ) = _properSplit( $theAttr, 2 );
-        $index = _getNumber( $index );
-        $str = "" unless( defined( $str ) );
-        my @arr = _getList( $str );
-        my $size = scalar @arr;
-        if( $index && $size ) {
-            $index-- if( $index > 0 );                 # documented index starts at 1
-            $index = $size + $index if( $index < 0 );  # start from back if negative
-            $result = $arr[$index] if( ( $index >= 0 ) && ( $index < $size ) );
-        }
-
-    } elsif( $theFunc eq "LISTJOIN" ) {
-        my( $sep, $str ) = _properSplit( $theAttr, 2 );
-        $str = "" unless( defined( $str ) );
-        $result = _listToDelimitedString( _getList( $str ) );
-        $sep = ", " if( !defined $sep || $sep eq '' );
-        $sep =~ s/\$comma/,/go;
-        $sep =~ s/\$sp/ /go;
-        $sep =~ s/\$(nop|empty)//go;
-        $sep =~ s/\$n/\n/go;
-        $result =~ s/, */$sep/go;
-
-    } elsif( $theFunc eq "LISTSIZE" ) {
-        my @arr = _getList( $theAttr );
-        $result = scalar @arr;
-
-    } elsif( $theFunc eq "LISTSORT" ) {
-        my $isNumeric = 1;
-        my @arr = map {
-            s/^\s*//o;
-            s/\s*$//o;
-            $isNumeric = 0 unless( $_ =~ /^[\+\-]?[0-9\.]+$/ );
-            $_
-        } _getList( $theAttr );
-        if( $isNumeric ) {
-            @arr = sort { $a <=> $b } @arr;
-        } else {
-            @arr = sort @arr;
-        }
-        $result = _listToDelimitedString( @arr );
-
-    } elsif( $theFunc eq "LISTSHUFFLE" ) {
-        my @arr = _getList( $theAttr );
-        my $size = scalar @arr;
-        if( $size > 1 ) {
-            for( $i = $size; $i--; ) {
-                my $j = int( rand( $i + 1 ) );
-                next if( $i == $j );
-                @arr[$i, $j] = @arr[$j, $i];
-            }
-        }
-        $result = _listToDelimitedString( @arr );
-
-    } elsif( $theFunc eq "LISTRAND" ) {
-        my @arr = _getList( $theAttr );
-        my $size = scalar @arr;
-        if( $size > 0 ) {
-            $i = int( rand( $size ) );
-            $result = $arr[$i];
-        }
-
-    } elsif( $theFunc eq "LISTREVERSE" ) {
-        my @arr = reverse _getList( $theAttr );
-        $result = _listToDelimitedString( @arr );
-
-    } elsif( $theFunc eq "LISTTRUNCATE" ) {
-        my( $index, $str ) = _properSplit( $theAttr, 2 );
-        $index = int( _getNumber( $index ) );
-        $str = "" unless( defined( $str ) );
-        my @arr = _getList( $str );
-        my $size = scalar @arr;
-        if( $index > 0 ) {
-            $index = $size if( $index > $size );
-            $#arr = $index - 1;
-            $result = _listToDelimitedString( @arr );
-        } elsif( $index < 0 ) {
-            $index = - $size if( $index < - $size );
-            splice( @arr, 0, $size + $index );
-            $result = _listToDelimitedString( @arr );
-        } #else result = '';
-
-    } elsif( $theFunc eq "LISTUNIQUE" ) {
-        my %seen = ();
-        my @arr = grep { ! $seen{$_} ++ } _getList( $theAttr );
-        $result = _listToDelimitedString( @arr );
-
-    } elsif( $theFunc eq "LISTMAP" ) {
-        # LISTMAP(action, item 1, item 2, ...)
-        my( $action, $str ) = _properSplit( $theAttr, 2 );
-        $action = "" unless( defined( $action ) );
-        $str = "" unless( defined( $str ) );
-        # with delay, handle functions in result recursively and clean up unbalanced parenthesis
-        _recurseFunc( $str );
-        my $item = "";
-        $i = 0;
-        my @arr =
-            map {
-               $item = $_;
-               $_ = $action;
-               $i++;
-               s/\$index/$i/go;
-               $_ .= $item unless( s/\$item/$item/go );
-               _recurseFunc( $_ );
-               $_
-            } _getList( $str );
-        $result = _listToDelimitedString( @arr );
-
-    } elsif( $theFunc eq "LISTNONEMPTY" ) {
-        my @arr = grep { /./ } _getList( $theAttr );
-        $result = _listToDelimitedString( @arr );
-
-    } elsif( $theFunc eq "LISTIF" ) {
-        # LISTIF(cmd, item 1, item 2, ...)
-        my( $cmd, $str ) = _properSplit( $theAttr, 2 );
-        $cmd = "" unless( defined( $cmd ) );
-        $cmd =~ s/^\s*(.*?)\s*$/$1/o;
-        $str = "" unless( defined( $str ) );
-        # with delay, handle functions in result recursively and clean up unbalanced parenthesis
-        _recurseFunc( $str );
-        my $item = "";
-        my $eval = "";
-        $i = 0;
-        my @arr =
-            grep { ! /^TWIKI_GREP_REMOVE$/ }
-            map {
-                $item = $_;
-                $_ = $cmd;
-                $i++;
-                s/\$index/$i/go;
-                s/\$item/$item/go;
-                _recurseFunc( $_ );
-                $eval = _safeEvalPerl( $_ );
-                if( $eval =~ /^ERROR/ ) {
-                    $_ = $eval;
-                } elsif( $eval ) {
-                    $_ = $item;
-                } else {
-                    $_ = "TWIKI_GREP_REMOVE";
-                }
-            } _getList( $str );
-        $result = _listToDelimitedString( @arr );
-
-    } elsif ( $theFunc eq "NOP" ) {
-        # pass everything through, this will allow plugins to defy plugin order
-        # for example the %SEARCH{}% variable
-        $theAttr =~ s/\$per(cnt)?/%/g;
-        $theAttr =~ s/\$quot/"/g;
-        $result = $theAttr;
-
-    } elsif ( $theFunc eq "EXISTS" ) {
-        $result = TWiki::Func::topicExists( $web, $theAttr );
-        $result = 0 unless( $result );
-
-    } elsif ( $theFunc eq "HEXENCODE" ) {
-        $result = uc( unpack( "H*", $theAttr ) );
-
-    } elsif ( $theFunc eq "HEXDECODE" ) {
-        $theAttr =~ s/[^0-9A-Fa-f]//g; # only hex numbers
-        $theAttr =~ s/.$// if( length( $theAttr ) % 2 ); # must be set of two
-        $result = pack( "H*", $theAttr ); 
+    my $f = $funcRef->{$theFunc};
+    if( $f ) {
+        $result = &$f( $theAttr );
+    }
+    else {
+        $result = "func $theFunc not found. ";
     }
 
     TWiki::Func::writeDebug( "- SpreadSheetPlugin::Calc::_doFunc: $theFunc( $theAttr ) returns: $result" ) if $debug;
+    return $result;
+}
+
+# =========================
+$funcRef->{ABOVE} = \&_funcABOVE;
+sub _funcABOVE
+{
+    my( $theAttr ) = @_;
+    my $i = $cPos + 1;
+    return "R0:C$i..R$rPos:C$i";
+}
+
+# =========================
+$funcRef->{ABS} = \&_funcABS;
+sub _funcABS
+{
+    my( $theAttr ) = @_;
+    return abs( _getNumber( $theAttr ) );
+}
+
+# =========================
+$funcRef->{AND} = \&_funcAND;
+sub _funcAND
+{
+    my( $theAttr ) = @_;
+    my $result = 0;
+    my @arr = _getListAsInteger( $theAttr );
+    foreach my $i( @arr ) {
+        unless( $i ) {
+            $result = 0;
+            last;
+        }
+        $result = 1;
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{AVERAGE} = \&_funcAVERAGE;
+$funcRef->{MEAN} = \&_funcAVERAGE;    #  undocumented - do not remove
+sub _funcAVERAGE
+{
+    my( $theAttr ) = @_;
+    my $result = 0;
+    my $items = 0;
+    my @arr = _getListAsFloat( $theAttr );
+    foreach my $i ( @arr ) {
+        if( defined $i ) {
+            $result += $i;
+            $items++;
+        }
+    }
+    if( $items > 0 ) {
+        $result = $result / $items;
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{BITXOR} = \&_funcBITXOR;
+sub _funcBITXOR
+{
+    my( $theAttr ) = @_;
+    my $ff = chr(255) x length( $theAttr );
+    return $theAttr ^ $ff;
+}
+
+# =========================
+$funcRef->{CEILING} = \&_funcCEILING;
+sub _funcCEILING
+{
+    my( $theAttr ) = @_;
+    my $i = _getNumber( $theAttr );
+    my $result = int( $i );
+    if( $i > 0 && $i != $result ) {
+        $result += 1;
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{CHAR} = \&_funcCHAR;
+sub _funcCHAR
+{
+    my( $theAttr ) = @_;
+    my $result = '';
+    my $i = 0;
+    if( $theAttr =~ /([0-9]+)/ ) {
+        $i = $1;
+    }
+    $i = 255 if $i > 255;
+    $i = 0 if $i < 0;
+    return chr( $i );
+}
+
+# =========================
+$funcRef->{CODE} = \&_funcCODE;
+sub _funcCODE
+{
+    my( $theAttr ) = @_;
+    return ord( $theAttr );
+}
+
+# =========================
+$funcRef->{COLUMN} = \&_funcCOLUMN;
+sub _funcCOLUMN
+{
+    my( $theAttr ) = @_;
+    my $i = $theAttr || 0;
+    return $cPos + $i + 1;
+}
+
+# =========================
+$funcRef->{COUNTITEMS} = \&_funcCOUNTITEMS;
+sub _funcCOUNTITEMS
+{
+    my( $theAttr ) = @_;
+    my $result = '';
+    my @arr = _getList( $theAttr );
+    my %items = ();
+    my $key = "";
+    foreach $key ( @arr ) {
+        $key =~ s/^\s*(.*?)\s*$/$1/o if( $key );
+        if( $key ) {
+            if( exists( $items{ $key } ) ) {
+                $items{ $key }++;
+            } else {
+                $items{ $key } = 1;
+            }
+        }
+    }
+    foreach $key ( sort keys %items ) {
+        $result .= "$key: $items{ $key }<br /> ";
+    }
+    $result =~ s|<br /> $||o;
+    return $result;
+}
+
+# =========================
+$funcRef->{COUNTSTR} = \&_funcCOUNTSTR;
+sub _funcCOUNTSTR
+{
+    my( $theAttr ) = @_;
+    my $result = 0;  # count any string
+    my $i = 0;       # count string equal second attr
+    my $list = $theAttr;
+    my $str = "";
+    if( $theAttr =~ /^(.*),\s*(.*?)$/ ) {  # greedy match for last comma
+        $list = $1;
+        $str = $2;
+    }
+    $str =~ s/\s*$//o;
+    my @arr = _getList( $list );
+    foreach my $cell ( @arr ) {
+        if( defined $cell ) {
+            $cell =~ s/^\s*(.*?)\s*$/$1/o;
+            $result++ if( $cell );
+            $i++ if( $cell eq $str );
+        }
+    }
+    $result = $i if( $str );
+    return $result;
+}
+
+# =========================
+$funcRef->{DEF} = \&_funcDEF;
+sub _funcDEF
+{
+    my( $theAttr ) = @_;
+    # Format DEF(list) returns first defined cell
+    # Added by MF 26/3/2002, fixed by PeterThoeny
+    my @arr = _getList( $theAttr );
+    my $result = '';
+    foreach my $cell ( @arr ) {
+        if( $cell ) {
+            $cell =~ s/^\s*(.*?)\s*$/$1/o;
+            if( $cell ) {
+                $result = $cell;
+                last;
+            }
+        }
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{EMPTY} = \&_funcEMPTY;
+sub _funcEMPTY
+{
+    my( $theAttr ) = @_;
+    my $result = 1;
+    $result = 0 if( length( $theAttr ) > 0 );
+    return $result;
+}
+
+# =========================
+$funcRef->{EVAL} = \&_funcEVAL;
+sub _funcEVAL
+{
+    my( $theAttr ) = @_;
+    return _safeEvalPerl( $theAttr );
+}
+
+# =========================
+$funcRef->{EVEN} = \&_funcEVEN;
+sub _funcEVEN
+{
+    my( $theAttr ) = @_;
+    return ( _getNumber( $theAttr ) + 1 ) % 2;
+}
+
+# =========================
+$funcRef->{EXACT} = \&_funcEXACT;
+sub _funcEXACT
+{
+    my( $theAttr ) = @_;
+    my $result = 0;
+    my( $str1, $str2 ) = split( /,\s*/, $theAttr, 2 );
+    $str1 = "" unless( $str1 );
+    $str2 = "" unless( $str2 );
+    $str1 =~ s/^\s*(.*?)\s*$/$1/o; # cut leading and trailing spaces
+    $str2 =~ s/^\s*(.*?)\s*$/$1/o;
+    $result = 1 if( $str1 eq $str2 );
+    return $result;
+}
+
+# =========================
+$funcRef->{EXEC} = \&_funcEXEC;
+sub _funcEXEC
+{
+    my( $theAttr ) = @_;
+    # add nesting level escapes
+    my $level = 0;
+    my $result = $theAttr;
+    $result =~ s/([\(\)])/_addNestingLevel($1, \$level)/geo;
+    # execute functions in attribute recursively and clean up unbalanced parenthesis
+    _recurseFunc( $result );
+    return $result;
+}
+
+# =========================
+$funcRef->{EXISTS} = \&_funcEXISTS;
+sub _funcEXISTS
+{
+    my( $theAttr ) = @_;
+    my $result = TWiki::Func::topicExists( $web, $theAttr );
+    $result = 0 unless( $result );
+    return $result;
+}
+
+# =========================
+$funcRef->{EXP} = \&_funcEXP;
+sub _funcEXP
+{
+    my( $theAttr ) = @_;
+    return exp( _getNumber( $theAttr ) );
+}
+
+# =========================
+$funcRef->{FILTER} = \&_funcFILTER;
+sub _funcFILTER
+{
+    my( $theAttr ) = @_;
+    my $result = '';
+    my( $filter, $string ) = split ( /,\s*/, $theAttr, 2 );
+    if( defined $string ) {
+      $filter =~ s/\$comma/,/g;
+      $filter =~ s/\$sp/ /g;
+      eval '$string =~ s/$filter//go';
+      $result = $string;
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{FIND} = \&_funcFIND;
+sub _funcFIND
+{
+    my( $theAttr ) = @_;
+    my( $searchString, $string, $pos ) = split( /,\s*/, $theAttr, 3 );
+    my $result = 0;
+    $searchString = '' unless( defined $searchString );
+    $string = '' unless( defined $string );
+    $pos--;
+    $pos = 0 if( $pos < 0 );
+    pos( $string ) = $pos if( $pos );
+    $searchString = quotemeta( $searchString );
+    # using zero width lookahead '(?=...)' to keep pos at the beginning of match
+    if( eval '$string =~ m/(?=$searchString)/g' && $string ) {
+        $result = pos( $string ) + 1;
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{FLOOR} = \&_funcFLOOR;
+sub _funcFLOOR
+{
+    my( $theAttr ) = @_;
+    my $i = _getNumber( $theAttr );
+    my $result = int( $i );
+    if( $i < 0 && $i != $result ) {
+        $result -= 1;
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{FORMAT} = \&_funcFORMAT;
+sub _funcFORMAT
+{
+    my( $theAttr ) = @_;
+
+    # Format FORMAT(TYPE, precision, value) returns formatted value -- JimStraus - 05 Jan 2003
+    my( $format, $res, $value )  = split( /,\s*/, $theAttr );
+    $format =~ s/^\s*(.*?)\s*$/$1/; #Strip leading and trailing spaces
+    $res =~ s/^\s*(.*?)\s*$/$1/;
+    $value =~ s/^\s*(.*?)\s*$/$1/;
+    my $result = '';
+    if( $format eq "DOLLAR" ) {
+        my $neg = 1 if $value < 0;
+        $value = abs($value);
+        $result = sprintf("%0.${res}f", $value);
+        my $temp = reverse $result;
+        $temp =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+        $result = "\$" . (scalar reverse $temp);
+        $result = "(".$result.")" if $neg;
+    } elsif( $format eq "COMMA" ) {
+        $result = sprintf("%0.${res}f", $value);
+        my $temp = reverse $result;
+        $temp =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+        $result = scalar reverse $temp;
+    } elsif( $format eq "PERCENT" ) {
+        $result = sprintf("%0.${res}f%%", $value * 100);
+    } elsif( $format eq "NUMBER" ) {
+        $result = sprintf("%0.${res}f", $value);
+    } elsif( $format eq "K" ) {
+        $result = sprintf("%0.${res}f K", $value / 1024);
+    } elsif( $format eq "KB" ) {
+        $result = sprintf("%0.${res}f KB", $value / 1024);
+    } elsif ($format eq "MB") {
+        $result = sprintf("%0.${res}f MB", $value / (1024 * 1024));
+    } elsif( $format =~ /^KBMB/ ) {
+        $value /= 1024;
+        my @lbls = ( "MB", "GB", "TB", "PB", "EB", "ZB" );
+        my $lbl = "KB";
+        while( $value >= 1024 && @lbls ) {
+            $value /= 1024;
+            $lbl = shift @lbls;
+        }
+        $result = sprintf("%0.${res}f", $value) . " $lbl";
+    } else {
+        # FORMAT not recognized, just return value
+        $result = $value;
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{FORMATGMTIME} = \&_funcFORMATGMTIME;
+sub _funcFORMATGMTIME
+{
+    my( $theAttr ) = @_;
+    my $result = '';
+    my( $time, $str ) = split( /,\s*/, $theAttr, 2 );
+    if( $time =~ /([0-9]+)/ ) {
+        $time = $1;
+    } else {
+        $time = time();
+    }
+    return _serial2date( $time, $str, 1 );
+}
+
+# =========================
+$funcRef->{FORMATTIME} = \&_funcFORMATTIME;
+sub _funcFORMATTIME
+{
+    my( $theAttr ) = @_;
+    my( $time, $str ) = split( /,\s*/, $theAttr, 2 );
+    if( $time =~ /([0-9]+)/ ) {
+        $time = $1;
+    } else {
+        $time = time();
+    }
+    my $isGmt = 0;
+    $isGmt = 1 if( $str =~ m/ gmt/i );
+    return _serial2date( $time, $str, $isGmt );
+}
+
+# =========================
+$funcRef->{FORMATTIMEDIFF} = \&_funcFORMATTIMEDIFF;
+sub _funcFORMATTIMEDIFF
+{
+    my( $theAttr ) = @_;
+    my( $scale, $prec, $time ) = split( /,\s*/, $theAttr, 3 );
+    $scale = "" unless( $scale );
+    $prec = int( _getNumber( $prec ) - 1 );
+    $prec = 0 if( $prec < 0 );
+    $time = _getNumber( $time );
+    $time = 0 if( $time < 0 );
+    my @unit  = ( 0, 0, 0, 0, 0, 0 ); # sec, min, hours, days, month, years
+    my @factor = ( 1, 60, 60, 24, 30.4166, 12 ); # sec, min, hours, days, month, years
+    my @singular = ( 'second',  'minute',  'hour',  'day',  'month', 'year' );
+    my @plural =   ( 'seconds', 'minutes', 'hours', 'days', 'month', 'years' );
+    my $min = 0;
+    my $max = $prec;
+    if( $scale =~ /^min/i ) {
+        $min = 1;
+        $unit[1] = $time;
+    } elsif( $scale =~ /^hou/i ) {
+        $min = 2;
+        $unit[2] = $time;
+    } elsif( $scale =~ /^day/i ) {
+        $min = 3;
+        $unit[3] = $time;
+    } elsif( $scale =~ /^mon/i ) {
+        $min = 4;
+        $unit[4] = $time;
+    } elsif( $scale =~ /^yea/i ) {
+        $min = 5;
+        $unit[5] = $time;
+    } else {
+        $unit[0] = $time;
+    }
+    my @arr = ();
+    my $i = 0;
+    my $val1 = 0;
+    my $val2 = 0;
+    for( $i = $min; $i < 5; $i++ ) {
+        $val1 = $unit[$i];
+        $val2 = $unit[$i+1] = int($val1 / $factor[$i+1]);
+        $val1 = $unit[$i] = $val1 - int($val2 * $factor[$i+1]);
+
+        push( @arr, "$val1 $singular[$i]" ) if( $val1 == 1 );
+        push( @arr, "$val1 $plural[$i]" )   if( $val1 > 1 );
+    }
+    push( @arr, "$val2 $singular[$i]" ) if( $val2 == 1 );
+    push( @arr, "$val2 $plural[$i]" )   if( $val2 > 1 );
+    push( @arr, "0 $plural[$min]" )   unless( @arr );
+    my @reverse = reverse( @arr );
+    $#reverse = $prec if( @reverse > $prec );
+    my $result = join( ', ', @reverse );
+    $result =~ s/(.+)\, /$1 and /;
+    return $result;
+}
+
+# =========================
+$funcRef->{GET} = \&_funcGET;
+sub _funcGET
+{
+    my( $theAttr ) = @_;
+    my $name = $theAttr;
+    $name =~ s/[^a-zA-Z0-9\_]//go;
+    my $result = $varStore{ $name } if( $name );
+    $result = "" unless( defined( $result ) );
+    return $result;
+}
+
+# =========================
+$funcRef->{HEXDECODE} = \&_funcHEXDECODE;
+sub _funcHEXDECODE
+{
+    my( $theAttr ) = @_;
+    $theAttr =~ s/[^0-9A-Fa-f]//g; # only hex numbers
+    $theAttr =~ s/.$// if( length( $theAttr ) % 2 ); # must be set of two
+    return pack( "H*", $theAttr );
+}
+
+# =========================
+$funcRef->{HEXENCODE} = \&_funcHEXENCODE;
+sub _funcHEXENCODE
+{
+    my( $theAttr ) = @_;
+    return uc( unpack( "H*", $theAttr ) );
+}
+
+# =========================
+$funcRef->{IF} = \&_funcIF;
+sub _funcIF
+{
+    my( $theAttr ) = @_;
+
+    # IF(condition, value if true, value if false)
+    my( $condition, $str1, $str2 ) = _properSplit( $theAttr, 3 );
+    # with delay, handle functions in condition recursively and clean up unbalanced parenthesis
+    _recurseFunc( $condition );
+    $condition =~ s/^\s*(.*?)\s*$/$1/o;
+    my $result = _safeEvalPerl( $condition );
+    unless( $result =~ /^ERROR/ ) {
+        if( $result ) {
+            $result = $str1;
+        } else {
+            $result = $str2;
+        }
+        $result = "" unless( defined( $result ) );
+        # with delay, handle functions in result recursively and clean up unbalanced parenthesis
+        _recurseFunc( $result );
+
+    } # else return error message
+
+    return $result;
+}
+
+# =========================
+$funcRef->{INSERTSTRING} = \&_funcINSERTSTRING;
+sub _funcINSERTSTRING
+{
+    my( $theAttr ) = @_;
+    my( $string, $start, $new ) = split ( /,\s*/, $theAttr, 3 );
+    $start = _getNumber( $start );
+    eval 'substr( $string, $start, 0, $new )';
+    return $string;
+}
+
+# =========================
+$funcRef->{INT} = \&_funcINT;
+sub _funcINT
+{
+    my( $theAttr ) = @_;
+    my $result = _safeEvalPerl( $theAttr );
+    unless( $result =~ /^ERROR/ ) {
+        $result = int( _getNumber( $result ) );
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{ISDIGIT} = \&_funcISDIGIT;
+sub _funcISDIGIT
+{
+    my( $theAttr ) = @_;
+    my $regex = ($TWiki::regex{numeric}) ? qr/[$TWiki::regex{numeric}]+/o : '[[:digit:]]+';
+    return ( $theAttr =~ m/^$regex$/o ) ? 1 : 0;
+}
+
+# =========================
+$funcRef->{ISLOWER} = \&_funcISLOWER;
+sub _funcISLOWER
+{
+    my( $theAttr ) = @_;
+    my $regex = ($TWiki::regex{lowerAlpha}) ? qr/[$TWiki::regex{lowerAlpha}]+/o : '[[:lower:]]+';
+    return ( $theAttr =~ m/^$regex$/o ) ? 1 : 0;
+}
+
+
+# =========================
+$funcRef->{ISUPPER} = \&_funcISUPPER;
+sub _funcISUPPER
+{
+    my( $theAttr ) = @_;
+    my $regex = ($TWiki::regex{upperAlpha}) ? qr/[$TWiki::regex{upperAlpha}]+/o : '[[:upper:]]+';
+    return ( $theAttr =~ m/^$regex$/o ) ? 1 : 0;
+}
+
+# =========================
+$funcRef->{ISWIKIWORD} = \&_funcISWIKIWORD;
+sub _funcISWIKIWORD
+{
+    my( $theAttr ) = @_;
+    my $regex = ($TWiki::regex{wikiWordRegex}) ? $TWiki::regex{wikiWordRegex} :
+                '[[:upper:]]+[[:lower:][:digit:]]+[[:upper:]]+[[:alpha:][:digit:]]*';
+    return ( $theAttr =~ m/^$regex$/o ) ? 1 : 0;
+}
+
+# =========================
+$funcRef->{LEFT} = \&_funcLEFT;
+sub _funcLEFT
+{
+    my( $theAttr ) = @_;
+    my $i = $rPos + 1;
+    return "R$i:C0..R$i:C$cPos";
+}
+
+# =========================
+$funcRef->{LEFTSTRING} = \&_funcLEFTSTRING;
+sub _funcLEFTSTRING
+{
+    my( $theAttr ) = @_;
+    my $result = '';
+    my( $string, $num ) = split ( /,\s*/, $theAttr, 2 );
+    $string = '' unless( defined $string );
+    $num = 1 unless( $num );
+    my $start = 0;
+    eval '$result = substr( $string, $start, $num )';
+    return $result;
+}
+
+# =========================
+$funcRef->{LENGTH} = \&_funcLENGTH;
+sub _funcLENGTH
+{
+    my( $theAttr ) = @_;
+    return length( $theAttr );
+}
+
+# =========================
+$funcRef->{LIST} = \&_funcLIST;
+sub _funcLIST
+{
+    my( $theAttr ) = @_;
+    my @arr = _getList( $theAttr );
+    return _listToDelimitedString( @arr );
+}
+
+# =========================
+$funcRef->{LISTIF} = \&_funcLISTIF;
+sub _funcLISTIF
+{
+    my( $theAttr ) = @_;
+    # LISTIF(cmd, item 1, item 2, ...)
+    my( $cmd, $str ) = _properSplit( $theAttr, 2 );
+    $cmd = "" unless( defined( $cmd ) );
+    $cmd =~ s/^\s*(.*?)\s*$/$1/o;
+    $str = "" unless( defined( $str ) );
+    # with delay, handle functions in result recursively and clean up unbalanced parenthesis
+    _recurseFunc( $str );
+    my $item = "";
+    my $eval = "";
+    my $i = 0;
+    my @arr =
+        grep { ! /^TWIKI_GREP_REMOVE$/ }
+        map {
+            $item = $_;
+            $_ = $cmd;
+            $i++;
+            s/\$index/$i/go;
+            s/\$item/$item/go;
+            _recurseFunc( $_ );
+            $eval = _safeEvalPerl( $_ );
+            if( $eval =~ /^ERROR/ ) {
+                $_ = $eval;
+            } elsif( $eval ) {
+                $_ = $item;
+            } else {
+                $_ = "TWIKI_GREP_REMOVE";
+            }
+        } _getList( $str );
+    return _listToDelimitedString( @arr );
+}
+
+# =========================
+$funcRef->{LISTITEM} = \&_funcLISTITEM;
+sub _funcLISTITEM
+{
+    my( $theAttr ) = @_;
+    my $result = '';
+    my( $index, $str ) = _properSplit( $theAttr, 2 );
+    $index = _getNumber( $index );
+    $str = "" unless( defined( $str ) );
+    my @arr = _getList( $str );
+    my $size = scalar @arr;
+    if( $index && $size ) {
+        $index-- if( $index > 0 );                 # documented index starts at 1
+        $index = $size + $index if( $index < 0 );  # start from back if negative
+        $result = $arr[$index] if( ( $index >= 0 ) && ( $index < $size ) );
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{LISTJOIN} = \&_funcLISTJOIN;
+sub _funcLISTJOIN
+{
+    my( $theAttr ) = @_;
+    my( $sep, $str ) = _properSplit( $theAttr, 2 );
+    $str = "" unless( defined( $str ) );
+    my $result = _listToDelimitedString( _getList( $str ) );
+    $sep = ", " if( !defined $sep || $sep eq '' );
+    $sep =~ s/\$comma/,/go;
+    $sep =~ s/\$sp/ /go;
+    $sep =~ s/\$(nop|empty)//go;
+    $sep =~ s/\$n/\n/go;
+    $result =~ s/, */$sep/go;
+    return $result;
+}
+
+# =========================
+$funcRef->{LISTMAP} = \&_funcLISTMAP;
+sub _funcLISTMAP
+{
+    my( $theAttr ) = @_;
+    # LISTMAP(action, item 1, item 2, ...)
+    my( $action, $str ) = _properSplit( $theAttr, 2 );
+    $action = "" unless( defined( $action ) );
+    $str = "" unless( defined( $str ) );
+    # with delay, handle functions in result recursively and clean up unbalanced parenthesis
+    _recurseFunc( $str );
+    my $item = "";
+    my $i = 0;
+    my @arr =
+        map {
+            $item = $_;
+            $_ = $action;
+            $i++;
+            s/\$index/$i/go;
+            $_ .= $item unless( s/\$item/$item/go );
+            _recurseFunc( $_ );
+            $_
+        } _getList( $str );
+    return _listToDelimitedString( @arr );
+}
+
+# =========================
+$funcRef->{LISTNONEMPTY} = \&_funcLISTNONEMPTY;
+sub _funcLISTNONEMPTY
+{
+    my( $theAttr ) = @_;
+    my @arr = grep { /./ } _getList( $theAttr );
+    return _listToDelimitedString( @arr );
+}
+
+# =========================
+$funcRef->{LISTRAND} = \&_funcLISTRAND;
+sub _funcLISTRAND
+{
+    my( $theAttr ) = @_;
+    my $result = '';
+    my @arr = _getList( $theAttr );
+    my $size = scalar @arr;
+    if( $size > 0 ) {
+        my $i = int( rand( $size ) );
+        $result = $arr[$i];
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{LISTREVERSE} = \&_funcLISTREVERSE;
+sub _funcLISTREVERSE
+{
+    my( $theAttr ) = @_;
+    my @arr = reverse _getList( $theAttr );
+    return _listToDelimitedString( @arr );
+}
+
+# =========================
+$funcRef->{LISTSHUFFLE} = \&_funcLISTSHUFFLE;
+sub _funcLISTSHUFFLE
+{
+    my( $theAttr ) = @_;
+    my @arr = _getList( $theAttr );
+    my $size = scalar @arr;
+    if( $size > 1 ) {
+        for( my $i = $size; $i--; ) {
+            my $j = int( rand( $i + 1 ) );
+            next if( $i == $j );
+            @arr[$i, $j] = @arr[$j, $i];
+        }
+    }
+    return _listToDelimitedString( @arr );
+}
+
+# =========================
+$funcRef->{LISTSIZE} = \&_funcLISTSIZE;
+sub _funcLISTSIZE
+{
+    my( $theAttr ) = @_;
+    my @arr = _getList( $theAttr );
+    return scalar @arr;
+}
+
+# =========================
+$funcRef->{LISTSORT} = \&_funcLISTSORT;
+sub _funcLISTSORT
+{
+    my( $theAttr ) = @_;
+    my $isNumeric = 1;
+    my @arr = map {
+        s/^\s*//o;
+        s/\s*$//o;
+        $isNumeric = 0 unless( $_ =~ /^[\+\-]?[0-9\.]+$/ );
+        $_
+    } _getList( $theAttr );
+    if( $isNumeric ) {
+        @arr = sort { $a <=> $b } @arr;
+    } else {
+        @arr = sort @arr;
+    }
+    return _listToDelimitedString( @arr );
+}
+
+# =========================
+$funcRef->{LISTTRUNCATE} = \&_funcLISTTRUNCATE;
+sub _funcLISTTRUNCATE
+{
+    my( $theAttr ) = @_;
+    my $result = '';
+    my( $index, $str ) = _properSplit( $theAttr, 2 );
+    $index = int( _getNumber( $index ) );
+    $str = "" unless( defined( $str ) );
+    my @arr = _getList( $str );
+    my $size = scalar @arr;
+    if( $index > 0 ) {
+        $index = $size if( $index > $size );
+        $#arr = $index - 1;
+        $result = _listToDelimitedString( @arr );
+    } elsif( $index < 0 ) {
+        $index = - $size if( $index < - $size );
+        splice( @arr, 0, $size + $index );
+        $result = _listToDelimitedString( @arr );
+    } #else result = '';
+    return $result;
+}
+
+# =========================
+$funcRef->{LISTUNIQUE} = \&_funcLISTUNIQUE;
+sub _funcLISTUNIQUE
+{
+    my( $theAttr ) = @_;
+    my %seen = ();
+    my @arr = grep { ! $seen{$_} ++ } _getList( $theAttr );
+    return _listToDelimitedString( @arr );
+}
+
+# =========================
+$funcRef->{LN} = \&_funcLN;
+sub _funcLN
+{
+    my( $theAttr ) = @_;
+    return log(_getNumber( $theAttr ) );
+}
+
+# =========================
+$funcRef->{LOG} = \&_funcLOG;
+sub _funcLOG
+{
+    my( $theAttr ) = @_;
+    my( $num, $base ) = split( /,\s*/, $theAttr, 2 );
+    $num = _getNumber( $num );
+    $base = _getNumber( $base );
+    $base = 10 if( $base <= 0 );
+    return log( $num ) / log( $base );
+}
+
+# =========================
+$funcRef->{LOWER} = \&_funcLOWER;
+sub _funcLOWER
+{
+    my( $theAttr ) = @_;
+    return lc( $theAttr );
+}
+
+# =========================
+$funcRef->{MAIN} = \&_funcMAIN;
+sub _funcMAIN
+{
+    my( $theAttr ) = @_;
+    return $theAttr;
+}
+
+# =========================
+$funcRef->{MAX} = \&_funcMAX;
+sub _funcMAX
+{
+    my( $theAttr ) = @_;
+    my @arr = sort { $a <=> $b }
+              grep { /./ }
+              grep { defined $_ }
+              _getListAsFloat( $theAttr );
+    return $arr[$#arr] if( scalar @arr );
+    return '';
+}
+
+# =========================
+$funcRef->{MEDIAN} = \&_funcMEDIAN;
+sub _funcMEDIAN
+{
+    my( $theAttr ) = @_;
+    my $result = '';
+    my @arr = sort { $a <=> $b } grep { defined $_ } _getListAsFloat( $theAttr );
+    my $i = @arr;
+    if( ( $i % 2 ) > 0 ) {
+        $result = $arr[$i/2];
+    } elsif( $i ) {
+        $i /= 2;
+        $result = ( $arr[$i] + $arr[$i-1] ) / 2;
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{MIN} = \&_funcMIN;
+sub _funcMIN
+{
+    my( $theAttr ) = @_;
+    my @arr = sort { $a <=> $b }
+              grep { /./ }
+              grep { defined $_ }
+              _getListAsFloat( $theAttr );
+    return $arr[0] if( scalar @arr );
+    return '';
+}
+
+# =========================
+$funcRef->{MOD} = \&_funcMOD;
+sub _funcMOD
+{
+    my( $theAttr ) = @_;
+    my $result = 0;
+    my( $num1, $num2 ) = split( /,\s*/, $theAttr, 2 );
+    $num1 = _getNumber( $num1 );
+    $num2 = _getNumber( $num2 );
+    if( $num1 && $num2 ) {
+        $result = $num1 % $num2;
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{NOEXEC} = \&_funcNOEXEC;
+sub _funcNOEXEC
+{
+    my( $theAttr ) = @_;
+    return $theAttr;
+}
+
+# =========================
+$funcRef->{NOP} = \&_funcNOP;
+sub _funcNOP
+{
+    my( $theAttr ) = @_;
+    # pass everything through, this will allow plugins to defy plugin order
+    # for example the %SEARCH{}% variable
+    $theAttr =~ s/\$per(cnt)?/%/g;
+    $theAttr =~ s/\$quot/"/g;
+    return $theAttr;
+}
+
+# =========================
+$funcRef->{NOT} = \&_funcNOT;
+sub _funcNOT
+{
+    my( $theAttr ) = @_;
+    my $result = 1;
+    $result = 0 if( _getNumber( $theAttr ) );
+    return $result;
+}
+
+# =========================
+$funcRef->{ODD} = \&_funcODD;
+sub _funcODD
+{
+    my( $theAttr ) = @_;
+    return _getNumber( $theAttr ) % 2;
+}
+
+# =========================
+$funcRef->{OR} = \&_funcOR;
+sub _funcOR
+{
+    my( $theAttr ) = @_;
+    my $result = 0;
+    my @arr = _getListAsInteger( $theAttr );
+    foreach my $i( @arr ) {
+        if( $i ) {
+            $result = 1;
+            last;
+        }
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{PERCENTILE} = \&_funcPERCENTILE;
+sub _funcPERCENTILE
+{
+    my( $theAttr ) = @_;
+    my( $percentile, $set ) = split( /,\s*/, $theAttr, 2 );
+    $set = '' unless( defined $set );
+    my @arr = sort { $a <=> $b } grep { defined $_ } _getListAsFloat( $set );
+    my $result = 0;
+    my $size = scalar( @arr );
+    if( $size > 0 ) {
+        my $i = $percentile / 100 * ( $size + 1 );
+        my $iInt = int( $i );
+        if( $i <= 1 ) {
+            $result = $arr[0];
+        } elsif( $i >= $size ) {
+            $result = $arr[$size-1];
+        } elsif( $i == $iInt ) {
+            $result = $arr[$i-1];
+        } else {
+            # interpolate beween neighbors # Example: $i = 7.25
+            my $r1 = $iInt + 1 - $i;       # 0.75 = 7 + 1 - 7.25
+            my $r2 = 1 - $r1;              # 0.25 = 1 - 0.75
+            my $x1 = $arr[$iInt-1];
+            my $x2 = $arr[$iInt];
+            $result = ($r1 * $x1) + ($r2 * $x2);
+        }
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{PI} = \&_funcPI;
+sub _funcPI
+{
+    return 3.1415926535897932384;
+}
+
+# =========================
+$funcRef->{MULT} = \&_funcPRODUCT;   # MULT is deprecated (no not remove)
+$funcRef->{PRODUCT} = \&_funcPRODUCT;
+sub _funcPRODUCT
+{
+    my( $theAttr ) = @_;
+    my @arr = _getListAsFloat( $theAttr );
+    my $result = 1;
+    foreach my $i ( @arr ) {
+        $result *= $i  if defined $i;
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{PROPER} = \&_funcPROPER;
+sub _funcPROPER
+{
+    my( $theAttr ) = @_;
+    # FIXME: I18N
+    my $result = lc( $theAttr );
+    $result =~ s/(^|[^a-z])([a-z])/$1 . uc($2)/geo;
+    return $result;
+}
+
+# =========================
+$funcRef->{PROPERSPACE} = \&_funcPROPERSPACE;
+sub _funcPROPERSPACE
+{
+    my( $theAttr ) = @_;
+    return _properSpace( $theAttr );
+}
+
+# =========================
+$funcRef->{RAND} = \&_funcRAND;
+sub _funcRAND
+{
+    my( $theAttr ) = @_;
+    my $max = _getNumber( $theAttr );
+    $max = 1 if( $max <= 0 );
+    return rand( $max );
+}
+
+# =========================
+$funcRef->{REPEAT} = \&_funcREPEAT;
+sub _funcREPEAT
+{
+    my( $theAttr ) = @_;
+    my( $str, $num ) = split( /,\s*/, $theAttr, 2 );
+    $str = "" unless( defined( $str ) );
+    $num = _getNumber( $num );
+    return "$str" x $num;
+}
+
+# =========================
+$funcRef->{REPLACE} = \&_funcREPLACE;
+sub _funcREPLACE
+{
+    my( $theAttr ) = @_;
+    my( $string, $start, $num, $replace ) = split ( /,\s*/, $theAttr, 4 );
+    $string = '' unless( defined $string );
+    $start = 0 unless( $start );
+    $start-- if( $start > 0 );
+    $num = 0 unless( $num );
+    $replace = "" unless( defined $replace );
+    eval 'substr( $string, $start, $num, $replace )';
+    return $string;
+}
+
+# =========================
+$funcRef->{RIGHT} = \&_funcRIGHT;
+sub _funcRIGHT
+{
+    my( $theAttr ) = @_;
+    my $i = $rPos + 1;
+    my $cStart = $cPos + 2;
+    return "R$i:C$cStart..R$i:C32000";
+}
+
+# =========================
+$funcRef->{RIGHTSTRING} = \&_funcRIGHTSTRING;
+sub _funcRIGHTSTRING
+{
+    my( $theAttr ) = @_;
+    my $result = '';
+    my( $string, $num ) = split ( /,\s*/, $theAttr, 2 );
+    $string = '' unless( defined $string );
+    $num = 1 unless( $num );
+    my $start = 0;
+    $start = length( $string ) - $num;
+    eval '$result = substr( $string, $start, $num )';
+    return $result;
+}
+
+# =========================
+$funcRef->{ROUND} = \&_funcROUND;
+sub _funcROUND
+{
+    my( $theAttr ) = @_;
+
+    # ROUND(num, digits)
+    my( $num, $digits ) = split( /,\s*/, $theAttr, 2 );
+    my $result = _safeEvalPerl( $num );
+    unless( $result =~ /^ERROR/ ) {
+        $result = _getNumber( $result );
+        if( ( $digits ) && ( $digits =~ s/^.*?(\-?[0-9]+).*$/$1/o ) && ( $digits ) ) {
+            my $factor = 10**$digits;
+            $result *= $factor;
+            ( $result >= 0 ) ? ( $result += 0.5 ) : ( $result -= 0.5 );
+            $result = int( $result );
+            $result /= $factor;
+        } else {
+            ( $result >= 0 ) ? ( $result += 0.5 ) : ( $result -= 0.5 );
+            $result = int( $result );
+        }
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{ROW} = \&_funcROW;
+sub _funcROW
+{
+    my( $theAttr ) = @_;
+    my $i = $theAttr || 0;
+    return $rPos + $i + 1;
+}
+
+# =========================
+$funcRef->{SEARCH} = \&_funcSEARCH;
+sub _funcSEARCH
+{
+    my( $theAttr ) = @_;
+    my( $searchString, $string, $pos ) = split( /,\s*/, $theAttr, 3 );
+    my $result = 0;
+    $searchString = '' unless( defined $searchString );
+    $string = '' unless( defined $string );
+    $pos--;
+    $pos = 0 if( $pos < 0 );
+    pos( $string ) = $pos if( $pos );
+    # using zero width lookahead '(?=...)' to keep pos at the beginning of match
+    if( eval '$string =~ m/(?=$searchString)/g' && $string ) {
+        $result = pos( $string ) + 1;
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{SET} = \&_funcSET;
+sub _funcSET
+{
+    my( $theAttr ) = @_;
+    my( $name, $value ) = split( /,\s*/, $theAttr, 2 );
+    $name = '' unless( defined $name );
+    $value = '' unless( defined $value );
+    $name =~ s/[^a-zA-Z0-9\_]//go;
+    if( $name && defined( $value ) ) {
+        $value =~ s/\s*$//o;
+        $varStore{ $name } = $value;
+    }
+    return '';
+}
+
+# =========================
+$funcRef->{SETIFEMPTY} = \&_funcSETIFEMPTY;
+sub _funcSETIFEMPTY
+{
+    my( $theAttr ) = @_;
+    my( $name, $value ) = split( /,\s*/, $theAttr, 2 );
+    $name = '' unless( defined $name );
+    $value = '' unless( defined $value );
+    $name =~ s/[^a-zA-Z0-9\_]//go;
+    if( $name && defined( $value ) && ! $varStore{ $name } ) {
+        $value =~ s/\s*$//o;
+        $varStore{ $name } = $value;
+    }
+    return '';
+}
+
+# =========================
+$funcRef->{SETM} = \&_funcSETM;
+sub _funcSETM
+{
+    my( $theAttr ) = @_;
+    my( $name, $value ) = split( /,\s*/, $theAttr, 2 );
+    $name = '' unless( defined $name );
+    $value = '' unless( defined $value );
+    $name =~ s/[^a-zA-Z0-9\_]//go;
+    if( $name ) {
+        my $old = $varStore{ $name };
+        $old = '' unless( defined( $old ) );
+        $value = _safeEvalPerl( "$old $value" );
+        $varStore{ $name } = $value;
+    }
+    return '';
+}
+
+# =========================
+$funcRef->{SIGN} = \&_funcSIGN;
+sub _funcSIGN
+{
+    my( $theAttr ) = @_;
+    my $i = _getNumber( $theAttr );
+    my $result =  0;
+    $result =  1 if( $i > 0 );
+    $result = -1 if( $i < 0 );
+    return $result;
+}
+
+# =========================
+$funcRef->{SPLIT} = \&_funcSPLIT;
+sub _funcSPLIT
+{
+    my( $theAttr ) = @_;
+    my( $sep, $str ) = _properSplit( $theAttr, 2 );
+    $str = '' unless( defined $str );
+    $sep = "  *" if( !defined $sep || $sep eq '' );
+    $sep =~ s/\$comma/,/go;
+    $sep =~ s/\$sp/ /go;
+    $sep =~ s/\$(nop|empty)//go;
+    return _listToDelimitedString( split( $sep, $str ) );
+}
+
+# =========================
+$funcRef->{SQRT} = \&_funcSQRT;
+sub _funcSQRT
+{
+    my( $theAttr ) = @_;
+    return sqrt( _getNumber( $theAttr ) );
+}
+
+# =========================
+$funcRef->{SUBSTITUTE} = \&_funcSUBSTITUTE;
+sub _funcSUBSTITUTE
+{
+    my( $theAttr ) = @_;
+    my( $string, $from, $to, $inst, $options ) = split( /,\s*/, $theAttr );
+    $string = '' unless( defined $string );
+    $from   = '' unless( defined $from );
+    $to     = '' unless( defined $to );
+    my $result = $string;
+    $from = quotemeta( $from ) unless( $options && $options =~ /r/i);
+    if( $inst ) {
+        # replace Nth instance
+        my $count = 0;
+        if( eval '$string =~ s/($from)/if( ++$count == $inst ) { $to; } else { $1; }/gex;' && $string ) {
+            $result = $string;
+        }
+    } else {
+        # global replace
+        if( eval '$string =~ s/$from/$to/g' ) {
+            $result = $string;
+        }
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{SUBSTRING} = \&_funcSUBSTRING;
+$funcRef->{MIDSTRING} = \&_funcSUBSTRING;  # undocumented - do not remove
+sub _funcSUBSTRING
+{
+    my( $theAttr ) = @_;
+    my( $string, $start, $num ) = split ( /,\s*/, $theAttr, 3 );
+    my $result = '';
+    if( $start && $num ) {
+        $start-- unless ($start < 1);
+        eval '$result = substr( $string, $start, $num )';
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{SUM} = \&_funcSUM;
+sub _funcSUM
+{
+    my( $theAttr ) = @_;
+    my $result = 0;
+    my @arr = _getListAsFloat( $theAttr );
+    foreach my $i ( @arr ) {
+        $result += $i  if defined $i;
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{SUMDAYS} = \&_funcSUMDAYS;
+$funcRef->{DURATION} = \&_funcSUMDAYS;  # undocumented - do not remove
+sub _funcSUMDAYS
+{
+    my( $theAttr ) = @_;
+    # contributed by SvenDowideit - 07 Mar 2003; modified by PTh
+    my $result = 0;
+    my @arr = _getListAsDays( $theAttr );
+    foreach my $i ( @arr ) {
+        $result += $i  if defined $i;
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{SUMPRODUCT} = \&_funcSUMPRODUCT;
+sub _funcSUMPRODUCT
+{
+    my( $theAttr ) = @_;
+    my $result = 0;
+    my @arr;
+    my @lol = split( /,\s*/, $theAttr );
+    my $size = 32000;
+    my $i;
+    for $i (0 .. $#lol ) {
+        @arr = _getListAsFloat( $lol[$i] );
+        $lol[$i] = [ @arr ];                # store reference to array
+        $size = @arr if( @arr < $size );    # remember smallest array
+    }
+    if( ( $size > 0 ) && ( $size < 32000 ) ) {
+        my $y; my $prod; my $val;
+        $size--;
+        for $y (0 .. $size ) {
+            $prod = 1;
+            for $i (0 .. $#lol ) {
+                $val = $lol[$i][$y];
+                if( defined $val ) {
+                    $prod *= $val;
+                } else {
+                    $prod = 0;   # don't count empty cells
+                }
+            }
+            $result += $prod;
+        }
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{T} = \&_funcT;
+sub _funcT
+{
+    my( $theAttr ) = @_;
+    my $result = '';
+    my @arr = _getTableRange( "$theAttr..$theAttr" );
+    if( @arr ) {
+        $result = $arr[0];
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{TIME} = \&_funcTIME;
+sub _funcTIME
+{
+    my( $result ) = @_;
+    $result =~ s/^\s+//o;
+    $result =~ s/\s+$//o;
+    if( $result ) {
+        $result = _date2serial( $result );
+    } else {
+        $result = time();
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{TIMEADD} = \&_funcTIMEADD;
+sub _funcTIMEADD
+{
+    my( $theAttr ) = @_;
+    my( $time, $value, $scale ) = split( /,\s*/, $theAttr, 3 );
+    $time = 0 unless( $time );
+    $value = 0 unless( $value );
+    $scale = "" unless( $scale );
+    $time =~ s/.*?([0-9]+).*/$1/o || 0;
+    $value =~ s/.*?(\-?[0-9\.]+).*/$1/o || 0;
+    $value *= 60            if( $scale =~ /^min/i );
+    $value *= 3600          if( $scale =~ /^hou/i );
+    $value *= 3600*24       if( $scale =~ /^day/i );
+    $value *= 3600*24*7     if( $scale =~ /^week/i );
+    $value *= 3600*24*30.42 if( $scale =~ /^mon/i );  # FIXME: exact calc
+    $value *= 3600*24*365   if( $scale =~ /^year/i ); # FIXME: exact calc
+    return int( $time + $value );
+}
+
+# =========================
+$funcRef->{TIMEDIFF} = \&_funcTIMEDIFF;
+sub _funcTIMEDIFF
+{
+    my( $theAttr ) = @_;
+    my( $time1, $time2, $scale ) = split( /,\s*/, $theAttr, 3 );
+    $scale ||= '';
+    $time1 = 0 unless( $time1 );
+    $time2 = 0 unless( $time2 );
+    $time1 =~ s/.*?([0-9]+).*/$1/o || 0;
+    $time2 =~ s/.*?([0-9]+).*/$1/o || 0;
+    my $result = $time2 - $time1;
+    $result /= 60            if( $scale =~ /^min/i );
+    $result /= 3600          if( $scale =~ /^hou/i );
+    $result /= 3600*24       if( $scale =~ /^day/i );
+    $result /= 3600*24*7     if( $scale =~ /^week/i );
+    $result /= 3600*24*30.42 if( $scale =~ /^mon/i );  # FIXME: exact calc
+    $result /= 3600*24*365   if( $scale =~ /^year/i ); # FIXME: exact calc
+    return $result;
+}
+
+# =========================
+$funcRef->{TODAY} = \&_funcTODAY;
+sub _funcTODAY
+{
+    return _date2serial( _serial2date( time(), '$year/$month/$day GMT', 1 ) );
+}
+
+# =========================
+$funcRef->{TRANSLATE} = \&_funcTRANSLATE;
+sub _funcTRANSLATE
+{
+    my( $theAttr ) = @_;
+    my $result = $theAttr;
+    # greedy match for comma separated parameters (in case first parameter has embedded commas)
+    if( $theAttr =~ /^(.*)\,\s*(.+)\,\s*(.+)$/ ) {
+        my $string = $1;
+        my $from = $2;
+        my $to   = $3;
+        $from =~ s/\$comma/,/g;      $to =~ s/\$comma/,/g;
+        $from =~ s/\$sp/ /g;         $to =~ s/\$sp/ /g;
+        $from =~ s/\$n/\n/g;         $to =~ s/\$n/\n/g; # the $from is silly, CALC can't be multi-line, yet
+        $from = quotemeta( $from );  $to = quotemeta( $to );
+        $from =~ s/([a-zA-Z0-9])\\\-([a-zA-Z0-9])/$1\-$2/g; # fix quotemeta (allow only ranges)
+        $to   =~ s/([a-zA-Z0-9])\\\-([a-zA-Z0-9])/$1\-$2/g;
+        $result = $string;
+        if( $string && eval "\$string =~ tr/$from/$to/" ) {
+            $result = $string;
+        }
+    }
+    return $result;
+}
+
+# =========================
+$funcRef->{TRIM} = \&_funcTRIM;
+sub _funcTRIM
+{
+    my( $theAttr ) = @_;
+    my $result = $theAttr || '';
+    $result =~ s/^\s*//o;
+    $result =~ s/\s*$//o;
+    $result =~ s/\s+/ /go;
+    return $result;
+}
+
+# =========================
+$funcRef->{UPPER} = \&_funcUPPER;
+sub _funcUPPER
+{
+    my( $theAttr ) = @_;
+    return uc( $theAttr );
+}
+
+# =========================
+$funcRef->{VALUE} = \&_funcVALUE;
+sub _funcVALUE
+{
+    my( $theAttr ) = @_;
+    return _getNumber( $theAttr );
+}
+
+# =========================
+$funcRef->{WHILE} = \&_funcWHILE;
+sub _funcWHILE
+{
+    my( $theAttr ) = @_;
+
+    # WHILE(condition, do something)
+    my( $condition, $str ) = _properSplit( $theAttr, 2 );
+    $condition = '' unless( defined $condition );
+    $str = '' unless( defined $str );
+    my $i = 0;
+    my $result = '';
+    while( 1 ) {
+        if( $i++ >= 32767 ) {
+            $result .= 'ERROR: Infinite loop (32767 cycles)';
+            last; # prevent infinite loop
+        }
+        # with delay, handle functions in condition recursively and clean up unbalanced parenthesis
+        my $cond = $condition;
+        $cond =~ s/\$counter/$i/go;
+        _recurseFunc( $cond );
+        $cond =~ s/^\s*(.*?)\s*$/$1/o;
+        my $res = _safeEvalPerl( $cond );
+        if( $res =~ /^ERROR/ ) {
+            $result .= $res;
+            last; # exit loop and return error
+        }
+        last unless( $res ); # proper loop exit
+        $res = $str;
+        $res = "" unless( defined( $res ) );
+        # with delay, handle functions in result recursively and clean up unbalanced parenthesis
+        $res =~ s/\$counter/$i/go;
+        _recurseFunc( $res );
+        $result .= $res;
+    }
+
+    return $result;
+}
+
+# =========================
+$funcRef->{WORKINGDAYS} = \&_funcWORKINGDAYS;
+sub _funcWORKINGDAYS
+{
+    my( $theAttr ) = @_;
+    my( $num1, $num2 ) = split( /,\s*/, $theAttr, 2 );
+    return _workingDays( _getNumber( $num1 ), _getNumber( $num2 ) );
+}
+
+# =========================
+$funcRef->{XOR} = \&_funcXOR;
+sub _funcXOR
+{
+    my( $theAttr ) = @_;
+    my @arr = _getListAsInteger( $theAttr );
+    my $result = shift( @arr );
+    if( scalar( @arr ) > 0 ) {
+        foreach my $i ( @arr ) {
+            $result = ( $result xor $i );
+        }
+    } else {
+        $result = 0;
+    }
+    $result = $result ? 1 : 0;
     return $result;
 }
 
