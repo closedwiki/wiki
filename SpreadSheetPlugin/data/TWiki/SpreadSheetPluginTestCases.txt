@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351897455" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351901106" format="1.1" version="$Rev$"}%
 ---+ !SpreadSheetPlugin Testing
 
 Use this topic to verify proper operation of the SpreadSheetPlugin in your environment.
@@ -651,6 +651,8 @@ __NOTE:__ All functions that follow are tested via:
 </li>
 <li>$GET(test)=|1234|
 </li>
+<li>$GET()=||
+</li>
 </ul>
 <!-- /expected -->
 </td><td>
@@ -658,6 +660,7 @@ __NOTE:__ All functions that follow are tested via:
 <!-- actual -->
    * $SET(test, 1234)=|%CALCULATE{$SET(test, 1234)}%|
    * $GET(test)=|%CALCULATE{$GET(test)}%|
+   * $GET()=|%CALCULATE{$GET()}%|
 <!-- /actual -->
 </td></tr></table>
 
@@ -1764,11 +1767,194 @@ $LISTJOIN($n, Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTJOIN($n, Apple, Orang
 <!-- /actual -->
 </td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncSEARCH][SEARCH]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected SEARCH -->
+<ul>
+<li>$SEARCH([uy], fluffy)=|3|
+</li>
+<li>$SEARCH([uy], fluffy, 4)=|6|
+</li>
+<li>$SEARCH([abc], fluffy,)=|0|
+</li>
+<li>$SEARCH(abc)=|0|
+</li>
+<li>$SEARCH()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $SEARCH([uy], fluffy)=|%CALCULATE{$SEARCH([uy], fluffy)}%|
+   * $SEARCH([uy], fluffy, 4)=|%CALCULATE{$SEARCH([uy], fluffy, 4)}%|
+   * $SEARCH([abc], fluffy,)=|%CALCULATE{$SEARCH([abc], fluffy,)}%|
+   * $SEARCH(abc)=|%CALCULATE{$SEARCH(abc)}%|
+   * $SEARCH()=|%CALCULATE{$SEARCH()}%|
+<!-- /actual -->
+</td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncSET][SET]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected SET -->
+<ul>
+<li>$SET(test, 1234)=||
+</li>
+<li>$GET(test)=|1234|
+</li>
+<li>$SET(sum, $SUM(1, 2, 3, 4))=||
+</li>
+<li>$GET(sum)=|10|
+</li>
+<li>$SET(novalue)=||
+</li>
+<li>$GET(novalue)=||
+</li>
+<li>$SET()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $SET(test, 1234)=|%CALCULATE{$SET(test, 1234)}%|
+   * $GET(test)=|%CALCULATE{$GET(test)}%|
+   * $SET(sum, $SUM(1, 2, 3, 4))=|%CALCULATE{$SET(sum, $SUM(1, 2, 3, 4))}%|
+   * $GET(sum)=|%CALCULATE{$GET(sum)}%|
+   * $SET(novalue)=|%CALCULATE{$SET(novalue)}%|
+   * $GET(novalue)=|%CALCULATE{$GET(novalue)}%|
+   * $SET()=|%CALCULATE{$SET()}%|
+<!-- /actual -->
+</td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncSETIFEMPTY][SETIFEMPTY]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected SETIFEMPTY -->
+<ul>
+<li>$SET(test, 1234)=||
+</li>
+<li>$SETIFEMPTY(test, 1)=||
+</li>
+<li>$GET(test)=|1234|
+</li>
+<li>$SET(test, 0)=||
+</li>
+<li>$SETIFEMPTY(test, 2)=||
+</li>
+<li>$GET(test)=|2|
+</li>
+<li>$SET(test,)=||
+</li>
+<li>$SETIFEMPTY(test, 3)=||
+</li>
+<li>$GET(test)=|3|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $SET(test, 1234)=|%CALCULATE{$SET(test, 1234)}%|
+   * $SETIFEMPTY(test, 1)=|%CALCULATE{$SETIFEMPTY(test, 1)}%|
+   * $GET(test)=|%CALCULATE{$GET(test)}%|
+   * $SET(test, 0)=|%CALCULATE{$SET(test, 0)}%|
+   * $SETIFEMPTY(test, 2)=|%CALCULATE{$SETIFEMPTY(test, 2)}%|
+   * $GET(test)=|%CALCULATE{$GET(test)}%|
+   * $SET(test,)=|%CALCULATE{$SET(test,)}%|
+   * $SETIFEMPTY(test, 3)=|%CALCULATE{$SETIFEMPTY(test, 3)}%|
+   * $GET(test)=|%CALCULATE{$GET(test)}%|
+<!-- /actual -->
+</td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncSETM][SETM]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected SETM -->
+<ul>
+<li>$SET(total, 10)=||
+</li>
+<li>$SETM(total, +5)=||
+</li>
+<li>$SETM(total)=||
+</li>
+<li>$GET(total)=|15|
+</li>
+<li>$SETM()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $SET(total, 10)=|%CALCULATE{$SET(total, 10)}%|
+   * $SETM(total, +5)=|%CALCULATE{$SETM(total, +5)}%|
+   * $SETM(total)=|%CALCULATE{$SETM(total)}%|
+   * $GET(total)=|%CALCULATE{$GET(total)}%|
+   * $SETM()=|%CALCULATE{$SETM()}%|
+<!-- /actual -->
+</td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncSIGN][SIGN]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected SIGN -->
+<ul>
+<li>$SIGN(12.34)=|1|
+</li>
+<li>$SIGN(2)=|1|
+</li>
+<li>$SIGN(0)=|0|
+</li>
+<li>$SIGN()=|0|
+</li>
+<li>$SIGN(-2)=|-1|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $SIGN(12.34)=|%CALCULATE{$SIGN(12.34)}%|
+   * $SIGN(2)=|%CALCULATE{$SIGN(2)}%|
+   * $SIGN(0)=|%CALCULATE{$SIGN(0)}%|
+   * $SIGN()=|%CALCULATE{$SIGN()}%|
+   * $SIGN(-2)=|%CALCULATE{$SIGN(-2)}%|
+<!-- /actual -->
+</td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncSPLIT][SPLIT]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected SPLIT -->
+<ul>
+<li>$SPLIT(, Apple Orange Kiwi)=|Apple, Orange, Kiwi|
+</li>
+<li>$SPLIT(-, Apple-Orange-Kiwi)=|Apple, Orange, Kiwi|
+</li>
+<li>$SPLIT([-:]$sp*, Apple-Orange: Kiwi)=|Apple, Orange, Kiwi|
+</li>
+<li>$SPLIT($empty, Apple)=|A, p, p, l, e|
+</li>
+<li>$SPLIT(x)=||
+</li>
+<li>$SPLIT()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $SPLIT(, Apple Orange Kiwi)=|%CALCULATE{$SPLIT(, Apple Orange Kiwi)}%|
+   * $SPLIT(-, Apple-Orange-Kiwi)=|%CALCULATE{$SPLIT(-, Apple-Orange-Kiwi)}%|
+   * $SPLIT([-:]$sp*, Apple-Orange: Kiwi)=|%CALCULATE{$SPLIT([-:]$sp*, Apple-Orange: Kiwi)}%|
+   * $SPLIT($empty, Apple)=|%CALCULATE{$SPLIT($empty, Apple)}%|
+   * $SPLIT(x)=|%CALCULATE{$SPLIT()}%|
+   * $SPLIT()=|%CALCULATE{$SPLIT()}%|
+<!-- /actual -->
+</td></tr></table>
 
 
 
