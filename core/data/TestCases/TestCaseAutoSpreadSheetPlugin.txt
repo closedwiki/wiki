@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351745669" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351933469" format="1.1" version="$Rev$"}%
 ---+ Test Case Auto: !SpreadSheetPlugin
 
 Description: Test %SYSTEMWEB%.SpreadSheetPlugin functions
@@ -10,5 +10,3 @@ Designed by: Peter Thoeny
 %INCLUDE{ "%SYSTEMWEB%.SpreadSheetPluginTestCases" for="TestFixturePlugin" }%
 
 __NOTE:__ Test cases are included from %SYSTEMWEB%.SpreadSheetPluginTestCases.
-
--- TWiki:Main.PeterThoeny - 2012-11-01
