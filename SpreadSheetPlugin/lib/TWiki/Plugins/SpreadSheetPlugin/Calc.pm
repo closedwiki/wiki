@@ -935,6 +935,7 @@ sub _doFunc
 
     } elsif( $theFunc eq "SPLIT" ) {
         my( $sep, $str ) = _properSplit( $theAttr, 2 );
+        $str = '' unless( defined $str );
         $sep = "  *" if( !defined $sep || $sep eq '' );
         $sep =~ s/\$comma/,/go;
         $sep =~ s/\$sp/ /go;
