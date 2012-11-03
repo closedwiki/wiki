@@ -951,9 +951,9 @@ __Note:__ This plugin is pre-installed. TWiki administrators can upgrade it as n
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2001-2012 Peter Thoeny, [[http://twiki.org/][TWiki.org]]<br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-11-02 |
+|  Plugin Version: | 2012-11-03 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2012-11-02: | TWikibug:Item7018: Added SpreadSheetPluginTestCases topic |
+|  2012-11-03: | TWikibug:Item7018: Added SpreadSheetPluginTestCases topic; refactor plugin to use function hash for better performance |
 |  2012-10-06: | TWikibug:Item6960: Fixed form action of interactive formula evaluation feature -- TWiki:Main.HideyoImazu |
 |  2012-06-30: | TWikibug:Item6898: Added $FILTER() |
 |  2012-06-29: | TWikibug:Item6897: Added $ISDIGIT(), $ISLOWER(), $ISUPPER(), $ISWIKIWORD() |
