@@ -725,8 +725,10 @@ sub _doFunc
 
     } elsif( $theFunc eq "SUBSTITUTE" ) {
         my( $string, $from, $to, $inst, $options ) = split( /,\s*/, $theAttr );
+        $string = '' unless( defined $string );
+        $from   = '' unless( defined $from );
+        $to     = '' unless( defined $to );
         $result = $string;
-        $to = "" unless( defined $to );
         $from = quotemeta( $from ) unless( $options && $options =~ /r/i);
         if( $inst ) {
             # replace Nth instance
