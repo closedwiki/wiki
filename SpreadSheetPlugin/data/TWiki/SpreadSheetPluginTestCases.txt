@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351901106" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351927127" format="1.1" version="$Rev$"}%
 ---+ !SpreadSheetPlugin Testing
 
 Use this topic to verify proper operation of the SpreadSheetPlugin in your environment.
@@ -872,19 +872,19 @@ __NOTE:__ All functions that follow are tested via:
 <tr>
 <td> 1 </td>
 <td> 2 </td>
-<td> $SUM($LEFT())=3 </td>
+<td> $SUM($LEFT())=&#124;3&#124; </td>
 </tr>
 <tr>
 <td> 3 </td>
 <td> 4 </td>
-<td> $SUM($LEFT())=7 </td>
+<td> $SUM($LEFT())=&#124;7&#124; </td>
 </tr></tbody></table>
 <!-- /expected -->
 </td><td>
 ---+++ Actual
 <!-- actual -->
-| 1 | 2 | $SUM($LEFT())=%CALC{$SUM($LEFT())}% |
-| 3 | 4 | $SUM($LEFT())=%CALC{$SUM($LEFT())}% |
+| 1 | 2 | $SUM($LEFT())=%VBAR%%CALC{$SUM($LEFT())}%%VBAR% |
+| 3 | 4 | $SUM($LEFT())=%VBAR%%CALC{$SUM($LEFT())}%%VBAR% |
 <!-- /actual -->
 </td></tr></table>
 
@@ -1658,12 +1658,12 @@ $LISTJOIN($n, Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTJOIN($n, Apple, Orang
 <!-- expected RIGHT -->
 <table cellspacing="0" cellpadding="0" class="twikiTable" border="1"><tbody>
 <tr>
-<td> $SUM($RIGHT())=3 </td>
+<td> $SUM($RIGHT())=&#124;3&#124; </td>
 <td> 1 </td>
 <td> 2 </td>
 </tr>
 <tr>
-<td> $SUM($RIGHT())=7 </td>
+<td> $SUM($RIGHT())=&#124;7&#124; </td>
 <td> 3 </td>
 <td> 4 </td>
 </tr></tbody></table>
@@ -1671,8 +1671,8 @@ $LISTJOIN($n, Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTJOIN($n, Apple, Orang
 </td><td>
 ---+++ Actual
 <!-- actual -->
-| $SUM($RIGHT())=%CALC{$SUM($RIGHT())}% | 1 | 2 |
-| $SUM($RIGHT())=%CALC{$SUM($RIGHT())}% | 3 | 4 |
+| $SUM($RIGHT())=%VBAR%%CALC{$SUM($RIGHT())}%%VBAR% | 1 | 2 |
+| $SUM($RIGHT())=%VBAR%%CALC{$SUM($RIGHT())}%%VBAR% | 3 | 4 |
 <!-- /actual -->
 </td></tr></table>
 
@@ -1955,6 +1955,207 @@ $LISTJOIN($n, Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTJOIN($n, Apple, Orang
    * $SPLIT()=|%CALCULATE{$SPLIT()}%|
 <!-- /actual -->
 </td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncSQRT][SQRT]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected SQRT -->
+<ul>
+<li>$SQRT(16)=|4|
+</li>
+<li>$SQRT(1)=|1|
+</li>
+<li>$SQRT()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $SQRT(16)=|%CALCULATE{$SQRT(16)}%|
+   * $SQRT(1)=|%CALCULATE{$SQRT(1)}%|
+   * $SQRT()=|%CALCULATE{$SQRT()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncSUBSTITUTE][SUBSTITUTE]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected SUBSTITUTE -->
+<ul>
+<li>$SUBSTITUTE(Good morning, morning, day)=|Good day|
+</li>
+<li>$SUBSTITUTE(Q2-2012, 2, 3)=|Q3-3013|
+</li>
+<li>$SUBSTITUTE(Q2-2012,2, 3, 3)=|Q2-2013|
+</li>
+<li>$SUBSTITUTE(abc123def, [0-9], 9, , r)=|abc999def|
+</li>
+<li>$SUBSTITUTE(abcd)=|abcd|
+</li>
+<li>$SUBSTITUTE()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $SUBSTITUTE(Good morning, morning, day)=|%CALCULATE{$SUBSTITUTE(Good morning, morning, day)}%|
+   * $SUBSTITUTE(Q2-2012, 2, 3)=|%CALCULATE{$SUBSTITUTE(Q2-2012, 2, 3)}%|
+   * $SUBSTITUTE(Q2-2012,2, 3, 3)=|%CALCULATE{$SUBSTITUTE(Q2-2012,2, 3, 3)}%|
+   * $SUBSTITUTE(abc123def, [0-9], 9, , r)=|%CALCULATE{$SUBSTITUTE(abc123def, [0-9], 9, , r)}%|
+   * $SUBSTITUTE(abcd)=|%CALCULATE{$SUBSTITUTE(abcd)}%|
+   * $SUBSTITUTE()=|%CALCULATE{$SUBSTITUTE()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncSUBSTRING][SUBSTRING]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected SUBSTRING -->
+<ul>
+<li>$SUBSTRING(abcdef,3,5)=|cdef|
+</li>
+<li>$SUBSTRING(abcdefgh,3,5)=|cdefg|
+</li>
+<li>$SUBSTRING(abcdefg,-2,2)=|fg|
+</li>
+<li>$SUBSTRING(abcdefg,-1,2)=|g|
+</li>
+<li>$SUBSTRING(abcdefg,0,2)=||
+</li>
+<li>$SUBSTRING(abcdefg,1,2)=|ab|
+</li>
+<li>$SUBSTRING(abcdefg,2,2)=|bc|
+</li>
+<li>$SUBSTRING(abcdefg,2,-1)=|bcdef|
+</li>
+<li>$SUBSTRING(abcdefg,-2,-1)=|f|
+</li>
+<li>$SUBSTRING(abcdefg)=||
+</li>
+<li>$SUBSTRING()=||
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $SUBSTRING(abcdef,3,5)=|%CALCULATE{$SUBSTRING(abcdef,3,5)}%|
+   * $SUBSTRING(abcdefgh,3,5)=|%CALCULATE{$SUBSTRING(abcdefgh,3,5)}%|
+   * $SUBSTRING(abcdefg,-2,2)=|%CALCULATE{$SUBSTRING(abcdefg,-2,2)}%|
+   * $SUBSTRING(abcdefg,-1,2)=|%CALCULATE{$SUBSTRING(abcdefg,-1,2)}%|
+   * $SUBSTRING(abcdefg,0,2)=|%CALCULATE{$SUBSTRING(abcdefg,0,2)}%|
+   * $SUBSTRING(abcdefg,1,2)=|%CALCULATE{$SUBSTRING(abcdefg,1,2)}%|
+   * $SUBSTRING(abcdefg,2,2)=|%CALCULATE{$SUBSTRING(abcdefg,2,2)}%|
+   * $SUBSTRING(abcdefg,2,-1)=|%CALCULATE{$SUBSTRING(abcdefg,2,-1)}%|
+   * $SUBSTRING(abcdefg,-2,-1)=|%CALCULATE{$SUBSTRING(abcdefg,-2,-1)}%|
+   * $SUBSTRING(abcdefg)=|%CALCULATE{$SUBSTRING(abcdefg)}%|
+   * $SUBSTRING()=|%CALCULATE{$SUBSTRING()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncSUM][SUM]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected SUM -->
+<ul>
+<li>$SUM(1, 2, 3, 4, 5)=|15|
+</li>
+<li>$SUM(1, x, 3, , 5)=|9|
+</li>
+<li>$SUM(1)=|1|
+</li>
+<li>$SUM()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $SUM(1, 2, 3, 4, 5)=|%CALCULATE{$SUM(1, 2, 3, 4, 5)}%|
+   * $SUM(1, x, 3, , 5)=|%CALCULATE{$SUM(1, x, 3, , 5)}%|
+   * $SUM(1)=|%CALCULATE{$SUM(1)}%|
+   * $SUM()=|%CALCULATE{$SUM()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncSUMDAYS][SUMDAYS]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected SUMDAYS -->
+<ul>
+<li>$SUMDAYS(2w, 1, 2d, 4h)=|13.5|
+</li>
+<li>$SUMDAYS(1w, x)=|5|
+</li>
+<li>$SUMDAYS()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+   * $SUMDAYS(2w, 1, 2d, 4h)=|%CALCULATE{$SUMDAYS(2w, 1, 2d, 4h)}%|
+   * $SUMDAYS(1w, x)=|%CALCULATE{$SUMDAYS(1w, x)}%|
+   * $SUMDAYS()=|%CALCULATE{$SUMDAYS()}%|
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncSUMPRODUCT][SUMPRODUCT]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected SUMPRODUCT -->
+<table cellspacing="0" cellpadding="0" class="twikiTable" border="1"><tbody>
+<tr>
+<td> 1 </td>
+<td> 2 </td>
+</tr>
+<tr>
+<td> 3 </td>
+<td> 4 </td>
+</tr>
+<tr>
+<td> $SUMPRODUCT(R1:C1..R2:C1, R1:C2..R2:C2)=&#124;14&#124; </td>
+<td> $SUMPRODUCT(R1:C1..R2:C1, $ABOVE())=&#124;14&#124; </td>
+</tr></tbody></table>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+| 1 | 2 |
+| 3 | 4 |
+| $SUMPRODUCT(R1:C1..R2:C1, R1:C2..R2:C2)=%VBAR%%CALC{$SUMPRODUCT(R1:C1..R2:C1, R1:C2..R2:C2)}%%VBAR% | $SUMPRODUCT(R1:C1..R2:C1, $ABOVE())=%VBAR%%CALC{$SUMPRODUCT(R1:C1..R2:C1, $ABOVE())}%%VBAR% |
+<!-- /actual -->
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncT][T]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<!-- expected T -->
+<table cellspacing="0" cellpadding="0" class="twikiTable" border="1"><tbody>
+<tr>
+<td> 1 </td>
+<td> 2 </td>
+</tr>
+<tr>
+<td> 3 </td>
+<td> 4 </td>
+</tr>
+<tr>
+<td> $T(R2:C1)=&#124;3&#124; </td>
+<td> $T(R1:C2)=&#124;2&#124; </td>
+</tr></tbody></table>
+<!-- /expected -->
+</td><td>
+---+++ Actual
+<!-- actual -->
+|1|2|
+|3|4|
+| $T(R2:C1)=%VBAR%%CALC{$T(R2:C1)}%%VBAR% | $T(R1:C2)=%VBAR%%CALC{$T(R1:C2)}%%VBAR% |
+<!-- /actual -->
+</td></tr></table>
+
 
 
 

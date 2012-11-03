@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351898207" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1351927127" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -725,8 +725,8 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Substitutes =new= text for =old= text in a =text= string. =instance= specifies which occurance of =old= you want to replace. If you specify =instance=, only that instance is replaced. Otherwise, every occurance is changed to the new text. A literal search is performed by default; a %SYSTEMWEB%.RegularExpression search if the =option= is set to ==r==
    * Syntax: ==$SUBSTITUTE( text, old, _new_, _instance_, _option_ )==
    * Example: ==%<nop>CALC{$SUBSTITUTE(Good morning, morning, day)}%== returns ==Good day==
-   * Example: ==%<nop>CALC{$SUBSTITUTE(Q2-2002, 2, 3)}%== returns ==Q3-3003==
-   * Example: ==%<nop>CALC{$SUBSTITUTE(Q2-2002,2, 3, 3)}%== returns ==Q2-2003==
+   * Example: ==%<nop>CALC{$SUBSTITUTE(Q2-2012, 2, 3)}%== returns ==Q3-3013==
+   * Example: ==%<nop>CALC{$SUBSTITUTE(Q2-2012,2, 3, 3)}%== returns ==Q2-2013==
    * Example: ==%<nop>CALC{$SUBSTITUTE(abc123def, [0-9], 9, , r)}%== returns ==abc999def==
    * Related: =[[#FuncBITXOR][$BITXOR()]]=, =[[#FuncFILTER][$FILTER()]]=, =[[#FuncHEXDECODE][$HEXDECODE()]]=, =[[#FuncHEXENCODE][$HEXENCODE()]]=, =[[#FuncINSERTSTRING][$INSERTSTRING()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
