@@ -1,0 +1,12 @@
+%META:TOPICINFO{author="TWikiContributor" date="1352113664" format="1.1" version="$Rev$"}%
+---+ SSO domains to which cookies can be forwarded
+
+SsoForwardCookiePlugin enables [[VarINCLUDE][%<nop>INCLUDE{...}%]] to retrieve external resource contents from intranet websites,
+where the user's credentials are transmitted over HTTP cookies to facilitate single sign-on.
+It also affects any plugins that retrieve external contents using =TWiki::Func::getExternalResource()= etc.
+
+The table below lists the domains to which cookies from the browser are allowed to be forwarded.
+
+| *Domain* |
+| example.com |
+| .example.com |

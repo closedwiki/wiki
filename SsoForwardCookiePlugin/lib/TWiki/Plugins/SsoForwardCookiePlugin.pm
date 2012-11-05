@@ -76,7 +76,6 @@ sub initPlugin {
         return 0;
     }
 
-    $handler = __PACKAGE__->new();
     TWiki::Func::registerExternalHTTPHandler( \&handleExternalHTTPRequest );
 
     # Plugin correctly initialized
@@ -85,7 +84,7 @@ sub initPlugin {
 
 sub handleExternalHTTPRequest {
     my ($session, $url) = @_;
-    my $this = $handler;
+    my $this = ($handler ||= __PACKAGE__->new());
 
     my $headers = [];
     my $params = {};
@@ -157,24 +156,38 @@ sub new {
 }
 
 sub parseDomains {
-    my ($this, $input, $result, $seen) = @_;
+    my ($this, $input, $result) = @_;
     $result ||= [];
-    $seen   ||= {};
+    my $systemWeb;
 
     for my $domain (split /\s*,\s*/, $input) {
         $domain =~ s/^\s+|\s*#.*|\s+$//g;
         next if $domain eq '';
 
-        if ($domain =~ m{^file:(.*)}i) {
-            my $file = $1;
-            next if $seen->{$file};
-            $seen->{$file} = 1; # avoid unintended recursion
+        if ($domain =~ m{^topic:(.*)}i) {
+            my $webTopic = $1;
+            my $systemWeb = $TWiki::cfg{SystemWebName};
 
-            if (open(my $in, $file)) {
-                $this->parseDomains($_, $result, $seen) while <$in>;
-                close $in;
+            if ($webTopic =~ /%/) {
+                $webTopic = TWiki::Func::expandCommonVariables($webTopic, $systemWeb);
+            }
+
+            my ($web, $topic) = TWiki::Func::normalizeWebTopicName($systemWeb, $webTopic);
+            my $wikiName = TWiki::Func::getWikiName();
+            my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
+
+            if (TWiki::Func::checkAccessPermission('VIEW', $wikiName, $text, $topic, $web, $meta)) {
+                if (defined $text && $text ne '') {
+                    while ($text =~ /^\s*\|(.*?)\|(?:.*\|)?\s*$/mg) {
+                        (my $name = $1) =~ s/^\s+|\s+$//g;
+                        next if $name =~ /^\*.*\*$/; # exclude "| *Text* |"
+                        push @$result, $name;
+                    }
+                } else {
+                    $this->writeWarning("$domain cannot be read");
+                }
             } else {
-                $this->writeWarning("$!: $file");
+                $this->writeWarning("$domain is not accessible for user $wikiName");
             }
         } else {
             push @$result, $domain;
@@ -210,7 +223,7 @@ sub matchDomain {
 
     if ($pattern) {
         $this->writeDebug("Pattern = $pattern") if $this->debug;
-	} else {
+    } else {
         $this->writeDebug("No SSO domains are configured") if $this->debug;
         return undef;
     }

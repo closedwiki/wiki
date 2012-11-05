@@ -6,6 +6,10 @@
 # Set the target domains (comma-separated) to which cookies are allowed to be
 # forwarded. It must be the same as TWiki server's domain, or a superdomain
 # with a dot prefix (e.g. ".example.com").
+# Alternatively, if there are many domains that need to be listed, a topic name
+# can be specified with a "topic:" prefix (e.g.
+# "topic:%<nop>SYSTEMWEB%.SsoForwardCookieDomains") where variables with
+# percent signs (%) are expanded.
 $TWiki::cfg{Plugins}{SsoForwardCookiePlugin}{Domains} = '';
 # **STRING**
 # Set cookie names that are forwarded to any matched domains (comma-separated).

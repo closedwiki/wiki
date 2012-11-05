@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351672869" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352114848" format="1.1" version="$Rev$"}%
 ---+!! !SsoForwardCookiePlugin
 <!--
 One line description, required for extensions repository catalog.
@@ -19,7 +19,17 @@ The administrator needs to configure the following values via the [[%SCRIPTURL{c
    * =$cfg{Plugins}{SsoForwardCookiePlugin}{Domains}= (required, separated by commas or spaces)
       * List of domain names to match each requested URL to determine if cookies should be forwarded.
       * If a specified domain starts with a dot (.), it matches any subdomains. Otherwise, only the exact domain is matched.
-      * Alternatively, file paths can be specified as =file:<i>FILE_PATH</i>= (e.g. =file:/var/www/twiki/etc/sso-cookie-domains=), where the file is expected to contain domain names separated by commas, spaces, or line breaks.
+      * Alternatively, a topic name can be specified as =topic:<i>Web</i>.<i>Topic</i>=. For example,
+         * =$cfg{Plugins}{SsoForwardCookiePlugin}{Domains} = "topic:%<nop>SYSTEMWEB%.SsoForwardCookieDomains"=
+            * where variables with percent signs (%) will be expanded; or
+         * =$cfg{Plugins}{SsoForwardCookiePlugin}{Domains} = "topic:SsoForwardCookieDomains"=
+            * if only a topic name is given, it defaults to [[%SYSTEMWEB%.WebHome][%<nop>SYSTEMWEB%]].
+      * The specified topic is expected to contain domain names in the table format as below. This plugin comes with an example %SYSTEMWEB%.SsoForwardCookieDomains topic, which can be edited and used.
+        <verbatim>
+| *Domain* |
+| example.com |
+| .example.com |
+</verbatim>
    * =$cfg{Plugins}{SsoForwardCookiePlugin}{CookieNames}= (required, separated by commas or spaces)
       * Names of cookies that are allowed to be forwarded. Specify a single star (*) to forward all the cookies, although it is not recommended.
 
@@ -81,6 +91,7 @@ Many thanks to the following sponsors for supporting this work:
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | 1.0 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-11-05: | TWikibug:Item7022: Accept =topic:Web.Topic= format for =Domains= - TWiki:Main.MahiroAndo |
 |  2012-10-25: | TWikibug:Item7011: Renamed this plugin - TWiki:Main.MahiroAndo |
 |  2012-10-16: | TWikibug:Item6989: Initial release - TWiki:Main.MahiroAndo |
 |  Dependencies: | CPAN:HTTP::Cookies |
