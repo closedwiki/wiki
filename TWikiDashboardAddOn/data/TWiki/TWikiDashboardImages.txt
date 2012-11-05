@@ -1,10 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351833764" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352159140" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiDashboardAddOn"}%
 ---+!! <span style="font-size: 60%"> TWikiDashboardAddOn &#187;</span> TWiki Dashboard Banner Images
 
-This topic contains images you can use as banners for your own dashboards. If you use your own image, attach it directly to your dashboard topic, not here.
+You can use these banner images for your own dashboards. If you use your own image, attach it directly to your dashboard topic, not here.
 
-These images have a size of 1026 x 150 pixels, for use in standard 1024 pixels wide dashboards with three column layout of 300 pixels wide boxes. To use, specify this parameter in the =DASHBOARD= variable:%BR%
+These images have a size of 1026 x 150 pixels, for use in standard 1024 pixels wide dashboards with three column layout of 300 pixels wide boxes. To reference an image, specify this parameter in the =DASHBOARD= variable:%BR%
 =&nbsp; bannerimage="%<nop>PUBURL%/%<nop>SYSTEMWEB/TWikiDashboardImages/&lt;name&gt;"=
 
 Name: =marin-headlands.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
@@ -19,8 +19,8 @@ Name: =san-francisco-cityscape.jpg= &nbsp; &nbsp; - image copyright 2012, [[http
 Name: =golden-gate-sunset.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/golden-gate-sunset.jpg" alt="" width="1026" height="150" />
 
-Name: =venetian-macau.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
-     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/venetian-macau.jpg" alt="" width="1026" height="150" />
+Name: =silicon-valley-sunrise.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://about.me/goro][Goro Kosaka]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/silicon-valley-sunrise.jpg" alt="" width="1026" height="150" />
 
 Name: =above-silicon-valley.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/above-silicon-valley.jpg" alt="" width="1026" height="150" />
@@ -61,6 +61,9 @@ Name: =sydney-harbour-bridge.jpg= &nbsp; &nbsp; - image copyright 2005, [[http:/
 Name: =hong-kong-skyline.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/hong-kong-skyline.jpg" alt="" width="1026" height="150" />
 
+Name: =venetian-macau.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/venetian-macau.jpg" alt="" width="1026" height="150" />
+
 Name: =boreal-by-night.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/boreal-by-night.jpg" alt="" width="1026" height="150" />
 
@@ -97,6 +100,7 @@ __Related:__ TWikiDashboardAddOn
 %META:FILEATTACHMENT{name="rio-de-janeiro.jpg" attachment="rio-de-janeiro.jpg" attr="h" comment="Image copyright 2007, Jens Hausherr" date="1351832294" path="rio-de-janeiro.jpg" size="68059" user="PeterThoeny" version="1"}%
 %META:FILEATTACHMENT{name="san-francisco-cityscape.jpg" attachment="san-francisco-cityscape.jpg" attr="h" comment="Image copyright 2012, David Yu" date="1351827528" path="san-francisco-cityscape.jpg" size="50918" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="saratoga-evening.jpg" attachment="saratoga-evening.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="saratoga-evening.jpg" size="49410" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="silicon-valley-sunrise.jpg" attachment="silicon-valley-sunrise.jpg" attr="h" comment="Image copyright 2012, Goro Kosaka" date="1352158061" path="silicon-valley-sunrise.jpg" size="44000" user="TWikiContributor" version="2"}%
 %META:FILEATTACHMENT{name="sydney-harbour-bridge.jpg" attachment="sydney-harbour-bridge.jpg" attr="h" comment="Image copyright 2005, Diliff" date="1351831457" path="sydney-harbour-bridge.jpg" size="54322" user="PeterThoeny" version="1"}%
 %META:FILEATTACHMENT{name="venetian-macau.jpg" attachment="venetian-macau.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156456" path="venetian-macau.jpg" size="65434" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="venice-grand-canal.jpg" attachment="venice-grand-canal.jpg" attr="h" comment="Image copyright 2007, Sbittante" date="1351830193" path="venice-grand-canal.jpg" size="59440" user="PeterThoeny" version="1"}%
