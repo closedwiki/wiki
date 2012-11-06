@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351930959" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352171255" format="1.1" version="$Rev$"}%
 ---+ !SpreadSheetPlugin Testing
 
 Use this topic to verify proper operation of the SpreadSheetPlugin in your environment.
@@ -1978,6 +1978,67 @@ $LISTJOIN($n, Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTJOIN($n, Apple, Orang
 <!-- /actual -->
 </td></tr></table>
 
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncSTDEV][STDEV]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<noautolink>
+<!-- expected STDEV -->
+<ul>
+<li>$STDEV(2, 4, 4, 4, 5, 5, 7, 9)=|2.1380899352994|
+</li>
+<li>$STDEV(2, 5, 3, 12)=|4.50924975282289|
+</li>
+<li>$STDEV(2, 5, 3, xyz, 12)=|4.50924975282289|
+</li>
+<li>$STDEV(3.50, 5.00, 7.23, 2.99)=|1.90205152401295|
+</li>
+<li>$STDEV()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</noautolink>
+</td><td>
+---+++ Actual
+<noautolink>
+<!-- actual -->
+   * $STDEV(2, 4, 4, 4, 5, 5, 7, 9)=|%CALC{$STDEV(2, 4, 4, 4, 5, 5, 7, 9)}%|
+   * $STDEV(2, 5, 3, 12)=|%CALC{$STDEV(2, 5, 3, 12)}%|
+   * $STDEV(2, 5, 3, xyz, 12)=|%CALC{$STDEV(2, 5, 3, xyz, 12)}%|
+   * $STDEV(3.50, 5.00, 7.23, 2.99)=|%CALC{$STDEV(3.50, 5.00, 7.23, 2.99)}%|
+   * $STDEV()=|%CALC{$STDEV()}%|
+<!-- /actual -->
+</noautolink>
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncSTDEVP][STDEVP]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<noautolink>
+<!-- expected STDEVP -->
+<ul>
+<li>$STDEVP(2, 5, 3, 12)=|3.90512483795333|
+</li>
+<li>$STDEVP(2, 5, 3, xyz, 12)=|3.90512483795333|
+</li>
+<li>$STDEVP(3.50, 5.00, 7.23, 2.99)=|1.64722493910213|
+</li>
+<li>$STDEVP()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</noautolink>
+</td><td>
+---+++ Actual
+<noautolink>
+<!-- actual -->
+   * $STDEVP(2, 5, 3, 12)=|%CALC{$STDEVP(2, 5, 3, 12)}%|
+   * $STDEVP(2, 5, 3, xyz, 12)=|%CALC{$STDEVP(2, 5, 3, xyz, 12)}%|
+   * $STDEVP(3.50, 5.00, 7.23, 2.99)=|%CALC{$STDEVP(3.50, 5.00, 7.23, 2.99)}%|
+   * $STDEVP()=|%CALC{$STDEVP()}%|
+<!-- /actual -->
+</noautolink>
+</td></tr></table>
+
 ---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncSUBSTITUTE][SUBSTITUTE]]
 <table class="testSideBySide"><tr><td>
 ---+++ Expected
@@ -2336,6 +2397,70 @@ $LISTJOIN($n, Apple, Orange, Apple, Kiwi)=|%CALCULATE{$LISTJOIN($n, Apple, Orang
    * $VALUE(PrjNotebook1234)=|%CALCULATE{$VALUE(PrjNotebook1234)}%|
    * $VALUE(Total: -12.5)=|%CALCULATE{$VALUE(Total: -12.5)}%|
    * $VALUE()=|%CALCULATE{$VALUE()}%|
+<!-- /actual -->
+</noautolink>
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncVAR][VAR]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<noautolink>
+<!-- expected VAR -->
+<ul>
+<li>$VAR(1, 2, 3, 4, 5, 6)=|3.5|
+</li>
+<li>$VAR(2, 5, 3, 12)=|20.3333333333333|
+</li>
+<li>$VAR(2, 5, 3, xyz, 12)=|20.3333333333333|
+</li>
+<li>$VAR(3.50, 5.00, 7.23, 2.99)=|3.6178|
+</li>
+<li>$VAR()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</noautolink>
+</td><td>
+---+++ Actual
+<noautolink>
+<!-- actual -->
+   * $VAR(1, 2, 3, 4, 5, 6)=|%CALCULATE{$VAR(1, 2, 3, 4, 5, 6)}%|
+   * $VAR(2, 5, 3, 12)=|%CALCULATE{$VAR(2, 5, 3, 12)}%|
+   * $VAR(2, 5, 3, xyz, 12)=|%CALCULATE{$VAR(2, 5, 3, xyz, 12)}%|
+   * $VAR(3.50, 5.00, 7.23, 2.99)=|%CALCULATE{$VAR(3.50, 5.00, 7.23, 2.99)}%|
+   * $VAR()=|%CALCULATE{$VAR()}%|
+<!-- /actual -->
+</noautolink>
+</td></tr></table>
+
+---++ Function [[%SYSTEMWEB%.SpreadSheetPlugin#FuncVARP][VARP]]
+<table class="testSideBySide"><tr><td>
+---+++ Expected
+<noautolink>
+<!-- expected VARP -->
+<ul>
+<li>$VARP(1, 2, 3, 4, 5, 6)=|2.91666666666667|
+</li>
+<li>$VARP(2, 5, 3, 12)=|15.25|
+</li>
+<li>$VARP(2, 5, 3, xyz, 12)=|15.25|
+</li>
+<li>$VARP(3.50, 5.00, 7.23, 2.99)=|2.71335|
+</li>
+<li>$VARP()=|0|
+</li>
+</ul>
+<!-- /expected -->
+</noautolink>
+</td><td>
+---+++ Actual
+<noautolink>
+<!-- actual -->
+   * $VARP(1, 2, 3, 4, 5, 6)=|%CALCULATE{$VARP(1, 2, 3, 4, 5, 6)}%|
+   * $VARP(2, 5, 3, 12)=|%CALCULATE{$VARP(2, 5, 3, 12)}%|
+   * $VARP(2, 5, 3, xyz, 12)=|%CALCULATE{$VARP(2, 5, 3, xyz, 12)}%|
+   * $VARP(3.50, 5.00, 7.23, 2.99)=|%CALCULATE{$VARP(3.50, 5.00, 7.23, 2.99)}%|
+   * $VARP()=|%CALCULATE{$VARP()}%|
 <!-- /actual -->
 </noautolink>
 </td></tr></table>
