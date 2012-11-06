@@ -1127,6 +1127,11 @@ The tokens solve the CSRF issue
 sub createCryptToken {
     my $this = shift;
 
+    #TWikibugs:Item7026: Check UserClientSessions first
+    unless ( $TWiki::cfg{UseClientSessions} ) {
+        return '';
+    }
+
     #Every request with %CRYPTOKEN% present creates the new token
 
     #Open the session database file for updating token
