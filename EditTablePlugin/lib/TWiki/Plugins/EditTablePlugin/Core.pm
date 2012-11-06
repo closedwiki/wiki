@@ -37,6 +37,7 @@ my $prefDELETE_LAST_ROW_BUTTON;
 my $prefCANCEL_BUTTON;
 my $prefMESSAGE_INCLUDED_TOPIC_DOES_NOT_EXIST;
 my $prefQUIETSAVE;
+my $prefREDIRECTTO;
 my $nrCols;
 my $encodeStart;
 my $encodeEnd;
@@ -70,6 +71,7 @@ sub init {
     $prefDELETE_LAST_ROW_BUTTON = undef;
     $prefDELETE_LAST_ROW_BUTTON = undef;
     $prefQUIETSAVE              = undef;
+    $prefREDIRECTTO             = undef;
     $nrCols                     = undef;
     $encodeStart                = undef;
     $encodeEnd                  = undef;
@@ -212,6 +214,8 @@ sub processText {
           || TWiki::Func::getPreferencesValue(
             'EDITTABLEPLUGIN_INCLUDED_TOPIC_DOES_NOT_EXIST')
           || 'Warning: \'include\' topic does not exist!';
+	$prefREDIRECTTO = 
+	  TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_REDIRECTTO');
 
         $prefsInitialized = 1;
     }
@@ -237,6 +241,28 @@ sub processText {
     my $webTopic       = $theWeb . '.' . $theTopic;
     my $includingTopic = $_[3];
     my $includingWeb   = $_[4];
+
+    # check if current site mode is readonly or slave.
+    my $session = $TWiki::Plugins::SESSION;
+    my $ctx = TWiki::Func::getContext();
+    my $inactive = ref $ctx && ( $ctx->{inactive} || $ctx->{content_slave} );
+    unless ( $inactive ) {
+	if ( defined($session->{noPartialEdit}) ) {
+	    $inactive = $session->{noPartialEdit};
+	}
+	else {
+	    my $noPartialEdit =
+		TWiki::Func::getPreferencesValue('NO_PARTIAL_EDIT');
+	    if ( $noPartialEdit && $noPartialEdit =~ /%/ ) {
+		$session->{noPartialEdit} = 0; # to avoid redundant processing
+		$noPartialEdit =
+		    TWiki::Func::expandCommonVariables($noPartialEdit,
+						       $theTopic, $theWeb);
+	    }
+	    $inactive = $session->{noPartialEdit} =
+		TWiki::isTrue($noPartialEdit);
+	}
+    }
 
     my $topicText;
     my $meta;
@@ -276,7 +302,7 @@ sub processText {
             # process the tag contents
             my $editTablePluginRE = "(.*?)$regex{edit_table_plugin}";
             $editTableTag =~
-s/$editTablePluginRE/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo;
+s/$editTablePluginRE/&handleEditTableTag( $theWeb, $theTopic, $1, $2, $inactive )/geo;
         }
 
         if ( $doSave && ( $tableNr != $saveTableNr ) ) {
@@ -605,6 +631,8 @@ s/^(\s*)\|(.*)/handleTableRow( $1, $2, $tableNr, $isNewRow, $rowNr, $doEdit, $do
         }
         TWiki::Func::setTopicEditLock( $theWeb, $theTopic, 0 );   # unlock Topic
         my $url = TWiki::Func::getViewUrl( $theWeb, $theTopic );
+        my $redirect = redirectTo($theWeb);
+        $url = $redirect if ( $redirect );
         if ($error) {
             $url = TWiki::Func::getOopsUrl( $theWeb, $theTopic, 'oopssaveerr',
                 $error );
@@ -656,6 +684,9 @@ sub extractParams {
     $tmp = TWiki::Func::extractNameValuePair( $theArgs, 'buttonrow' );
     $$theHashRef{'buttonrow'} = $tmp if ($tmp);
 
+    $tmp = TWiki::Func::extractNameValuePair( $theArgs, 'redirectto' );
+    $$theHashRef{'redirectto'} = $tmp if ($tmp);
+
     return;
 }
 
@@ -690,7 +721,7 @@ sub parseFormat {
 =cut
 
 sub handleEditTableTag {
-    my ( $theWeb, $theTopic, $thePreSpace, $theArgs ) = @_;
+    my ( $theWeb, $theTopic, $thePreSpace, $theArgs, $inactive ) = @_;
 
     my $preSp = $thePreSpace || '';
 
@@ -705,6 +736,7 @@ sub handleEditTableTag {
         'editbutton'          => '',
         'javascriptinterface' => '',
         'buttonrow'           => '',
+        'redirectto'          => '',
     );
     $warningMessage = '';
 
@@ -775,7 +807,7 @@ sub handleTableStart {
       = @_;
 
     my $viewUrl = TWiki::Func::getScriptUrl( $theWeb, $theTopic, 'viewauth' )
-      . "\#edittable$theTableNr";
+      . "\#${theTopic}edittable$theTableNr";
     my $text = '';
     if ($doEdit) {
         require TWiki::Contrib::JSCalendarContrib;
@@ -784,14 +816,14 @@ sub handleTableStart {
         }
     }
     $text .= "$preSp<noautolink>\n" if $doEdit;
-    $text .= "$preSp<a name=\"edittable$theTableNr\"></a>\n"
+    $text .= "$preSp<a name=\"${theTopic}edittable$theTableNr\"></a>\n"
       if ( "$theWeb.$theTopic" eq "$includingWeb.$includingTopic" );
     my $cssClass = 'editTable';
     if ($doEdit) {
         $cssClass .= ' editTableEdit';
     }
     $text .= "<div class=\"" . $cssClass . "\">\n";
-    my $formName = "edittable$theTableNr";
+    my $formName = "${theTopic}edittable$theTableNr";
     $formName .= "\_$includingWeb\_$includingTopic"
       if ( "$theWeb\_$theTopic" ne "$includingWeb\_$includingTopic" );
     $text .=
@@ -835,7 +867,9 @@ sub handleTableEnd {
     $text .= hiddenField( $preSp, 'etrows',      $rowCount,      "\n" );
     $text .= hiddenField( $preSp, 'etaddedrows', $addedRowCount, "\n" )
       if $addedRowCount;
-
+    if ( my $to = $query->param('redirectto') ) {
+        $text .= hiddenField( $preSp, 'redirectto', $to, "\n" );
+    }
     $text .= $PLACEHOLDER_BUTTONROW_BOTTOM;
 
     $text .= "$preSp</form>\n";
@@ -896,7 +930,7 @@ sub createButtonRow {
         # table specific script
         my $tableNr = $query->param('ettablenr');
         &TWiki::Plugins::EditTablePlugin::addEditModeHeadersToHead( $tableNr,
-            $params{'javascriptinterface'} );
+            $params{'javascriptinterface'}, $theTopic );
         &TWiki::Plugins::EditTablePlugin::addJavaScriptInterfaceDisabledToHead(
             $tableNr)
           if ( $params{'javascriptinterface'} eq 'off' );
@@ -908,7 +942,9 @@ sub createButtonRow {
         $params{editbutton} |= '';
 
         # View mode
-        if ( $params{editbutton} eq "hide" ) {
+        if ( $params{editbutton} eq "hide" ||
+            ( $params{editbutton} eq '' && $prefEDIT_BUTTON eq 'hide' )
+      ) {
 
             # do nothing, button assumed to be in a cell
         }
@@ -918,6 +954,13 @@ sub createButtonRow {
             $text .=
               $preSp . viewEditCell("editbutton, 1, $params{'editbutton'}");
         }
+	if ( my $to = $params{'redirectto'} || $prefREDIRECTTO ) {
+	    if ( $to =~ /%/ ) {
+		$to = TWiki::Func::expandCommonVariables($to, $theTopic,
+							 $theWeb);
+	    }
+            $text .= "$preSp<input type=\"hidden\" name=\"redirectto\" value=\"$to\" />\n";
+	}
     }
     return $text;
 }
@@ -958,6 +1001,11 @@ sub viewEditCell {
             $img =~ s|%WEB%|%SYSTEMWEB%|o;
         }
     }
+
+    my $ctx = TWiki::Func::getContext();
+    my $inactive = ref $ctx && ( $ctx->{inactive} || $ctx->{content_slave} );
+    return "" if ( $inactive );
+
     if ($img) {
         return
 "<input class=\"editTableEditImageButton\" type=\"image\" src=\"$img\" alt=\"$value\" /> $warningMessage";
@@ -1432,9 +1480,9 @@ sub doCancelEdit {
       if $TWiki::Plugins::EditTablePlugin::debug;
 
     TWiki::Func::setTopicEditLock( $theWeb, $theTopic, 0 );
-
+    my $redirect = redirectTo($theWeb);
     TWiki::Func::redirectCgiQuery( $query,
-        TWiki::Func::getViewUrl( $theWeb, $theTopic ) );
+        $redirect || TWiki::Func::getViewUrl( $theWeb, $theTopic ) );
 }
 
 =pod
@@ -1511,6 +1559,22 @@ s/( "START_EDITTABLEPLUGIN_TMP_TAG")("END_EDITTABLEPLUGIN_TMP_TAG")/$1$_[1]$2/;
 sub removeTmpTagInTableTagLine {
     $_[0] =~
       s/ "START_EDITTABLEPLUGIN_TMP_TAG"(.*?)"END_EDITTABLEPLUGIN_TMP_TAG"//go;
+}
+
+sub redirectTo {
+    my $theWeb = shift;
+    my $to = $query->param( 'redirectto' );
+    if ( $to ) {
+        if( $to =~ /^$TWiki::regex{linkProtocolPattern}\:\/\//o ) {
+            return $to;
+        }
+        else {
+            my ( $w, $t ) = TWiki::Func::normalizeWebTopicName(
+                $theWeb, $to );
+            return TWiki::Func::getViewUrl( $w, $t );
+        }
+    }
+    return '';
 }
 
 =pod

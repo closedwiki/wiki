@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273994193" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352184478" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarEDITTABLE
 ---+++ EDITTABLE{ _attributes_ } -- edit TWiki tables using edit fields and other input fields
@@ -17,6 +17,7 @@
      | =editbutton= | Set edit button text, e.g. ="Edit this table"=; set button image with alt text, e.g. ="Edit table, %<nop>PUBURL%/%<nop>SYSTEMWEB%/TWikiDocGraphics/edittopic.gif"=; hide edit button at the end of the table with ="hide"= (Note: Button is automatically hidden if an edit button is present in a cell) | =EDITBUTTON= %BR% plugin setting |
      | =buttonrow= | Set to =top= to put the edit buttons above the table. | =bottom= |
      | =javascriptinterface= | Use javascript to directly move and delete row without page refresh. Enable with ="on"=, disable with ="off"=. | =JAVASCRIPTINTERFACE= %BR% plugin setting |
+     | =redirectto= | Set up a return page after saving changes. e.g By setting redirectto="%<nop>BASEPAGE%", you can return to base page if your editable table is included by another page. | (none) |
 %ENDSECTION{"edittable_attributes"}%
    * Example:%BR%
      =%<nop>EDITTABLE{ format="| text, 20 | select, 1, one, two, three |" changerows="on" }%= %BR%

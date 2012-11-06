@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1341997550" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352184478" format="1.1" version="$Rev$"}%
 ---+!! Edit Table Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -218,6 +218,8 @@ __Note:__ This is a pre-installed TWiki plugin. You should not need to install t
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2012-07-11 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2012-11-06: | TWikibug:Item7025: Return to base page after saving changes. |
+|  2012-11-06: | TWikibug:Item7024: Make EditTable read-only when current site mode is readonly or slave |
 |  2012-07-11: | TWikibug:Item6900: Fix for warning: "my" variable %regex masks earlier declaration -- TWiki:Main.JudBarron |
 |  2011-07-07: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2010-05-25: | 5.1: TWikibug:Item6324 - Fix for editing a table removing EDITCELL from another table - patch by TWiki:Main/NickThorpe |

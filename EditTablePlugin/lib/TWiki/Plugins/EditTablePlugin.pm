@@ -23,7 +23,7 @@ package TWiki::Plugins::EditTablePlugin;
 use strict;
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-07-11';
+our $RELEASE = '2012-11-05';
 
 our $web;
 our $topic;
@@ -149,7 +149,7 @@ Style sheet and javascript for table in edit mode
 =cut
 
 sub addEditModeHeadersToHead {
-    my ( $tableNr, $paramJavascriptInterface ) = @_;
+    my ( $tableNr, $paramJavascriptInterface, $theTopic ) = @_;
     return if $editModeHeaderDone;
     return
       if !$usesJavascriptInterface && ( $paramJavascriptInterface ne 'on' );
@@ -159,7 +159,7 @@ sub addEditModeHeadersToHead {
 
     $editModeHeaderDone = 1;
 
-    my $formName = "edittable$tableNr";
+    my $formName = "${theTopic}edittable$tableNr";
     my $header   = "";
     $header .=
       '<meta name="EDITTABLEPLUGIN_FormName" content="' . $formName . '" />';
