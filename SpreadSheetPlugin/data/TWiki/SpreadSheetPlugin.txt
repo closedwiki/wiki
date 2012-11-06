@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351930959" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352177561" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -101,7 +101,7 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
 ---+++ AVERAGE( list ) -- average of a list or a range of cells
    * Syntax: ==$AVERAGE( list )==
    * Example: ==%<nop>CALC{$AVERAGE(R2:C5..R$ROW(-1):C5)}%== returns the average of column 5, excluding the title row
-   * Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=
+   * Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncSTDEV][$STDEV()]]=, =[[#FuncSTDEVP][$STDEVP()]]=, =[[#FuncVAR][$VAR()]]=, =[[#FuncVARP][$VARP()]]=
 
 #FuncBITXOR
 ---+++ BITXOR( text ) -- bit-wise XOR of text
@@ -534,19 +534,19 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
 ---+++ MAX( list ) - biggest value of a list or range of cells
    * Syntax: ==$MAX( list )==
    * Example: To find the biggest number to the left of the current cell, write: ==%<nop>CALC{$MAX($LEFT())}%==
-   * Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncPERCENTILE][$PERCENTILE()]]=
+   * Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncPERCENTILE][$PERCENTILE()]]=, =[[#FuncSTDEV][$STDEV()]]=, =[[#FuncSTDEVP][$STDEVP()]]=, =[[#FuncVAR][$VAR()]]=, =[[#FuncVARP][$VARP()]]=
 
 #FuncMEDIAN
 ---+++ MEDIAN( list ) -- median of a list or range of cells
    * Syntax: ==$MEDIAN( list )==
    * Example: ==%<nop>CALC{$MEDIAN(3, 9, 4, 5)}%== returns ==4.5==
-   * Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncPERCENTILE][$PERCENTILE()]]=
+   * Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncPERCENTILE][$PERCENTILE()]]=, =[[#FuncSTDEV][$STDEV()]]=, =[[#FuncSTDEVP][$STDEVP()]]=, =[[#FuncVAR][$VAR()]]=, =[[#FuncVARP][$VARP()]]=
 
 #FuncMIN
 ---+++ MIN( list ) -- smallest value of a list or range of cells
    * Syntax: ==$MIN( list )==
    * Example: ==%<nop>CALC{$MIN(15, 3, 28)}%== returns ==3==
-   * Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncPERCENTILE][$PERCENTILE()]]=
+   * Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncPERCENTILE][$PERCENTILE()]]=, =[[#FuncSTDEV][$STDEV()]]=, =[[#FuncSTDEVP][$STDEVP()]]=, =[[#FuncVAR][$VAR()]]=, =[[#FuncVARP][$VARP()]]=
 
 #FuncMOD
 ---+++ MOD( num, divisor ) -- reminder after dividing ==num== by ==divisor==
@@ -590,7 +590,7 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Calculates the num-th percentile, useful to establish a threshold of acceptance. num is the percentile value, range 0..100
    * Syntax: ==$PERCENTILE( num, list )==
    * Example: ==%<nop>CALC{$PERCENTILE(75, 400, 200, 500, 100, 300)}%== returns ==450==
-   * Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=
+   * Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncSTDEV][$STDEV()]]=, =[[#FuncSTDEVP][$STDEVP()]]=, =[[#FuncVAR][$VAR()]]=, =[[#FuncVARP][$VARP()]]=
 
 #FuncPI
 ---+++ PI( ) -- mathematical constant Pi, 3.14159265358979
@@ -720,6 +720,22 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Syntax: ==$SQRT( num )==
    * Example: ==%<nop>CALC{$SQRT(16)}%== returns ==4==
 
+#FuncSTDEV
+---+++ STDEV( list ) -- standard deviation based on a sample
+   * Calculates the standard deviation, assuming that the =list= is a sample of the population. Use =[[#FuncSTDEVP][$STDEVP()]]= if your data represents the entire population. The standard deviation is a measure of how widely values are dispersed from the average (mean) value.
+   * Syntax: ==$STDEV( list )==
+   * Example: ==%<nop>CALC{$STDEV(R2:C5..R$ROW(-1):C5)}%== returns the standard deviation of column 5, excluding the title row
+   * Example: ==%<nop>CALCULATE{$STDEV(3.50, 5.00, 7.23, 2.99)}%== returns ==1.90205152401295==
+   * Related: =[[#FuncAVERAGE][$AVERAGE()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncPERCENTILE][$PERCENTILE()]]=, =[[#FuncSTDEVP][$STDEVP()]]=, =[[#FuncVAR][$VAR()]]=, =[[#FuncVARP][$VARP()]]=
+
+#FuncSTDEVP
+---+++ STDEVP( list ) -- standard deviation based on the entire population
+   * Calculates the standard deviation, assuming that the =list= is the entire population. Use =[[#FuncSTDEV][$STDEV()]]= if your data represents a sample of the population. The standard deviation is a measure of how widely values are dispersed from the average (mean) value.
+   * Syntax: ==$STDEVP( list )==
+   * Example: ==%<nop>CALC{$STDEVP(R2:C5..R$ROW(-1):C5)}%== returns the standard deviation of column 5, excluding the title row
+   * Example: ==%<nop>CALCULATE{$STDEVP(3.50, 5.00, 7.23, 2.99)}%== returns ==1.64722493910213==
+   * Related: =[[#FuncAVERAGE][$AVERAGE()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncPERCENTILE][$PERCENTILE()]]=, =[[#FuncSTDEV][$STDEV()]]=, =[[#FuncVAR][$VAR()]]=, =[[#FuncVARP][$VARP()]]=
+
 #FuncSUBSTITUTE
 ---+++ SUBSTITUTE( text, old, new, instance, option ) -- substitute text
    * Substitutes =new= text for =old= text in a =text= string. =instance= specifies which occurance of =old= you want to replace. If you specify =instance=, only that instance is replaced. Otherwise, every occurance is changed to the new text. A literal search is performed by default; a %SYSTEMWEB%.RegularExpression search if the =option= is set to ==r==
@@ -821,6 +837,22 @@ The plugin currently has %CALCULATE{$GET(nFunctions)}% functions. Convention for
    * Example: ==%<nop>CALC{$VALUE(<nop>PrjNotebook1234)}%== returns ==1234==
    * Example: ==%<nop>CALC{$VALUE(Total: -12.5)}%== returns ==-12.5==
    * Related: =[[#FuncCEILING][$CEILING()]]=, =[[#FuncEVAL][$EVAL()]]=, =[[#FuncFLOOR][$FLOOR()]]=, =[[#FuncINT][$INT()]]=, =[[#FuncISDIGIT][$ISDIGIT()]]=, =[[#FuncROUND][$ROUND()]]=
+
+#FuncVAR
+---+++ VAR( list ) -- variance based on a sample
+   * This assumes that the =list= is a sample of the population. Use =[[#FuncVARP][$VARP()]]= if your data represents the entire population.
+   * Syntax: ==$VARP( list )==
+   * Example: ==%<nop>CALC{$VAR(R2:C5..R$ROW(-1):C5)}%== returns the variance of column 5, excluding the title row
+   * Example: ==%<nop>CALCULATE{$VAR(3.50, 5.00, 7.23, 2.99)}%== returns ==3.6178==
+   * Related: =[[#FuncAVERAGE][$AVERAGE()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncPERCENTILE][$PERCENTILE()]]=, =[[#FuncSTDEV][$STDEV()]]=, =[[#FuncSTDEVP][$STDEVP()]]=, =[[#FuncVARP][$VARP()]]=
+
+#FuncVARP
+---+++ VARP( list ) -- variance based on the entire population
+   * This assumes that the =list= is the entire population. Use =[[#FuncVAR][$VAR()]]= if your data represents a sample of the population.
+   * Syntax: ==$VARP( list )==
+   * Example: ==%<nop>CALC{$VARP(R2:C5..R$ROW(-1):C5)}%== returns the variance of column 5, excluding the title row
+   * Example: ==%<nop>CALCULATE{$VARP(3.50, 5.00, 7.23, 2.99)}%== returns ==2.71335==
+   * Related: =[[#FuncAVERAGE][$AVERAGE()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncPERCENTILE][$PERCENTILE()]]=, =[[#FuncSTDEV][$STDEV()]]=, =[[#FuncSTDEVP][$STDEVP()]]=, =[[#FuncVAR][$VAR()]]=
 
 #FuncWHILE
 ---+++ WHILE( condition, do ) -- do something while a condition is true
@@ -936,6 +968,7 @@ __Note:__ This plugin is pre-installed. TWiki administrators can upgrade it as n
       * Unzip ==SpreadSheetPlugin.zip== in your twiki installation directory. Content:
         | *File:* | *Description:* |
         | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==data/TWiki/SpreadSheetPluginTestCases.txt== | Test cases |
         | ==data/TWiki/VarCALC.txt== | Documentation of the CALC variable |
         | ==data/TWiki/VarCALCULATE.txt== | Documentation of the CALCULATE variable |
         | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
@@ -944,15 +977,16 @@ __Note:__ This plugin is pre-installed. TWiki administrators can upgrade it as n
 
    * Plugin __configuration and testing__:
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
-      * Test if the installation was successful: See example above. See %SYSTEMWEB%.SpreadSheetPluginTestCases
+      * Test if the installation was successful: See example above and %SYSTEMWEB%.SpreadSheetPluginTestCases.
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2001-2012 Peter Thoeny, [[http://twiki.org/][TWiki.org]]<br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-11-03 |
+|  Plugin Version: | 2012-11-05 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2012-11-05: | TWikibug:Item7023: Added $STDEV(), $STDEVP(), $VAR(), $VARP() |
 |  2012-11-03: | TWikibug:Item7018: Added SpreadSheetPluginTestCases topic; refactor plugin to use function hash for better performance |
 |  2012-10-06: | TWikibug:Item6960: Fixed form action of interactive formula evaluation feature -- TWiki:Main.HideyoImazu |
 |  2012-06-30: | TWikibug:Item6898: Added $FILTER() |
