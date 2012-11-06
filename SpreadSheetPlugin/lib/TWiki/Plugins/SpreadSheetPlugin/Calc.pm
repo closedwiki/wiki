@@ -247,12 +247,12 @@ sub _funcAVERAGE
     my( $theAttr ) = @_;
     my $result = 0;
     my $items = 0;
-    my @arr = _getListAsFloat( $theAttr );
+    my @arr = grep { /./ }
+              grep { defined $_ }
+              _getListAsFloat( $theAttr );
     foreach my $i ( @arr ) {
-        if( defined $i ) {
-            $result += $i;
-            $items++;
-        }
+        $result += $i;
+        $items++;
     }
     if( $items > 0 ) {
         $result = $result / $items;
@@ -1434,6 +1434,52 @@ sub _funcSQRT
 }
 
 # =========================
+$funcRef->{STDEV} = \&_funcSTDEV;
+sub _funcSTDEV
+{
+    my( $theAttr ) = @_;
+    my @arr = grep { /./ }
+              grep { defined $_ }
+              _getListAsFloat( $theAttr );
+    my $result = 0;
+    my $mean = 0;
+    my $size = scalar @arr;
+    return $result unless( $size > 1 );
+    # calculate mean
+    foreach my $i ( @arr ) {
+        $mean += $i;
+    }
+    $mean = $mean / $size;
+    foreach my $i ( @arr ) {
+        $result += ($i - $mean) ** 2;
+    }
+    return sqrt( $result / ($size - 1) );
+}
+
+# =========================
+$funcRef->{STDEVP} = \&_funcSTDEVP;
+sub _funcSTDEVP
+{
+    my( $theAttr ) = @_;
+    my @arr = grep { /./ }
+              grep { defined $_ }
+              _getListAsFloat( $theAttr );
+    my $result = 0;
+    my $mean = 0;
+    my $size = scalar @arr;
+    return $result unless( $size > 1 );
+    # calculate mean
+    foreach my $i ( @arr ) {
+        $mean += $i;
+    }
+    $mean = $mean / $size;
+    foreach my $i ( @arr ) {
+        $result += ($i - $mean) ** 2;
+    }
+    return sqrt( $result / $size );
+}
+
+# =========================
 $funcRef->{SUBSTITUTE} = \&_funcSUBSTITUTE;
 sub _funcSUBSTITUTE
 {
@@ -1663,6 +1709,52 @@ sub _funcVALUE
 {
     my( $theAttr ) = @_;
     return _getNumber( $theAttr );
+}
+
+# =========================
+$funcRef->{VAR} = \&_funcVAR;
+sub _funcVAR
+{
+    my( $theAttr ) = @_;
+    my @arr = grep { /./ }
+              grep { defined $_ }
+              _getListAsFloat( $theAttr );
+    my $result = 0;
+    my $mean = 0;
+    my $size = scalar @arr;
+    return $result unless( $size > 1 );
+    # calculate mean
+    foreach my $i ( @arr ) {
+        $mean += $i;
+    }
+    $mean = $mean / $size;
+    foreach my $i ( @arr ) {
+        $result += ( abs($i - $mean) ) ** 2;
+    }
+    return $result / ($size - 1);
+}
+
+# =========================
+$funcRef->{VARP} = \&_funcVARP;
+sub _funcVARP
+{
+    my( $theAttr ) = @_;
+    my @arr = grep { /./ }
+              grep { defined $_ }
+              _getListAsFloat( $theAttr );
+    my $result = 0; 
+    my $mean = 0;
+    my $size = scalar @arr;
+    return $result unless( $size > 1 );
+    # calculate mean
+    foreach my $i ( @arr ) {
+        $mean += $i;
+    }
+    $mean = $mean / $size;
+    foreach my $i ( @arr ) {
+        $result += ( abs($i - $mean) ) ** 2;
+    }
+    return $result / $size;
 }
 
 # =========================
