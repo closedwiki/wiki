@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352177561" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352182285" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -34,10 +34,17 @@ __Interactive example:__
 
 <form name="interactive" action="%SCRIPTURL{view}%/%WEB%/%TOPIC%" method="get">
 <noautolink>
-Formula:%BR%
-<code>&nbsp;%<nop>CALC{</code><input type="text" name="func" size="50" value="%URLPARAM{ "func" default="$PROPERSPACE(%WIKINAME%)" encode="entity" }%" class="twikiInputField" /><code>}%</code>
-<input type="submit" value="Evaluate" class="twikiSubmit" /><br />
-Result: &nbsp; %CALC{%URLPARAM{ "func" default="$PROPERSPACE(%WIKINAME%)" }%}%
+<table><tr>
+<td></td>
+<td>Formula:</td>
+</tr><tr>
+<td><code>%<nop>CALCULATE{</code></td>
+<td><input type="text" name="func" size="50" value="%URLPARAM{ "func" default="$PROPERSPACE(%WIKINAME%)" encode="entity" }%" class="twikiInputField" /><code>}%</code>
+<input type="submit" value="Evaluate" class="twikiSubmit" /></td>
+</tr><tr>
+<td valign="top" align="right">Result:&nbsp;</td>
+<td valign="top">%CALCULATE{%URLPARAM{ "func" default="$PROPERSPACE(%WIKINAME%)" }%}%</td>
+</tr></table>
 </noautolink>
 </form>
 </td></tr><tr><td colspan="3">
