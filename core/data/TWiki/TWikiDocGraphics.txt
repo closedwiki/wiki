@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350520971" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352255738" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -93,6 +93,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{radioactive}% | =%<nop>ICON{radioactive}%= | Radioactive | gif | 16x16 |  |
 | %ICON{requirements}% | =%<nop>ICON{requirements}%= | Requirements | gif | 16x16 |  |
 | %ICON{rfc}% | =%<nop>ICON{rfc}%= | Request for comments | gif | 16x16 |  |
+| %ICON{roadmap}% | =%<nop>ICON{roadmap}%= | Roadmap | gif | 16x16 |  |
 | %ICON{sitemap}% | =%<nop>ICON{sitemap}%= | Site map | gif | 16x16 |  |
 | %ICON{sitetree}% | =%<nop>ICON{sitetree}%= | Site tree | gif | 16x16 |  |
 | %ICON{shipping}% | =%<nop>ICON{shipping}%= | Shipping | gif | 16x16 |  |
@@ -789,6 +790,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="requirements.gif" attr="h" comment="" date="1336582106" path="requirements.gif" size="919" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="rfc.gif" attr="h" comment="" date="1169565034" path="rfc.gif" size="369" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="right.gif" attr="h" comment="" date="1169565034" path="right.gif" size="194" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="roadmap.gif" attr="h" comment="" date="1352255578" path="roadmap.gif" size="962" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="rss.gif" attr="h" comment="" date="1260079118" path="rss.gif" size="394" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="rss-feed.gif" attr="h" comment="" date="1169565034" path="rss-feed.gif" size="227" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="rss-small.gif" attr="h" comment="" date="1169565034" path="rss-small.gif" size="122" user="TWikiContributor" version=""}%
