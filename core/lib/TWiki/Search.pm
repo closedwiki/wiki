@@ -783,15 +783,8 @@ sub searchWeb {
             my $isoDate =
               TWiki::Time::formatTime( $epochSecs, '$iso', 'gmtime' );
 
-            my $ru     = $topicInfo->{$topic}->{editby} || 'UnknownUser';
+            my $cUID   = $topicInfo->{$topic}->{cUID};
             my $revNum = $topicInfo->{$topic}->{revNum} || 0;
-
-            my $cUID = $users->getCanonicalUserID( $ru );
-            unless( $cUID ) {
-                # Not a login name or a wiki name. Is it a valid cUID?
-                my $ln = $users->getLoginName( $ru );
-                $cUID = $ru if( defined $ln && $ln ne 'unknown' );
-            }
 
             # Check security
             my $allowView = $topicInfo->{$topic}->{allowView};
@@ -843,11 +836,8 @@ sub searchWeb {
 
                 $text = pop( @multipleHitLines ) if( scalar(@multipleHitLines) );
 
-                my $wikiusername = $users->webDotWikiName( $cUID );
-                $wikiusername = "$TWiki::cfg{UsersWebName}.UnknownUser"
-                    unless( defined $wikiusername );
-                my $wikiname = $users->getWikiName( $cUID );
-                $wikiname = 'UnknownUser' unless( defined $wikiname );
+                my $wikiname = $topicInfo->{$topic}->{editby};
+                my $wikiusername = $TWiki::cfg{UsersWebName}.'.'.$wikiname;
 
                 if( $format ) {
                     $out = $format;
@@ -1091,7 +1081,6 @@ sub _sortTopics {
     my $topicInfo = {};
     foreach my $topic ( @$topics ) {
         $topicInfo->{$topic} = _extractTopicInfo( $this, $web, $topic, $sortfield );
-        $topicInfo->{$topic}->{editby} = $users->getWikiName( $topicInfo->{$topic}->{editby} );
     }
     if( $revSort ) {
         @$topics =
@@ -1139,8 +1128,9 @@ sub _extractTopicInfo {
     $info->{text} = $text;
     $info->{meta} = $meta;
 
-    my ( $revdate, $revuser, $revnum ) = $meta->getRevisionInfo();
-    $info->{editby}   = $revuser || '';
+    my ( $revdate, $cUID, $revnum ) = $meta->getRevisionInfo();
+    $info->{cUID}     = $cUID || 'unknown';
+    $info->{editby}   = $users->getWikiName($cUID);
     $info->{modified} = $revdate;
     $info->{revNum}   = $revnum;
 
