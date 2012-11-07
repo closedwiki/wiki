@@ -114,7 +114,7 @@ sub writeLog {
 sub getList {
     my( $this, $table ) = @_;
     return () unless ( $this->{cont}{$table} );
-    return keys %{$this->{cont}{$table}};
+    return map { /(.*)/; $1 } keys %{$this->{cont}{$table}};
 }
 
 sub getRec {
@@ -130,7 +130,14 @@ sub getRec {
 	return '';
     }
     else {
-	return $r;
+        # cleanse for taint check
+        my %rv;
+        while ( my ($k, $v) = each %$r ) {
+            $v = '' if ( !defined($v) );
+            $v =~ /^(.*)$/;
+            $rv{$k} = $1;
+        }
+	return \%rv;
     }
 }
 
