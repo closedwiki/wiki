@@ -20,7 +20,7 @@
 
 
 %TMPL:DEF{"delete"}%---++ %MAKETEXT{"Delete topic"}%
-%IF{"$'NOINALLPUBLICWEBS' = 'on'" else="   * <b><a href='%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?newweb=%TRASHWEB%&amp;nonwikiword=on' rel='nofollow'>%MAKETEXT{"Delete topic..."}%</a></b>
+%IF{"{NoInAllPublicWebs}" else="   * <b><a href='%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?newweb=%TRASHWEB%&amp;nonwikiword=on' rel='nofollow'>%MAKETEXT{"Delete topic..."}%</a></b>
      %MAKETEXT{"scans links in _all public webs_"}% *%MAKETEXT{"(recommended)"}%*
 "}%   * <a href='%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?newweb=%TRASHWEB%&amp;nonwikiword=on&amp;currentwebonly=on' rel='nofollow'>%MAKETEXT{"Delete topic..."}%</a>
      %MAKETEXT{"scans links in _[_1] web_ only" args="<nop>%WEB%"}%
@@ -29,7 +29,7 @@
 
 
 %TMPL:DEF{"rename"}%---++ %MAKETEXT{"Rename or move topic"}%
-%IF{"$'NOINALLPUBLICWEBS' = 'on'" else="   * <b><a href='%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%' rel='nofollow'>%MAKETEXT{"Rename/move topic..."}%</a></b>
+%IF{"{NoInAllPublicWebs}" else="   * <b><a href='%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%' rel='nofollow'>%MAKETEXT{"Rename/move topic..."}%</a></b>
      %MAKETEXT{"scans links in _all public webs_"}% *%MAKETEXT{"(recommended)"}%*
 "}%   * <a href='%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?currentwebonly=on' rel='nofollow'>%MAKETEXT{"Rename/move topic..."}%</a>
      %MAKETEXT{"scans links in _[_1] web_ only" args="<nop>%WEB%"}%
@@ -38,7 +38,7 @@
 
 
 %TMPL:DEF{"backlinks"}%---++ %MAKETEXT{"Backlinks"}%
-%IF{"$'NOINALLPUBLICWEBS' = 'on'" else="   * <b><a href='%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksallwebs' title='%MAKETEXT{"Search all webs for topics that link to here"}%' accesskey='l'>%MAKETEXT{"Find topics that link to [_1] ..." args="<nop>%TOPIC%"}%</a></b>,
+%IF{"{NoInAllPublicWebs}" else="   * <b><a href='%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksallwebs' title='%MAKETEXT{"Search all webs for topics that link to here"}%' accesskey='l'>%MAKETEXT{"Find topics that link to [_1] ..." args="<nop>%TOPIC%"}%</a></b>,
      %MAKETEXT{"<em>in all public webs</em>"}%
 "}%   * <a href='%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb' title='%MAKETEXT{"Search the [_1] Web for topics that link to here' args='<nop>%WEB%"}%' accesskey='w'>%MAKETEXT{"Find topics that link to [_1] ..." args="<nop>%TOPIC%"}%</a>,
      %MAKETEXT{"<em>in [_1] web</em> only" args="<nop>%WEB%"}%

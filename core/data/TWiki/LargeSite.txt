@@ -31,7 +31,7 @@ The custom user mapping manager would have its own isAdmin(), which would return
 
 If you have thousands of webs the following operations would take too long and cases time out:
    * "in all public webs" operations on the "More topic action"
-      * Setting NOINALLPUBLICWEBS to "on" suppresses the "in all public webs" links.
+      * Setting the ={NoInAllPublicWebs}= configuration parameter to true suppresses the "in all public webs" links.
    * !SiteChanges, the topic showing all recent changes across all webs, 
       * This topic should be deleted on a large site.
 
