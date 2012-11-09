@@ -720,6 +720,7 @@ sub searchWeb {
         elsif (
                 $sortOrder =~ /^creat/ ||    # topic creation time
                 $sortOrder eq 'editby' ||    # author
+                $sortOrder eq 'parent' ||    # parent topic
                 $sortOrder =~ s/^formfield\((.*)\)$/$1/    # form field
               ) {
 
@@ -1141,6 +1142,9 @@ sub _extractTopicInfo {
 
     if ( $sortfield =~ /^creat/ ) {
         ( $info->{$sortfield} ) = $meta->getRevisionInfo( 1 );
+    }
+    elsif ( $sortfield =~ /^parent/ ) {
+        ( $info->{$sortfield} ) = $meta->getParent( );
     }
     elsif ( !defined( $info->{$sortfield} ) ) {
         $info->{$sortfield} = displayFormField( $meta, $sortfield );
