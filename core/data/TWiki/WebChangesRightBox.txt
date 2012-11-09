@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350280813" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352453309" format="1.1" version="$Rev$"}%
 <div style="float:right; margin:0 0 20px 20px; padding: 10px 20px 10px 20px; border: solid #dddddd 1px; background-image: url(%PUBURLPATH%/%SYSTEMWEB%/WebChangesRightBox/gradient-title.png); background-repeat: repeat-x; background-color:#fbfbfd; color:#333333; font-size: 90%">
 *Recent changes in <nop>%BASEWEB{ format="$current" }% web:*
 %SEARCH{
@@ -7,7 +7,7 @@
  type="regex"
  scope="topic"
  nonoise="on"
- order="modified"
+ sort="modified"
  limit="%IF{ "defined 'limit'" then="%limit%" else="16" }%"
  reverse="on"
  format="%BB% <a href=\"%SCRIPTURL{view}%/$web/$topic\" title=\"By <nop>$wikiname: $summary\">$percntSPACEOUT{$topic}$percnt</a>"
@@ -44,7 +44,7 @@ To show a recent changes bullet list in a [[TWikiDashboardAddOn][dashboard box]]
  type="regex"
  scope="topic"
  nonoise="on"
- order="modified"
+ sort="modified"
  limit="%IF{ "defined 'limit'" then="%limit%" else="32" }%"
  reverse="on"
  format="   * <a href=\"%SCRIPTURL{view}%/$web/$topic\" title=\"By <nop>$wikiname: $summary\">$percntSPACEOUT{$topic}$percnt</a>"

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350862529" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352453309" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Forms - Foundation of TWiki Applications
 
@@ -256,7 +256,7 @@ TWiki Forms accept user-input data, stored as TWikiMetaData. Meta data also cont
 TWiki users often want to have an overview of topics they contributed to. With the ==$formfield== parameter it is easy to display the value of a classification field next to the topic link:
 <verbatim>
 | *Topic* | *Classification* |
-%SEARCH{"%USERSWEB%.UserName" scope="text" nosearch="on" nototal="on" order="modified" reverse="on"
+%SEARCH{"%USERSWEB%.UserName" scope="text" nosearch="on" nototal="on" sort="modified" reverse="on"
 format="|<b>[[$web.$topic][$topic]]</b> |<nop>$formfield(TopicClassification) |" web="Sandbox"}%
 </verbatim>
 </blockquote> 

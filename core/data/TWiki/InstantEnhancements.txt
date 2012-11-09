@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350799753" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352453309" format="1.1" version="$Rev$"}%
 ---+!! Instant TWiki Site Enhancements
 
 These quick enhancements are aimed at improving and customising your TWiki.  New TWiki site administrators are especially encouraged to review this document for ideas before deploying a new TWikiSite. The metaphor of building a house is useful.  The listed enhancements are some of the details possible when moving into a new office or home. These small changes can make a *big* differences for user satisfaction at your site. All modifications can be done through your Web browser, and they don't take more then in a couple of minutes.  No system administration expertise is required. Some of these enhancements are also mentioned in the reference manual and other topics.
@@ -123,14 +123,14 @@ __Here's a list of topics I've been involved in recently:__
 
 ---++++ Codev
 
-%SEARCH{ "%TOPIC%" web="Codev" scope="text" nosearch="on" nosummary="on" noheader="on" nototal="on" order="modified" reverse="on" limit="20"}%
+%SEARCH{ "%TOPIC%" web="Codev" scope="text" nosearch="on" nosummary="on" noheader="on" nototal="on" sort="modified" reverse="on" limit="20"}%
 ---++++ Support
 
-%SEARCH{ "%TOPIC%" web="Support" scope="text" nosearch="on" nosummary="on" noheader="on" nototal="on" order="modified" reverse="on" limit="20"}%
+%SEARCH{ "%TOPIC%" web="Support" scope="text" nosearch="on" nosummary="on" noheader="on" nototal="on" sort="modified" reverse="on" limit="20"}%
 
 ---++++ TWiki
 
-%SEARCH{ "%TOPIC%" web="TWiki" scope="text" nosearch="on" nosummary="on" noheader="on" nototal="on" order="modified" reverse="on" limit="10"}%
+%SEARCH{ "%TOPIC%" web="TWiki" scope="text" nosearch="on" nosummary="on" noheader="on" nototal="on" sort="modified" reverse="on" limit="10"}%
 
 </verbatim>
 *End Copy*
@@ -142,7 +142,7 @@ Here are the last 15 changed pages, formatted into a neat table.
 
 <verbatim>
 <table>
-%SEARCH{ "\.*" scope="topic" type="regex" nosearch="on" nototal="on" order="modified" reverse="on"  format="<tr><td>  [[$topic][$topic]] </td><td>  $wikiusername  </td><td> $date  </td></tr>" limit="15" }%
+%SEARCH{ "\.*" scope="topic" type="regex" nosearch="on" nototal="on" sort="modified" reverse="on"  format="<tr><td>  [[$topic][$topic]] </td><td>  $wikiusername  </td><td> $date  </td></tr>" limit="15" }%
 </table>
 </verbatim>
 

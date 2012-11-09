@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1336874600" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352453309" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %STARTINCLUDE%
 ---+ TWiki Formatted Search
@@ -109,11 +109,29 @@ Here are some samples of formatted searches. The SearchPatternCookbook has other
 
 *Write this:*
 
-=%<nop>SEARCH{ "FAQ" scope="topic" nosearch="on" nototal="on" header="   * <nop>*Topic: Summary:*" format="   * [<nop>[$topic]]: $summary"  footer="   * <nop>*Topic: Summary*"  }%=
+<verbatim>
+%SEARCH{
+ "FAQ"
+ scope="topic"
+ nosearch="on"
+ nototal="on"
+ header="   * *Topic: Summary:*"
+ format="   * [[$topic]]: $summary"
+ footer="   * *Topic: Summary*"
+}%
+</verbatim>
 
 *To get this:*
 
-%SEARCH{ "FAQ" scope="topic" nosearch="on" nototal="on" header="   * *Topic: Summary:*" format="   * [[$topic]]: $summary"  footer="   * *Topic: Summary*" }%
+%SEARCH{
+ "FAQ"
+ scope="topic"
+ nosearch="on"
+ nototal="on"
+ header="   * *Topic: Summary:*"
+ format="   * [[$topic]]: $summary"
+ footer="   * *Topic: Summary*"
+}%
 
 
 ---+++ Table showing form field values of topics with a form
@@ -134,11 +152,29 @@ To get this:
 
 *Write this:*
 
-=%<nop>SEARCH{ "__Back to\:__ <nop>TWikiFAQ" scope="text" type="regex" nosearch="on" nototal="on" header="TWiki FAQs:" format="   * $pattern(.*?FAQ\:[\n\r]*([^\n\r]+).*) [<nop>[$topic][Answer...]]" }%=
+<verbatim>
+%SEARCH{
+ "__Back to\:__ TWikiFAQ"
+ scope="text"
+ type="regex"
+ nosearch="on"
+ nototal="on"
+ header="TWiki FAQs:"
+ format="   * $pattern(.*?FAQ\:[\n\r]*([^\n\r]+).*) [[$topic][Answer...]]"
+}%
+</verbatim>
 
 *To get this:*
 
-%SEARCH{ "__Back to\:__ TWikiFAQ" scope="text" type="regex" nosearch="on" nototal="on" header="TWiki FAQs:" format="   * $pattern(.*?FAQ\:[\n\r]*([^\n\r]+).*) [[$topic][Answer...]]" }%
+%SEARCH{
+ "__Back to\:__ TWikiFAQ"
+ scope="text"
+ type="regex"
+ nosearch="on"
+ nototal="on"
+ header="TWiki FAQs:"
+ format="   * $pattern(.*?FAQ\:[\n\r]*([^\n\r]+).*) [[$topic][Answer...]]"
+}%
 
 
 ---+++ Nested Search
@@ -159,11 +195,23 @@ Here is an example. Let's search for all topics that contain the word "culture" 
 
 *Write this:*
 
-=%<nop>SEARCH{ "culture" format="   * $topic is referenced by:$n      * $percntSEARCH{ \"$topic\" format=\"$dollartopic\" nosearch=\"on\" nototal=\"on\" separator=\", \" }$nop%" nosearch="on" nototal="on" }%=
+<verbatim>
+%SEARCH{
+ "culture"
+ format="   * $topic is referenced by:$n      * $percntSEARCH{ \"$topic\" format=\"$dollartopic\" nosearch=\"on\" nototal=\"on\" separator=\", \" }$nop%"
+ nosearch="on"
+ nototal="on"
+}%
+</verbatim>
 
 *To get this:*
 
-%SEARCH{ "culture" format="   * $topic is referenced by:$n      * $percntSEARCH{ \"$topic\" format=\"$dollartopic\" nosearch=\"on\" nototal=\"on\" separator=\", \" }$nop%" nosearch="on" nototal="on" }%
+%SEARCH{
+ "culture"
+ format="   * $topic is referenced by:$n      * $percntSEARCH{ \"$topic\" format=\"$dollartopic\" nosearch=\"on\" nototal=\"on\" separator=\", \" }$nop%"
+ nosearch="on"
+ nototal="on"
+}%
 
 __Note:__ Nested search can be slow, especially if you nest more then 3 times. Nesting is limited to 16 levels. For each new nesting level you need to "escape the escapes", e.g. write =$dollarpercntSEARCH{= for level three, =$dollardollarpercntSEARCH{= for level four, etc.
 
@@ -171,11 +219,33 @@ __Note:__ Nested search can be slow, especially if you nest more then 3 times. N
 
 *Write this:*
 
-=%<nop>SEARCH{ "\.*" scope="topic" type="regex" nosearch="on" nototal="on" order="modified" reverse="on"  format="| [<nop>[$topic]] | $wikiusername  | $date |" limit="7" }%=
+<verbatim>
+%SEARCH{
+ "\.*"
+ scope="topic"
+ type="regex"
+ nosearch="on"
+ nototal="on"
+ sort="modified"
+ reverse="on"
+ format="| [[$topic]] | $wikiusername  | $date |"
+ limit="7"
+}%=
+</verbatim>
 
 *To get this:*
 
-%SEARCH{ "\.*" scope="topic" type="regex" nosearch="on" nototal="on" order="modified" reverse="on"  format="| [[$topic]] | $wikiusername  | $date |" limit="7" }%
+%SEARCH{
+ "\.*"
+ scope="topic"
+ type="regex"
+ nosearch="on"
+ nototal="on"
+ sort="modified"
+ reverse="on"
+ format="| [[$topic]] | $wikiusername  | $date |"
+ limit="7"
+}%
 
 ---+++ Search with conditional output
 
@@ -190,7 +260,7 @@ This requires the TWiki:Plugins.SpreadSheetPlugin. The following example shows a
 *Write this:*
 
 =%<nop>CALC{$SET(weekold, $TIMEADD($TIME(), -7, day))}%= %BR%
-=%<nop>SEARCH{ "." scope="topic" type="regex" web="%USERSWEB%" nonoise="on" order="modified" reverse="on" format="$percntCALC{$IF($TIME($date) &lt; $GET(weekold), &lt;nop&gt;, | [<nop>[$web.$topic][$topic]] | $wikiusername | $date | $rev |)}$percnt" limit="100" }%=
+=%<nop>SEARCH{ "." scope="topic" type="regex" web="%USERSWEB%" nonoise="on" sort="modified" reverse="on" format="$percntCALC{$IF($TIME($date) &lt; $GET(weekold), &lt;nop&gt;, | [<nop>[$web.$topic][$topic]] | $wikiusername | $date | $rev |)}$percnt" limit="100" }%=
 
    * The first line sets the =weekold= variable to the serialized date of exactly one week ago
    * The SEARCH has a deferred CALC. The =$percnt= makes sure that the CALC gets executed once for each search hit
@@ -201,7 +271,7 @@ This requires the TWiki:Plugins.SpreadSheetPlugin. The following example shows a
 *To get this:*
 
 %CALC{$SET(weekold, $TIMEADD($TIME(), -7, day))}%
-%SEARCH{ "." scope="topic" type="regex" web="%USERSWEB%" nonoise="on" order="modified" reverse="on" format="$percntCALC{$IF($TIME($date) < $GET(weekold), <nop>, | [[$web.$topic][$topic]] | $wikiusername | $date | $rev |)}$percnt" limit="100" }%
+%SEARCH{ "." scope="topic" type="regex" web="%USERSWEB%" nonoise="on" sort="modified" reverse="on" format="$percntCALC{$IF($TIME($date) < $GET(weekold), <nop>, | [[$web.$topic][$topic]] | $wikiusername | $date | $rev |)}$percnt" limit="100" }%
 
 The condition can be anything you like. To restrict search based on a date range it is easier to use the =date=""= parameter as shown in the next example.
 
@@ -211,11 +281,35 @@ A search can be restricted based on a [[TimeSpecifications][date range]]. The fo
 
 *Write this:*
 
-=%<nop>SEARCH{ "." scope="topic" type="regex" web="%USERSWEB%" nonoise="on" order="modified" reverse="on" format="| [<nop>[$web.$topic][$topic]] | $wikiusername | $date | $rev |" limit="100" date="P1w/$today" }%=
+<verbatim>
+%SEARCH{
+ "."
+ scope="topic"
+ type="regex"
+ web="%USERSWEB%"
+ nonoise="on"
+ sort="modified"
+ reverse="on"
+ format="| [[$web.$topic][$topic]] | $wikiusername | $date | $rev |"
+ limit="100"
+ date="P1w/$today"
+}%=
+</verbatim>
 
 *To get this:*
 
-%SEARCH{ "." scope="topic" type="regex" web="%USERSWEB%" nonoise="on" order="modified" reverse="on" format="| [[$web.$topic][$topic]] | $wikiusername | $date | $rev |" limit="100" date="P1w/$today" }%
+%SEARCH{
+ "."
+ scope="topic"
+ type="regex"
+ web="%USERSWEB%"
+ nonoise="on"
+ sort="modified"
+ reverse="on"
+ format="| [[$web.$topic][$topic]] | $wikiusername | $date | $rev |"
+ limit="100"
+ date="P1w/$today"
+}%
 
 ---+++ Embedding search forms to return a formatted result
 
@@ -229,7 +323,12 @@ Find Topics:
 <input type="text" name="q" size="32" value="%URLPARAM{"q" encode="entity"}%" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" />
 </form>
 Result:
-%SEARCH{ search="%URLPARAM{"q" encode="quote"}%" type="keyword" format="   * $web.$topic: %BR% $summary" nosearch="on" }%
+%SEARCH{
+ search="%URLPARAM{"q" encode="quote"}%"
+ type="keyword"
+ format="   * $web.$topic: %BR% $summary"
+ nosearch="on"
+}%
 </verbatim>
 
 *To get this:*
@@ -239,7 +338,12 @@ Find Topics:
 <input type="text" name="q" size="32" value="%URLPARAM{"q" encode="entity"}%" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" />
 </form>
 Result:
-%SEARCH{ search="%URLPARAM{"q" encode="quote"}%" type="keyword" format="   * $web.$topic: %BR% $summary" nosearch="on" }%
+%SEARCH{
+ search="%URLPARAM{"q" encode="quote"}%"
+ type="keyword"
+ format="   * $web.$topic: %BR% $summary"
+ nosearch="on"
+}%
 
 __Related Topics:__ UserDocumentationCategory, SearchHelp, VarSEARCH, SearchPatternCookbook, RegularExpression, QuerySearch
 

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1296278382" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352453309" format="1.1" version="$Rev$"}%
 ---+ %MAKETEXT{"[_1] Recent Changes in [_2] Web" args="%URLPARAM{"limit" default="50"}%, <nop>%INCLUDINGWEB%"}% <span style="font-size: 50%">%MAKETEXT{"retrieved at [_1]" args="%DISPLAYTIME{"$hour:$min ($tz)"}%"}%</span>
 
 %SEARCH{
@@ -8,7 +8,7 @@
  scope="topic"
  nosearch="on"
  noheader="on"
- order="modified"
+ sort="modified"
  limit="%URLPARAM{"limit" default="50"}%"
  reverse="on"
 }%

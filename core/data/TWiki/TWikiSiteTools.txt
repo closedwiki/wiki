@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347501410" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352453309" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Site Tools
 
@@ -39,8 +39,15 @@ To check for the most recently edited topics while on-site, use the WebChanges l
 This is simply a preset =SEARCH=. The number of topics listed by the =limit= parameter.:
 <blockquote>
 <pre>
-%<nop>SEARCH{ ".*" web="%INCLUDINGWEB%" type="regex" nosearch="on" order="modified"%BR% reverse="on" 
-limit="50" }%
+%<nop>SEARCH{
+ ".*"
+ web="%INCLUDINGWEB%"
+ type="regex"
+ nosearch="on"
+ sort="modified"
+ reverse="on" 
+ limit="50"
+}%
 </pre>
 </blockquote>
 
@@ -55,7 +62,12 @@ You can point your news reader at WebRss and WebAtom to find out what is new in 
 WebIndex lists all web topics in alphabetical order, with the first couple of lines of text. This is simply a preset =SEARCH=:
 <blockquote>
 <pre>
-%<nop>SEARCH{ "\.*" scope="topic" type="regex" nosearch="on" }%
+%<nop>SEARCH{
+ "\.*"
+ scope="topic"
+ type="regex"
+ nosearch="on"
+}%
 </pre>
 </blockquote>
 
