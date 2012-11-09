@@ -1,5 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1117992408" format="1.0" version="$Rev$"}%
-
+%META:TOPICINFO{author="TWikiContributor" date="1352455778" format="1.1" version="$Rev$"}%
 Description: Automated search function tests.
 
 Results dependent on templates used to render search results. Tests only make sense when this topic is viewed with "pattern" skin and standard search templates.
@@ -66,7 +65,7 @@ Same as last test
 <!-- /expected -->
 ---++ Actual
 <!-- actual -->
-%SEARCH{ "WebPreferences$" type="regex" scope="topic" web="TestCases, TWiki" nosummary="on" nosearch="on" noheader="on" nototal="on" order="topic" }%
+%SEARCH{ "WebPreferences$" type="regex" scope="topic" web="TestCases, TWiki" nosummary="on" nosearch="on" noheader="on" nototal="on" sort="topic" }%
 <!-- /actual -->
 
 
@@ -293,7 +292,4 @@ NOOPED vars shouldn't expand in search results %<nop>DATE%
 ---+ header="..."
 
 ---+ separator=", " (default newline)
----+ newline="%BR%" 	Line separator within a search hit, effective only in FormattedSearch.
-
-
-
+---+ newline="%BR%"    Line separator within a search hit, effective only in FormattedSearch.
