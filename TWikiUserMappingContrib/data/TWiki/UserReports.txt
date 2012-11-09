@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351491982" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352456135" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="UserList"}%
 ---+!! TWiki User Reports
 
@@ -13,7 +13,7 @@ Show a simple list of registered users. The output is a comma-space delimited so
    * Section "user_list": Show a list of users as comma-space delimited list of !WikiWords.
       * Parameter =search=: Apply filter by searching all form fields, but not the main topic text. Optional; all users are returned if missing.
       * Parameter =limit=: Limits the number of users returned. Optional; all users are returned if missing.
-      * Parameter =order=: Sort the result by the topic name, topic creation date, last modified date, last editor, or named field of TWikiForms. For details see =order= parameter of [[VarSEARCH][SEARCH]].
+      * Parameter =sort=: Sort the result by the topic name, topic creation date, last modified date, last editor, or named field of TWikiForms. For details see =sort= parameter of [[VarSEARCH][SEARCH]].
       * Parameter =reverse=: Reverse the direction of the search result
 
 This sections also sets a ="UserReports_users"= variable to the number of users found. To retrieve, write =%<nop>GET{UserReports_users}%=.
@@ -37,7 +37,7 @@ This sections also sets a ="UserReports_users"= variable to the number of users 
  web="%USERSWEB%"
  type="regex"
  limit="%IF{   "defined 'limit'"   then="%limit%" }%"
- order="%IF{   "defined 'order'"   then="%order%" }%"
+ sort="%IF{   "defined 'sort'"   then="%sort%" }%"
  reverse="%IF{ "defined 'reverse'" then="%reverse%" }%"
  nonoise="on"
  excludetopic="UserList*, *Template"
