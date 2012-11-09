@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350947044" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352453485" format="1.1" version="$Rev$"}%
 %DASHBOARD{ section="dashboard_start" }%
 %DASHBOARD{ section="banner"
  image="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/golden-gate-dawn.jpg"
@@ -40,7 +40,7 @@ TWiki<sup>&reg;</sup> is a flexible, powerful, secure, yet simple web-based coll
 &nbsp; [[%SYSTEMWEB%.TWikiRegistration][Register]]
 %USERREPORT{ action="slim_box_css" }%
 %USERREPORT{ action="slim_box_start" style="background-color: white;" }%
-%USERREPORT{ action="slim_box_list" users="%USERREPORT{ action="user_list" limit="10" order="modified" reverse="on" }%" }%
+%USERREPORT{ action="slim_box_list" users="%USERREPORT{ action="user_list" limit="10" sort="modified" reverse="on" }%" }%
 %USERREPORT{ action="slim_box_end" }%
 
 %DASHBOARD{ section="box_end" }%
