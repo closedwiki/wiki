@@ -408,7 +408,7 @@ sub searchWeb {
     my $zeroResults    = 1 - TWiki::isTrue( ( $params{zeroresults} || 'on' ), $nonoise );
     my $noTotal        = TWiki::isTrue( $params{nototal}, $nonoise );
     my $newLine        = $params{newline} || '';
-    my $sortOrder      = $params{order}   || '';
+    my $sortOrder      = $params{sort} || $params{order} || '';
     my $revSort        = TWiki::isTrue( $params{reverse} );
     my $scope          = $params{scope} || '';
     my $searchString   = $params{search} || '';

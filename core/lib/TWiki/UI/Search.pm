@@ -45,8 +45,8 @@ Perform a search as dictated by CGI parameters:
 | =excludetopic="Web*"= <br /> =excludetopic="%HOMETOPIC%, <nop>WebChanges"= | Exclude topics from search: A topic, a topic with asterisk wildcards, or a list of topics separated by comma. | None |
 | =type="keyword"= <br /> =type="literal"= <br /> =type="regex"= | Do a keyword search like =soap "web service" -shampoo=; a literal search like =web service=; or RegularExpression search like =soap;web service;!shampoo= | =%<nop>SEARCHVAR- DEFAULTTYPE%= [[TWikiPreferences][preferences]] setting (%SEARCHVARDEFAULTTYPE%) |
 | =scope="topic"= <br /> =scope="text"= <br /> =scope="all"= | Search topic name (title); the text (body) of topic; or all (both) | ="text"= |
-| =order="topic"= <br /> =order="created"= <br />  =order="modified"= <br /> =order="editby"= <br /> =order=<br />&nbsp;"formfield(name)"= | Sort the results of search by the topic names, topic creation time, last modified time, last editor, or named field of TWikiForms. The sorting is done web by web; in case you want to sort across webs, create a [[FormattedSearch][formatted]] table and sort it with TablePlugin's initsort | Sort by topic name |
-| =limit="all"= <br /> =limit="16"= | Limit the number of results returned. This is done after sorting if =order= is specified | All results |
+| =sort="topic"= <br /> =sort="created"= <br />  =sort="modified"= <br /> =sort="editby"= <br /> =sort="parent"= <br /> =sort=<br />&nbsp;"formfield(name)"= | Sort the results of search by the topic names, topic creation time, last modified time, last editor, parent topic name, or named field of TWikiForms. The sorting is done web by web; in case you want to sort across webs, create a [[FormattedSearch][formatted]] table and sort it with TablePlugin's initsort | Sort by topic name |
+| =limit="all"= <br /> =limit="16"= | Limit the number of results returned. This is done after sorting if =sort= is specified | All results |
 | =date="..."= | limits the results to those pages with latest edit time in the given TimeInterval.  | All results |
 | =reverse="on"= | Reverse the direction of the search | Ascending search |
 | =casesensitive="on"= | Case sensitive search | Ignore case |
@@ -126,7 +126,8 @@ sub search {
         'topic'         => scalar $query->param( 'topic' ),
         'excludetopic'  => scalar $query->param( 'excludetopic' ),
         'scope'         => scalar $query->param( 'scope' ),
-        'order'         => scalar $query->param( 'order' ),
+        'sort'          => scalar $query->param( 'sort' ) ||
+          scalar $query->param( 'order' ),
         'type'          => scalar $query->param( 'type' ) ||
           $session->{prefs}->getPreferencesValue( 'SEARCHDEFAULTTYPE' ),
         'regex'         => scalar $query->param( 'regex' ),
