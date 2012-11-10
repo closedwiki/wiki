@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349582394" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352534385" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Installation Guide
 
@@ -70,6 +70,7 @@ If you need help, ask a question in the TWiki:Support.WebHome web or on TWiki:Co
 
 You now have a basic, unauthenticated installation running. At this point you can just point your web browser at =http://yourdomain.com/twiki/bin/view= and start TWiki-ing away!
 
+#SecuritySettings
 ---++ Important Server Security Settings
 
 Before you continue any further there are some basic and very important security settings you have to make sure are set correctly.
@@ -154,30 +155,81 @@ To enable TWiki to sign administrative e-mails:
 
 All out-going administrative e-mails will now be signed.
 
+#EnableWebStatistics
 ---++ Enable !WebStatistics
 
 You can generate a listing manually, or on an automated schedule, of visits to individual pages, on a per web basis. For information on setting up this feature, see the TWikiSiteTools topic.
 
+#AutomateRemoval
 ---++ Automate removal of expired sessions and lease files
 
 Per default TWiki cleans out expired session and lease files each time any topic is viewed. This however comes at a cost of lower performance. It is an advantage to define a negative value in =configure= for ={Sessions}{ExpireAfter}= (turn on expert mode to see it), and install a crjob to run the =tools/tick_twiki.pl= script. Read The topic TWikiScripts#tick_twiki_pl for details how to do this.
 
----++ Enable Localisation
+#EnableLocalization
+---++ Enable Localization
 
-TWiki now supports displaying of national (non-ascii) characters and presentation of basic interface elements in different languages. To enable these features, see the =Localisation= section of =configure=. For more information about these features, see TWiki:TWiki.InternationalizationSupplement.
+TWiki now supports displaying of national (non-ascii) characters and presentation of basic interface elements in different languages. To enable these features, see the =Localization= section of =configure=. For more information about these features, see TWiki:TWiki.InternationalizationSupplement.
 
 #TailorUsersTopic
----++ Tailor New Users Home Topic
+---++ Tailor New User Profile Topic
 
-When a new users registers on your TWiki, a home topic is created for them based on the NewUserTemplate topic (and its UserForm). It contains additional resources you can use to:
+When a new users registers on your TWiki, a user profile topic is created for them based on the NewUserTemplate topic (and its UserForm). It contains additional resources you can use to:
    * Localize the user topic.
    * Add a default ALLOWTOPICCHANGE so only the user can edit their own home topic. We do not encourage this for Intranet sites as it sends a wrong signal to new users, but it can be necessary on a public TWiki to prevent spam.
    * Add and remove fields defined in the !UserForm
 
-If you choose to tailor anything you are strongly adviced to copy !NewUserTemplate and !UserForm to the %USERSWEB% web and tailor the %USERSWEB% web copies. TWiki will look for the !NewUserTemplate in the %USERSWEB% web first and if it does not exist it uses the default from the %SYSTEMWEB% web. By creating a <nop>%USERSWEB%.NewUserTemplate and its <nop>%USERSWEB%.UserForm you will not loose your tailorings next time you upgrade TWiki.
+If you choose to tailor anything you are strongly adviced to copy !NewUserTemplate and !UserForm to the %USERSWEB% web and tailor the %USERSWEB% web copies. TWiki will look for the !NewUserTemplate in the %USERSWEB% web first and if it does not exist it uses the default from the %SYSTEMWEB% web. By creating a <nop>%USERSWEB%.NewUserTemplate and its <nop>%USERSWEB%.UserForm you will not loose your customization next time you upgrade TWiki.
 
 If you added or removed fields from the user form you may also need to tailor TWikiRegistration.
 
+#CustomStartWeb
+---++ Custom Start Web and Homepage
+
+By default the TWiki home is [[%USERSWEB%.%HOMETOPIC%]]. Users tend to create content starting from the homepage. In most cases it is better to [[ManagingWebs][create a new web]] (workspace) for default content. That way the <nop>%USERSWEB% web can be kept clean and used just for users and TWiki groups. For example, you could create an "Intranet" web if TWiki is primarily used as an intranet, or a "KB" web if used as a knowledge base, etc.
+
+If you have a dedicated web as a starting point you obviously want users start at the home of that web. This can be configured in two places: 1. Redirect from site home to web home, and 2. Set the wiki logo URL.
+
+__1. Redirect from site home to web home__
+
+When a user enters the domain name of your TWiki she expects to see the homepage. You can do that either with an Apache rewrite rule or an HTML meta redirect to redirect from =/= to =%SCRIPTURLPATH{view}%/Intranet/WebHome=. Here is an example =index.html= containing an HTML meta redirect you can use: Customize it and put it in your HTML document root on your TWiki sever:
+
+<verbatim>
+<html>
+<head>
+<meta http-equiv="refresh" content="0;/do/view/Intranet/WebHome" />
+</head>
+<body>
+Redirecting to <a href="/do/view/Intranet/WebHome">Intranet home</a>...
+</body>
+</html>
+</verbatim>
+
+__2. Set the wiki logo URL__
+
+When a user clicks on the logo in the upper left or on the "Home" link in the top-bar she expects to navigate to the new homepage. You can do that by defining and customizing the following setting in [[%USERSWEB%.TWikiPreferences]] as described in the [[#SetPreferences][Set TWiki Preferences]] section:
+
+<pre>
+URL of the logo:
+   * Set <nop>WIKILOGOURL = %<nop>SCRIPTURLPATH{view}%/Intranet/WebHome
+</pre>
+
+#CustomizeTheLook
+---++ Customize the Look of Your TWiki!
+
+The real power of TWiki lies in it's flexibility to be customized to meet your needs. You can with small means change the looks of the default skins (called TopMenuSkin and PatternSkin) by reading the PatternSkinCustomization.
+
+At the official TWiki website you can find more resources. A good place to start for exploring what's possible is TWiki:TWiki.TWikiAdminCookBook which offers tips and tricks for customizing your TWiki site. Many of these are appropriate to implement immediately after installing TWiki and before adding content so now's a good time to look at these.
+
+#CustomizeSpecialPages
+---++ Customize Special Pages
+
+Some pages are meant to be customized after choice of authentication. If you do not use the internal TWiki password manager the topics that contains the features for changing and resetting passwords and changing the email address should be changed to a note describing how to perform these tasks in your organization. The topics are:
+
+   * ChangePassword
+   * ResetPassword
+   * ChangeEmailAddress
+
+#InstallPlugins
 ---++ Install Plugins
 
 TWiki:Plugins.WebHome is an extensive library of plugins for TWiki, that enhance functionality in a huge number of ways. A few plugins are pre-installed in the TWiki distribution. For more information on these, see InstalledPlugins.
@@ -186,21 +238,8 @@ You activate installed plugin in the _Plugins_ section of =configure=. In this s
 
 Some plugins require that you define their settings in =configure=. You fill find these under the _Extensions_ section of configure.
 
----++ Customize Your TWiki!
-
-The real power of TWiki lies in it's flexibility to be customized to meet your needs. You can with small means change the looks of the default skins (called TopMenuSkin and PatternSkin) by reading the PatternSkinCustomization.
-
-At the official TWiki website you can find more resources. A good place to start for exploring what's possible is TWiki:TWiki.TWikiAdminCookBook which offers tips and tricks for customizing your TWiki site. Many of these are appropriate to implement immediately after installing TWiki and before adding content so now's a good time to look at these.
-
----++ Customization of Special Pages
-
-Some pages are meant to be customized after choice of authentication. If you do not use the internal TWiki password manager the topics that contains the features for changing and resetting passwords and changing the email address should be changed to a note describing how to perform these tasks in your organization. The topics are:
-
-   * ChangePassword
-   * ResetPassword
-   * ChangeEmailAddress
-
----++ WYSIWYG vs Raw Edit
+#WysiwygAndRawEdit
+---++ WYSIWYG And Raw Edit
 
 From TWiki release 4.2.0 on the WYSIWYG editor has been replaced by a much better and more powerful editor and it was decided that WYSIWYG would be the default edit mode. An Edit Raw link is available for those that have a need or preference for this mode.
 
@@ -208,6 +247,7 @@ However you may prefer to have the same user interface as in TWiki 4.1 where _Ed
 
    * Set EDITMETHOD = raw
 
+#WebCopyright
 ---++ Copyright, License and Classification Statements
 
 In the bottom of each topic you will find a default copyright messages saying "Copyright &copy; by the contributing authors. All material on this collaboration platform is the property of the contributing authors." It is a setting WEBCOPYRIGHT that defines this. This is often not adequate.
@@ -221,6 +261,7 @@ You change the copy right statement globally by taking these steps.
    * You can create a unique message for each web by adding the WEBCOPYRIGHT setting to !WebPreferences in each web. E.g. adding a confidencial classification to a very restricted web.
    * The WEBCOPYRIGHT in [[%SYSTEMWEB%.WebPreferences]] covers the documentation that comes with TWiki and is covered by the original TWiki Copyright and GPL License. You will normally leave this unchanged.
 
+#TroubleShooting
 ---++ Troubleshooting
 
 The first step is to re-run the =configure= script and make sure you have resolved all errors, and are satisfied that you understand any warnings.
@@ -237,7 +278,6 @@ It is also advisable to review TWiki:Codev/KnownIssuesOfTWiki05x00.
 If you need help, ask a question in the TWiki:Support web or on TWiki:Codev/TWikiIRC (irc.freenode.net, channel #twiki)
 
 ---++ Appendices
-
 
 #SystemRequirements
 ---++ TWiki System Requirements
@@ -278,6 +318,7 @@ Referring to the [[#StandardInstallation][Basic Installation]] steps presented a
 
 For additional information about installing TWiki on a hosted accounts, see TWiki:TWiki.InstallingTWiki#WebHostingSites
 
+#WithoutConfigure
 ---++ Installing Manually Without Configure
 
 It is highly recommended to use run configure from the browser when setting up TWiki. Configure does a lot of the hard work for you.
