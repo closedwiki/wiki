@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352596963" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352623376" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
----+!! Search Predefined TWiki Variables
-%STARTSECTION{categories}%%SET{ "twVarCategories" value="Administration, Applications/Components, Attachments/Files, Database/Forms, Date/Time, Development, Drawing/Charting, Editing/Content Update, Email/Notification, Export/Publishing, Formatting/Rendering, Import, Linking/Navigation, Searching/Listing, Security/Access Control, Skins/Templates, Tables/Spreadsheets, UI/Visualization, Users/Authentication, Workflow/Automation"}%%ENDSECTION{categories}%
+---+!! <span style="font-size: 60%;">[[TWikiVariables][TWiki Variables]] &raquo;</span> Search Variables
+%STARTSECTION{categories}%%SET{ "twVarCategories" value="%SEARCH{ "INCLUDE.*[T]WikiVariablesCategoryBody" type="regex" topic="*Variables" nonoise="on" format="$topic" separator=", " }%"}%%ENDSECTION{categories}%
 <form name="searchvars" action="%SCRIPTURL{view}%/%WEB%/%TOPIC%" method="get">
 <table style="padding: 5px 10px; background-color: #f0f0f8; width: 100%;"><tr><td>
 <input type="text" class="twikiInputField" name="search" value="%URLPARAM{ "search" encode="entity" }%" style="width: 95%" />
