@@ -1,18 +1,34 @@
-%META:TOPICINFO{author="TWikiContributor" date="1239663368" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352595838" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 ---+!! Search Predefined TWiki Variables
- <form name="searchvars" action="%SCRIPTURL{view}%/%WEB%/%TOPIC%" method="get">
-<input type="text" class="twikiInputField" name="search" size="20" value="%URLPARAM{ "search" encode="entity" }%" />
+%STARTSECTION{categories}%%SET{ "twVarCategories" value="Administration, Applications/Components, Attachments/Files, Database/Forms, Date/Time, Development, Drawing/Charting, Editing/Content Update, Email/Notification, Export/Publishing, Formatting/Rendering, Import, Linking/Navigation, Searching/Listing, Security/Access Control, Skins/Templates, Tables/Spreadsheets, UI/Visualization, Users/Authentication, Workflow/Automation"}%%ENDSECTION{categories}%
+<form name="searchvars" action="%SCRIPTURL{view}%/%WEB%/%TOPIC%" method="get">
+<table style="padding: 5px 10px; background-color: #f0f0f8; width: 100%;"><tr><td>
+<input type="text" class="twikiInputField" name="search" value="%URLPARAM{ "search" encode="entity" }%" style="width: 95%" />
+</td><td>
 <input type="submit" class="twikiSubmit" value="Search" />
-<span class="twikiSmall">&nbsp;&nbsp; see all [[TWikiVariables][TWiki Variables]]</span>
+</td><td style="width: 90%">
+&nbsp;&nbsp; [[%TOPIC%][Clear]]
+</td></tr><tr><td>
+<select name="category"> <option>%URLPARAM{ "category" }%</option> <option></option> %CALCULATE{$LISTJOIN($sp, $LISTMAP(<option>$item</option>, %GET{twVarCategories}%))}% </select>
+</td><td>
+Category
+</td><td>
+&nbsp;&nbsp; <span class="twikiSmall">See all [[TWikiVariables][TWiki Variables]]</span>
+</td></tr></table>
 </form>
+
+%CALCULATE{$SET(found, %IF{ "defined 'search'" then="__Note:__ No variables found." else="%BR%" }%)}%
 %TOC{ title="Found:" }%
 %SEARCH{
-    "^\#Var[A-Z0-9];%URLPARAM{ "search" default="don't_show_anything" encode="quote" }%"
-    topic="Var*"
-    type="regex"
-    nonoise="on"
-    format="$percntINCLUDE{$web.$topic}$percnt"
+  "^\#Var[A-Z0-9];%IF{ "defined 'search'" then="$percntURLPARAM{ \"search\" encode=\"quote\" }$percnt" else="don't_show_anything" }%%IF{ "'%URLPARAM{ "category" encode="quote" }%'!=''" then=";\* Category:.*?%URLPARAM{ "category" encode="quote" }%" }%"
+ topic="Var*"
+ type="regex"
+ nonoise="on"
+ format="$percntINCLUDE{$web.$topic}$percnt"
+ footer="$percntCALCULATE{$SET(found, __Total:__ $IF($ntopics>1, $ntopics variables, $ntopics variable))}$percnt"
 }%
+
+%CALCULATE{$GET(found)}%
 
 __Related Topics:__ UserDocumentationCategory, TWikiVariables, SearchHelp
