@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352595838" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352596963" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 ---+!! Search Predefined TWiki Variables
 %STARTSECTION{categories}%%SET{ "twVarCategories" value="Administration, Applications/Components, Attachments/Files, Database/Forms, Date/Time, Development, Drawing/Charting, Editing/Content Update, Email/Notification, Export/Publishing, Formatting/Rendering, Import, Linking/Navigation, Searching/Listing, Security/Access Control, Skins/Templates, Tables/Spreadsheets, UI/Visualization, Users/Authentication, Workflow/Automation"}%%ENDSECTION{categories}%
@@ -10,7 +10,10 @@
 </td><td style="width: 90%">
 &nbsp;&nbsp; [[%TOPIC%][Clear]]
 </td></tr><tr><td>
-<select name="category"> <option>%URLPARAM{ "category" }%</option> <option></option> %CALCULATE{$LISTJOIN($sp, $LISTMAP(<option>$item</option>, %GET{twVarCategories}%))}% </select>
+<select name="category"> <option>%URLPARAM{ "category" }%</option>
+<option></option>
+%CALCULATE{$LISTJOIN($sp, $LISTMAP(<option>$item</option>, %GET{twVarCategories}%))}%
+</select>
 </td><td>
 Category
 </td><td>
@@ -18,7 +21,7 @@ Category
 </td></tr></table>
 </form>
 
-%CALCULATE{$SET(found, %IF{ "defined 'search'" then="__Note:__ No variables found." else="%BR%" }%)}%
+%CALCULATE{$SET(found, %IF{ "defined 'search'" then="__Note:__ No variables found." else="" }%)}%
 %TOC{ title="Found:" }%
 %SEARCH{
   "^\#Var[A-Z0-9];%IF{ "defined 'search'" then="$percntURLPARAM{ \"search\" encode=\"quote\" }$percnt" else="don't_show_anything" }%%IF{ "'%URLPARAM{ "category" encode="quote" }%'!=''" then=";\* Category:.*?%URLPARAM{ "category" encode="quote" }%" }%"
@@ -30,5 +33,8 @@ Category
 }%
 
 %CALCULATE{$GET(found)}%
+
+__Categories:__
+%CALCULATE{$LISTMAP([[%SCRIPTURL{view}%/%WEB%/%TOPIC%?search=;category=$NOP(%)ENCODE{$item}$NOP(%)][$item]], %GET{twVarCategories}%)}%
 
 __Related Topics:__ UserDocumentationCategory, TWikiVariables, SearchHelp
