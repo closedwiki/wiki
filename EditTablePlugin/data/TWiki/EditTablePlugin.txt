@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352184478" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352708896" format="1.1" version="$Rev$"}%
 ---+!! Edit Table Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -216,8 +216,9 @@ __Note:__ This is a pre-installed TWiki plugin. You should not need to install t
 |  Plugin Author: | Arthur Clemens, TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2008 Arthur Clemens;%BR% &copy; 2002-2012 TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]];%BR% &copy; 2002-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-07-11 |
+|  Plugin Version: | 2012-11-12 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2012-11-12: | TWikibug:Item7020: Categorize TWiki Variable EDITTABLE -- TWiki:Main.PeterThoeny |
 |  2012-11-06: | TWikibug:Item7025: Return to base page after saving changes. |
 |  2012-11-06: | TWikibug:Item7024: Make EditTable read-only when current site mode is readonly or slave |
 |  2012-07-11: | TWikibug:Item6900: Fix for warning: "my" variable %regex masks earlier declaration -- TWiki:Main.JudBarron |

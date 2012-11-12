@@ -23,7 +23,7 @@ package TWiki::Plugins::EditTablePlugin;
 use strict;
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-11-05';
+our $RELEASE = '2012-11-12';
 
 our $web;
 our $topic;
