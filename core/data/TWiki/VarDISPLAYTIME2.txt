@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293665017" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352707495" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarDISPLAYTIME2
 ---+++ DISPLAYTIME{"format"} -- formatted display time
@@ -6,4 +6,5 @@
    * Syntax: =%<nop>DISPLAYTIME{"format"}%=
    * [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarGMTIME2][Supported variables]]: =$seconds=, =$minutes=, =$hours=, =$day=, =$wday=, =$dow=, =$month=, =$mo=, =$year=, =$ye=, =$tz=, =$iso=, =$rcs=, =$http=, =$epoch=
    * Example: =%<nop>DISPLAYTIME{"$hou:$min"}%= expands to =%DISPLAYTIME{"$hou:$min"}%=
+   * Category: DateAndTimeVariables, SystemInformationVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarDISPLAYTIME][DISPLAYTIME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarGMTIME][GMTIME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSERVERTIME][SERVERTIME]]
