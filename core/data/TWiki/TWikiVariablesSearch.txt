@@ -1,7 +1,13 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352623376" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352681179" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 ---+!! <span style="font-size: 60%;">[[TWikiVariables][TWiki Variables]] &raquo;</span> Search Variables
-%STARTSECTION{categories}%%SET{ "twVarCategories" value="%SEARCH{ "INCLUDE.*[T]WikiVariablesCategoryBody" type="regex" topic="*Variables" nonoise="on" format="$topic" separator=", " }%"}%%ENDSECTION{categories}%
+%STARTSECTION{categories}%%SET{
+ "twVarCategories"
+ value="%SEARCH{ "INCLUDE.*[T]WikiVariablesCategoryBody" type="regex" topic="*Variables" nonoise="on" format="$topic" separator=", " }%"
+}%%SET{
+ "twVarCategoriesLinks"
+ value="%CALCULATE{$LISTMAP([[%SCRIPTURL{view}%/%WEB%/TWikiVariablesSearch?search=;category=$NOP(%)ENCODE{$item}$NOP(%)][$SUBSTITUTE($PROPERSPACE($SUBSTITUTE($item, Variables,)), And , &amp; )]], %GET{twVarCategories}%)}%"
+}%%ENDSECTION{categories}%
 <form name="searchvars" action="%SCRIPTURL{view}%/%WEB%/%TOPIC%" method="get">
 <table style="padding: 5px 10px; background-color: #f0f0f8; width: 100%;"><tr><td>
 <input type="text" class="twikiInputField" name="search" value="%URLPARAM{ "search" encode="entity" }%" style="width: 95%" />
@@ -12,7 +18,7 @@
 </td></tr><tr><td>
 <select name="category"> <option>%URLPARAM{ "category" }%</option>
 <option></option>
-%CALCULATE{$LISTJOIN($sp, $LISTMAP(<option>$item</option>, %GET{twVarCategories}%))}%
+%CALCULATE{$LISTJOIN($sp, $LISTMAP(<option value="$item">$SUBSTITUTE($PROPERSPACE($SUBSTITUTE($item, Variables,)), And , &amp; )</option>, %GET{twVarCategories}%))}%
 </select>
 </td><td>
 Category
@@ -35,6 +41,6 @@ Category
 %CALCULATE{$GET(found)}%
 
 __Categories:__
-%CALCULATE{$LISTMAP([[%SCRIPTURL{view}%/%WEB%/%TOPIC%?search=;category=$NOP(%)ENCODE{$item}$NOP(%)][$item]], %GET{twVarCategories}%)}%
+%GET{twVarCategoriesLinks}%
 
 __Related Topics:__ UserDocumentationCategory, TWikiVariables, SearchHelp
