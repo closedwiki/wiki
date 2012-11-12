@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1239664354" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352682003" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebSearch"}%
 ---+!! Search Help
 
@@ -36,9 +36,9 @@ You can embed a nicely [[FormattedSearch][formatted search]] in a topic by using
 
 [[TWikiVariables][TWiki Variables]] are text strings - =%<nop>VARIABLE%= or =%<nop>VARIABLE{ parameter="value" }%= - that expand into content whenever a topic is rendered for viewing. TWiki Variables are useful to create TWiki applications and workflows, but there are also variables for content creation such as =%<nop>TOC%= to show a table of content and =%<nop>INCLUDE{}%= to include another page.
 
-You can [[TWikiVariablesSearch][search TWiki Variables]].
+You can [[TWikiVariablesSearch][search TWiki Variables & list them by categories]].
 
----++ Search Preferences
+---++ Search Related Preferences
 
 TWikiPreferences defines these search preferences:
 
