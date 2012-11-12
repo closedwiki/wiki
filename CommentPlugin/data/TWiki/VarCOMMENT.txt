@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349702436" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352703605" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarCOMMENT
 ---+++ COMMENT{ _attributes_ } -- insert an edit box into the topic to easily add comments.
@@ -19,4 +19,5 @@
      | =emailto= | Send comment by email. Use comma "," to seperate multiple email addresses. This feature is disabled by default. To enable this feature, please set up "$TWiki::cfg{Plugins}{CommentPlugin}{EmailEnabled} = 1;". | |
 %ENDSECTION{"comment_attributes"}%
    * See CommentPlugin for more information
+   * Category: ApplicationsAndComponentsVariables, DatabaseAndFormsVariables, EditingAndContentUpdateVariables, WorkflowAndAutomationVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarHIDE][HIDE]], TWikiForms
