@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273807228" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352708434" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarENDBG
 ---+++ ENDBG -- end background color section
@@ -6,4 +6,5 @@
    * Syntax: =%<nop>REDBG% red background %<nop>ENDBG%=
    * Expands to: %REDBG% red background %ENDBG%
    * __Note:__ =%&lt;color&gt;BG%= section must end with =%<nop>ENDBG%=. If you want to switch from one background color to another one you first need to end the active background color with =%<nop>ENDBG%=, such as =%<nop>REDBG% some text %<nop>ENDBG% %<nop>GREENBG% more text %<nop>ENDBG%=.
+   * Category: FormattingAndRenderingVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENDCOLOR][VarENDCOLOR]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREDBG][VarREDBG]], [[TWikiPreferences#RenderingShortcuts][TWikiPreferences rendering shortcuts]], StandardColors

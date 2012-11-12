@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351237728" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352708512" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarENTITY
 ---+++ ENTITY{string} -- encode a string to HTML entities
@@ -13,4 +13,5 @@
    * __Notes:__
       * To protect against [[http://en.wikipedia.org/wiki/Cross-site_scripting][cross-site scripting]] (XSS), __always__ entity encode text intended for HTML input fields. This is especially true if text is received dynamically via URLPARAM or the like. %BR% Example: =&lt;input type="text" name="address" value="%<nop>ENTITY{any text}%" /&gt;=
       * =%<nop>ENTITY{string}%= is roughly equivalent to =%<nop>ENCODE{ "string" type="html" }%=, but the latter cannot handle strings that have double quotes embedded in it.
+   * Category: DevelopmentVariables, FormattingAndRenderingVariables, ExportAndPublishingVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENCODE][ENCODE]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarFORMFIELD][FORMFIELD]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarQUERYPARAMS][QUERYPARAMS]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarURLPARAM][URLPARAM]]

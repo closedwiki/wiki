@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351239885" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352708415" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarENCODE
 ---+++ ENCODE{string} -- encode a string to URL or HTML entities
@@ -25,4 +25,5 @@
       * Values of HTML input fields should be encoded as ="html"=. A shorter =%<nop>ENTITY{any text}%= can be used instead of the more verbose =%<nop>ENCODE{ "any text" type="html" }%=. %BR% Example: =&lt;input type="text" name="address" value="%<nop>ENTITY{any text}%" /&gt;=
       * Double quotes in strings must be escaped when passed into other TWiki variables.%BR% Example: =%<nop>SEARCH{ "%<nop>ENCODE{ "string with "quotes"" type="quotes" }%" noheader="on" }%=
       * Use =type="moderate"=, =type="safe"=, =type="entity"= or =type="html"= to protect user input from URL parameters and external sources against [[http://en.wikipedia.org/wiki/Cross-site_scripting][cross-site scripting]] (XSS). =type="html"= is the safest mode, but some TWiki applications might not work. =type="safe"= provides a safe middle ground, =type="moderate"= provides only moderate cross-site scripting protection.
+   * Category: ApplicationsAndComponentsVariables, DevelopmentVariables, ExportAndPublishingVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENTITY][ENTITY]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarFORMFIELD][FORMFIELD]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarQUERYPARAMS][QUERYPARAMS]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarURLPARAM][URLPARAM]]
