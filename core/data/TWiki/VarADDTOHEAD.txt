@@ -10,5 +10,5 @@
      | =text="..."= | HTML text to add to the head section | Mutually exclusive with =topic=""= |
      | =topic="Web.TopicName"= | Name of topic that contains the full HTML text to add to the head section, such as =topic="%USERSWEB%.MyCssTopic"= | Mutually exclusive with =text=""= |
      | =requires="..., ..."= | Comma-separated list of other IDs this one depends on | Optional |
-   * Category: AppsAndComponentsVariables, DevelopmentVariables
+   * Category: ApplicationsAndComponentsVariables, DevelopmentVariables
    * Example: =%<nop>ADDTOHEAD{ "MYBOX_CSS" text="&lt;style type=\"text/css\"&gt; .myBox { height: 22px; background-color: #AFB3C5; } &lt;/style&gt;" }%=
