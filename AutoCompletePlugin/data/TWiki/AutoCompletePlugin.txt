@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305423448" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352706975" format="1.1" version="$Rev$"}%
 ---+!! !AutoCompletePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -94,10 +94,11 @@ var SubmitJump = function(sType, aArgs) {
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.AndrewRJones |
-|  Copyright: | &copy; 2007-2008, TWiki:Main.AndrewRJones <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2007-2008, TWiki:Main.AndrewRJones <br /> &copy; 2007-2012 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Plugin Version: | 2011-05-14 |
+|  Plugin Version: | 2012-11-12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-11-12: | TWikibug:Item7020: Categorize TWiki Variable AUTOCOMPLETE -- TWiki:Main.PeterThoeny |
 |  2011-05-14: | TWikibug:Item6701: Small fix in Config.spec -- TWiki:Main.PeterThoeny |
 |  2011-05-01: | TWikibug:Item6701: Doc improvements -- TWiki:Main.PeterThoeny |
 |  2010-04-01 | TWikibug:Item6415: Added VarAUTOCOMPLETE variable documentation topic -- TWiki:Main.PeterThoeny |

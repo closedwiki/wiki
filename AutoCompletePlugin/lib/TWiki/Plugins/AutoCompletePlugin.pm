@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2007-2008 Andrew Jones, andrewjones86@googlemail.com
-# Copyright (C) 2007-2011 TWiki Contributors
+# Copyright (C) 2007-2012 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,8 +21,8 @@ use strict;
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC $id $doneYui $doneStyle @loadedData);
 
-$VERSION = '$Rev: 14277$';
-$RELEASE = '2010-05-14';
+$VERSION = '$Rev$';
+$RELEASE = '2012-11-12';
 $SHORTDESCRIPTION = 'Auto-complete input field with select options as you type ';
 
 $NO_PREFS_IN_TOPIC = 1;
