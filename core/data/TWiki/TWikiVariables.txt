@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301208112" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352683122" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %STARTSECTION{type="include"}%
 ---+ TWiki Variables
@@ -159,7 +159,7 @@ This TWiki: - %WIKIVERSION%
     casesensitive="on"
     type="regex"
     scope="topic"
-    format="$percntINCLUDE{$web.$topic}$percnt"
+    format="$percntINCLUDE{$web.$topic}$percnt ([[$topic][this topic]])"
     nonoise="on"
 }%
 

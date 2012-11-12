@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352681532" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352682451" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariablesSearch"}%
 ---+ TWiki Variables Category Body
 
@@ -14,7 +14,7 @@ This is a system topic used by TWikiVariablesSearch categories.
  topic="Var*"
  type="regex"
  nonoise="on"
- format="$percntINCLUDE{$web.$topic}$percnt"
+ format="$percntINCLUDE{$web.$topic}$percnt ([[$topic][this topic]])"
  footer="$percntCALCULATE{$SET(found, __Total:__ $IF($ntopics>1, $ntopics variables, $ntopics variable))}$percnt"
 }%
 
