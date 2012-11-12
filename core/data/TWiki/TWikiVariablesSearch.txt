@@ -1,20 +1,22 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352682502" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352689195" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 ---+!! <span style="font-size: 60%;">[[TWikiVariables][TWiki Variables]] &raquo;</span> Search Variables
-%STARTSECTION{categories}%%SET{
+%STARTINCLUDE%%STARTSECTION{categories}%%SET{
  "twVarCategories"
  value="%SEARCH{ "INCLUDE.*[T]WikiVariablesCategoryBody" type="regex" topic="*Variables" nonoise="on" format="$topic" separator=", " }%"
 }%%SET{
  "twVarCategoriesLinks"
  value="%CALCULATE{$LISTMAP([[%SCRIPTURL{view}%/%WEB%/TWikiVariablesSearch?search=;category=$NOP(%)ENCODE{$item}$NOP(%)][$SUBSTITUTE($PROPERSPACE($SUBSTITUTE($item, Variables,)), And , &amp; )]], %GET{twVarCategories}%)}%"
 }%%ENDSECTION{categories}%
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="scroll_box_engine" }%
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_start" boxstyle="width: auto;" }%
 <form name="searchvars" action="%SCRIPTURL{view}%/%WEB%/%TOPIC%" method="get">
-<table style="padding: 5px 10px; background-color: #f0f0f8; width: 100%;"><tr><td>
+<table style="width: 100%;"><tr><td>
 <input type="text" class="twikiInputField" name="search" value="%URLPARAM{ "search" encode="entity" }%" style="width: 95%" />
 </td><td>
 <input type="submit" class="twikiSubmit" value="Search" />
 </td><td style="width: 90%">
-&nbsp;&nbsp; [[%TOPIC%][Clear]]
+%IF{ "'%BASETOPIC%'!='TWikiVariables'" then="&nbsp;&nbsp; [[%TOPIC%][Clear]]" }%
 </td></tr><tr><td>
 <select name="category"> <option>%URLPARAM{ "category" }%</option>
 <option></option>
@@ -23,9 +25,10 @@
 </td><td>
 Category
 </td><td>
-&nbsp;&nbsp; <span class="twikiSmall">See all [[TWikiVariables][TWiki Variables]]</span>
+%IF{ "'%BASETOPIC%'!='TWikiVariables'" then="<span class=\"twikiSmall\" style=\"white-space: nowrap;\">&nbsp;&nbsp; See all [[TWikiVariables][TWiki Variables]]</span>" }%
 </td></tr></table>
 </form>
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_end" }%%STOPINCLUDE%
 
 %CALCULATE{$SET(found, %IF{ "defined 'search'" then="__Note:__ No variables found." else="" }%)}%
 %TOC{ title="Found:" }%
@@ -40,7 +43,9 @@ Category
 
 %CALCULATE{$GET(found)}%
 
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_start" boxstyle="width: auto;" }%
 __Categories:__
 %GET{twVarCategoriesLinks}%
+%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_end"}%
 
 __Related Topics:__ UserDocumentationCategory, TWikiVariables, TWikiVariablesQuickStart, SearchHelp
