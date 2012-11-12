@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352689198" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352695079" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %STARTSECTION{type="include"}%
 ---+ TWiki Variables
@@ -172,6 +172,40 @@ This TWiki: - %WIKIVERSION%
 }%
 
 %CALCULATE{$GET(found)}%
+
+---++ Documenting TWiki Variables
+
+This section is for people documenting TWiki variables of the TWiki core and of TWiki extensions.
+
+Each variable is documented in a topic named =Var&lt;name&gt;= in the %SYSTEMWEB% web. For example, a =%<nop>LIGHTSABER%= variable has a documentation topic called !VarLIGHTSABER. The topic is expected to have a specific format so that reports in this !TWikiVariables topic, in TWikiVariablesSearch and in category topics work as expected.
+
+Basic structure of a variable documentation topic:
+
+   * Parent set to !TWikiVariables
+   * An anchor named the same like the topic, such as =#VarLIGHTSABER=
+   * A =---+++= (level 3) heading with variable name, =--=, short description
+   * A bullet with description of the variable (optional)
+   * A =Syntax:= bullet with example syntax
+   * A =Parameters:= bullet with a table explaining the parameters (optional)
+   * A bullet or more with examples
+   * A =Note:= bullet with notes (optional)
+   * A =Category:= bullet with one or more of the TWiki variables categories:%BR% <noautolink> <tt> %GET{twVarCategories}% </tt> </noautolink>
+   * A =Related:= bullet with related links. Links have conditional IF so that links work properly locally in variable documentation topics and in the !TWikiVariables topic
+
+Example content of a =VarLIGHTSABER= topic:
+<verbatim>
+#VarLIGHTSABER
+---+++ LIGHTSABER -- laser sword to fend of naysayer
+   * The =%<nop>LIGHTSABER{}%= variable is handled by the LightsaberPlugin.
+   * Syntax: =%<nop>LIGHTSABER{ _parameters_ }%=
+   * Parameters: (optional)
+     | =color="..."= | Color: =red=, =glue=, =green= |
+     | =sound="..."= | Sound: =none=, =standard=, =loud= |
+   * Example: =%<nop>LIGHTSABER{ color="red" }%= shows a red Lightsaber
+   * Note: The Lightsaber is a fictional weapon in the Star Wars universe, a "laser sword."
+   * Category: FormattingAndRenderingVariables, UIAndVisualizationVariables
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarPLASM][PLASMA]], LightsaberPlugin
+</verbatim>
 
 %ENDSECTION{type="include"}%
 
