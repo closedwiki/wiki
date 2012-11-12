@@ -40,7 +40,7 @@ use strict;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-09-08';
+our $RELEASE = '2012-11-11';
 
 my $pluginInitialized = 0;
 my $initError         = '';
