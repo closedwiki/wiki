@@ -31,7 +31,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '2012-10-05';
+$RELEASE = '2012-11-12';
 
 $pluginName = 'DateTimePlugin';    # Name of this Plugin
 
