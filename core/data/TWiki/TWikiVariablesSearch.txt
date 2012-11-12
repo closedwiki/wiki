@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352689195" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352710772" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 ---+!! <span style="font-size: 60%;">[[TWikiVariables][TWiki Variables]] &raquo;</span> Search Variables
 %STARTINCLUDE%%STARTSECTION{categories}%%SET{
@@ -18,7 +18,7 @@
 </td><td style="width: 90%">
 %IF{ "'%BASETOPIC%'!='TWikiVariables'" then="&nbsp;&nbsp; [[%TOPIC%][Clear]]" }%
 </td></tr><tr><td>
-<select name="category"> <option>%URLPARAM{ "category" }%</option>
+<select name="category"> <option value="%URLPARAM{ "category" }%">%CALCULATE{$SUBSTITUTE($PROPERSPACE($SUBSTITUTE(%URLPARAM{ "category" }%, Variables,)), And , &amp; )}%</option>
 <option></option>
 %CALCULATE{$LISTJOIN($sp, $LISTMAP(<option value="$item">$SUBSTITUTE($PROPERSPACE($SUBSTITUTE($item, Variables,)), And , &amp; )</option>, %GET{twVarCategories}%))}%
 </select>
