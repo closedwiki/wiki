@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352695079" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352695209" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %STARTSECTION{type="include"}%
 ---+ TWiki Variables
@@ -204,7 +204,7 @@ Example content of a =VarLIGHTSABER= topic:
    * Example: =%<nop>LIGHTSABER{ color="red" }%= shows a red Lightsaber
    * Note: The Lightsaber is a fictional weapon in the Star Wars universe, a "laser sword."
    * Category: FormattingAndRenderingVariables, UIAndVisualizationVariables
-   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarPLASM][PLASMA]], LightsaberPlugin
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarPLASMA][PLASMA]], LightsaberPlugin
 </verbatim>
 
 %ENDSECTION{type="include"}%
