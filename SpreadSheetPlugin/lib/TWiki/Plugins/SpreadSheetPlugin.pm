@@ -25,7 +25,7 @@ package TWiki::Plugins::SpreadSheetPlugin;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-11-05';
+our $RELEASE = '2012-11-11';
 
 our $web;
 our $topic;
