@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352695209" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352697876" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %STARTSECTION{type="include"}%
 ---+ TWiki Variables
@@ -157,6 +157,7 @@ __Categories:__
 %INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_end" }%
 </td></tr></table>
 
+#AllVariables
 ---++!! List of all predefined variables
 
 This TWiki: - %WIKIVERSION%
@@ -173,6 +174,7 @@ This TWiki: - %WIKIVERSION%
 
 %CALCULATE{$GET(found)}%
 
+#DocumentingVariables
 ---++ Documenting TWiki Variables
 
 This section is for people documenting TWiki variables of the TWiki core and of TWiki extensions.
