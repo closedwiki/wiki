@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347953907" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352709430" format="1.1" version="$Rev$"}%
 ---+!! External Link Tracker Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -90,8 +90,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2012 Nuclearconst.net <br /> &copy; 2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-09-18 |
+|  Plugin Version: | 2012-11-12 |
 |  Change History: | <!-- versions below in reverse order --> |
+|  2012-11-12: | TWikibug:Item7020: Categorize TWiki Variable EXLINK |
 |  2012-09-18: | TWikibug:Item6935: Configure setting to open up external link in a new window or tab |
 |  2012-09-13: | TWikibug:Item6926: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.2 |

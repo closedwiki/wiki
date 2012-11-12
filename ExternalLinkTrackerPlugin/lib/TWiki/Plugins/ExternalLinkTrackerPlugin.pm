@@ -27,7 +27,7 @@ require TWiki::Plugins; # For the API version
 
 #==================================================================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-09-18';
+our $RELEASE = '2012-11-12';
 our $SHORTDESCRIPTION = 'Track and report on users clicking on external links';
 our $NO_PREFS_IN_TOPIC = 1;
 
