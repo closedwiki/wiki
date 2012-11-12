@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1348644795" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352705333" format="1.1" version="$Rev$"}%
 ---+!! Comment Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -263,12 +263,13 @@ Note that if you want to use the =action= template then you must also:
    * Set SHORTDESCRIPTION = Quickly post comments to a page without an edit/preview/save cycle.
 
 |  Plugin Author: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk inspired by the work of TWiki:Main.DavidWeller and TWiki:Main.PeterMasiar |
-|  Copyright: | &copy; 2004, TWiki:Main.CrawfordCurrie; %BR% &copy; 2009 TWiki:Main.SopanShewale; %BR% &copy; 2004-2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2004, TWiki:Main.CrawfordCurrie; %BR% &copy; 2009 TWiki:Main.SopanShewale; %BR% &copy; 2004-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | %$VERSION% |
+|  Plugin Version: | 2012-11-11 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-09-26: | TWikibug:Item6945 Send comment to multiple email addresses. |
-|  2012-09-26: | TWikibug:Item6944 Get script URL with TWiki::Func::getMasterWebScriptUrl. |
+|  2012-11-11: | TWikibug:Item7020: Categorize TWiki Variable COMMENT -- TWiki:Main.PeterThoeny |
+|  2012-09-26: | TWikibug:Item6945: Send comment to multiple email addresses. |
+|  2012-09-26: | TWikibug:Item6944: Get script URL with TWiki::Func::getMasterWebScriptUrl. |
 |  2011-06-16: | TWikibug:Item6754: Fix for action comment template missing %<nop>ENDACTION% -- TWiki:Main.JohnRouillard |
 |  2011-06-12: | TWikibug:Item6725: Change global package variables from "use vars" to "our"; adding NO_PREFS_IN_TOPIC in plugin package -- TWiki:Main.PeterThoeny |
 |  2011-03-28: | TWikibug:Item6672 - doc improvements: Adding link to HIDE |
