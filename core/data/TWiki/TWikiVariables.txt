@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352697876" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352702833" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %STARTSECTION{type="include"}%
 ---+ TWiki Variables
@@ -189,7 +189,8 @@ Basic structure of a variable documentation topic:
    * A bullet with description of the variable (optional)
    * A =Syntax:= bullet with example syntax
    * A =Parameters:= bullet with a table explaining the parameters (optional)
-   * A bullet or more with examples
+   * An =Example:= bullet or two with examples
+   * An =Expands to:= bullet with expanded variable (optional)
    * A =Note:= bullet with notes (optional)
    * A =Category:= bullet with one or more of the TWiki variables categories:%BR% <noautolink> <tt> %GET{twVarCategories}% </tt> </noautolink>
    * A =Related:= bullet with related links. Links have conditional IF so that links work properly locally in variable documentation topics and in the !TWikiVariables topic
@@ -204,6 +205,7 @@ Example content of a =VarLIGHTSABER= topic:
      | =color="..."= | Color: =red=, =glue=, =green= |
      | =sound="..."= | Sound: =none=, =standard=, =loud= |
    * Example: =%<nop>LIGHTSABER{ color="red" }%= shows a red Lightsaber
+   * Expands to: =%LIGHTSABER{ color="red" }%=
    * Note: The Lightsaber is a fictional weapon in the Star Wars universe, a "laser sword."
    * Category: FormattingAndRenderingVariables, UIAndVisualizationVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarPLASMA][PLASMA]], LightsaberPlugin
