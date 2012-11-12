@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349572014" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352705799" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarDASHBOARD
 ---+++ DASHBOARD -- build a dashboard with banner and boxes
@@ -15,4 +15,5 @@
      %BR% =%<nop>DASHBOARD{ section="box_end" }%=
      %BR% =...=
      %BR% =%<nop>DASHBOARD{ section="dashboard_end" }%=
+   * Category: AdministrationVariables, ApplicationsAndComponentsVariables, DevelopmentVariables, FormattingAndRenderingVariables, UIAndVisualizationVariables
    * Related: TWikiDashboardAddOn
