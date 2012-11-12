@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1348130808" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352704933" format="1.1" version="$Rev$"}%
 ---+!! Chart Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
