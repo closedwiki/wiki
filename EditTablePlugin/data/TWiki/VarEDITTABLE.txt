@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352184478" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352708319" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarEDITTABLE
 ---+++ EDITTABLE{ _attributes_ } -- edit TWiki tables using edit fields and other input fields
@@ -23,4 +23,5 @@
      =%<nop>EDITTABLE{ format="| text, 20 | select, 1, one, two, three |" changerows="on" }%= %BR%
      =| <nop>*Name*<nop> | <nop>*Type*<nop> |= %BR%
      =| Foo | two |=
+   * Category: DatabaseAndFormsVariables, EditingAndContentUpdateVariables, TablesAndSpreadsheetsVariables
    * Related: See EditTablePlugin for more details
