@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1348827697" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352703638" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarCONTENTMODE
 ---+++ CONTENTMODE{web="WEB"} -- content mode
@@ -9,5 +9,5 @@
    * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* |
      | =web= | The name of the web. | The current web |
+   * Category: SystemInformationVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSITENAME][SITENAME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarMASTERWEBSCRIPTURL][MASTERWEBSCRIPTURL]], ReadOnlyAndMirrorWebs, MetadataRepository
-

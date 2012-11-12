@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273851326" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352703542" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarCARET
 ---+++ CARET -- caret symbol
@@ -6,4 +6,5 @@
    * Type: Preference variable - TWikiRenderingShortcut.
    * Syntax: =%<nop>CARET%=
    * Expands to: %CARET%
+   * Category: FormattingAndRenderingVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarBB][BB]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarBB2][BB2]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarBB3][BB3]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarBB4][BB4]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarBR][BR]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarBULLET][BULLET]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarVBAR][VBAR]], [[TWikiPreferences#RenderingShortcuts][TWikiPreferences rendering shortcuts]]
