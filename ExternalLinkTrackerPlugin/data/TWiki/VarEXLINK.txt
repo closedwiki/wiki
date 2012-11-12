@@ -1,8 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347499653" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352708559" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarEXLINK
 ---+++ EXLINK{ID} -- add an external link identified by an ID
    * The ID is the link identifier. The external links with IDs are defined in %INCLUDE{ExternalLinkTrackerDefinitionTemplate}%. External link actions are tracked, and [[ExternalLinkTrackerStatistics][statistics can be viewed]]. The EXLINK variables is handled by the ExternalLinkTrackerPlugin.
    * Syntax: =%<nop>EXLINK{ID}%=
    * Example: =%<nop>EXLINK{TWiki}%= - creates an external link like [[http://twiki.org/][TWiki.org%ICON{external}%]]
+   * Category: LinkingAndNavigationVariables
    * Related: ExternalLinkTrackerPlugin, %INCLUDE{ExternalLinkTrackerDefinitionTemplate}%, ExternalLinkTrackerStatistics
