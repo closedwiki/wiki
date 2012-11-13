@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1308282927" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352789699" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="CommentPlugin"}%
 ---+!! Templates for CommentPlugin
 
@@ -20,7 +20,7 @@ Put your local templates into %SYSTEMWEB%.UserCommentsTemplate (create if it doe
 ---+++ Templates used in rest of file
 Generic prompt box used by other templates
 <verbatim>
-%TMPL:DEF{promptbox}%<div class="commentPlugin commentPluginPromptBox"><table border="0" cellpadding="0" cellspacing="0"><tr valign="middle"><td><textarea %DISABLED% rows="%rows|3%" cols="%cols|70%" name="comment" class="twikiInputField" wrap="soft" onfocus="if(this.value=='%MESSAGE%')this.value=''" onblur="if(this.value=='')this.value='%MESSAGE%'">%MESSAGE%</textarea></td><td>&nbsp;<input %DISABLED% type="submit" value="%button|Add comment%" class="twikiButton" /></td></tr></table></div><!--/commentPlugin-->%TMPL:END%
+%TMPL:DEF{promptbox}%<div class="commentPlugin commentPluginPromptBox" style="margin: 5px 0;">%IF{ "istopic '%SYSTEMWEB%.ScrollBoxAddOn'" then="$percntINCLUDE{ \"%SYSTEMWEB%.ScrollBoxAddOn\" section=\"scroll_box_engine\" }$percnt $percntINCLUDE{ \"%SYSTEMWEB%.ScrollBoxAddOn\" section=\"static_box_start\" boxstyle=\"padding: 7px; width: auto; background-color: #f6f6fb;\" }$percnt" }% <div><textarea %DISABLED% rows="%rows|5%" cols="%cols|80%" name="comment" class="twikiTextarea" wrap="soft" style="width: 100%" onfocus="if(this.value=='%MESSAGE%')this.value=''" onblur="if(this.value=='')this.value='%MESSAGE%'">%MESSAGE%</textarea></div><div style="padding: 5px 0 0 0;"><input %DISABLED% type="submit" value="%button|Add comment%" class="twikiButton" /></div> %IF{ "istopic '%SYSTEMWEB%.ScrollBoxAddOn'" then="$percntINCLUDE{ \"%SYSTEMWEB%.ScrollBoxAddOn\" section=\"static_box_end\" }$percnt" }%</div><!--/commentPlugin-->%TMPL:END%
 </verbatim>
 Short comment, signed and dated
 <verbatim>
