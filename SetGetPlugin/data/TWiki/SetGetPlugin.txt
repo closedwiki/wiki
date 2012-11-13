@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349923696" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352770512" format="1.1" version="$Rev$"}%
 ---+!! !SetGetPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -254,8 +254,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2010-2012 TWiki:Main.PeterThoeny <br /> &copy; 2010-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public Licen:se]]) |
-|  Plugin Version: | 2012-10-11 |
+|  Plugin Version: | 2012-11-12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-11-12: | TWikibug:Item7032: GET variable with format parameter |
 |  2012-10-11: | TWikibug:Item6978: SetGetPlugin::Core::_savePersistentVar() may fail at Data::Dumper-&gt;Dump(). "require Data::Dumper;" line added before that. -- TWiki:Main.HideyoImazu |
 |  2012-09-25: | TWikibug:Item6943: Add REST interface |
 |  2012-01-06: | TWikibug:Item6828: Removing write to persistent if already exists, and adding data dump -- TWiki:Main.AaronLWalker |
