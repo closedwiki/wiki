@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1270702735" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352795309" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarGAUGE
 ---+++ GAUGE{ _attributes_ } -- create graphical images of gauges, typically used for dashboards
@@ -17,4 +17,5 @@
    * Examples:
       * =%<nop>GAUGE{ type="tambar" name="t1" scale="0, 10, 20, 40" value="27" }%= shows <img src="%PUBURLPATH%/%WEB%/GaugePlugin/tambar1.gif" width="60" height="16" alt="27" />
       * =%<nop>GAUGE{ type="trend" name="t2" value="-3" }%= shows <img src="%PUBURLPATH%/%WEB%/GaugePlugin/trenddn.gif" alt="down trend" width="16" height="16" />
+   * Category: ChartingAndDrawingVariables, FormattingAndRenderingVariables, UIAndVisualizationVariables
    * Related: GaugePlugin, GaugePluginTests
