@@ -57,7 +57,7 @@ sub VarDUMP
     if( defined $params->{format} ) {
         $format = $params->{format};
     } else {
-        $format = "key: \$key, value: \$value <br />";
+        $format = "name: \$name, value: \$value <br />";
     }
 
     if( defined $params->{separator} ) {
@@ -69,10 +69,12 @@ sub VarDUMP
     $sep =~ s/\$n/\n/g;
     while( my ($k, $v) = each %{$this->{PersistentVars}} ) {
         $hold = $format;
-        $hold =~ s/\$key/$k/g;
+        $hold =~ s/\$name/$k/g;
+        $hold =~ s/\$key/$k/g; # undocumented for compatibility
         $hold =~ s/\$value/$v/g;
         $value .= "$hold$sep";
     }
+    $value =~ s/$sep$//;
 
     return $value;
 }
@@ -86,17 +88,36 @@ sub VarGET
     return '' unless( $name );
 
     my $value = '';
+    my $isDefined = 0;
+    my $isPersistent = 0;
+    my $useDefault = 0;
     if( defined $this->{VolatileVars}{$name} ) {
+        $isDefined = 1;
         $value = $this->{VolatileVars}{$name};
         TWiki::Func::writeDebug( "-   set volatile -> $value" ) if $this->{Debug};
 
     } elsif( defined $this->{PersistentVars}{$name} ) {
+        $isDefined = 1;
+        $isPersistent = 1;
         $value = $this->{PersistentVars}{$name};
         TWiki::Func::writeDebug( "-   get persistent -> $value" ) if $this->{Debug};
 
     } elsif( defined $params->{default} ) {
         $value = $params->{default};
-    } 
+        $useDefault = 1;
+    }
+
+    if( defined $params->{format} && ! $useDefault ) {
+        my $v = $value;
+        $value = $params->{format};
+        $value =~ s/\$name/$name/g;
+        $value =~ s/\$value/$v/g;
+        $value =~ s/\$isdefined/$isDefined/g;
+        $value =~ s/\$isset/_isTrue( $v )/ge;
+        $value =~ s/\$ispersistent/$isPersistent/g;
+        $value = TWiki::Func::decodeFormatTokens( $value );
+    }
+
     return $value;
 }
 
@@ -123,6 +144,17 @@ sub VarSET
         $this->{VolatileVars}{$name} = $value;
     }
     return '';
+}
+
+# =========================
+sub _isTrue {
+    my( $value ) = @_;
+    return 0 unless( defined( $value ) );
+    $value =~ s/^\s*(.*?)\s*$/$1/gi;
+    $value =~ s/off//gi;
+    $value =~ s/no//gi;
+    $value =~ s/false//gi;
+    return ( $value ) ? 1 : 0;
 }
 
 # =========================

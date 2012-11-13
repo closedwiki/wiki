@@ -26,7 +26,7 @@ package TWiki::Plugins::SetGetPlugin;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-09-25';
+our $RELEASE = '2012-11-12';
 
 our $web;
 our $topic;
