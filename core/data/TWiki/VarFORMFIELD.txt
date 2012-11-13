@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351238498" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352795171" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarFORMFIELD
 ---+++ FORMFIELD{"fieldname"} -- renders a field in the form attached to some topic
@@ -15,4 +15,5 @@
      | =encode="html"= | Encode special characters into HTML entities. If a FORMFIELD is passed into an HTML form field it should be encoded as ="html"=. Additional encodings available: =encode="quote"=, =encode="moderate"=, =encode="safe"=, =encode="entity"= and =encode="url"=. See [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENCODE][ENCODE]] for details. | =""= (no encoding) |
    * Example: =%<nop>FORMFIELD{"<nop>ProjectName" topic="Projects.<nop>SushiProject" default="(not set)" alttext="<nop>ProjectName field not found"}%= 
    * Example: =&lt;input type="text" name="Address" value="%<nop>FORMFIELD{ "Address" encode="html" }%" /&gt;=
+   * Category: DatabaseAndFormsVariables, DevelopmentVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENCODE][ENCODE]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENTITY][ENTITY]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarMETASEARCH][METASEARCH]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSEARCH][SEARCH]], FormattedSearch, QuerySearch, SearchHelp
