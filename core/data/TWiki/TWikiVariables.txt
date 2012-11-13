@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352702833" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352783058" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %STARTSECTION{type="include"}%
 ---+ TWiki Variables
@@ -202,8 +202,9 @@ Example content of a =VarLIGHTSABER= topic:
    * The =%<nop>LIGHTSABER{}%= variable is handled by the LightsaberPlugin.
    * Syntax: =%<nop>LIGHTSABER{ _parameters_ }%=
    * Parameters: (optional)
-     | =color="..."= | Color: =red=, =glue=, =green= |
-     | =sound="..."= | Sound: =none=, =standard=, =loud= |
+     | *Parameter* | *Description* | *Default* |
+     | =color="..."= | Color: =red=, =glue=, =green= | =white= |
+     | =sound="..."= | Sound: =none=, =standard=, =loud= | =none= |
    * Example: =%<nop>LIGHTSABER{ color="red" }%= shows a red Lightsaber
    * Expands to: =%LIGHTSABER{ color="red" }%=
    * Note: The Lightsaber is a fictional weapon in the Star Wars universe, a "laser sword."
