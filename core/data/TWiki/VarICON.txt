@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1262475753" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352797408" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarICON
 ---+++ ICON{"name"} -- small documentation graphic or icon of common attachment types
@@ -18,4 +18,5 @@
       * =%<nop>ICON{"bubble" format="$description icon is defined in $web.$topic"}%= returns: %ICON{"bubble" format="$description icon is defined in $web.$topic"}%
    * Graphic samples: %ICON{"arrowbright"}% =arrowbright=, %ICON{"bubble"}% =bubble=, %ICON{"choice-yes"}% =choice-yes=, %ICON{"hand"}% =hand=
    * File type samples: %ICON{"bmp"}% =bmp=, %ICON{"doc"}% =doc=, %ICON{"gif"}% =gif=, %ICON{"hlp"}% =hlp=, %ICON{"html"}% =html=, %ICON{"mp3"}% =mp3=, %ICON{"pdf"}% =pdf=, %ICON{"ppt"}% =ppt=, %ICON{"txt"}% =txt=, %ICON{"xls"}% =xls=, %ICON{"xml"}% =xml=, %ICON{"zip"}% =zip=
+   * Category: FormattingAndRenderingVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarICONURL][ICONURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarICONURLPATH][ICONURLPATH]], %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics

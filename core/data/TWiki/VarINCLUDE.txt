@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1338535194" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352797317" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarINCLUDE
 ---+++ INCLUDE{"page"} -- include other topic or web page
@@ -28,4 +28,5 @@
       * The ability to INCLUDE arbitrary URLs, such as =%<nop>INCLUDE{"http://www.google.com/"}%= is turned *off* by default. To turn this on, ask your TWiki administrator to enable the ={INCLUDE}{AllowURLs}= flag in the _Security setup_ section of configure.
       * !JavaScript in included web pages is filtered out as a security precaution per default. Disable filtering with =raw= or =disableremovescript= parameter.
    * Examples: See IncludeTopicsAndWebPages
+   * Category: ApplicationsAndComponentsVariables, DevelopmentVariables, ImportVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarBASETOPIC][BASETOPIC]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarBASEWEB][BASEWEB]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarINCLUDINGWEB][INCLUDINGWEB]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSTARTINCLUDE][STARTINCLUDE]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSTOPINCLUDE][STOPINCLUDE]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSTARTSECTION][STARTSECTION]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENDSECTION][ENDSECTION]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarTOC2][TOC]], IncludeTopicsAndWebPages, ParameterizedVariables

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352797216" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarICONURL
 ---+++ ICONURL{"name"} -- URL of small documentation graphic or icon
@@ -8,5 +8,5 @@
       * =%<nop>ICONURL{"arrowbright"}%= returns <nop>%ICONURL{"arrowbright"}%
       * =%<nop>ICONURL{"novel.pdf"}%= returns <nop>%ICONURL{"novel.pdf"}%
       * =%<nop>ICONURL{"/queen/boheme.mp3"}%= returns <nop>%ICONURL{"/queen/boheme.mp3"}%
+   * Category: FormattingAndRenderingVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarICONURLPATH][ICONURLPATH]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarICON][ICON]], %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
-

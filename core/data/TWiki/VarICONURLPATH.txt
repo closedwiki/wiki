@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352797216" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarICONURLPATH
 ---+++ ICONURLPATH{"name"} -- URL path of small documentation graphic or icon
@@ -8,5 +8,5 @@
       * =%<nop>ICONURLPATH{"locktopic"}%= returns %ICONURLPATH{"locktopic"}%
       * =%<nop>ICONURLPATH{"eggysmell.xml"}%= returns %ICONURLPATH{"eggysmell.xml"}%
       * =%<nop>ICONURLPATH{"/doc/xhtml.xsl"}%= returns %ICONURLPATH{"/doc/xhtml.xsl"}%
+   * Category: FormattingAndRenderingVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarICONURL][ICONURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarICON][ICON]], %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
-
