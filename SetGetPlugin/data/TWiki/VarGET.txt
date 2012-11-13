@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352770512" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352770875" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarGET
 ---+++ GET{"name"} -- get a variable
@@ -10,4 +10,5 @@
      | =format="..."= | Format with supported variables: %BB% =$name= for variable name %BB% =$value= for variable value %BB% =$isdefined= expanding to =1= or =0= depending if variable is defined or not %BB% =$isset= expanding to =1= or =0= depending if variable is logically true or false %BB% =$ispersistent= expanding to =1= or =0= depending if variable is persistent or not %BB% all %SYSTEMWEB%.FormatTokens such as =$dollar=, =$n=, =$percnt=. | ="$value"= |
      | =default="..."= | Text shown if variable is not defined, e.g. not found. This parameter overrides the format parameter. | =""= (empty string) |
    * Example: =%<nop>GET{"lunch"}%= returns =Sushi= if the following has been previously set:%BR% =%<nop>SET{ "lunch" value="Sushi" }%= %IF{"'%INCLUDINGTOPIC%'!='SetGetPlugin'" then=" - [[SetGetPlugin#SetGetExamples][see more examples]]" }%
+   * Category: ApplicationsAndComponentsVariables, DevelopmentVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarIF][IF]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables' OR '%INCLUDINGTOPIC%'='SetGetPlugin'" then="#"}%VarSET][SET]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables' OR '%INCLUDINGTOPIC%'='SetGetPlugin'" then="#"}%VarSETGETDUMP][SETGETDUMP]], %IF{"'%INCLUDINGTOPIC%'!='SetGetPlugin'" then="SetGetPlugin, "}%SpreadSheetPlugin#FuncGET
