@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1346830739" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352795906" format="1.1" version="$Rev$"}%
 ---+!! Headlines Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -197,8 +197,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.MichaelDaum |
 |  Copyright: | &copy; 2002-2012 Peter Thoeny, [[http://twiki.org/][TWiki.org]]%BR% &copy; 2005-2007 Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-09-05 |
+|  Plugin Version: | 2012-11-13 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2012-11-13: | TWikibug:Item7020: Categorize TWiki Variable |
 |  2012-09-05: | TWikibug:Item6837: Doc fixes |
 |  2011-07-17: | TWikibug:Item6764: Add VarHEADLINES variable documentation; doc improvements; setting NO_PREFS_IN_TOPIC |
 |  2011-07-08: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
