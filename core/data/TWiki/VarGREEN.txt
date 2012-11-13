@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273807283" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352795424" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarGREEN
 ---+++ GREEN -- start green colored text
@@ -6,4 +6,5 @@
    * Syntax: =%<nop>GREEN% green text %<nop>ENDCOLOR%=
    * Expands to: %GREEN% green text %ENDCOLOR%
    * __Note:__ =%&lt;color&gt;%= text must end with =%<nop>ENDCOLOR%=. If you want to switch from one color to another one you first need to end the active color with =%<nop>ENDCOLOR%=, e.g. write =%<nop>RED% some text %<nop>ENDCOLOR% %<nop>GREEN% more text %<nop>ENDCOLOR%=.
+   * Category: FormattingAndRenderingVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENDCOLOR][ENDCOLOR]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREDBG][REDBG]], [[TWikiPreferences#RenderingShortcuts][TWikiPreferences rendering shortcuts]], StandardColors

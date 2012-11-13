@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1275533057" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352795383" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarGMTIME2
 ---+++ GMTIME{"format"} -- formatted GM time
@@ -23,6 +23,6 @@
      | =$epoch= | Number of seconds since 00:00 on 1st January, 1970 | %GMTIME{"$epoch"}% |
    * Variables can be shortened to 3 characters
    * Example: =%<nop>GMTIME{"$day $month, $year - $hour:$min:$sec"}%= expands to =%GMTIME{"$day $month, $year - $hour:$min:$sec"}%=
-   * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+   * Note: When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+   * Category: DateAndTimeVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarDISPLAYTIME][DISPLAYTIME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarGMTIME][GMTIME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREVINFO2][REVINFO]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSERVERTIME][SERVERTIME]]
-
