@@ -164,6 +164,12 @@ sub _requestHTTP {
     unless ($TEST_SOCKET_HTTP) {
         eval "use LWP";
         unless( $@ ) {
+            unless ( defined $params->{agent} ) {
+                '$Rev$'=~/([0-9]+)/;
+                my $revstr=$1;
+                $params->{agent} = 'TWiki::Net/'.$revstr." libwww-perl/$LWP::VERSION";
+            }
+
             return $this->_requestUsingLWP( $method, $url, $headers, $params, $content );
         }
     }
@@ -240,10 +246,13 @@ sub _requestHTTP {
             # TODO: Should we also add Proxy-Authorization as in _requestUsingLWP?
         }
 
-        '$Rev$'=~/([0-9]+)/;
-        my $revstr=$1;
+        unless ( defined $params->{agent} ) {
+            '$Rev$'=~/([0-9]+)/;
+            my $revstr=$1;
+            $params->{agent} = 'TWiki::Net/'.$revstr;
+        }
 
-        $req .= 'User-Agent: TWiki::Net/'.$revstr."\r\n";
+        $req .= "User-Agent: $params->{agent}\r\n";
         if( $headers ) {
             while( my $key = shift @$headers ) {
                 my $val = shift( @$headers );
@@ -327,7 +336,7 @@ sub _requestUsingLWP {
     my $initParams = {map {
         $_ => $params->{$_}
     } grep {exists $params->{$_}} qw(
-        cookie_jar load_address max_redirect max_size
+        agent cookie_jar load_address max_redirect max_size
         parse_head requests_redirectable ssl_opts timeout
     )};
 
@@ -348,10 +357,6 @@ sub _requestUsingLWP {
     if( $TWiki::cfg{PROXY}{Username} && $TWiki::cfg{PROXY}{Password} ) {
         $request->proxy_authorization_basic( $TWiki::cfg{PROXY}{Username}, $TWiki::cfg{PROXY}{Password} );
     }
-
-    '$Rev$'=~/([0-9]+)/;
-    my $revstr=$1;
-    $request->header( 'User-Agent' => 'TWiki::Net/'.$revstr." libwww-perl/$LWP::VERSION" );
 
     return $ua->request($request);
 }

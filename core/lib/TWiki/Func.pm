@@ -206,13 +206,16 @@ the relevant RFC. Any proxy set in =configure= is honored.
 
 Optional parameters may be supplied:
    * =\@headers= (an array ref): Additional HTTP headers of form 'name1',
-     'value1', 'name2', 'value2'. Do not add a User-Agent header, it will be
-     added.
+     'value1', 'name2', 'value2'.
+     User-Agent header is set to "TWiki::Net/### libwww-perl/#.##" by default,
+     where ### is the revision number of TWiki::Net and #.## is the version
+     of LWP.
    * =\%params= (a hash ref): Additional options.
 
 Below is the list of available =%params=. See CPAN:LWP::UserAgent for more
 details.
 | *Name* | *Usage* |
+| =agent= | =&#61;&gt; $useragent= ("User-Agent:" header) |
 | =cookie_jar= | =&#61;&gt; $cookies= |
 | =credentials= | =&#61;&gt; [$netloc, $realm, $uname, $pass]= |
 | =handlers= | =&#61;&gt; {$phase &#61;&gt; \&cb, ...}= \
