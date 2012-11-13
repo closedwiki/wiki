@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352705333" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352789885" format="1.1" version="$Rev$"}%
 ---+!! Comment Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -265,8 +265,9 @@ Note that if you want to use the =action= template then you must also:
 |  Plugin Author: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk inspired by the work of TWiki:Main.DavidWeller and TWiki:Main.PeterMasiar |
 |  Copyright: | &copy; 2004, TWiki:Main.CrawfordCurrie; %BR% &copy; 2009 TWiki:Main.SopanShewale; %BR% &copy; 2004-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-11-11 |
+|  Plugin Version: | 2012-11-12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-11-12: | TWikibug:Item6967: Better layout of default comment box -- TWiki:Main.PeterThoeny |
 |  2012-11-11: | TWikibug:Item7020: Categorize TWiki Variable COMMENT -- TWiki:Main.PeterThoeny |
 |  2012-09-26: | TWikibug:Item6945: Send comment to multiple email addresses. |
 |  2012-09-26: | TWikibug:Item6944: Get script URL with TWiki::Func::getMasterWebScriptUrl. |
