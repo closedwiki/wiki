@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310171207" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352795850" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarHEADLINES
 ---+++ HEADLINES{"url"} -- show RSS and ATOM feeds in TWiki pages
@@ -26,4 +26,5 @@
              - =$category=: the article category (item.category) |
      | [[HeadlinesPlugin#Syntax_Rules][Details]] ||
    * Example: =%<nop>HEADLINES{ "http://slashdot.org/slashdot.rdf" header="*[<nop>[$link][$title]]:* $description" format="$t* [<nop>[$link][$title]]" limit="4" }%= shows the latest Slashdot news in bullet list format
+   * Category: ApplicationsAndComponentsVariables, ImportVariables
    * Related: HeadlinesPlugin
