@@ -33,7 +33,7 @@ use MIME::Base64 qw(encode_base64);
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-09-14';
+our $RELEASE = '2012-11-13';
 
 my $installWeb;
 my $debug;
