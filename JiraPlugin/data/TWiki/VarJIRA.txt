@@ -1,8 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349483452" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352868629" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarJIRA
 ---+++ JIRA -- display JIRA issues using JQL search
    * JIRA issues can be displayed as a TWiki table, based on a JQL (JIRA Query Language) query. This variable is handled by the JiraPlugin.
    * Syntax: =%<nop>JIRA{"JIRA URL" jql="..."}%=
+   * Category: ApplicationsAndComponentsVariables
    * Example: =%<nop>JIRA{"http://example.com/jira" jql="project = XYZ and status in ('In Progress')"}%=
    * Related: JiraPlugin
