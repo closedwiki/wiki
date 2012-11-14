@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1276063850" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352868578" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarJQTAB
 ---+++ JQTAB -- start a JQuery tab within a tab pane
@@ -8,4 +8,5 @@
      | *Parameter:* | *Description:* | *Comment:* |
      | ="..."= | Name of tab, shown as tab label | Required, no default |
    * Example: See [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarJQTABPANE][JQTABPANE]]
+   * Category: ApplicationsAndComponentsVariables, FormattingAndRenderingVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarJQENDTAB][JQENDTAB]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarJQENDTABPANE][JQENDTABPANE]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarJQTABPANE][JQTABPANE]], JQueryPlugin

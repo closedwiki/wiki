@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1276063560" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352868551" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarJQTABPANE
 ---+++ JQTABPANE -- start a JQuery tab pane
@@ -13,4 +13,5 @@
      %BR% =Tab 2 content...=
      %BR% =%<nop>JQENDTAB%=
      %BR% =%<nop>JQENDTABPANE%=
+   * Category: ApplicationsAndComponentsVariables, FormattingAndRenderingVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarJQENDTAB][JQENDTAB]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarJQENDTABPANE][JQENDTABPANE]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarJQTAB][JQTAB]], JQueryPlugin
