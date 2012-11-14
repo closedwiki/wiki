@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350644012" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352886024" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarMETASEARCH
 ---+++ METASEARCH -- special search of meta data
@@ -16,5 +16,6 @@
    * Example: =%<nop>METASEARCH{type="topicmoved" web="%<nop>WEB%" topic="%<nop>TOPIC%" title="This topic used to exist and was moved to: "}%=
    * Example: You may want to use this in WebTopicViewTemplate and WebTopicNonWikiTemplate:<br /> =%<nop>METASEARCH{type="parent" web="%<nop>WEB%" topic="%<nop>TOPIC%" title="Children: "}%=
    * Example: =%<nop>METASEARCH{type="field" name="Country" value="China"}%=
+   * Note: METASEARCH is deprecated in favour of the new and much more powerful query type search. See [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSEARCH][SEARCH]] and QuerySearch.
+   * Category: SearchingAndListingVariables, SystemInformationVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSEARCH][SEARCH]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarMETA][META]]
-   * __%X% Note:__ METASEARCH is deprecated in favour of the new and much more powerful query type search. See [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSEARCH][SEARCH]] and QuerySearch.

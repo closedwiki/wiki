@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1276665111" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352885821" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarMAKETEXT
 ---+++ MAKETEXT -- creates text using TWiki's <nop>I18N infrastructure
@@ -22,3 +22,5 @@
       * Ampersands (<code>&amp;</code>) followed by one letter (one of =a...z=, =A...Z= -- say, =X=) in the translatable string will be translated to <code>&lt;span class='twikiAccessKey'&gt;X&lt;/span&gt;</code>. This is used to implement access keys. If you want to write an actual amperstand that stays just before a letter, write two consecutive amperstands (<code>&amp;&amp;</code>): they will be transformed in just one.
       * Translatable string starting with underscores (<code>_</code>) are reserved. You *must not* use translatable phrases starting with an underscore.
       * Make sure that the translatable string is _constant_. Specially, do *not* include <code>%<nop>VARIABLES%</code> inside the translatable strings (since they will get expanded *before* the <code>%<nop>MAKETEXT{...}%</code> itself is handled).
+   * Category: DevelopmentVariables, FormattingAndRenderingVariables
+   * Related: TWiki:Codev.UserInterfaceInternationalisation (on TWiki.org)

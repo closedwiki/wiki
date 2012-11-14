@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277957639" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352886103" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarMETA
 ---+++ META -- displays meta-data
@@ -28,6 +28,7 @@
                     =separator="..."=: Separator between parents; default =" &gt; "=. %BR% \
                     =topic="..."=: Get meta info of "Topic" or "Web.Topic"; default ="%<nop>BASEWEB%.%<nop>BASETOPIC%"=. \
                   | Generates the parent link |
-   * __Attention:__ The base topic, not the current topic, is used if =%<nop>META{}%= is placed in an included topic. Add a =topic="%<nop>WEB%.%<nop>TOPIC%"= parameter if you need meta info of the current topic.
-   * __Note:__ [[FormatTokens][Formatting tokens]] can be used for =newline=, =prefix=, =format=, =suffix= and =separator= options, such as =separator="$n   * "=
+   * Attention: The base topic, not the current topic, is used if =%<nop>META{}%= is placed in an included topic. Add a =topic="%<nop>WEB%.%<nop>TOPIC%"= parameter if you need meta info of the current topic.
+   * Note: [[FormatTokens][Formatting tokens]] can be used for =newline=, =prefix=, =format=, =suffix= and =separator= options, such as =separator="$n   * "=
+   * Category: AttachmentsAndFilesVariables, SearchingAndListingVariables, SystemInformationVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarMETASEARCH][METASEARCH]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarPARENTTOPIC][PARENTTOPIC]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSEARCH][SEARCH]], FormattedSearch

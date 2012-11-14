@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349324322" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352885952" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarMEREPO
 ---+++ MDREPO -- retrieve data from metadata repository
@@ -29,4 +29,5 @@
      | =exclude="..."= | Comma separated list of record IDs to be excluded. You can use regular expression. If you specify Trash\d*, then Trash, Trash1, Trash2, ... are exluded but !LightTrash and !TrashBag are not excluded | _none_ |
    * Example: <code>%<nop>MDREPO{"webs" filter="^A" format="| $_ | $admin | $site |"}%</code> %BR%
      This would show the metadata of webs whose names start with A.
-   * See: MetadataRepository
+   * Category: AdministrationVariables, SystemInformationVariables
+   * Related: MetadataRepository
