@@ -1,0 +1,101 @@
+%META:TOPICINFO{author="TWikiContributor" date="1352874649" format="1.1" version="$Rev$"}%
+---+!! !JqPlotPlugin
+<!--
+One line description, required for extensions repository catalog.
+   * Set SHORTDESCRIPTION = jqPlot !JavaScript library for TWiki
+-->
+%SHORTDESCRIPTION%
+
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div>
+</sticky>
+
+---++ Usage
+
+<verbatim>
+%JQPLOT%
+<div id='chart1' style='height:280px; width: 500px;'></div>
+<script>
+$.jqplot ('chart1', [[3,7,9,1,4,6,8,2,5]]);
+</script>
+</verbatim>
+
+%ATTACHURL%/chart1.png
+
+More examples are found in the [[http://www.jqplot.com/deploy/dist/examples/][official jqPlot website]].
+
+---++ Description
+
+[[http://www.jqplot.com/][jqPlot]] is a "pure javascript plotting" library, and this TWiki plugin bundles the package with easy setup using =%<nop>JQPLOT%= tag.
+
+Since jqPlot depends on the jQuery !JavaScript library, JQueryPlugin must be installed for JqPlotPlugin to work.
+
+When a =%<nop>JQPLOT%= tag is present, the necessary !JavaScript and CSS references are added to the =&lt;head&gt;= of the page. The =%<nop>JQPLOT%= tag itself is expanded into an empty string. Even if the tag happens to be used multiple times, the required references are added only once.
+
+In order to use jqPlot plugins (for bar charts, pie charts, axis labels, etc.), the plugin names should be added to the =%<nop>JQPLOT%= tag.
+
+<verbatim>
+%JQPLOT{"barRenderer, pieRenderer, categoryAxisRenderer"}%
+ or
+%JQPLOT{"barRenderer"}%
+%JQPLOT{"pieRenderer"}%
+%JQPLOT{"categoryAxisRenderer"}%
+</verbatim>
+
+The above will add the =&lt;script&gt;= tags to the =&lt;head&gt;= as below:
+
+<verbatim>
+<script type="text/javascript" src=".../plugins/jqplot.barRenderer.min.js"></script>
+<script type="text/javascript" src=".../plugins/jqplot.pieRenderer.min.js"></script>
+<script type="text/javascript" src=".../plugins/jqplot.categoryAxisRenderer.min.js"></script>
+</verbatim>
+
+All the common references such as =jquery.jqplot.min.js= (which would be added by the empty =%<nop>JQPLOT%=) are also added automatically.
+
+---++ Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
+      * See the [[http://twiki.org/cgi-bin/view/Plugins/BuildContribInstallationSupplement][installation supplement]] on TWiki.org for more information.
+
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/JqPlotPllugin.txt== | Plugin topic |
+        | ==data/TWiki/VarJQPLOT.txt== | JQPLOT variable documentation topic |
+        | ==lib/TWiki/Plugins/JqPlotPlugin.pm== | Plugin Perl module |
+        | ==pub/TWiki/JqPlotPlugin/*.png== | Image files |
+        | ==pub/TWiki/JqPlotPlugin/jquery.jqplot.*== | jqPlot library package |
+      * Set the ownership of the extracted directories and files to the webserver user.
+      * Install the dependencies.
+
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
+      * Configure additional plugin settings in the __Extensions__ section if needed.
+      * Test if the installation was successful using the example above.
+
+---++ Plugin Info
+
+Many thanks to the following sponsors for supporting this work:
+   * Acknowledge any sponsors here
+
+|  Plugin Author(s): | TWiki:Main.MahiroAndo |
+|  Copyright: | &copy; 2012 TWiki:Main.MahiroAndo %BR% &copy; 2012 TWiki:TWiki.TWikiContributor |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Plugin Version: | 2012-11-14 jquery.jqplot.1.0.4r1121 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-11-14: | Initial release with jquery.jqplot.1.0.4r1121 |
+|  Dependencies: | JQueryPlugin |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/JqPlotPlugin |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/JqPlotPluginDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/JqPlotPluginAppraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
+
+%META:FILEATTACHMENT{name="chart1.png" attachment="chart1.png" attr="" comment="" date="1352864462" path="chart1.png" size="21045" user="TWikiContributor" version="1"}%

@@ -1,0 +1,3 @@
+# Dependencies for JqPlotPlugin
+TWiki::Plugins,>=1.1,perl,Required
+JQueryPlugin,>=1.4,perl,Required
