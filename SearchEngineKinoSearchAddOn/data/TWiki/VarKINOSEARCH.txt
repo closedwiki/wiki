@@ -1,13 +1,11 @@
-
-
----+++ KINOSEARCH tag
-If SearchEngineKinoSearchPlugin is enabled, you will be able to use the KINOSEARCH tag to search indexed topics and attachments:
-   * =%<nop>KINOSEARCH{'Search String' format='Formatting string'}%=
-   
-format takes the following variables to place content.
-   * $icon - An icon to display filetype when showing attachments
-   * $match - The Twiki Name of the page being displayed
-   * $locked - Show if a page is locked
-   * $texthead - Summary text
-   
-See: SearchEngineKinoSearchAddOn and SearchEngineKinoSearchPlugin
+%META:TOPICINFO{author="TWikiContributor" date="1352870344" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarKINOSEARCH
+---+++ KINOSEARCH{...} -- search indexed topics and attachments
+   * The =%<nop>KINOSEARCH{...}%= variable is handled by the SearchEngineKinoSearchPlugin.
+   * Syntax: =%<nop>KINOSEARCH{ "search string" format="..." }%=
+   * Parameters:
+     | ="..."= | Search string |
+     | =format="..."= | Format of a search hit. Supported variables: %BB% =$icon= - An icon to display file type when showing attachments %BB% =$match= - The TWiki Name of the page being displayed %BB% =$locked= - Show if a page is locked %BB% =$texthead= - Summary text |
+   * Category: SearchingAndListingVariables
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSEARCH][SEARCH]], SearchEngineKinoSearchAddOn, SearchEngineKinoSearchPlugin
