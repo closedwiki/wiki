@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (c) 2007-2008 Michael Daum, http://michaeldaumconsulting.com
-# Copyright (c) 2007-2011 TWiki Contributors. All Rights Reserved.
+# Copyright (c) 2007-2012 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -22,7 +22,7 @@ package TWiki::Plugins::JQueryPlugin;
 use strict;
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-07-08';
+our $RELEASE = '2012-11-13';
 our $SHORTDESCRIPTION = 'jQuery <nop>JavaScript library for TWiki';
 our $NO_PREFS_IN_TOPIC = 1;
 our $doneInit = 0;

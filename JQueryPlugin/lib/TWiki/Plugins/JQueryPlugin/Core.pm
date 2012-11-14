@@ -1,7 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2006-2007 Michael Daum http://wikiring.de
-# Copyright (c) 2007-2011 TWiki Contributors. All Rights Reserved.
+# Copyright (c) 2007-2012 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 #
