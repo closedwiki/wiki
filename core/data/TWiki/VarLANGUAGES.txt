@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352871917" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarLANGUAGES
 ---+++ LANGUAGES -- list available TWiki languages
@@ -15,5 +15,5 @@
      | *Variable* | *Meaning* |
      | =$langname= | language's name, as informed by the translators |
      | =$langtag= | language's tag. Ex: =en=, =pt-br=, etc. |
+   * Category: AdministrationVariables, SystemInformationVariables
    * Example: =&lt;select&gt;%<nop>LANGUAGES{format="&lt;option $marker value='$langtag'>$langname&lt;/option&gt;" selection="%<nop>LANGUAGE%"}%&lt;/select&gt;= creates an option list of the available languages with the current language selected
-
