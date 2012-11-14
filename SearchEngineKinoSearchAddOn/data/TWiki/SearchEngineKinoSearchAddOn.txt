@@ -1,14 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1255083152" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352871197" format="1.1" version="$Rev$"}%
+---+!! Kino Search Engine Add-On
 <!--
-This topic is part of the documentation for SearchEngineKinoSearchAddOn and is
-automatically generated from Subversion. Do not edit it! Your edits
-will be lost the next time the topic is uploaded!
-
-If you want to report an error in the topic, please raise a report at
-http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/SearchEngineKinoSearchAddOn
+   Contributions to this add-on are appreciated. Please update the add-on page at
+   http://twiki.org/cgi-bin/view/Plugins/SearchEngineKinoSearchAddOn or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/SearchEngineKinoSearchAddOnDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
-
----+ Kino Search Engine Add-On
 %TOC%
 
 [[http://www.rectangular.com/kinosearch/][KinoSearch]], A Perl search library,  implementation of Lucene (Java implementation) search engine. This is the base of this indexed search engine for TWiki. With <nop>KinoSearch you create an index over all webs including attachments like Word, Excel and PDF. Based on that you get a really fast search over all topics and the attachments. You need this add-on
@@ -34,7 +31,7 @@ If you have enabled the SearchEngineKinoSearchPlugin, you can use the rest handl
 The following form submits text to the ==kinosearch== script. The installation instructions are detailed below.
 
 <form action="%SCRIPTURLPATH%/kinosearch%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%/">
-   <input type="text" name="search" size="32" /> <input type="submit" value="Search text" /> | [[%TWIKIWEB%.KinoSearch][Help]]
+   <input type="text" name="search" size="32" /> <input type="submit" value="Search text" /> | [[%SYSTEMWEB%.KinoSearch][Help]]
 </form>
 
 %INCLUDE{"VarKINOSEARCH"}%
@@ -359,10 +356,12 @@ text seems to be O.K.
 
    * Set SHORTDESCRIPTION = Fast indexed SEARCH of topics and attachments (eg Word, Excel, PDF and PPT)
 
-|  Add-on Author: | TWiki:Main/MarkusHesse, TWiki:Main.SvenDowideit and TWiki:Main.SopanShewale ([[http://www.twiki.net][Twiki, Inc]]) |
-| Add-on Version: | 18169 (9 Oct 2009) |
-|  Update note | If you update from an older version to v1.15 or higher, remove the old index and create a complete new one with kinoindex|
+|  Add-on Author: | TWiki:Main/MarkusHesse, TWiki:Main.SvenDowideit, TWiki:Main.SopanShewale |
+|  Add-on Version: | 2012-11-13 |
+|  Copyright: | &copy; 2007-2009 TWiki:Main.DavidGuest %BR% &copy; 2009 [[http://www.twiki.net][Twiki, Inc]] %BR% &copy; 2009-2012 TWiki:TWiki.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-11-13: | TWikibug:Item7020: Categorize TWiki Variable -- TWiki:Main.PeterThoeny |
 | 9 Oct 2009: | version 1.19, added support to index documents of type .docx, .pptx, .xlsx|
 |^| Bug:Item6177:Attachments with issues to stringify are added into work area, they are skipped from indexing next time|
 | 20 Aug 2008:  | v 1.18, added Integrated SEARCH, SearchEngineKinoSearchPlugin, restHandlers, updated code and tests -- TWiki:Main.SvenDowideit |
@@ -400,7 +399,6 @@ text seems to be O.K.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
+__Related Topics:__ VarKINOSEARCH, SearchEngineKinoSearchPlugin, %SYSTEMWEB%.VarSEARCH
 
-
-
-%META:FILEATTACHMENT{name="KinoSearchResult.jpg" attachment="KinoSearchResult.jpg" attr="" comment="" date="1208389508" path="KinoSearchResult.jpg" size="112106" stream="KinoSearchResult.jpg" tmpFilename="" user="BaseUserMapping_333" version="1"}%
+%META:FILEATTACHMENT{name="KinoSearchResult.jpg" attachment="KinoSearchResult.jpg" attr="h" comment="" date="1208389508" path="KinoSearchResult.jpg" size="112106" stream="KinoSearchResult.jpg" tmpFilename="" user="BaseUserMapping_333" version="1"}%

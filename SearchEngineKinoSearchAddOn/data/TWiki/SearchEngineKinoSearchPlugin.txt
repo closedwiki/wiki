@@ -1,5 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1255012449" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352871200" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
+<!--
+   Contributions to this plugin are appreciated. Please update the add-on page at
+   http://twiki.org/cgi-bin/view/Plugins/SearchEngineKinoSearchAddOn or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/SearchEngineKinoSearchAddOnDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
 
 _A plugin wrapper around the SearchEngineKinoSearchAddOn_
 
@@ -37,7 +43,7 @@ __TODO:__ while search works, the template it uses isn't useable as its tuned fo
 %SCRIPTURL{rest}%/SearchEngineKinoSearchPlugin/search
 
 <form action="%SCRIPTURL{rest}%/SearchEngineKinoSearchPlugin/search/%INTURLENCODE{"%INCLUDINGWEB%"}%/">
-   <input type="text" name="search" size="32" /> <input type="submit" value="Search text" /> | [[%TWIKIWEB%.KinoSearch][Help]]
+   <input type="text" name="search" size="32" /> <input type="submit" value="Search text" /> | [[%SYSTEMWEB%.KinoSearch][Help]]
 </form>
 
 ---++ Monitoring the Indexing log
@@ -62,7 +68,7 @@ If installed correctly, please see the log files below
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = _A plugin wrapper around the SearchEngineKinoSearchAddOn_
 
    * Debug plugin: (See output in =data/debug.txt=)
@@ -84,23 +90,23 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.DavidGuest, TWiki:Main.SvenDowideit and TWiki:Main.SopanShewale ([[http://www.twiki.net][Twiki, Inc]])|
-|  Copyright: | &copy; 2009, TWiki:Main.DavidGuest and [[http://www.twiki.net][Twiki, Inc]] |
-|  Additional Copyright: | &copy; 2007, TWiki:Main.DavidGuest |
+|  Plugin Author: | TWiki:Main.DavidGuest, TWiki:Main.SvenDowideit, TWiki:Main.SopanShewale |
+|  Copyright: | &copy; 2007-2009 TWiki:Main.DavidGuest %BR% &copy; 2009 [[http://www.twiki.net][Twiki, Inc]] %BR% &copy; 2009-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 08 Oct 2009 (V1.300) |
+|  Plugin Version: | 2012-11-13 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-11-13: | TWikibug:Item7020: Categorize TWiki Variable KINOSEARCH -- TWiki:Main.PeterThoeny |
 | 08 Oct 2009: | Version 1.3 Added Index/Update Indexing Log feature to the plugin|
 |  20 Aug 2008: | Version 1.2, brought Plugin into SearchEngineKinoSearchAddOn package, and svn, and added restHandlers for indexing & searching - TWiki:Main.SvenDowideit |
 |  09 Apr 2008: | Version 1.1, Added auto index updater code |
 |  07 Apr 2008: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | %TWIKIWEB%.SearchEngineKinoSearchAddOn, CPAN:File::Tail|
+|  Other Dependencies: | %SYSTEMWEB%.SearchEngineKinoSearchAddOn, CPAN:File::Tail|
 |  Perl Version: | 5.005 |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences, SearchEngineKinoSearchAddOn
+__Related Topics:__ VarKINOSEARCH, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences, SearchEngineKinoSearchAddOn, %SYSTEMWEB%.VarSEARCH

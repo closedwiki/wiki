@@ -12,8 +12,8 @@ use vars qw(
         $webName $topicName $enableOnSaveUpdates
     );
 
-$VERSION = '$Rev: 18164 $';
-$RELEASE = '1.3';
+$VERSION = '$Rev:$';
+$RELEASE = '2012-11-13';
 $SHORTDESCRIPTION = 'Kino Search Plugin';
 $NO_PREFS_IN_TOPIC = 1;
 $pluginName = 'SearchEngineKinoSearchPlugin';
