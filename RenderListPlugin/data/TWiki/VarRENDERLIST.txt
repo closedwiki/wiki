@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1191140974" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352959734" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarRENDERLIST
 ---+++ RENDERLIST -- render bullet lists in a variety of formats
@@ -12,4 +12,5 @@
      =&nbsp;  * [<nop>[Sales.WestCoastTeam][Sales]]= %BR%
      =&nbsp;     * [<nop>[Sales.EastCoastTeam][East Coast]]= %BR%
      =&nbsp;     * [<nop>[Sales.WestCoastTeam][West Coast]]=
+   * Category: FormattingAndRenderingVariables
    * Related: RenderListPlugin
