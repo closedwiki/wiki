@@ -99,7 +99,7 @@ sub init_edit {
     my $metaPreferences = '';
 
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'edit' );
-    TWiki::UI::checkWritable( $session );
+    TWiki::UI::checkWebWritable( $session );
     if ( $store->webExists( $webName.'/'.$topic ) ) {
         throw TWiki::OopsException(
             'attention',

@@ -1677,7 +1677,7 @@ sub saveTopicText {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
     my $session = $TWiki::Plugins::SESSION;
-    TWiki::UI::checkWritable($session, $web);
+    TWiki::UI::checkWebWritable($session, $web);
 
     # check access permission
     unless( $ignorePermissions ||
@@ -2574,7 +2574,7 @@ sub registerRESTHandler {
 =pod
 
 #RegisterExternalHTTPHandler
----+++ registerRESTHandler( \&fn )
+---+++ RegisterExternalHTTPHandler( \&fn )
 
 Should only be called from initPlugin.
 
@@ -2833,37 +2833,34 @@ sub getSiteName {
 ---+++ getContentMode( $web ) -> $contentMode
 
 Returns the content mode of the specified $web.
+Please read ReadOnlyAndMirrorWebs about content mode.
 
+*Since:* TWiki::Plugins::VERSION 1.5
 =cut
 
 sub getContentMode {
-    my $web = shift;
+#    my $web = shift;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    $TWiki::Plugins::SESSION->getContentMode($web);
+    $TWiki::Plugins::SESSION->getContentMode($_[0]);
 }
 
 =pod
 
-#GetMasterWebScriptUrl
----+++ getMasterWebScriptUrl( $web, $topic, $script ) -> $url
+#WebWritable
+---+++ webWritable( $web ) -> $boolean
 
-This is equivalent to getScriptUrl() about the master web.
-It returns the URL of the specified script on the master site of the $web
-processing the $topic.
-If $topic is undefined, it returns the master web's URL.
+Checks if the web is wriable on this site - if it's master or local.
+Returns true if it's writable. Returns false otherwise.
 
+*Since:* TWiki::Plugins::VERSION 1.5
 =cut
 
-sub getMasterWebScriptUrl {
-    my ($web, $topic, $script) = @_;
+sub webWritable {
+#    my $web = shift;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    my $session = $TWiki::Plugins::SESSION;
-    $web ||= $session->{webName}; # $web must be defined
-    my $url = $session->MASTERWEBSCRIPTURL({_DEFAULT => $script}, undef, $web );
-    $url .= '/' . $topic if ( defined($topic) );
-    return $url;
+    return $TWiki::Plugins::SESSION->webWritable($_[0]);
 }
 
 =pod
@@ -3709,6 +3706,13 @@ $TWiki::Plugins::VERSION 1.4
    * =afterAttachmentSaveHandler(\%attrHash, $topic, $web, $error, $meta)= -- added =$meta=
    * =beforeAttachmentSaveHandler(\%attrHash, $topic, $web, $meta)= == added =$meta=
    * =writeLog( $action, $extra, $web, $topic, $user )=
+
+$TWiki::Plugins::VERSION 1.5
+---++++ Func.pm
+   * =postExternalResource(  $url, $text, \@headers, \%params )=
+   * =registerExternalHTTPHandler( \&fn )=
+   * =getContentMode( $web )=
+   * =webWritable( $web )=
 
 =cut
 

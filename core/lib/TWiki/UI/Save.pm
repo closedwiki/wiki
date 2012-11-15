@@ -92,7 +92,7 @@ sub buildNewTopic {
             params => [ $script ]);
     }
 
-    TWiki::UI::checkWritable( $session );
+    TWiki::UI::checkWebWritable( $session );
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'save' );
     if ( $store->webExists( $webName.'/'.$topic ) ) {
         throw TWiki::OopsException(

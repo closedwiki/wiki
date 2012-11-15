@@ -1341,6 +1341,14 @@ $TWiki::cfg{Operators}{If} = [ 'TWiki::If::OP_allows', 'TWiki::If::OP_defined', 
 # directories.
 # $TWiki::cfg{Mdrepo}{WebRecordRequired} = 1;
 
+#---+ Read-only and mirror webs (TWiki.ReadOnlyAndMirrorWebs)
+# scripts to be executed on the master site of the web
+$TWiki::cfg{ScriptOnMaster}{edit} = 1;
+$TWiki::cfg{ScriptOnMaster}{save} = 1;
+$TWiki::cfg{ScriptOnMaster}{attach} = 1;
+$TWiki::cfg{ScriptOnMaster}{upload} = 1;
+$TWiki::cfg{ScriptOnMaster}{rename} = 1;
+
 #---+ Plugins
 # *PLUGINS* Marker used by bin/configure script - do not remove!
 # The plugins listed below were discovered by searching the @INC path for

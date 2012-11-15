@@ -233,7 +233,6 @@ BEGIN {
         INTURLENCODE      => \&INTURLENCODE_deprecated,
         LANGUAGES         => \&LANGUAGES,
         MAKETEXT          => \&MAKETEXT,
-        MASTERWEBSCRIPTURL=> \&MASTERWEBSCRIPTURL,
 	MDREPO            => \&MDREPO,
         META              => \&META,
         METASEARCH        => \&METASEARCH,
@@ -1158,7 +1157,7 @@ Returns the URL to a TWiki script, providing the web and topic as
      url-encoded and added to the url. The special parameter name '#' is
      reserved for specifying an anchor. e.g.
      <tt>getScriptUrl('x','y','view','#'=>'XXX',a=>1,b=>2)</tt> will give
-     <tt>.../view/x/y?a=1&b=2#XXX</tt>
+     <tt>.../view/x/y?a=1&b=2#XXX</tt> %BR%
 
 If $absolute is set, generates an absolute URL. $absolute is advisory only;
 TWiki can decide to generate absolute URLs (for example when run from the
@@ -1176,47 +1175,111 @@ If either the web or the topic is defined, will generate a full url
 (including web and topic). Otherwise will generate only up to the script 
 name. An undefined web will default to the main web name.
 
+The returned URL takes ReadOnlyAndMirrorWebs into account.
+If the specified =$web= is slave on this site, with the scripts
+=edit=, =save=, =attach=, =upload=, and =rename=, this method returns
+the URLs on the master site because it does not make sense to execute
+those scripts on the master site of the web.
+
+Even with the other scripts, you may need to get the URLs on the master site.
+You can get those URLs by providing =$master =&gt; 1= as a name value pair.
 =cut
 
 sub getScriptUrl {
     my( $this, $absolute, $script, $web, $topic, @params ) = @_;
 
-    $absolute ||= ($this->inContext( 'command_line' ) ||
-                   $this->inContext( 'rss' ) ||
-                   $this->inContext( 'absolute_urls' ));
+    if( $web || $topic ) {
+        if ( !$web && $topic !~ /[.\/]/ ) {
+            $web = $this->{webName};
+        }
+        else {
+            ($web, $topic) = $this->normalizeWebTopicName( $web, $topic );
+        }
+    }
+    # the above is needed here because $web is crucial
+
+    # check if $master => X exists in @params and makes @params1 excluding it
+    my $ofMaster = 0;
+    my @params1;
+    my $i = 0;
+    while ( $i < @params ) {
+        if ( $params[$i] eq '$master' ) {
+            $ofMaster = 1 if ( $params[$i + 1] );
+        }
+        else {
+            push(@params1, @params[$i, $i+1]);
+        }
+        $i += 2;
+    }
+
+    # determine if it's of the master and get the information of the master
+    my ($contentMode, $master);
+    if ( $web ) {
+        ($contentMode, $master) = $this->modeAndMaster($web);
+        if ( $contentMode eq 'slave' ) {
+            $ofMaster = 1 if ( $TWiki::cfg{ScriptOnMaster}{$script} );
+                # even if $script is null, no disaster happens
+            $ofMaster = 0 unless ( $master->{webScriptUrlTmpl} );
+                # In case $master->{webScriptUrlTmpl} is undef, which should
+                # not happen, resort to 'not of master'
+        }
+    }
+    else {
+        $ofMaster = 0;
+    }
 
     # SMELL: topics and webs that contain spaces?
 
     my $url;
-    if( defined $TWiki::cfg{ScriptUrlPaths} && $script) {
-        $url = $TWiki::cfg{ScriptUrlPaths}{$script};
+    if ( $ofMaster ) {
+        $script ||= 'view';
+            # A web is specified explicitly or implicitly.
+            # In that case, a URL having the web cannot be script neutral.
+        $url = $master->{webScriptUrlTmpl};
+        if ( $script eq 'view' && $master->{webViewUrl} ) {
+            $url = $master->{webViewUrl};
+        }
+        else {
+            my $suffix = $master->{scriptSuffix} || '';
+            $url =~ s:^(.*)//:$1/$script$suffix/:;
+        }
+        $url .= urlEncode( '/'.$topic );
+        $url .= _make_params(0, @params1);
     }
-    unless( defined( $url )) {
-        $url = $TWiki::cfg{ScriptUrlPath};
-        if( $script ) {
-            $url .= '/' unless $url =~ /\/$/;
-            $url .= $script;
-            if ( rindex($url, $TWiki::cfg{ScriptSuffix}) !=
-                 ( length($url) - length($TWiki::cfg{ScriptSuffix}) )
-               ) {
-                $url .= $TWiki::cfg{ScriptSuffix} if $script;
+    else {
+        # if $ofMaster is true, the URL needs to be absolute regardless.
+        # So absolute checking is done here.
+        $absolute ||= ($this->inContext( 'command_line' ) ||
+                       $this->inContext( 'rss' ) ||
+                       $this->inContext( 'absolute_urls' ));
+
+        if( defined $TWiki::cfg{ScriptUrlPaths} && $script) {
+            $url = $TWiki::cfg{ScriptUrlPaths}{$script};
+        }
+        unless( defined( $url )) {
+            $url = $TWiki::cfg{ScriptUrlPath};
+            if( $script ) {
+                $url .= '/' unless $url =~ /\/$/;
+                $url .= $script;
+                if ( rindex($url, $TWiki::cfg{ScriptSuffix}) !=
+                     ( length($url) - length($TWiki::cfg{ScriptSuffix}) )
+                   ) {
+                    $url .= $TWiki::cfg{ScriptSuffix} if $script;
+                }
             }
         }
-    }
 
-    if( $absolute && $url !~ /^[a-z]+:/ ) {
-        # See http://www.ietf.org/rfc/rfc2396.txt for the definition of
-        # "absolute URI". TWiki bastardises this definition by assuming
-        # that all relative URLs lack the <authority> component as well.
-        $url = $this->{urlHost}.$url;
-    }
+        if( $absolute && $url !~ /^[a-z]+:/ ) {
+            # See http://www.ietf.org/rfc/rfc2396.txt for the definition of
+            # "absolute URI". TWiki bastardises this definition by assuming
+            # that all relative URLs lack the <authority> component as well.
+            $url = $this->{urlHost}.$url;
+        }
 
-    if( $web || $topic ) {
-        ( $web, $topic ) = $this->normalizeWebTopicName( $web, $topic );
-
-        $url .= urlEncode( '/'.$web.'/'.$topic );
-
-    $url .= _make_params(0, @params);
+        if( $web || $topic ) {
+            $url .= urlEncode( '/'.$web.'/'.$topic );
+            $url .= _make_params(0, @params1);
+        }
     }
 
     return $url;
@@ -4625,18 +4688,31 @@ sub SCRIPTNAME {
     return $_[0]->{request}->action;
 }
 
-sub SCRIPTURL {
-    my ( $this, $params, $topic, $web ) = @_;
+sub scriptUrlSub {
+    my ( $this, $params, $absolute ) = @_;
     my $script = $params->{_DEFAULT} || '';
+    my $web = $params->{web};
+    my $topic = $params->{topic};
+    $topic = '' if ( !defined($topic) );
+    my @optParams;
+    if ( isTrue($params->{master}) ) {
+        push(@optParams, '$master', 1);
+    }
+    my $url = $this->getScriptUrl($absolute, $script, $web, $topic, @optParams);
+    if ( $web && !$topic ) {
+        $url = substr($url, 0, -length($cfg{HomeTopicName})-1);
+    }
+    return $url;
+}
 
-    return $this->getScriptUrl( 1, $script );
+sub SCRIPTURL {
+#    my ( $this, $params, $topic, $web ) = @_;
+    return scriptUrlSub($_[0], $_[1], 1);
 }
 
 sub SCRIPTURLPATH {
-    my ( $this, $params, $topic, $web ) = @_;
-    my $script = $params->{_DEFAULT} || '';
-
-    return $this->getScriptUrl( 0, $script );
+#    my ( $this, $params, $topic, $web ) = @_;
+    return scriptUrlSub($_[0], $_[1], 0);
 }
 
 sub PUBURL {
@@ -4649,29 +4725,6 @@ sub PUBURLPATH {
     return $this->getPubUrl(0);
 }
 
-sub MASTERWEBSCRIPTURL {
-    my ( $this, $params, $topic, $web ) = @_;
-    if ( $params->{web} ) {
-        $web = $params->{web};
-    }
-    my $master;
-    if ( $web eq $this->{webName} ) {
-        $master = $this->{master};
-    }
-    else {
-        $master = ($this->modeAndMaster($web))[1];
-    }
-    return '' unless ( $master );
-    my $url    = $master->{webScriptUrlTmpl};
-    return '' unless ( $url );
-    my $script = $params->{_DEFAULT} || 'view';
-    return $master->{webViewUrl}
-        if ( $script eq 'view' && $master->{webViewUrl} );
-    my $suffix = $master->{scriptSuffix} || '';
-    $url =~ s:^(.*)//:$1/$script$suffix/:;
-    return $url;
-}
-
 sub getContentMode {
     my ( $this, $web ) = @_;
     if ( !defined($web) || $web eq '' || $web eq $this->{webName} ) {
@@ -4680,6 +4733,12 @@ sub getContentMode {
     else {
         return ($this->modeAndMaster($web))[0];
     }
+}
+
+sub webWritable {
+    my ( $this, $web ) = @_;
+    my $mode = $this->getContentMode($web);
+    return ($mode eq 'slave' || $mode eq 'read-only') ? 0 : 1;
 }
 
 sub CONTENTMODE {

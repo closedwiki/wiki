@@ -74,7 +74,7 @@ sub attach {
     my $isHideChecked = '';
     my $users         = $session->{users};
 
-    TWiki::UI::checkWritable( $session );
+    TWiki::UI::checkWebWritable( $session );
 
     TWiki::UI::checkAccess( $session, $webName, $topic, 'CHANGE',
         $session->{user} );
@@ -210,7 +210,7 @@ sub upload {
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'attach files to' );
     TWiki::UI::checkTopicExists( $session, $webName, $topic,
         'attach files to' );
-    TWiki::UI::checkWritable( $session );
+    TWiki::UI::checkWebWritable( $session );
     TWiki::UI::checkAccess( $session, $webName, $topic, 'CHANGE', $user );
 
     my $hideFile    = $query->param('hidefile')    || '';

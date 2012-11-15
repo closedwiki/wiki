@@ -334,26 +334,18 @@ sub checkTopicExists {
 
 =pod twiki
 
----++ StaticMethod checkWritable( $session )
+---++ StaticMethod checkWebWritable( $session )
 
 Checks if this web is writable on this site, Throwing an exception
 if it is not.
 
 =cut
 
-sub checkWritable {
+sub checkWebWritable {
     my ( $session, $web ) = @_;
     ASSERT($session->isa( 'TWiki')) if DEBUG;
 
-    my $mode;
-    if ( $web && $web ne $session->{webName} ) {
-        $mode = ($session->modeAndMaster($web))[0];
-    }
-    else {
-        $web = $session->{webName};
-        $mode = $session->{contentMode};
-    }
-    if ( $mode eq 'slave' || $mode eq 'read-only' ) {
+    unless ( $session->webWritable($web) ) {
         throw TWiki::OopsException( 'accessdenied',
                                     def => 'not_writable',
                                     web => $web,
