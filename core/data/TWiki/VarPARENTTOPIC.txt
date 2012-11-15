@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277957247" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352959038" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarPARENTTOPIC
 ---+++ PARENTTOPIC -- parent of current topic
@@ -8,4 +8,5 @@
      | *Item* | *Description* | *Default* |
      | =format="..."= | Format string used to display parent topic, where =$web= expands to the web name, and =$topic= expands to the topic name. Additional [[FormatTokens][formatting tokens]] can be used. | ="$topic"= %BR% (topic name) |
      | =topic="..."= | Get parent of "Topic" or "Web.Topic" | ="%<nop>WEB%.%<nop>TOPIC%"= %BR%(current topic) |
+   * Category: SystemInformationVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarMETA][META]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarMETASEARCH][METASEARCH]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarTOPIC][TOPIC]]
