@@ -18,4 +18,5 @@
    * Examples:
       * =%<nop>GEOLOOKUP{"75.52.124.86"}%= shows default format (city, region, country code)
       * =%<nop>GEOLOOKUP{"75.52.124.86" format="$latitude, $longitude"}%= shows comma separated Latitude and Longitude
+   * Category: AdministrationVariables, ApplicationsAndComponentsVariables, DevelopmentVariables, SecurityAndAccessControlVariables, UsersAndAuthenticationVariables
    * Related: GeoLookupPlugin
