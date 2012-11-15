@@ -1562,18 +1562,21 @@ sub getTopicNames {
     return $handler->getTopicNames();
 }
 
-# filter out webs to which you cannot move the current web to
-sub _filterCanMoveTo {
-    my ($this, $webListRef) = @_;
+# Pick up webs writable on thie site.
+# If $canMoveTo is true, further filter the webs so that the result has
+# the webs the current web can be moved to.
+sub _filterWritable {
+    my ($this, $webListRef, $canMoveTo) = @_;
     my @result;
     my $theDiskID;
-    if ( $TWiki::cfg{MultipleDisks} ) {
-        $theDiskID = ($this->getDiskInfo($this->{session}{webName}))[2];
+    my $session = $this->{session};
+    if ( $canMoveTo && $TWiki::cfg{MultipleDisks} ) {
+        $theDiskID = ($this->getDiskInfo($session->{webName}))[2];
     }
     for my $i ( @$webListRef ) {
-        my $mode = ($this->{session}->modeAndMaster($i))[0];
+        my $mode = ($session->modeAndMaster($i))[0];
         if ( $mode eq 'local' || $mode eq 'master' ) {
-            if ( $TWiki::cfg{MultipleDisks} ) {
+            if ( $canMoveTo && $TWiki::cfg{MultipleDisks} ) {
                 my $id = ($this->getDiskInfo($i))[2];
                 if ( $id eq $theDiskID ) {
                     push(@result, $i);
@@ -1589,15 +1592,28 @@ sub _filterCanMoveTo {
 
 =pod
 
----++ ObjectMethod getListOfWebs( $filter ) -> @webNames
+---++ ObjectMethod getListOfWebs( $filter, $web ) -> @webNames
 
-Gets a list of webs, filtered according to the spec in the $filter,
+Gets a list of webs.
+If =$web= is not specified or null, top level webs are returned.
+If the site allows hiearchical webs (={EnableHierarchicalWebs}= is true),
+subwebs, subsubwebs, ... are also returned.
+If =$web= is specified and non-null, the subwebs of it are returned assuming
+hiearchical webs are allowed.
+
+The returned webs are filtered according to the spec in the $filter,
 which may include one of:
    1 'user' (for only user webs)
    2 'template' (for only template webs)
-$filter may also contain the word 'public' which will further filter
-webs on whether NOSEARCHALL is specified for them or not.
-'allowed' filters out webs that the user is denied access to by a *WEBVIEW.
+
+=$filter= may also contain the following words to further filter webs.
+   * 'public' (eliminates webs having NOSEARCHALL set 'on')
+   * 'allowed' (eliminates webs that the user is denied access to by a *WEBVIEW)
+   * 'writable' (eliminates webs not writalbe on this site. This is related to
+      ReadOnlyAndMirrorWebs.)
+   * 'canmoveto' (eliminates webs to which the current web cannot be moved to.
+      The result is equal to or a subset of the 'writable' result.
+      This is related both ReadOnlyAndMirrorWebs and MultipleDisks.)
 
 If $TWiki::cfg{EnableHierarchicalWebs} is set, will also list
 sub-webs recursively.
@@ -1610,7 +1626,7 @@ sub getListOfWebs {
     $web ||= '';
     $web =~ s#\.#/#g;
 
-    my @webList = _getSubWebs( $this, $web );
+    my @webList = _getSubWebs( $this, $web, $filter );
 
     if ( $filter =~ /\buser\b/ ) {
         @webList = grep { !/(?:^_|\/_)/, } @webList;
@@ -1620,64 +1636,95 @@ sub getListOfWebs {
 
     my $session = $this->{session};
     if ( $TWiki::cfg{Mdrepo}{WebRecordRequired} && $this->{session}{mdrepo} ) {
-        # skipping public and allowed check because it may take too much
-        # time with thousands of webs
+        # This site may have thousands of webs. Skipping costly filtering
         if ( $filter =~ /\bcanmoveto\b/ ) {
-            @webList = $this->_filterCanMoveTo(\@webList);
+            # The canmoveto filter is for rename/move destination list.
+            # It's not a big deal for the result to have webs supposed to be
+            # filtered out.
+            if ( $TWiki::cfg{SiteName} ) {
+                @webList = $this->_filterWritable(\@webList, 1);
+            }
+            return sort @webList;
         }
-        return sort @webList;
     }
+    else {
+        my $user = $session->{user};
+        if( $filter =~ /\bpublic\b/ &&
+              !$this->{session}->{users}->isAdmin( $user )) {
+            my $prefs = $this->{session}->{prefs};
+            my $wn = $this->{session}->{webName};
+            @webList =
+              grep {
+                  $_ eq $wn ||
+                    !$prefs->getWebPreferencesValue( 'NOSEARCHALL', $_ )
+                } @webList;
+        }
 
-    my $user = $session->{user};
-    if( $filter =~ /\bpublic\b/ &&
-          !$this->{session}->{users}->isAdmin( $user )) {
-        my $prefs = $this->{session}->{prefs};
-        my $wn = $this->{session}->{webName};
-        @webList =
-          grep {
-              $_ eq $wn ||
-                !$prefs->getWebPreferencesValue( 'NOSEARCHALL', $_ )
-            } @webList;
+        if( $filter =~ /\ballowed\b/ ) {
+            my $security = $this->{session}->security;
+            @webList =
+              grep {
+                  $security->checkAccessPermission(
+                      'VIEW', $user, undef, undef, undef, $_ )
+              } @webList;
+        }
     }
-
-    if( $filter =~ /\ballowed\b/ ) {
-        my $security = $this->{session}->security;
-        @webList =
-          grep {
-              $security->checkAccessPermission(
-                  'VIEW', $user, undef, undef, undef, $_ )
-          } @webList;
-    }
-
-    if( $filter =~ /\bcanmoveto\b/ ) {
-        @webList = $this->_filterCanMoveTo(\@webList);
+    if ( $TWiki::cfg{SiteName} ) {
+        # The 'canmoveto' filter result is always equal to or smaller than
+        # the 'writable' filter result.
+        if ( $filter =~ /\bcanmoveto\b/ ) {
+            @webList = $this->_filterWritable(\@webList, 1);
+        }
+        elsif ( $filter =~ /\bwritable\b/ ) {
+            @webList = $this->_filterWritable(\@webList);
+        }
     }
 
     # Only return webs that really exist
     return sort grep { $this->webExists( $_ ) } @webList;
 }
 
-# get a list of directories within the named web directory. If hierarchical
+# Get a list of webs within the named web. If hierarchical
 # webs are enabled, returns a deep list e.g. web, web/subweb,
 # web/subweb/subsubweb
+# For speed optimization for a large site having thousands of webs, the third
+# argument $filter is introduced. Depending on $filter, it may do a shortcut.
 sub _getSubWebs {
-    my( $this, $web ) = @_ ;
+    my( $this, $web, $filter ) = @_ ;
 
+    my @webList;
+    my $session = $this->{session};
     if ( $web eq '' && $TWiki::cfg{Mdrepo}{WebRecordRequired} &&
-         $this->{session}{mdrepo}
+         $session->{mdrepo}
     ) {
         # speed optimization for a site having thousands of webs
-        my @list;
-        @list = $this->{session}{mdrepo}->getList('webs');
-        # only subwebs of the current webs are listed.
-        # finding all subwebs defeats the purpose of thise speed optimization.
-        push(@list,
-             _getSubWebs($this,
-                         TWiki::topLevelWeb($this->{session}{webName})));
-        return @list;
+        @webList = $session->{mdrepo}->getList('webs');
+        if ( $filter && $filter =~ /\bcanmoveto\b/ ) {
+            # only subwebs of the current webs are listed.
+            # finding all subwebs defeats the purpose of this speed
+            # optimization.
+            my $topLevelWeb = TWiki::topLevelWeb($session->{webName});
+            push(@webList, _getSubWebs($this, $topLevelWeb));
+            if ( $TWiki::cfg{EnableUserSubwebs} &&
+                 $topLevelWeb ne $TWiki::cfg{UsersWebName} 
+            ) {
+                # Add the user's subweb if exists.
+                # If the current web cannot be moved to the user's subweb,
+                # then the user's subweb will be pruned in getListOfWebs().
+                # So you don't have to worry about it here.
+                my $userSubweb = $TWiki::cfg{UsersWebName} . '/' .
+                    $session->{users}->getWikiName($session->{user});
+                if ( $this->webExists($userSubweb) ) {
+                    push(@webList, $userSubweb);
+                }
+            }
+            return @webList;
+        }
     }
-    my $handler = _getHandler( $this, $web );
-    my @webList = $handler->getWebNames();
+    else {
+        my $handler = _getHandler( $this, $web );
+        @webList = $handler->getWebNames();
+    }
     if( $web ) {
         # sub-web, add hierarchical path
         foreach (@webList) {
