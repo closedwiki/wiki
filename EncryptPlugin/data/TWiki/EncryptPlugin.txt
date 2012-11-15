@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352969670" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352970661" format="1.1" version="$Rev$"}%
 ---+!! Encrypt Plugin (WORK IN PROGRESS)
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -64,7 +64,7 @@ Other people see =<nop>*****<nop>= when looking at the page, and =%<nop>ENCRYPT{
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.org/][Twiki.org]], TWiki:Main.CraigMeyer |
+|  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]], TWiki:Main.CraigMeyer |
 |  Copyright: | &copy; 2010 TWiki:Main.CraigMeyer, &copy; 2010-2012 TWiki:Main.PeterThoeny %BR% &copy; 2010-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2012-11-15 |
