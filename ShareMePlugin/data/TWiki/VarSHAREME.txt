@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1263023639" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352971806" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarSHAREME
 ---+++ SHAREME -- icon bar to share topics on popular social media sites
@@ -7,4 +7,5 @@
    * Examples:
       * =%<nop>SHAREME%= shows the default icon set %SHAREME%
       * =%<nop>SHAREME{"Delicious, Facebook, Twitter"}%= shows icons to share the current TWiki topic at Delicious, Facebook and Twitter
+   * Category: AdministrationVariables, ExportAndPublishingVariables, LinkingAndNavigationVariables, SkinsAndTemplatesVariables
    * Related: ShareMePlugin
