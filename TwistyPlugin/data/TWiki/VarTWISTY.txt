@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1270075721" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352963035" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarTWISTY
 ---+++ TWISTY{ _attributes_ } -- dynamically open and close sections of content
@@ -9,4 +9,5 @@
      =%<nop>TWISTY{}%= %BR%
      =my twisty content= %BR%
      =%<nop>ENDTWISTY%=
+   * Category: FormattingAndRenderingVariables, ApplicationsAndComponentsVariables
    * Related: TwistyPlugin, TwistyContrib
