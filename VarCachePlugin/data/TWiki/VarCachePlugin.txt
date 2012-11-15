@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347055169" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352964481" format="1.1" version="$Rev$"}%
 ---+!! Variable Cache Plugin 
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -103,8 +103,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2004-2012, Peter Thoeny, [[http://twiki.org/][TWiki.org]] <br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-09-07 |
+|  Plugin Version: | 2012-11-14 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-11-14: | TWikibug:Item7020: Categorize TWiki Variable VARCACHE |
 |  2012-09-07: | TWikibug:Item6837: Doc fixes |
 |  2012-04-27: | TWikibug:Item6871: New =&lt;varcache_exclude&gt;= tag to exclude parts of page from getting cached |
 |  2011-05-25: | TWikibug:Item6701: Small code refactor; adding $SHORTDESCRIPTION that was missing in previous release |

@@ -23,7 +23,7 @@ use strict;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-09-07';
+our $RELEASE = '2012-11-14';
 
 # =========================
 our $SHORTDESCRIPTION = 'Cache TWiki variables in selected topics for faster page rendering';
