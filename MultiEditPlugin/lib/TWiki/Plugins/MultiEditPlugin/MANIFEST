@@ -1,6 +1,5 @@
-bin/editonesection
-data/TWiki/MultiEditPlugin.txt
-lib/TWiki/Plugins/MultiEditPlugin.pm
-pub/TWiki/MultiEditPlugin/multieditplugin_example.jgp
-lib/TWiki/Plugins/MultiEditPlugin/build.pl
+bin/editonesection 0555
+data/TWiki/MultiEditPlugin.txt 0444
+lib/TWiki/Plugins/MultiEditPlugin.pm 0444
+pub/TWiki/MultiEditPlugin/multieditplugin_example.jgp 0444
 

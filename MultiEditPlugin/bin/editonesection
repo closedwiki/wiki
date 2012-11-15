@@ -1,9 +1,10 @@
-#!/usr/bin/perl -wT
+#!/ms/dist/perl5/bin/perl5.10 -wT
 #
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2006 Peter Thoeny, peter@thoeny.org
-# and TWiki Contributors.
+# Copyright (C) 1999-2012 Peter Thoeny, peter[at]thoeny.org and
+# TWiki Contributors. All Rights Reserved. TWiki Contributors are
+# listed in the AUTHORS file in the root of this distribution.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,18 +18,27 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
+
+use strict;
+use warnings;
+
 BEGIN {
-    # See the 'view' script for a description of what this does
-    if( $ENV{"SCRIPT_FILENAME"} &&
-        $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
-        chdir $1;
+    if ( defined $ENV{GATEWAY_INTERFACE} or defined $ENV{MOD_PERL} ) {
+        $TWiki::cfg{Engine} = 'TWiki::Engine::CGI';
+        use CGI::Carp qw(fatalsToBrowser);
+        $SIG{__DIE__} = \&CGI::Carp::confess;
     }
-    unshift @INC, '.';
+    else {
+        $TWiki::cfg{Engine} = 'TWiki::Engine::CLI';
+        require Carp;
+        $SIG{__DIE__} = \&Carp::confess;
+    }
+    $ENV{TWIKI_ACTION} = 'editonesection';
+    @INC = ('.', grep { $_ ne '.' } @INC);
     require 'setlib.cfg';
 }
 
+use TWiki;
 use TWiki::UI;
-use TWiki::UI::Edit;
-use TWiki::Plugins::MultiEditPlugin;
-TWiki::UI::run( \&TWiki::Plugins::MultiEditPlugin::doEdit );
+$TWiki::engine->run();
 

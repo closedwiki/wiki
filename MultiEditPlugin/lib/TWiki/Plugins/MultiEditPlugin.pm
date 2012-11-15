@@ -27,7 +27,7 @@ use vars qw(
 use TWiki::Func;
 use TWiki::Contrib::EditContrib;
 
-$VERSION = '$Rev: 0000';
+$VERSION = '$Rev$';
 $pluginName = 'MultiEditPlugin';
 
 $RELEASE = 'Dakar';
@@ -93,15 +93,39 @@ sub beforeCommonTagsHandler {
 
     TWiki::Func::writeDebug( "- ${pluginName}::beforeIncludeHandler( $_[2].$_[1] )" ) if $debug;
 
+    my $session = $TWiki::Plugins::SESSION;
+    my $ctx = TWiki::Func::getContext();
+    my $inactive = ref $ctx && ( $ctx->{inactive} || $ctx->{content_slave} );
+    unless ( $inactive ) {
+	if ( defined($session->{noPartialEdit}) ) {
+	    $inactive = $session->{noPartialEdit};
+	}
+	else {
+	    my $noPartialEdit =
+		TWiki::Func::getPreferencesValue('NO_PARTIAL_EDIT');
+	    if ( $noPartialEdit && $noPartialEdit =~ /%/ ) {
+		$session->{noPartialEdit} = 0; # to avoid infinite recursion
+		$noPartialEdit =
+		    TWiki::Func::expandCommonVariables($noPartialEdit,
+						       $_[1], $_[2]);
+	    }
+	    $inactive = $session->{noPartialEdit} =
+		TWiki::isTrue($noPartialEdit);
+	}
+    }
     my $sec = 0;
-    $_[0] =~ s/<section((\s+[^>]+)?)>/&rememberTopic($_[1], $_[2], $1, $sec)/geo;
+    my $renderer = $TWiki::Plugins::SESSION->{renderer};
+    my %takenOut;
+    $_[0] = $renderer->takeOutBlocks($_[0], 'verbatim', \%takenOut);
+    $_[0] =~ s/<section((\s+[^>]+)?)>/&rememberTopic($_[1], $_[2], $1, $sec, $inactive)/geo;
+    $renderer->putBackBlocks(\$_[0], \%takenOut, 'verbatim');
 
     TWiki::Func::writeDebug( "- after ${pluginName}::beforeIncludeHandler( $_[2].$_[1] )" ) if $debug;
 
 }
 
 sub rememberTopic {
-  my ( $topic, $web, $posattr ) = @_;
+  my ( $topic, $web, $posattr, $sec, $inactive ) = @_;
 
 ##SMELL: Need to make sure the section attribute is given, even if
 ##topic was passed already
@@ -111,6 +135,7 @@ sub rememberTopic {
   if ( $posattr =~ s/label\s*=\"(.*?)\"//o ) {
     $seclabel = $1;
   }
+  $posattr .= ' edit="0"' if ( $inactive );
   if ($posattr =~ / topic=/o) {
     return "<section$posattr>";
   } else {
@@ -134,7 +159,8 @@ sub preRenderingHandler
     my $cgiAction = TWiki::Contrib::EditContrib::getCgiAction();
     return unless ($cgiAction =~ m/view|viewauth|render/o);
 
-    my $ctmpl = $session->{cgiQuery}->param('template') || '';
+    my $cgiQuery = TWiki::Func::getCgiQuery();
+    my $ctmpl = $cgiQuery->param('template') || '';
     my $cskin = &TWiki::Func::getSkin() || '';
     my $skipit = 0;
     foreach my $ss (split(/\s*,\s*/, $skipskin)) {
@@ -256,10 +282,10 @@ sub doEdit
     my $tmpl = '';
     ( $session, $text, $tmpl ) = &TWiki::Contrib::EditContrib::edit( $session );
 
-    my $query = $session->{cgiQuery};
+    my $query = TWiki::Func::getCgiQuery();
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
-    my $theSec = int($query->param('sec')) || 0;
+    my $theSec = int($query->param('sec')) || int($query->param('param5')) || 0;
     my $editUrlParams = "&sec=$theSec#SECEDITBOX";
     $tmpl =~ s/%EDIT%/editonesection/go;
     $tmpl =~ s/%EDITPARAMS%/$editUrlParams/go;
