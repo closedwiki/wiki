@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1339203044" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352960529" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarSENDMAIL
 ---+++ SENDMAIL{...} -- send e-mail from actions in TWiki topics, useful for workflow automation
@@ -19,4 +19,5 @@
      | =onerror="&#124; $error &#124;&#124;"= | Error message shown in place of the SENDMAIL variable on error, if any. Text may include %SYSTEMWEB%.TWikiVariables and [[%SYSTEMWEB%.FormatTokens][format tokens]]. Token =$error= expands to the error message. | ="$error"= |%STOPINCLUDE%
    * Security: See note on [[SendMailPlugin#OpenMailRelay][how to avoid an open mail relay]]
    * Example:%BR% =%<nop>SENDMAIL{ action="send" to="$username &lt;$useremail&gt;" subject="Status change" text="Status changed to %<nop>FORMFIELD{Status}%" }%=
+   * Category: DevelopmentVariables, EmailAndNotificationVariables, WorkflowAndAutomationVariables
    * Related: SendMailPlugin
