@@ -22,7 +22,7 @@ package TWiki::Plugins::RenderListPlugin;    # change the package name and $plug
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-09-05';
+our $RELEASE = '2012-12-14';
 
 our $web;
 our $topic;
