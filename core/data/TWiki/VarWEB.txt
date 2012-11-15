@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1271650884" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352965052" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarWEB
 ---+++ WEB -- name of current web
@@ -9,4 +9,5 @@
      | *Parameter:* | *Description:* | *Default:* |
      | =format="..."= | Format, may include tokens =$web= (the full web path), =$parents= (parent webs, if any), =$current= (current web without parent webs) | ="$web"= |
    * Example, assuming =%<nop>WEB%= is =Engineering/TechPubs/Apps=: %BR% =%<nop>WEB{format="Parent webs: $parents, current web: $current"}%= returns: =Parent webs: Engineering/TechPubs, current web: Apps= 
+   * Category: SystemInformationVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarBASEWEB][BASEWEB]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarINCLUDINGWEB][INCLUDINGWEB]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarTOPIC][TOPIC]]
