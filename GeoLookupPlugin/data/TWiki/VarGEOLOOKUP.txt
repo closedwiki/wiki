@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1264060722" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352970492" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarGEOLOOKUP
 ---+++ GEOLOOKUP -- lookup geo location by IP address or domain name
