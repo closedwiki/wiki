@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351238502" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352963811" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarURLPARAM
 ---+++ URLPARAM{"name"} -- get value of a URL parameter
@@ -27,4 +27,5 @@
       * When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
       * Watch out for TWiki internal parameters, such as =rev=, =skin=, =template=, =topic=, =web=; they have a special meaning in TWiki. Common parameters and view script specific parameters are documented at TWikiScripts.
       * If you have =%<nop>URLPARAM{= in the value of a URL parameter, it will be modified to =%&lt;nop&gt;URLPARAM{=. This is to prevent an infinite loop during expansion.
+   * Category: DevelopmentVariables, SystemInformationVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENCODE][ENCODE]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENTITY][ENTITY]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSEARCH][SEARCH]], FormattedSearch, [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarQUERYSTRING][QUERYSTRING]]
