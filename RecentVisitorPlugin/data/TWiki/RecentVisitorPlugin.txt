@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307393000" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352971313" format="1.1" version="$Rev$"}%
 ---+!! !RecentVisitorPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -194,11 +194,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Show statistics of recent visitors to the TWiki site
 
-|  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] |
-|  Copyright: | &copy; 2011 TWiki:Main.PeterThoeny <br /> &copy; 2011 TWiki:TWiki.TWikiContributor |
+|  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]] |
+|  Copyright: | &copy; 2011-2012 TWiki:Main.PeterThoeny <br /> &copy; 2011-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-06-06 |
+|  Plugin Version: | 2012-11-15 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-11-15: | TWikibug:Item7020: Categorize RECENTVISITOR TWiki Variable |
 |  2011-06-06: | TWikibug:Item6725: Plugins: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2011-05-14: | TWikibug:Item6701: Small fix in Config.spec -- TWiki:Main.PeterThoeny |
 |  2011-05-01: | TWikibug:Item6701: Fix small warning issue if plugin is run by a shell script |
