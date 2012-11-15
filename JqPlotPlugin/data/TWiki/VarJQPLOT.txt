@@ -1,8 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352874652" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352954943" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
 #VarJQPLOT
----+++ JQPLOT -- add references to jqPlot !JavaScript library
-   * [[http://www.jqplot.com/][jqPlot]] is a "pure javascript plotting" library. This variable is handled by the JqPlotPlugin to add the required !JavaScript and CSS tags to =&lt;head&gt;=.
+---+++ JQPLOT -- add line, bar and pie charts using jqPlot !JavaScript library
+   * [[http://www.jqplot.com/][jqPlot]] is a "pure javascript plotting and charting" library. This variable is handled by the JqPlotPlugin to add the required !JavaScript and CSS tags to =&lt;head&gt;=.
    * Syntax: =%<nop>JQPLOT%=, =%<nop>JQPLOT{"jqPlot plugin name(s)"}%=
    * Example: =%<nop>JQPLOT{"barRenderer, pieRenderer"}%=
-   * Related: JQueryPlugin
    * Category: ChartingAndDrawingVariables, ApplicationsAndComponentsVariables, DevelopmentVariables
+   * Related: JqPlotPlugin, JQueryPlugin

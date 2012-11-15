@@ -1,16 +1,20 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352874649" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352954943" format="1.1" version="$Rev$"}%
 ---+!! !JqPlotPlugin
 <!--
-One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = jqPlot !JavaScript library for TWiki
--->
-%SHORTDESCRIPTION%
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/JqPlotPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/JqPlotPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
 
+One line description, required for extensions repository catalog.
+   * Set SHORTDESCRIPTION = Add line, bar and pie charts to TWiki topics using jqPlot !JavaScript library
+-->
 <sticky>
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
 </div>
 </sticky>
+%SHORTDESCRIPTION%
 
 ---++ Usage
 
@@ -75,15 +79,14 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
    * Plugin __configuration and testing__:
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
-      * Configure additional plugin settings in the __Extensions__ section if needed.
       * Test if the installation was successful using the example above.
 
 ---++ Plugin Info
 
 Many thanks to the following sponsors for supporting this work:
-   * Acknowledge any sponsors here
+   * Morgan Stanley
 
-|  Plugin Author(s): | TWiki:Main.MahiroAndo |
+|  Plugin Author: | TWiki:Main.MahiroAndo |
 |  Copyright: | &copy; 2012 TWiki:Main.MahiroAndo %BR% &copy; 2012 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | 2012-11-14 jquery.jqplot.1.0.4r1121 |
@@ -94,8 +97,6 @@ Many thanks to the following sponsors for supporting this work:
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/JqPlotPluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/JqPlotPluginAppraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ %SYSTEMWEB%.VarJQPLOT, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
-
-%META:FILEATTACHMENT{name="chart1.png" attachment="chart1.png" attr="" comment="" date="1352864462" path="chart1.png" size="21045" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="chart1.png" attachment="chart1.png" attr="h" comment="" date="1352864462" path="chart1.png" size="21045" user="TWikiContributor" version="1"}%

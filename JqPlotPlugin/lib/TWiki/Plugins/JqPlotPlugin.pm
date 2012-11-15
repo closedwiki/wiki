@@ -1,4 +1,7 @@
-# Plugin for TWiki Collaboration Platform, http://TWiki.org/
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2012 TWiki:Main.MahiroAndo 
+# Copyright (C) 2012 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -30,29 +33,12 @@ our $pluginName = 'JqPlotPlugin';
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
-# $VERSION is referred to by TWiki, and is the only global variable that
-# *must* exist in this package. It should always be Rev enclosed in dollar
-# signs so that TWiki can determine the checked-in status of the plugin.
-# It is used by the build automation tools, so you should leave it alone.
 our $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS. Add a release date in ISO
-# format (preferred) or a release number such as '1.3'.
 our $JQPLOT_RELEASE = 'jquery.jqplot.1.0.4r1121';
 our $RELEASE = "2012-11-14 $JQPLOT_RELEASE";
 
 # One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
-our $SHORTDESCRIPTION = 'jqPlot JavaScript library for TWiki';
-
-# You must set $NO_PREFS_IN_TOPIC to 0 if you want your plugin to use preferences
-# stored in the plugin topic. This default is required for compatibility with
-# older plugins, but imposes a significant performance penalty, and
-# is not recommended. Instead, use $TWiki::cfg entries set in LocalSite.cfg, or
-# if you want the users to be able to change settings, then use standard TWiki
-# preferences that can be defined in your Main.TWikiPreferences and overridden
-# at the web and topic level.
+our $SHORTDESCRIPTION = 'Add line, bar and pie charts to TWiki topics using jqPlot !JavaScript library';
 our $NO_PREFS_IN_TOPIC = 1;
 
 # Define other global package variables
