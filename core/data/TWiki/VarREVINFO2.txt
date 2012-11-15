@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293665017" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352959747" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarREVINFO2
 ---+++ REVINFO{"format"} -- formatted revision information of topic
@@ -22,4 +22,5 @@
      | =$iso= | Revision date in ISO date format | =2006-09-22T06:24:25Z= |
      | =$min=, =$sec=, etc. | Same date format qualifiers as [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarGMTIME2][GMTIME{"format"}]] | |
    * Example: =%<nop>REVINFO{"$date - $wikiusername" rev="1.1"}%= returns revision info of first revision
+   * Category: SystemInformationVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarGMTIME2][GMTIME{"format"}]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREVINFO][REVINFO]]

@@ -1,8 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293665017" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352959747" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarREVINFO
 ---+++ REVINFO -- revision information of current topic
    * Syntax: =%<nop>REVINFO%=
    * Expands to: <code>%REVINFO%</code>
    * Date format defined as {DefaultDateFormat} in [[%SCRIPTURLPATH{"configure"}%][configure]], default =$year-$mo-$day=
+   * Category: SystemInformationVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREVINFO2][REVINFO{"format"}]]
