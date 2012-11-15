@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1191730164" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352962812" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarTABLE
 ---+++ TABLE{ _attributes_ } -- control attributes of tables and sorting of table columns
@@ -40,4 +40,5 @@
      =%<nop>TABLE{ tableborder="0" cellpadding="4" cellspacing="3" cellborder="0" }%= %BR%
      =| <nop>*A1*<nop> | <nop>*B1*<nop> |= %BR%
      =| A2 | B2 |=
+   * Category: FormattingAndRenderingVariables, TablesAndSpreadsheetsVariables
    * Related: See TablePlugin for more details
