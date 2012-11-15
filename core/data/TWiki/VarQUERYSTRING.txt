@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352959362" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarQUERYSTRING
 ---+++ QUERYSTRING -- full, unprocessed string of parameters to this URL
@@ -6,5 +6,5 @@
    * __%X% Note:__ URLs built this way are typically restricted in length, typically to 2048 characters. If you need more space than this, you will need to use an HTML form and =%<nop>QUERYPARAMS%=.
    * Syntax: =%<nop>QUERYSTRING%=
    * Expands to: <code> %QUERYSTRING% </code>
+   * Category: DevelopmentVariables, SystemInformationVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarQUERYPARAMS][QUERYPARAMS]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarURLPARAM][URLPARAM]]
- 
