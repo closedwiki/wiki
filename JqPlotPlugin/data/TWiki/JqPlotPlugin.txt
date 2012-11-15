@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352954943" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352956448" format="1.1" version="$Rev$"}%
 ---+!! !JqPlotPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -26,7 +26,21 @@ $.jqplot ('chart1', [[3,7,9,1,4,6,8,2,5]]);
 </script>
 </verbatim>
 
+<sticky>
+<table><tr><td valign="top">
+__Resulting chart (if plugin is installed and enabled):__
+%JQPLOT%
+<div id='chart1' style='height:280px; width: 500px;'></div>
+<script>
+$.jqplot ('chart1', [[3,7,9,1,4,6,8,2,5]]);
+</script>
+</td><td>&nbsp; &nbsp;</td><td valign="top">
+__Simulated (screenshot):__
+<div>
 %ATTACHURL%/chart1.png
+</div>
+</td></tr></table>
+</sticky>
 
 More examples are found in the [[http://www.jqplot.com/deploy/dist/examples/][official jqPlot website]].
 
