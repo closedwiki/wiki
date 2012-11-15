@@ -30,7 +30,10 @@ use TWiki::OopsException;
 $VERSION = 1.001;
 
 BEGIN {
-   if ( substr($TWiki::RELEASE, 8) >= 1 ) {
+   if ( substr($TWiki::RELEASE, 6) gt '5' ) {
+     require TWiki::Contrib::EditContrib::Include51;
+     $TWiki::functionTags{INCLUDE} = \&TWiki::Contrib::EditContrib::Include41::_INCLUDE;
+   } elsif ( substr($TWiki::RELEASE, 8) >= 1 ) {
      require TWiki::Contrib::EditContrib::Include41;
      $TWiki::functionTags{INCLUDE} = \&TWiki::Contrib::EditContrib::Include41::_INCLUDE;
    } elsif ( substr($TWiki::RELEASE, 8) == 0 ) {
@@ -51,7 +54,7 @@ sub init_edit {
     my $session = shift;
 
     $session->enterContext( 'edit' );
-    my $query = $session->{cgiQuery};
+    my $query = TWiki::Func::getCgiQuery();
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
     my $user = $session->{user};
@@ -64,62 +67,13 @@ sub init_edit {
     my $store = $session->{store};
 
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'edit' );
-    TWiki::UI::checkMirror( $session, $webName, $topic );
+    TWiki::UI::checkWritable( $session, $webName );
 
     my $topicExists  = $store->topicExists( $webName, $topic );
 
     # If you want to edit, you have to be able to view and change.
     TWiki::UI::checkAccess( $session, $webName, $topic, 'view', $user );
     TWiki::UI::checkAccess( $session, $webName, $topic, 'change', $user );
-
-    # Check lease, unless we have been instructed to ignore it
-    # or if we are using the 10X's topic name for dynamic topic names
-    my $breakLock = $query->param( 'breaklock' ) || '';
-    unless( $breakLock || ($topic =~ /X{10}/ )) {
-        my $lease = $store->getLease( $webName, $topic );
-        if( $lease ) {
-            my $who = $lease->{user}->webDotWikiName();
-
-            if( $who ne $user->webDotWikiName() ) {
-                # redirect; we are trying to break someone else's lease
-                my( $future, $past );
-                my $why = $lease->{message};
-                my $def;
-                my $t = time();
-                if( $t > $lease->{expires} ) {
-                    # The lease has expired, but see if we are still
-                    # expected to issue a "less forceful' warning
-                    if( $TWiki::cfg{LeaseLengthLessForceful} < 0 ||
-                          $t < $lease->{expires} +
-                            $TWiki::cfg{LeaseLengthLessForceful} ) {
-                        $def = 'lease_old';
-                        $past = TWiki::Time::formatDelta(
-                            $t - $lease->{expires}, $session->{i18n} );
-                        $future = '';
-                    }
-                }
-                else {
-                    # The lease is active
-                    $def = 'lease_active';
-                    $past = TWiki::Time::formatDelta(
-                        $t - $lease->{taken}, $session->{i18n} );
-                    $future = TWiki::Time::formatDelta(
-                        $lease->{expires} - $t, $session->{i18n} );
-                }
-                if( $def ) {
-                    # use a 'keep' redirect to ensure we pass parameter
-                    # values in the query on to the oops script
-                    throw TWiki::OopsException( 'leaseconflict',
-                                                keep => 1,
-                                                def => $def,
-                                                web => $webName,
-                                                topic => $topic,
-                                                params =>
-                                                  [ $who, $past, $future ] );
-                }
-            }
-        }
-    }
 
     # Prevent editing existing topic?
     if( $onlyNewTopic && $topicExists ) {
@@ -149,7 +103,7 @@ sub edit {
     my $session = shift;
     my $topicExists;
     ( $session, $topicExists ) = init_edit( $session );
-    my $query = $session->{cgiQuery};
+    my $query = TWiki::Func::getCgiQuery();
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
     my $store = $session->{store};
@@ -185,8 +139,7 @@ sub edit {
     #### Removed a chunk here. Figure out how we can get the right
     #### template by using the editaction url parameter
 
-    my $tmpl =
-      $session->{templates}->readTemplate( "editsection", $skin );
+    my $tmpl = TWiki::Func::readTemplate( "editsection", $skin );
 
     unless( $topicExists ) {
         if( $templateTopic ) {
@@ -264,8 +217,10 @@ sub edit {
                                                  $topic, undef );
     }
 
-    $session->{plugins}->beforeEditHandler(
-        $text, $topic, $webName, $meta ) unless( $saveCmd );
+    $session->{plugins}->dispatch( 'beforeEditHandler',
+        $text, $topic, $webName, undef, 1 ) unless( $saveCmd );
+    # the fifth argument of 1 (received as $_[4] ) is handed to hint
+    # that beforeEditHandler() is called again from finalize_edit()
 
     if( $TWiki::cfg{Log}{edit} ) {
         # write log entry
@@ -296,7 +251,7 @@ sub edit {
                                         topic => $session->{topicName},
                                         params => [ $templateWeb, $form ] );
         }
-        $formDef->getFieldValuesFromQuery( $session->{cgiQuery}, $meta, 1 );
+        $formDef->getFieldValuesFromQuery( $query, $meta, 1 );
         # and render them for editing
         if ( $editaction eq "text" ) {
             $formText = $formDef->renderHidden( $meta,
@@ -306,7 +261,7 @@ sub edit {
                                                  $getValuesFromFormTopic );
         }
     } elsif( !$saveCmd && $session->{prefs}->getWebPreferencesValue( 'WEBFORMS', $webName )) {
-        $formText = $session->{templates}->readTemplate( "addform", $skin );
+        $formText = TWiki::Func::readTemplate( "addform", $skin );
         $formText = $session->handleCommonTags( $formText, $webName, $topic );
     }
     $tmpl =~ s/%FORMFIELDS%/$formText/g;
@@ -353,7 +308,7 @@ sub finalize_edit {
     #### Why is this necessary?
     #### For right now, just pass tmpl
 
-    my $query = $session->{cgiQuery};
+    my $query = TWiki::Func::getCgiQuery();
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
     my $store = $session->{store};
@@ -372,7 +327,7 @@ sub finalize_edit {
     
     ##AS added hook for plugins that want to do heavy stuff
     #TW: Does not appear to be in Edit.pm
-    $session->{plugins}->beforeEditHandler( $sectxt, $topic, $webName );
+    $session->{plugins}->dispatch( 'beforeEditHandler', $sectxt, $topic, $webName );
     ##/AS
 
     $tmpl =~ s/%UNENCODED_TEXT%/$sectxt/g;
@@ -380,7 +335,6 @@ sub finalize_edit {
     #### quoteForXml included in entityEncode
     #### $sectxt = &TWiki::Contrib::EditContrib::quoteForXml($sectxt);
     $sectxt = TWiki::entityEncode( $sectxt );
-    $sectxt = $sectxt;
     $tmpl =~ s/%TEXT%/$sectxt/g;
 
     $store->setLease( $webName, $topic, $user, $TWiki::cfg{LeaseLength} );
@@ -445,7 +399,7 @@ sub addSection {
     my $tmpl = '';
     ( $session, $text, $tmpl ) = &edit( $session );
 
-    my $query = $session->{cgiQuery};
+    my $query = TWiki::Func::getCgiQuery();
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
     my $preamble = $query->param('pretxt') || '';
@@ -479,9 +433,16 @@ sub saveSection {
   my $query = TWiki::Func::getCgiQuery();
 
   # update text url param
+  my $t = $query->param( 'text' );
+  if ( defined($TWiki::Plugins::WysiwygPlugin::SECRET_ID) &&
+       (defined( $query->param( 'wysiwyg_edit' )) ||
+	$t =~ /<!--$TWiki::Plugins::WysiwygPlugin::SECRET_ID-->/)
+  ) {
+      $t = "<wysiwyg-area>$t</wysiwyg-area>";
+  }
   my $text = 
     unprotect($query->param( 'pretxt' )) .
-    $query->param( 'text' ) .
+    $t .
     unprotect($query->param( 'postxt' ));
   $query->param( -name=>"text", -value=>$text);
 
@@ -498,6 +459,7 @@ sub getCgiAction {
 
   my $pathInfo = $ENV{'PATH_INFO'} || '';
   my $theAction = $ENV{'REQUEST_URI'} || '';
+  $pathInfo =~ s/(\W)/\\$1/g;
   if ($theAction =~ /^.*?\/([^\/]+)$pathInfo.*$/) {
     $theAction = $1;
   } else {
