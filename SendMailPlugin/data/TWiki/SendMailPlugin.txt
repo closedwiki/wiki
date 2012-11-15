@@ -132,8 +132,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2012 Hypertek lnc. <br /> &copy; 2012 TWiki:Main.PeterThoeny <br /> &copy; 2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-06-08 |
+|  Plugin Version: | 2012-11-14 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-11-14: | TWikibug:Item7020: Categorize TWiki Variable SENDMAIL |
 |  2012-06-08: | TWikibug:Item6885: Support HTML and MIME Multi-Part e-mail messages |
 |  2012-04-10: | TWikibug:Item6867: Fix for no e-mail sent if =excludetopic= parameter is missing |
 |  2012-04-02: | TWikibug:Item6837: Add image |
