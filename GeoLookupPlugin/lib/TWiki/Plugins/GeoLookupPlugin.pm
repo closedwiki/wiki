@@ -1,7 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org
-# Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
+# Copyright (C) 2010-2012 Peter Thoeny, peter[at]thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -33,7 +32,7 @@ require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
 our $VERSION = '$Rev$';
-our $RELEASE = '20110-05-01';
+our $RELEASE = '2012-11-15';
 
 our $SHORTDESCRIPTION = 'Lookup geolocation by IP address or domain name';
 our $NO_PREFS_IN_TOPIC = 0;
