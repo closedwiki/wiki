@@ -1,5 +1,6 @@
 # Release manifest for IncludeXMLPlugin
 data/TWiki/IncludeXMLPlugin.txt 0644 Documentation
+data/TWiki/VarINCLUDEXML.txt 0644 Documentation
 lib/TWiki/Plugins/IncludeXMLPlugin.pm 0644 Perl module
 lib/TWiki/Plugins/IncludeXMLPlugin/Handler.pm 0644 Perl module
 lib/TWiki/Plugins/IncludeXMLPlugin/SubsequenceGenerator.pm 0644 Perl module

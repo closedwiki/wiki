@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351677923" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352944798" format="1.1" version="$Rev$"}%
 ---+!! INCLUDEXML Plugin
 
 <!--
@@ -196,8 +196,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.MahiroAndo |
 |  Copyright: | &copy; 2012 TWiki:Main.MahiroAndo %BR% &copy; 2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 0.2 (2012-10-16) |
+|  Plugin Version: | 0.3 (2012-11-15) |
 |  Change History: | <!-- versions below in reverse order --> |
+|  2012-11-15: | TWikibug:Item7020: Add categories to VarINCLUDEXML - TWiki:Main.MahiroAndo |
 |  2012-10-31: | TWikibug:Item6990: Use =TWiki::Func::get/postExternalResource()= instead - TWiki:Main.MahiroAndo |
 |  2012-10-16: | TWikibug:Item6990: Leverage =TWiki::Func::getLWPRequest()= for single sign-on - TWiki:Main.MahiroAndo |
 |  2012-10-01: | TWikibug:Item6952: Added VarINCLUDEXML - TWiki:Main.MahiroAndo |
