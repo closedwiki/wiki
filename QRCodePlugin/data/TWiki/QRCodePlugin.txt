@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1346721029" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352959450" format="1.1" version="$Rev$"}%
 ---+!! !QRCodePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -267,8 +267,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2011-2012 TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]] <br /> &copy; 2011-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-09-03 |
+|  Plugin Version: | 2012-11-14 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-11-14: | TWikibug:Item7020: Categorize TWiki Variable QRCODE -- TWiki:Main.PeterThoeny |
 |  2012-09-03: | TWikibug:Item6837: Added missing example screenshot qrcode-example-4.png |
 |  2011-07-12: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2011-02-15: | TWikibug:Item6647: Added TopMenuSkin example; added qrcode.gif 16x16 pixels icon |
