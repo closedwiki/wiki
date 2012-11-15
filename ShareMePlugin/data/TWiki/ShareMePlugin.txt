@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310364396" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352971812" format="1.1" version="$Rev$"}%
 ---+!! Share-Me Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -93,11 +93,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] |
-|  Copyright: | &copy; 2010-2011 TWiki:Main.PeterThoeny <br /> &copy; 2010-2011 TWiki:TWiki.TWikiContributor  |
+|  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]] |
+|  Copyright: | &copy; 2010-2012 TWiki:Main.PeterThoeny <br /> &copy; 2010-2012 TWiki:TWiki.TWikiContributor  |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | %$VERSION% |
+|  Plugin Version: | 2012-11-15 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-11-15: | TWikibug:Item7020: Categorize SHAREME TWiki Variable |
 |  2011-07-10: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2010-12-04: | TWikibug:Item6616: Fix to use BASETOPIC instead of TOPIC when referencing topics. This allows to add SHAREME in an included topic, such as !TopMenuSkinTopBar of TWiki:Plugins.TopMenuSkin |
 |  2010-06-06: | XHTML validation fixes; moving CSS to HTML head using TWiki::Func::addToHEAD |
