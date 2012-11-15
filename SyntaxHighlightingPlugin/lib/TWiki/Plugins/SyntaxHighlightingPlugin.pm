@@ -46,8 +46,8 @@ use vars qw(    $VERSION
                 %langs
            );
 
-$VERSION = '1.010';
-$RELEASE = '2011-05-14';
+$VERSION = '1.20';
+$RELEASE = '2012-11-14';
 $SHORTDESCRIPTION = 'Highlights code fragments for many languages using ==enscript==';
 $NO_PREFS_IN_TOPIC = 1;
 
@@ -128,9 +128,8 @@ sub initPlugin {
 }
 
 sub commonTagsHandler {
-
     $_[0] =~ s/%CODE{(.*?)}%\s*(.*?)%ENDCODE%/&_handleTag/egs;
-
+    $_[0] =~ s/%SYNTAX{(.*?)}%\s*(.*?)%ENDSYNTAX%/&_handleTag/egs;
 }
 
 # =========================
@@ -138,20 +137,23 @@ sub commonTagsHandler {
 sub _handleTag {
     
     my %params = TWiki::Func::extractParameters($1);
-    my $lang = lc$params{lang} || lc$params{_DEFAULT}; # language
+    my $lang = lc$params{lang} || lc$params{syntax} || lc$params{_DEFAULT}; # language
     my $num = lc$params{num} || lc$params{number} || lc$params{numbered}; # start line number
     my $code = $2; # code to highlight
+    my $step = lc$params{numstep} || lc$params{numberstep} || lc$params{numberedstep}; # line number step
     
     unless( _definedLang( $lang ) ){
         return _returnError("Language is either undefined or unsupported. Check %TWIKIWEB%.$pluginName for more information.");
     }
     
     my $highlighted = _highlight($code, $lang);
-    
+
+    # check if we got a result
     if ($highlighted =~ s/.*\<PRE\>\n(.*?)\n?\<\/PRE\>.*/$1/os){
-        if ($num) {
-            my $line = $num;
-            $highlighted =~ s/(^.*)/sprintf("<b><font color=\"#000000\">%5d<\/font><\/b>\t%s", $line++, $1)/mgeo
+        # append our own line counter
+        if ($num ne '') {
+            my $line = $num - $step;
+            $highlighted =~ s/(^.*)/sprintf("<b><font color=\"#000000\">%5d<\/font><\/b>\t%s", $line += $step, $1)/mgeo
         }
         my $out = "<!-- !$pluginName -->\n";
         $out .= "<pre class='syntaxHighlightingPlugin'>$highlighted</pre>";

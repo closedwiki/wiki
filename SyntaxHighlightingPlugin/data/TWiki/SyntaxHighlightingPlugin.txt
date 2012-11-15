@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1305440560" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352948966" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiPreferences"}%
 ---+!! Syntax Highlighting Plugin
 <!--
@@ -87,13 +87,19 @@ To use this plugin, use the following syntax:
 
 <verbatim>
 <sticky>
-%CODE{lang="..." [num="10"]}% 
+%CODE{lang="..." [num="10"] [numstep="2"] }% 
 ...code...
 %ENDCODE%
 </sticky>
 </verbatim>
 
-The language can be any from the above list. The =num= setting is optional and will set the starting line number. The =&lt;sticky&gt;= tags are required to prevent TWiki's WYSIWYG editor from removing line breaks inside the code block.
+---+++ Parameter
+| *Param* | *Value* | *Description* |
+| [lang=]"syntax type | cpp, ksh... | look at "enscript --help-highlight" for a list from enscript %BR% param identifier lang= is optional |
+| num(numbered) | on, off, true, false, yes, no %BR% 1000 | will attach an extra source line number %BR% a given number will also be the first line number |
+| numstep | 10, 100, -50 | increment next line number with the given step counter %BR% negative will decrement |
+
+The =&lt;sticky&gt;= tags are required to prevent TWiki's WYSIWYG editor from removing line breaks inside the code block.
 
 ---++ Examples
 
@@ -184,6 +190,7 @@ This has been changed to be more consistent with other twiki variables. There is
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-11-15: | TWikibug:Item7035: Number step support -- TWiki:Main.YaojunFei |
 |  2011-05-14: | TWikibug:Item6701: Small fix in Config.spec -- TWiki:Main.PeterThoeny |
 |  2010-10-23: | TWikibug:Item6530: Doc improvements - TWiki:Main.PeterThoeny, TWiki:Main.AndreasKeil |
 |  2008-09-11: | TWikibug:Item5995: Rewritten to work on TWiki 4.2 |
