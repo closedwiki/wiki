@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1296798336" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352970892" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarRECENTVISITOR
 ---+++ RECENTVISITOR -- show statistics of recent visitors to the TWiki site
@@ -16,4 +16,5 @@
    * Examples:
       * =%<nop>RECENTVISITOR{"user" name="TWikiAdminUser"}%= show most recent visit of !TWikiAdminUser.
       * =%<nop>RECENTVISITOR{"recent" format="| $wikiusername | $ago ago |}%= shows 10 most recent visitors.
+   * Category: AdministrationVariables, UsersAndAuthenticationVariables
    * Related: RecentVisitorPlugin
