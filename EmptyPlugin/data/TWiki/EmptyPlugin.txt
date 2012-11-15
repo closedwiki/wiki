@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1306124026" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352972440" format="1.1" version="$Rev$"}%
 ---+!! Empty TWiki Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -62,10 +62,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Set SHORTDESCRIPTION = Empty Plugin used as a template for new plugins
 
 |  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie |
-|  Copyright: | &copy; 2001-2011, TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2001-2012, TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-11-15: | TWikibug:Item7020: Categorize EXAMPLEVAR TWiki Variable -- TWiki:Main.PeterThoeny |
 |  2011-05-22: | TWikibug:Item6724: Pass text and meta data to registerTagHandler callback -- TWiki:Main.PeterThoeny |
 |  2011-05-17: | TWikibug:Item6725: Change global package variables from "use vars" to "ours"; doc improvements -- TWiki:Main.PeterThoeny |
 |  2011-03-06: | TWikibug:Item6656: Add meta data to attachment save handlers |

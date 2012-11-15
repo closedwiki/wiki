@@ -1,8 +1,8 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2011 Peter Thoeny, peter[at]thoeny.org
-# Copyright (C) 2001-2011 TWiki Contributors.
+# Copyright (C) 2001-2012 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2001-2012 TWiki Contributors.
 # All Rights Reserved. TWiki Contributors are listed in the AUTHORS
 # file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -84,7 +84,7 @@ our $VERSION = '$Rev$';
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS. Add a release date in ISO
 # format (preferred) or a release number such as '1.3'.
-our $RELEASE = '2011-05-22';
+our $RELEASE = '2012-11-15';
 
 # One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
 our $SHORTDESCRIPTION = 'Empty Plugin used as a template for new Plugins';
