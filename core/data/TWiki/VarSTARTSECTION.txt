@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351794975" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352960948" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarSTARTSECTION
 ---+++ STARTSECTION -- marks the start of a section within a topic
@@ -19,4 +19,5 @@
      | =disablefixlinks="on"= | Only for named sections: Bypass fixing !WikiWord links if section is included from a topic in another web. Fixing links in included text such as from !SomeLink to !Thisweb.SomeLink is usually desirable so that links in included text still point to the same target. | fix links |
    * __%X% Note:__ If a section is not given a name, it will be assigned one. Unnamed sections are assigned names starting with =_SECTION0= for the first unnamed section in the topic, =_SECTION1= for the second, etc..
    * __%X% Note:__ You can define nested sections. Do not overlap sections. Use named sections to make sure that the correct START and ENDs are matched. Section markers are *not* displayed when a topic is viewed.
+   * Category: DevelopmentVariables, WorkflowAndAutomationVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENDSECTION][ENDSECTION]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarHIDE][HIDE]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarINCLUDE][INCLUDE]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarNOP][NOP]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSTARTINCLUDE][STARTINCLUDE]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSTOPINCLUDE][STOPINCLUDE]]

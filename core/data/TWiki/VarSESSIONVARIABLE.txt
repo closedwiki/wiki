@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1302334793" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352960702" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarSESSIONVARIABLE
 ---+++ SESSION_VARIABLE -- get, set or clear a session variable
@@ -9,4 +9,5 @@
    * Special read-only session variables:
       * =%<nop>SESSION_VARIABLE{"AUTHUSER"}%= - user ID, current value: <tt>%SESSION_VARIABLE{"AUTHUSER"}%</tt>
       * =%<nop>SESSION_VARIABLE{"SESSION_REQUEST_NUMBER"}%= - number of pages accessed by current user since login, current value: <tt>%SESSION_VARIABLE{"SESSION_REQUEST_NUMBER"}%</tt>
+   * Category: DevelopmentVariables, SystemInformationVariables, UsersAndAuthenticationVariables
    * Related: TWikiUserAuthentication#Sessions, [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarAUTHREALM][AUTHREALM]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarGET][GET]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarLOGIN][LOGIN]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarLOGOUT][LOGOUT]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSESSIONID][SESSIONID]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSESSIONVAR][SESSIONVAR]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSET][SET]]

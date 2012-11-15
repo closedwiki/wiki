@@ -1,9 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293665017" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352960592" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarSERVERTIME
 ---+++ SERVERTIME -- server time
    * Syntax: =%<nop>SERVERTIME%=
    * Expands to: =%SERVERTIME%=
    * Date format defined as {DefaultDateFormat} in [[%SCRIPTURLPATH{"configure"}%][configure]], default =$year-$mo-$day=
-   * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+   * Note: When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+   * Category: DateAndTimeVariables, SystemInformationVariables
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarDISPLAYTIME][DISPLAYTIME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarGMTIME][GMTIME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSERVERTIME2][SERVERTIME{"format"}]]
