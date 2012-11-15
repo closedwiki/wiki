@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="CraigMeyer" date="1291529456" format="1.1" reprev="1.4" version="1.4"}%
+%META:TOPICINFO{author="TWikiContributor" date="1352969319" format="1.1" version="$Rev$"}%
 ---+!! Encrypt Plugin (WORK IN PROGRESS)
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -65,11 +65,12 @@ Other people see =<nop>*****<nop>= when looking at the page, and =%<nop>ENCRYPT{
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.net/][Twiki, Inc.]], TWiki:Main.CraigMeyer |
-|  Copyright: | &copy; 2010 TWiki:Main.CraigMeyer, &copy; 2010, TWiki:Main.PeterThoeny %BR% &copy; 2010, TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2010 TWiki:Main.CraigMeyer, &copy; 2010-2012 TWiki:Main.PeterThoeny %BR% &copy; 2010-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | %$VERSION% |
+|  Plugin Version: | 2012-11-15 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-12-5: | First working version - still some loose ends |
+|  2012-11-15: | TWikibug:Item7020: Categorize ENCRYPT TWiki Variable |
+|  2010-12-05: | First working version - still some loose ends |
 |  2010-11-15: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | CPAN:Mime::Base64, CPAN:Crypt::CBC, CPAN:Crypt::Rijndael_PP, CPAN:Crypt::RC4, CPAN:Crypt::OpenSSL::RSA |

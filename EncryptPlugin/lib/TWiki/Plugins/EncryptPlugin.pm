@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2010 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2010 TWiki:Main.CraigMeyer
+# Copyright (C) 2010-2012 Peter Thoeny, peter@thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -110,29 +110,13 @@ $MY_META_TYPE  = 'ENCRYPTPLUGIN';
     'RSA_RC4'  => 'Crypt::RC4',
 );
 
-# This should always be $Rev: 18620 (2010-10-10) $ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev: 18620 (2010-10-10) $';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS. Add your own release number
-# such as '1.3' or release date such as '2010-05-08'
-$RELEASE = '0.1';
+$VERSION = '$Rev$';
+$RELEASE = '2012-11-15';
 
 # Short description of this plugin
-# One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 $SHORTDESCRIPTION =
 'Securely encrypt text in TWiki topics to be accessible by selected users only.';
 
-# You must set $NO_PREFS_IN_TOPIC to 0 if you want your plugin to use preferences
-# stored in the plugin topic. This default is required for compatibility with
-# older plugins, but imposes a significant performance penalty, and
-# is not recommended. Instead, use $TWiki::cfg entries set in LocalSite.cfg, or
-# if you want the users to be able to change settings, then use standard TWiki
-# preferences that can be defined in your Main.TWikiPreferences and overridden
-# at the web and topic level.
 $NO_PREFS_IN_TOPIC = 1;
 
 # Name of this Plugin, only used in this module
