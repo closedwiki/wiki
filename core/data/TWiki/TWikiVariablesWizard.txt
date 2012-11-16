@@ -1,14 +1,15 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353055257" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353056428" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 ---+ TWiki Variables Wizard
-%INCLUDE{ "ScrollBoxAddOn" section="scroll_box_engine" }%<nop>
+%STARTINCLUDE%
 <style type="text/css">
  #one_var h6 {
-  margin-top: 5px;
+  margin-top: 0;
  }
 </style>
 <table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td valign="top">
 %SET{ "useBox" value="%IF{ "istopic 'ScrollBoxAddOn'" then="1" else="0" }%" }%<nop>
+%IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="scroll_box_engine" }$percnt' else='<nop>' }%
 %IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="width: auto;" contentstyle="margin-top: -10px;" }$percnt' else='<nop>' }%
 %INCLUDE{ "TWikiVariablesSearch" section="categories" }%<nop>
 __Categories:__ %BR%
@@ -33,7 +34,7 @@ __Categories:__ %BR%
 __Variables:__ %BR%
 <form>
 <select name="sel_vars" id="sel_vars" size="12" style="width: 99%; font-family: monospace; overflow-x: hidden;">
-<option> </option>
+<option> &nbsp; </option>
 </select>
 </form>
 %IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_end" }$percnt' else='<nop>' }%
@@ -41,9 +42,9 @@ __Variables:__ %BR%
 %ICON{arrowdown}%
 </div>
 </td></tr></table>
-%IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="width: auto; padding-right: 0;" contentstyle="margin-top: -10px;" }$percnt' else='<nop>' }%
+%IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="width: auto; padding-right: 0;" contentstyle="margin-top: -5px;" }$percnt' else='<nop>' }%
 <div id="one_var" style="width: 99%; height: 15em; overflow-x: hidden; overflow-y: auto;">
-%GRAY% Select a variable %ENDCOLOR%
+%GRAY% Select a category and a variable %ENDCOLOR%
 </div>
 %IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_end" }$percnt' else='<nop>' }%
 <div style="margin: 2px 0 3px 0; text-align: center;">
@@ -102,5 +103,6 @@ __Build Your Variable:__
   });
 </script>
 <!--</pre>-->
+%STOPINCLUDE%
 
 __Related Topics:__ UserDocumentationCategory, TWikiVariables, TWikiVariablesSearch, TWikiVariablesQuickStart, SearchHelp
