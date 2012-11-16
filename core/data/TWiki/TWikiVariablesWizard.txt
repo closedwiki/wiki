@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353056428" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353057360" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 ---+ TWiki Variables Wizard
 %STARTINCLUDE%
@@ -60,6 +60,9 @@ __Build Your Variable:__
 <textarea class="twikiTextarea twikiEditboxStyleProportional" id="edit_var" name="text" rows="3" cols="70" style="width:99%">
 </textarea>
 %IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_end" }$percnt' else='<nop>' }%
+<div style='display: none;'>
+Pre-load image: %ICONURL{processing-bar-wide}%
+</div>
 <!--<pre>-->
 <script>
   var hashCats = new Object();
@@ -88,6 +91,7 @@ __Build Your Variable:__
     if( twVar!='' ) {
       var txt = hashHeads[twVar].replace(/(&#37;.*?&#37;).*/, "$1");
       $("#edit_var").html( txt );
+      $("#one_var").html( "<div style='padding: 3px;'><img src='%ICONURL{processing-bar-wide}%' width='124' height='12' alt='' title='Loading...' />" );
       $.ajax({
         url: "%SCRIPTURLPATH{view}%/%SYSTEMWEB%/Var"+twVar,
         data: { skin: "text" },
