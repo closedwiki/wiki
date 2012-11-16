@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353052212" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353055257" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 ---+ TWiki Variables Wizard
 %INCLUDE{ "ScrollBoxAddOn" section="scroll_box_engine" }%<nop>
@@ -7,7 +7,7 @@
   margin-top: 5px;
  }
 </style>
-<table><tr><td valign="top">
+<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td valign="top">
 %SET{ "useBox" value="%IF{ "istopic 'ScrollBoxAddOn'" then="1" else="0" }%" }%<nop>
 %IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="width: auto;" contentstyle="margin-top: -10px;" }$percnt' else='<nop>' }%
 %INCLUDE{ "TWikiVariablesSearch" section="categories" }%<nop>
@@ -27,30 +27,33 @@ __Categories:__ %BR%
 </form>
 %IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_end" }$percnt' else='<nop>' }%
 </td>
-<td>&nbsp;%ICON{arrowright}%&nbsp;</td>
-<td valign="top">
-%IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="width: auto;" contentstyle="margin-top: -10px;" }$percnt' else='<nop>' }%
+<td><div style="width: 22px; text-align: center;">%ICON{arrowright}%</div></td>
+<td valign="top" width="90%">
+%IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="width: auto; padding-right: 10px;" contentstyle="width: 100%; margin-top: -10px;" }$percnt' else='<nop>' }%
 __Variables:__ %BR%
 <form>
-<select name="sel_vars" id="sel_vars" size="12" style="font-family: monospace; overflow-x: hidden;">
-<option> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </option>
+<select name="sel_vars" id="sel_vars" size="12" style="width: 99%; font-family: monospace; overflow-x: hidden;">
+<option> </option>
 </select>
 </form>
 %IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_end" }$percnt' else='<nop>' }%
-<div style="margin: 7px 0 5px 0; text-align: center;">
+<div style="margin: 2px 0 3px 0; text-align: center;">
 %ICON{arrowdown}%
 </div>
 </td></tr></table>
 %IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="width: auto; padding-right: 0;" contentstyle="margin-top: -10px;" }$percnt' else='<nop>' }%
-<div id="one_var" style="width: 99%; height: 15em; margin-left: 5px; overflow-x: hidden; overflow-y: auto;">
+<div id="one_var" style="width: 99%; height: 15em; overflow-x: hidden; overflow-y: auto;">
 %GRAY% Select a variable %ENDCOLOR%
 </div>
 %IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_end" }$percnt' else='<nop>' }%
-<div style="margin: 7px 0 5px 0; text-align: center;">
+<div style="margin: 2px 0 3px 0; text-align: center;">
 %ICON{arrowdown}%
 </div>
-%IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="width: auto;" contentstyle="margin-top: -10px;" }$percnt' else='<nop>' }%
-<div>
+%IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="width: auto;" contentstyle="margin-top: -13px;" }$percnt' else='<nop>' }%
+<div style="float: right; width: 100px; text-align: right; padding: 2px;">
+<input type="button" value="Select all" class="twikiButton" id="select_all" title="Select all text for copy &amp; paste operation" />
+</div>
+<div style="padding: 3px;">
 __Build Your Variable:__
 </div>
 <textarea class="twikiTextarea twikiEditboxStyleProportional" id="edit_var" name="text" rows="3" cols="70" style="width:99%">
@@ -74,7 +77,7 @@ __Build Your Variable:__
     for( var i=0; i<twVars.length; i++ ) {
       var twVar = twVars[i];
       if( twVar!='' ) {
-        txt += "<option value='" + twVar + "'>" + hashHeads[twVar].slice(0, 60) + "</option>";
+        txt += "<option value='" + twVar + "'>" + hashHeads[twVar].slice(0, 120) + "</option>";
       }
     }
     $("#sel_vars").html( txt );
@@ -92,6 +95,12 @@ __Build Your Variable:__
         $("#one_var").html( html.replace('h3>', 'h6>') );
       });
     }
- });
+  });
+  $("#select_all").click(function () {
+    $("#edit_var").select();
+    $("#edit_var").focus();
+  });
 </script>
 <!--</pre>-->
+
+__Related Topics:__ UserDocumentationCategory, TWikiVariables, TWikiVariablesSearch, TWikiVariablesQuickStart, SearchHelp
