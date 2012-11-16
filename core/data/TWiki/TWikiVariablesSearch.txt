@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352710772" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353056418" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 ---+!! <span style="font-size: 60%;">[[TWikiVariables][TWiki Variables]] &raquo;</span> Search Variables
 %STARTINCLUDE%%STARTSECTION{categories}%%SET{
@@ -48,4 +48,4 @@ __Categories:__
 %GET{twVarCategoriesLinks}%
 %INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_end"}%
 
-__Related Topics:__ UserDocumentationCategory, TWikiVariables, TWikiVariablesQuickStart, SearchHelp
+__Related Topics:__ UserDocumentationCategory, TWikiVariables, TWikiVariablesWizard, TWikiVariablesQuickStart, SearchHelp

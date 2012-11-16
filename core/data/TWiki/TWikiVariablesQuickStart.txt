@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352681769" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353056414" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 ---+ TWiki Variables Quickstart
 
@@ -16,10 +16,10 @@ Many TWiki variables are built-in, and others are predefined for your convenienc
    * =%<nop>INCLUDE{"SomeTopic"}%= : Server side include, [[VarINCLUDE][includes another topic]]. The current web is the default web. Example: =<b>%<nop>INCLUDE{"%SYSTEMWEB%.SiteMap"}%</b>=
    * =%<nop>SEARCH{"sushi"}%= : [[VarSEARCH][Inline search]] showing the search result embedded in a topic. FormattedSearch gives you control over formatting, used to create web-based applications.
    * [[TWikiDocGraphics][Documentation Graphics]]: There are many graphics available to use in your topics. Use =%<nop>ICON{"help"}%=, =%<nop>ICON{"tip"}%=, and =%<nop>ICON{"warning"}%= to get: %H%, %T%, and %X%, respectively.
-   * [[TWikiVariables][See all TWiki variables]].
-   * [[TWikiVariablesSearch][Search TWiki variables & list by category]].
+   * [[TWikiVariablesWizard][Use the TWiki Variables Wizard]] to build your variables.
+   * [[TWikiVariables][See all TWiki Variables]].
 
 %ICON{"tip"}% To "escape" a variable, prefix it with an exclamation mark. Write: =!%<nop>SOMEVARIABLE%= to get: !%SOMEVARIABLE%.
 %STOPINCLUDE%
 
-__Related Topics:__ UserDocumentationCategory, TWikiVariables, TWikiVariablesSearch, TextFormattingRules
+__Related Topics:__ UserDocumentationCategory, TWikiVariables, TWikiVariablesWizard, TWikiVariablesSearch, TextFormattingRules
