@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352783058" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353056423" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %STARTSECTION{type="include"}%
 ---+ TWiki Variables
@@ -143,19 +143,10 @@ Most predefined variables return values that were either set in the configuratio
    * %X% Plugins may extend the set of predefined variables (see individual plugin topics for details)
    * %T% *Take the time to thoroughly read through ALL preference variables.* If you actively configure your site, review variables periodically. They cover a wide range of functions, and it can be easy to miss the one perfect variable for something you have in mind. For example, see =%<nop>INCLUDINGTOPIC%=, =%<nop>INCLUDE%=, and the mighty =%<nop>SEARCH%=.
 
-<table width="100%"><tr><td valign="top">
----++!! Search predefined variables
+#TWikiVariablesWizard
+---+++ TWiki variables wizard
 
-%INCLUDE{TWikiVariablesSearch}%
-</td><td>&nbsp;&nbsp;
-</td><td valign="top">
----++!! &nbsp;
-
-%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_start" boxstyle="width: auto;" }%
-__Categories:__
-%GET{twVarCategoriesLinks}%
-%INCLUDE{ "%SYSTEMWEB%.ScrollBoxAddOn" section="static_box_end" }%
-</td></tr></table>
+%INCLUDE{TWikiVariablesWizard}%
 
 #AllVariables
 ---++!! List of all predefined variables
