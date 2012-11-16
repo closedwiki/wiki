@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353057360" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353093675" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 ---+ TWiki Variables Wizard
 %STARTINCLUDE%
@@ -10,7 +10,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td valign="top">
 %SET{ "useBox" value="%IF{ "istopic 'ScrollBoxAddOn'" then="1" else="0" }%" }%<nop>
 %IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="scroll_box_engine" }$percnt' else='<nop>' }%
-%IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="width: auto;" contentstyle="margin-top: -10px;" }$percnt' else='<nop>' }%
+%IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="padding: 10px; width: auto;" contentstyle="margin-top: -5px;" }$percnt' else='<nop>' }%
 %INCLUDE{ "TWikiVariablesSearch" section="categories" }%<nop>
 __Categories:__ %BR%
 <nop>%CALCULATE{$SET(varTopics, %SEARCH{
@@ -21,7 +21,7 @@ __Categories:__ %BR%
  separator=", "
 }%)$SET(vars, $LISTMAP($SUBSTRING($item, 4, 99), $GET(varTopics)))$LISTJOIN($sp, $LISTMAP($SET(cat_$item, $LISTNONEMPTY($GET(cat_$item))), %GET{twVarCategories}%))$SET(cat_all, $LISTMAP($item$SET(head, &#37;$SUBSTITUTE($SUBSTITUTE($SUBSTITUTE($TRANSLATE($GET(var_head_$item), $comma, ~), }, }&#37;), \", &#34;), ~, &#44;))$SET(var_head_$item, $IF($SEARCH(^&#37;[A-Z]+ , $GET(head))>0, $INSERTSTRING($GET(head), $INT($SEARCH([ ], $GET(head))-1), &#37;), $GET(head))), $GET(vars)))}%
 <form>
-<select name="sel_cats" id="sel_cats" size="12" style="font-family: monospace;">
+<select name="sel_cats" id="sel_cats" size="10">
 <option value="all">all</option>
 %CALCULATE{$LISTJOIN($sp, $LISTMAP(<option value="$item">$SUBSTITUTE($PROPERSPACE($SUBSTITUTE($item, Variables,)), And , &amp; )</option>, %GET{twVarCategories}%))}%
 </select>
@@ -30,10 +30,10 @@ __Categories:__ %BR%
 </td>
 <td><div style="width: 22px; text-align: center;">%ICON{arrowright}%</div></td>
 <td valign="top" width="90%">
-%IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="width: auto; padding-right: 10px;" contentstyle="width: 100%; margin-top: -10px;" }$percnt' else='<nop>' }%
+%IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="padding: 10px; width: auto;" contentstyle="width: 100%; margin-top: -5px;" }$percnt' else='<nop>' }%
 __Variables:__ %BR%
 <form>
-<select name="sel_vars" id="sel_vars" size="12" style="width: 99%; font-family: monospace; overflow-x: hidden;">
+<select name="sel_vars" id="sel_vars" size="10" style="width: 100%; overflow-x: hidden;">
 <option> &nbsp; </option>
 </select>
 </form>
@@ -42,7 +42,7 @@ __Variables:__ %BR%
 %ICON{arrowdown}%
 </div>
 </td></tr></table>
-%IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="width: auto; padding-right: 0;" contentstyle="margin-top: -5px;" }$percnt' else='<nop>' }%
+%IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="padding: 10px 0 10px 10px; width: auto;" contentstyle="margin-top: -1px;" }$percnt' else='<nop>' }%
 <div id="one_var" style="width: 99%; height: 15em; overflow-x: hidden; overflow-y: auto;">
 %GRAY% Select a category and a variable %ENDCOLOR%
 </div>
@@ -50,14 +50,14 @@ __Variables:__ %BR%
 <div style="margin: 2px 0 3px 0; text-align: center;">
 %ICON{arrowdown}%
 </div>
-%IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="width: auto;" contentstyle="margin-top: -13px;" }$percnt' else='<nop>' }%
-<div style="float: right; width: 100px; text-align: right; padding: 2px;">
+%IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_start" boxstyle="padding: 10px; width: auto;" contentstyle="margin-top: -7px;" }$percnt' else='<nop>' }%
+<div style="float: right; width: 100px; text-align: right; padding: 1px 3px;">
 <input type="button" value="Select all" class="twikiButton" id="select_all" title="Select all text for copy &amp; paste operation" />
 </div>
 <div style="padding: 3px;">
 __Build Your Variable:__
 </div>
-<textarea class="twikiTextarea twikiEditboxStyleProportional" id="edit_var" name="text" rows="3" cols="70" style="width:99%">
+<textarea class="twikiTextarea twikiEditboxStyleMono" id="edit_var" name="text" rows="3" cols="70" style="width:99%">
 </textarea>
 %IF{ '"%GET{useBox}%"="1"' then='$percntINCLUDE{ "ScrollBoxAddOn" section="static_box_end" }$percnt' else='<nop>' }%
 <div style='display: none;'>
