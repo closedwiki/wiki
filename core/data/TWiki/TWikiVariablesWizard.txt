@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353093675" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353144502" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 ---+ TWiki Variables Wizard
 %STARTINCLUDE%
@@ -93,7 +93,7 @@ Pre-load image: %ICONURL{processing-bar-wide}%
       $("#edit_var").html( txt );
       $("#one_var").html( "<div style='padding: 3px;'><img src='%ICONURL{processing-bar-wide}%' width='124' height='12' alt='' title='Loading...' />" );
       $.ajax({
-        url: "%SCRIPTURLPATH{view}%/%SYSTEMWEB%/Var"+twVar,
+        url: "%SCRIPTURLPATH{view}%/%WEB%/Var"+twVar,
         data: { skin: "text" },
         cache: false
       }).done(function( html ) {

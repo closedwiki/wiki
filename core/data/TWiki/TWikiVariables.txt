@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353056423" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353144494" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %STARTSECTION{type="include"}%
 ---+ TWiki Variables
@@ -205,4 +205,4 @@ Example content of a =VarLIGHTSABER= topic:
 
 %ENDSECTION{type="include"}%
 
-__Related Topics:__ UserDocumentationCategory, TWikiVariablesSearch, TWikiVariablesQuickStart, ParameterizedVariables
+__Related Topics:__ UserDocumentationCategory, TWikiVariablesWizard, TWikiVariablesSearch, TWikiVariablesQuickStart, ParameterizedVariables

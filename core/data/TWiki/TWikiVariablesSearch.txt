@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353056418" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353144496" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 ---+!! <span style="font-size: 60%;">[[TWikiVariables][TWiki Variables]] &raquo;</span> Search Variables
 %STARTINCLUDE%%STARTSECTION{categories}%%SET{
@@ -33,7 +33,7 @@ Category
 %CALCULATE{$SET(found, %IF{ "defined 'search'" then="__Note:__ No variables found." else="" }%)}%
 %TOC{ title="Found:" }%
 %SEARCH{
-  "^\#Var[A-Z0-9];%IF{ "defined 'search'" then="$percntURLPARAM{ \"search\" encode=\"quote\" }$percnt" else="don't_show_anything" }%%IF{ "'%URLPARAM{ "category" encode="quote" }%'!=''" then=";\* Category:.*?%URLPARAM{ "category" encode="quote" }%" }%"
+  "^\#Var[A-Z0-9]%IF{ "defined 'search'" then=";$percntURLPARAM{ \"search\" encode=\"quote\" }$percnt" else=";don't_show_anything" }%%IF{ "'%URLPARAM{ "category" encode="quote" }%'!=''" then=";\* Category:.*?%URLPARAM{ "category" encode="quote" }%" }%"
  topic="Var*"
  type="regex"
  nonoise="on"
