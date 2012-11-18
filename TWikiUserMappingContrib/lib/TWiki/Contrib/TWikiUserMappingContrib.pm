@@ -20,5 +20,5 @@ package TWiki::Contrib::TWikiUserMappingContrib;
 use strict;
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-11-14';
+our $RELEASE = '2012-11-18';
 our $SHORTDESCRIPTION = 'Traditional TWiki topic based user management and user mapping';
