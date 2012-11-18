@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="PeterThoeny" date="1350871667" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353198816" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.2.0 (Jerusalem), 2012-??-?? 
 
-FIXME: Placeholder topic
+FIXME: Placeholder topic. The Jerusalem release will be either TWiki-5.2 or TWiki-6.0.
 
 %TOC%
 
