@@ -1,10 +1,15 @@
-%META:TOPICINFO{author="TWikiContributor" date="1311545688" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353267170" format="1.1" version="$Rev$"}%
 ---+ %MAKETEXT{"Change Profile Picture of [_1]" args="%URLPARAM{ "wikiname" default=" " }%" }%
 
 <!--<pre>-->
 <style type='text/css' media='all'>
  .profileBox {
   border: solid #dddddd 1px;
+  -moz-box-shadow: 2px 2px 3px #e8e8e8;
+  -webkit-box-shadow: 2px 2px 3px #e8e8e8;
+  box-shadow: 2px 2px 3px #e8e8e8;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
   padding: 5px 10px 10px 10px;
   background-image: url(%PUBURLPATH%/%WEB%/UserProfileHeader/gradient-title.png);
   background-repeat: repeat-x;
@@ -45,11 +50,12 @@ function validateFileType( fieldID, allowedTypes )
 <div class="profileHeader">
 %MAKETEXT{"Current picture"}%:
 </div>
-<img src="%IF{
- "'%URLPARAM{wikiname}%'/attachments[name='%FORMFIELD{ "Image" topic="%URLPARAM{wikiname}%" }%']"
- then='%PUBURLPATH%/%WEB%/%URLPARAM{wikiname}%/$percntFORMFIELD{ "Image" topic="%URLPARAM{wikiname}%" }$percnt'
- else='%PUBURLPATH%/%WEB%/UserProfileHeader/default-user-profile.jpg'
-}%" width="200" alt="" />
+%CALCULATE{$SET(current-image, %FORMFIELD{ "Image" topic="%URLPARAM{wikiname}%" }%)}%<nop>
+<img %IF{
+ "'%URLPARAM{wikiname}%'/attachments[name='%CALCULATE{$GET(current-image)}%']"
+ then='src="%PUBURLPATH%/%WEB%/%URLPARAM{wikiname}%/%CALCULATE{$GET(current-image)}%" title="%CALCULATE{$GET(current-image)}%"'
+ else='src="%PUBURLPATH%/%WEB%/UserProfileHeader/default-user-profile.jpg"'
+}% width="200" alt="" />
 </td><td valign="top">
 <img src="%PUBURLPATH%/%WEB%/UserProfileHeader/spacer.gif" width="20" height="1" />
 </td><td valign="top" class="profileBox">
@@ -75,7 +81,7 @@ function validateFileType( fieldID, allowedTypes )
 <div class="profileHeader">
 %MAKETEXT{"Select existing picture"}%:
 </div>
-%CALC{$LISTJOIN(&nbsp; , $LISTMAP(<form action="%SCRIPTURL{save}%/%WEB%/%URLPARAM{wikiname}%" method="post" /> <input type="hidden" name="Image" value="$item" /> <input type="image" src="%PUBURLPATH%/%WEB%/%URLPARAM{wikiname}%/$item" XXwidth="100" height="60" alt="" border="0" class="twikiButton" style="padding:10px" /></form>, $LISTIF($NOT($EXACT($item,undef)), %SEARCH{ "%URLPARAM{wikiname}%" scope="topic" topic="%URLPARAM{wikiname}%" nonoise="1" limit="1" format="$query(attachments[name~'*.jpg'].name), $query(attachments[name~'*.JPG'].name), $query(attachments[name~'*.png'].name), $query(attachments[name~'*.PNG'].name), $query(attachments[name~'*.gif'].name), $query(attachments[name~'*.GIF'].name)" }%)))}%
+%CALCULATE{$LISTJOIN(&nbsp; , $LISTMAP(<form action="%SCRIPTURL{save}%/%WEB%/%URLPARAM{wikiname}%" method="post" /> <input type="hidden" name="Image" value="$item" /> <input type="image" src="%PUBURLPATH%/%WEB%/%URLPARAM{wikiname}%/$item" height="60" border="0" alt="" title="$item" class="twikiButton" style="padding:10px" /></form>, $LISTIF($NOT($EXACT($item,undef)), %SEARCH{ "%URLPARAM{wikiname}%" scope="topic" topic="%URLPARAM{wikiname}%" nonoise="1" limit="1" format="$query(attachments[name~'*.jpg'].name), $query(attachments[name~'*.JPG'].name), $query(attachments[name~'*.png'].name), $query(attachments[name~'*.PNG'].name), $query(attachments[name~'*.gif'].name), $query(attachments[name~'*.GIF'].name)" }%)))}%
 </td></tr></table>
 
 %IF{ "defined 'wikiname'" then="__%MAKETEXT{"Return to"}%:__ [[%URLPARAM{wikiname}%]]" }%

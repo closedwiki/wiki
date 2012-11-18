@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1333168607" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353267140" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -10,6 +10,11 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 <style type='text/css' media='all'>
 .profileBox {
   border: solid #dddddd 1px;
+  -moz-box-shadow: 2px 2px 3px #e8e8e8;
+  -webkit-box-shadow: 2px 2px 3px #e8e8e8;
+  box-shadow: 2px 2px 3px #e8e8e8;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
   padding: 10px;
   background-image: url(%PUBURLPATH%/%WEB%/UserProfileHeader/gradient-title.png);
   background-repeat: repeat-x;
