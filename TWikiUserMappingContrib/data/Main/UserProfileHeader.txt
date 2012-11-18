@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353267140" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353276174" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -46,11 +46,12 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 <div style="position: absolute; width: 200px; margin-top: -1px; text-align:right;">
 <a href="%SCRIPTURL{view}%/%WEB%/ChangeProfilePicture?wikiname=%INCLUDINGTOPIC%" title="%MAKETEXT{"Change profile picture"}%" id="changePicture" rel="nofollow">&nbsp;<img src='%ICONURLPATH{uweb-bo12}%' width='12' height='12' alt='' border='0' style='vertical-align: middle' /> %MAKETEXT{"Change"}%&nbsp;</a>
 </div>
-<a href="%SCRIPTURL{view}%/%WEB%/ChangeProfilePicture?wikiname=%INCLUDINGTOPIC%" title="%MAKETEXT{"Change profile picture"}%" rel="nofollow"><img src="%IF{
- "'%INCLUDINGTOPIC%'/attachments[name='%FORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }%']"
- then='%PUBURLPATH%/%WEB%/%INCLUDINGTOPIC%/$percntFORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }$percnt'
- else='%PUBURLPATH%/%WEB%/UserProfileHeader/default-user-profile.jpg'
-}%" width="200" border="0" alt="" /></a>
+%CALCULATE{$SET(image, %FORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }%)}%<nop>
+%IF{
+ "'%INCLUDINGTOPIC%'/attachments[name='%CALCULATE{$GET(image)}%']"
+ then='<a href="%PUBURLPATH%/%WEB%/%INCLUDINGTOPIC%/%CALCULATE{$GET(image)}%" rel="nofollow"><img src="%PUBURLPATH%/%WEB%/%INCLUDINGTOPIC%/%CALCULATE{$GET(image)}%" width="200" border="0" alt="" /></a>'
+ else='<img src="%PUBURLPATH%/%WEB%/UserProfileHeader/default-user-profile.jpg" width="200" border="0" alt="" />'
+}%
 <div style="margin-top: 5px; overflow: hidden; white-space: nowrap; line-height: 28px; width: 200px;">
 <noautolink>
 %ICON{mail}% %FORMFIELD{ "Email" topic="%INCLUDINGTOPIC%" }% &nbsp;
