@@ -250,7 +250,7 @@ sub _generateEditButton {
 
     my $script = TWiki::Func::getContext()->{authenticated} ?
         'view' : 'viewauth';
-    my $viewUrl = TWiki::Func::getScriptUrl( $web, $topic, $script, 1 );
+    my $viewUrl = TWiki::Func::getScriptUrl( $web, $topic, $script );
     my $text = CGI::start_form(
         -name => 'editpreferences',
         -method => 'post',
