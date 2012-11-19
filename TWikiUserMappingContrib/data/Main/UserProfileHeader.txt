@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353290320" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353292525" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -36,6 +36,7 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
   -moz-opacity: .2;
   filter: alpha(opacity=20);
 }
+.changePictureHover,
 .changePicture:hover {
   color: #222e74;
   background-color: #ffffff;
@@ -50,12 +51,14 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 <div style="position: absolute; width: 200px; margin-top: -1px; text-align:right;">
 <a href="%SCRIPTURL{view}%/%WEB%/ChangeProfilePicture?wikiname=%INCLUDINGTOPIC%" title="%MAKETEXT{"Change profile picture"}%" class="changePicture" rel="nofollow">&nbsp;<img src='%ICONURLPATH{uweb-bo12}%' width='12' height='12' alt='' border='0' style='vertical-align: middle' /> %MAKETEXT{"Change"}%&nbsp;</a>
 </div>
+<div id="profilePicture">
 %CALCULATE{$SET(image, %FORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }%)}%<nop>
 %IF{
  "'%INCLUDINGTOPIC%'/attachments[name='%CALCULATE{$GET(image)}%']"
  then='<a href="%PUBURLPATH%/%WEB%/%INCLUDINGTOPIC%/%CALCULATE{$GET(image)}%" rel="nofollow"><img src="%PUBURLPATH%/%WEB%/%INCLUDINGTOPIC%/%CALCULATE{$GET(image)}%" width="200" border="0" alt="" /></a>'
  else='<img src="%PUBURLPATH%/%WEB%/UserProfileHeader/default-user-profile.jpg" width="200" border="0" alt="" />'
 }%
+</div>
 <div style="margin-top: 5px; overflow: hidden; white-space: nowrap; line-height: 28px; width: 200px;">
 <noautolink>
 %ICON{mail}% %FORMFIELD{ "Email" topic="%INCLUDINGTOPIC%" }% &nbsp;
@@ -144,6 +147,12 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 </td></tr></table>
 </form>
 </div>
+<script type="text/javascript">
+$("#profilePicture").hover(
+ function() { $(".changePicture").addClass("changePictureHover") },
+ function() { $(".changePicture").removeClass("changePictureHover") }
+);
+</script>
 %STOPINCLUDE%
 -----
 
