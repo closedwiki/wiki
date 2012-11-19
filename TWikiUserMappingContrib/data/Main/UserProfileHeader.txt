@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353276174" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353290320" format="1.1" version="$Rev$"}%
 ---+ Header of User Profile Pages
 
 __Note:__ This is a maintenance topic, used by the TWiki Administrator.
@@ -23,18 +23,22 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 #viewInfo .twikiLastCol {
   min-width:19em;
 }
-#changePicture {
+.changePicture {
+  display: inline-block; /* for IE */
+  width: auto; /* for IE */
   text-decoration: none;
   border: 0 none;
   font-size: 14px;
   line-height: 18px;
+  color: #222e74;
   background-color: #ffffff;
   opacity: .2;
   -moz-opacity: .2;
   filter: alpha(opacity=20);
 }
-#changePicture:hover {
-  color: #333333;
+.changePicture:hover {
+  color: #222e74;
+  background-color: #ffffff;
   opacity: .7;
   -moz-opacity: .7;
   filter: alpha(opacity=70);
@@ -44,7 +48,7 @@ The part between the horizontal rules gets included at the top of every [[%WIKIU
 <div id="viewRecord" style="display: block; padding: 10px 0 0 0">
 <table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top" class="profileBox" style="width: 200px;" rowspan="2">
 <div style="position: absolute; width: 200px; margin-top: -1px; text-align:right;">
-<a href="%SCRIPTURL{view}%/%WEB%/ChangeProfilePicture?wikiname=%INCLUDINGTOPIC%" title="%MAKETEXT{"Change profile picture"}%" id="changePicture" rel="nofollow">&nbsp;<img src='%ICONURLPATH{uweb-bo12}%' width='12' height='12' alt='' border='0' style='vertical-align: middle' /> %MAKETEXT{"Change"}%&nbsp;</a>
+<a href="%SCRIPTURL{view}%/%WEB%/ChangeProfilePicture?wikiname=%INCLUDINGTOPIC%" title="%MAKETEXT{"Change profile picture"}%" class="changePicture" rel="nofollow">&nbsp;<img src='%ICONURLPATH{uweb-bo12}%' width='12' height='12' alt='' border='0' style='vertical-align: middle' /> %MAKETEXT{"Change"}%&nbsp;</a>
 </div>
 %CALCULATE{$SET(image, %FORMFIELD{ "Image" topic="%INCLUDINGTOPIC%" }%)}%<nop>
 %IF{
