@@ -250,7 +250,7 @@ sub _generateEditButton {
 
     my $script = TWiki::Func::getContext()->{authenticated} ?
         'view' : 'viewauth';
-    my $viewUrl = TWiki::Func::getScriptUrl( $web, $topic, $script );
+    my $viewUrl = TWiki::Func::getScriptUrl( $web, $topic, $script, 1 );
     my $text = CGI::start_form(
         -name => 'editpreferences',
         -method => 'post',
@@ -259,9 +259,16 @@ sub _generateEditButton {
         type => 'hidden',
         name => 'prefsaction',
         value => 'edit'});
-    $text .= CGI::submit(-name => 'edit',
-                         -value=> $buttonLabel,
-                         -class=> 'twikiButton');
+    my @submitAttrs = (
+	-name => 'edit',
+	-value=>'Edit Preferences',
+	-class=>'twikiButton',
+    );
+    my $ctx = TWiki::Func::getContext();
+    my $inactive = ref $ctx && ( $ctx->{inactive} || $ctx->{content_slave} );
+    push(@submitAttrs, '-disabled' => '')
+	if ( $inactive );
+    $text .= CGI::submit(@submitAttrs);
     $text .= CGI::end_form();
     $text =~ s/\n//sg;
     return $text;
