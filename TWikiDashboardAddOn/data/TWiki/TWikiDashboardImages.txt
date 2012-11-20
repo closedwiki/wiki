@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353299473" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353366112" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiDashboardAddOn"}%
 ---+!! <span style="font-size: 60%"> TWikiDashboardAddOn &#187;</span> TWiki Dashboard Banner Images
 
@@ -85,6 +85,9 @@ Name: =boeing-factory.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.th
 Name: =cubicle-panorama.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.flickr.com/photos/brownpau/][Paulo Ordoveza]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/cubicle-panorama.jpg" alt="" width="1026" height="150" />
 
+Name: =picture-gallery.jpg= &nbsp; &nbsp; - image copyright 2011, [[http://seanfitzgibbon.blogspot.com/][Sean Fitzgibbon]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/picture-gallery.jpg" alt="" width="1026" height="150" />
+
 Name: =code-camp.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/code-camp.jpg" alt="" width="1026" height="150" />
 
@@ -112,6 +115,7 @@ __Related:__ TWikiDashboardAddOn
 %META:FILEATTACHMENT{name="nasa-shed-cyan.jpg" attachment="nasa-shed-cyan.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156455" path="nasa-shed-cyan.jpg" size="104232" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="nasa-shed-orange.jpg" attachment="nasa-shed-orange.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156455" path="nasa-shed-orange.jpg" size="103835" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="niagara-falls.jpg" attachment="niagara-falls.jpg" attr="h" comment="Image copyright 2008, Koppi2" date="1351830764" path="niagara-falls.jpg" size="61423" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="picture-gallery.jpg" attachment="picture-gallery.jpg" attr="h" comment="Image copyright 2011, Sean Fitzgibbon" date="1353364773" path="picture-gallery.jpg" size="45523" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="rio-de-janeiro.jpg" attachment="rio-de-janeiro.jpg" attr="h" comment="Image copyright 2007, Jens Hausherr" date="1351832294" path="rio-de-janeiro.jpg" size="68059" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="san-francisco-airport.jpg" attachment="san-francisco-airport.jpg" attr="h" comment="Image copyright 2000, Jeff Keller" date="1353215973" path="san-francisco-airport.jpg" size="68727" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="san-francisco-cityscape.jpg" attachment="san-francisco-cityscape.jpg" attr="h" comment="Image copyright 2012, David Yu" date="1351827528" path="san-francisco-cityscape.jpg" size="50918" user="TWikiContributor" version="1"}%
