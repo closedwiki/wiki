@@ -1,6 +1,6 @@
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 
-package TWiki::Contrib::EditContrib::Include41;
+package TWiki::Contrib::EditContrib::Include51;
 
 use strict;
 use TWiki;

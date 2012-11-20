@@ -32,7 +32,7 @@ $VERSION = 1.001;
 BEGIN {
    if ( substr($TWiki::RELEASE, 6) gt '5' ) {
      require TWiki::Contrib::EditContrib::Include51;
-     $TWiki::functionTags{INCLUDE} = \&TWiki::Contrib::EditContrib::Include41::_INCLUDE;
+     $TWiki::functionTags{INCLUDE} = \&TWiki::Contrib::EditContrib::Include51::_INCLUDE;
    } elsif ( substr($TWiki::RELEASE, 8) >= 1 ) {
      require TWiki::Contrib::EditContrib::Include41;
      $TWiki::functionTags{INCLUDE} = \&TWiki::Contrib::EditContrib::Include41::_INCLUDE;
@@ -67,7 +67,7 @@ sub init_edit {
     my $store = $session->{store};
 
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'edit' );
-    TWiki::UI::checkWritable( $session, $webName );
+    TWiki::UI::checkWebWritable( $session, $webName );
 
     my $topicExists  = $store->topicExists( $webName, $topic );
 
