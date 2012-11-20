@@ -275,7 +275,7 @@ if (!$response->is_error() && $response->isa('HTTP::Response')) {
 
 *Since:* TWiki::Plugins::VERSION 1.2
 
-Note: the optional headers and parameters were added in TWiki::Plugins::VERSION
+__Note:__ the optional headers and parameters were added in TWiki::Plugins::VERSION
 1.5
 
 =cut
@@ -3115,7 +3115,8 @@ Format the time in seconds into the desired time string
    * =$format=   - Format type, optional. Default e.g. ='31 Dec 2002 - 19:30'=. Can be ='$iso'= (e.g. ='2002-12-31T19:30Z'=), ='$rcs'= (e.g. ='2001/12/31 23:59:59'=, ='$http'= for HTTP header format (e.g. ='Thu, 23 Jul 1998 07:21:56 GMT'=), or any string with tokens ='$seconds, $minutes, $hours, $day, $wday, $month, $mo, $year, $ye, $tz'= for seconds, minutes, hours, day of month, day of week, 3 letter month, 2 digit month, 4 digit year, 2 digit year, timezone string, respectively
    * =$timezone= - either not defined (uses the displaytime setting), 'gmtime', or 'servertime'
 Return: =$text=        Formatted time string
-| Note:                  | if you used the removed formatGmTime, add a third parameter 'gmtime' |
+
+__Note:__ If you used the removed formatGmTime, add a third parameter 'gmtime'
 
 *Since:* TWiki::Plugins::VERSION 1.020 (26 Feb 2004)
 
@@ -3204,8 +3205,7 @@ sub extractParameters {
 #ExtractNameValuePair
 ---+++ extractNameValuePair( $attr, $name ) -> $value
 
-Extract a named or unnamed value from a variable parameter string
-- Note:              | Function TWiki::Func::extractParameters is more efficient for extracting several parameters
+Extract a named or unnamed value from a variable parameter string.
    * =$attr= - Attribute string
    * =$name= - Name, optional
 Return: =$value=   Extracted value
@@ -3220,11 +3220,133 @@ Return: =$value=   Extracted value
         =my $val1  = TWiki::Func::extractNameValuePair( $text, "name1" );= <br />
         =my $val2  = TWiki::Func::extractNameValuePair( $text, "name2" );=
 
+__Note:__ Function TWiki::Func::extractParameters is more efficient for extracting several parameters
+
 =cut
 
 sub extractNameValuePair {
     require TWiki::Attrs;
     return TWiki::Attrs::extractValue( @_ );
+}
+
+=pod
+
+#EntityEncode
+---+++ entityEncode( $text, $extra ) -> $text
+
+Entity encode text.
+   * =$text= - Text to encode, may be empty
+   * =$extra= - Additional characters to include in the set of encoded
+                characters, optional
+Return: =$text=   Entity encoded text
+
+*Since:* TWiki::Plugins::VERSION 1.5
+
+Escape special characters to HTML numeric entities. This is *not* a generic
+encoding, it is tuned specifically for use in TWiki.
+
+HTML4.0 spec:
+"Certain characters in HTML are reserved for use as markup and must be
+escaped to appear literally. The "&lt;" character may be represented with
+an <em>entity</em>, <strong class=html>&amp;lt;</strong>. Similarly, "&gt;"
+is escaped as <strong class=html>&amp;gt;</strong>, and "&amp;" is escaped
+as <strong class=html>&amp;amp;</strong>. If an attribute value contains a
+double quotation mark and is delimited by double quotation marks, then the
+quote should be escaped as <strong class=html>&amp;quot;</strong>.
+
+Other entities exist for special characters that cannot easily be entered
+with some keyboards..."
+
+This method encodes HTML special and any non-printable ASCII
+characters (except for \n and \r) using numeric entities.
+
+FURTHER this method also encodes characters that are special in TWiki
+meta-language.
+
+$extras is an optional param that may be used to include *additional*
+characters in the set of encoded characters. It should be a string
+containing the additional chars.
+
+=cut
+
+sub entityEncode {
+#   my ( $text, $type ) = @_;
+    return TWiki::entityEncode( @_ );
+}
+
+=pod
+
+#EntityDecode
+---+++ entityDecode( $text ) -> $text
+
+Decode all numeric entities (e.g. &amp;#123;). _Does not_ decode
+named entities such as &amp;amp; (use HTML::Entities for that)
+   * =$text= - Text to decode, may be empty
+Return: =$text=   Entity decoded text
+
+*Since:* TWiki::Plugins::VERSION 1.5
+
+=cut
+
+sub entityDecode {
+    return TWiki::entityDecode( @_ );
+}
+
+=pod
+
+#UrlEncode
+---+++ urlEncode( $text ) -> $text
+
+URL encode text, mainly used to encode URL parameters.
+   * =$text= - Text to encode, may be empty
+Return: =$text=   URL encoded text
+
+*Since:* TWiki::Plugins::VERSION 1.5
+
+Encoding is done by converting characters that are illegal in
+URLs to their %NN equivalents. This method is used for encoding
+strings that must be embedded _verbatim_ in URLs; it cannot
+be applied to URLs themselves, as it escapes reserved
+characters such as = and ?.
+
+RFC 1738, Dec. '94:
+<verbatim>
+    ...Only alphanumerics [0-9a-zA-Z], the special
+    characters $-_.+!*'(), and reserved characters used for their
+    reserved purposes may be used unencoded within a URL.
+</verbatim>
+
+Reserved characters are $&+,/:;=?@ - these are _also_ encoded by
+this method.
+
+This URL-encoding handles all character encodings including ISO-8859-*,
+KOI8-R, EUC-* and UTF-8.
+
+This may not handle EBCDIC properly, as it generates an EBCDIC URL-encoded
+URL, but mainframe web servers seem to translate this outbound before it hits browser
+- see CGI::Util::escape for another approach.
+
+=cut
+
+sub urlEncode {
+    return TWiki::urlEncode( @_ );
+}
+
+=pod
+
+#UrlDecode
+---+++ urlDecode( $text ) -> $text
+
+URL decode text, mainly used to decode URL parameters.
+   * =$text= - Text to decode, may be empty
+Return: =$text=   URL decoded text
+
+*Since:* TWiki::Plugins::VERSION 1.5
+
+=cut
+
+sub urlDecode {
+    return TWiki::urlDecode( @_ );
 }
 
 =pod
@@ -3707,12 +3829,19 @@ $TWiki::Plugins::VERSION 1.4
    * =beforeAttachmentSaveHandler(\%attrHash, $topic, $web, $meta)= == added =$meta=
    * =writeLog( $action, $extra, $web, $topic, $user )=
 
+---+++ TWiki-5.2 (Jerusalem Release)
 $TWiki::Plugins::VERSION 1.5
+---++++ EmptyPlugin.pm
+No changes
 ---++++ Func.pm
-   * =postExternalResource(  $url, $text, \@headers, \%params )=
+   * =postExternalResource(  $url, $text, \@headers, \%params ) -> $response=
    * =registerExternalHTTPHandler( \&fn )=
-   * =getContentMode( $web )=
-   * =webWritable( $web )=
+   * =getContentMode( $web ) -> $contentMode=
+   * =webWritable( $web ) -> $boolean=
+   * =entityEncode( $text, $extra ) -> $text=
+   * =entityDecode( $text ) -> $text=
+   * =urlEncode( $text ) -> $text=
+   * =urlDecode( $text ) -> $text=
 
 =cut
 
