@@ -611,6 +611,65 @@ sub test_isTrue {
 
 }
 
+sub test_entityEncode {
+    my $this = shift;
+
+    $this->assert_str_equals( '', TWiki::Func::entityEncode( '' ) );
+    $this->assert_str_equals(
+      'hello world!&#64;#$&#37;^&#38;&#42;()&#95;+-&#61;
+     line 2',
+      TWiki::Func::entityEncode( 'hello world!@#$%^&*()_+-=
+     line 2' ) );
+    $this->assert_str_equals(
+      'hello&#32;world!&#64;#$&#37;^&#38;&#42;()&#95;+-&#61;&#10;&#32;&#32;&#32;&#32;&#32;line&#32;2',
+      TWiki::Func::entityEncode( 'hello world!@#$%^&*()_+-=
+     line 2',
+      ' \n\r' ) );
+}
+
+sub test_entityDecode {
+    my $this = shift;
+
+    $this->assert_str_equals( '', TWiki::Func::entityDecode( '' ) );
+    $this->assert_str_equals(
+      'hello world!@#$%^&*()_+-=
+     line 2',
+      TWiki::Func::entityDecode( 'hello world!&#64;#$&#37;^&#38;&#42;()&#95;+-&#61;
+     line 2' ) );
+    $this->assert_str_equals(
+      'hello world!@#$%^&*()_+-=
+     line 2',
+      TWiki::Func::entityDecode( 'hello&#32;world!&#64;#$&#37;^&#38;&#42;()&#95;+-&#61;&#10;&#32;&#32;&#32;&#32;&#32;line&#32;2',
+      ' \n\r' ) );
+}
+
+sub test_urlEncode {
+    my $this = shift;
+
+    $this->assert_str_equals( '', TWiki::Func::urlEncode( '' ) );
+    $this->assert_str_equals(
+      'hello%20world!%40%23%24%25%5e%26*%28%29_%2b-%3d',
+      TWiki::Func::urlEncode( 'hello world!@#$%^&*()_+-=' ) );
+    $this->assert_str_equals(
+      'hello%20world!%40%23%24%25%5e%26*%28%29_%2b-%3d%0a%20%20%20%20%20line%202',
+      TWiki::Func::urlEncode( 'hello world!@#$%^&*()_+-=
+     line 2' ) );
+}
+
+sub test_urlDecode {
+    my $this = shift;
+
+    $this->assert_str_equals( '', TWiki::Func::urlDecode( '' ) );
+    $this->assert_str_equals(
+      'hello world!@#$%^&*()_+-=',
+      TWiki::Func::urlDecode( 'hello%20world!%40%23%24%25%5e%26*%28%29_%2b-%3d' ) );
+    $this->assert_str_equals(
+      'hello world!@#$%^&*()_+-=
+     line 2',
+      TWiki::Func::urlDecode( 'hello%20world!%40%23%24%25%5e%26*%28%29_%2b-%3d%0a%20%20%20%20%20line%202',
+      ' \n\r' ) );
+}
+
 sub test_decodeFormatTokens {
     my $this = shift;
 
