@@ -29,10 +29,14 @@ use strict;
 use TWiki;
 use TWiki::Func;
 use TWiki::Plugins;
+use MIME::Base64;
+use MIME::QuotedPrint;
 use CGI qw( :all );
 
 use vars qw( $debug $emailRE );
 
+my $RETRY_COUNT                  =
+        $TWiki::cfg{Plugins}{SendEmailPlugin}{Retry} || 1;
 my $ERROR_STATUS_TAG             = 'SendEmailErrorStatus';
 my $ERROR_MESSAGE_TAG            = 'SendEmailErrorMessage';
 my $NOTIFICATION_CSS_CLASS       = 'sendEmailPluginNotification';
@@ -70,7 +74,7 @@ some init steps
 
 sub init {
     my $session = shift;
-    $TWiki::Plugins::SESSION ||= $session;
+    $TWiki::Plugins::SESSION = $session; # ||= may fail on mod_perl
     my $pluginName = $TWiki::Plugins::SendEmailPlugin::pluginName;
     $debug = $TWiki::cfg{Plugins}{$pluginName}{Debug} || 0;
     $emailRE = TWiki::Func::getRegularExpression('emailAddrRegex');
@@ -138,13 +142,20 @@ sub sendEmail {
 
             # regular address
             $addrs = $thisTo;
+            # validate TO
+            if (!_matchesSetting('Allow', 'MailTo', $addrs) || 
+                    _matchesSetting('Deny', 'MailTo', $addrs)) {
+                $errorMessage = $ERROR_NO_PERMISSION_TO;
+                $errorMessage =~ s/\$EMAIL/$thisTo/go;
+                TWiki::Func::writeWarning($errorMessage);
+                return _finishSendEmail( $session, $ERROR_STATUS{'error'},
+                    $errorMessage, $redirectUrl );
+            }
         }
         else {
 
             # get TO user info
-            my $wikiName = TWiki::Func::getWikiName($thisTo);
-            my @addrs    = TWiki::Func::wikinameToEmails($wikiName);
-            $addrs = $addrs[0] if @addrs;
+            $addrs = TWiki::Func::wikiToEmail($thisTo);
 
             unless ($addrs) {
 
@@ -157,38 +168,29 @@ sub sendEmail {
             }
         }
 
-        # validate TO
-        if (  !_matchesSetting( 'Allow', 'MailTo', $thisTo )
-            || _matchesSetting( 'Deny', 'MailTo', $thisTo ) )
-        {
-            $errorMessage = $ERROR_NO_PERMISSION_TO;
-            $errorMessage =~ s/\$EMAIL/$thisTo/go;
-            TWiki::Func::writeWarning($errorMessage);
-            return _finishSendEmail( $session, $ERROR_STATUS{'error'},
-                $errorMessage, $redirectUrl );
-        }
-
         push @toEmails, $addrs;
     }
     $to = join( ', ', @toEmails );
     _debug("to=$to");
 
     # get FROM
-    my $from = $query->param('from') || $query->param('From');
-
-    unless ($from) {
-
-        # get from user settings
-        my $emails = TWiki::Func::wikiToEmail();
-        my @emails = split( /\s*,*\s/, $emails );
-        $from = shift @emails if @emails;
+    my $from;
+    if ( $TWiki::cfg{SendEmailPlugin}{AlwaysFromTheUser} ) {
+        $from = TWiki::Func::wikiToEmail(TWiki::Func::getWikiName());
     }
-
-    unless ($from) {
-
-        # fallback to webmaster
-        $from = $TWiki::cfg{WebMasterEmail}
-          || TWiki::Func::getPreferencesValue('WIKIWEBMASTER');
+    else {
+        $from = $query->param('from') || $query->param('From');
+        unless ($from) {
+            # get from user settings
+            my $emails = TWiki::Func::wikiToEmail();
+            my @emails = split( /\s*,*\s/, $emails );
+            $from = shift @emails if @emails;
+        }
+        unless ($from) {
+            # fallback to webmaster
+            $from = $TWiki::cfg{WebMasterEmail}
+              || TWiki::Func::getPreferencesValue('WIKIWEBMASTER');
+        }
     }
 
     # validate FROM
@@ -223,18 +225,22 @@ sub sendEmail {
             my $addrs;
 
             if ( $thisCC =~ /$emailRE/ ) {
-
                 # normal email address
                 $addrs = $thisCC;
-
+                # validate CC
+                if (!_matchesSetting('Allow', 'MailCc', $addrs) || 
+                    _matchesSetting('Deny', 'MailCc', $addrs)) {
+                    $errorMessage = $ERROR_NO_PERMISSION_CC;
+                    $errorMessage =~ s/\$EMAIL/$thisCC/go;
+                    TWiki::Func::writeWarning($errorMessage);
+                    return _finishSendEmail( $session, $ERROR_STATUS{'error'},
+                        $errorMessage, $redirectUrl );
+                }
             }
             else {
 
                 # get from user info
-                my $wikiName = TWiki::Func::getWikiName($thisCC);
-                my @addrs    = TWiki::Func::wikinameToEmails($wikiName);
-                $addrs = $addrs[0] if @addrs;
-
+                $addrs = TWiki::Func::wikiToEmail($thisCC);
                 unless ($addrs) {
 
                     # no regular address and no address found in user info
@@ -246,17 +252,6 @@ sub sendEmail {
                 }
             }
 
-            # validate CC
-            if (  !_matchesSetting( 'Allow', 'MailCc', $thisCC )
-                || _matchesSetting( 'Deny', 'MailCc', $thisCC ) )
-            {
-                $errorMessage = $ERROR_NO_PERMISSION_CC;
-                $errorMessage =~ s/\$EMAIL/$thisCC/go;
-                TWiki::Func::writeWarning($errorMessage);
-                return _finishSendEmail( $session, $ERROR_STATUS{'error'},
-                    $errorMessage, $redirectUrl );
-            }
-
             push @ccEmails, $addrs;
         }
         $cc = join( ', ', @ccEmails );
@@ -264,8 +259,24 @@ sub sendEmail {
     }
 
     # get SUBJECT
-    my $subject = $query->param('subject') || $query->param('Subject') || '';
-    _debug("subject=$subject") if $subject;
+    my $subject = $query->param('subject');
+    $subject = $query->param('Subject') unless ( defined($subject) );
+    $subject = '' unless ( defined($subject) );
+    if ( $subject ) {
+	_debug("subject=$subject");
+	$subject = TWiki::Func::expandCommonVariables($subject);
+	if ( $subject =~ /[\x80-\xff]/ ) {
+	    my $charset = $TWiki::cfg{Site}{CharSet} || '';
+	    if ( $charset =~ /utf/i ) {
+		$subject = "=?$charset?B?" .
+		    encode_base64($subject, '') . '?=';
+	    }
+	    else {
+		$subject = "=?$charset?Q?" .
+		    encode_qp($subject, '') . '?=';
+	    }
+	}
+    }
 
     # get BODY
     my $body = $query->param('body') || $query->param('Body') || '';
@@ -277,31 +288,54 @@ sub sendEmail {
     $templateName =~ s/^(.*?)Template$/$1/;
     
     my $template = TWiki::Func::readTemplate($templateName);
-    _debug("templateName=$templateName");
+    my $expandTmpl = $TWiki::cfg{SendEmailPlugin}{ExpandVariablesInTemplate};
+    _debug("templateName=$templateName expand=$expandTmpl");
     unless ($template) {
+        if ( $expandTmpl ) {
         $template = <<'HERE';
-From: %FROM%
-To: %TO%
-CC: %CC%
-Subject: %SUBJECT%
++From: %SENDEMAIL_FROM%
++To: %SENDEMAIL_TO%
++CC: %SENDEMAIL_CC%
++Subject: %SENDEMAIL_SUBJECT%
+
+%SENDEMAIL_BODY%
+HERE
+        }
+        else {
+        $template = <<'HERE';
++From: %FROM%
++To: %_TO%
++CC: %CC%
++Subject: %SUBJECT%
 
 %BODY%
 HERE
+       }
     }
     _debug("template=$template");
 
     # format email
     my $mail = $template;
-    $mail =~ s/%FROM%/$from/go;
-    $mail =~ s/%TO%/$to/go;
-    $mail =~ s/%CC%/$cc/go;
-    $mail =~ s/%SUBJECT%/$subject/go;
-    $mail =~ s/%BODY%/$body/go;
-
+    if ( $expandTmpl ) {
+        $mail = TWiki::Func::expandCommonVariables($template);
+        # "FROM, TO, CC..." variables are too simple and might cause conflicts easily.
+        $mail =~ s/%SENDEMAIL_FROM%/$from/go;
+        $mail =~ s/%SENDEMAIL_TO%/$to/go;
+        $mail =~ s/%SENDEMAIL_CC%/$cc/go;
+        $mail =~ s/%SENDEMAIL_SUBJECT%/$subject/go;
+        $mail =~ s/%SENDEMAIL_BODY%/$body/go;
+    }
+    else {
+        $mail =~ s/%FROM%/$from/go;
+        $mail =~ s/%TO%/$to/go;
+        $mail =~ s/%CC%/$cc/go;
+        $mail =~ s/%SUBJECT%/$subject/go;
+        $mail =~ s/%BODY%/$body/go;
+    }
     _debug("mail=\n$mail");
 
     # send email
-    $errorMessage = TWiki::Func::sendEmail( $mail, 1 );
+    $errorMessage = TWiki::Func::sendEmail( $mail, $RETRY_COUNT );
     
     # finally
     my $errorStatus =
@@ -323,6 +357,7 @@ at least one of the patterns in the list matches.
 
 sub _matchesSetting {
     my ( $mode, $key, $value ) = @_;
+    _debug("called matchesPreference($mode, $key, $value)");
 
     my $pluginName = $TWiki::Plugins::SendEmailPlugin::pluginName;
     my $pattern = $TWiki::cfg{Plugins}{$pluginName}{Permissions}{$mode}{$key};
@@ -343,7 +378,7 @@ sub _matchesSetting {
 
     _debug("final matching pattern=$pattern");
 
-    my $result = ( $value =~ /$pattern/ ) ? 1 : 0;
+    my $result = ( $value =~ /$pattern/i ) ? 1 : 0;
 
     _debug("result=$result");
 
@@ -357,7 +392,7 @@ sub _matchesSetting {
 sub handleSendEmailTag {
     my ( $session, $params, $topic, $web ) = @_;
 
-    init();
+    init( $session );
     _addHeader();
 
     my $query = TWiki::Func::getCgiQuery();
@@ -446,7 +481,8 @@ sub _finishSendEmail {
     $redirectUrl ||= $origUrl;
     $redirectUrl = "$redirectUrl#$NOTIFICATION_ANCHOR_NAME";
 
-    TWiki::Func::redirectCgiQuery( undef, $redirectUrl, 1 );
+    _debug("_finishSendEmail redirecting to $redirectUrl");
+    TWiki::Func::redirectCgiQuery( undef, $redirectUrl, 1, undef, 1 );
     return 0;
 }
 

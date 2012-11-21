@@ -2,7 +2,19 @@
 #---++ SendEmailPlugin
 # **BOOLEAN**
 # Enable debugging (debug messages will be written to data/debug.txt)
-$TWiki::cfg{Plugins}{SendEmailPlugin}{Debug} = '0';
+$TWiki::cfg{Plugins}{SendEmailPlugin}{Debug} = 0;
+#
+# **BOOLEAN**
+# Uer can't change from field, and the from field always comes from user's wiki name for security purpose.
+$TWiki::cfg{Plugins}{SendEmailPlugin}{AlwaysFromTheUser} = 0;
+#
+# **BOOLEAN**
+# Expand varialbes in its templates. If this is set, the original fields will be prefixed by "SENDEMAIL" like  %SENDEMAIL_FROM%, %SENDEMAIL_SUBJECT%..."
+$TWiki::cfg{Plugins}{SendEmailPlugin}{ExpandVariablesInTemplate} = 0;
+#
+# **NUMBER**
+# Set the retry times when sending an email.
+$TWiki::cfg{Plugins}{SendEmailPlugin}{Retry} = 1;
 #
 # **STRING 300**
 # Regular expression of mail addresses that we are allowed to send to. To send to multiple addresses you can write (address1|address2).

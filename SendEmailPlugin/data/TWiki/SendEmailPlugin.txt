@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1301806006" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353467687" format="1.1" version="$Rev$"}%
 ---+!! Send Email Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -142,6 +142,15 @@ The tags =%<nop>FROM%=, =%<nop>TO%=, =%<nop>CC%=, =%<nop>SUBJECT%= and =%<nop>BO
 For a template topic named =<nop>MailTemplate= you can either pass the name =Mail= or =MailTemplate=.
 
 The search path for templates always starts in the current web.
+
+#Miscellaneous config
+---+++ Miscellaneous config
+| *Config* | *Description* | *Default* |
+| $TWiki::cfg{Plugins}{SendEmailPlugin}{Debug}  | Enable debugging (debug messages will be written to TWiki debug log file)  |  0  |
+| $TWiki::cfg{Plugins}{SendEmailPlugin}{AlwaysFromTheUser}  | User can't change the "from" field when sending email. It's always the email adress of current user.  |  0  |
+| $TWiki::cfg{Plugins}{SendEmailPlugin}{Retry}  | Setup the retrying times when sending email.  |  1  |
+| $TWiki::cfg{Plugins}{SendEmailPlugin}{ExpandVariablesInTemplate}  | Expand variables in an email template.  |  0  |
+After setting "$TWiki::cfg{Plugins}{SendEmailPlugin}{ExpandVariablesInTemplate} = 1", all the variables in template "%FROM%,%TO%..." have to be prefixed with"SENDEMAIL" like "%SENDEMAIL_FROM%, %SENDEMAIL_TO%..." to avoid conflicts with other existing variables.
 
 ---++ Examples
 ---+++ Example with a handcrafted HTML form
@@ -439,6 +448,9 @@ HTML elements with these style names are written to the default feedback.
 |  Version: | 2011-04-02 |
 |  Release: | 1.5.1 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-11-21: | Item7048: Block the "from" field for security purpose. |
+|  2012-11-21: | Item7047: Configure retry times in config file. |
+|  2012-11-21: | Item7046: SendEmailPlugin doesn't expand variables in an email template |
 |  2011-04-02: | Item6676: Plugin update 2010 from related project and doc improvements |
 |  28 Feb 2010 | 1.5.1 Added forgotten =Config.spec= file. |
 |  08 Jan 2010 | 1.5 Arthur Clemens: Improved error feedback; added =format= parameter; moved the mail template to a topic; changed param =template= to =mailtemplate=. |
