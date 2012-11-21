@@ -1345,8 +1345,18 @@ sub _getReferringTopicsListFromURL {
 
     my $query = $session->{request};
     my @result;
-    foreach my $topic ( $query->param( 'referring_topics' ) ) {
-        push @result, $topic;
+    foreach my $webTopic ( $query->param( 'referring_topics' ) ) {
+        my ( $aWeb, $aTopic ) = $session->normalizeWebTopicName( '', $webTopic );
+
+        # Sanitize web and topic
+        $aWeb   =~ s/$TWiki::cfg{NameFilter}//go;
+        $aWeb   = TWiki::Sandbox::untaintUnchecked( $aWeb );
+        $aTopic =~ s/$TWiki::cfg{NameFilter}//go;
+        $aTopic = TWiki::Sandbox::untaintUnchecked( $aTopic );
+        # Skip topics that fail validation
+        next if( length( $aWeb ) == 0 || length( $aTopic ) == 0 );
+
+        push( @result, "$aWeb.$aTopic" );
     }
     return \@result;
 }
