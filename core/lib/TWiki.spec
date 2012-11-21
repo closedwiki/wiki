@@ -851,6 +851,8 @@ $TWiki::cfg{PluralToSingular} = $TRUE;
 # TWiki::Store::RcsFile).
 # The TWiki::Store::Subversive class is an example implementation using the
 # Subversion version control system as a data store.
+# <br /> NOTE: If you select <tt>RcsLite</tt> it is recommended to set 
+# {RCS}{SearchAlgorithm} expert setting to <tt>PurePerl</tt>.
 $TWiki::cfg{StoreImpl} = 'RcsWrap';
 
 # **STRING 20 EXPERT**
