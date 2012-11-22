@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353543870" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353544845" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiDashboardAddOn"}%
 ---+!! <span style="font-size: 60%"> TWikiDashboardAddOn &#187;</span> TWiki Dashboard Banner Images
 
@@ -42,9 +42,6 @@ Name: =san-francisco-airport.jpg= &nbsp; &nbsp; - image copyright 2000, [[http:/
 
 Name: =nasa-airfield.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/nasa-airfield.jpg" alt="" width="1026" height="150" />
-
-Name: =nasa-shed-cyan.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
-     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/nasa-shed-cyan.jpg" alt="" width="1026" height="150" />
 
 Name: =nasa-shed-orange.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/nasa-shed-orange.jpg" alt="" width="1026" height="150" />
@@ -130,7 +127,6 @@ __Related:__ TWikiDashboardAddOn
 %META:FILEATTACHMENT{name="marin-headlands.jpg" attachment="marin-headlands.jpg" attr="h" comment="Image copyright 2012, David Yu" date="1349156457" path="marin-headlands.jpg" size="34304" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="monterey-by-bike.jpg" attachment="monterey-by-bike.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="monterey-by-bike.jpg" size="51252" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="nasa-airfield.jpg" attachment="nasa-airfield.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="nasa-airfield.jpg" size="65068" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="nasa-shed-cyan.jpg" attachment="nasa-shed-cyan.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156455" path="nasa-shed-cyan.jpg" size="104232" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="nasa-shed-orange.jpg" attachment="nasa-shed-orange.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156455" path="nasa-shed-orange.jpg" size="103835" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="niagara-falls.jpg" attachment="niagara-falls.jpg" attr="h" comment="Image copyright 2008, Koppi2" date="1351830764" path="niagara-falls.jpg" size="61423" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="picture-gallery.jpg" attachment="picture-gallery.jpg" attr="h" comment="Image copyright 2011, Sean Fitzgibbon" date="1353364773" path="picture-gallery.jpg" size="45523" user="TWikiContributor" version="1"}%
