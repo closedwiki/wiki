@@ -32,7 +32,7 @@ require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-11-15';
+our $RELEASE = '2012-11-21';
 
 our $SHORTDESCRIPTION = 'Lookup geolocation by IP address or domain name';
 our $NO_PREFS_IN_TOPIC = 0;
