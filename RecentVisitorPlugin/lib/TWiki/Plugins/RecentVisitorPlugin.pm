@@ -26,7 +26,7 @@ require TWiki::Plugins; # For the API version
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-11-15';
+our $RELEASE = '2012-12-22';
 
 # One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 our $SHORTDESCRIPTION = 'Show recent visitors to a TWiki site';

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352971313" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353572759" format="1.1" version="$Rev$"}%
 ---+!! !RecentVisitorPlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -8,10 +8,6 @@
 -->
 <sticky><div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
-</div>
-<div style="float:right; background-color:#F0F0F0; margin:0 0 20px 20px; padding: 10px 10px 10px 10px; text-align:center">
-This plugin is%BR% sponsored by:%BR%
-[[http://twiki.net/][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" alt="Twiki, Inc." title="Twiki, Inc." />]]
 </div></sticky>
 %SHORTDESCRIPTION%
 
@@ -21,7 +17,7 @@ This plugin shows statistics of recent visitors to a TWiki site. The time of las
 
 ---++ Syntax Rules
 
----+++ Recent visit of an individual
+---+++ Most recent visit of an individual
 
 =%<nop>RECENTVISITOR{ action="user" ... }%=
 
@@ -69,7 +65,7 @@ $time)"
  format="Last seen $ago ago ($date $time)"
 }%
 </td><td valign="top">
- Last seen 3 weeks ago (2011-02-03 06:22)
+ Last seen 3 weeks ago (2012-11-03 06:22)
 </td></tr></table>
 
 ---+++!! Example: Show recent visitors, default bullet list report
@@ -123,11 +119,11 @@ $time)"
  limit="5"
 }%
 </td><td valign="top">
-| [[%TOPIC%][NielsBohr]] | 2011-02-03 |
-| [[%TOPIC%][KlausFuchs]] | 2011-02-03 |
-| [[%TOPIC%][AlbertEinstein]] | 2011-02-02 |
-| [[%TOPIC%][EnricoFermi]] | 2011-01-19 |
-| [[%TOPIC%][DavidBohm]] | 2010-11-27 |
+| [[%TOPIC%][NielsBohr]] | 2012-02-03 |
+| [[%TOPIC%][KlausFuchs]] | 2012-02-03 |
+| [[%TOPIC%][AlbertEinstein]] | 2012-02-02 |
+| [[%TOPIC%][EnricoFermi]] | 2012-01-19 |
+| [[%TOPIC%][DavidBohm]] | 2011-11-27 |
 </td></tr></table>
 
 ---+++!! Example: Show recent visitors with geolocation
@@ -197,9 +193,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]] |
 |  Copyright: | &copy; 2011-2012 TWiki:Main.PeterThoeny <br /> &copy; 2011-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-11-15 |
+|  Plugin Version: | 2012-11-22 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-11-15: | TWikibug:Item7020: Categorize RECENTVISITOR TWiki Variable |
+|  2012-11-22: | TWikibug:Item7020: Categorize RECENTVISITOR TWiki Variable; doc enhancements |
 |  2011-06-06: | TWikibug:Item6725: Plugins: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2011-05-14: | TWikibug:Item6701: Small fix in Config.spec -- TWiki:Main.PeterThoeny |
 |  2011-05-01: | TWikibug:Item6701: Fix small warning issue if plugin is run by a shell script |

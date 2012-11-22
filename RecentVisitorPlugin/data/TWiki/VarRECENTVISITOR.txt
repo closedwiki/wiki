@@ -1,20 +1,26 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352970892" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353572759" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarRECENTVISITOR
 ---+++ RECENTVISITOR -- show statistics of recent visitors to the TWiki site
    * The =%<nop>RECENTVISITOR{}%= variable is handled by the RecentVisitorPlugin
-   * Recent visit of an individual:
+   * Most recent visit of an individual:
       * Syntax: =%<nop>RECENTVISITOR{"user" name="..." format="..."}%=
-      * Parameter =name="..."= - %SYSTEMWEB%.WikiName of person. Default is current user.
-      * Parameter =format="..."= - format of report. Supported tokens:%BB% =$date= - date of last visit%BB% =$time= - time of last visit (GMT)%BB% =$ago= - how long ago%BB% =$ip= - IP address (only shown to non-administrators if enabled in configure)%BB% =$n=, =$nop=, =$quot=, =$percnt=, =$dollar= - standard %SYSTEMWEB%.FormatTokens.
-      * Parameter =notfound="..."= - message shown if user is not found.
+      * Parameters:
+        | *Parameter* | *Description* | *Default* |
+        | ="user"= or%BR% =action="user"= | Recent visit of an individual report | (none) |
+        | =name="..."= | %SYSTEMWEB%.WikiName of person | (currently logged in user) |
+        | =format="..."= | Format of report. Supported tokens:%BB% =$date= - date of last visit%BB% =$time= - time of last visit (GMT)%BB% =$ago= - how long ago%BB% =$ip= - IP address (only shown to non-administrators if enabled in configure)%BB% =$n=, =$nop=, =$quot=, =$percnt=, =$dollar= - standard %SYSTEMWEB%.FormatTokens. | ="Last seen $ago ago"= |
+        | =notfound="..."= | Message shown if user is not found. | ="Never seen"= |
    * Report of recent visitors:
       * Syntax: =%<nop>RECENTVISITOR{"recent" format="..."}%=
-      * Parameter =format="..."= - format of each line of the report. Supported tokens:%BB% =$username= - login name of user%BB% =$wikiname= - %SYSTEMWEB%.WikiName of user%BB% =$wikusername= - !WikiName prefixed with %USERSWEB% web name%BB% plus above tokens.
-      * Parameter =separator="..."= - separator between lines. Standard %SYSTEMWEB%.FormatTokens are expanded. Default is newline.
-      * Parameter =limit="..."= - limit the number of lines. Default is 10.
+      * Parameters:
+        | *Parameter* | *Description* | *Default* |
+        | ="recent"= or%BR% =action="recent"= | Report of recent visitors | (none) |
+        | =format="..."= | Format of each line of the report. Supported tokens:%BB% =$username= - login name of user%BB% =$wikiname= - %SYSTEMWEB%.WikiName of user%BB% =$wikusername= - !WikiName prefixed with %USERSWEB% web name%BB% plus above tokens. | ="   * $wikiusername last seen $ago ago"= |
+        | =separator="..."= | Separator between lines. Standard %SYSTEMWEB%.FormatTokens are expanded. | ="$n"= (newline) |
+        | =limit="..."= | Limit the number of lines. | ="10"= |
    * Examples:
-      * =%<nop>RECENTVISITOR{"user" name="TWikiAdminUser"}%= show most recent visit of !TWikiAdminUser.
-      * =%<nop>RECENTVISITOR{"recent" format="| $wikiusername | $ago ago |}%= shows 10 most recent visitors.
+      * =%<nop>RECENTVISITOR{"user" name="TWikiAdminUser"}%= - show most recent visit of !TWikiAdminUser.
+      * =%<nop>RECENTVISITOR{"recent" format="| $wikiusername | $ago ago |}%= - show 10 most recent visitors.
    * Category: AdministrationVariables, UsersAndAuthenticationVariables
    * Related: RecentVisitorPlugin
