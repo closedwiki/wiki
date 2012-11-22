@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1348203683" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353558124" format="1.1" version="$Rev$"}%
 ---+!! Using multiple disks for !DataDir and !PubDir
 
 ---++ Motivation
@@ -23,11 +23,11 @@ Setting $TWiki::cfg{MultipleDisks} a true value enables this feature.
 
 ---+++ On which disk a web resides
 This feature requires that [[MetadataRepository][metadata repository]] is in use.
-This is because a mechanism to specify which web resides in which disk is required.
+This is because a mechanism to specify which web resides on which disk is required.
 Since this feature is for a large site having thousands of webs, it's not practical to use a topic for the disk specification purposes.
 
 Obviously, the webs metadata file needs to be populated properly.
-Specifically, each web record needs to have the =disk= field specifying which disk the web resides in.
+Specifically, each web record needs to have the =disk= field specifying which disk the web resides on.
 Its value is a non-zero positive integer in decimal or a zero width string.
 Those values are called disk IDs.
 
@@ -56,6 +56,14 @@ But just in case there are bugs in the TWiki core regarding those and there are 
 ---++++ $TWiki::cfg{...}
 If you don't have the sites metadata in MetadataRepository, you are supposed to have $TWiki::cfg{DataDir}, $TWiki::cfg{DataDir}, $TWiki::cfg{DataDir1}, $TWiki::cfg{PubDir1}, ... set.
 
+---++++ Non numeric disk IDs
+Actually, non numeric disk IDs are allowed on purpose.
+You can have disk IDs such as =a=, =b=, and =c= for read-only webs.
+=TWiki::getDiskList()= doesn't return non numeric disk IDs except the zero width string one ("").
+
+Non numeric disk IDs may be handy for migration to a newer version of TWiki.
+The new version can show as read-only and include webs not yet migrated without bothering them.
+
 ---+++ !TrashxNx
 Each disk need to have its own Trash, which is named !TrashxNx, e.g. !Trashx1x, !Trashx2x, ...
 For topic, attachment, and web deletion, a proper !TrashxNx needs to be selected automatically.
@@ -70,7 +78,7 @@ The aged Trash webs would clash their names with trashes for extra disks.
 ---+++ Attachment URLs
 ---++++ They must be stable
 Using multiple disks and exposing them in URLs are two different matters.
-Topic URLs are not affected by the disk in which topics reside.
+Topic URLs are not affected by the disk on which topics reside.
 But attachment URLs may if attachment retrieval is handled by the web server directly without TWiki involved.
 
 Attachment URLs must not be affected by disks they are housed in because if they are affected, an attachment's URL will change when the topic is moved to another disk.

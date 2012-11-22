@@ -69,7 +69,7 @@ sub getDiskInfo {
     if ( my $mdrepo = $session->{mdrepo} ) {
         if ( my $webRec = $mdrepo->getRec('webs', TWiki::topLevelWeb($web)) ) {
             $diskID = $webRec->{disk} || '';
-            $diskID =~ /^(\d*)/; # limiting to digits
+            $diskID =~ /^(\w*)/; # allowing alphanumeric
             $diskID = $1;
             my $siteRec;
             if ( $site && ($siteRec = $mdrepo->getRec('sites', $site)) ) {
