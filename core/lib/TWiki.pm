@@ -1143,6 +1143,15 @@ sub getSkin {
         $skinpath = $epidermis.','.$skinpath if $epidermis;
     }
 
+    # Resolve TWiki variables if needed
+    if( $skinpath =~ /\%[A-Z]/ ) {
+        $skinpath = $this->handleCommonTags( $skinpath, $this->{webName},
+                                             $this->{topicName} );
+    }
+
+    # sanitize skin path
+    $skinpath =~ s/[^A-Za-z0-9_\-\,\. ]//g;
+
     return $skinpath;
 }
 
