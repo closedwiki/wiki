@@ -22,10 +22,12 @@ use TWiki::Func;
 use File::Path;
 
 sub new {
-    my( $class, $path, $web ) = @_;
+    my( $class, $path, $web, $genopt, $logger ) = @_;
     my $this = bless( {}, $class );
     $this->{path} = $path;
     $this->{web} = $web;
+    $this->{genopt} = $genopt;
+    $this->{logger} = $logger;
 
     eval "use Archive::Zip qw( :ERROR_CODES :CONSTANTS )";
     die $@ if $@;

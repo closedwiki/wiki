@@ -17,3 +17,4 @@ $TWiki::cfg{PublishContrib}{URL} = '$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{PubUr
 # <li>%EXTRAS|U% will expand to any additional generator options entered
 # in the publishing form.</li></ul>
 $TWiki::cfg{PublishContrib}{PDFCmd} = 'htmldoc --webpage --links --linkstyle plain --outfile %FILE|F% %EXTRAS|U% %FILES|F%';
+1;

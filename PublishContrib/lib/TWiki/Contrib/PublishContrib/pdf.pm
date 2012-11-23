@@ -46,7 +46,7 @@ sub close {
     my @extras = split( /\s+/, $this->{genopt} );
 
     $ENV{HTMLDOC_DEBUG} = 1; # see man htmldoc - goes to apache err log
-    $ENV{HTMLDOC_NOCGI} = 1; # see man htmldoc
+    $ENV{HTMLDOC_NOCGI} = 'all'; # see man htmldoc
     my $sb;
     if (defined $TWiki::sandbox) {
         $sb = $TWiki::sandbox

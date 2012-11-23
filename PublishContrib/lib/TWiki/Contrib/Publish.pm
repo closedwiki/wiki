@@ -69,9 +69,9 @@ sub new {
     unless ( defined $TWiki::cfg{PublishContrib}{Dir} ) {
         die "{PublishContrib}{Dir} not defined; run install script";
     }
-    unless( -d $TWiki::cfg{PublishContrib}{Dir}) {
-        die "{PublishContrib}{Dir} $TWiki::cfg{PublishContrib}{Dir} does not exist";
-    }
+#    unless( -d $TWiki::cfg{PublishContrib}{Dir}) {
+#        die "{PublishContrib}{Dir} $TWiki::cfg{PublishContrib}{Dir} does not exist";
+#    }
     unless ( $TWiki::cfg{PublishContrib}{Dir} =~ m!/$!) {
         die "{PublishContrib}{Dir} must terminate in a slash";
     }
@@ -110,6 +110,7 @@ sub finish {
 sub _display {
     my $msg = join('', @_);
     if (defined $TWiki::Plugins::SESSION->{response} &&
+          defined &TWiki::Response::appendToBody &&
           !TWiki::Func::getContext()->{command_line}) {
         $TWiki::Plugins::SESSION->{response}->appendToBody($msg);
     } else {
@@ -122,6 +123,7 @@ sub control {
     my $this = shift;
 
     my ($header, $footer) = $this->_getPageTemplate();
+    _display "content-type: text/html; charset=UTF-8\n\n";
     _display $header;
     _display CGI::p(<<HERE);
 <h1>Publishers Control Interface</h1>
@@ -143,27 +145,24 @@ HERE
     if (opendir(D, $TWiki::cfg{PublishContrib}{Dir})) {
         my @files = grep(!/^\./, readdir(D));
         if (scalar(@files)) {
-            _display $query->start_table();
+            _display "<table>";
             foreach my $file (@files) {
                 my $link = "$TWiki::cfg{PublishContrib}{URL}/$file";
-                $link = $query->a({href => $link}, $file);
-                my @cols = ( $query->th($link) );
-                my $delcol = $query->start_form({ action => '',
-                                               method=>'GET',
-                                               name => $file });
-                $delcol .= $query->submit(
-                    { type  => 'button',
-                      name  => 'Delete'});
-                $delcol .= $query->hidden('file', $file);
-                $delcol .= $query->hidden('action', 'delete');
-                $delcol .= $query->hidden('control', '1');
-                $delcol .= $query->hidden('skin');
-                $delcol .= $query->end_form();
+                $link = "<a href=\"$link\">$file</a>";
+                my @cols = "<th>$link</th>";
+                my $delcol = "<form action='' method='GET' name='$file'>";
+                $delcol .= "<input type='button' name='delete' />";
+                $delcol .= "<input type='hidden' name='file' value='$file' />";
+                $delcol .= "<input type='hidden' name='action' value='delete' />";
+                $delcol .= "<input type='hidden' name='control' value='1' />";
+                $delcol .= "<input type='hidden' name='skin' />";
+                $delcol .= "</form>";
                 push(@cols, $delcol);
-                _display $query->Tr({valign=>"baseline"},
-                              join('', map {$query->td($_)} @cols));
+                _display "<tr valign='baseline'>" .
+                         join('', map {"<td>$_</td>"} @cols) .
+                         "</tr>";
             }
-            _display $query->end_table();
+            _display "</table>";
         } else {
             _display "The output directory is currently empty";
         }
@@ -219,9 +218,9 @@ sub publishWeb {
             my $k = $1;
             my $v = $2;
 
-            if ( $k eq 'HISTORY' && $v ) {
+            if ( $k eq 'HISTORY' && $v ne '' ) {
                 $this->{historyTopic} = $v;
-            } elsif ( $k eq 'INCLUSIONS' ) {
+            } elsif ( $k eq 'INCLUSIONS' && $v ne '' ) {
                 $v =~ s/([*?])/.$1/g;
                 $v =~ s/,/|/g;
                 $this->{inclusions} = $v;
@@ -242,7 +241,7 @@ sub publishWeb {
                 $debug = $v;
             } elsif ($k eq 'VERSIONS') {
                 $versionsTopic = $v;
-            } elsif ($k eq 'TEMPLATES' ) {
+            } elsif ($k eq 'TEMPLATES' && $v ne '' ) {
                 $v =~ /([\w,]*)/;
                 $this->{templatesWanted} = $1;
             } elsif ($k eq 'TEMPLATELOCATION' ) {
@@ -299,7 +298,8 @@ sub publishWeb {
             }
         }
         $skin = $query->param('skin') || $query->param('publishskin');
-        foreach my $param qw(filter topicsearch genopt compress format) {
+        $this->{format} = $format;
+        foreach my $param qw(inclusions exclusions filter topicsearch genopt compress format configtopic history) {
             $query->delete($param);
         }
     }
@@ -466,7 +466,7 @@ sub _getPageTemplate {
 
     my $query = TWiki::Func::getCgiQuery();
     my $topic = $query->param('publishtopic') || $this->{session}->{topicName};
-    my $tmpl = TWiki::Func::readTemplate('view');
+    my $tmpl = TWiki::Func::readTemplate('view', $this->{skin});
 
     $tmpl =~ s/%META{.*?}%//g;
     for my $tag qw( REVTITLE REVARG REVISIONS MAXREV CURRREV ) {
@@ -478,6 +478,7 @@ sub _getPageTemplate {
     $header = TWiki::Func::renderText( $header, $this->{web} );
     $header =~ s/<nop>//go;
     TWiki::Func::writeHeader($query);
+    _display "content-type: text/html; charset=UTF-8\n\n";
     _display $header;
 
     $footer = TWiki::Func::expandCommonVariables( $footer, $topic,
@@ -535,25 +536,37 @@ sub publishUsingTemplate {
 
     # Attempt to render each included page.
     my %copied;
-    foreach my $topic (@topics) {
-        next if $topic eq $this->{historyTopic}; # never publish this
-        try {
-            my $dispo = '';
-            if( $this->{inclusions} && $topic !~ /^($this->{inclusions})$/ ) {
-                $dispo = 'not included';
-            } elsif( $this->{exclusions} &&
-                       $topic =~ /^($this->{exclusions})$/ ) {
-                $dispo = 'excluded';
-            } else {
-                my $rev = $this->publishTopic(
-                    $topic, $filetype, $template, $tmpl, \%copied) || '0';
-                $dispo = "Rev $rev published";
-            }
-            $this->logInfo($topic, $dispo);
-        } catch Error::Simple with {
-            my $e = shift;
-            $this->logError("$topic not published: ".$e->{-text});
-        };
+    my @inclusionsSet = grep { $_ ne '' } split(/;\s*/, $this->{inclusions});
+    my %visited;
+    foreach my $inclusions ( @inclusionsSet ) {
+	$this->logInfo('Inclusions', $inclusions);
+	foreach my $topic (@topics) {
+	    next if $topic eq $this->{historyTopic};
+	    try {
+		my $dispo = '';
+		if( $topic !~ /^$inclusions$/ ) {
+		    $dispo = 'not included';
+		} elsif( $this->{exclusions} && $topic =~ /^($this->{exclusions})$/ ) {
+		    $dispo = 'excluded';
+		} else {
+		    if ( $visited{$topic} ) {
+			$dispo = 'already published';
+		    }
+		    else {
+			$this->publishTopic($topic, $filetype, $template, $tmpl,
+				     \%copied);
+			my ( $date, $user, $rev, $comment ) =
+			  TWiki::Func::getRevisionInfo($this->{web}, $topic);
+			$dispo = "Rev $rev published";
+			$visited{$topic} = 1;
+		    }
+		}
+		$this->logInfo($topic, $dispo) if ( $dispo ne 'not included' );
+	    } catch Error::Simple with {
+		my $e = shift;
+		$this->logError("$topic not published: ".$e->{-text});
+	    };
+	}
     }
 }
 
@@ -603,6 +616,7 @@ sub publishTopic {
     # really inefficient, but is essential at the moment to maintain correct
     # prefs
     my $twiki = new TWiki($this->{publisher}, $query);
+    $twiki->{security} = new TWiki::Access( $twiki );
     $TWiki::Plugins::SESSION = $twiki;
 
     # Because of Item5388, we have to re-read the topic to get the
@@ -627,6 +641,13 @@ sub publishTopic {
     ($revdate, $revuser, $maxrev) = $meta->getRevisionInfo();
     if (ref($revuser)) {
         $revuser = $revuser->wikiName();
+    }
+
+    # clean-up for PDF
+    if ( $this->{format} eq 'pdf' ) {
+	$text =~ s/\%TOC({.*?})?\%//g;
+	$text =~ s|<section\b.*?>||ig;
+	$text =~ s|</section>||ig;
     }
 
     # Expand and render the topic text
@@ -670,6 +691,12 @@ sub publishTopic {
     $tmpl = TWiki::Func::renderText($tmpl, $this->{web});
 
     $tmpl =~ s|( ?) *</*nop/*>\n?|$1|gois;
+
+    # additional clean-up for PDF
+    if ( $this->{format} eq 'pdf' ) {
+	$tmpl =~ s|<script\b.*?</script>\s*||isg;
+	$tmpl =~ s|<style\b.*?</style>\s*||isg;
+    }
 
     # Remove <base.../> tag
     $tmpl =~ s/<base[^>]+\/>//i;
@@ -719,7 +746,7 @@ sub publishTopic {
     $this->{archive}->addString( $tmpl, $topic.$filetype);
 
     $TWiki::Plugins::SESSION = $oldTWiki; # restore twiki object
-
+    $twiki->finish();
     return $publishedRev;
 }
 
@@ -781,6 +808,10 @@ sub _copyResource {
     $rsrcName =~ /^\s*(.*?)\s*$/;
     $rsrcName = $1;
 
+    # remove URL parameters
+    $rsrcName =~ s/\?.*$//;
+
+
     # SMELL WARNING
     # This is covers up a case such as where rsrcname comes through like 
     # configtopic=PublishTestWeb/WebPreferences/favicon.ico
@@ -804,7 +835,7 @@ sub _copyResource {
             $path =~ s(\/[^\/]*$)()o; # path, excluding the basename
         }
         # Copy resource to rsrc directory.
-        my $TWikiPubDir = TWiki::Func::getPubDir();
+        my $TWikiPubDir = TWiki::Func::getPubDir($this->{web});
         if ( -r "$TWikiPubDir/$rsrcName" ) {
             $this->{archive}->addDirectory( "rsrc" );
             $this->{archive}->addDirectory( "rsrc/$path" );

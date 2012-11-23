@@ -9,9 +9,24 @@
    you make will simply be overwritten the next time a release is generated.
 
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
-
+   
+   * Set STUB = %$STUB%
    * Set SHORTDESCRIPTION = Generate static output (HTML, PDF) for a TWiki Web and optionally upload (FTP) the output to a publishing site.
 -->
++<script type="text/javascript">
++// <![CDATA[
+function pickSkin(field) {
+    var form = document.publish;
+    var value = field[field.selectedIndex].text;
+    if ( value == 'pdf' ) {
+        form.skin.value = 'text';
+    }
+    else {
+        form.skin.value = 'plain';
+    }
+}
+// ]]>
+</script>
 
 _Previously known as !GenHTMLAddOn, and then !PublishAddOn, this is the *original* publishing extension for TWiki_.
 
@@ -71,7 +86,7 @@ padding:.5em;
 <tr>
   <td> Web to publish </td>
   <td>
-   <select name="web" class="twikiSelect">%WEBLIST{"<option $marker value='$name'>$name</option>" selection="%URLPARAM{"web" default="%WEB%"}%"}%</select>
+   <select name="web" class="twikiSelect">%WEBLIST{"<option $marker value='$name'>$name</option>" selection="%URLPARAM{"web" default="%BASEWEB%"}%"}%</select>
   </td>
   <td>
    =web=
@@ -79,11 +94,12 @@ padding:.5em;
 </tr>
 <tr>
   <td> 
-    Comma-separated list of [[#WildcardPattern][wildcard patterns]] that match
+    Comma-separated list of [[%SCRIPTURLPATH{view}%/%BASEWEB%/%BASETOPIC%#WildcardPattern][wildcard patterns]] that match
     the names of topics to *include*.
   </td>
   <td> 
-    <input type="text" name="inclusions" class="twikiInputField" value="%URLPARAM{"inclusions" default="*"}%" size="50"/><br />Use * for all topics.
+    <input type="text" name="inclusions" class="twikiInputField" value="%URLPARAM{"inclusions" default="*"}%" size="100"/><br />Use * for all topics.
+    You can [[%SCRIPTURLPATH{view}%/%BASEWEB%/%BASETOPIC%#TopicOrder][specify order of topics]] using semicolon
   </td>
   <td>
    =inclusions=
@@ -91,7 +107,7 @@ padding:.5em;
 </tr>
 <tr>
   <td> 
-    Comma-separated list of [[#WildcardPattern][wildcard patterns]] that match
+    Comma-separated list of [[%SCRIPTURLPATH{view}%/%BASEWEB%/%BASETOPIC%#WildcardPattern][wildcard patterns]] that match
     the names of topics to *exclude*.
   </td>
   <td> 
@@ -114,7 +130,7 @@ padding:.5em;
 </tr>
 <tr>
   <td> 
-    A [[#RegularExpression][regular expression]] that will cause a topic to be
+    A [[%SCRIPTURLPATH{view}%/%BASEWEB%/%BASETOPIC%#RegularExpression][regular expression]] that will cause a topic to be
     *excluded* if the RE matches the topic content.
   </td>
   <td> 
@@ -142,7 +158,7 @@ padding:.5em;
 <tr>
   <td>Select skin for published HTML</td>
   <td>
-    <input type="text" name="skin" class="twikiInputField" size="20" value="basic_publish" /><br />
+    <input type="text" name="skin" class="twikiInputField" size="20" value="plain" /><br />
     The skin provides the template for how topics are published. See %TWIKIWEB%.TWikiSkins for more informations on skins.<br />
     You are recommended to pick =basic_publish=, or =plain=, or a =print= skin.
     Your installation may also offer a special =export= or =publish= skin.<br />%I% The =view= [[TWikiTemplates][template]] is used to generate published pages, so =view.%URLPARAM{"skin" default="basic_publish"}%.tmpl= is the template that will be used to generate the output. You can preview any topic in this skin simply by appending =?skin=%URLPARAM{"skin" default="basic_publish"}%= to the end of the view URL. Note that the standard =VIEW_TEMPLATE= template override still works when publishing.
@@ -156,7 +172,6 @@ padding:.5em;
   <td>Output format</td>
   <td>
    <select name="format" class="twikiSelect" onchange="toggle('ftp','ftpoptions')">
-    <option value="">file</option>
     <option value="zip">zip</option>
     <option value="tgz">tgz</option>
     <option value="pdf">pdf</option>
@@ -310,7 +325,7 @@ The FTP output generator was written by TWiki:Main.SvenDowideit.
 <tr>
   <td>Some output generators support extra options (e.g. for =pdf=, you can add =htmldoc= command-line parameters here, such as =--linkstyle underline=)</td>
   <td>
-   <textarea rows="5" cols="80"  class="twikiInputField">%URLPARAM{"genopt" default=""}%</textarea>
+   <textarea name="genopt" rows="5" cols="80" class="twikiInputField">%URLPARAM{"genopt" default=""}%</textarea>
   </td>
   <td>
    =genopt=
@@ -332,6 +347,24 @@ Wildcard patterns are well known to people who are used to command lines on comp
 | * | Matches any string, including an empty string. | =*Cheese*= | Every topic with "Cheese" somewhere in the name (but _not_ "cheese") |
 | ? | Matches any single character. | Example1? | Example10 and Example 1X but _not_ example1 |
 | [...] | Matches any one of the enclosed characters.  A pair of characters separated by a hyphen denotes a range  expression; any  character that sorts between those two characters, inclusive, using the current locale's collating sequence and character set, is matched.  If the first character following the [ is a ^ then any character not enclosed is matched. A - may be matched by including it as the first or  last  character  in  the set.  A ] may be matched by including it as the first character in the set.<br /> Within  [  and ], character classes can be specified using the syntax [:class:], where class is one of the following classes defined in the POSIX.2 standard: =alnum=, =alpha=, =ascii=, =blank=, =cntrl=, =digit=, =graph=, =lower=, =print=, =punct=, =space=, =upper=, =word=, =xdigit=. A character class matches any character belonging to that class.  The =word= character class matches letters, digits, and the character _. | B[aeiou]g | Bag, Bog, Big, Beg, Bug |
++#TopicOrder
+
+---+++ Specifying topic order
+You may want to specify the order of topics in a published file.
+You can do it by putting inclusion pattern lists separated by semicolon.
+Let's say you specify the following as inclusion pattern: %BR%
+<pre>
+Abc*,Def*;Ghi*
+</pre>
+Then, topics starting with Abc or Def are put into the output first.
+Next, topics starting with Def are put into the output.
+
+More than one pattern lists may match a topic.
+Even in that case, a topic isn't included more than once in an output.
+For example, the following pattern yields an output having topics starting with Abcd first, then topics starting with Ab but not Abcd because topics starting with Abcd are already included.
+<pre>
+Abcd*;Ab*
+</pre>
 
 #RegularExpression
 ---+++ Regular Expressions

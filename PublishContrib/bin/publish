@@ -1,37 +1,43 @@
-#!/usr/bin/perl -wT
+#!/ms/dist/perl5/bin/perl5.10 -wT
 #
-#  publish
-#  Publish site (generate static HTML)
+# TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-#  Written by Crawford Currie, http://c-dot.co.uk
-#  Based loosely on GenHTMLPlugin
-#  Copyright (C) 2001 Motorola
-#
-#  Revisions Copyright (C) 2002, Eric Scouten
-#  Cairo updates Copyright (C) 2004 Crawford Currie http://c-dot.co.uk
+# Copyright (C) 1999-2012 Peter Thoeny, peter[at]thoeny.org and
+# TWiki Contributors. All Rights Reserved. TWiki Contributors are
+# listed in the AUTHORS file in the root of this distribution.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at
-# http://www.gnu.org/copyleft/gpl.html
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
+# As per the GPL, removal of this notice is prohibited.
+
+
+use strict;
+use warnings;
 
 BEGIN {
-    # Set default current working directory (needed for mod_perl)
-    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
-        chdir $1;
+    if ( defined $ENV{GATEWAY_INTERFACE} or defined $ENV{MOD_PERL} ) {
+        $TWiki::cfg{Engine} = 'TWiki::Engine::CGI';
+        use CGI::Carp qw(fatalsToBrowser);
+        $SIG{__DIE__} = \&CGI::Carp::confess;
     }
-    # Set library paths in @INC at compile time
-    unshift @INC, '.';
+    else {
+        $TWiki::cfg{Engine} = 'TWiki::Engine::CLI';
+        require Carp;
+        $SIG{__DIE__} = \&Carp::confess;
+    }
+    $ENV{TWIKI_ACTION} = 'publish';
+    @INC = ('.', grep { $_ ne '.' } @INC);
     require 'setlib.cfg';
 }
 
+use TWiki;
 use TWiki::UI;
-use TWiki::Contrib::Publish;
-TWiki::UI::run( \&TWiki::Contrib::Publish::publish );
+$TWiki::engine->run();
