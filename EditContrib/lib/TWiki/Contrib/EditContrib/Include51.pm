@@ -98,7 +98,7 @@ sub _INCLUDE {
                                  $rev );
 
     unless( TWiki::Func::checkAccessPermission(
-        'VIEW', $this->{user}, $texta, $includedTopic, $includedWeb, $meta )) {
+        'VIEW', $this->{user}, $text, $includedTopic, $includedWeb, $meta )) {
         if( TWiki::isTrue( $warn )) {
             return $this->inlineAlert( 'alerts', 'access_denied',
                                        $includedTopic );
