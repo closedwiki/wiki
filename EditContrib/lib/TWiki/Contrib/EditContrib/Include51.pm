@@ -4,6 +4,7 @@ package TWiki::Contrib::EditContrib::Include51;
 
 use strict;
 use TWiki;
+use TWiki::Func;
 
 sub _INCLUDE {
     my ( $this, $params, $includingTopic, $includingWeb ) = @_;
@@ -96,8 +97,8 @@ sub _INCLUDE {
       $this->{store}->readTopic( undef, $includedWeb, $includedTopic,
                                  $rev );
 
-    unless( $this->{security}->checkAccessPermission(
-        'VIEW', $this->{user}, $text, $meta, $includedTopic, $includedWeb )) {
+    unless( TWiki::Func::checkAccessPermission(
+        'VIEW', $this->{user}, $texta, $includedTopic, $includedWeb, $meta )) {
         if( TWiki::isTrue( $warn )) {
             return $this->inlineAlert( 'alerts', 'access_denied',
                                        $includedTopic );
