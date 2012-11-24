@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1307397574" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353787267" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Plugins
 
@@ -59,9 +59,9 @@ Define =DISABLEDPLUGINS= to be a comma-separated list of names of plugins to dis
 
 Some plugins require additional settings or offer extra options that you have to select. Also, you may want to make a plugin available only in certain webs, or temporarily disable it. And may want to list all available plugins in certain topics. You can handle all of these management tasks with simple procedures:
 
----+++ Enabling Plugins
+---+++ Enabling/Disabling Plugins
 
-Plugins can be enabled and disabled with the [[%SCRIPTURLPATH{configure}%][configure]] script. An installed plugin needs to be enabled before it can be used.
+Plugins can be enabled and disabled with the [[%SCRIPTURLPATH{configure}%][configure]] script in the *Plugins* section. An installed plugin needs to be enabled before it can be used.
 
 ---+++ Plugin Evaluation Order
 
