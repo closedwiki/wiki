@@ -1,9 +1,9 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2011 Peter Thoeny, Peter[at]Thoeny.org
+# Copyright (C) 2001-2012 Peter Thoeny, Peter[at]Thoeny.org
+# Copyright (C) 2008-2012 TWiki Contributors
 # Copyright (C) 2002-2006 Crawford Currie, cc@c-dot.co.uk
-# Copyright (C) 2008-2011 TWiki Contributors
+# Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
 #
 # For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2011-04-05';
+$RELEASE = '2012-11-24';
 
 my $editmess;
 
@@ -51,14 +51,18 @@ sub initPlugin {
 sub handleDrawing {
   my( $attributes, $topic, $web ) = @_;
   my $nameVal = TWiki::Func::extractNameValuePair( $attributes );
-  if( ! $nameVal ) {
-	$nameVal = "untitled";
-  }
   $nameVal =~ s/[^A-Za-z0-9_\.\-]//go; # delete special characters
+  if( ! $nameVal ) {
+    $nameVal = "untitled";
+  }
 
-  # should really use TWiki server-side include mechanism....
-  my $mapFile = TWiki::Func::getPubDir() . "/$web/$topic/$nameVal.map";
+  # FIXME: should really use TWiki server-side include mechanism....
+  my $pubDir = TWiki::Func::getPubDir();
+  my $mapFile = "$pubDir/$web/$topic/$nameVal.map";
   my $img = "src=\"%ATTACHURLPATH%/$nameVal.gif\"";
+  unless( -e "$pubDir/$web/$topic/$nameVal.gif" ) {
+    $img = "src=\"%PUBURLPATH%/%SYSTEMWEB%/TWikiDrawPlugin/newdrawing.gif\"";
+  }
   my $editUrl =
 	TWiki::Func::getOopsUrl($web, $topic, "twikidraw", $nameVal);
   my $imgText = "";
@@ -87,7 +91,7 @@ sub handleDrawing {
           "Edit</a><br />" if ( $editButton == 1 );
 #	$imgText = "<br /><button onclick=\"window.location='$editUrl'\" $hover>".
 #          "Edit</button><br />" if ( $editButton == 1 );
-	$imgText .= "<img $img>$map";
+	$imgText .= "<img $img />$map";
   } else {
 	# insensitive drawing; the whole image gets a rather more
 	# decorative version of the edit URL
