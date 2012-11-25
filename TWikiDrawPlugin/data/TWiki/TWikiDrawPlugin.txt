@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353812407" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353830027" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -30,7 +30,9 @@ Browser support for Java 1.1 or later required.
 
 ---++ Syntax Rules
 
-Write the command =%<nop>DRAWING{name}%= anywhere in a TWiki topic. You can name the drawing anything you like, allowed characters are =A-Z a-z 0-9 _ - .= . If you have only one drawing in the topic you can simply write =%<nop>DRAWING%= .
+Write the command =%<nop>DRAWING{name}%= anywhere in a TWiki topic. You can name the drawing anything you like, allowed characters are =A-Z=, =a-z=, =0-9=, =.=, =_=, =-=. If you have only one drawing in the topic you can simply write =%<nop>DRAWING%= .
+
+__Example:__ =%<nop>DRAWING{workflow}%=
 
 ---+++ Tools
 
@@ -74,7 +76,7 @@ Attributes, such as fill color, text color or arrow tip, can be changed through 
 __NOTE:__ Do not change the settings here, overload them in the [[%LOCALSITEPREFS%]]. Prefix a setting with ==TWIKIDRAWPLUGIN_==, e.g. to overload ==EXTRA_COLORS== define a ==TWIKIDRAWPLUGIN_EXTRA_COLORS== setting in the <nop>%LOCALSITEPREFS%.
 
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules
-      * Set SHORTDESCRIPTION = Java Applet based drawing editor
+      * Set SHORTDESCRIPTION = Vector drawing editor and clickable maps for diagrams and workflows
 
    * Extra colors to be added to the menu of colors in the applet, as a comma-separated list with colors in HTML format (see %SYSTEMWEB%.StandardColors)
       * Set EXTRA_COLORS = Aquamarine=#70DB93,New Tan=#EBC79E,Sea Green=#238E68,Motorola Blue=#3ff
@@ -102,13 +104,16 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
         | *File:* | *Description:* |
         | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==data/TWiki/VarDRAWING.txt== | DRAWING variable documentation topic |
         | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
         | ==lib/TWiki/Plugins/%TOPIC%/source.zip== | Zip with Java sources |
         | ==pub/TWiki/TWikiDrawPlugin/*.gif== | Button images |
         | ==pub/TWiki/TWikiDrawPlugin/example.draw== | Example drawing |
         | ==pub/TWiki/TWikiDrawPlugin/example.gif== | Example drawing, generated image file |
         | ==pub/TWiki/TWikiDrawPlugin/example.map== | Example drawing, generated map file |
+        | ==pub/TWiki/TWikiDrawPlugin/newdrawing.gif== | New drawing image |
         | ==pub/TWiki/TWikiDrawPlugin/screenshot.png== | Screenshot |
+        | ==pub/TWiki/TWikiDrawPlugin/twikidraw.gif== | !TWikiDraw icon image |
         | ==pub/TWiki/TWikiDrawPlugin/twikidraw.jar== | Java applet |
         | ==templates/twikidraw.tmpl== | Template for drawing editor |
         | ==templates/twikidraw.pattern.tmpl== | Template for drawing editor, pattern skin |
@@ -128,11 +133,12 @@ If you add a map to a drawing by setting a URL on any of the figures a map file 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk, TWiki:Main.SopanShewale |
 |  Copyright: | &copy; 2000-2012 Peter Thoeny [[http://www.twiki.org/][TWiki.org]]; <br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor; <br /> see additional copyrights below |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | %$VERSION% |
+|  Plugin Version: | 2012-11-25 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-11-24 | TWikibug:Item7056: Show default image for new drawing (if image is missing); doc improvements; change TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
-|  2011-04-05 | TWikibug:Item6638: Doc improvements; fixing broken button images -- TWiki:Main.PeterThoeny |
-|  2009-10-29 | TWikibug:Item6333: !TWikiDrawPlugin does not work in TWiki-4.3.2 if {CryptToken}{Enable} is set -- Sopan Shewale |
+|  2012-11-25: | TWikibug:Item7020: Adding and categorizing TWiki variable doc topic VarDRAWING |
+|  2012-11-24: | TWikibug:Item7056: Show default image for new drawing (if image is missing); doc improvements; change TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2011-04-05: | TWikibug:Item6638: Doc improvements; fixing broken button images -- TWiki:Main.PeterThoeny |
+|  2009-10-29: | TWikibug:Item6333: !TWikiDrawPlugin does not work in TWiki-4.3.2 if {CryptToken}{Enable} is set -- Sopan Shewale |
 |  8570 | TWikibug:Item1528: Minor pattern skin template update for TWikiDrawPlugin |
 |  8569 | TWikibug:Item1528: Adding pattern skin template to TWikiDrawPlugin |
 |  7926 | TWikibug:Item1206: minor formatting fix |
@@ -172,7 +178,7 @@ Additional copyright info:
    * Modifications Copyright &copy; 2001 Motorola. All Rights Reserved.
    * Modifications &copy; 2003-2004 Copyright Crawford Currie http://www.c-dot.co.uk
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
+__Related Topics:__ VarDRAWING, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 %META:FILEATTACHMENT{name="newdrawing.gif" attachment="newdrawing.gif" attr="h" comment="" date="1353803742" path="newdrawing.gif" size="7280" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="twikidraw.gif" attachment="twikidraw.gif" attr="h" comment="" date="1353803742" path="twikidraw.gif" size="3306" user="TWikiContributor" version="1"}%
