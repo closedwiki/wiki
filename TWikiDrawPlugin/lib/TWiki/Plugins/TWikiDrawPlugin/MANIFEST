@@ -4,7 +4,9 @@ lib/TWiki/Plugins/TWikiDrawPlugin/source.zip 0644 Zip of java sources
 pub/TWiki/TWikiDrawPlugin/example.draw 0644
 pub/TWiki/TWikiDrawPlugin/example.gif 0644
 pub/TWiki/TWikiDrawPlugin/example.map 0644
+pub/TWiki/TWikiDrawPlugin/newdrawing.gif 0644
 pub/TWiki/TWikiDrawPlugin/screenshot.png 0644
+pub/TWiki/TWikiDrawPlugin/twikidraw.gif 0644
 pub/TWiki/TWikiDrawPlugin/twikidraw.jar 0644 JAR file for applet
 pub/TWiki/TWikiDrawPlugin/ATEXT1.gif 0644
 pub/TWiki/TWikiDrawPlugin/ATEXT2.gif 0644
