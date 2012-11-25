@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353830027" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353833593" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -136,7 +136,7 @@ If you add a map to a drawing by setting a URL on any of the figures a map file 
 |  Plugin Version: | 2012-11-25 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  2012-11-25: | TWikibug:Item7020: Adding and categorizing TWiki variable doc topic VarDRAWING |
-|  2012-11-24: | TWikibug:Item7056: Show default image for new drawing (if image is missing); doc improvements; change TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
+|  2012-11-25: | TWikibug:Item7056: Show default image for new drawing (if image is missing); doc improvements; change TWIKIWEB to SYSTEMWEB; replace confusing static drawing image with !TWikiDraw logo image, and add clarifying note that popup will open with Java based drawing editor -- TWiki:Main.PeterThoeny |
 |  2011-04-05: | TWikibug:Item6638: Doc improvements; fixing broken button images -- TWiki:Main.PeterThoeny |
 |  2009-10-29: | TWikibug:Item6333: !TWikiDrawPlugin does not work in TWiki-4.3.2 if {CryptToken}{Enable} is set -- Sopan Shewale |
 |  8570 | TWikibug:Item1528: Minor pattern skin template update for TWikiDrawPlugin |
