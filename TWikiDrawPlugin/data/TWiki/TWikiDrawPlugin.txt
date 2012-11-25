@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1302066394" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353804779" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -13,6 +13,9 @@
 
 ---++ Overview
 
+<sticky><div style="float:left; margin:0 10px 10px 0;">
+<img src="%PUBURLPATH%/%WEB%/%TOPIC%/twikidraw.gif" alt="twikidraw.gif" width="116" height="95" />
+</div></sticky>
 This plugin encapsulates the <nop>TWikiDraw Java Applet first developed by TWiki:Main.PeterThoeny from the original <nop>JHotDraw.
 
 <nop>JHotDraw is a simple drawing editor that supports drawing in a style similar to that found in MS Powerpoint and MS Word. Various shaped figures can be placed in the drawing and text annotations joined to them.
@@ -113,7 +116,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
    * Plugin __configuration and testing__:
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
-      * Test if the installation was successful: You should see a placeholder box below. Click on it.<br />
+      * Test if the installation was successful: You should see a "Create New Drawing" box below. Click on it.<br />
         %DRAWING{empty}%
 
 ---++ Known Problems
@@ -122,11 +125,12 @@ If you add a map to a drawing by setting a URL on any of the figures a map file 
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk, TWiki:Main.SopanShewale http://www.twiki.net |
-|  Copyright: | &copy; 2000-2011 Peter Thoeny [[http://www.twiki.net/][Twiki, Inc]]; <br /> &copy; 2008-2011 TWiki:TWiki.TWikiContributor; <br /> see additional copyrights below |
+|  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk, TWiki:Main.SopanShewale |
+|  Copyright: | &copy; 2000-2012 Peter Thoeny [[http://www.twiki.org/][TWiki.org]]; <br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor; <br /> see additional copyrights below |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-11-24 | TWikibug:Item7056: Show default image for new drawing (if image is missing); doc improvements; change TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  2011-04-05 | TWikibug:Item6638: Doc improvements; fixing broken button images -- TWiki:Main.PeterThoeny |
 |  2009-10-29 | TWikibug:Item6333: !TWikiDrawPlugin does not work in TWiki-4.3.2 if {CryptToken}{Enable} is set -- Sopan Shewale |
 |  8570 | TWikibug:Item1528: Minor pattern skin template update for TWikiDrawPlugin |
@@ -169,3 +173,6 @@ Additional copyright info:
    * Modifications &copy; 2003-2004 Copyright Crawford Currie http://www.c-dot.co.uk
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
+
+%META:FILEATTACHMENT{name="newdrawing.gif" attachment="newdrawing.gif" attr="h" comment="" date="1353803742" path="newdrawing.gif" size="7280" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="twikidraw.gif" attachment="twikidraw.gif" attr="h" comment="" date="1353803742" path="twikidraw.gif" size="3306" user="TWikiContributor" version="1"}%
