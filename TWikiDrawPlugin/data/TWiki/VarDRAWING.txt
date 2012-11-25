@@ -1,0 +1,12 @@
+%META:TOPICINFO{author="TWikiContributor" date="1353830027" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarDRAWING
+---+++ DRAWING -- vector drawing editor and clickable maps for diagrams and workflows
+   * The =%<nop>DRAWING{}%= variable is handled by the TWikiDrawPlugin.
+   * Syntax: =%<nop>DRAWING{ _name_ }%=
+   * Parameter:
+     | *Parameter* | *Description* | *Default* |
+     | ="..."= | Name of drawing. Allowed characters are =A-Z=, =a-z=, =0-9=, =.=, =_=, =-=. | ="untitled"= |
+   * Example: =%<nop>DRAWING{"workflow"}%=
+   * Category: ChartingAndDrawingVariables, EditingAndContentUpdateVariables, UIAndVisualizationVariables
+   * Related: TWikiDrawPlugin

@@ -26,7 +26,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2012-11-24';
+$RELEASE = '2012-11-25';
 
 my $editmess;
 

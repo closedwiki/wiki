@@ -1,4 +1,5 @@
 data/TWiki/TWikiDrawPlugin.txt 0644
+data/TWiki/VarDRAWING.txt 0644
 lib/TWiki/Plugins/TWikiDrawPlugin.pm 0644
 lib/TWiki/Plugins/TWikiDrawPlugin/source.zip 0644 Zip of java sources
 pub/TWiki/TWikiDrawPlugin/example.draw 0644
