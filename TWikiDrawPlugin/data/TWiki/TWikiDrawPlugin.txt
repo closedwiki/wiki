@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353804779" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353812407" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -20,7 +20,7 @@ This plugin encapsulates the <nop>TWikiDraw Java Applet first developed by TWiki
 
 <nop>JHotDraw is a simple drawing editor that supports drawing in a style similar to that found in MS Powerpoint and MS Word. Various shaped figures can be placed in the drawing and text annotations joined to them.
 
-<img src="%ATTACHURLPATH%/screenshot.png" alt="screenshot.png" />
+<sticky><div style="clear:left;"></div><img src="%PUBURLPATH%/%WEB%/%TOPIC%/screenshot.png" alt="TWikiDraw screenshot" width="687" height="462" /></sticky>
 
 Unique to <nop>%TOPIC%, a drawing can also have a "map" which makes figures in the drawing sensitive to the mouse cursor. A map is automatically added to an image when a URL is attached to any of the figures.
 
@@ -176,3 +176,4 @@ __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 %META:FILEATTACHMENT{name="newdrawing.gif" attachment="newdrawing.gif" attr="h" comment="" date="1353803742" path="newdrawing.gif" size="7280" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="twikidraw.gif" attachment="twikidraw.gif" attr="h" comment="" date="1353803742" path="twikidraw.gif" size="3306" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1353812211" path="screenshot.png" size="36057" user="TWikiContributor" version="1"}%
