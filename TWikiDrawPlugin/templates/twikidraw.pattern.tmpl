@@ -4,7 +4,19 @@
 
 %TMPL:DEF{"heading"}% Edit <nop>TWikiDraw figure '%PARAM1%' %TMPL:END%
 
-%TMPL:DEF{"message"}%<img src="%ATTACHURLPATH%/%PARAM1%.gif" border="2" title="%PARAM1%" alt="Image of drawing %PARAM1%" />
+%TMPL:DEF{"message"}%<table width="100%" border="0" cellpadding="3" cellspacing="0"><tr><td>
+<img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiDrawPlugin/twikidraw.gif" border="0" alt="" />
+</td><td>
+%ICON{"help"}% A window with a Java based drawing editor will open up to edit the drawing '%PARAM1%'.
+
+%ICON{"warning"}% It may also be necessary to reload the originating topic after you have finished editing and saving this drawing, to see the updated figure.
+
+%ICON{"key"}% It is important that you are authenticated (are logged in) while editing, otherw
+ise your changes may be lost. %WIKITOOLNAME% currently thinks you are '<nop>%USERINFO{format="$wikiname"}%'.
+
+%ICON{"help"}% You can get help on <nop>TWikiDraw by visiting the <a target="TWikiDrawPlugin" onclick="return launchWindow('%SYSTEMWEB%','TWikiDrawPlugin')" href="%SCRIPTURLPATH{"view"}%/%SYSTEMWEB%/TWikiDrawPlugin"><nop>TWikiDrawPlugin page</a> (opens in new window).
+</td></tr></table>
+
 <applet code="CH.ifa.draw.twiki.TWikiDraw.class" archive="%PUBURLPATH%/%SYSTEMWEB%/TWikiDrawPlugin/twikidraw.jar" width="100%" height="40">
 <param name="drawpath" value="%ATTACHURLPATH%/%PARAM1%.draw" />
 <param name="gifpath"  value="%ATTACHURLPATH%/%PARAM1%.gif" />
@@ -16,16 +28,7 @@
 <param name="crypttoken_svg" value="%CRYPTTOKEN%"/>
 <param name="viewpath" value="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%" />
 <param name="helppath" value="%SCRIPTURLPATH{"view"}%/%SYSTEMWEB%/TWikiDrawPlugin" />
-</applet>
-
 %ICON{"warning"}% You need a Java enabled browser to edit the drawing '%PARAM1%'.
-
-%ICON{"warning"}% If you have edited this drawing before, it may be necessary to reload the drawing in the editor, due to URL caching. <br />
-It may also be necessary to reload the originating topic after you have finished editing and saving this drawing, to see the updated figure.
-
-%ICON{"key"}% It is important that you are authenticated (are logged in) while editing, otherwise your changes may be lost. <br />
-%WIKITOOLNAME% currently thinks you are '<nop>%USERINFO{format="$wikiname"}%'.
-
-%ICON{"help"}% You can get help on <nop>TWikiDraw by visiting the <a target="TWikiDrawPlugin" onclick="return launchWindow('%SYSTEMWEB%','TWikiDrawPlugin')" href="%SCRIPTURLPATH{"view"}%/%SYSTEMWEB%/TWikiDrawPlugin"><nop>TWikiDrawPlugin page</a> (opens in new window).%TMPL:END%
+</applet>%TMPL:END%
 
 %TMPL:DEF{"topicactionbuttons"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">%MAKETEXT{"Cancel"}%</a>%TMPL:END%
