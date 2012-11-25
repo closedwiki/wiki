@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1313109307" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1353826442" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Skins
 
@@ -240,6 +240,19 @@ This pushes a different skin to the front of the skin search path (so for our ex
 An example would be invoking the printable mode, which is achieved by applying =?cover=print=. The =view.print.tmpl= simply invokes the =viewprint= template for the current skin which then can appropriately include all other used templates for the current skin. Where the printable mode be applied by using =SKIN=, all skins would have the same printable appearance.
 
 The full skin path is built up as follows: =SKIN= setting (or =?skin= if it is set), then =COVER= setting is added, then =?cover=.
+
+#ConditionalSkin
+---++ Conditional Skin Activation
+
+TWiki skins can be activated conditionally using IfStatements. For example, you might want to use a mobile skin for iPhone and Android user agents, and the default skin otherwise. This example uses the print skin on iPhone and Android:
+
+<pre>
+   * Set <nop>SKIN = %<nop>IF{
+      "'%<nop>HTTP{"User-Agent"}%'~'*iPhone*' OR '%<nop>HTTP{"User-Agent"}%'~'*Android*'"
+      then="print, pattern"
+      else="topmenu, pattern"
+     }%
+</pre>
 
 #HardCodedSkins
 ---++ Hard-Coded Skins
