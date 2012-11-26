@@ -1,12 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352798346" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1176923679" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TagMePlugin"}%
 ---+!! Tag-me: Change Requests
-%STARTINCLUDE%
+
 %ICON{info}% __Note:__
-   * Creating, renaming, and deleting of tags is ususally done by users that have received permissions to do this. Permissions are set in [[%BASEWEB%.WebPreferences][WebPreferences]] with ALLOW_TAG_CHANGE and DENY_TAG_CHANGE variables.
-   If both are not defined, user who can edit the !WebPreferences can do it.
-   * If creating, renaming, and deleting of tags is done by someone else than you, use the forms on the [[TagMeCreateNewTag][Create]], [[TagMeRenameTag][Rename]] and [[TagMeDeleteTag][Delete]] pages to automatically add your requests here.
-%STOPINCLUDE%
+   * Renaming and deleting of tags is ususally done by users that have received permissions to do this. Permissions are set in [[TagMePlugin#PluginSettings][TagMePlugin's settings]]. 
+   * If renaming and deleting of tags is done by someone else than you, use the forms on the [[TagMeRenameTag][Rename]] and [[TagMeDeleteTag][Delete]] pages to automatically add your requests here.
+
 <!--
 When refactoring this topic, please keep the table header row
 -->

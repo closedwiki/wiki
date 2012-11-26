@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352798346" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1346793879" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TagMePlugin"}%
 ---+!! Tag-me: Create New Tag
 
@@ -7,9 +7,9 @@
 <td>&nbsp; &nbsp;</td>
 <td bgcolor="#d7dced" style="background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TagMePlugin/gray-gradient-1.png); border: solid 1px #d7dced;">&nbsp; *Create New Tag* &nbsp;</td>
 <td>&nbsp;</td>
-<td bgcolor="#eef0f8" style="background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TagMePlugin/gray-gradient-2.png); border: solid 1px #d7dced;">&nbsp; [[%BASEWEB%.TagMeRenameTag][Rename Tag]] &nbsp;</td>
+<td bgcolor="#eef0f8" style="background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TagMePlugin/gray-gradient-2.png); border: solid 1px #d7dced;">&nbsp; [[TagMeRenameTag][Rename Tag]] &nbsp;</td>
 <td>&nbsp;</td>
-<td bgcolor="#eef0f8" style="background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TagMePlugin/gray-gradient-2.png); border: solid 1px #d7dced;">&nbsp; [[%BASEWEB%.TagMeDeleteTag][Delete Tag]] &nbsp;</td>
+<td bgcolor="#eef0f8" style="background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TagMePlugin/gray-gradient-2.png); border: solid 1px #d7dced;">&nbsp; [[TagMeDeleteTag][Delete Tag]] &nbsp;</td>
 </tr></table>
 <table border="0" cellpadding="5" cellspacing="0" style="width:100%;">
 <tr bgcolor="#d7dced"><td style="width:100%;"></td></tr>
@@ -17,15 +17,15 @@
 %STARTSECTION{"create"}%
 Create a new tag - then add it to a topic.
 
-<noautolink><form name="addtag" action="%SCRIPTURL{viewauth}%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return cleanTag(this.newtag.value);">%TAGME{ tpaction="%URLPARAM{"newaction" default="newtaginit"}%" tag="%URLPARAM{newtag}%" note="%URLPARAM{newtagnote}%" }%
+<noautolink>%TAGME{ tpaction="%URLPARAM{"newaction" default="nop"}%" tag="%URLPARAM{newtag}%" note="%URLPARAM{newtagnote}%" }%<form name="addtag" action="%SCRIPTURL{viewauth}%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return cleanTag(this.newtag.value);">
 <div class="twikiFormSteps">
 <div class="twikiFormStep twikiLast">
-Name of new tag: <input type="text" class="twikiInputField" name="newtag" id="newtag" size="30" value="%URLPARAM{"createtag"}%" onblur="this.value=cleanTag(this.value)" /> <input %IF{"context inactive" then="disabled"}% type="submit" class="twikiSubmit" value="%MAKETEXT{"Create"}%" />
+Name of new tag: <input type="text" class="twikiInputField" name="newtag" id="newtag" size="30" value="%URLPARAM{"createtag"}%" onblur="this.value=cleanTag(this.value)" /> <input type="submit" class="twikiSubmit" value="%MAKETEXT{"Create"}%" />
 </div>
 </div>
 <input type="hidden" name="newaction" value="newtag" />
 <input type="hidden" name="from" value="%URLPARAM{"from"}%" />
-<input type="hidden" name="newtagnote" value="%IF{"defined from" then="Return to [<nop>[%URLPARAM{from}%]]"}%" />
+<input type="hidden" name="newtagnote" value="Return to [<nop>[%URLPARAM{"from" default="%BASEWEB%.%HOMETOPIC%" }%]]" />
 </form>
 </noautolink>
 %ENDSECTION{"create"}%
@@ -33,17 +33,18 @@ Name of new tag: <input type="text" class="twikiInputField" name="newtag" id="ne
 %STARTSECTION{"existing"}%
 Existing tags: %TAGME{ tpaction="showalltags" format="[[%SCRIPTURL{view}%/%SYSTEMWEB%/TagMeSearch?tag=$tag][$tag]]" separator=", " }%
 %ENDSECTION{"existing"}%
+%STOPINCLUDE%
 
 %BR%
-<span class="twikiGrayText">Other tag options: [[%BASEWEB%.TagMeViewAllTags][View all tags]], %IF{"'%TAGMEPLUGIN_USER_AGNOSTIC%' = 'on'" else="[[%BASEWEB%.TagMeViewMyTags][View my tags]], "}%[[%BASEWEB%.TagMeSearch][Search tags]]</span>
+<span class="twikiGrayText">Other tag options: [[TagMeViewAllTags][View all tags]], [[TagMeViewMyTags][View my tags]], [[TagMeSearch][Search tags]]</span>
 
 %STARTSECTION{"cleanTagJavascript"}%
 <script language="javascript" type="text/javascript">
 <!-- // <pre>-hide
 function cleanTag(inTagString) {
-   var shouldTranslate = '%TAGMEPLUGIN_NORMALIZE_TAG_INPUT%';
+   var shouldTranslate = 0%TAGMEPLUGIN_NORMALIZE_TAG_INPUT%;
    var cleanName = "";
-   if (shouldTranslate == 'on') {
+   if (shouldTranslate) {
       cleanName = translateEntities(inTagString);
    } else {
       cleanName = makeSafe(inTagString);
@@ -123,4 +124,3 @@ function setHandyFocus () {
 </script>
 
 %ENDSECTION{"cleanTagJavascript"}%
-%STOPINCLUDE%
