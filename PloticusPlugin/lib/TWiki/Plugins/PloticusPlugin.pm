@@ -58,15 +58,17 @@ package TWiki::Plugins::PloticusPlugin;
 
 # Always use strict to enforce variable scoping
 use strict;
+use Digest::MD5 qw( md5_hex );
+use File::Path;
 
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package
-use vars qw( $VERSION $RELEASE $debug $pluginName );
+use vars qw( $VERSION $RELEASE $debug $pluginName $inline );
 
 # This should always be $Rev: 8354$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev: 1.0$';
+$VERSION = '$Rev$';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
@@ -110,8 +112,8 @@ and highly dangerous!
 sub initPlugin {
     #TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
     my( $topic, $web, $user, $installWeb ) = @_;
-    $debug = TWiki::Func::getPreferencesValue( 'PLOTICUSPLUGIN_DEBUG' );
-    $debug = 1;
+    $debug = TWiki::Func::getPreferencesValue( "\U$pluginName\E_DEBUG" );
+    $inline = TWiki::Func::getPreferencesValue( "\U$pluginName\E_INLINE" );
     TWiki::Func::writeDebug( "Initialising PloticusPlugin...." ) if $debug;
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.026 ) {
@@ -655,6 +657,76 @@ For more information, check TWiki:TWiki.TWikiScripts#rest
 sub restPloticus {
    #my ($session) = @_;
    return "This is an example of a REST invocation\n\n";
+}
+
+########################################################################
+
+sub commonTagsHandler {
+### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+    return unless ( $inline );
+    TWiki::Func::writeDebug("- ${pluginName}::commonTagsHandler( $_[2].$_[1] )")
+      if $debug;
+    # This is the place to define customized tags and variables
+    # Called by sub handleCommonTags, after %INCLUDE:"..."%
+
+    # Pass everything within <easytimeline> tags to handleTimeline function
+    $_[0] =~ s/<ploticus\s+name=['"]?([-\w]+)["']?.*?>(.*?)<\/ploticus>/&handlePloticus($1, $2, $_[1], $_[2])/giseo;
+}
+
+# =========================
+sub handlePloticus {
+    my ( $name, $plotData, $topic, $web ) = @_;
+    # Create topic directory "pub/$web/$topic" if needed
+    my $dir = TWiki::Func::getPubDir($web) . "/$web/$topic";
+    unless ( -e "$dir" ) {
+        umask(002);
+        mkpath( $dir, 0, 0755 )
+          or return
+          "<nop>$pluginName Error: *folder $dir could not be created*";
+    }
+
+    # compute the MD5 hash of this string
+    my $hash_code = md5_hex($plotData);
+
+    my $image = "$dir/$name.png";
+    my $hashValFile = "$dir/$name-hash.txt";
+    my $storedHashVal = "";
+    open(HASH, "< $hashValFile") and do {
+	$storedHashVal = <HASH>;
+	chomp $storedHashVal;
+	close(HASH);
+    };
+
+    if ( -r $image && $hash_code eq $storedHashVal ) {
+	return <<END;
+<a name="$name"></a>
+<img src="%ATTACHURL%/$name.png?t=$hash_code" alt="$name.png"/>
+END
+    }
+    else {
+	my $flattenedWeb = $web;
+	$flattenedWeb =~ s:/:.:;
+	my $tmpFile = "/tmp/$pluginName$flattenedWeb$topic$name.txt";
+        # output the timeline text into the tmp file
+        open OUTFILE, ">$tmpFile"
+          or return "<nop>$pluginName Error: could not create file";
+	my $octets = $plotData;
+	if ( $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i ) {
+	    require Encode;
+	    Encode::from_to($octets, "utf8", "cp1252");
+	    print OUTFILE $octets;
+	}
+	else {
+	    print OUTFILE $octets;
+	}
+        close OUTFILE;
+	# the temp file is removed in PloticusPlugin::Plot.
+
+	require TWiki::Plugins::PloticusPlugin::Plot;
+	my $plot = TWiki::Plugins::PloticusPlugin::Plot->new($web, $topic,
+						$name, $tmpFile, $hash_code);
+	return $plot->render(0);
+    }
 }
 
 1;

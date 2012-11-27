@@ -28,7 +28,7 @@ sub fromFile{
 
 sub buildFileName{
     my ($web, $topic, $plotName) = @_;
-    return TWiki::Func::getPubDir() . "/$web/$topic/$plotName.ploticus";
+    return TWiki::Func::getPubDir($web) . "/$web/$topic/$plotName.ploticus";
 }
 sub readFile {
     my $ploticusFile = $_[0];
@@ -68,7 +68,7 @@ sub readFile {
 
 sub writeFile{
     my ($web, $topic, $plotName, $text) = @_;
-    my $webDir = TWiki::Func::getPubDir() . "/$web";
+    my $webDir = TWiki::Func::getPubDir($web) . "/$web";
     unless (-e $webDir) { mkdir $webDir };
     unless (-e "$webDir/$topic") { mkdir "$webDir/$topic" };
     my $ploticusFile =  "$webDir/$topic/$plotName.ploticus";
@@ -143,16 +143,18 @@ sub render{
 #    $self->{NAME} 
 #    $self->{TEXT}  
     my $text = '';
+    my $TEXT = $self->{TEXT};
+    $TEXT =~ s:^[ \t]*$:<nop>:mg;
     $text .= "*Edit Settings for !$self->{NAME}*\n";
     $text .= "<a name=\"ploticusplot" . $self->{NAME} . "\"></a>\n";
     $text .= "<form action=" . TWiki::Func::getScriptUrl( "$self->{WEB}", "$self->{TOPIC}", "view" ) . "\#ploticusplot$self->{NAME}\" method=\"post\">\n";
     $text .= "<table>\n";
     $text .= "  <tr valign=\"middle\">\n";
-    $text .= "    <td><textarea  rows=\"10\" cols=\"90\" name=\"ploticusPlotSettingsText\" >$self->{TEXT}</textarea>\n";
+    $text .= "    <td><textarea  rows=\"10\" cols=\"90\" name=\"ploticusPlotSettingsText\" >$TEXT</textarea>\n";
     $text .= "    </td>\n";
     $text .= "    <td><input  type=\"submit\" value=\"Save Settings\" class=\"twikiSubmit\" /><br>\n";
-    $text .= "        <a target=\"PloticusPlugin\" onclick=\"return launchWindow('TWiki','PloticusPlugin')\" href=\"/twiki/bin/view/TWiki/PloticusPlugin\">PloticusPlugin help</a><br>\n";
-    $text .= "        <a target=\"PloticusHelp\" onclick=\"return launchWindow('TWiki','PloticusHelp')\" href=\"/twiki/bin/view/TWiki/PloticusHelp\">Ploticus help</a>\n";
+    $text .= "        <a target=\"PloticusPlugin\" onclick=\"return launchWindow('TWiki','PloticusPlugin')\" href=\"/cgi-bin/view/TWiki/PloticusPlugin\">PloticusPlugin help</a><br>\n";
+    $text .= "        <a target=\"PloticusHelp\" onclick=\"return launchWindow('TWiki','PloticusHelp')\" href=\"/cgi-bin/view/TWiki/PloticusHelp\">Ploticus help</a>\n";
     $text .= "    </td>\n";
     $text .= "  </tr>\n";
     $text .= "</table>\n";
