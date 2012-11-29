@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354178291" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354181382" format="1.1" version="$Rev$"}%
 ---+ Search Results Pagination
 
 When a =%<nop>SEARCH{...}%= returns many results, you may want to paginate the results.
@@ -34,7 +34,7 @@ This tweaking adds pagination link rows before and after the search results as f
 The =section="preamble"= and =section="postamble"= also support a =style=""= parameter to set the style of the pagination link row =&lt;div&gt;= tag. For example, to disable the pagination link row on top, write:%BR%
 =%<nop>INCLUDE{"%<nop>SYSTEMWEB%.SearchResultsPagination" section="preamble" style="display:none;"}%&lt;nop&gt;=
 
-If the number of results is below the threshold, the pagination link row is not shown.
+Maximum 32 page links are shown &mdash; the "Next" link can be used to paginate beyond 32 pages if there are more than that. The pagination link rows are not shown if the number of results is below a one page threshold.
 
 WebChanges, WebSearch, and WebSearchAdvanced are using this technique.
 
@@ -89,7 +89,7 @@ __Related Topics:__ UserDocumentationCategory, SearchHelp, VarSEARCH, FormattedS
 %CALCULATE{$SET(numlimit, $IF($VALUE($GET(limit)) > 0, $GET(limit), 100000))}%<nop>
 %CALCULATE{$SET(npages, $INT($GET(ntopics)/$GET(numlimit)+1))}%<nop>
 %CALCULATE{$SET(prevText, $IF($GET(start) >= $GET(numlimit), <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)-$GET(numlimit));limit=$GET(limit)'>&laquo;%MAKETEXT{"Previous"}%</a>, $GET(gray)&laquo;%MAKETEXT{"Previous"}%</span>))$IF($GET(npages) > 1, $GET(prevText)$SET(linksText, $GET(prevText)))}%
-%CALCULATE{$SET(stepsText, )$SET(pages, $INT(($GET(ntopics) - 1)/$GET(numlimit)+1))$SET(i, 0)$WHILE($counter<=$GET(pages), $SET(stepsText, $GET(stepsText)$IF($GET(i)==$GET(start), &nbsp; <b>$counter</b>, &nbsp; <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$GET(i);limit=$GET(limit)'>$counter</a>))$SETM(i, +$GET(numlimit)))$IF($GET(npages) > 1, $GET(stepsText)$SET(linksText, $GET(linksText)$GET(stepsText)))$SET(linksText, $GET(linksText) &nbsp; )}% &nbsp;
+%CALCULATE{$SET(stepsText, )$SET(pages, $INT(($GET(ntopics) - 1)/$GET(numlimit)+1))$SET(maxpages, $MIN($GET(pages), 32))$SET(i, 0)$WHILE($counter<=$GET(maxpages), $SET(stepsText, $GET(stepsText)$IF($GET(i)==$GET(start), &nbsp; <b>$counter</b>, &nbsp; <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$GET(i);limit=$GET(limit)'>$counter</a>))$SETM(i, +$GET(numlimit)))$IF($GET(npages) > 1, $GET(stepsText)$SET(linksText, $GET(linksText)$GET(stepsText)))$SET(linksText, $GET(linksText) &nbsp; )}% &nbsp;
 %CALCULATE{$SET(nextText,$IF($INT($GET(start)+$GET(numlimit))<$GET(ntopics), <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)+$GET(numlimit));limit=$GET(limit)'>%MAKETEXT{"Next"}%&raquo;</a>, $GET(gray)%MAKETEXT{"Next"}%&raquo;</span>))$IF($GET(npages) > 1, $GET(nextText)$SET(linksText, $GET(linksText)$GET(nextText)))}%
 </div>
 <script type="text/javascript">
