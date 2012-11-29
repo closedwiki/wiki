@@ -163,6 +163,7 @@ data/TWiki/RenameWeb.txt 0644
 data/TWiki/SearchDoesNotWork.txt 0644
 data/TWiki/SearchHelp.txt 0644
 data/TWiki/SearchPatternCookbook.txt 0644
+data/TWiki/SearchResultsPagination.txt 0644
 data/TWiki/SearchingAndListingVariables.txt 0644
 data/TWiki/SecurityAndAccessControlVariables.txt 0644
 data/TWiki/SimultaneousEdits.txt 0644
