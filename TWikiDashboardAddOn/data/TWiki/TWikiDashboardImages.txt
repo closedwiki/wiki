@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353544845" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1354173309" format="1.1" reprev="1.17" version="1.17"}%
 %META:TOPICPARENT{name="TWikiDashboardAddOn"}%
 ---+!! <span style="font-size: 60%"> TWikiDashboardAddOn &#187;</span> TWiki Dashboard Banner Images
 
@@ -58,6 +58,9 @@ Name: =niagara-falls.jpg= &nbsp; &nbsp; - image copyright 2008, [[http://en.wiki
 Name: =rio-de-janeiro.jpg= &nbsp; &nbsp; - image copyright 2007, [[http://en.wikipedia.org/wiki/File:Panorama_from_Rio_de_Janeiro.jpg][Jens Hausherr]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/rio-de-janeiro.jpg" alt="" width="1026" height="150" />
 
+Name: =zurich-at-dawn.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://creativecommons.org/licenses/by-nc-nd/2.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by-nc-nd.png" alt="cc-by-nc-nd" title="Creative Commons Attribution-NonCommercial-NoDerivs 2.0 Generic (CC BY-NC-ND 2.0)" width="42" height="14" /> CC BY-NC-ND 2.0]], [[http://www.flickr.com/photos/meckert75/][Martin Eckert]]<br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/zurich-at-dawn.jpg" alt="" width="1026" height="150" />
+
 Name: =venice-grand-canal.jpg= &nbsp; &nbsp; - image copyright 2007, [[http://en.wikipedia.org/wiki/File:Venedig_Pano_AM.jpg][Sbittante]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/venice-grand-canal.jpg" alt="" width="1026" height="150" />
 
@@ -73,6 +76,9 @@ Name: =venetian-macau.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.th
 Name: =boreal-by-night.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/boreal-by-night.jpg" alt="" width="1026" height="150" />
 
+Name: =swiss-castle.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://creativecommons.org/licenses/by-nc-nd/2.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by-nc-nd.png" alt="cc-by-nc-nd" title="Creative Commons Attribution-NonCommercial-NoDerivs 2.0 Generic (CC BY-NC-ND 2.0)" width="42" height="14" /> CC BY-NC-ND 2.0]], [[http://www.flickr.com/photos/meckert75/][Martin Eckert]]<br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/swiss-castle.jpg" alt="" width="1026" height="150" />
+
 Name: =baergli-swiss-alps.jpg= &nbsp; &nbsp; - image copyright 2012, Burga Joos: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/baergli-swiss-alps.jpg" alt="" width="1026" height="150" />
 
@@ -85,13 +91,13 @@ Name: =solar-surface.jpg= &nbsp; &nbsp; - image copyright 2012, NASA: <br />
 Name: =solar-flare.jpg= &nbsp; &nbsp; - image copyright 2011, NASA: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/solar-flare.jpg" alt="" width="1026" height="150" />
 
-Name: =autumn-leaves.jpg= &nbsp; &nbsp; - image copyright 2006, [[http://fotos.blindcow.org/][Andreas Schaefer]]: <br />
+Name: =autumn-leaves.jpg= &nbsp; &nbsp; - image copyright 2006, [[http://creativecommons.org/licenses/by-sa/2.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by-sa.png" alt="cc-by-sa" title="Creative Commons Attribution-ShareAlike 2.0 Generic (CC BY-SA 2.0)" width="28" height="14" /> CC BY-SA 2.0]], [[http://fotos.blindcow.org/][Andreas Schaefer]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/autumn-leaves.jpg" alt="" width="1026" height="150" />
 
 Name: =boeing-factory.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/boeing-factory.jpg" alt="" width="1026" height="150" />
 
-Name: =cubicle-panorama.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.flickr.com/photos/brownpau/][Paulo Ordoveza]]: <br />
+Name: =cubicle-panorama.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://creativecommons.org/licenses/by/2.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by.png" alt="cc-by" title="Creative Commons Attribution 2.0 Generic (CC BY 2.0)" width="14" height="14" /> CC BY 2.0]], [[http://www.flickr.com/photos/brownpau/][Paulo Ordoveza]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/cubicle-panorama.jpg" alt="" width="1026" height="150" />
 
 Name: =picture-gallery.jpg= &nbsp; &nbsp; - image copyright 2011, [[http://seanfitzgibbon.blogspot.com/][Sean Fitzgibbon]]: <br />
@@ -106,6 +112,8 @@ Name: =code-camp.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.
 Name: =community-leaders.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/community-leaders.jpg" alt="" width="1026" height="150" />
 
+__Note:__ Images are copyrighted by respective authors, and are released under the [[http://www.gnu.org/licenses/gpl.html][GNU General Public License]] unless noted otherwise.
+
 __Related:__ TWikiDashboardAddOn
 
 %META:FILEATTACHMENT{name="above-silicon-valley.jpg" attachment="above-silicon-valley.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="above-silicon-valley.jpg" size="53618" user="TWikiContributor" version="1"}%
@@ -115,6 +123,12 @@ __Related:__ TWikiDashboardAddOn
 %META:FILEATTACHMENT{name="bay-night-colors.jpg" attachment="bay-night-colors.jpg" attr="h" comment="Image copyright 2012, David Yu" date="1353215972" path="bay-night-colors.jpg" size="63974" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="boeing-factory.jpg" attachment="boeing-factory.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="boeing-factory.jpg" size="55166" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="boreal-by-night.jpg" attachment="boreal-by-night.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="boreal-by-night.jpg" size="38030" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="cc-by.png" attachment="cc-by.png" attr="h" comment="" date="1354091776" path="cc-by.png" size="534" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="cc-by-nc.png" attachment="cc-by-nc.png" attr="h" comment="" date="1354092123" path="cc-by-nc.png" size="749" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="cc-by-nd.png" attachment="cc-by-nd.png" attr="h" comment="" date="1354092123" path="cc-by-nd.png" size="640" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="cc-by-nc-nd.png" attachment="cc-by-nc-nd.png" attr="h" comment="" date="1354091776" path="cc-by-nc-nd.png" size="828" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="cc-by-nc-sa.png" attachment="cc-by-nc-sa.png" attr="h" comment="" date="1354092123" path="cc-by-nc-sa.png" size="923" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="cc-by-sa.png" attachment="cc-by-sa.png" attr="h" comment="" date="1354091776" path="cc-by-sa.png" size="719" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="code-camp.jpg" attachment="code-camp.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="code-camp.jpg" size="124898" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="community-leaders.jpg" attachment="community-leaders.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350171065" path="community-leaders.jpg" size="91846" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="cubicle-panorama.jpg" attachment="cubicle-panorama.jpg" attr="h" comment="Image copyright 2012, Paulo Ordoveza" date="1353299042" path="cubicle-panorama.jpg" size="57243" user="TWikiContributor" version="1"}%
@@ -137,7 +151,9 @@ __Related:__ TWikiDashboardAddOn
 %META:FILEATTACHMENT{name="silicon-valley-sunrise.jpg" attachment="silicon-valley-sunrise.jpg" attr="h" comment="Image copyright 2012, Goro Kosaka" date="1352158061" path="silicon-valley-sunrise.jpg" size="44000" user="TWikiContributor" version="2"}%
 %META:FILEATTACHMENT{name="solar-flare.jpg" attachment="solar-flare.jpg" attr="h" comment="Image copyright 2011, NASA" date="1353542987" path="solar-flare.jpg" size="51546" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="solar-surface.jpg" attachment="solar-surface.jpg" attr="h" comment="Image copyright 2012, NASA" date="1353542986" path="solar-surface.jpg" size="40745" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="swiss-castle.jpg" attachment="swiss-castle.jpg" attr="h" comment="Image copyright 2012, Martin Eckert, CC BY-NC-ND 2.0" date="1354083353" path="swiss-castle.jpg" size="65390" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="sydney-harbour-bridge.jpg" attachment="sydney-harbour-bridge.jpg" attr="h" comment="Image copyright 2005, Diliff" date="1351831457" path="sydney-harbour-bridge.jpg" size="54322" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="venetian-macau.jpg" attachment="venetian-macau.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1349156456" path="venetian-macau.jpg" size="65434" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="venice-grand-canal.jpg" attachment="venice-grand-canal.jpg" attr="h" comment="Image copyright 2007, Sbittante" date="1351830193" path="venice-grand-canal.jpg" size="59440" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="wine-tasting.jpg" attachment="wine-tasting.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="wine-tasting.jpg" size="68924" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="zurich-at-dawn.jpg" attachment="zurich-at-dawn.jpg" attr="h" comment="Image copyright 2012, Martin Eckert, CC BY-NC-ND 2.0" date="1354173236" path="zurich-at-dawn.jpg" size="68500" user="TWikiContributor" version="1"}%

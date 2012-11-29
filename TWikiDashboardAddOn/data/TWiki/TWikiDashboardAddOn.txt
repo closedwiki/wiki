@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353544420" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354092998" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -317,9 +317,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2012, TWiki:Main.PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2012-11-21 |
+|  Add-on Version: | 2012-11-28 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-11-21: | TWikibug:Item7041: Add 10 new banner images by Andreas Schaefer, Angela Ju, David Yu, Jeff Keller, NASA, Paulo Ordoveza, Peter Thoeny, Sean Fitzgibbon |
+|  2012-11-28: | TWikibug:Item7041: Add 12 new banner images by Andreas Schaefer, Angela Ju, David Yu, Jeff Keller, Martin Eckert, NASA, Paulo Ordoveza, Peter Thoeny, Sean Fitzgibbon |
 |  2012-11-11: | TWikibug:Item7020: Categorize TWiki Variable CHART |
 |  2012-11-05: | TWikibug:Item7021: Add 6 more banner images by David Yu, Diliff, Goro Kosaka, Jens Hausherr, Koppi2, Sbittante |
 |  2012-10-13: | TWikibug:Item6972: Add !TWikiDashboardAddOn to core distribution; multiple banner buttons with button1="" button2="" ... |
