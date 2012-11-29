@@ -384,6 +384,7 @@ sub searchWeb {
     my $default       = $params{default};
     my $inline        = $params{inline};
     my $limit         = $params{limit} || '';
+    my $start         = defined($params{start}) ? int($params{start}) : '';
     my $doMultiple    = TWiki::isTrue( $params{multiple} );
     my $nonoise       = TWiki::isTrue( $params{nonoise} );
     my $noEmpty       = TWiki::isTrue( $params{noempty}, $nonoise );
@@ -694,7 +695,7 @@ sub searchWeb {
             # SMELL: In Dakar this seems to be pointless since latest rev
             # time is taken from topic instead of dir list.
             my $slack = 10;
-            if( $limit + 2 * $slack < scalar(@topicList) ) {
+            if( $start eq '' && $limit + 2 * $slack < scalar(@topicList) ) {
 
                 # sort by approx latest rev time
                 my @tmpList =
@@ -768,8 +769,19 @@ sub searchWeb {
 
         # output the list of topics in $web
         my $ntopics    = 0; # number of topics in current web
+        my $tntopics   = @topicList;
         my $nhits      = 0; # number of hits (if multiple=on) in current web
         my $headerDone = $noHeader;
+        if ( $start ) {
+            if ( $start < @topicList ) {
+                $ntopics = $nhits = $start;
+                splice(@topicList, 0, $start);
+            }
+            else {
+                $ntopics = $nhits = @topicList;
+                @topicList = ();
+            }
+        }
         foreach my $topic ( @topicList ) {
             my $forceRendering = 0;
             unless ( exists( $topicInfo->{$topic} ) ) {
@@ -851,6 +863,7 @@ sub searchWeb {
                     $out =~ s/\$rev/$revNum/gs;
                     $out =~ s/\$wikiusername/$wikiusername/ges;
                     $out =~ s/\$ntopics/$ntopics/gs;
+                    $out =~ s/\$tntopics/$tntopics/gs;
                     $out =~ s/\$nhits/$nhits/gs;
                     $out =~ s/\$wikiname/$wikiname/ges;
                     
@@ -960,6 +973,7 @@ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
                     $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/go;
                     $beforeText =~ s/%WEB%/$web/go;
                     $beforeText =~ s/\$ntopics/0/gs;
+                    $beforeText =~ s/\$tntopics/0/gs;
                     $beforeText =~ s/\$nhits/0/gs;
                     $beforeText = $session->handleCommonTags( $beforeText, $web, $topic );
                     if( defined $callback ) {
@@ -991,7 +1005,7 @@ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
             # delete topic info to clear any cached data
             undef $topicInfo->{$topic};
 
-            last if( $ntopics >= $limit );
+            last if( $ttopics >= $limit );
 
         } # end topic loop
 
@@ -1003,6 +1017,7 @@ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
             $afterText = TWiki::expandStandardEscapes( $afterText );
             $afterText =~ s/\$web/$web/gos;    # expand name of web
             $afterText =~ s/\$ntopics/$ntopics/gs;
+            $afterText =~ s/\$tntopics/$tntopics/gs;
             $afterText =~ s/\$nhits/$nhits/gs;
             $afterText = $session->handleCommonTags( $afterText, $web, $homeTopic );
             if( $afterText && $afterText ne '' ) {
@@ -1027,7 +1042,12 @@ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
         if( $ntopics || scalar(@webs) < 2 ) {
             unless( $noTotal ) {
                 my $thisNumber = $tmplNumber;
-                $thisNumber =~ s/%NTOPICS%/$ntopics/go;
+                if ( $start eq '' ) {
+                    $thisNumber =~ s/%NTOPICS%/$ntopics/go;
+                }
+                else {
+                    $thisNumber =~ s/%NTOPICS%/$tntopics/go;
+                }
                 if( defined $callback ) {
                     $thisNumber = $renderer->getRenderedVersion( $thisNumber, $web, $homeTopic );
                     $thisNumber =~ s|</*nop/*>||goi;    # remove <nop> tag

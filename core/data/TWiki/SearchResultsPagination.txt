@@ -1,0 +1,80 @@
+%META:TOPICINFO{author="TWikiContributor" date="1354086192" format="1.1" version="$Rev$"}%
+---+ Search Results Pagination
+When a =%<nop>SEARCH{...}%= returns many results, you may want to paginate the results.
+
+---++ Overview
+You can achieve search results pagination by tweaking a =%<nop>SEARCH{...}%= as follows.
+(New lines are inserted for readability in =$SET(searchparams, ...)=. Please don't copy-paste it for real use.)
+As you can see, this is using SpreadSheetPlugin.
+<verbatim>
+...
+%INCLUDE{"%SYSTEMWEB%.SearchResultsPagination" section="preamble"}%<nop>
+%SEARCH{ 
+"%URLPARAM{"search" encode="quote"}%"
+...
+start="%CALCULATE{$GET(start)}%"
+limit="%CALCULATE{$GET(limit)}%"
+footer="$percntCALCULATE{$SET(ntopics, $tntopics)}$percnt"
+}%
+%CALCULATE{$SET(searchparams, search=%URLPARAM{"search" encode="quote"}%;
+type=%URLPARAM{"type" encode="quote" default="%SEARCHDEFAULTTYPE%"}%;
+scope=%URLPARAM{"scope" encode="quote"}%;
+web=%URLPARAM{"web" encode="quote"}%;
+nosearch=%URLPARAM{"nosearch" encode="quote"}%;)}%<nop>
+%INCLUDE{"%SYSTEMWEB%.SearchResultsPagination" section="postamble"}%<nop>
+...
+</verbatim>
+This tweaking results in the following display below search results.
+
+[[#A][&laquo;Prev]] &nbsp; [[#A][1]] &nbsp; *2* &nbsp; [[#A][3]] &nbsp; [[#A][4]] &nbsp; [[#A][5]] &nbsp; [[#A][Next&raquo;]]
+
+If the number of results is below the threashold, the pagination apparatus is not displayed.
+
+WebChanges, WebSearch, and WebSearchAdvanced are using this technique.
+
+---++ Results per page
+By default, each page shows 20 results.
+To change it to 10, change the initial part as follows.
+(The second line is inserted.)
+<verbatim>
+%INCLUDE{"%SYSTEMWEB%.SearchResultsPagination" section="preamble"}%<nop>
+%CALCULATE{$SET(limit, %URLPARAM{"limit" default="10"}%)}%<nop>
+%SEARCH{ 
+</verbatim>
+If you specify =limit=50= URL parameter manually, that's observed.
+If you specify =limit=all= URL parameter, all results are shown without pagination.
+
+---++ URL parameters
+All hyper links in the pagination apparatus point to the same page with some URL parameters.
+The parameters are %CALCULATE{$GET(searchparams)}% plus pagination parameters (namely =start= and =limit=).
+You need to =$SET(searchparams, ...)= having this in mind.
+
+---++ !SpreadSheetPlugin variables
+This feature uses the following SpreadSheetPlugin variables.
+Please beware of variable clashes if you use SpreadSheetPlugin for your own use on a page doing search result pagination
+
+   * start
+   * limit
+   * ntopics
+   * numlimit
+   * npages
+   * prevText
+   * stepsText
+   * nextText
+   * searchparams
+<!--
+%STARTSECTION{"preamble"}%
+%CALCULATE{$SET(start, %URLPARAM{"start" default="0"}%)}%<nop>
+%CALCULATE{$SET(limit, %URLPARAM{"limit" default="20"}%)}%<nop>
+%CALCULATE{$SET(ntopics, 0)}%<nop>
+%ENDSECTION{"preamble"}%
+
+%STARTSECTION{"postamble"}%
+%CALCULATE{$SET(gray, <span style='color: gray'>)}%
+%CALCULATE{$SET(numlimit, $IF($SEARCH(^\d+$, $GET(limit)) > 0, $GET(limit), 100000))}%
+%CALCULATE{$SET(npages, $INT($GET(ntopics)/$GET(numlimit)+1))}%
+%CALCULATE{$SET(prevText, $IF($GET(start) >= $GET(numlimit), <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)-$GET(numlimit));limit=$GET(limit)'>&laquo;Previous</a>, $GET(gray)&laquo;Previous</span>))$IF($GET(npages) > 1, $GET(prevText))}% &nbsp;
+%CALCULATE{$SET(stepsText, )$SET(pages, $INT(($GET(ntopics) - 1)/$GET(numlimit)+1))$SET(i, 0)$WHILE($counter<=$GET(pages), $SET(stepsText, $GET(stepsText)$IF($GET(i)==$GET(start), &nbsp;<b>$counter</b>, &nbsp;<a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$GET(i);limit=$GET(limit)'>$counter</a>))$SETM(i, +$GET(numlimit)))$IF($GET(npages) > 1, $GET(stepsText))}% &nbsp;
+%CALCULATE{$SET(nextText,$IF($INT($GET(start)+$GET(numlimit))<$GET(ntopics), &nbsp;<a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)+$GET(numlimit));limit=$GET(limit)'>Next&raquo;</a>, $GET(gray)&nbsp;Next&raquo;</span>))$IF("$GET(npages) > 1, $GET(nextText))}%
+%ENDSECTION{"postamble"}%
+-->
