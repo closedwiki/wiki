@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354169957" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354177279" format="1.1" version="$Rev$"}%
 ---+ %MAKETEXT{"Recent Changes in [_1] Web" args="<nop>%INCLUDINGWEB%"}% <span style="font-size: 50%">%MAKETEXT{"retrieved at [_1]" args="%DISPLAYTIME{"$hour:$min ($tz)"}%"}%</span>
 %INCLUDE{"%SYSTEMWEB%.SearchResultsPagination" section="preamble"}%<nop>
 %SEARCH{
@@ -17,6 +17,6 @@
 }%
 %INCLUDE{"%SYSTEMWEB%.SearchResultsPagination" section="postamble"}%<nop>
 
-%MAKETEXT{"Show [_1] results per page, or show <a href='[_2]' rel='nofollow'>all changes</a>." args="%CALCULATE{$LISTJOIN(&#44; , $LISTMAP($IF($VALUE($GET(limit))==$item, <b>$item</b>, <a href='%SCRIPTURLPATH{"view"}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%?limit=$item' rel='nofollow'>$item</a>), 10, 20, 50, 100, 500, 1000))}%, %SCRIPTURLPATH{"view"}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%?limit=All"}%
+%MAKETEXT{"Show [_1] results per page, or [_2]show all[_3]." args="%CALCULATE{$LISTJOIN(&#44; , $LISTMAP($IF($VALUE($GET(limit))==$item, <b>$item</b>, <a href='%SCRIPTURLPATH{"view"}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%?limit=$item' rel='nofollow'>$item</a>), 10, 20, 50, 100, 500, 1000)), $IF($EXACT($GET(limit), all), <b>, <a href='%SCRIPTURLPATH{"view"}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%?limit=all' rel='nofollow'>), $IF($EXACT($GET(limit), all), </b>, </a>)}%"}%
 
 __Related topics:__ %ICON{feed}% [[%INCLUDINGWEB%.WebRss][RSS feed]], [[%INCLUDINGWEB%.WebAtom][ATOM feed]], [[%INCLUDINGWEB%.WebNotify][WebNotify]], %IF{"istopic '%SYSTEMWEB%.SiteChanges'" then="[[%SYSTEMWEB%.SiteChanges][site changes]], "}%[[%SYSTEMWEB%.SiteMap][site map]]

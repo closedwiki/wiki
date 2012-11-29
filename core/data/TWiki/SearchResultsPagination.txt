@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354162767" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354177288" format="1.1" version="$Rev$"}%
 ---+ Search Results Pagination
 
 When a =%<nop>SEARCH{...}%= returns many results, you may want to paginate the results.
@@ -40,7 +40,7 @@ WebChanges, WebSearch, and WebSearchAdvanced are using this technique.
 
 ---++ Results per page
 
-By default, each page shows 20 results.
+By default, each page shows %SEARCHRESULTSPERPAGE% results, which is defined by the SEARCHRESULTSPERPAGE preferences setting.
 To change it to 10, change the initial part as follows.
 (The second line is inserted.)
 <verbatim>
@@ -48,7 +48,7 @@ To change it to 10, change the initial part as follows.
 %CALCULATE{$SET(limit, %URLPARAM{"limit" default="10"}%)}%<nop>
 %SEARCH{ 
 </verbatim>
-If you specify =limit=50= URL parameter manually, that's observed.
+If you specify =limit=20= URL parameter manually, that's observed.
 If you specify =limit=all= URL parameter, all results are shown without pagination.
 
 ---++ URL parameters
@@ -78,7 +78,7 @@ __Related Topics:__ UserDocumentationCategory, SearchHelp, VarSEARCH, FormattedS
 <!--
 %STARTSECTION{"preamble"}%
 %CALCULATE{$SET(start, %URLPARAM{"start" default="0"}%)}%<nop>
-%CALCULATE{$SET(limit, %URLPARAM{"limit" default="20"}%)}%<nop>
+%CALCULATE{$SET(limit, %URLPARAM{"limit" default="%SEARCHRESULTSPERPAGE%"}%)}%<nop>
 %CALCULATE{$SET(ntopics, 0)}%<nop>
 <div id="searchTopNav%INCLUDINGTOPIC%" style="margin-bottom: 1em; %IF{ "defined 'style'" then="%style%" }%"></div>
 %ENDSECTION{"preamble"}%
@@ -86,7 +86,7 @@ __Related Topics:__ UserDocumentationCategory, SearchHelp, VarSEARCH, FormattedS
 %STARTSECTION{"postamble"}%
 <div id="searchBottomNav%INCLUDINGTOPIC%" style="%IF{ "defined 'style'" then="%style%" }%">
 %CALCULATE{$SET(gray, <span style='color: gray;'>)}%<nop>
-%CALCULATE{$SET(numlimit, $IF($SEARCH(^\d+$, $GET(limit)) > 0, $GET(limit), 100000))}%<nop>
+%CALCULATE{$SET(numlimit, $IF($VALUE($GET(limit)) > 0, $GET(limit), 100000))}%<nop>
 %CALCULATE{$SET(npages, $INT($GET(ntopics)/$GET(numlimit)+1))}%<nop>
 %CALCULATE{$SET(prevText, $IF($GET(start) >= $GET(numlimit), <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)-$GET(numlimit));limit=$GET(limit)'>&laquo;Previous</a>, $GET(gray)&laquo;Previous</span>))$IF($GET(npages) > 1, $GET(prevText)$SET(linksText, $GET(prevText)))}%
 %CALCULATE{$SET(stepsText, )$SET(pages, $INT(($GET(ntopics) - 1)/$GET(numlimit)+1))$SET(i, 0)$WHILE($counter<=$GET(pages), $SET(stepsText, $GET(stepsText)$IF($GET(i)==$GET(start), &nbsp; <b>$counter</b>, &nbsp; <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$GET(i);limit=$GET(limit)'>$counter</a>))$SETM(i, +$GET(numlimit)))$IF($GET(npages) > 1, $GET(stepsText)$SET(linksText, $GET(linksText)$GET(stepsText)))$SET(linksText, $GET(linksText) &nbsp; )}% &nbsp;

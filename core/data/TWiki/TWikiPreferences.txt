@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352453309" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354177303" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -162,6 +162,8 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * Set SEARCHVARDEFAULTTYPE = literal
    * Stop words, e.g., common words and characters to exclude from a keyword search:
       * Set SEARCHSTOPWORDS = a, all, am, an, and, any, as, at, b, be, by, c, d, e, for, from, g, h, how, i, i'm, i.e., in, is, isn't, it, it's, its, j, k, l, m, n, o, of, on, or, p, q, r, s, t, that, that's, the, this, to, u, v, w, was, wasn't, what, what's, when, where, who, who's, will, with, x, y, z
+   * Default number of results per page in %SYSTEMWEB%.SearchResultsPagination:
+      * Set SEARCHRESULTSPERPAGE = 50
 
 #EmailSettings
 ---+++ E-mail Settings

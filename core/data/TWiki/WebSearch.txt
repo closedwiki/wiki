@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1273873464" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354177269" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+ %MAKETEXT{"Web Search"}%
 
-%IF{"defined search" then='%ICON{feed}% <a href="%SCRIPTURL{"view"}%/%BASEWEB%/WebRss?search=%URLPARAM{"search" encode="url"}%;type=%IF{"'%URLPARAM{"regex" encode="url"}%'='on' OR '%URLPARAM{"type" encode="url"}%'='regex'" then="regex" else="word"}%;excludetopic=%BASETOPIC%,WebHome,WebStatistics;web=%URLPARAM{"web" encode="url" default="%BASEWEB%"}%;limit=%URLPARAM{"limit" encode="url" default="all"}%;scope=%URLPARAM{"scope" encode="url" default="text"}%;casesensitive=%URLPARAM{"casesensitive" encode="url" default="off"}%">%MAKETEXT{"Get notified on changes on this search"}%</a>'}%
+%IF{"defined search" then='%ICON{feed}% <a href="%SCRIPTURL{"view"}%/%BASEWEB%/WebRss?search=%URLPARAM{"search" encode="url"}%;type=%IF{"'%URLPARAM{"regex" encode="url"}%'='on' OR '%URLPARAM{"type" encode="url"}%'='regex'" then="regex" else="word"}%;excludetopic=%BASETOPIC%,WebHome,WebStatistics;web=%URLPARAM{"web" encode="url" default="%BASEWEB%"}%;limit=%URLPARAM{"limit" encode="url" default="%SEARCHRESULTSPERPAGE%"}%;scope=%URLPARAM{"scope" encode="url" default="text"}%;casesensitive=%URLPARAM{"casesensitive" encode="url" default="off"}%">%MAKETEXT{"Get notified on changes on this search"}%</a>'}%
 
 %INCLUDE{"%SYSTEMWEB%.SearchResultsPagination" section="preamble"}%<nop>
 %SEARCH{ 
