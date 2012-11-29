@@ -1090,11 +1090,15 @@ $TWiki::cfg{MailProgram} = '/usr/sbin/sendmail -t -oi -oeq';
 # **STRING 30**
 # Mail host for outgoing mail. This is only used if Net::SMTP is installed.
 # Examples: mail.your.company
-# <b>CAUTION</b> This setting can be overridden by a setting of SMTPMAILHOST
+# <br /> <b>CAUTION:</b> This setting can be overridden by a SMTPMAILHOST setting
 # in TWikiPreferences. Make sure you delete that setting if you are using a
 # TWikiPreferences topic from a previous release of TWiki. To disable all
 # outgoing mail from TWiki leave both this field and the MailProgram field
 # above blank.
+# <br /> <b>NOTE:</b> If you are using SELinux you might need to configure 
+# it to allow TWiki to send e-mails:
+# <br /> <tt> $ sudo setsebool -P httpd_can_sendmail on </tt>
+# <br /> <tt> $ sudo setsebool -P httpd_can_network_connect on </tt>
 $TWiki::cfg{SMTP}{MAILHOST} = '';
 
 # **STRING 30**
