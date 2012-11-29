@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352453309" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354221773" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Site Tools
 
@@ -144,17 +144,18 @@ TWiki generates monthly log files which are used by the statistics script
 
 Outgoing mail is required for TWikiRegistration and for [[#WebNotify][recent changes alert]].
 
-TWiki will use the ==Net::SMTP== module if it is installed on your system. Set this with the ==SMTPMAILHOST== variable in TWikiPreferences.
+TWiki will use the ==Net::SMTP== module if it is installed on your system. Set this with the =={SMTP}{MAILHOST}== setting in [[%SCRIPTURLPATH{"configure"}%][configure]].
+
+   * %T% You can define a separate =={SMTP}{SENDERHOST}== configure setting to set the mail sender host - some SMTP installations require this.
+   * %X% If you are using SELinux ([[Wikipedia:Security-Enhanced_Linux][Security-Enhanced Linux]]) you might need to configure it to allow TWiki to send e-mails:
+     %BR% =$ sudo setsebool -P httpd_can_sendmail on=
+     %BR% =$ sudo setsebool -P httpd_can_network_connect on=
+
+You can use an external mail program, such as ==sendmail==, if the =Net::SMTP= module is not installed or not functioning properly. Set the program path in =={MailProgram}== and set =={SMTP}{MAILHOST}== to an empty value in [[%SCRIPTURLPATH{"configure"}%][configure]].
 
 The notify e-mail uses the default =changes.tmpl= template, or a skin if activated in the TWikiPreferences.
 
 mailnotify also relies on two hidden files in each =twiki/data/Web= directory: =.changes= and =.mailnotify.= Make sure both are writable by your web server process. =.changes= contains a list of changes; go ahead and make this empty. =.mailnotify= contains a timestamp of the last time notification was done.
-
-You can use an external mail program, such as ==sendmail==, if the =Net::SMTP= module is not installed. Set the program path in =={MailProgram}== in [[%SCRIPTURLPATH{"configure"}%][configure]].
-
-   * %H% Net::SMTP can be easily disabled (if there is an installation error) by setting ==SMTPMAILHOST== in TWikiPreferences to an empty value.
-
-   * %T% You can set a separate ==SMTPSENDERHOST== variable to define the mail sender host (some SMTP installations require this).
 
 ---+++ Setting the automatic e-mail schedule
 
