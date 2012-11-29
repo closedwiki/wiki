@@ -11,6 +11,12 @@ pub/TWiki/TWikiDashboardImages/baseball-game.jpg 0644
 pub/TWiki/TWikiDashboardImages/bay-night-colors.jpg 0644
 pub/TWiki/TWikiDashboardImages/boeing-factory.jpg 0644
 pub/TWiki/TWikiDashboardImages/boreal-by-night.jpg 0644
+pub/TWiki/TWikiDashboardImages/cc-by.png 0644
+pub/TWiki/TWikiDashboardImages/cc-by-nc.png 0644
+pub/TWiki/TWikiDashboardImages/cc-by-nc-nd.png 0644
+pub/TWiki/TWikiDashboardImages/cc-by-nc-sa.png 0644
+pub/TWiki/TWikiDashboardImages/cc-by-nd.png 0644
+pub/TWiki/TWikiDashboardImages/cc-by-sa.png 0644
 pub/TWiki/TWikiDashboardImages/code-camp.jpg 0644
 pub/TWiki/TWikiDashboardImages/community-leaders.jpg 0644
 pub/TWiki/TWikiDashboardImages/cubicle-panorama.jpg 0644
@@ -33,8 +39,10 @@ pub/TWiki/TWikiDashboardImages/saratoga-evening.jpg 0644
 pub/TWiki/TWikiDashboardImages/silicon-valley-sunrise.jpg 0644
 pub/TWiki/TWikiDashboardImages/solar-flare.jpg 0644
 pub/TWiki/TWikiDashboardImages/solar-surface.jpg 0644
+pub/TWiki/TWikiDashboardImages/swiss-castle.jpg 0644
 pub/TWiki/TWikiDashboardImages/sydney-harbour-bridge.jpg 0644
 pub/TWiki/TWikiDashboardImages/venetian-macau.jpg 0644
 pub/TWiki/TWikiDashboardImages/venice-grand-canal.jpg 0644
 pub/TWiki/TWikiDashboardImages/wine-tasting.jpg 0644
+pub/TWiki/TWikiDashboardImages/zurich-at-dawn.jpg 0644
 lib/TWiki/Contrib/TWikiDashboardAddOn.pm 0444
