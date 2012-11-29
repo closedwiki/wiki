@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354177288" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354178291" format="1.1" version="$Rev$"}%
 ---+ Search Results Pagination
 
 When a =%<nop>SEARCH{...}%= returns many results, you may want to paginate the results.
@@ -88,9 +88,9 @@ __Related Topics:__ UserDocumentationCategory, SearchHelp, VarSEARCH, FormattedS
 %CALCULATE{$SET(gray, <span style='color: gray;'>)}%<nop>
 %CALCULATE{$SET(numlimit, $IF($VALUE($GET(limit)) > 0, $GET(limit), 100000))}%<nop>
 %CALCULATE{$SET(npages, $INT($GET(ntopics)/$GET(numlimit)+1))}%<nop>
-%CALCULATE{$SET(prevText, $IF($GET(start) >= $GET(numlimit), <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)-$GET(numlimit));limit=$GET(limit)'>&laquo;Previous</a>, $GET(gray)&laquo;Previous</span>))$IF($GET(npages) > 1, $GET(prevText)$SET(linksText, $GET(prevText)))}%
+%CALCULATE{$SET(prevText, $IF($GET(start) >= $GET(numlimit), <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)-$GET(numlimit));limit=$GET(limit)'>&laquo;%MAKETEXT{"Previous"}%</a>, $GET(gray)&laquo;%MAKETEXT{"Previous"}%</span>))$IF($GET(npages) > 1, $GET(prevText)$SET(linksText, $GET(prevText)))}%
 %CALCULATE{$SET(stepsText, )$SET(pages, $INT(($GET(ntopics) - 1)/$GET(numlimit)+1))$SET(i, 0)$WHILE($counter<=$GET(pages), $SET(stepsText, $GET(stepsText)$IF($GET(i)==$GET(start), &nbsp; <b>$counter</b>, &nbsp; <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$GET(i);limit=$GET(limit)'>$counter</a>))$SETM(i, +$GET(numlimit)))$IF($GET(npages) > 1, $GET(stepsText)$SET(linksText, $GET(linksText)$GET(stepsText)))$SET(linksText, $GET(linksText) &nbsp; )}% &nbsp;
-%CALCULATE{$SET(nextText,$IF($INT($GET(start)+$GET(numlimit))<$GET(ntopics), <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)+$GET(numlimit));limit=$GET(limit)'>Next&raquo;</a>, $GET(gray)Next&raquo;</span>))$IF($GET(npages) > 1, $GET(nextText)$SET(linksText, $GET(linksText)$GET(nextText)))}%
+%CALCULATE{$SET(nextText,$IF($INT($GET(start)+$GET(numlimit))<$GET(ntopics), <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)+$GET(numlimit));limit=$GET(limit)'>%MAKETEXT{"Next"}%&raquo;</a>, $GET(gray)%MAKETEXT{"Next"}%&raquo;</span>))$IF($GET(npages) > 1, $GET(nextText)$SET(linksText, $GET(linksText)$GET(nextText)))}%
 </div>
 <script type="text/javascript">
   %CALCULATE{$IF($GET(npages) > 1, <nop>, $('#searchTopNav%INCLUDINGTOPIC%').hide(); $('#searchBottomNav%INCLUDINGTOPIC%').hide();)}%
