@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354086192" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354153958" format="1.1" version="$Rev$"}%
 ---+ Search Results Pagination
 When a =%<nop>SEARCH{...}%= returns many results, you may want to paginate the results.
 
@@ -62,6 +62,9 @@ Please beware of variable clashes if you use SpreadSheetPlugin for your own use 
    * stepsText
    * nextText
    * searchparams
+
+__Related Topics:__ UserDocumentationCategory, SearchHelp, VarSEARCH, FormattedSearch, SearchPatternCookbook
+
 <!--
 %STARTSECTION{"preamble"}%
 %CALCULATE{$SET(start, %URLPARAM{"start" default="0"}%)}%<nop>
@@ -73,8 +76,8 @@ Please beware of variable clashes if you use SpreadSheetPlugin for your own use 
 %CALCULATE{$SET(gray, <span style='color: gray'>)}%
 %CALCULATE{$SET(numlimit, $IF($SEARCH(^\d+$, $GET(limit)) > 0, $GET(limit), 100000))}%
 %CALCULATE{$SET(npages, $INT($GET(ntopics)/$GET(numlimit)+1))}%
-%CALCULATE{$SET(prevText, $IF($GET(start) >= $GET(numlimit), <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)-$GET(numlimit));limit=$GET(limit)'>&laquo;Previous</a>, $GET(gray)&laquo;Previous</span>))$IF($GET(npages) > 1, $GET(prevText))}% &nbsp;
-%CALCULATE{$SET(stepsText, )$SET(pages, $INT(($GET(ntopics) - 1)/$GET(numlimit)+1))$SET(i, 0)$WHILE($counter<=$GET(pages), $SET(stepsText, $GET(stepsText)$IF($GET(i)==$GET(start), &nbsp;<b>$counter</b>, &nbsp;<a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$GET(i);limit=$GET(limit)'>$counter</a>))$SETM(i, +$GET(numlimit)))$IF($GET(npages) > 1, $GET(stepsText))}% &nbsp;
-%CALCULATE{$SET(nextText,$IF($INT($GET(start)+$GET(numlimit))<$GET(ntopics), &nbsp;<a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)+$GET(numlimit));limit=$GET(limit)'>Next&raquo;</a>, $GET(gray)&nbsp;Next&raquo;</span>))$IF("$GET(npages) > 1, $GET(nextText))}%
+%CALCULATE{$SET(prevText, $IF($GET(start) >= $GET(numlimit), <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)-$GET(numlimit));limit=$GET(limit)'>&laquo;Previous</a>, $GET(gray)&laquo;Previous</span>))$IF($GET(npages) > 1, $GET(prevText))}%
+%CALCULATE{$SET(stepsText, )$SET(pages, $INT(($GET(ntopics) - 1)/$GET(numlimit)+1))$SET(i, 0)$WHILE($counter<=$GET(pages), $SET(stepsText, $GET(stepsText)$IF($GET(i)==$GET(start), &nbsp; <b>$counter</b>, &nbsp; <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$GET(i);limit=$GET(limit)'>$counter</a>))$SETM(i, +$GET(numlimit)))$IF($GET(npages) > 1, $GET(stepsText))}% &nbsp;
+%CALCULATE{$SET(nextText,$IF($INT($GET(start)+$GET(numlimit))<$GET(ntopics), <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)+$GET(numlimit));limit=$GET(limit)'>Next&raquo;</a>, $GET(gray)Next&raquo;</span>))$IF("$GET(npages) > 1, $GET(nextText))}%
 %ENDSECTION{"postamble"}%
 -->

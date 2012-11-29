@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354092334" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354153958" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %STARTINCLUDE%
 ---+ TWiki Formatted Search
@@ -80,6 +80,7 @@ Variables that can be used in the footer string:
 | *Name:* | *Expands To:* |
 | =$web= | Name of the web |
 | =$ntopics= | Number of topics found in current web |
+| =$tntopics= | The total number of topics matched |
 | =$nhits= | Number of hits if =multiple="on"=. Cumulative across all topics in current web. Identical to =$ntopics= unless =multiple="on"= |
 %INCLUDE{FormatTokens}%
 
@@ -92,6 +93,14 @@ Variables that can be used in the default string:
 | *Name:* | *Expands To:* |
 | =$web= | Name of the web |
 %INCLUDE{FormatTokens}%
+
+---++ Results pagination
+
+When a search return many results, you may want to paginate them having the following line below the results.
+
+[[#A][&laquo;Prev]] &nbsp; [[#A][1]] &nbsp; *2* &nbsp; [[#A][3]] &nbsp; [[#A][4]] &nbsp; [[#A][5]] &nbsp; [[#A][Next&raquo;]]
+
+SearchResultsPagination describes how to do it.
 
 #EvaluationOrder
 ---++ Evaluation order of variables
@@ -346,6 +355,6 @@ Result:
  nosearch="on"
 }%
 
-__Related Topics:__ UserDocumentationCategory, SearchHelp, VarSEARCH, SearchPatternCookbook, RegularExpression, QuerySearch
+__Related Topics:__ UserDocumentationCategory, SearchHelp, VarSEARCH, SearchResultsPagination, SearchPatternCookbook, RegularExpression, QuerySearch
 
 -- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie, TWiki:Main.SopanShewale
