@@ -772,6 +772,9 @@ sub searchWeb {
 
         # output the list of topics in $web
         my $ntopics    = 0; # number of topics in current web
+        my $ntopicsExclSkipped = 0;
+            # number of topics in current web excluding the ones skipped by
+            # the start parameter
         my $tntopics   = @topicList;
         my $nhits      = 0; # number of hits (if multiple=on) in current web
         my $headerDone = $noHeader;
@@ -843,6 +846,7 @@ sub searchWeb {
             }
 
             $ntopics += 1;
+            $ntopicsExclSkipped += 1;
             $ttopics += 1;
 
             do {    # multiple=on loop
@@ -867,6 +871,7 @@ sub searchWeb {
                     $out =~ s/\$wikiusername/$wikiusername/ges;
                     $out =~ s/\$ntopics/$ntopics/gs;
                     $out =~ s/\$tntopics/$tntopics/gs;
+                    $out =~ s/\$nwebs/scalar(@webs)/gse;
                     $out =~ s/\$nhits/$nhits/gs;
                     $out =~ s/\$wikiname/$wikiname/ges;
                     
@@ -977,6 +982,7 @@ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
                     $beforeText =~ s/%WEB%/$web/go;
                     $beforeText =~ s/\$ntopics/0/gs;
                     $beforeText =~ s/\$tntopics/0/gs;
+                    $beforeText =~ s/\$nwebs/scalar(@webs)/gse;
                     $beforeText =~ s/\$nhits/0/gs;
                     $beforeText = $session->handleCommonTags( $beforeText, $web, $topic );
                     if( defined $callback ) {
@@ -1008,7 +1014,7 @@ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
             # delete topic info to clear any cached data
             undef $topicInfo->{$topic};
 
-            last if( $ttopics >= $limit );
+            last if( $ntopicsExclSkipped >= $limit );
 
         } # end topic loop
 
@@ -1021,6 +1027,7 @@ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
             $afterText =~ s/\$web/$web/gos;    # expand name of web
             $afterText =~ s/\$ntopics/$ntopics/gs;
             $afterText =~ s/\$tntopics/$tntopics/gs;
+            $afterText =~ s/\$nwebs/scalar(@webs)/gse;
             $afterText =~ s/\$nhits/$nhits/gs;
             $afterText = $session->handleCommonTags( $afterText, $web, $homeTopic );
             if( $afterText && $afterText ne '' ) {

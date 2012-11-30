@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354181382" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354257474" format="1.1" version="$Rev$"}%
 ---+ Search Results Pagination
 
 When a =%<nop>SEARCH{...}%= returns many results, you may want to paginate the results.
@@ -16,7 +16,7 @@ As you can see, this is using the SpreadSheetPlugin.
 ...
 start="%CALCULATE{$GET(start)}%"
 limit="%CALCULATE{$GET(limit)}%"
-footer="$percntCALCULATE{$SET(ntopics, $tntopics)}$percnt"
+footer="$percntCALCULATE{$SET(ntopics, $tntopics)$SET(nwebs, $nwebs)}$percnt"
 }%
 %CALCULATE{$SET(searchparams, search=%URLPARAM{"search" encode="quote"}%;
 type=%URLPARAM{"type" encode="quote" default="%SEARCHDEFAULTTYPE%"}%;
@@ -57,21 +57,28 @@ All hyper links in the pagination apparatus point to the same page with some URL
 The parameters are %CALCULATE{$GET(searchparams)}% plus pagination parameters (namely =start= and =limit=).
 You need to =$SET(searchparams, ...)= having this in mind.
 
+---++ Multiple webs
+
+=%<nop>SEARCH{...}%= may take the =web= parameter to have multiple webs specified.
+In that case, it's strange to do pagination hence suppressed.
+
 ---++ !SpreadSheetPlugin variables
 
 This feature uses the following SpreadSheetPlugin variables.
 Please beware of variable clashes if you use SpreadSheetPlugin for your own use on a page doing search result pagination
 
-   * start
    * limit
+   * linksText
+   * npages
    * ntopics
    * numlimit
-   * npages
-   * prevText
-   * stepsText
    * nextText
-   * linksText
+   * nwebs
+   * paginate
+   * prevText
    * searchparams
+   * start
+   * stepsText
 
 __Related Topics:__ UserDocumentationCategory, SearchHelp, VarSEARCH, FormattedSearch, SearchPatternCookbook
 
@@ -80,6 +87,7 @@ __Related Topics:__ UserDocumentationCategory, SearchHelp, VarSEARCH, FormattedS
 %CALCULATE{$SET(start, %URLPARAM{"start" default="0"}%)}%<nop>
 %CALCULATE{$SET(limit, %URLPARAM{"limit" default="%SEARCHRESULTSPERPAGE%"}%)}%<nop>
 %CALCULATE{$SET(ntopics, 0)}%<nop>
+%CALCULATE{$SET(nwebs, 1)}%<nop>
 <div id="searchTopNav%INCLUDINGTOPIC%" style="margin-bottom: 1em; %IF{ "defined 'style'" then="%style%" }%"></div>
 %ENDSECTION{"preamble"}%
 
@@ -88,12 +96,13 @@ __Related Topics:__ UserDocumentationCategory, SearchHelp, VarSEARCH, FormattedS
 %CALCULATE{$SET(gray, <span style='color: gray;'>)}%<nop>
 %CALCULATE{$SET(numlimit, $IF($VALUE($GET(limit)) > 0, $GET(limit), 100000))}%<nop>
 %CALCULATE{$SET(npages, $INT($GET(ntopics)/$GET(numlimit)+1))}%<nop>
-%CALCULATE{$SET(prevText, $IF($GET(start) >= $GET(numlimit), <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)-$GET(numlimit));limit=$GET(limit)'>&laquo;%MAKETEXT{"Previous"}%</a>, $GET(gray)&laquo;%MAKETEXT{"Previous"}%</span>))$IF($GET(npages) > 1, $GET(prevText)$SET(linksText, $GET(prevText)))}%
-%CALCULATE{$SET(stepsText, )$SET(pages, $INT(($GET(ntopics) - 1)/$GET(numlimit)+1))$SET(maxpages, $MIN($GET(pages), 32))$SET(i, 0)$WHILE($counter<=$GET(maxpages), $SET(stepsText, $GET(stepsText)$IF($GET(i)==$GET(start), &nbsp; <b>$counter</b>, &nbsp; <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$GET(i);limit=$GET(limit)'>$counter</a>))$SETM(i, +$GET(numlimit)))$IF($GET(npages) > 1, $GET(stepsText)$SET(linksText, $GET(linksText)$GET(stepsText)))$SET(linksText, $GET(linksText) &nbsp; )}% &nbsp;
-%CALCULATE{$SET(nextText,$IF($INT($GET(start)+$GET(numlimit))<$GET(ntopics), <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)+$GET(numlimit));limit=$GET(limit)'>%MAKETEXT{"Next"}%&raquo;</a>, $GET(gray)%MAKETEXT{"Next"}%&raquo;</span>))$IF($GET(npages) > 1, $GET(nextText)$SET(linksText, $GET(linksText)$GET(nextText)))}%
+%CALCULATE{$SET(paginate, $AND($IF($GET(npages) > 1, 1, 0), $IF($GET(nwebs) < 2), 1, 0)}%<nop>
+%CALCULATE{$SET(prevText, $IF($GET(start) >= $GET(numlimit), <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)-$GET(numlimit));limit=$GET(limit)'>&laquo;%MAKETEXT{"Previous"}%</a>, $GET(gray)&laquo;%MAKETEXT{"Previous"}%</span>))$IF($GET(paginate), $GET(prevText)$SET(linksText, $GET(prevText)))}%
+%CALCULATE{$SET(stepsText, )$SET(pages, $INT(($GET(ntopics) - 1)/$GET(numlimit)+1))$SET(maxpages, $MIN($GET(pages), 32))$SET(i, 0)$WHILE($counter<=$GET(maxpages), $SET(stepsText, $GET(stepsText)$IF($GET(i)==$GET(start), &nbsp; <b>$counter</b>, &nbsp; <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$GET(i);limit=$GET(limit)'>$counter</a>))$SETM(i, +$GET(numlimit)))$IF($GET(paginate), $GET(stepsText)$SET(linksText, $GET(linksText)$GET(stepsText)))$SET(linksText, $GET(linksText) &nbsp; )}% &nbsp;
+%CALCULATE{$SET(nextText,$IF($INT($GET(start)+$GET(numlimit))<$GET(ntopics), <a href='%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?$GET(searchparams)start=$INT($GET(start)+$GET(numlimit));limit=$GET(limit)'>%MAKETEXT{"Next"}%&raquo;</a>, $GET(gray)%MAKETEXT{"Next"}%&raquo;</span>))$IF($GET(paginate), $GET(nextText)$SET(linksText, $GET(linksText)$GET(nextText)))}%
 </div>
 <script type="text/javascript">
-  %CALCULATE{$IF($GET(npages) > 1, <nop>, $('#searchTopNav%INCLUDINGTOPIC%').hide(); $('#searchBottomNav%INCLUDINGTOPIC%').hide();)}%
+  %CALCULATE{$IF($GET(paginate), <nop>, $('#searchTopNav%INCLUDINGTOPIC%').hide(); $('#searchBottomNav%INCLUDINGTOPIC%').hide();)}%
   $('#searchTopNav%INCLUDINGTOPIC%').html("%CALCULATE{$GET(linksText)"}%);
 </script>
 %ENDSECTION{"postamble"}%

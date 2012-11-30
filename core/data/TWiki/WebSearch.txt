@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354177269" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354257474" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+ %MAKETEXT{"Web Search"}%
 
@@ -14,7 +14,7 @@ nosearch="%URLPARAM{"nosearch" encode="quote"}%"
 zeroresults="%IF{ "defined search" then="on" else="off" }%"
 start="%CALCULATE{$GET(start)}%"
 limit="%CALCULATE{$GET(limit)}%"
-footer="$percntCALCULATE{$SET(ntopics, $tntopics)}$percnt"
+footer="$percntCALCULATE{$SET(ntopics, $tntopics)$SET(nwebs, $nwebs)}$percnt"
 }%
 %CALCULATE{$SET(searchparams, search=%URLPARAM{"search" encode="quote"}%;type=%URLPARAM{"type" encode="quote" default="%SEARCHDEFAULTTYPE%"}%;scope=%URLPARAM{"scope" encode="quote"}%;web=%URLPARAM{"web" encode="quote"}%;nosearch=%URLPARAM{"nosearch" encode="quote"}%;)}%<nop>
 %INCLUDE{"%SYSTEMWEB%.SearchResultsPagination" section="postamble"}%<nop>
