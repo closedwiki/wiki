@@ -457,14 +457,14 @@ sub _handleActionSearch {
     }
 
     my $actions;
-    if ( $TWiki::cfg{Plugins}{ActionTrackerPlugin}{SearchAllWebs} ) {
+    if ( $TWiki::cfg{Plugins}{ActionTrackerPlugin}{SearchCurrentWebOnly} ) {
         $actions =
-          TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs( $web,
+          TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWeb( $web,
           $attrs, 0 );
     }
     else {
         $actions =
-          TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWeb( $web,
+          TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs( $web,
           $attrs, 0 );
     }
     $actions->sort( $sort, $reverse );
