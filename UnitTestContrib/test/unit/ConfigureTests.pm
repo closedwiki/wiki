@@ -70,15 +70,17 @@ EXAMPLE
     $cfg{MandatoryBoolean} = 0;
     $cfg{Types}{Chosen} = 'TWiki::Configure::Types::STRING';
     $cfg{OptionalRegex} = qr/^X*$/;
+    my $aRegex = "qr/$cfg{OptionalRegex}/";
+    $aRegex = '\'^X*$\'' if( $^V lt v5.14.0 );
     $cfg{DontIgnore} = 'now is';
     $saver->{content} = '';
     $out = $saver->_save();
-    my $expectacle = <<'EXAMPLE';
-$TWiki::cfg{MandatoryBoolean} = 0;
-$TWiki::cfg{MandatoryPath} = 'fixed';
-$TWiki::cfg{OptionalRegex} = '^X*$';
-$TWiki::cfg{DontIgnore} = 'now is';
-$TWiki::cfg{Types}{Chosen} = 'TWiki::Configure::Types::STRING';
+    my $expectacle = <<"EXAMPLE";
+\$TWiki::cfg{MandatoryBoolean} = 0;
+\$TWiki::cfg{MandatoryPath} = 'fixed';
+\$TWiki::cfg{OptionalRegex} = $aRegex;
+\$TWiki::cfg{DontIgnore} = 'now is';
+\$TWiki::cfg{Types}{Chosen} = 'TWiki::Configure::Types::STRING';
 1;
 EXAMPLE
     my @a = split("\n", $expectacle);
