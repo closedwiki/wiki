@@ -46,6 +46,11 @@ sub add {
 sub load {
     my ( $web, $topic, $text, $keepText ) = @_;
 
+    my $readonly = 0;
+    if ( defined &TWiki::Func::webWritable ) {
+        $readonly = 1 unless ( TWiki::Func::webWritable($web) );
+    }
+
     $text =~ s/\r//g;
     my @blocks       = split( /(%ACTION{.*?}%|%ENDACTION%)/, $text );
     my $actionSet    = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
@@ -81,7 +86,7 @@ sub load {
             }
             my $action =
               new TWiki::Plugins::ActionTrackerPlugin::Action( $web, $topic,
-                $actionNumber++, $attrs, $descr );
+                $actionNumber++, $attrs, $descr, $readonly );
             $actionSet->add($action);
         }
         elsif ($keepText) {

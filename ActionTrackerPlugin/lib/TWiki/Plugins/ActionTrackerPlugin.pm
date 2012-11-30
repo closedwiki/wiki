@@ -73,9 +73,9 @@ HERE
 }
 
 sub commonTagsHandler {
-    my ( $otext, $topic, $web, $meta ) = @_;
-
     return unless ( $_[0] =~ m/%ACTION.*{.*}%/o );
+
+    my( $otext, $topic, $web, $meta ) = @_;
 
     return unless lazyInit( $web, $topic );
 
@@ -409,6 +409,10 @@ sub _addMissingAttributes {
     foreach my $action ( @{ $as->{ACTIONS} } ) {
         next unless ref($action);
         $action->populateMissingFields();
+        if ( $action->{state} eq 'open' ) {
+            delete $action->{closed};
+            delete $action->{closer};
+        }
         if ( $seenUID{ $action->{uid} } ) {
 
             # This can happen if there has been a careless
@@ -452,9 +456,17 @@ sub _handleActionSearch {
         $fmt = $defaultFormat;
     }
 
-    my $actions =
-      TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs( $web,
-        $attrs, 0 );
+    my $actions;
+    if ( $TWiki::cfg{Plugins}{ActionTrackerPlugin}{SearchAllWebs} ) {
+        $actions =
+          TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs( $web,
+          $attrs, 0 );
+    }
+    else {
+        $actions =
+          TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWeb( $web,
+          $attrs, 0 );
+    }
     $actions->sort( $sort, $reverse );
     my $result = $actions->formatAsHTML(
         $fmt, 'href', $options->{USENEWWINDOW}, 'atpSearch' );
@@ -578,6 +590,10 @@ sub _updateSingleAction {
             if ( $action->{uid} == $uid ) {
                 foreach my $key ( keys %changes ) {
                     $action->{$key} = $changes{$key};
+                    if ( $key eq 'state' && $changes{$key} eq 'open' ) {
+                        delete $action->{closed};
+                        delete $action->{closer};
+                    }
                 }
             }
         }

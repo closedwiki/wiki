@@ -202,7 +202,7 @@ sub formatHTMLTable {
                 $entry = CGI::a( { name => $object->getAnchor() } ) . $entry;
                 $anchored = 1;
             }
-            $entry = CGI::td($entry);
+            $entry = CGI::td($entry) . "\n";
             $entry ||= '&nbsp;';
             push @cols, $entry;
         }
@@ -276,24 +276,24 @@ sub formatChangesAsHTML {
             my $newval = _expandVar( $new, $field, undef, 1 );
             if ( $oldval ne $newval ) {
                 $row =
-                    CGI::td( $a, $field )
-                  . CGI::td( $a, $oldval )
-                  . CGI::td( $a, $newval );
+                    CGI::td( $a, $field ) . "\n"
+                  . CGI::td( $a, $oldval ) . "\n"
+                  . CGI::td( $a, $newval ) . "\n";
             }
         }
         elsif ( defined( $old->{$field} ) ) {
             my $oldval = _expandVar( $old, $field, undef, 1 );
             $row =
-                CGI::td( $a, $field )
-              . CGI::td( $a, $oldval )
-              . CGI::td( $a, ' *removed* ' );
+                CGI::td( $a, $field ) . "\n"
+              . CGI::td( $a, $oldval ) . "\n"
+              . CGI::td( $a, ' *removed* ' ) . "\n";
         }
         elsif ( defined( $new->{$field} ) ) {
             my $newval = _expandVar( $new, $field, undef, 1 );
             $row =
-                CGI::td( $a, $field )
-              . CGI::td( $a, ' *missing* ' )
-              . CGI::td( $a, $newval );
+                CGI::td( $a, $field ) . "\n"
+              . CGI::td( $a, ' *missing* ' ) . "\n"
+              . CGI::td( $a, $newval ) . "\n";
         }
         $tbl .= CGI::Tr( $a, $row ) if $row;
     }
@@ -346,7 +346,7 @@ sub formatEditableFields {
         my $entry = $col;
         $entry =~ s/\$(\w+\b)(?:\((.*?)\))?/
           _expandEditField( $this, $object, $1, $2, $expanded )/geos;
-        $entry = CGI::td( { class => 'atpEdit' }, $entry );
+        $entry = CGI::td( { class => 'atpEdit' }, $entry ) . "\n";
         push @fields, $entry;
     }
     my @rows;

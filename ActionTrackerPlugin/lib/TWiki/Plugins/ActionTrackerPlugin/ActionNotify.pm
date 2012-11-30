@@ -40,7 +40,7 @@ my $options;
 sub actionNotify {
     my $expr = shift;
 
-    my $session = new TWiki();
+    my $session = new TWiki(undef, undef, {command_line => 1});
 
     # Assign SESSION so that Func methods work
     $TWiki::Plugins::SESSION = $session;
@@ -52,10 +52,50 @@ sub actionNotify {
     TWiki::Plugins::ActionTrackerPlugin::lazyInit($session->{webName}, $session->{topicName});
 
     if ( $expr =~ s/DEBUG//o ) {
-        print doNotifications( $session->{webName}, $expr, 1 ), "\n";
+        print doAllNotifications( $expr, 1 ),"\n";
     }
     else {
-        doNotifications( $session->{webName}, $expr, 0 );
+        doAllNotifications( $expr, 0 );
+    }
+}
+
+sub doAllNotifications {
+    my ($expr, $debug) = @_;
+
+    $options = TWiki::Plugins::ActionTrackerPlugin::Options::load();
+    my $attrs = new TWiki::Attrs( $expr, 1 );
+    my $webFilter = $attrs->remove('web') || '.';
+
+    my @weblist = grep { /$webFilter/ } TWiki::Func::getListOfWebs( 'user' );
+    my $session = $TWiki::Plugins::SESSION;
+    my $infoManager = $session->{admininfomanager} || '';
+    my $thisSite = $TWiki::cfg{SiteID} || '';
+
+    if ( $session->inContext('command_line') ) {
+	print "* processing action notification ...\n";
+    }
+    foreach my $web ( @weblist ) {
+	my $topLevWeb = $web;
+	$topLevWeb =~ s:/.*$::;
+	my $webRec;
+	if ( $infoManager && $thisSite ) {
+	    $webRec = $infoManager->getRec("webs", $topLevWeb) or
+		next;
+	    $webRec->{origsite} eq $thisSite or
+		next;
+	}
+	print " - $web\n";
+	if ( $webRec && $webRec->{contact} ) {
+	    my $contact = $webRec->{contact} . '@ms.com';
+	    $options->{CONTACT_PLAIN} = $contact;
+	    $options->{CONTACT_HTML} =
+		qq(<a href="mailto:$contact">$contact</a>);
+	}
+	else {
+	    delete $options->{CONTACT_PLAIN};
+	    delete $options->{CONTACT_HTML};
+	}
+	doNotificationsCore($web, $attrs, $options, $debug);
     }
 }
 
@@ -65,11 +105,14 @@ sub doNotifications {
     my ( $webName, $expr, $debugMailer ) = @_;
 
     $options = TWiki::Plugins::ActionTrackerPlugin::Options::load();
+    my $attrs = new TWiki::Attrs( $expr, 1 );
+    doNotificationsCore($webName, $attrs, $options, $debugMailer);
+}
 
+sub doNotificationsCore {
+    my ($webName, $attrs, $options, $debugMailer) = @_;
     # Disable the state shortcut in mails
     $options->{ENABLESTATESHORTCUT} = 0;
-
-    my $attrs = new TWiki::Attrs( $expr, 1 );
     my $hdr = $attrs->remove('header') || $options->{TABLEHEADER};
     my $bdy = $attrs->remove('format') || $options->{TABLEFORMAT};
 
@@ -82,7 +125,6 @@ sub doNotifications {
         $textform, $changes );
 
     my $result = '';
-    my $webs   = $attrs->remove('web') || '.*';
     my $topics = $attrs->remove('topic') || '.*';
 
     # Okay, we have tables of all the actions and a partial set of the
@@ -95,7 +137,7 @@ sub doNotifications {
         # need to get rid of formatting done in actionnotify perl script
         $date =~ s/[, ]+/ /go;
         $date = _getRelativeDate($date);
-        _findChangesInWebs( $webs, $topics, $date, $format, \%notifications );
+        _findChangesInWeb( $webName, $topics, $date, $format, \%notifications );
         foreach my $key ( keys %notifications ) {
             if ( defined( $notifications{$key} ) ) {
                 $people{$key} = 1;
@@ -107,8 +149,8 @@ sub doNotifications {
 
         # Get all the actions that match the search
         $actions =
-          TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs(
-            $webs, $attrs, 1 );
+          TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWeb(
+            $webName, $attrs, 1 );
         $actions->getActionees( \%people );
     }
 
@@ -198,7 +240,7 @@ sub doNotifications {
         if ( $actionsString || $changesString ) {
             my $message =
               _composeActionsMail( $actionsString, $actionsHTML, $changesString,
-                $changesHTML, $date, $email, $format );
+                $changesHTML, $date, $email, $format, $options );
 
             # COVERAGE OFF debug only
             if ($debugMailer) {
@@ -310,7 +352,9 @@ sub _getMailAddress {
     }
     elsif ( $who =~ m/^($webNameRE)\.($wikiWordRE)$/o ) {
         my ( $inweb, $intopic ) = ( $1, $2 );
-        $addresses = join( ',', TWiki::Func::wikinameToEmails($intopic) );
+        $addresses = join( ',', TWiki::Func::wikinameToEmails("$inweb.$intopic") );
+            # originally $intopic was handed. By the change, you now can
+            # specify a group not in the Main web.
 
         # LEGACY - Try and expand groups the old way
         if ( !$addresses && TWiki::Func::topicExists( $inweb, $intopic ) ) {
@@ -345,7 +389,7 @@ sub _getMailAddress {
 # PRIVATE Mail the contents of the action set to the given user(s)
 sub _composeActionsMail {
     my ( $actionsString, $actionsHTML, $changesString, $changesHTML, $since,
-        $mailaddr, $format )
+        $mailaddr, $format, $options )
       = @_;
 
     my $from =
@@ -375,6 +419,7 @@ HERE
 
     $text =~ s/%EMAILFROM%/$from/go;
     $text =~ s/%EMAILTO%/$mailaddr/go;
+    $text =~ s/%ACTIONTRACKERPLUGIN_CSS%/$options->{CSS}/g;
 
     if ( $actionsString ne '' ) {
         $text =~ s/%ACTIONS_AS_STRING%/$actionsString/go;
@@ -403,6 +448,11 @@ HERE
     else {
         $text =~ s/%CHANGES%.*?%END%//gso;
     }
+
+    my $contactPlain = $options->{CONTACT_PLAIN} || $from;
+    my $contactHtml = $options->{CONTACT_HTML} || $from;
+    $text =~ s/%CONTACT_PLAIN%/$contactPlain/g;
+    $text =~ s/%CONTACT_HTML%/$contactHtml/g;
 
     $text =
       TWiki::Func::expandCommonVariables( $text,

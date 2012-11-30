@@ -20,15 +20,22 @@ Changes to actions since %SINCE% for which you have registered for notification 
 
 %CHANGES_AS_STRING%
 %END%
-For help please contact %WIKIWEBMASTER%.
+For help please contact %CONTACT_PLAIN%.
 
 --=====================_64421935==_.ALT
-Content-Type: text/html; charset="us-ascii"
+Content-Type: text/html; charset="%CHARSET%"
 Content-Transfer-Encoding: 8bit
 
 <html>
+<head>
 <link rel="stylesheet" href="%ACTIONTRACKERPLUGIN_CSS%" type="text/css" />
+<style type="text/css">
+#actionnotify table {border-width: 1px; border-style: outset;}
+#actionnotify th, #actionnotify td {border-width: 1px; border-style: inset;}
+</style>
+</head>
 <body>
+<div id="actionnotify">
 <p />
 This is an automated notification from %WIKITOOLNAME%.
 %ACTIONS%
@@ -41,7 +48,8 @@ This is an automated notification from %WIKITOOLNAME%.
 <br />
 You are registered to receive notifications about state changes in these actions because you are in the =notify= list associated with the action.
 %END%
-<p />For help please contact %WIKIWEBMASTER%.
+<p />For help please contact %CONTACT_HTML%.
+</div>
 </body>
 </html>
 

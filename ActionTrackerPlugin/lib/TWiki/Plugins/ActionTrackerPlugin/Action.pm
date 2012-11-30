@@ -152,10 +152,11 @@ my %types = %basetypes;
 
 # PUBLIC Constructor
 sub new {
-    my ( $class, $web, $topic, $number, $attrs, $descr ) = @_;
+    my ( $class, $web, $topic, $number, $attrs, $descr, $readOnly ) = @_;
     my $this = {};
 
     my $attr = new TWiki::Attrs( $attrs, 1 );
+    delete $attr->{uid} if ( $readOnly );
 
     # We always have a state, and if it's not defined in the
     # attribute set, and the closed attribute isn't defined,
@@ -374,12 +375,8 @@ sub populateMissingFields {
     }
 
     if ( $this->{state} eq 'closed' ) {
-        if ( !defined( $this->{closer} ) ) {
-            $this->{closer} = $me;
-        }
-        if ( !defined( $this->{closed} ) ) {
-            $this->{closed} = $now;
-        }
+        $this->{closer} ||= $me;
+        $this->{closed} ||= $now;
     }
 }
 
@@ -825,7 +822,7 @@ sub _formatField_link {
 sub _formatField_edit {
     my ( $this, $args, $asHTML, $type, $newWindow ) = @_;
 
-    if ( !$asHTML ) {
+    if ( !$asHTML || !$this->{uid} ) {
 
         # Can't edit from plain text
         return '';
