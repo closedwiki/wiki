@@ -54,7 +54,15 @@ sub _getValue {
         # SMELL: Really shouldn't do this unless we are sure it's an RE,
         # but the probability of this string occurring elsewhere than an
         # RE is so low that we can afford to take the risk.
-        while ($val =~ s/^\(\?-xism:(.*)\)$/$1/) {};
+
+        # TWikibug:Item7067: Configure adds extra (?^:) to regex variables
+        # on save under Perl 5.14. This needs to be cleaned up.
+        # SMELL: Regex cleanup needs to be done on 3 places:
+        #    * TWiki::Configure::Types::REGEX in sub string2value,
+        #    * TWiki::Configure::Types::REGEX in sub equals,
+        #    * Here in sub _getValue.
+        while ( $val =~ s/^\(\?-xism:(.*)\)$/$1/ ) { }
+        while ( $val =~ s/^\(\?\^:(.*)\)$/$1/ )    { }
     }
     return $val;
 }

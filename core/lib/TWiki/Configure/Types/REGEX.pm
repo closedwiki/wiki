@@ -27,19 +27,31 @@ use TWiki::Configure::Types::STRING;
 
 use base 'TWiki::Configure::Types::STRING';
 
+# TWikibug:Item7067: Configure adds extra (?^:) to regex variables
+# on save under Perl 5.14. This needs to be cleaned up.
+# SMELL: Regex cleanup needs to be done on 3 places:
+#    * Here in sub string2value,
+#    * Here in sub equals,
+#    * TWiki::Configure::Valuer in sub _getValue.
+
 sub prompt {
     my( $this, $id, $opts, $value ) = @_;
     $value = '' unless defined($value);
     $value = "$value";
-    while ($value =~ s/^\(\?-xism:(.*)\)$/$1/) { };
-    $value =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|])/'&#'.ord($1).';'/ge;
+
+    # Disabling this because the value should not appears changed in the authorise screen
+    # while ( $value =~ s/^\(\?-xism:(.*)\)$/$1/ ) { }
+    # while ( $value =~ s/^\(\?\^:(.*)\)/$1/ )     { }
+    # $value =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|])/'&#'.ord($1).';'/ge;
+
     my $res = '<input name="'.$id.'" type="text" size="55%" value="'.$value.'" />';
     return $res;
 }
 
 sub string2value {
     my ($this, $value) = @_;
-    while ($value =~ s/^\(\?-xism:(.*)\)$/$1/) { };
+    while ( $value =~ s/^\(\?-xism:(.*)\)$/$1/ ) { }
+    while ( $value =~ s/^\(\?\^:(.*)\)/$1/ )     { }
     return qr/$value/;
 }
 
@@ -51,10 +63,10 @@ sub equals {
     } elsif (!defined $def) {
         return 0;
     }
-    while ($val =~ s/^\(\?-xism:(.*)\)$/$1/) {
-    }
-    while ($def =~ s/^\(\?-xism:(.*)\)$/$1/) {
-    }
+    while ( $val =~ s/^\(\?-xism:(.*)\)$/$1/ ) { }
+    while ( $def =~ s/^\(\?-xism:(.*)\)$/$1/ ) { }
+    while ( $val =~ s/^\(\?\^:(.*)\)/$1/ ) { }
+    while ( $def =~ s/^\(\?\^:(.*)\)/$1/ ) { }
     return $val eq $def;
 }
 
