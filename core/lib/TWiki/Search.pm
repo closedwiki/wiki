@@ -694,8 +694,9 @@ sub searchWeb {
             # SMELL: Ciaro had efficient two stage handling of modified sort.
             # SMELL: In Dakar this seems to be pointless since latest rev
             # time is taken from topic instead of dir list.
+            my @saveShortened;
             my $slack = 10;
-            if( $start eq '' && $limit + 2 * $slack < scalar(@topicList) ) {
+            if( $limit + 2 * $slack < scalar(@topicList) ) {
 
                 # sort by approx latest rev time
                 my @tmpList =
@@ -708,15 +709,18 @@ sub searchWeb {
 
                 # then shorten list and build the hashes for date and author
                 my $idx = $limit + $slack;
-                @topicList = ();
-                foreach( @tmpList ) {
-                    push( @topicList, $_ );
-                    $idx -= 1;
-                    last if $idx <= 0;
-                }
+                @topicList = @tmpList[0 .. $idx - 1];
+                @saveShortened = @tmpList[$idx .. $#tmpList];
+                    # removed elements are saved for later use
             }
 
             $topicInfo = _sortTopics( $this, $web, \@topicList, $sortOrder, !$revSort );
+            if ( $start ne '' && @saveShortened ) {
+                # for pagination, which is indicated by the presense of the
+                # =start= parameter, the removed elements for optimization are
+                # put back
+                push(@topicList, @saveShortened);
+            }
         }
         elsif (
                 $sortOrder =~ /^creat/ ||    # topic creation time
@@ -726,7 +730,6 @@ sub searchWeb {
               ) {
 
             $topicInfo = _sortTopics( $this, $web, \@topicList, $sortOrder, !$revSort );
-
         }
         else {
 
