@@ -109,7 +109,12 @@ sub parseTime {
         # Local time at midnight on the epoch gives us minus the 
         # local difference. e.g. CST is GMT + 1, so midnight Jan 1 1970 CST
         # is -01:00Z
-        $tzadj = -Time::Local::timelocal(0, 0, 0, 1, 0, 70);
+        ## $tzadj = -Time::Local::timelocal(0, 0, 0, 1, 0, 70);
+        # Note: This does not work for GMT timezone itself, eg. under perl 
+        # v5.8.8 built for x86_64-linux-thread-multi.,
+        # Item7068: Proper handling of DST when in GMT timezone -- TWiki:Main/TomCrane
+        my @now = localtime(time);
+        $tzadj = Time::Local::timegm(@now) - Time::Local::timelocal(@now);
     }
 
     # try "31 Dec 2001 - 23:59"  (TWiki date)
