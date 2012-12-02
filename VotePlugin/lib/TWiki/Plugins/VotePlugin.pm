@@ -1,7 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
-# Copyright (C) 2005-2011 TWiki Contributors. All Rights Reserved.
+# Copyright (C) 2005-2012 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution.
 #
@@ -27,7 +27,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '2012-10-10';
+$RELEASE = '2012-12-01';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Simple way to count votes';
 
