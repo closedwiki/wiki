@@ -1,6 +1,25 @@
-%META:TOPICINFO{author="TWikiContributor" date="1182547552" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354424258" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarVOTE
----+++ VOTE{ _attributes_ } -- define a poll in a TWiki topic.
-%INCLUDE{"%TWIKIWEB%.VotePlugin" section="vote_attributes"}%
-   * See VotePlugin for more information
+---+++ VOTE{ id="..." } -- define a poll in a TWiki topic
+   * The =%<nop>VOTE{}%= variable is handled by the VotePlugin.%STARTSECTION{syntax}%
+   * Syntax: =%<nop>VOTE{ id="..." select1="..., ..., ..." }%=
+   * Parameters:
+     | *Parameter* | *Description* | *Example* |
+     | =id= | The identifier of the poll. You can have multiple independent votes in the same topic. | =id="Dining"= |
+     | =select<i>N</i>= | Defines the name of a *select* vote, where you select one from a ranges of options. =N= is a number that identifies this item within the poll e.g. =select1=, =select2= etc. You must number all =select= and =stars= parameters uniquely and sequentially (e.g. =select1 stars2 select3= | =select1="Drink"= |
+     | =options<i>N</i>= | Each =select<i>N</i>= must have a corresponding =options<i>N</i>= that defines a comma-separated list of the options that can be selected between. | =options1="Beer,Wine,Milk"= |
+     | =stars<i>N</i>= | Defines the name of a *rate* vote, where you rate something by giving it a number of stars. =N= is a number that identifies this item within the poll e.g. =select1=, =stars2= etc. You must number all =select= and =stars= parameters uniquely and sequentially (e.g. =select1 stars2 select3= | =stars2="Usability"= |
+     | =width<i>N</i>= | Each =stars<i>N</i>= must have a corresponding =width<i>N</i>=. This gives the number of stars to show e.g. =width1="5"= will show 5 stars. | =width2="10"= |
+     | =format<i>N</i>= | Defines the format of the results display. See [[VotePlugin#FormattingResults][formatting results]], below. | =format="$large"= |
+     | =chart<i>N</i>= | Defines the format of a single bar in the results bar chart generated for the corresponding  =select= (for =select= type only). See [[VotePlugin#FormattingResults][formatting results]], below. | =chart="&lt;p>$option $score&lt;/p>"= |
+     | =separator= | Defines the string to be used to separate each row in the result. | =separator="&lt;br/>"= |
+     | =global= | If set to ="off"=, this makes the =id= local to this topic (the default). If set to ="on"= it will be a global poll that can be accessed from many topics. | =global="on"= |
+     | =open= | If set to ="off"= this is a closed vote. If set to ="on"= it is open (the default) | =open="on"= |
+     | =secret= | If set to ="off"=, then the database will record who voted. If set to ="on"=, votes are secret (the default) | =secret="on"= |
+     | =saveto= | If set to the name of a topic, the poll results will be appended to the end of that topic. The results are formatted as a TWiki table for easy post-processing. | =saveto="Main.<nop>VoteResults"= |
+     | =bayesian= | If set to ="on"=, rating averages will be computed using the Bayesian average of this item against all the other items _that have the same item in their =stars= field_. This requires all the participating %VOTEs to be =global=, or to save their results to the same place using =saveto=. See http://www.thebroth.com/blog/118/bayesian-rating for more information about Bayesian rating. | =bayesian="off"= |
+     | =submit= | If set to ="off"=, this makes the %VOTE display the results of the vote without prompting for any input. This is useful when - for example - you want to show the results of a global vote, without permitting more voting. |%ENDSECTION{syntax}%
+   * Example: =%<nop>VOTE{ id="FavouriteMeal" select1="Drink" options1="Beer,Wine,Milk,Water" select2="Food" options2="Steak,Bread,Pasta,Pizza" }%= shows two selectors named "Drink" and "Food", respectively, and a "Vote" button
+   * Category: ApplicationsAndComponentsVariables, DatabaseAndFormsVariables
+   * Related: VotePlugin
