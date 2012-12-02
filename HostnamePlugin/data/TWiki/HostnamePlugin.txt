@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1288936488" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354425909" format="1.1" version="$Rev$"}%
 ---+!! !HostnamePlugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -9,19 +9,14 @@
    One line description, required for extensions repository catalog:
    * Set SHORTDESCRIPTION = Displays the hostname of the server serving TWiki.
 -->
-<sticky><div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px; width:380px">
+<sticky><div style="float:right; background-color:#eeeeee; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
 </div></sticky>
 %SHORTDESCRIPTION%
 
 ---++ Usage
 
-%STARTSECTION{"usage"}%
-   * Displays the hostname of the server.
-   * Syntax: =%HOS<nop>TNAME%=
-   * Expands to: =%HOSTNAME%=
-   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarHTTPHOST][HTTP_HOST]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEADDR][REMOTE_ADDR]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEPORT][REMOTE_PORT]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEUSER][REMOTE_USER]]
-<nop>%ENDSECTION{"usage"}%
+%INCLUDE{ "VarHOSTNAME" section="syntax" }%
 
 ---++ Installation Instructions
 
@@ -35,10 +30,11 @@
 ---++ Plugin Info
 
 |  Plugin Author(s): | TWiki:Main.AndrewRJones |
-|  Copyright: | &copy; 2007 TWiki:Main.AndrewRJones,%BR% &copy; 2007-2010 TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2007 TWiki:Main.AndrewRJones, %BR% &copy; 2007-2012 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Plugin Version: | %$VERSION% |
+|  Plugin Version: | 2012-12-01 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-12-01: | TWikibug:Item7020: Categorize TWiki Variable HOSTNAME -- TWiki:Main.PeterThoeny|
 |  2010-07-25 | TWikibug:Item6530 - doc fixes |
 |  14486 | Bugs:Item4420 - Initial version |
 |  Dependencies: | %$DEPENDENCIES% |

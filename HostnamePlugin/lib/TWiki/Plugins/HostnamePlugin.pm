@@ -1,7 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2007 Andrew Jones, andrewjones86@googlemail.com
-# Copyright (C) 2007-2010 TWiki Contributors
+# Copyright (C) 2007-2012 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,8 +21,8 @@ use strict;
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-07-25';
-$SHORTDESCRIPTION = 'Displays the hostname of the server serving TWiki.';
+$RELEASE = '2012-12-01';
+$SHORTDESCRIPTION = 'Get the hostname of the server serving TWiki';
 $NO_PREFS_IN_TOPIC = 1;
 $pluginName = 'HostnamePlugin';
 
