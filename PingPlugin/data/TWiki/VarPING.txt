@@ -1,11 +1,14 @@
-%META:TOPICINFO{author="AaronWalker" date="1339092395" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354415149" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarPING
----+++ PING{ host="..." } -- ping a host
+---+++ PING{ host="..." } -- ping a host for reachability
+   * The =%<nop>PING{}%= variable tests if a remote host identified by host name or IP address is reachable via ping command. The variable is handled by the PingPlugin.
    * Syntax: =%<nop>PING{ host="www.google.com" }%=
    * Supported attributes:
      | *Attribute* | *Comment* | *Default* |
      | =host="..."= | Host name or IP address | (required) |
      | =wait="..."= | Time, in seconds, to wait for a ping response  | ="5"= |
      | =format="..."= | Format of output.  Use the variables =$host= for the host and $result for the result (*1* for success, *0* for failure)  | For success: ="%<nop>GREEN%<i>host</i>%<nop>ENDCOLOR%"= %BR% For failure: ="%<nop>RED%<i>host</i>%<nop>ENDCOLOR%"= |
-   * Example: =%<nop>PING{ host="www.google.com" wait="2" format}%=
+   * Example: =%<nop>PING{ host="www.google.com" wait="2" }%=
+   * Category: AdministrationVariables, DevelopmentVariables, SystemInformationVariables
+   * Related: PingPlugin
