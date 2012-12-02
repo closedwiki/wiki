@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354486292" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354488087" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -38,7 +38,6 @@ Insert the code between =%<nop>CODE{"<i>language</i>"}%= and =%<nop>ENDCODE%=.  
 | Python | =%<nop>CODE{"python"}%= ... =%<nop>ENDCODE%= |
 | Scheme | =%<nop>CODE{"scheme"}%= ... =%<nop>ENDCODE%= |
 | TCL | =%<nop>CODE{"tcl"}%= ... =%<nop>ENDCODE%= |
-| HTML | =%<nop>CODE{"html"}= ... =%<nop>ENDCODE%= |
 | Visual Basic | =%<nop>CODE{"vb"}%= ... =%<nop>ENDCODE%= |
 | Verilog | =%<nop>CODE{"verilog"}%= ... =%<nop>ENDCODE%= |
 | VHDL | =%<nop>CODE{"vhdl"}%= ... =%<nop>ENDCODE%= |
