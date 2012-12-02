@@ -3,7 +3,7 @@
 # Copyright (C) 2005 Thomas Hartkens <thomas@hartkens.de>
 # Copyright (C) 2005 Thomas Weigert <thomas.weigert@motorola.com>
 # Copyright (C) 2008-2010 Crawford Currie http://c-dot.co.uk
-# Copyright (C) 2005-2011 TWiki:TWiki.TWikiContributor
+# Copyright (C) 2005-2012 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ use TWiki::OopsException ();
 use TWiki::Sandbox ();
 
 our $VERSION          = '$Rev$';
-our $RELEASE          = '201009-04';
+our $RELEASE          = '2012-12-02';
 our $SHORTDESCRIPTION = 'Associate a "state" with a topic and then control the work flow that the topic progresses through as content is added.';
 our $NO_PREFS_IN_TOPIC = 1;
 our $pluginName       = 'WorkflowPlugin';

@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1283592904" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354437467" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarWORKFLOW
----+++ WORKFLOW* -- manage workflows
+---+++ WORKFLOW*{} -- manage workflows
    * Associate a "state" with a topic and then control the work flow that the topic progresses through as content is added. The WorkflowPlugin expands the following variables:
    * Controlling topics in the workflow:
       * =%<nop>WORKATTACHTOPIC%= - Expands to a link that lets you attach to the topic (if the user is not able to modify the topic, either in the workflow sense or according to the standard access controls, the link will be <strike>struck out</strike>).
@@ -15,4 +15,5 @@
       * =%<nop>WORKFLOWLASTVERSION_State%= - Expands to a link to the version of the document when it was last in the state _State_.
       * =%<nop>WORKFLOWSTATE%= - Expands to the current state of the document. It can also be given a =topic= parameter (default), in which case the state of that topic is returned.
       * =%<nop>WORKFLOWSTATEMESSAGE%= - Expands to the corresponding message in the state table.
-   * Details: WorkflowPlugin#VarWORKFLOW
+   * Category: ApplicationsAndComponentsVariables, EditingAndContentUpdateVariables, WorkflowAndAutomationVariables
+   * Related: WorkflowPlugin for details
