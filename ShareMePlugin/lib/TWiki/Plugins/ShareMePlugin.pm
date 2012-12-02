@@ -32,7 +32,7 @@ require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-11-15';
+our $RELEASE = '2012-12-01';
 our $SHORTDESCRIPTION = 'Icon bar to share a TWiki page on popular social media sites such as Facebook, StumbleUpon, Twitter';
 our $NO_PREFS_IN_TOPIC = 0;
 
