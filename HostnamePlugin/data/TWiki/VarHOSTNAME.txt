@@ -1,6 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1280115161" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354425909" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarHOSTNAME
----+++ HOSTNAME -- the name of the host
-%INCLUDE{"%SYSTEMWEB%.HostnamePlugin" section="usage"}%
-   * See HostnamePlugin for more information
+---+++ HOSTNAME -- hostname of the server serving TWiki
+   * This variable is handled by the HostnamePlugin.%STARTSECTION{syntax}%
+   * Syntax: =%<nop>HOSTNAME%=
+   * Expands to: =%HOSTNAME%=
+   * Category: SystemInformationVariables
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarHTTPHOST][HTTP_HOST]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEADDR][REMOTE_ADDR]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEPORT][REMOTE_PORT]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEUSER][REMOTE_USER]], HostnamePlugin%ENDSECTION{syntax}%
