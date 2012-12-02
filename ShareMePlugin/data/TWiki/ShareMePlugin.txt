@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352971812" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354410387" format="1.1" version="$Rev$"}%
 ---+!! Share-Me Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -20,10 +20,6 @@ Add =%<nop>SHAREME%= anywhere in a TWiki page or preferably in a TWiki skin:
 | *Write this:* | *Renders as: (if installed)* | *Simulated example:* |
 | =%<nop>SHAREME%= | %SHAREME{Delicious,Facebook,StumbleUpon,Twitter}% | <a href="http://delicious.com/post?url=%SCRIPTURL{view}%/%WEB%/%TOPIC%&amp;title=%TOPIC%&amp;notes=Icon+bar+to+share+a+TWiki+page+on+popular+social+media+sites+such+as+Facebook,+StumbleUpon,+Twitter" target='_shareme' rel='nofollow' style='border-style: none;'><img src="%ATTACHURLPATH%/delicious.png" title="Delicious" width='16' height='16' border='0' class='example-hover' /></a> <a href="http://www.facebook.com/share.php?u=%SCRIPTURL{view}%/%WEB%/%TOPIC%&amp;t=%TOPIC%" target='_shareme' rel='nofollow' style='border-style: none;'><img src="%ATTACHURLPATH%/facebook.png" title="Facebook" width='16' height='16' border='0' class='example-hover' /></a> <a href="http://www.stumbleupon.com/submit?url=%SCRIPTURL{view}%/%WEB%/%TOPIC%&amp;title=%TOPIC%" target='_shareme' rel='nofollow' style='border-style: none;'><img src="%ATTACHURLPATH%/stumbleupon.png" title="StumbleUpon" width='16' height='16' border='0' class='example-hover' /></a> <a href="http://twitter.com/home?status=%TOPIC%+-+%SCRIPTURL{view}%/%WEB%/%TOPIC%" target='_shareme' rel='nofollow' style='border-style: none;'><img src="%ATTACHURLPATH%/twitter.png" title="Twitter" width='16' height='16' border='0' class='example-hover' /></a> |
 
-<div style="float:right; text-align: center; padding:10px; width:150px; background-color:#EBEEF0">
-This skin is%BR% sponsored by:%BR%
-[[http://twiki.net/?ref=twiki.org/sharemeplugin.logo][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" title="Twiki, Inc." />]]
-</div>
 Optionally, a list of social media sites (defined below) can be specified, such as:%BR% =%<nop>SHAREME{"Delicious, Facebook, !StumbleUpon, Twitter"}%=.
 
 ---++ Social Media Sites
@@ -41,6 +37,7 @@ This table defines the social media sites. The following variables can be used i
 | E-mail | %ATTACHURL%/email.png | mailto:?subject=$title&amp;body=$link |
 | Facebook | %ATTACHURL%/facebook.png | http://www.facebook.com/share.php?u=$link&amp;t=$title |
 | FriendFeed | %ATTACHURL%/friendfeed.png | http://www.friendfeed.com/share?title=$title&amp;link=$link |
+| Google Plus | %ATTACHURL%/googleplus.png | https://plus.google.com/share?url=$link |
 | Google Bookmarks | %ATTACHURL%/googlebookmark.png | http://www.google.com/bookmarks/mark?op=edit&amp;bkmk=$link&amp;title=$title&amp;annotation=$summary |
 | LinkedIn | %ATTACHURL%/linkedin.png | http://www.linkedin.com/shareArticle?mini=true&amp;url=$link&amp;title=$title&amp;source=$site&amp;summary=$summary |
 | Live | %ATTACHURL%/live.png | https://favorites.live.com/quickadd.aspx?marklet=1&amp;url=$link&amp;title=$title |
@@ -96,8 +93,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]] |
 |  Copyright: | &copy; 2010-2012 TWiki:Main.PeterThoeny <br /> &copy; 2010-2012 TWiki:TWiki.TWikiContributor  |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-11-15 |
+|  Plugin Version: | 2012-12-01 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-12-01: | TWikibug:Item6962: Add Google+ share icon & link |
 |  2012-11-15: | TWikibug:Item7020: Categorize SHAREME TWiki Variable |
 |  2011-07-10: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2010-12-04: | TWikibug:Item6616: Fix to use BASETOPIC instead of TOPIC when referencing topics. This allows to add SHAREME in an included topic, such as !TopMenuSkinTopBar of TWiki:Plugins.TopMenuSkin |
@@ -127,7 +125,8 @@ __Related Topics:__ VarSHAREME, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperD
 %META:FILEATTACHMENT{name="technorati.png" attachment="technorati.png" attr="h" comment="" date="1262854043" path="technorati.png" size="283" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="twitter.png" attachment="twitter.png" attr="h" comment="" date="1263277220" path="twitter.png" size="503" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="googlebookmark.png" attachment="googlebookmark.png" attr="h" comment="" date="1262854072" path="googlebookmark.png" size="758" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="live.png" attachment="live.png" attr="h" comment="" date="1262931398" path="live.png" size="4574" user="TWikiContributor" version="2"}%
+%META:FILEATTACHMENT{name="googleplus.png" attachment="googleplus.png" attr="h" comment="" date="1354409903" path="googleplus.png" size="694" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="live.png" attachment="live.png" attr="h" comment="" date="1262931398" path="live.png" size="4574" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="misterwong.png" attachment="misterwong.png" attr="h" comment="" date="1262854162" path="misterwong.png" size="668" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="ping.png" attachment="ping.png" attr="h" comment="" date="1262854181" path="ping.png" size="673" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="rss.png" attachment="rss.png" attr="h" comment="" date="1262854201" path="rss.png" size="827" user="TWikiContributor" version="1"}%
