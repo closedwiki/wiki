@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2010 Twiki Inc
-# Copyright (C) 2010-2011 TWiki Contributors
+# Copyright (C) 2010-2012 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ our ( $VERSION, $RELEASE, $SHORTDESCRIPTION, $debug, $pluginName,
 	$NO_PREFS_IN_TOPIC, %menu_trees );
 
 $VERSION = '$Rev: 15942 (02 Sep 2009) $';
-$RELEASE = '2011-05-01';
+$RELEASE = '2012-12-01';
 
 $SHORTDESCRIPTION = 'Drop-Down Menu Plugin for JavaScript multi-level drop-down menus';
 $NO_PREFS_IN_TOPIC = 1;

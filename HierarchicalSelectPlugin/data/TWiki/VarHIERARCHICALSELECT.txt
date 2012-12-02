@@ -1,11 +1,19 @@
-%META:TOPICINFO{author="TWikiContributor" date="1304139643" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354431934" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarHIERARCHICALSELECT
 ---+++ HIERARCHICALSELECT{ attributes } -- display hierarchical multi-level drop-down menus
    * The =%<nop>HIERARCHICALSELECT{}%= variable is handled by the HierarchicalSelectPlugin.
    * Syntax: =%<nop>HIERARCHICALSELECT{ topic="MenuDefinition" ... }%=
    * Parameters:
-      * to be documented
-   * Examples:
-      * to be documented
+     | *Parameter* | *Description* | *Default* |
+     | =topic= | Topic from which to read the menu definition| (required) |
+     | =web= | Web from which to read the menu definition | current web |
+     | =key= | String to use as the basis for naming of HTML form elements | Derived from menu topic |
+     | =level= | If specified, select a menu level (integer starting from 0) to display | All levels |
+     | =parse_keywords= |Flag: Nonzero sets parsing mode where first word of menu line is return-value keyword, remainder is text to display | Entire line used as both return value and display text |
+   * Example with three levels:
+     %BR% =%<nop>HIERARCHICALSELECT{ web="TWiki" topic="HierarchicalSelectPluginExample" level="0" names="country,subdivision,region" }%=
+     %BR% =%<nop>HIERARCHICALSELECT{ web="TWiki" topic="HierarchicalSelectPluginExample" level="1" }%=
+     %BR% =%<nop>HIERARCHICALSELECT{ web="TWiki" topic="HierarchicalSelectPluginExample" level="2" }%=
+   * Category: DatabaseAndFormsVariables, FormattingAndRenderingVariables, UIAndVisualizationVariables
    * Related: HierarchicalSelectPlugin, HierarchicalSelectPluginExample, TWikiTemplates
