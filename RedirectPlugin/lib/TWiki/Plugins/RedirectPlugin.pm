@@ -3,7 +3,7 @@
 # Copyright (C) 2006 Motorola, thomas.weigert@motorola.com
 # Copyright (C) 2006 Meredith Lesly, msnomer@spamcop.net
 # Copyright (C) 2003 Steve Mokris, smokris@softpixel.com
-# Copyright (C) 2006-2011 TWiki Contributors
+# Copyright (C) 2006-2012 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ use strict;
 
 # =========================
 our $VERSION    = '$Rev$';
-our $RELEASE    = '2011-07-15';
+our $RELEASE    = '2012-12-01';
 
 my $pluginName = 'RedirectPlugin';
 my $debug;
