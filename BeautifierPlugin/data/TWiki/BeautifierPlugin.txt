@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1294101396" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354486292" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -72,15 +72,29 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 ---++ Plugin Installation Instructions
 
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory, this will also install the Beautifier library by default. Content:
-     | *File:* | *Description:* |
-%$MANIFEST%
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
       * Optionally, move the =lib/Beautifier=, =lib/Output= and =lib/HFile= libraries into the Perl library folder.
-   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * Test if the installation was successful:
+
+   * Or, follow these __manual installation__ steps:
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==data/TWiki/VarCODE.txt== | CODE variable documentation topic |
+        | ==pub/TWiki/%TOPIC%/style.css== | Default CSS |
+        | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+        | ==lib/Beautifier/*.pm== | Perl modules |
+        | ==lib/HFile/*.pm== | Perl modules |
+        | ==lib/Output/*.pm== | Perl modules |
+      * Optionally, move the =lib/Beautifier=, =lib/Output= and =lib/HFile= libraries into the Perl library folder.
+      * Set the ownership of the extracted directories and files to the webserver user.
+
+   * Plugin __configuration and testing__:
+      * Run the [[%SCRIPTURL{configure}%][configure]] script, enable the plugin in the __Plugins__ section
+      * Configure the plugin: See plugin settings above.
+      * Test if the installation was successful:
 
 %CODE{"cpp"}%
 #include <nworld.h>
@@ -106,10 +120,11 @@ void nWorld::StepSim()
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.LingLo |
-|  Copyright: | &copy; 2002-2007 TWiki:Main.LingLo <br /> &copy; 2007-2010 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2002-2007 TWiki:Main.LingLo <br /> &copy; 2007-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-01-03 |
+|  Plugin Version: | 2012-12-02 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2012-12-02: | TWikibug:Item7020: Add category to VarCODE; doc improvements -- TWiki:Main.PeterThoeny|
 |  2011-01-03: | TWikibug:Item6530: Doc improvements; small style improvement; changing TWIKIWEB to SYSTEMWEB; adding CORBA (thanks Will Norris), IDL (thanks Will Norris), Visual Basic (thanks TWiki:Main.ThomasJachmann), CSS -- TWiki:Main.PeterThoeny |
 |  2007-05-20: | added <nop>JavaScript language file, removed legacy CODE_<i>lang</i> construct -- TWiki:Main.WillNorris |
 |  2007-04-30: | warnings cleanup; no functional changes -- TWiki:Main.WillNorris |
@@ -129,6 +144,6 @@ void nWorld::StepSim()
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
+__Related Topics:__ VarCODE, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 %META:FILEATTACHMENT{name="style.css" attr="h" comment="CSS to format code fragments" date="1294097044" path="style.css" size="154" user="TWikiContributor" version="1"}%

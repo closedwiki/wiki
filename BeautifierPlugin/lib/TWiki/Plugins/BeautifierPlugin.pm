@@ -3,7 +3,7 @@
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
 # Copyright (C) 2002-2007 TWiki:Main.LingLo
-# Copyright (C) 2007-2010 TWiki:TWiki.TWikiContributor
+# Copyright (C) 2007-2012 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2010-01-03';
+$RELEASE = '2012-12-02';
 
 # =========================
 
