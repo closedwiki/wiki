@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354415149" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354416190" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="Sandbox.PluginDevelopment"}%
 ---+!! <nop>%TOPIC%
 <!--
@@ -73,7 +73,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2012-12-01 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-12-01: | Fix manifest; add category to VarPING; doc enhancements -- TWiki:Main.PeterThoeny |
+|  2012-12-01: | TWikibug:Item6962: Fix manifest; add category to VarPING; doc enhancements -- TWiki:Main.PeterThoeny |
 |  2005-09-28: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | none |
