@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2007 Crawford Currie http://c-dot.co.uk
+# Copyright (C) 2007-2008 Crawford Currie http://c-dot.co.uk
 # Copyright (C) 2008-2012 TWiki:TWiki.TWikiContributor
 # All Rights Reserved. TWiki Contributors are listed in the
 # AUTHORS file in the root of this distribution.
