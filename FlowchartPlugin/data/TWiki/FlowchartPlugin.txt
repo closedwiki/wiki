@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1308292051" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354493101" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -129,8 +129,9 @@ To override the default settings, add them to [[%LOCALSITEPREFS%]].
 |  Plugin Author: | TWiki:Main.AurelioAHeckert |
 |  Copyright: | &copy; 2005 TWiki:Main.AurelioAHeckert <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-06-16 |
+|  Plugin Version: | 2012-12-02 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-12-02: | TWikibug:Item7020: Add category to VarFLOWCHART; doc improvements -- TWiki:Main.PeterThoeny |
 |  2011-06-16: | TWikibug:Item6756: Fix for anchors not working if title is longer than 32 characters -- TWiki:Main.TimmoVerlaan |
 |  2011-01-17: | TWikibug:Item6530: Back-porting from related project - thanks GPL; doc improvements |
 |  16 Jul 2010 | Set the path to !ImageMagick in configure -- TWiki:Main.AndrewRJones |

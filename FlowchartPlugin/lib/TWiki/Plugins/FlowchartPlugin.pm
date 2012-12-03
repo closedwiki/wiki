@@ -4,7 +4,7 @@
 # Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
 # Copyright (C) 2005... Aurelio A. Heckert, aurium@gmail.com
 # Copyright (C) 2009-2010 Foswiki Contributors
-# Copyright (C) 2007-2011 TWiki Contributors
+# Copyright (C) 2007-2012 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 package TWiki::Plugins::FlowchartPlugin;
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2011-06-16';
+our $RELEASE = '2012-12-02';
 
 our $pluginName = 'FlowchartPlugin';    # Name of this Plugin
 
