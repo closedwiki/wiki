@@ -1694,13 +1694,16 @@ sub _canTag {
 	( $allowTopic =~ /\S/ || $allowWeb =~ /\S/ ||
 	  $denyTopic =~ /\S/ || $denyWeb =~ /\S/ ) ? 'TAG' : 'CHANGE';
     my $wikiUserName = TWiki::Func::getWikiName();
-    return $canTag = 1
-	if ( $TWiki::cfg{TagMePlugin}{SplitSpace}
-             && TWiki::Func::checkAccessPermission(
-		 $mode, $wikiUserName, undef, $topic, $web, undef) );
-    return $canTag = _canChange();
-    # Everybody who can change tags needs be able to tag and untag pages.
-    # Otherwise, things get strange.
+    if ( $TWiki::cfg{TagMePlugin}{SplitSpace} ) { 
+        return $canTag = 1
+	  if ( TWiki::Func::checkAccessPermission( $mode, $wikiUserName, undef, $topic, $web, undef) );
+        return $canTag = _canChange();
+        # Everybody who can change tags needs be able to tag and untag pages.
+        # Otherwise, things get strange.
+    }
+    else {
+        return $canTag = 1
+    }
 }
 
 # =========================
@@ -1738,6 +1741,9 @@ sub _canChange {
 	return $canChange = TWiki::Func::checkAccessPermission(
 	    'CHANGE', $wikiUserName, undef, $TWiki::cfg{WebPrefsTopicName}, $manipWeb,
 	    undef);
+    }
+    else {
+        return $canChange = 1;
     }
 }
 
