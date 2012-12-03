@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1293784608" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354520708" format="1.1" version="$Rev$"}%
 ---+ Subscribe Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -34,10 +34,11 @@ You don't need =VIEW= access to the WebNotify topic in order to subscribe to cha
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |
-|  Copyright: | &copy; 2008 Crawford Currie http://c-dot.co.uk; <br /> &copy; 2008-2010 TWiki:TWiki/TWikiContributor |
+|  Copyright: | &copy; 2007-2008 Crawford Currie http://c-dot.co.uk; <br /> &copy; 2008-2012 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | %$VERSION% |
+|  Plugin Version: | 2012-12-02 |
 |  Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-12-02: | TWikibug:Item7020: Add category to VarSUBSCRIBE -- TWiki:Main.PeterThoeny |
 |  2010-04-25 | TWikibug:Item6433 - doc improvements |
 |  15 Oct 2008 | TWikibug:Item4115: enable subscriptions with (child), \
                     TWikibug:Item5950: fix cross web SUBSCRIPTION indication (requires updated MailerContrib) \

@@ -1,4 +1,30 @@
-# See the bottom of the file for description, copyright and license information
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2007 Crawford Currie http://c-dot.co.uk
+# Copyright (C) 2008-2012 TWiki:TWiki.TWikiContributor
+# All Rights Reserved. TWiki Contributors are listed in the
+# AUTHORS file in the root of this distribution.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# For licensing info read LICENSE file in the TWiki root.
+#
+# Author: Crawford Currie http://c-dot.co.uk
+#
+# This plugin supports a subscription button that, when embedded in a topic,
+# will add the clicker to the WebNotify for that topic. It uses the API
+# published by the MailerContrib to manage the subscriptions in WebNotify.
+#
+# TWikiGuest cannot be subscribed, only logged-in users.
+
 package TWiki::Plugins::SubscribePlugin;
 
 use strict;
@@ -7,7 +33,7 @@ require TWiki::Func;
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC $uid $WEB $TOPIC);
 
 $VERSION = '$Rev: 13787$';
-$RELEASE = '2010-04-25';
+$RELEASE = '2012-12-02';
 $SHORTDESCRIPTION = 'Companion plugin to the MailerContrib, adding a "Subscribe me" link to topics to easily subscribe to topic changes';
 
 $NO_PREFS_IN_TOPIC = 1;
@@ -138,31 +164,3 @@ sub _subscribe {
 }
 
 1;
-__END__
-
-Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
-
-Copyright (C) 2007 Crawford Currie http://c-dot.co.uk
-and TWiki Contributors. All Rights Reserved. TWiki Contributors
-are listed in the AUTHORS file in the root of this distribution.
-NOTE: Please extend that file, not this notice.
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version. For
-more details read LICENSE in the root of this distribution.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-For licensing info read LICENSE file in the TWiki root.
-
-Author: Crawford Currie http://c-dot.co.uk
-
-This plugin supports a subscription button that, when embedded in a topic,
-will add the clicker to the WebNotify for that topic. It uses the API
-published by the MailerContrib to manage the subscriptions in WebNotify.
-
-TWikiGuest cannot be subscribed, only logged-in users.
