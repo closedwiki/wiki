@@ -28,8 +28,8 @@ package TWiki::Plugins::TagMePlugin;
 use strict;
 
 # =========================
-our $VERSION    = '1.10';
-our $RELEASE    = '2012-11-13';
+our $VERSION    = '1.9';
+our $RELEASE    = '2012-09-04';
 
 # =========================
 our $pluginName = 'TagMePlugin';    # Name of this Plugin
@@ -57,18 +57,6 @@ our $label;
 our $header;
 our $footer;
 our $button;
-our $NO_PREFS_IN_TOPIC = 1;
-  # to avoid inefficiency of parsing the plug-in document for configuration
-our $SHORTDESCRIPTION = 'Tag wiki content collectively to find content by keywords';
-our $manipWeb;
-our $userAgnostic;
-our $canTag;
-our $canChange;
-our $splitSpace;
-our $inactiveSite;
-our $showControl;
-our $maxTagLen;
-
 
 # =========================
 BEGIN {
@@ -91,38 +79,14 @@ sub initPlugin {
     }
 
     # Get plugin debug flag
-    $debug = $TWiki::cfg{TagMePlugin}{Debug};
+    $debug = TWiki::Func::getPreferencesFlag('TAGMEPLUGIN_DEBUG');
+    $normalizeTagInput = TWiki::Func::getPreferencesFlag('TAGMEPLUGIN_NORMALIZE_TAG_INPUT');
     
-    TWiki::Func::registerTagHandler( 'TAGME',
-				     \&_handleTagMe );
-    TWiki::Func::registerTagHandler( 'TAGMEPLUGIN_NORMALIZE_TAG_INPUT',
-				     \&_TAGMEPLUGIN_NORMALIZE_TAG_INPUT );
-    TWiki::Func::registerTagHandler( 'TAGMEPLUGIN_USER_AGNOSTIC',
-				     \&_TAGMEPLUGIN_USER_AGNOSTIC );
-
     _writeDebug("initPlugin( $web.$topic ) is OK");
     $initialized = 0;
     $doneHeader  = 0;
-    $canTag = undef;
-    $canChange = undef;
 
     return 1;
-}
-
-# =========================
-sub _manipWeb {
-    my $w = shift;
-    if ( $TWiki::cfg{PersonalWebName} &&
-	 $w =~ m|^(${TWiki::cfg{PersonalWebName}}[./][^./]+)|
-    ) {
-	$w = $1;
-	$w =~ s:\.:/:g;
-	return $w;
-    }
-    else {
-	$w =~ s:[./].*$::;
-	return $w;
-    }
 }
 
 # =========================
@@ -130,29 +94,12 @@ sub _initialize {
     return if ($initialized);
 
     # Initialization
-    my $ctx = TWiki::Func::getContext();
-    $inactiveSite = ref $ctx && ( $ctx->{inactive} || $ctx->{content_slave} );
     $workAreaDir = TWiki::Func::getWorkArea($pluginName);
-    $attachUrl = TWiki::Func::getPubUrlPath($installWeb) . "/$installWeb/$pluginName";
-    $logAction = $TWiki::cfg{TagMePlugin}{LogAction} || '';
-    $normalizeTagInput = $TWiki::cfg{TagMePlugin}{NormalizeTagInput} || 0;
-    if ( $TWiki::cfg{TagMePlugin}{SplitSpace} ) {
-	$manipWeb = _manipWeb($web);
-    }
-    else {
-	$manipWeb = '%SYSTEMWEB%';
-    }
-    $userAgnostic =
-	TWiki::Func::getPreferencesValue('TAGMEPLUGIN_USER_AGNOSTIC', $web);
-    if ( !defined($userAgnostic) ) {
-	$userAgnostic = $TWiki::cfg{TagMePlugin}{UserAgnostic};
-    }
-    $userAgnostic = TWiki::isTrue($userAgnostic);
-    $tagChangeRequestLink =
-	"[[$manipWeb.$tagChangeRequestTopic][Tag change requests]]";
+    $attachUrl = TWiki::Func::getPubUrlPath() . "/$installWeb/$pluginName";
+    $logAction = TWiki::Func::getPreferencesFlag("\U$pluginName\E_LOGACTION");
     $tagLinkFormat =
-        '<a rel="nofollow" href="%SCRIPTURL{view}%/'
-      . $manipWeb
+        '<a href="%SCRIPTURL{view}%/'
+      . $installWeb
       . '/TagMeSearch?tag=$tag;by=$by">$tag</a>';
     $tagQueryFormat =
 '<table class="tagmeResultsTable tagmeResultsTableHeader" cellpadding="0" cellspacing="0" border="0"><tr>$n'
@@ -167,44 +114,37 @@ sub _initialize {
       . '<span class="tagmeResultsTags">Tags: $taglist</span>' . '</p>';
     $alphaNum = TWiki::Func::getRegularExpression('mixedAlphaNum');
 
-    $maxTagLen =
-	TWiki::Func::getPreferencesValue('TAGMEPLUGIN_MAX_TAG_LEN', $web) || 30;
-      # by default maximum tag length is 30
-    my $lenLimit = $TWiki::cfg{TagMePlugin}{TagLenLimit} || 0;
-    if ( $lenLimit && $maxTagLen > $lenLimit ) {
-	$maxTagLen = $lenLimit;
-    }
-      # if $TWiki::cfg{TagMePlugin}{TagLenLimit} is defined, maximum tag length
-      # cannot exceed the value
-
     _addHeader();
 
     $initialized = 1;
 }
 
 # =========================
-sub afterRenameHandler {
-    my ($oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment)
-	= @_;
-    return if ( $oldAttachment ne '' ); # do nothing for attachment rename
-    _writeDebug("afterRenameHandler: $oldWeb.$oldTopic -> $newWeb.$newTopic");
-    _initialize();
-    renameOrCopyTagInfo("$oldWeb.$oldTopic", "$newWeb.$newTopic", 'rename');
+sub afterSaveHandler {
+### my ( $text, $topic, $web, $error, $meta ) = @_;
+
+    _writeDebug("afterSaveHandler( $_[2].$_[1] )");
+
+    my $newTopic = $_[1];
+    my $newWeb   = $_[2];
+    if ( "$newWeb.$newTopic" ne "$web.$topic"
+        && $topic ne $TWiki::cfg{HomeTopicName} )
+    {
+
+        # excluding WebHome due to TWiki 4 bug on statistics viewed as WebHome
+        # and saved as WebStatistics
+        _writeDebug(" - topic renamed from $web.$topic to $newWeb.$newTopic");
+        _initialize();
+        renameTagInfo( "$web.$topic", "$newWeb.$newTopic" );
+    }
 }
 
 # =========================
-sub afterSaveHandler {
-    ### my ( $text, $topic, $web, $error, $meta, $options ) = @_;
-    ###      0      1       2     3       4      5
-    ### TWiki::Store::saveStopic needs to be slightly modified to get $_[5]
+sub commonTagsHandler {
+### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
-    return unless ( $_[5] && ref $_[5] && defined $_[5]->{comment} &&
-		    $_[5]->{comment} eq 'copy' );
-    # this is only for page copy
-    my ($newWeb, $newTopic) = ($_[2], $_[1]);
-    _writeDebug("copy $web.$topic -> $newWeb.$newTopic");
-    _initialize();
-    renameOrCopyTagInfo("$web.$topic", "$newWeb.$newTopic", 'copy');
+    _writeDebug("commonTagsHandler( $_[2].$_[1] )");
+    $_[0] =~ s/%TAGME{(.*?)}%/_handleTagMe($1)/ge;
 }
 
 # =========================
@@ -219,17 +159,15 @@ sub _addHeader {
 
 # =========================
 sub _handleTagMe {
-#    my($session, $params, $theTopic, $theWeb) = @_;
-    my $attr = $_[1];
-    $action = defined($attr->{tpaction}) ? $attr->{tpaction} : '';
-    $style = defined($attr->{style}) ? $attr->{style} : '';
-    $label = defined($attr->{label}) ? $attr->{label} : '';
-    $button = defined($attr->{button}) ? $attr->{button} : '';
-    $header = defined($attr->{header}) ? $attr->{header} : '';
+    my ($attr) = @_;
+    $action = TWiki::Func::extractNameValuePair( $attr, 'tpaction' );
+    $style = TWiki::Func::extractNameValuePair( $attr, 'style' );
+    $label = TWiki::Func::extractNameValuePair( $attr, 'label' );
+    $button = TWiki::Func::extractNameValuePair( $attr, 'button' );
+    $header = TWiki::Func::extractNameValuePair( $attr, 'header' );
     $header =~ s/\$n/\n/go;
-    $footer = defined($attr->{footer}) ? $attr->{footer} : '';
+    $footer = TWiki::Func::extractNameValuePair( $attr, 'footer' );
     $footer =~ s/\$n/\n/go;
-    $showControl = TWiki::isTrue($attr->{showcontrol}, 1);
     my $text = '';
     _initialize();
 
@@ -244,9 +182,6 @@ sub _handleTagMe {
     }
     elsif ( $action eq 'newtag' ) {
         $text = _newTag($attr);
-    }
-    elsif ( $action eq 'newtaginit' ) {
-        $text = _modifyTagInit( 'create', $attr );
     }
     elsif ( $action eq 'newtagsandadd' ) {
         $text = _newTagsAndAdd($attr);
@@ -294,17 +229,14 @@ sub _handleTagMe {
 
 # =========================
 sub _showDefault {
+    my (@tagInfo) = @_;
+
     return '' unless ( TWiki::Func::topicExists( $web, $topic ) );
     
     # overriden by the relevant "show" functions for each style
     if ($style eq 'blog') {
-        return _showStyleBlog(@_);
+	return _showStyleBlog(@tagInfo);
     }
-
-    my %arg = @_;
-    my @tagInfo;
-    @tagInfo = @{$arg{tagInfo}} if ( $arg{tagInfo} && ref $arg{tagInfo} );
-    my $status = $arg{status} || '';
 
     my $query = TWiki::Func::getCgiQuery();
     my $tagMode = $query->param('tagmode') || '';
@@ -323,26 +255,21 @@ sub _showDefault {
         # Example: 004, usability, UserA, UserB, UserC, UserD
         # SMELL: This format is a quick hack for easy sorting, parsing, and
         # for fast rendering
-        if (/$lineRegex/o) {
+        if (/$lineRegex/) {
             $num   = $1;
             $tag   = $2;
             $users = $3;
             $line =
-              _printTagLink( $tag, '' ) .
-	      ($userAgnostic ? '' :
-	       "<span class=\"tagMeVoteCount\">$num</span>");
-	    if ( $showControl && _canTag() ) {
-		if ( $users =~ /\b$user\b/ ) {
-		    $line .= _imgTag( 'tag_remove',
-			($userAgnostic ? 'Remove this tag' :
-			 'Remove my vote on this tag'),
-			'remove', $tag, $tagMode );
-		}
-		else {
-		    $line .= _imgTag( 'tag_add', 'Add my vote for this tag',
-			'add', $tag, $tagMode );
-		}
-	    }
+              _printTagLink( $tag, '' )
+              . "<span class=\"tagMeVoteCount\">$num</span>";
+            if ( $users =~ /\b$user\b/ ) {
+                $line .= _imgTag( 'tag_remove', 'Remove my vote on this tag',
+                    'remove', $tag, $tagMode );
+            }
+            else {
+                $line .= _imgTag( 'tag_add', 'Add my vote for this tag',
+                    'add', $tag, $tagMode );
+            }
             $seen{$tag} = _wrapHtmlTagControl($line);
         }
     }
@@ -357,39 +284,30 @@ sub _showDefault {
         $text .=
           join( ' ', map { $seen{$_} } sort { lc $a cmp lc $b } keys(%seen) );
     }
-    if ( $showControl ) {
-        my @allTags = _readAllTags();
-        my @notSeen = ();
-        foreach (@allTags) {
-            push( @notSeen, $_ ) unless ( $seen{$_} );
-        }
-        if ( _canTag() && scalar @notSeen ) {
-            if ( $tagMode eq 'nojavascript' ) {
-                $text .= _createNoJavascriptSelectBox(@notSeen);
-            }
-            else {
-                $text .= _createJavascriptSelectBox(@notSeen);
-            }
-        }
-	if ( _canTag() ) {
-	    $text .= ' '.
-		_wrapHtmlTagControl(
-	    '<a rel="nofollow" ' .
-	    'href="%SCRIPTURL{viewauth}%/' . $manipWeb . '/TagMeCreateNewTag'.
-	    "?from=$web.$topic\">create new tag</a>");
-	}
+    my @allTags = _readAllTags();
+    my @notSeen = ();
+    foreach (@allTags) {
+        push( @notSeen, $_ ) unless ( $seen{$_} );
     }
+    if ( scalar @notSeen ) {
+        if ( $tagMode eq 'nojavascript' ) {
+            $text .= _createNoJavascriptSelectBox(@notSeen);
+        }
+        else {
+            $text .= _createJavascriptSelectBox(@notSeen);
+        }
+    }
+    $text .= ' '.
+      _wrapHtmlTagControl("<a href=\"%SCRIPTURL{viewauth}%/$installWeb/TagMeCreateNewTag".
+        "?from=$web.$topic\">create new tag</a>");
 
-    return _wrapHtmlTagMeShowForm($text) . $status;
+    return _wrapHtmlTagMeShowForm($text);
 }
 
 # =========================
 # displays a comprehensive tag management frame, with a common UI
 sub _showStyleBlog {
-    my %arg = @_;
-    my @tagInfo;
-    @tagInfo = @{$arg{tagInfo}} if ( $arg{tagInfo} && ref $arg{tagInfo} );
-    my $status = $arg{status} || '';
+    my (@tagInfo) = @_;
     my $text  = '';
 
     # View mode
@@ -397,12 +315,7 @@ sub _showStyleBlog {
 	if ($button) {
 	    $text .= $button;
 	} elsif ($label) {
-	    if ( _canTag() ) {
-		$text = "<a rel='nofollow' class='tagmeEditLink' href='%SCRIPTURL{viewauth}%/%WEB%/%TOPIC%?tpaction=show' title='Open tag edit menu'>" . $label . "</a>" if $label;
-	    }
-	    else {
-		$text = '';
-	    }
+	    $text = "<a href='%SCRIPTURL{viewauth}%/%WEB%/%TOPIC%?tpaction=show' title='Open tag edit menu'>" . $label . "</a>" if $label;
 	}
 	return $text;
     }
@@ -423,10 +336,8 @@ sub _showStyleBlog {
     my %seen_others  = ();
     my %tagCount = ();
     # header
-    $text .= $header."<fieldset class='tagmeEdit'><legend class='tagmeEdit'>Edit Tags - <a rel='nofollow' href='".
+    $text .= $header."<fieldset class='tagmeEdit'><legend class='tagmeEdit'>Edit Tags - <a href='".
 	$topic . "' name='tagmeEdit'>Done</a></legend>";
-
-    $text .= $status;
 
     # My tags on this topic + Tags from others on this topic
     foreach (@tagInfo) {
@@ -434,18 +345,18 @@ sub _showStyleBlog {
         # Example: 004, usability, UserA, UserB, UserC, UserD
         # SMELL: This format is a quick hack for easy sorting, parsing, and
         # for fast rendering
-        if (/$lineRegex/o) {
+        if (/$lineRegex/) {
             $num   = $1;
             $tag   = $2;
             $users = $3;
             $seen{$tag} = lc $1;
             if ( $users =~ /\b$user\b/ ) { # we tagged this topic
-                $line = "<a rel='nofollow' class='tagmeTag' href='" . $topic .
+	        $line = "<a class='tagmeTag' href='" . $topic .
   	        "?tpaction=remove;tag=" . &_urlEncode($tag) . "'>". $tag .
 		"</a> ";
 		$seen_my{$tag} = _wrapHtmlTagControl($line);
             } else {                       # others tagged it
-                $line = "<a rel='nofollow' class='tagmeTag' href='" . $topic .
+	        $line = "<a class='tagmeTag' href='" . $topic .
   	        "?tpaction=add;tag=" . &_urlEncode($tag) . "'>". $tag .
 		"</a> ";
 		$line .= _imgTag( 'tag_remove', 'Force untagging',
@@ -457,17 +368,15 @@ sub _showStyleBlog {
 
     if ($normalizeTagInput) {
         # plain sort can be used and should be just a little faster
-        $text .= "<p class='tagmeBlog'><b>" .
-	    ($userAgnostic ? '' : 'My ') . "Tags on this topic: </b>" . 
-	    join( ' ', map { $seen_my{$_} } sort keys(%seen_my) ) .
+        $text .= "<p class='tagmeBlog'><b>My Tags on this topic: </b>" . 
+	    join( ' ', map { $seen_my{$_} } sort keys(%seen_my) ) . 
 	        "<br /><i>click to untag</i></p>";
         $text .= "<p class='tagmeBlog'><b>Tags on this topic by others: </b>". 
 	    join( ' ', map { $seen_others{$_} } sort keys(%seen_others) ) . 
 	        "<br /><i>click tag to also tag with, click delete icon to force untag by all</i></p>" if %seen_others;
     } else {
         # uppercase characters are possible, so sort with lowercase comparison
-        $text .= "<p class='tagmeBlog'><b>" .
-	    ($userAgnostic ? '' : "My ") . "Tags on this topic: </b>" . 
+        $text .= "<p class='tagmeBlog'><b>My Tags on this topic: </b>" . 
             join( ' ', map { $seen_my{$_} } sort { lc $a cmp lc $b } keys(%seen_my) ) .
 	        "<br /><i>click to untag</i></p>";
         $text .= "<p class='tagmeBlog'><b>Tags on this topic by others: </b>" . 
@@ -483,7 +392,7 @@ sub _showStyleBlog {
 	my @seenTopic = ();
 	my $topicIsRelated = 0;
 	foreach my $line (@tagInfo) {
-	    if ( $line =~ /$lineRegex/o ) {
+	    if ( $line =~ /$lineRegex/ ) {
 		$num   = $1;
                 $tag   = $2;
 		push (@seenTopic, $tag);
@@ -504,7 +413,7 @@ sub _showStyleBlog {
     if ( %related ) {
         $text .= "<p class='tagmeBlog'><b>Related tags:</b> ";
 	foreach my $tag (keys %related) {
-	    $text .= "<a rel='nofollow' class='tagmeTag' href='" . $topic .
+	    $text .= "<a class='tagmeTag' href='" . $topic .
   	        "?tpaction=add;tag=" . &_urlEncode($tag) . "'>". $tag .
 		    "</a> ";
 	}
@@ -512,7 +421,7 @@ sub _showStyleBlog {
     }
 
     # Bundles, space or commas-seprated of titles: and tags
-    my $bundles = $TWiki::cfg{TagMePlugin}{Bundles} || '';
+    my $bundles = TWiki::Func::getPluginPreferencesValue('BUNDLES');
     if ( defined($bundles) && $bundles =~ /\S/ ) {
 	my $tagsep = ( $bundles =~ /[^,]*/ ) ? qr/[\,\s]+/ :  qr/\s*\,+\s*/;
 	my $listsep = '';
@@ -525,7 +434,7 @@ sub _showStyleBlog {
 		    $text .= "<span class='tagmeTagNoclick'>" . $tag . 
 			"</span> ";
 		} else {
-		    $text .= "<a rel='nofollow' class='tagmeTag' href='" . $topic .
+		    $text .= "<a class='tagmeTag' href='" . $topic .
 			"?tpaction=autonewadd;tag=" . &_urlEncode($tag) . 
 			    "'>". $tag . "</a> ";
 		}
@@ -542,46 +451,39 @@ sub _showStyleBlog {
     }
 
     if ( @notSeen ) {
-        $text .= "<p class='tagmeBlog'><b>Available tags:</b> ";
+        $text .= "<p class='tagmeBlog'><b>Available known tags:</b> ";
 	foreach my $tag (@notSeen) {
-	    $text .= "<a rel='nofollow' class='tagmeTag' href='" . $topic .
+	    $text .= "<a class='tagmeTag' href='" . $topic .
   	        "?tpaction=add;tag=" . &_urlEncode($tag) . "'>". $tag .
 		"</a>";
 	    if ($tagCount{$tag}) {
 		$text .= "<span class=\"tagMeVoteCount\">($tagCount{$tag})</span>";
 	    } else {
-		if ( _canChange() ) {
-		    $text .= _imgTag( 'tag_remove', 'Delete tag',
-				      'deletethetag', $tag, $tagMode );
-		}
+		$text .= _imgTag( 'tag_remove', 'Delete tag',
+				  'deletethetag', $tag, $tagMode );
 	    }
 	    $text .= " ";
 	}
-	$text .= "<br /><i>click to tag with" .
-            (_canChange() ? ", click delete icon to delete unused tags" : '') .
-            "</i></p>";
+	$text .= "<br /><i>click to tag with, click delete icon to delete unused tags</i></p>"
     }
 
     # create and add tag
-    if ( _canChange() ) {
-        $text .= "<p class='tagmeBlog'><b>Tag with a new tag:</b>
-            <form name='createtag' style='display:inline'>
-            <input type='text' class='twikiInputField' name='tag' size='64' />
-            <input type='hidden' name='tpaction' value='newtagsandadd' />
-            <input type='submit' class='twikiSubmit' value='Create and Tag' />
-            </form>
-            <br /><i>You can enter multiple tags separated by spaces</i></p>";
-    }
+    $text .= "<p class='tagmeBlog'><b>Tag with a new tag:</b>
+        <form name='createtag' style='display:inline'>
+	<input type='text' class='twikiInputField' name='tag' size='64' />
+	<input type='hidden' name='tpaction' value='newtagsandadd' />
+	<input type='submit' class='twikiSubmit' value='Create and Tag' />
+	</form>
+        <br /><i>You can enter multiple tags separated by spaces</i></p>";
 
     # more
     $text .= "<p class='tagmeBlog'><b>Tags management:</b> 
-        [[$manipWeb.TagMeCreateNewTag][create tags]] -
-        [[$manipWeb.TagMeRenameTag][rename tags]] -
-	[[$manipWeb.TagMeDeleteTag][delete tags]] -
-	[[$manipWeb.TagMeViewAllTags][view all tags]] - " .
-	($userAgnostic ? '' :
-	 "[[$manipWeb.TagMeViewMyTags][view my tags]] - ") .
-	"[[$manipWeb.TagMeSearch][search with tags]]
+        [[TWiki.TagMeCreateNewTag][create tags]] -
+        [[TWiki.TagMeRenameTag][rename tags]] -
+	[[TWiki.TagMeDeleteTag][delete tags]] -
+	[[TWiki.TagMeViewAllTags][view all tags]] -
+	[[TWiki.TagMeViewMyTags][view my tags]] -
+	[[TWiki.TagMeSearch][search with tags]]
         </p>";
     # footer
     $text .= "</fieldset>".$footer;
@@ -634,7 +536,7 @@ EOF
 "\nif (text.length > 0) {createSelectBox(text, \"$selectControlId\"); document.getElementById(\"tagmeAddNewButton\").style.display=\"inline\";}\n//]]>\n</script>";
 
     my $noscript .=
-'<noscript><a rel="nofollow" href="%SCRIPTURL{viewauth}%/%BASEWEB%/%BASETOPIC%?tagmode=nojavascript">tag this topic</a></noscript>';
+'<noscript><a href="%SCRIPTURL{viewauth}%/%BASEWEB%/%BASETOPIC%?tagmode=nojavascript">tag this topic</a></noscript>';
 
     $selectControl .=
         '<span id="tagmeAddNewButton" style="display:none;">'
@@ -670,24 +572,24 @@ sub _showAllTags {
     
     my @allTags = _readAllTags();
     return '' if scalar @allTags == 0;
-  
-    my $qWeb      = defined($attr->{web}) ? $attr->{web} : '';
-    $qWeb =~ s:\.:/:g;
-    my $qTopic    = defined($attr->{topic}) ? $attr->{topic} : '';
-    my $exclude   = defined($attr->{exclude}) ? $attr->{exclude} : '';
-    my $by        = defined($attr->{by}) ? $attr->{by} : '';
-    my $format    = defined($attr->{format}) ? $attr->{format} : '';
-    my $header    = defined($attr->{header}) ? $attr->{header} : '';
-    my $separator = defined($attr->{separator}) ? $attr->{separator} : '';
-    my $footer    = defined($attr->{footer}) ? $attr->{footer} : '';
-    my $minSize   = defined($attr->{minsize}) ? $attr->{minsize} : '';
-    my $maxSize   = defined($attr->{maxsize}) ? $attr->{maxsize} : '';
-    my $minCount  = defined($attr->{mincount}) ? $attr->{mincount} : '';
+    
+    my $qWeb      = TWiki::Func::extractNameValuePair( $attr, 'web' );
+    my $qTopic    = TWiki::Func::extractNameValuePair( $attr, 'topic' );
+    my $exclude   = TWiki::Func::extractNameValuePair( $attr, 'exclude' );
+    my $by        = TWiki::Func::extractNameValuePair( $attr, 'by' );
+    my $format    = TWiki::Func::extractNameValuePair( $attr, 'format' );
+    my $header    = TWiki::Func::extractNameValuePair( $attr, 'header' );
+    my $separator = TWiki::Func::extractNameValuePair( $attr, 'separator' );
+    my $footer    = TWiki::Func::extractNameValuePair( $attr, 'footer' );
+    my $minSize   = TWiki::Func::extractNameValuePair( $attr, 'minsize' );
+    my $maxSize   = TWiki::Func::extractNameValuePair( $attr, 'maxsize' );
+    my $minCount  = TWiki::Func::extractNameValuePair( $attr, 'mincount' );
 
     $minCount = 1 if !defined($minCount) || $qWeb || $qTopic || $exclude || $by;
 
     # a comma separated list of 'selected' options (for html forms)
-    my $selection = defined($attr->{selection}) ? $attr->{selection} : '';
+    my $selection = TWiki::Func::extractNameValuePair( $attr, 'selection' )
+      || '';
     my %selected = map { $_ => 1 } split( /,\s*/, $selection );
 
     $topicsRegex = '';
@@ -734,7 +636,6 @@ sub _showAllTags {
                 my $tag = $_;
                 $line = $format;
                 $line =~ s/\$tag/$tag/go;
-                $line =~ s/\$manipweb/$manipWeb/g;
                 my $marker = '';
                 $marker = ' selected="selected" ' if ( $selected{$tag} );
                 $line =~ s/\$marker/$marker/g;
@@ -763,7 +664,7 @@ sub _showAllTags {
             my $num     = '';
             my $users   = '';
             foreach $line (@tagInfo) {
-                if ( $line =~ /$lineRegex/o ) {
+                if ( $line =~ /$lineRegex/ ) {
                     $num   = $1;
                     $tag   = $2;
                     $users = $3;
@@ -837,7 +738,6 @@ sub _showAllTags {
                 $line =~ s/\$size/$size/go;
                 $line =~ s/\$count/$tagCount{$_}/go;
                 $line =~ s/\$order/$order{$_}/go;
-                $line =~ s/\$manipweb/$manipWeb/g;
                 $line;
               } @tags
         );
@@ -849,24 +749,26 @@ sub _showAllTags {
 sub _queryTag {
     my ($attr) = @_;
 
-    my $qWeb   = defined($attr->{web}) ? $attr->{web} : '';
-    my $qTopic = defined($attr->{topic}) ? $attr->{topic} : '';
-    my $qTag = _urlDecode( defined($attr->{tag}) ? $attr->{tag} : '' );
-    my $refine = $attr->{refine} || $TWiki::cfg{TagMePlugin}{AlwaysRefine} ||
-	'';
-    my $qBy       = defined($attr->{by}) ? $attr->{by} : '';
-    my $noRelated = defined($attr->{norelated}) ? $attr->{norelated} : '';
-    my $noTotal   = defined($attr->{nototal}) ? $attr->{nototal} : '';
-    my $sort =  $attr->{sort} || 'tagcount';
-    my $format = $attr->{format} || $tagQueryFormat;
-    my $separator = defined($attr->{separator}) ? $attr->{separator} : "\n";
-    my $minSize      = defined($attr->{minsize}) ? $attr->{minsize} : '';
-    my $maxSize      = defined($attr->{maxsize}) ? $attr->{maxsize} : '';
-    my $resultLimit  = defined($attr->{limit}) ? $attr->{limit} : '';
-    my $formatHeader = defined($attr->{header}) ? $attr->{header} :
-	'---+++ $web';
-    my $formatFooter = defined($attr->{footer}) ? $attr->{footer} :
-      'Showing $limit out of $count results $showmore';
+    my $qWeb   = TWiki::Func::extractNameValuePair( $attr, 'web' );
+    my $qTopic = TWiki::Func::extractNameValuePair( $attr, 'topic' );
+    my $qTag = _urlDecode( TWiki::Func::extractNameValuePair( $attr, 'tag' ) );
+    my $refine = TWiki::Func::extractNameValuePair( $attr, 'refine' )
+      || TWiki::Func::getPluginPreferencesFlag('ALWAYS_REFINE');
+    my $qBy       = TWiki::Func::extractNameValuePair( $attr, 'by' );
+    my $noRelated = TWiki::Func::extractNameValuePair( $attr, 'norelated' );
+    my $noTotal   = TWiki::Func::extractNameValuePair( $attr, 'nototal' );
+    my $sort = TWiki::Func::extractNameValuePair( $attr, 'sort' ) || 'tagcount';
+    my $format = TWiki::Func::extractNameValuePair( $attr, 'format' )
+      || $tagQueryFormat;
+    my $separator = TWiki::Func::extractNameValuePair( $attr, 'separator' )
+      || "\n";
+    my $minSize      = TWiki::Func::extractNameValuePair( $attr, 'minsize' );
+    my $maxSize      = TWiki::Func::extractNameValuePair( $attr, 'maxsize' );
+    my $resultLimit  = TWiki::Func::extractNameValuePair( $attr, 'limit' );
+    my $formatHeader = TWiki::Func::extractNameValuePair( $attr, 'header' )
+      || '---+++ $web';
+    my $formatFooter = TWiki::Func::extractNameValuePair( $attr, 'footer' )
+      || 'Showing $limit out of $count results $showmore';
 
     return '__Note:__ Please select a tag' unless ($qTag);
 
@@ -914,7 +816,7 @@ sub _queryTag {
         @tags   = ();
         %sawTag = ();
         foreach my $line (@tagInfo) {
-            if ( $line =~ /$lineRegex/o ) {
+            if ( $line =~ /$lineRegex/ ) {
                 $num   = $1;
                 $tag   = $2;
                 $users = $3;
@@ -1106,10 +1008,10 @@ sub _printTagLink {
     foreach my $tag ( split( /,\s*/, $qTag ) ) {
         my $text = $tagLinkFormat;
         if ($refine) {
-            $text = '<a rel="nofollow" href="'
+            $text = '[['
               . TWiki::Func::getCgiQuery()->url( -path_info => 1 ) . '?'
               . TWiki::Func::getCgiQuery()->query_string();
-            $text .= ";tag=" . _urlEncode($tag) . '">' . $tag . '</a>';
+            $text .= ";tag=" . _urlEncode($tag) . '][' . $tag . ']]';
         }
 
         # urlencode characters
@@ -1130,17 +1032,12 @@ sub _printTagLink {
 sub _newTag {
     my ($attr) = @_;
 
-    my $tag = defined($attr->{tag}) ? $attr->{tag} : '';
-    my $note = defined($attr->{note}) ? $attr->{note} : '';
-    my $silent = defined($attr->{silent}) ? $attr->{silent} : '';
+    my $tag = TWiki::Func::extractNameValuePair( $attr, 'tag' );
+    my $note = TWiki::Func::extractNameValuePair( $attr, 'note' ) || '';
+    my $silent = TWiki::Func::extractNameValuePair( $attr, 'silent' );
 
-    my $query = TWiki::Func::getCgiQuery();
-    my $postChangeRequest = $query->param('postChangeRequest') || '';
-    if ($postChangeRequest) {
-        return _handlePostChangeRequest( 'create', undef, $tag, $note );
-    }
-    if ( !_canChange() || $user =~ /^(TWikiGuest|guest)$/ ) {
-        return _htmlErrorFeedbackChangeMessage( 'create', $note );
+    if ( $user =~ /^(TWikiGuest|guest)$/ ) {
+        return _wrapHtmlErrorFeedbackMessage( "<nop>$user cannot add new tags", $note );
     }
 
     $tag = _makeSafeTag($tag);
@@ -1153,12 +1050,12 @@ sub _newTag {
     }
     else {
         push( @allTags, $tag );
-        writeAllTags(\@allTags);
+        writeAllTags(@allTags);
         _writeLog("New tag '$tag'");
         my $query = TWiki::Func::getCgiQuery();
         my $from  = $query->param('from');
         if ($from) {
-            $note = '<a rel="nofollow" href="%SCRIPTURL{viewauth}%/%URLPARAM{"from"}%?tpaction=add;tag=%URLPARAM{newtag}%">'
+            $note = '<a href="%SCRIPTURL{viewauth}%/%URLPARAM{"from"}%?tpaction=add;tag=%URLPARAM{newtag}%">'
                   . 'Add tag "%URLPARAM{newtag}%" to %URLPARAM{"from"}%</a>%BR%'
                   . $note;
         }
@@ -1181,7 +1078,7 @@ sub _makeSafeTag {
     else {
         $tag =~ s/[\x01-\x1f^\#\,\'\"\|\*]//go;    # strip #,'"|*
     }
-    $tag = substr($tag, 0, $maxTagLen) if ( length($tag) > $maxTagLen ); # limit tag length
+    $tag =~ s/^(.{30}).*/$1/;                      # limit to 30 characters
     $tag =~ s/^\s*//;                              # trim spaces at start
     $tag =~ s/\s*$//;                              # trim spaces at end
     return $tag;
@@ -1193,8 +1090,8 @@ sub _makeSafeTag {
 sub _addTag {
     my ( $attr ) = @_;
 
-    my $addTag = defined($attr->{tag}) ? $attr->{tag} : '';
-    my $noStatus = defined($attr->{nostatus}) ? $attr->{nostatus} : '';
+    my $addTag = TWiki::Func::extractNameValuePair( $attr, 'tag' );
+    my $noStatus = TWiki::Func::extractNameValuePair( $attr, 'nostatus' );
 
     my $webTopic = "$web.$topic";
     my @tagInfo  = _readTagInfo($webTopic);
@@ -1209,56 +1106,50 @@ sub _addTag {
         $text .= _wrapHtmlFeedbackErrorInline("tag not added, it needs to be created first");
 
     } elsif ( TWiki::Func::topicExists( $web, $topic ) ) {
-	if ( _canTag() ) {
-	    foreach my $line (@tagInfo) {
-		if ( $line =~ /$lineRegex/o ) {
-		    $num   = $1;
-		    $tag   = $2;
-		    $users = $3;
-		    if ( $tag eq $addTag ) {
-			if ( $users =~ /\b$user\b/ ) {
-			    $text .=
-			      _wrapHtmlFeedbackErrorInline(
-				"you already added this tag");
-			}
-			else {
+        foreach my $line (@tagInfo) {
+            if ( $line =~ /$lineRegex/ ) {
+                $num   = $1;
+                $tag   = $2;
+                $users = $3;
+                if ( $tag eq $addTag ) {
+                    if ( $users =~ /\b$user\b/ ) {
+                        $text .=
+                          _wrapHtmlFeedbackErrorInline(
+                            "you already added this tag");
+                    }
+                    else {
 
-			    # add user to existing tag
-			    $line =
-				_tagDataLine( $num + 1, $tag, $users, $user );
-			    $text .= _wrapHtmlFeedbackInline(
-				"added tag vote on \"$tag\"");
-			    _writeLog("Added tag vote on '$tag'");
-			}
-		    }
-		}
-		push( @result, $line );
-	    }
-	    unless ($text) {
+                        # add user to existing tag
+                        $line = _tagDataLine( $num + 1, $tag, $users, $user );
+                        $text .=
+                          _wrapHtmlFeedbackInline("added tag vote on \"$tag\"");
+                        _writeLog("Added tag vote on '$tag'");
+                    }
+                }
+            }
+            push( @result, $line );
+        }
+        unless ($text) {
 
-		# tag does not exist yet
-		if ($addTag) {
-		    push( @result, "001, $addTag, $user" );
-		    $text .= _wrapHtmlFeedbackInline("added tag \"$addTag\"");
-		    _writeLog("Added tag '$addTag'");
-		}
-		else {
-		    $text .= _wrapHtmlFeedbackInline(" (please select a tag)");
-		}
-	    }
-	    @tagInfo = reverse sort(@result);
-	    _writeTagInfo( $webTopic, @tagInfo );
-	}
-	else {
-	    $text .= "You are not allowed to add tags to this topic";
-	}
+            # tag does not exist yet
+            if ($addTag) {
+                push( @result, "001, $addTag, $user" );
+                $text .= _wrapHtmlFeedbackInline(" added tag \"$addTag\"");
+                _writeLog("Added tag '$addTag'");
+            }
+            else {
+                $text .= _wrapHtmlFeedbackInline(" (please select a tag)");
+            }
+        }
+        @tagInfo = reverse sort(@result);
+        _writeTagInfo( $webTopic, @tagInfo );
+
     } else {
         $text .= _wrapHtmlFeedbackErrorInline("tag not added, topic does not exist");
     }
 
     # Suppress status? FWM, 03-Oct-2006
-    return _showDefault(tagInfo => \@tagInfo,
-			status => ($noStatus ? '' : $text) );
+    return _showDefault(@tagInfo) . ( ($noStatus) ? '' : $text );
 }
 
 # =========================
@@ -1267,20 +1158,16 @@ sub _newTagsAndAdd {
     my ( $attr ) = @_;
     my $text;
     my $args;
-    my $tags = defined($attr->{tag}) ? $attr->{tag} : '';
-    my $noStatus = defined($attr->{nostatus}) ? $attr->{nostatus} : '';
+    my $tags = TWiki::Func::extractNameValuePair( $attr, 'tag' );
     $tags =~ s/^\s+//o;
     $tags =~ s/\s+$//o;
     $tags =~ s/\s\s+/ /go;
     foreach my $tag ( split( ' ', $tags )) {
 	$tag = _makeSafeTag($tag);
 	if ($tag) {
-	    $args = { tag => $tag };
+	    $args = 'tag="' . $tag . '"';
 	    $text = _newTag($args);
-	    unless ( $text =~ /twikiAlert/ ) {
-		$args->{nostatus} = 'on' if ( $noStatus );
-		$text = _addTag($args);
-	    }
+	    $text = _addTag($args) unless $text =~ /twikiAlert/;
 	}
     }
     return $text;
@@ -1291,8 +1178,8 @@ sub _newTagsAndAdd {
 sub _removeTag {
     my ( $attr ) = @_;
 
-    my $removeTag = defined($attr->{tag}) ? $attr->{tag} : '';
-    my $noStatus = defined($attr->{nostatus}) ? $attr->{nostatus} : '';
+    my $removeTag = TWiki::Func::extractNameValuePair( $attr, 'tag' );
+    my $noStatus = TWiki::Func::extractNameValuePair( $attr, 'nostatus' );
 
     my $webTopic = "$web.$topic";
     my @tagInfo  = _readTagInfo($webTopic);
@@ -1302,58 +1189,49 @@ sub _removeTag {
     my $users    = '';
     my $found    = 0;
     my @result   = ();
-    if ( _canTag() ) {
-	foreach my $line (@tagInfo) {
-	    if ( $line =~ /$lineRegex/o ) {
-		$num   = $1;
-		$tag   = $2;
-		$users = $3;
-		if ( $tag eq $removeTag ) {
-		    my %userHash = map { $_ => 1 } split(/, */, $users);
-		    if ( $userHash{$user} ) {
-			$found = 1;
-			$users = join(', ', sort keys %userHash);
-			$num--;
-			if ($num) {
-			    $line = _tagDataLine( $num, $tag, $users );
-			    $text .=
-			      _wrapHtmlFeedbackInline(
-				"removed my tag vote on \"$tag\"");
-			    _writeLog("Removed tag vote on '$tag'");
-			    push( @result, $line );
-			}
-			else {
-			    $text .=
-			      _wrapHtmlFeedbackInline("removed tag \"$tag\"");
-			    _writeLog("Removed tag '$tag'");
-			}
-		    }
-		}
-		else {
-		    push( @result, $line );
-		}
-	    }
-	    else {
-		push( @result, $line );
-	    }
-	}
-	if ($found) {
-	    @tagInfo = reverse sort(@result);
-	    _writeTagInfo( $webTopic, @tagInfo );
-	}
-	else {
-	    $text .=
-		_wrapHtmlFeedbackErrorInline("Tag \"$removeTag\" not found");
-	}
+    foreach my $line (@tagInfo) {
+
+        if ( $line =~ /^0*([0-9]+), ([^,]+)(, .*)/ ) {
+            $num   = $1;
+            $tag   = $2;
+            $users = $3;
+            if ( $tag eq $removeTag ) {
+                if ( $users =~ s/, $user\b// ) {
+                    $found = 1;
+                    $num--;
+                    if ($num) {
+                        $line = _tagDataLine( $num, $tag, $users );
+                        $text .=
+                          _wrapHtmlFeedbackInline(
+                            "removed my tag vote on \"$tag\"");
+                        _writeLog("Removed tag vote on '$tag'");
+                        push( @result, $line );
+                    }
+                    else {
+                        $text .=
+                          _wrapHtmlFeedbackInline("removed tag \"$tag\"");
+                        _writeLog("Removed tag '$tag'");
+                    }
+                }
+            }
+            else {
+                push( @result, $line );
+            }
+        }
+        else {
+            push( @result, $line );
+        }
+    }
+    if ($found) {
+        @tagInfo = reverse sort(@result);
+        _writeTagInfo( $webTopic, @tagInfo );
     }
     else {
-	$text = _wrapHtmlFeedbackErrorInline(
-	    "You are not allowed to remove tags from this topic");
+        $text .= _wrapHtmlFeedbackErrorInline("Tag \"$removeTag\" not found");
     }
 
     # Suppress status? FWM, 03-Oct-2006
-    return _showDefault(tagInfo => \@tagInfo,
-			status => ($noStatus ? '' : $text));
+    return _showDefault(@tagInfo) . ( ($noStatus) ? '' : $text );
 }
 
 # =========================
@@ -1361,48 +1239,43 @@ sub _removeTag {
 sub _removeAllTag {
     my ( $attr ) = @_;
 
-    my $removeTag = defined($attr->{tag}) ? $attr->{tag} : '';
-    my $noStatus = defined($attr->{nostatus}) ? $attr->{nostatus} : '';
+    my $removeTag = TWiki::Func::extractNameValuePair( $attr, 'tag' );
+    my $noStatus = TWiki::Func::extractNameValuePair( $attr, 'nostatus' );
 
     my $webTopic = "$web.$topic";
     my @tagInfo  = _readTagInfo($webTopic);
     my $text     = '';
     my $tag      = '';
     my $num      = '';
+    my $users    = '';
     my $found    = 0;
     my @result   = ();
-    if ( _canTag() ) {
-	foreach my $line (@tagInfo) {
-	    if ( $line =~ /$lineRegex/o ) {
-		$num   = $1;
-		$tag   = $2;
-		if ( $tag eq $removeTag ) {
-		    $text .= _wrapHtmlFeedbackInline("removed tag \"$tag\"");
-		    _writeLog("Removed tag '$tag'");
-		    $found = 1;
-		} else {
-		    push( @result, $line );
-		}
-	    } else {
-		push( @result, $line );
-	    }
-	}
-	if ($found) {
-	    @tagInfo = reverse sort(@result);
-	    _writeTagInfo( $webTopic, @tagInfo );
-	} else {
-	    $text .=
-		_wrapHtmlFeedbackErrorInline("Tag \"$removeTag\" not found");
-	}
+    foreach my $line (@tagInfo) {
+
+        if ( $line =~ /^0*([0-9]+), ([^,]+)(, .*)/ ) {
+            $num   = $1;
+            $tag   = $2;
+            $users = $3;
+            if ( $tag eq $removeTag ) {
+		$text .= _wrapHtmlFeedbackInline("removed tag \"$tag\"");
+		_writeLog("Removed tag '$tag'");
+		$found = 1;
+            } else {
+                push( @result, $line );
+            }
+        } else {
+            push( @result, $line );
+        }
     }
-    else {
-	$text = _wrapHtmlFeedbackErrorInline(
-	    "You are not allowed to remove tags from this topic");
+    if ($found) {
+        @tagInfo = reverse sort(@result);
+        _writeTagInfo( $webTopic, @tagInfo );
+    } else {
+        $text .= _wrapHtmlFeedbackErrorInline("Tag \"$removeTag\" not found");
     }
 
     # Suppress status? FWM, 03-Oct-2006
-    return _showDefault(tagInfo => \@tagInfo,
-			status => ($noStatus ? '' : $text));
+    return _showDefault(@tagInfo) . ( ($noStatus) ? '' : $text );
 }
 
 # =========================
@@ -1424,7 +1297,7 @@ sub _imgTag {
 
     if ($tag) {
         $text =
-"<a rel=\"nofollow\" class=\"tagmeAction $image\" href=\"%SCRIPTURL{viewauth}%/%BASEWEB%/%BASETOPIC%?"
+"<a class=\"tagmeAction $image\" href=\"%SCRIPTURL{viewauth}%/%BASEWEB%/%BASETOPIC%?"
           . "tpaction=$action;tag="
           . _urlEncode($tag)
           . ";tagmode=$tagMode\">";
@@ -1440,63 +1313,13 @@ sub _imgTag {
 }
 
 # =========================
-sub _workAreaDir {
-    if ( $TWiki::cfg{TagMePlugin}{SplitSpace} ) {
-	my ($w, $withTopic) = @_;
-	$w =~ s:/:.:g;
-	$w =~ s/\.[^.]+$// if ( $withTopic );
-	$w = _manipWeb($w);
-	return TWiki::Func::getPubDir($w) . "/$w/.tags";
-    }
-    else {
-	return $workAreaDir;
-    }
-}
-
-# =========================
-use Sys::Hostname;
-
-sub _saveFile {
-    my ($file, $text) = @_;
-    _writeDebug("_saveFile($file, ...)");
-    my $dir = $file;
-    if ( $dir =~ s:/[^/]+$:: ) {
-	mkdir($dir, 0750) unless ( -d $dir );
-    }
-    my $tmpFile = "$file.$$." . hostname() . '.tmp';
-    open(FILE, ">$tmpFile") or do {
-	_writeWarning("open: >$tmpFile: $!");
-	return 0;
-    };
-    print FILE $text or do {
-	_writeWarning("print: >$tmpFile: $!");
-	return 0;
-    };
-    close(FILE) or do {
-	_writeWarning("close: >$tmpFile: $!");
-	return 0;
-    };
-    rename($tmpFile, $file) or do {
-	_writeWarning("rename: $tmpFile -> $file: $!");
-	return 0;
-    };
-    return 1
-}
-
-# =========================
 sub _getTagInfoList {
-    my @list;
-    my $workDir = _workAreaDir($web);
-    if ( opendir( DIR, $workDir ) ) {
-        my @files = readdir(DIR);
+    my @list = ();
+    if ( opendir( DIR, "$workAreaDir" ) ) {
+        my @files =
+          grep { !/^_tags_all\.txt$/ } grep { /^_tags_.*\.txt$/ } readdir(DIR);
         closedir DIR;
-	splice(@files, 0, 2); # eliminate . and ..
-	for ( @files ) {
-	    if ( /^_tags_(.*)\.txt$/ ) {
-		next if ( $1 eq 'all' );
-		push(@list, $1);
-	    }
-	}
+        @list = map { s/^_tags_(.*)\.txt$/$1/; $_ } @files;
     }
     return sort @list;
 }
@@ -1506,14 +1329,8 @@ sub _readTagInfo {
     my ($webTopic) = @_;
 
     $webTopic =~ s/[\/\\]/\./g;
-    my $workDir = _workAreaDir($webTopic, 1);
-    my $text = TWiki::Func::readFile("$workDir/_tags_$webTopic.txt");
+    my $text = TWiki::Func::readFile("$workAreaDir/_tags_$webTopic.txt");
     my @info = grep { /^[0-9]/ } split( /\n/, $text );
-    if ( $userAgnostic ) {
-	for ( @info ) {
-	    s/$lineRegex/001, $2, $user/o;
-	}
-    }
     return @info;
 }
 
@@ -1521,13 +1338,12 @@ sub _readTagInfo {
 sub _writeTagInfo {
     my ( $webTopic, @info ) = @_;
     $webTopic =~ s/[\/\\]/\./g;
-    my $workDir = _workAreaDir($webTopic, 1);
-    my $file = "$workDir/_tags_$webTopic.txt";
+    my $file = "$workAreaDir/_tags_$webTopic.txt";
     if ( scalar @info ) {
         my $text =
           "# This file is generated, do not edit\n"
           . join( "\n", reverse sort @info ) . "\n";
-        _saveFile( $file, $text );
+        TWiki::Func::saveFile( $file, $text );
     }
     elsif ( -e $file ) {
         unlink($file);
@@ -1535,58 +1351,23 @@ sub _writeTagInfo {
 }
 
 # =========================
-sub renameOrCopyTagInfo {
-    my ( $oldWebTopic, $newWebTopic, $opr ) = @_;
+sub renameTagInfo {
+    my ( $oldWebTopic, $newWebTopic ) = @_;
 
     $oldWebTopic =~ s/[\/\\]/\./g;
     $newWebTopic =~ s/[\/\\]/\./g;
-    my $workDirO = _workAreaDir($oldWebTopic, 1);
-    my $workDirN = _workAreaDir($newWebTopic, 1);
-    my $oldFile = "$workDirO/_tags_$oldWebTopic.txt";
-    my $newFile = "$workDirN/_tags_$newWebTopic.txt";
+    my $oldFile = "$workAreaDir/_tags_$oldWebTopic.txt";
+    my $newFile = "$workAreaDir/_tags_$newWebTopic.txt";
     if ( -e $oldFile ) {
-	my $newTrash = $newWebTopic =~ /^Trash\./;
-	# the tag file is moved to Trash so that it can be undeleted.
-	if ( -d $workDirN || $newTrash ) {
-	    my $text = TWiki::Func::readFile($oldFile);
-	    if ( $workDirO ne $workDirN && !$newTrash ) {
-		# If there are missing tags in the tag list of the destination
-		# (_tags_all.txt), add them.
-		my @tagsOfTopic;
-		for ( split(/\n/, $text) ) {
-		    if ( /$lineRegex/ ) {
-			push(@tagsOfTopic, $2);
-		    }
-		}
-		my $newWeb = $newWebTopic;
-		$newWeb =~ s/\.[^.]+$//;
-		my %tagOfNewWeb = map { $_ => 1 }  _readAllTags($newWeb);
-		my $nTags = keys %tagOfNewWeb;
-		@tagOfNewWeb{@tagsOfTopic} = (1) x @tagsOfTopic;
-		my @tagsOfNewWeb = keys %tagOfNewWeb;
-		if ( $nTags != @tagsOfNewWeb ) {
-		    writeAllTags(\@tagsOfNewWeb, $newWeb);
-		}
-	    }
-	    mkdir($workDirN, 0750) if ( $newTrash && ! -d $workDirN );
-	    _saveFile( $newFile, $text );
-	}
-	else {
-	    _writeWarning(
-"tags are not copied from $oldWebTopic to $newWebTopic because " .
-"the destination web is not using tags"
-	    );
-	}
-	unlink($oldFile) if ( $opr ne 'copy' );
+        my $text = TWiki::Func::readFile($oldFile);
+        TWiki::Func::saveFile( $newFile, $text );
+        unlink($oldFile);
     }
 }
 
 # =========================
 sub _readAllTags {
-    my ($w) = @_;
-    $w ||= $web;
-    my $workDir = _workAreaDir($w);
-    my $text = TWiki::Func::readFile("$workDir/_tags_all.txt");
+    my $text = TWiki::Func::readFile("$workAreaDir/_tags_all.txt");
 
     #my @tags = grep{ /^[${alphaNum}_]/ } split( /\n/, $text );
     # we assume that this file has been written by TagMe, so tags should be
@@ -1599,13 +1380,11 @@ sub _readAllTags {
 # Sorting of tags (lowercase comparison) is done just before writing of
 # the _tags_all file.
 sub writeAllTags {
-    my ($tagsRef, $w) = @_;
-    $w ||= $web;
+    my (@tags) = @_;
     my $text =
       "# This file is generated, do not edit\n"
-      . join( "\n", sort { lc $a cmp lc $b } @$tagsRef ) . "\n";
-    my $workDir = _workAreaDir($w);
-    _saveFile( "$workDir/_tags_all.txt", $text );
+      . join( "\n", sort { lc $a cmp lc $b } @tags ) . "\n";
+    TWiki::Func::saveFile( "$workAreaDir/_tags_all.txt", $text );
 }
 
 # =========================
@@ -1631,7 +1410,7 @@ sub _modifyTag {
 
     my @newAllTags = grep( !/^\Q$oldTag\E$/, @allTags );
     push( @newAllTags, $newTag ) if ($newTag);
-    writeAllTags(\@newAllTags);
+    writeAllTags(@newAllTags);
 
     my $webTopic = '';
     foreach $webTopic ( _getTagInfoList() ) {
@@ -1644,7 +1423,7 @@ sub _modifyTag {
         my @result     = ();
         foreach my $line (@tagInfo) {
 
-            if ( $line =~ /^($lineRegex)$/o ) {
+            if ( $line =~ /^($lineRegex)$/ ) {
                 $line  = $1;
                 $num   = $2;
                 $tag   = $3;
@@ -1683,70 +1462,34 @@ sub _modifyTag {
 }
 
 # =========================
-sub _canTag {
-    return $canTag if ( defined($canTag) );
-    return $canTag = 0 if ( $inactiveSite );
-    my $allowTopic = TWiki::Func::getPreferencesValue('ALLOWTOPICTAG') || '';
-    my $allowWeb = TWiki::Func::getPreferencesValue('ALLOWWEBTAG', $web) || '';
-    my $denyTopic = TWiki::Func::getPreferencesValue('DENYTOPICTAG') || '';
-    my $denyWeb = TWiki::Func::getPreferencesValue('DENYWEBTAG', $web) || '';
-    my $mode =
-	( $allowTopic =~ /\S/ || $allowWeb =~ /\S/ ||
-	  $denyTopic =~ /\S/ || $denyWeb =~ /\S/ ) ? 'TAG' : 'CHANGE';
-    my $wikiUserName = TWiki::Func::getWikiName();
-    return $canTag = 1
-	if ( TWiki::Func::checkAccessPermission(
-		 $mode, $wikiUserName, undef, $topic, $web, undef) );
-    return $canTag = _canChange();
-    # Everybody who can change tags needs be able to tag and untag pages.
-    # Otherwise, things get strange.
-}
-
-# =========================
 sub _canChange {
-    return $canChange if ( defined($canChange) );
-    my $session = $TWiki::Plugins::SESSION;
-    return $canChange = 0 if ( $inactiveSite );
-    my $deny = TWiki::Func::getPreferencesValue('DENY_TAG_CHANGE', $web) || '';
-    my $allow = TWiki::Func::getPreferencesValue('ALLOW_TAG_CHANGE', $web) ||
-	'';
 
-    if ( $deny =~ /\S/ || $allow =~ /\S/ ) {
-	# If either or both of DENY_TAG_CHANGE and ALLOW_TAG_CHANGE are
-	# defined, then they are used to determine tag change permission.
-	# Even if they deny tag change, site admins and web admins have
-	# tag change permission.
-	if ( $deny =~ /\S/ ) {
-	    if ( _isGroupMember($deny) ) {
-		return $canChange = $session->{security}->isAdminOrWebAdmin(
-		    $session->{user}, $web);
-	    }
-	}
-	if ( $allow =~ /\S/ ) {
-	    unless ( _isGroupMember($allow) ) {
-		return $canChange = $session->{security}->isAdminOrWebAdmin(
-		    $session->{user}, $web);
-	    }
-	}
-	return $canChange = 1;
+    my $allowModifyPrefNames =
+         TWiki::Func::getPluginPreferencesValue('ALLOW_TAG_CHANGE')
+      || TWiki::Func::getPluginPreferencesValue('ALLOW_TAG_CHANGE');
+
+    return 1 if !$allowModifyPrefNames;    # anyone is allowed to change
+
+    $allowModifyPrefNames =~ s/ //g;
+    my @groupsAndUsers = split( ",", $allowModifyPrefNames );
+    foreach (@groupsAndUsers) {
+        my $name = $_;
+        $name =~ s/.*\.//go; # Remove web prefix from Main.WikiName
+        return 1 if ( $name eq TWiki::Func::getWikiName(undef) ); # user is listed
+        return 1 if _isGroupMember( $name );
     }
-    else {
-	# If neither DENY_TAG_CHANGE or ALLOW_TAG_CHANGE is defined, then
-	# change permission to WebPreferences dictates it.
-        my $wikiUserName = TWiki::Func::getWikiName();
-	return $canChange = TWiki::Func::checkAccessPermission(
-	    'CHANGE', $wikiUserName, undef, $TWiki::cfg{WebPrefsTopicName}, $manipWeb,
-	    undef);
-    }
+
+    # this user is not in list
+    return 0;
 }
 
 # =========================
 sub _renameTag {
     my ($attr) = @_;
 
-    my $oldTag = defined($attr->{oldtag}) ? $attr->{oldtag} : '';
-    my $newTag = defined($attr->{newtag}) ? $attr->{newtag} : '';
-    my $note   = defined($attr->{note}) ? $attr->{note} : '';
+    my $oldTag = TWiki::Func::extractNameValuePair( $attr, 'oldtag' );
+    my $newTag = TWiki::Func::extractNameValuePair( $attr, 'newtag' );
+    my $note   = TWiki::Func::extractNameValuePair( $attr, 'note' ) || '';
 
     my $query = TWiki::Func::getCgiQuery();
     my $postChangeRequest = $query->param('postChangeRequest') || '';
@@ -1777,48 +1520,29 @@ sub _handlePostChangeRequest {
     my $requestLine = '';
     my $message     = '';
     my $logMessage  = '';
-    my $ctx = TWiki::Func::getContext();
-    my $inactiveSite = ref $ctx && ( $ctx->{inactive} || $ctx->{content_slave} );
-    if ( $inactiveSite ) {
-	$message = "Your request cannot be added to $tagChangeRequestLink " .
-	    "since this web is read-only: $mode, $oldTag, $newTag";
-	$logMessage = $message . " (requested by $userName)";
-    }
-    else {
-	my $date = TWiki::Time::formatTime(time(), '$day $mon $year', 'gmtime');
-	if ( $mode eq 'rename' ) {
-	    $requestLine =
-		"| Rename | $oldTag | $newTag | $userName | $date |";
-	    $message .=
+    if ( $mode eq 'rename' ) {
+        $requestLine = "| Rename | $oldTag | $newTag | $userName | %DATE% |";
+        $message .=
 "Your request to rename \"$oldTag\" to \"$newTag\" is added to $tagChangeRequestLink";
-	    $logMessage .=
-    "Posted tag rename request: from '$oldTag' to '$newTag' (requested by $userName)";
-	}
-	elsif ( $mode eq 'delete' ) {
-	    $requestLine =
-"| %RED% Delete %ENDCOLOR% | %RED% $oldTag %ENDCOLOR%  | | $userName | $date |";
-	    $message .=
+        $logMessage .=
+"Posted tag rename request: from '$oldTag' to '$newTag' (requested by $userName)";
+    }
+    elsif ( $mode eq 'delete' ) {
+        $requestLine =
+"| %RED% Delete %ENDCOLOR% | %RED% $oldTag %ENDCOLOR%  | | $userName | %DATE% |";
+        $message .=
 "Your request to delete \"$oldTag\" is added to $tagChangeRequestLink";
-	    $logMessage .=
-	      "Posted tag delete request: '$oldTag' (requested by $userName)";
-	}
-	elsif ( $mode eq 'create' ) {
-	    $requestLine =
-"| %RED% Add %ENDCOLOR% | %RED% $newTag %ENDCOLOR%  | | $userName | $date |";
-	    $message .=
-"Your request to create \"$newTag\" is added to $tagChangeRequestLink";
-	    $logMessage .=
-	      "Posted tag create request: '$newTag' (requested by $userName)";
-	}
-
-	my ( $meta, $text ) =
-	  TWiki::Func::readTopic( $manipWeb, $tagChangeRequestTopic );
-	$text =~ s/\s+$//;
-	$text .= "\n" . $requestLine;
-	TWiki::Func::saveTopic( $manipWeb, $tagChangeRequestTopic, $meta, $text,
-	    { comment => 'posted tag change request' } );
+        $logMessage .=
+          "Posted tag delete request: '$oldTag' (requested by $userName)";
     }
 
+    my ( $meta, $text ) =
+      TWiki::Func::readTopic( $installWeb, $tagChangeRequestTopic );
+    $text .= $requestLine;
+    TWiki::Func::saveTopic( $installWeb, $tagChangeRequestTopic, $meta, $text,
+        { comment => 'posted tag change request' } );
+
+    $message .= "%BR%$note" if $note;
     $message .= _htmlPostChangeRequestFormField();
 
     _writeLog($logMessage);
@@ -1833,7 +1557,7 @@ sub _handlePostChangeRequest {
 sub _modifyTagInit {
     my ( $mode, $attr ) = @_;
 
-    my $note = defined($attr->{note}) ? $attr->{note} : '';
+    my $note = TWiki::Func::extractNameValuePair( $attr, 'note' ) || '';
 
     return _htmlErrorFeedbackChangeMessage( $mode, $note ) if !_canChange();
 
@@ -1843,8 +1567,8 @@ sub _modifyTagInit {
 # =========================
 sub _deleteTag {
     my ($attr) = @_;
-    my $deleteTag = defined($attr->{oldtag}) ? $attr->{oldtag} : '';
-    my $note = defined($attr->{note}) ? $attr->{note} : '';
+    my $deleteTag = TWiki::Func::extractNameValuePair( $attr, 'oldtag' );
+    my $note = TWiki::Func::extractNameValuePair( $attr, 'note' ) || '';
 
     my $query = TWiki::Func::getCgiQuery();
     my $postChangeRequest = $query->param('postChangeRequest') || '';
@@ -1865,8 +1589,8 @@ sub _deleteTag {
 # same as above but to be used inlinr on a topic, for some styles
 sub _deleteTheTag {
     my ($attr) = @_;
-    my $deleteTag = defined($attr->{tag}) ? $attr->{tag} : '';
-    my $note = defined($attr->{note}) ? $attr->{note} : '';
+    my $deleteTag = TWiki::Func::extractNameValuePair( $attr, 'tag' );
+    my $note = TWiki::Func::extractNameValuePair( $attr, 'note' ) || '';
 
     return _htmlErrorFeedbackChangeMessage( 'delete', $note ) if !_canChange();
 
@@ -1876,15 +1600,13 @@ sub _deleteTheTag {
 
     my $changeMessage = "Tag \"$deleteTag\" is successfully deleted";
     $note = _modifyTag( $deleteTag, '', $changeMessage, $note );
-    return _showDefault(status => $note);
+    return _showDefault() . $note;
 }
 
 # =========================
 sub _wrapHtmlFeedbackMessage {
     my ( $text, $note ) = @_;
-    return defined($note) && $note ne '' ?
-	"<div class=\"tagMeNotification\">$text<div>$note</div></div>" :
-	"<span class=\"tagMeNotification\">$text</span>";
+    return "<div class=\"tagMeNotification\">$text<div>$note</div></div>";
 }
 
 # =========================
@@ -1916,7 +1638,7 @@ sub _wrapHtmlTagControl {
 sub _wrapHtmlTagMeShowForm {
     my ($text) = @_;
     return
-"<form name=\"tagmeshow\" style=\"display:inline\" action=\"%SCRIPTURL{viewauth}%/%BASEWEB%/%BASETOPIC%\" method=\"post\">$text</form>";
+"<form name=\"tagmeshow\" action=\"%SCRIPTURL{viewauth}%/%BASEWEB%/%BASETOPIC%\" method=\"post\">$text</form>";
 }
 
 # =========================
@@ -1924,22 +1646,18 @@ sub _htmlErrorFeedbackChangeMessage {
     my ( $changeMode, $note ) = @_;
 
     my $errorMessage = '%ICON{"warning"}%';
-    my $op;
-    if ( $changeMode =~ /^(create|rename|delete)$/ ) {
-	$op = $changeMode;
+    if ( $changeMode eq 'rename' ) {
+        $errorMessage .= ' You are not allowed to rename tags';
+    }
+    elsif ( $changeMode eq 'delete' ) {
+        $errorMessage .= ' You are not allowed to delete tags';
     }
     else {
-	$op = 'modify';
+        $errorMessage .= ' You are not allowed to modify tags';
     }
-    my $extraNote = '';
-    if ( $inactiveSite ) {
-	$errorMessage .= "You cannot $op tags since this web is read-only.";
-    }
-    else {
-	$errorMessage .= " You are not allowed to $op tags";
-	$extraNote =
+
+    my $extraNote =
 "But you may use this form to post a change request to $tagChangeRequestLink";
-    }
     $note = '%BR%' . $note if $note;
     $note = $extraNote . $note;
     $note .= _htmlPostChangeRequestFormField();
@@ -1984,12 +1702,6 @@ sub _writeDebug {
 }
 
 # =========================
-sub _writeWarning {
-    my ($text) = @_;
-    TWiki::Func::writeWarning("- ${pluginName}: $text");
-}
-
-# =========================
 sub _writeLog {
     my ($theText) = @_;
     if ($logAction) {
@@ -2007,18 +1719,6 @@ sub _isGroupMember {
     
     return TWiki::Func::isGroupMember ( $group, undef ) if $TWiki::Plugins::VERSION >= 1.2;
     return $TWiki::Plugins::SESSION->{user}->isInList($group);
-}
-
-# =========================
-sub _TAGMEPLUGIN_NORMALIZE_TAG_INPUT {
-    _initialize();
-    return $normalizeTagInput ? 'on' : 'off';
-}
-
-# =========================
-sub _TAGMEPLUGIN_USER_AGNOSTIC {
-    _initialize();
-    return $userAgnostic ? 'on' : 'off';
 }
 
 # =========================
