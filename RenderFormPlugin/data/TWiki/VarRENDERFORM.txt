@@ -1,9 +1,27 @@
-%META:TOPICINFO{author="TWikiContributor" date="1191140974" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354515436" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarRENDERFORM
----+++ RENDERFORM -- render TWikiForms data within a topic
-   * The =%<nop>RENDERLIST%= variable is handled by the RenderFormPlugin
-   * Syntax: =%<nop>RENDERFORM{ "ATWikiFormDefinition"}%=
-   * Example:%BR%
-     =%<nop>RENDERLIST{ "TWiki.HelpDeskForm" }%= %BR%
-   * Related: TWikiForms
+---+++ RENDERFORM -- render TWiki Forms data within a topic
+   * The =%<nop>RENDERLIST%= variable is handled by the RenderFormPlugin.
+   * Syntax: =%<nop>RENDERFORM{ "ATWikiFormDefinition" }%=
+   * Example: =%<nop>RENDERLIST{ "IT.HelpDeskForm" }%=
+   * Parameters:%STARTSECTION{parameters}%
+     | *Attribute* | *Description* | *Default / Example* |
+     | =dateformat= | overwrites the JSCALENDARDATEFORMAT preference for date fields | =dateformat="%d %b %Y"= |
+     | =donotnotify= | disables notifications | undefined / =donotnotify="on"= |
+     | =form= | (required attribute) a name of a topic with a TWiki.TWikiForms definition | undefined / =form="MyTestForm"= |
+     | =hidden= | a comma separated list of form field names to hide in all modes | undefined / =hidden="Field1,Field2"= |
+     | =hideheader= | if set, disables the form header | =hideheader="no"= |
+     | =layout= | a topic with a layout (see [[RenderFormPlugin#RenderFormPluginFormLayout][Form Layout]] section); syntax: layout="&lt;topic&gt;#&lt;layout name&gt;"; if layout name is omitted a default layout will be taken | undefined / =layout="TestFormLayout#test1"= |
+     | =mode= | render mode of the form, allowed values: create (default), edit, view (default if =topic= exists) | =mode="create"= |
+     | =onlynewtopic= | disables overwrite of existing topics | =onlynewtopic="on"= |
+     | =onlywikiname= | disallows the usage of non-[[TWiki.WikiWords]] for topic names | =onlywikiname="on"= |
+     | =order= | changes the display order of form fields; order value is a comma separated list of field names; if the order list is incomplete all missing and unhidden form fields will be added; there are special values for order: [:alpha:], [:dalpha:], [:num:] and [:dnum:], e.g. order="[:alpha:]" to sort all fields alphanumerical | undefined / =order="Field1, Field2"= |
+     | =script= | changes the behavior of edit/create modes; allowed values: save - saves the form data; edit - edit the resulting topic | =script="save"= | 
+     | =template= | a template name for predefined attributes | undefined / =template="helpdesk"= |
+     | =templatetopic= | a template topic; useful for the create mode | undefined / =templatetopic="MyHelpDeskTopicTemplate"= |
+     | =text= | the topic text;  text will be ignored if a templatetopic is defined | undefined / =text="my small topic text"= |
+     | =topic= | an existing topic for edit and view mode or a topic template name for a new topic (create mode) (e.g. <nop>TestFormDataXXXXXXXXXX) | =topic="%<nop>TOPIC%XXXXXXXXXX"= / =topic="TestFormData%<nop>SERVERTIME{$epoch}%"= |
+     | =topicparent= | a topic parent; useful for the create mode; if undefined the form topic will be used | =topicparent="%<nop>WEB%.%<nop>TOPIC%"= / =topicparent="MyHelpDesk"= |%ENDSECTION{parameters}%
+   * Category: ApplicationsAndComponentsVariables, DatabaseAndFormsVariables, EditingAndContentUpdateVariables, FormattingAndRenderingVariables, UIAndVisualizationVariables
+   * Related: RenderFormPlugin, %SYSTEMWEB%.TWikiForms
