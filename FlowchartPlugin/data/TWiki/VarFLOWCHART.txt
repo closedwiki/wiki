@@ -1,6 +1,37 @@
-%META:TOPICINFO{author="TWikiContributor" date="1295331502" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354493105" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarFLOWCHART
----+++ FLOWCHART{ _attributes_ } -- create a flowchart from topic text
-
-   * The =%<nop>FLOWCHART%= variable is handled by the FlowchartPlugin. For more information please see the [[FlowchartPlugin][plugin topic]], or the [[FlowchartPluginExample][example]].
+---+++ FLOWCHART{} -- create a flowchart from topic text
+   * The =%<nop>FLOWCHART{}%=, =%<nop>FLOWCHART_START%= and =%<nop>FLOWCHART_STOP%= variables are handled by the FlowchartPlugin.
+   * Syntax: =%<nop>FLOWCHART{}%= ... =%<nop>FLOWCHART_START%= ... =%<nop>FLOWCHART_STOP%=
+   * Parameters of =%<nop>FLOWCHART{}%=:
+     | *Parameter* | *Description* |
+     | =item-w= | Width for the flowchart's itens area |
+     | =item-h= | Height for the flowchart's itens |
+     | =area-w= | Width of the area of the flowchart's itens |
+     | =area-h= | Height of the area of the flowchart's itens |
+     | =percent= | Percentage of the PNG size presented in relation to the standard of the generated SVG |
+     | =text-size= | Size in pixels of the font text |
+     | =tag-style= | Style for the =img= tag |
+   * Example:
+     %BR% =%<nop>FLOWCHART%=
+     %BR% =%<nop>FLOWCHART_START%=
+     %BR% =---++ Flowchart Start=
+     %BR% =<nop>   * Type: Start=
+     %BR% =---++ Question 1=
+     %BR% =<nop>   * Type: Question=
+     %BR% =<nop>   * Yes: trunk1=
+     %BR% =<nop>   * No: trunk2=
+     %BR% =---++ Start of %FLOWCHART_BR% Trunk 1=
+     %BR% =<nop>   * Id: trunk1=
+     %BR% =<nop>   * Color: !70B070=
+     %BR% =---++ End of Trunk 1=
+     %BR% =<nop>   * Type: End=
+     %BR% =---++ Start of %FLOWCHART_BR% Trunk 2=
+     %BR% =<nop>   * Id: trunk2=
+     %BR% =<nop>   * Color: !E0B040=
+     %BR% =---++ End of Trunk 2=
+     %BR% =<nop>   * Type: End=
+     %BR%  =%<nop>FLOWCHART_STOP%=
+   * Category: FormattingAndRenderingVariables, UIAndVisualizationVariables
+   * Related: FlowchartPlugin, FlowchartPluginExample
