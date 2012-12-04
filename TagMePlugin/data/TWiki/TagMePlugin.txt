@@ -1,6 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352798346" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354590939" format="1.1" version="$Rev$"}%
 ---+!! Tag-me Plugin
-<div style="padding: 6px; border-style: solid; border-color: #EE7777; border-width: 3px;">This plug-in is heavily customized in our environment. Please read *[[TWikiDev.TagMePlugin][this page]]* for the actual behavior.</div>
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
    http://twiki.org/cgi-bin/view/Plugins/TagMePlugin or provide feedback at
@@ -14,13 +13,13 @@ Plugin to tag wiki content collectively in order to find content by tags and to 
 
 ---++ Introduction
 
-The larger a wiki gets, the harder it is to find content. This wiki tagging plugin attempts to solve the issue based on these assumptions:
+---+++The larger a wiki gets, the harder it is to find content. This wiki tagging plugin attempts to solve the issue based on these assumptions:
 
    * Assertion 1: Intranet search does not work well due to inadequate ranking of search engines on intranets. This is because there are typically not many cross-links between pages.
    * Assertion 2: Let the individuals build their own taxonomy to find content quickly
    * Assertion 3: Let the users do the ranking to get an "human intelligence" ranking of important content
 
-There are clear benefits in tagging content in a large TWiki (10K or more topics):
+---+++There are clear benefits in tagging content in a large TWiki (10K or more topics):
 
    * Find relevant content in a large system quickly,
       * by quickly accessing related topics via the tags on a topic
@@ -30,7 +29,7 @@ There are clear benefits in tagging content in a large TWiki (10K or more topics
    * Solve the search ranking issue of wiki content indexed by a search engine
    * Help solve stale content issue (old topics do not get tagged)
 
-The design goals of the <nop>%TOPIC% were as follows:
+---+++The design goals of the <nop>%TOPIC% were as follows:
 
    * Any topic can be tagged by individuals =->= create taxonomy for individuals
    * Show tag statistics of all users on each topic =->= show popularity
@@ -39,6 +38,55 @@ The design goals of the <nop>%TOPIC% were as follows:
    * Make it as easy as possible to add a new tag to a topic
    * Encourage users to create new tags, but try to avoid use of similar tags for the same subject
    * Search for topic by tag, sorted by tag popularity
+
+---+++More advanced features of this plugin:
+
+   * A TWiki page can have a number of tags, but tagging only works on a master site. It is diabled when current site mode is readonly or salve. Please refer TWiki:Codev/ReadOnlyAndMirrorWebs for different site mode.
+   * By default, !TagMePlugin has only one tag name space. By setting $TWiki::cfg{TagMePlugin}{SplitSpace} to true, !TagMePlugin can support multiple namespaces, and each top level web has its own tag name space. Tag data files are stored at: pub/TOP_LEVEL_WEB/.tags. When a page is copied or moved The tag data of the page is copied or moved if needed. 
+   * By default, tags are not user agnostic. Other user can not remove a tag when it is tagged by another user. A TWiki sites can have user agnostic tags by setting $TWiki::cfg{TagMePlugin}{UserAgnostic} to true. The tag T put to the page P1 by the user U1 and the tag T put to the page P2 by U2 are equally the tag T for everybody. This allows user to remove a tag added by someone else.
+
+---+++Permission for user agnostic tags:
+
+*Tag change permission and tagging permission*
+
+There are two sorts of permissions - 1) permission to create/rename/delete tags (let's call it tag change permission here); 2) adding and removing tags to/from a page (let's call it tagging permission here).
+
+A user having tagging permission to a page (2) but not having tag change permission (1) can add an existing tag to the page and can remove a tag. A user having tag change permission is guaranteed to have tagging permission to all the pages of the site. This may sound unnecessary. The logic behind this is as follows.
+   * If you have tag change permission, you can add and delete tags. Only unused tags can be deleted. As such, when you delete a tag, you need to remove the tag from all pages having it.
+   * If you have tag change permission, you can rename an existing tag. A rename operation ends up changing tags of multiple pages.
+For these, if you have tag change permission but you don't have tagging permission, it's strange.
+
+Tag change permission is a site-wide permission whereas tagging permission is either site-wide or page by page.
+
+*How tag change permission and tagging permission are determined*
+
+By default, users who can edit !WebPreferences has tag change permission. Also by default, users who can edit a page can add and remove tags to/from the page.
+
+You can explicitly specify tag change permission by setting ALLOW_TAG_CHANGE and/or DENY_TAG_CHANGE variables on !WebPreferences. The way they work is similar to other access control variables ALLOW* and DENY*. You can find out the details of TWiki's access control at [[TWiki.TWikiAccessControl]].
+
+Tagging permission can be explicitly set by the =DENYTOPICTAG=, =ALLOWTOPICTAG=, =DENYWEBTAG=, and =ALLOWWEBTAG= variables.
+
+Because of the way tag change permission and tagging permission behave, if you want to restrict who can tag pages by setting =ALLOWWEBTAG=, =ALLOWTOPICTAG=, =DENYWEBTAG=, and =DENY_TOPICTAG=, while allowing people to edit pages, you need to restrict who can change tags by setting =ALLOW_TAG_CHANGE= and/or =DENY_TAG_CHANGE=.
+
+Regardless of these settings, the members of the contact mail group of a site have tag change permission. Hence they can add and remove tags on any page of the site.
+
+---++ Examples
+
+---+++ Tag name space example
+
+Each top level TWiki site has its own tag name space. Let's say Site1 has the following tags:
+   * apple
+   * orange
+   * lemon
+Another site Site2 can decide what tags it has on its own. e.g.
+   * kiwi
+   * durian
+   * mango
+This is what it means by each top level TWiki site has its own tag name space. Sub sites share the same tag names as its parent site. The site Site1/Sub1, which is a sub site of Site1 has the same exact tags as Site1:
+   * apple
+   * orange
+   * lemon
+
 
 ---++ User Interface
 
