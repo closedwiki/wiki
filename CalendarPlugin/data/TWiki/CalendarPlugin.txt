@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310355508" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354605596" format="1.1" version="$Rev$"}%
 ---+!! Calendar Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -23,55 +23,9 @@ __Note:__ This Plugin does not observe topic permissions.
 | =%<nop>CALENDAR%= | a monthly calendar for the current month/year, with events taken from the current topic |
 | =%<nop>CALENDAR{&lt;attributes>}%= | is the full syntax |
 
----+++ Attributes recognized
+---+++ CALENDAR Parameters
 
-| *Attribute*            | *Meaning* | *Default* |
-| ==year="yyyy"==        | The year | Current year |
-| ==year="+yy"== or =="-yy"== | Relative year | Current year |
-| ==month="mm"==         | The month | Current month |
-| ==month="+mm"== or =="-mm"== | relative month | Current month |
-| ==gmtoffset="+/-hh"== | Timezone expressed as number of hours offset from GMT | Server timezone |
-| ==topic="TopicName"==  | Topic containing events | The topic containing the tag |
-| ==topic="Web.TopicName1, <nop>Web.TopicName2"==  | Topics containing events | The topics containing the tags |
-| ==web="Webname"==      | Web containing the event topic | The current web |
-| ==lang="language"==    | Language: First few characters of "English", "Fran�ais", "Deutsch", "Espa�ol", "Portugu�s", "Nederlands", "Italiano", "Norsk", "Svenska", "Dansk", "suomi", "Magyar", "Polski | "English" |
-| ==daynames="Mon&brvbar;Tue&brvbar;..."== | Custom day names | "Monday&brvbar;Tuesday&brvbar;Wednesday&brvbar;Thursday&brvbar;<br />Friday&brvbar;Saturday&brvbar;Sunday" |
-| ==header="..."==    | Text at the top of the calendar; use ==$m== for current month, ==$y== for year | Current month and year |
-| ==weekstartsonmonday="1"== or =="0"== | Flag to start week on Monday | "0" (Sunday) |
-| ==showdatenumbers="0"== | Show day numbers 1...31 in date cells. Note that ==showdatenumbers=1== means that ==HTML::CalendarMonthSimple== will add the date numbers to the cells. If ==showdatenumbers=0==, then the plugin adds the date numbers. The result of this is that a calendar will *always* show the date numbers. | "0" (except with aslist="1", see below) |
-| ==showweekdayheaders="1"== | Show the weekday headers | "0" |
-| ==weekdayheadersbig="0"== | If enabled, show weekday headers in bold cell headings | "1" |
-| ==cellalignment="left"== | Horizontal cell alignment of day cells: "left", "center", "right", "justify", "char" | "center" |
-| ==vcellalignment="middle"== | Vertical cell alignment of day cells: "top", "middle", "bottom", "baseline" | "top" |
-| ==cellheight="n"== | Height in pixels of each cell in the calendar | Minimum height needed |
-| ==format="..."== | How to highlight a date | See [[%TOPIC%#EventFormatting][Event Formatting]] below |
-| ==width="n"== or =="n%"== | Width of calendar table in pixels or percent | Minimum width needed |
-| ==sharpborders="n"== | If set to 1, this gives very crisp edges between the table cells. If set to 0 standard HTML cells are used. | "1" |
-| ==border="n"== | Border width of calendar table. (sharpborders="0" required) | "1" |
-| ==cellspacing="n"== | Spacing of calendar cells. (sharpborders="0" required) | "0" |
-| ==cellpadding="n"== | Padding of calendar cells. (sharpborders="0" required) | "3" |
-| ==nowrap="1"== or =="0"== | Prevent cell content from wrapping | "0" |
-| ==bgcolor="#nnnn"== | Default background color of all cells unless redefined by other color settings below (use an HTML color-code like "#000000" as defined in %SYSTEMWEB%.StandardColors) | white |
-| ==contentcolor="#nnnn"== | Default content color of all cells unless redefined | black |
-| ==headercolor="#nnnn"== | Background color of the Month+Year header | The web bgcolor |
-| ==headercontentcolor="#nnnn"== | Content color of the Month+Year header | contentcolor setting |
-| ==weekdayheadercolor="#nnnn"== | Background color of weekdays' headers | bgcolor setting |
-| ==weekdayheadercontentcolor=<br /> "#nnnn"== | Content color of weekdays' headers | contentcolor setting |
-| ==weekendheadercolor="#nnnn"== | Background color of weekends' headers | bgcolor setting |
-| ==weekendheadercontentcolor=<br /> "#nnnn"== | Content color of weekends' headers | contentcolor setting |
-| ==weekdaycolor="#nnnn"== | Background color of weekday cells | bgcolor setting |
-| ==weekdaycontentcolor="#nnnn"== | Content color of weekday cells | contentcolor setting |
-| ==weekendcolor="#nnnn"== | Background of weekend cells | light gray |
-| ==weekendcontentcolor="#nnnn"== | Content color of weekend cells | contentcolor setting |
-| ==todaycolor="#nnnn"== | Background of today's cell | The web bgcolor |
-| ==todaycontentcolor="#nnnn"== | Content color of today's cell | contentcolor setting |
-| and other attributes of HTML::CalendarMonthSimple |||
-| ==aslist== | Controls whether events displayed in calendar style (=aslist=0=) or list style (=aslist=1=). Note that specifying =aslist=1= forces =showdatenumbers=1=.  This is done to ensure that the date number is formatted according to =datenumberformat= and that only the days that have an event are listed. | 0 |
-| ==days== | Specifies how many days of calendar data to list. Only valid if =aslist=1=. | 1 |
-| ==months== | Specifies how many months of calendars to display. Only valid if =aslist=0=. | 1 |
-| ==datenumberformat== | Specifies formatting for the date number in each cell. The formatting codes accepted are the same as those for the ==%<nop>GMTIME%== variable. | '$day' (if =aslist=0=)%BR%'   * $day $mon $year' (if =aslist=1=) |
-| ==todaydatenumberformat== | Specifies formatting for the date number for the current day (today) in the calendar. The formatting codes accepted are the same as those for the ==%<nop>GMTIME%== variable. | ==datenumberformat== |
-| ==multidayformat== | Specifies formatting of the description for multi-day events. See [[%TOPIC%#MultiDayFormatting][Multi-Day Event Formatting]] for details. | ==$description== |
+%INCLUDE{ "VarCALENDAR" section="parameters" }%
 
 ---+++ Event Syntax
 
@@ -178,7 +132,7 @@ The default format is to simply display the description of the event.
 
 ---++ Examples
 
-<table border=1 width="80%">
+<table border="1" cellpadding="10" cellspacing="0" width="80%">
 <tr><th>You type:</th><th>You get:</th><th>If correctly installed:</th></tr>
 <tr><td>
 A list of Events is just a bullet list like this:
@@ -187,8 +141,16 @@ A list of Events is just a bullet list like this:
    * 29 May 1996 - Maria Teresa is born!
    * 29 Sep 1998 - Davide is born!
 
-%<nop>CALENDAR{month="2" year="2002" bgcolor="cyan"}%
-%<nop>CALENDAR{month="3" year="2002" showweekdayheaders="1"}%
+%<nop>CALENDAR{
+%BR%&nbsp;month="2"
+%BR%&nbsp;year="2002"
+%BR%&nbsp;bgcolor="cyan"
+%BR%}%
+%BR%%<nop>CALENDAR{
+%BR%&nbsp;month="3"
+%BR%&nbsp;year="2002"
+%BR%&nbsp;showweekdayheaders="1"
+%BR%}%
 
 </td><td align=center>
 <!-- First calendar -->
@@ -364,11 +326,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Install ==Date::Calc==
       * Install ==HTML::CalendarMonthSimple==
       * To avoid an annoying log message, change line 272 of <nop>CalendarMonthSimple.pm v1.25 by adding the section marked in %RED% RED %ENDCOLOR% :<br />
-        <verbatim>if ($self->year = = $todayyear && $self->month = = $todaymonth %RED% && defined $thisday %ENDCOLOR% && $thisday = = $todaydate)</verbatim>
+        <tt>if ($self->year == $todayyear && $self->month == $todaymonth %RED% && defined $thisday %ENDCOLOR% && $thisday == $todaydate)</tt>
          * For earlier or later versions where the line number may be different, search for =todayyear=. It currently (v1.22-v1.25) only appears twice: once to declare and set it, once to use it. On the line that uses it, add the =%RED%&& defined $thisday%ENDCOLOR%= as shown above. -- TWiki:Main.AngusRogerson - 16 Aug 2004
       * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
         | *File:* | *Description:* |
         | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+        | ==data/TWiki/VarCALENDAR.txt== | CALENDAR variable documentation topic |
         | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
         | ==pub/TWiki/%TOPIC%/exclam.gif== | Image file |
 
@@ -379,11 +342,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny, TWiki:Main.NathanKerr, TWiki:Main.DavidBright, TWiki:Main.DanielRohde, TWiki:Main. |
-|  Copyright: | &copy; 2001 TWiki:Main.AndreaSterbini <br /> &copy; 2002-2011 TWiki:Main.PeterThoeny <br /> &copy; 2002-2011 TWiki:TWiki.TWikiContributor |
+|  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny, TWiki:Main.NathanKerr, TWiki:Main.DavidBright, TWiki:Main.DanielRohde |
+|  Copyright: | &copy; 2001 TWiki:Main.AndreaSterbini <br /> &copy; 2002-2012 TWiki:Main.PeterThoeny <br /> &copy; 2002-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2011-07-10 |
+|  Plugin Version: | 2012-12-03 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-12-03: | TWikibug:Item7020: Add VarCALENDAR with category; doc improvements -- TWiki:Main.PeterThoeny |
 |  2011-07-10: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2011-02-18: | TWikibug:Item6650: Add cellspacing, cellpadding parameters; fix sharpborders="0" issue -- TWiki:Main.PeterThoeny |
 |  2011-02-17: | TWikibug:Item6649: Support anniversary, yearly, weekly and periodic events with ISO date format -- TWiki:Main.PeterThoeny |
@@ -418,6 +382,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
+__Related Topics:__ VarCALENDAR, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 %META:FILEATTACHMENT{name="exclam.gif" attr="h" comment="Image of exclamation point" date="1073090410" path="exclam.gif" size="79" user="TWikiContributor" version="1"}%
