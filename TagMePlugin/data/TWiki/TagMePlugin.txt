@@ -43,11 +43,11 @@ The design goals of the <nop>%TOPIC% were as follows:
 
 ---+++ Behavior on different site mode
 
-A TWiki page can have a number of tags, but tagging only works on a master site. In another work, tagging is diabled when current site mode is readonly or salve. If you are not familiar with site modes, please refer TWiki:Codev/ReadOnlyAndMirrorWebs.
+A TWiki page can have a number of tags, but tagging only works on a master site. In another word, tagging is disabled when current site mode is readonly or salve. If you are not familiar with site modes, please refer TWiki:Codev/ReadOnlyAndMirrorWebs.
 
 ---+++ Multiple tag namespaces support
 
-By default, !TagMePlugin has only one tag name space. By setting $TWiki::cfg{TagMePlugin}{SplitSpace} to true, !TagMePlugin can support multiple namespaces, and each top level web has its own tag name space. Tag data files are stored at: pub/TOP_LEVEL_WEB/.tags. When a page is copied or moved The tag data of the page is copied or moved if needed.
+By default, !TagMePlugin has only one tag namespace. You can set "$TWiki::cfg{TagMePlugin}{SplitSpace} = 1" to support multiple namespaces. With multiple namespaces, each top level web has its own tag namespace. Tag data files are stored at "pub/TOP_LEVEL_WEB/.tags/". When a page is copied or moved, its tag data is also copied or moved along with it.
 
 *Tag name space example*
 
@@ -69,11 +69,13 @@ which is a sub site of Site1 has the same exact tags as Site1:
 
 ---+++ Permission for user agnostic tags
 
- By default, tags are not user agnostic. Other user can not remove a tag when it is tagged by another user. A TWiki sites can have user agnostic tags by setting $TWiki::cfg{TagMePlugin}{UserAgnostic} to true. The tag T put to the page P1 by the user U1 and the tag T put to the page P2 by U2 are equally the tag T for everybody. This allows user to remove a tag added by someone else.
+!TagMePlugin makes tags user-related. User can not remove a tag when it is tagged by someone else. A TWiki site can have user agnostic tags by setting "$TWiki::cfg{TagMePlugin}{UserAgnostic} = 1". The tag T put to the page P1 by the user U1 and the tag T put to the page P2 by U2 are equally the tag T for everybody. This allows user to remove a tag added by someone else.
 
 *Tag change permission and tagging permission*
 
-There are two sorts of permissions - 1) permission to create/rename/delete tags (let's call it tag change permission here); 2) adding and removing tags to/from a page (let's call it tagging permission here).
+There are two sorts of permissions 
+   1 permission to create/rename/delete tags (let's call it tag change permission here).
+   2 adding and removing tags to/from a page (let's call it tagging permission here).
 
 A user having tagging permission to a page (2) but not having tag change permission (1) can add an existing tag to the page and can remove a tag. A user having tag change permission is guaranteed to have tagging permission to all the pages of the site. This may sound unnecessary. The logic behind this is as follows.
    * If you have tag change permission, you can add and delete tags. Only unused tags can be deleted. As such, when you delete a tag, you need to remove the tag from all pages having it.
