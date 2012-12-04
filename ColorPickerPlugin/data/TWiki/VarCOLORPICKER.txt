@@ -1,0 +1,19 @@
+%META:TOPICINFO{author="TWikiContributor" date="1354609444" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarCOLORPICKER
+---+++ COLORPICKER{} --  color picker for use in HTML forms for TWiki applications
+   * The =%<nop>COLORPICKER{}%= variable is handled by the ColorPickerPlugin.
+   * Syntax: =%<nop>COLORPICKER{ name="..." value="..." }%=
+   * Parameters:%STARTSECTION{parameters}%
+     | *Parameter* | *Description* | *Default* | *Example* |
+     | =name= | Name of input field | (required) | =name="text_color"= |
+     | =value= | Initial color value, in hexadecimal notation for the combination of Red, Green, and Blue color values (RGB). | (none) | =value="#0000ff"= |
+     | =size= | Size of input field | (browser default) | =size="12"= |
+     | =class= | CSS class of input field | (none) | =class="twikiInputField"= |
+     | Additional parameters can be supplied; they will be added to the HTML input field. ||||%ENDSECTION{parameters}%
+   * Example:
+     %BR% =&lt;form action="..."&gt;=
+     %BR% =%<nop>COLORPICKER{ name="text_color" size="12" value="#123456" class="twikiInputField" }%=
+     %BR% =&lt;form&gt;=
+   * Category: ApplicationsAndComponentsVariables, DatabaseAndFormsVariables, EditingAndContentUpdateVariables, FormattingAndRenderingVariables, UIAndVisualizationVariables
+   * Related: ColorPickerPlugin, %SYSTEMWEB%.TWikiForms
