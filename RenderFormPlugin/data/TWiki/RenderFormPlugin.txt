@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354515436" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354608735" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The RenderFormPlugin handles the variable =%<nop>RENDERFORM{...}%=. The variable will be replaced by a form that is defined and looks like TWiki.TWikiForms. It helps you to create a new topic with TWiki.TWikiForms or to edit or view  existing topic form data. The form data can be changed without pushing the topic edit button. The variable can be used at any topic to show, edit or create TWiki.TWikiForms data from any other topic.
 
@@ -199,9 +199,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2008-2010 TWiki:Main.DanielRohde %BR% &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-12-02 |
+|  Plugin Version: | 2012-12-03 |
 |  Change History: | <!-- versions below in reverse order --> |
-|  2012-12-02: | TWikibug:Item7020: Add category to VarRENDERFORM; doc improvements -- TWiki:Main.PeterThoeny |
+|  2012-12-03: | TWikibug:Item7020: Add category to VarRENDERFORM; doc improvements -- TWiki:Main.PeterThoeny |
 |  V1.004 (19 Aug 2010) | TWiki:Main.DanielRohde: fixed TWiki 5.0 problems |
 |  V1.003 (13 Feb 2009) | TWiki:Main.DanielRohde: fixed performance problem (see Benchmarks - Switch module removed) |
 |  V1.002 (14 Oct 2008): | TWiki:Main.DanielRohde: added layout feature; fixed date field bug; added missing docs; |

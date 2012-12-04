@@ -1,12 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354515436" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354608740" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarRENDERFORM
 ---+++ RENDERFORM -- render TWiki Forms data within a topic
    * The =%<nop>RENDERLIST%= variable is handled by the RenderFormPlugin.
    * Syntax: =%<nop>RENDERFORM{ "ATWikiFormDefinition" }%=
-   * Example: =%<nop>RENDERLIST{ "IT.HelpDeskForm" }%=
    * Parameters:%STARTSECTION{parameters}%
-     | *Attribute* | *Description* | *Default / Example* |
+     | *Parameter* | *Description* | *Default / Example* |
      | =dateformat= | overwrites the JSCALENDARDATEFORMAT preference for date fields | =dateformat="%d %b %Y"= |
      | =donotnotify= | disables notifications | undefined / =donotnotify="on"= |
      | =form= | (required attribute) a name of a topic with a TWiki.TWikiForms definition | undefined / =form="MyTestForm"= |
@@ -23,5 +22,6 @@
      | =text= | the topic text;  text will be ignored if a templatetopic is defined | undefined / =text="my small topic text"= |
      | =topic= | an existing topic for edit and view mode or a topic template name for a new topic (create mode) (e.g. <nop>TestFormDataXXXXXXXXXX) | =topic="%<nop>TOPIC%XXXXXXXXXX"= / =topic="TestFormData%<nop>SERVERTIME{$epoch}%"= |
      | =topicparent= | a topic parent; useful for the create mode; if undefined the form topic will be used | =topicparent="%<nop>WEB%.%<nop>TOPIC%"= / =topicparent="MyHelpDesk"= |%ENDSECTION{parameters}%
+   * Example: =%<nop>RENDERLIST{ "IT.HelpDeskForm" }%=
    * Category: ApplicationsAndComponentsVariables, DatabaseAndFormsVariables, EditingAndContentUpdateVariables, FormattingAndRenderingVariables, UIAndVisualizationVariables
    * Related: RenderFormPlugin, %SYSTEMWEB%.TWikiForms

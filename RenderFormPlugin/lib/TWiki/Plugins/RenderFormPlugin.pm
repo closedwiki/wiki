@@ -23,8 +23,7 @@ use strict;
 use vars qw( $VERSION $RELEASE $REVISION $debug $pluginName );
 
 $VERSION = '$Rev$';
-$RELEASE = '2012-12-02';
-
+$RELEASE = '2012-12-03';
 
 $REVISION = '1.004'; #dro# fixed TWiki 5.0 problems
 #$REVISION = '1.003'; #dro# fixed performance problem (see Benchmarks - Switch module removed) 
