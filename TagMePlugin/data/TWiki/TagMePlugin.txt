@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354590939" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354602885" format="1.1" version="$Rev$"}%
 ---+!! Tag-me Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -13,13 +13,15 @@ Plugin to tag wiki content collectively in order to find content by tags and to 
 
 ---++ Introduction
 
----+++The larger a wiki gets, the harder it is to find content. This wiki tagging plugin attempts to solve the issue based on these assumptions:
+---+++ Overview
+
+The larger a wiki gets, the harder it is to find content. This wiki tagging plugin attempts to solve the issue based on these assumptions:
 
    * Assertion 1: Intranet search does not work well due to inadequate ranking of search engines on intranets. This is because there are typically not many cross-links between pages.
    * Assertion 2: Let the individuals build their own taxonomy to find content quickly
    * Assertion 3: Let the users do the ranking to get an "human intelligence" ranking of important content
 
----+++There are clear benefits in tagging content in a large TWiki (10K or more topics):
+There are clear benefits in tagging content in a large TWiki (10K or more topics):
 
    * Find relevant content in a large system quickly,
       * by quickly accessing related topics via the tags on a topic
@@ -29,7 +31,7 @@ Plugin to tag wiki content collectively in order to find content by tags and to 
    * Solve the search ranking issue of wiki content indexed by a search engine
    * Help solve stale content issue (old topics do not get tagged)
 
----+++The design goals of the <nop>%TOPIC% were as follows:
+The design goals of the <nop>%TOPIC% were as follows:
 
    * Any topic can be tagged by individuals =->= create taxonomy for individuals
    * Show tag statistics of all users on each topic =->= show popularity
@@ -39,13 +41,35 @@ Plugin to tag wiki content collectively in order to find content by tags and to 
    * Encourage users to create new tags, but try to avoid use of similar tags for the same subject
    * Search for topic by tag, sorted by tag popularity
 
----+++More advanced features of this plugin:
+---+++ Behavior on different site mode
 
-   * A TWiki page can have a number of tags, but tagging only works on a master site. It is diabled when current site mode is readonly or salve. Please refer TWiki:Codev/ReadOnlyAndMirrorWebs for different site mode.
-   * By default, !TagMePlugin has only one tag name space. By setting $TWiki::cfg{TagMePlugin}{SplitSpace} to true, !TagMePlugin can support multiple namespaces, and each top level web has its own tag name space. Tag data files are stored at: pub/TOP_LEVEL_WEB/.tags. When a page is copied or moved The tag data of the page is copied or moved if needed. 
-   * By default, tags are not user agnostic. Other user can not remove a tag when it is tagged by another user. A TWiki sites can have user agnostic tags by setting $TWiki::cfg{TagMePlugin}{UserAgnostic} to true. The tag T put to the page P1 by the user U1 and the tag T put to the page P2 by U2 are equally the tag T for everybody. This allows user to remove a tag added by someone else.
+A TWiki page can have a number of tags, but tagging only works on a master site. In another work, tagging is diabled when current site mode is readonly or salve. If you are not familiar with site modes, please refer TWiki:Codev/ReadOnlyAndMirrorWebs.
 
----+++Permission for user agnostic tags:
+---+++ Multiple tag namespaces support
+
+By default, !TagMePlugin has only one tag name space. By setting $TWiki::cfg{TagMePlugin}{SplitSpace} to true, !TagMePlugin can support multiple namespaces, and each top level web has its own tag name space. Tag data files are stored at: pub/TOP_LEVEL_WEB/.tags. When a page is copied or moved The tag data of the page is copied or moved if needed.
+
+*Tag name space example*
+
+Each top level TWiki site has its own tag name space. Let's say Site1 has the
+following tags:
+   * apple
+   * orange
+   * lemon
+Another site Site2 can decide what tags it has on its own. e.g.
+   * kiwi
+   * durian
+   * mango
+This is what it means by each top level TWiki site has its own tag name space.
+Sub sites share the same tag names as its parent site. The site Site1/Sub1,
+which is a sub site of Site1 has the same exact tags as Site1:
+   * apple
+   * orange
+   * lemon
+
+---+++ Permission for user agnostic tags
+
+ By default, tags are not user agnostic. Other user can not remove a tag when it is tagged by another user. A TWiki sites can have user agnostic tags by setting $TWiki::cfg{TagMePlugin}{UserAgnostic} to true. The tag T put to the page P1 by the user U1 and the tag T put to the page P2 by U2 are equally the tag T for everybody. This allows user to remove a tag added by someone else.
 
 *Tag change permission and tagging permission*
 
@@ -69,23 +93,6 @@ Tagging permission can be explicitly set by the =DENYTOPICTAG=, =ALLOWTOPICTAG=,
 Because of the way tag change permission and tagging permission behave, if you want to restrict who can tag pages by setting =ALLOWWEBTAG=, =ALLOWTOPICTAG=, =DENYWEBTAG=, and =DENY_TOPICTAG=, while allowing people to edit pages, you need to restrict who can change tags by setting =ALLOW_TAG_CHANGE= and/or =DENY_TAG_CHANGE=.
 
 Regardless of these settings, the members of the contact mail group of a site have tag change permission. Hence they can add and remove tags on any page of the site.
-
----++ Examples
-
----+++ Tag name space example
-
-Each top level TWiki site has its own tag name space. Let's say Site1 has the following tags:
-   * apple
-   * orange
-   * lemon
-Another site Site2 can decide what tags it has on its own. e.g.
-   * kiwi
-   * durian
-   * mango
-This is what it means by each top level TWiki site has its own tag name space. Sub sites share the same tag names as its parent site. The site Site1/Sub1, which is a sub site of Site1 has the same exact tags as Site1:
-   * apple
-   * orange
-   * lemon
 
 
 ---++ User Interface
