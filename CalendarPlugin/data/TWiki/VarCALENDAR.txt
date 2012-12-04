@@ -1,0 +1,57 @@
+%META:TOPICINFO{author="TWikiContributor" date="1354605596" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarCALENDAR
+---+++ CALENDAR -- show a monthly calendar with highlighted events 
+   * Events are defined by bullets, see CalendarPlugin#Event_Syntax for details. The =%<nop>CALENDAR{}%= variable is handled by the CalendarPlugin.
+   * Syntax: =%<nop>CALENDAR{ _parameters_ }%=
+   * Parameters:%STARTSECTION{parameters}%
+     | *Parameter* | *Description* | *Default* |
+     | ==year="yyyy"==        | The year | Current year |
+     | ==year="+yy"== or =="-yy"== | Relative year | Current year |
+     | ==month="mm"==         | The month | Current month |
+     | ==month="+mm"== or =="-mm"== | relative month | Current month |
+     | ==gmtoffset="+/-hh"== | Timezone expressed as number of hours offset from GMT | Server timezone |
+     | ==topic="TopicName"==  | Topic containing events | The topic containing the tag |
+     | ==topic="Web.TopicName1, <nop>Web.TopicName2"==  | Topics containing events | The topics containing the tags |
+     | ==web="Webname"==      | Web containing the event topic | The current web |
+     | ==lang="language"==    | Language: First few characters of "English", "Francais", "Deutsch", "Espagnol", "Portugues", "Nederlands", "Italiano", "Norsk", "Svenska", "Dansk", "Suomi", "Magyar", "Polski | ="English"= |
+     | ==daynames="Mon&#124;Tue&#124;..."== | Custom day names | ="Monday&#124;Tuesday&#124;%BR%Wednesday&#124;Thursday&#124;%BR%Friday&#124;Saturday&#124;%BR%Sunday"= |
+     | ==header="..."==    | Text at the top of the calendar; use ==$m== for current month, ==$y== for year | Current month and year |
+     | ==weekstartsonmonday="1"== or =="0"== | Flag to start week on Monday | ="0"= (Sunday) |
+     | ==showdatenumbers="0"== | Show day numbers 1...31 in date cells. Note that ==showdatenumbers=1== means that ==HTML::CalendarMonthSimple== will add the date numbers to the cells. If ==showdatenumbers=0==, then the plugin adds the date numbers. The result of this is that a calendar will *always* show the date numbers. | ="0"= (except with =aslist="1"=, see below) |
+     | ==showweekdayheaders="1"== | Show the weekday headers | ="0"= |
+     | ==weekdayheadersbig="0"== | If enabled, show weekday headers in bold cell headings | ="1"= |
+     | ==cellalignment="left"== | Horizontal cell alignment of day cells: "left", "center", "right", "justify", "char" | ="center"= |
+     | ==vcellalignment="middle"== | Vertical cell alignment of day cells: "top", "middle", "bottom", "baseline" | ="top"= |
+     | ==cellheight="n"== | Height in pixels of each cell in the calendar | Minimum height needed |
+     | ==format="..."== | How to highlight a date | See [[CalendarPlugin#EventFormatting][Event Formatting]] below |
+     | ==width="n"== or =="n%"== | Width of calendar table in pixels or percent | Minimum width needed |
+     | ==sharpborders="n"== | If set to 1, this gives very crisp edges between the table cells. If set to 0 standard HTML cells are used. | ="1"= |
+     | ==border="n"== | Border width of calendar table. (sharpborders="0" required) | ="1"= |
+     | ==cellspacing="n"== | Spacing of calendar cells. (sharpborders="0" required) | ="0"= |
+     | ==cellpadding="n"== | Padding of calendar cells. (sharpborders="0" required) | ="3"= |
+     | ==nowrap="1"== or =="0"== | Prevent cell content from wrapping | ="0"= |
+     | ==bgcolor="#nnnn"== | Default background color of all cells unless redefined by other color settings below (use an HTML color-code like "#000000" as defined in %SYSTEMWEB%.StandardColors) | ="white"= |
+     | ==contentcolor="#nnnn"== | Default content color of all cells unless redefined | ="black"= |
+     | ==headercolor="#nnnn"== | Background color of the Month+Year header | The web bgcolor |
+     | ==headercontentcolor="#nnnn"== | Content color of the Month+Year header | contentcolor setting |
+     | ==weekdayheadercolor="#nnnn"== | Background color of weekdays' headers | bgcolor setting |
+     | ==weekdayheadercontentcolor=<br /> "#nnnn"== | Content color of weekdays' headers | contentcolor setting |
+     | ==weekendheadercolor="#nnnn"== | Background color of weekends' headers | bgcolor setting |
+     | ==weekendheadercontentcolor=<br /> "#nnnn"== | Content color of weekends' headers | contentcolor setting |
+     | ==weekdaycolor="#nnnn"== | Background color of weekday cells | bgcolor setting |
+     | ==weekdaycontentcolor="#nnnn"== | Content color of weekday cells | contentcolor setting |
+     | ==weekendcolor="#nnnn"== | Background of weekend cells | light gray |
+     | ==weekendcontentcolor="#nnnn"== | Content color of weekend cells | contentcolor setting |
+     | ==todaycolor="#nnnn"== | Background of today's cell | The web bgcolor |
+     | ==todaycontentcolor="#nnnn"== | Content color of today's cell | contentcolor setting |
+     | and other attributes of HTML::CalendarMonthSimple |||
+     | ==aslist== | Controls whether events displayed in calendar style (=aslist=0=) or list style (=aslist=1=). Note that specifying =aslist=1= forces =showdatenumbers=1=.  This is done to ensure that the date number is formatted according to =datenumberformat= and that only the days that have an event are listed. | ="0"= |
+     | ==days== | Specifies how many days of calendar data to list. Only valid if =aslist="1"=. | ="1"= |
+     | ==months== | Specifies how many months of calendars to display. Only valid if =aslist="0"=. | ="1"= |
+     | ==datenumberformat== | Specifies formatting for the date number in each cell. The formatting codes accepted are the same as those for the ==%<nop>GMTIME%== variable. | =$day= (if =aslist="0"=)%BR% =<nop>   * $day $mon $year= (if =aslist="1"=) |
+     | ==todaydatenumberformat== | Specifies formatting for the date number for the current day (today) in the calendar. The formatting codes accepted are the same as those for the ==%<nop>GMTIME%== variable. | ==datenumberformat== |
+     | ==multidayformat== | Specifies formatting of the description for multi-day events. See [[CalendarPlugin#MultiDayFormatting][Multi-Day Event Formatting]] for details. | ==$description== |%ENDSECTION{parameters}%
+   * Example: =%<nop>CALENDAR{ month="2" year="%SERVERTIME{$year}%" bgcolor="cyan" }%= shows a February %SERVERTIME{$year}% calendar
+   * Category: DateAndTimeVariables, FormattingAndRenderingVariables
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarDATE][DATE]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarDISPLAYTIME][DISPLAYTIME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarGMTIME2][GMTIME{"format"}]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSERVERTIME][SERVERTIME]], CalendarPlugin
