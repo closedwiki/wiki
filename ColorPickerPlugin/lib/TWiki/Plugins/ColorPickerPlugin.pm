@@ -1,7 +1,7 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2010-2011 Peter Thoeny, peter[at]thoeny.org
-# Copyright (C) 2010-2011 TWiki Contributors. All Rights Reserved.
+# Copyright (C) 2010-2012 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2010-2012 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
 # this distribution. NOTE: Please extend that file, not this notice.
 #
@@ -32,7 +32,7 @@ require TWiki::Func;    # The plugins API
 
 # ==========================================================================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-08-11';
+our $RELEASE = '2012-12-03';
 our $SHORTDESCRIPTION = "Color picker, packaged for use in TWiki forms and TWiki applications";
 our $NO_PREFS_IN_TOPIC = 1;
 our $doneHeader;
