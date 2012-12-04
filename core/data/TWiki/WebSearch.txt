@@ -35,8 +35,10 @@ footer="$percntCALCULATE{$SET(ntopics, $tntopics)$SET(nwebs, $nwebs)}$percnt"
 <th class="twikiLast">%MAKETEXT{"Search where:"}%</th>
 <td class="twikiLast">
 <input type="radio" class="twikiRadioButton" id="textbody" name="scope" value="text" %IF{" '%URLPARAM{"scope" encode="entity"}%' = 'text' " then="checked=\"checked\"" else=""}% /><label for="textbody"> %MAKETEXT{"Text body"}%</label>&nbsp;&nbsp;&nbsp;<input type="radio" class="twikiRadioButton" id="topictitle" name="scope" value="topic" %IF{" '%URLPARAM{"scope" encode="entity"}%' = 'topic' " then="checked=\"checked\"" else=""}% /><label for="topictitle"> %MAKETEXT{"Topic title"}%</label>&nbsp;&nbsp;&nbsp;<input type="radio" class="twikiRadioButton" id="both" name="scope" value="all" %IF{" '%URLPARAM{"scope" encode="entity" default="all"}%' = 'all' " then="checked=\"checked\"" else=""}% /><label for="both"> %MAKETEXT{"Both body and title"}%</label>
+%IF{"{NoInAllPublicWebs}" then="<div style='display:none'>" else="<nop>"}%
 <hr />
 <input type="checkbox" class="twikiCheckbox" id="web" name="web" value="all" %IF{" '%URLPARAM{"web" encode="entity"}%' = 'all'" then="checked=\"checked\"" else=""}% /><label for="web"> %MAKETEXT{"All public webs"}%</label> <span class="twikiSmall">%MAKETEXT{"(otherwise search [_1] Web only)" args="<nop>%INCLUDINGWEB%"}%</span>
+%IF{"{NoInAllPublicWebs}" then="</div>" else="<nop>"}%
 </td>
 </tr>
 </table>
