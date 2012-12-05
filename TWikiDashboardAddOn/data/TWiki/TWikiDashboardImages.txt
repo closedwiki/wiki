@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1354173309" format="1.1" reprev="1.17" version="1.17"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354692176" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiDashboardAddOn"}%
 ---+!! <span style="font-size: 60%"> TWikiDashboardAddOn &#187;</span> TWiki Dashboard Banner Images
 
@@ -103,6 +103,36 @@ Name: =cubicle-panorama.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://crea
 Name: =picture-gallery.jpg= &nbsp; &nbsp; - image copyright 2011, [[http://seanfitzgibbon.blogspot.com/][Sean Fitzgibbon]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/picture-gallery.jpg" alt="" width="1026" height="150" />
 
+Name: =cern-control-room.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/cern-control-room.jpg" alt="" width="1026" height="150" />
+
+Name: =cern-datacenter.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/cern-datacenter.jpg" alt="" width="1026" height="150" />
+
+Name: =datacenter-racks.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/datacenter-racks.jpg" alt="" width="1026" height="150" />
+
+Name: =datacenter-desk.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/datacenter-desk.jpg" alt="" width="1026" height="150" />
+
+Name: =computer-cables.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/computer-cables.jpg" alt="" width="1026" height="150" />
+
+Name: =computer-wires.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/computer-wires.jpg" alt="" width="1026" height="150" />
+
+Name: =cern-atlas-construction.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/cern-atlas-construction.jpg" alt="" width="1026" height="150" />
+
+Name: =cern-atlas-detector.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/cern-atlas-detector.jpg" alt="" width="1026" height="150" />
+
+Name: =cern-cms-cavern.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/cern-cms-cavern.jpg" alt="" width="1026" height="150" />
+
+Name: =cern-lhc-tunnel.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/cern-lhc-tunnel.jpg" alt="" width="1026" height="150" />
+
 Name: =baseball-game.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/baseball-game.jpg" alt="" width="1026" height="150" />
 
@@ -129,9 +159,19 @@ __Related:__ TWikiDashboardAddOn
 %META:FILEATTACHMENT{name="cc-by-nc-nd.png" attachment="cc-by-nc-nd.png" attr="h" comment="" date="1354091776" path="cc-by-nc-nd.png" size="828" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="cc-by-nc-sa.png" attachment="cc-by-nc-sa.png" attr="h" comment="" date="1354092123" path="cc-by-nc-sa.png" size="923" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="cc-by-sa.png" attachment="cc-by-sa.png" attr="h" comment="" date="1354091776" path="cc-by-sa.png" size="719" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="cern-atlas-construction.jpg" attachment="cern-atlas-construction.jpg" attr="h" comment="Image copyright 2012, CERN" date="1354690819" path="cern-atlas-construction.jpg" size="87635" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="cern-atlas-detector.jpg" attachment="cern-atlas-detector.jpg" attr="h" comment="Image copyright 2012, CERN" date="1354690820" path="cern-atlas-detector.jpg" size="77857" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="cern-cms-cavern.jpg" attachment="cern-cms-cavern.jpg" attr="h" comment="Image copyright 2012, CERN" date="1354690818" path="cern-cms-cavern.jpg" size="77684" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="cern-control-room.jpg" attachment="cern-control-room.jpg" attr="h" comment="Image copyright 2012, CERN" date="1354690817" path="cern-control-room.jpg" size="66678" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="cern-datacenter.jpg" attachment="cern-datacenter.jpg" attr="h" comment="Image copyright 2012, CERN" date="1354690815" path="cern-datacenter.jpg" size="83830" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="cern-lhc-tunnel.jpg" attachment="cern-lhc-tunnel.jpg" attr="h" comment="Image copyright 2012, CERN" date="1354690818" path="cern-lhc-tunnel.jpg" size="69114" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="code-camp.jpg" attachment="code-camp.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="code-camp.jpg" size="124898" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="community-leaders.jpg" attachment="community-leaders.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350171065" path="community-leaders.jpg" size="91846" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="computer-cables.jpg" attachment="computer-cables.jpg" attr="h" comment="Image copyright 2012, CERN" date="1354690817" path="computer-cables.jpg" size="82703" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="computer-wires.jpg" attachment="computer-wires.jpg" attr="h" comment="Image copyright 2012, CERN" date="1354690816" path="computer-wires.jpg" size="58233" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="cubicle-panorama.jpg" attachment="cubicle-panorama.jpg" attr="h" comment="Image copyright 2012, Paulo Ordoveza" date="1353299042" path="cubicle-panorama.jpg" size="57243" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="datacenter-desk.jpg" attachment="datacenter-desk.jpg" attr="h" comment="Image copyright 2012, CERN" date="1354690814" path="datacenter-desk.jpg" size="87513" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="datacenter-racks.jpg" attachment="datacenter-racks.jpg" attr="h" comment="Image copyright 2012, CERN" date="1354690815" path="datacenter-racks.jpg" size="74495" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="flute-cave.jpg" attachment="flute-cave.jpg" attr="h" comment="Image copyright 2012, Angela Ju" date="1353542988" path="flute-cave.jpg" size="92111" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="golden-gate-dawn.jpg" attachment="golden-gate-dawn.jpg" attr="h" comment="Image copyright 2012, David Yu" date="1350108167" path="golden-gate-dawn.jpg" size="57708" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="golden-gate-sunrise.jpg" attachment="golden-gate-sunrise.jpg" attr="h" comment="Image copyright 2012, David Yu" date="1353215972" path="golden-gate-sunrise.jpg" size="35864" user="TWikiContributor" version="1"}%
