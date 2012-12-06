@@ -1,4 +1,5 @@
 data/TWiki/PercentCompletePlugin.txt 0664
+data/TWiki/VarPERCENTCOMPLETE.txt 0664
 lib/TWiki/Plugins/PercentCompletePlugin.pm 0444
 lib/TWiki/Form/Percent.pm 0444
 pub/TWiki/PercentCompletePlugin/complete.png 0664
