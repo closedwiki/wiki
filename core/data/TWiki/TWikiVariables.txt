@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353144494" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354780583" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %STARTSECTION{type="include"}%
 ---+ TWiki Variables
@@ -192,7 +192,7 @@ Example content of a =VarLIGHTSABER= topic:
 ---+++ LIGHTSABER -- laser sword to fend of naysayer
    * The =%<nop>LIGHTSABER{}%= variable is handled by the LightsaberPlugin.
    * Syntax: =%<nop>LIGHTSABER{ _parameters_ }%=
-   * Parameters: (optional)
+   * Parameters:
      | *Parameter* | *Description* | *Default* |
      | =color="..."= | Color: =red=, =glue=, =green= | =white= |
      | =sound="..."= | Sound: =none=, =standard=, =loud= | =none= |
