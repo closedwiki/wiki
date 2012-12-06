@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1344638711" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354780850" format="1.1" version="$Rev$"}%
 ---+!! Percent Complete Plugin
 <!--
    Contributions to this plugin package are appreciated. Please update this page at
@@ -20,7 +20,7 @@
 
 This TWiki plugin package adds a percent complete selector to TWiki forms and TWiki applications. The percentage can be set by clicking on the indicator bar, or by picking a value from the pick list. Percent values are in range 0% to 100%, and rounded to nearest 10% if needed.
 
----++ Use percent selector in !TWikiForms
+---++ Use Percent Selector in !TWikiForms
 
 This package adds a =percent= type to %SYSTEMWEB%.TWikiForms:
 
@@ -32,7 +32,7 @@ Example form definition:
 | *Name:* | *Type:* | *Size* | *Values:* | *Tooltip message:* |
 | Progress | percent | | | Select percent complete |
 
----++ Use percent selector in an HTML form
+---++ Use Percent Selector in HTML Forms
 
 You can also use the percent complete selector directly in your HTML forms, without having to write any code. Just include this in the topic text:
 <verbatim>
@@ -40,7 +40,9 @@ You can also use the percent complete selector directly in your HTML forms, with
 %PERCENTCOMPLETE{ name="Progress" value="60" }%
 <form>
 </verbatim>
-This will show an HTML selector named "Progress" and a percent complete indicator bar tied to it. The =value= parameter is optional.
+This will show an HTML selector named "Progress" and a percent complete indicator bar tied to it.
+
+%INCLUDE{ "VarPERCENTCOMPLETE" section="parameters" }%
 
 Test: (this only works if the !PercentCompletePlugin is installed and enabled)
 
@@ -60,14 +62,15 @@ Test: (this only works if the !PercentCompletePlugin is installed and enabled)
 |  Copyright: | &copy; 2012 TWiki:Main.PeterThoeny; %BR% &copy; 2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
-|  Version: | 2012-08-10 |
+|  Version: | 2012-12-05 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-12-05: | TWikibug:Item7020: Add VarPERCENTCOMPLETE variable doc topic with category |
 |  2012-08-10: | TWikibug:Item6907: Initial version of !PercentCompletePlugin |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.TWikiPlugins
+__Related Topics:__ VarPERCENTCOMPLETE, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.TWikiPlugins
 
 
 %META:FILEATTACHMENT{name="complete0.png" attachment="complete0.png" attr="h" comment="" date="1344565519" path="complete0.png" size="1112" user="TWikiContributor" version="1"}%
