@@ -354,7 +354,7 @@ sub readRssFeed
       $cacheDir = TWiki::Func::getWorkArea('HeadlinesPlugin');
     } else {
       my $twikiWeb = &TWiki::Func::getTwikiWebname();
-      $cacheDir  = TWiki::Func::getPubDir() . '/' . $twikiWeb . '/HeadlinesPlugin';
+      $cacheDir  = TWiki::Func::getPubDir($twikiWeb) . '/' . $twikiWeb . '/HeadlinesPlugin';
       $cacheDir  =~ /(.*)/;  
       $cacheDir  = $1; # untaint (save because only internal variables)
     }
