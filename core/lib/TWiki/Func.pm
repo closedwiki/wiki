@@ -2214,9 +2214,9 @@ TWiki installation.
 =cut
 
 sub redirectCgiQuery {
-    my( $query, $url, $passthru ) = @_;
+    my( $query, $url, $passthru, $viaCache ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->redirect( $url, $passthru );
+    return $TWiki::Plugins::SESSION->redirect( $url, $passthru, 0, $viaCache );
 }
 
 =pod

@@ -853,7 +853,7 @@ server.
 =cut
 
 sub redirect {
-    my( $this, $url, $passthru, $action_redirectto ) = @_;
+    my( $this, $url, $passthru, $action_redirectto, $viaCache ) = @_;
 
     my $query = $this->{request};
     # if we got here without a query, there's not much more we can do
@@ -877,7 +877,7 @@ sub redirect {
         if ($url =~ s/\?(.*)$//) {
             $existing = $1;
         }
-        if ( $query->request_method() =~ /^POST$/i ) {
+        if ( $query->request_method() =~ /^POST$/i || $viaCache ) {
             # Redirecting from a post to a get
             my $cache = $this->cacheQuery();
             if ($cache) {
