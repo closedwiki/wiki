@@ -2865,6 +2865,66 @@ sub webWritable {
 
 =pod
 
+#UsingMultipleDisks
+---++ Using multiple disks
+
+The following functions are for UsingMultipleDisks.
+
+=cut
+
+=pod
+
+#GetDiskList
+---+++ getDiskList() -> @diskIDs
+
+Returns IDs of disks used by TWiki. An disk ID is "" (a null string) or a decimal number without leading 0.
+
+*Since:* TWiki::Plugins::VERSION 1.5
+=cut
+
+sub getDiskList {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
+    return $TWiki::Plugins::SESSION->getDiskList();
+}
+
+=pod
+
+#GetDiskInfo
+---+++ getDiskInfo($web, [$diskID]) -> ($dataDir, $pubDir, $diskID)
+
+Returns the relevant paths and the disk ID of the specified web on the specified site.
+
+*Since:* TWiki::Plugins::VERSION 1.5
+=cut
+
+sub getDiskInfo {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
+    return $TWiki::Plugins::SESSION->getDiskInfo(@_);
+}
+
+=pod
+
+#TrashWebName
+---+++ trashWebName(web => $web | disk => $diskID) -> $trashWebName
+
+Returns the name of the trash web to which topics of the =$web= web are moved.
+Or returns the name of the trash web of the specified disk.
+
+Each disk (file system) TWiki uses needs to have a trash web since a topic deletion may entail an attachment directory move, which is possible only within the same disk/file system. 
+
+*Since:* TWiki::Plugins::VERSION 1.5
+=cut
+
+sub trashWebName {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
+    return $TWiki::Plugins::SESSION->trashWebName(@_);
+}
+
+=pod
+
 #GeneralUtilitiesFunctions
 ---++ General Utilities
 
@@ -3838,6 +3898,9 @@ No changes
    * =registerExternalHTTPHandler( \&fn )=
    * =getContentMode( $web ) -> $contentMode=
    * =webWritable( $web ) -> $boolean=
+   * =getDiskList() -> @diskIDs=
+   * =getDiskInfo($web, $siteName) -> ($dataDir, $pubDir, $diskID)=
+   * =trashWebName(web => $web | disk => $diskID) -> $trashWebName=
    * =entityEncode( $text, $extra ) -> $text=
    * =entityDecode( $text ) -> $text=
    * =urlEncode( $text ) -> $text=
