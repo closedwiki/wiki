@@ -57,7 +57,7 @@ sub handleDrawing {
   }
 
   # FIXME: should really use TWiki server-side include mechanism....
-  my $pubDir = TWiki::Func::getPubDir();
+  my $pubDir = TWiki::Func::getPubDir($web);
   my $mapFile = "$pubDir/$web/$topic/$nameVal.map";
   my $img = "src=\"%ATTACHURLPATH%/$nameVal.gif\"";
   unless( -e "$pubDir/$web/$topic/$nameVal.gif" ) {
