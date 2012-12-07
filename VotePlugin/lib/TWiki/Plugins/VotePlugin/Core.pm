@@ -518,7 +518,7 @@ sub getVotesFile {
 
     if (! -e $votesFile 
 	&& $TWiki::cfg{Plugins}{VotePlugin}{OldVoteFileAutoConvert}) {
-        my $attachPath = TWiki::Func::getPubDir()."/$web/$topic";
+        my $attachPath = TWiki::Func::getPubDir($web)."/$web/$topic";
         my $oldVotesFile = "$attachPath/_Votes" . ($id?"_$id":"") . ".txt";
 
         if (!-e $oldVotesFile ) {
