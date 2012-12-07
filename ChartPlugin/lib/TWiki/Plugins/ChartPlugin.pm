@@ -271,13 +271,14 @@ sub _make_filename {
     }
 
     # before save, create directories if they don't exist.
-    # If the top level "pub/$web" directory doesn't exist, create it.
-    my $dir = TWiki::Func::getPubDir() . "/$web";
+    # If the top level "pub[?]/$web" directory doesn't exist, create it.
+    # refer http://twiki.org/cgi-bin/view/Codev/UsingMultipleDisks
+    my $dir = TWiki::Func::getPubDir($web) . "/$web";
     if (! -e "$dir") {
         umask(002);
         mkdir($dir, 0775);
     }
-    # If the top level "pub/$web/$topic" directory doesn't exist, create
+    # If the top level "pub[?]/$web/$topic" directory doesn't exist, create
     # it.
     my $tempPath = "$dir/$topic";
     if (! -e "$tempPath") {
