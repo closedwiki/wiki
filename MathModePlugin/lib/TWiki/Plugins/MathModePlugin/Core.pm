@@ -163,7 +163,7 @@ sub init {
   }
 
   # create the topic pubdir if it does not exist already
-  my $pubDir = &TWiki::Func::getPubDir();
+  my $pubDir = &TWiki::Func::getPubDir($web);
   my $topicPubDir = $pubDir;
   foreach my $dir (split(/\//, "$web/$topic")) {
     $topicPubDir .= '/'.$dir;
