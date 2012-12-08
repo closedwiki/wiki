@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350640803" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354955702" format="1.1" version="$Rev$"}%
 ---+!! Managing a Large Site
 
 There is no limitation with the number of webs and users a TWiki site can have.
@@ -30,8 +30,9 @@ The custom user mapping manager would have its own isAdmin(), which would return
 ---++ Eliminating Impractical Operations
 
 If you have thousands of webs the following operations would take too long and cases time out:
-   * "in all public webs" operations on the "More topic action"
-      * Setting the ={NoInAllPublicWebs}= configuration parameter to true suppresses the "in all public webs" links.
+   * Setting the ={NoInAllPublicWebs}= configuration parameter to true has the following effects
+      * On the "More topic actions" page, "in all public webs" links are suppressed
+      * On te !WebSearch and !WebSearchAdvance topics on all webs, the "All public webs" checkbox is suppressed.
    * !SiteChanges, the topic showing all recent changes across all webs, 
       * This topic should be deleted on a large site.
 
