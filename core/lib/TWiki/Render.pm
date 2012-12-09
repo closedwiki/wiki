@@ -848,6 +848,7 @@ sub _externalLink {
         return CGI::img( { src => $url, alt => $filename } );
     }
     my $opt = '';
+    my $icn = '';
     if( $url =~ /^mailto:/i ) {
         if( $TWiki::cfg{AntiSpam}{EmailPadding} ) {
             $url =~  s/(\@[\w\_\-\+]+)(\.)/$1$TWiki::cfg{AntiSpam}{EmailPadding}$2/;
@@ -873,6 +874,12 @@ sub _externalLink {
         } else {
             $opt = ' target="_top"';
         }
+        if( $TWiki::cfg{Links}{ExternalLinksIcon} ) {
+            my $icnUrl = "$TWiki::cfg{PubUrlPath}/$TWiki::cfg{SystemWebName}"
+                       . "/TWikiDocGraphics/external-link.gif";
+            $icn = CGI::img( { src => $icnUrl, alt => '',
+                               width => 13, height => 12, border => 0 } );
+        }
     }
     $text ||= $url;
 
@@ -881,7 +888,7 @@ sub _externalLink {
     # the link, and those have already been encoded once in the
     # rendering loop (they are identified as "stand-alone"). One
     # encoding works; two is too many. None would be better for everyone!
-    return '<a href="'.$url.'"'.$opt.'>'.$text.'</a>';
+    return "<a href=\"$url\"$opt>$text$icn</a>";
 }
 
 # Generate a "mailTo" link
