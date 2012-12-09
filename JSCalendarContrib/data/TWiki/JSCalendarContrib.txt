@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1344725105" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355037900" format="1.1" version="$Rev$"}%
 ---+!! JS Calendar Contrib
 <!--
    Contributions to this contrib package are appreciated. Please update this page at
@@ -69,8 +69,9 @@ If the contrib is installed, you will see such a field here:
 |  Copyright: | &copy; See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] for Mishoo JSCalendar %BR% &copy; 2007-2012 TWiki:TWiki.TWikiContributor for TWiki !JSCalendarContrib |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
-|  Version: | 2012-08-11 |
+|  Version: | 2012-12-08 |
 | Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-12-08: | TWikibug:Item6962: Configure change: Move contrib settings from top level section to Extensions section -- TWiki:Main.PeterThoeny |
 |  2012-08-11: | TWikibug:Item6837: Doc fixes; updated installation instructions -- TWiki:Main.PeterThoeny |
 |  2011-07-08: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
 |  2010-12-03: | TWikibug:Item6609: In %SYSTEMWEB%.TWikiForms type table, automatically list the =date= form field type defined in this contrib -- TWiki:Main.PeterThoeny |
