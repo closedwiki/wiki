@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352255738" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355044451" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -303,6 +303,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{topicbacklinks}% | =%<nop>ICON{topicbacklinks}%= | Topic back-links | gif | 16x16 |  |
 | %ICON{arrowdot}% | =%<nop>ICON{arrowdot}%= | Meet here | gif | 16x16 |  |
 | %ICON{external}% | =%<nop>ICON{external}%= | External site | gif | 16x16 |  |
+| %ICON{external-link}% | =%<nop>ICON{external-link}%= | External link | gif | 13x12 |  |
 | %ICON{left}% | =%<nop>ICON{left}%= | Left | gif | 16x16 |  |
 | %ICON{right}% | =%<nop>ICON{right}%= | Right | gif | 16x16 |  |
 | %ICON{up}% | =%<nop>ICON{up}%= | Up | gif | 16x16 |  |
@@ -629,6 +630,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="empty.gif" attr="h" comment="" date="1169565034" path="empty.gif" size="100" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="exe.gif" attr="h" comment="" date="1169565034" path="exe.gif" size="372" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="external.gif" attr="h" comment="" date="1347479503" path="external.gif" size="872" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="external-link.gif" attr="h" comment="" date="1355044240" path="external-link.gif" size="82" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="facebook.gif" attr="h" comment="" date="1258790911" path="facebook.gif" size="889" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="fax.gif" attr="h" comment="" date="1193349525" path="fax.gif" size="122" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="feed.gif" attr="h" comment="" date="1193349525" path="feed.gif" size="1023" user="TWikiContributor" version=""}%
