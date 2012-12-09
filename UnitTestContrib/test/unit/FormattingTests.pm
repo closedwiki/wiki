@@ -118,7 +118,7 @@ ACTUAL
 sub test_squabbedUrlAltTextOldUndocumentedUse {
     my $this = shift;
     my $expected = <<EXPECTED;
-<a href="$this->{sup}/$TWiki::cfg{SystemWebName}/$TWiki::cfg{HomeTopicName}" target="_blank">Alt <nop>TextAlt</a>
+<a href="$this->{sup}/$TWiki::cfg{SystemWebName}/$TWiki::cfg{HomeTopicName}" target="_top">Alt <nop>TextAlt</a>
 EXPECTED
 
     my $actual = <<ACTUAL;
@@ -354,7 +354,7 @@ ACTUAL
 sub test_wikiWordInsideRelative {
     my $this = shift;
     my $expected = <<EXPECTED;
-<a href="/somewhere/on/this/host" target="_blank">There is a <nop>WikiWord inside a relative link</a>
+<a href="/somewhere/on/this/host" target="_top">There is a <nop>WikiWord inside a relative link</a>
 EXPECTED
 
     my $actual = <<'ACTUAL';
