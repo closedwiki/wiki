@@ -864,7 +864,7 @@ sub _externalLink {
             }
         }
     } else {
-        $opt = ' target="_top"';
+        $opt = ' target="_blank"';
     }
     $text ||= $url;
 
