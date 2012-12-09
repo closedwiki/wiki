@@ -864,11 +864,15 @@ sub _externalLink {
             }
         }
     } elsif( $url =~ /^\// ) {
-        # TWiki internal link without domain
+        # Link without domain name: TWiki internal link
         $opt = ' target="_top"';
     } else {
         # regular external link
-        $opt = ' target="_blank"';
+        if( $TWiki::cfg{Links}{ExternalLinksInNewWindow} ) {
+            $opt = ' target="_blank"';
+        } else {
+            $opt = ' target="_top"';
+        }
     }
     $text ||= $url;
 
