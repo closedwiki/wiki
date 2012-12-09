@@ -118,7 +118,7 @@ ACTUAL
 sub test_squabbedUrlAltTextOldUndocumentedUse {
     my $this = shift;
     my $expected = <<EXPECTED;
-<a href="$this->{sup}/$TWiki::cfg{SystemWebName}/$TWiki::cfg{HomeTopicName}" target="_top">Alt <nop>TextAlt</a>
+<a href="$this->{sup}/$TWiki::cfg{SystemWebName}/$TWiki::cfg{HomeTopicName}" target="_blank">Alt <nop>TextAlt</a>
 EXPECTED
 
     my $actual = <<ACTUAL;
@@ -309,7 +309,7 @@ ACTUAL
 sub test_wikiWordInsideHttpLink {
     my $this = shift;
     my $expected = <<EXPECTED;
-<a href="http://google.com/" target="_top">There is a <nop>WikiWord inside an external link</a>
+<a href="http://google.com/" target="_blank">There is a <nop>WikiWord inside an external link</a>
 EXPECTED
 
     my $actual = <<ACTUAL;
@@ -324,7 +324,7 @@ ACTUAL
 sub test_wikiWordInsideFileLink {
     my $this = shift;
     my $expected = <<EXPECTED;
-<a href="file://tmp/pam.gif" target="_top">There is a <nop>WikiWord inside a file: link</a>
+<a href="file://tmp/pam.gif" target="_blank">There is a <nop>WikiWord inside a file: link</a>
 EXPECTED
 
     my $actual = <<ACTUAL;
@@ -354,7 +354,7 @@ ACTUAL
 sub test_wikiWordInsideRelative {
     my $this = shift;
     my $expected = <<EXPECTED;
-<a href="/somewhere/on/this/host" target="_top">There is a <nop>WikiWord inside a relative link</a>
+<a href="/somewhere/on/this/host" target="_blank">There is a <nop>WikiWord inside a relative link</a>
 EXPECTED
 
     my $actual = <<'ACTUAL';
@@ -610,7 +610,7 @@ sub test_protocols {
 
     foreach my $url (keys %urls) {
         my $expected = $urls{$url} || <<EXPECTED;
-<a href="$url" target="_top">$url</a>
+<a href="$url" target="_blank">$url</a>
 EXPECTED
 
         # URL in text
@@ -656,7 +656,7 @@ sub test_4067_entities {
 sub test_externalLinkWithSpacedUrl {
     my $this = shift;
     my $expected = <<EXPECTED;
-<a href="http://twiki.org/p/pub/Some\%20File\%20WikiWord\%20And\%20Spaces.txt" target="_top">topic</a>
+<a href="http://twiki.org/p/pub/Some\%20File\%20WikiWord\%20And\%20Spaces.txt" target="_blank">topic</a>
 EXPECTED
 
     my $actual = <<ACTUAL;
