@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355037900" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355038828" format="1.1" version="$Rev$"}%
 ---+!! JS Calendar Contrib
 <!--
    Contributions to this contrib package are appreciated. Please update this page at
@@ -63,7 +63,7 @@ If the contrib is installed, you will see such a field here:
 
 ---++ Contrib Info
 
-   * Set SHORTDESCRIPTION = Mishoo JSCalendar: A pop-up calendar for use in TWiki forms and TWiki applications
+   * Set SHORTDESCRIPTION = Pop-up calendar with date picker, for use in TWiki forms, HTML forms and TWiki plugins
 
 |  Author: | TWiki:Main.CrawfordCurrie http://c-dot.co.uk |
 |  Copyright: | &copy; See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] for Mishoo JSCalendar %BR% &copy; 2007-2012 TWiki:TWiki.TWikiContributor for TWiki !JSCalendarContrib |

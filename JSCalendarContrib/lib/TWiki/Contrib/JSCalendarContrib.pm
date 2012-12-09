@@ -36,7 +36,7 @@ require TWiki::Func;    # The plugins API
 
 our $VERSION = '$Rev$';
 our $RELEASE = '2012-12-08';
-our $SHORTDESCRIPTION = "[[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]], packaged for use by plugins, skins and add-ons";
+our $SHORTDESCRIPTION = "Pop-up calendar with date picker, for use in TWiki forms, HTML forms and TWiki plugins";
 
 # Max width of different mishoo format components
 my %w = (
