@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355035020" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355086368" format="1.1" version="$Rev$"}%
 LinkAtStart
 <!-- /actual -->
 <!-- expected expand LINKATSTART -->
@@ -50,8 +50,8 @@ Designed by: Crawford Currie
 
 ---++ Bold Text with URL
 ---+++ Expected
-<!-- expected BOLD LINK -->
-<strong>reminded about <a target="_blank" href="http://www.koders.com">http://www.koders.com</a></strong>
+<!-- expected expand BOLD LINK -->
+<strong>reminded about <a target="_blank" href="http://www.koders.com">http://www.koders.com<img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/external-link.gif" width="13" height="12" alt="" border="0" /></a></strong>
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->
@@ -406,9 +406,9 @@ escaped:
 <!-- expected expand PROTOCOL -->
 <span class="twikiNewLink"><a href=%SCRIPTURLPATH{"edit"}%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting;nowysiwyg=%IF{ "$ EDITMETHOD='wyswyg'" then="0" else="1"}% rel="nofollow" title="syntax (this topic does not yet exist; you can create it)">syntax</a></span>
 <p />
-<a href="http://gnu.org" target="_blank">GNU</a>
+<a href="http://gnu.org" target="_blank">GNU<img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/external-link.gif" width="13" height="12" alt="" border="0" /></a>
 <p />
-<a href="http://xml.org" target="_blank">XML</a>
+<a href="http://xml.org" target="_blank">XML<img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/external-link.gif" width="13" height="12" alt="" border="0" /></a>
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->
@@ -516,16 +516,16 @@ Note that when viewing this topic the table below may be formatted by <nop>Table
 
 ---++ Link in a table
 ---+++ Expected
-<!-- expected GOOGLE -->
+<!-- expected expand GOOGLE -->
 <table border="1" cellspacing="0" cellpadding="0" class=twikiTable>
 <tbody>
  <tr>
   <td>
-   <a  target="_blank" href="http://www.google.co.uk">http://www.google.co.uk</a>  </td>
+   <a  target="_blank" href="http://www.google.com/">http://www.google.com/<img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/external-link.gif" width="13" height="12" alt="" border="0" /></a>  </td>
  </tr>
  <tr>
   <td>
-   <a  target="_blank" href="http://www.google.co.uk">http://www.google.co.uk</a>  </td>
+   <a  target="_blank" href="http://www.google.com/">http://www.google.com/<img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/external-link.gif" width="13" height="12" alt="" border="0" /></a>  </td>
  </tr>
 </tbody>
 </table>
@@ -533,8 +533,8 @@ Note that when viewing this topic the table below may be formatted by <nop>Table
 ---+++ Actual
 ---+++ Actual
 <!-- actual -->
-|http://www.google.co.uk|
-| http://www.google.co.uk |
+|http://www.google.com/|
+| http://www.google.com/ |
 <!-- /actual -->
 
 ---++ Newlines in variable parameter lists
