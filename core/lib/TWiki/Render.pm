@@ -877,10 +877,13 @@ sub _externalLink {
             $opt = ' target="_top"';
         }
         if( $TWiki::cfg{Links}{ExternalLinksIcon} ) {
-            my $icnUrl = "$TWiki::cfg{PubUrlPath}/$TWiki::cfg{SystemWebName}"
-                       . "/TWikiDocGraphics/external-link.gif";
-            $icn = CGI::img( { src => $icnUrl, alt => '',
-                               width => 13, height => 12, border => 0 } );
+            unless( $this->{externalIcon} ) {
+                $this->{externalIcon} = CGI::img( { src =>
+                  "$TWiki::cfg{PubUrlPath}/$TWiki::cfg{SystemWebName}"
+                  . "/TWikiDocGraphics/external-link.gif", 
+                  alt => '', width => 13, height => 12, border => 0 } );
+            }
+            $icn = $this->{externalIcon};
         }
     }
     $text ||= $url;
