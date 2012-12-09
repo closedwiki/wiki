@@ -863,7 +863,11 @@ sub _externalLink {
                 $text =~ s/\@/'&#'.ord('@').';'/ge;
             }
         }
+    } elsif( $url =~ /^\// ) {
+        # TWiki internal link without domain
+        $opt = ' target="_top"';
     } else {
+        # regular external link
         $opt = ' target="_blank"';
     }
     $text ||= $url;
