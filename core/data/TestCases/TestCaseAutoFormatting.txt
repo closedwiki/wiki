@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354783221" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355035020" format="1.1" version="$Rev$"}%
 LinkAtStart
 <!-- /actual -->
 <!-- expected expand LINKATSTART -->
@@ -385,7 +385,7 @@ LinkBoxes
 escaped:
 [<nop>[wiki syntax]]
 <p />
-<a href="/relative/URL" target="_blank">relative url</a>
+<a href="/relative/URL" target="_top">relative url</a>
 <p />
 <span class="twikiNewLink"><a href=%SCRIPTURLPATH{"edit"}%/TestCases/FilterRubbishFromThelink?topicparent=TestCases.TestCaseAutoFormatting;nowysiwyg=%IF{ "$ EDITMETHOD='wysiwyg'" then="0" else="1" }% rel="nofollow" title="filter%rubbish;from'thelink (this topic does not yet exist; you can create it)">filter%rubbish;from'thelink </a></span>
 <!-- /expected -->
