@@ -44,7 +44,7 @@ require TWiki::Contrib::MailerContrib::Change;
 require TWiki::Contrib::MailerContrib::UpData;
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-01-13';
+our $RELEASE = '2012-12-08';
 
 our $verbose = 0;
 

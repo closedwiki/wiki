@@ -1,4 +1,5 @@
-# ---+ Mailer Contrib
+# ---+ Extensions
+# ---++ MailerContrib
 # Settings for the mailer that sends out topic change notifications.
 # **REGEX**
 # Define the regular expression that an email address entered in WebNotify
