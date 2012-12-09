@@ -31,6 +31,9 @@ sub set_up {
     $this->{twiki}->{store}->saveTopic(
         $this->{twiki}->{user}, $this->{test_web},
         'Numeric1Wikiword', "BLEEGLE");
+    $this->{externalIcon} = '<img src="'.$TWiki::cfg{PubUrlPath}.'/'
+        .$TWiki::cfg{SystemWebName}.'/TWikiDocGraphics/external-link.gif" '
+        .'width="13" height="12" alt="" border="0" />';
     $TWiki::cfg{AntiSpam}{RobotsAreWelcome} = 1;
     $TWiki::cfg{AntiSpam}{EmailPadding} = 'STUFFED';
     $TWiki::cfg{AllowInlineScript} = 1;
@@ -309,7 +312,7 @@ ACTUAL
 sub test_wikiWordInsideHttpLink {
     my $this = shift;
     my $expected = <<EXPECTED;
-<a href="http://google.com/" target="_blank">There is a <nop>WikiWord inside an external link</a>
+<a href="http://google.com/" target="_blank">There is a <nop>WikiWord inside an external link$this->{externalIcon}</a>
 EXPECTED
 
     my $actual = <<ACTUAL;
@@ -324,7 +327,7 @@ ACTUAL
 sub test_wikiWordInsideFileLink {
     my $this = shift;
     my $expected = <<EXPECTED;
-<a href="file://tmp/pam.gif" target="_blank">There is a <nop>WikiWord inside a file: link</a>
+<a href="file://tmp/pam.gif" target="_blank">There is a <nop>WikiWord inside a file: link$this->{externalIcon}</a>
 EXPECTED
 
     my $actual = <<ACTUAL;
@@ -610,7 +613,7 @@ sub test_protocols {
 
     foreach my $url (keys %urls) {
         my $expected = $urls{$url} || <<EXPECTED;
-<a href="$url" target="_blank">$url</a>
+<a href="$url" target="_blank">$url$this->{externalIcon}</a>
 EXPECTED
 
         # URL in text
@@ -656,11 +659,11 @@ sub test_4067_entities {
 sub test_externalLinkWithSpacedUrl {
     my $this = shift;
     my $expected = <<EXPECTED;
-<a href="http://twiki.org/p/pub/Some\%20File\%20WikiWord\%20And\%20Spaces.txt" target="_blank">topic</a>
+<a href="http://example.org/p/pub/Some\%20File\%20WikiWord\%20And\%20Spaces.txt" target="_blank">topic$this->{externalIcon}</a>
 EXPECTED
 
     my $actual = <<ACTUAL;
-[[http://twiki.org/p/pub/Some File WikiWord And Spaces.txt ][topic]]
+[[http://example.org/p/pub/Some File WikiWord And Spaces.txt ][topic]]
 ACTUAL
     $this->do_test($expected, $actual);
 }
