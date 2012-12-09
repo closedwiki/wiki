@@ -864,11 +864,13 @@ sub _externalLink {
                 $text =~ s/\@/'&#'.ord('@').';'/ge;
             }
         }
-    } elsif( $url =~ /^\// ) {
-        # Link without domain name: TWiki internal link
+
+    } elsif( $url =~ /^($this->{session}->{urlHost}|\/)/ ) {
+        # TWiki internal link if URL starts with TWiki domain or "/"
         $opt = ' target="_top"';
+
     } else {
-        # regular external link
+        # External link
         if( $TWiki::cfg{Links}{ExternalLinksInNewWindow} ) {
             $opt = ' target="_blank"';
         } else {
