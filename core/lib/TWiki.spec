@@ -1225,6 +1225,14 @@ $TWiki::cfg{TemplatePath} = '$TWiki::cfg{TemplateDir}/$web/$name.$skin.tmpl, $TW
 # found at <a href="http://en.wikipedia.org/wiki/URI_scheme">http://en.wikipedia.org/wiki/URI_scheme</a>.
 $TWiki::cfg{LinkProtocolPattern} = '(file|ftp|gopher|https|http|irc|mailto|news|nntp|telnet)';
 
+# **BOOLEAN**
+# Open external links in a new browser window or tab.
+$TWiki::cfg{Links}{ExternalLinksInNewWindow} = $TRUE;
+
+# **BOOLEAN**
+# Show external link icon next to external links.
+$TWiki::cfg{Links}{ExternalLinksIcon} = $TRUE;
+
 # **STRING 50 EXPERT**
 # Set to enable experimental mirror-site support. If this name is
 # different to MIRRORSITENAME, then this TWiki is assumed to be a
