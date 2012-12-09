@@ -1,4 +1,5 @@
-# ---+ JSCalendarContrib Settings
+# ---+ Extensions
+# ---++ JSCalendarContrib
 # This is the configuration used by the <b>JSCalendarContrib</b>.
 # See also documentation at
 # <a href="http://twiki.org/cgi-bin/view/Plugins/JSCalendarContrib">TWiki:Plugins/JSCalendarContrib</a>
