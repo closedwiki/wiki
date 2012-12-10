@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354975581" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355126807' format="1.1" version="$Rev$"}%
 ---+!! Read only and mirror web support
 
 ---++ Scope
@@ -134,9 +134,12 @@ And then you would set SKIN to e.g. =mirror, topmenu, pattern=.
    If the web is neither master nor slave, the function returns the URL on the same site.
    $ TWiki::Func::getContext() : This is not specifically for read-only and mirror webs, but you can obtain the context and determine what you do.
 
----++ Web statistics
+---+++ Statistics script
 
----+++ Mirrored webs
+The =statistics= script behaves differently in the presence of read-only and/or mirror webs.
+There are additional configuration parameters of read-only and mirror webs.
+
+---++++ Mirrored webs
 
 If you run a [[MetadataRepository#Federation_of_sites][federation of sites]], you should want to consolidate access figures of the master web and the slave webs.
 Taking the example on [[MetadataRepository#Federation_of_sites][the topic]],
@@ -160,7 +163,7 @@ Needless to say, the file glob needs to cover the log file of the local log file
 The =statistics= script writes to !WebStatistics only on the master site of a web. For example, !WebOne.WebStatistics is written only on =strawman=.
 And then, !WebStatistics is mirrored to slave sites together with other updated topics.
 
----+++ Read-only webs
+---++++ Read-only webs
 
 By default, read-only webs don't get their !WebStatistics topic updated because you cannot update topics there.
 By setting ={Stats}{ReadOnlyWebs}= and ={Stats}{ReadOnlyWebStatsOn}= configuration parameters as follows, read-only webs' statistics is written as <i>WEBNAME</i>WebStatistics topic on the web specified by ={Stats}{ReadOnlyWebStatsOn}= on the master site.
@@ -173,6 +176,10 @@ This way, users don't have to know where read-only webs' statistics are housed.
 <verbatim>
 %INCLUDE{"%USERSWEB%.%WEB%WebStatistics" disablefixlinks="on"}%
 </verbatim>
+
+---+++ tools/mailnotify
+
+Change notification by =tools/mailnotify= happens only with local or master webs for the obvious reasons.
 
 __Related Topics:__ AdminDocumentationCategory, MetadataRepository, VarCONTENTMODE, VarSCRIPTURL2, VarWEBLIST
 
