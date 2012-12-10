@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1318876477" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355126320" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -158,6 +158,7 @@ Some of the below variables can _only_ be set this way, some of the may be overr
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2.98 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-12-10 | TWikibug:Item7071: MathModePlugin doesn't support multiple disks. |
 |  2011-10-17 | TWikibug:Item6799: Add troubleshoot info -- TWiki:Main.MatthiasRella |
 |  2010-04-25 | TWikibug:Item6433: Doc improvements -- TWiki:Main.PeterThoeny |
 |  07 Dec 2007: | replaced =templfile= with =mktemp= in the latex2img helper script |
