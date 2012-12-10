@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355129752" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355130183" format="1.1" version="$Rev$"}%
 ---+!! Date Picker Plugin
 <!--
    Contributions to this plugin package are appreciated. Please update this page at
@@ -11,7 +11,7 @@
 %TOC{title="Page contents"}%
 </div>
 <div style="float:right; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
-<img src="%PUBURLPATH%/%WEB%/%TOPIC%/screenshot.png" alt="Percent complete screenshot" width="237" height="202" />
+<img src="%PUBURLPATH%/%WEB%/%TOPIC%/screenshot.png" alt="Date picker screenshot" width="237" height="202" />
 </div>
 </sticky>
 %SHORTDESCRIPTION%
