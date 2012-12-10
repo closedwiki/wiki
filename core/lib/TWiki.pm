@@ -1753,17 +1753,17 @@ sub new {
     require TWiki::Store;
     $this->{store} = new TWiki::Store( $this );
 
-    $this->{remoteUser} = $login;    #use login as a default (set when running from cmd line)
-    require TWiki::Users;
-    $this->{users} = new TWiki::Users( $this );
-    $this->{remoteUser} = $this->{users}->{remoteUser};
-
     if( $TWiki::cfg{Mdrepo}{Store} && $TWiki::cfg{Mdrepo}{Dir} &&
         $TWiki::cfg{Mdrepo}{Tables}
     ) {
 	require TWiki::Mdrepo;
 	$this->{mdrepo} = new TWiki::Mdrepo( $this );
     }
+
+    $this->{remoteUser} = $login;    #use login as a default (set when running from cmd line)
+    require TWiki::Users;
+    $this->{users} = new TWiki::Users( $this );
+    $this->{remoteUser} = $this->{users}->{remoteUser};
 
     # Make %ENV safer, preventing hijack of the search path
     # SMELL: can this be done in a BEGIN block? Or is the environment
