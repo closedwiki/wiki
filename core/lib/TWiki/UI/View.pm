@@ -518,17 +518,17 @@ sub viewfile {
             my $suffix = $1;
             my $presuffix = $fileName;
             $presuffix  =~ s/\.$suffix$//;
-            $webName =~ s/$presuffix$//o;  #let us drop filename part from webName
+            $webName =~ s/$presuffix$//;  #let us drop filename part from webName
             $webName =~ s/\/$//o;
             if ($webName =~ /\/([^\/]+)$/) {$topic = $1;} #topic name defined here
-            $webName =~ s/$topic$//o;
+            $webName =~ s/$topic$//;
             $webName =~ s/\/$//o;
 
          } else {    #file does not have extension
-            $webName =~ s/$fileName$//o;  #let us drop the filename from webName
+            $webName =~ s/$fileName$//;  #let us drop the filename from webName
             $webName =~ s/\/$//o;
             if ($webName =~ /\/([^\/]+)$/) {$topic = $1;}  #topic name redefined here
-            $webName =~ s/$topic$//o;
+            $webName =~ s/$topic$//;
             $webName =~ s/\/$//o;
         }
         $retrofit = 1;
