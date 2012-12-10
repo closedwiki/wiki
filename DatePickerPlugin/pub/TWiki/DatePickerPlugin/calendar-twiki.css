@@ -12,7 +12,7 @@ div.calendar { position: relative; }
   font-size: 11px;
   color: #000;
   cursor: default;
-  background: #fdfeff;
+  background: #edeef1;
   font-family: tahoma,verdana,sans-serif;
 }
 
@@ -30,7 +30,7 @@ div.calendar { position: relative; }
 .calendar thead .title { /* This holds the current "month, year" */
   font-weight: bold;      /* Pressing it will take you to the current date */
   text-align: center;
-  background: #b3b2ab url(twiki-bg.gif) repeat-x 100% 100%;
+  background: #b3b2ab url(twiki-bg.gif) repeat-x;
   color: #222;
   padding: 2px;
 }
@@ -68,6 +68,10 @@ div.calendar { position: relative; }
 }
 
 /* The body part -- contains all the days in month. */
+
+.calendar tbody td {
+  background: #fdfeff;
+}
 
 .calendar tbody .day { /* Cells <TD> containing month days dates */
   width: 2em;
@@ -140,7 +144,7 @@ div.calendar { position: relative; }
 
 .calendar tfoot .ttip { /* Tooltip (status bar) cell <TD> */
   border-top: 1px solid #a2a5ae;
-  background: #b3b2ab url(twiki-bg.gif) repeat-x 100% 100%;
+  background: #b3b2ab url(twiki-bg.gif) repeat-x;
   color: #420;
 }
 
