@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355128901" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355129304" format="1.1" version="$Rev$"}%
 ---+!! Date Picker Plugin
 <!--
    Contributions to this plugin package are appreciated. Please update this page at
@@ -20,7 +20,7 @@
 
 The !DatePickerPlugin handles an input field with a pop-up calendar to select a date for use in TWiki forms and TWiki applications. The plugin is based on the [[http://www.dynarch.com/projects/calendar/old/][Mishoo JSCalendar]], a DHTML pop-up calendar. The date format can be customized.
 
-This plugin replaces the JSCalendarContrib. ATTENTION: At this time the !JSCalendarContrib and the !DatePickerPlugin do not coexists, uninstall the !JSCalendarContrib before using the !DatePickerPlugin.
+%X% __ATTENTION:__ This plugin replaces the JSCalendarContrib. At this time the !JSCalendarContrib and the !DatePickerPlugin do not coexist, uninstall the !JSCalendarContrib before using the !DatePickerPlugin.
 
 ---++ Use Date Picker in !TWikiForms
 
@@ -64,7 +64,7 @@ Test: (this only works if the !DatePickerPlugin is installed and enabled)
      | *Setting* | *Default* |
      | =$TWiki::cfg{Plugins}{DatePickerPlugin}{Format}= | ='%Y-%m-%d'= |
      | =$TWiki::cfg{Plugins}{DatePickerPlugin}{Lang}= | ='en'= |
-     | =$TWiki::cfg{Plugins}{DatePickerPlugin}{Style}= | ='blue'= |
+     | =$TWiki::cfg{Plugins}{DatePickerPlugin}{Style}= | ='twiki'= |
 
 ---++ Plugin Info
 
