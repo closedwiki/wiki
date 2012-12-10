@@ -1,0 +1,1 @@
+TWiki::Plugins::JQueryPlugin,>=1.0,perl,Required; pre-installed in TWiki-5; download from TWiki:Plugins/JQueryPlugin
