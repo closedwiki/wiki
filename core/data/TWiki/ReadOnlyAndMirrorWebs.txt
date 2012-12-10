@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354264361" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1354975581" format="1.1" version="$Rev$"}%
 ---+!! Read only and mirror web support
 
 ---++ Scope
@@ -40,7 +40,7 @@ In a skin, you can use the context each mode provides.
 
 ---++ Setting up
 
-Setting the site's identifier (a few character long alpha-numeric string) to $TWiki::cfg{SiteName} enables you to use this feature.
+Setting the site's identifier (a few character long alpha-numeric string) to =$TWiki::cfg{SiteName}= enables this feature.
 
 There are two ways to set read-only and mirroring related information.
 One is to use MetadataRepository and the other is setting preferences on !WebPreferences.
@@ -133,6 +133,46 @@ And then you would set SKIN to e.g. =mirror, topmenu, pattern=.
    $ TWiki::Func::getScriptUrl($web, $topic, $script, '$master' =&gt; 'on') : Returns the URL of the specified script accessing the web and topic specified on the master web.
    If the web is neither master nor slave, the function returns the URL on the same site.
    $ TWiki::Func::getContext() : This is not specifically for read-only and mirror webs, but you can obtain the context and determine what you do.
+
+---++ Web statistics
+
+---+++ Mirrored webs
+
+If you run a [[MetadataRepository#Federation_of_sites][federation of sites]], you should want to consolidate access figures of the master web and the slave webs.
+Taking the example on [[MetadataRepository#Federation_of_sites][the topic]],
+!WebOne.WebStatistics should be of accesses on the servers =strawman=, =woodenman=, and =tinman=, rather than each server has its own stats.
+
+For that, access log files need to be copied among the federation members.
+Concretely speaking, =strawman= needs to get access logs of =woodenman= and =tinman=, =woodenman= needs to get access logs of =strawman= and =tinman=, etc.
+This should be done as a part of content mirroring.
+
+If ={Stats}{LogFileGlob}= configuration parameter is set as shown below, the =statistics= script reads access log files matching the file glob (wildcard) *instead of* the file specified by ={LogFileName}=.
+<verbatim>
+$TWiki::cfg{Stats}{LogFileGlob} = "$TWiki::cfg{LogDir}*/log%DATE%.*.txt";
+</verbatim>
+In the example above, the following things are assumed/implied.
+   * =$TWiki::cfg{LogDir}= has the directory having access log (=logYYYYMM.txt=), warning log (=warnYYYYMM.txt=), and debug log (=debugYYYYMM.txt=) files
+      * e.g. =/var/twiki/logs=
+   * Log files of the other sites in the federation are stored in ="$TWiki::cfg{LogDir}-$site_name"=
+      * e.g. =/var/twiki/logs-eu= and =/var/twiki/logs-as=
+Needless to say, the file glob needs to cover the log file of the local log file in addition to log files copied from the other sites.
+
+The =statistics= script writes to !WebStatistics only on the master site of a web. For example, !WebOne.WebStatistics is written only on =strawman=.
+And then, !WebStatistics is mirrored to slave sites together with other updated topics.
+
+---+++ Read-only webs
+
+By default, read-only webs don't get their !WebStatistics topic updated because you cannot update topics there.
+By setting ={Stats}{ReadOnlyWebs}= and ={Stats}{ReadOnlyWebStatsOn}= configuration parameters as follows, read-only webs' statistics is written as <i>WEBNAME</i>WebStatistics topic on the web specified by ={Stats}{ReadOnlyWebStatsOn}= on the master site.
+<verbatim>
+$TWiki::cfg{Stats}{ReadOnlyWebs} = [qw(TWiki)];
+$TWiki::cfg{Stats}{ReadOnlyWebStatsOn} = $TWiki::cfg{UsersWebName};
+</verbatim>
+On a read-only web, !WebStatistics is supposed be as follows.
+This way, users don't have to know where read-only webs' statistics are housed.
+<verbatim>
+%INCLUDE{"%USERSWEB%.%WEB%WebStatistics" disablefixlinks="on"}%
+</verbatim>
 
 __Related Topics:__ AdminDocumentationCategory, MetadataRepository, VarCONTENTMODE, VarSCRIPTURL2, VarWEBLIST
 

@@ -1,0 +1,7 @@
+%META:TOPICINFO{author="TWikiContributor" date="1354963969" format="1.1" version="$Rev$"}%
+__Notes:__
+   * Do not edit this topic, it is updated automatically.
+   %IF{"{Stats}{DisableInvocationFromBrowser}" then="<nop>" else="(You can also [[%SCRIPTURL{"statistics"}%/%WEB%/%TOPIC%][force]] an update)"}%
+   * [[%SYSTEMWEB%.TWikiSiteTools#WebStatistics][TWikiSiteTools]] explains how to enable automatic updates of the statistics pages.
+
+__Related:__ [[%USERSWEB%.SiteStatistics][SiteStatistics]]%IF{"{NoInAllPublicWebs}" else=", !WebStatistics in"}% %%IF{"{NoInAllPublicWebs}" then="HIDE{" else="SEARCH{"}% "WebStatistics" scope="topic" web="all, -%WEB%" topic="WebStatistics" nonoise="on" format="[[$web.$topic][$web]]" separator=", " limit="50" }% %IF{"{NoInAllPublicWebs}" else="webs"}%

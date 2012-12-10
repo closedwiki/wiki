@@ -5,8 +5,4 @@
 | *Month:* | *Topic <br /> views:* | *Topic <br /> saves:* | *File <br /> uploads:* | *Most popular <br /> topic views:* | *Top contributors for <br /> topic save and uploads:* |
 | <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> | <!--statTopViews--> | <!--statTopContributors--> |
 
-__Notes:__
-   * Do not edit this topic, it is updated automatically. (You can also [[%SCRIPTURL{"statistics"}%/%WEB%/%TOPIC%][force]] an update)
-   * [[%SYSTEMWEB%.TWikiSiteTools#WebStatistics][TWikiSiteTools]] explains how to enable automatic updates of the statistics pages.
-
-__Related:__ [[%USERSWEB%.SiteStatistics][SiteStatistics]], !WebStatistics in %SEARCH{ "WebStatistics" scope="topic" web="all, -%WEB%" topic="WebStatistics" nonoise="on" format="[[$web.$topic][$web]]" separator=", " limit="50" }% webs
+%INCLUDE{WebStatisticsFooter}%

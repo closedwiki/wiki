@@ -21,13 +21,93 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
+
 =begin twiki
+
 
 ---+ package TWiki::UI::Statistics
 
 Statistics extraction and presentation
 
+---++ package ParaLogReader
+
+An internal class to read TWiki log entries in the chronological order from
+multiple log files.
+
+Usage:
+<verbatim>
+my $reader = ParaLogReader->new(@logFiles);
+while ( my $line = $reader->getline() ) {
+   ...
+}
+</verbatim>
+
 =cut
+
+package ParaLogReader;
+
+use strict;
+use IO::File;
+
+sub insert {
+    my ($arrayRef, $val) = @_;
+    my $idx = 0;
+    while ( $idx < @$arrayRef ) {
+	last if ( $val lt $arrayRef->[$idx] );
+	$idx++;
+    }
+    splice(@$arrayRef, $idx, 0, $val);
+    $idx;
+}
+
+sub readEnt {
+    my $fh = shift;
+    my $line;
+    while ( $line = <$fh> ) {
+	last if ( $line =~ /^\| \d{4}-\d\d-\d\d - \d\d:\d\d/ );
+    }
+    $line;
+}
+
+sub new {
+    my ($class, @files) = @_;
+    my $self = bless {}, $class;
+    my @fhs;
+    my @heads;
+    for my $i ( @files ) {
+	my $fh = IO::File->new("< $i");
+	if ( $fh ) {
+	    my $line = readEnt($fh);
+	    if ( $line ) {
+		splice(@fhs, insert(\@heads, $line), 0, $fh);
+	    }
+	    else {
+		$fh->close();
+	    }
+	}
+    }
+    $self->{fhs} = \@fhs;
+    $self->{heads} = \@heads;
+    $self;
+}
+
+sub getline {
+    my ($self) = @_;
+    my $fhsRef = $self->{fhs};
+    my $headsRef = $self->{heads};
+    return undef if ( @$headsRef == 0 );
+    my $val = shift @$headsRef;
+    my $fh = shift @$fhsRef;
+    my $next = readEnt($fh);
+    if ( $next ) {
+	splice(@$fhsRef, insert($headsRef, $next), 0, $fh);
+    }
+    else {
+	$fh->close();
+    }
+    $val;
+}
+#===========================================================
 
 package TWiki::UI::Statistics;
 
@@ -79,6 +159,13 @@ sub statistics {
         $session->generateHTTPHeaders();
         $session->{response}->body(
             CGI::start_html( -title => 'TWiki: Create Usage Statistics' ) );
+        if ( $TWiki::cfg{Stats}{DisableInvocationFromBrowser} ) {
+            _printMsg( $session,
+                       'This script is not for interactive use from browser' );
+            $session->{response}->body( $session->{response}->body .
+                                        CGI::end_html() );
+            return;
+        }
     }
     # Initial messages
     _printMsg( $session, 'TWiki: Create Usage Statistics' );
@@ -109,18 +196,32 @@ sub statistics {
     _printMsg( $session, "* Statistics for $logYearMo" );
     _printMsg( $session, '* Executed by ' . $session->{users}->getWikiName( $session->{user} ) );
 
-    my $logFile = $TWiki::cfg{LogFileName};
-    $logFile =~ s/%DATE%/$logDate/g;
-    unless( -e $logFile ) {
-        _printMsg( $session, "!Log file $logFile does not exist; aborting" );
-        return;
+    my @logFiles;
+    if ( my $logFileGlob = $TWiki::cfg{Stats}{LogFileGlob} ) {
+        $logFileGlob =~ s/%DATE%/$logDate/g;
+        @logFiles = glob $logFileGlob;
+        if ( @logFiles == 0 ) {
+            _printMsg( $session, "!Log files $logFileGlob do not exist; aborting" );
+            return;
+        }
+    }
+    else {
+        my $logFile = $TWiki::cfg{LogFileName};
+        $logFile =~ s/%DATE%/$logDate/g;
+        unless( -e $logFile ) {
+            _printMsg( $session, "!Log file $logFile does not exist; aborting" );
+            return;
+        }
+        @logFiles = ($logFile);
     }
 
     # Do a single data collection pass on the temporary copy of logfile,
     # then process each web once.
     my ($viewRef, $saveRef, $contribRef, $statViewsRef, $statSavesRef, $statUploadsRef) =
-      _collectLogData( $session, $logFile );
+      _collectLogData( $session, @logFiles );
 
+    my %roWeb;
+    my $roWebStatsOn;
     my @weblist;
     my $webSet = TWiki::Sandbox::untaintUnchecked($session->{request}->param( 'webs' ))
                || $session->{requestedWebName};
@@ -130,7 +231,18 @@ sub statistics {
 
     } else {
         # otherwise do all user webs:
-        @weblist = $session->{store}->getListOfWebs( 'user' );
+        @weblist = $session->{store}->getListOfWebs( 'user,writable' );
+        # add read-only webs if appropriate
+        if ( $TWiki::cfg{Stats}{ReadOnlyWebs} ) {
+            if ( $roWebStatsOn = $TWiki::cfg{Stats}{ReadOnlyWebStatsOn} ) {
+                my %included = map { $_ => 1 } @weblist;
+                if ( $included{$roWebStatsOn} ) {
+                    %roWeb = map { $_ => 1 }
+                                 @{$TWiki::cfg{Stats}{ReadOnlyWebs}};
+                    push(@weblist, @{$TWiki::cfg{Stats}{ReadOnlyWebs}});
+                }
+            }
+        }
     }
 
     # do site statistics (only if no specific webs selected, or if force update from SiteStatistics)
@@ -147,10 +259,16 @@ sub statistics {
     }
 
     foreach my $web ( @weblist ) {
+        my $webToSave;
+        if ( $roWeb{$web} ) {
+            $webToSave = $roWebStatsOn;
+        }
         try {
             _processWeb( $session, $web, $logYearMo, $logMonYear,
                         $viewRef, $contribRef,
-                        $statViewsRef, $statSavesRef, $statUploadsRef );
+                        $statViewsRef, $statSavesRef, $statUploadsRef,
+                        $webToSave,
+            );
         } catch TWiki::AccessControlException with  {
             _printMsg( $session, '  - ERROR: no permission to CHANGE statistics topic in '.$web);
         }
@@ -207,7 +325,7 @@ sub _debugPrintHash {
 #   $contrib{$web}{"Main.".$WikiName} == number of saves/uploads, by user
 #===========================================================
 sub _collectLogData {
-    my( $session, $logFile ) = @_;
+    my( $session, @logFiles ) = @_;
 
     # Log file format:
     # | date | user | operation | web.topic | notes | ip address |
@@ -231,20 +349,26 @@ sub _collectLogData {
     my $users = $session->{users};
 
     # Copy the log file to temp file, since analysis could take some time
-    my $tmpFileHandle = new File::Temp(
-        DIR      => $session->{store}->getWorkArea( 'CoreStatistics' ),
-        TEMPLATE => 'twiki-stats-XXXXXXXXXX',
-        SUFFIX   => '.txt',
-        # UNLINK => 0         # To debug, uncomment this to keep the temp file
-      );
+    my $tmpFileHandle;
+    if ( @logFiles > 1 ) {
+        $tmpFileHandle = ParaLogReader->new(@logFiles);
+    }
+    else {
+        $tmpFileHandle = new File::Temp(
+            DIR      => $session->{store}->getWorkArea( 'CoreStatistics' ),
+            TEMPLATE => 'twiki-stats-XXXXXXXXXX',
+            SUFFIX   => '.txt',
+            # UNLINK => 0      # To debug, uncomment this to keep the temp file
+            );
 
-    # Don't use File::Copy, it does not work with File::Temp older than 0.22
-    _copy( $logFile, $tmpFileHandle ) or throw Error::Simple( 'Cannot backup log file: '.$! );
-    # Seek to start of temp file
-    $tmpFileHandle->seek( 0, 0 );
+        # Don't use File::Copy, it does not work with File::Temp older than 0.22
+        _copy( $logFiles[0], $tmpFileHandle ) or throw Error::Simple( 'Cannot backup log file: '.$! );
+        # Seek to start of temp file
+        $tmpFileHandle->seek( 0, 0 );
+    }
 
     # main log file loop, line by line
-    while ( my $line = <$tmpFileHandle> ) {
+    while ( my $line = $tmpFileHandle->getline ) {
         my @fields = split( /\s*\|\s*/, $line );
 
         my( $date, $logFileUserName );
@@ -305,7 +429,8 @@ sub _collectLogData {
                 }
             }
         } else {
-            $session->writeDebug('WebStatistics: Bad logfile line '.$line);
+            $session->writeDebug('WebStatistics: Bad logfile line '.$line)
+                unless ( $webTopic =~ /^_/ );
         }
     }
 
@@ -391,7 +516,7 @@ sub _collectSiteStats {
 
     $siteStats->{statDate} = $logYearMo;
 
-    my @weblist = $session->{store}->getListOfWebs( 'user' );
+    my @weblist = $session->{store}->getListOfWebs( 'user,writable' );
     $siteStats->{statWebs} = scalar @weblist;
     $siteStats->{statWebs} = 0 unless( $currentMonth );
 
@@ -606,7 +731,7 @@ sub _processSiteStats {
 #===========================================================
 sub _processWeb {
     my( $session, $web, $logYearMo, $logMonYear, $viewRef, $contribRef,
-        $statViewsRef, $statSavesRef, $statUploadsRef ) = @_;
+        $statViewsRef, $statSavesRef, $statUploadsRef, $webToSave ) = @_;
 
     _printMsg( $session, "* Reporting on $web web" );
 
@@ -692,7 +817,13 @@ sub _processWeb {
     }
     $text = join( "\n", @lines );
     $text .= "\n";
-    $session->{store}->saveTopic( $session->{user}, $web, $statsTopic,
+    if ( $webToSave ) {
+        $statsTopic = $web . $statsTopic;
+    }
+    else {
+        $webToSave = $web;
+    }
+    $session->{store}->saveTopic( $session->{user}, $webToSave, $statsTopic,
                                   $text, $meta,
                                   { minor => 1,
                                     dontlog => 1 } );
