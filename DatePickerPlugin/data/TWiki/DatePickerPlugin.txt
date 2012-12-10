@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355122606" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355128901" format="1.1" version="$Rev$"}%
 ---+!! Date Picker Plugin
 <!--
    Contributions to this plugin package are appreciated. Please update this page at
@@ -11,7 +11,7 @@
 %TOC{title="Page contents"}%
 </div>
 <div style="float:right; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
-<img src="%PUBURLPATH%/%WEB%/%TOPIC%/screenshot.png" alt="Percent complete screenshot" width="228" height="196" />
+<img src="%PUBURLPATH%/%WEB%/%TOPIC%/screenshot.png" alt="Percent complete screenshot" width="237" height="202" />
 </div>
 </sticky>
 %SHORTDESCRIPTION%
@@ -27,7 +27,7 @@ This plugin replaces the JSCalendarContrib. ATTENTION: At this time the !JSCalen
 This package adds a =date= type to %SYSTEMWEB%.TWikiForms:
 
 | *Type* | *Description* | *Size* | *Value* |
-| =date= | %IF{ "'%BASETOPIC%'!='%TOPIC%'" then="<img src='%PUBURLPATH%/%WEB%/DatePickerPlugin/screenshot-small.png' alt='screenshot-small' width='150' height='139' align='right' style='margin-left:20px;' /> "}%Text input field and a button next to it to pick a date from a pop-up calendar. The date can also be typed into the text box. The date format can be customized. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[DatePickerPlugin][See details]]." }% | Text box width in number of characters | Initial (default) date |
+| =date= | %IF{ "'%BASETOPIC%'!='%TOPIC%'" then="<img src='%PUBURLPATH%/%WEB%/DatePickerPlugin/screenshot-small.png' alt='screenshot-small' width='150' height='126' align='right' style='margin-left:15px;' /> "}%Text input field and a button next to it to pick a date from a pop-up calendar. The date can also be typed into the text box. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[DatePickerPlugin][See details]]." }% | Text box width in number of characters | Initial (default) date |
 
 Example form definition:
 
