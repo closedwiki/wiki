@@ -92,6 +92,7 @@ sub handleDATEPICKER  {
   my $name   = $params->{name};
   my $value  = $params->{value};
   my $format = $params->{format};
+  # FIXME: size, class, and more
   return renderForEdit( $name, $value, $format );
 }
 
@@ -147,6 +148,7 @@ sub renderForEdit {
     $options->{id} = 'id_'.$name;
     $options->{value} = $value || '';
     $options->{size} ||= length($wide);
+    $options->{class} ||= 'twikiInputField';
 
     my $text = CGI::textfield($options)
       . CGI::image_button(
