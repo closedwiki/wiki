@@ -48,7 +48,7 @@ $TWiki::cfg{Plugins}{DatePickerPlugin}{Format} = '%Y-%m-%d';
 $TWiki::cfg{Plugins}{DatePickerPlugin}{Lang} = 'en';
 
 # **STRING 10**
-# <b>Style</b>. Default: blue. Available: blue, blue2, brown, green, system, tas, win2k-1,
-# win2k-2, win2k-cold-1, win2k-cold-2.
-$TWiki::cfg{Plugins}{DatePickerPlugin}{Style} = 'blue';
+# <b>Style</b>. Default: twiki. Available: blue, blue2, brown, green, system, tas, twiki, 
+# win2k-1, win2k-2, win2k-cold-1, win2k-cold-2.
+$TWiki::cfg{Plugins}{DatePickerPlugin}{Style} = 'twiki';
 
