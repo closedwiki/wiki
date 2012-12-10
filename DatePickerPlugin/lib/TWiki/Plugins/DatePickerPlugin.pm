@@ -38,7 +38,7 @@ require TWiki::Func;    # The plugins API
 
 # ========================================================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-12-09';
+our $RELEASE = '2012-12-10';
 our $SHORTDESCRIPTION = "Pop-up calendar with date picker, for use in TWiki forms, HTML forms and TWiki plugins";
 our $NO_PREFS_IN_TOPIC = 1;
 

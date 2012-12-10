@@ -16,6 +16,7 @@ pub/TWiki/DatePickerPlugin/calendar-setup_stripped.js 0644
 pub/TWiki/DatePickerPlugin/calendar_stripped.js 0644
 pub/TWiki/DatePickerPlugin/calendar-system.css 0644
 pub/TWiki/DatePickerPlugin/calendar-tas.css 0644
+pub/TWiki/DatePickerPlugin/calendar-twiki.css 0644
 pub/TWiki/DatePickerPlugin/calendar-win2k-1.css 0644
 pub/TWiki/DatePickerPlugin/calendar-win2k-2.css 0644
 pub/TWiki/DatePickerPlugin/calendar-win2k-cold-1.css 0644
@@ -97,4 +98,5 @@ pub/TWiki/DatePickerPlugin/test.php 0644
 pub/TWiki/DatePickerPlugin/test-position.html 0644
 pub/TWiki/DatePickerPlugin/transparent.gif 0644
 pub/TWiki/DatePickerPlugin/twiki.js 0644
+pub/TWiki/DatePickerPlugin/twiki-bg.gif 0644
 pub/TWiki/DatePickerPlugin/twiki_src.js 0644
