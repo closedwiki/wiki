@@ -2177,12 +2177,13 @@ sub writeHeader {
 =pod
 
 #RedirectCgiQuery
----+++ redirectCgiQuery( $query, $url, $passthru )
+---+++ redirectCgiQuery( $query, $url, $passthru, $viaCache )
 
 Redirect to URL
    * =$query= - CGI query object. Ignored, only there for compatibility. The session CGI query object is used instead.
    * =$url=   - URL to redirect to
    * =$passthru= - enable passthrough.
+   * =$viaCache= - forcibly cache a redirect CGI query. It cuts off all the params in a GET url and replace with a "?$cache=..." param. "$viaCache" is meaningful only if "$passthru" is true.
 
 Return:             none
 

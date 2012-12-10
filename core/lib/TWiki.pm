@@ -823,12 +823,14 @@ sub _getRedirectUrl {
 
 =pod
 
----++ ObjectMethod redirect( $url, $passthrough, $action_redirectto )
+---++ ObjectMethod redirect( $url, $passthrough, $action_redirectto, $viaCache )
 
    * $url - url or twikitopic to redirect to
    * $passthrough - (optional) parameter to **FILLMEIN**
    * $action_redirectto - (optional) redirect to where ?redirectto=
      points to (if it's valid)
+   * $viaCache - forcibly cache a redirect CGI query. It cuts off all 
+     the params in a GET url and replace with a "?$cache=..." param.
 
 Redirects the request to =$url=, *unless*
    1 It is overridden by a plugin declaring a =redirectCgiQueryHandler=.
@@ -848,7 +850,8 @@ URL would be too big for the receiver, so it caches the form data and passes
 over a cache reference in the redirect GET.
 
 NOTE: Passthrough is only meaningful if the redirect target is on the same
-server.
+server. "$viaCache" is meaningful only if "$action_redirectto" is false and 
+"$passthru" is true.
 
 =cut
 
