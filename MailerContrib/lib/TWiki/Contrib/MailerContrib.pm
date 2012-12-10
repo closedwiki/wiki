@@ -104,7 +104,7 @@ sub mailNotify {
     initContrib();
 
     my $report = '';
-    foreach my $web ( TWiki::Func::getListOfWebs( 'user ') ) {
+    foreach my $web ( TWiki::Func::getListOfWebs( 'user,writable') ) {
        if ( $web =~ /^($webstr)$/ && $web !~ /^($exwebstr)$/ ) {
           $report .= _processWeb( $twiki, $web );
        }
