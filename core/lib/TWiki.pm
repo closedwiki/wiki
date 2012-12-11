@@ -4672,8 +4672,21 @@ sub MAKETEXT {
 
     # unescape parameters and calculate highest parameter number:
     my $max = 0;
-    $str =~ s/~\[(\_(\d+))~\]/ $max = $2 if ($2 > $max); "[$1]"/ge;
-    $str =~ s/~\[(\*,\_(\d+),[^,]+(,([^,]+))?)~\]/ $max = $2 if ($2 > $max); "[$1]"/ge;
+    my $min = 1;
+    $str =~ s/~\[(\_(\d+))~\]/
+              $max = $2 if ($2 > $max);
+              $min = $2 if ($2 < $min);
+              "[$1]"/ge;
+    $str =~ s/~\[(\*,\_(\d+),[^,]+(,([^,]+))?)~\]/
+              $max = $2 if ($2 > $max);
+              $min = $2 if ($2 < $min);
+              "[$1]"/ge;
+
+    # Item7080: Sanitize MAKETEXT variable:
+    return "MAKETEXT error: No more than 32 parameters are allowed" if( $max > 32 );
+    return "MAKETEXT error: Parameter 0 is not allowed" if( $min < 1 );
+    $str =~ s#\\#\\\\#g if( $TWiki::cfg{UserInterfaceInternationalisation}
+              && $Locale::Maketext::VERSION && $Locale::Maketext::VERSION < 1.23 );
 
     # get the args to be interpolated.
     my $argsStr = $params->{args} || "";
