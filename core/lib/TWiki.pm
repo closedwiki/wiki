@@ -4685,8 +4685,8 @@ sub MAKETEXT {
     # Item7080: Sanitize MAKETEXT variable:
     return "MAKETEXT error: No more than 32 parameters are allowed" if( $max > 32 );
     return "MAKETEXT error: Parameter 0 is not allowed" if( $min < 1 );
-    $str =~ s#\\#\\\\#g if( $TWiki::cfg{UserInterfaceInternationalisation}
-              && $Locale::Maketext::VERSION && $Locale::Maketext::VERSION < 1.23 );
+    $str =~ s#\\#\\\\#g; # if( $TWiki::cfg{UserInterfaceInternationalisation}
+             # && $Locale::Maketext::VERSION && $Locale::Maketext::VERSION < 1.23 );
 
     # get the args to be interpolated.
     my $argsStr = $params->{args} || "";
