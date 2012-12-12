@@ -1641,7 +1641,7 @@ sub getListOfWebs {
             # The canmoveto filter is for rename/move destination list.
             # It's not a big deal for the result to have webs supposed to be
             # filtered out.
-            if ( $TWiki::cfg{SiteName} ) {
+            if ( $TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName} ) {
                 @webList = $this->_filterWritable(\@webList, 1);
             }
             return sort @webList;
@@ -1669,7 +1669,7 @@ sub getListOfWebs {
               } @webList;
         }
     }
-    if ( $TWiki::cfg{SiteName} ) {
+    if ( $TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName} ) {
         # The 'canmoveto' filter result is always equal to or smaller than
         # the 'writable' filter result.
         if ( $filter =~ /\bcanmoveto\b/ ) {
@@ -2149,7 +2149,7 @@ Called only if $TWiki::cfg{MultipleDisks} is true.
 sub getDiskInfo {
     my( $this, $web, $site ) = @_;
     my $handler = $this->_getHandler( $web );
-    if ( $site eq ($TWiki::cfg{SiteName} || '') &&
+    if ( $site eq ($TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName} || '') &&
          defined($handler->{diskID})
     ) {
         # shortcut

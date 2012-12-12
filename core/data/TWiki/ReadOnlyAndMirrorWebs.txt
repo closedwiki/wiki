@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355126807' format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355276563" format="1.1" version="$Rev$"}%
 ---+!! Read only and mirror web support
 
 ---++ Scope
@@ -40,7 +40,7 @@ In a skin, you can use the context each mode provides.
 
 ---++ Setting up
 
-Setting the site's identifier (a few character long alpha-numeric string) to =$TWiki::cfg{SiteName}= enables this feature.
+Setting the site's identifier (a few character long alpha-numeric string) to =$TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName}= enables this feature.
 
 There are two ways to set read-only and mirroring related information.
 One is to use MetadataRepository and the other is setting preferences on !WebPreferences.
@@ -51,7 +51,7 @@ So you can accomplish that without introducing MetadataRepository.
 That should be handy if you want to try it out before diving into it.
 
 ---+++ !WebPreferences
-If you are not using MetadataRepository, you can make a web read-only by setting MASTERSITENAME on !WebPreferences to 'ro' (or 'readonly' or anhything different from $TWiki::cfg{SiteName} value.
+If you are not using MetadataRepository, you can make a web read-only by setting MASTERSITENAME on !WebPreferences to 'ro' (or 'readonly' or anhything different from =$TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName}= value.
 
 If it's a mirror site copied from another site which is accessible, you need to set MASTERWEBSCRIPTURLTMPL to e.g. http:<nop>//twiki.example.com/cgi-bin//WebName.
 If the master site needs a file name extension such as .cgi for CGI programs, you need to set MASTERSCRIPTSUFFIX.
@@ -61,10 +61,10 @@ In such cases, you should set MASTERWEBVIEWURL to e.g. http:<nop>/twiki.example.
 Because this is not the norm, MASTERWEBVIEWURL is optional.
 
 ---+++ Metadata Repository
-If you use MetadataRepository, read-only and mirroring related information comes only from MetadataRepository (except with $TWiki::cfg{SiteName}) and preferences on !WebPreferences don't matter.
+If you use MetadataRepository, read-only and mirroring related information comes only from MetadataRepository (except with =$TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName}=) and preferences on !WebPreferences don't matter.
 
 The web's 'master' field specifies the master site.
-If it's the same as $TWiki::cfg{SiteName}, then the web's content mode is 'master'.
+If it's the same as =$TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName}=, then the web's content mode is 'master'.
 Otherwise, the sites table is referred to get information of the master site.
 
 If the sites table doesn't have the record for the master site, the web is regarded as 'read-only'. Even if there is a record, if the record doesn't have the 'scripturl' field, the web is still regarded as 'read-only'
@@ -119,7 +119,7 @@ You would provide =viewtopicactionbuttons.mirror.tmpl= defining the =mirror_to_a
 And then you would set SKIN to e.g. =mirror, topmenu, pattern=.
 
 ---+++ Variables and context
-   $ %<nop>SITENAME% : Returns the current site name defined by $TWiki::cfg{SiteName} if it's defined. Otherwise, it returns the null string.
+   $ %<nop>SITENAME% : Returns the current site name defined by =$TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName}= if it's defined. Otherwise, it returns the null string.
    $ %<nop>CONTENTMODE{[web="WEB"]}% : Returns [[#Content_modes][the content mode]] of the specified web.
    $ %<nop>SCRIPTURL{"script" web="WEB" master="on"}% : Returns the URL of the specified script of the specified web on the master site followed by the web name.
    It's enhanced for mirror webs. Please read the description of the [[VarSCRIPTURL2][SCRIPTURL]] variable for details.
@@ -176,6 +176,12 @@ This way, users don't have to know where read-only webs' statistics are housed.
 <verbatim>
 %INCLUDE{"%USERSWEB%.%WEB%WebStatistics" disablefixlinks="on"}%
 </verbatim>
+
+---++++ Site statistics
+
+The site statistics is written on the ={UsersWebName}= web (Main by default),
+which might be a slave or read-only.
+It's processed and written only if the ={UsersWebName}= web is writable.
 
 ---+++ tools/mailnotify
 

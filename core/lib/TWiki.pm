@@ -1052,7 +1052,7 @@ defined for the web.
 sub modeAndMaster {
     my ($this, $web) = @_;
     my $mode = 'local'; # by default a web is local
-    if ( !$TWiki::cfg{SiteName} ) {
+    if ( !$TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName} ) {
         return ($mode, undef);
     }
     my $cache = $this->{modeAndMaster} ||= {};
@@ -1103,7 +1103,7 @@ sub modeAndMaster {
         }
     }
     if ( $masterSite ) {
-        if ( $masterSite eq $TWiki::cfg{SiteName} ) {
+        if ( $masterSite eq $TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName} ) {
             $mode = 'master';
         }
         else {
@@ -1229,8 +1229,10 @@ sub getScriptUrl {
     if ( $web ) {
         ($contentMode, $master) = $this->modeAndMaster($web);
         if ( $contentMode eq 'slave' ) {
-            $ofMaster = 1 if ( $TWiki::cfg{ScriptOnMaster}{$script} );
+            if ( $TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster}{$script} ) {
                 # even if $script is null, no disaster happens
+                $ofMaster = 1;
+            }
             $ofMaster = 0 unless ( $master->{webScriptUrlTmpl} );
                 # In case $master->{webScriptUrlTmpl} is undef, which should
                 # not happen, resort to 'not of master'
@@ -1328,7 +1330,7 @@ sub _make_params {
 sub getDiskInfo {
     my( $this, $web, $site ) = @_;
     $web ||= $this->{webName};
-    $site ||= $TWiki::cfg{SiteName} || '';
+    $site ||= $TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName} || '';
     return $this->{store}->getDiskInfo($web, $site);
 }
 
@@ -1909,7 +1911,8 @@ sub new {
     $this->{SESSION_TAGS}{BASETOPIC}      = $this->{topicName};
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $this->{topicName};
     $this->{SESSION_TAGS}{INCLUDINGWEB}   = $this->{webName};
-    $this->{SESSION_TAGS}{SITENAME}       = $TWiki::cfg{SiteName} || '';
+    $this->{SESSION_TAGS}{SITENAME}       =
+        $TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName} || '';
 
     # Push plugin settings
     $this->{plugins}->settings();

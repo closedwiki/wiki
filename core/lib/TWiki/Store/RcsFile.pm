@@ -56,7 +56,8 @@ require TWiki::Sandbox;
 sub getDiskInfo {
     my ($this, $web, $site) = @_;
     $web = ($this->{web} || '') if ( !defined($web) );
-    $site = ($TWiki::cfg{SiteName} || '') if ( !defined($site) );
+    $site = ($TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName} || '')
+        if ( !defined($site) );
     my $session = $this->{session};
     my $cache = $session->{diskInfoCache} ||= {};
     my $cached = $cache->{"$site:$web"};
@@ -103,7 +104,8 @@ sub getDiskList {
     my @list = ('');
     if ( my $mdrepo = $session->{mdrepo} ) {
         if ( my $siteRec =
-             $mdrepo->getRec('sites', $TWiki::cfg{SiteName} || '')
+             $mdrepo->getRec('sites',
+                             $TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName} || '')
         ) {
             my $diskID = 1;
             for (;;) {

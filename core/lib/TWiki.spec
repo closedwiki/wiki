@@ -1233,13 +1233,6 @@ $TWiki::cfg{Links}{ExternalLinksInNewWindow} = $TRUE;
 # Show external link icon next to external links.
 $TWiki::cfg{Links}{ExternalLinksIcon} = $TRUE;
 
-# **STRING 50 EXPERT**
-# Set to enable experimental mirror-site support. If this name is
-# different to MIRRORSITENAME, then this TWiki is assumed to be a
-# mirror of another. You are <b>highly</b> recommended not
-# to dabble with this experimental, undocumented, untested feature!
-$TWiki::cfg{SiteWebTopicName} = '';
-
 # **STRING 20 EXPERT**
 # Name of site-level preferences topic in the {SystemWebName} web.
 # <b>If you change this setting you will have to
@@ -1331,7 +1324,8 @@ $TWiki::cfg{Operators}{Query} = [ 'TWiki::Query::OP_and', 'TWiki::Query::OP_eq',
 # configure UI.
 $TWiki::cfg{Operators}{If} = [ 'TWiki::If::OP_allows', 'TWiki::If::OP_defined', 'TWiki::If::OP_isempty','TWiki::If::OP_ingroup', 'TWiki::If::OP_isweb', 'TWiki::If::OP_context', 'TWiki::If::OP_dollar', 'TWiki::If::OP_istopic' ];
 
-#---+ Metadata repository
+#---+ Large Site Settings
+#---++ Metadata repository (TWiki.MetadataRepository)
 # All of the following three settings need to be made to use the metadata repository
 #
 # **STRING 120 EXPERT**
@@ -1354,14 +1348,33 @@ $TWiki::cfg{Operators}{If} = [ 'TWiki::If::OP_allows', 'TWiki::If::OP_defined', 
 # %WEBLIST{...}% gets faster referring to web metadata instead of traversing
 # directories.
 # $TWiki::cfg{Mdrepo}{WebRecordRequired} = 1;
-
-#---+ Read-only and mirror webs (TWiki.ReadOnlyAndMirrorWebs)
-# scripts to be executed on the master site of the web
-$TWiki::cfg{ScriptOnMaster}{edit} = 1;
-$TWiki::cfg{ScriptOnMaster}{save} = 1;
-$TWiki::cfg{ScriptOnMaster}{attach} = 1;
-$TWiki::cfg{ScriptOnMaster}{upload} = 1;
-$TWiki::cfg{ScriptOnMaster}{rename} = 1;
+#
+#---++ Read-only and mirror webs (TWiki.ReadOnlyAndMirrorWebs)
+# **STRING 100 EXPERT**
+# If set, read-only and mirror web features are enabled.
+# This site is identified by this site name among the federation of sites.
+# $TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName} = 'am';
+#
+# **BOOLEAN EXPERT**
+# On a slave web, some scripts always need to be executed on the master site.
+# Those scripts are specified in the following lines.
+$TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster}{edit} = 1;
+$TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster}{save} = 1;
+$TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster}{attach} = 1;
+$TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster}{upload} = 1;
+$TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster}{rename} = 1;
+#
+#---++ Using Multiple Disks (TWiki.UsingMultipleDisks)
+# **BOOLEAN EXPERT**
+# If set, you can use multiple disks either by {DataDir1}, {PubDir1}, ... or
+# TWiki.MetadataRepository.
+# $TWiki::cfg{MultipleDisks} = 1;
+#
+#---++ No "in all public webs" option
+# **BOOLEAN EXPERT**
+# If you have thousands of webs on a site, "in all public webs" operation
+# just times out and need to be aovided.
+# $TWiki::cfg{NoInAllPublicWebs} = 1;
 
 #---+ Plugins
 # *PLUGINS* Marker used by bin/configure script - do not remove!

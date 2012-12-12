@@ -2823,7 +2823,7 @@ string.
 sub getSiteName {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    return $TWiki::cfg{SiteName} || '';
+    return $TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName} || '';
 }
 
 
