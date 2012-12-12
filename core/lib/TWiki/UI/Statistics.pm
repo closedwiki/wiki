@@ -247,7 +247,12 @@ sub statistics {
 
     # do site statistics (only if no specific webs selected, or if force update from SiteStatistics)
     my $siteStatsTopic = $TWiki::cfg{Stats}{SiteStatsTopicName} || 'SiteStatistics';
-    if( !$webSet || $session->{topicName} eq $siteStatsTopic ) {
+    my $usersWebMode = $session->getContentMode($TWiki::cfg{UsersWebName});
+    if( (!$webSet || $session->{topicName} eq $siteStatsTopic) &&
+        ($usersWebMode eq 'local' || $usersWebMode eq 'master')
+        # Site statistics written on the {UsersWebName} web, if the web is not
+        # writable on this site, it's no use doing site statisitcs
+    ) {
         try {
             my $siteStats = _collectSiteStats( $session, $currentMonth, $logYearMo,
                                                $viewRef, $saveRef, $contribRef,
