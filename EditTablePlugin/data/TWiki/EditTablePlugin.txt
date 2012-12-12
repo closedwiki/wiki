@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352708896" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355282725" format="1.1" version="$Rev$"}%
 ---+!! Edit Table Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -20,6 +20,8 @@ Simply add an *[&nbsp;Edit&nbsp;table&nbsp;]* button to an existing table by wri
 Customize entry fields by specifying the format: use a text field, a drop down box, a date field, radio buttons or checkboxes.
 
 Multiple tables per topic are editable, but only one at a time can be edited.
+
+%X% __ATTENTION:__ This plugin version depends on the new TWiki:Plugins.DatePickerPlugin; the !JSCalendarContrib is no longer needed and must be uninstalled. Before uninstalling !JSCalendarContrib check if you use dependent extensions !ChecklistTablePlugin, !DateFieldPlugin, !EditTablerowPlugin, !FormPlugin, !RenderFormPlugin.
 
 ---++ Per Table Settings
 
@@ -46,7 +48,7 @@ The format tokens are the same as with %SYSTEMWEB%.FormattedSearch:
 
 The =date= field type allows one to choose a date with a popup calendar. Popup calendar works with all modern browsers. The date picker button is inactive if the browser cannot support the popup calendar or if Javascript is disabled. 
 
-The date format can be defined; the default is taken from the ={JSCalendarContrib}{format}= configure setting. Date specifiers are described in JSCalendarContrib. Example format for ISO date: =format="| date, 10, , %Y-%m-%d |"=.
+The date format can be defined; the default is taken from the ={Plugins}{DatePickerPlugin}{Format}= configure setting. Date specifiers are described in DatePickerPlugin. Example format for ISO date: =format="| date, 10, , %Y-%m-%d |"=.
 
 <img src="%ATTACHURLPATH%/EditTablePluginCalendarExample.gif" alt="Edit Table Calendar Example" width="638" height="250" />
 
@@ -186,7 +188,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
    * Default help texts
       * Set INCLUDED_TOPIC_DOES_NOT_EXIST = <span class="twikiAlert">%MAKETEXT{"Warning: 'include' topic does not exist!"}%</span>
 
-__Note:__ The Plugin uses base settings like date format, language and style from the JSCalendarContrib.
+__Note:__ The Plugin uses base settings like date format, language and style from the DatePickerPlugin.
 
 ---++ Limitations and Known Issues
 
@@ -197,6 +199,8 @@ __Note:__ The Plugin uses base settings like date format, language and style fro
      <br /> =select,1,%&lt;nop&gt;X%,%&lt;nop&gt;Y%=
 
 ---++ Installation Instructions
+
+%X% __ATTENTION:__ This plugin version depends on the new TWiki:Plugins.DatePickerPlugin; the !JSCalendarContrib is no longer needed and must be uninstalled. Before uninstalling !JSCalendarContrib check if you use dependent extensions !ChecklistTablePlugin, !DateFieldPlugin, !EditTablerowPlugin, !FormPlugin, !RenderFormPlugin.
 
 __Note:__ This is a pre-installed TWiki plugin. You should not need to install the plugin unless it is for an upgrade.
 
@@ -216,8 +220,9 @@ __Note:__ This is a pre-installed TWiki plugin. You should not need to install t
 |  Plugin Author: | Arthur Clemens, TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2008 Arthur Clemens;%BR% &copy; 2002-2012 TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]];%BR% &copy; 2002-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-11-12 |
+|  Plugin Version: | 2012-12-11 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2012-12-11: | TWikibug:Item7077: Make !EditTablePlugin dependent on DatePickerPlugin instead of deprecated !JSCalendarContrib -- TWiki:Main.PeterThoeny |
 |  2012-11-12: | TWikibug:Item7020: Categorize TWiki Variable EDITTABLE -- TWiki:Main.PeterThoeny |
 |  2012-11-06: | TWikibug:Item7025: Return to base page after saving changes. |
 |  2012-11-06: | TWikibug:Item7024: Make EditTable read-only when current site mode is readonly or slave |
@@ -275,12 +280,11 @@ __Note:__ This is a pre-installed TWiki plugin. You should not need to install t
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__  VarEDITTABLE, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
+__Related Topics:__ VarEDITTABLE, DatePickerPlugin, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
-%META:FILEATTACHMENT{name="EditTablePluginCalendarExample.gif" attr="h" comment="" date="1071283396" path="EditTablePluginCalendarExample.gif" size="7823" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="EditTablePluginCalendarExample.gif" attr="h" comment="Screenshot" date="1355272727" path="EditTablePluginCalendarExample.gif" size="19627" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="ScreenshotEditCell1.gif" attr="h" comment="Screenshot" date="1077050633" path="ScreenshotEditCell1.gif" size="2017" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="ScreenshotEditCell2.gif" attr="h" comment="Screenshot" date="1077050702" path="ScreenshotEditCell2.gif" size="3199" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="img.gif" attr="h" comment="Component of Mishoo DHTML calendar" date="1077813483" path="img.gif" size="145" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="menuarrow.gif" attr="h" comment="Component of Mishoo DHTML calendar" date="1077813470" path="menuarrow.gif" size="68" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="edittable.gif" attr="h" comment="Edit table image button" date="1077933805" path="edittable.gif" size="298" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="btn_move.gif" attr="h" comment="Javascript button: move row" date="1077933805" path="btn_move.gif" size="298" user="TWikiContributor" version="1"}%
