@@ -93,7 +93,7 @@ sub handleDATEPICKER  {
   my $value  = $params->{value};
   my $format = $params->{format};
   my $options = {};
-  foreach my $i ( 'id', 'size', 'alt', 'title', 'maxlength', 'disabled', 'readonly', 'hidden'
+  foreach my $i ( 'id', 'size', 'alt', 'title', 'maxlength', 'disabled', 'readonly', 'hidden',
                   'style', 'class', 'tabindex', 'onblur', 'onchange', 'onfocus' ) {
       $options->{$i} = $params->{$i} if( $params->{$i} );
   }
