@@ -810,10 +810,7 @@ sub handleTableStart {
       . "\#${theTopic}edittable$theTableNr";
     my $text = '';
     if ($doEdit) {
-        require TWiki::Contrib::JSCalendarContrib;
-        unless ($@) {
-            TWiki::Contrib::JSCalendarContrib::addHEAD('twiki');
-        }
+        require TWiki::Plugins::DatePickerPlugin;
     }
     $text .= "$preSp<noautolink>\n" if $doEdit;
     $text .= "$preSp<a name=\"${theTopic}edittable$theTableNr\"></a>\n"
@@ -1246,10 +1243,11 @@ sub inputElement {
     elsif ( $type eq 'date' ) {
         my $ifFormat = '';
         $ifFormat = $bits[3] if ( @bits > 3 );
-        $ifFormat ||= $TWiki::cfg{JSCalendarContrib}{format} || '%Y-%m-%d';
+        $ifFormat ||= $TWiki::cfg{Plugins}{DatePickerPlugin}{Format} || '%Y-%m-%d';
         $size = 10 if ( !$size || $size < 1 );
         TWiki::Plugins::EditTablePlugin::encodeValue($theValue)
           unless ( $theValue eq '' );
+        $text .= '%DATEPICKER{}%';
         $text .= CGI::textfield(
             {
                 name     => $theName,
@@ -1261,7 +1259,7 @@ sub inputElement {
             }
         );
         $text .= saveEditCellFormat( $cellFormat, $theName );
-        eval 'use TWiki::Contrib::JSCalendarContrib';
+        eval 'use TWiki::Plugins::DatePickerPlugin';
 
         unless ($@) {
             $text .= '<span class="twikiMakeVisible">';
@@ -1271,7 +1269,7 @@ sub inputElement {
                 -onclick => "return showCalendar('id$theName','$ifFormat')",
                 -src     => TWiki::Func::getPubUrlPath() . '/'
                   . TWiki::Func::getTwikiWebname()
-                  . '/JSCalendarContrib/img.gif',
+                  . '/DatePickerPlugin/img.gif',
                 -alt   => 'Calendar',
                 -align => 'middle'
             );

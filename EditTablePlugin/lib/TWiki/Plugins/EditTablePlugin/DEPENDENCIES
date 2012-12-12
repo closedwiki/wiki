@@ -1,0 +1,1 @@
+TWiki::Plugins::DatePickerPlugin,>=0,perl,Required. Used to select a date when using type date.
