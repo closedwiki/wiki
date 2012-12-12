@@ -38,7 +38,7 @@ require TWiki::Func;    # The plugins API
 
 # ========================================================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-12-11';
+our $RELEASE = '2012-12-12';
 our $SHORTDESCRIPTION = "Pop-up calendar with date picker, for use in TWiki forms, HTML forms and TWiki plugins";
 our $NO_PREFS_IN_TOPIC = 1;
 
@@ -92,8 +92,12 @@ sub handleDATEPICKER  {
   my $name   = $params->{name};
   my $value  = $params->{value};
   my $format = $params->{format};
-  # FIXME: size, class, and more
-  return renderForEdit( $name, $value, $format );
+  my $options = {};
+  foreach my $i ( 'id', 'size', 'alt', 'title', 'maxlength', 'disabled', 'readonly', 'hidden'
+                  'style', 'class', 'tabindex', 'onblur', 'onchange', 'onfocus' ) {
+      $options->{$i} = $params->{$i} if( $params->{$i} );
+  }
+  return renderForEdit( $name, $value, $format, $options );
 }
 
 =begin twiki
@@ -145,7 +149,7 @@ sub renderForEdit {
     $wide =~ s/(%(.))/$w{$2} ? ('_' x $w{$2}) : $1/ge;
     $options ||= {};
     $options->{name} = $name;
-    $options->{id} = 'id_'.$name;
+    $options->{id} ||= 'id_'.$name;
     $options->{value} = $value || '';
     $options->{size} ||= length($wide);
     $options->{class} ||= 'twikiInputField';
@@ -154,11 +158,12 @@ sub renderForEdit {
       . CGI::image_button(
           -name => 'img_'.$name,
           -onclick =>
-            "javascript: return showCalendar('id_$name','$format')",
+            "javascript: return showCalendar('".$options->{id}."','$format')",
             -src=> TWiki::Func::getPubUrlPath() . '/' .
               TWiki::Func::getTwikiWebname() .
                   '/DatePickerPlugin/img.gif',
           -alt => 'Calendar',
+          -title => 'Select date',
           -align => 'middle');
 
     return $text;
