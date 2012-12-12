@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355292009" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355293758" format="1.1" version="$Rev$"}%
 ---+!! Date Picker Plugin
 <!--
    Contributions to this plugin package are appreciated. Please update this page at
@@ -81,7 +81,7 @@ Test: (this only works if the !DatePickerPlugin is installed and enabled)
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ VarPERCENTCOMPLETE, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.TWikiPlugins
+__Related Topics:__ VarDATEPICKER, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiForms, %SYSTEMWEB%.TWikiPlugins
 
 %META:FILEATTACHMENT{name="screenshot-small.png" attachment="screenshot-small.png" attr="h" comment="" date="1355129304" path="screenshot-small.png" size="5948" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1355129304" path="screenshot.png" size="21973" user="TWikiContributor" version="1"}%
