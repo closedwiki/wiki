@@ -104,7 +104,7 @@ sub handleDATEPICKER  {
 
 ---+++ renderForEdit
 
-TWiki::Plugins::DatePickerPlugin::renderForEdit($name, $value, $format [, \%options]) -> $html
+TWiki::Plugins::DatePickerPlugin::renderForEdit( $name, $value, $format [, \%options] ) -> $html
 
 This is the simplest way to use calendars from a plugin.
    * =$name= is the name of the CGI parameter for the calendar
@@ -168,6 +168,53 @@ sub renderForEdit {
 
     return $text;
 }
+
+=begin twiki
+
+---+++ addToHEAD
+
+TWiki::Plugins::DatePickerPlugin::addToHEAD( $setup )
+
+This function will automatically add the headers for the calendar to the page
+being rendered. It's intended for use when you want more control over the
+formatting of your calendars than =renderForEdit= affords. =$setup= is the name
+of the calendar setup module; it can either be omitted, in which case the method
+described in the Mishoo documentation can be used to create calendars, or it
+can be ='twiki'=, in which case a Javascript helper function called
+'showCalendar' is added that simplifies using calendars to set a value in a
+text field. For example, say we wanted to display the date with the calendar
+icon _before_ the text field, using the format =%Y %b %e=
+<verbatim>
+use TWiki::Plugins::DatePickerPlugin;
+...
+
+sub commonTagsHandler {
+  ....
+  # Add styles and javascript for the date picker & enable 'showCalendar'
+  TWiki::Plugins::DatePickerPlugin::addToHEAD( 'twiki' );
+
+  my $cal = CGI::image_button(
+      -name => 'img_datefield',
+      -onclick =>
+       "return showCalendar('id_datefield','%Y %b %e')",
+      -src=> TWiki::Func::getPubUrlPath() . '/' .
+             TWiki::Func::getTwikiWebname() .
+             '/DatePickerPlugin/img.gif',
+      -alt => 'Calendar',
+      -align => 'middle' )
+    . CGI::textfield(
+      { name => 'date', id => "id_datefield" });
+  ....
+}
+</verbatim>
+
+The first parameter to =showCalendar= is the id of the textfield, and the 
+second parameter is the date format. Default format is '%e %B %Y'.
+
+The =addToHEAD= function can be called from =commonTagsHandler= for adding
+the header to all pages, or from =beforeEditHandler= just for edit pages etc.
+
+=cut
 
 # ========================================================
 sub addToHEAD {
