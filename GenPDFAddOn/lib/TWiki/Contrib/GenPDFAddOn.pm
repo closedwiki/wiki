@@ -579,7 +579,9 @@ sub genpdf {
    my $response = $session->{response};
    my $rev      = $query->param('rev');
 
-   open( STDERR, ">>$TWiki::cfg{DataDir}/error.log" ); # redirect errors to a log file
+   # Plugins' exceptions are already being handled upstream by the Engine. 
+   # Also, htmldoc's STDERR is caught by Sandbox, so error.log shouldn't be needed.
+   # open( STDERR, ">>$TWiki::cfg{DataDir}/error.log" ); # redirect errors to a log file
 
    # initialize module wide variables
    %tree  = ();
@@ -778,11 +780,15 @@ sub genpdf {
    # Disable CGI feature of newer versions of htmldoc
    # (thanks to Brent Roberts for this fix)
    $ENV{HTMLDOC_NOCGI} = "yes";
-   my ( $Output, $exit ) =
-     $sandbox->sysCommand(
-         $htmldocCmd.' '.join(' ', @htmldocArgs) );
-   if( ! -e $outputFile ) {
-      die "error running htmldoc ($htmldocCmd): $Output\n";
+   my $sysCmd = $htmldocCmd.' '.join(' ', @htmldocArgs);
+   $sandbox->sysCommand( $sysCmd );
+   if( ! -s $outputFile ) {
+       $sysCmd .= ' --continuous';
+       $sandbox->sysCommand( $sysCmd );
+       if( ! -s $outputFile ) {
+           TWiki::Func::writeWarning("genpdf fail: $sysCmd");
+           die "error running htmldoc, check twiki warning log\n";
+       }
    }
 
    #  output the HTML header and the output of HTMLDOC
