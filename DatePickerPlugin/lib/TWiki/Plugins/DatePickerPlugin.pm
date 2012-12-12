@@ -104,7 +104,7 @@ sub handleDATEPICKER  {
 
 ---+++ renderForEdit
 
-TWiki::Plugins::DatePickerPlugin::renderForEdit( $name, $value, $format [, \%options] ) -> $html
+=TWiki::Plugins::DatePickerPlugin::renderForEdit( $name, $value, $format [, \%options] ) -> $html=
 
 This is the simplest way to use calendars from a plugin.
    * =$name= is the name of the CGI parameter for the calendar
@@ -116,8 +116,13 @@ This is the simplest way to use calendars from a plugin.
    * =\%options= is an optional hash containing base options for
      the textfield.
 
-__Note:__ No output is shown if =$name= is empty or undef, but the 
-CSS and Javascript are loaded.
+__Notes:__
+   * The CSS and Javascript are added if needed, e.g. the =addToHEAD()=
+     function does not need to be called.
+   * No output is shown if =$name= is empty or undef, but the CSS and
+     Javascript are loaded if needed. This can be used to preload the
+     CSS and Javascript with a parameterless =%<nop>DATEPICKER{}%=
+     variable.
 
 Example:
 <verbatim>
@@ -173,7 +178,7 @@ sub renderForEdit {
 
 ---+++ addToHEAD
 
-TWiki::Plugins::DatePickerPlugin::addToHEAD( $setup )
+=TWiki::Plugins::DatePickerPlugin::addToHEAD( $setup )=
 
 This function will automatically add the headers for the calendar to the page
 being rendered. It's intended for use when you want more control over the
@@ -209,7 +214,7 @@ sub commonTagsHandler {
 </verbatim>
 
 The first parameter to =showCalendar= is the id of the textfield, and the 
-second parameter is the date format. Default format is '%e %B %Y'.
+second parameter is the date format. Default format is ='%Y-%m-%d'=.
 
 The =addToHEAD= function can be called from =commonTagsHandler= for adding
 the header to all pages, or from =beforeEditHandler= just for edit pages etc.
