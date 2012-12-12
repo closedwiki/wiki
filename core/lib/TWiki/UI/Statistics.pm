@@ -173,7 +173,7 @@ sub statistics {
     _printMsg( $session, '(Please wait until page download has finished)' );
 
     require TWiki::Time;
-    my $currentMonth = TWiki::Time::formatTime( time(), '$year$mo', 'servertime' );
+    my $currentMonth = TWiki::Time::formatTime( time(), '$year$mo', 'gmtime' );
     unless( $logDate ) {
         $logDate = $currentMonth;
     }
