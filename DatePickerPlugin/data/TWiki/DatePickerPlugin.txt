@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355268536" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355282169" format="1.1" version="$Rev$"}%
 ---+!! Date Picker Plugin
 <!--
    Contributions to this plugin package are appreciated. Please update this page at
@@ -76,7 +76,7 @@ Test: (this only works if the !DatePickerPlugin is installed and enabled)
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | 2012-12-11 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-12-11: | TWikibug:Item7020: Initial version, based on work of TWiki:Plugins.JSCalendarContrib -- TWiki:Main.PeterThoeny |
+|  2012-12-11: | TWikibug:Item7077: Initial version, based on work of TWiki:Plugins.JSCalendarContrib -- TWiki:Main.PeterThoeny |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
