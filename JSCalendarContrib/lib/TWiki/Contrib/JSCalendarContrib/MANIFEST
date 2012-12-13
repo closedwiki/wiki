@@ -2,7 +2,6 @@ data/TWiki/JSCalendarContrib.txt 0644
 data/TWiki/JSCalendarContribInline.txt 0644
 lib/TWiki/Contrib/JSCalendarContrib.pm 0444
 lib/TWiki/Contrib/JSCalendarContrib/Config.spec 0444 Spec file for =configure=
-lib/TWiki/Form/Date.pm 0444 Perl module that implements the =date= type
 pub/TWiki/JSCalendarContrib/twiki.js 0644
 pub/TWiki/JSCalendarContrib/bugtest-hidden-selects.html 0644
 pub/TWiki/JSCalendarContrib/calendar-blue2.css 0644
