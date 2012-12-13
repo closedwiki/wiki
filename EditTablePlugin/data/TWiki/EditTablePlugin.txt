@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355282725" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355383580" format="1.1" version="$Rev$"}%
 ---+!! Edit Table Plugin
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -21,7 +21,7 @@ Customize entry fields by specifying the format: use a text field, a drop down b
 
 Multiple tables per topic are editable, but only one at a time can be edited.
 
-%X% __ATTENTION:__ This plugin version depends on the new TWiki:Plugins.DatePickerPlugin; the !JSCalendarContrib is no longer needed and must be uninstalled. Before uninstalling !JSCalendarContrib check if you use dependent extensions !ChecklistTablePlugin, !DateFieldPlugin, !EditTablerowPlugin, !FormPlugin, !RenderFormPlugin.
+%X% __ATTENTION:__ This plugin version depends on the new TWiki:Plugins.DatePickerPlugin; the !JSCalendarContrib is no longer needed and must be upgraded or uninstalled. Before uninstalling !JSCalendarContrib check if you use any extensions that depend on the !JSCalendarContrib as described in that contrib package.
 
 ---++ Per Table Settings
 
@@ -220,9 +220,9 @@ __Note:__ This is a pre-installed TWiki plugin. You should not need to install t
 |  Plugin Author: | Arthur Clemens, TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2008 Arthur Clemens;%BR% &copy; 2002-2012 TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]];%BR% &copy; 2002-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-12-11 |
+|  Plugin Version: | 2012-12-12 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2012-12-11: | TWikibug:Item7077: Make !EditTablePlugin dependent on DatePickerPlugin instead of deprecated !JSCalendarContrib -- TWiki:Main.PeterThoeny |
+|  2012-12-12: | TWikibug:Item7077: Make !EditTablePlugin dependent on DatePickerPlugin instead of deprecated !JSCalendarContrib -- TWiki:Main.PeterThoeny |
 |  2012-11-12: | TWikibug:Item7020: Categorize TWiki Variable EDITTABLE -- TWiki:Main.PeterThoeny |
 |  2012-11-06: | TWikibug:Item7025: Return to base page after saving changes. |
 |  2012-11-06: | TWikibug:Item7024: Make EditTable read-only when current site mode is readonly or slave |
