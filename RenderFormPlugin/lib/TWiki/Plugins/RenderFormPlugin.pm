@@ -23,7 +23,7 @@ use strict;
 use vars qw( $VERSION $RELEASE $REVISION $debug $pluginName );
 
 $VERSION = '$Rev$';
-$RELEASE = '2012-12-03';
+$RELEASE = '2012-12-13';
 
 $REVISION = '1.004'; #dro# fixed TWiki 5.0 problems
 #$REVISION = '1.003'; #dro# fixed performance problem (see Benchmarks - Switch module removed) 
@@ -61,8 +61,6 @@ sub commonTagsHandler {
 
 	$_[0] =~ s/\%RENDERFORM{(.*?)}\%/TWiki::Plugins::RenderFormPlugin::Core::render($1,$_[1],$_[2])/ge;
 	$_[0] =~ s/\%STARTRENDERFORMLAYOUT(.*?)STOPRENDERFORMLAYOUT\%//sg;
-	### workaround for date fields:
-	$_[0] =~ s/<\/body>/%INCLUDE{"%TWIKIWEB%\/JSCalendarContribInline"}%<\/body>/i if ($TWiki::Plugins::VERSION > 1.1) && ($_[0] !~ /JSCalendarContrib\twiki.js/);
     ##};
     ##TWiki::Func::writeWarning($@) if $@;
 }

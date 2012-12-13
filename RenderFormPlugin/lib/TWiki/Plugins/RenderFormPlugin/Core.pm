@@ -434,12 +434,15 @@ sub _renderFormField {
 			$td = $$def{value};
 			$td = '&nbsp;' if $$def{value} eq "";
 		} else {
-			my $dateformat = defined $options{dateformat} ? $options{dateformat} : TWiki::Func::getPreferencesValue('JSCALENDARDATEFORMAT');
-			$dateformat="%d %b %Y" unless defined $dateformat;
+			require TWiki::Plugins::DatePickerPlugin;
+			my $dateformat = $TWiki::cfg{Plugins}{DatePickerPlugin}{Format} ||  '%Y-%m-%d';
+			$dateformat = $options{dateformat} if defined $options{dateformat};
 			my $id=$formName.$$def{name}; 
-			$td = $cgi->textfield({-id=>$id,-name=>$$def{name},-default=>$$def{value},-size=>$$def{size},-readonly=>'readonly'})
-				.$cgi->image_button(-name=>'calendar', -src=>'%PUBURLPATH%/TWiki/JSCalendarContrib/img.gif', 
-						-alt=>'Calendar', -title=>'Calendar', -onClick=>qq@javascript: return showCalendar('$id','$dateformat')@);
+
+			$td = TWiki::Plugins::DatePickerPlugin::renderForEdit(
+			    $$def{name}, $$def{value}, $dateformat, {
+			      -id=>$id, -size=>$$def{size}, -readonly=>'readonly' }
+			);
 		}
 	} else { 
 		if ($options{mode} eq 'view') {
