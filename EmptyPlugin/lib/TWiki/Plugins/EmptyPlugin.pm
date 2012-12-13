@@ -84,7 +84,7 @@ our $VERSION = '$Rev$';
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS. Add a release date in ISO
 # format (preferred) or a release number such as '1.3'.
-our $RELEASE = '2012-11-15';
+our $RELEASE = '2012-12-13';
 
 # One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
 our $SHORTDESCRIPTION = 'Empty Plugin used as a template for new Plugins';
@@ -749,9 +749,9 @@ continues by considering the built-in types.
 
 Note that since TWiki-4.2, you can also extend the range of available
 types by providing a subclass of =TWiki::Form::FieldDefinition= to implement
-the new type (see =TWiki::Plugins.JSCalendarContrib= and
+the new type (see =TWiki::Plugins.DatePickerPlugin= and
 =TWiki::Plugins.RatingContrib= for examples). This is the preferred way to
-extend the form field types, but does not work for TWiki < 4.2.
+extend the form field types.
 
 =cut
 
