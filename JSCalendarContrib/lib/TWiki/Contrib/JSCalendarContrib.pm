@@ -35,8 +35,8 @@ use strict;
 require TWiki::Func;    # The plugins API
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-12-08';
-our $SHORTDESCRIPTION = "Pop-up calendar with date picker, for use in TWiki forms, HTML forms and TWiki plugins";
+our $RELEASE = '2012-12-12';
+our $SHORTDESCRIPTION = "DEPRECATED pop-up calendar with date picker -- please upgrade to new DatePickerPlugin";
 
 # Max width of different mishoo format components
 my %w = (

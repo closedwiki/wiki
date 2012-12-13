@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355038828" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355350935" format="1.1" version="$Rev$"}%
 ---+!! JS Calendar Contrib
 <!--
    Contributions to this contrib package are appreciated. Please update this page at
@@ -10,67 +10,139 @@
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Page contents"}%
 </div>
-<img src="%ATTACHURL%/screenshot.png" width="228" height="196" style="float:right" />
 </sticky>
 %SHORTDESCRIPTION%
 
----++ Introduction
+---++ Deprecation Notice and Migration
 
-This module packages the [[http://www.dynarch.com/projects/calendar/][Mishoo JSCalendar]], a DHTML pop-up calendar in a form suitable for use in TWiki forms and TWiki applications.
+This [[http://www.dynarch.com/projects/calendar/][Mishoo JSCalendar]] based DHTML pop-up calendar is now repackaged as DatePickerPlugin. Simply installing the TWiki:Plugins.DatePickerPlugin is not enough:
+   * Extensions that have a dependency on !JSCalendarContrib need to be updated to version 2012-12-12 or later:
+      * ChecklistTablePlugin - TWiki:Plugins.ChecklistTablePlugin on twiki.org
+      * DateFieldPlugin - TWiki:Plugins.DateFieldPlugin on twiki.org
+      * EditTablePlugin - TWiki:Plugins.EditTablePlugin on twiki.org
+      * EditTablerowPlugin - TWiki:Plugins.EditTablerowPlugin on twiki.org
+      * FormPlugin - TWiki:Plugins.FormPlugin on twiki.org
+      * RenderFormPlugin - TWiki:Plugins.RenderFormPlugin on twiki.org
+   * TWiki pages that use !JSCalendarContrib need to be updated (see below).
+   * Once plugins and page content have been updated it is safe to remove this !JSCalendarContrib completely.
 
----++ Using the Calendar in !TWikiForms
+---++ Migrate Popup Calendar in HTML Forms
 
-This package adds a =date= type to %SYSTEMWEB%.TWikiForms:
+Please update your content to use the [[VarDATEPICKER][%<nop>DATEPICKER{}%]] variable instead of handcrafted HTML to show a popup calendar.
 
-| *Type* | *Description* | *Size* | *Value* |
-| =date= | %IF{ "'%BASETOPIC%'!='%TOPIC%'" then="<img src='%PUBURLPATH%/%WEB%/JSCalendarContrib/screenshot-small.png' alt='screenshot-small' width='150' height='139' align='right' /> "}%Single-line text box and a button next to it to pick a date from a popup calendar. The date can also be typed into the text box. The date format can be customized. %IF{ "'%BASETOPIC%'='TWikiForms'" then="[[JSCalendarContrib][See details]]." }% | Text box width in number of characters | Initial (default) date |
-
-Example form definition:
-
-| *Name:* | *Type:* | *Size* | *Values:* | *Tooltip message:* |
-| Start date | date | 12 | %SERVERTIME{$year-$mo-$day}% | Select start date |
-
----++ Using the Calendar in user forms
-
-You can also use the calendar directly in your own hand-built forms, without
-having to write any code. Just add this inline in the topic text:
+<table><tr><td valign="top">
+*The old !JSCalendarContrib way:*
 <verbatim>
 %INCLUDE{"%SYSTEMWEB%.JSCalendarContribInline"}%
+<input type="text" name="start_date" id="cal_val_here" />
+<input type="image"
+ src="%PUBURL%/%SYSTEMWEB%/JSCalendarContrib/img.gif" 
+ onclick="javascript:
+  return showCalendar('cal_val_here','%Y-%m-%d')" />
 </verbatim>
-Then, to display a calendar icon next to a text input field:
+
+</td><td>&nbsp;</td><td style="background-color: #ddd; width: 5px;">&nbsp;</td><td>&nbsp;</td><td valign="top">
+*Change to the new DatePickerPlugin way:*
+<pre>
+<span style="color:#d11;">%<nop>DATEPICKER{ name="start_date" }%</span>
+</pre>
+</td></tr></table>
+
+---++ Migrate Plugins using !JSCalendarContrib
+
+Please update your plugins to use the new DatePickerPlugin. Example:
+
+<table><tr><td valign="top">
+*The old !JSCalendarContrib way:*
 <verbatim>
-<input type="text" id="cal_val_here" />
-<input type="image" src="%PUBURL%/%SYSTEMWEB%/JSCalendarContrib/img.gif" onclick="javascript: return showCalendar('cal_val_here','%Y-%m-%d')" />
+use TWiki::Contrib::JSCalendarContrib;
+...
+my $fromDate =
+ TWiki::Contrib::JSCalendarContrib::renderDateForEdit(
+   'from', '1 April 1999');
+my $toDate =
+ TWiki::Contrib::JSCalendarContrib::renderDateForEdit(
+   'to', undef, '%Y');
 </verbatim>
-If the contrib is installed, you will see such a field here:
-%INCLUDE{"%SYSTEMWEB%.JSCalendarContribInline"}%
-<input type="text" id="cal_val_here" />
-<input type="image" src="%PUBURL%/%SYSTEMWEB%/JSCalendarContrib/img.gif" onclick="javascript: return showCalendar('cal_val_here','%Y-%m-%d')" />
 
----++ Detailed Documentation
+</td><td>&nbsp;</td><td style="background-color: #ddd; width: 5px;">&nbsp;</td><td>&nbsp;</td><td valign="top">
+*Change to the new DatePickerPlugin way:*
+<pre>
+use TWiki::<span style="color:#d11;">Plugins::DatePickerPlugin</span>;
+...
+my $fromDate =
+ TWiki::<span style="color:#d11;">Plugins::DatePickerPlugin::renderForEdit</span>(
+   'from', '1 April 1999');
+my $toDate =
+ TWiki::<span style="color:#d11;">Plugins::DatePickerPlugin::renderForEdit</span>(
+   'to', undef, '%Y');
+</pre>
+</td></tr></table>
 
-%$POD%
+Example using hand-crafted Javascript:
 
----++ Installation Instructions
+<table><tr><td valign="top">
+*The old !JSCalendarContrib way:*
+<verbatim>
+use TWiki::Contrib::JSCalendarContrib;
+...
 
-%$INSTALL_INSTRUCTIONS%
+sub commonTagsHandler {
+  ....
+  TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
 
-   * An administrator can customize the appearance of the calendar by modifying ={JSCalendarContrib}= settings in the "JSCalendarContrib Settings" section of the configure:
-     | *Setting* | *Default* |
-     | =$TWiki::cfg{JSCalendarContrib}{format}= | ='%Y-%m-%d'= |
-     | =$TWiki::cfg{JSCalendarContrib}{lang}= | ='en'= |
-     | =$TWiki::cfg{JSCalendarContrib}{style}= | ='blue'= |
+  my $cal = CGI::image_button(
+      -name => 'img_datefield',
+      -onclick =>
+       "return showCalendar('id_datefield','%Y %b %e')",
+      -src=> TWiki::Func::getPubUrlPath() . '/' .
+             TWiki::Func::getTwikiWebname() .
+             '/JSCalendarContrib/img.gif',
+      -alt => 'Calendar',
+      -align => 'middle' )
+    . CGI::textfield(
+      { name => 'date', id => "id_datefield" });
+  ....
+}
+</verbatim>
+
+</td><td>&nbsp;</td><td style="background-color: #ddd; width: 5px;">&nbsp;</td><td>&nbsp;</td><td valign="top">
+*Change to the new DatePickerPlugin way:*
+<pre>
+use TWiki::<span style="color:#d11;">Plugins::DatePickerPlugin</span>;
+...
+
+sub commonTagsHandler {
+  ....
+  TWiki::<span style="color:#d11;">Plugins::DatePickerPlugin::addToHEAD</span>( 'twiki' );
+
+  my $cal = CGI::image_button(
+      -name => 'img_datefield',
+      -onclick =>
+       "return showCalendar('id_datefield','%Y %b %e')",
+      -src=> TWiki::Func::getPubUrlPath() . '/' .
+             TWiki::Func::getTwikiWebname() .
+             '/<span style="color:#d11;">DatePickerPlugin</span>/img.gif',
+      -alt => 'Calendar',
+      -align => 'middle' )
+    . CGI::textfield(
+      { name => 'date', id => "id_datefield" });
+  ....
+}
+</pre>
+</td></tr></table>
 
 ---++ Contrib Info
 
-   * Set SHORTDESCRIPTION = Pop-up calendar with date picker, for use in TWiki forms, HTML forms and TWiki plugins
+   * Set SHORTDESCRIPTION = DEPRECATED pop-up calendar with date picker -- please upgrade to new DatePickerPlugin
 
 |  Author: | TWiki:Main.CrawfordCurrie http://c-dot.co.uk |
 |  Copyright: | &copy; See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] for Mishoo JSCalendar %BR% &copy; 2007-2012 TWiki:TWiki.TWikiContributor for TWiki !JSCalendarContrib |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
-|  Version: | 2012-12-08 |
+|  Version: | 2012-12-12 |
 | Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-12-12: | TWikibug:Item7077: Deprecate this contrib in favor of the new DatePickerPlugin -- TWiki:Main.PeterThoeny |
 |  2012-12-08: | TWikibug:Item6962: Configure change: Move contrib settings from top level section to Extensions section -- TWiki:Main.PeterThoeny |
 |  2012-08-11: | TWikibug:Item6837: Doc fixes; updated installation instructions -- TWiki:Main.PeterThoeny |
 |  2011-07-08: | TWikibug:Item6725: Change global package variables from "use vars" to "our" -- TWiki:Main.PeterThoeny |
@@ -95,7 +167,7 @@ If the contrib is installed, you will see such a field here:
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiForms
+__Related Topics:__ DatePickerPlugin, VarDATEPICKER, JSCalendarContribInline, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiForms
 
 %META:FILEATTACHMENT{name="screenshot-small.png" attachment="screenshot-small.png" attr="h" comment="" date="1291363747" path="screenshot-small.png" size="22317" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1291364339" path="screenshot.png" size="20920" user="TWikiContributor" version="1"}%
