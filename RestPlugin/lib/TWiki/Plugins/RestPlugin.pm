@@ -1089,9 +1089,9 @@ continues by considering the built-in types.
 
 Note that since TWiki-4.2, you can also extend the range of available
 types by providing a subclass of =TWiki::Form::FieldDefinition= to implement
-the new type (see =TWiki::Plugins.JSCalendarContrib= and
+the new type (see =TWiki::Plugins.DatePickerPlugin= and
 =TWiki::Plugins.RatingContrib= for examples). This is the preferred way to
-extend the form field types, but does not work for TWiki < 4.2.
+extend the form field types.
 
 =cut
 
