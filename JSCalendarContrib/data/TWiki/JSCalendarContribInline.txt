@@ -1,4 +1,6 @@
+%META:TOPICINFO{author="TWikiContributor" date="1355350935" format="1.1" version="$Rev$"}%
 Inline include of JSCalendarContrib HTML for use in forms.
-%STARTINCLUDE%
-<style type='text/css' media='all'>@import url('%PUBURLPATH%/%SYSTEMWEB%/JSCalendarContrib/calendar-blue.css');.calendar {z-index:2000;}</style><script type='text/javascript' src='%PUBURLPATH%/%SYSTEMWEB%/JSCalendarContrib/calendar.js'></script><script type='text/javascript' src='%PUBURLPATH%/%SYSTEMWEB%/JSCalendarContrib/lang/calendar-en.js'></script><script type='text/javascript' src='%PUBURLPATH%/%SYSTEMWEB%/JSCalendarContrib/calendar-setup.js'></script><script type='text/javascript' src='%PUBURLPATH%/%SYSTEMWEB%/JSCalendarContrib/twiki.js'></script>
-%STOPINCLUDE%
+
+__NOTE:__ As of 2012-12-12 this now uses the DatePickerPlugin. Please update your content to use the [[VarDATEPICKER][%<nop>DATEPICKER{}%]] instead of handcrafted HTML to show a popup calendar.
+
+%STARTINCLUDE%%DATEPICKER{}%%STOPINCLUDE%
