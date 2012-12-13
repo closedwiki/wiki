@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355320237" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355364251" format="1.1" version="$Rev$"}%
 <!-- PDFSTART -->
 ---+!! Generate PDF Add-On
 <!--
@@ -174,7 +174,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main/BrianSpinar, TWiki:Main/WadeTurland |
 |  Copyright: | &copy; 2005-2006 TWiki:Main.BrianSpinar <br /> 2008 TWiki:Main.SvenDowideit <br /> &copy; 2007-2011 TWiki:Main.TWikiContributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2011-01-24 |
+|  Add-on Version: | 2012-12-12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  2012-12-12: | TWikibug:Item7083: GenPDFAddOn throws exception "Not a GLOB reference" at FCGI.pm line 125 -- TWiki:Main.YaojunFei |
 |  2012-12-12: | TWikibug:Item7082: GenPDFAddOn doesn't work when HTML source doesn't have an "h1" tag. -- TWiki:Main.YaojunFei |
