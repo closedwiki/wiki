@@ -1,7 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349595764" format="1.1" version="$Rev$"}%
----+!! Release Notes of TWiki-5.1.2 (Istanbul), 2012-10-07
-
+%META:TOPICINFO{author="TWikiContributor" date="1355609949" format="1.1" version="$Rev$"}%
+---+!! Release Notes of TWiki-5.1.3 (Istanbul), 2012-12-15
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC%
+</div>
 
 ---++ Introduction
 
@@ -13,6 +14,8 @@ TWiki-5.1.1 released on 2012-01-14 is a patch release that adds some minor new f
 
 TWiki-5.1.2 released on 2012-10-07 is a patch release that adds some minor new features and fixes a number of bugs.
 
+TWiki-5.1.3 released on 2012-12-15 is a patch release that adds some minor new features and fixes a number of bugs, including TWiki:Codev.SecurityAlert-CVE-2012-6329.
+
 ---++ New Features Highlights
 
    * *Usability Enhancements*
@@ -22,7 +25,7 @@ TWiki-5.1.2 released on 2012-10-07 is a patch release that adds some minor new f
       * In-place editing of TWiki group settings using !PreferencesPlugin
       * Point and click bookmarks for better usability
       * Improved statistics showing overall site usage over time, such as total number of webs, topics, users, etc
-      * TopMenuSkin: Option for auto-hidden or fixed top menu-bar; in auto-hidden mode, menu is always accessible with stub - added in TWiki-5.1.2
+      * TopMenuSkin: Option for auto-hidden or fixed top menu-bar; in auto-hidden mode, menu is always accessible with stub - added in __TWiki-5.1.2__
    * *TWiki Application Platform Enhancements*
       * Macro language with parameterized variables
       * Ability to auto-create page on view if it does not exist
@@ -32,17 +35,22 @@ TWiki-5.1.2 released on 2012-10-07 is a patch release that adds some minor new f
       * Set a flag to force password change on next login
       * S/Mime support for notification e-mails
    * *Miscellaneous Feature Enhancements*
-      * TWikiDocGraphics: Added 2 new icons, and updated 1 icon - added in TWiki-5.1.1
-      * TWikiDocGraphics: Added 25 new icons, and updated 2 icons - added in TWiki-5.1.2
+      * TWikiDocGraphics: Added 2 new icons, and updated 1 icon - added in __TWiki-5.1.1__
+      * TWikiDocGraphics: Added 25 new icons, and updated 2 icons - added in __TWiki-5.1.2__
+      * TWikiDocGraphics: Added 5 new icons - added in __TWiki-5.1.3__
+      * User profile pages with CSS based box shadow and rounded corners - added in __TWiki-5.1.3__
    * *Plugin Enhancements*
       * New BackupRestorePlugin to easily backup, restore and upgrade TWiki installations
-      * BackupRestorePlugin: Add restore from backup feature - added in TWiki-5.1.1
-      * New SetGetPlugin that can store variables persistently
+      * BackupRestorePlugin: Add restore from backup feature - added in __TWiki-5.1.1__
+      * CommentPlugin: Send comment to multiple e-mail addresses; better layout & nicer look of default comment box - added in __TWiki-5.1.3__
       * New ColorPickerPlugin to pick a color in form fields
+      * New SetGetPlugin that can store variables persistently
+      * SetGetPlugin: Add REST interface - added in __TWiki-5.1.2__
+      * SetGetPlugin: GET variable with format parameter - added in __TWiki-5.1.3__
       * SpreadSheetPlugin: New functions BITXOR(), HEXENCODE(), HEXDECODE(), XOR()
-      * SpreadSheetPlugin: New functions FLOOR() and CEILING() - added in TWiki-5.1.1
-      * SpreadSheetPlugin: New CALCULATE variable using the register tag handler for variable evaluation with proper inside-out, left-to-right eval order; new functions $ISDIGIT(), $ISLOWER(), $ISUPPER(), $ISWIKIWORD() and $FILTER() - added in TWiki-5.1.2
-      * SetGetPlugin: Add REST interface - added in TWiki-5.1.2
+      * SpreadSheetPlugin: New functions FLOOR() and CEILING() - added in __TWiki-5.1.1__
+      * SpreadSheetPlugin: New CALCULATE variable using the register tag handler for variable evaluation with proper inside-out, left-to-right eval order; new functions $ISDIGIT(), $ISLOWER(), $ISUPPER(), $ISWIKIWORD() and $FILTER() - added in __TWiki-5.1.2__
+      * SpreadSheetPlugin: New function $STDEV(), $STDEVP(), $VAR(), $VARP() - added in __TWiki-5.1.3__
 
 See the full list of new features and bug fixes further below.
 
@@ -321,5 +329,44 @@ Total: 15
 | TWikibug:Item6960 | SpreadSheetPlugin: Form action of interactive formula evaluation feature has old format |
 </noautolink>
 Total: 27
+
+---++ TWiki-5.1.3 Patch Release - Details
+
+TWiki-5.1.3 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x01 revision r24482 (2012-12-15)
+
+---++ Enhancements
+
+<noautolink>
+| TWikibug:Item6945 | CommentPlugin: Send comment to multiple e-mail addresses |
+| TWikibug:Item6958 | Documentation: New TWiki Doc Graphics icons for TWiki-5.1.3 |
+| TWikibug:Item6959 | Translation: Translation work for TWiki-5.1.3 |
+| TWikibug:Item6962 | Documentation work for TWiki-5.1.3 |
+| TWikibug:Item6967 | CommentPlugin: Better layout of default comment box |
+| TWikibug:Item6979 | InterwikiPlugin: INTERWIKIPLUGIN_RULESTOPIC enhancement |
+| TWikibug:Item7018 | SpreadSheetPlugin: Test Cases for all !SpreadSheetPlugin functions; refactor plugin to use function hash for better performance |
+| TWikibug:Item7023 | SpreadSheetPlugin: New function $STDEV(), $STDEVP(), $VAR(), $VARP() |
+| TWikibug:Item7032 | SetGetPlugin: GET variable with format parameter |
+| TWikibug:Item7042 | TWikiUserMappingContrib: CSS based box shadow and rounded corners for user profile pages |
+</noautolink>
+Total: 10
+
+---++ Fixes
+
+<noautolink>
+| TWikibug:Item6944 | CommentPlugin: Get script URL with TWiki::Func::getMasterWebScriptUrl |
+| TWikibug:Item6978 | SetGetPlugin: Plugin may fail due to Data::Dumper not being loaded |
+| TWikibug:Item6982 | Links in INCLUDE across web have gratuitous trailing parenthesis |
+| TWikibug:Item6992 | Topic preferences in template topics are lost when creating a new topic |
+| TWikibug:Item7002 | !VarMETASEARCH was showing up in UserDocumentationCategory |
+| TWikibug:Item7005 | Documentation: Webs that have a !WikiWord name are shown as "TWiki.WikiWordWeb" in sitemap |
+| TWikibug:Item7006 | PatternSkin: Removing obsolete and unreferenced !PatternSkinHeaderArt topic |
+| TWikibug:Item7015 | TablePlugin: Cannot handle date (0, 0, 0, 14, 2, 1100) error on very early date |
+| TWikibug:Item7051 | Insecure dependency in open when renaming a topic |
+| TWikibug:Item7067 | Configure: Configure adds extra (?^: ... ) to regex variables on save under Perl 5.14 |
+| TWikibug:Item7068 | Time: SEARCH{date="interval"} incorrectly handles DST when in GMT timezone |
+| TWikibug:Item7080 | Security Alert CVE-2012-6329: TWiki MAKETEXT Variable Allows Arbitrary Shell Command Execution |
+| TWikibug:Item7084 | TWikiUserMappingContrib: Can't register local TWiki users with !LdapContrib |
+</noautolink>
+Total: 13
 
 __Related Topics:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide, %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%
