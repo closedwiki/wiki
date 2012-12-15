@@ -79,7 +79,7 @@ sub new {
     #if password manager says sorry, we're read only today
     #'none' is a special case, as it means we're not actually using the password manager for
     # registration.
-    if ($this->{passwords}->readOnly() && ($TWiki::cfg{PasswordManager} !~ /^(none|TWiki::Users::LdapUser)$/)) {         
+    if ($this->{passwords}->readOnly() && ($TWiki::cfg{PasswordManager} !~ /^(none|TWiki::Users::LdapPasswdUser)$/)) {         
         $session->writeWarning( 'TWikiUserMapping has TURNED OFF EnableNewUserRegistration, because the password file is read only.' );
         $TWiki::cfg{Register}{EnableNewUserRegistration} = 0;
     }
@@ -158,9 +158,9 @@ sub handlesUser {
     # Check the login id to see if we know it
 	return 1 if ($login && $this->_userReallyExists( $login ));
 
-    # FIXME: Hack to make PasswordManager 'TWiki::Users::LdapUser' work with
+    # FIXME: Hack to make PasswordManager 'TWiki::Users::LdapPasswdUser' work with
     # UserMappingManager 'TWiki::Users::TWikiUserMapping'
-    return 1 if ( $TWiki::cfg{PasswordManager} eq 'TWiki::Users::LdapUser' );
+    return 1 if ( $TWiki::cfg{PasswordManager} eq 'TWiki::Users::LdapPasswdUser' );
 
     # Or the wiki name
 	if ($wikiname) {
@@ -293,7 +293,7 @@ sub addUser {
                 'New password did not match existing password for this user');
         }
         # User exists, and the password was good.
-    } elsif( $TWiki::cfg{PasswordManager} ne 'TWiki::Users::LdapUser' ) {         
+    } elsif( $TWiki::cfg{PasswordManager} ne 'TWiki::Users::LdapPasswdUser' ) {         
        # add a new user
 
         unless( defined( $password )) {
