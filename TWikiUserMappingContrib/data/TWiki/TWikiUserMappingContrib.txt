@@ -73,8 +73,9 @@ It's a part of the default distribution of the TWiki Core.
 |  Contrib Authors: | TWiki:Main.SvenDowideit, TWiki:Main.PeterThoeny, TWiki:TWiki.TWikiContributor |
 |  Copyright: | &copy; 2007 Sven Dowideit %BR% &copy; 2007-2012 TWiki:Main.PeterThoeny %BR% &copy; 2007-2012 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Contrib Version: | 2012-11-18 |
+|  Contrib Version: | 2012-12-15 |
 |  <span style="white-space: nowrap;">Change History:</span> | <!-- versions below in reverse order -->&nbsp; |
+|  2012-12-15: | TWikibug:Item7084: Can't register local TWiki users with !LdapContrib -- TWiki:Main.PeterThoeny |
 |  2012-11-18: | TWikibug:Item7042: CSS based box shadow and rounded corners; make "Change" highlight on hover work in IE; make "Change" highlight when hovering anywhere on the profile picture -- TWiki:Main.PeterThoeny |
 |  2012-11-14: | TWikibug:Item7020: Categorize TWiki Variable USERREPORT -- TWiki:Main.PeterThoeny |
 |  2012-11-09: | TWikibug:Item7019: Rename order parameter in UserRepots to sort -- TWiki:Main.PeterThoeny |
