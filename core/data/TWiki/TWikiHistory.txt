@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349772854" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355609949" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
 %TOC%
 
 #IstanbulRelease
----++ TWiki Release 5.1 (Istanbul) released on 2011-08-20 &amp; 2012-10-07
+---++ TWiki Release 5.1 (Istanbul) released on 2011-08-20 &mdash; 2012-12-15
 
 __New Features and Enhancements of TWiki Release 5.1__
 
@@ -16,7 +16,7 @@ __New Features and Enhancements of TWiki Release 5.1__
       * In-place editing of TWiki group settings using !PreferencesPlugin
       * Point and click bookmarks for better usability
       * Improved statistics showing overall site usage over time, such as total number of webs, topics, users, etc
-      * TopMenuSkin: Option for auto-hidden or fixed top menu-bar; in auto-hidden mode, menu is always accessible with stub - added in TWiki-5.1.2
+      * TopMenuSkin: Option for auto-hidden or fixed top menu-bar; in auto-hidden mode, menu is always accessible with stub - added in __TWiki-5.1.2__
    * *TWiki Application Platform Enhancements*
       * Macro language with parameterized variables
       * Ability to auto-create page on view if it does not exist
@@ -26,22 +26,27 @@ __New Features and Enhancements of TWiki Release 5.1__
       * Set a flag to force password change on next login
       * S/Mime support for notification e-mails
    * *Miscellaneous Feature Enhancements*
-      * TWikiDocGraphics: Added 2 new icons, and updated 1 icon - added in TWiki-5.1.1
-      * TWikiDocGraphics: Added 25 new icons, and updated 2 icons - added in TWiki-5.1.2
+      * TWikiDocGraphics: Added 2 new icons, and updated 1 icon - added in __TWiki-5.1.1__
+      * TWikiDocGraphics: Added 25 new icons, and updated 2 icons - added in __TWiki-5.1.2__
+      * TWikiDocGraphics: Added 5 new icons - added in __TWiki-5.1.3__
+      * User profile pages with CSS based box shadow and rounded corners - added in __TWiki-5.1.3__
    * *Plugin Enhancements*
       * New BackupRestorePlugin to easily backup, restore and upgrade TWiki installations
-      * BackupRestorePlugin: Add restore from backup feature - added in TWiki-5.1.1
-      * New SetGetPlugin that can store variables persistently
+      * BackupRestorePlugin: Add restore from backup feature - added in __TWiki-5.1.1__
+      * CommentPlugin: Send comment to multiple e-mail addresses; better layout & nicer look of default comment box - added in __TWiki-5.1.3__
       * New ColorPickerPlugin to pick a color in form fields
+      * New SetGetPlugin that can store variables persistently
+      * SetGetPlugin: Add REST interface - added in __TWiki-5.1.2__
+      * SetGetPlugin: GET variable with format parameter - added in __TWiki-5.1.3__
       * SpreadSheetPlugin: New functions BITXOR(), HEXENCODE(), HEXDECODE(), XOR()
-      * SpreadSheetPlugin: New functions FLOOR() and CEILING() - added in TWiki-5.1.1
-      * SpreadSheetPlugin: New CALCULATE variable using the register tag handler for variable evaluation with proper inside-out, left-to-right eval order - added in TWiki-5.1.2
-      * SpreadSheetPlugin: New functions $ISDIGIT(), $ISLOWER(), $ISUPPER(), $ISWIKIWORD() and $FILTER() - added in TWiki-5.1.2
-      * SetGetPlugin: Add REST interface - added in TWiki-5.1.2
+      * SpreadSheetPlugin: New functions FLOOR() and CEILING() - added in __TWiki-5.1.1__
+      * SpreadSheetPlugin: New CALCULATE variable using the register tag handler for variable evaluation with proper inside-out, left-to-right eval order; new functions $ISDIGIT(), $ISLOWER(), $ISUPPER(), $ISWIKIWORD() and $FILTER() - added in __TWiki-5.1.2__
+      * SpreadSheetPlugin: New function $STDEV(), $STDEVP(), $VAR(), $VARP() - added in __TWiki-5.1.3__
    * *Bug Fixes*
       * 21 bug fixes since TWiki-5.0.2
       * 17 bug fixes since TWiki-5.1.0 - fixed in TWiki-5.1.1
       * 28 bug fixes since TWiki-5.1.1 - fixed in TWiki-5.1.2
+      * 13 bug fixes since TWiki-5.1.2 - fixed in TWiki-5.1.3
 
 See the full list of new features and bug fixes in TWikiReleaseNotes05x01.
 
@@ -51,8 +56,8 @@ __Hall of Fame of TWiki Release 5.1__
 Many people have been involved in creating TWiki 5.1. Special thanks go to the most active contributors in the following areas:
 
    * *Sponsor and facilitator:* TWiki:Main.PeterThoeny
-   * *Spec and code:* TWiki:Main.PeterThoeny, TWiki:Main.SopanShewale, TWiki:Main.GeorgeTrubisky, TWiki:Main.PeterJones, TWiki:Main.ChrisLahti, TWiki:Main.TimotheLitt, TWiki:Main.ThomasWeigert, TWiki:Main.IanKluft
-   * *Testing and bug fixing:* TWiki:Main.GeorgeTrubisky, TWiki:Main.GertjanVanOosten, TWiki:Main.JohnWorsley, TWiki:Main.JosephZamzow, TWiki:Main.JulianCollins, Wiki:Main.PhillipHuang, TWiki:Main.SopanShewale, TWiki:Main.PaulMerchantJr, TWiki:Main.PeterThoeny, TWiki:Main.RolandOldenburg, TWiki:Main.StefanScherer, TWiki:Main.StefanWalter, TWiki:Main.SpirosDenaxas, TWiki:Main.ThomasWeigert, TWiki:Main.TimotheLitt, TWiki:Main.WillemEngen
+   * *Spec and code:* TWiki:Main.PeterThoeny, TWiki:Main.SopanShewale, TWiki:Main.GeorgeTrubisky, TWiki:Main.PeterJones, TWiki:Main.ChrisLahti, TWiki:Main.TimotheLitt, TWiki:Main.ThomasWeigert, TWiki:Main.IanKluft, TWiki:Main.HideyoImazu
+   * *Testing and bug fixing:* TWiki:Main.GeorgeTrubisky, TWiki:Main.GertjanVanOosten, TWiki:Main.JohnWorsley, TWiki:Main.JosephZamzow, TWiki:Main.JulianCollins, Wiki:Main.PhillipHuang, TWiki:Main.SopanShewale, TWiki:Main.PaulMerchantJr, TWiki:Main.PeterThoeny, TWiki:Main.RolandOldenburg, TWiki:Main.StefanScherer, TWiki:Main.StefanWalter, TWiki:Main.SpirosDenaxas, TWiki:Main.ThomasWeigert, TWiki:Main.TimotheLitt, TWiki:Main.WillemEngen, TWiki:Main.MahiroAndo, TWiki:Main.YaojunFei
    * *Documentation:* TWiki:Main.PeterThoeny, TWiki:Main.ThomasWeigert, TWiki:Main.ScottGutman, TWiki:Main.SebastianKlus, TWiki:Main.DavidWTucker, TWiki:Main.JonasThomsen, TWiki:Main.MichaelRoberts, TWiki:Main.TaitCyrus, TWiki:Main.TorstenEriksson
    * *Release package builds:* TWiki:Main.GeorgeTrubisky
    * *Usability:* TWiki:Main.PeterThoeny
@@ -86,7 +91,7 @@ If you find an omission please fix it at TWiki:TWiki/TWikiHistory. For the full 
 See more details on the TWiki 5.1 release at TWikiReleaseNotes05x01.
 
 #HelsinkiRelease
----++ TWiki Release 5.0 (Helsinki) released on 2010-05-29 &amp; 2011-04-21
+---++ TWiki Release 5.0 (Helsinki) released on 2010-05-29 &mdash; 2011-04-21
 
 __New Features and Enhancements of TWiki Release 5.0__
 
