@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355620880" format="1.1" version="$Rev$"}%
----+!! Release Notes of TWiki-5.1.3 (Istanbul), 2012-12-15
+%META:TOPICINFO{author="TWikiContributor" date="1355637327" format="1.1" version="$Rev$"}%
+---+!! Release Notes of TWiki-5.1.3 (Istanbul), 2012-12-16
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC%
 </div>
@@ -14,7 +14,7 @@ TWiki-5.1.1 released on 2012-01-14 is a patch release that adds some minor new f
 
 TWiki-5.1.2 released on 2012-10-07 is a patch release that adds some minor new features and fixes a number of bugs.
 
-TWiki-5.1.3 released on 2012-12-15 is a patch release that adds some minor new features and fixes a number of bugs, including TWiki:Codev.SecurityAlert-CVE-2012-6329.
+TWiki-5.1.3 released on 2012-12-16 is a patch release that adds some minor new features and fixes a number of bugs, including TWiki:Codev.SecurityAlert-CVE-2012-6329.
 
 ---++ New Features Highlights
 
@@ -332,7 +332,7 @@ Total: 27
 
 ---++ TWiki-5.1.3 Patch Release - Details
 
-TWiki-5.1.3 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x01 revision r24496 (2012-12-15)
+TWiki-5.1.3 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease05x01 revision r24504 (2012-12-16)
 
 ---++ Enhancements
 
@@ -354,13 +354,18 @@ Total: 10
 
 <noautolink>
 | TWikibug:Item6944 | CommentPlugin: Get script URL with TWiki::Func::getMasterWebScriptUrl |
+| TWikibug:Item6969 | PreferencesPlugin: Various edge cases are not handled properly |
 | TWikibug:Item6978 | SetGetPlugin: Plugin may fail due to Data::Dumper not being loaded |
 | TWikibug:Item6982 | Links in INCLUDE across web have gratuitous trailing parenthesis |
 | TWikibug:Item6992 | Topic preferences in template topics are lost when creating a new topic |
 | TWikibug:Item7002 | !VarMETASEARCH was showing up in UserDocumentationCategory |
 | TWikibug:Item7005 | Documentation: Webs that have a !WikiWord name are shown as "TWiki.WikiWordWeb" in sitemap |
 | TWikibug:Item7006 | PatternSkin: Removing obsolete and unreferenced !PatternSkinHeaderArt topic |
+| TWikibug:Item7008 | PreferencesPlugin: Radio buttons are not displayed inline on webkit browsers |
+| TWikibug:Item7009 | PreferencesPlugin: Edit Preferences button to fail if the user does not have change permission |
 | TWikibug:Item7015 | TablePlugin: Cannot handle date (0, 0, 0, 14, 2, 1100) error on very early date |
+| TWikibug:Item7028 | PreferencesPlugin: Disable submit button when current site is mode read-only or slave. |
+| TWikibug:Item7029 | PreferencesPlugin: Redirect to master site when current site mode is slave. |
 | TWikibug:Item7051 | Insecure dependency in open when renaming a topic |
 | TWikibug:Item7067 | Configure: Configure adds extra (?^: ... ) to regex variables on save under Perl 5.14 |
 | TWikibug:Item7068 | Time: SEARCH{date="interval"} incorrectly handles DST when in GMT timezone |
@@ -368,6 +373,6 @@ Total: 10
 | TWikibug:Item7084 | TWikiUserMappingContrib: Can't register local TWiki users with !LdapContrib |
 | TWikibug:Item7087 | ICON: Icon image is undetermined if ICON parameter is empty |
 </noautolink>
-Total: 14
+Total: 19
 
 __Related Topics:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide, %SEARCH{ "TWikiReleaseNotes" scope="topic" topic="TWikiReleaseNotes*" excludetopic="%TOPIC%" nonoise="on" format="$topic" separator=", " }%
