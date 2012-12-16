@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1277358734" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355698389" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiSkins"}%
 ---+ TWiki Skin Browser
 
 You can try out the TWikiSkins currently installed on this system:
 
 <div class="skinstable">
-%SEARCH{ "Skin$" scope="topic" type="regex" nosearch="on" nototal="on" expandvariables="on" format="| $pattern(.*\| *Screenshot\:[^\|]*\|([^\|]*).*) | *[[$topic]]*: $pattern(.*\| *Description\:[^\|]*\|([^\|]*).*)<br /><br />[[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?skin=$pattern(.*\| *Base Name\:[^\|]*\| *(\w*).*)][preview with this topic]] |" }%
+%SEARCH{ "Skin$" scope="topic" type="regex" nosearch="on" nototal="on" expandvariables="on" format="| $pattern(.*\| *Screenshot\:[^\|]*\|([^\|]*).*) | *[[$topic]]*: $pattern(.*\| *Description\:[^\|]*\|([^\|]*).*)<br /><br />[[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?skin=$pattern(.*\| *Base Name\:[^\|]*\| *([\w,]*).*)][preview with this topic]] |" }%
 </div>
 <style type="text/css" media="all">
 .skinstable td {border-top:2px solid #444; padding:0.75em 0.5em;}
