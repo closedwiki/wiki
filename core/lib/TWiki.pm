@@ -1606,8 +1606,12 @@ sub formatIcon {
     }
 
     # cut file path, if any
-    $iconName =~ s/^.*\.(.*?)$/$1/; # cut file path if any
     $default  =~ s/^.*\.(.*?)$/$1/;
+    if( $iconName =~ s/^.*\.(.*?)$/$1/ ) {
+        # file icon path identified, set default unless defined
+        $default = 'else' unless( $default );
+    }
+    $iconName = 'empty' unless( $iconName );
 
     if( $iconName =~ /^list:/ ) {
         my @icons = ();
@@ -4569,7 +4573,7 @@ sub ICON {
     my( $this, $params ) = @_;
     my $iconName = $params->{_DEFAULT} || '';
     my $format   = $params->{format} || '$img';
-    my $default  = $params->{default} || $iconName;
+    my $default  = $params->{default} || '';
 
     return $this->formatIcon( $iconName, $format, $default );
 }
@@ -4577,7 +4581,7 @@ sub ICON {
 sub ICONURL {
     my( $this, $params ) = @_;
     my $iconName = ( $params->{_DEFAULT} || '' );
-    my $default  = $params->{default} || $iconName;
+    my $default  = $params->{default} || '';
 
     return $this->formatIcon( $iconName, '$url', $default );
 }
@@ -4585,7 +4589,7 @@ sub ICONURL {
 sub ICONURLPATH {
     my( $this, $params ) = @_;
     my $iconName = ( $params->{_DEFAULT} || '' );
-    my $default  = $params->{default} || $iconName;
+    my $default  = $params->{default} || '';
 
     return $this->formatIcon( $iconName, '$urlpath', $default );
 }
