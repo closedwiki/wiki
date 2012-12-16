@@ -1,0 +1,5 @@
+lib/TWiki/Contrib/MovedSkin.pm 0444
+data/TWiki/MovedSkin.txt 0644
+pub/TWiki/MovedSkin/fullscreen.png 0644
+pub/TWiki/MovedSkin/screenshot.png 0644
+templates/view.moved.tmpl 0644
