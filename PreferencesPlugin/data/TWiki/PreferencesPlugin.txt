@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352948966" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355636110" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page
@@ -51,10 +51,10 @@ In edit mode, the edit button is replaced by Save and Cancel buttons, with their
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
 |  Copyright: | &copy; 2005 TWiki:Main.ThomasWeigert, %BR% &copy; 2005-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-10-25 |
+|  Plugin Version: | 2012-11-15 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2012-11-15: | TWikibug:ItemItem7029: Redirect to master site when current site mode is slave. -- TWiki:Main.YaojunFei |
-|  2012-11-15: | TWikibug:ItemItem7028: Disable submit button when current site is mode read-only or slave. -- TWiki:Main.YaojunFei |
+|  2012-11-15: | TWikibug:Item7029: Redirect to master site when current site mode is slave. -- TWiki:Main.YaojunFei |
+|  2012-11-15: | TWikibug:Item7028: Disable submit button when current site is mode read-only or slave. -- TWiki:Main.YaojunFei |
 |  2012-10-25: | TWikibug:Item7009: "Edit Preferences" button is to fail if the user does not have change permission -- TWiki:Main.HideyoImazu |
 |  2012-10-24: | TWikibug:Item7008: Radio buttons were not displayed inline on webkit browsers -- TWiki:Main.HideyoImazu |
 |  2012-10-12: | TWikibug:Item6969: Various edge cases were not handled properly. All of those problems were fixed and the unit test enhanced accordingly. -- TWiki:Main.HideyoImazu |

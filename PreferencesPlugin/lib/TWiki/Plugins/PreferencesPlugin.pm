@@ -30,7 +30,7 @@ require TWiki::Plugins; # For the API version
 use Error qw(:try);
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-10-25';
+our $RELEASE = '2012-11-15';
 
 my @shelter;
 my $MARKER = "\007";
