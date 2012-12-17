@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1283032316" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355726226" format="1.1" version="$Rev$"}%
 %IF{"defined Name and $ Name != ''" then="---+!! Hello %URLPARAM{"Name"}%!" else="---+!! Form Plugin"}%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -252,7 +252,7 @@ options="mary=Mary M, peter=Peter P, annabel=Annabel A, nicky=Nicky N, jennifer=
 fieldformat="$e&lt;br /&gt;" %BR% \
 value="mary" %BR% \
 }%= |
-| =type="date"=   | Creates a date button; requires !JSCalendarContrib (installed by default). |=-=|=-=| =%<nop>FORMELEMENT{ %BR% \
+| =type="date"=   | Creates a date button; requires !DatePickerPlugin (installed by default). |=-=|=-=| =%<nop>FORMELEMENT{ %BR% \
 name="date" %BR% \
 type="date" %BR% \
 dateformat="%e-%b-%y" %BR% \
@@ -324,7 +324,7 @@ cssclass="twikiBroadcastMessage" %BR% \
 | =focus=  | =focus="on"= gives text entry focus to a field. Requires javascript. Only one element on the page can have focus. |=-=|=-=| =focus="on"= |
 | =disabled=  | =disabled="on"= disables user input; copying from a disabled input field is not possible. Note: disabled fields are not included into the submitted data. |=-=|=-=| =disabled="on"= |
 | =readonly=  | =readonly="on"= makes the field read-only; copying is possible but not changing. Only works for text fields and textarea. Note: readonly fields _are_ included into the submitted data. |=-=|=-=| =readonly="on"= |
-| =dateformat=   | Sets the output format of the date button, for instance: =%Y/%m/%d= - see [[#DateFormats][date formats]] for more info. |=-=| Default date format set in [[%SCRIPTURL{configure}%#JSCalendarContrib$Extensions][configure:JSCalendarContrib]]. ||
+| =dateformat=   | Sets the output format of the date button, for instance: =%Y/%m/%d= - see [[#DateFormats][date formats]] for more info. |=-=| Default date format set in [[%SCRIPTURL{configure}%][configure]]'s Extensions section, !DatePickerPlugin settings. ||
 
 ---++++ Javascript parameters
 Note that all function calls should include =(this)=.
@@ -550,16 +550,19 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 ---++ Installation
 
+%X% __Attention:__ This plugin version depends on the new TWiki:Plugins.DatePickerPlugin; the !JSCalendarContrib is no longer needed by this plugin and must be upgraded or uninstalled. 
+
 %$INSTALL_INSTRUCTIONS%
 
 ---++ Plugin Info
 
 |  Plugin Authors: | Arthur Clemens, Sven Dowideit, Eugen Mayer |
 |  Other authors: | =Validate.pm=, originally =CGI::Validate= by Zenin <zenin@archive.rhps.org> aka Byron Brummer <byron@omix.com>. Copyright (c) 1997,1998 OMIX, Inc. All rights reserved. Use is granted under the same terms of Perl. |
-|  Copyright: | &copy; 2007-2010 Arthur Clemens, Sven Dowideit, [[TWiki:Main.EugenMayer][Eugen Mayer]]; <br /> &copy; 2005-2010, TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2007-2010 Arthur Clemens, Sven Dowideit, [[TWiki:Main.EugenMayer][Eugen Mayer]]; <br /> &copy; 2005-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | %$VERSION% |
+|  Plugin Version: | 2012-12-16 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-12-16: | TWikibug:Item7077: Make !FormPlugin dependent on DatePickerPlugin instead of deprecated !JSCalendarContrib -- TWiki:Main.PeterThoeny |
 |  2010-08-28: | TWikibug:Item6530 - doc improvements |
 |  31 May 2010 | 1.6.2 Fixed field reference substitution when saving a topic; improved CSS in error messages. |
 |  26 May 2010 | 1.6.1 Replaced =getRequestObject= with =getCgiQuery= |
