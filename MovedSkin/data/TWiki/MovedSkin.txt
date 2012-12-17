@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355704113" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355705993" format="1.1" version="$Rev$"}%
 ---+!! !MovedSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -14,7 +14,7 @@
 
 ---++ Overview
 
-Sometimes a TWiki site is migrated to a new location with a new URL. For convenience users visiting the old site should find the new site. This skin is installed at the old TWiki site, and a =MOVEDMESSAGE= can be set to inform users of the new location.
+Sometimes a TWiki site is migrated to a new location with a new URL. For convenience users visiting the old site should find the new site. When this skin is installed and enabled at the old TWiki site, users will see a yellow moved message box instead of page content. A configurable =MOVEDMESSAGE= is set to inform users of the new location.
 
 For scheduled downtime & temporary maintenance it is better to use the read-only skin mode of the TopMenuSkin or PatternSkin instead of this !MovedSkin. For this, define a =BROADCASTMESSAGE= setting and a =Set READONLYSKINMODE = 1= setting in [[%LOCALSITEPREFS%]].
 
@@ -39,13 +39,25 @@ __Note:__ You do not need to install anything in the browser to use this skin. T
         | ==lib/TWiki/Contrib/%TOPIC%.pm== | Skin Perl module |
       * Set the ownership of the extracted directories and files to the webserver user.
 
-   * Skin __configuration and testing__:
+   * Skin __testing__:
       * Test if installed: %SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=moved.
-      * Define a MOVEDMESSAGE setting in [[%LOCALSITEPREFS%]] for site-wide effect. Example: %BR% =* Set MOVEDMESSAGE = <nop>__NOTE:__<nop> The %<nop>WIKITOOLNAME% site has been moved to a new location. The page you are trying to access is now at: %<nop>BR%%<nop>BR% <nop>http://twiki.example.com/do/view/%<nop>WEB%/%<nop>TOPIC%. %<nop>BR% Please update your bookmarks. %<nop>BR%%<nop>BR% Questions? Ask %<nop>WIKIWEBMASTER%=
-      * To active the skin site-wide ([[%SYSTEMWEB%.TWikiSkins][details]]), change the SKIN setting in [[%LOCALSITEPREFS%]]: %BR% =* Set SKIN = moved=
+
+---++ Enabling Moved Message
+
+1. Define a MOVEDMESSAGE setting in [[%LOCALSITEPREFS%]] so that the moved message takes effect site-wide. Example:
+
+=<nop>   * Set MOVEDMESSAGE = <nop>__NOTE:__<nop> The %<nop>WIKITOOLNAME% site has been moved to a new location. The page you are trying to access is now at: %<nop>BR%%<nop>BR% <nop>http://twiki.example.com/do/view/%<nop>WEB%/%<nop>TOPIC%. %<nop>BR% Please update your bookmarks. %<nop>BR%%<nop>BR% Questions? Ask %<nop>WIKIWEBMASTER%=
 <!--
    * Set MOVEDMESSAGE = __NOTE:__ The %WIKITOOLNAME% site has been moved to a new location. The page you are trying to access is now at: %BR%%BR% http://twiki.example.com/do/view/%WEB%/%TOPIC%. %BR% Please update your bookmarks. %BR%%BR% Questions? Ask %WIKIWEBMASTER%
 -->
+
+2. Test the yellow moved message box:%BR% %SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=moved.
+
+3. Active the skin site-wide by changing the SKIN setting in [[%LOCALSITEPREFS%]]:
+
+=<nop>   * Set SKIN = moved=
+
+%SYSTEMWEB%.TWikiSkins has details on skin activation.
 
 ---++ Skin Info
 
