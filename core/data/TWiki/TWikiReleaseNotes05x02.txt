@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353198816" format="1.1" version="$Rev$"}%
----+!! Release Notes of TWiki-5.2.0 (Jerusalem), 2012-??-?? 
+%META:TOPICINFO{author="TWikiContributor" date="1355716380" format="1.1" version="$Rev$"}%
+---+!! Release Notes of TWiki-5.2.0 (Jerusalem), 2013-??-?? 
 
 FIXME: Placeholder topic. The Jerusalem release will be either TWiki-5.2 or TWiki-6.0.
 
@@ -23,7 +23,9 @@ FIXME
 
 ---++ Deprecation Notices
 
-FIXME
+FIXME:
+
+   * The JSCalendarContrib is deprecated and is replaced by the DatePickerPlugin. The !JSCalendarContrib will be removed in the next release. Therefore, make sure to update calendars in your content to the much easier format of the !DatePickerPlugin. See details in JSCalendarContrib.
 
 ---++ Notes for TWiki Administrators and Wiki Champions
 
@@ -31,6 +33,7 @@ FIXME:
 
    * TWikiForms: Adding/changing/removing a TWiki Form has been moved from the edit screen to the "More topic actions" screen.
    * TWikiForms: The WEBFORMS preferences setting has been removed. TWiki Forms Template topics are now detected automatically.
+   * JSCalendarContrib: Update content showing calendars to the new DatePickerPlugin as documented in the now deprecated JSCalendarContrib.
 
 ---++ TWiki-5.2.0 Major Release - Details
 
