@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (c) 2007-2010 Arthur Clemens, Sven Dowideit, Eugen Mayer
-# Copyright (C) 2007-2010 TWiki Contributor. All Rights Reserved.
+# Copyright (C) 2007-2012 TWiki Contributor. All Rights Reserved.
 # TWiki Contributors listed in the AUTHORS file in the root of
 # this distribution. NOTE: Please extend that file, not this notice.
 #
@@ -28,13 +28,13 @@ use CGI qw(-nosticky :all);
 use Data::Dumper;    # for debugging
 
 our $VERSION = '$Rev$';
-our $RELEASE = '1.6.2';
+our $RELEASE = '2012-12-16';
 
 # Name of this Plugin, only used in this module
 our $pluginName = 'FormPlugin';
 
 our $NO_PREFS_IN_TOPIC = 1;
-our $SHORTDESCRIPTION = 'Lets you create simple and advanced web forms';
+our $SHORTDESCRIPTION = 'Create simple and advanced web forms using TWiki forms';
 
 my $currentTopic;
 my $currentWeb;
@@ -1729,20 +1729,20 @@ sub _getDateFieldHtml {
 
     my $text = CGI::textfield(%attributes);
 
-    eval 'use TWiki::Contrib::JSCalendarContrib';
+    eval 'use TWiki::Plugins::DatePickerPlugin';
     {
         if ($@) {
-            my $mess = "WARNING: JSCalendar not installed: $@";
+            my $mess = "WARNING: DatePickerPlugin not installed: $@";
             print STDERR "$mess\n";
             TWiki::Func::writeWarning($mess);
         }
         else {
-            TWiki::Contrib::JSCalendarContrib::addHEAD('twiki');
+            TWiki::Plugins::DatePickerPlugin::addToHEAD('twiki');
 
             my $format =
                  $dateFormat
               || $TWiki::cfg{JSCalendarContrib}{format}
-              || "%e %B %Y";
+              || "%Y-%m-%d";
 
             $text .= ' <span class="twikiMakeVisible">';
             my $control = CGI::image_button(
@@ -1751,7 +1751,7 @@ sub _getDateFieldHtml {
                 -onclick => "return showCalendar('$id','$format')",
                 -src     => TWiki::Func::getPubUrlPath() . '/'
                   . $TWiki::cfg{SystemWebName}
-                  . '/JSCalendarContrib/img.gif',
+                  . '/DatePickerPlugin/img.gif',
                 -alt   => 'Calendar',
                 -align => 'middle'
             );
