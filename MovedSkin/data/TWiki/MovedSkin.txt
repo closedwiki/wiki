@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355707590" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1355707959" format="1.1" version="$Rev$"}%
 ---+!! !MovedSkin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -67,9 +67,6 @@ If you want the page to redirect automatically to the new site you can add a met
 
 ---++ Skin Info
 
-Sponsor:
-
-   * [[http://www.wave.com/][Wave Systems Corp.]]
 <!--
 Needed by TWiki.org skin package reports:
    * Set SHORTDESCRIPTION = Inform users that a TWiki site has moved to a new location
@@ -79,6 +76,7 @@ Notes to skin maintainer on table rows:
 -->
 |  Skin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2012 [[http://www.wave.com/][Wave Systems Corp.]] <br /> &copy; 2012 TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]] <br /> &copy; 2012 TWiki:TWiki.TWikiContributor |
+|  Sponsor: | [[http://www.wave.com/][Wave Systems Corp.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Description: | Inform users that a TWiki site has moved to a new location |
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img width="600" alt="Click for full screen image" src="%ATTACHURL%/screenshot.png" height="130" /></a> |
