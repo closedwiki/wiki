@@ -5,12 +5,12 @@
 #!include ClassicSkin/lib/TWiki/Contrib/ClassicSkin
 #!include ColorPickerPlugin/lib/TWiki/Plugins/ColorPickerPlugin
 #!include CommentPlugin/lib/TWiki/Plugins/CommentPlugin
+#!include DatePickerPlugin/lib/TWiki/Plugins/DatePickerPlugin
 #!include EditTablePlugin/lib/TWiki/Plugins/EditTablePlugin
 #!include EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin
 #!include HeadlinesPlugin/lib/TWiki/Plugins/HeadlinesPlugin
 #!include InterwikiPlugin/lib/TWiki/Plugins/InterwikiPlugin
 #!include JQueryPlugin/lib/TWiki/Plugins/JQueryPlugin
-#!include JSCalendarContrib/lib/TWiki/Contrib/JSCalendarContrib
 #!include MailerContrib/lib/TWiki/Contrib/MailerContrib
 #!include PatternSkin/lib/TWiki/Contrib/PatternSkin
 #!include PreferencesPlugin/lib/TWiki/Plugins/PreferencesPlugin
