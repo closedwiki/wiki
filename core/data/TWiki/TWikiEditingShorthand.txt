@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355099322" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1355973662" format="1.1" reprev="1.4" version="1.4"}%
 ---+ TWiki Editing Shorthand
 
 _These instructions are for contributors who prefer to use the Raw Edit over the default WYSIWYG editor._
@@ -488,6 +488,20 @@ a@b.com
 [Mail]]
 
 [[mailto:?subject=Hi][Hi]]
+</td>
+</tr>
+<tr valign="top">
+<td>
+#TwitterLinks
+ *Twitter Links:* %BR%
+ <nop>@twitter IDs are linked automatically. The link rule is defined by the ={Links}{TwitterUrlPattern}= configure setting.
+</td><td>
+<verbatim>
+@twiki
+</verbatim>
+</td><td>
+
+@twiki
 </td>
 </tr>
 <tr valign="top">

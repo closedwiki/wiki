@@ -269,7 +269,7 @@ sub beforeSaveHandler
     }
 
     # check for evil eval() or escape() spam in <script>
-    if( $_[0] =~ /<script.*?(eval|escape) *\(.*?<\/script>/gis ) {
+    if( $_[0] =~ /<script.*?[^\$](eval|escape) *\(.*?<\/script>/gis ) {
         _oopsMessage( "topic", "script eval() or escape()", $remoteAddr );
     }
 
