@@ -39,12 +39,12 @@
 %TMPL:END%
 
 %TMPL:DEF{"tabpane"}%<!-- tabpane -->
-%JQTABPANE%
+%TABPANE%
 %TMPL:P{"firsttab"}%<!-- -->
 %TMPL:P{"formfields"}%<!-- -->
 %TMPL:P{"settingstab"}%<!-- -->
 %TMPL:P{"helptab"}%<!-- -->
-%JQENDTABPANE%
+%ENDTABPANE%
 <!-- //tabpane -->%TMPL:END%
 
 %TMPL:DEF{"formfields"}%%TMPL:P{"form"}%%TMPL:END%
@@ -62,19 +62,19 @@
 
 
 %TMPL:DEF{"firsttab"}%<!-- firsttab -->
-%JQTAB{"%MAKETEXT{"Text"}%" after="$.natedit.autoMaxExpand('#topic')"}%
+%TAB{"%MAKETEXT{"Text"}%" after="$.natedit.autoMaxExpand('#topic')"}%
 %TMPL:P{"topicmeta"}%
 %TMPL:P{"textarea"}%<!-- -->
-%JQENDTAB%
+%ENDTAB%
 <!-- //firsttab -->%TMPL:END%
 
 %TMPL:DEF{"settingstab"}%<!-- settingstab -->
-%JQTAB{"Settings" after="fixHeightOfPane()"}% %TMPL:P{"settings"}% %JQENDTAB%
+%TAB{"Settings" after="fixHeightOfPane()"}% %TMPL:P{"settings"}% %ENDTAB%
 <!-- //settingstab -->%TMPL:END%
 
 
 %TMPL:DEF{"helptab"}%<!-- helptab -->
-%JQTAB{"%MAKETEXT{"Help"}%" after="fixHeightOfPane()"}% %TMPL:P{"edithelp"}% %JQENDTAB%
+%TAB{"%MAKETEXT{"Help"}%" after="fixHeightOfPane()"}% %TMPL:P{"edithelp"}% %ENDTAB%
 <!-- //helptab -->%TMPL:END%
 
 %TMPL:DEF{"settings"}%<!-- settings -->

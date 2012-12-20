@@ -1233,11 +1233,6 @@ $TWiki::cfg{Links}{ExternalLinksInNewWindow} = $TRUE;
 # Show external link icon next to external links.
 $TWiki::cfg{Links}{ExternalLinksIcon} = $TRUE;
 
-# **STRING 40 Expert**
-# URL pattern of "@twitter_ID" style links. Use <tt>%ID%</tt> for the 
-# Twitter ID. An empty string disables autolinking.
-$TWiki::cfg{Links}{TwitterUrlPattern} = 'https://twitter.com/%ID%';
-
 # **STRING 20 EXPERT**
 # Name of site-level preferences topic in the {SystemWebName} web.
 # <b>If you change this setting you will have to

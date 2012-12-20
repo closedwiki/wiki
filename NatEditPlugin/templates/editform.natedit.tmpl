@@ -20,10 +20,10 @@
 <input type="hidden" name="templatetopic" value="%TEMPLATETOPIC%" />
 <input type="hidden" name="editaction" value="form" />
 <input type="hidden" name="cmd" value="%CMD%" /><div></div>
-%JQTABPANE%
+%TABPANE%
 %TMPL:P{"formfields"}%
-%JQTAB{"%MAKETEXT{"Help"}%" after="fixHeightOfPane()"}% %TMPL:P{"edithelp"}% %JQENDTAB%
-%JQENDTABPANE%
+%TAB{"%MAKETEXT{"Help"}%" after="fixHeightOfPane()"}% %TMPL:P{"edithelp"}% %ENDTAB%
+%ENDTABPANE%
 %TMPL:P{"bottomtopicactions"}%
 </form></div><!-- /patternFormHolder-->%TMPL:END%
 %TMPL:DEF{"formfields"}%%FORMFIELDS%%TMPL:END%

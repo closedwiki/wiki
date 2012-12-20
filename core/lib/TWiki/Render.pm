@@ -905,16 +905,6 @@ sub _mailLink {
     return _externalLink( $this, $url, $text );
 }
 
-# Generate a "@twitter" link
-sub _twitterLink {
-    my( $this, $text ) = @_;
-
-    my $url = $TWiki::cfg{Links}{TwitterUrlPattern};
-    return( '@' . $text ) unless( $url );
-    $url =~ s/\%ID\%/$text/go;
-    return _externalLink( $this, $url, '@' . $text );
-}
-
 =pod
 
 ---++ ObjectMethod renderFORMFIELD ( %params, $topic, $web ) -> $html
@@ -1120,13 +1110,13 @@ sub getRenderedVersion {
 
     # Escape rendering: Change ' !AnyWord' to ' <nop>AnyWord',
     # for final ' AnyWord' output
-    $text =~ s/$STARTWW\!(?=[\w\*\=\@])/<nop>/gm;
+    $text =~ s/$STARTWW\!(?=[\w\*\=])/<nop>/gm;
 
     # Blockquoted email (indented with '> ')
-    # Could be used to provide different colors for different numbers of '>'
+    # Could be used to provide different colours for different numbers of '>'
     $text =~ s/^>(.*?)$/'&gt;'.CGI::cite( $1 ).CGI::br()/gem;
 
-    # Locate isolated < and > and translate to entities
+    # locate isolated < and > and translate to entities
     # Protect isolated <!-- and -->
     $text =~ s/<!--/{$TWiki::TranslationToken!--/g;
     $text =~ s/-->/--}$TWiki::TranslationToken/g;
@@ -1290,9 +1280,6 @@ sub getRenderedVersion {
     # Mailto e-mail addresses must always be 7-bit, even within I18N sites
     # Normal mailto:foo@example.com ('mailto:' part optional)
     $text =~ s/$STARTWW((mailto\:)?$TWiki::regex{emailAddrRegex})$ENDWW/_mailLink( $this, $1 )/gem;
-
-    # Twitter ID, e.g. @twiki
-    $text =~ s/$STARTWW\@([a-zA-Z0-9_]+)/_twitterLink( $this, $1 )/gem;
 
     unless( TWiki::isTrue( $prefs->getPreferencesValue('NOAUTOLINK')) ) {
         # Handle WikiWords

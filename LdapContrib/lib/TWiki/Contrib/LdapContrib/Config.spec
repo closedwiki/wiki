@@ -71,7 +71,7 @@ $TWiki::cfg{Ldap}{TLSVerify} = 'require';
 $TWiki::cfg{Ldap}{TLSCAPath} = '';
 
 # **STRING**
-# Filename containing the certificate of the CA which signed the server's certificate.
+# Filename containing the certificate of the CA which signed the server’s certificate.
 $TWiki::cfg{Ldap}{TLSCAFile} = '';
 
 # **STRING**
