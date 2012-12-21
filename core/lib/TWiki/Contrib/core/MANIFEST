@@ -2,7 +2,6 @@
 # will be build up into the final release package elsewhere.
 #!include BackupRestorePlugin/lib/TWiki/Plugins/BackupRestorePlugin
 #!include BehaviourContrib/lib/TWiki/Contrib/BehaviourContrib
-#!include ClassicSkin/lib/TWiki/Contrib/ClassicSkin
 #!include ColorPickerPlugin/lib/TWiki/Plugins/ColorPickerPlugin
 #!include CommentPlugin/lib/TWiki/Plugins/CommentPlugin
 #!include DatePickerPlugin/lib/TWiki/Plugins/DatePickerPlugin
