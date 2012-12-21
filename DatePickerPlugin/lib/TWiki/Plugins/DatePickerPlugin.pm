@@ -38,7 +38,7 @@ require TWiki::Func;    # The plugins API
 
 # ========================================================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-12-16';
+our $RELEASE = '2012-12-20';
 our $SHORTDESCRIPTION = "Pop-up calendar with date picker, for use in TWiki forms, HTML forms and TWiki plugins";
 our $NO_PREFS_IN_TOPIC = 1;
 
@@ -229,7 +229,7 @@ sub addToHEAD {
     return if( $headerDone );
     $headerDone = 1;
 
-    my $style = $TWiki::cfg{Plugins}{DatePickerPlugin}{Style} || 'blue';
+    my $style = $TWiki::cfg{Plugins}{DatePickerPlugin}{Style} || 'twiki';
     my $lang = $TWiki::cfg{Plugins}{DatePickerPlugin}{Lang} || 'en';
     my $base = '%PUBURLPATH%/%SYSTEMWEB%/DatePickerPlugin';
     my $head = <<HERE;
