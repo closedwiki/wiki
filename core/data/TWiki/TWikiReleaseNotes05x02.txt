@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355716380" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1356073786" format="1.1" version="$Rev$"}%
 ---+!! Release Notes of TWiki-5.2.0 (Jerusalem), 2013-??-?? 
 
 FIXME: Placeholder topic. The Jerusalem release will be either TWiki-5.2 or TWiki-6.0.
@@ -24,7 +24,7 @@ FIXME
 ---++ Deprecation Notices
 
 FIXME:
-
+   * The !ClassicSkin has been deprecated in the TWiki-5.1 release and has been removed from this release.
    * The JSCalendarContrib is deprecated and is replaced by the DatePickerPlugin. The !JSCalendarContrib will be removed in the next release. Therefore, make sure to update calendars in your content to the much easier format of the !DatePickerPlugin. See details in JSCalendarContrib.
 
 ---++ Notes for TWiki Administrators and Wiki Champions
