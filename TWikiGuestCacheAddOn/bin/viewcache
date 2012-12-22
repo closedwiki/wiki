@@ -1,0 +1,207 @@
+#!/usr/bin/perl -w
+#
+# TWikiGuestCacheAddOn, part of:
+# TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2009 Peter Thoeny, peter@thoeny.org
+# and TWiki Contributors.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# As per the GPL, removal of this notice is prohibited.
+# 
+# Configure variables with defaults:
+# $TWiki::cfg{TWikiGuestCacheAddOn}{WgetCmd} = '/usr/bin/wget --user-agent=TWikiGuestCacheAddOn -O';
+# $TWiki::cfg{TWikiGuestCacheAddOn}{CacheAge} = '43200';
+# 
+
+BEGIN {
+    # Set default current working directory (needed for mod_perl)
+    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+        chdir $1;
+    }
+    # Set library paths in @INC, at compile time
+    unshift @INC, '.';
+    require 'setlib.cfg';
+}
+
+#=====================================================
+# Global variables and initialization
+#use CGI::Carp qw(fatalsToBrowser);
+
+my $now = time();
+my $pathInfo = $ENV{PATH_INFO} || '';
+my $queryString = $ENV{QUERY_STRING} || '';
+my $sid = $ENV{HTTP_COOKIE} || '';
+$sid = '' unless( $sid && $sid =~ s/.*TWIKISID\=([a-z0-9]+).*/$1/ );
+my $dataDir = '';
+if( do 'LocalSite.cfg' ) {
+    $dataDir = $TWiki::cfg{DataDir};
+}
+my $dataUpdate = (stat( "$dataDir$pathInfo.txt" ))[9];
+
+#=====================================================
+sub _readFile {
+    my $name = shift;
+    my $data = '';
+    open( IN_FILE, "<$name" ) || return '';
+    local $/ = undef; # set to read to EOF
+    $data = <IN_FILE>;
+    close( IN_FILE );
+    $data = '' unless $data; # no undefined
+    return $data;
+}
+
+#=====================================================
+sub _saveFile {
+    my( $name, $text ) = @_;
+
+    unless ( open( FILE, ">$name" ) )  {
+        die "Can't create file $name - $!\n";
+    }
+    print FILE $text;
+    close( FILE);
+}
+
+#=====================================================
+sub _appendToFile {
+    my ( $name, $text ) = @_;
+
+    if( $name && $text ) {
+        if( open( FILE, ">>$name" ) ) {
+            print FILE "$text\n";
+            close( FILE );
+        } else {
+            print STDERR 'Could not write "'.$text.'" to '."$name: $!\n";
+        }
+    }
+}
+
+#=====================================================
+sub _addLogEntry
+{
+    my ( $script ) = @_;
+
+    my ($sec,$min,$hour,$day,$mo,$year) = localtime( $now );
+    $min = '0' . $min if( $min < 10 );
+    $hour = '0' . $hour if( $hour < 10 );
+    $day = '0' . $day if( $day < 10 );
+    my @abbr = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
+    my $month = $abbr[$mo];
+    $mo++;
+    $mo = '0' . $mo if( $mo < 10 );
+    $year += 1900;
+    my $dateFormat = $TWiki::cfg{DefaultDateFormat} || '$year-$mo-$day';
+    $dateFormat =~ s/\$year/$year/go;
+    $dateFormat =~ s/\$mo/$mo/go;
+    $dateFormat =~ s/\$month/$month/go;
+    $dateFormat =~ s/\$day/$day/go;
+    my $webTopic = $pathInfo;
+    $webTopic =~ s/^\///;
+    $webTopic =~ s/(.*)\//$1./;
+    my $agent = $ENV{HTTP_USER_AGENT} || 'Unknown';
+    $agent =~ s/[\/ ].*//;
+    my $ip = $ENV{REMOTE_ADDR} || '';
+    my $log = "| $dateFormat - $hour:$min | guest | $script | $webTopic | $agent - cache | $ip |";
+    my $logFile = $TWiki::cfg{LogFileName};
+    $logFile =~ s/%DATE%/$year$mo/go;
+    print STDERR "$log -- $logFile";
+    _appendToFile( $logFile, $log );
+}
+
+#=====================================================
+sub _getAuthUser
+{
+    my $file = shift;
+    open( FILE, "<$file" ) || return '';
+    while( <FILE> ) {
+        if( $_ =~ /'AUTHUSER' *\=\> *'([^']+)'/ ) {
+            return $1; # authenticated user
+        }
+    }
+    close( FILE );
+    return ''; # guest (not authenticated user)
+}
+
+#=====================================================
+sub _checkIfCache
+{
+    my $doCache = 1;
+    $doCache = 0 if( $doCache && ! $dataDir );    # no caching if LocalSite.cfg not valid
+    $doCache = 0 if( $doCache && $queryString );  # no caching if URL parameter(s)
+    my $authUser = _getAuthUser( "$TWiki::cfg{WorkingDir}/tmp/cgisess_$sid" );
+    $doCache = 0 if( $doCache && $authUser );     # no caching if authenticated user
+    $doCache = 0 if( $doCache && ! $dataUpdate ); # no caching if topic does not exist
+    return $doCache;
+}
+
+#=====================================================
+sub _cacheAndReturnPage
+{
+    # cache age in seconds
+    my $cacheAge = $TWiki::cfg{TWikiGuestCacheAddOn}{CacheAge} || '43200';
+    # build wget command with parameters
+    my $wgetCmd = $TWiki::cfg{TWikiGuestCacheAddOn}{WgetCmd} || '/usr/bin/wget --user-agent=TWikiGuestCacheAddOn -O';
+    my $cacheDir = $TWiki::cfg{PubDir} . '/.cache';
+    $wgetCmd .= " $cacheDir$pathInfo.html"; #cache file
+    $wgetCmd .= " http://$ENV{HTTP_HOST}$ENV{SCRIPT_NAME}$pathInfo";
+    $wgetCmd .= "?TWikiGuestCache=1"; # add URL param to prevent recursion
+    $wgetCmd .= " 2>/dev/null";       # throw away STDERR
+$wgetCmd =~ s/\/cache/\/view/;
+
+    # create cache directories if needed
+    mkdir( $cacheDir ) unless( -e $cacheDir );
+    my $webs = $pathInfo;
+    $webs =~ s/(.*)\/(.*)/$1/; # cut topic
+    my $topicName = $2;        # extract topic name
+    $webs =~ s/^\///;          # cut initial slash from web list
+    foreach( split( /\//, $webs ) ) {
+        $cacheDir .= "/$_";
+        mkdir( $cacheDir ) unless( -e $cacheDir ); # create web directories if needed
+    }
+
+    # update cache file if needed
+    my $cacheUpdate = (stat( "$cacheDir/$topicName.html" ))[9];
+    if( ! $cacheUpdate || $cacheUpdate < $dataUpdate || $cacheUpdate + $cacheAge < $now ) {
+        _addLogEntry( 'cache' );
+        `$wgetCmd`;
+    } else {
+        # add log entry
+       _addLogEntry( 'view' );
+    }
+    print "Content-type: text/html\n\n";
+    my $text = _readFile( "$cacheDir/$topicName.html" );
+  if(1){
+    print $text;
+  }else{
+    print "wgetCmd: $wgetCmd<br />\n";
+    print "dataDir: $dataDir<br />\n";
+    print "dataUpdate: $dataUpdate<br />\n";
+    print "webs: $webs<br />\n";
+    print "topicName: $topicName<br />\n";
+    print "cacheDir: $cacheDir<br />\n";
+    print "cacheUpdate: $cacheUpdate<br />\n";
+    print "now: $now<br />\n";
+    print "sid: $sid<br />\n";
+  }
+}
+
+# Main =====================================================
+if( _checkIfCache() ) {
+    _cacheAndReturnPage();
+
+} else {
+    require TWiki::UI;
+    require TWiki::UI::View;
+    TWiki::UI::run( \&TWiki::UI::View::view, view => 1 );
+}
+
+# END =====================================================
