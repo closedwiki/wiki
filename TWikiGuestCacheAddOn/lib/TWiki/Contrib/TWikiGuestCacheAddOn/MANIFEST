@@ -1,3 +1,4 @@
 data/TWiki/TWikiGuestCacheAddOn.txt 0644
 bin/viewcache 0555
-lib/TWiki/Contrib/TWikiGuestCacheAddOn.pm 0444
+lib/TWiki/Contrib/TWikiGuestCacheAddOn.pm 0644
+lib/TWiki/Contrib/TWikiGuestCacheAddOn/Config.spec 0644

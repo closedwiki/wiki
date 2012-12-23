@@ -21,11 +21,11 @@
 # Configure variables with defaults:
 # $TWiki::cfg{TWikiGuestCacheAddOn}{WgetCmd} =
 #   '/usr/bin/wget --user-agent=TWikiGuestCacheAddOn -O';
-# $TWiki::cfg{TWikiGuestCacheAddOn}{CacheAge} = '172800'; # 48h
-# $TWiki::cfg{TWikiGuestCacheAddOn}{Tier1CacheAge} = '21600'; # 6h
+# $TWiki::cfg{TWikiGuestCacheAddOn}{CacheAge} = '48'; # hours
+# $TWiki::cfg{TWikiGuestCacheAddOn}{Tier1CacheAge} = '6'; # hours
 # $TWiki::cfg{TWikiGuestCacheAddOn}{Tier1Topics} =
 #   'WebHome, WebTopicList';
-# $TWiki::cfg{TWikiGuestCacheAddOn}{Tier2CacheAge} = '3600'; # 1h
+# $TWiki::cfg{TWikiGuestCacheAddOn}{Tier2CacheAge} = '1'; # hour
 # $TWiki::cfg{TWikiGuestCacheAddOn}{Tier2Topics} =
 #   'WebAtom, WebChanges, WebRss';
 # $TWiki::cfg{TWikiGuestCacheAddOn}{Debug} = 0;
