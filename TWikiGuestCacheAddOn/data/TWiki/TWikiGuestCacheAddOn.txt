@@ -1,0 +1,100 @@
+%META:TOPICINFO{author="TWikiContributor" date="1356240754" format="1.1" version="$Rev$"}%
+---+!! TWiki Guest Cache Add-On
+<!--
+   Contributions to this add-on are appreciated. Please update the contrib page at
+   http://twiki.org/cgi-bin/view/Plugins/TWikiGuestCacheAddOn or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TWikiGuestCacheAddOnDev.
+   If you are a TWiki contributor please update the add-on in the SVN repository.
+-->
+<sticky>
+<div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
+%TOC{title="Page contents"}%
+</div></sticky>
+%SHORTDESCRIPTION%
+
+---++ Overview
+
+Public TWiki sites are frequently visited by search engine spiders and non-autheticated users. The actual traffic by authenticated users who browse and change content is typically less than 5% of all traffic. This add-on is designed to cache topics for non-autheticated users. Content is not cached for authenticated users - this ensures that personalized content remains personalized.
+
+A typical TWiki page may load in about 1 second. A cached topic loads about 10 times faster.
+
+Deploying this add-on on a public TWiki site tends to speed up the site for all users. It also reduces the CPU load considerably on a high traffic site. On TWiki.org the average CPU load dropped from 2-3 down to 0.2-0.5 after deploying this add-on.
+
+---++ Cache Algorithm
+
+Once the add-on is installed and configured it can be forgotten, the caching and cache update is done automatically.
+
+A topic is only cached if:
+
+   * the user is _not_ authenticated,
+   * the requested URL has no parameters,
+   * the requested topic exists.
+
+The cached content is returned if all conditions are met and if the cache exists. If needed, a topic is cached or re-cached first.
+
+A configurable cache invalidation determines when a topic is re-cached. There are three tiers:
+
+   * Tier 1 topics, such as =WebChanges, !WebRss=: Cache invalidation is 1 hour by default.
+   * Tier 2 topics, such as =WebHome, !WebTopicList=: Cache invalidation is 6 hours by default.
+   * Other topics: Cache invalidation is 48 hours by default.
+
+---++ Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the TWiki server.
+
+   * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section. 
+      * See the [[http://twiki.org/cgi-bin/view/Plugins/BuildContribInstallationSupplement][installation supplement]] on TWiki.org for more information.
+
+   * Or, follow these __manual installation__ steps: 
+      * Download the ZIP file from the Plugins home (see below).
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+        | *File:* | *Description:* |
+        | ==data/TWiki/%TOPIC%.txt== | Add-on topic |
+        | ==bin/viewcache== | View script with cache logic |
+        | ==lib/TWiki/Contrib/%TOPIC%.pm== | Add-on Perl module |
+        | ==lib/TWiki/Contrib/%TOPIC%/Config.spec== | Spec file for configure |
+      * Set the ownership of the extracted directories and files to the webserver user.
+      * Make sure the =wget= command is installed.
+   * Add-on __configuration and testing__:
+      * Configure the <nop>%TOPIC% settings in the __Extensions__ section.
+         * Settings:
+           %BR% =# Comma-space delimited list of tier 1 topic names:=
+           %BR% =$TWiki::cfg{TWikiGuestCacheAddOn}{Tier1Topics} = 'WebAtom, !WebChanges, !WebRss';=
+           %BR% =# Maximum cache age for tier 1 pages, in hours:=
+           %BR% =$TWiki::cfg{TWikiGuestCacheAddOn}{Tier1CacheAge} = '1';=
+           %BR% =# Comma-space delimited list of tier 2 topic names:=
+           %BR% =$TWiki::cfg{TWikiGuestCacheAddOn}{Tier2Topics} = 'WebHome, !WebTopicList';=
+           %BR% =# Maximum cache age for tier 2 pages, in hours:=
+           %BR% =$TWiki::cfg{TWikiGuestCacheAddOn}{Tier2CacheAge} = '6';=
+           %BR% =# Maximum cache age for default pages, in hours:=
+           %BR% =$TWiki::cfg{TWikiGuestCacheAddOn}{CacheAge} = '48';=
+           %BR% =# wget command:=
+           %BR% =$TWiki::cfg{TWikiGuestCacheAddOn}{WgetCmd} = '/usr/bin/wget --user-agent=TWikiGuestCacheAddOn -O';=
+           %BR% =# Debug flag:=
+           %BR% =$TWiki::cfg{TWikiGuestCacheAddOn}{Debug} = 0;=
+      * Copy the =twiki/bin/viewcache= script to =twiki/bin/view= (overwrite the latter).
+      * Test if the installation was successful:
+         * Logout and view a topic as a not authenticated user.
+         * On the shell, check if the cache file =twiki/pub/.cache/&lt;web&gt;/&lt;topic&gt;.html= has been created.
+         * The second time you view a topic, it should load much faster.
+         * Look at the tail of the TWiki log file =twiki/data/log%SERVERTIME{$year$mo}%.txt= to verify that cached content is returned you should see ="from cache"= entries. Example:%BR% =| %SERVERTIME{$year-$mo-$day - $hour:$min}% | guest | view | !Support.SupportForum | Mozilla - from cache | 1.2.3.4 |=
+
+---++ Add-On Info
+
+   * Set SHORTDESCRIPTION = Speed up a TWiki site by caching topics for non-authenticated users
+
+|  Add-on Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2012 TWiki:Main.PeterThoeny |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Add-on Version: | 2012-12-22 |
+|  Change History: | <!-- versions below in reverse order --> |
+|  2012-12-22: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.3 (TWiki-5.0) |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | wget command |
+|  Perl Version: | 5.005 |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/TWikiGuestCacheAddOn |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/TWikiGuestCacheAddOnDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/TWikiGuestCacheAddOnAppraisal |
+
+__Related Topic:__ %SYSTEMWEB%.TWikiAddOns
