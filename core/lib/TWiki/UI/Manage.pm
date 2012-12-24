@@ -614,6 +614,8 @@ sub _renameweb {
         }
     }
 
+    my $currentWebOnly = TWiki::isTrue($query->param( 'currentwebonly' ),
+                                       $TWiki::cfg{NoInAllPublicWebs} ? 1 : 0);
     my @tmp = split( /[\/\.]/, $oldWeb );
     pop( @tmp );
     my $oldParentWeb = join( '/', @tmp );
@@ -684,7 +686,8 @@ sub _renameweb {
         # get a topic list for all the topics referring to this web,
         # and build up a hash containing permissions and lock info.
         my $refs0 = getReferringTopics( $session, $oldWeb, undef, 0 );
-        my $refs1 = getReferringTopics( $session, $oldWeb, undef, 1 );
+        my $refs1 = $currentWebOnly ?
+            {} : getReferringTopics( $session, $oldWeb, undef, 1 );
         %refs = (%$refs0, %$refs1);
 
         $webTopicInfo{referring}{refs0} = $refs0;
@@ -1386,7 +1389,7 @@ sub getReferringTopics {
     my @webs = ( $web );
 
     if( $allWebs ) {
-        @webs = $store->getListOfWebs();
+        @webs = $store->getListOfWebs('writable');
     }
 
     my %results;
