@@ -81,7 +81,7 @@ BEGIN {
 
     # Item7098
     # eval "use base 'Locale::Maketext'"; does not work as expected at lease
-    # in some cases. So 'require' and 'push(@ISA, ...)' are exected explictly
+    # in some cases. So 'require' and 'push(@ISA, ...)' are executed explictly
     # instead.
     eval 'require Locale::Maketext';
     if ( $@ ) {
