@@ -30,7 +30,7 @@ package TWiki::I18N;
 use strict;
 use Assert;
 
-use vars qw( $initialised @initErrors );
+use vars qw( $initialised @initErrors @ISA );
 
 =pod
 
@@ -79,11 +79,16 @@ BEGIN {
     # we first assume it's ok
     $initialised = 1;
 
-    eval "use base 'Locale::Maketext'";
+    # Item7098
+    # eval "use base 'Locale::Maketext'"; does not work as expected at lease
+    # in some cases. So 'require' and 'push(@ISA, ...)' are exected explictly
+    # instead.
+    eval 'require Locale::Maketext';
     if ( $@ ) {
         $initialised = 0;
         push(@initErrors, "I18N: Couldn't load required perl module Locale::Maketext: " . $@."\nInstall the module or turn off {UserInterfaceInternationalisation}");
     }
+    push(@ISA, 'Locale::Maketext');
 
     unless( $TWiki::cfg{LocalesDir} && -e $TWiki::cfg{LocalesDir} ) {
         push(@initErrors, 'I18N: {LocalesDir} not configured. Define it or turn off {UserInterfaceInternationalisation}');
