@@ -102,6 +102,7 @@ use vars qw(
       $sandbox
       $engine
       $ifParser
+      %scriptOnMaster
     );
 
 # Token character that must not occur in any normal text - converted
@@ -513,6 +514,16 @@ BEGIN {
     # Check for unsafe search regex mode (affects filtering in) - default
     # to safe mode
     $TWiki::cfg{ForceUnsafeRegexes} = 0 unless defined $TWiki::cfg{ForceUnsafeRegexes};
+
+    # scripts which cannot work for a slave web
+    if ( $TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster} ) {
+        for my $script (
+            split(/[\s,]+/,
+                  $TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster})
+        ) {
+            $scriptOnMaster{$script} = 1;
+        }
+    }
 
     # initialize lib directory early because of later 'cd's
     getTWikiLibDir();
@@ -1229,7 +1240,7 @@ sub getScriptUrl {
     if ( $web ) {
         ($contentMode, $master) = $this->modeAndMaster($web);
         if ( $contentMode eq 'slave' ) {
-            if ( $TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster}{$script} ) {
+            if ( $scriptOnMaster{$script} ) {
                 # even if $script is null, no disaster happens
                 $ofMaster = 1;
             }
@@ -4384,6 +4395,8 @@ sub WEBLIST {
             push( @list, $this->{store}->getListOfWebs( 'user,public,allowed', $showWeb ) );
         } elsif ( $aweb eq 'canmoveto' ) {
             push( @list, $this->{store}->getListOfWebs( 'user,public,allowed,canmoveto', $showWeb ) );
+        } elsif ( $aweb eq 'cancopyto' ) {
+            push( @list, $this->{store}->getListOfWebs( 'user,public,allowed,cancopyto', $showWeb ) );
         } elsif( $aweb eq 'webtemplate' ) {
             push( @list, $this->{store}->getListOfWebs( 'template,allowed', $showWeb ));
         } else {

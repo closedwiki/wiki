@@ -1362,12 +1362,9 @@ $TWiki::cfg{Operators}{If} = [ 'TWiki::If::OP_allows', 'TWiki::If::OP_defined', 
 #
 # **BOOLEAN EXPERT**
 # On a slave web, some scripts always need to be executed on the master site.
-# Those scripts are specified in the following lines.
-$TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster}{edit} = 1;
-$TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster}{save} = 1;
-$TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster}{attach} = 1;
-$TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster}{upload} = 1;
-$TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster}{rename} = 1;
+# Those scripts are specified in the following line.
+$TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster} =
+    'edit,save,attach,upload,rename';
 #
 #---++ Using Multiple Disks (TWiki.UsingMultipleDisks)
 # **BOOLEAN EXPERT**
@@ -1380,6 +1377,15 @@ $TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster}{rename} = 1;
 # If you have thousands of webs on a site, "in all public webs" operation
 # just times out and need to be aovided.
 # $TWiki::cfg{NoInAllPublicWebs} = 1;
+#
+#---++ WEBLIST tuning
+# **REGEX EXPERT**
+# You may want to exclude some webs from the canmoveto web list
+# $TWiki::cfg{WEBLIST}{canmovetoExclude} = qr/^$TWiki::cfg{TrashWebName}(x\d+x)?\d+$/;
+#
+# **REGEX EXPERT**
+# You may want to exclude some webs from the cancopyto web list
+# $TWiki::cfg{WEBLIST}{cancopytoExclude} = qr/^$TWiki::cfg{TrashWebName}(x\d+x)?\d*$/;
 
 #---+ Plugins
 # *PLUGINS* Marker used by bin/configure script - do not remove!
