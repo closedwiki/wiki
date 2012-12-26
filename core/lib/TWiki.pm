@@ -275,6 +275,8 @@ BEGIN {
         WEBLIST           => \&WEBLIST,
         WIKINAME          => \&WIKINAME_deprecated,
         WIKIUSERNAME      => \&WIKIUSERNAME_deprecated,
+        WIKIWEBMASTER     => \&WIKIWEBMASTER,
+        WIKIWEBMASTERNAME => \&WIKIWEBMASTERNAME,
         # Constant tag strings _not_ dependent on config. These get nicely
         # optimised by the compiler.
         ENDSECTION        => sub { '' },
@@ -346,8 +348,6 @@ BEGIN {
     $functionTags{WEBPREFSTOPIC}   = sub { $TWiki::cfg{WebPrefsTopicName} };
     $functionTags{WIKIPREFSTOPIC}  = sub { $TWiki::cfg{SitePrefsTopicName} };
     $functionTags{WIKIUSERSTOPIC}  = sub { $TWiki::cfg{UsersTopicName} };
-    $functionTags{WIKIWEBMASTER}   = sub { $TWiki::cfg{WebMasterEmail} };
-    $functionTags{WIKIWEBMASTERNAME} = sub { $TWiki::cfg{WebMasterName} };
     if ( $TWiki::cfg{EnableUserSubwebs} ) {
         $TWiki::cfg{UserPrefsTopicName} ||= 'WebHome';
         $functionTags{USERPREFSTOPIC} = sub { $TWiki::cfg{UserPrefsTopicName} };
@@ -5095,6 +5095,32 @@ sub TRASHWEB {
     my ( $this, $params, $topic, $web ) = @_;
     my $w = $params->{web} || $web;
     return $this->trashWebName(web => $w);
+}
+
+sub _wikiWebMaster {
+    my ( $this, $params, $topic, $web, $name ) = @_;
+    if ( $params->{web} ) {
+        $web = $params->{web};
+    }
+    my $mapping = $this->{users}{mapping};
+    my $result = '';
+    if ( $mapping->can('wikiWebMaster') ) {
+        $result = $mapping->wikiWebMaster($web, $topic, $name);
+    }
+    if ( $result ) {
+        return $result;
+    }
+    else {
+        return $name ? $TWiki::cfg{WebMasterName} : $TWiki::cfg{WebMasterEmail};
+    }
+}
+
+sub WIKIWEBMASTER {
+    return _wikiWebMaster(@_[0..3], 0);
+}
+
+sub WIKIWEBMASTERNAME {
+    return _wikiWebMaster(@_[0..3], 1);
 }
 
 1;

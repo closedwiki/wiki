@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355101648" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1356486891" format="1.1" version="$Rev$"}%
 ---+!! Managing a Large Site
 
 There is no limitation with the number of webs and users a TWiki site can have.
@@ -24,8 +24,7 @@ If you have thousands of webs, you face the following issues.
    * The frequency of administrator help requests increases. Each web should be made as self-service as possible.
 The first issue can be solved by MetadataRepository with <code>$TWiki::cfg{Mdrepo}{WebRecordRequired} = 1;</code>
 
-The second issue can be solved by a combination of MetadataRepository#Web_admins and a custom user mapping manager referring to the web admin data.
-The custom user mapping manager would have its own isAdmin(), which would return true for the web admin members.
+The second issue can be solved by making webs autonomous following AutonomousWebs.
 
 ---++ Eliminating Impractical Operations
 
@@ -96,4 +95,4 @@ UserMasquerading provides a means to minimize the amount of time an administrato
 
 In addition, UserMasquerading enables web owners to check access restriction settings on their own.
 
-__Related Topics:__ AdminDocumentationCategory, MetadataRepository, SuperWebAdmins, UsingMultipleDisks, UserSubwebs, UserMasquerading
+__Related Topics:__ AdminDocumentationCategory, MetadataRepository, AutonomousWebs, UsingMultipleDisks, UserSubwebs, UserMasquerading
