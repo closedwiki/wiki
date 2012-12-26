@@ -103,6 +103,7 @@ use vars qw(
       $engine
       $ifParser
       %scriptOnMaster
+      %httpHiddenField
     );
 
 # Token character that must not occur in any normal text - converted
@@ -522,6 +523,18 @@ BEGIN {
                   $TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster})
         ) {
             $scriptOnMaster{$script} = 1;
+        }
+    }
+
+    # HTTP header fields not be exposed to users
+    if ( $TWiki::cfg{HTTP}{HiddenFields} ) {
+        for my $field (
+            split(/[\s,]+/,
+                  $TWiki::cfg{HTTP}{HiddenFields})
+        ) {
+            $field = lc $field;
+            $field =~ s/_/-/g;
+            $httpHiddenField{$field} = 1;
         }
     }
 
@@ -4158,24 +4171,27 @@ sub INCLUDE {
     return $text;
 }
 
-sub HTTP {
-    my( $this, $params ) = @_;
+sub _http {
+    my( $this, $params, $https ) = @_;
     my $res;
-    if( $params->{_DEFAULT} ) {
-        $res = $this->{request}->http( $params->{_DEFAULT} );
+    my $field = $params->{_DEFAULT};
+    if ( $field ) {
+        my $f = lc $field;
+        $f =~ s/_/-/g;
+        return '' if $httpHiddenField{$f};
+        $res = $https ? $this->{request}->https( $field )
+                      : $this->{request}->http( $field );
     }
     $res = '' unless defined( $res );
     return $res;
 }
 
+sub HTTP {
+    return _http($_[0], $_[1], 0);
+}
+
 sub HTTPS {
-    my( $this, $params ) = @_;
-    my $res;
-    if( $params->{_DEFAULT} ) {
-        $res = $this->{request}->https( $params->{_DEFAULT} );
-    }
-    $res = '' unless defined( $res );
-    return $res;
+    return _http($_[0], $_[1], 1);
 }
 
 #deprecated functionality, now implemented using %ENV%

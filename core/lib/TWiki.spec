@@ -1164,6 +1164,11 @@ $TWiki::cfg{PROXY}{Password} = '';
 # <code>intra.example.com, bugs.example.com</code>
 $TWiki::cfg{PROXY}{SkipProxyForDomains} = '';
 
+# **STRING 30 EXPERT**
+# Comma separated list of HTTP header fields which must not be exposed by
+# %<nop>HTTP{...}%
+$TWiki::cfg{HTTP}{HiddenFields} = 'cookie';
+
 #---+ Miscellaneous settings
 
 # **NUMBER**
