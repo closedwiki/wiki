@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1356593011" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1356650698" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiDashboardAddOn"}%
 ---+!! <span style="font-size: 60%"> TWikiDashboardAddOn &#187;</span> TWiki Dashboard Banner Images
 
@@ -30,6 +30,9 @@ Name: =moonlight-over-city.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://w
 
 Name: =san-francisco-cityscape.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/san-francisco-cityscape.jpg" alt="" width="1026" height="150" />
+
+Name: =san-francisco-skyline.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
+     <img src="%PUBURLPATH%/%WEB%/%TOPIC%/san-francisco-skyline.jpg" alt="" width="1026" height="150" />
 
 Name: =seasons-greetings.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/seasons-greetings.jpg" alt="" width="1026" height="150" />
@@ -209,6 +212,7 @@ __Related:__ TWikiDashboardAddOn
 %META:FILEATTACHMENT{name="river-pebbles.jpg" attachment="river-pebbles.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1356591172" path="river-pebbles.jpg" size="78719" user="PeterThoeny" version="1"}%
 %META:FILEATTACHMENT{name="san-francisco-airport.jpg" attachment="san-francisco-airport.jpg" attr="h" comment="Image copyright 2000, Jeff Keller" date="1353215973" path="san-francisco-airport.jpg" size="68727" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="san-francisco-cityscape.jpg" attachment="san-francisco-cityscape.jpg" attr="h" comment="Image copyright 2012, David Yu" date="1351827528" path="san-francisco-cityscape.jpg" size="50918" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="san-francisco-skyline.jpg" attachment="san-francisco-skyline.jpg" attr="h" comment="Image copyright 2012, David Yu" date="1356648978" path="san-francisco-skyline.jpg" size="59281" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="saratoga-evening.jpg" attachment="saratoga-evening.jpg" attr="h" comment="Image copyright 2012, Peter Thoeny" date="1350108167" path="saratoga-evening.jpg" size="49410" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="seasons-greetings.jpg" attachment="seasons-greetings.jpg" attr="h" comment="Image copyright 2012, David Yu" date="1356591174" path="seasons-greetings.jpg" size="83501" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="silicon-valley-sunrise.jpg" attachment="silicon-valley-sunrise.jpg" attr="h" comment="Image copyright 2012, Goro Kosaka" date="1352158061" path="silicon-valley-sunrise.jpg" size="44000" user="TWikiContributor" version="2"}%
