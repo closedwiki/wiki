@@ -145,4 +145,30 @@ THIS
     $this->assert_str_equals($handledTopicText, $text."\n");    #add \n because handleCommonTags removes it :/
 }
 
+sub test_encode_newline {
+    my $this = shift;
+    my $includedTopic = "TopicToInclude";
+    my $topicText = <<THIS;
+The quick brown fox | jumps | over the lazy dog.
+Hello World!
+THIS
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{other_web},
+        $includedTopic, $topicText);
+
+    my $handled = $this->{twiki}->handleCommonTags(
+        "%INCLUDE{\"$this->{other_web}.$includedTopic\" encode=\"html\"}%",
+        $this->{test_web}, $this->{test_topic});
+    my $expected = substr($topicText, 0, -1);
+    $expected =~ s/([ \n\|])/'&#' . ord($1) . ';'/ge;
+    $this->assert_str_equals($expected, $handled);
+
+    my $handled1 = $this->{twiki}->handleCommonTags(
+        "%INCLUDE{\"$this->{other_web}.$includedTopic\" newline=\"\$br\"}%",
+        $this->{test_web}, $this->{test_topic});
+    my $expected1 = substr($topicText, 0, -1);
+    $expected1 =~ s:\n:<br />:g;
+    $this->assert_str_equals($expected1, $handled1);
+}
+
 1;
