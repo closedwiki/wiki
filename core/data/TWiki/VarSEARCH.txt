@@ -17,6 +17,7 @@
      | =start="0"= <br /> =start="20"= | Specify the number of results to skip. This is done after sorting if =sort= parameter is specified. This is intended for pagination of results. If this parameter is specified, =%<nop>NTOPICS%= in the search template is replaced with the number of topics matched. Without this parameter, =%<nop>NTOPICS%= doesn't exceed the =limit= value. | No results skipped |
      | =limit="all"= <br /> =limit="16"= | Limit the number of results returned. This is done after sorting if =sort= parameter is specified. This parameter specifing the number of results remains the same in the presense of the =start= parameter. Assuming there are more than 20 results matched, =start="10" limit="10"= results in 11th to 20th results are returned | All results |
      | =date="..."= | limits the results to those pages with latest edit time in the given [[TimeSpecifications#TimeIntervals][time interval]].  | All results |
+     | =createdate="..."= | similar to =date= but it's about create time instead of last edit. You can specify both =date= and =createdate=, in which case topics matching both conditions are shown. | All results |
      | =reverse="on"= | Reverse the direction of the search | Ascending search |
      | =casesensitive="on"= | Case sensitive search | Ignore case |
      | =bookview="on"= | BookView search, e.g. show complete topic text | Show topic summary |
@@ -36,6 +37,7 @@
      | =recurse="on"= | Recurse into subwebs, if subwebs are enabled. | =off= |
      | =separator=", "= | Line separator _between_ search hits | ="$n"= (Newline) |
      | =newline="%<nop>BR%"= | Line separator _within_ a search hit. Useful if you want to put multi-line content into a table cell, for example if the format="" parameter contains a $pattern() that captures more than one line, or contains a $formfield() that returns a multi-line textfield. | ="$n"= (Newline) |
+     | =encode="html"= | Encode special characters into HTML entities. If a FORMFIELD is passed into an HTML form field it should be encoded as ="html"=. Additional encodings available: =encode="quote"=, =encode="moderate"=, =encode="safe"=, =encode="entity"= and =encode="url"=. See [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENCODE][ENCODE]] for details. | no encoding |
    * Example: =%<nop>SEARCH{"wiki" web="%USERSWEB%" scope="topic"}%=
    * Example with format: =%<nop>SEARCH{"FAQ" scope="topic" nosearch="on" nototal="on" header="| *Topic: * | *Summary: * |" format="<nop>| $topic | $summary |"}%= _(displays results in a table with header - [[FormattedSearch][details]])_
    * %H% Hint: If the TWiki:Plugins.TablePlugin is installed, you may set a =%<nop>TABLE{}%= variable just before the =%<nop>SEARCH{}%= to alter the output of a search.  Example: =%<nop>TABLE{ tablewidth="90%" }%=

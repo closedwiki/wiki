@@ -4432,6 +4432,9 @@ sub SEARCH {
     my $s;
     try {
         $s = $this->search->searchWeb( %$params );
+        if( my $encode = $params->{encode} ) {
+            $s = $this->ENCODE( { _DEFAULT => $s, type => $encode } );
+        }
     } catch Error::Simple with {
         my $message = (DEBUG) ? shift->stringify() : shift->{-text};
         # Block recursions kicked off by the text being repeated in the

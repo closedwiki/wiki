@@ -428,6 +428,7 @@ sub searchWeb {
 
     my $webName        = $params{web} || '';
     my $date           = $params{date} || '';
+    my $createDate     = $params{createdate} || '';
     my $recurse        = $params{'recurse'} || '';
     my $finalTerm      = $inline ? ( $params{nofinalnewline} || 0 ) : 0;
     my $users          = $this->{session}->{users};
@@ -754,6 +755,20 @@ sub searchWeb {
                 my $topicdate = $store->getTopicLatestRevTime( $web, $topic );
                 push( @resultList, $topic )
                   unless( $topicdate < $ends[0] || $topicdate > $ends[1] );
+            }
+            @topicList = @resultList;
+        }
+        if( $createDate ) {
+            require TWiki::Time;
+            my @ends       = TWiki::Time::parseInterval( $createDate );
+            my @resultList = ();
+            foreach my $topic ( @topicList ) {
+
+                # if date falls out of interval: exclude topic from result
+		my $info = {};
+		$this->_getRev1Info( $web, $topic, undef, $info);
+                push( @resultList, $topic )
+                  unless( $info->{date} < $ends[0] || $info->{date} > $ends[1] );
             }
             @topicList = @resultList;
         }
