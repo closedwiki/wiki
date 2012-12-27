@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1337281397" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1356585532" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Templates
 
@@ -199,7 +199,7 @@ This will restrict who can edit the template topic, but will be removed when a n
 =%<nop>NOP%= can be used to prevent expansion of TWiki variables that would otherwise be expanded during topic creation. For example, escape =%<nop>SERVERTIME%= with =%<nop>SER%<nop>NOP%VERTIME%=.
 
 #ControlOverVariableExpansion
----++++ 3. Control over variable expansion
+---++++ 3. Causing variable expansion in a section
 
 You can forcefully expand TWikiVariables by placing them inside a =type="expandvariables"= section in the template topic, such as:
 <verbatim>
@@ -228,6 +228,22 @@ you will get this raw text in new topics based on that template topic:
    * Sandbox.%HOMETOPIC% - try out TWiki on your own
    * Sandbox.JimmyNeutronSandbox - just for me
 </pre>
+
+---++++ 4. Specifying variables to be expanded individually
+
+You may want to mix variables to be expanded and variables not to be.
+By prepending a variable name with =EOTC__= (EOTC followed by two underscores; EOTC stands for Expand On Topic Creation), you can have the variable expanded.
+
+Here's an example.
+<verbatim>
+%EOTC__SEARCH{"."
+ topic="%URLPARAM{prefix}%*"
+ nonoise="on"
+ format="$percntINCLUDE{$topic}$percnt" separator="$n"
+}%
+</verbatim>
+This yields a series of <code>%<nop>INCLUDE{...}%</code>s, which are not expanded.
+This is not achievable by an =expandvariables= section.
 
 #SpecifyingForm
 ---+++ Specifying a Form

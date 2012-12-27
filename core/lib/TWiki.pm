@@ -3380,6 +3380,14 @@ sub _expandTagOnTopicCreation {
     # brace-matching.
     return '' if $_[0] eq 'NOP' && defined $_[1];
 
+    # You may want to expand arbitrary tags on topic creation.
+    # By prepending EOTC__ (EOTC stands for Expand On Topic Creation), you
+    # can achieve that.
+    if ( $_[0] =~ /^EOTC__(\w+)$/ ) {
+	$_[0] = $1;
+	return _expandTagOnTopicRendering( $this, @_ );
+    }
+
     # Only expand a subset of legal tags. Warning: $this->{user} may be
     # overridden during this call, when a new user topic is being created.
     # This is what we want to make sure new user templates are populated
