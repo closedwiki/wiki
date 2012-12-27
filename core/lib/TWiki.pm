@@ -1735,6 +1735,25 @@ sub normalizeWebTopicName {
     return( $web, $topic );
 }
 
+sub _readExtraPreferences {
+    my ($this) = @_;
+    my $prefs = $this->{prefs};
+    my $topics = $prefs->getPreferencesValue( 'EXTRAPREFERENCES' );
+        # It's somewhat better to use getWebPreferencesValue() than
+        # getPreferencesValue().
+        # But getWebPreferencesValue() causes re-processing of WebPreferences 
+        # of the current and parent webs.
+        # The cost is too much for the marginal benefit of not picking
+        # prefernces from an unitended place.
+    if ( $topics ) {
+	for my $topic ( split(/[,\s]+/, $topics) ) {
+	    my ($epWeb, $epTopic) =
+		normalizeWebTopicName($this, $this->{webName}, $topic);
+	    $prefs->pushPreferences($epWeb, $epTopic, 'EXTRA');
+	}
+    }
+}
+
 =pod
 
 ---++ ClassMethod new( $loginName, $query, \%initialContext )
@@ -1968,6 +1987,7 @@ sub new {
     }
 
     $prefs->pushWebPreferences( $this->{webName} );
+    $this->_readExtraPreferences();
 
     $prefs->pushPreferences( $this->{webName}, $this->{topicName}, 'TOPIC' );
 

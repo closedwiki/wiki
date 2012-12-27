@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354780583" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1356571058" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %STARTSECTION{type="include"}%
 ---+ TWiki Variables
@@ -45,6 +45,8 @@ You can set variables in all the following places:
    1 local site level in [[%LOCALSITEPREFS%][%LOCALSITEPREFS%]]
    1 user level in individual user topics in %USERSWEB% web
    1 web level in %WEBPREFSTOPIC% of each web
+   1 If =EXTRAPREFERENCES= is defined at this point, it's regarded as having comma separated list of topics.
+     Those topics are read in the listed order as if they were %WEBPREFSTOPIC%
    1 topic level in topics in webs
    1 session variables (if sessions are enabled)
 
