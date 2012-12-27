@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354692176" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1356593205" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -317,8 +317,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2012, TWiki:Main.PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2012-12-04 |
+|  Add-on Version: | 2012-12-26 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2012-12-26: | TWikibug:Item7041: Add 6 new banner images by David Yu, ETH Zurich, Peter Thoeny |
 |  2012-12-04: | TWikibug:Item7041: Add 10 new banner images by CERN |
 |  2012-11-28: | TWikibug:Item7041: Add 12 new banner images by Andreas Schaefer, Angela Ju, David Yu, Jeff Keller, Martin Eckert, NASA, Paulo Ordoveza, Peter Thoeny, Sean Fitzgibbon |
 |  2012-11-11: | TWikibug:Item7020: Categorize TWiki Variable DASHBOARD |
