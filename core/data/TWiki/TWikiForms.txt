@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352453309" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1356580739" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Forms - Foundation of TWiki Applications
 
@@ -224,6 +224,21 @@ For example:
 *Notes:*
    * The ==Values== column *must be empty* in the referring form definition.
  
+---++ Using a form template on a different web
+
+You can use a form template on a different web by specifying a form template in the WEB.TOPIC format.
+
+In addition, you can put a comma separated list of webs in the =TWIKIFORMPATH= variable.
+It's referred to only when a form template is spcified without a web (TOPIC instead of WEB.TOPIC).
+The webs in =TWIKIFORMPATH= are examined in the listed order until the specified template is found.
+
+=TWIKIFORMPATH= may contain TWiki variables. For example:
+<pre>
+   * <nop>Set TWIKIFORMPATH = %<nop>APPLICATION_WEB%, %<nop>WEB%
+</pre>
+
+If =TWIKIFORMPATH= is defined, the current web is examined only if all the webs listed in it don't have the form template.
+
 ---++ Extending the range of form data types
 
 You can extend the range of data types accepted by forms by using TWikiPlugins. All such extended data types are single-valued (can only have one value) with the following exceptions:

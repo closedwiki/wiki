@@ -79,6 +79,24 @@ May throw TWiki::OopsException
 sub new {
     my( $class, $session, $web, $form, $def ) = @_;
 
+    unless ( $form =~ m:[./]: ) {
+        # if $form is not fully qualified
+        my $formPath = $session->{prefs}->getPreferencesValue('TWIKIFORMPATH');
+        if ( $formPath && $formPath =~ /\S/ ) {
+            if ( $formPath =~ /%/ ) {
+                $formPath = $session->expandCommonTags($formPath,
+                                   $session->{webName}, $session->{topicName});
+            }
+            for my $w ( split(/[,\s]+/, $formPath) ) {
+                next unless $w; # skipping leading space just in case
+                if ( $session->{store}->topicExists($w, $form) ) {
+                    $form = "$w.$form";
+                    last;
+                }
+            }
+        }
+    }
+
     ( $web, $form ) =
       $session->normalizeWebTopicName( $web, $form );
 
