@@ -2436,6 +2436,25 @@ sub _convertCharsets {
     }
 }
 
+# newline, encode, and nofinalnewline parameters
+sub _includePostProcessing {
+    my ($this, $textRef, $params) = @_;
+    my $newLine = $params->{newline};
+    if( defined $newLine ) {
+        $newLine =~ s/\$br\b/\0-br-\0/go;
+        $newLine =~ s/\$n\b/\0-n-\0/go;
+        $$textRef =~ s/\r?\n/$newLine/go;
+    }
+    if( my $encode = $params->{encode} ) {
+        $$textRef = $this->ENCODE( { _DEFAULT => $$textRef, type => $encode } );
+    }
+    if( defined $newLine ) {
+        $$textRef =~ s/\0-br-\0/<br \/>/go;
+        $$textRef =~ s/\0-n-\0/\n/go;
+    }
+    $$textRef =~ s/(\r?\n)+$// if ( isTrue($params->{nofinalnewline}) );
+}
+
 # Fetch content from a URL for inclusion by an INCLUDE
 sub _includeUrl {
     my( $this, $url, $pattern, $web, $topic, $raw, $options, $warn ) = @_;
@@ -2510,10 +2529,14 @@ sub _includeUrl {
         } elsif( $contentType =~ /^text\/(plain|css)/ ) {
             # do nothing
         } else {
-            $text = _includeWarning( $this, $warn, 'bad_content', $contentType );
+            unless ( $options->{allowanytype} ) {
+                $text = _includeWarning( $this, $warn, 'bad_content',
+                                         $contentType );
+            }
         }
         $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
         $text = "<literal>\n" . $text . "\n</literal>" if ( $options->{literal} );
+        $this->_includePostProcessing(\$text, $options);
     } else {
         $text = _includeWarning( $this, $warn, 'geturl_failed',
                                  $url.' '.$response->message() );
@@ -4189,6 +4212,8 @@ sub INCLUDE {
     if( $headingoffset =~ s/.*?([-+]?[0-9]).*/$1/ ) {
         $text =~ s/^(---*)(\++)/_fixHeadingOffset( $1, length( $2 ), $headingoffset )/gem;
     }
+
+    $this->_includePostProcessing(\$text, $params);
 
     # restore the tags
     delete $this->{_INCLUDES}->{$key};
