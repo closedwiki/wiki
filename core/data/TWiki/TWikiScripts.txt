@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352453309" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1356735684" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki CGI and Command Line Scripts
 
@@ -395,6 +395,7 @@ Used for viewing topics.
 | =template= | Allows you to specify a different skin template, overriding the 'view' template the view script would normally use. The default template is =view=. For example, you could specify [[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?template=edit][%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?template=edit]]. This is mainly useful when you have specialised templates for a TWiki Application. | |
 | =topic= | redirects to show the specified Web.Topic, or, redirects to a URL, if allowed by ={AllowRedirectUrl}= and ={PermittedRedirectHostUrls}= configure settings | |
 | =createifnotexist= | If =createifnotexist= is set to =1= and in case the topic does not exist, it is created automatically on view. Useful to create topics automatically based on a specific template (see example below). Behind the scene, the =view= script redirects first to the =save= script, passing along all URL parameters. Thus all URL parameters of the =save= script can be used, such as =templatetopic=, =topicparent= and =redirectto=. Next, the =save= script creates the topic and redirects back to the =view= script (or displays an error in case there were any issues creating the topic). | |
+| =extralog= | Add additional text to TWiki log, next to the user agent string. Useful to log actions by cache scripts and crawlers. | |
 
 %T% Example use of =createifnotexist= to link to the bookmark page of a user, and to create the page on the fly if needed:%BR%
 =[<nop>[%<nop>SCRIPTURL{view}%/%<nop>USERSWEB%/%<nop>WIKINAME%Bookmarks?createifnotexist=1&amp;amp;templatetopic=%S<nop>YSTEMWEB%.UserBookmarksTemplate&amp;amp;topicparent=%<nop>WIKINAME%][Bookmarks]]=
