@@ -796,6 +796,7 @@ pub/TWiki/TWikiDocGraphics/building.gif 0644
 pub/TWiki/TWikiDocGraphics/buildings.gif 0644
 pub/TWiki/TWikiDocGraphics/c.gif 0644
 pub/TWiki/TWikiDocGraphics/cachetopic.gif 0644
+pub/TWiki/TWikiDocGraphics/calculator.gif 0644
 pub/TWiki/TWikiDocGraphics/changes-small.gif 0644
 pub/TWiki/TWikiDocGraphics/changes.gif 0644
 pub/TWiki/TWikiDocGraphics/chart-bar.gif 0644
@@ -806,6 +807,7 @@ pub/TWiki/TWikiDocGraphics/checked-square.gif 0644
 pub/TWiki/TWikiDocGraphics/choice-cancel.gif 0644
 pub/TWiki/TWikiDocGraphics/choice-no.gif 0644
 pub/TWiki/TWikiDocGraphics/choice-yes.gif 0644
+pub/TWiki/TWikiDocGraphics/clock.gif 0644
 pub/TWiki/TWikiDocGraphics/close.gif 0644
 pub/TWiki/TWikiDocGraphics/closed.gif 0644
 pub/TWiki/TWikiDocGraphics/code.gif 0644
@@ -1001,6 +1003,8 @@ pub/TWiki/TWikiDocGraphics/recentchanges.gif 0644
 pub/TWiki/TWikiDocGraphics/reddit.gif 0644
 pub/TWiki/TWikiDocGraphics/refreshtopic.gif 0644
 pub/TWiki/TWikiDocGraphics/reg.gif 0644
+pub/TWiki/TWikiDocGraphics/reload.gif 0644
+pub/TWiki/TWikiDocGraphics/reload-green.gif 0644
 pub/TWiki/TWikiDocGraphics/remove.gif 0644
 pub/TWiki/TWikiDocGraphics/requirements.gif 0644
 pub/TWiki/TWikiDocGraphics/rfc.gif 0644
@@ -1020,6 +1024,7 @@ pub/TWiki/TWikiDocGraphics/sitemap.gif 0644
 pub/TWiki/TWikiDocGraphics/sitetree.gif 0644
 pub/TWiki/TWikiDocGraphics/skin.gif 0644
 pub/TWiki/TWikiDocGraphics/skype.gif 0644
+pub/TWiki/TWikiDocGraphics/smartphone.gif 0644
 pub/TWiki/TWikiDocGraphics/sniff.gif 0644
 pub/TWiki/TWikiDocGraphics/socket.gif 0644
 pub/TWiki/TWikiDocGraphics/sort.gif 0644
