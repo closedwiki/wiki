@@ -44,6 +44,8 @@ sub prompt {
     # while ( $value =~ s/^\(\?\^:(.*)\)/$1/ )     { }
     # $value =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|])/'&#'.ord($1).';'/ge;
 
+    $value =~ s/(['"&<>])/'&#'.ord($1).';'/ge; # escape basic chars for input field
+
     my $res = '<input name="'.$id.'" type="text" size="55%" value="'.$value.'" />';
     return $res;
 }
