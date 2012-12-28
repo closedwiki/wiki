@@ -1398,6 +1398,7 @@ $TWiki::cfg{WEBLIST}{cancopytoExclude} = qr//;
 $TWiki::cfg{Plugins}{BackupRestorePlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{ColorPickerPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{CommentPlugin}{Enabled} = 1;
+$TWiki::cfg{Plugins}{DatePickerPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{EditTablePlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{EmptyPlugin}{Enabled} = 0;
 $TWiki::cfg{Plugins}{HeadlinesPlugin}{Enabled} = 1;
