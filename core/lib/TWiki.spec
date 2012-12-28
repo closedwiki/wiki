@@ -301,7 +301,7 @@ $TWiki::cfg{TemplateLogin}{PreventBrowserRememberingPassword} = 0;
 # environments may require funny characters in login names, such as \.
 # This is a filter <b>in</b> expression i.e. a login name must match this
 # expression or an error will be thrown and the login denied.
-$TWiki::cfg{LoginNameFilterIn} = qr/^[^\s\*?~^\$@%`"'&;|<>\x00-\x1f]+$/;
+$TWiki::cfg{LoginNameFilterIn} = qr/^[^\s\*?~^\$@%`"'&;\\|<>\x00-\x1f]+$/;
 
 # **STRING 20 EXPERT**
 # Guest user's login name. You are recommended not to change this.
@@ -549,7 +549,7 @@ $TWiki::cfg{UploadFilter} = qr/^(\.htaccess|.*\.(?i)(?:php[0-9s]?(\..*)?|[sp]htm
 # and skin names. This is a filter <b>out</b>, so if any of the
 # characters matched by this expression are seen in names, they will be
 # removed.
-$TWiki::cfg{NameFilter} = qr/[\s\*?~^\$\#@%`"'&;|<>\[\]\+\x00-\x1f]/;
+$TWiki::cfg{NameFilter} = qr/[\s\*?~^\$\#@%`"'&;\\|<>\[\]\+\x00-\x1f]/;
 
 # **BOOLEAN EXPERT**
 # If this is set, the the search module will use more relaxed
@@ -1330,61 +1330,66 @@ $TWiki::cfg{Operators}{If} = [ 'TWiki::If::OP_allows', 'TWiki::If::OP_defined', 
 
 #---+ Large Site Settings
 #---++ Metadata repository (TWiki.MetadataRepository)
-# All of the following three settings need to be made to use the metadata repository
-#
-# **STRING 120 EXPERT**
-# The name of the Perl class tie-able.
-# $TWiki::cfg{Mdrepo}{Store} = 'DB_File';
-#
+# All of the following settings need to be defined to use the metadata repository.
+# The settings are visible if EXPERT mode is on.
+
+# **STRING 30 EXPERT**
+# The name of the tie-able Perl class.
+# <br /> Example: <tt>DB_File</tt>
+$TWiki::cfg{Mdrepo}{Store} = '';
+
 # **PATH EXPERT**
 # The path to the directory where the key-value store files are located.
-# $TWiki::cfg{Mdrepo}{Dir} = '/var/twiki/mdrepo';
-#
+# <br /> Example: <tt>/var/twiki/mdrepo</tt>
+$TWiki::cfg{Mdrepo}{Dir} = '';
+
 # **PERL H**
 # Table names are to be listed. A table name may be followed by : and options.
 # Currently 'b' is the only recognized option, which means the table can be
-#  updated from browser.
-# $TWiki::cfg{Mdrepo}{Tables} = [qw(sites webs:b)];
-#
+# updated from browser.
+$TWiki::cfg{Mdrepo}{Tables} = [qw(sites webs:b)];
+
 # **BOOLEAN EXPERT**
 # If set, each web requires its metadata record in the 'webs' file.
 # This is desirable for web managemement for a large site.
 # %WEBLIST{...}% gets faster referring to web metadata instead of traversing
 # directories.
-# $TWiki::cfg{Mdrepo}{WebRecordRequired} = 1;
-#
+$TWiki::cfg{Mdrepo}{WebRecordRequired} = $FALSE;
+
 #---++ Read-only and mirror webs (TWiki.ReadOnlyAndMirrorWebs)
-# **STRING 100 EXPERT**
+# **STRING 30 EXPERT**
 # If set, read-only and mirror web features are enabled.
 # This site is identified by this site name among the federation of sites.
-# $TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName} = 'am';
-#
-# **BOOLEAN EXPERT**
+# <br /> Example: <tt>new-york</tt>
+$TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName} = '';
+
+# **STRING EXPERT**
 # On a slave web, some scripts always need to be executed on the master site.
-# Those scripts are specified in the following line.
-$TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster} =
-    'edit,save,attach,upload,rename';
-#
+# Specify those scripts as a comma separated list.
+$TWiki::cfg{ReadOnlyAndMirrorWebs}{ScriptOnMaster} = 'edit, save, attach, upload, rename';
+
 #---++ Using Multiple Disks (TWiki.UsingMultipleDisks)
 # **BOOLEAN EXPERT**
 # If set, you can use multiple disks either by {DataDir1}, {PubDir1}, ... or
 # TWiki.MetadataRepository.
-# $TWiki::cfg{MultipleDisks} = 1;
-#
+$TWiki::cfg{MultipleDisks} = $FALSE;
+
 #---++ No "in all public webs" option
 # **BOOLEAN EXPERT**
-# If you have thousands of webs on a site, "in all public webs" operation
-# just times out and need to be aovided.
-# $TWiki::cfg{NoInAllPublicWebs} = 1;
-#
+# If you have thousands of webs on a site, "in all public webs" operations
+# just times out. These operations can be disabled by setting this flag.
+$TWiki::cfg{NoInAllPublicWebs} = $FALSE;
+
 #---++ WEBLIST tuning
 # **REGEX EXPERT**
-# You may want to exclude some webs from the canmoveto web list
-# $TWiki::cfg{WEBLIST}{canmovetoExclude} = qr/^$TWiki::cfg{TrashWebName}(x\d+x)?\d+$/;
-#
+# You may want to exclude some webs from the canmoveto web list.
+# <br /> Example: <tt>^$TWiki::cfg{TrashWebName}(x\d+x)?\d+$</tt>
+$TWiki::cfg{WEBLIST}{canmovetoExclude} = qr//;
+
 # **REGEX EXPERT**
 # You may want to exclude some webs from the cancopyto web list
-# $TWiki::cfg{WEBLIST}{cancopytoExclude} = qr/^$TWiki::cfg{TrashWebName}(x\d+x)?\d*$/;
+# <br /> Example: <tt>^$TWiki::cfg{TrashWebName}(x\d+x)?\d*$</tt>
+$TWiki::cfg{WEBLIST}{cancopytoExclude} = qr//;
 
 #---+ Plugins
 # *PLUGINS* Marker used by bin/configure script - do not remove!
