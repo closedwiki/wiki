@@ -231,8 +231,10 @@ sub view {
     }
 
     if( $query->param( 'extralog' ) ) {
+        my $extraLog = $query->param( 'extralog' );
+        $extraLog =~ s/`\|\x00-\x1f]//go; # Sanitize parameter value
         $logEntry .= ' ' if( $logEntry );
-        $logEntry .= $query->param( 'extralog' );
+        $logEntry .= $extraLog;
     }
 
     if( $TWiki::cfg{Log}{view} ) {
