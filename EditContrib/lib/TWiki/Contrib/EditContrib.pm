@@ -31,8 +31,7 @@ $VERSION = 1.001;
 
 BEGIN {
    if ( substr($TWiki::RELEASE, 6) gt '5' ) {
-     require TWiki::Contrib::EditContrib::Include51;
-     $TWiki::functionTags{INCLUDE} = \&TWiki::Contrib::EditContrib::Include51::_INCLUDE;
+     # reuse TWiki::INCLUDE
    } elsif ( substr($TWiki::RELEASE, 8) >= 1 ) {
      require TWiki::Contrib::EditContrib::Include41;
      $TWiki::functionTags{INCLUDE} = \&TWiki::Contrib::EditContrib::Include41::_INCLUDE;
