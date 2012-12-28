@@ -2213,16 +2213,13 @@ sub writeLog {
     $user = ($this->{users}->getLoginName( $user ) || 'unknown')
       if ($this->{users});
 
-    if( $user eq $cfg{DefaultUserLogin} ) {
-       my $cgiQuery = $this->{request};
-       if( $cgiQuery ) {
-           my $agent = $cgiQuery->user_agent();
-           if( $agent ) {
-               if($agent =~ m/([\w]+)/) {
-                   $extra .= ' '.$1;
-               }
-           }
-       }
+    my $cgiQuery = $this->{request};
+    if( $cgiQuery ) {
+        my $agent = $cgiQuery->user_agent();
+        if( $agent && $agent =~ m/([\w]+)/ ) {
+            $extra = "$1 $extra";
+            $extra =~ s/ +$//;
+        }
     }
 
     my $remoteAddr = $this->{request}->remoteAddress() || '';
