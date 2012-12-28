@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1355044451" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1356661986" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 %TOC{title="Contents:"}%
@@ -39,8 +39,10 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{bridge}% | =%<nop>ICON{bridge}%= | Bridge | gif | 16x16 |  |
 | %ICON{bubble}% | =%<nop>ICON{bubble}%= | Speech bubble | gif | 16x16 |  |
 | %ICON{bug}% | =%<nop>ICON{bug}%= | Bug | gif | 16x16 |  |
+| %ICON{calculator}% | =%<nop>ICON{calculator}%= | Calculator | gif | 16x16 |  |
 | %ICON{chart-bar}% | =%<nop>ICON{chart-bar}%= | Bar chart | gif | 16x16 |  |
 | %ICON{chart-pie}% | =%<nop>ICON{chart-pie}%= | Pie chart | gif | 16x16 |  |
+| %ICON{clock}% | =%<nop>ICON{clock}%= | Clock | gif | 16x16 |  |
 | %ICON{color-wheel}% | =%<nop>ICON{color-wheel}%= | Color wheel | gif | 16x16 |  |
 | %ICON{color-wheel-bg}% | =%<nop>ICON{color-wheel-bg}%= | Color wheel, transparent | gif | 16x16 |  |
 | %ICON{comments}% | =%<nop>ICON{comments}%= | Comments | gif | 16x16 |  |
@@ -60,7 +62,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{heart}% | =%<nop>ICON{heart}%= | Heart | gif | 16x16 |  |
 | %ICON{help}% | =%<nop>ICON{help}%=, =%<nop>H%= | Help | gif | 16x16 |  |
 | %ICON{help-video}% | =%<nop>ICON{help-video}%= | Help video | gif | 16x16 |  |
-| %ICON{hourglass}% | =%<nop>ICON{hourglass}%= | Hour glass (clock) | gif | 16x16 |  |
+| %ICON{hourglass}% | =%<nop>ICON{hourglass}%= | Hourglass | gif | 16x16 |  |
 | %ICON{info}% | =%<nop>ICON{info}%= | Info | gif | 16x16 |  |
 | %ICON{legal}% | =%<nop>ICON{legal}%= | Legal | gif | 16x16 |  |
 | %ICON{luggage}% | =%<nop>ICON{luggage}%= | Luggage | gif | 16x16 |  |
@@ -98,6 +100,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{sitetree}% | =%<nop>ICON{sitetree}%= | Site tree | gif | 16x16 |  |
 | %ICON{shipping}% | =%<nop>ICON{shipping}%= | Shipping | gif | 16x16 |  |
 | %ICON{skype}% | =%<nop>ICON{skype}%= | Skype | gif | 16x16 |  |
+| %ICON{smartphone}% | =%<nop>ICON{smartphone}%= | Smartphone | gif | 16x16 |  |
 | %ICON{socket}% | =%<nop>ICON{socket}%= | Socket | gif | 16x16 |  |
 | %ICON{sort}% | =%<nop>ICON{sort}%= | Sort | gif | 16x16 |  |
 | %ICON{stargold}% | =%<nop>ICON{stargold}%= | Gold star, favorites | gif | 16x16 |  |
@@ -244,6 +247,8 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{minus}% | =%<nop>ICON{minus}%= | Minus | gif | 16x16 |  |
 | %ICON{plus}% | =%<nop>ICON{plus}%= | Plus | gif | 16x16 |  |
 | %ICON{close}% | =%<nop>ICON{close}%= | Close | gif | 16x16 |  |
+| %ICON{reload}% | =%<nop>ICON{reload}%= | Reload | gif | 16x16 |  |
+| %ICON{reload-green}% | =%<nop>ICON{reload-green}%= | Reload green | gif | 16x16 |  |
 | %ICON{choice-cancel}% | =%<nop>ICON{choice-cancel}%= | Cancel | gif | 16x16 |  |
 | %ICON{choice-no}% | =%<nop>ICON{choice-no}%= | No | gif | 16x16 |  |
 | %ICON{choice-yes}% | =%<nop>ICON{choice-yes}%=, =%<nop>Y%= | Yes / Done | gif | 16x16 |  |
@@ -583,6 +588,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="buildings.gif" attr="h" comment="" date="1169565034" path="buildings.gif" size="167" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="c.gif" attr="h" comment="" date="1169565034" path="c.gif" size="372" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="cachetopic.gif" attr="h" comment="" date="1169565034" path="cachetopic.gif" size="163" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="calculator.gif" attr="h" comment="" date="1355044451" path="calculator.gif" size="958" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="changes-small.gif" attr="h" comment="" date="1169565034" path="changes-small.gif" size="86" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="changes.gif" attr="h" comment="" date="1169565034" path="changes.gif" size="118" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="chart-bar.gif" attr="h" comment="" date="1260335693" path="chart-bar.gif" size="970" user="TWikiContributor" version=""}%
@@ -593,6 +599,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="choice-cancel.gif" attr="h" comment="" date="1169565034" path="choice-cancel.gif" size="347" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="choice-no.gif" attr="h" comment="" date="1169565034" path="choice-no.gif" size="166" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="choice-yes.gif" attr="h" comment="" date="1169565034" path="choice-yes.gif" size="159" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="clock.gif" attr="h" comment="" date="1169565034" path="clock.gif" size="371" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="close.gif" attr="h" comment="" date="1298971278" path="close.gif" size="892" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="closed.gif" attr="h" comment="" date="1169565034" path="closed.gif" size="379" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="code.gif" attr="h" comment="" date="1169565035" path="code.gif" size="374" user="TWikiContributor" version=""}%
@@ -663,7 +670,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="help-video.gif" attr="h" comment="" date="1297804845" path="help-video.gif" size="968" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="hlp.gif" attr="h" comment="" date="1169565034" path="hlp.gif" size="370" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="home.gif" attr="h" comment="" date="1169565034" path="home.gif" size="342" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="hourglass.gif" attr="h" comment="" date="1169565034" path="hourglass.gif" size="371" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="hourglass.gif" attr="h" comment="" date="1355044451" path="hourglass.gif" size="937" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="html.gif" attr="h" comment="" date="1169565034" path="html.gif" size="376" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="index.gif" attr="h" comment="" date="1169565034" path="index.gif" size="100" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="indexlist.gif" attr="h" comment="" date="1169565034" path="indexlist.gif" size="102" user="TWikiContributor" version=""}%
@@ -788,6 +795,8 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="reddit.gif" attr="h" comment="" date="1262417730" path="reddit.gif" size="600" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="refreshtopic.gif" attr="h" comment="" date="1169565034" path="refreshtopic.gif" size="229" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="reg.gif" attr="h" comment="" date="1169565034" path="reg.gif" size="377" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="reload.gif" attr="h" comment="" date="1355044451" path="reload.gif" size="917" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="reload-green.gif" attr="h" comment="" date="1355044451" path="reload-green.gif" size="945" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="remove.gif" attr="h" comment="" date="1271904862" path="remove.gif" size="556" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="requirements.gif" attr="h" comment="" date="1336582106" path="requirements.gif" size="919" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="rfc.gif" attr="h" comment="" date="1169565034" path="rfc.gif" size="369" user="TWikiContributor" version=""}%
@@ -807,6 +816,7 @@ __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens
 %META:FILEATTACHMENT{name="sitetree.gif" attr="h" comment="" date="1193349525" path="sitetree.gif" size="892" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="skin.gif" attr="h" comment="" date="1169565034" path="skin.gif" size="356" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="skype.gif" attr="h" comment="" date="1193349525" path="skype.gif" size="588" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="smartphone.gif" attr="h" comment="" date="1355044451" path="smartphone.gif" size="964" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="sniff.gif" attr="h" comment="" date="1169565034" path="sniff.gif" size="368" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="socket.gif" attr="h" comment="" date="1260656213" path="socket.gif" size="985" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="sort.gif" attr="h" comment="" date="1169565034" path="sort.gif" size="129" user="TWikiContributor" version=""}%
