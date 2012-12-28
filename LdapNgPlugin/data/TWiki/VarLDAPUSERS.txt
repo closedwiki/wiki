@@ -1,0 +1,29 @@
+%META:TOPICINFO{author="TWikiContributor" date="1356669011" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarLDAPUSERS
+---+++ LDAPUSERS{...} -- LDAP user information
+%IF{"{Plugins}{LdapNgPlugin}{DisableLDAPUSERS}"
+then="   * <span style='color:red'> *This variable is disabled on this TWiki* </span>"}%
+   * List all LDAP user information.
+     Information is drawn from cache and not from the LDAP server. Use =?refreshldap=on= to update.
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default:* |
+     | =format="..."= | format string used to display a user record | ordered list of =$displayName= |
+     | =header="..."= | header to prepend the output | no header |
+     | =footer="..."= | footer to appended to the output | no footer |
+     | =sep="..."= | separator between database records | =$n= (new line) |
+     | =limit="100"= | maximum number of records to return | no limit |
+     | =skip="10"= | number of records in the hit set to skip before displaying them | 0 (nothing is skipped) |
+     | =include="..."= | regular expression a user's <nop>WikiName must match to be included in the output | |
+     | =exclude="..."= | regular expression a user's <nop>WikiName must not match | |
+     | =hideunknown="off"= | on/off, enable/disable filtering out users that did not log in yet and thus have no home topic (e.g. created by TWiki:Plugins/NewUsersPlugin) | =on= |
+   * The =header=, =format= and =footer= format strings may contain the following variables and [[FormatTokens][the standard special tokens]]:
+     | *Variable:* | *Description:* |
+     | =$index= | the record number |
+     | =$wikiName= | the user's <nop>WikiName |
+     | =$loginName= | the user's login name |
+     | =$displayName= | a link pointing to the users home topic in the %USERSWEB% web, if it exists, and '&lt;nop&gt;$wikiName' otherwise |
+     | =$emails= | the list of all known email addresses |
+   * Example: =%<nop>LDAPUSERS{limit="10"}%=
+   * Category: DevelopmentVariables, DatabaseAndFormsVariables, SearchingAndListingVariables
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarLDAP][LDAPUSERS]], LdapNgPlugin, LdapContrib

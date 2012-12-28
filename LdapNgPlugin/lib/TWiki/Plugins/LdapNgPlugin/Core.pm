@@ -295,7 +295,15 @@ sub expandVars {
 
   $format =~ s/\n/<br \/>/go; # multi-line values, e.g. for postalAddress
 
-  $format = TWiki::Func::decodeFormatTokens($format);
+  if ( $TWiki::cfg{Plugins}{LdapNgPlugin}{AutoClear} ) {
+      $format =~ s/\$dollar/\0dollar\0/g;
+      $format = TWiki::Func::decodeFormatTokens($format);
+      $format =~ s/\$[a-z]+//ig;
+      $format =~ s/\0dollar\0/\$/g;
+  }
+  else {
+      $format = TWiki::Func::decodeFormatTokens($format);
+  }
 
   #writeDebug("done expandVars()") if DEBUG;
   return $format;

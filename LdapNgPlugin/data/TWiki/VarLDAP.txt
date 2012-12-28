@@ -1,0 +1,40 @@
+%META:TOPICINFO{author="TWikiContributor" date="1356669011" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarLDAP
+---+++ LDAP{"filter" format="format"} -- LDAP directory query
+   * An interface to query an LDAP directory and display the results in a TWiki topic
+   * Syntax: =%<nop>LDAP{"filter" format="format" ...}%=
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default:* |
+     | ="uid=joeshmoe"= | the LDAP query string | required |
+     | =filter="uid=joeshmoe"= | (Alternative to above) | N/A |
+%IF{"{Plugins}{LdapNgPlugin}{UseDefaultServer}"
+else="     | =host=\"...\"= | host IP or name to connect to | |
+     | =port=\"...\"= | port to of the host | |
+     | =version=\"...\"= | protocol version; possible values: 2,3 | |
+     | =ssl=\"...\"= | use ssl to bind to the server; possible values 0,1 | |
+"
+}%     | =base="..."= | base dn of the (sub)tree to search in; if =base= is written in brackets (e.g. 'base="(ou=people)"') then it is prepended to the default base | the default base of the LdapContrib |
+     | =scope="one"= | scope of search; possible values: =sub=, =base=, =one= | =sub= |
+     | =format="..."= | format string used to display a database record | =$dn= |
+     | =header="..."= | header to prepend the output | no header |
+     | =footer="..."= | footer to appended to the output | no footer |
+     | =sep="..."= or =separator="..."= | separator between database records | =$n= (new line) |
+     | =sort="..."= | name of attributes to sort the output | DN |
+     | =reverse="on"= | reverse the result set; possible values: =on=, =off= | =off= |
+     | =limit="100"= | maximum number of records to return | no limit |
+     | =skip="10"= | number of records in the hit set to skip before displaying them | 0 (nothing is skipped) |
+     | =required="..."= | a comma separated list of LDAP record attributes. If specified, the LDAP query results not having all of the specified attributes are eliminated | nothing is required |
+     |  =hidenull="on"= | wether to hide any output on an empty hit set; possible values: =on=, =off= | =off= |
+     | =default="..."= | when the LDAP query yields no results, the value of this parameter is returned as the search result instead of null. Naturally, if =hidenull= is on, =default= doesn't have any effect | =""= (null string) |
+%IF{"{Plugins}{LdapNgPlugin}{AutoClear}"
+else="     | =clear=\"...\"= | comma separated list of attributes to be removed from the output if they are not resolved | nothing is cleared |
+"
+}%   * The =header=, =format= and =footer= format strings may contain the following variables and [[FormatTokens][the standard special tokens]]:
+     | *Variable:* | *Description:* |
+     | =$count= | the number of hits |
+     | =$index= | the record number |
+     | =$&lt;attr-name&gt;= | the value of the record attribute =&lt;attr-name&gt;= |
+   * Example: =%<nop>LDAP{"objectClass=posixAccount" format="| $index | $cn | $mail |"}%=
+   * Category: DevelopmentVariables, DatabaseAndFormsVariables, SearchingAndListingVariables
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarLDAPUSERS][LDAPUSERS]], LdapNgPlugin, LdapContrib
