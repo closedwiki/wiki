@@ -217,15 +217,22 @@ sub view {
               TWiki::UI::readTemplateTopic( $session, 'WebTopicNonWikiTemplate' );
         }
         ( $text, $meta ) = ( $currText, $currMeta );
-        $logEntry .= ' (not exist)';
+        $logEntry .= ' ' if( $logEntry );
+        $logEntry .= '(not exist)';
     }
 
     if( $raw ) {
         $indexableView = 0;
-        $logEntry .= ' raw='.$raw;
+        $logEntry .= ' ' if( $logEntry );
+        $logEntry .= 'raw='.$raw;
         if( $raw eq 'debug' || $raw eq 'all' ) {
             $text = $store->getDebugText( $meta, $text );
         }
+    }
+
+    if( $query->param( 'extralog' ) ) {
+        $logEntry .= ' ' if( $logEntry );
+        $logEntry .= $query->param( 'extralog' );
     }
 
     if( $TWiki::cfg{Log}{view} ) {
