@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1356241267" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1356740439" format="1.1" version="$Rev$"}%
 ---+!! TWiki Guest Cache Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the contrib page at
@@ -54,7 +54,6 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
         | ==lib/TWiki/Contrib/%TOPIC%.pm== | Add-on Perl module |
         | ==lib/TWiki/Contrib/%TOPIC%/Config.spec== | Spec file for configure |
       * Set the ownership of the extracted directories and files to the webserver user.
-      * Make sure the =wget= command is installed.
    * Add-on __configuration and testing__:
       * Configure the <nop>%TOPIC% settings in the __Extensions__ section.
          * Settings:
@@ -68,8 +67,6 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
            %BR% =$TWiki::cfg{TWikiGuestCacheAddOn}{Tier2CacheAge} = '6';=
            %BR% =# Maximum cache age for default pages, in hours:=
            %BR% =$TWiki::cfg{TWikiGuestCacheAddOn}{CacheAge} = '48';=
-           %BR% =# wget command:=
-           %BR% =$TWiki::cfg{TWikiGuestCacheAddOn}{WgetCmd} = '/usr/bin/wget --user-agent=TWikiGuestCacheAddOn -O';=
            %BR% =# Debug flag:=
            %BR% =$TWiki::cfg{TWikiGuestCacheAddOn}{Debug} = 0;=
       * Copy the =twiki/bin/viewcache= script to =twiki/bin/view= (overwrite the latter).
@@ -86,12 +83,13 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2009-2012 TWiki:Main.PeterThoeny <br /> &copy; 2009-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2012-12-22 |
+|  Add-on Version: | 2012-12-28 |
 |  Change History: | <!-- versions below in reverse order --> |
-|  2012-12-22: | Initial version |
+|  2012-12-28: | TWikibug:Item7112: Call view script from command line, no need for wget to cache topics |
+|  2012-12-22: | TWikibug:Item7094: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.3 (TWiki-5.0) |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | wget command |
+|  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/TWikiGuestCacheAddOn |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/TWikiGuestCacheAddOnDev |
