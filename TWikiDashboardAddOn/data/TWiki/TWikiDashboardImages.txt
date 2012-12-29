@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1356744305" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1356748271" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiDashboardAddOn"}%
 ---+!! <span style="font-size: 60%"> TWikiDashboardAddOn &#187;</span> TWiki Dashboard Banner Images
 
@@ -11,7 +11,7 @@ These images have a size of 1026 x 150 pixels, for use in standard 1024 pixels w
 %CALC{$SET(CC-BY-NC, [[http://creativecommons.org/licenses/by-nc/3.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by-nc.png" alt="cc-by-nc" title="Creative Commons Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0)" width="28" height="14" /> CC BY-NC 3.0]])}%
 %CALC{$SET(CC-BY-NC-ND, [[http://creativecommons.org/licenses/by-nc-nd/2.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by-nc-nd.png" alt="cc-by-nc-nd" title="Creative Commons Attribution-NonCommercial-NoDerivs 2.0 Generic (CC BY-NC-ND 2.0)" width="42" height="14" /> CC BY-NC-ND 2.0]])}%
 %CALC{$SET(CC-BY-SA, [[http://creativecommons.org/licenses/by-sa/2.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by-sa.png" alt="cc-by-sa" title="Creative Commons Attribution-ShareAlike 2.0 Generic (CC BY-SA 2.0)" width="28" height="14" /> CC BY-SA 2.0]])}%
-%CALC{$SET(CC-BY-NC-SA, [[http://creativecommons.org/licenses/by-nc-sa/3.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by-nc-sa.png" alt="cc-by-nc-sa" title="Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Generic (CC BY-NC-SA 3.0)" width="42" height="14" /> CC BY-NC-ND 2.0]])}%
+%CALC{$SET(CC-BY-NC-SA, [[http://creativecommons.org/licenses/by-nc-sa/3.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by-nc-sa.png" alt="cc-by-nc-sa" title="Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Generic (CC BY-NC-SA 3.0)" width="42" height="14" /> CC BY-NC-SA 3.0]])}%
 -->
 
 Image: =marin-headlands.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.facebook.com/davidyuphotography][David Yu Photography]], %CALC{$GET(CC-BY-NC)}% <br />
@@ -74,19 +74,19 @@ Image: =hakone-garden.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.
 Image: =monterey-by-bike.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/monterey-by-bike.jpg" alt="" width="1026" height="150" />
 
-Image: =niagara-falls.jpg= &nbsp; &nbsp; -- copyright 2008, [[http://en.wikipedia.org/wiki/File:Niagara_falls_panorama.jpg][Koppi2]] <br />
+Image: =niagara-falls.jpg= &nbsp; &nbsp; -- copyright 2007, [[http://en.wikipedia.org/wiki/File:Niagara_falls_panorama.jpg][Sbittante]], %CALC{$GET(CC-BY-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/niagara-falls.jpg" alt="" width="1026" height="150" />
 
-Image: =rio-de-janeiro.jpg= &nbsp; &nbsp; -- copyright 2007, [[http://en.wikipedia.org/wiki/File:Panorama_from_Rio_de_Janeiro.jpg][Jens Hausherr]] <br />
+Image: =rio-de-janeiro.jpg= &nbsp; &nbsp; -- copyright 2007, [[http://en.wikipedia.org/wiki/File:Panorama_from_Rio_de_Janeiro.jpg][Jens Hausherr]], %CALC{$GET(CC-BY-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/rio-de-janeiro.jpg" alt="" width="1026" height="150" />
 
 Image: =zurich-at-dawn.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.flickr.com/photos/meckert75/][Martin Eckert]], %CALC{$GET(CC-BY-NC-ND)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/zurich-at-dawn.jpg" alt="" width="1026" height="150" />
 
-Image: =venice-grand-canal.jpg= &nbsp; &nbsp; -- copyright 2007, [[http://en.wikipedia.org/wiki/File:Venedig_Pano_AM.jpg][Sbittante]] <br />
+Image: =venice-grand-canal.jpg= &nbsp; &nbsp; -- copyright 2007, [[http://en.wikipedia.org/wiki/File:Venedig_Pano_AM.jpg][Koppi2]], %CALC{$GET(CC-BY-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/venice-grand-canal.jpg" alt="" width="1026" height="150" />
 
-Image: =sydney-harbour-bridge.jpg= &nbsp; &nbsp; -- copyright 2005, [[http://en.wikipedia.org/wiki/File:Sydney_Harbour_Bridge_night.jpg][Diliff]] <br />
+Image: =sydney-harbour-bridge.jpg= &nbsp; &nbsp; -- copyright 2005, [[http://en.wikipedia.org/wiki/File:Sydney_Harbour_Bridge_night.jpg][David Iliff]], %CALC{$GET(CC-BY-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/sydney-harbour-bridge.jpg" alt="" width="1026" height="150" />
 
 Image: =hong-kong-skyline.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
