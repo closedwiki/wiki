@@ -1,38 +1,82 @@
-%META:TOPICINFO{author="TWikiContributor" date="1347495734" format="1.1" version="$Rev$"}%
-%INCLUDE{%SYSTEMWEB%.WebChangesRightBox}%
----+!! %MAKETEXT{"Welcome to the [_1] web" args="<nop>%WEB%"}%
-
+%META:TOPICINFO{author="TWikiContributor" date="1356762357" format="1.1" version="$Rev$"}%
+%DASHBOARD{ section="dashboard_start" }%
+%DASHBOARD{ section="banner"
+ image="%PUBURL%/%SYSTEMWEB%/TWikiDashboardImages/nasa-airfield.jpg"
+ title="%MAKETEXT{"Welcome to the [_1] web" args="<nop>%WEB%"}%"
+ titlestyle="color:#800000;"
+}%
+<!--===== OVERVIEW ============================================-->
+%DASHBOARD{ section="box_start"
+ title="Overview"
+}%
 %MAKETEXT{"Use this web to try out TWiki. Everybody is invited to add or delete some stuff. It is recommended to walk through the [_1] to learn the basics of TWiki. It is good practice to sign your contributions with your [_2] and date." args="[[%SYSTEMWEB%.TWikiTutorial][TWiki Tutorial]], %SYSTEMWEB%.WikiName"}%
 
----++ %MAKETEXT{"Test Topics"}%
-
+%DASHBOARD{ section="box_end" }%
+<!--===== TEST TOPICS ============================================-->
+%DASHBOARD{ section="box_start"
+ title="%MAKETEXT{"Create Test Topics"}%"
+}%
 <form action='%SCRIPTURLPATH{"edit"}%/%WEB%/'> 
-%ICON{"newtopic"}% %MAKETEXT{"Create a new document by name:"}% %MAKETEXT{"(Use a topic name in TWiki.WikiNotation)"}% <br /> 
-<input class="twikiInputField" type="text" name="topic" size="32" />&nbsp;<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Create by Name"}%' />
+%ICON{"newtopic"}% %MAKETEXT{"Create a new document by name:"}% <br /> 
+%ICON{"empty"}% <input type="text" name="topic" size="32" class="twikiInputField" /> <br />
+%ICON{"empty"}% <input type="submit" value='%MAKETEXT{"Create by Name"}%' class="twikiSubmit" /> <br />
+%ICON{"empty"}% %MAKETEXT{"(Use a topic name in TWiki.WikiNotation)"}%
 <input type="hidden" name="onlywikiname" value="on" />
 <input type="hidden" name="onlynewtopic" value="on" />
 <input type="hidden" name="nowysiwyg" value="%IF{"$ EDITMETHOD='wysiwyg'" then="0" else="1"}%" />
 </form>
 
-<form action='%SCRIPTURLPATH{"edit"}%/%BASEWEB%/TestTopicAUTOINC0' name="createNewTestTopic">
-%ICON{"newtopic"}% %MAKETEXT{"Create a new auto-numbered test topic:"}%
+<form action='%SCRIPTURLPATH{"edit"}%/%BASEWEB%/TestTopicAUTOINC000' name="createNewTestTopic">
+%ICON{"newtopic"}% %MAKETEXT{"Create a new auto-numbered test topic:"}% <br />
+%ICON{"empty"}% <input type="submit" value='%MAKETEXT{"Create <nop>TestTopic###"}%' class="twikiSubmit" />
 <input type="hidden" name="t" value="%SERVERTIME{$hou$min$sec}%" />
 <input type="hidden" name="nowysiwyg" value="%IF{"$ EDITMETHOD='wysiwyg'" then="0" else="1"}%" />
-<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Create <nop>TestTopic###"}%' />
 </form>
 
----++ <nop>%WEB% Web Utilities
+%DASHBOARD{ section="box_end" }%
+<!--===== RECENT CHANGES ============================================-->
+%DASHBOARD{ section="box_start"
+ title="[[%BASEWEB%.WebChanges][Recent Changes]]"
+ contentstyle="overflow: hidden;"
+}%
+%INCLUDE{ "%SYSTEMWEB%.WebChangesRightBox" section="bullet_list" limit="30" }%
 
-   * [[%SYSTEMWEB%.WelcomeGuest][WelcomeGuest]] - for first time visitors
-   * [[%SYSTEMWEB%.TWikiRegistration][Registration]] - become a <nop>%WIKITOOLNAME% user
-   * [[WebSearch]] - simple search
-   * [[WebSearchAdvanced]] - %MAKETEXT{"advanced search"}%
-   * [[WebTopicList]] - all topics in alphabetical order
-   * [[WebChanges]] - recent topic changes in this web
-   * [[WebNotify]] - subscribe to an e-mail alert sent when topics change
-   * [[WebRss]], [[WebAtom]] - RSS and ATOM news feeds of topic changes
-   * [[WebStatistics]] - listing popular topics and top contributors
-   * [[WebTopMenu]] - top menu definition
-   * [[WebPreferences]] - preferences of this web
+%DASHBOARD{ section="box_end" }%
+<!--===== TIP OF DAY ============================================-->
+%DASHBOARD{ section="box_start"
+ title="Tip of Day"
+ contentstyle="overflow: hidden;"
+}%
+%INCLUDE{"%SYSTEMWEB%.TWikiTipsOfTheDayInclude" warn="off" }%
 
-   * Set ALLOWTOPICCHANGE = Main.TWikiAdminGroup
+%DASHBOARD{ section="box_end" }%
+<!--===== NEW USERS ============================================-->
+%DASHBOARD{ section="box_start"
+ title="For New Users"
+}%
+   * icon:twiki [[%SYSTEMWEB%.WelcomeGuest][Welcome Guest - look here first]]
+   * icon:useradd [[%SYSTEMWEB%.TWikiRegistration][Registration - become a <nop>%WIKITOOLNAME% user]]
+   * [[%SYSTEMWEB%.TWikiTutorial][Tutorial - 20 minutes]]
+   * [[%SYSTEMWEB%.TWikiUsersGuide][TWiki User's Guide]]
+   * [[%SYSTEMWEB%.TWikiFAQ][Frequently Asked Questions]]
+   * [[%SYSTEMWEB%.TextFormattingRules][Text formatting rules - for raw edit]]
+
+%DASHBOARD{ section="box_end" }%
+<!--===== WEB UTILITIES ============================================-->
+%DASHBOARD{ section="box_start"
+ title="%WEB% Web Utilities"
+ contentstyle="overflow: hidden;"
+}%
+   * icon:searchtopic [[WebSearch][Web search]] &amp; [[WebSearchAdvanced][advanced search]]
+   * icon:index [[WebTopicList][Web topic list]] - all topics
+   * icon:mail [[WebNotify][Web notify]] - subscribe to e-mail alerts
+   * icon:rss [[WebRss][RSS]] &amp; [[WebAtom][ATOM]] feeds of topic changes
+   * icon:statistics [[WebStatistics][Web statistics]]
+   * icon:wrench [[WebPreferences][Web preferences]] - preferences of this web
+   * icon:topmenu [[WebTopMenu]] - top menu definition
+
+%DASHBOARD{ section="box_end" }%
+<!--===== END ============================================-->
+%DASHBOARD{ section="dashboard_end" }%
+
+   * Set ALLOWTOPICCHANGE = %USERSWEB%.TWikiAdminGroup
