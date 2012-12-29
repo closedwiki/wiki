@@ -2214,7 +2214,7 @@ sub writeLog {
       if ($this->{users});
 
     my $cgiQuery = $this->{request};
-    if( $cgiQuery ) {
+    if( $cgiQuery && $action eq 'view' ) {
         my $agent = $cgiQuery->user_agent();
         if( $agent && $agent =~ m/([\w]+)/ ) {
             $extra = "$1 $extra";
