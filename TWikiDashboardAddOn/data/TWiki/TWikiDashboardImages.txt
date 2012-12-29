@@ -1,169 +1,176 @@
-%META:TOPICINFO{author="TWikiContributor" date="1356650698" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1356744305" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiDashboardAddOn"}%
 ---+!! <span style="font-size: 60%"> TWikiDashboardAddOn &#187;</span> TWiki Dashboard Banner Images
 
 You can use these banner images for your own dashboards. If you use your own image, attach it directly to your dashboard topic, not here.
 
 These images have a size of 1026 x 150 pixels, for use in standard 1024 pixels wide dashboards with three column layout of 300 pixels wide boxes. To reference an image, specify this parameter in the =DASHBOARD= variable:%BR%
-=&nbsp; bannerimage="%<nop>PUBURL%/%<nop>SYSTEMWEB/TWikiDashboardImages/&lt;name&gt;"=
+=&nbsp; bannerimage="%<nop>PUBURL%/%<nop>SYSTEMWEB/TWikiDashboardImages/&lt;image&gt;"=
+<!--
+%CALC{$SET(CC-BY, [[http://creativecommons.org/licenses/by/2.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by.png" alt="cc-by" title="Creative Commons Attribution 2.0 Generic (CC BY 2.0)" width="14" height="14" /> CC BY 2.0]])}%
+%CALC{$SET(CC-BY-NC, [[http://creativecommons.org/licenses/by-nc/3.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by-nc.png" alt="cc-by-nc" title="Creative Commons Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0)" width="28" height="14" /> CC BY-NC 3.0]])}%
+%CALC{$SET(CC-BY-NC-ND, [[http://creativecommons.org/licenses/by-nc-nd/2.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by-nc-nd.png" alt="cc-by-nc-nd" title="Creative Commons Attribution-NonCommercial-NoDerivs 2.0 Generic (CC BY-NC-ND 2.0)" width="42" height="14" /> CC BY-NC-ND 2.0]])}%
+%CALC{$SET(CC-BY-SA, [[http://creativecommons.org/licenses/by-sa/2.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by-sa.png" alt="cc-by-sa" title="Creative Commons Attribution-ShareAlike 2.0 Generic (CC BY-SA 2.0)" width="28" height="14" /> CC BY-SA 2.0]])}%
+%CALC{$SET(CC-BY-NC-SA, [[http://creativecommons.org/licenses/by-nc-sa/3.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by-nc-sa.png" alt="cc-by-nc-sa" title="Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Generic (CC BY-NC-SA 3.0)" width="42" height="14" /> CC BY-NC-ND 2.0]])}%
+-->
 
-Name: =marin-headlands.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
+Image: =marin-headlands.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.facebook.com/davidyuphotography][David Yu Photography]], %CALC{$GET(CC-BY-NC)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/marin-headlands.jpg" alt="" width="1026" height="150" />
 
-Name: =golden-gate-sunrise.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
+Image: =golden-gate-sunrise.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.facebook.com/davidyuphotography][David Yu Photography]], %CALC{$GET(CC-BY-NC)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/golden-gate-sunrise.jpg" alt="" width="1026" height="150" />
 
-Name: =sunrise-colors.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
+Image: =sunrise-colors.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.facebook.com/davidyuphotography][David Yu Photography]], %CALC{$GET(CC-BY-NC)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/sunrise-colors.jpg" alt="" width="1026" height="150" />
 
-Name: =bay-night-colors.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
+Image: =bay-night-colors.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.facebook.com/davidyuphotography][David Yu Photography]], %CALC{$GET(CC-BY-NC)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/bay-night-colors.jpg" alt="" width="1026" height="150" />
 
-Name: =golden-gate-dawn.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
+Image: =golden-gate-dawn.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.facebook.com/davidyuphotography][David Yu Photography]], %CALC{$GET(CC-BY-NC)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/golden-gate-dawn.jpg" alt="" width="1026" height="150" />
 
-Name: =dawn-blue.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
+Image: =dawn-blue.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.facebook.com/davidyuphotography][David Yu Photography]], %CALC{$GET(CC-BY-NC)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/dawn-blue.jpg" alt="" width="1026" height="150" />
 
-Name: =moonlight-over-city.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
+Image: =moonlight-over-city.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.facebook.com/davidyuphotography][David Yu Photography]], %CALC{$GET(CC-BY-NC)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/moonlight-over-city.jpg" alt="" width="1026" height="150" />
 
-Name: =san-francisco-cityscape.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
+Image: =san-francisco-cityscape.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.facebook.com/davidyuphotography][David Yu Photography]], %CALC{$GET(CC-BY-NC)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/san-francisco-cityscape.jpg" alt="" width="1026" height="150" />
 
-Name: =san-francisco-skyline.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
+Image: =san-francisco-skyline.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.facebook.com/davidyuphotography][David Yu Photography]], %CALC{$GET(CC-BY-NC)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/san-francisco-skyline.jpg" alt="" width="1026" height="150" />
 
-Name: =seasons-greetings.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.pbase.com/davidyuweb][David Yu]]: <br />
+Image: =seasons-greetings.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.facebook.com/davidyuphotography][David Yu Photography]], %CALC{$GET(CC-BY-NC)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/seasons-greetings.jpg" alt="" width="1026" height="150" />
 
-Name: =golden-gate-sunset.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+Image: =golden-gate-sunset.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/golden-gate-sunset.jpg" alt="" width="1026" height="150" />
 
-Name: =silicon-valley-sunrise.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://about.me/goro][Goro Kosaka]]: <br />
+Image: =silicon-valley-sunrise.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://about.me/goro][Goro Kosaka]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/silicon-valley-sunrise.jpg" alt="" width="1026" height="150" />
 
-Name: =above-silicon-valley.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+Image: =above-silicon-valley.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/above-silicon-valley.jpg" alt="" width="1026" height="150" />
 
-Name: =wine-tasting.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+Image: =wine-tasting.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/wine-tasting.jpg" alt="" width="1026" height="150" />
 
-Name: =saratoga-evening.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+Image: =saratoga-evening.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/saratoga-evening.jpg" alt="" width="1026" height="150" />
 
-Name: =san-francisco-airport.jpg= &nbsp; &nbsp; - image copyright 2000, [[http://www.dcresource.com/][Jeff Keller]]: <br />
+Image: =san-francisco-airport.jpg= &nbsp; &nbsp; -- copyright 2000, [[http://www.dcresource.com/][Jeff Keller]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/san-francisco-airport.jpg" alt="" width="1026" height="150" />
 
-Name: =nasa-airfield.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+Image: =nasa-airfield.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/nasa-airfield.jpg" alt="" width="1026" height="150" />
 
-Name: =nasa-shed-orange.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+Image: =nasa-shed-orange.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/nasa-shed-orange.jpg" alt="" width="1026" height="150" />
 
-Name: =hakone-garden.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+Image: =hakone-garden.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/hakone-garden.jpg" alt="" width="1026" height="150" />
 
-Name: =monterey-by-bike.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+Image: =monterey-by-bike.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/monterey-by-bike.jpg" alt="" width="1026" height="150" />
 
-Name: =niagara-falls.jpg= &nbsp; &nbsp; - image copyright 2008, [[http://en.wikipedia.org/wiki/File:Niagara_falls_panorama.jpg][Koppi2]]: <br />
+Image: =niagara-falls.jpg= &nbsp; &nbsp; -- copyright 2008, [[http://en.wikipedia.org/wiki/File:Niagara_falls_panorama.jpg][Koppi2]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/niagara-falls.jpg" alt="" width="1026" height="150" />
 
-Name: =rio-de-janeiro.jpg= &nbsp; &nbsp; - image copyright 2007, [[http://en.wikipedia.org/wiki/File:Panorama_from_Rio_de_Janeiro.jpg][Jens Hausherr]]: <br />
+Image: =rio-de-janeiro.jpg= &nbsp; &nbsp; -- copyright 2007, [[http://en.wikipedia.org/wiki/File:Panorama_from_Rio_de_Janeiro.jpg][Jens Hausherr]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/rio-de-janeiro.jpg" alt="" width="1026" height="150" />
 
-Name: =zurich-at-dawn.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://creativecommons.org/licenses/by-nc-nd/2.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by-nc-nd.png" alt="cc-by-nc-nd" title="Creative Commons Attribution-NonCommercial-NoDerivs 2.0 Generic (CC BY-NC-ND 2.0)" width="42" height="14" /> CC BY-NC-ND 2.0]], [[http://www.flickr.com/photos/meckert75/][Martin Eckert]]<br />
+Image: =zurich-at-dawn.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.flickr.com/photos/meckert75/][Martin Eckert]], %CALC{$GET(CC-BY-NC-ND)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/zurich-at-dawn.jpg" alt="" width="1026" height="150" />
 
-Name: =venice-grand-canal.jpg= &nbsp; &nbsp; - image copyright 2007, [[http://en.wikipedia.org/wiki/File:Venedig_Pano_AM.jpg][Sbittante]]: <br />
+Image: =venice-grand-canal.jpg= &nbsp; &nbsp; -- copyright 2007, [[http://en.wikipedia.org/wiki/File:Venedig_Pano_AM.jpg][Sbittante]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/venice-grand-canal.jpg" alt="" width="1026" height="150" />
 
-Name: =sydney-harbour-bridge.jpg= &nbsp; &nbsp; - image copyright 2005, [[http://en.wikipedia.org/wiki/File:Sydney_Harbour_Bridge_night.jpg][Diliff]]: <br />
+Image: =sydney-harbour-bridge.jpg= &nbsp; &nbsp; -- copyright 2005, [[http://en.wikipedia.org/wiki/File:Sydney_Harbour_Bridge_night.jpg][Diliff]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/sydney-harbour-bridge.jpg" alt="" width="1026" height="150" />
 
-Name: =hong-kong-skyline.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+Image: =hong-kong-skyline.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/hong-kong-skyline.jpg" alt="" width="1026" height="150" />
 
-Name: =venetian-macau.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+Image: =venetian-macau.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/venetian-macau.jpg" alt="" width="1026" height="150" />
 
-Name: =boreal-by-night.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+Image: =boreal-by-night.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/boreal-by-night.jpg" alt="" width="1026" height="150" />
 
-Name: =swiss-castle.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://creativecommons.org/licenses/by-nc-nd/2.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by-nc-nd.png" alt="cc-by-nc-nd" title="Creative Commons Attribution-NonCommercial-NoDerivs 2.0 Generic (CC BY-NC-ND 2.0)" width="42" height="14" /> CC BY-NC-ND 2.0]], [[http://www.flickr.com/photos/meckert75/][Martin Eckert]]<br />
+Image: =swiss-castle.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.flickr.com/photos/meckert75/][Martin Eckert]], %CALC{$GET(CC-BY-NC-ND)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/swiss-castle.jpg" alt="" width="1026" height="150" />
 
-Name: =baergli-swiss-alps.jpg= &nbsp; &nbsp; - image copyright 2012, Burga Joos: <br />
+Image: =baergli-swiss-alps.jpg= &nbsp; &nbsp; -- copyright 2012, Burga Joos <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/baergli-swiss-alps.jpg" alt="" width="1026" height="150" />
 
-Name: =flute-cave.jpg= &nbsp; &nbsp; - image copyright 2012, Anjela Ju: <br />
+Image: =flute-cave.jpg= &nbsp; &nbsp; -- copyright 2012, Anjela Ju <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/flute-cave.jpg" alt="" width="1026" height="150" />
 
-Name: =solar-surface.jpg= &nbsp; &nbsp; - image copyright 2012, NASA: <br />
+Image: =solar-surface.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.nasa.gov/][NASA]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/solar-surface.jpg" alt="" width="1026" height="150" />
 
-Name: =solar-flare.jpg= &nbsp; &nbsp; - image copyright 2011, NASA: <br />
+Image: =solar-flare.jpg= &nbsp; &nbsp; -- copyright 2011, [[http://www.nasa.gov/][NASA]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/solar-flare.jpg" alt="" width="1026" height="150" />
 
-Name: =autumn-leaves.jpg= &nbsp; &nbsp; - image copyright 2006, [[http://creativecommons.org/licenses/by-sa/2.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by-sa.png" alt="cc-by-sa" title="Creative Commons Attribution-ShareAlike 2.0 Generic (CC BY-SA 2.0)" width="28" height="14" /> CC BY-SA 2.0]], [[http://fotos.blindcow.org/][Andreas Schaefer]]: <br />
+Image: =autumn-leaves.jpg= &nbsp; &nbsp; -- copyright 2006, [[http://fotos.blindcow.org/][Andreas Schaefer]], %CALC{$GET(CC-BY-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/autumn-leaves.jpg" alt="" width="1026" height="150" />
 
-Name: =river-pebbles.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+Image: =river-pebbles.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/river-pebbles.jpg" alt="" width="1026" height="150" />
 
-Name: =bubbling-blob.gif= &nbsp; &nbsp; - image copyright 2012, [[http://www.caad.arch.ethz.ch/][CAAD, ETH Zurch]]: <br />
+Image: =bubbling-blob.gif= &nbsp; &nbsp; -- copyright 2012, [[http://www.caad.arch.ethz.ch/][CAAD, ETH Zurch]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/bubbling-blob.gif" alt="" width="1026" height="150" />
 
-Name: =boeing-factory.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+Image: =boeing-factory.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/boeing-factory.jpg" alt="" width="1026" height="150" />
 
-Name: =cubicle-panorama.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://creativecommons.org/licenses/by/2.0/][<img src="%PUBURLPATH%/%WEB%/%TOPIC%/cc-by.png" alt="cc-by" title="Creative Commons Attribution 2.0 Generic (CC BY 2.0)" width="14" height="14" /> CC BY 2.0]], [[http://www.flickr.com/photos/brownpau/][Paulo Ordoveza]]: <br />
+Image: =cubicle-panorama.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.flickr.com/photos/brownpau/][Paulo Ordoveza]], %CALC{$GET(CC-BY)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/cubicle-panorama.jpg" alt="" width="1026" height="150" />
 
-Name: =picture-gallery.jpg= &nbsp; &nbsp; - image copyright 2011, [[http://seanfitzgibbon.blogspot.com/][Sean Fitzgibbon]]: <br />
+Image: =picture-gallery.jpg= &nbsp; &nbsp; -- copyright 2011, [[http://seanfitzgibbon.blogspot.com/][Sean Fitzgibbon]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/picture-gallery.jpg" alt="" width="1026" height="150" />
 
-Name: =cern-control-room.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+Image: =cern-control-room.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://cdsweb.cern.ch/][CERN]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/cern-control-room.jpg" alt="" width="1026" height="150" />
 
-Name: =cern-datacenter.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+Image: =cern-datacenter.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://cdsweb.cern.ch/][CERN]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/cern-datacenter.jpg" alt="" width="1026" height="150" />
 
-Name: =datacenter-racks.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+Image: =datacenter-racks.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://cdsweb.cern.ch/][CERN]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/datacenter-racks.jpg" alt="" width="1026" height="150" />
 
-Name: =datacenter-desk.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+Image: =datacenter-desk.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://cdsweb.cern.ch/][CERN]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/datacenter-desk.jpg" alt="" width="1026" height="150" />
 
-Name: =computer-cables.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+Image: =computer-cables.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://cdsweb.cern.ch/][CERN]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/computer-cables.jpg" alt="" width="1026" height="150" />
 
-Name: =computer-wires.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+Image: =computer-wires.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://cdsweb.cern.ch/][CERN]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/computer-wires.jpg" alt="" width="1026" height="150" />
 
-Name: =cern-atlas-construction.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+Image: =cern-atlas-construction.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://cdsweb.cern.ch/][CERN]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/cern-atlas-construction.jpg" alt="" width="1026" height="150" />
 
-Name: =cern-atlas-detector.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+Image: =cern-atlas-detector.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://cdsweb.cern.ch/][CERN]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/cern-atlas-detector.jpg" alt="" width="1026" height="150" />
 
-Name: =cern-cms-cavern.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+Image: =cern-cms-cavern.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://cdsweb.cern.ch/][CERN]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/cern-cms-cavern.jpg" alt="" width="1026" height="150" />
 
-Name: =cern-lhc-tunnel.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://cdsweb.cern.ch/][CERN]]: <br />
+Image: =cern-lhc-tunnel.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://cdsweb.cern.ch/][CERN]] <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/cern-lhc-tunnel.jpg" alt="" width="1026" height="150" />
 
-Name: =baseball-game.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+Image: =baseball-game.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/baseball-game.jpg" alt="" width="1026" height="150" />
 
-Name: =code-camp.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+Image: =code-camp.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/code-camp.jpg" alt="" width="1026" height="150" />
 
-Name: =community-leaders.jpg= &nbsp; &nbsp; - image copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]]: <br />
+Image: =community-leaders.jpg= &nbsp; &nbsp; -- copyright 2012, [[http://www.thoeny.org/][Peter Thoeny]], %CALC{$GET(CC-BY-NC-SA)}% <br />
      <img src="%PUBURLPATH%/%WEB%/%TOPIC%/community-leaders.jpg" alt="" width="1026" height="150" />
 
-__Note:__ Images are copyrighted by respective authors, and are released under the [[http://www.gnu.org/licenses/gpl.html][GNU General Public License]] unless noted otherwise.
+__Note:__ Images are copyrighted by respective authors, and are licensed under the [[http://www.gnu.org/licenses/gpl.html][GNU General Public License]] unless noted otherwise.
 
 __Related:__ TWikiDashboardAddOn
 
