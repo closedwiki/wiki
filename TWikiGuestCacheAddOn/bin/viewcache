@@ -26,8 +26,6 @@
 # $TWiki::cfg{TWikiGuestCacheAddOn}{Tier2Topics} =
 #   'WebHome, WebTopicList';
 # $TWiki::cfg{TWikiGuestCacheAddOn}{CacheAge} = '48'; # hours
-# $TWiki::cfg{TWikiGuestCacheAddOn}{WgetCmd} =
-#   '/usr/bin/wget --user-agent=TWikiGuestCacheAddOn -O';
 # $TWiki::cfg{TWikiGuestCacheAddOn}{Debug} = 0;
 
 BEGIN {
@@ -118,7 +116,7 @@ sub _addLogEntry
     $agent =~ s/[\/ ].*//;
     my $ip = $ENV{REMOTE_ADDR} || '';
     my $log = "| $dateFormat - $hour:$min | guest | $script | $webTopic "
-            . "| $agent$extra | $ip |";
+            . "| $agent $extra | $ip |";
     my $logFile = $TWiki::cfg{LogFileName};
     $logFile =~ s/%DATE%/$year$mo/go;
     #print STDERR "$log -- $logFile";
@@ -142,13 +140,14 @@ sub _getAuthUser
 #=====================================================
 sub _checkIfCache
 {
-    my $doCache = 1;
-    $doCache = 0 if( $doCache && ! $dataDir );    # no caching if LocalSite.cfg not valid
-    $doCache = 0 if( $doCache && $queryString );  # no caching if URL parameter(s)
+    return 0 unless( $dataDir );    # no caching if LocalSite.cfg not valid
+    return 0 if( scalar( @ARGV ) ); # no caching if command line call
+    return 0 unless( $pathInfo );   # no caching if no path info
+    return 0 if( $queryString );    # no caching if URL parameter(s)
     my $authUser = _getAuthUser( "$TWiki::cfg{WorkingDir}/tmp/cgisess_$sid" );
-    $doCache = 0 if( $doCache && $authUser );     # no caching if authenticated user
-    $doCache = 0 if( $doCache && ! $dataUpdate ); # no caching if topic does not exist
-    return $doCache;
+    return 0 if( $authUser );       # no caching if authenticated user
+    return 0 unless( $dataUpdate ); # no caching if topic does not exist
+    return 1;
 }
 
 #=====================================================
@@ -172,16 +171,8 @@ sub _cacheAndReturnPage
     $tier2Topics =~ s/, */\|/go;
     $tier2Topics = '^(' . $tier2Topics . ')$';
 
-    # build wget command with parameters
-    my $wgetCmd = $TWiki::cfg{TWikiGuestCacheAddOn}{WgetCmd} || 
-                  '/usr/bin/wget --user-agent=TWikiGuestCacheAddOn -O';
-    my $cacheDir = $TWiki::cfg{PubDir} . '/.cache';
-    $wgetCmd .= " $cacheDir$pathInfo.html"; #cache file
-    $wgetCmd .= " http://$ENV{HTTP_HOST}$ENV{SCRIPT_NAME}$pathInfo";
-    $wgetCmd .= "?TWikiGuestCache=1"; # add URL param to prevent recursion
-    $wgetCmd .= " 2>/dev/null";       # throw away STDERR
-
     # create cache directories if needed
+    my $cacheDir = $TWiki::cfg{PubDir} . '/.cache';
     mkdir( $cacheDir ) unless( -e $cacheDir );
     my $webs = $pathInfo;
     $webs =~ s/(.*)\/(.*)/$1/; # cut topic
@@ -194,24 +185,32 @@ sub _cacheAndReturnPage
 
     # update cache file if needed
     my $cacheUpdate = (stat( "$cacheDir/$topicName.html" ))[9];
+    my $text = '';
     if( ! $cacheUpdate
       || $cacheUpdate < $dataUpdate
       || ( $topicName =~ /$tier1Topics/ && $cacheUpdate + $tier1Age < $now )
       || ( $topicName =~ /$tier2Topics/ && $cacheUpdate + $tier2Age < $now )
       || $cacheUpdate + $cacheAge < $now
       ) {
-        _addLogEntry( 'cache', '' );
-        `$wgetCmd`;
-    } else {
-        # add log entry
-       _addLogEntry( 'view', ' - from cache' );
+        # Cache topic and return content
+        my $cmd = $ENV{SCRIPT_NAME} || '/do/view';
+        $cmd =~ s/^.*\//.\//o; # change '/do/view' to './view'
+        $ENV{QUERY_STRING} = 'extralog=-+caching+topic';
+        $cmd .= " topic=$webs.$topicName 2>/dev/null";
+        $text = `$cmd`;
+        $text =~ s/^.*?\n\r?\n\r?//os;
+        $text =~ s/<meta name="robots"[^>]*>//goi;
+        _saveFile( "$cacheDir/$topicName.html", $text );
+
+    } else { 
+        # Return cached topic
+        _addLogEntry( 'view', '- from cache' );
+        $text = _readFile( "$cacheDir/$topicName.html" );
+        $text =~ s/<meta name="robots"[^>]*>//goi;
     }
     print "Content-type: text/html\n\n";
-    my $text = _readFile( "$cacheDir/$topicName.html" );
-    $text =~ s/<meta name="robots"[^>]*>//goi;
     if( $TWiki::cfg{TWikiGuestCacheAddOn}{Debug} ) {
         my $debug = "\n<pre>\n"
-          . "wgetCmd: $wgetCmd\n"
           . "dataDir: $dataDir\n"
           . "dataUpdate: $dataUpdate\n"
           . "webs: $webs\n"
