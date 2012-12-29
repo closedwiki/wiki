@@ -21,12 +21,6 @@ $TWiki::cfg{TWikiGuestCacheAddOn}{Tier2CacheAge} = '6';
 # Maximum cache age for all other pages, in hours.
 $TWiki::cfg{TWikiGuestCacheAddOn}{CacheAge} = '48';
 
-# **STRING**
-# Path, command and parameters of wget command. Used to grab a
-# rendered page for caching.
-$TWiki::cfg{TWikiGuestCacheAddOn}{WgetCmd} = '/usr/bin/wget --user-agent=TWikiGuestCacheAddOn -
-O';
-
 # **BOOLEAN**
 # Debug flag. See output in STDERR, e.g. apache error log.
 $TWiki::cfg{TWikiGuestCacheAddOn}{Debug} = 0;
