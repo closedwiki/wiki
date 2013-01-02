@@ -2,7 +2,7 @@
 #
 # Build for TWiki
 # Crawford Currie & Sven Dowideit
-# Copyright (C) 2005-2011 TWikiContributors
+# Copyright (C) 2005-2013 TWikiContributors
 
 use strict;
 use TWiki::Time;
@@ -120,7 +120,7 @@ END
             print `$cmd`;
             #print "$cmd\n";
             die $@ if $@;
-            $cmd = "svn commit -m 'Item6711: $tim' ../lib/TWiki.pm";
+            $cmd = "svn commit -m 'Item7086: $tim' ../lib/TWiki.pm";
             print `$cmd`;
             #print "$cmd\n";
             die $@ if $@;

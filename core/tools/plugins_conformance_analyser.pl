@@ -2,7 +2,7 @@
 
 # Copyright (C) 2004 C-Dot Consultants - All rights reserved
 # Portions (C) 2004 Martin Cleaver
-# Copyright (C) 2004-2011 TWiki Contributors
+# Copyright (C) 2004-2013 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License

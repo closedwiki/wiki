@@ -2,7 +2,7 @@
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2005 Crawford Currie - all rights reserved
-# Copyright (C) 2005-2011 TWiki Contributors. All Rights Reserved. 
+# Copyright (C) 2005-2013 TWiki Contributors. All Rights Reserved. 
 # TWiki Contributors are listed in the AUTHORS file in the root
 # of this distribution.
 #

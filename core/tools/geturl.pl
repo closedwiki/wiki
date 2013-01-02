@@ -4,7 +4,7 @@
 # (Utility for TWiki Enterprise Collaboration Platform, http://TWiki.org/)
 #
 # Copyright (C) 1999 Jon Udell, BYTE
-# Copyright (C) 2000-2012 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2000-2013 Peter Thoeny, peter[at]thoeny.org
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
