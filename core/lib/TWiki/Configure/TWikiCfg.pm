@@ -333,12 +333,13 @@ sub startVisit {
         # when -T is enabled, so have to do a substitution
         my $txt = Data::Dumper->Dump([$warble]);
         $txt =~ s/VAR1/TWiki::cfg$keys/;
-        if ($this->{logger}) {
-            $this->{logger}->logChange($visitee->getKeys(), $visitee->{typename} eq 'PASSWORD'? ('*' x 15) : $txt);
-        }
         # Substitute any existing value, or append if not there
         unless ($this->{content} =~ s/\$(TWiki::)?cfg$keys\s*=.*?;\n/$txt/s) {
             $this->{content} .= $txt;
+        }
+        $txt = ('*' x 15) . "\n" if( $visitee->{typename} eq 'PASSWORD' );
+        if ($this->{logger}) {
+            $this->{logger}->logChange($visitee->getKeys(), $txt);
         }
     }
     return 1;
