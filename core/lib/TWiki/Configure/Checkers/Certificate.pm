@@ -1,6 +1,6 @@
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2011 Timothe Litt <litt at acm dot org>
+# Copyright (C) 2011-2013 Timothe Litt <litt at acm dot org>
 # Copyright (C) 2011-2013 Peter Thoeny, peter[at]thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
