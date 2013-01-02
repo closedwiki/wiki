@@ -1,7 +1,7 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2002 John Talintyre, john.talintyre@btinternet.com
-# Copyright (C) 2002-2012 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2002-2013 Peter Thoeny, peter[at]thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
