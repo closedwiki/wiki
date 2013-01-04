@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1357281723" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357289785" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -404,6 +404,13 @@ ParameterizedVariables for global use are defined here.
          * Set NEWLINKFORMAT = <span class="twikiNewLink"><a href="%SCRIPTURLPATH{"edit"}%/$web/$topic?topicparent=%WEB%.%TOPIC%;nowysiwyg=%IF{ "$ EDITMETHOD='wysiwyg'" then="0" else="1"  }%" rel="nofollow" title="%MAKETEXT{"$text (this topic does not yet exist; you can create it)"}%">$text</a></span>
       * alternative setting:
          * #Set NEWLINKFORMAT = <a class="twikiNewLink" href="%SCRIPTURLPATH{"edit"}%/$web/$topic?topicparent=%WEB%.%TOPIC%" rel="nofollow" title="%MAKETEXT{"Create this topic"}%">$text</a>
+
+   * User signature format, used when creating new topics and when adding comments with %SYSTEMWEB%.CommentPlugin:
+      * default setting:
+         * Set SIGNATUREFORMAT = -- %CALCULATE{%U}%SERSIG{%WIKINAME% - %DATE%}%
+         * __Note:__ The USERSIG is defined in section "user_sig" of %SYSTEMWEB%.UserReports. The desired expanded signature format in a topic is =%<nop>USERSIG{%<nop>WIKINAME% - %<nop>DATE%}%=, this with unexpanded USERSIG, but expanded WIKINAME and DATE. A hack using CALCULATE is used to keep USERSIG unexpanded: =%<nop>CALCULATE{%U}%SERSIG{...}%=
+      * alternative setting:
+         * #Set SIGNATUREFORMAT = -- %WIKIUSERNAME% - %DATE%
 
    * %SYSTEMWEB%.PreviewBackground image:
       * Set PREVIEWBGIMAGE = %PUBURLPATH%/%SYSTEMWEB%/PreviewBackground/preview2bg.gif
