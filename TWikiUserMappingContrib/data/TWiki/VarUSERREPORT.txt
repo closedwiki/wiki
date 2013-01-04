@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352963913" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357291267" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarUSERREPORT
 ---+++ USERREPORT -- show user reports with profile pictures
@@ -15,4 +15,4 @@
      | Show rows of checkboxes to select users,%BR% for use in HTML forms | ="select_users"= | =name=, =selected=, =users=, =colums=, =style= |
    * Example: =%<nop>USERREPORT{ action="user_list" search="jane" limit="5" }%=
    * Category: AdministrationVariables, DevelopmentVariables, UsersAndAuthenticationVariables
-   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSEARCH][SEARCH]], %USERSWEB%.UserList, UserReports
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSEARCH][SEARCH]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarUSERSIG][USERSIG]], %USERSWEB%.UserList, UserReports
