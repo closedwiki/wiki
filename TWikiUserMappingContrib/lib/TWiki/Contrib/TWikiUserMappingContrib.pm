@@ -1,8 +1,9 @@
 # Contrib for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2007-2012 TWiki Contributors. All Rights Reserved. 
-# TWiki Contributors are listed in the AUTHORS file in the root of
-# this distribution. NOTE: Please extend that file, not this notice.
+# Copyright (C) 2007-2013 Peter Thoeny, peter[at]thoeny.org
+# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# are listed in the AUTHORS file in the root of this distribution.
+# NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,5 +21,5 @@ package TWiki::Contrib::TWikiUserMappingContrib;
 use strict;
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-12-15';
+our $RELEASE = '2013-01-03';
 our $SHORTDESCRIPTION = 'Traditional TWiki topic based user management and user mapping';
