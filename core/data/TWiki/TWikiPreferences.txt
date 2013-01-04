@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1354177303" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357281723" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -259,6 +259,7 @@ ParameterizedVariables for global use are defined here.
 
    * UserReports variable, documented in VarUSERREPORT:
       * Set USERREPORT = %INCLUDE{ "%SYSTEMWEB%.UserReports" section="%action%" %IF{ "'%ENCODE{ "%search{ default="~~" }%" type="entity" }%'!='~~'" then="search=\"%search%\"" }% %IF{ "'%limit{ default="~~" }%'!='~~'" then="limit=\"%limit%\"" }% %IF{ "'%order{ default="~~" }%'!='~~'" then="order=\"%order%\"" }% %IF{ "'%sort{ default="~~" }%'!='~~'" then="sort=\"%sort%\"" }% %IF{ "'%reverse{ default="~~" }%'!='~~'" then="reverse=\"%reverse%\"" }% %IF{ "'%user{ default="~~" }%'!='~~'" then="user=\"%user%\"" }% %IF{ "'%users{ default="~~" }%'!='~~'" then="users=\"%users%\"" }% %IF{ "'%selected{ default="~~" }%'!='~~'" then="selected=\"%selected%\"" }% %IF{ "'%height{ default="~~" }%'!='~~'" then="height=\"%height%\"" }% %IF{ "'%width{ default="~~" }%'!='~~'" then="width=\"%width%\"" }% %IF{ "'%ENCODE{ "%title{ default="~~" }%" type="entity" }%'!='~~'" then="title=\"%title%\"" }% %IF{ "'%name{ default="~~" }%'!='~~'" then="name=\"%name%\"" }% %IF{ "'%columns{ default="~~" }%'!='~~'" then="columns=\"%columns%\"" }% %IF{ "'%ENCODE{ "%style{ default="~~" }%" type="entity" }%'!='~~'" then="style=\"%style%\"" }% }%
+      * Set USERSIG = %INCLUDE{ "%SYSTEMWEB%.UserReports" section="user_sig" user="%DEFAULT%" }%
 
 #RenderingShortcuts
 ---++ Rendering Shortcuts Settings
