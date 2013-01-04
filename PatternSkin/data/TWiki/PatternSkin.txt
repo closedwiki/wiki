@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1351048914" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357290214" format="1.1" version="$Rev$"}%
 ---+!! Pattern Skin
 <!--
    Contributions to this skin are appreciated. Please update the skin page at
@@ -89,14 +89,15 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 ---++ Skin Info
 
 |  Skin Author: | TWiki:Main.ArthurClemens, TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2004-2008 TWiki:Main.ArthurClemens <br /> &copy; 2008-2012 TWiki:Main.PeterThoeny <br /> &copy; 2004-2012 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2004-2008 TWiki:Main.ArthurClemens <br /> &copy; 2008-2013 TWiki:Main.PeterThoeny <br /> &copy; 2004-2013 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Description: | TWiki's base skin; CSS based, flexible and <nop>W3C-compliant |
 |  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.png" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this skin]] |
 |  Base Name: | pattern |
-|  Skin Version: | 2012-10-23 |
+|  Skin Version: | 2013-01-04 |
 |  History: | <!-- specify latest version first -->&nbsp; |
+|  2013-01-04: | TWikibug:Item7115: Configurable signatures with profile pictures - updating "Your signature to copy/paste" input field with new SIGNATUREFORMAT setting |
 |  2012-10-23: | TWikibug:Item7006: Removing obsolete and unreferenced !PatternSkinHeaderArt topic |
 |  2012-10-20: | TWikibug:Item7003: Icon bullet lists feature with =* icon:name= syntax |
 |  2012-03-23: | TWikibug:Item6834: Better style in user bookmark menu pulldown preview |
