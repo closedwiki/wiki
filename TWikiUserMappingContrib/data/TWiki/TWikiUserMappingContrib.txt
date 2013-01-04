@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1357281564" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357291826" format="1.1" version="$Rev$"}%
 ---+!! !TWikiUserMappingContrib
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -40,6 +40,7 @@ It includes:
    * User reports for TWiki applications:
       * %SYSTEMWEB%.UserReports
       * %SYSTEMWEB%.VarUSERREPORT
+      * %SYSTEMWEB%.VarUSERSIG
    * Default groups and user:
       * %USERSWEB%.NobodyGroup
       * %USERSWEB%.TWikiAdminGroup
@@ -73,13 +74,13 @@ It's a part of the default distribution of the TWiki Core.
 |  Contrib Authors: | TWiki:Main.SvenDowideit, TWiki:Main.PeterThoeny, TWiki:TWiki.TWikiContributor |
 |  Copyright: | &copy; 2007 Sven Dowideit %BR% &copy; 2007-2013 TWiki:Main.PeterThoeny %BR% &copy; 2007-2013 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Contrib Version: | 2013-01-03 |
+|  Contrib Version: | 2013-01-04 |
 |  <span style="white-space: nowrap;">Change History:</span> | <!-- versions below in reverse order -->&nbsp; |
-|  2013-01-03: | TWikibug:Item7115: Configurable Signatures With Profile Pictures - adding "user_pic" section to USERREPORT -- TWiki:Main.PeterThoeny |
+|  2013-01-04: | TWikibug:Item7115: Configurable signatures with profile pictures - adding "user_pic" section to USERREPORT; adding VarUSERSIG -- TWiki:Main.PeterThoeny |
 |  2012-12-15: | TWikibug:Item7084: Can't register local TWiki users with !LdapContrib -- TWiki:Main.PeterThoeny |
 |  2012-11-18: | TWikibug:Item7042: CSS based box shadow and rounded corners; make "Change" highlight on hover work in IE; make "Change" highlight when hovering anywhere on the profile picture -- TWiki:Main.PeterThoeny |
 |  2012-11-14: | TWikibug:Item7020: Categorize TWiki Variable USERREPORT -- TWiki:Main.PeterThoeny |
-|  2012-11-09: | TWikibug:Item7019: Rename order parameter in UserRepots to sort -- TWiki:Main.PeterThoeny |
+|  2012-11-09: | TWikibug:Item7019: Rename order parameter in UserReports to sort -- TWiki:Main.PeterThoeny |
 |  2012-10-29: | TWikibug:Item7014: In UserReports, include css sections automatically if needed; in UserReports, add style parameter to sections slim_box, small_box and business_card; in UserReports, set a "UserReports_users" variable in "user_list" section; in %USERSWEB%.UserList, replace hardcoded business cards with business_card section of UserReports -- TWiki:Main.PeterThoeny |
 |  2012-10-24: | TWikibug:Item6818: Remove obsolete WEBFORMS preferences setting; turn !UserList search form into a "search_box" section; add order="" and reverse="" parameters to "user_list" UserReports -- TWiki:Main.PeterThoeny |
 |  2012-10-21: | TWikibug:Item6819: Move change TWiki form from edit screen to "more" screen -- TWiki:Main.PeterThoeny |
@@ -114,4 +115,4 @@ It's a part of the default distribution of the TWiki Core.
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/TWikiUserMappingContribAppraisal |
 
 __Related topics:__ %SYSTEMWEB%.TWikiRegistration, %SYSTEMWEB%.ResetPassword, %SYSTEMWEB%.ChangePassword, %SYSTEMWEB%.ChangeEmailAddress, %SYSTEMWEB%.BulkRegistration, 
-%SYSTEMWEB%.BulkResetPassword, %SYSTEMWEB%.ManagingUsers, %SYSTEMWEB%.UserToolsCategory, %SYSTEMWEB%.UserReports, %SYSTEMWEB%.VarUSERREPORT, %SYSTEMWEB%.LoginName, %USERSWEB%.NobodyGroup, %USERSWEB%.TWikiAdminGroup, %USERSWEB%.TWikiRegistrationAgent, %USERSWEB%.UserList, %USERSWEB%.UserListHeader, %USERSWEB%.UserListByDateJoined, %USERSWEB%.UserListByLocation, %SYSTEMWEB%.NewUserTemplate, %SYSTEMWEB%.UserForm, %SYSTEMWEB%.TWikiUsersTemplate, %SYSTEMWEB%.TWikiUserSetting, %USERSWEB%.ChangeProfilePicture, %USERSWEB%.TWikiGroupTemplate, %USERSWEB%.UserProfileHeader, %SYSTEMWEB%.TWikiContribs
+%SYSTEMWEB%.BulkResetPassword, %SYSTEMWEB%.ManagingUsers, %SYSTEMWEB%.UserToolsCategory, %SYSTEMWEB%.UserReports, %SYSTEMWEB%.VarUSERREPORT, %SYSTEMWEB%.VarUSERSIG, %SYSTEMWEB%.LoginName, %USERSWEB%.NobodyGroup, %USERSWEB%.TWikiAdminGroup, %USERSWEB%.TWikiRegistrationAgent, %USERSWEB%.UserList, %USERSWEB%.UserListHeader, %USERSWEB%.UserListByDateJoined, %USERSWEB%.UserListByLocation, %SYSTEMWEB%.NewUserTemplate, %SYSTEMWEB%.UserForm, %SYSTEMWEB%.TWikiUsersTemplate, %SYSTEMWEB%.TWikiUserSetting, %USERSWEB%.ChangeProfilePicture, %USERSWEB%.TWikiGroupTemplate, %USERSWEB%.UserProfileHeader, %SYSTEMWEB%.TWikiContribs
