@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357289793" format="1.0" version="$Rev$"}%
 
 
 
 
 
--- %WIKIUSERNAME% - %DATE%
+%STARTSECTION{ type="expandvariables" }%%SIGNATUREFORMAT%%ENDSECTION{ type="expandvariables" }%
