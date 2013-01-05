@@ -2842,10 +2842,11 @@ sub parseSections {
 
    * =$text= - text to expand
    * =$user= - This is the user expanded in e.g. %USERNAME. Optional, defaults to logged-in user.
+   * =$web= - name of web, optional
+   * =$topic= - name of topic, optional
+
 Expand limited set of variables during topic creation. These are variables
 expected in templates that must be statically expanded in new content.
-   * =$web= - name of web
-   * =$topic= - name of topic
 
 # SMELL: no plugin handler
 
@@ -2854,7 +2855,9 @@ expected in templates that must be statically expanded in new content.
 sub expandVariablesOnTopicCreation {
     my ( $this, $text, $user, $theWeb, $theTopic ) = @_;
 
-    $user ||= $this->{user};
+    $user     ||= $this->{user};
+    $theWeb   ||= $this->{SESSION_TAGS}{WEB}   || $this->{SESSION_TAGS}{BASEWEB};
+    $theTopic ||= $this->{SESSION_TAGS}{TOPIC} || $this->{SESSION_TAGS}{BASETOPIC};
 
     # Chop out templateonly sections
     my( $ntext, $sections ) = parseSections( $text );
