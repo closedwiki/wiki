@@ -2399,10 +2399,12 @@ sub wikiToEmail {
 =pod
 
 #ExpandVariablesOnTopicCreation
----+++ expandVariablesOnTopicCreation ( $text ) -> $text
+---+++ expandVariablesOnTopicCreation ( $text, $web, $topic ) -> $text
 
 Expand the limited set of variables that are always expanded during topic creation
    * =$text= - the text to process
+   * =$web= - name of web, optional
+   * =$topic= - name of topic, optional
 Return: text with variables expanded
 
 *Since:* TWiki::Plugins::VERSION 1.1
@@ -2426,7 +2428,7 @@ See also: expandVariables
 
 sub expandVariablesOnTopicCreation {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->expandVariablesOnTopicCreation( shift, $TWiki::Plugins::SESSION->{user} );
+    return $TWiki::Plugins::SESSION->expandVariablesOnTopicCreation( shift, $TWiki::Plugins::SESSION->{user}, @_ );
 }
 
 =pod
@@ -3895,7 +3897,8 @@ $TWiki::Plugins::VERSION 1.5
 ---++++ EmptyPlugin.pm
 No changes
 ---++++ Func.pm
-   * =postExternalResource(  $url, $text, \@headers, \%params ) -> $response=
+   * =expandVariablesOnTopicCreation( $text, $web, $topic ) -> $text= -- added =$web= and =$topic=
+   * =postExternalResource( $url, $text, \@headers, \%params ) -> $response=
    * =registerExternalHTTPHandler( \&fn )=
    * =getContentMode( $web ) -> $contentMode=
    * =webWritable( $web ) -> $boolean=
