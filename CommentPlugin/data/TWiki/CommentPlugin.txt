@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1353026656" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357352006" format="1.1" version="$Rev$"}%
 ---+!! Comment Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -263,10 +263,11 @@ Note that if you want to use the =action= template then you must also:
    * Set SHORTDESCRIPTION = Quickly post comments to a page without an edit/preview/save cycle.
 
 |  Plugin Author: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk inspired by the work of TWiki:Main.DavidWeller and TWiki:Main.PeterMasiar |
-|  Copyright: | &copy; 2004, TWiki:Main.CrawfordCurrie; %BR% &copy; 2009 TWiki:Main.SopanShewale; %BR% &copy; 2004-2012 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2004, TWiki:Main.CrawfordCurrie; %BR% &copy; 2009 TWiki:Main.SopanShewale; %BR% &copy; 2004-2013 TWiki:Main.PeterThoeny; %BR% &copy; 2004-2013 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-11-16 |
+|  Plugin Version: | 2013-01-04 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2013-01-04: | TWikibug:Item7115: Configurable signatures with profile pictures - use SIGNATUREFORMAT setting in default comment box signature -- TWiki:Main.PeterThoeny |
 |  2012-11-16: | TWikibug:Item7039: Adapting it to the enhnaced TWiki::Func::getScriptUrl() -- TWiki:Main.HideyoImazu |
 |  2012-11-12: | TWikibug:Item6967: Better layout of default comment box -- TWiki:Main.PeterThoeny |
 |  2012-11-11: | TWikibug:Item7020: Categorize TWiki Variable COMMENT -- TWiki:Main.PeterThoeny |
