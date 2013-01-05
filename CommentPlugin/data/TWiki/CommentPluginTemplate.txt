@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352789699" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357351403" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="CommentPlugin"}%
 ---+!! Templates for CommentPlugin
 
@@ -24,7 +24,7 @@ Generic prompt box used by other templates
 </verbatim>
 Short comment, signed and dated
 <verbatim>
-%TMPL:DEF{outputoneliner}%   * %URLPARAM{"comment"}% -- %WIKIUSERNAME% - %GMTIME{"$day $month $year"}%%TMPL:END%
+%TMPL:DEF{outputoneliner}%   * %URLPARAM{"comment"}% -- %WIKIUSERNAME% - %DATE%%TMPL:END%
 </verbatim>
 
 %ICON{"hand"}% See rendered template [[CommentPluginExamples#Default][Default]]
@@ -106,7 +106,7 @@ Wiki thread mode comment, signed and dated
 
 %URLPARAM{"comment"}%
 
--- %WIKIUSERNAME% - %DATE%
+%STARTSECTION{ type="expandvariables" }%%SIGNATUREFORMAT%%ENDSECTION{ type="expandvariables" }%
 %TMPL:END%
 </verbatim>
 
