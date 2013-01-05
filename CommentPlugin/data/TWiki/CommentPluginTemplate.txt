@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1357351403" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357352440" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="CommentPlugin"}%
 ---+!! Templates for CommentPlugin
 
@@ -106,7 +106,7 @@ Wiki thread mode comment, signed and dated
 
 %URLPARAM{"comment"}%
 
-%STARTSECTION{ type="expandvariables" }%%SIGNATUREFORMAT%%ENDSECTION{ type="expandvariables" }%
+%STARTSECTION{ type="expandvariables" }%%IF{ "defined 'SIGNATUREFORMAT'" then="$percntSIGNATUREFORMAT$percnt" else="-- $percntWIKIUSERNAME$percnt - $percntDATE$percnt" }%%ENDSECTION{ type="expandvariables" }%
 %TMPL:END%
 </verbatim>
 
