@@ -709,6 +709,8 @@ sub _renderNonExistingWikiWord {
     $ans =~ s/\$web/$web/g;
     $ans =~ s/\$topic/$topic/g;
     $ans =~ s/\$text/$text/g;
+    $ans =~ s/\$summary/$this->TML2PlainText( $text, $web, $topic, 'entityencode')/ge;
+
     $ans = $this->{session}->handleCommonTags( $ans, $this->{session}{webName}, $this->{session}{topicName} );
     return $ans;
 }
@@ -1371,12 +1373,14 @@ $opts:
    * expandvar - expands !%VARS%
    * nohead - strips ---+ headings at the top of the text
    * showmeta - does not filter meta-data
+   * entityencode - entity encode the resulting plain text (for title parameter)
 
 =cut
 
 sub TML2PlainText {
     my( $this, $text, $web, $topic, $opts ) = @_;
     $opts ||= '';
+    my $nopToken = "\0nop\0";
 
     $text =~ s/\r//g;  # SMELL, what about OS10?
 
@@ -1424,7 +1428,8 @@ sub TML2PlainText {
     # Format e-mail to add spam padding (HTML tags removed later)
     $text =~ s/$STARTWW((mailto\:)?[a-zA-Z0-9-_.+]+@[a-zA-Z0-9-_.]+\.[a-zA-Z0-9-_]+)$ENDWW/_mailLink( $this, $1 )/gem;
     $text =~ s/<!--.*?-->//gs;          # remove all HTML comments
-    $text =~ s/<(?!nop)[^>]*>//g;       # remove all HTML tags except <nop>
+    $text =~ s|<nop[ />]*>|$nopToken|g; # escape <nop>
+    $text =~ s/<[^>]*>//g;              # remove all HTML tags
     $text =~ s/\&[a-z]+;/ /g;           # remove entities
     if( $opts =~ /nohead/ ) {
         # skip headings on top
@@ -1441,10 +1446,15 @@ sub TML2PlainText {
     $text =~ s/[\"\']/`/g;              # change quotes to not interfere if used in html tag attributes
     $text =~ s/^\s+//;                  # remove leading whitespace
     $text =~ s/\s+$//;                  # remove trailing whitespace
-    $text =~ s/!(\w+)/$1/gs;            # remove all nop exclamation marks before words
+    $text =~ s/!(\w+)/$1/gs;            # remove all ! nop exclamation marks before words
     $text =~ s/[\r\n]+/\n/s;
     $text =~ s/[ \t]+/ /s;              # consolidate multiple spaces into one
+    $text =~ s/$nopToken/<nop>/g;       # restore <nop>
 
+    if( $opts =~ /entityencode/ ) {
+        $text =~ s/<nop>//g;            # remove <nop> tags
+        $text = TWiki::entityEncode( $text, ' ' );
+    }
     return $text;
 }
 
