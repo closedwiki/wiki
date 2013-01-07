@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1356744305" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357524457" format="1.1" version="$Rev$"}%
 ---+!! TWiki Dashboard Add-On
 <!--
    Contributions to this add-on are appreciated. Please update the add-on page at
@@ -315,10 +315,11 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
    * Set SHORTDESCRIPTION = Create professional dashboards for intranet home, teams, knowledge bases and more
 
 |  Add-on Author: | TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2012, TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2012-2013, TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]]<br /> &copy; 2012-2013 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 2012-12-28 |
+|  Add-on Version: | 2013-01-06 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2013-01-06: | TWikibug:Item7041: Add 4 new banner images by David Yu, Joi Ito |
 |  2012-12-28: | TWikibug:Item7041: Add 7 new banner images by David Yu, ETH Zurich, Peter Thoeny |
 |  2012-12-04: | TWikibug:Item7041: Add 10 new banner images by CERN |
 |  2012-11-28: | TWikibug:Item7041: Add 12 new banner images by Andreas Schaefer, Angela Ju, David Yu, Jeff Keller, Martin Eckert, NASA, Paulo Ordoveza, Peter Thoeny, Sean Fitzgibbon |
