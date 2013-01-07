@@ -42,6 +42,7 @@ bin/LocalLib.cfg.txt 0644
 bin/attach 0555
 bin/changes 0555
 bin/configure 0555
+bin/copy 0555
 bin/edit 0555
 bin/login 0555
 bin/logon 0555
@@ -114,6 +115,7 @@ data/TWiki/BumpyWord.txt 0644
 data/TWiki/CategoryCategory.txt 0644
 data/TWiki/ChartingAndDrawingVariables.txt 0644
 data/TWiki/ClassMethod.txt 0644
+data/TWiki/CopyingTopics.txt 0644
 data/TWiki/DatabaseAndFormsVariables.txt 0644
 data/TWiki/DateAndTimeVariables.txt 0644
 data/TWiki/DeleteOrRenameATopic.txt 0644
@@ -683,6 +685,7 @@ lib/TWiki/Time.pm 0444
 lib/TWiki/UI.pm 0444
 lib/TWiki/UI/ChangeForm.pm 0444
 lib/TWiki/UI/Changes.pm 0444
+lib/TWiki/UI/Copy.pm 0444
 lib/TWiki/UI/Edit.pm 0444
 lib/TWiki/UI/Manage.pm 0444
 lib/TWiki/UI/Oops.pm 0444
@@ -1219,6 +1222,7 @@ templates/backlinksallwebs.tmpl 0444
 templates/backlinksweb.tmpl 0444
 templates/changeform.tmpl 0444
 templates/changes.tmpl 0444
+templates/copy.tmpl 0444
 templates/css.tmpl 0444
 templates/cssmediatypes.tmpl 0444
 templates/edit.tmpl 0444
