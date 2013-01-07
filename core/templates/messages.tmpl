@@ -468,6 +468,32 @@ __%MAKETEXT{"Note:"}%__
 
 %TMPL:END%
 
+%TMPL:DEF{"copy_to_same_topic"}%
+%MAKETEXT{"[_1] is copied to the identical topic. Copy destination is incorrect or missing." args="[[%WEB%.%TOPIC%]]"}%
+%TMPL:END%
+
+%TMPL:DEF{"copy_dest_delete_error"}%
+---+++ %MAKETEXT{"Error copying topic"}%
+%MAKETEXT{"Before copying [_1] to [_2], the existing [_2] needed to be moved to [_3], which caused an error." args="<nop>%WEB%.<nop>%TOPIC%,<nop>%PARAM2%.<nop>%PARAM3%,<nop>%PARAM4%.<nop>%PARAM5%"}%
+
+<verbatim>
+%PARAM1%
+</verbatim>
+%TMPL:END%
+
+%TMPL:DEF{"copy_dest_exists"}%
+%MAKETEXT{"The copy destination [_1] already exists." args="[[%PARAM1%.%PARAM2%]]"}%
+%TMPL:END%
+
+%TMPL:DEF{"copy_error"}%
+---+++ %MAKETEXT{"Error copying topic"}%
+%MAKETEXT{"During copy of [_1] to [_2] an error occurred." args="<nop>%WEB%.<nop>%TOPIC%,<nop>%PARAM2%.<nop>%PARAM3%"}%
+
+<verbatim>
+%PARAM1%
+</verbatim>
+%TMPL:END%
+
 %TMPL:DEF{no_such_template}%
 %MAKETEXT{"Could not find template"}% =%PARAM1%=
 

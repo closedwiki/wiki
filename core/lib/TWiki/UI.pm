@@ -45,6 +45,8 @@ BEGIN {
       [ 'TWiki::UI::Upload',     'attach',        { attach      => 1 } ];
     $TWiki::cfg{SwitchBoard}{changes} =
       [ 'TWiki::UI::Changes',    'changes',       { changes     => 1 } ];
+    $TWiki::cfg{SwitchBoard}{copy} =
+      [ 'TWiki::UI::Copy',       'copy',          { copy        => 1 } ];
     $TWiki::cfg{SwitchBoard}{edit} =
       [ 'TWiki::UI::Edit',       'edit',          { edit        => 1 } ];
     $TWiki::cfg{SwitchBoard}{login} =
