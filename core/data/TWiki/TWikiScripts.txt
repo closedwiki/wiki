@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1357525413" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357540907" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki CGI and Command Line Scripts
 
@@ -222,6 +222,7 @@ Used for renaming topics and attachments.
 | =currentwebonly= | if defined, searches current web only for links to this topic | |
 | =nonwikiword= | if defined, a non-wikiword is acceptable for the new topic name | |
 | =redirectto= | If the rename process is successful, rename will redirect to this topic or URL. The parameter value can be a =TopicName=, a =Web.TopicName=, or a URL.%BR% __Note:__ Redirect to a URL only works if it is enabled in =configure= (Security setup &gt; Miscellaneous ={AllowRedirectUrl}=). | |
+| =disablefixlinks= | Bypass fixing !WikiWord links in the rename destination topic if rename is done across webs. Fixing links in the renamed topic such as from !SomeLink to !Otherweb.SomeLink is usually desirable so that links in the copied topic still point to the same target | =off= (links are fixed) |
 
 __Note:__ The =rename= script can only be called via http POST method, not GET. Make sure you specify =method="post"= if you call the =rename= script via a form action.
 

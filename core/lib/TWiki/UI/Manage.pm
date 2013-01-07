@@ -1018,7 +1018,9 @@ sub move {
 
     my( $meta, $text ) = $store->readTopic( undef, $newWeb, $newTopic );
 
-    if( $oldWeb ne $newWeb ) {
+    if( $oldWeb ne $newWeb &&
+        !TWiki::isTrue($session->{request}->param( 'disablefixlinks' ))
+    ) {
         # If the web changed, replace local refs to the topics
         # in $oldWeb with full $oldWeb.topic references so that
         # they still work.

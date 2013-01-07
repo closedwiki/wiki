@@ -12,7 +12,7 @@
 
 %TMPL:DEF{"nonwikiword"}%%IF{"$HIDE_NON_WIKI_WORD_WARNINGS!='on'" then="$percntTMPL:P{$quotnonwikiwordwarning$quot}$percnt" else="$percntTMPL:P{$quotnonwikiwordallowed$quot}$percnt"}%%TMPL:END%
 
-%TMPL:DEF{"disablefixlinksallowed"}%<p><input type="checkbox" id="disablefixlinks" name="disablefixlinks" /><label for="disablefixlinks">%MAKETEXT{"Bypass fixing <nop>WikiWord links if copy is done across webs"}%</label><br />Fixing links in the copy destination topic such as from <nop>SomeLink to <nop>Otherweb.SomeLink is usually desirable so that links in the copy destination topic still point to the same target</p>%TMPL:END%
+%TMPL:DEF{"disablefixlinksallowed"}%<p><input type="checkbox" id="disablefixlinks" name="disablefixlinks" /><label for="disablefixlinks">%MAKETEXT{"Bypass fixing <nop>WikiWord links if the destination is a different web"}%</label><br />Fixing links in the destination topic such as from <nop>SomeLink to <nop>Otherweb.SomeLink is usually desirable so that links in the destination topic still point to the same target</p>%TMPL:END%
 
 %TMPL:DEF{"disablefixlinks"}%%IF{"$DISABLEFIXLINKSCHECKBOX='on'" then="$percntTMPL:P{$quotdisablefixlinksallowed$quot}$percnt"}%%TMPL:END%
 
