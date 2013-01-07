@@ -12,6 +12,7 @@
 #!include JQueryPlugin/lib/TWiki/Plugins/JQueryPlugin
 #!include JSCalendarContrib/lib/TWiki/Contrib/JSCalendarContrib
 #!include MailerContrib/lib/TWiki/Contrib/MailerContrib
+#!include MovedSkin/lib/TWiki/Contrib/MovedSkin
 #!include PatternSkin/lib/TWiki/Contrib/PatternSkin
 #!include PreferencesPlugin/lib/TWiki/Plugins/PreferencesPlugin
 #!include RenderListPlugin/lib/TWiki/Plugins/RenderListPlugin
