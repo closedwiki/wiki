@@ -1562,25 +1562,46 @@ sub getTopicNames {
     return $handler->getTopicNames();
 }
 
-# Pick up webs writable on thie site.
-# If $canMoveTo is true, further filter the webs so that the result has
-# the webs the current web can be moved to.
+# Pick up webs writable on this site - read-only and slave webs are eliminated.
+# If $canOpt->{moveto} or $canOpt->{copyto} is true, further trimming is
+# conducted.
+# If $canOpt->{moveto} is true, webs residing on a different disk from the
+# current web are eliminated. Plus webs matching
+# $TWiki::cfg{WEBLIST}{canmovetoExclude} are eliminated.
+# If $canOpt->{copyto} is true, webs matching
+# $TWiki::cfg{WEBLIST}{cancopytoExclude} are eliminated.
 sub _filterWritable {
-    my ($this, $webListRef, $canMoveTo) = @_;
+    my ($this, $webListRef, $canOpt) = @_;
+    $canOpt ||= {};
     my @result;
-    my $theDiskID;
     my $session = $this->{session};
-    if ( $canMoveTo && $TWiki::cfg{MultipleDisks} ) {
-        $theDiskID = ($this->getDiskInfo($session->{webName}))[2];
-    }
+    my $theDiskID = $TWiki::cfg{MultipleDisks} ?
+        ($this->getDiskInfo($session->{webName}))[2] : '';
+        # $theDiskID is not needed if $canOpt->{moveto} is false.
+        # So the value is wasted in that case.
+        # But it's done this way because setting it only if $canOpt->{moveto}
+        # is true may lead to bugs in the future when $theDiskID is used 
+        # even if $canOpt->{moveto} is false.
+        # $theDiskID looks to have a correctly value regardless of
+        # $canOpt->{moveto}
     for my $i ( @$webListRef ) {
         my $mode = ($session->modeAndMaster($i))[0];
         if ( $mode eq 'local' || $mode eq 'master' ) {
-            if ( $canMoveTo && $TWiki::cfg{MultipleDisks} ) {
-                my $id = ($this->getDiskInfo($i))[2];
-                if ( $id eq $theDiskID ) {
+            if ( $canOpt->{moveto} ) {
+                my $id = $TWiki::cfg{MultipleDisks} ?
+                    ($this->getDiskInfo($i))[2] : '';
+                if ( $id eq $theDiskID &&
+                     (!$TWiki::cfg{WEBLIST}{canmovetoExclude} ||
+                      $i !~ $TWiki::cfg{WEBLIST}{canmovetoExclude})
+                ) {
                     push(@result, $i);
                 }
+            }
+            elsif ( $canOpt->{copyto} ) {
+                push(@result, $i)
+                    if ( !$TWiki::cfg{WEBLIST}{cancopytoExclude} ||
+                         $i !~ $TWiki::cfg{WEBLIST}{cancopytoExclude}
+                    );
             }
             else {
                 push(@result, $i);
@@ -1614,6 +1635,8 @@ which may include one of:
    * 'canmoveto' (eliminates webs to which the current web cannot be moved to.
       The result is equal to or a subset of the 'writable' result.
       This is related both ReadOnlyAndMirrorWebs and MultipleDisks.)
+   * 'cancopyto' (similar to 'writable' but does shortcut for efficiency
+      sacrificing completeness)
 
 If $TWiki::cfg{EnableHierarchicalWebs} is set, will also list
 sub-webs recursively.
@@ -1625,8 +1648,13 @@ sub getListOfWebs {
     $filter ||= '';
     $web ||= '';
     $web =~ s#\.#/#g;
+    my %canOpt;
+    $canOpt{moveto} = 1 if ( $filter =~ /\bcanmoveto\b/ );
+    $canOpt{copyto} = 1 if ( $filter =~ /\bcancopyto\b/ );
+    # The canmoveto filter is for rename/move destination list.
+    # The cancopyto filter is for copy destination list.
 
-    my @webList = _getSubWebs( $this, $web, $filter );
+    my @webList = _getSubWebs( $this, $web, \%canOpt );
 
     if ( $filter =~ /\buser\b/ ) {
         @webList = grep { !/(?:^_|\/_)/, } @webList;
@@ -1636,13 +1664,13 @@ sub getListOfWebs {
 
     my $session = $this->{session};
     if ( $TWiki::cfg{Mdrepo}{WebRecordRequired} && $this->{session}{mdrepo} ) {
-        # This site may have thousands of webs. Skipping costly filtering
-        if ( $filter =~ /\bcanmoveto\b/ ) {
-            # The canmoveto filter is for rename/move destination list.
-            # It's not a big deal for the result to have webs supposed to be
-            # filtered out.
+        # This site may have thousands of webs. Skipping costly filtering.
+        # It's not a big deal for the result to have webs supposed to be
+        # filtered out.
+        if ( %canOpt ) {
+            # if can* filter is specified, shortcut further for speed.
             if ( $TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName} ) {
-                @webList = $this->_filterWritable(\@webList, 1);
+                @webList = $this->_filterWritable(\@webList, \%canOpt);
             }
             return sort @webList;
         }
@@ -1670,13 +1698,8 @@ sub getListOfWebs {
         }
     }
     if ( $TWiki::cfg{ReadOnlyAndMirrorWebs}{SiteName} ) {
-        # The 'canmoveto' filter result is always equal to or smaller than
-        # the 'writable' filter result.
-        if ( $filter =~ /\bcanmoveto\b/ ) {
-            @webList = $this->_filterWritable(\@webList, 1);
-        }
-        elsif ( $filter =~ /\bwritable\b/ ) {
-            @webList = $this->_filterWritable(\@webList);
+        if ( %canOpt || $filter =~ /\bwritable\b/ ) {
+            @webList = $this->_filterWritable(\@webList, \%canOpt);
         }
     }
 
@@ -1690,7 +1713,8 @@ sub getListOfWebs {
 # For speed optimization for a large site having thousands of webs, the third
 # argument $filter is introduced. Depending on $filter, it may do a shortcut.
 sub _getSubWebs {
-    my( $this, $web, $filter ) = @_ ;
+    my( $this, $web, $canOpt ) = @_ ;
+    $canOpt ||= {};
 
     my @webList;
     my $session = $this->{session};
@@ -1699,7 +1723,7 @@ sub _getSubWebs {
     ) {
         # speed optimization for a site having thousands of webs
         @webList = $session->{mdrepo}->getList('webs');
-        if ( $filter && $filter =~ /\bcanmoveto\b/ ) {
+        if ( %$canOpt ) {
             # only subwebs of the current webs are listed.
             # finding all subwebs defeats the purpose of this speed
             # optimization.
@@ -1710,6 +1734,7 @@ sub _getSubWebs {
             ) {
                 # Add the user's subweb if exists.
                 # If the current web cannot be moved to the user's subweb,
+                # or cannot be copied to the user's subweb,
                 # then the user's subweb will be pruned in getListOfWebs().
                 # So you don't have to worry about it here.
                 my $userSubweb = $TWiki::cfg{UsersWebName} . '/' .
