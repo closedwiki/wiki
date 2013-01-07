@@ -85,6 +85,7 @@ templates/attachnew.pattern.tmpl 0444
 templates/attachtables.pattern.tmpl 0444
 templates/changeform.pattern.tmpl 0444
 templates/changes.pattern.tmpl 0444
+templates/copy.pattern.tmpl 0444
 templates/css.pattern.tmpl 0444
 templates/edit.pattern.tmpl 0444
 templates/formtables.pattern.tmpl 0444
