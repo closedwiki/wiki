@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1350872110" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357546118" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Upgrade Guide
 
@@ -40,6 +40,7 @@ The main steps are:
    1 Copy the users from old installation to the new including all their topics from Main
    1 Apply customizations to your skin (logos, menu bars etc)
    1 Apply preferences from old installation
+   1 Switch-over
 
 %T% After the extensions are installed (or upgraded) in step 2, take a "golden" backup. That will come in handy for your next patch or upgrade: By checking the differences between the golden copy and your production copy, you will be able to identify all the modifications that you have applied to the core or extensions.
    
@@ -111,6 +112,20 @@ The main steps are:
    * If you changed any of the topics in the original TWiki distribution, you will have to transfer your changes to the new install manually. There is no simple way to do this, though a suggestion is to use 'diff' to find changed files in the =data/TWiki= of the old and new TWiki installation, and transfer the changes into the new TWiki install. If you can run a GUI on your server, you may find that using a visual diff tool like !WinMerge, meld, kdiff3, xxdiff, etc. is helpful.
    * Compare the =WebPreferences= topics in the old TWiki Installation with the default from the new TWiki installation and add any new Preferences that may be relevant.
    * Compare the =WebLeftBar= topics in the old TWiki Installation with the default from the new TWiki installation and add any new feature that you desire.
+
+---+++ Switch-Over
+
+Once you have tested the new TWiki you can switch over to the new site.
+
+__If the same domain and URL is used:__
+
+   * Update the DNS settings of the TWiki domain with the IP address of the new TWiki server.
+   * Keep in mind that the updated DNS is not seen immediately by all users at the same time. The DNS propagation can take several hours and depends on the time to live (TTL) setting. Because of this it is recommended to disable content update on the old server. You could simply rename or move all scripts in =twiki/bin= that allow content update, such as =attach=, =edit=, =manage=, =rename=, =save=, =upload=, =rest=. Alternatively, if you have a recent TWiki version on the old server you can set a =READONLYSKINMODE = 1= setting in =Main.TWikiPreferences= to turn the skin into read-only mode.
+
+__If the domain or URL changes:__
+
+   * Add a DNS setting for the new TWiki domain if needed.
+   * Redirect users visiting the old TWiki to the new TWiki. The TWiki:Plugins.MovedSkin has been designed for that task. Install it on your old TWiki, and configure it with the proper URL of the new TWiki. After that, users on the old TWiki will see a yellow box informing them of the move, with a link to the new URL of the page visited.
 
 ---++ Customization of Special Pages
 
