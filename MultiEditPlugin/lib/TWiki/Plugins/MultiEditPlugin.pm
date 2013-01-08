@@ -22,6 +22,7 @@ package TWiki::Plugins::MultiEditPlugin;
 use vars qw(
         $VERSION $pluginName $debug
         $label $skipskin $placement %renderedText $prefix
+        $editmethod
     );
 
 use TWiki::Func;
@@ -59,6 +60,7 @@ sub initPlugin
     #initialize a few other things
     %renderedText = ();
     $prefix = "<_render_>";
+    $editmethod = &TWiki::Func::getPreferencesValue("EDITMETHOD") || ''; 
 
     # Get plugin debug flag
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
@@ -240,7 +242,8 @@ sub editLink
 {
     my ($eurl,$pos,$title) = @_;
     my $session = $TWiki::Plugins::SESSION;
-    return "<a class=\"multiEditLink\" href=\"$eurl\?t=" . time() . "&sec=$pos&redirectto=" . $session->{webName}.'.'.$session->{topicName} . "#SECEDITBOX\">$title</a>";
+    my $nowysiwyg = $editmethod eq 'rawedit' ? 'nowysiwyg=1&' : '';
+    return "<a class=\"multiEditLink\" href=\"$eurl\?${nowysiwyg}topic=&t=" . time() . "&sec=$pos&redirectto=" . $session->{webName}.'.'.$session->{topicName} . "#SECEDITBOX\">$title</a>";
 }
 
 # =========================
