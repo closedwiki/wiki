@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiGuest" date="1357715015" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiGuest" date="1357716826" format="1.1" version="$Rev$"}%
 ---+ <nop>%TOPIC%
 
 This plugin allows the user to break a topic into sections which can be edited individually. A secondary usage of this plugin is to render text in portions of a topic where it ordinarily could not be placed. For example, one could place a table within a cell of a table, or bullet lists inside of table cells.
@@ -101,7 +101,7 @@ Index: lib/TWiki.pm
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/ThomasWeigert |
-|  Plugin Version: | 10 Apr 2007 |
+|  Plugin Version: | 2013-01-09 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  09 Jan 2013: | Item7121: MultiEditPlugin doesn't check "EDITMETHOD" when showing edit link.|
 |  15 Nov 2012: | Item7038: MultiEditPlugin doesn't work under twiki-core 5.1. |

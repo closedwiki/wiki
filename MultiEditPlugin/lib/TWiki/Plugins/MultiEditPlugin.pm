@@ -28,7 +28,7 @@ use vars qw(
 use TWiki::Func;
 use TWiki::Contrib::EditContrib;
 
-$VERSION = '$Rev$';
+$VERSION = '2013-01-09';
 $pluginName = 'MultiEditPlugin';
 
 $RELEASE = 'Dakar';
