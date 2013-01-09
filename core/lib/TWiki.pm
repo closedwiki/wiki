@@ -5170,10 +5170,9 @@ sub TRASHWEB {
 }
 
 sub _wikiWebMaster {
-    my ( $this, $params, $topic, $web, $name ) = @_;
-    if ( $params->{web} ) {
-        $web = $params->{web};
-    }
+    my ( $this, $params, $name ) = @_;
+    my $web = $params->{web} || $this->{webName};
+    my $topic = $params->{topic} || $this->{topicName};
     my $mapping = $this->{users}{mapping};
     my $result = '';
     if ( $mapping->can('wikiWebMaster') ) {
@@ -5188,11 +5187,11 @@ sub _wikiWebMaster {
 }
 
 sub WIKIWEBMASTER {
-    return _wikiWebMaster(@_[0..3], 0);
+    return _wikiWebMaster(@_[0, 1], 0);
 }
 
 sub WIKIWEBMASTERNAME {
-    return _wikiWebMaster(@_[0..3], 1);
+    return _wikiWebMaster(@_[0, 1], 1);
 }
 
 1;
