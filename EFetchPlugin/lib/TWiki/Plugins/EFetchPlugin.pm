@@ -1,7 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004 Cole Beck, cole.beck@vanderbilt.edu
-# Copyright (C) 2004-2012 TWiki:TWiki.TWikiContributor
+# Copyright (C) 2004-2013 TWiki:TWiki.TWikiContributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License

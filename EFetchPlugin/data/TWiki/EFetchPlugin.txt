@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1292215720" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357701788" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -119,9 +119,10 @@ __Note:__ You do not need to install anything on your browser to use this plugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ColeBeck |
-|  Copyright: | &copy; 2004 TWiki:Main.ColeBeck <br /> &copy; 2004-2010 TWiki:TWiki.TWikiContributor |
-|  Plugin Version: | 2010-12-12 (V1.1) |
+|  Copyright: | &copy; 2004 TWiki:Main.ColeBeck <br /> &copy; 2004-2013 TWiki:TWiki.TWikiContributor |
+|  Plugin Version: | 2013-01-08 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2013-01-13: | TWikibug:Item7122: Caching of Efetch records -- TWiki:Main.IanHolmes |
 |  2010-12-12: | TWikibug:Item6530: Doc improvements, changing TWIKIWEB to SYSTEMWEB -- TWiki:Main.PeterThoeny |
 |  28 Dec 2004: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
