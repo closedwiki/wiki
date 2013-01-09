@@ -34,7 +34,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '2012-13-08';
+$RELEASE = '2013-01-08';
 
 $pluginName = 'EFetchPlugin';  # Name of this Plugin
 $maxAuthors = 10;  # IH, 9/5/07
