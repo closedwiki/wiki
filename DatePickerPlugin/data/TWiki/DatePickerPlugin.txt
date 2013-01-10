@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1357788045" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357788526" format="1.1" version="$Rev$"}%
 ---+!! Date Picker Plugin
 <!--
    Contributions to this plugin package are appreciated. Please update this page at
@@ -8,7 +8,7 @@
 -->
 <sticky>
 <div style="float:right; background-color:#EBEEF0; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
-%TOC{title="Page contents"}%
+%TOC{title="Page contents" depth="2"}%
 </div>
 <div style="float:right; margin:0 0 20px 20px; padding: 0 10px 0 10px;">
 <img src="%PUBURLPATH%/%WEB%/%TOPIC%/screenshot.png" alt="Date picker screenshot" width="237" height="202" />
