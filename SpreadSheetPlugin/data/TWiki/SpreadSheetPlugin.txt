@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352704346" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357784454" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -947,8 +947,13 @@ Above table is created manually. The table can be build dynamically with a [[%SY
 
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>SPREADSHEETPLUGIN_SHORTDESCRIPTION%==
+%TWISTY{
+ mode="div"
+ showlink="Show details %ICONURL{toggleopen}% "
+ hidelink="Hide details %ICONURL{toggleclose}% "
+}%
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>SPREADSHEETPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Add spreadsheet calculation like ="$SUM( $ABOVE() )"= to TWiki tables or anywhere in topic text
@@ -963,10 +968,16 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>S
    * [[%SYSTEMWEB%.WikiWord][WikiWords]] to exclude from being spaced out by the ==$PROPERSPACE(text)== function. This comma delimited list can be overloaded by a DONTSPACE preferences variable:
       * Set DONTSPACE = CodeWarrior, MacDonald, McIntosh, RedHat, SuSE
 </noautolink>
+%ENDTWISTY%
 
 ---++ Plugin Installation Instructions
 
-__Note:__ This plugin is pre-installed. TWiki administrators can upgrade it as needed on the TWiki server.
+This plugin is pre-installed. TWiki administrators can upgrade the plugin as needed on the TWiki server.
+%TWISTY{
+ mode="div"
+ showlink="Show details %ICONURL{toggleopen}% "
+ hidelink="Hide details %ICONURL{toggleclose}% "
+}%
 
    * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
 
@@ -986,13 +997,23 @@ __Note:__ This plugin is pre-installed. TWiki administrators can upgrade it as n
       * Run the [[%SCRIPTURL{configure}%][configure]] script and enable the plugin in the __Plugins__ section.
       * Test if the installation was successful: See example above and %SYSTEMWEB%.SpreadSheetPluginTestCases.
 
+%ENDTWISTY%
+
 ---++ Plugin Info
 
+%TABLE{ tablewidth="100%" columnwidths="170," }%
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2001-2012 Peter Thoeny, [[http://twiki.org/][TWiki.org]]<br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-11-11 |
-|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  Plugin Version: | 2013-01-09 |
+%TABLE{ tablewidth="100%" columnwidths="170," }%
+%TWISTY{
+ mode="div"
+ showlink="Show Change History %ICONURL{toggleopen}%"
+ hidelink="Hide Change History %ICONURL{toggleclose}% "
+}%
+%TABLE{ tablewidth="100%" columnwidths="170," }%
+|  2013-01-09: | TWikibug:Item7091: Use TWISTY in variable section, installation instructions and change history |
 |  2012-11-11: | TWikibug:Item7020: Categorize TWiki Variables CALC and CALCULATE |
 |  2012-11-05: | TWikibug:Item7023: Added $STDEV(), $STDEVP(), $VAR(), $VARP() |
 |  2012-11-03: | TWikibug:Item7018: Added SpreadSheetPluginTestCases topic; refactor plugin to use function hash for better performance |
@@ -1063,6 +1084,8 @@ __Note:__ This plugin is pre-installed. TWiki administrators can upgrade it as n
 |  01 Jun 2001: | Fixed insecure dependencies for $MIN() and $MAX() |
 |  16 Apr 2001: | Fixed div by 0 bug in $AVERAGE() |
 |  17 Mar 2001: | Initial version with $ABOVE(), $AVERAGE(), $COLUMN(), $COUNTITEMS(), $EVAL(), $INT(), $LEFT(), $LOWER(), $MAX(), $MIN(), $ROW(), $SUM(), $T(), $UPPER() |
+%ENDTWISTY%
+%TABLE{ tablewidth="100%" columnwidths="170," }%
 |  CPAN Dependencies: | none |
 |  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 99%, %TOPIC% 95% |
 |  Other Dependencies: | none |
