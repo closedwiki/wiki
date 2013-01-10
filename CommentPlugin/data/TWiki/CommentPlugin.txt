@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1357352006" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357785321" format="1.1" version="$Rev$"}%
 ---+!! Comment Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -233,6 +233,12 @@ All the usual TWikiVariables that can be used in a topic template can also be us
 
 ---++ Plugin Settings
 
+%TWISTY{
+ mode="div"
+ showlink="Show details %ICONURL{toggleopen}% "
+ hidelink="Hide details %ICONURL{toggleclose}% "
+}%
+
 Plugin settings are stored as preferences settings. Do __not__ change the settings here, they are here only for illustration purposes showing the default values. Define the settings in [[%LOCALSITEPREFS%]], in a !WebPreferences or in individual topics. For example, to customize the =COMMENTPLUGIN_DEFAULT_TYPE= setting, add a =* Set COMMENTPLUGIN_DEFAULT_TYPE = ...= bullet in <nop>%LOCALSITEPREFS%.
 
    * Name of file in the =twiki/templates= directory that contains the comment templates. The default 'comments.tmpl' automatically includes user templates from [[%SYSTEMWEB%.CommentPluginTemplate]], which in turn includes [[%SYSTEMWEB%.UserCommentsTemplate]].
@@ -241,32 +247,43 @@ Plugin settings are stored as preferences settings. Do __not__ change the settin
    * Default template type (above or below) :
       * Set COMMENTPLUGIN_DEFAULT_TYPE = above
 
+%ENDTWISTY%
+
 #PluginInstallation
 ---++ Plugin Installation Instructions
 
-   * This plugin is pre-installed in TWiki releases. However if you need to upgrade the plugin for any reason:
-   * Download the archive file from the Plugin web (see below)
-   * Unpack the archive in your twiki installation directory.
-      * You may need to correct file permissions
-   * Run ==%TOPIC%_installer== to automatically check and install other modules that this module depends on, and enable the plugin.
-   * Alternatively,
-      * Manually resolve the dependencies listed below.
-      %$DEPENDENCIES%
-   * Use =configure= to enable the plugin
+This plugin is pre-installed. TWiki administrators can upgrade the plugin as needed on the TWiki server.
+
+%TWISTY{
+ mode="div"
+ showlink="Show details %ICONURL{toggleopen}% "
+ hidelink="Hide details %ICONURL{toggleclose}% "
+}%
+
+%$INSTALL_INSTRUCTIONS%
 
 Note that if you want to use the =action= template then you must also:
    1 Install the TWiki:Plugins/ActionTrackerPlugin;
    1 Put the !CommentPlugin *before* the !ActionTrackerPlugin in the ={PluginsOrder}= configuration option (in =configure=)
 
+%ENDTWISTY%
+
 ---++ Plugin Info
 
    * Set SHORTDESCRIPTION = Quickly post comments to a page without an edit/preview/save cycle.
 
+%TABLE{ tablewidth="100%" columnwidths="170," }%
 |  Plugin Author: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk inspired by the work of TWiki:Main.DavidWeller and TWiki:Main.PeterMasiar |
 |  Copyright: | &copy; 2004, TWiki:Main.CrawfordCurrie; %BR% &copy; 2009 TWiki:Main.SopanShewale; %BR% &copy; 2004-2013 TWiki:Main.PeterThoeny; %BR% &copy; 2004-2013 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2013-01-04 |
-|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Plugin Version: | 2013-01-09 |
+%TWISTY{
+ mode="div"
+ showlink="Show Change History %ICONURL{toggleopen}%"
+ hidelink="Hide Change History %ICONURL{toggleclose}% "
+}%
+%TABLE{ tablewidth="100%" columnwidths="170," }%
+|  2013-01-09: | TWikibug:Item7091: Use TWISTY in plugin settings section, installation instructions and change history |
 |  2013-01-04: | TWikibug:Item7115: Configurable signatures with profile pictures - use SIGNATUREFORMAT setting in default comment box signature -- TWiki:Main.PeterThoeny |
 |  2012-11-16: | TWikibug:Item7039: Adapting it to the enhnaced TWiki::Func::getScriptUrl() -- TWiki:Main.HideyoImazu |
 |  2012-11-12: | TWikibug:Item6967: Better layout of default comment box -- TWiki:Main.PeterThoeny |
@@ -308,6 +325,8 @@ Note that if you want to use the =action= template then you must also:
 |  4889 | Chopped down from !PeterMasiar version, removing several parameters, savecomment script, changing way templates are done. Major rewrite, atcherly. |
 |  4882 | Update from !PeterMasiar's 2.0 version, plus documentation and small code improvements. |
 |  4745 | 06 Mar 2002 initial commit |
+%ENDTWISTY%
+%TABLE{ tablewidth="100%" columnwidths="170," }%
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
