@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1357788526" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357788731" format="1.1" version="$Rev$"}%
 ---+!! Date Picker Plugin
 <!--
    Contributions to this plugin package are appreciated. Please update this page at
@@ -87,11 +87,12 @@ You do not need to install anything on the browser to use this plugin. These ins
 
    * Set SHORTDESCRIPTION = Pop-up calendar with date picker, for use in TWiki forms, HTML forms and TWiki plugins
 
+%TABLE{ tablewidth="100%" columnwidths="170," }%
 |  Author: | TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]] |
 |  Copyright: | &copy; See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] for Mishoo JSCalendar; %BR% &copy; 2012 [[http://www.wave.com/][Wave Systems Corp.]] for TWiki !DatePickerPlugin rewrite; %BR% &copy; 2004-2013 TWiki:Main.PeterThoeny for TWiki !DatePickerPlugin; %BR% &copy; 2004-2013 TWiki:TWiki.TWikiContributor for TWiki !DatePickerPlugin |
 |  Sponsor: | [[http://www.wave.com/][Wave Systems Corp.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Dependencies: | %$DEPENDENCIES% |
+|  Dependencies: | JQueryPlugin (pre-installed) |
 |  Version: | 2013-01-09 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  2013-01-09: | TWikibug:Item7091: Use TWISTY in detailed documentation section, installation instructions -- TWiki:Main.PeterThoeny |
