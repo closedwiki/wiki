@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1356071451" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357788045" format="1.1" version="$Rev$"}%
 ---+!! Date Picker Plugin
 <!--
    Contributions to this plugin package are appreciated. Please update this page at
@@ -54,9 +54,24 @@ Test: (this only works if the !DatePickerPlugin is installed and enabled)
 
 ---++ Detailed Documentation
 
+%TWISTY{
+ mode="div"
+ showlink="Show details %ICONURL{toggleopen}% "
+ hidelink="Hide details %ICONURL{toggleclose}% "
+}%
+
 %$POD%
 
+%ENDTWISTY%
+
 ---++ Installation Instructions
+
+You do not need to install anything on the browser to use this plugin. These instructions are for the administrator who installs the plugin on the TWiki server.
+%TWISTY{
+ mode="div"
+ showlink="Show details %ICONURL{toggleopen}% "
+ hidelink="Hide details %ICONURL{toggleclose}% "
+}%
 
 %$INSTALL_INSTRUCTIONS%
 
@@ -66,17 +81,20 @@ Test: (this only works if the !DatePickerPlugin is installed and enabled)
      | =$TWiki::cfg{Plugins}{DatePickerPlugin}{Lang}= | ='en'= |
      | =$TWiki::cfg{Plugins}{DatePickerPlugin}{Style}= | ='twiki'= |
 
+%ENDTWISTY%
+
 ---++ Plugin Info
 
    * Set SHORTDESCRIPTION = Pop-up calendar with date picker, for use in TWiki forms, HTML forms and TWiki plugins
 
 |  Author: | TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]] |
-|  Copyright: | &copy; See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] for Mishoo JSCalendar; %BR% &copy; 2012 [[http://www.wave.com/][Wave Systems Corp.]] for TWiki !DatePickerPlugin rewrite; %BR% &copy; 2004-2012 TWiki:Main.PeterThoeny for TWiki !DatePickerPlugin; %BR% &copy; 2004-2012 TWiki:TWiki.TWikiContributor for TWiki !DatePickerPlugin |
+|  Copyright: | &copy; See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] for Mishoo JSCalendar; %BR% &copy; 2012 [[http://www.wave.com/][Wave Systems Corp.]] for TWiki !DatePickerPlugin rewrite; %BR% &copy; 2004-2013 TWiki:Main.PeterThoeny for TWiki !DatePickerPlugin; %BR% &copy; 2004-2013 TWiki:TWiki.TWikiContributor for TWiki !DatePickerPlugin |
 |  Sponsor: | [[http://www.wave.com/][Wave Systems Corp.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
-|  Version: | 2012-12-20 |
+|  Version: | 2013-01-09 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2013-01-09: | TWikibug:Item7091: Use TWISTY in detailed documentation section, installation instructions -- TWiki:Main.PeterThoeny |
 |  2012-12-20: | TWikibug:Item7077: Initial version, partly based on work of TWiki:Plugins.JSCalendarContrib -- TWiki:Main.PeterThoeny |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
