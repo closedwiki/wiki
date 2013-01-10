@@ -1,7 +1,10 @@
 # Module for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004-2008 C-Dot Consultants - All rights reserved
-# Copyright (C) 2004-2012 TWiki:TWiki.TWikiContributor
+# Copyright (C) 2004-2013 TWiki:TWiki.TWikiContributor
+# Copyright (C) 2004-2013 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2004-2013 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,6 +17,8 @@
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
+# As per the GPL, removal of this notice is prohibited.
+
 package TWiki::Contrib::Build;
 
 use TWiki::Contrib::BuildContrib::BaseBuild;
@@ -284,8 +289,6 @@ sub new {
 
     local $/;
     $this->{INSTALL_INSTRUCTIONS} = <<HERE;
-__Note:__ You do not need to install anything on the browser to use this extension. The following instructions are for the administrator who installs the extension on the TWiki server.
-
    * For an __automated installation__, run the [[\%SCRIPTURL{configure}\%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
       * See the [[http://twiki.org/cgi-bin/view/Plugins/BuildContribInstallationSupplement][installation supplement]] on TWiki.org for more information.
 
