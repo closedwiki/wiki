@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1357784454" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357785181" format="1.1" version="$Rev$"}%
 ---+!! TWiki Spreadsheet Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -1006,7 +1006,6 @@ This plugin is pre-installed. TWiki administrators can upgrade the plugin as nee
 |  Copyright: | &copy; 2001-2012 Peter Thoeny, [[http://twiki.org/][TWiki.org]]<br /> &copy; 2008-2012 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 2013-01-09 |
-%TABLE{ tablewidth="100%" columnwidths="170," }%
 %TWISTY{
  mode="div"
  showlink="Show Change History %ICONURL{toggleopen}%"
