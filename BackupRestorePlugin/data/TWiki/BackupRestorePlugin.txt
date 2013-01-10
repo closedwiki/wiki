@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1346745683" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357785973" format="1.1" version="$Rev$"}%
 ---+!! Backup &amp; Restore Plugin - Beta Version
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -147,7 +147,12 @@ This plugin is distributed under GPL ([[http://www.gnu.org/copyleft/gpl.html][GN
 #PluginInstallation
 ---++ Plugin Installation &amp; Configuration
 
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. This plugin is pre-installed in TWiki-5.1.0 and newer.
+This plugin is pre-installed from TWiki-5.1 on. TWiki administrators can upgrade the plugin as needed on the TWiki server.
+%TWISTY{
+ mode="div"
+ showlink="Show details %ICONURL{toggleopen}% "
+ hidelink="Hide details %ICONURL{toggleclose}% "
+}%
 
    * For an __automated installation__, run the [[%SCRIPTURL{configure}%][configure]] script and follow "Find More Extensions" in the in the __Extensions__ section.
 
@@ -191,17 +196,26 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * If your TWiki is older than TWiki-4.2, create a =working= directory in the =twiki= root (same level as =twiki/lib=), and set ownership to the webserver user.
       * Test if the installation was successful: See BackupRestoreConsole.
 
+%ENDTWISTY%
+
 #PluginInfo
 ---++ Plugin Info
 
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Administrator utility to backup, restore and upgrade a TWiki site
 
+%TABLE{ tablewidth="100%" columnwidths="170," }%
 |  Plugin Author: | TWiki:Main.PeterThoeny, [[http://twiki.org/][TWiki.org]] |
-|  Copyright: | &copy; 2011-2012 TWiki:Main.PeterThoeny <br /> &copy; 2011-2012 TWiki:TWiki.TWikiContributor <br /> &copy; 2004, 2005 Simon Flack (for CPAN:IO::CaptureOutput) <br /> &copy; 2007, 2008 David Golden (for CPAN:IO::CaptureOutput) <br /> &copy; 1997-2011 by Earl Hood and Detlef Pilzecker (for CPAN:Proc::Daemon) |
+|  Copyright: | &copy; 2011-2013 TWiki:Main.PeterThoeny <br /> &copy; 2011-2013 TWiki:TWiki.TWikiContributor <br /> &copy; 2004, 2005 Simon Flack (for CPAN:IO::CaptureOutput) <br /> &copy; 2007, 2008 David Golden (for CPAN:IO::CaptureOutput) <br /> &copy; 1997-2011 by Earl Hood and Detlef Pilzecker (for CPAN:Proc::Daemon) |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2012-09-03 |
-|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Plugin Version: | 2013-01-09 |
+%TWISTY{
+ mode="div"
+ showlink="Show Change History %ICONURL{toggleopen}%"
+ hidelink="Hide Change History %ICONURL{toggleclose}% "
+}%
+%TABLE{ tablewidth="100%" columnwidths="170," }%
+|  2013-01-09: | TWikibug:Item7091: Use TWISTY in installation instructions section and change history |
 |  2012-09-03: | TWikibug:Item6837: Doc update with zip utility limitation of 4GB |
 |  2012-01-13: | TWikibug:Item6796: Fixing copyright year to 2012 |
 |  2011-12-19: | TWikibug:Item6799: Improved docs on GNU zip dependency |
@@ -211,6 +225,8 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  2011-08-16: | TWikibug:Item6793: Add screenshot; add Config.spec configure file; proper detection of command line mode also for older TWiki versions; use TWiki::Func::registerTagHandler only if available so that plugin can run in older TWiki versions |
 |  2011-08-15: | TWikibug:Item6793: Better error handling; add magic number to download URL to restrict download of backups to TWiki admins only |
 |  2011-08-12: | TWikibug:Item6631: Initial version |
+%ENDTWISTY%
+%TABLE{ tablewidth="100%" columnwidths="170," }%
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.0 |
 |  CPAN Dependencies: | none <br /> (=Proc::Daemon= included as =TWiki::Plugins::BackupRestorePlugin::ProcDaemon=) <br /> (=IO::CaptureOutput= included as =TWiki::Plugins::BackupRestorePlugin::CaptureOutput= ) |
 |  Other Dependencies: | GNU =zip= and =unzip= command line utilities |
