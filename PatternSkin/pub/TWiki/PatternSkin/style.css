@@ -190,6 +190,7 @@ a.twikiSubmit,
 	font-weight:bold;
 	vertical-align:middle;
 	text-align:center;
+	overflow:visible;/* to prevent IE from putting extra left and right padding */
 }
 .twikiSubmit,
 .twikiSubmitDisabled,
