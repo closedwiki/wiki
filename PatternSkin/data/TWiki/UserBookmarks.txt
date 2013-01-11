@@ -59,6 +59,9 @@ This page contains several parts that are used by user bookmark pages. Bookmark 
 %TMPL:DEF{PROMPT:bookmark_page_comment_template}%<div class="commentPlugin commentPluginPromptBox" style="display: %IF{ "defined 'ettablenr'" then="none" else="block" }%">
 #AddBookmark
 ---++ Add Bookmark
+
+%T% Visit any topic and select "Bookmark this page" in the "%MAKETEXT{"Account"}%" pulldown menu. Alternatively, add a bookmark here.
+
 <table border="0" style="background-color: #f4f4f8; padding: 10px; margin-top: -6px">
 <tr><th>
 </th><th colspan="2">
@@ -86,9 +89,9 @@ This page contains several parts that are used by user bookmark pages. Bookmark 
 </td></tr>
 <tr><td>
 Example:&nbsp;
-</td><td colspan="2">
+</td><td colspan="2" style="padding: 0 5px;">
 =Engineering.StatusReport=
-</td><td colspan="3">
+</td><td colspan="3" style="padding: 0 5px;">
 =Status report=
 </td></tr>
 </table>
