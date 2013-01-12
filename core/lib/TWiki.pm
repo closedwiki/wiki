@@ -1252,14 +1252,17 @@ sub getScriptUrl {
     my ($contentMode, $master);
     if ( $web ) {
         ($contentMode, $master) = $this->modeAndMaster($web);
-        if ( $contentMode eq 'slave' ) {
-            if ( $scriptOnMaster{$script} ) {
+        if ( $master && $master->{webScriptUrlTmpl} ) {
+            if ( $contentMode eq 'slave' && $scriptOnMaster{$script} ) {
                 # even if $script is null, no disaster happens
                 $ofMaster = 1;
             }
-            $ofMaster = 0 unless ( $master->{webScriptUrlTmpl} );
-                # In case $master->{webScriptUrlTmpl} is undef, which should
-                # not happen, resort to 'not of master'
+        }
+        else {
+            $ofMaster = 0;
+                # if $master->{webScriptUrlTmpl} is not defined,
+                # no way to get the URL for the master site, hence resort to
+                # 'not of master'
         }
     }
     else {
