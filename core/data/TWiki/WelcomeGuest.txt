@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1274238941" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1357870037" format="1.1" version="$Rev$"}%
 ---+!! Welcome, %WIKIUSERNAME%!
 
 Welcome to <nop>%WIKITOOLNAME%! This is a TWikiSite (pronounced _twee-kee site_), a meeting place to work on common interests. Anyone can contribute using any web browser. <nop>%WIKITOOLNAME% looks like a normal web site... except that it encourages contribution and *editing* of pages, questions, answers, comments and updates.
@@ -9,7 +9,7 @@ Welcome to <nop>%WIKITOOLNAME%! This is a TWikiSite (pronounced _twee-kee site_)
 
 ---++ What's in a TWiki?
 
-   * *Webs:* A TWikiSite is divided into webs, each one represents a workspace for collaboration. This site has the following webs: %WEBLIST{ format="[[$name.%HOMETOPIC%][$name]]" separator=", " }%
+   * *Webs:* A TWikiSite is divided into webs, each one represents a workspace for collaboration. This site has the following webs: %%IF{"{NoInAllPublicWebs}" then="HIDE{" else="WEBLIST{"}% format="[[$name.%HOMETOPIC%][$name]]" separator=", " }%%IF{"{NoInAllPublicWebs}" then="[[%USERSWEB%.%HOMETOPIC%][%USERSWEB%]], [[%SYSTEMWEB%.%HOMETOPIC%][%SYSTEMWEB%]], [[Sandbox.%HOMETOPIC%][Sandbox]], and many others."}%
    * *Topics:* Each web is made up of hyperlinked [[TWikiTopics][topics]] (wiki pages) that appear in your browser.
 
 ---++ Some things to do
