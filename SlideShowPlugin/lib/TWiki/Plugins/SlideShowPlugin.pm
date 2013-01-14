@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2002-2012 Peter Thoeny, peter[at]thoeny.org, and
+# Copyright (C) 2002-2013 Peter Thoeny, peter[at]thoeny.org, and
 # TWiki Contributors.
 #
 # This program is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@ package TWiki::Plugins::SlideShowPlugin;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-11-14';
+our $RELEASE = '2013-01-13';
 
 our $web;
 our $topic;
