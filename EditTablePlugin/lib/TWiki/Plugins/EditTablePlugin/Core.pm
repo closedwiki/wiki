@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2008 Arthur Clemens, arthur@visiblearea.com
-# Copyright (C) 2002-2012 Peter Thoeny, peter[at]thoeny.org and
+# Copyright (C) 2002-2013 Peter Thoeny, peter[at]thoeny.org and
 # TWiki Contributors.
 #
 # This program is free software; you can redistribute it and/or

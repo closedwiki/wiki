@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2008 Arthur Clemens, arthur@visiblearea.com
-# Copyright (C) 2002-2012 Peter Thoeny, peter[at]thoeny.org and TWiki
+# Copyright (C) 2002-2013 Peter Thoeny, peter[at]thoeny.org and TWiki
 # Contributors.
 #
 # This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ package TWiki::Plugins::EditTablePlugin;
 use strict;
 
 our $VERSION = '$Rev$';
-our $RELEASE = '2012-12-12';
+our $RELEASE = '2013-01-13';
 
 our $web;
 our $topic;
