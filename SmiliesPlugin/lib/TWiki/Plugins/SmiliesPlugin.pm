@@ -1,8 +1,8 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2002-2011 Peter Thoeny, peter[at]thoeny.org
-# Copyright (C) 2001-2011 TWiki Contributor
+# Copyright (C) 2002-2013 Peter Thoeny, peter[at]thoeny.org
+# Copyright (C) 2001-2013 TWiki Contributor
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ use TWiki::Func;
 
 # =========================
 our $VERSION = '$Rev$';
-our $RELEASE = '2010-09-20';
+our $RELEASE = '2013-01-13';
 
 our %smiliesUrls;
 our %smiliesEmotions;
