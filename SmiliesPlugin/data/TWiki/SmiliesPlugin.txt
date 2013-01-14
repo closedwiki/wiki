@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1310274658" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1358131364" format="1.1" version="$Rev$"}%
 ---+!! The Smilies Plugin <nop>:-)
 <!--
    Contributions to this TWiki plugin are appreciated. Please update the plugin page at
@@ -57,10 +57,16 @@ Here is the list of smilies supported by this plugin. To add others, attach new 
 
 ---++ <nop>%TOPIC% Global Settings
 
+%TWISTY{
+ mode="div"
+ showlink="Show details %ICONURL{toggleopen}% "
+ hidelink="Hide details %ICONURL{toggleclose}% "
+}%
+
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Render smilies as icons, like =&nbsp;:-)= for :-) or =&nbsp;:eek:= for :eek:
+      * Set SHORTDESCRIPTION = Render smilies as icons, like =&nbsp;:-)&nbsp;= as :-) or =&nbsp;:eek:&nbsp;= as :eek:
 
    * The name of the topic containig your Smilies. Default: ==%WEB%.SmiliesPlugin==
       * Set TOPIC = %SYSTEMWEB%.SmiliesPlugin
@@ -69,10 +75,16 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 <verbatim>
       * Set FORMAT = <img src="$url" alt="$tooltip" title="$tooltip" border="0" />
 </verbatim>
+%ENDTWISTY%
 
 ---++ Plugin Installation Instructions
 
-This plugin is installed by default with a TWiki release. You should not need to install the plugin unless it is for an upgrade.
+This plugin is pre-installed. TWiki administrators can upgrade the plugin as needed on the TWiki server.
+%TWISTY{
+ mode="div"
+ showlink="Show details %ICONURL{toggleopen}% "
+ hidelink="Hide details %ICONURL{toggleclose}% "
+}%
 
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
@@ -84,13 +96,21 @@ This plugin is installed by default with a TWiki release. You should not need to
    * Test if the plugin is correctly installed:
    * You will see a series of icons on next line: <br />
      :-) :) :cool: :( :o :D ;) :p :rolleyes: :mad: :eek: :confused: >:-) >;-) :-X :ok: :yes: :no: :love: :skull: :red: :green:
+%ENDTWISTY%
 
 ---++ Plugin Info
 
+%TABLE{ tablewidth="100%" columnwidths="170," }%
 |  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2001-2007 Andrea Sterbini,%BR% &copy; 2001-2011 Peter Thoeny,%BR% &copy; 2001-2011 TWiki:TWiki.TWikiContributor |
-|  Plugin Version: | %$VERSION% |
-|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  Copyright: | &copy; 2001-2007 Andrea Sterbini,%BR% &copy; 2001-2013 Peter Thoeny,%BR% &copy; 2001-2013 TWiki:TWiki.TWikiContributor |
+|  Plugin Version: | 2013-01-13 |
+%TWISTY{
+ mode="div"
+ showlink="Show Change History %ICONURL{toggleopen}%"
+ hidelink="Hide Change History %ICONURL{toggleclose}% "
+}%
+%TABLE{ tablewidth="100%" columnwidths="170," }%
+|  2013-01-13: | TWikibug:Item7091: Use TWISTY in plugin settings section, installation instructions and change history |
 |  2011-07-09: | TWikibug:Item6725: Change global package variables from "use vars" to "our" |
 |  2010-09-20: | TWikibug:Item6580: Added "red", "yellow", "green", "blue" smilies |
 |  2010-05-15: | TWikibug:Item6433: Doc improvements; replacing TWIKIWEB with SYSTEMWEB |
@@ -106,6 +126,8 @@ This plugin is installed by default with a TWiki release. You should not need to
 |  23 Nov 2001: | Added TOPIC and FORMAT setting |
 |  10 Jun 2001: | Packaged into ZIP |
 |  28 Feb 2001: | Initial version |
+%ENDTWISTY%
+%TABLE{ tablewidth="100%" columnwidths="170," }%
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
