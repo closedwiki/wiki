@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1357291826" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1358327355" format="1.1" version="$Rev$"}%
 ---+!! !TWikiUserMappingContrib
 <!--
    Contributions to this contrib are appreciated. Please update the contrib page at
@@ -74,8 +74,9 @@ It's a part of the default distribution of the TWiki Core.
 |  Contrib Authors: | TWiki:Main.SvenDowideit, TWiki:Main.PeterThoeny, TWiki:TWiki.TWikiContributor |
 |  Copyright: | &copy; 2007 Sven Dowideit %BR% &copy; 2007-2013 TWiki:Main.PeterThoeny %BR% &copy; 2007-2013 TWiki:TWiki.TWikiContributor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Contrib Version: | 2013-01-05 |
+|  Contrib Version: | 2013-01-16 |
 |  <span style="white-space: nowrap;">Change History:</span> | <!-- versions below in reverse order -->&nbsp; |
+|  2013-01-16: | TWikibug:Item7088: Remove link to outdated presentation -- TWiki:Main.PeterThoeny |
 |  2013-01-05: | TWikibug:Item7115: Configurable signatures with profile pictures - adding "user_pic" section to USERREPORT; adding VarUSERSIG -- TWiki:Main.PeterThoeny |
 |  2012-12-15: | TWikibug:Item7084: Can't register local TWiki users with !LdapContrib -- TWiki:Main.PeterThoeny |
 |  2012-11-18: | TWikibug:Item7042: CSS based box shadow and rounded corners; make "Change" highlight on hover work in IE; make "Change" highlight when hovering anywhere on the profile picture -- TWiki:Main.PeterThoeny |
