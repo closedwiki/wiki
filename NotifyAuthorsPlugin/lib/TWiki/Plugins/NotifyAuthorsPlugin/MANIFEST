@@ -1,0 +1,3 @@
+data/TWiki/NotifyAuthorsPlugin.txt 0644 Plugin documentation
+lib/TWiki/Plugins/NotifyAuthorsPlugin.pm 0644 Perl module
+lib/TWiki/Plugins/NotifyAuthorsPlugin/Core.pm 0644 Perl module
