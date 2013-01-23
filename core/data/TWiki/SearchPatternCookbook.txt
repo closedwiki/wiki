@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1240609516" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1358925784" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="FormattedSearch"}%
 ---+!! Search Pattern Cookbook
 
@@ -255,13 +255,14 @@ _Thanks to TWiki:Main.PeterThoeny for these solutions._
 </verbatim>
 
 ---+++ Test case
+%IF{"{NoInAllPublicWebs}" then="<span style='color: red'>The above solution would time out on this site because there are too many webs. So the following test case does the job only with the %USERSWEB% and %SYSTEMWEB% webs.</span>" else="<nop>"}%
 
 Public webs of TWiki.
 
 <form>
 <select name="topic">
 <option value="%TOPIC%">Select...</option>
-%SEARCH{ "%HOMETOPIC%" scope="topic" web="all" topic="%HOMETOPIC%" format="<option value=\"$web.$topic\">$web</option>" separator=" " }%
+%SEARCH{ "%HOMETOPIC%" scope="topic" web="%IF{"{NoInAllPublicWebs}" then="%USERSWEB%,%SYSTEMWEB%" else="all"}%" topic="%HOMETOPIC%" format="<option value=\"$web.$topic\">$web</option>" separator=" " }%
 </select>
 <input type="submit"  value="Go" />
 </form>
@@ -269,13 +270,14 @@ Public webs of TWiki.
 %T% For private webs, or any other webs you wish to exclude from the display, use "on" for the =Exclude web from a web="all" search= setting in the relevant web's !WebPreferences topic.
 
 ---+++ Alternative solution
+%IF{"{NoInAllPublicWebs}" then="<span style='color: red'>The following solution would time out on this site for the same reason as above. So the following test case does the job only with the %USERSWEB% and %SYSTEMWEB% webs.</span>" else="<nop>"}%
 
 This result can also be accomplished with the %<nop>WEBLIST% variable.
 
 <form>
 <select name="topic">
 <option value="%TOPIC%">Select...</option>
-%WEBLIST{ format="<option value=\"$name.%HOMETOPIC%\">$name</option>" webs="public" separator=" " }%
+%WEBLIST{ format="<option value=\"$name.%HOMETOPIC%\">$name</option>" webs="%IF{"{NoInAllPublicWebs}" then="%USERSWEB%,%SYSTEMWEB%" else="public"}%" separator=" " }%
 </select>
 <input type="submit" value="Go" />
 </form>
