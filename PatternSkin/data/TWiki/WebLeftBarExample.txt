@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 7555 $"}%
+%META:TOPICINFO{author="TWikiContributor" date="1358928752" format="1.0" version="$Rev: 7555 $"}%
    * <b>%MAKETEXT{"[_1] Web" args="<nop>%INCLUDINGWEB%"}%</b>
    * [[%HOMETOPIC%][%MAKETEXT{"[_1] Web Home" args="%INCLUDINGWEB%"}%]]
    * [[WebChanges][%MAKETEXT{"Changes"}%]] 
@@ -6,7 +6,7 @@
    * [[WebSearch][%MAKETEXT{"Search"}%]]
 ---
    * *%MAKETEXT{"Webs"}%*
-%WEBLIST{"      * [[$name.%HOMETOPIC%][$name]]" separator=""}%
+%WEBLIST{"      * [[$name.%HOMETOPIC%][$name]]" separator="" %IF{"{NoInAllPublicWebs}" then="webs=\"%USERSWEB%,%SYSTEMWEB%\""}%}%
 <div class="patternLeftBarPersonal">
 %INCLUDE{"USERSWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH{"edit"}%/%USERSWEB%/%WIKINAME%LeftBar?templatetopic=%SYSTEMWEB%.WebLeftBarPersonalTemplate\">%MAKETEXT{"Create personal sidebar"}%</a>"}%
 </div>
