@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1349766793" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1358928752" format="1.1" version="$Rev$"}%
 ---+!! Tree Browser Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -114,7 +114,7 @@ Those classes are prefixed with the =style= parameter. For clarity of the docume
          * Leaf3
       * Leaf2
    * *Webs*
-%WEBLIST{"      * [[$name.%HOMETOPIC%][$name]]"}%
+%WEBLIST{"      * [[$name.%HOMETOPIC%][$name]]" webs="cancopyto"}%
 </verbatim>
 generates
 <table border="0" cellpadding="5">
@@ -131,7 +131,7 @@ generates
          * Leaf3
       * Leaf2
    * *Webs*
-%WEBLIST{"      * [[$name.%HOMETOPIC%][$name]]"}%
+%WEBLIST{"      * [[$name.%HOMETOPIC%][$name]]" webs="cancopyto"}%
 
 <a href="javascript: basicdemo.openAll();">open all</a> | <a href="javascript: basicdemo.closeAll();">close all</a>
 
@@ -490,10 +490,11 @@ See TWiki:Plugins.TreeBrowserPluginDev.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ThomasWeigert & TWiki:Main.StephaneLenclud |
-|  Copyright: | &copy; 2000-2003 TWiki:Main.AndreaSterbini, %BR% &copy; 2001-2004 TWiki:Main.PeterThoeny, %BR% &copy; 2004 TWiki:Main.ThomasWeigert, %BR% &copy; 2006-2007 TWiki:Main.StephaneLenclud, %BR% &copy; 2000-2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2000-2003 TWiki:Main.AndreaSterbini, %BR% &copy; 2001-2004 TWiki:Main.PeterThoeny, %BR% &copy; 2004 TWiki:Main.ThomasWeigert, %BR% &copy; 2006-2007 TWiki:Main.StephaneLenclud, %BR% &copy; 2000-2013 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | %$VERSION% |
+|  Plugin Version: | 2013-01-23 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2013-01-23: | TWikibug:Item6977: This topic caused timeout on a large site, which is fixed |
 |  2011-01-19: | TWikibug:Item6638: More doc fixes |
 |  2010-07-25: | TWikibug:Item6530: Doc fixes |
 |  29 Mar 2007: | (v1.8) - Improved =smenu= CSS and fixing warning.  By [[TWiki:Main.StephaneLenclud][Stephane Lenclud]]. |
