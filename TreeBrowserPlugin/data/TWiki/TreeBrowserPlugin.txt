@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1358928752" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1358949296" format="1.1" version="$Rev$"}%
 ---+!! Tree Browser Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
@@ -102,8 +102,8 @@ Those classes are prefixed with the =style= parameter. For clarity of the docume
 
 ---+++ Basic
 
-<verbatim>
-%TREEBROWSER{"file" title="[[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]" shared="left"}%
+<pre>
+%<nop>TREEBROWSER{"file" title="[[%<nop>HOMETOPIC%][%<nop>INCLUDINGWEB% Web Home]]" shared="left"}%
    * [[WebChanges][Changes]] 
    * [[WebIndex][Index]]
    * [[WebSearch][Search]]
@@ -114,8 +114,8 @@ Those classes are prefixed with the =style= parameter. For clarity of the docume
          * Leaf3
       * Leaf2
    * *Webs*
-%WEBLIST{"      * [[$name.%HOMETOPIC%][$name]]" webs="cancopyto"}%
-</verbatim>
+%<nop>WEBLIST{"      * [[$name.%<nop>HOMETOPIC%][$name]]" %IF{"{NoInAllPublicWebs}" then="webs=\"cancopyto\""}%}%
+</pre>
 generates
 <table border="0" cellpadding="5">
 <tr><th align="left">If installed</th><th>&nbsp;</th><th align="left">Simulated</th></tr>
@@ -131,7 +131,7 @@ generates
          * Leaf3
       * Leaf2
    * *Webs*
-%WEBLIST{"      * [[$name.%HOMETOPIC%][$name]]" webs="cancopyto"}%
+%WEBLIST{"      * [[$name.%HOMETOPIC%][$name]]" %IF{"{NoInAllPublicWebs}" then="webs=\"cancopyto\""}%}%
 
 <a href="javascript: basicdemo.openAll();">open all</a> | <a href="javascript: basicdemo.closeAll();">close all</a>
 
