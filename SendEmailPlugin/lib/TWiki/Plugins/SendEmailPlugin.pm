@@ -25,7 +25,7 @@ use strict;
 use TWiki::Func;
 
 our $VERSION    = '$Rev$';
-our $RELEASE    = '2011-04-02';
+our $RELEASE    = '2013-01-24';
 our $pluginName = 'SendEmailPlugin';
 our $SHORTDESCRIPTION = "Allows to send e-mails through an e-mail form.";
 our $NO_PREFS_IN_TOPIC = 1;

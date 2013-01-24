@@ -479,10 +479,9 @@ sub _finishSendEmail {
       if $section;
 
     $redirectUrl ||= $origUrl;
-    $redirectUrl = "$redirectUrl#$NOTIFICATION_ANCHOR_NAME";
 
     _debug("_finishSendEmail redirecting to $redirectUrl");
-    TWiki::Func::redirectCgiQuery( undef, $redirectUrl, 1, undef, 1 );
+    TWiki::Func::redirectCgiQuery( $query, $redirectUrl, 1, 1 );
     return 0;
 }
 
