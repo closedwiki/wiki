@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1352453309" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1358992117" format="1.1" version="$Rev$"}%
 ---+ %MAKETEXT{"Note: This topic does not exist"}%
 
 _%MAKETEXT{"The topic [_1] you are trying to access does not exist, yet." args="'%BASETOPIC%'"}%_
@@ -31,6 +31,7 @@ _%MAKETEXT{"The topic [_1] you are trying to access does not exist, yet." args="
 </tr>
 </table>
 </div>
-
+%IF{"context inactive" then="<div style='display: none'>"}%
 ---+++ %MAKETEXT{"Do you wish to create the topic [_1]?" args="'%BASETOPIC%'"}%
-%ICON{arrowbright}% [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?create=on&newtopic=%BASETOPIC%&template=WebCreateNewTopic&topicparent=%URLPARAM{"topicparent"}%][%MAKETEXT{"Create '[_1]'" args="<nop>%BASETOPIC%"}%]]
+%ICON{arrowbright}% [[%SCRIPTURL{"view" web="%BASEWEB%" master="on"}%/%BASETOPIC%?create=on&newtopic=%BASETOPIC%&template=WebCreateNewTopic&topicparent=%URLPARAM{"topicparent"}%][%MAKETEXT{"Create '[_1]'" args="<nop>%BASETOPIC%"}%]]
+%IF{"context inactive" then="</div>"}%

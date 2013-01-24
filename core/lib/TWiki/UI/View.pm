@@ -247,9 +247,6 @@ sub view {
     my $mode = $session->{contentMode};
     if( $mode eq 'read-only' ) {
         $session->enterContext( 'inactive' );
-        unless( $topicExists ) {
-            $text = '';
-        }
     } elsif( $rev < $showRev ) {
         $session->enterContext( 'inactive' );
         # disable edit of previous revisions
