@@ -190,11 +190,11 @@ After setting "$TWiki::cfg{Plugins}{SendEmailPlugin}{ExpandVariablesInTemplate} 
 %SENDEMAIL%
 <input type="button" value="Ok" class="twikiButton" onclick="window.location.href='%URLPARAM{"origurl" default="%SCRIPTURLPATH{view}%/%BASEWEB%/%BASETOPIC%"}%'" />
 %ENDSECTION{"thanks"}%
-
 -->
 </verbatim>
 %ENDTWISTY%
 
+%RED% The following form is disabled because only the first !SendEmailPlugin form on a topic works. This is the second. %ENDCOLOR%
 <form enctype="application/x-www-form-urlencoded" name="mailform" action="%SCRIPTURL{sendemail}%/%WEB%/%TOPIC%" method="POST">
 <input type="hidden" name="successsection" value="thanks" />
 <fieldset>
@@ -217,7 +217,7 @@ After setting "$TWiki::cfg{Plugins}{SendEmailPlugin}{ExpandVariablesInTemplate} 
 <textarea class="twikiInputField" cols="70" name="body" rows="6" style="width:100%">%URLPARAM{"body"}%</textarea>
 </div>
 <div class="twikiFormStep">
-<input type="submit" class="twikiSubmit" value="Send" />
+<input type="submit" class="twikiSubmit" disabled value="Send" />
 </div>
 </div>
 </fieldset>
@@ -325,6 +325,7 @@ function checkPasswords(inForm) {
 </verbatim>
 %ENDTWISTY%
 
+%RED% The following form is disabled because only the first !SendEmailPlugin form on a topic works. This is the third. %ENDCOLOR%
 %STARTFORM{
 name="mailForm"
 action="%SCRIPTURL{sendemail}%/%WEB%/%TOPIC%"
@@ -385,6 +386,7 @@ $Confirm"
 %FORMELEMENT{
 type="submit"
 buttonlabel="Send"
+disabled="on"
 }%
 </fieldset>
 %ENDFORM%
@@ -443,11 +445,11 @@ HTML elements with these style names are written to the default feedback.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
-|  Copyright: | &copy; 2007-2010 Arthur Clemens; 2008 Michael Daum <br /> &copy; 2007-2011 TWiki:TWiki.TWikiContributor |
+|  Copyright: | &copy; 2007-2010 Arthur Clemens; 2008 Michael Daum <br /> &copy; 2007-2013 TWiki:TWiki.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | 2011-04-02 |
-|  Release: | 1.5.1 |
+|  Plugin Version: | 2013-01-24 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2013-01-24: | TWikibug:Item7129: !TWiki.SendEmailPlugin 2nd and 3rd email forms are bound to fail |
 |  2013-01-24: | TWikibug:Item7045: Make SendEmailPlugin hiding URL "get" parameters when rediecting to a target page. |
 |  2012-11-21: | TWikibug:Item7048: Block the "from" field for security purpose. |
 |  2012-11-21: | TWikibug:Item7047: Configure retry times in config file. |
