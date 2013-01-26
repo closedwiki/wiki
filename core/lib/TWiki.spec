@@ -531,8 +531,9 @@ $TWiki::cfg{INCLUDE}{AllowURLs} = $FALSE;
 # **BOOLEAN EXPERT**
 # Allow the use of SCRIPT and LITERAL tags in content. If this is set false,
 # all SCRIPT and LITERAL sections will be removed from the body of topics.
-# SCRIPT can still be used in the HEAD section, though. Note that this may
-# prevent some plugins from functioning correctly.
+# SCRIPT can still be used in the HEAD section, though. <br /> <b>Note:</b>
+# This may prevent the TopMenuSkin and some other extensions from functioning
+# correctly.
 $TWiki::cfg{AllowInlineScript} = $TRUE;
 
 # **REGEX EXPERT**
